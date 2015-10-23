@@ -48,7 +48,7 @@ class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
 
     /** this is an optional NumRule compare component for applications where
         the NumRules don't have names */
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > mxNumRuleCompare;
+    css::uno::Reference< css::ucb::XAnyCompare > mxNumRuleCompare;
 
     SAL_DLLPRIVATE sal_uInt32 Find( XMLTextListAutoStylePoolEntry_Impl* pEntry )
         const;
@@ -60,12 +60,10 @@ public:
     void RegisterName( const OUString& rName );
 
     OUString Add(
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::container::XIndexReplace > & rNumRules );
+            const css::uno::Reference< css::container::XIndexReplace > & rNumRules );
 
     OUString Find(
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::container::XIndexReplace > & rNumRules ) const;
+            const css::uno::Reference< css::container::XIndexReplace > & rNumRules ) const;
     OUString Find( const OUString& rInternalName ) const;
 
     void exportXML() const;

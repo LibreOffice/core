@@ -94,8 +94,7 @@ public:
 
     SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-              ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
               sal_uInt16 nFamily=0,
               bool bDefaultStyle = false );
 
@@ -103,12 +102,10 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     const OUString&  GetName() const { return maName; }
     const OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
@@ -163,17 +160,13 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
     SvXMLTokenMap           *mpStyleStylesElemTokenMap;
 
 
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer > mxParaStyles;
+    css::uno::Reference< css::container::XNameContainer > mxParaStyles;
 
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer > mxTextStyles;
+    css::uno::Reference< css::container::XNameContainer > mxTextStyles;
 
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::style::XAutoStyleFamily > mxParaAutoStyles;
+    css::uno::Reference< css::style::XAutoStyleFamily > mxParaAutoStyles;
 
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::style::XAutoStyleFamily > mxTextAutoStyles;
+    css::uno::Reference< css::style::XAutoStyleFamily > mxTextAutoStyles;
 
     rtl::Reference < SvXMLImportPropertyMapper > mxParaImpPropMapper;
     rtl::Reference < SvXMLImportPropertyMapper > mxTextImpPropMapper;
@@ -194,19 +187,16 @@ protected:
 
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
@@ -215,8 +205,7 @@ public:
 
     SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
         bool bAutomatic = false );
 
     virtual ~SvXMLStylesContext();
@@ -224,8 +213,7 @@ public:
     // Create child element.
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     // Override this method to insert styles into the document.
     virtual void EndElement() override;
@@ -241,12 +229,11 @@ public:
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const;
 
-    virtual ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer >
+    virtual css::uno::Reference< css::container::XNameContainer >
         GetStylesContainer( sal_uInt16 nFamily ) const;
     virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
 
-       ::com::sun::star::uno::Reference < ::com::sun::star::style::XAutoStyleFamily >
+    css::uno::Reference< css::style::XAutoStyleFamily >
         GetAutoStyles( sal_uInt16 nFamily ) const;
     void CopyAutoStylesToDoc();
     void CopyStylesToDoc( bool bOverwrite, bool bFinish = true );

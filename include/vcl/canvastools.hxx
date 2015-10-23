@@ -79,15 +79,13 @@ namespace vcl
 
         /** Create an XBitmap from VCL BitmapEx
          */
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
-            VCL_DLLPUBLIC xBitmapFromBitmapEx( const ::com::sun::star::uno::Reference<
-                                                     ::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
-                                               const ::BitmapEx&                                        inputBitmap );
+        css::uno::Reference< css::rendering::XBitmap >
+            VCL_DLLPUBLIC xBitmapFromBitmapEx( const css::uno::Reference< css::rendering::XGraphicDevice >& xGraphicDevice,
+                                               const ::BitmapEx&                                            inputBitmap );
 
         /** Create a BitmapEx from an XBitmap
          */
-        ::BitmapEx VCL_DLLPUBLIC bitmapExFromXBitmap( const ::com::sun::star::uno::Reference<
-                                                            ::com::sun::star::rendering::XIntegerReadOnlyBitmap >& xInputBitmap );
+        ::BitmapEx VCL_DLLPUBLIC bitmapExFromXBitmap( const css::uno::Reference< css::rendering::XIntegerReadOnlyBitmap >& xInputBitmap );
 
         // Color conversions (vcl/tools Color <-> canvas standard color space)
 
@@ -97,7 +95,7 @@ namespace vcl
             Note that this method assumes a color space equivalent to
             the one returned from createStandardColorSpace()
          */
-        ::com::sun::star::uno::Sequence< double >
+        css::uno::Sequence< double >
             VCL_DLLPUBLIC colorToStdColorSpaceSequence( const Color& rColor );
 
         /** Convert color to device color sequence
@@ -108,10 +106,9 @@ namespace vcl
             @param xColorSpace
             Color space to convert into
          */
-        ::com::sun::star::uno::Sequence< double >
-        VCL_DLLPUBLIC colorToDoubleSequence( const Color&                                      rColor,
-                                             const ::com::sun::star::uno::Reference<
-                                                   ::com::sun::star::rendering::XColorSpace >& xColorSpace );
+        css::uno::Sequence< double >
+        VCL_DLLPUBLIC colorToDoubleSequence( const Color&                                              rColor,
+                                             const css::uno::Reference< css::rendering::XColorSpace >& xColorSpace );
 
         /** Convert from standard device color space to VCL/Tools color
 
@@ -119,7 +116,7 @@ namespace vcl
             the one returned from createStandardColorSpace()
          */
         Color VCL_DLLPUBLIC stdColorSpaceSequenceToColor(
-            const ::com::sun::star::uno::Sequence< double >& rColor );
+            const css::uno::Sequence< double >& rColor );
 
         /** Convert color to device color sequence
 
@@ -129,9 +126,8 @@ namespace vcl
             @param xColorSpace
             Color space to convert from
          */
-        Color VCL_DLLPUBLIC doubleSequenceToColor( const ::com::sun::star::uno::Sequence< double >& rColor,
-                                                   const ::com::sun::star::uno::Reference<
-                                                         ::com::sun::star::rendering::XColorSpace >& xColorSpace );
+        Color VCL_DLLPUBLIC doubleSequenceToColor( const css::uno::Sequence< double >& rColor,
+                                                   const css::uno::Reference< css::rendering::XColorSpace >& xColorSpace );
 
         /// Convert [0,1] double value to [0,255] int
         inline sal_Int8 toByteColor( double val )
@@ -147,23 +143,22 @@ namespace vcl
         }
 
         /// Create a standard color space suitable for VCL RGB color
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XColorSpace> VCL_DLLPUBLIC createStandardColorSpace();
+        css::uno::Reference< css::rendering::XColorSpace> VCL_DLLPUBLIC createStandardColorSpace();
 
         // Geometry conversions (vcl/tools <-> x)
 
 
         // geometry::Real
-        ::com::sun::star::geometry::RealSize2D          VCL_DLLPUBLIC size2DFromSize( const Size& );
+        css::geometry::RealSize2D          VCL_DLLPUBLIC size2DFromSize( const Size& );
 
-        Size                                            VCL_DLLPUBLIC sizeFromRealSize2D( const ::com::sun::star::geometry::RealSize2D& );
+        Size                               VCL_DLLPUBLIC sizeFromRealSize2D( const css::geometry::RealSize2D& );
 
         // geometry::Integer
-        ::com::sun::star::geometry::IntegerSize2D       VCL_DLLPUBLIC integerSize2DFromSize( const Size& );
+        css::geometry::IntegerSize2D       VCL_DLLPUBLIC integerSize2DFromSize( const Size& );
 
-        Size                                            VCL_DLLPUBLIC sizeFromIntegerSize2D( const ::com::sun::star::geometry::IntegerSize2D& );
-        Point                                           VCL_DLLPUBLIC pointFromIntegerPoint2D( const ::com::sun::star::geometry::IntegerPoint2D& );
-        Rectangle                                       VCL_DLLPUBLIC rectangleFromIntegerRectangle2D( const ::com::sun::star::geometry::IntegerRectangle2D& );
+        Size                               VCL_DLLPUBLIC sizeFromIntegerSize2D( const css::geometry::IntegerSize2D& );
+        Point                              VCL_DLLPUBLIC pointFromIntegerPoint2D( const css::geometry::IntegerPoint2D& );
+        Rectangle                          VCL_DLLPUBLIC rectangleFromIntegerRectangle2D( const css::geometry::IntegerRectangle2D& );
 
         // basegfx::B2D
         Size                        VCL_DLLPUBLIC sizeFromB2DSize( const ::basegfx::B2DVector& );

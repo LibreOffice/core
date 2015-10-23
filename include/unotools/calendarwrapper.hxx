@@ -41,21 +41,21 @@ namespace com { namespace sun { namespace star {
 
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCalendar4 >   xC;
+    css::uno::Reference< css::i18n::XCalendar4 >   xC;
 
             DateTime            aEpochStart;        // 1Jan1970
 
 public:
                                 CalendarWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext
+                                    const css::uno::Reference< css::uno::XComponentContext > & rxContext
                                     );
                                 ~CalendarWrapper();
 
     // wrapper implementations of XCalendar
 
-    void loadDefaultCalendar( const ::com::sun::star::lang::Locale& rLocale );
-    void loadCalendar( const OUString& rUniqueID, const ::com::sun::star::lang::Locale& rLocale );
-    ::com::sun::star::uno::Sequence< OUString > getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const;
+    void loadDefaultCalendar( const css::lang::Locale& rLocale );
+    void loadCalendar( const OUString& rUniqueID, const css::lang::Locale& rLocale );
+    css::uno::Sequence< OUString > getAllCalendars( const css::lang::Locale& rLocale ) const;
     OUString getUniqueID() const;
     /// set UTC date/time
     void setDateTime( double fTimeInDays );
@@ -82,11 +82,11 @@ public:
 
     // wrapper implementations of XCalendar3
 
-    ::com::sun::star::i18n::Calendar2 getLoadedCalendar() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getDays() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getMonths() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getGenitiveMonths() const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getPartitiveMonths() const;
+    css::i18n::Calendar2 getLoadedCalendar() const;
+    css::uno::Sequence< css::i18n::CalendarItem2 > getDays() const;
+    css::uno::Sequence< css::i18n::CalendarItem2 > getMonths() const;
+    css::uno::Sequence< css::i18n::CalendarItem2 > getGenitiveMonths() const;
+    css::uno::Sequence< css::i18n::CalendarItem2 > getPartitiveMonths() const;
 
     // wrapper implementations of XCalendar4
 

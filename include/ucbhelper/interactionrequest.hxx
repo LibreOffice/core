@@ -60,13 +60,13 @@ struct InteractionRequest_Impl;
   * like authentication requests.
   */
 class UCBHELPER_DLLPUBLIC InteractionRequest : public cppu::OWeakObject,
-                           public com::sun::star::lang::XTypeProvider,
-                           public com::sun::star::task::XInteractionRequest
+                           public css::lang::XTypeProvider,
+                           public css::task::XInteractionRequest
 {
     InteractionRequest_Impl * m_pImpl;
 
 protected:
-    void setRequest( const com::sun::star::uno::Any & rRequest );
+    void setRequest( const css::uno::Any & rRequest );
 
     InteractionRequest();
     virtual ~InteractionRequest();
@@ -77,7 +77,7 @@ public:
       *
       * @param rRequest is the exception describing the error.
       */
-    InteractionRequest( const com::sun::star::uno::Any & rRequest );
+    InteractionRequest( const css::uno::Any & rRequest );
 
     /**
       * This method sets the continuations for the request.
@@ -85,37 +85,32 @@ public:
       * @param rContinuations contains the possible continuations.
       */
     void setContinuations(
-        const com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > &
-                    rContinuations );
+        const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > & rContinuations );
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
     // XTypeProvider
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionRequest
-    virtual com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
     getRequest()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence<
-                com::sun::star::uno::Reference<
-                    com::sun::star::task::XInteractionContinuation > > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL
     getContinuations()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // Non-interface methods.
 
@@ -181,33 +176,33 @@ public:
   * the operation that caused the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionAbort : public InteractionContinuation,
-                         public com::sun::star::lang::XTypeProvider,
-                         public com::sun::star::task::XInteractionAbort
+                         public css::lang::XTypeProvider,
+                         public css::task::XInteractionAbort
 {
 public:
     InteractionAbort( InteractionRequest * pRequest )
     : InteractionContinuation( pRequest ) {}
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
     // XTypeProvider
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 
@@ -218,33 +213,33 @@ public:
   * the operation that caused the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionRetry : public InteractionContinuation,
-                         public com::sun::star::lang::XTypeProvider,
-                         public com::sun::star::task::XInteractionRetry
+                         public css::lang::XTypeProvider,
+                         public css::task::XInteractionRetry
 {
 public:
     InteractionRetry( InteractionRequest * pRequest )
     : InteractionContinuation( pRequest ) {}
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
     // XTypeProvider
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 
@@ -255,33 +250,33 @@ public:
   * the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionApprove : public InteractionContinuation,
-                           public com::sun::star::lang::XTypeProvider,
-                           public com::sun::star::task::XInteractionApprove
+                           public css::lang::XTypeProvider,
+                           public css::task::XInteractionApprove
 {
 public:
     InteractionApprove( InteractionRequest * pRequest )
     : InteractionContinuation( pRequest ) {}
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
     // XTypeProvider
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 
@@ -292,33 +287,33 @@ public:
   * the request.
   */
 class UCBHELPER_DLLPUBLIC InteractionDisapprove : public InteractionContinuation,
-                              public com::sun::star::lang::XTypeProvider,
-                              public com::sun::star::task::XInteractionDisapprove
+                              public css::lang::XTypeProvider,
+                              public css::task::XInteractionDisapprove
 {
 public:
     InteractionDisapprove( InteractionRequest * pRequest )
     : InteractionContinuation( pRequest ) {}
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
     // XTypeProvider
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 
@@ -330,21 +325,21 @@ public:
   */
 class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication :
                   public InteractionContinuation,
-                  public com::sun::star::lang::XTypeProvider,
-                  public com::sun::star::ucb::XInteractionSupplyAuthentication2
+                  public css::lang::XTypeProvider,
+                  public css::ucb::XInteractionSupplyAuthentication2
 {
-    com::sun::star::uno::Sequence< com::sun::star::ucb::RememberAuthentication >
+    css::uno::Sequence< css::ucb::RememberAuthentication >
                   m_aRememberPasswordModes;
-    com::sun::star::uno::Sequence< com::sun::star::ucb::RememberAuthentication >
+    css::uno::Sequence< css::ucb::RememberAuthentication >
                   m_aRememberAccountModes;
     OUString m_aRealm;
     OUString m_aUserName;
     OUString m_aPassword;
     OUString m_aAccount;
-    com::sun::star::ucb::RememberAuthentication m_eRememberPasswordMode;
-    com::sun::star::ucb::RememberAuthentication m_eDefaultRememberPasswordMode;
-    com::sun::star::ucb::RememberAuthentication m_eRememberAccountMode;
-    com::sun::star::ucb::RememberAuthentication m_eDefaultRememberAccountMode;
+    css::ucb::RememberAuthentication m_eRememberPasswordMode;
+    css::ucb::RememberAuthentication m_eDefaultRememberPasswordMode;
+    css::ucb::RememberAuthentication m_eRememberAccountMode;
+    css::ucb::RememberAuthentication m_eDefaultRememberAccountMode;
     bool m_bCanSetRealm    : 1;
     bool m_bCanSetUserName : 1;
     bool m_bCanSetPassword : 1;
@@ -367,7 +362,7 @@ public:
       * @param bCanSetAccount indicates, whether the account given with the
       *        authentication request is read-only.
       *
-      * @see com::sun::star::ucb::AuthenticationRequest
+      * @see css::ucb::AuthenticationRequest
       */
     inline InteractionSupplyAuthentication(
                     InteractionRequest * pRequest,
@@ -406,8 +401,8 @@ public:
       * @param bDefaultUseSystemCredentials specifies the default system
       *        credentials usage preferred by the requesting client
       *
-      * @see com::sun::star::ucb::AuthenticationRequest
-      * @see com::sun::star::ucb::RememberAuthentication
+      * @see css::ucb::AuthenticationRequest
+      * @see css::ucb::RememberAuthentication
       */
     inline InteractionSupplyAuthentication(
                     InteractionRequest * pRequest,
@@ -415,92 +410,85 @@ public:
                     bool bCanSetUserName,
                     bool bCanSetPassword,
                     bool bCanSetAccount,
-                    const com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::RememberAuthentication > &
-                            rRememberPasswordModes,
-                    const com::sun::star::ucb::RememberAuthentication
-                        eDefaultRememberPasswordMode,
-                    const com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::RememberAuthentication > &
-                            rRememberAccountModes,
-                    const com::sun::star::ucb::RememberAuthentication
-                        eDefaultRememberAccountMode,
+                    const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberPasswordModes,
+                    const css::ucb::RememberAuthentication eDefaultRememberPasswordMode,
+                    const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
+                    const css::ucb::RememberAuthentication  eDefaultRememberAccountMode,
                     bool bCanUseSystemCredentials,
                     bool bDefaultUseSystemCredentials );
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
     // XTypeProvider
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionSupplyAuthentication
     virtual sal_Bool SAL_CALL
     canSetRealm()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     setRealm( const OUString& Realm )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
     canSetUserName()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     setUserName( const OUString& UserName )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
     canSetPassword()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     setPassword( const OUString& Password )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Sequence<
-                com::sun::star::ucb::RememberAuthentication > SAL_CALL
+    virtual css::uno::Sequence<
+                css::ucb::RememberAuthentication > SAL_CALL
     getRememberPasswordModes(
-            com::sun::star::ucb::RememberAuthentication& Default )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            css::ucb::RememberAuthentication& Default )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    setRememberPassword( com::sun::star::ucb::RememberAuthentication Remember )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    setRememberPassword( css::ucb::RememberAuthentication Remember )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
     canSetAccount()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     setAccount( const OUString& Account )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Sequence<
-                com::sun::star::ucb::RememberAuthentication > SAL_CALL
+    virtual css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL
     getRememberAccountModes(
-            com::sun::star::ucb::RememberAuthentication& Default )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            css::ucb::RememberAuthentication& Default )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    setRememberAccount( com::sun::star::ucb::RememberAuthentication Remember )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    setRememberAccount( css::ucb::RememberAuthentication Remember )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionSupplyAuthentication2
     virtual sal_Bool SAL_CALL canUseSystemCredentials( sal_Bool& Default )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL setUseSystemCredentials( sal_Bool UseSystemCredentials )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // Non-interface methods.
 
@@ -534,7 +522,7 @@ public:
       *
       * @return the remember-mode for the password.
       */
-    const com::sun::star::ucb::RememberAuthentication &
+    const css::ucb::RememberAuthentication &
     getRememberPasswordMode() const { return m_eRememberPasswordMode; }
 
     bool getUseSystemCredentials() const { return m_bUseSystemCredentials; }
@@ -548,16 +536,12 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
                     bool bCanSetPassword,
                     bool bCanSetAccount )
 : InteractionContinuation( pRequest ),
-  m_aRememberPasswordModes( com::sun::star::uno::Sequence<
-                com::sun::star::ucb::RememberAuthentication >( 1 ) ),
-  m_aRememberAccountModes( com::sun::star::uno::Sequence<
-                com::sun::star::ucb::RememberAuthentication >( 1 ) ),
-  m_eRememberPasswordMode( com::sun::star::ucb::RememberAuthentication_NO ),
-  m_eDefaultRememberPasswordMode(
-                com::sun::star::ucb::RememberAuthentication_NO ),
-  m_eRememberAccountMode( com::sun::star::ucb::RememberAuthentication_NO ),
-  m_eDefaultRememberAccountMode(
-                com::sun::star::ucb::RememberAuthentication_NO ),
+  m_aRememberPasswordModes( css::uno::Sequence< css::ucb::RememberAuthentication >( 1 ) ),
+  m_aRememberAccountModes( css::uno::Sequence< css::ucb::RememberAuthentication >( 1 ) ),
+  m_eRememberPasswordMode( css::ucb::RememberAuthentication_NO ),
+  m_eDefaultRememberPasswordMode( css::ucb::RememberAuthentication_NO ),
+  m_eRememberAccountMode( css::ucb::RememberAuthentication_NO ),
+  m_eDefaultRememberAccountMode( css::ucb::RememberAuthentication_NO ),
   m_bCanSetRealm( bCanSetRealm ),
   m_bCanSetUserName( bCanSetUserName ),
   m_bCanSetPassword( bCanSetPassword ),
@@ -567,9 +551,9 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_bUseSystemCredentials( false )
 {
     m_aRememberPasswordModes[ 0 ]
-        = com::sun::star::ucb::RememberAuthentication_NO;
+        = css::ucb::RememberAuthentication_NO;
     m_aRememberAccountModes [ 0 ]
-        = com::sun::star::ucb::RememberAuthentication_NO;
+        = css::ucb::RememberAuthentication_NO;
 }
 
 
@@ -579,14 +563,10 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
     bool bCanSetUserName,
     bool bCanSetPassword,
     bool bCanSetAccount,
-    const com::sun::star::uno::Sequence<
-        com::sun::star::ucb::RememberAuthentication > & rRememberPasswordModes,
-    const com::sun::star::ucb::RememberAuthentication
-        eDefaultRememberPasswordMode,
-    const com::sun::star::uno::Sequence<
-        com::sun::star::ucb::RememberAuthentication > & rRememberAccountModes,
-    const com::sun::star::ucb::RememberAuthentication
-        eDefaultRememberAccountMode,
+    const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberPasswordModes,
+    const css::ucb::RememberAuthentication eDefaultRememberPasswordMode,
+    const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
+    const css::ucb::RememberAuthentication eDefaultRememberAccountMode,
     bool bCanUseSystemCredentials,
     bool bDefaultUseSystemCredentials )
 : InteractionContinuation( pRequest ),
@@ -615,38 +595,38 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   */
 class InteractionReplaceExistingData :
                   public InteractionContinuation,
-                  public com::sun::star::lang::XTypeProvider,
-                  public com::sun::star::ucb::XInteractionReplaceExistingData
+                  public css::lang::XTypeProvider,
+                  public css::ucb::XInteractionReplaceExistingData
 {
 public:
     InteractionReplaceExistingData( InteractionRequest * pRequest )
     : InteractionContinuation( pRequest ) {}
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
     // XTypeProvider
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 class UCBHELPER_DLLPUBLIC InteractionAuthFallback:
                   public InteractionContinuation,
-                  public com::sun::star::ucb::XInteractionAuthFallback
+                  public css::ucb::XInteractionAuthFallback
 {
     OUString m_aCode;
 
@@ -655,9 +635,9 @@ public:
     : InteractionContinuation( pRequest ) {}
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -665,7 +645,7 @@ public:
 
     // XInteractionContinuation
     virtual void SAL_CALL select()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XAuthFallback
     virtual void SAL_CALL setCode( const OUString& code )

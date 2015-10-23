@@ -51,8 +51,7 @@ class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport
 
     SAL_DLLPRIVATE void exportLevelStyle(
             sal_Int32 nLevel,
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue>& rProps,
+            const css::uno::Sequence< css::beans::PropertyValue>& rProps,
             bool bOutline=false );
 
 protected:
@@ -60,8 +59,7 @@ protected:
     /// Override this to add attributes to the <list-style> element.
     SAL_DLLPRIVATE virtual void AddListStyleAttributes();
 
-    SAL_DLLPRIVATE bool exportStyle( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::style::XStyle >& rStyle );
+    SAL_DLLPRIVATE bool exportStyle( const css::uno::Reference< css::style::XStyle >& rStyle );
     SAL_DLLPRIVATE void exportOutline();
 
     SvXMLExport& GetExport() { return rExport; }
@@ -73,8 +71,7 @@ public:
 
     // should be private but sw::StoredChapterNumberingExport needs it
     void exportLevelStyles(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XIndexReplace > & xNumRule,
+            const css::uno::Reference< css::container::XIndexReplace > & xNumRule,
             bool bOutline=false );
 
     void exportStyles( bool bUsed,
@@ -82,8 +79,7 @@ public:
                        bool bExportChapterNumbering = true );
     void exportNumberingRule(
             const OUString& rName, bool bIsHidden,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XIndexReplace > & xNumRule );
+            const css::uno::Reference< css::container::XIndexReplace > & xNumRule );
 };
 
 #endif // INCLUDED_XMLOFF_XMLNUME_HXX

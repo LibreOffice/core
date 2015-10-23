@@ -52,7 +52,7 @@ UNOTOOLS_DLLPUBLIC bool GetTitle(
 
 UNOTOOLS_DLLPUBLIC bool Kill(OUString const & url);
 
-UNOTOOLS_DLLPUBLIC com::sun::star::uno::Any GetProperty(
+UNOTOOLS_DLLPUBLIC css::uno::Any GetProperty(
     OUString const & url, OUString const & property);
 
 UNOTOOLS_DLLPUBLIC bool MakeFolder(
@@ -61,8 +61,8 @@ UNOTOOLS_DLLPUBLIC bool MakeFolder(
 
 /// like mkdir -p
 UNOTOOLS_DLLPUBLIC bool ensureFolder(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xCtx,
-    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv,
+    css::uno::Reference< css::uno::XComponentContext > xCtx,
+    css::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
     const OUString& rFolder, ucbhelper::Content & result) throw();
 
 /// @return the value of the "Size" property of the given content, or zero if

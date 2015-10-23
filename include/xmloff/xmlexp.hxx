@@ -108,30 +108,30 @@ namespace o3tl
 }
 
 class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
-             ::com::sun::star::document::XFilter,
-             ::com::sun::star::lang::XServiceInfo,
-             ::com::sun::star::document::XExporter,
-              ::com::sun::star::lang::XInitialization,
-             ::com::sun::star::container::XNamed,
-             ::com::sun::star::lang::XUnoTunnel>
+             css::document::XFilter,
+             css::lang::XServiceInfo,
+             css::document::XExporter,
+             css::lang::XInitialization,
+             css::container::XNamed,
+             css::lang::XUnoTunnel>
 {
     SvXMLExport_Impl            *mpImpl;            // dummy
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     OUString m_implementationName;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >            mxHandler;      // the handlers
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler >    mxExtHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > mxGraphicResolver;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > mxStatusIndicator;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxExportInfo;
-     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > mxEventListener;
+    css::uno::Reference< css::frame::XModel > mxModel;
+    css::uno::Reference< css::xml::sax::XDocumentHandler >            mxHandler;      // the handlers
+    css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >    mxExtHandler;
+    css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
+    css::uno::Reference< css::document::XGraphicObjectResolver > mxGraphicResolver;
+    css::uno::Reference< css::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
+    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
+    css::uno::Reference< css::beans::XPropertySet > mxExportInfo;
+    css::uno::Reference< css::lang::XEventListener > mxEventListener;
 
     SvXMLAttributeList          *mpAttrList;        // a common attribute list
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >          mxAttrList;     // and an interface of it
+    css::uno::Reference< css::xml::sax::XAttributeList >          mxAttrList;     // and an interface of it
 
     OUString     msOrigFileName; // the original URL
     OUString     msGraphicObjectProtocol;
@@ -180,7 +180,7 @@ private:
         // <office:master-styles>
     SAL_DLLPRIVATE void ImplExportContent(); // <office:body>
     virtual void SetBodyAttributes();
-    void GetViewSettingsAndViews(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
+    void GetViewSettingsAndViews(css::uno::Sequence<css::beans::PropertyValue>& rProps);
 
 protected:
     void setExportFlags( SvXMLExportFlags nExportFlags ) { mnExportFlags = nExportFlags; }
@@ -233,13 +233,13 @@ protected:
     virtual XMLPageExport* CreatePageExport();
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
     xmloff::OFormLayerXMLExport* CreateFormExport();
-    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
-    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
+    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps);
+    virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps);
 
     struct SettingsGroup
     {
-        ::xmloff::token::XMLTokenEnum                                               eGroupName;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   aSettings;
+        ::xmloff::token::XMLTokenEnum                     eGroupName;
+        css::uno::Sequence< css::beans::PropertyValue >   aSettings;
 
         SettingsGroup()
             :eGroupName( ::xmloff::token::XML_TOKEN_INVALID )
@@ -249,7 +249,7 @@ protected:
 
         SettingsGroup(
                 const ::xmloff::token::XMLTokenEnum _eGroupName,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rSettings )
+                const css::uno::Sequence< css::beans::PropertyValue >& _rSettings )
             :eGroupName( _eGroupName )
             ,aSettings( _rSettings )
         {
@@ -265,64 +265,64 @@ protected:
     */
     virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings );
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
-    inline void SetEmbeddedResolver( com::sun::star::uno::Reference< com::sun::star::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
+    const css::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
+    inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver >& GetGraphicResolver() const { return mxGraphicResolver; }
-    void SetGraphicResolver( com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& _xGraphicResolver );
+    const css::uno::Reference< css::document::XGraphicObjectResolver >& GetGraphicResolver() const { return mxGraphicResolver; }
+    void SetGraphicResolver( css::uno::Reference< css::document::XGraphicObjectResolver >& _xGraphicResolver );
 
-    void SetDocHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > &rHandler );
+    void SetDocHandler( const css::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler );
 
 public:
 
     SvXMLExport(
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         const enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID,
         SvXMLExportFlags nExportFlag = SvXMLExportFlags::ALL );
 
     SvXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         const OUString& rFileName,
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
-		const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler);
+        const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler);
 
     SvXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         const OUString& rFileName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
+        const css::uno::Reference< css::frame::XModel > &,
         FieldUnit const eDefaultFieldUnit );
 
     virtual ~SvXMLExport();
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    static SvXMLExport* getImplementation( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ) throw();
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    static SvXMLExport* getImplementation( css::uno::Reference< css::uno::XInterface > ) throw();
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL cancel() throw(css::uno::RuntimeException, std::exception) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // XNamed
-    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) final override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) final override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) final override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) final override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) final override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) final override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
     /** ensures that the given namespace is in scope at the next started
         element.
@@ -386,7 +386,7 @@ public:
                     also switches nPrefix XML_NAMESPACE_FO to XML_NAMESPACE_STYLE
      */
     void AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPrefixRfc,
-            const ::com::sun::star::lang::Locale& rLocale, bool bWriteEmpty,
+            const css::lang::Locale& rLocale, bool bWriteEmpty,
             enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_LANGUAGE );
 
     /** Same as AddLanguageTagAttributes() but with LanguageTag parameter
@@ -397,16 +397,16 @@ public:
             enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_LANGUAGE );
 
     // add several attributes to the common attribute list
-    void AddAttributeList( const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    void AddAttributeList( const css::uno::Reference<
+                                  css::xml::sax::XAttributeList >& xAttrList );
 
     // Get common attribute list as implementation or interface.
     SvXMLAttributeList &GetAttrList() { return *mpAttrList; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & GetXAttrList() { return mxAttrList; }
+    const css::uno::Reference< css::xml::sax::XAttributeList > & GetXAttrList() { return mxAttrList; }
 
     // Get document handler. This methods are not const, because the
     // reference allowes modifications through the handler.
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & GetDocHandler() { return mxHandler; }
+    const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() { return mxHandler; }
 
     // Get original URL.
     const OUString& GetOrigFileName() const { return msOrigFileName; }
@@ -430,14 +430,14 @@ public:
     virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) const;
     sal_Int32 dataStyleForceSystemLanguage(sal_Int32 nFormat) const;
 
-    virtual void exportAnnotationMeta( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape);
+    virtual void exportAnnotationMeta( const css::uno::Reference < css::drawing::XShape >& xShape);
 
     // Get XModel
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &
+    const css::uno::Reference< css::frame::XModel > &
                GetModel() const { return mxModel; }
     // Get XNumberFormatsSupplier
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier() { return mxNumberFormatsSupplier; }
-    inline void SetNumberFormatsSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
+    css::uno::Reference< css::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier() { return mxNumberFormatsSupplier; }
+    inline void SetNumberFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
     {
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
         if ( mxNumberFormatsSupplier.is() && mxHandler.is() )
@@ -469,9 +469,9 @@ public:
     inline bool HasFormExport();
 
     // get XPropertySet with export information
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getExportInfo() const { return mxExportInfo; }
+    inline css::uno::Reference< css::beans::XPropertySet > getExportInfo() const { return mxExportInfo; }
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > GetStatusIndicator() { return mxStatusIndicator; }
+    css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator() { return mxStatusIndicator; }
 
     /// get Event export, with handlers for script types "None" and
     /// "StarBasic" already registered; other handlers may be registered, too.
@@ -500,8 +500,7 @@ public:
     SvXMLExportFlags getExportFlags() const { return mnExportFlags; }
 
     bool ExportEmbeddedOwnObject(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent >& rComp );
+        css::uno::Reference<css::lang::XComponent >& rComp );
 
     OUString GetRelativeReference(const OUString& rValue);
 
@@ -528,16 +527,15 @@ public:
         /// error ID, may contain an error flag
         sal_Int32 nId,
         /// string parameters for the error message
-        const ::com::sun::star::uno::Sequence< OUString> & rMsgParams,
+        const css::uno::Sequence< OUString> & rMsgParams,
         /// original exception message (if applicable)
         const OUString& rExceptionMessage,
         /// error location (if applicable)
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XLocator> & rLocator );
+        const css::uno::Reference<css::xml::sax::XLocator> & rLocator );
 
     void SetError(
         sal_Int32 nId,
-        const ::com::sun::star::uno::Sequence< OUString> & rMsgParams);
+        const css::uno::Sequence< OUString> & rMsgParams);
 
     /** return current error flags (logical 'or' of all error flags so far) */
     SvXMLErrorFlags GetErrorFlags()  { return mnErrorFlags; }
@@ -546,7 +544,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getComponentContext() { return m_xContext;}
+    css::uno::Reference< css::uno::XComponentContext > getComponentContext() { return m_xContext;}
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory GetModelType() const
@@ -557,7 +555,7 @@ public:
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     bool writeOutlineStyleAsNormalListStyle() const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetTargetStorage();
+    css::uno::Reference< css::embed::XStorage > GetTargetStorage();
 
     /// returns the currently configured default version for odf export
     SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
@@ -575,12 +573,10 @@ public:
             sal_uInt16 const nLegacyPrefix, OUString const& rValue);
 
     /// add xml:id attribute (for RDF metadata)
-    void AddAttributeXmlId(::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface> const & i_xIfc);
+    void AddAttributeXmlId(css::uno::Reference<css::uno::XInterface> const & i_xIfc);
 
     /// add RDFa attributes for a metadatable text content
-    void AddAttributesRDFa( ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextContent> const & i_xTextContent);
+    void AddAttributesRDFa( css::uno::Reference<css::text::XTextContent> const & i_xTextContent);
 
     bool exportTextNumberElement() const;
 
@@ -650,13 +646,13 @@ inline bool SvXMLExport::HasFormExport()
 }
 
 inline void SvXMLExport::SetEmbeddedResolver(
-    com::sun::star::uno::Reference< com::sun::star::document::XEmbeddedObjectResolver >& _xEmbeddedResolver )
+    css::uno::Reference< css::document::XEmbeddedObjectResolver >& _xEmbeddedResolver )
 {
     mxEmbeddedResolver = _xEmbeddedResolver;
 }
 
 inline void SvXMLExport::SetGraphicResolver(
-    com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& _xGraphicResolver )
+    css::uno::Reference< css::document::XGraphicObjectResolver >& _xGraphicResolver )
 {
     mxGraphicResolver = _xGraphicResolver;
 }

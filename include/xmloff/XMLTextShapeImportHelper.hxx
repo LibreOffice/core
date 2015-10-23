@@ -38,12 +38,9 @@ public:
     virtual ~XMLTextShapeImportHelper();
 
     virtual void addShape(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape >& rShape,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShapes >& rShapes ) override;
+        css::uno::Reference< css::drawing::XShape >& rShape,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        css::uno::Reference< css::drawing::XShapes >& rShapes ) override;
 };
 
 #endif

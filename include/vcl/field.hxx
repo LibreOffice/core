@@ -76,8 +76,8 @@ public:
     virtual void            Reformat();
     virtual void            ReformatAll();
 
-    virtual void            SetLocale( const ::com::sun::star::lang::Locale& rLocale );
-    const ::com::sun::star::lang::Locale&   GetLocale() const;
+    virtual void            SetLocale( const css::lang::Locale& rLocale );
+    const css::lang::Locale& GetLocale() const;
     const LanguageTag&      GetLanguageTag() const;
 
     const AllSettings&      GetFieldSettings() const;
@@ -333,7 +333,7 @@ public:
     virtual void            Reformat() override;
     virtual void            ReformatAll() override;
 
-    virtual void            SetLocale( const ::com::sun::star::lang::Locale& rLocale ) override;
+    virtual void            SetLocale( const css::lang::Locale& rLocale ) override;
 
 
     void                    SetExtDateFormat( ExtDateFieldFormat eFormat );

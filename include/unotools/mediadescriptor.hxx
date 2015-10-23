@@ -36,7 +36,7 @@ namespace comphelper { class IDocPasswordVerifier; }
 
 namespace utl {
 
-/** @short  can be used to work with a ::com::sun::star::document::MediaDescriptor
+/** @short  can be used to work with a css::document::MediaDescriptor
             struct.
 
     @descr  It wraps a unordered_map around the Sequence< css::beans::PropertyValue >, which
@@ -110,7 +110,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
                     the default ctors of the compiler :-(.
          */
         MediaDescriptor();
-        MediaDescriptor(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lSource);
+        MediaDescriptor(const css::uno::Sequence< css::beans::PropertyValue >& lSource);
 
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.
@@ -177,7 +177,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
                 sequence of the 'ComponentData' property, otherwise an empty
                 Any.
          */
-        ::com::sun::star::uno::Any getComponentDataEntry(
+        css::uno::Any getComponentDataEntry(
             const OUString& rName ) const;
 
         /** Inserts a value into the sequence contained in the property
@@ -197,7 +197,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
          */
         void setComponentDataEntry(
             const OUString& rName,
-            const ::com::sun::star::uno::Any& rValue );
+            const css::uno::Any& rValue );
 
         /** Removes a value from the sequence contained in the property
             'ComponentData' of the media descriptor.
@@ -253,7 +253,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             passed password verifier. If empty, no valid password has been
             found, or the user has chossen to cancel password input.
         */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestAndVerifyDocPassword(
+        css::uno::Sequence< css::beans::NamedValue > requestAndVerifyDocPassword(
             comphelper::IDocPasswordVerifier& rVerifier,
             comphelper::DocPasswordRequestType eRequestType,
             const ::std::vector< OUString >* pDefaultPasswords = 0 );
@@ -281,8 +281,8 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
                     if the given PostData stream is <NULL/>.
          */
         SAL_DLLPRIVATE bool impl_openStreamWithPostData(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& _rxPostData
-            )   throw(::com::sun::star::uno::RuntimeException);
+            const css::uno::Reference< css::io::XInputStream >& _rxPostData
+            )   throw(css::uno::RuntimeException);
 
         /** @short  tries to open a stream by using the given URL.
 
@@ -308,7 +308,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         SAL_DLLPRIVATE bool impl_openStreamWithURL(
             const OUString& sURL,
             bool bLockFile
-            ) throw(::com::sun::star::uno::RuntimeException);
+            ) throw(css::uno::RuntimeException);
 
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.

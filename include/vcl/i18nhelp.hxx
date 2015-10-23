@@ -50,12 +50,12 @@ class VCL_DLLPUBLIC I18nHelper
 private:
     ::osl::Mutex                    maMutex;
     LanguageTag                     maLanguageTag;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     LocaleDataWrapper*              mpLocaleDataWrapper;
     utl::TransliterationWrapper*    mpTransliterationWrapper;
 
-    bool                        mbTransliterateIgnoreCase;
+    bool                            mbTransliterateIgnoreCase;
 
     SAL_DLLPRIVATE void             ImplDestroyWrappers();
 
@@ -66,7 +66,7 @@ protected:
 
 public:
 
-                I18nHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag );
+                I18nHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag );
                 ~I18nHelper();
 
     sal_Int32   CompareString( const OUString& rStr1, const OUString& rStr2 ) const;

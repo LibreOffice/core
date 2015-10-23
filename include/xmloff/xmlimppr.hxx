@@ -84,8 +84,7 @@ public:
       */
     void importXML(
             ::std::vector< XMLPropertyState >& rProperties,
-            ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > xAttrList,
+            css::uno::Reference< css::xml::sax::XAttributeList > xAttrList,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
             sal_uInt32 nPropType,
@@ -106,19 +105,17 @@ public:
 
     void CheckSpecialContext(
             const ::std::vector< XMLPropertyState >& rProperties,
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet >& rPropSet,
+            const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
             _ContextID_Index_Pair* pSpecialContextIds ) const;
 
     bool FillPropertySet(
             const ::std::vector< XMLPropertyState >& rProperties,
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet >& rPropSet,
+            const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
             _ContextID_Index_Pair* pSpecialContextIds = NULL ) const;
 
     void FillPropertySequence(
             const ::std::vector< XMLPropertyState >& aProperties,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues )
+            css::uno::Sequence< css::beans::PropertyValue >& rValues )
             const;
 
     inline const rtl::Reference< XMLPropertySetMapper >&
@@ -130,10 +127,8 @@ public:
      * Exceptions will be asserted. */
     static bool _FillPropertySet(
         const ::std::vector<XMLPropertyState> & rProperties,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySetInfo> & rPropSetInfo,
+        const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
+        const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         SvXMLImport& rImport,
 
@@ -145,10 +140,8 @@ public:
      * If unsuccessul, set return value. */
     static bool _FillMultiPropertySet(
         const ::std::vector<XMLPropertyState> & rProperties,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XMultiPropertySet> & rMultiPropSet,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySetInfo> & rPropSetInfo,
+        const css::uno::Reference< css::beans::XMultiPropertySet> & rMultiPropSet,
+        const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
 
         // parameters for use by txtstyli.cxx; allows efficient
@@ -159,8 +152,7 @@ public:
      * If unsuccessul, set return value. */
     static bool _FillTolerantMultiPropertySet(
         const ::std::vector<XMLPropertyState> & rProperties,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XTolerantMultiPropertySet> & rTolPropSet,
+        const css::uno::Reference< css::beans::XTolerantMultiPropertySet> & rTolPropSet,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         SvXMLImport& rImport,
 
@@ -171,12 +163,11 @@ public:
 
     static void _PrepareForMultiPropertySet(
         const ::std::vector<XMLPropertyState> & rProperties,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySetInfo> & rPropSetInfo,
+        const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         _ContextID_Index_Pair* pSpecialContextIds,
-        ::com::sun::star::uno::Sequence< OUString >& rNames,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues);
+        css::uno::Sequence< OUString >& rNames,
+        css::uno::Sequence< css::uno::Any >& rValues);
 };
 
 

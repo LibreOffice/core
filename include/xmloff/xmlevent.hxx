@@ -96,9 +96,8 @@ public:
     virtual void Export(
         SvXMLExport& rExport,                   /// the current XML export
         const OUString& rEventQName,     /// the XML name of the event
-        ::com::sun::star::uno::Sequence<        /// the values for the event
-            ::com::sun::star::beans::PropertyValue> & rValues,
-         bool bUseWhitespace) = 0;  /// create whitespace around elements?
+        css::uno::Sequence<css::beans::PropertyValue> & rValues, /// the values for the event
+        bool bUseWhitespace) = 0;  /// create whitespace around elements?
 };
 
 
@@ -129,8 +128,7 @@ public:
         SvXMLImport& rImport,               /// import context
         sal_uInt16 nPrefix,                 /// element: namespace prefix
         const OUString& rLocalName,  /// element: local name
-        const ::com::sun::star::uno::Reference<     /// attribute list
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
+        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList, /// attribute list
         /// the context for the enclosing <script:events> element
         XMLEventsImportContext* rEvents,
         /// the event name (as understood by the API)

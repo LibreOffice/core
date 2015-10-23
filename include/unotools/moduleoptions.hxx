@@ -134,7 +134,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
             @return A suitable enum value. See EFactory above.
          */
         static EFactory ClassifyFactoryByURL(const OUString&                                                           sURL            ,
-                                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lMediaDescriptor);
+                                             const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor);
 
         /** @short  return the corresponding application ID for the given properties.
 
@@ -149,7 +149,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
 
             @return A suitable enum value. See EFactory above.
          */
-        static EFactory ClassifyFactoryByModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
+        static EFactory ClassifyFactoryByModel(const css::uno::Reference< css::frame::XModel >& xModel);
 
         static OUString GetFactoryShortName(EFactory eFactory);
 
@@ -164,7 +164,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
         static bool   IsBasicIDE () { return true; }
         bool   IsDataBase () const;
 
-        ::com::sun::star::uno::Sequence < OUString > GetAllServiceNames();
+        css::uno::Sequence < OUString > GetAllServiceNames();
 
     private:
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& impl_GetOwnStaticMutex();

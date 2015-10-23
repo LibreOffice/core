@@ -89,16 +89,12 @@ typedef std::vector< ContentProviderData > ContentProviderDataList;
  */
 
 UCBHELPER_DLLPUBLIC bool registerAtUcb(
-    com::sun::star::uno::Reference<
-            com::sun::star::ucb::XContentProviderManager > const &
-        rManager,
-    com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > const &
-        rxContext,
+    css::uno::Reference< css::ucb::XContentProviderManager > const & rManager,
+    css::uno::Reference< css::uno::XComponentContext > const & rxContext,
     OUString const & rName,
     OUString const & rArguments,
     OUString const & rTemplate)
-    throw (com::sun::star::uno::RuntimeException);
+    throw (css::uno::RuntimeException);
 
 }
 #endif // INCLUDED_UCBHELPER_REGISTERUCB_HXX

@@ -50,9 +50,9 @@ namespace vcl
 {
 namespace unohelper
 {
-VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > CreateBreakIterator();
-VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification> CreateCharacterClassification();
-VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject );
+VCL_DLLPUBLIC css::uno::Reference < css::i18n::XBreakIterator > CreateBreakIterator();
+VCL_DLLPUBLIC css::uno::Reference < css::i18n::XCharacterClassification> CreateCharacterClassification();
+VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const css::accessibility::AccessibleEventObject& rEventObject );
 }}  // namespace vcl::unohelper
 
 #endif // INCLUDED_VCL_UNOHELP_HXX

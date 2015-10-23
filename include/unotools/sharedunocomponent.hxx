@@ -43,8 +43,7 @@ namespace utl
     */
     class UNOTOOLS_DLLPUBLIC DisposableComponent
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-            m_xComponent;
+        css::uno::Reference< css::lang::XComponent >  m_xComponent;
 
     public:
         /** constructs a ->DisposableComponent instance
@@ -52,7 +51,7 @@ namespace utl
         @param _rxComponent
             the component whose life time should be controlled by the instance. Must not be <NULL/>.
         */
-        DisposableComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+        DisposableComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
 
         /** disposes the component represented by the instance
 
@@ -88,7 +87,7 @@ namespace utl
         @param _rxComponent
             the component whose life time should be controlled by the instance. Must not be <NULL/>.
         */
-        CloseableComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+        CloseableComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
 
         /** destroys resources associated with this instance, and disposes the component
 
@@ -141,8 +140,8 @@ namespace utl
         typedef std::shared_ptr<Component>          ComponentPointer;
 
     private:
-        ComponentPointer                                m_xComponent;
-        ::com::sun::star::uno::Reference< INTERFACE >   m_xTypedComponent;
+        ComponentPointer                            m_xComponent;
+        css::uno::Reference< INTERFACE >            m_xTypedComponent;
 
     public:
         enum AssignmentMode
@@ -156,32 +155,32 @@ namespace utl
         {
         }
 
-        explicit inline  SharedUNOComponent( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode eMode = TakeOwnership )
+        explicit inline  SharedUNOComponent( const css::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode eMode = TakeOwnership )
         {
             reset( _rxComponent, eMode );
         }
 
-        inline SharedUNOComponent( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
+        inline SharedUNOComponent( const css::uno::XInterface* _pInterface, css::uno::UnoReference_QueryThrow _queryThrow )
         {
             set( _pInterface, _queryThrow );
         }
 
-        inline SharedUNOComponent( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
+        inline SharedUNOComponent( const css::uno::BaseReference & _rRef, css::uno::UnoReference_QueryThrow _queryThrow )
         {
             set( _rRef, _queryThrow );
         }
 
-        inline SharedUNOComponent( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
+        inline SharedUNOComponent( const css::uno::Any& _rAny, css::uno::UnoReference_QueryThrow _queryThrow )
         {
             set( _rAny, _queryThrow );
         }
 
-        inline  SharedUNOComponent( const SharedUNOComponent& _rxComponent, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
+        inline  SharedUNOComponent( const SharedUNOComponent& _rxComponent, css::uno::UnoReference_SetThrow _setThrow )
         {
             set( _rxComponent, _setThrow );
         }
 
-//        SharedUNOComponent& operator=( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent );
+//        SharedUNOComponent& operator=( const css::uno::Reference< INTERFACE >& _rxComponent );
         // This operator is intentionally not implemented. There is no canonic ownership after this operator
         // would have been applied: Should the SharedUNOComponent have the ownership of the component,
         // or shouldn't it? Hard to guess, and probably wrong in 50 percent of all cases, anyway. So,
@@ -191,26 +190,26 @@ namespace utl
 
         /** assigns a new component, and releases the old one
         */
-        void reset( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode = TakeOwnership );
+        void reset( const css::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode = TakeOwnership );
 
-        inline bool set( const ::com::sun::star::uno::BaseReference& _rRef, ::com::sun::star::uno::UnoReference_Query _query );
+        inline bool set( const css::uno::BaseReference& _rRef, css::uno::UnoReference_Query _query );
 
-        inline void set( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
-        inline void set( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
-        inline void set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
+        inline void set( const css::uno::XInterface* _pInterface, css::uno::UnoReference_QueryThrow _queryThrow );
+        inline void set( const css::uno::BaseReference & _rRef, css::uno::UnoReference_QueryThrow _queryThrow );
+        inline void set( const css::uno::Any& _rAny, css::uno::UnoReference_QueryThrow _queryThrow );
 
-        inline void set( const INTERFACE* _pInterface, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
-        inline void set( const ::com::sun::star::uno::Reference< INTERFACE >& _rRef, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
-        inline void set( const SharedUNOComponent& _rComp, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
+        inline void set( const INTERFACE* _pInterface, css::uno::UnoReference_SetThrow _setThrow );
+        inline void set( const css::uno::Reference< INTERFACE >& _rRef, css::uno::UnoReference_SetThrow _setThrow );
+        inline void set( const SharedUNOComponent& _rComp, css::uno::UnoReference_SetThrow _setThrow );
 
         INTERFACE* SAL_CALL operator->() const;
 
-        operator const ::com::sun::star::uno::Reference< INTERFACE >&() const
+        operator const css::uno::Reference< INTERFACE >&() const
         {
             return m_xTypedComponent;
         }
 
-        const ::com::sun::star::uno::Reference< INTERFACE >& getTyped() const
+        const css::uno::Reference< INTERFACE >& getTyped() const
         {
             return m_xTypedComponent;
         }
@@ -235,7 +234,7 @@ namespace utl
 
     // assignments
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::reset( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::reset( const css::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode )
     {
         m_xComponent.reset(_eMode == TakeOwnership ? new COMPONENT( _rxComponent ) : NULL);
         m_xTypedComponent = _rxComponent;
@@ -243,62 +242,62 @@ namespace utl
 
     // comparison operators
     template < class INTERFACE, class COMPONENT >
-    bool operator==( const ::com::sun::star::uno::Reference< INTERFACE >& _rLHS, const SharedUNOComponent< INTERFACE, COMPONENT >& _rRHS )
+    bool operator==( const css::uno::Reference< INTERFACE >& _rLHS, const SharedUNOComponent< INTERFACE, COMPONENT >& _rRHS )
     {
         return _rLHS == _rRHS.getTyped();
     }
 
     template < class INTERFACE, class COMPONENT >
-    bool operator==( const SharedUNOComponent< INTERFACE, COMPONENT >& _rLHS, const ::com::sun::star::uno::Reference< INTERFACE >& _rRHS )
+    bool operator==( const SharedUNOComponent< INTERFACE, COMPONENT >& _rLHS, const css::uno::Reference< INTERFACE >& _rRHS )
     {
         return _rLHS.getTyped() == _rRHS;
     }
 
     // conversion to Any
     template < class INTERFACE, class COMPONENT >
-    inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const SharedUNOComponent< INTERFACE, COMPONENT >& value )
+    inline void SAL_CALL operator <<= ( css::uno::Any & rAny, const SharedUNOComponent< INTERFACE, COMPONENT >& value )
     {
         rAny <<= value.getTyped();
     }
 
     template < class INTERFACE, class COMPONENT >
-    inline ::com::sun::star::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value )
+    inline css::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value )
     {
         return makeAny( value.getTyped() );
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const css::uno::XInterface* _pInterface, css::uno::UnoReference_QueryThrow _queryThrow )
     {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _pInterface, _queryThrow ), TakeOwnership );
+        reset( css::uno::Reference< INTERFACE >( _pInterface, _queryThrow ), TakeOwnership );
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const css::uno::BaseReference & _rRef, css::uno::UnoReference_QueryThrow _queryThrow )
     {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _rRef, _queryThrow ), TakeOwnership );
+        reset( css::uno::Reference< INTERFACE >( _rRef, _queryThrow ), TakeOwnership );
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const css::uno::Any& _rAny, css::uno::UnoReference_QueryThrow _queryThrow )
     {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _rAny, _queryThrow ), TakeOwnership );
+        reset( css::uno::Reference< INTERFACE >( _rAny, _queryThrow ), TakeOwnership );
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const INTERFACE* _pInterface, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const INTERFACE* _pInterface, css::uno::UnoReference_SetThrow _setThrow )
     {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _pInterface, _setThrow ), TakeOwnership );
+        reset( css::uno::Reference< INTERFACE >( _pInterface, _setThrow ), TakeOwnership );
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Reference< INTERFACE >& _rRef, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const css::uno::Reference< INTERFACE >& _rRef, css::uno::UnoReference_SetThrow _setThrow )
     {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _rRef, _setThrow ), TakeOwnership );
+        reset( css::uno::Reference< INTERFACE >( _rRef, _setThrow ), TakeOwnership );
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const SharedUNOComponent& _rComp, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const SharedUNOComponent& _rComp, css::uno::UnoReference_SetThrow _setThrow )
     {
         *this = _rComp;
         // provoke an exception in case the component is NULL
@@ -306,9 +305,9 @@ namespace utl
     }
 
     template < class INTERFACE, class COMPONENT >
-    bool SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::BaseReference& _rRef, ::com::sun::star::uno::UnoReference_Query _query )
+    bool SharedUNOComponent< INTERFACE, COMPONENT >::set( const css::uno::BaseReference& _rRef, css::uno::UnoReference_Query _query )
     {
-        reset( ::com::sun::star::uno::Reference< INTERFACE >( _rRef, _query ) );
+        reset( css::uno::Reference< INTERFACE >( _rRef, _query ) );
         return is();
     }
 

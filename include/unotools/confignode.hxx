@@ -46,30 +46,29 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC OConfigurationNode : public ::utl::OEventListenerAdapter
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
+        css::uno::Reference< css::container::XHierarchicalNameAccess >
                     m_xHierarchyAccess;     /// accessing children grandchildren (mandatory interface of our UNO object)
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        css::uno::Reference< css::container::XNameAccess >
                     m_xDirectAccess;        /// accessing children  (mandatory interface of our UNO object)
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >
+        css::uno::Reference< css::container::XNameReplace >
                     m_xReplaceAccess;       /// replacing child values
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        css::uno::Reference< css::container::XNameContainer >
                     m_xContainerAccess;     /// modifying set nodes  (optional interface of our UNO object)
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                     m_xDummy;
-        bool    m_bEscapeNames;         /// escape names before accessing children ?
+        bool        m_bEscapeNames;         /// escape names before accessing children ?
 
-        OUString
-                    m_sCompletePath;
+        OUString    m_sCompletePath;
 
-        OConfigurationNode  insertNode(const OUString& _rName,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xNode) const throw();
+        OConfigurationNode  insertNode(const OUString& _rName,const css::uno::Reference< css::uno::XInterface >& _xNode) const throw();
 
     protected:
         /// constructs a node object with an interface representing a node
         OConfigurationNode(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxNode
+            const css::uno::Reference< css::uno::XInterface >& _rxNode
         );
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >&
+        const css::uno::Reference< css::container::XNameAccess >&
             getUNONode() const { return m_xDirectAccess; }
 
     public:
@@ -124,11 +123,9 @@ namespace utl
             Unfortunately, this implies that if a void value is returned, you won't have a clue if this means
             "the path does not exist" (besides the assertion made :), or if the value is really void.
         */
-        ::com::sun::star::uno::Any
-                            getNodeValue(const OUString& _rPath) const throw();
+        css::uno::Any       getNodeValue(const OUString& _rPath) const throw();
 
-        ::com::sun::star::uno::Any
-                            getNodeValue( const sal_Char* _pAsciiPath ) const
+        css::uno::Any       getNodeValue( const sal_Char* _pAsciiPath ) const
         {
             return getNodeValue( OUString::createFromAscii( _pAsciiPath ) );
         }
@@ -139,15 +136,15 @@ namespace utl
             node.
             @return     sal_True if and only if the write was successful.
         */
-        bool            setNodeValue(const OUString& _rPath, const ::com::sun::star::uno::Any& _rValue) const throw();
+        bool            setNodeValue(const OUString& _rPath, const css::uno::Any& _rValue) const throw();
 
-        bool            setNodeValue( const sal_Char* _pAsciiPath, const ::com::sun::star::uno::Any& _rValue ) const
+        bool            setNodeValue( const sal_Char* _pAsciiPath, const css::uno::Any& _rValue ) const
         {
             return setNodeValue( OUString::createFromAscii( _pAsciiPath ), _rValue );
         }
 
         /// return the names of the existing children
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                             getNodeNames() const throw();
 
         /** enables or disables name escaping when accessing direct children<p/>
@@ -185,7 +182,7 @@ namespace utl
 
     protected:
         // OEventListenerAdapter
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) override;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
     protected:
         enum NAMEORIGIN
@@ -205,13 +202,13 @@ namespace utl
     */
     class UNOTOOLS_DLLPUBLIC OConfigurationTreeRoot : public OConfigurationNode
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >
+        css::uno::Reference< css::util::XChangesBatch >
                                 m_xCommitter;
     protected:
         /** ctor for a readonly node
         */
         OConfigurationTreeRoot(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxRootNode
+            const css::uno::Reference< css::uno::XInterface >& _rxRootNode
         );
 
     public:
@@ -258,7 +255,7 @@ namespace utl
             @see    createWithServiceFactory
         */
         static OConfigurationTreeRoot createWithProvider(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
+                const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                 const OUString& _rPath,
                 sal_Int32 _nDepth = -1,
                 CREATION_MODE _eMode = CM_UPDATABLE,
@@ -277,7 +274,7 @@ namespace utl
             @param      _nDepth         depth for node retrieval
             @param      _eMode          specifies which privileges should be applied when retrieving the node
         */
-        static OConfigurationTreeRoot createWithComponentContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
+        static OConfigurationTreeRoot createWithComponentContext(const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, bool _bLazyWrite = true);
 
         /** tolerant version of the <member>createWithServiceFactory</member>
@@ -286,7 +283,7 @@ namespace utl
             the configuration could be initialized, errors in the creation of the specific node (e.g. because the
             given node path does not exist) are still asserted.</p>
         */
-        static OConfigurationTreeRoot tryCreateWithComponentContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+        static OConfigurationTreeRoot tryCreateWithComponentContext( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, bool _bLazyWrite = true );
 
         /** commit all changes made on the subtree the object is the root for<p/>

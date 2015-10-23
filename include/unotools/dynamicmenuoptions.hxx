@@ -87,7 +87,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtDynamicMenuOptions : public utl::det
             @onerror    We return an empty list.
         *//*-*****************************************************************************************************/
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetMenu( EDynamicMenuType eMenu ) const;
+        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > GetMenu( EDynamicMenuType eMenu ) const;
     private:
 
         /*-****************************************************************************************************

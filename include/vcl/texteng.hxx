@@ -104,8 +104,8 @@ private:
 
     TEIMEInfos*         mpIMEInfos;
 
-    ::com::sun::star::lang::Locale maLocale;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > mxBreakIterator;
+    css::lang::Locale   maLocale;
+    css::uno::Reference< css::i18n::XBreakIterator > mxBreakIterator;
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
 
     Rectangle           maInvalidRect;
@@ -162,7 +162,7 @@ protected:
     // gets not exported. First and second parameter swapped to have a different signatur.
     SAL_DLLPRIVATE TextPaM  ImpInsertText( sal_Unicode c, const TextSelection& rSel, bool bOverwrite = false, bool bIsUserInput = false );
     // some other new functions needed that must not be exported to remain compatible
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > GetInputSequenceChecker();
+    SAL_DLLPRIVATE css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > GetInputSequenceChecker();
     SAL_DLLPRIVATE bool IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
 
     // broadcast or adjust selections
@@ -308,9 +308,9 @@ public:
 
     void                Draw( OutputDevice* pDev, const Point& rPos );
 
-    void                            SetLocale( const ::com::sun::star::lang::Locale& rLocale );
-    ::com::sun::star::lang::Locale  GetLocale();
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > GetBreakIterator();
+    void                SetLocale( const css::lang::Locale& rLocale );
+    css::lang::Locale   GetLocale();
+    css::uno::Reference< css::i18n::XBreakIterator > GetBreakIterator();
 
     static bool         DoesKeyChangeText( const KeyEvent& rKeyEvent );
     static bool         IsSimpleCharInput( const KeyEvent& rKeyEvent );

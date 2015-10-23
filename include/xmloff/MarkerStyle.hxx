@@ -43,9 +43,8 @@ public:
     ~XMLMarkerStyleImport();
 
     bool importXML(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-        ::com::sun::star::uno::Any& rValue,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        css::uno::Any& rValue,
         OUString& rStrName );
 };
 
@@ -59,7 +58,7 @@ public:
 
     void exportXML(
         const OUString& rStrName,
-        const ::com::sun::star::uno::Any& rValue );
+        const css::uno::Any& rValue );
 };
 
 #endif // INCLUDED_XMLOFF_MARKERSTYLE_HXX

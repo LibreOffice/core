@@ -46,7 +46,7 @@ public:
       @param key key to xor the data with, from the start until the key's length (not repeated)
       @param eot whether the data is compressed in Embedded OpenType format
     */
-    static bool addEmbeddedFont( com::sun::star::uno::Reference< com::sun::star::io::XInputStream > stream,
+    static bool addEmbeddedFont( css::uno::Reference< css::io::XInputStream > stream,
         const OUString& fontName, const char* extra,
         std::vector< unsigned char > key = std::vector< unsigned char >(), bool eot = false);
 

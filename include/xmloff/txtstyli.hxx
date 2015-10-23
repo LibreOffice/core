@@ -67,8 +67,7 @@ public:
 
     XMLTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
             bool bDefaultStyle = false );
     virtual ~XMLTextStyleContext();
@@ -76,7 +75,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     const OUString& GetListStyle() const { return sListStyleName; }
     // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
@@ -96,8 +95,7 @@ public:
 
     // override FillPropertySet, so we can get at the combined characters
     virtual void FillPropertySet(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
+            const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 
     inline bool HasCombinedCharactersLetter()
         { return bHasCombinedCharactersLetter; }

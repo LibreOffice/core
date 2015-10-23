@@ -46,7 +46,7 @@ namespace xmloff
 
         virtual void    Characters( const OUString& i_rCharacters ) = 0;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        virtual css::uno::Reference< css::uno::XComponentContext >
                         GetComponentContext() const = 0;
 
     protected:

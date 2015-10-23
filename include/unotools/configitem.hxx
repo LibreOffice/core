@@ -77,9 +77,9 @@ namespace utl
             friend class ConfigManager;
 
             const OUString              sSubTree;
-            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
+            css::uno::Reference< css::container::XHierarchicalNameAccess>
                                         m_xHierarchyAccess;
-            com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
+            css::uno::Reference< css::util::XChangesListener >
                                         xChangeLstnr;
             ConfigItemMode              m_nMode;
             bool                        m_bIsModified;
@@ -88,7 +88,7 @@ namespace utl
 
             void                    RemoveChangesListener();
             void                    CallNotify(
-                                const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
+                                const css::uno::Sequence<OUString>& aPropertyNames);
 
             // In special mode ALL_LOCALES we must support reading/writing of localized cfg entries as Sequence< PropertyValue >.
             // These methods are helper to convert given lists of names and Any-values.
@@ -100,15 +100,15 @@ namespace utl
             //                      LOCALE      VALUE
             //                      "de"        "Mein Name"
             //                      "en-US"     "my name"
-            void impl_packLocalizedProperties   (   const   com::sun::star::uno::Sequence< OUString >&                  lInNames    ,
-                                                    const   com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lInValues   ,
-                                                            com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lOutValues  );
-            void impl_unpackLocalizedProperties (   const   com::sun::star::uno::Sequence< OUString >&                  lInNames    ,
-                                                    const   com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lInValues   ,
-                                                            com::sun::star::uno::Sequence< OUString >&                  lOutNames   ,
-                                                            com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lOutValues  );
+            void impl_packLocalizedProperties   (   const   css::uno::Sequence< OUString >&                  lInNames    ,
+                                                    const   css::uno::Sequence< css::uno::Any >&  lInValues   ,
+                                                            css::uno::Sequence< css::uno::Any >&  lOutValues  );
+            void impl_unpackLocalizedProperties (   const   css::uno::Sequence< OUString >&                  lInNames    ,
+                                                    const   css::uno::Sequence< css::uno::Any >&  lInValues   ,
+                                                            css::uno::Sequence< OUString >&                  lOutNames   ,
+                                                            css::uno::Sequence< css::uno::Any >&  lOutValues  );
 
-            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
+            css::uno::Reference< css::container::XHierarchicalNameAccess>
                                         GetTree();
             /** writes the changed values into the sub tree.
                 Private and only called from non-virtual public Commit().  */
@@ -121,15 +121,15 @@ namespace utl
             void                    SetModified  (); // mark item as modified
             void                    ClearModified(); // reset state after commit!
 
-            com::sun::star::uno::Sequence< com::sun::star::uno::Any>
-                                    GetProperties(const com::sun::star::uno::Sequence< OUString >& rNames);
+            css::uno::Sequence< css::uno::Any>
+                                    GetProperties(const css::uno::Sequence< OUString >& rNames);
 
-            com::sun::star::uno::Sequence< sal_Bool >
-                                    GetReadOnlyStates(const com::sun::star::uno::Sequence< OUString >& rNames);
+            css::uno::Sequence< sal_Bool >
+                                    GetReadOnlyStates(const css::uno::Sequence< OUString >& rNames);
 
             bool                PutProperties(
-                                        const com::sun::star::uno::Sequence< OUString >& rNames,
-                                        const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues);
+                                        const css::uno::Sequence< OUString >& rNames,
+                                        const css::uno::Sequence< css::uno::Any>& rValues);
 
             /** enables notifications about changes on selected sub nodes/values
 
@@ -139,7 +139,7 @@ namespace utl
                 @see Notify
                 @see DisableNotification
             */
-            bool                EnableNotification(const com::sun::star::uno::Sequence< OUString >& rNames,
+            bool                EnableNotification(const css::uno::Sequence< OUString >& rNames,
                                         bool bEnableInternalNotification = false);
             /** disables notifications about changes on sub nodes/values, which previosly had
                 been enabled with EnableNotification
@@ -149,20 +149,20 @@ namespace utl
             void                    DisableNotification();
 
             //returns all members of a node in a specific format
-            com::sun::star::uno::Sequence< OUString >
+            css::uno::Sequence< OUString >
                                     GetNodeNames(const OUString& rNode);
             //returns all members of a node in a specific format
-            com::sun::star::uno::Sequence< OUString >
+            css::uno::Sequence< OUString >
                                     GetNodeNames(const OUString& rNode, ConfigNameFormat eFormat);
             // remove all members of a set
             bool                ClearNodeSet(const OUString& rNode);
             // remove selected members of a set
             bool                ClearNodeElements(const OUString& rNode,
-                                        com::sun::star::uno::Sequence< OUString >& rElements);
+                                        css::uno::Sequence< OUString >& rElements);
             // change or add members to a set
-            bool                SetSetProperties(const OUString& rNode, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rValues);
+            bool                SetSetProperties(const OUString& rNode, const css::uno::Sequence< css::beans::PropertyValue >& rValues);
             // remove, change or add members of a set
-            bool                ReplaceSetProperties(const OUString& rNode, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rValues);
+            bool                ReplaceSetProperties(const OUString& rNode, const css::uno::Sequence< css::beans::PropertyValue >& rValues);
             // add a new node without setting any properties
             bool                AddNode(const OUString& rNode, const OUString& rNewNode);
 
@@ -171,7 +171,7 @@ namespace utl
 
             /** is called from the ConfigManager before application ends of from the
                 PropertyChangeListener if the sub tree broadcasts changes. */
-            virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames)=0;
+            virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames)=0;
 
             const OUString&         GetSubTreeName() const {return sSubTree;}
 

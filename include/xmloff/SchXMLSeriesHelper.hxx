@@ -35,36 +35,25 @@
 class XMLOFF_DLLPUBLIC SchXMLSeriesHelper
 {
 public:
-    static ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >
+    static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
             getDataSeriesFromDiagram(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDiagram > & xDiagram );
-    static ::std::map< ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >, sal_Int32 >
+                const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+    static ::std::map< css::uno::Reference< css::chart2::XDataSeries >, sal_Int32 >
             getDataSeriesIndexMapFromDiagram(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDiagram > & xDiagram );
+                const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
     static bool isCandleStickSeries(
-                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDataSeries >& xSeries
-                , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel  );
+                  const css::uno::Reference< css::chart2::XDataSeries >& xSeries
+                , const css::uno::Reference< css::frame::XModel >& xChartModel  );
 
-    static ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > createOldAPISeriesPropertySet(
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XDataSeries >& xSeries
-                    , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel >& xChartModel );
+    static css::uno::Reference< css::beans::XPropertySet > createOldAPISeriesPropertySet(
+                    const css::uno::Reference< css::chart2::XDataSeries >& xSeries
+                    , const css::uno::Reference< css::frame::XModel >& xChartModel );
 
-    static ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > createOldAPIDataPointPropertySet(
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XDataSeries >& xSeries
+    static css::uno::Reference< css::beans::XPropertySet > createOldAPIDataPointPropertySet(
+                    const css::uno::Reference< css::chart2::XDataSeries >& xSeries
                     , sal_Int32 nPointIndex
-                    , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel >& xChartModel );
+                    , const css::uno::Reference< css::frame::XModel >& xChartModel );
 };
 
 // INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX

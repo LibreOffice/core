@@ -58,8 +58,7 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject
     const OUString sIsPhysical;
     const OUString sFollowStyle;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameAccess > xPageStyles;
+    css::uno::Reference< css::container::XNameAccess > xPageStyles;
 
     ::std::vector< XMLPageExportNameEntry > aNameVector;
     SAL_DLLPRIVATE bool findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const;
@@ -73,18 +72,15 @@ protected:
     SvXMLExport& GetExport() { return rExport; }
 
     void collectPageMasterAutoStyle(
-                const ::com::sun::star::uno::Reference <
-                    ::com::sun::star::beans::XPropertySet > & rPropSet,
+                const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
                 OUString& rPageMasterName );
 
     virtual void exportMasterPageContent(
-                const ::com::sun::star::uno::Reference <
-                    ::com::sun::star::beans::XPropertySet > & rPropSet,
+                const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
                  bool bAutoStyles );
 
     bool exportStyle(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::style::XStyle >& rStyle,
+                const css::uno::Reference< css::style::XStyle >& rStyle,
                 bool bAutoStyles );
 
     void exportStyles( bool bUsed, bool bAutoStyles );

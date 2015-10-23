@@ -271,24 +271,24 @@ namespace vcl
     template <typename I>
     class DeleteUnoReferenceOnDeinit : public vcl::DeleteOnDeinitBase
     {
-        ::com::sun::star::uno::Reference<I> m_xI;
+        css::uno::Reference<I> m_xI;
         virtual void doCleanup() override { set(NULL); }
     public:
-        DeleteUnoReferenceOnDeinit(const ::com::sun::star::uno::Reference<I>& r_xI ) : m_xI( r_xI ) {
+        DeleteUnoReferenceOnDeinit(const css::uno::Reference<I>& r_xI ) : m_xI( r_xI ) {
             addDeinitContainer( this ); }
         virtual ~DeleteUnoReferenceOnDeinit() {}
 
-        ::com::sun::star::uno::Reference<I> get() { return m_xI; }
+        css::uno::Reference<I> get() { return m_xI; }
 
-        void set (const ::com::sun::star::uno::Reference<I>& r_xNew )
+        void set (const css::uno::Reference<I>& r_xNew )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComponent (m_xI, ::com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference< css::lang::XComponent> xComponent (m_xI, css::uno::UNO_QUERY);
             m_xI = r_xNew;
             if (xComponent.is()) try
             {
                 xComponent->dispose();
             }
-            catch( ::com::sun::star::uno::Exception& )
+            catch( css::uno::Exception& )
             {
             }
         }

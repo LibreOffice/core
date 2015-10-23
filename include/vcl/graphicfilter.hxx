@@ -310,7 +310,7 @@ public:
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
-                                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData,
+                                   css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                    WMF_EXTERNALHEADER *pExtHeader = NULL );
 
     void                Abort() { bAbort = true; }

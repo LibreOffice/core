@@ -60,7 +60,7 @@ class VCL_DLLPUBLIC MnemonicGenerator
 private:
     // 0 == Mnemonic; >0 == count of characters
     sal_uInt8               maMnemonics[MAX_MNEMONICS];
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification > mxCharClass;
+    css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
 
 protected:
     SAL_DLLPRIVATE sal_uInt16       ImplGetMnemonicIndex( sal_Unicode c );
@@ -71,7 +71,7 @@ public:
 
     void                RegisterMnemonic( const OUString& rKey );
     OUString            CreateMnemonic( const OUString& rKey );
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification > GetCharClass();
+    css::uno::Reference< css::i18n::XCharacterClassification > GetCharClass();
 
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed
     static OUString EraseAllMnemonicChars( const OUString& rStr );

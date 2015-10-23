@@ -35,9 +35,9 @@ namespace ucbhelper {
 //TODO: a duplicate of comphelper::getComponentContext
 // (comphelper/processfactory.hxx)
 UCBHELPER_DLLPUBLIC
-com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+css::uno::Reference< css::uno::XComponentContext >
 getComponentContext(
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    css::uno::Reference< css::lang::XMultiServiceFactory >
         const & factory);
 
 }

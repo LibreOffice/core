@@ -205,8 +205,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
                         Every view can handle its own user defined data set.
             @onerror    In the non-product version, an assertion is made. In a product version, errors are silently ignored.
         *//*-*****************************************************************************************************/
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetUserData(                                                                                     ) const;
-        void                                                                   SetUserData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lData );
+        css::uno::Sequence< css::beans::NamedValue > GetUserData(                                                                                     ) const;
+        void                                         SetUserData( const css::uno::Sequence< css::beans::NamedValue >& lData );
 
         /*-****************************************************************************************************
             @short      use it to set/get ONE special user data item directly
@@ -215,9 +215,9 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @onerror    In the non-product version, an assertion is made. In a product version, errors are silently ignored.
         *//*-*****************************************************************************************************/
 
-        ::com::sun::star::uno::Any GetUserItem( const OUString&            sName  ) const;
-        void                       SetUserItem( const OUString&            sName  ,
-                                                const ::com::sun::star::uno::Any& aValue );
+        css::uno::Any GetUserItem( const OUString&            sName  ) const;
+        void          SetUserItem( const OUString&            sName  ,
+                                   const css::uno::Any& aValue );
 
     //  private methods
 

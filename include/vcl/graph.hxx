@@ -96,7 +96,7 @@ public:
                         Graphic( const SvgDataPtr& rSvgDataPtr );
                         Graphic( const Animation& rAnimation );
                         Graphic( const GDIMetaFile& rMtf );
-                        Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic );
+                        Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
     virtual             ~Graphic();
 
     Graphic&            operator=( const Graphic& rGraphic );
@@ -126,7 +126,7 @@ public:
     Animation               GetAnimation() const;
     const GDIMetaFile&      GetGDIMetaFile() const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > GetXGraphic() const;
+    css::uno::Reference< css::graphic::XGraphic > GetXGraphic() const;
 
     Size                GetPrefSize() const;
     void                SetPrefSize( const Size& rPrefSize );

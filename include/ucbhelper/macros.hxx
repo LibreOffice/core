@@ -40,17 +40,17 @@
 
 
 #define XTYPEPROVIDER_COMMON_IMPL( Class )                                  \
-com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL                          \
+css::uno::Sequence< sal_Int8 > SAL_CALL                          \
 Class::getImplementationId()                                                \
-    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+    throw( css::uno::RuntimeException, std::exception )          \
 {                                                                           \
       return css::uno::Sequence<sal_Int8>();                                \
 }
 
 #define GETTYPES_IMPL_START( Class )                                        \
-com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL         \
+css::uno::Sequence< css::uno::Type > SAL_CALL         \
 Class::getTypes()                                                           \
-    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+    throw( css::uno::RuntimeException, std::exception )          \
 {                                                                           \
     static cppu::OTypeCollection* pCollection = NULL;                       \
       if ( !pCollection )                                                     \
@@ -166,7 +166,7 @@ GETTYPES_IMPL_END
 
 #define XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                         \
 OUString SAL_CALL Class::getImplementationName()                       \
-    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+    throw( css::uno::RuntimeException, std::exception )          \
 {                                                                           \
     return getImplementationName_Static();                                  \
 }                                                                           \
@@ -178,42 +178,36 @@ OUString Class::getImplementationName_Static()                         \
                                                                             \
 sal_Bool SAL_CALL                                                           \
 Class::supportsService( const OUString& ServiceName )                  \
-    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+    throw( css::uno::RuntimeException, std::exception )          \
 {                                                                           \
     return cppu::supportsService( this, ServiceName );                      \
 }                                                                           \
                                                                             \
-com::sun::star::uno::Sequence< OUString > SAL_CALL                     \
+css::uno::Sequence< OUString > SAL_CALL                     \
 Class::getSupportedServiceNames()                                           \
-    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+    throw( css::uno::RuntimeException, std::exception )          \
 {                                                                           \
     return getSupportedServiceNames_Static();                               \
 }
 
 #define XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                          \
-static com::sun::star::uno::Reference<                                      \
-                                com::sun::star::uno::XInterface > SAL_CALL  \
-Class##_CreateInstance( const com::sun::star::uno::Reference<               \
-                com::sun::star::lang::XMultiServiceFactory> & rSMgr )       \
-    throw( com::sun::star::uno::Exception )                                 \
+static css::uno::Reference< css::uno::XInterface > SAL_CALL  \
+Class##_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )       \
+    throw( css::uno::Exception )                                 \
 {                                                                           \
-    com::sun::star::lang::XServiceInfo* pX =                                \
-                static_cast<com::sun::star::lang::XServiceInfo*>(new Class( rSMgr ));    \
-    return com::sun::star::uno::Reference<                                  \
-                            com::sun::star::uno::XInterface >::query( pX ); \
+    css::lang::XServiceInfo* pX =                                \
+                static_cast<css::lang::XServiceInfo*>(new Class( rSMgr ));    \
+    return css::uno::Reference< css::uno::XInterface >::query( pX ); \
 }
 
 #define XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                          \
-static com::sun::star::uno::Reference<                                      \
-                                com::sun::star::uno::XInterface > SAL_CALL  \
-Class##_CreateInstance( const com::sun::star::uno::Reference<               \
-                com::sun::star::lang::XMultiServiceFactory> & rSMgr )       \
-    throw( com::sun::star::uno::Exception )                                 \
+static css::uno::Reference< css::uno::XInterface > SAL_CALL  \
+Class##_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )       \
+    throw( css::uno::Exception )                                 \
 {                                                                           \
-    com::sun::star::lang::XServiceInfo* pX =                                \
-                static_cast<com::sun::star::lang::XServiceInfo*>(new Class( ucbhelper::getComponentContext(rSMgr) ));    \
-    return com::sun::star::uno::Reference<                                  \
-                            com::sun::star::uno::XInterface >::query( pX ); \
+    css::lang::XServiceInfo* pX =                                \
+                static_cast<css::lang::XServiceInfo*>(new Class( ucbhelper::getComponentContext(rSMgr) ));    \
+    return css::uno::Reference< css::uno::XInterface >::query( pX ); \
 }
 
 
@@ -223,13 +217,11 @@ Class##_CreateInstance( const com::sun::star::uno::Reference<               \
 
 
 #define ONE_INSTANCE_SERVICE_FACTORY_IMPL( Class )                          \
-com::sun::star::uno::Reference<                                             \
-                        com::sun::star::lang::XSingleServiceFactory >       \
-Class::createServiceFactory( const com::sun::star::uno::Reference<          \
-            com::sun::star::lang::XMultiServiceFactory >& rxServiceMgr )    \
+css::uno::Reference< css::lang::XSingleServiceFactory >       \
+Class::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )    \
 {                                                                           \
-    return com::sun::star::uno::Reference<                                  \
-        com::sun::star::lang::XSingleServiceFactory >(                      \
+    return css::uno::Reference<                                  \
+        css::lang::XSingleServiceFactory >(                      \
             cppu::createOneInstanceFactory(                                 \
                 rxServiceMgr,                                               \
                 Class::getImplementationName_Static(),                      \
@@ -243,17 +235,17 @@ Class::createServiceFactory( const com::sun::star::uno::Reference<          \
 #define XSERVICEINFO_NOFACTORY_IMPL_0( Class, ImplName )                    \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
                                                                             \
-com::sun::star::uno::Sequence< OUString >                              \
+css::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()
 
 // 1 service name
 #define XSERVICEINFO_NOFACTORY_IMPL_1( Class, ImplName, Service1 )          \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
                                                                             \
-com::sun::star::uno::Sequence< OUString >                              \
+css::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    com::sun::star::uno::Sequence< OUString > aSNS( 1 );               \
+    css::uno::Sequence< OUString > aSNS( 1 );               \
     aSNS.getArray()[ 0 ] = Service1;                                        \
     return aSNS;                                                            \
 }
@@ -265,7 +257,7 @@ Class::getSupportedServiceNames_Static()                                    \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                                  \
                                                                             \
-com::sun::star::uno::Sequence< OUString >                              \
+css::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()
 
 // 1 service name
@@ -273,10 +265,10 @@ Class::getSupportedServiceNames_Static()
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                  \
                                                                             \
-com::sun::star::uno::Sequence< OUString >                              \
+css::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    com::sun::star::uno::Sequence< OUString > aSNS( 1 );               \
+    css::uno::Sequence< OUString > aSNS( 1 );               \
     aSNS.getArray()[ 0 ] = Service1;                                        \
     return aSNS;                                                            \
 }
@@ -286,10 +278,10 @@ Class::getSupportedServiceNames_Static()                                    \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                                  \
                                                                             \
-com::sun::star::uno::Sequence< OUString >                              \
+css::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    com::sun::star::uno::Sequence< OUString > aSNS( 1 );               \
+    css::uno::Sequence< OUString > aSNS( 1 );               \
     aSNS.getArray()[ 0 ] = Service1;                                        \
     return aSNS;                                                            \
 }

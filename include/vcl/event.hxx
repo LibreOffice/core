@@ -132,7 +132,7 @@ public:
     const Point&    GetPosPixel() const     { return maPos; }
     MouseEventModifiers GetMode() const         { return mnMode; }
                     /** inits this vcl KeyEvent with all settings from the given awt event **/
-                    MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent );
+                    MouseEvent( const css::awt::MouseEvent& rEvent );
 
     sal_uInt16      GetClicks() const       { return mnClicks; }
 

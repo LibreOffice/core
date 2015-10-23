@@ -64,7 +64,7 @@ class SvXMLImport;
 class SchXMLImportHelper : public salhelper::SimpleReferenceObject
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::chart::XChartDocument > mxChartDoc;
+    css::uno::Reference< css::chart::XChartDocument > mxChartDoc;
     SvXMLStylesContext* mpAutoStyles;
 
     SvXMLTokenMap* mpChartDocElemTokenMap;
@@ -93,10 +93,8 @@ public:
     SvXMLImportContext* CreateChartContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const com::sun::star::uno::Reference<
-            com::sun::star::frame::XModel >& rChartModel,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XAttributeList >& rAttrList );
+        const css::uno::Reference< css::frame::XModel >& rChartModel,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& rAttrList );
 
     /** set the auto-style context that will be used to retrieve auto-styles
         used inside the following <chart:chart> element to parse
@@ -104,8 +102,7 @@ public:
     void SetAutoStylesContext( SvXMLStylesContext* pAutoStyles ) { mpAutoStyles = pAutoStyles; }
     SvXMLStylesContext* GetAutoStylesContext() const { return mpAutoStyles; }
 
-    const com::sun::star::uno::Reference<
-        com::sun::star::chart::XChartDocument >& GetChartDocument()
+    const css::uno::Reference< css::chart::XChartDocument >& GetChartDocument()
         { return mxChartDoc; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
@@ -135,19 +132,15 @@ public:
                following new chart types are again be added at the end (by
                passing false).
      */
-    static ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > GetNewDataSeries(
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XChartDocument > & xDoc,
+    static css::uno::Reference< css::chart2::XDataSeries > GetNewDataSeries(
+                    const css::uno::Reference< css::chart2::XChartDocument > & xDoc,
                     sal_Int32 nCoordinateSystemIndex,
                     const OUString & rChartTypeName,
                     bool bPushLastChartType = false );
 
     static void DeleteDataSeries(
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XDataSeries >& xSeries,
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XChartDocument > & xDoc );
+                    const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+                    const css::uno::Reference< css::chart2::XChartDocument > & xDoc );
 };
 
 #endif // INCLUDED_XMLOFF_SCHXMLIMPORTHELPER_HXX

@@ -104,14 +104,14 @@ public:
 
 class UNOTOOLS_DLLPUBLIC TextSearch
 {
-    static ::com::sun::star::uno::Reference< ::com::sun::star::util::XTextSearch >
-        getXTextSearch( const ::com::sun::star::util::SearchOptions& rPara );
+    static css::uno::Reference< css::util::XTextSearch >
+        getXTextSearch( const css::util::SearchOptions& rPara );
 
-    com::sun::star::uno::Reference < com::sun::star::util::XTextSearch >
+    css::uno::Reference < css::util::XTextSearch >
             xTextSearch;
 
     void Init( const SearchParam & rParam,
-               const ::com::sun::star::lang::Locale& rLocale );
+               const css::lang::Locale& rLocale );
 
 public:
     // rText is the string being searched for
@@ -119,7 +119,7 @@ public:
     TextSearch( const SearchParam & rPara, LanguageType nLanguage );
     TextSearch( const SearchParam & rPara, const CharClass& rCClass );
 
-    TextSearch( const ::com::sun::star::util::SearchOptions& rPara );
+    TextSearch( const css::util::SearchOptions& rPara );
     ~TextSearch();
 
     /* search in the (selected) text the search string:
@@ -143,16 +143,16 @@ public:
     */
     bool SearchForward( const OUString &rStr,
                         sal_Int32* pStart, sal_Int32* pEnd,
-                        ::com::sun::star::util::SearchResult* pRes = 0 );
+                        css::util::SearchResult* pRes = 0 );
     bool SearchBackward( const OUString &rStr,
                         sal_Int32* pStart, sal_Int32* pEnd,
-                        ::com::sun::star::util::SearchResult* pRes = 0 );
+                        css::util::SearchResult* pRes = 0 );
 
-    void SetLocale( const ::com::sun::star::util::SearchOptions& rOpt,
-                    const ::com::sun::star::lang::Locale& rLocale );
+    void SetLocale( const css::util::SearchOptions& rOpt,
+                    const css::lang::Locale& rLocale );
 
     /* replace back references in the replace string by the sub expressions from the search result */
-    void ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const ::com::sun::star::util::SearchResult& rResult );
+    void ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const css::util::SearchResult& rResult );
 
 };
 

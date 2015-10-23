@@ -60,20 +60,20 @@ public:
     virtual void                Destroy() = 0;
 
     // Toolkit
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > GetVCLToolkit() = 0;
+    virtual css::uno::Reference< css::awt::XToolkit > GetVCLToolkit() = 0;
 
     // Graphics
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >    CreateGraphics( OutputDevice* pOutDev ) = 0;
+    virtual css::uno::Reference< css::awt::XGraphics >    CreateGraphics( OutputDevice* pOutDev ) = 0;
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) = 0;
 
     // Window
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) = 0;
-    virtual void                SetWindowInterface( vcl::Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace ) = 0;
+    virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) = 0;
+    virtual void                SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer > xIFace ) = 0;
 
     virtual void                WindowDestroyed( vcl::Window* pWindow ) = 0;
 
     // Accessibility
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
                                 CreateAccessible( Menu* pMenu, bool bIsMenuBar ) = 0;
 
 protected:

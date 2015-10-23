@@ -44,9 +44,7 @@ namespace utl
         <code>AccessibleStateSet</code> service.
 */
 class UNOTOOLS_DLLPUBLIC AccessibleStateSetHelper
-    :   public cppu::WeakImplHelper1<
-        ::com::sun::star::accessibility::XAccessibleStateSet
-        >
+    :   public cppu::WeakImplHelper1< css::accessibility::XAccessibleStateSet >
 {
 public:
     //=====  internal  ========================================================
@@ -77,7 +75,7 @@ public:
             <FALSE/> if there is at least one state set in it.
     */
     virtual sal_Bool SAL_CALL isEmpty ()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Checks if the given state is a member of the state set of this
         object.
@@ -91,7 +89,7 @@ public:
             state set and <FALSE/> otherwise.
     */
     virtual sal_Bool SAL_CALL contains (sal_Int16 aState)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Checks if all of the given states are in this object's state
         set.
@@ -109,37 +107,37 @@ public:
             object's state set.
     */
     virtual sal_Bool SAL_CALL containsAll (
-        const ::com::sun::star::uno::Sequence<sal_Int16>& rStateSet)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<sal_Int16>& rStateSet)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Returns a sequence of all states.
     */
-    virtual com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<sal_Int16> SAL_CALL getStates()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Adds a state to the set.
     */
     void    AddState(sal_Int16 aState)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     /** Removes a state from the set if the set contains the state, otherwise nothing is done.
     */
     void    RemoveState(sal_Int16 aState)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     //=====  XTypeProvider  ===================================================
 
     /** Returns a sequence of all supported interfaces.
     */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
         getTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Returns a implementation id.
     */
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     /// Mutex guarding this object.

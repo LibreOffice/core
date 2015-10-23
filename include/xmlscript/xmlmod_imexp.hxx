@@ -42,12 +42,10 @@ struct XMLSCRIPT_DLLPUBLIC ModuleDescriptor
 
 XMLSCRIPT_DLLPUBLIC void
 SAL_CALL exportScriptModule(
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::xml::sax::XWriter > const & xOut,
+    css::uno::Reference< css::xml::sax::XWriter > const & xOut,
     const ModuleDescriptor& rMod );
 
-XMLSCRIPT_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::xml::sax::XDocumentHandler >
+XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::xml::sax::XDocumentHandler >
 SAL_CALL importScriptModule( ModuleDescriptor& rMod );
 
 }

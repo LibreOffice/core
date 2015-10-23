@@ -48,13 +48,13 @@ public:
     /// Imports the given value in cas of the given XML-data-type
     virtual bool importXML(
             const OUString& rStrImpValue,
-            ::com::sun::star::uno::Any& rValue,
+            css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 
     /// Exports the given value in cas of the given XML-data-type
     virtual bool exportXML(
             OUString& rStrExpValue,
-            const ::com::sun::star::uno::Any& rValue,
+            const css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 

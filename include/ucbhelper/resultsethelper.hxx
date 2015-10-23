@@ -50,32 +50,28 @@ namespace ucbhelper {
   *
   * Features of the base class implementation:
   * - standard interfaces ( XInterface, XTypeProvider, XServiceInfo )
-  * - all required interfaces for service com::sun::star::ucb::DynamicResultSet
+  * - all required interfaces for service css::ucb::DynamicResultSet
   */
 class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
                 public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::ucb::XDynamicResultSet
+                public css::lang::XTypeProvider,
+                public css::lang::XServiceInfo,
+                public css::ucb::XDynamicResultSet
 {
     cppu::OInterfaceContainerHelper* m_pDisposeEventListeners;
     bool                         m_bStatic;
     bool                         m_bInitDone;
 
 protected:
-    osl::Mutex                                           m_aMutex;
-    com::sun::star::ucb::OpenCommandArgument2            m_aCommand;
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext >         m_xContext;
+    osl::Mutex                                                 m_aMutex;
+    css::ucb::OpenCommandArgument2                             m_aCommand;
+    css::uno::Reference< css::uno::XComponentContext >         m_xContext;
     // Resultset #1
-    com::sun::star::uno::Reference<
-        com::sun::star::sdbc::XResultSet >               m_xResultSet1;
+    css::uno::Reference< css::sdbc::XResultSet >               m_xResultSet1;
     // Resultset #2
-    com::sun::star::uno::Reference<
-        com::sun::star::sdbc::XResultSet >               m_xResultSet2;
+    css::uno::Reference< css::sdbc::XResultSet >               m_xResultSet2;
     // Resultset changes listener.
-    com::sun::star::uno::Reference<
-        com::sun::star::ucb::XDynamicResultSetListener > m_xListener;
+    css::uno::Reference< css::ucb::XDynamicResultSetListener > m_xListener;
 
 private:
     UCBHELPER_DLLPRIVATE void init( bool bStatic );
@@ -125,9 +121,9 @@ public:
       *        this resultset.
       */
     ResultSetImplHelper(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& rxContext,
-            const com::sun::star::ucb::OpenCommandArgument2& rCommand );
+            const css::uno::Reference<
+                css::uno::XComponentContext >& rxContext,
+            const css::ucb::OpenCommandArgument2& rCommand );
 
     /**
       * Destructor.
@@ -143,12 +139,12 @@ public:
         throw() override;
 
     // XTypeProvider
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -164,34 +160,29 @@ public:
     // XComponent ( base class of XDynamicResultSet )
     virtual void SAL_CALL
     dispose()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    addEventListener( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XEventListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XEventListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XDynamicResultSet
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XResultSet > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
     getStaticResultSet()
-        throw( com::sun::star::ucb::ListenerAlreadySetException,
-        com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::ucb::ListenerAlreadySetException,
+        css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    setListener( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XDynamicResultSetListener >& Listener )
-        throw( com::sun::star::ucb::ListenerAlreadySetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener >& Listener )
+        throw( css::ucb::ListenerAlreadySetException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    connectToCache( const com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XDynamicResultSet > & xCache )
-        throw( com::sun::star::ucb::ListenerAlreadySetException,
-               com::sun::star::ucb::AlreadyInitializedException,
-               com::sun::star::ucb::ServiceNotFoundException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache )
+        throw( css::ucb::ListenerAlreadySetException,
+               css::ucb::AlreadyInitializedException,
+               css::ucb::ServiceNotFoundException,
+               css::uno::RuntimeException, std::exception ) override;
 
     /**
       * The implementation of this method always returns 0. Override this
@@ -199,7 +190,7 @@ public:
       */
     virtual sal_Int16 SAL_CALL
     getCapabilities()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 };
 

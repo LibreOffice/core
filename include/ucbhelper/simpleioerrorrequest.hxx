@@ -35,7 +35,7 @@ namespace ucbhelper {
   * instance contains an InteractiveIOException and one interaction
   * continuation: "Abort".
   *
-  * @see com::sun::star::ucb::InteractiveIOException
+  * @see css::ucb::InteractiveIOException
   * @see InteractionAbort
   */
 class SimpleIOErrorRequest : public ucbhelper::InteractionRequest
@@ -53,12 +53,10 @@ public:
       *        of the error code. Refer to com/sun/star/ucb/IOErrorCode.idl
       *        for details.
       */
-    SimpleIOErrorRequest( const com::sun::star::ucb::IOErrorCode eError,
-                          const com::sun::star::uno::Sequence<
-                            com::sun::star::uno::Any > & rArgs,
+    SimpleIOErrorRequest( const css::ucb::IOErrorCode eError,
+                          const css::uno::Sequence< css::uno::Any > & rArgs,
                           const OUString & rMessage,
-                          const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandProcessor > & xContext
+                          const css::uno::Reference< css::ucb::XCommandProcessor > & xContext
                          );
 };
 

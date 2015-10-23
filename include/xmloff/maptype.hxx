@@ -106,11 +106,11 @@ struct XMLPropertyMapEntry
 struct XMLPropertyState
 {
     sal_Int32                  mnIndex;
-    ::com::sun::star::uno::Any maValue;
+    css::uno::Any              maValue;
 
     XMLPropertyState( sal_Int32 nIndex )
         : mnIndex( nIndex ) {}
-    XMLPropertyState( sal_Int32 nIndex, const ::com::sun::star::uno::Any& rValue )
+    XMLPropertyState( sal_Int32 nIndex, const css::uno::Any& rValue )
         : mnIndex( nIndex ), maValue( rValue ) {}
     XMLPropertyState( const XMLPropertyState& rPropState )
         : mnIndex( rPropState.mnIndex ), maValue( rPropState.maValue ) {}

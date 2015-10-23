@@ -35,7 +35,7 @@ class InteractionSupplyName;
   * continuations: "Abort" and "SupplyName". Another continuation
   * ("ReplaceExistingData") may be supplied optionally.
   *
-  * @see com::sun::star::ucb::NameClashResolveRequest
+  * @see css::ucb::NameClashResolveRequest
   * @see InteractionAbort
   * @see InteractioneplaceExistingData
   */

@@ -165,7 +165,7 @@ public:
         @return                 mapped interface
     */
     inline void * SAL_CALL mapInterface(
-        void * pInterface, const ::com::sun::star::uno::Type & rType ) const;
+        void * pInterface, const css::uno::Type & rType ) const;
 
     /** Maps an interface from one environment to another.
 
@@ -190,7 +190,7 @@ public:
         @param pInterface       source interface
         @param rType            type of interface to be mapped
      */
-    inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, const ::com::sun::star::uno::Type & rType ) const;
+    inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, const css::uno::Type & rType ) const;
 };
 
 inline Mapping::Mapping(
@@ -254,7 +254,7 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping )
 }
 
 inline void Mapping::mapInterface(
-    void ** ppOut, void * pInterface, const ::com::sun::star::uno::Type & rType ) const
+    void ** ppOut, void * pInterface, const css::uno::Type & rType ) const
 {
     typelib_TypeDescription * pTD = 0;
     TYPELIB_DANGER_GET( &pTD, rType.getTypeLibType() );
@@ -274,7 +274,7 @@ inline void * Mapping::mapInterface(
 }
 
 inline void * Mapping::mapInterface(
-    void * pInterface, const ::com::sun::star::uno::Type & rType ) const
+    void * pInterface, const css::uno::Type & rType ) const
 {
     void * pOut = 0;
     mapInterface( &pOut, pInterface, rType );

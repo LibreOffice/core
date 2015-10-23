@@ -38,7 +38,7 @@ namespace ucbhelper {
   *
   * Read-write values: certificateValidity, certificate
   *
-  * @see com::sun::star::ucb::CertificateValidationRequest
+  * @see css::ucb::CertificateValidationRequest
   * @see InteractionApproved
   * @see InteractionRetry
   */
@@ -52,7 +52,7 @@ public:
       * @param pCertificate contains the server certificate.
       */
     SimpleCertificateValidationRequest( const sal_Int32 & lCertificateValidity,
-        const com::sun::star::uno::Reference<com::sun::star::security::XCertificate>& certificate,
+        const css::uno::Reference<css::security::XCertificate>& certificate,
         const OUString & hostname );
 };
 

@@ -35,18 +35,18 @@ namespace com { namespace sun { namespace star {
 /** export an XForms model. */
 void SAL_DLLPRIVATE exportXForms( SvXMLExport& );
 
-OUString SAL_DLLPRIVATE getXFormsBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+OUString SAL_DLLPRIVATE getXFormsBindName( const css::uno::Reference<css::beans::XPropertySet>& xBinding );
 
-OUString SAL_DLLPRIVATE getXFormsListBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+OUString SAL_DLLPRIVATE getXFormsListBindName( const css::uno::Reference<css::beans::XPropertySet>& xBinding );
 
-OUString SAL_DLLPRIVATE getXFormsSubmissionName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+OUString SAL_DLLPRIVATE getXFormsSubmissionName( const css::uno::Reference<css::beans::XPropertySet>& xBinding );
 
 
 /** returns the settings of the given XForms container, to be exported as document specific settings
 */
 void XMLOFF_DLLPUBLIC getXFormsSettings(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rXForms,
-              ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rSettings
+        const css::uno::Reference< css::container::XNameAccess >& _rXForms,
+              css::uno::Sequence< css::beans::PropertyValue >& _out_rSettings
     );
 
 #endif

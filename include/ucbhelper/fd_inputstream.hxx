@@ -33,8 +33,8 @@
 namespace ucbhelper
 {
     typedef ::cppu::WeakImplHelper2<
-        com::sun::star::io::XInputStream,
-        com::sun::star::io::XSeekable > FdInputStream_Base;
+        css::io::XInputStream,
+        css::io::XSeekable > FdInputStream_Base;
 
     /** Implements a seekable InputStream
      *  working on a buffer.

@@ -35,8 +35,8 @@ public:
     XMLAnimationsExporter( XMLShapeExport* pShapeExp );
     virtual ~XMLAnimationsExporter();
 
-    void prepare( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, SvXMLExport& rExport );
-    void collect( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, SvXMLExport& rExport );
+    void prepare( css::uno::Reference< css::drawing::XShape > xShape, SvXMLExport& rExport );
+    void collect( css::uno::Reference< css::drawing::XShape > xShape, SvXMLExport& rExport );
     void exportAnimations( SvXMLExport& rExport );
 };
 

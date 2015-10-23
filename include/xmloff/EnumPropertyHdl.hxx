@@ -31,14 +31,14 @@ class XMLOFF_DLLPUBLIC XMLEnumPropertyHdl : public XMLPropertyHandler
 {
 private:
     const SvXMLEnumMapEntry* mpEnumMap;
-    const ::com::sun::star::uno::Type & mrType;
+    const css::uno::Type & mrType;
 
 public:
-    XMLEnumPropertyHdl( const SvXMLEnumMapEntry* pEnumMap, const ::com::sun::star::uno::Type & rType ) : mpEnumMap( pEnumMap ), mrType( rType ) {}
+    XMLEnumPropertyHdl( const SvXMLEnumMapEntry* pEnumMap, const css::uno::Type & rType ) : mpEnumMap( pEnumMap ), mrType( rType ) {}
     virtual ~XMLEnumPropertyHdl();
 
-    virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 #endif // INCLUDED_XMLOFF_ENUMPROPERTYHDL_HXX

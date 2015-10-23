@@ -49,13 +49,11 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageExport : public XMLPageExport
 protected:
 
     virtual void exportHeaderFooterContent(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XText >& rText,
+            const css::uno::Reference< css::text::XText >& rText,
             bool bAutoStyles, bool bExportParagraph = true );
 
     virtual void exportMasterPageContent(
-                const ::com::sun::star::uno::Reference <
-                    ::com::sun::star::beans::XPropertySet > & rPropSet,
+                const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
                  bool bAutoStyles ) override;
 
 public:

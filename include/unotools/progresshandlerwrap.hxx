@@ -27,20 +27,20 @@
 namespace utl
 {
 
-class UNOTOOLS_DLLPUBLIC ProgressHandlerWrap : public ::cppu::WeakImplHelper1< ::com::sun::star::ucb::XProgressHandler >
+class UNOTOOLS_DLLPUBLIC ProgressHandlerWrap : public ::cppu::WeakImplHelper1< css::ucb::XProgressHandler >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > m_xStatusIndicator;
+    css::uno::Reference< css::task::XStatusIndicator > m_xStatusIndicator;
 
 public:
-    ProgressHandlerWrap( ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > xSI );
+    ProgressHandlerWrap( css::uno::Reference< css::task::XStatusIndicator > xSI );
 
     // XProgressHandler
-    virtual void SAL_CALL push( const ::com::sun::star::uno::Any& Status )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL update( const ::com::sun::star::uno::Any& Status )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL push( const css::uno::Any& Status )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL update( const css::uno::Any& Status )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL pop()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 }   // namespace utl

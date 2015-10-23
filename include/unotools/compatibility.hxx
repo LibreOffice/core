@@ -123,7 +123,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
             @onerror    We return an empty list.
         *//*-*****************************************************************************************************/
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetList() const;
+        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > GetList() const;
 
         /*-****************************************************************************************************
             @short      append a new item

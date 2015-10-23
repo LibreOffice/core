@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer { namesp
 namespace vcl { namespace unohelper {
 
     class VCL_DLLPUBLIC TextDataObject :
-                            public ::com::sun::star::datatransfer::XTransferable,
+                            public css::datatransfer::XTransferable,
                             public ::cppu::OWeakObject
     {
     private:
@@ -45,20 +45,20 @@ namespace vcl { namespace unohelper {
 
         OUString&       GetString() { return maText; }
 
-        // ::com::sun::star::uno::XInterface
-        ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-        void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
+        // css::uno::XInterface
+        css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+        void          SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
+        void          SAL_CALL release() throw() override  { OWeakObject::release(); }
 
-        // ::com::sun::star::datatransfer::XTransferable
-        ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        // css::datatransfer::XTransferable
+        css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+        css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(css::uno::RuntimeException, std::exception) override;
+        sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) throw(css::uno::RuntimeException, std::exception) override;
 
         /// copies a given string to a given clipboard
         static  void    CopyStringTo(
             const OUString& rContent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard
+            const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard
         );
     };
 

@@ -30,15 +30,15 @@
 
 #include <cppuhelper/implbase3.hxx>
 
-extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
+extern css::uno::Reference< css::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
 
 class SvXMLAttrContainerData;
 
 class XMLOFF_DLLPUBLIC SvUnoAttributeContainer:
     public ::cppu::WeakAggImplHelper3<
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::lang::XUnoTunnel,
-        ::com::sun::star::container::XNameContainer >
+        css::lang::XServiceInfo,
+        css::lang::XUnoTunnel,
+        css::container::XNameContainer >
 {
 private:
     SvXMLAttrContainerData* mpContainer;
@@ -52,31 +52,31 @@ public:
 
     SvXMLAttrContainerData* GetContainerImpl() const { return mpContainer; }
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::container::XElementAccess
-    virtual ::com::sun::star::uno::Type  SAL_CALL getElementType() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL hasElements() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    // css::container::XElementAccess
+    virtual css::uno::Type  SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception ) override;
 
-    // ::com::sun::star::container::XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName(const OUString& aName) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& aName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    // css::container::XNameAccess
+    virtual css::uno::Any SAL_CALL getByName(const OUString& aName) throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL hasByName(const OUString& aName) throw( css::uno::RuntimeException, std::exception ) override;
 
-    // ::com::sun::star::container::XNameReplace
-    virtual void SAL_CALL replaceByName(const OUString& aName, const ::com::sun::star::uno::Any& aElement) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    // css::container::XNameReplace
+    virtual void SAL_CALL replaceByName(const OUString& aName, const css::uno::Any& aElement) throw( css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
 
-    // ::com::sun::star::container::XNameContainer
-    virtual void SAL_CALL insertByName(const OUString& aName, const ::com::sun::star::uno::Any& aElement) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removeByName(const OUString& Name) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    // css::container::XNameContainer
+    virtual void SAL_CALL insertByName(const OUString& aName, const css::uno::Any& aElement) throw( css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removeByName(const OUString& Name) throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
 
-    // ::com::sun::star::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    // css::lang::XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
 
-    friend  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SvUnoAttributeContainer_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ) throw( ::com::sun::star::uno::Exception );
+    friend  css::uno::Reference< css::uno::XInterface > SvUnoAttributeContainer_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr ) throw( css::uno::Exception );
 };
 
 #endif

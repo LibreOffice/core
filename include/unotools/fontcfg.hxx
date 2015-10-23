@@ -94,9 +94,9 @@ namespace utl
 
 class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    css::uno::Reference< css::lang::XMultiServiceFactory >
             m_xConfigProvider;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
+    css::uno::Reference< css::container::XNameAccess >
             m_xConfigAccess;
 
     struct LocaleAccess
@@ -105,7 +105,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
         // used to get rid of upper/lower case problems
         OUString aConfigLocaleString;
         // xAccess is mutable to be able to be filled on demand
-        mutable com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xAccess;
+        mutable css::uno::Reference< css::container::XNameAccess > xAccess;
     };
 
     std::unordered_map< OUString, LocaleAccess, OUStringHash > m_aConfig;
@@ -137,13 +137,13 @@ struct UNOTOOLS_DLLPUBLIC FontNameAttr
 class UNOTOOLS_DLLPUBLIC FontSubstConfiguration
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    css::uno::Reference< css::lang::XMultiServiceFactory >
             m_xConfigProvider;
-    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
+    css::uno::Reference< css::container::XNameAccess >
             m_xConfigAccess;
     struct LocaleSubst
     {
-        OUString                           aConfigLocaleString;
+        OUString                                aConfigLocaleString;
         mutable bool                            bConfigRead;
         // note: aSubstAttributes must be sorted alphabetically by Name
         // searches on the substitutes are done with Name as key, where
@@ -157,14 +157,14 @@ private:
     typedef std::unordered_set< OUString, OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
-    void fillSubstVector( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
+    void fillSubstVector( const css::uno::Reference< css::container::XNameAccess >& rFont,
                           const OUString& rType,
                           std::vector< OUString >& rSubstVector ) const;
-    FontWeight getSubstWeight( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
+    FontWeight getSubstWeight( const css::uno::Reference< css::container::XNameAccess >& rFont,
                           const OUString& rType ) const;
-    FontWidth getSubstWidth( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
+    FontWidth getSubstWidth( const css::uno::Reference< css::container::XNameAccess >& rFont,
                              const OUString& rType ) const;
-    ImplFontAttrs getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
+    ImplFontAttrs getSubstType( const css::uno::Reference< css::container::XNameAccess >& rFont,
                                 const OUString& rType ) const;
     void readLocaleSubst( const OUString& rBcp47 ) const;
 public:

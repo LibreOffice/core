@@ -39,14 +39,14 @@ public:
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             sal_Unicode c,
             bool bCount );
     XMLCharContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             sal_Int16 nControl );
 
     virtual ~XMLCharContext();

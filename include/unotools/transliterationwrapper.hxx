@@ -36,8 +36,7 @@ namespace utl
 
 class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::i18n::XExtendedTransliteration > xTrans;
+    css::uno::Reference< css::i18n::XExtendedTransliteration > xTrans;
     LanguageTag aLanguageTag;
     sal_uInt32 nType;
     mutable bool bFirstCall;
@@ -49,8 +48,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
     void setLanguageLocaleImpl( sal_uInt16 nLang );
 
 public:
-    TransliterationWrapper( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XComponentContext > & rxContext,
+    TransliterationWrapper( const css::uno::Reference< css::uno::XComponentContext > & rxContext,
                     sal_uInt32 nType );
 
     ~TransliterationWrapper();
@@ -83,12 +81,12 @@ public:
         string is returned.  */
     OUString transliterate( const OUString& rStr,
                         sal_Int32 nStart, sal_Int32 nLen,
-                        ::com::sun::star::uno::Sequence <sal_Int32>* pOffset ) const;
+                        css::uno::Sequence <sal_Int32>* pOffset ) const;
 
     // Wrapper implementations of class Transliteration
     OUString transliterate( const OUString& rStr, sal_uInt16 nLanguage,
                         sal_Int32 nStart, sal_Int32 nLen,
-                        ::com::sun::star::uno::Sequence <sal_Int32>* pOffset );
+                        css::uno::Sequence <sal_Int32>* pOffset );
 
     /** If two strings are equal per this transliteration.
         Returns the number of matched code points in any case, even if strings
