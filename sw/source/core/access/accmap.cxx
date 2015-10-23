@@ -2583,6 +2583,7 @@ void SwAccessibleMap::InvalidateAttr( const SwTextFrm& rTextFrm )
 
 void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 {
+SAL_WARN("DEBUG","InvalidateCursorPosition");
     SwAccessibleChild aFrmOrObj( pFrm );
     bool bShapeSelected = false;
     const SwViewShell *pVSh = GetShell();
@@ -2799,6 +2800,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 
 void SwAccessibleMap::InvalidateFocus()
 {
+SAL_WARN("DEBUG","InvalidateFocus");
     if(GetShell()->IsPreview())
     {
         uno::Reference<XAccessible> xAcc = _GetDocumentView( true );

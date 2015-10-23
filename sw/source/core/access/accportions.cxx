@@ -87,6 +87,7 @@ SwAccessiblePortionData::SwAccessiblePortionData(
 {
     OSL_ENSURE( pTextNode != NULL, "Text node is needed!" );
 
+SAL_WARN("DEBUG","AccessiblePortionData["<<this<<"] Ctor: node["<<pTextNd<<"] index["<<pTextNd->GetIndex()<<"] len["<<pTextNd->Len()<<"] txt["<<pTextNd->GetText()<<"] ");
     // reserve some space to reduce memory allocations
     aLineBreaks.reserve( 5 );
     aModelPositions.reserve( 10 );

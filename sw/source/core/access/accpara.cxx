@@ -154,6 +154,7 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
 
         // check whether the point points into 'our' node
         SwPosition* pPoint = pCaret->GetPoint();
+SAL_WARN_IF(pNode->GetIndex() == pPoint->nNode.GetIndex(),"DEBUG","GetCaretPos(): oldCaret["<<nOldCaretPos<<"] node["<<pNode<<"] PaM["<<*pCaret<<"] point["<<pPoint<<"] NodeIndex["<<pNode->GetIndex()<<"]["<<pPoint->nNode.GetIndex()<<"] Frm["<<GetFrm()<<"] Map["<<GetMap()<<"] count["<<getCharacterCount()<<"] ContentIndex["<<pPoint->nContent.GetIndex()<<"]");
         if( pNode->GetIndex() == pPoint->nNode.GetIndex() )
         {
             // same node? Then check whether it's also within 'our' part
@@ -370,6 +371,7 @@ void SwAccessibleParagraph::GetStates(
     // FOCUSED (simulates node index of cursor)
     SwPaM* pCaret = GetCursor( false ); // #i27301# - consider adjusted method signature
     const SwTextNode* pTextNd = GetTextNode();
+SAL_WARN_IF(pCaret && (pCaret->GetPoint()->nNode.GetIndex() == pTextNd->GetIndex() ),"DEBUG","setting focused state: pCaret["<<pCaret<<"] txtNode["<<pTextNd<<"] NodeIndex["<<(pTextNd && pTextNd->GetIndex())<<"] caretIndex["<<(pCaret && pCaret->GetPoint()->nNode.GetIndex()) << "] oldCaretPos["<<nOldCaretPos<<"] Frm["<<GetFrm()<<"] Map["<<GetMap()<<"]");
     if( pCaret != 0 && pTextNd != 0 &&
         pTextNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() &&
         nOldCaretPos != -1)
@@ -390,6 +392,7 @@ void SwAccessibleParagraph::_InvalidateContent( bool bVisibleDataFired )
 
     const OUString& rText = GetString();
 
+SAL_WARN("DEBUG","What triggers this _InvalidateContent? bVisibleDataFired["<<bVisibleDataFired<<"] oldText["<<sOldText<<"] curr["<<rText<<"]");
     if( rText != sOldText )
     {
         // The text is changed
@@ -483,6 +486,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
     }
 
     vcl::Window *pWin = GetWindow();
+SAL_WARN("DEBUG","nOld["<<nOld<<"] nNew["<<nNew<<"] pWin["<<pWin<<"] focus?["<<(pWin && pWin->HasFocus())<<"] charcount["<<getCharacterCount()<<"] Frm["<<GetFrm()<<"] Map["<<GetMap()<<"] portionData["<<pPortionData<<"]");
     if( nOld != nNew )
     {
         // The cursor's node position is simulated by the focus!
@@ -561,6 +565,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
 {
     SolarMutexGuard aGuard;
 
+SAL_WARN("DEBUG","portionData["<<pPortionData<<"] deleted in dtor  count["<<getCharacterCount()<<"]");
     delete pPortionData;
     delete pHyperTextData;
     delete mpParaChangeTrackInfo; // #i108125#
@@ -581,9 +586,14 @@ void SwAccessibleParagraph::UpdatePortionData()
     const SwTextFrm* pFrm = static_cast<const SwTextFrm*>( GetFrm() );
 
     // build new portion data
+SAL_WARN_IF(GetCursor(false)->GetNode().GetIndex() == GetTextNode()->GetIndex(),"DEBUG","UpdatePortionData: before delete pPortionData");
+SAL_WARN_IF(GetCursor(false)->GetNode().GetIndex() == GetTextNode()->GetIndex(),"DEBUG","pPortionData["<<pPortionData<<"] Node["<<GetTextNode()<<"]["<<pFrm->GetTextNode()<<"] NodeIndex["<<GetTextNode()->GetIndex()<<"] OldCaret["<<nOldCaretPos<<"] pam["<<*GetCursor( false )<<"]["<<GetCursor(false)->GetNode().GetIndex()<<"] txt["<<GetTextNode()->GetText()<<"]");
     delete pPortionData;
+SAL_WARN_IF(GetCursor(false)->GetNode().GetIndex() == GetTextNode()->GetIndex(),"DEBUG","UpdatePortionData: after delete pPortionData");
     pPortionData = new SwAccessiblePortionData(
         pFrm->GetTextNode(), GetMap()->GetShell()->GetViewOptions() );
+SAL_WARN_IF(GetCursor(false)->GetNode().GetIndex() == GetTextNode()->GetIndex(),"DEBUG","UpdatePortionData: after new SwAccessiblePortionData");
+SAL_WARN_IF(GetCursor(false)->GetNode().GetIndex() == GetTextNode()->GetIndex(),"DEBUG","pPortionData["<<pPortionData<<"] Node["<<GetTextNode()<<"]["<<pFrm->GetTextNode()<<"] NodeIndex["<<GetTextNode()->GetIndex()<<"] OldCaret["<<nOldCaretPos<<"] pam["<<*GetCursor( false )<<"]["<<GetCursor(false)->GetNode().GetIndex()<<"] txt["<<GetTextNode()->GetText()<<"]");
     pFrm->VisitPortions( *pPortionData );
 
     OSL_ENSURE( pPortionData != NULL, "UpdatePortionData() failed" );
@@ -1287,6 +1297,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 
     sal_Int32 nRet = GetCaretPos();
     {
+SAL_WARN("DEBUG","getCaretPosition["<<nRet<<"] oldCaret["<<nOldCaretPos<<"] Frm["<<GetFrm()<<"] Map["<<GetMap()<<"] count["<<getCharacterCount()<<"]");
         osl::MutexGuard aOldCaretPosGuard( m_Mutex );
         OSL_ENSURE( nRet == nOldCaretPos, "caret pos out of sync" );
         nOldCaretPos = nRet;
@@ -2937,7 +2948,9 @@ sal_Bool SwAccessibleParagraph::replaceText(
             const uno::Reference<text::XTextRange> xRange(
                 SwXTextRange::CreateXTextRange(
                     *pNode->GetDoc(), aStartPos, &aEndPos));
+SAL_WARN("DEBUG","text["<<GetString()<<"] before replacing a portion["<<aStartPos<<"]["<<aEndPos<<"]=["<<xRange->getString()<<"] of it with ["<<sReplacement<<"]");
             xRange->setString(sReplacement);
+SAL_WARN("DEBUG","text["<<GetString()<<"] range["<<xRange->getString()<<"] after replacing. text OUGHT to match modification - not be null");
 
             // delete portion data
             ClearPortionData();

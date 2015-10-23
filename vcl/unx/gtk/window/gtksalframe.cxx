@@ -4630,6 +4630,7 @@ uno::Reference<accessibility::XAccessibleEditableText>
     uno::Reference<accessibility::XAccessibleStateSet> xState = xContext->getAccessibleStateSet();
     if (xState.is())
     {
+SAL_WARN_IF(xState->contains(accessibility::AccessibleStateType::FOCUSED),"DEBUG","FindFocus - xState.is()["<<xState.is()<<"] StateType::Focused?["<<(int) xState->contains(accessibility::AccessibleStateType::FOCUSED)<<"]");
         if (xState->contains(accessibility::AccessibleStateType::FOCUSED))
             return uno::Reference<accessibility::XAccessibleEditableText>(xContext, uno::UNO_QUERY);
     }
@@ -4643,6 +4644,7 @@ uno::Reference<accessibility::XAccessibleEditableText>
         if (!xChildContext.is())
             continue;
         uno::Reference< accessibility::XAccessibleEditableText > xText = FindFocus(xChildContext);
+SAL_WARN_IF(xText.is(),"DEBUG","AccessibleChild["<<i<<"] found focused xText");
         if (xText.is())
             return xText;
     }
@@ -4694,6 +4696,7 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
         return true;
 
     uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
+SAL_WARN("DEBUG","xText.is()["<<xText.is()<<"] - why is this false sometimes?");
     if (xText.is())
     {
         sal_Int32 nPosition = xText->getCaretPosition();

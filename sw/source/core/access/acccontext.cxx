@@ -683,6 +683,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 {
     SolarMutexGuard aGuard;
 
+SAL_WARN_IF(m_isSelectedInDoc,"DEBUG","GetAccessibleStateSet Frm["<<GetFrm()<<"] GetMap["<<GetMap()<<"]  SelectedInDoc["<<m_isSelectedInDoc<<"]");
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
     ::utl::AccessibleStateSetHelper *pStateSet =
