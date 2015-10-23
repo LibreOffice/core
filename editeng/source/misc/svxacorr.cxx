@@ -1717,10 +1717,8 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
     }
 
     // If it still could not be found here, then keep on searching
-
     LanguageType eLang = aLanguageTag.getLanguageType();
-    LanguageType nTmpKey1 = eLang & 0x7ff, // the main language in many cases DE
-                 nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
+    LanguageType nTmpKey1 = eLang & 0x7ff; // the main language in many cases DE
     if(nTmpKey1 != eLang && (m_pLangTable->find(aLanguageTag.reset(nTmpKey1)) != m_pLangTable->end() ||
                 CreateLanguageFile(aLanguageTag, false)))
     {
@@ -1734,8 +1732,12 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
         }
     }
 
-    if (nTmpKey2 != eLang && (m_pLangTable->find(aLanguageTag.reset(nTmpKey2)) != m_pLangTable->end() ||
-                CreateLanguageFile(aLanguageTag, false)))
+    // otherwise for example EN
+    aLanguageTag.reset(aLanguageTag.getLanguage());
+    LanguageType nTmpKey2 = aLanguageTag.getLanguageType(false);
+    if (nTmpKey2 != eLang && nTmpKey2 != LANGUAGE_UNDETERMINED &&
+                (m_pLangTable->find(aLanguageTag) != m_pLangTable->end() ||
+                 CreateLanguageFile(aLanguageTag, false)))
     {
         //the language is available - so bring it on
         std::unique_ptr<SvxAutoCorrectLanguageLists> const& pList = m_pLangTable->find(aLanguageTag)->second;
@@ -1771,8 +1773,7 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
 
     // First search for eLang, then US-English -> English
     // and last in LANGUAGE_UNDETERMINED
-    LanguageType nTmpKey1 = eLang & 0x7ff, // the main language in many cases DE
-                 nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
+    LanguageType nTmpKey1 = eLang & 0x7ff; // the main language in many cases DE
     OUString sTemp(sWord);
 
     if (m_pLangTable->find(aLanguageTag) != m_pLangTable->end() || CreateLanguageFile(aLanguageTag, false))
@@ -1794,8 +1795,11 @@ bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
             return true;
     }
 
-    if (nTmpKey2 != eLang && (m_pLangTable->find(aLanguageTag.reset(nTmpKey2)) != m_pLangTable->end() ||
-                CreateLanguageFile(aLanguageTag, false)))
+    // otherwise for example EN
+    LanguageType nTmpKey2 = aLanguageTag.getLanguageType(false);
+    if (nTmpKey2 != eLang && nTmpKey2 != LANGUAGE_UNDETERMINED &&
+                (m_pLangTable->find(aLanguageTag) != m_pLangTable->end() ||
+                 CreateLanguageFile(aLanguageTag, false)))
     {
         //the language is available - so bring it on
         auto const& pList = m_pLangTable->find(aLanguageTag)->second;
@@ -1857,8 +1861,7 @@ bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
 
     // First search for eLang, then US-English -> English
     // and last in LANGUAGE_UNDETERMINED
-    LanguageType nTmpKey1 = eLang & 0x7ff, // the main language in many cases DE
-                 nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
+    LanguageType nTmpKey1 = eLang & 0x7ff; // the main language in many cases DE
     OUString sTemp( sWord );
 
     if (m_pLangTable->find(aLanguageTag) != m_pLangTable->end() || CreateLanguageFile(aLanguageTag, false))
@@ -1878,8 +1881,11 @@ bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
             return true;
     }
 
-    if(nTmpKey2 != eLang && (m_pLangTable->find(aLanguageTag.reset(nTmpKey2)) != m_pLangTable->end() ||
-                CreateLanguageFile(aLanguageTag, false)))
+    // otherwise for example EN
+    LanguageType nTmpKey2 = aLanguageTag.getLanguageType(false);
+    if (nTmpKey2 != eLang && nTmpKey2 != LANGUAGE_UNDETERMINED &&
+                (m_pLangTable->find(aLanguageTag) != m_pLangTable->end() ||
+                 CreateLanguageFile(aLanguageTag, false)))
     {
         //the language is available - so bring it on
         const SvStringsISortDtor* pList = m_pLangTable->find(aLanguageTag)->second->GetCplSttExceptList();
