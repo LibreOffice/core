@@ -4396,7 +4396,24 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         const ScIconSetFormat& mrIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
                         OUString aIconSetName = getIconSetName(mrIconSet.GetIconSetData()->eIconSetType);
                         AddAttribute( XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, aIconSetName );
+                        if (mrIconSet.GetIconSetData()->mbCustom)
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM, OUString::boolean(true));
+
                         SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_ICON_SET, true, true);
+
+                        if (mrIconSet.GetIconSetData()->mbCustom)
+                        {
+                            for (std::vector<std::pair<ScIconSetType, sal_Int32> >::const_iterator
+                                    it = mrIconSet.GetIconSetData()->maCustomVector.begin();
+                                    it != mrIconSet.GetIconSetData()->maCustomVector.end(); ++it)
+                            {
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_NAME, getIconSetName(it->first));
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_INDEX, OUString::number(it->second));
+                                SvXMLElementExport aCustomIcon(*this, XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET, true, true);
+                            }
+
+                        }
+
                         if(!mrIconSet.GetIconSetData()->mbShowValue)
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
                         for (auto const& it : mrIconSet)
