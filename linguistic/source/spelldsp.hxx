@@ -46,8 +46,8 @@ class LngSvcMgr;
 class SpellCheckerDispatcher :
     public cppu::WeakImplHelper
     <
-        ::com::sun::star::linguistic2::XSpellChecker1,
-        ::com::sun::star::linguistic2::XSpellChecker
+        css::linguistic2::XSpellChecker1,
+        css::linguistic2::XSpellChecker
     >,
     public LinguDispatcher
 {
@@ -56,10 +56,8 @@ class SpellCheckerDispatcher :
     SpellSvcByLangMap_t     aSvcMap;
     LinguOptions            aOpt;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >           xPropSet;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList >  xDicList;
+    css::uno::Reference< css::linguistic2::XLinguProperties >           xPropSet;
+    css::uno::Reference< css::linguistic2::XSearchableDictionaryList >  xDicList;
 
     LngSvcMgr                   &rMgr;
     mutable linguistic::SpellCache      *pCache; // Spell Cache (holds known words)
@@ -70,50 +68,48 @@ class SpellCheckerDispatcher :
 
     inline linguistic::SpellCache &  GetCache() const;
 
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >
+    inline css::uno::Reference< css::linguistic2::XLinguProperties >
             GetPropSet();
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList >
+    inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
             GetDicList();
 
     void    ClearSvcList();
 
     bool    isValid_Impl(const OUString& aWord, LanguageType nLanguage,
-                    const ::com::sun::star::beans::PropertyValues& aProperties,
+                    const css::beans::PropertyValues& aProperties,
                     bool bCheckDics)
-                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception );
+                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception );
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellAlternatives >
+    css::uno::Reference<
+        css::linguistic2::XSpellAlternatives >
             spell_Impl(const OUString& aWord, LanguageType nLanguage,
-                    const ::com::sun::star::beans::PropertyValues& aProperties,
+                    const css::beans::PropertyValues& aProperties,
                     bool bCheckDics)
-                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception );
+                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception );
 
 public:
     explicit SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr );
     virtual ~SpellCheckerDispatcher();
 
     // XSupportedLocales (for XSpellChecker)
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getLocales() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasLocale( const ::com::sun::star::lang::Locale& aLocale ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasLocale( const css::lang::Locale& aLocale ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XSpellChecker
-    virtual sal_Bool SAL_CALL isValid( const OUString& aWord, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::beans::PropertyValues& aProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::beans::PropertyValues& aProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isValid( const OUString& aWord, const css::lang::Locale& aLocale, const css::beans::PropertyValues& aProperties ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, const css::lang::Locale& aLocale, const css::beans::PropertyValues& aProperties ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // XSupportedLanguages
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getLanguages(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasLanguage( ::sal_Int16 nLanguage ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getLanguages(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasLanguage( ::sal_Int16 nLanguage ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XSpellChecker1
-    virtual sal_Bool SAL_CALL isValid( const OUString& aWord, ::sal_Int16 nLanguage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, ::sal_Int16 nLanguage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isValid( const OUString& aWord, ::sal_Int16 nLanguage, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, ::sal_Int16 nLanguage, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // LinguDispatcher
-    virtual void SetServiceList( const ::com::sun::star::lang::Locale &rLocale, const ::com::sun::star::uno::Sequence< OUString > &rSvcImplNames ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const override;
+    virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) override;
+    virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
 
     void    FlushSpellCache();
 
@@ -131,8 +127,7 @@ inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 }
 
 
-inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XLinguProperties >
+inline css::uno::Reference< css::linguistic2::XLinguProperties >
         SpellCheckerDispatcher::GetPropSet()
 {
     return xPropSet.is() ?
@@ -140,8 +135,7 @@ inline ::com::sun::star::uno::Reference<
 }
 
 
-inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSearchableDictionaryList >
+inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
         SpellCheckerDispatcher::GetDicList()
 {
     return xDicList.is() ?

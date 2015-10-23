@@ -57,9 +57,9 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 class LngSvcMgr :
     public cppu::WeakImplHelper
     <
-        com::sun::star::linguistic2::XLinguServiceManager2,
-        com::sun::star::lang::XServiceInfo,
-        com::sun::star::util::XModifyListener
+        css::linguistic2::XLinguServiceManager2,
+        css::lang::XServiceInfo,
+        css::util::XModifyListener
     >,
     private utl::ConfigItem
 {
@@ -67,32 +67,32 @@ class LngSvcMgr :
 
     ::cppu::OInterfaceContainerHelper                   aEvtListeners;
 
-    com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker >              xSpellDsp;
-    com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XProofreadingIterator >      xGrammarDsp;
-    com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >                xHyphDsp;
-    com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XThesaurus >                 xThesDsp;
+    css::uno::Reference<
+        css::linguistic2::XSpellChecker >              xSpellDsp;
+    css::uno::Reference<
+        css::linguistic2::XProofreadingIterator >      xGrammarDsp;
+    css::uno::Reference<
+        css::linguistic2::XHyphenator >                xHyphDsp;
+    css::uno::Reference<
+        css::linguistic2::XThesaurus >                 xThesDsp;
 
-    com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XEventListener >        xListenerHelper;
+    css::uno::Reference<
+        css::lang::XEventListener >                    xListenerHelper;
 
-    com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyBroadcaster>     xMB;
+    css::uno::Reference<
+        css::util::XModifyBroadcaster>                  xMB;
 
     Idle                                                aUpdateIdle;
 
 
-    com::sun::star::uno::Sequence<
-        com::sun::star::lang::Locale >                  aAvailSpellLocales;
-    com::sun::star::uno::Sequence<
-        com::sun::star::lang::Locale >                  aAvailGrammarLocales;
-    com::sun::star::uno::Sequence<
-        com::sun::star::lang::Locale >                  aAvailHyphLocales;
-    com::sun::star::uno::Sequence<
-        com::sun::star::lang::Locale >                  aAvailThesLocales;
+    css::uno::Sequence<
+        css::lang::Locale >                             aAvailSpellLocales;
+    css::uno::Sequence<
+        css::lang::Locale >                             aAvailGrammarLocales;
+    css::uno::Sequence<
+        css::lang::Locale >                             aAvailHyphLocales;
+    css::uno::Sequence<
+        css::lang::Locale >                             aAvailThesLocales;
 
     SpellCheckerDispatcher *                            pSpellDsp;
     GrammarCheckingIterator *                           pGrammarDsp;
@@ -133,7 +133,7 @@ class LngSvcMgr :
     static void clearSvcInfoArray(SvcInfoArray *&rpInfo);
 
     // utl::ConfigItem (to allow for listening of changes of relevant properties)
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
     virtual void    ImplCommit() override;
 
     void UpdateAll();
@@ -145,42 +145,41 @@ public:
     virtual ~LngSvcMgr();
 
     // XLinguServiceManager
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker > SAL_CALL getSpellChecker(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator > SAL_CALL getHyphenator(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus > SAL_CALL getThesaurus(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL addLinguServiceManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL removeLinguServiceManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServices( const OUString& aServiceName, const ::com::sun::star::lang::Locale& aLocale )
-        throw (::com::sun::star::uno::RuntimeException,
+    virtual css::uno::Reference< css::linguistic2::XSpellChecker > SAL_CALL getSpellChecker(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::linguistic2::XHyphenator > SAL_CALL getHyphenator(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::linguistic2::XThesaurus > SAL_CALL getThesaurus(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL addLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL removeLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServices( const OUString& aServiceName, const css::lang::Locale& aLocale )
+        throw (css::uno::RuntimeException,
                std::exception) override;
-    virtual void SAL_CALL setConfiguredServices( const OUString& aServiceName, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::uno::Sequence< OUString >& aServiceImplNames ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getConfiguredServices( const OUString& aServiceName, const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale, const css::uno::Sequence< OUString >& aServiceImplNames ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XAvailableLocales
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getAvailableLocales( const OUString& aServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getAvailableLocales( const OUString& aServiceName ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rSource ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XModifyListener
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& rEvent ) throw(css::uno::RuntimeException, std::exception) override;
 
     static inline OUString   getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw();
 
     bool    AddLngSvcEvtBroadcaster(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
+                const css::uno::Reference< css::linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
 };
 
 

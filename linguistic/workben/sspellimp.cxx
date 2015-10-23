@@ -220,7 +220,7 @@ Reference< XSpellAlternatives >
         {
             aTmp.SearchAndReplaceAllAscii( "liss", "liz" );
             xRes = new SpellAlternatives( aTmp, nLang,
-                        SpellFailure::IS_NEGATIVE_WORD, ::com::sun::star::uno::Sequence< OUString >() );
+                        SpellFailure::IS_NEGATIVE_WORD, css::uno::Sequence< OUString >() );
         }
         else if (-1 != aTmp.indexOf( (sal_Unicode) 'x' )  ||
                  -1 != aTmp.indexOf( (sal_Unicode) 'X' ))
@@ -252,7 +252,7 @@ Reference< XSpellAlternatives >
                         (sal_Unicode) 'S': (sal_Unicode) 's';
                 aTmp.GetBufferAccess()[0] = cNewChar;
                 xRes = new SpellAlternatives( aTmp, nLang,
-                        SpellFailure::CAPTION_ERROR, ::com::sun::star::uno::Sequence< OUString >() );
+                        SpellFailure::CAPTION_ERROR, css::uno::Sequence< OUString >() );
             }
         }
     }

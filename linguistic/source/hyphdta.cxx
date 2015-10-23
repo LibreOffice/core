@@ -168,17 +168,17 @@ Sequence< sal_Int16 > SAL_CALL PossibleHyphens::getHyphenationPositions()
     return aOrigHyphenPos;
 }
 
-com::sun::star::uno::Reference <com::sun::star::linguistic2::XHyphenatedWord> HyphenatedWord::CreateHyphenatedWord(
+css::uno::Reference <css::linguistic2::XHyphenatedWord> HyphenatedWord::CreateHyphenatedWord(
         const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
         const OUString &rHyphenatedWord, sal_Int16 nHyphenPos )
 {
     return new HyphenatedWord( rWord, nLang, nHyphenationPos, rHyphenatedWord, nHyphenPos );
 }
 
-com::sun::star::uno::Reference < com::sun::star::linguistic2::XPossibleHyphens > PossibleHyphens::CreatePossibleHyphens
+css::uno::Reference < css::linguistic2::XPossibleHyphens > PossibleHyphens::CreatePossibleHyphens
         (const OUString &rWord, sal_Int16 nLang,
          const OUString &rHyphWord,
-         const ::com::sun::star::uno::Sequence< sal_Int16 > &rPositions)
+         const css::uno::Sequence< sal_Int16 > &rPositions)
 {
     return new PossibleHyphens( rWord, nLang, rHyphWord, rPositions );
 }

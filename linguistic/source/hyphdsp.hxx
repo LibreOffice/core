@@ -45,7 +45,7 @@ class LngSvcMgr;
 class HyphenatorDispatcher :
     public cppu::WeakImplHelper
     <
-        ::com::sun::star::linguistic2::XHyphenator
+        css::linguistic2::XHyphenator
     >,
     public LinguDispatcher
 {
@@ -53,36 +53,28 @@ class HyphenatorDispatcher :
     typedef std::map< LanguageType, LangSvcEntries_Hyph_Ptr_t >     HyphSvcByLangMap_t;
     HyphSvcByLangMap_t      aSvcMap;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >          xPropSet;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList > xDicList;
+    css::uno::Reference< css::linguistic2::XLinguProperties >          xPropSet;
+    css::uno::Reference< css::linguistic2::XSearchableDictionaryList > xDicList;
 
     LngSvcMgr      &rMgr;
 
     HyphenatorDispatcher(const HyphenatorDispatcher &) = delete;
     HyphenatorDispatcher & operator = (const HyphenatorDispatcher &) = delete;
 
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguProperties >
+    inline css::uno::Reference< css::linguistic2::XLinguProperties >
             GetPropSet();
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSearchableDictionaryList >
+    inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
             GetDicList();
 
     void    ClearSvcList();
 
-    static com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenatedWord>
+    static css::uno::Reference< css::linguistic2::XHyphenatedWord>
             buildHyphWord( const OUString& rOrigWord,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XDictionaryEntry> &xEntry,
+                const css::uno::Reference< css::linguistic2::XDictionaryEntry> &xEntry,
                 sal_Int16 nLang, sal_Int16 nMaxLeading );
 
-    static com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XPossibleHyphens >
-            buildPossHyphens( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XDictionaryEntry > &xEntry,
+    static css::uno::Reference< css::linguistic2::XPossibleHyphens >
+            buildPossHyphens( const css::uno::Reference< css::linguistic2::XDictionaryEntry > &xEntry,
                     sal_Int16 nLanguage );
 
 public:
@@ -90,52 +82,47 @@ public:
     virtual ~HyphenatorDispatcher();
 
     // XSupportedLocales
-    virtual ::com::sun::star::uno::Sequence<
-            ::com::sun::star::lang::Locale > SAL_CALL
+    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales()
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL
-        hasLocale( const ::com::sun::star::lang::Locale& aLocale )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        hasLocale( const css::lang::Locale& aLocale )
+            throw(css::uno::RuntimeException, std::exception) override;
 
     // XHyphenator
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
+    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL
         hyphenate( const OUString& aWord,
-                const ::com::sun::star::lang::Locale& aLocale,
+                const css::lang::Locale& aLocale,
                 sal_Int16 nMaxLeading,
-                const ::com::sun::star::beans::PropertyValues& aProperties )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
+                const css::beans::PropertyValues& aProperties )
+            throw(css::lang::IllegalArgumentException,
+                  css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL
         queryAlternativeSpelling( const OUString& aWord,
-                const ::com::sun::star::lang::Locale& aLocale,
+                const css::lang::Locale& aLocale,
                 sal_Int16 nIndex,
-                const ::com::sun::star::beans::PropertyValues& aProperties )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL
+                const css::beans::PropertyValues& aProperties )
+            throw(css::lang::IllegalArgumentException,
+                  css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<
+            css::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
                 const OUString& aWord,
-                const ::com::sun::star::lang::Locale& aLocale,
-                const ::com::sun::star::beans::PropertyValues& aProperties )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) override;
+                const css::lang::Locale& aLocale,
+                const css::beans::PropertyValues& aProperties )
+            throw(css::lang::IllegalArgumentException,
+                  css::uno::RuntimeException, std::exception) override;
 
     // LinguDispatcher
     virtual void
-        SetServiceList( const ::com::sun::star::lang::Locale &rLocale,
-                const ::com::sun::star::uno::Sequence<
-                    OUString > &rSvcImplNames ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString >
-        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const override;
+        SetServiceList( const css::lang::Locale &rLocale,
+                const css::uno::Sequence< OUString > &rSvcImplNames ) override;
+    virtual css::uno::Sequence< OUString >
+        GetServiceList( const css::lang::Locale &rLocale ) const override;
 };
 
 
-inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XLinguProperties >
+inline css::uno::Reference< css::linguistic2::XLinguProperties >
         HyphenatorDispatcher::GetPropSet()
 {
     return xPropSet.is() ?
@@ -143,8 +130,7 @@ inline ::com::sun::star::uno::Reference<
 }
 
 
-inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSearchableDictionaryList >
+inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
         HyphenatorDispatcher::GetDicList()
 {
     return xDicList.is() ?
