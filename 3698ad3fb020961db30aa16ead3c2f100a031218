@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_5d5f4f0e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-23T13:47:59Z",
+      "side": 1,
+      "message": "I\u0027d much appreciate if the commit message contained details about what was the failure and how it was solved. Yes, I know it is due to floating point precision, but.. give a chance to those who come across this later without knowing why the code is as it is.\n\nAlso, instead of \"bad result ...\" the summary should say what was done, so something like \"improve precision in MDETERM calculation\".",
+      "revId": "3698ad3fb020961db30aa16ead3c2f100a031218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
