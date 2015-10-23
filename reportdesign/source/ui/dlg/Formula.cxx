@@ -47,7 +47,7 @@ FormulaDialog::FormulaDialog(vcl::Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
                              , const std::shared_ptr< IFunctionManager >&  _pFunctionMgr
                              , const OUString& _sFormula
-                             , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
+                             , const css::uno::Reference < css::beans::XPropertySet >& _xRowSet
                              , svl::SharedStringPool& rStrPool )
     : FormulaModalDialog( pParent, false,false,false,_pFunctionMgr.get(),this)
     ,m_aFunctionManager(_pFunctionMgr)

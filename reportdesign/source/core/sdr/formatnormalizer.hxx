@@ -52,8 +52,8 @@ namespace rptui
         typedef ::std::vector< Field >  FieldList;
 
     private:
-        const OReportModel&                                                                 m_rModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >     m_xReportDefinition;
+        const OReportModel&                                       m_rModel;
+        css::uno::Reference< css::report::XReportDefinition >     m_xReportDefinition;
 
         /// is our field list dirty?
         FieldList                       m_aFields;
@@ -63,18 +63,18 @@ namespace rptui
         explicit FormatNormalizer( const OReportModel& _rModel );
         ~FormatNormalizer();
 
-        void    notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent );
-        void    notifyElementInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement );
+        void    notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent );
+        void    notifyElementInserted( const css::uno::Reference< css::uno::XInterface >& _rxElement );
 
     private:
         bool    impl_lateInit();
 
         void    impl_onDefinitionPropertyChange( const OUString& _rChangedPropName );
-        void    impl_onFormattedProperttyChange( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormattedField >& _rxFormatted, const OUString& _rChangedPropName );
+        void    impl_onFormattedProperttyChange( const css::uno::Reference< css::report::XFormattedField >& _rxFormatted, const OUString& _rChangedPropName );
 
         bool    impl_ensureUpToDateFieldList_nothrow();
 
-        void    impl_adjustFormatToDataFieldType_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormattedField >& _rxFormatted );
+        void    impl_adjustFormatToDataFieldType_nothrow( const css::uno::Reference< css::report::XFormattedField >& _rxFormatted );
     };
 
 

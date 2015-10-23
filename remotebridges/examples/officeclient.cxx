@@ -183,7 +183,7 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
                             OUString::createFromAscii( urls[i] ) ,
                             OUString( "_blank"),
                             0 ,
-                            Sequence < ::com::sun::star::beans::PropertyValue >() );
+                            Sequence < css::beans::PropertyValue >() );
 
                     if( 0 == i )
                     {

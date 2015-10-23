@@ -118,7 +118,7 @@ namespace rptui
                 }
                 else
                 {
-                    com::sun::star::util::Color aColor2 = xSection->getBackColor();
+                    css::util::Color aColor2 = xSection->getBackColor();
                     Color aBackColor(aColor2);
                     bIsDark = aBackColor.IsDark();
                 }

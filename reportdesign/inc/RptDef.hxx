@@ -80,11 +80,11 @@ namespace ControlModification
     static const ::sal_Int32 HEIGHT_GREATEST    = (sal_Int32)10;
 }
 
-class AnyConverter : public ::std::binary_function< OUString,::com::sun::star::uno::Any,::com::sun::star::uno::Any >
+class AnyConverter : public ::std::binary_function< OUString,css::uno::Any,css::uno::Any >
 {
 public:
     virtual ~AnyConverter(){}
-    virtual ::com::sun::star::uno::Any operator() (const OUString& /*_sPropertyName*/,const ::com::sun::star::uno::Any& lhs) const
+    virtual css::uno::Any operator() (const OUString& /*_sPropertyName*/,const css::uno::Any& lhs) const
     {
         return lhs;
     }
@@ -95,12 +95,12 @@ typedef std::map<OUString, TPropertyConverter> TPropertyNamePair;
     @param  _nObjectId  the object id
 */
 REPORTDESIGN_DLLPUBLIC const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId);
-REPORTDESIGN_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle> getUsedStyle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport);
+REPORTDESIGN_DLLPUBLIC css::uno::Reference< css::style::XStyle> getUsedStyle(const css::uno::Reference< css::report::XReportDefinition>& _xReport);
 
-template < typename T> T getStyleProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,const OUString& _sPropertyName)
+template < typename T> T getStyleProperty(const css::uno::Reference< css::report::XReportDefinition>& _xReport,const OUString& _sPropertyName)
 {
     T nReturn = T();
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp(getUsedStyle(_xReport),::com::sun::star::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::beans::XPropertySet> xProp(getUsedStyle(_xReport),css::uno::UNO_QUERY_THROW);
     xProp->getPropertyValue(_sPropertyName) >>= nReturn;
     return nReturn;
 }

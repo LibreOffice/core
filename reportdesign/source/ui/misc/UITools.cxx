@@ -998,9 +998,9 @@ void setZoomFactor(const Fraction& _aZoom, vcl::Window& _rWindow)
 }
 
 bool openDialogFormula_nothrow( OUString& _in_out_rFormula
-                               , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext
+                               , const css::uno::Reference< css::uno::XComponentContext >& _xContext
                                , const uno::Reference< awt::XWindow>& _xInspectorWindow
-                               , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
+                               , const css::uno::Reference < css::beans::XPropertySet >& _xRowSet
                                )
 {
     OSL_PRECOND( _xInspectorWindow.is(), "openDialogFormula_nothrow: invalid parameters!" );

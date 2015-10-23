@@ -42,14 +42,14 @@ namespace rptui
         ~ConditionUpdater();
 
         /// notifies the object about the change of a property value, somewhere in the report definition
-        void    notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent );
+        void    notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent );
 
     private:
         /// does late initializations, return whether or not successful
         bool impl_lateInit_nothrow();
 
         void impl_adjustFormatConditions_nothrow(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >& _rxRptControlModel,
+            const css::uno::Reference< css::report::XReportControlModel >& _rxRptControlModel,
             const OUString& _rOldDataSource,
             const OUString& _rNewDataSource
         );

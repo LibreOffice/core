@@ -51,14 +51,14 @@ namespace rptui
         @return returns the position of the group in the list, otherwise -1
     */
     template<typename T> sal_Int32 getPositionInIndexAccess(
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _xCollection
-                                ,const ::com::sun::star::uno::Reference< T >& _xSearch)
+                                const css::uno::Reference< css::container::XIndexAccess >& _xCollection
+                                ,const css::uno::Reference< T >& _xSearch)
     {
         sal_Int32 nCount = _xCollection->getCount();
         sal_Int32 i = (nCount == 0) ? -1 : 0;
         for (;i<nCount ; ++i)
         {
-            ::com::sun::star::uno::Reference< T > xObject(_xCollection->getByIndex(i),::com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference< T > xObject(_xCollection->getByIndex(i),css::uno::UNO_QUERY);
             if ( xObject == _xSearch )
                 break;
         }
@@ -68,7 +68,7 @@ namespace rptui
     /** set the name of the header and footer of the group by the expression appended by the localized name of the section
         @param  _xGroup the group where the header/footer name is set by the expression of the group
     */
-    void adjustSectionName(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup,sal_Int32 _nPos);
+    void adjustSectionName(const css::uno::Reference< css::report::XGroup >& _xGroup,sal_Int32 _nPos);
 
     /** add a listener for the properties size, left margin, right margin to the page style
     *
@@ -76,22 +76,22 @@ namespace rptui
     * \param _pListener
     * \return
     */
-    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> addStyleListener( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition
+    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> addStyleListener( const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition
                                                                 ,::comphelper::OPropertyChangeListener* _pListener);
 
     /** opens the common character font dialog
     */
     bool    openCharDialog(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat>& _xReportControlFormat,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow,
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _out_rNewValues
+                const css::uno::Reference< css::report::XReportControlFormat>& _xReportControlFormat,
+                const css::uno::Reference< css::awt::XWindow>& _xWindow,
+                css::uno::Sequence< css::beans::NamedValue >& _out_rNewValues
             );
 
     /** opens the area dialog for shapes
     */
     bool openAreaDialog(
-             const ::com::sun::star::uno::Reference< ::com::sun::star::report::XShape >& _xShape
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow
+             const css::uno::Reference< css::report::XShape >& _xShape
+            ,const css::uno::Reference< css::awt::XWindow>& _xWindow
             );
 
     /** opens the formula dialog
@@ -103,16 +103,16 @@ namespace rptui
             <TRUE/> if and only if the user successfully chose a clause
     */
     bool openDialogFormula_nothrow( OUString& _in_out_rFormula
-                               , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext
-                               , const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow
-                               , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
+                               , const css::uno::Reference< css::uno::XComponentContext >& _xContext
+                               , const css::uno::Reference< css::awt::XWindow>& _xWindow
+                               , const css::uno::Reference < css::beans::XPropertySet >& _xRowSet
                                );
 
     /** applies the character settings previously obtained via openCharDialog
     */
     void    applyCharacterSettings(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat >& _rxReportControlFormat,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rSettings
+                const css::uno::Reference< css::report::XReportControlFormat >& _rxReportControlFormat,
+                const css::uno::Sequence< css::beans::NamedValue >& _rSettings
             );
 
     /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
@@ -154,8 +154,8 @@ namespace rptui
 
     /** retrieves the names of the parameters of the command which the given RowSet is bound to
     */
-    ::com::sun::star::uno::Sequence< OUString >
-        getParameterNames( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet );
+    css::uno::Sequence< OUString >
+        getParameterNames( const css::uno::Reference< css::sdbc::XRowSet >& _rxRowSet );
 
     /** ensures that no control overlaps the given one.
     *

@@ -38,9 +38,9 @@ namespace rptui
         OSectionUndo(const OSectionUndo&) = delete;
         void operator =(const OSectionUndo&) = delete;
     protected:
-        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> >
+        ::std::vector< css::uno::Reference< css::drawing::XShape> >
                                                     m_aControls;
-        ::std::vector< ::std::pair< OUString ,::com::sun::star::uno::Any> >
+        ::std::vector< ::std::pair< OUString ,css::uno::Any> >
                                                     m_aValues;
         Action                                      m_eAction;
         sal_uInt16                                  m_nSlot;
@@ -49,7 +49,7 @@ namespace rptui
         virtual void    implReInsert( ) = 0;
         virtual void    implReRemove( ) = 0;
 
-        void collectControls(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+        void collectControls(const css::uno::Reference< css::report::XSection >& _xSection);
     public:
         TYPEINFO_OVERRIDE();
         OSectionUndo(   OReportModel& rMod
@@ -67,7 +67,7 @@ namespace rptui
     class OReportSectionUndo : public OSectionUndo
     {
         OReportHelper                               m_aReportHelper;
-        ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                     ,OReportHelper> m_pMemberFunction;
 
         void    implReInsert( ) override;
@@ -76,12 +76,12 @@ namespace rptui
         void operator =(const OReportSectionUndo&) = delete;
     public:
         TYPEINFO_OVERRIDE();
-        //OReportSectionUndo(    const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+        //OReportSectionUndo(    const css::uno::Reference< css::report::XSection >& _xSection
         OReportSectionUndo( OReportModel& rMod
                             ,sal_uInt16 _nSlot
-                            ,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                 ,OReportHelper> _pMemberFunction
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReport
+                            ,const css::uno::Reference< css::report::XReportDefinition >& _xReport
                             ,Action _eAction
                             ,sal_uInt16 nCommentID);
         virtual ~OReportSectionUndo();
@@ -92,7 +92,7 @@ namespace rptui
     class OGroupSectionUndo : public OSectionUndo
     {
         OGroupHelper                                m_aGroupHelper;
-        ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                     ,OGroupHelper> m_pMemberFunction;
 
         mutable OUString                     m_sName;
@@ -103,12 +103,12 @@ namespace rptui
         void operator =(const OGroupSectionUndo&) = delete;
     public:
         TYPEINFO_OVERRIDE();
-        //OGroupSectionUndo(     const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+        //OGroupSectionUndo(     const css::uno::Reference< css::report::XSection >& _xSection
         OGroupSectionUndo(  OReportModel& rMod
                             ,sal_uInt16 _nSlot
-                            ,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                             ,OGroupHelper> _pMemberFunction
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup
+                            ,const css::uno::Reference< css::report::XGroup >& _xGroup
                             ,Action _eAction
                             ,sal_uInt16 nCommentID);
 
@@ -120,8 +120,8 @@ namespace rptui
     */
     class OGroupUndo : public OCommentUndoAction
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>             m_xGroup; ///<! the group for the undo redo action
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition > m_xReportDefinition; ///<! the parent report definition
+        css::uno::Reference< css::report::XGroup>             m_xGroup; ///<! the group for the undo redo action
+        css::uno::Reference< css::report::XReportDefinition > m_xReportDefinition; ///<! the parent report definition
         Action                                                                          m_eAction; ///<! the current action
         sal_Int32                                                                       m_nLastPosition; ///<! the last position of the group
 
@@ -132,8 +132,8 @@ namespace rptui
         OGroupUndo(OReportModel& rMod
                     ,sal_uInt16 nCommentID
                     ,Action _eAction
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
+                    ,const css::uno::Reference< css::report::XGroup>& _xGroup
+                    ,const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
         virtual void        Undo() override;
         virtual void        Redo() override;
     };

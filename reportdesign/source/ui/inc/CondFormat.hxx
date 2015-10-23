@@ -78,9 +78,9 @@ namespace rptui
         VclPtr<ScrollBar>         m_pCondScroll;
 
         ::rptui::OReportController&                         m_rController;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >
+        css::uno::Reference< css::report::XReportControlModel >
                                                             m_xFormatConditions;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >
+        css::uno::Reference< css::report::XReportControlModel >
                                                             m_xCopy;
 
         bool    m_bDeletingCondition;
@@ -89,7 +89,7 @@ namespace rptui
     public:
         ConditionalFormattingDialog(
             vcl::Window* pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel>& _xHoldAlive,
+            const css::uno::Reference< css::report::XReportControlModel>& _xHoldAlive,
             ::rptui::OReportController& _rController
         );
         virtual ~ConditionalFormattingDialog();

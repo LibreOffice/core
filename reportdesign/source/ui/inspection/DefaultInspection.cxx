@@ -142,13 +142,13 @@ namespace rptui
         return m_nMinHelpTextLines;
     }
 
-    sal_Bool SAL_CALL DefaultComponentInspectorModel::getIsReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Bool SAL_CALL DefaultComponentInspectorModel::getIsReadOnly() throw (css::uno::RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         return m_bIsReadOnly;
     }
 
-    void SAL_CALL DefaultComponentInspectorModel::setIsReadOnly( sal_Bool _isreadonly ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL DefaultComponentInspectorModel::setIsReadOnly( sal_Bool _isreadonly ) throw (css::uno::RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         m_bIsReadOnly = _isreadonly;

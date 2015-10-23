@@ -46,15 +46,15 @@
 namespace rptxml
 {
 using namespace ::xmloff::token;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::report;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::xml::sax;
+using namespace css::uno;
+using namespace css::container;
+using namespace css::lang;
+using namespace css::beans;
+using namespace css::document;
+using namespace css::text;
+using namespace css::report;
+using namespace css::io;
+using namespace css::xml::sax;
 
 // - ORptExport -
 
@@ -184,13 +184,13 @@ public:
 
     ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag);
 
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-    static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+    static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
 
@@ -204,10 +204,10 @@ public:
 class ORptExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
 /** Exports only content
@@ -217,10 +217,10 @@ public:
 class ORptContentExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
 /** Exports only styles
@@ -230,10 +230,10 @@ public:
 class ORptStylesExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
 /** Exports only meta data
@@ -243,10 +243,10 @@ public:
 class ORptMetaExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 /** Exports all
  * \ingroup reportdesign_source_filter_xml
@@ -255,10 +255,10 @@ public:
 class ODBFullExportHelper
 {
 public:
-    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+        create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 };
 
 } // rptxml

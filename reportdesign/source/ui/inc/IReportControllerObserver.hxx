@@ -32,9 +32,9 @@ namespace rptui
 
     public:
 
-        virtual void notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) = 0;
-        virtual void notifyElementInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) = 0;
-        virtual void handle( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) = 0;
+        virtual void notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent ) = 0;
+        virtual void notifyElementInserted( const css::uno::Reference< css::uno::XInterface >& _rxElement ) = 0;
+        virtual void handle( const css::uno::Reference< css::uno::XInterface >& _rxElement ) = 0;
     };
 
 } // namespace rptui

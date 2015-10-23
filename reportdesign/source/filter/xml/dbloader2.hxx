@@ -64,27 +64,27 @@
 namespace rptxml
 {
 
-    class ORptTypeDetection : public ::cppu::WeakImplHelper< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo>
+    class ORptTypeDetection : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 public:
-    explicit ORptTypeDetection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    explicit ORptTypeDetection(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
     // XServiceInfo
     OUString                                     SAL_CALL getImplementationName() throw(std::exception  ) override;
     sal_Bool                                            SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) override;
-    ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception  ) override;
+    css::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception  ) override;
 
     // static methods
-    static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException )
+    static OUString getImplementationName_Static() throw( css::uno::RuntimeException )
     {
         return OUString("com.sun.star.comp.report.ORptTypeDetection");
     }
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-    create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+    create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
-    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) throw (css::uno::RuntimeException, std::exception) override;
 };
 }
 #endif

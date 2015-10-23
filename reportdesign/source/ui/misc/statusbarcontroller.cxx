@@ -156,53 +156,53 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
 }
 
 // XStatusbarController
-sal_Bool SAL_CALL OStatusbarController::mouseButtonDown(const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OStatusbarController::mouseButtonDown(const css::awt::MouseEvent& _aEvent)throw (css::uno::RuntimeException, std::exception)
 {
     return m_rController.is() && m_rController->mouseButtonDown(_aEvent);
 }
 
-sal_Bool SAL_CALL OStatusbarController::mouseMove(    const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OStatusbarController::mouseMove(    const css::awt::MouseEvent& _aEvent)throw (css::uno::RuntimeException, std::exception)
 {
     return m_rController.is() && m_rController->mouseMove(_aEvent);
 }
 
-sal_Bool SAL_CALL OStatusbarController::mouseButtonUp(    const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OStatusbarController::mouseButtonUp(    const css::awt::MouseEvent& _aEvent)throw (css::uno::RuntimeException, std::exception)
 {
     return m_rController.is() && m_rController->mouseButtonUp(_aEvent);
 }
 
 void SAL_CALL OStatusbarController::command(
-    const ::com::sun::star::awt::Point& aPos,
+    const css::awt::Point& aPos,
     ::sal_Int32 nCommand,
     sal_Bool bMouseEvent,
-    const ::com::sun::star::uno::Any& aData )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Any& aData )
+throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_rController.is() )
         m_rController->command( aPos, nCommand, bMouseEvent, aData );
 }
 
 void SAL_CALL OStatusbarController::paint(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
-    const ::com::sun::star::awt::Rectangle& rOutputRectangle,
+    const css::uno::Reference< css::awt::XGraphics >& xGraphics,
+    const css::awt::Rectangle& rOutputRectangle,
     ::sal_Int32 nStyle )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_rController.is() )
         m_rController->paint( xGraphics, rOutputRectangle, nStyle );
 }
 
 void SAL_CALL OStatusbarController::click(
-    const ::com::sun::star::awt::Point& aPos )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::awt::Point& aPos )
+throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_rController.is() )
         m_rController->click( aPos );
 }
 
 void SAL_CALL OStatusbarController::doubleClick(
-    const ::com::sun::star::awt::Point& aPos )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::awt::Point& aPos )
+throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_rController.is() )
         m_rController->doubleClick( aPos );
@@ -216,7 +216,7 @@ void SAL_CALL OStatusbarController::update() throw ( RuntimeException, std::exce
 }
 
 // XComponent
-void SAL_CALL OStatusbarController::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OStatusbarController::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_rController.is() )
         ::comphelper::disposeComponent( m_rController );

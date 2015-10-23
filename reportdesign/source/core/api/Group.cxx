@@ -174,7 +174,7 @@ uno::Reference< report::XSection > SAL_CALL OGroup::getFooter() throw (container
 void SAL_CALL OGroup::setGroupOn( ::sal_Int16 _groupon ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     if ( _groupon < report::GroupOn::DEFAULT || _groupon > report::GroupOn::INTERVAL )
-        throwIllegallArgumentException("com::sun::star::report::GroupOn"
+        throwIllegallArgumentException("css::report::GroupOn"
                         ,*this
                         ,1
                         ,m_xContext);
@@ -201,7 +201,7 @@ void SAL_CALL OGroup::setGroupInterval( ::sal_Int32 _groupinterval ) throw (uno:
 void SAL_CALL OGroup::setKeepTogether( ::sal_Int16 _keeptogether ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     if ( _keeptogether < report::KeepTogether::NO || _keeptogether > report::KeepTogether::WITH_FIRST_DETAIL )
-        throwIllegallArgumentException("com::sun::star::report::KeepTogether"
+        throwIllegallArgumentException("css::report::KeepTogether"
                         ,*this
                         ,1
                         ,m_xContext);

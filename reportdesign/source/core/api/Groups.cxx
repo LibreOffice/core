@@ -52,7 +52,7 @@ void SAL_CALL OGroups::dispose() throw(uno::RuntimeException, std::exception)
 
 void SAL_CALL OGroups::disposing()
 {
-    ::std::for_each(m_aGroups.begin(),m_aGroups.end(),::boost::mem_fn(&com::sun::star::report::XGroup::dispose));
+    ::std::for_each(m_aGroups.begin(),m_aGroups.end(),::boost::mem_fn(&css::report::XGroup::dispose));
     m_aGroups.clear();
     lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );

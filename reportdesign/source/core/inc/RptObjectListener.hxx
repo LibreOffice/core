@@ -32,7 +32,7 @@ class OObjectBase;
 // OObjectListener
 
 
-typedef ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener > TPropertyChangeListenerHelper;
+typedef ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener > TPropertyChangeListenerHelper;
 
 class OObjectListener: public TPropertyChangeListenerHelper
 {
@@ -46,10 +46,10 @@ public:
     OObjectListener(OObjectBase* _pObject);
 
     // XEventListener
-    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException, std::exception) override;
 };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_RPTOBJECTLISTENER_HXX

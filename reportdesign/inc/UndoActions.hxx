@@ -60,22 +60,22 @@ namespace rptui
     */
     class REPORTDESIGN_DLLPUBLIC OGroupHelper
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup > m_xGroup;
+        css::uno::Reference< css::report::XGroup > m_xGroup;
         OGroupHelper(const OGroupHelper&) = delete;
         OGroupHelper& operator=(const OGroupHelper&) = delete;
     public:
-        OGroupHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup)
+        OGroupHelper(const css::uno::Reference< css::report::XGroup >& _xGroup)
             :m_xGroup(_xGroup)
         {
         }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >   getHeader() { return m_xGroup->getHeader(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >   getFooter() { return m_xGroup->getFooter(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >     getGroup() { return m_xGroup; }
+        inline css::uno::Reference< css::report::XSection >   getHeader() { return m_xGroup->getHeader(); }
+        inline css::uno::Reference< css::report::XSection >   getFooter() { return m_xGroup->getFooter(); }
+        inline css::uno::Reference< css::report::XGroup >     getGroup() { return m_xGroup; }
 
         inline bool getHeaderOn() { return m_xGroup->getHeaderOn(); }
         inline bool getFooterOn() { return m_xGroup->getFooterOn(); }
 
-        static ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OGroupHelper> getMemberFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+        static ::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OGroupHelper> getMemberFunction(const css::uno::Reference< css::report::XSection >& _xSection);
 
     };
 
@@ -83,24 +83,24 @@ namespace rptui
     */
     class REPORTDESIGN_DLLPUBLIC OReportHelper
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition > m_xReport;
+        css::uno::Reference< css::report::XReportDefinition > m_xReport;
     public:
-        OReportHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReport)
+        OReportHelper(const css::uno::Reference< css::report::XReportDefinition >& _xReport)
             :m_xReport(_xReport)
         {
         }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getReportHeader() { return m_xReport->getReportHeader(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getReportFooter() { return m_xReport->getReportFooter(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getPageHeader()   { return m_xReport->getPageHeader(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getPageFooter()   { return m_xReport->getPageFooter(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getDetail()       { return m_xReport->getDetail(); }
+        inline css::uno::Reference< css::report::XSection > getReportHeader() { return m_xReport->getReportHeader(); }
+        inline css::uno::Reference< css::report::XSection > getReportFooter() { return m_xReport->getReportFooter(); }
+        inline css::uno::Reference< css::report::XSection > getPageHeader()   { return m_xReport->getPageHeader(); }
+        inline css::uno::Reference< css::report::XSection > getPageFooter()   { return m_xReport->getPageFooter(); }
+        inline css::uno::Reference< css::report::XSection > getDetail()       { return m_xReport->getDetail(); }
 
         inline bool getReportHeaderOn() { return m_xReport->getReportHeaderOn(); }
         inline bool getReportFooterOn() { return m_xReport->getReportFooterOn(); }
         inline bool getPageHeaderOn() { return m_xReport->getPageHeaderOn(); }
         inline bool getPageFooterOn() { return m_xReport->getPageFooterOn(); }
 
-        static ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> getMemberFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+        static ::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OReportHelper> getMemberFunction(const css::uno::Reference< css::report::XSection >& _xSection);
     };
 
 
@@ -172,21 +172,21 @@ namespace rptui
         OUndoContainerAction(OUndoContainerAction&) = delete;
         void operator =(OUndoContainerAction&) = delete;
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                         m_xElement;     // object not owned by the action
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        css::uno::Reference< css::uno::XInterface >
                         m_xOwnElement;  // object owned by the action
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
+        css::uno::Reference< css::container::XIndexContainer >
                         m_xContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+        css::uno::Reference< css::report::XSection >
                         m_xSection;
         Action          m_eAction;
 
     public:
         OUndoContainerAction(SdrModel& rMod
                             ,Action _eAction
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rContainer
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
+                            ,const css::uno::Reference< css::container::XIndexContainer >& rContainer
+                            ,const css::uno::Reference< css::uno::XInterface>& xElem
                             ,sal_uInt16 _nCommentId);
         virtual ~OUndoContainerAction();
 
@@ -204,15 +204,15 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OUndoReportSectionAction : public OUndoContainerAction
     {
         OReportHelper                               m_aReportHelper;
-        ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                     ,OReportHelper> m_pMemberFunction;
     public:
         OUndoReportSectionAction(SdrModel& rMod
                             ,Action _eAction
-                            ,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                 ,OReportHelper> _pMemberFunction
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReport
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
+                            ,const css::uno::Reference< css::report::XReportDefinition >& _xReport
+                            ,const css::uno::Reference< css::uno::XInterface>& xElem
                             ,sal_uInt16 _nCommentId);
 
     protected:
@@ -225,15 +225,15 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OUndoGroupSectionAction : public OUndoContainerAction
     {
         OGroupHelper                                m_aGroupHelper;
-        ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                     ,OGroupHelper> m_pMemberFunction;
     public:
         OUndoGroupSectionAction(SdrModel& rMod
                             ,Action _eAction
-                            ,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                             ,OGroupHelper> _pMemberFunction
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
+                            ,const css::uno::Reference< css::report::XGroup >& _xGroup
+                            ,const css::uno::Reference< css::uno::XInterface>& xElem
                             ,sal_uInt16 _nCommentId);
 
     protected:
@@ -244,10 +244,10 @@ namespace rptui
     // ORptUndoPropertyAction
     class REPORTDESIGN_DLLPUBLIC ORptUndoPropertyAction: public OCommentUndoAction
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xObj;
-        OUString                     m_aPropertyName;
-        ::com::sun::star::uno::Any          m_aNewValue;
-        ::com::sun::star::uno::Any          m_aOldValue;
+        css::uno::Reference< css::beans::XPropertySet> m_xObj;
+        OUString               m_aPropertyName;
+        css::uno::Any          m_aNewValue;
+        css::uno::Any          m_aOldValue;
 
         /** sets either the old value or the new value again at the property set.
          *
@@ -255,10 +255,10 @@ namespace rptui
          */
         void setProperty(bool _bOld);
     protected:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getObject();
+        virtual css::uno::Reference< css::beans::XPropertySet> getObject();
 
     public:
-        ORptUndoPropertyAction(SdrModel& rMod, const ::com::sun::star::beans::PropertyChangeEvent& evt);
+        ORptUndoPropertyAction(SdrModel& rMod, const css::beans::PropertyChangeEvent& evt);
 
         virtual void Undo() override;
         virtual void Redo() override;
@@ -272,16 +272,16 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OUndoPropertyReportSectionAction : public ORptUndoPropertyAction
     {
         OReportHelper                               m_aReportHelper;
-        ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                     ,OReportHelper> m_pMemberFunction;
     protected:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getObject() override;
+        virtual css::uno::Reference< css::beans::XPropertySet> getObject() override;
     public:
         OUndoPropertyReportSectionAction(SdrModel& rMod
-                            ,const ::com::sun::star::beans::PropertyChangeEvent& evt
-                            ,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+                            ,const css::beans::PropertyChangeEvent& evt
+                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                 ,OReportHelper> _pMemberFunction
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReport
+                            ,const css::uno::Reference< css::report::XReportDefinition >& _xReport
                             );
     };
 
@@ -291,16 +291,16 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OUndoPropertyGroupSectionAction : public ORptUndoPropertyAction
     {
         OGroupHelper                                m_aGroupHelper;
-        ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+        ::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                     ,OGroupHelper> m_pMemberFunction;
     protected:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getObject() override;
+        virtual css::uno::Reference< css::beans::XPropertySet> getObject() override;
     public:
         OUndoPropertyGroupSectionAction(SdrModel& rMod
-                            ,const ::com::sun::star::beans::PropertyChangeEvent& evt
-                            ,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
+                            ,const css::beans::PropertyChangeEvent& evt
+                            ,::std::mem_fun_t< css::uno::Reference< css::report::XSection >
                                             ,OGroupHelper> _pMemberFunction
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup
+                            ,const css::uno::Reference< css::report::XGroup >& _xGroup
                             );
     };
 

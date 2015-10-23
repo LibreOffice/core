@@ -46,15 +46,15 @@ class OPageNumberDialog :   public ModalDialog
 
     VclPtr<CheckBox>                               m_pShowNumberOnFirstPage;
 
-    ::rptui::OReportController*             m_pController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>
-                                            m_xHoldAlive;
+    ::rptui::OReportController*                    m_pController;
+    css::uno::Reference< css::report::XReportDefinition>
+                                                   m_xHoldAlive;
 
     OPageNumberDialog(const OPageNumberDialog&) = delete;
     void operator =(const OPageNumberDialog&) = delete;
 public:
     OPageNumberDialog( vcl::Window* pParent
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xHoldAlive
+                        ,const css::uno::Reference< css::report::XReportDefinition>& _xHoldAlive
                         ,::rptui::OReportController* _pController);
     virtual ~OPageNumberDialog();
     virtual void    dispose() override;

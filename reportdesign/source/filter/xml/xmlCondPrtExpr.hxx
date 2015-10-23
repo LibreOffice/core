@@ -27,7 +27,7 @@ namespace rptxml
     class ORptFilter;
     class OXMLCondPrtExpr : public SvXMLImportContext
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xComponent;
+        css::uno::Reference< css::beans::XPropertySet >   m_xComponent;
         OXMLCondPrtExpr(const OXMLCondPrtExpr&) = delete;
         void operator =(const OXMLCondPrtExpr&) = delete;
     public:
@@ -35,8 +35,8 @@ namespace rptxml
         OXMLCondPrtExpr( ORptFilter& _rImport
                     ,sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & _xAttrList
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xComponent);
+                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & _xAttrList
+                    ,const css::uno::Reference< css::beans::XPropertySet >& _xComponent);
         virtual ~OXMLCondPrtExpr();
 
         // This method is called for all characters that are contained in the

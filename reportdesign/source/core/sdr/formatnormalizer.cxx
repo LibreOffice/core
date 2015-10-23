@@ -68,7 +68,7 @@ namespace rptui
     }
 
 
-    void FormatNormalizer::notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent )
+    void FormatNormalizer::notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent )
     {
         if ( !impl_lateInit() )
             return;
@@ -85,7 +85,7 @@ namespace rptui
     }
 
 
-    void FormatNormalizer::notifyElementInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement )
+    void FormatNormalizer::notifyElementInserted( const css::uno::Reference< css::uno::XInterface >& _rxElement )
     {
         if ( !impl_lateInit() )
             return;

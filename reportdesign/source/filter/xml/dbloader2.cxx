@@ -45,7 +45,7 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
 {
 }
 
-OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (RuntimeException, std::exception)
+OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue >& Descriptor ) throw (RuntimeException, std::exception)
 {
 
     ::comphelper::SequenceAsHashMap aTemp(Descriptor);

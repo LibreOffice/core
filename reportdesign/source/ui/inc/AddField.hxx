@@ -50,9 +50,9 @@ class  OAddFieldWindow  :public FloatingWindow
                     ,   public ::comphelper::OContainerListener
                     ,   public dbaui::OToolBoxHelper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       m_xHoldAlive;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xRowSet;
+    css::uno::Reference< css::lang::XComponent>                                 m_xHoldAlive;
+    css::uno::Reference< css::container::XNameAccess>                           m_xColumns;
+    css::uno::Reference< css::beans::XPropertySet >                             m_xRowSet;
 
     VclPtr<ToolBox>                                                             m_aActions;
 
@@ -78,7 +78,7 @@ class  OAddFieldWindow  :public FloatingWindow
     void operator =(const OAddFieldWindow&) = delete;
 public:
     OAddFieldWindow(vcl::Window* pParent
-                    , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xRowSet);
+                    , const css::uno::Reference< css::beans::XPropertySet >& _xRowSet);
 
     virtual ~OAddFieldWindow();
     virtual void dispose() override;
@@ -91,9 +91,9 @@ public:
     inline bool                     GetEscapeProcessing()   const { return m_bEscapeProcessing; }
     inline void SetCreateHdl(const Link<OAddFieldWindow&,void>& _aCreateLink) { m_aCreateLink = _aCreateLink; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              getConnection() const;
+    css::uno::Reference< css::sdbc::XConnection>              getConnection() const;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getSelectedFieldDescriptors();
+    css::uno::Sequence< css::beans::PropertyValue > getSelectedFieldDescriptors();
 
     /** will be called when the id of the image list needs to change.
         @param  _eBitmapSet
@@ -117,11 +117,11 @@ public:
 
 private:
     // FmXChangeListener
-    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) throw( css::uno::RuntimeException, std::exception ) override;
     // OContainerListener
-    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 } // rptui

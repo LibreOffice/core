@@ -554,7 +554,7 @@ OSectionWindow* ODesignView::getMarkedSection(NearSectionAccess nsa) const
     return  m_aScrollWindow->getMarkedSection(nsa);
 }
 
-OSectionWindow* ODesignView::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+OSectionWindow* ODesignView::getSectionWindow(const css::uno::Reference< css::report::XSection>& _xSection) const
 {
     return  m_aScrollWindow->getSectionWindow(_xSection);
 }

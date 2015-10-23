@@ -29,8 +29,8 @@ namespace rptxml
     class OXMLGroup : public SvXMLImportContext
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups >   m_xGroups;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >    m_xGroup;
+        css::uno::Reference< css::report::XGroups >   m_xGroups;
+        css::uno::Reference< css::report::XGroup >    m_xGroup;
 
         ORptFilter& GetOwnImport();
 
@@ -41,13 +41,13 @@ namespace rptxml
         OXMLGroup( ORptFilter& rImport
                     , sal_uInt16 nPrfx
                     ,const OUString& rLName
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
+                    ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
                     );
         virtual ~OXMLGroup();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
         virtual void EndElement() override;
     };

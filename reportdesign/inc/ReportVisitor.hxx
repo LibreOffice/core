@@ -28,20 +28,20 @@ namespace reportdesign
     class SAL_NO_VTABLE ITraverseReport
     {
     public:
-        virtual void traverseReport(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport) = 0;
-        virtual void traverseReportFunctions(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctions>& _xFunctions) = 0;
-        virtual void traverseReportHeader(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) = 0;
-        virtual void traverseReportFooter(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) = 0;
-        virtual void traversePageHeader(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) = 0;
-        virtual void traversePageFooter(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) = 0;
+        virtual void traverseReport(const css::uno::Reference< css::report::XReportDefinition>& _xReport) = 0;
+        virtual void traverseReportFunctions(const css::uno::Reference< css::report::XFunctions>& _xFunctions) = 0;
+        virtual void traverseReportHeader(const css::uno::Reference< css::report::XSection>& _xSection) = 0;
+        virtual void traverseReportFooter(const css::uno::Reference< css::report::XSection>& _xSection) = 0;
+        virtual void traversePageHeader(const css::uno::Reference< css::report::XSection>& _xSection) = 0;
+        virtual void traversePageFooter(const css::uno::Reference< css::report::XSection>& _xSection) = 0;
 
-        virtual void traverseGroups(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups>& _xGroups) = 0;
-        virtual void traverseGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup) = 0;
-        virtual void traverseGroupFunctions(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctions>& _xFunctions) = 0;
-        virtual void traverseGroupHeader(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) = 0;
-        virtual void traverseGroupFooter(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) = 0;
+        virtual void traverseGroups(const css::uno::Reference< css::report::XGroups>& _xGroups) = 0;
+        virtual void traverseGroup(const css::uno::Reference< css::report::XGroup>& _xGroup) = 0;
+        virtual void traverseGroupFunctions(const css::uno::Reference< css::report::XFunctions>& _xFunctions) = 0;
+        virtual void traverseGroupHeader(const css::uno::Reference< css::report::XSection>& _xSection) = 0;
+        virtual void traverseGroupFooter(const css::uno::Reference< css::report::XSection>& _xSection) = 0;
 
-        virtual void traverseDetail(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) = 0;
+        virtual void traverseDetail(const css::uno::Reference< css::report::XSection>& _xSection) = 0;
 
     protected:
         ~ITraverseReport() {}
@@ -52,8 +52,8 @@ namespace reportdesign
         ITraverseReport*                                                                m_pTraverseReport;
     public:
         OReportVisitor(ITraverseReport* _pTraverseReport);
-        void start(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReportDefinition);
-        void start(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup);
+        void start(const css::uno::Reference< css::report::XReportDefinition>& _xReportDefinition);
+        void start(const css::uno::Reference< css::report::XGroup>& _xGroup);
     };
 
 } // namespace reportdesign

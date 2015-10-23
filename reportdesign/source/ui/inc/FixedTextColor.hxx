@@ -38,18 +38,18 @@ namespace rptui
     {
         const OReportController& m_rReportController;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer > getVclWindowPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFixedText >& _xComponent) throw(::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > getXControl(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFixedText >& _xFixedText) throw(::com::sun::star::uno::RuntimeException);
+        css::uno::Reference< css::awt::XVclWindowPeer > getVclWindowPeer(const css::uno::Reference< css::report::XFixedText >& _xComponent) throw(css::uno::RuntimeException);
+        css::uno::Reference< css::awt::XControl > getXControl(const css::uno::Reference< css::report::XFixedText >& _xFixedText) throw(css::uno::RuntimeException);
 
-        static void setPropertyTextColor(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nFormatKey);
+        static void setPropertyTextColor(const css::uno::Reference< css::awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nFormatKey);
 
     public:
         FixedTextColor(const OReportController & _aObserver);
         virtual ~FixedTextColor();
 
-        void    notifyPropertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) override;
-        void    notifyElementInserted( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) override;
-        void    handle( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) override;
+        void    notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
+        void    notifyElementInserted( const css::uno::Reference< css::uno::XInterface >& _rxElement ) override;
+        void    handle( const css::uno::Reference< css::uno::XInterface >& _rxElement ) override;
 
     };
 

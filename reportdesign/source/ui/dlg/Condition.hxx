@@ -122,17 +122,17 @@ namespace rptui
         /** sets the props at the control
             @param  _xCondition the source
         */
-        void setCondition(const com::sun::star::uno::Reference< com::sun::star::report::XFormatCondition >& _xCondition);
+        void setCondition(const css::uno::Reference< css::report::XFormatCondition >& _xCondition);
 
         /** fills from the control
             _xCondition the destination
         */
-        void fillFormatCondition(const com::sun::star::uno::Reference< com::sun::star::report::XFormatCondition >& _xCondition);
+        void fillFormatCondition(const css::uno::Reference< css::report::XFormatCondition >& _xCondition);
 
         /** updates the toolbar
             _xCondition the destination
         */
-        void updateToolbar(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlFormat >& _xCondition);
+        void updateToolbar(const css::uno::Reference< css::report::XReportControlFormat >& _xCondition);
 
         /// tells the condition its new index within the dialog's condition array
         void setConditionIndex( size_t _nCondIndex, size_t _nCondCount );

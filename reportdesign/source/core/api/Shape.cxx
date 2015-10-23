@@ -440,13 +440,13 @@ void SAL_CALL OShape::setZOrder( ::sal_Int32 _zorder ) throw (uno::RuntimeExcept
     set(PROPERTY_ZORDER,_zorder,m_nZOrder);
 }
 
-sal_Bool SAL_CALL OShape::getOpaque() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OShape::getOpaque() throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bOpaque;
 }
 
-void SAL_CALL OShape::setOpaque( sal_Bool _opaque ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OShape::setOpaque( sal_Bool _opaque ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     set(PROPERTY_OPAQUE,_opaque,m_bOpaque);

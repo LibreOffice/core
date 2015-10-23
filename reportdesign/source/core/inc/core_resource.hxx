@@ -54,12 +54,12 @@ namespace reportdesign
         friend class EnsureDelete;
 
     protected:
-        static void ensureImplExists(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >& _rM);
+        static void ensureImplExists(const css::uno::Reference< css::lang::XMultiComponentFactory >& _rM);
 
     public:
         /** loads the string with the specified resource id from the FormLayer resource file
         */
-        static OUString loadString(sal_uInt16 _nResId,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >& _rM);
+        static OUString loadString(sal_uInt16 _nResId,const css::uno::Reference< css::lang::XMultiComponentFactory >& _rM);
     };
 
 

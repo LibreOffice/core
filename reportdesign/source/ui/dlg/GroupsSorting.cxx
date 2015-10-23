@@ -88,11 +88,11 @@ public:
     explicit OFieldExpressionControlContainerListener(OFieldExpressionControl* pParent) : mpParent(pParent) {}
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
     // XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 class OFieldExpressionControl : public ::svt::EditBrowseBox
@@ -117,8 +117,8 @@ public:
     virtual void dispose() override;
 
     // XContainerListener
-    void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
-    void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception);
+    void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception);
 
     virtual Size GetOptimalSize() const override;
 
@@ -179,16 +179,16 @@ public:
 };
 
 
-void OFieldExpressionControlContainerListener::disposing(const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void OFieldExpressionControlContainerListener::disposing(const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
 {}
 
-void OFieldExpressionControlContainerListener::elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void OFieldExpressionControlContainerListener::elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception)
 { mpParent->elementInserted(rEvent); }
 
-void OFieldExpressionControlContainerListener::elementReplaced(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void OFieldExpressionControlContainerListener::elementReplaced(const css::container::ContainerEvent& ) throw(css::uno::RuntimeException, std::exception)
 {}
 
-void OFieldExpressionControlContainerListener::elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void OFieldExpressionControlContainerListener::elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception)
 { mpParent->elementRemoved(rEvent); }
 
 
@@ -275,7 +275,7 @@ void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*
         if( aClipboardList.getLength() )
         {
             OGroupExchange* pData = new OGroupExchange(aClipboardList);
-            uno::Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+            uno::Reference< css::datatransfer::XTransferable> xRef = pData;
             pData->StartDrag(this, DND_ACTION_MOVE );
         }
     }
@@ -840,7 +840,7 @@ void OFieldExpressionControl::copy()
     if( aClipboardList.getLength() )
     {
         OGroupExchange* pData = new OGroupExchange(aClipboardList);
-        uno::Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+        uno::Reference< css::datatransfer::XTransferable> xRef = pData;
         pData->CopyToClipboard(GetParent());
     }
 }

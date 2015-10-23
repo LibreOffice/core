@@ -34,41 +34,41 @@
 class SvXMLTokenMap;
 namespace rptxml
 {
-typedef ::cppu::WeakAggImplHelper3< ::com::sun::star::xml::sax::XDocumentHandler
-                                ,   ::com::sun::star::lang::XInitialization
-                                ,   ::com::sun::star::lang::XServiceInfo>   ImportDocumentHandler_BASE;
+typedef ::cppu::WeakAggImplHelper3< css::xml::sax::XDocumentHandler
+                                ,   css::lang::XInitialization
+                                ,   css::lang::XServiceInfo>   ImportDocumentHandler_BASE;
 
 class ImportDocumentHandler : public ImportDocumentHandler_BASE
 {
 public:
     // XServiceInfo - static versions
-    static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                    create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+    static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(css::uno::RuntimeException);
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+                    create(const css::uno::Reference< css::uno::XComponentContext >&);
 public:
-    explicit ImportDocumentHandler(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
+    explicit ImportDocumentHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
 
 private:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     DECLARE_XINTERFACE( )
     DECLARE_XTYPEPROVIDER( )
 
-    // ::com::sun::star::xml::sax::XDocumentHandler:
-    virtual void SAL_CALL startDocument() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL startElement(const OUString & aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL endElement(const OUString & aName) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL characters(const OUString & aChars) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL ignorableWhitespace(const OUString & aWhitespaces) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL processingInstruction(const OUString & aTarget, const OUString & aData) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::xml::sax::SAXException, std::exception) override;
+    // css::xml::sax::XDocumentHandler:
+    virtual void SAL_CALL startDocument() throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL endDocument() throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL startElement(const OUString & aName, const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL endElement(const OUString & aName) throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL characters(const OUString & aChars) throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL ignorableWhitespace(const OUString & aWhitespaces) throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL processingInstruction(const OUString & aTarget, const OUString & aData) throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
 private:
     ImportDocumentHandler(ImportDocumentHandler &) = delete;
@@ -76,20 +76,20 @@ private:
 
     virtual ~ImportDocumentHandler();
 
-    ::osl::Mutex                                                                        m_aMutex;
-    bool                                                                                m_bImportedChart;
-    ::std::vector< OUString>                                                     m_aMasterFields;
-    ::std::vector< OUString>                                                     m_aDetailFields;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >           m_aArguments;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xDelegatee;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >             m_xProxy;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >           m_xTypeProvider;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >            m_xServiceInfo;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >        m_xModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDatabaseDataProvider >   m_xDatabaseDataProvider;
+    ::osl::Mutex                                                      m_aMutex;
+    bool                                                              m_bImportedChart;
+    ::std::vector< OUString>                                          m_aMasterFields;
+    ::std::vector< OUString>                                          m_aDetailFields;
+    css::uno::Sequence< css::beans::PropertyValue >                   m_aArguments;
+    css::uno::Reference< css::uno::XComponentContext >                m_xContext;
+    css::uno::Reference< css::xml::sax::XDocumentHandler >            m_xDelegatee;
+    css::uno::Reference< css::uno::XAggregation >                     m_xProxy;
+    css::uno::Reference< css::lang::XTypeProvider >                   m_xTypeProvider;
+    css::uno::Reference< css::lang::XServiceInfo >                    m_xServiceInfo;
+    css::uno::Reference< css::chart2::XChartDocument >                m_xModel;
+    css::uno::Reference< css::chart2::data::XDatabaseDataProvider >   m_xDatabaseDataProvider;
 
-    ::std::unique_ptr<SvXMLTokenMap>                                                    m_pReportElemTokenMap;
+    ::std::unique_ptr<SvXMLTokenMap>                                  m_pReportElemTokenMap;
 };
 
 } // namespace rptxml

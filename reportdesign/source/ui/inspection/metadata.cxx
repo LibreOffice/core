@@ -217,7 +217,7 @@ namespace rptui
     }
 
 
-    bool OPropertyInfoService::isComposable( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxFormComponentHandler )
+    bool OPropertyInfoService::isComposable( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyHandler >& _rxFormComponentHandler )
     {
         sal_Int32 nId = getPropertyId( _rPropertyName );
         if ( nId != -1 )
@@ -230,7 +230,7 @@ namespace rptui
     }
 
 
-    void OPropertyInfoService::getExcludeProperties(::std::vector< beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler)
+    void OPropertyInfoService::getExcludeProperties(::std::vector< beans::Property >& _rExcludeProperties,const css::uno::Reference< css::inspection::XPropertyHandler >& _xFormComponentHandler)
     {
         uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
         static const OUString pExcludeProperties[] =
