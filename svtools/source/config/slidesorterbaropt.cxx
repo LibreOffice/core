@@ -74,7 +74,7 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
         */
         void Load( const Sequence< OUString >& rPropertyNames );
 
-        //  public interface
+    private:
         bool m_bVisibleImpressView;
         bool m_bVisibleOutlineView;
         bool m_bVisibleNotesView;
@@ -82,7 +82,6 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
         bool m_bVisibleSlideSorterView;
         bool m_bVisibleDrawView;
 
-    private:
         virtual void ImplCommit() override;
 
         /** return list of key names of our configuration management which represent oue module tree
@@ -93,6 +92,26 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
             \return A list of needed configuration keys is returned.
         */
         static Sequence< OUString > GetPropertyNames();
+    public:
+        //  public interface
+        bool GetVisibleImpressViewImpl() const   { return m_bVisibleImpressView; }
+        void SetVisibleImpressViewImpl( bool bVisible );
+
+        bool GetVisibleOutlineViewImpl() const   { return m_bVisibleOutlineView; }
+        void SetVisibleOutlineViewImpl( bool bVisible );
+
+        bool GetVisibleNotesViewImpl() const     { return m_bVisibleNotesView; }
+        void SetVisibleNotesViewImpl( bool bVisible );
+
+        bool GetVisibleHandoutViewImpl() const   { return m_bVisibleHandoutView; }
+        void SetVisibleHandoutViewImpl( bool bVisible );
+
+        bool GetVisibleSlideSorterViewImpl() const { return m_bVisibleSlideSorterView; }
+        void SetVisibleSlideSorterViewImpl( bool bVisible );
+
+        bool GetVisibleDrawViewImpl() const { return m_bVisibleDrawView; }
+        void SetVisibleDrawViewImpl( bool bVisible );
+
 
     protected:
 };
@@ -169,6 +188,60 @@ SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys!
     EnableNotification( m_seqPropertyNames );
+}
+
+void SvtSlideSorterBarOptions_Impl::SetVisibleImpressViewImpl(bool bVisible)
+{
+    if (m_bVisibleImpressView != bVisible)
+    {
+        m_bVisibleImpressView = bVisible;
+        SetModified();
+    };
+}
+
+void SvtSlideSorterBarOptions_Impl::SetVisibleOutlineViewImpl(bool bVisible)
+{
+    if (m_bVisibleOutlineView != bVisible)
+    {
+        m_bVisibleOutlineView = bVisible;
+        SetModified();
+    }
+}
+
+void SvtSlideSorterBarOptions_Impl::SetVisibleNotesViewImpl(bool bVisible)
+{
+    if (m_bVisibleNotesView != bVisible)
+    {
+        m_bVisibleNotesView = bVisible;
+        SetModified();
+    }
+}
+
+void SvtSlideSorterBarOptions_Impl::SetVisibleHandoutViewImpl(bool bVisible)
+{
+    if (m_bVisibleHandoutView != bVisible)
+    {
+        m_bVisibleHandoutView = bVisible;
+        SetModified();
+    }
+}
+
+void SvtSlideSorterBarOptions_Impl::SetVisibleSlideSorterViewImpl(bool bVisible)
+{
+    if (m_bVisibleSlideSorterView != bVisible)
+    {
+        m_bVisibleSlideSorterView = bVisible;
+        SetModified();
+    }
+}
+
+void SvtSlideSorterBarOptions_Impl::SetVisibleDrawViewImpl(bool bVisible)
+{
+    if (m_bVisibleDrawView != bVisible)
+    {
+        m_bVisibleDrawView = bVisible;
+        SetModified();
+    }
 }
 
 SvtSlideSorterBarOptions_Impl::~SvtSlideSorterBarOptions_Impl()
@@ -339,6 +412,8 @@ SvtSlideSorterBarOptions::~SvtSlideSorterBarOptions()
     // If last instance was deleted we must destroy our static data container!
     if( m_nRefCount <= 0 )
     {
+        if (m_pDataContainer->IsModified())
+            m_pDataContainer->Commit();
         delete m_pDataContainer;
         m_pDataContainer = NULL;
     }
@@ -346,62 +421,62 @@ SvtSlideSorterBarOptions::~SvtSlideSorterBarOptions()
 
 bool SvtSlideSorterBarOptions::GetVisibleImpressView() const
 {
-    return m_pDataContainer->m_bVisibleImpressView && !comphelper::LibreOfficeKit::isActive();
+    return m_pDataContainer->GetVisibleImpressViewImpl() && !comphelper::LibreOfficeKit::isActive();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleImpressView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleImpressView = bVisible;
+    return m_pDataContainer->SetVisibleImpressViewImpl( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleOutlineView() const
 {
-    return m_pDataContainer->m_bVisibleOutlineView;
+    return m_pDataContainer->GetVisibleOutlineViewImpl();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleOutlineView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleOutlineView = bVisible;
+    return m_pDataContainer->SetVisibleOutlineViewImpl( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleNotesView() const
 {
-    return m_pDataContainer->m_bVisibleNotesView;
+    return m_pDataContainer->GetVisibleNotesViewImpl();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleNotesView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleNotesView = bVisible;
+    return m_pDataContainer->SetVisibleNotesViewImpl( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleHandoutView() const
 {
-    return m_pDataContainer->m_bVisibleHandoutView;
+    return m_pDataContainer->GetVisibleHandoutViewImpl();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleHandoutView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleHandoutView = bVisible;
+    return m_pDataContainer->SetVisibleHandoutViewImpl( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleSlideSorterView() const
 {
-    return m_pDataContainer->m_bVisibleSlideSorterView && !comphelper::LibreOfficeKit::isActive();
+    return m_pDataContainer->GetVisibleSlideSorterViewImpl() && !comphelper::LibreOfficeKit::isActive();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleSlideSorterView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleSlideSorterView = bVisible;
+    return m_pDataContainer->SetVisibleSlideSorterViewImpl( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleDrawView() const
 {
-    return m_pDataContainer->m_bVisibleDrawView;
+    return m_pDataContainer->GetVisibleDrawViewImpl();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleDrawView(bool bVisible)
 {
-    m_pDataContainer->m_bVisibleDrawView = bVisible;
+    return m_pDataContainer->SetVisibleDrawViewImpl( bVisible );
 }
 
 namespace
