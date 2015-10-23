@@ -1627,7 +1627,8 @@ vcl::Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
 
 void SvxFrameWindow_Impl::GetFocus()
 {
-    aFrameSet->GrabFocus();
+    if (aFrameSet)
+        aFrameSet->GrabFocus();
 }
 
 void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
