@@ -567,6 +567,7 @@ bool SvxSearchDialog::Close()
     aOpt.SetNotes                   ( m_pNotesBtn->IsChecked() );
     aOpt.SetIgnoreDiacritics_CTL    ( m_pIgnoreDiacritics->IsChecked() );
     aOpt.SetIgnoreKashida_CTL       ( m_pIgnoreKashida->IsChecked() );
+    aOpt.SetSearchFormatted         ( m_pSearchFormattedCB->IsChecked() );
     aOpt.Commit();
 
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
@@ -811,6 +812,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     if ( pSearchItem->GetAppFlag() == SvxSearchApp::CALC )
     {
         m_pCalcGrid->Show();
+        m_pSearchFormattedCB->Check( aOpt.IsSearchFormatted() );
         Link<Button*,void> aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
         m_pCalcSearchInLB->SetSelectHdl( LINK( this, SvxSearchDialog, LBSelectHdl_Impl ) );
         m_pRowsBtn->SetClickHdl( aLink );
