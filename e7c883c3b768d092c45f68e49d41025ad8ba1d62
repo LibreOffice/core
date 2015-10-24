@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_1dcb1774",
+        "filename": "svtools/source/config/colorcfg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2015-10-24T07:24:56Z",
+      "side": 1,
+      "message": "Might as well make this one COL_BLACK while you are doing the changes.",
+      "range": {
+        "startLine": 434,
+        "startChar": 6,
+        "endLine": 434,
+        "endChar": 32
+      },
+      "revId": "e7c883c3b768d092c45f68e49d41025ad8ba1d62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
