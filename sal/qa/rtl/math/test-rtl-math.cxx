@@ -120,12 +120,60 @@ public:
         CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
     }
 
+    void test_expm1() {
+        double x, res;
+        x =  0.0;
+        res = rtl::math::expm1(x);
+        CPPUNIT_ASSERT_EQUAL(0.0,res);
+        x = -0.0;
+        res = rtl::math::expm1(x);
+        CPPUNIT_ASSERT_EQUAL(-0.0,res);
+        CPPUNIT_ASSERT_EQUAL(true, rtl::math::isSignBitSet(res));
+        rtl::math::setInf( &x, false);
+        res = rtl::math::expm1(x);
+        CPPUNIT_ASSERT_EQUAL(true, rtl::math::isInf(res) && !rtl::math::isSignBitSet(res));
+        rtl::math::setInf( &x, true);
+        res = rtl::math::expm1(x);
+        CPPUNIT_ASSERT_EQUAL(-1.0,res);
+        rtl::math::setNan( &x);
+        res = rtl::math::expm1(x);
+        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+    }
+
+    void test_log1p() {
+        double x, res;
+        x =  0.0;
+        res = rtl::math::log1p(x);
+        CPPUNIT_ASSERT_EQUAL(0.0,res);
+        x = -0.0;
+        res = rtl::math::log1p(x);
+        CPPUNIT_ASSERT_EQUAL(-0.0,res);
+        CPPUNIT_ASSERT_EQUAL(true, rtl::math::isSignBitSet(res));
+        rtl::math::setInf( &x, false);
+        res = rtl::math::log1p(x);
+        CPPUNIT_ASSERT_EQUAL(true, rtl::math::isInf(res) && !rtl::math::isSignBitSet(res));
+        x = -1.0;
+        res = rtl::math::log1p(x);
+        CPPUNIT_ASSERT_EQUAL(true, rtl::math::isInf(res) && rtl::math::isSignBitSet(res));
+        x = -1.1;
+        res = rtl::math::log1p(x);
+        CPPUNIT_ASSERT_EQUAL(true, rtl::math::isNan(res));
+        rtl::math::setInf( &x, true);
+        res = rtl::math::log1p(x);
+        CPPUNIT_ASSERT_EQUAL(true, rtl::math::isNan(res));
+        rtl::math::setNan( &x);
+        res = rtl::math::log1p(x);
+        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+    }
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(test_stringToDouble_good);
     CPPUNIT_TEST(test_stringToDouble_bad);
     CPPUNIT_TEST(test_stringToDouble_exponent_without_digit);
     CPPUNIT_TEST(test_erf);
     CPPUNIT_TEST(test_erfc);
+    CPPUNIT_TEST(test_expm1);
+    CPPUNIT_TEST(test_log1p);
     CPPUNIT_TEST_SUITE_END();
 };
 
