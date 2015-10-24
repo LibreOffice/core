@@ -193,6 +193,7 @@ public:
     void testFuncGCD();
     void testFuncLCM();
     void testFuncSUMSQ();
+    void testFuncMDETERM();
 
     void testExternalRef();
     void testExternalRefFunctions();
@@ -534,6 +535,7 @@ public:
     CPPUNIT_TEST(testFuncGCD);
     CPPUNIT_TEST(testFuncLCM);
     CPPUNIT_TEST(testFuncSUMSQ);
+    CPPUNIT_TEST(testFuncMDETERM);
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testExternalRangeName);
     CPPUNIT_TEST(testExternalRefFunctions);

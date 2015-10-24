@@ -6572,6 +6572,46 @@ void Test::testFuncSUMSQ()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncMDETERM()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "MDETERM_test");
+    ScAddress aPos(8,0,0);
+    OUString aColCodes("ABCDEFGH");
+    OUString aFormulaTemplate("=MDETERM(A1:B2)");
+    OUStringBuffer aFormulaBuffer(aFormulaTemplate);
+    for( SCSIZE nSize = 3; nSize <= 8; nSize++ )
+    {
+        double fVal = 1.0;
+        // Generate a singular integer matrix
+        for( SCROW nRow = 0; nRow < static_cast<SCROW>(nSize); nRow++ )
+        {
+            for( SCCOL nCol = 0; nCol < static_cast<SCCOL>(nSize); nCol++ )
+            {
+                m_pDoc->SetValue(nCol, nRow, 0, fVal);
+                fVal += 1.0;
+            }
+        }
+        aFormulaBuffer[12] = aColCodes[nSize-1];
+        aFormulaBuffer[13] = static_cast<sal_Unicode>( '0' + nSize );
+        m_pDoc->SetString(aPos, aFormulaBuffer.toString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
+                                     0.0, m_pDoc->GetValue(aPos));
+    }
+
+    int aVals[] = {23, 31, 13, 12, 34, 64, 34, 31, 98, 32, 33, 63, 45, 54, 65, 76};
+    int nIdx = 0;
+    for( SCROW nRow = 0; nRow < 4; nRow++ )
+        for( SCCOL nCol = 0; nCol < 4; nCol++ )
+            m_pDoc->SetValue(nCol, nRow, 0, static_cast<double>(aVals[nIdx++]));
+    m_pDoc->SetString(aPos, "=MDETERM(A1:D4)");
+    // Following test is conservative in the sense that on Linux x86_64 the error is less that 1.0E-9
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of MDETERM incorrect for non-singular integer matrix",
+                                         -180655.0, m_pDoc->GetValue(aPos), 1.0E-6);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaErrorPropagation()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
