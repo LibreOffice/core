@@ -241,7 +241,7 @@ again:
         else
         {
 #ifdef  DEBUG_EVAL
-            fprintf( pCppOut, "pushing %d onto value stack[%d]\n",
+            fprintf( pCppOut, "pushing %d onto value stack[%u]\n",
                      evalue, valp - value);
 #endif
             *valp++ = evalue;

@@ -2343,7 +2343,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     fprintf(outf, "    0 1 255 {Encoding exch /.notdef put} for\n");
 
     for (i = 1; i<nGlyphs; i++) {
-        fprintf(outf, "Encoding %d /glyph%d put\n", encoding[i], gID[i]);
+        fprintf(outf, "Encoding %d /glyph%u put\n", encoding[i], gID[i]);
     }
     fprintf(outf, "/XUID [103 0 1 16#%08X %d 16#%08X 16#%08X] def\n", (unsigned int)rtl_crc32(0, ttf->ptr, ttf->fsize), (unsigned int)nGlyphs, (unsigned int)rtl_crc32(0, glyphArray, nGlyphs * 2), (unsigned int)rtl_crc32(0, encoding, nGlyphs));
 

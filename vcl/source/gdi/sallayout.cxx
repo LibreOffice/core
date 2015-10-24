@@ -1624,7 +1624,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nValid[ nLevel ] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
             nStartNew[ nLevel ], &nGlyphAdv[ nLevel ], &nCharPos[ nLevel ] );
 #ifdef MULTI_SL_DEBUG
-        if (nValid[nLevel]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", n, nStartOld[nLevel], nStartNew[nLevel], aPos.X(), (long)nGlyphAdv[nLevel], nCharPos[nLevel],
+        if (nValid[nLevel]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d x%d a%d c%ld %x\n", n, nStartOld[nLevel], nStartNew[nLevel], aPos.X(), (long)nGlyphAdv[nLevel], nCharPos[nLevel],
             rArgs.mrStr[nCharPos[nLevel]]);
 #endif
         if( (n > 0) && !nValid[ nLevel ] )
@@ -1695,7 +1695,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 nValid[0] = mpLayouts[0]->GetNextGlyphs( 1, &nDummy, aPos,
                     nStartNew[0], &nGlyphAdv[0], &nCharPos[0] );
 #ifdef MULTI_SL_DEBUG
-                if (nValid[0]) fprintf(mslLog(), "layout[0]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", nStartOld[0], nStartNew[0], aPos.X(), (long)nGlyphAdv[0], nCharPos[0], rArgs.mrStr[nCharPos[0]]);
+                if (nValid[0]) fprintf(mslLog(), "layout[0]->GetNextGlyphs %d,%d x%d a%ld c%d %x\n", nStartOld[0], nStartNew[0], aPos.X(), (long)nGlyphAdv[0], nCharPos[0], rArgs.mrStr[nCharPos[0]]);
 #endif
                 if( !nValid[0] )
                    break;
@@ -1715,7 +1715,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             nValid[n] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
                                                      nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
 #ifdef MULTI_SL_DEBUG
-            if (nValid[n]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d a%d c%d %x\n", n, nStartOld[n], nStartNew[n], (long)nGlyphAdv[n], nCharPos[n], rArgs.mrStr[nCharPos[n]]);
+            if (nValid[n]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d a%ld c%d %x\n", n, nStartOld[n], nStartNew[n], (long)nGlyphAdv[n], nCharPos[n], rArgs.mrStr[nCharPos[n]]);
 #endif
             // break after last glyph of active layout
             if( !nValid[n] )

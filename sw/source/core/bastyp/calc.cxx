@@ -1666,7 +1666,7 @@ void main()
 
     for( int n = 0; n < 27; ++n )
     {
-        unsigned long ii = 0;
+        unsigned int ii = 0;
         const sal_Char* pp = sNTypeTab[ n ];
 
         while( *pp )
@@ -1677,7 +1677,7 @@ void main()
 
         ch = aArr[ ii ] ? 'X' : ' ';
         aArr[ ii ] = 1;
-        printf( "%-20s -> %3d [%c]\n", sNTypeTab[ n ], ii, ch );
+        printf( "%-20s -> %3u [%c]\n", sNTypeTab[ n ], ii, ch );
     }
 }
 
