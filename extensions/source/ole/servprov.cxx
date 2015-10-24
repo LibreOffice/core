@@ -442,12 +442,14 @@ sal_Bool OleConverter_Impl2::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString> OleConverter_Impl2::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return m_nUnoWrapperClass == INTERFACE_OLE_WRAPPER_IMPL
-        ? css::uno::Sequence<OUString>{
+    if (m_nUnoWrapperClass == INTERFACE_OLE_WRAPPER_IMPL)
+    {
+        return css::uno::Sequence<OUString>{
             "com.sun.star.bridge.OleBridgeSupplier2",
-            "com.sun.star.bridge.oleautomation.BridgeSupplier"}
-        : css::uno::Sequence<OUString>{
-            "com.sun.star.bridge.OleBridgeSupplierVar1"};
+            "com.sun.star.bridge.oleautomation.BridgeSupplier"};
+    }
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.bridge.OleBridgeSupplierVar1"};
 }
 
 // XInitialize ------------------------------------------------------------------------------
