@@ -102,6 +102,9 @@ public:
         rtl::math::setNan( &x);
         res = rtl::math::erf(x);
         CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+        x = 3.0;
+        res = rtl::math::erf(-x);
+        CPPUNIT_ASSERT_EQUAL(-rtl::math::erf(x),res);
     }
 
     void test_erfc() {
@@ -118,6 +121,9 @@ public:
         rtl::math::setNan( &x);
         res = rtl::math::erfc(x);
         CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+        x = 3.0;
+        res = rtl::math::erfc(-x);
+        CPPUNIT_ASSERT_EQUAL(2.0-rtl::math::erfc(x),res);
     }
 
     void test_expm1() {
