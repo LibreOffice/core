@@ -44,13 +44,6 @@
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 
-using namespace ::osl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
-
 #define MI_OPEN                    1
 #define MI_WRITER                  2
 #define MI_CALC                    3
@@ -137,7 +130,7 @@ struct RecentMenuEntry
     rtl::OUString aPassword;
 };
 
-class RecentFilesStringLength : public ::cppu::WeakImplHelper< ::com::sun::star::util::XStringWidth >
+class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStringWidth >
 {
     public:
         RecentFilesStringLength() {}
@@ -145,7 +138,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< ::com::sun::star:
 
         // XStringWidth
         sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
-            throw (::com::sun::star::uno::RuntimeException) override
+            throw ( css::uno::RuntimeException ) override
         {
             return aString.getLength();
         }
@@ -183,24 +176,24 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< ::com::sun::star:
     int nItems = [menu numberOfItems];
     while( nItems -- )
         [menu removeItemAtIndex: 0];
-    
+
     // update recent item list
-    Sequence< Sequence< PropertyValue > > aHistoryList( SvtHistoryOptions().GetList( ePICKLIST ) );
+    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aHistoryList( SvtHistoryOptions().GetList( ePICKLIST ) );
 
     int nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
-        
+
     m_pRecentFilesItems->clear();
     if( ( nPickListMenuItems > 0 ) )
     {
         for ( int i = 0; i < nPickListMenuItems; i++ )
         {
-            Sequence< PropertyValue >& rPickListEntry = aHistoryList[i];
+            css::uno::Sequence< css::beans::PropertyValue >& rPickListEntry = aHistoryList[i];
             RecentMenuEntry aRecentFile;
-            
+
             for ( int j = 0; j < rPickListEntry.getLength(); j++ )
             {
-                Any a = rPickListEntry[j].Value;
-                
+                css::uno::Any a = rPickListEntry[j].Value;
+
                 if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_URL )
                     a >>= aRecentFile.aURL;
                 else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_FILTER )
@@ -210,7 +203,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< ::com::sun::star:
                 else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_PASSWORD )
                     a >>= aRecentFile.aPassword;
             }
-            
+
             m_pRecentFilesItems->push_back( aRecentFile );
         }
     }
@@ -220,14 +213,14 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< ::com::sun::star:
     {
         rtl::OUString   aMenuTitle;
         INetURLObject   aURL( (*m_pRecentFilesItems)[i].aURL );
-        
+
         if ( aURL.GetProtocol() == INetProtocol::File )
         {
             // Do handle file URL differently => convert it to a system
             // path and abbreviate it with a special function:
             ::rtl::OUString aSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
             ::rtl::OUString aCompactedSystemPath;
-            
+
             oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
             if ( !nError )
                 aMenuTitle = aCompactedSystemPath;
@@ -237,10 +230,10 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< ::com::sun::star:
         else
         {
             // Use INetURLObject to abbreviate all other URLs
-            Reference< XStringWidth > xStringLength( new RecentFilesStringLength() );
+            css::uno::Reference< css::util::XStringWidth > xStringLength( new RecentFilesStringLength() );
             aMenuTitle = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
         }
-        
+
         NSMenuItem* pNewItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( aMenuTitle )
                                                    action: @selector(executeRecentEntry:)
                                                    keyEquivalent: @""];
@@ -259,14 +252,14 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< ::com::sun::star:
     {
         const RecentMenuEntry& rRecentFile = (*m_pRecentFilesItems)[ nIndex ];
         int NUM_OF_PICKLIST_ARGS = 3;
-        Sequence< PropertyValue > aArgsList( NUM_OF_PICKLIST_ARGS );
-        
+        css::uno::Sequence< css::beans::PropertyValue > aArgsList( NUM_OF_PICKLIST_ARGS );
+
         aArgsList[0].Name = "Referer";
-        aArgsList[0].Value = makeAny( OUString( "private:user" ) );
+        aArgsList[0].Value = css::uno::makeAny( OUString( "private:user" ) );
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = "AsTemplate";
-        aArgsList[1].Value = makeAny( false );
+        aArgsList[1].Value = css::uno::makeAny( false );
 
         ::rtl::OUString  aFilter( rRecentFile.aFilter );
         sal_Int32 nPos = aFilter.indexOf( '|' );
@@ -278,14 +271,14 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< ::com::sun::star:
                 aFilterOptions = aFilter.copy( nPos+1 );
 
             aArgsList[2].Name = "FilterOptions";
-            aArgsList[2].Value = makeAny( aFilterOptions );
+            aArgsList[2].Value = css::uno::makeAny( aFilterOptions );
 
             aFilter = aFilter.copy( 0, nPos-1 );
             aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
         }
 
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = "FilterName";
-        aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = makeAny( aFilter );
+        aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = css::uno::makeAny( aFilter );
 
         ShutdownIcon::OpenURL( rRecentFile.aURL, OUString( "_default" ), aArgsList );
     }
@@ -316,7 +309,7 @@ static void appendMenuItem( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const rtl::OUS
 {
     if( ! i_rTitle.getLength() )
         return;
-    
+
     NSMenuItem* pItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( i_rTitle )
                                             action: @selector(executeMenuItem:)
                                             keyEquivalent: (i_rKeyEquiv.getLength() ? getAutoreleasedString( i_rKeyEquiv ) : @"")
@@ -344,7 +337,7 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUStri
 {
     if( ! pRecentDelegate )
         pRecentDelegate = [[RecentMenuDelegate alloc] init];
-    
+
     NSMenuItem* pItem = [i_pMenu addItemWithTitle: getAutoreleasedString( i_rTitle )
                                                    action: @selector(executeMenuItem:)
                                                    keyEquivalent: @""
@@ -399,13 +392,13 @@ void aqua_init_systray()
     // disable shutdown
     pShutdownIcon->SetVeto( true );
     ShutdownIcon::addTerminateListener();
-    
+
     if( ! pDefMenu )
     {
         if( [NSApp respondsToSelector: @selector(addFallbackMenuItem:)] )
         {
             aShortcuts.clear();
-            
+
             pExecute = [[QSMenuExecute alloc] init];
             pDefMenu = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) ) action: NULL keyEquivalent: @""];
             pDockSubMenu = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) ) action: NULL keyEquivalent: @""];
@@ -413,16 +406,16 @@ void aqua_init_systray()
             [pMenu setAutoenablesItems: NO];
             NSMenu* pDockMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) )];
             [pDockMenu setAutoenablesItems: NO];
-            
+
             // collect the URLs of the entries in the File/New menu
             SvtModuleOptions    aModuleOptions;
             std::set< rtl::OUString > aFileNewAppsAvailable;
             SvtDynamicMenuOptions aOpt;
-            Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
+            css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
             const rtl::OUString sURLKey( "URL" );
-        
-            const Sequence< PropertyValue >* pNewMenu = aNewMenu.getConstArray();
-            const Sequence< PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
+
+            const css::uno::Sequence< css::beans::PropertyValue >* pNewMenu = aNewMenu.getConstArray();
+            const css::uno::Sequence< css::beans::PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
             for ( ; pNewMenu != pNewMenuEnd; ++pNewMenu )
             {
                 comphelper::SequenceAsHashMap aEntryItems( *pNewMenu );
@@ -430,7 +423,7 @@ void aqua_init_systray()
                 if ( sURL.getLength() )
                     aFileNewAppsAvailable.insert( sURL );
             }
-            
+
             // describe the menu entries for launching the applications
             struct MenuEntryDescriptor
             {
@@ -457,23 +450,23 @@ void aqua_init_systray()
                     OSL_FAIL( "setDockIconClickHandler selector failed on NSApp\n" );
 
             }
-            
+
             // insert the menu entries for launching the applications
             for ( size_t i = 0; i < SAL_N_ELEMENTS( aMenuItems ); ++i )
             {
                 if ( !aModuleOptions.IsModuleInstalled( aMenuItems[i].eModuleIdentifier ) )
                     // the complete application is not even installed
                     continue;
-        
+
                 rtl::OUString sURL( ::rtl::OUString::createFromAscii( aMenuItems[i].pAsciiURLDescription ) );
-        
+
                 if ( aFileNewAppsAvailable.find( sURL ) == aFileNewAppsAvailable.end() )
                     // the application is installed, but the entry has been configured to *not* appear in the File/New
                     // menu => also let not appear it in the quickstarter
                     continue;
-                
+
                 rtl::OUString aKeyEquiv( getShortCut( ShutdownIcon::GetUrlDescription( sURL ) ) );
-        
+
                 appendMenuItem( pMenu, pDockMenu, ShutdownIcon::GetUrlDescription( sURL ), aMenuItems[i].nMenuTag, aKeyEquiv );
             }
 
@@ -488,7 +481,7 @@ void aqua_init_systray()
             aTitle = pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN );
             aKeyEquiv = getShortCut( aTitle );
             appendMenuItem( pMenu, pDockMenu, aTitle, MI_OPEN, aKeyEquiv );
-            
+
             [pDefMenu setSubmenu: pMenu];
             [NSApp performSelector:@selector(addFallbackMenuItem:) withObject: pDefMenu];
 
