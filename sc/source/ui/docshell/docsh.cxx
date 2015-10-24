@@ -3196,7 +3196,7 @@ void ScDocShell::libreOfficeKitCallback(int nType, const char* pPayload) const
 
 bool ScDocShell::isTiledRendering() const
 {
-    return aDocument.GetDrawLayer()->isTiledRendering();
+    return aDocument.GetDrawLayer() && aDocument.GetDrawLayer()->isTiledRendering();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
