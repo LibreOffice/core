@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_7dfccb3e",
+        "filename": "sc/source/filter/oox/workbookfragment.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-24T17:38:24Z",
+      "side": 1,
+      "message": "Can\u0027t we use WorkbookGlobals::recalcFormulaCells() instead of copying the identical code?",
+      "revId": "d9ae59880a85202be4b0568c8600b0d7d76c730e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
