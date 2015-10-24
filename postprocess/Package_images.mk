@@ -13,4 +13,11 @@ $(eval $(call gb_Package_add_files,postprocess_images,$(LIBO_SHARE_FOLDER)/confi
 	$(foreach theme,$(WITH_THEMES),images_$(theme).zip) \
 ))
 
+# images.list in XML format, for online help
+ifneq ($(filter HELP,$(BUILD_TYPE)),)
+$(eval $(call gb_Package_add_files,postprocess_images,$(LIBO_SHARE_HELP_FOLDER),\
+	$(foreach theme,$(WITH_THEMES),links_$(theme).xml) \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

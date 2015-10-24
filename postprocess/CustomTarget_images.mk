@@ -15,6 +15,7 @@ helpimages_DIR := $(call gb_CustomTarget_get_workdir,helpcontent2/source/auxilia
 
 $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 	$(foreach theme,$(WITH_THEMES),images_$(theme).zip) \
+	$(foreach theme,$(WITH_THEMES),$(theme).xml) \
 	commandimagelist.ilst \
 	sorted.lst \
 ))
@@ -69,5 +70,17 @@ $(packimages_DIR)/sorted.lst : \
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SRCDIR)/solenv/bin/image-sort.pl \
 			$< $(INSTROOT)/$(gb_UIConfig_INSTDIR) $@)
+
+$(packimages_DIR)/links_%.xml : $(SRCDIR)/icon-themes/%/links.txt
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XML,1)
+	echo '<?xml version="1.0" encoding="UTF-8"?>' > $@.tmp
+	grep -v '^#' < $(SRCDIR)/icon-themes/$*/links.txt | \
+	while read SOURCE TARGET ; do \
+		if test -n "$${SOURCE}" -a "$${SOURCE}" != "#"; then \
+			SOURCE2=`echo $${SOURCE} | tr / :` ; \
+			echo "<image id=\"$${SOURCE2}\">$${TARGET}</image>" ; \
+		fi ; \
+	done >> $@.tmp
+	mv $@.tmp $@
 
 # vim: set noet sw=4 ts=4:
