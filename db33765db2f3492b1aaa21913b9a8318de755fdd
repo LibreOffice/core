@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_fd59fb8f",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-10-24T15:12:45Z",
+      "side": 1,
+      "message": "If you use a ComboBox you need to fill the list of available pages. On long documents this would give a pretty long list\nI\u0027d propose to use a NumericField.",
+      "revId": "db33765db2f3492b1aaa21913b9a8318de755fdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_5d746ffc",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-10-24T15:12:45Z",
+      "side": 1,
+      "message": "// the item needs a \u0027WhichId\u0027\nSfxUInt16Item aPageNum(SID_JUMP_TO_SPECIFIC_PAGE);",
+      "revId": "db33765db2f3492b1aaa21913b9a8318de755fdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_bd5f8374",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-10-24T15:12:45Z",
+      "side": 1,
+      "message": "//add the item with the requested page no.\npCurrentShell-\u003eGetDispatcher()-\u003eExecute(SID_JUMP_TO_SPECIFIC_PAGE, SfxCallMode::ASYNCHRON, \u0026aPageNum, 0L);",
+      "revId": "db33765db2f3492b1aaa21913b9a8318de755fdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_9d64474a",
+        "filename": "sw/source/uibase/uiview/pview.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-10-24T15:12:45Z",
+      "side": 1,
+      "message": "//extract the argument value\nsal_uInt16 nPageNum \u003d 0;\nconst SfxItemSet *pArgs \u003d rReq.GetArgs();\nif( pArgs \u0026\u0026 pArgs-\u003eCount())\n{\n    nPageNum \u003d static_cast\u003cconst SfxUInt16Item \u0026\u003e(pArgs-\u003eGet(SID_JUMP_TO_SPECIFIC_PAGE)).GetValue();\n}",
+      "revId": "db33765db2f3492b1aaa21913b9a8318de755fdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
