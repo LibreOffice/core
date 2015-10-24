@@ -1143,7 +1143,18 @@ double SAL_CALL rtl_math_erf( double x ) SAL_THROW_EXTERN_C()
 
     // Otherwise we may end up in endless recursion through rtl_math_erfc().
     if (!::rtl::math::isFinite(x))
+    {
+        // See http://en.cppreference.com/w/cpp/numeric/math/erf
+        if (::rtl::math::isInf(x))
+        {
+            if (::rtl::math::isSignBitSet(x))
+                return -1.0;
+            else
+                return 1.0;
+        }
+        // It is a NaN.
         return x;
+    }
 
     bool bNegative = false;
     if ( x < 0.0 )
@@ -1183,7 +1194,18 @@ double SAL_CALL rtl_math_erfc( double x ) SAL_THROW_EXTERN_C()
 
     // Otherwise we may end up in endless recursion through rtl_math_erf().
     if (!::rtl::math::isFinite(x))
+    {
+        // See http://en.cppreference.com/w/cpp/numeric/math/erfc
+        if (::rtl::math::isInf(x))
+        {
+            if (::rtl::math::isSignBitSet(x))
+                return 2.0;
+            else
+                return 0.0;
+        }
+        // It is a NaN.
         return x;
+    }
 
     bool bNegative = false;
     if ( x < 0.0 )
