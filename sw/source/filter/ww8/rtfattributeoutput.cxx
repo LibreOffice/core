@@ -3837,6 +3837,9 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     if (rGraphic.GetType()==GRAPHIC_NONE)
         return;
 
+    ConvertDataFormat pConvertDestinationFormat = ConvertDataFormat::WMF;
+    const sal_Char* pConvertDestinationBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
+
     GfxLink aGraphicLink;
     const sal_Char* pBLIPType = 0;
     if (rGraphic.IsLink())
@@ -3868,6 +3871,11 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         case GFX_LINK_TYPE_NATIVE_WMF:
             pBLIPType =
                 IsEMF(pGraphicAry, nSize) ? OOO_STRING_SVTOOLS_RTF_EMFBLIP : OOO_STRING_SVTOOLS_RTF_WMETAFILE;
+            break;
+        case GFX_LINK_TYPE_NATIVE_GIF:
+            // GIF is not supported by RTF, but we override default conversion to WMF, PNG seems fits better here.
+            pConvertDestinationFormat = ConvertDataFormat::PNG;
+            pConvertDestinationBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
             break;
         default:
             break;
@@ -3977,9 +3985,9 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     else
     {
         aStream.Seek(0);
-        if (GraphicConverter::Export(aStream, rGraphic, ConvertDataFormat::WMF) != ERRCODE_NONE)
+        if (GraphicConverter::Export(aStream, rGraphic, pConvertDestinationFormat) != ERRCODE_NONE)
             SAL_WARN("sw.rtf", "failed to export the graphic");
-        pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
+        pBLIPType = pConvertDestinationBLIPType;
         aStream.Seek(STREAM_SEEK_TO_END);
         nSize = aStream.Tell();
         pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());
