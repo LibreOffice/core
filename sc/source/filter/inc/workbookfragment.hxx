@@ -55,6 +55,8 @@ private:
     void                importExternalLinkFragment( ExternalLink& rExtLink );
     void                importPivotCacheDefFragment( const OUString& rRelId, sal_Int32 nCacheId );
 
+    void recalcFormulaCells();
+
 private:
     DefinedNameRef      mxCurrName;
 };

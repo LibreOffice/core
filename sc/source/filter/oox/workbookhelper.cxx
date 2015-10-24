@@ -660,60 +660,9 @@ void WorkbookGlobals::finalize()
         if (pModel)
             pModel->SetOpenInDesignMode(false);
 
-        //stop preventing establishment of listeners as is done in
-        //ScDocShell::AfterXMLLoading() for ods
-        mpDoc->SetInsertingFromOtherDoc(false);
-        getDocImport().finalize();
-
-        recalcFormulaCells();
     }
 }
 
-void WorkbookGlobals::recalcFormulaCells()
-{
-    // Recalculate formula cells.
-    ScDocument& rDoc = getScDocument();
-    ScDocShell& rDocSh = getDocShell();
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-    ScRecalcOptions nRecalcMode =
-        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::get(xContext));
-    bool bHardRecalc = false;
-    if (nRecalcMode == RECALC_ASK)
-    {
-        if (rDoc.IsUserInteractionEnabled())
-        {
-            // Ask the user if full re-calculation is desired.
-            ScopedVclPtrInstance<QueryBox> aBox(
-                ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
-            aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
-
-            sal_Int32 nRet = aBox->Execute();
-            bHardRecalc = nRet == RET_YES;
-
-            if (aBox->GetCheckBoxState())
-            {
-                // Always perform selected action in the future.
-                std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
-                ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
-                aOpt.SetOOXMLRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
-                /* XXX  is this really supposed to set the ScModule options?
-                 *      Not the ScDocShell options? */
-                SC_MOD()->SetFormulaOptions(aOpt);
-
-                batch->commit();
-            }
-        }
-    }
-    else if (nRecalcMode == RECALC_ALWAYS)
-        bHardRecalc = true;
-
-    if (bHardRecalc)
-        rDocSh.DoHardRecalc(false);
-    else
-        rDoc.CalcFormulaTree(false, true, false);
-}
 
 WorkbookHelper::~WorkbookHelper()
 {

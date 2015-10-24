@@ -52,9 +52,11 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "calcconfig.hxx"
+#include "globstr.hrc"
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/msgbox.hxx>
 
 #include <oox/core/fastparser.hxx>
 #include <salhelper/thread.hxx>
@@ -67,6 +69,9 @@
 #include <memory>
 
 #include <oox/ole/vbaproject.hxx>
+
+#include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 namespace oox {
 namespace xls {
@@ -482,6 +487,19 @@ void WorkbookFragment::finalizeImport()
     // load all worksheets
     importSheetFragments(*this, aSheetFragments);
 
+    sal_Int16 nActiveSheet = getViewSettings().getActiveCalcSheet();
+    getWorksheets().finalizeImport( nActiveSheet );
+
+    // final conversions, e.g. calculation settings and view settings
+    finalizeWorkbookImport();
+    //
+    //stop preventing establishment of listeners as is done in
+    //ScDocShell::AfterXMLLoading() for ods
+    getScDocument().SetInsertingFromOtherDoc(false);
+    getDocImport().finalize();
+
+    recalcFormulaCells();
+
     for( std::vector<WorksheetHelper*>::iterator aIt = maHelpers.begin(), aEnd = maHelpers.end(); aIt != aEnd; ++aIt )
     {
         (*aIt)->finalizeDrawingImport();
@@ -494,12 +512,6 @@ void WorkbookFragment::finalizeImport()
         aIt->first.reset();
     }
 
-    sal_Int16 nActiveSheet = getViewSettings().getActiveCalcSheet();
-    getWorksheets().finalizeImport( nActiveSheet );
-
-    // final conversions, e.g. calculation settings and view settings
-    finalizeWorkbookImport();
-
     OUString aRevHeadersPath = getFragmentPathFromFirstType(CREATE_OFFICEDOC_RELATION_TYPE("revisionHeaders"));
     if (!aRevHeadersPath.isEmpty())
     {
@@ -507,6 +519,61 @@ void WorkbookFragment::finalizeImport()
         rtl::Reference<oox::core::FragmentHandler> xFragment(new RevisionHeadersFragment(*this, aRevHeadersPath));
         importOoxFragment(xFragment, *xParser);
     }
+}
+
+namespace {
+
+ScDocShell& getDocShell(ScDocument& rDoc)
+{
+    return static_cast<ScDocShell&>(*rDoc.GetDocumentShell());
+}
+
+}
+
+void WorkbookFragment::recalcFormulaCells()
+{
+    // Recalculate formula cells.
+    ScDocument& rDoc = getScDocument();
+    ScDocShell& rDocSh = getDocShell(rDoc);
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    ScRecalcOptions nRecalcMode =
+        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::get(xContext));
+    bool bHardRecalc = false;
+    if (nRecalcMode == RECALC_ASK)
+    {
+        if (rDoc.IsUserInteractionEnabled())
+        {
+            // Ask the user if full re-calculation is desired.
+            ScopedVclPtrInstance<QueryBox> aBox(
+                ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
+            aBox->SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
+
+            sal_Int32 nRet = aBox->Execute();
+            bHardRecalc = nRet == RET_YES;
+
+            if (aBox->GetCheckBoxState())
+            {
+                // Always perform selected action in the future.
+                std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
+                ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
+                aOpt.SetOOXMLRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
+                /* XXX  is this really supposed to set the ScModule options?
+                 *      Not the ScDocShell options? */
+                SC_MOD()->SetFormulaOptions(aOpt);
+
+                batch->commit();
+            }
+        }
+    }
+    else if (nRecalcMode == RECALC_ALWAYS)
+        bHardRecalc = true;
+
+    if (bHardRecalc)
+        rDocSh.DoHardRecalc(false);
+    else
+        rDoc.CalcFormulaTree(false, true, false);
 }
 
 // private --------------------------------------------------------------------
