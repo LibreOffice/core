@@ -88,10 +88,44 @@ public:
         CPPUNIT_ASSERT_EQUAL(0.0, res);
     }
 
+    void test_erf() {
+        double x, res;
+        x =  0.0;
+        res = rtl::math::erf(x);
+        CPPUNIT_ASSERT_EQUAL(0.0,res);
+        rtl::math::setInf( &x, false);
+        res = rtl::math::erf(x);
+        CPPUNIT_ASSERT_EQUAL(1.0,res);
+        rtl::math::setInf( &x, true);
+        res = rtl::math::erf(x);
+        CPPUNIT_ASSERT_EQUAL(-1.0,res);
+        rtl::math::setNan( &x);
+        res = rtl::math::erf(x);
+        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+    }
+
+    void test_erfc() {
+        double x, res;
+        x =  0.0;
+        res = rtl::math::erfc(x);
+        CPPUNIT_ASSERT_EQUAL(1.0,res);
+        rtl::math::setInf( &x, false);
+        res = rtl::math::erfc(x);
+        CPPUNIT_ASSERT_EQUAL(0.0,res);
+        rtl::math::setInf( &x, true);
+        res = rtl::math::erfc(x);
+        CPPUNIT_ASSERT_EQUAL(2.0,res);
+        rtl::math::setNan( &x);
+        res = rtl::math::erfc(x);
+        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+    }
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(test_stringToDouble_good);
     CPPUNIT_TEST(test_stringToDouble_bad);
     CPPUNIT_TEST(test_stringToDouble_exponent_without_digit);
+    CPPUNIT_TEST(test_erf);
+    CPPUNIT_TEST(test_erfc);
     CPPUNIT_TEST_SUITE_END();
 };
 
