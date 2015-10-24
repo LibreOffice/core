@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/bind.hpp>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -130,7 +129,7 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( sal_Bool bSet ) throw ( css::uno::Runt
     mPlaybackLoop = bSet;
 
     if ( bSet )
-        mEventManager.onEndReached(boost::bind(&VLCPlayer::replay, this));
+        mEventManager.onEndReached([this](){ this->replay(); });
     else
         mEventManager.onEndReached();
 }

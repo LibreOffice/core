@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/bind.hpp>
 #include <chrono>
 #include <iostream>
 #include <osl/conditn.hxx>
@@ -75,7 +74,7 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
     const rtl::OUString& fileName = utl::TempFile::CreateTempName();
     {
         wrapper::EventManager manager( mPlayer, mEventHandler );
-        manager.onPaused(boost::bind(&osl::Condition::set, &condition));
+        manager.onPaused([&condition](){ condition.set(); });
 
         if ( !mPlayer.play() )
         {
