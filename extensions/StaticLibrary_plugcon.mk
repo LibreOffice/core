@@ -36,12 +36,6 @@ $(eval $(call gb_StaticLibrary_add_defs,plugcon,\
 
 endif # ENABLE_JAVA=YES
 
-ifeq ($(SYSTEM_MOZILLA),YES)
-$(eval $(call gb_StaticLibrary_add_defs,plugcon,\
-	-DSYSTEM_MOZILLA \
-))
-endif # SYSTEM_MOZILLA=YES
-
 ifeq ($(ENABLE_GTK),TRUE)
 $(eval $(call gb_StaticLibrary_add_defs,plugcon,\
 	-DENABLE_GTK \

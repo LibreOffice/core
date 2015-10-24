@@ -55,12 +55,6 @@ extern "C" {
 #endif
 #define MOZ_X11
 #include <stdio.h>
-#ifdef SYSTEM_MOZILLA
-#ifndef OJI
-#  define OJI
-#endif
-#define MOZ_X11
-#endif
 
 #if ! defined ( _NPAPI_H_) && ! defined (npapi_h_)
 extern "C" {

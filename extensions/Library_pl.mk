@@ -32,12 +32,6 @@ $(eval $(call gb_Library_add_defs,pl,\
 
 endif # ENABLE_JAVA=YES
 
-ifeq ($(SYSTEM_MOZILLA),YES)
-$(eval $(call gb_Library_add_defs,pl,\
-	-DSYSTEM_MOZILLA \
-))
-endif # SYSTEM_MOZILLA=YES
-
 ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Library_add_libs,pl,\
 	-lsocket \

@@ -35,11 +35,6 @@ if (defined($ENV{TMPDIR})) {
 }
 if (!-d $tmp_dir) {die "Set TMPDIR!\n";}
 
-# Workaround for system Mozilla
-if ($ENV{'SYSTEM_MOZILLA'} eq 'YES') {
-    $ENV{'LD_LIBRARY_PATH'} = "$ENV{'MOZ_LIB'}:$ENV{'LD_LIBRARY_PATH'}";
-}
-
 for $arg (@ARGV) {
     if ($arg eq '-s' || $arg eq '--strip') {
         $strip = "-strip";
