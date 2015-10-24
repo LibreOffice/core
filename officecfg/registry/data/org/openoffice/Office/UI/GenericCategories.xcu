@@ -92,7 +92,7 @@
       </node>
       <node oor:name="14" oor:op="replace">
         <prop oor:name="Name" oor:type="xs:string">
-          <value xml:lang="en-US">Graphic</value>
+          <value xml:lang="en-US">Image</value>
         </prop>
       </node>
       <node oor:name="15" oor:op="replace">

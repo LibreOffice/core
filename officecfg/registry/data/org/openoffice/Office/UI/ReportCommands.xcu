@@ -121,7 +121,7 @@
       </node>
       <node oor:name=".uno:ImageControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Graphic...</value>
+          <value xml:lang="en-US">Image...</value>
         </prop>
       </node>
       <node oor:name=".uno:TextDocument" oor:op="replace">
