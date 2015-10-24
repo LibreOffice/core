@@ -1141,6 +1141,10 @@ double SAL_CALL rtl_math_erf( double x ) SAL_THROW_EXTERN_C()
     if( x == 0.0 )
         return 0.0;
 
+    // Otherwise we may end up in endless recursion through rtl_math_erfc().
+    if (!::rtl::math::isFinite(x))
+        return x;
+
     bool bNegative = false;
     if ( x < 0.0 )
     {
@@ -1176,6 +1180,10 @@ double SAL_CALL rtl_math_erfc( double x ) SAL_THROW_EXTERN_C()
 {
     if ( x == 0.0 )
         return 1.0;
+
+    // Otherwise we may end up in endless recursion through rtl_math_erf().
+    if (!::rtl::math::isFinite(x))
+        return x;
 
     bool bNegative = false;
     if ( x < 0.0 )
