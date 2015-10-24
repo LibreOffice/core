@@ -162,7 +162,7 @@ struct State
         meTextAnchor(BEFORE),
         meTextDisplayAlign(BEFORE),
         mnTextLineIncrement(0.0),
-        maCurrentColor(1.0),
+        maCurrentColor(0.0),
         mbVisibility(true),
         meFillType(SOLID),
         mnFillOpacity(1.0),
