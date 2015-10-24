@@ -3175,7 +3175,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 {
                                     const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     DBG_ASSERT( pAttr, "Field not found");
-                                    DBG_ASSERT( dynamic_cast< const SvxFieldItem* >( pAttr ) !=  nullptr, "Field of the wrong type! ");
+                                    DBG_ASSERT( dynamic_cast< const EditCharAttribField* >( pAttr ) !=  nullptr, "Field of the wrong type! ");
                                     aText = static_cast<const EditCharAttribField*>(pAttr)->GetFieldValue();
                                     nTextStart = 0;
                                     nTextLen = aText.getLength();
@@ -3523,7 +3523,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 {
                                     const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     DBG_ASSERT( pAttr, "Field not found" );
-                                    DBG_ASSERT( dynamic_cast< const SvxFieldItem* >( pAttr  ) !=  nullptr, "Wrong type of field!" );
+                                    DBG_ASSERT( dynamic_cast< const EditCharAttribField* >( pAttr  ) !=  nullptr, "Wrong type of field!" );
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
