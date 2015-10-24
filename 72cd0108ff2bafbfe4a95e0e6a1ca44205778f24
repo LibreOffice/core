@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_7d9fab5f",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6468,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-10-24T07:56:29Z",
+      "side": 1,
+      "message": "Please use CPPUNIT_ASSERT_DOUBLES_EQUAL",
+      "revId": "72cd0108ff2bafbfe4a95e0e6a1ca44205778f24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
