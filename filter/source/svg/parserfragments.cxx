@@ -446,7 +446,7 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
                   >> '('
                   >> real_p[assign_a(fRotationAngle)]
                   >> !((',' | eps_p) >> real_p[assign_a(aCurrTransform.m02)]
-                       >> real_p[assign_a(aCurrTransform.m12)])
+                       >> (',' | eps_p) >>  real_p[assign_a(aCurrTransform.m12)])
                   >> ')')[boost::bind(&calcRotation,
                                       boost::ref(aTransforms),
                                       boost::ref(aCurrTransform),
