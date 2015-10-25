@@ -206,7 +206,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     // threaded apartment we need a message loop to deliver
     // messages to our XTDataObject
     //HRESULT hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
-    HRESULT hr = CoInitialize( NULL );
+    (void)CoInitialize( NULL );
 
     char buff[6];
 

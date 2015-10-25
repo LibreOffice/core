@@ -385,7 +385,7 @@ namespace
 
 #ifdef BRDEBUG
     fprintf(stderr,"cpp_mediate1 gp=%p,fp=%p,ov=%p\n",gpreg,fpreg,ovrflw);
-    fprintf(stderr,"gp=%x,%x,%x,%x\n",gpreg[0],gpreg[1],gpreg[2],gpreg[3]);
+    fprintf(stderr,"gp=%p,%p,%p,%p\n",gpreg[0],gpreg[1],gpreg[2],gpreg[3]);
 #endif
 
     // gpreg:  [ret *], this, [other gpr params]

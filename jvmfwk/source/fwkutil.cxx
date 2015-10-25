@@ -61,8 +61,8 @@ bool isAccessibilitySupportDesired()
         sValue == "1" )
         return false;
 
-    bool retVal = false;
 #ifdef WNT
+    bool retVal = false;
     HKEY    hKey = 0;
     if (RegOpenKeyEx(HKEY_CURRENT_USER,
                      "Software\\LibreOffice\\Accessibility\\AtToolSupport",
@@ -104,7 +104,7 @@ bool isAccessibilitySupportDesired()
 
 #elif defined UNX
     // Java is no longer required for a11y - we use atk directly.
-    retVal = ::rtl::Bootstrap::get( "JFW_PLUGIN_FORCE_ACCESSIBILITY", sValue) && sValue == "1";
+    bool retVal = ::rtl::Bootstrap::get( "JFW_PLUGIN_FORCE_ACCESSIBILITY", sValue) && sValue == "1";
 #endif
 
     return retVal;

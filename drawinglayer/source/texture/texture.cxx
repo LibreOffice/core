@@ -780,7 +780,7 @@ namespace drawinglayer
                     {
                         for(double fPosX(fStartX); basegfx::fTools::less(fPosX, 1.0); fPosX += fWidth, nPosX++)
                         {
-                            for(double fPosY(nPosX % 2 ? fStartY - fHeight + (mfOffsetY * fHeight) : fStartY);
+                            for(double fPosY((nPosX % 2) ? fStartY - fHeight + (mfOffsetY * fHeight) : fStartY);
                                 basegfx::fTools::less(fPosY, 1.0); fPosY += fHeight)
                             {
                                 rMatrices.push_back(
@@ -796,7 +796,7 @@ namespace drawinglayer
                     {
                         for(double fPosY(fStartY); basegfx::fTools::less(fPosY, 1.0); fPosY += fHeight, nPosY++)
                         {
-                            for(double fPosX(nPosY % 2 ? fStartX - fWidth + (mfOffsetX * fWidth) : fStartX);
+                            for(double fPosX((nPosY % 2) ? fStartX - fWidth + (mfOffsetX * fWidth) : fStartX);
                                 basegfx::fTools::less(fPosX, 1.0); fPosX += fWidth)
                             {
                                 rMatrices.push_back(

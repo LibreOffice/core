@@ -220,8 +220,7 @@ void comphelper::ConfigurationListener::addListener(ConfigurationListenerPropert
 
 void comphelper::ConfigurationListener::removeListener(ConfigurationListenerPropertyBase *pListener)
 {
-    auto it = maListeners.begin();
-    it = std::find( maListeners.begin(), maListeners.end(), pListener );
+    auto it = std::find( maListeners.begin(), maListeners.end(), pListener );
     if ( it != maListeners.end() )
     {
         maListeners.erase( it );

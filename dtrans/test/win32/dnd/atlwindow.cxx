@@ -139,7 +139,6 @@ LRESULT AWindow::OnMouseAction(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
 LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    HRESULT hr;
     USES_CONVERSION;
     KillTimer( 1);
     if(m_xDragSource.is())

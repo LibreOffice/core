@@ -392,7 +392,7 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
 
     bRet=WriteFile(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree,&BytesWritten,NULL);
 
-    if ( bRet == 0 || BytesWritten <= 0 )
+    if ( bRet == 0 || BytesWritten == 0 )
     {
         OSL_ENSURE(bRet,"WriteFile failed!!!");
         OSL_TRACE("write failed '%s'",strerror(errno));

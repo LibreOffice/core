@@ -616,17 +616,18 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( sal_Int16 nLang, sal
 
 ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImplName )
 {
-    ServiceInfo_Impl* pInfo = 0;
-    for (sal_uLong i = 0;  i < nDisplayServices  &&  !pInfo;  ++i)
+    for (sal_uLong i = 0;  i < nDisplayServices;  ++i)
     {
         ServiceInfo_Impl &rTmp = aDisplayServiceArr[ i ];
         if (rTmp.sSpellImplName == rSvcImplName ||
             rTmp.sHyphImplName  == rSvcImplName ||
             rTmp.sThesImplName  == rSvcImplName ||
             rTmp.sGrammarImplName == rSvcImplName)
-            pInfo = &rTmp;
+        {
+            return &rTmp;
+        }
     }
-    return pInfo;
+    return 0;
 }
 
 

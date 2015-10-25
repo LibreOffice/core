@@ -26,7 +26,7 @@ class AutoMem:
     public RecursiveASTVisitor<AutoMem>, public loplugin::Plugin
 {
 public:
-    explicit AutoMem(InstantiationData const & data): Plugin(data) {}
+    explicit AutoMem(InstantiationData const & data): Plugin(data), mbInsideDestructor(false) {}
 
     virtual void run() override
     {
