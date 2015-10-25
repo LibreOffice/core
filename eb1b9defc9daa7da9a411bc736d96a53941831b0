@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_881a4716",
+        "filename": "sal/osl/w32/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-10-25T22:31:35Z",
+      "side": 1,
+      "message": "good catch, unintuitively enough, DWORD is unsigned.",
+      "revId": "eb1b9defc9daa7da9a411bc736d96a53941831b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
