@@ -48,7 +48,7 @@ using namespace ::com::sun::star::lang;
 class ButtonsImpl
 {
 public:
-    ButtonsImpl( const OUString& rURL );
+    explicit ButtonsImpl( const OUString& rURL );
 
     Reference< XInputStream > getInputStream( const OUString& rName );
 

@@ -93,7 +93,7 @@ public:
 class NextButton
 {
 public:
-    NextButton (vcl::Window* pParent);
+    explicit NextButton (vcl::Window* pParent);
 
     void ForceFocusEventBroadcast();
     void SetClickHdl (const Link<Button*,void>& rLink);

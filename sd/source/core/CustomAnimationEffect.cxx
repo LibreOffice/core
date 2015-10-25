@@ -105,7 +105,7 @@ namespace sd
 class MainSequenceChangeGuard
 {
 public:
-    MainSequenceChangeGuard( EffectSequenceHelper* pSequence )
+    explicit MainSequenceChangeGuard( EffectSequenceHelper* pSequence )
     {
         mpMainSequence = dynamic_cast< MainSequence* >( pSequence );
         if( mpMainSequence == 0 )
@@ -2739,7 +2739,7 @@ void EffectSequenceHelper::setTextGroupingAuto( CustomAnimationTextGroupPtr pTex
 
 struct ImplStlTextGroupSortHelper
 {
-    ImplStlTextGroupSortHelper( bool bReverse ) : mbReverse( bReverse ) {};
+    explicit ImplStlTextGroupSortHelper( bool bReverse ) : mbReverse( bReverse ) {};
     bool operator()( const CustomAnimationEffectPtr& p1, const CustomAnimationEffectPtr& p2 );
     bool mbReverse;
     sal_Int32 getTargetParagraph( const CustomAnimationEffectPtr& p1 );
@@ -2974,7 +2974,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
 class AnimationChangeListener : public cppu::WeakImplHelper< XChangesListener >
 {
 public:
-    AnimationChangeListener( MainSequence* pMainSequence ) : mpMainSequence( pMainSequence ) {}
+    explicit AnimationChangeListener( MainSequence* pMainSequence ) : mpMainSequence( pMainSequence ) {}
 
     virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (RuntimeException, std::exception) override;
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception) override;

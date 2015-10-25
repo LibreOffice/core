@@ -85,7 +85,7 @@ typedef ::std::deque<RecentlyUsedCacheDescriptor> RecentlyUsedQueue;
 class BestFittingCacheComparer
 {
 public:
-    BestFittingCacheComparer (const Size& rPreferredSize)
+    explicit BestFittingCacheComparer (const Size& rPreferredSize)
         : maPreferredSize(rPreferredSize)
     {}
     bool operator()(const ::sd::slidesorter::cache::PageCacheManager::BestFittingPageCaches::value_type& rElement1,
@@ -123,7 +123,7 @@ public:
         address only.
     */
     class CompareWithCache { public:
-        CompareWithCache(const std::shared_ptr<PageCacheManager::Cache>& rpCache)
+        explicit CompareWithCache(const std::shared_ptr<PageCacheManager::Cache>& rpCache)
             : mpCache(rpCache) {}
         bool operator () (const PageCacheContainer::value_type& rValue) const
         { return rValue.second == mpCache; }

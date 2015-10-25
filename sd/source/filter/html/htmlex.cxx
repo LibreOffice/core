@@ -159,7 +159,7 @@ private:
     OUString maTarget;
 
 public:
-    HtmlState( Color aDefColor );
+    explicit HtmlState( Color aDefColor );
 
     OUString SetWeight( bool bWeight );
     OUString SetItalic( bool bItalic );

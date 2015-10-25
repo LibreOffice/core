@@ -38,7 +38,7 @@ namespace sd {
 class AnnotationEnumeration: public ::cppu::WeakImplHelper< css::office::XAnnotationEnumeration >, private boost::noncopyable
 {
 public:
-    AnnotationEnumeration( const AnnotationVector& rAnnotations );
+    explicit AnnotationEnumeration( const AnnotationVector& rAnnotations );
 
     // ::com::sun::star::office::XAnnotationEnumeration:
     virtual sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception) override;

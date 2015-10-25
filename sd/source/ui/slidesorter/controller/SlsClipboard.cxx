@@ -86,7 +86,7 @@ namespace {
 class TemporarySlideTrackingDeactivator
 {
 public:
-    TemporarySlideTrackingDeactivator (SlideSorterController& rController)
+    explicit TemporarySlideTrackingDeactivator (SlideSorterController& rController)
         : mrController(rController),
           mbIsCurrentSlideTrackingActive (
               mrController.GetVisibleAreaManager().IsCurrentSlideTrackingActive())

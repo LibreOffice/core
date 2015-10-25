@@ -54,7 +54,7 @@ protected:
     virtual SdPage* ImpGetPage (sal_uInt32 nIndex) const = 0;
 
 public:
-    ImpPageListWatcher(const SdrModel& rModel);
+    explicit ImpPageListWatcher(const SdrModel& rModel);
     virtual ~ImpPageListWatcher();
 
     void Invalidate() { mbPageListValid = false; }
@@ -70,7 +70,7 @@ protected:
     virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const override;
 
 public:
-    ImpDrawPageListWatcher(const SdrModel& rModel);
+    explicit ImpDrawPageListWatcher(const SdrModel& rModel);
     virtual ~ImpDrawPageListWatcher();
 };
 
@@ -81,7 +81,7 @@ protected:
     virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const override;
 
 public:
-    ImpMasterPageListWatcher(const SdrModel& rModel);
+    explicit ImpMasterPageListWatcher(const SdrModel& rModel);
     virtual ~ImpMasterPageListWatcher();
 };
 

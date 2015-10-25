@@ -126,7 +126,7 @@ class Section
         void                    AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize );
 
     public:
-                                Section( const sal_uInt8* pFMTID );
+                                explicit Section( const sal_uInt8* pFMTID );
                                 Section( const Section& rSection );
 
         Section&                operator=( const Section& rSection );

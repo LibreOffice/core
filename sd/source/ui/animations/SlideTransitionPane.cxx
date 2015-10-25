@@ -375,7 +375,7 @@ OUString lcl_getSoundFileURL(
 
 struct lcl_AppendSoundToListBox : public ::std::unary_function< OUString, void >
 {
-    lcl_AppendSoundToListBox( ListBox*  rListBox ) :
+    explicit lcl_AppendSoundToListBox( ListBox*  rListBox ) :
             mrListBox( rListBox )
     {}
 

@@ -318,7 +318,7 @@ class CustomAnimationListEntry : public SvTreeListEntry
 {
 public:
     CustomAnimationListEntry();
-    CustomAnimationListEntry( CustomAnimationEffectPtr pEffect );
+    explicit CustomAnimationListEntry( CustomAnimationEffectPtr pEffect );
     virtual ~CustomAnimationListEntry();
 
     CustomAnimationEffectPtr getEffect() const { return mpEffect; }
@@ -530,7 +530,7 @@ void CustomAnimationList::update( MainSequencePtr pMainSequence )
 
 struct stl_append_effect_func : public std::unary_function<CustomAnimationEffectPtr, void>
 {
-    stl_append_effect_func( CustomAnimationList& rList ) : mrList( rList ) {}
+    explicit stl_append_effect_func( CustomAnimationList& rList ) : mrList( rList ) {}
     void operator()(CustomAnimationEffectPtr pEffect);
     CustomAnimationList& mrList;
 };

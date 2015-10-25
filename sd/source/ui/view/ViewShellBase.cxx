@@ -101,7 +101,7 @@ namespace {
 class CurrentPageSetter
 {
 public:
-    CurrentPageSetter (ViewShellBase& rBase);
+    explicit CurrentPageSetter (ViewShellBase& rBase);
     void operator () (bool);
 private:
     ViewShellBase& mrBase;
@@ -146,7 +146,7 @@ public:
     std::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
     std::shared_ptr<FormShellManager> mpFormShellManager;
 
-    Implementation (ViewShellBase& rBase);
+    explicit Implementation (ViewShellBase& rBase);
     ~Implementation();
 
     void LateInit();

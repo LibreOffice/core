@@ -71,7 +71,7 @@ class BasicViewFactory
       public BasicViewFactoryInterfaceBase
 {
 public:
-    BasicViewFactory (
+    explicit BasicViewFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~BasicViewFactory();
 

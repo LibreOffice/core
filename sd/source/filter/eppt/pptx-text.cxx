@@ -1291,7 +1291,7 @@ struct ImplTextObj
     bool        mbHasExtendedBullets;
     bool        mbFixedCellHeightUsed;
 
-    ImplTextObj( int nInstance );
+    explicit ImplTextObj( int nInstance );
     ~ImplTextObj();
 };
 

@@ -139,7 +139,7 @@ struct TextRuleEntry
     int                 nPageNumber;
     SvMemoryStream*     pOut;
 
-    TextRuleEntry( int nPg ) :
+    explicit TextRuleEntry( int nPg ) :
         nPageNumber( nPg ),
         pOut ( NULL ){};
 

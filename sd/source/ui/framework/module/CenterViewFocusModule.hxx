@@ -54,7 +54,7 @@ class CenterViewFocusModule
       public CenterViewFocusModuleInterfaceBase
 {
 public:
-    CenterViewFocusModule (
+    explicit CenterViewFocusModule (
         ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
     virtual ~CenterViewFocusModule();
 

@@ -59,7 +59,7 @@ struct ClientBoxEntry
     bool m_bActive :1;
     std::shared_ptr<ClientInfo> m_pClientInfo;
 
-    ClientBoxEntry(std::shared_ptr<ClientInfo> pClientInfo);
+    explicit ClientBoxEntry(std::shared_ptr<ClientInfo> pClientInfo);
    ~ClientBoxEntry();
 
 };
@@ -73,7 +73,7 @@ class ClientRemovedListener : public ::cppu::WeakImplHelper<css::lang::XEventLis
 
 public:
 
-    ClientRemovedListener(ClientBox *pParent)
+    explicit ClientRemovedListener(ClientBox *pParent)
     {
         m_pParent = pParent;
     }

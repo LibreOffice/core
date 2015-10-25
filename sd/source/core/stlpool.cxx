@@ -620,7 +620,7 @@ namespace
 
 struct HasFamilyPredicate : svl::StyleSheetPredicate
 {
-    HasFamilyPredicate(SfxStyleFamily eFamily)
+    explicit HasFamilyPredicate(SfxStyleFamily eFamily)
     : meFamily(eFamily) {;}
 
     bool Check(const SfxStyleSheetBase& sheet) override

@@ -97,7 +97,7 @@ struct PresentationSettingsEx : public PresentationSettings
     css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
 
     PresentationSettingsEx( const PresentationSettingsEx& );
-    PresentationSettingsEx( PresentationSettings& );
+    explicit PresentationSettingsEx( PresentationSettings& );
 
     void SetArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments ) throw (css::lang::IllegalArgumentException, std::exception);
 

@@ -46,7 +46,7 @@ class PresenterPreviewCache
       public PresenterPreviewCacheInterfaceBase
 {
 public:
-    PresenterPreviewCache (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    explicit PresenterPreviewCache (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterPreviewCache();
 
     // XInitialize

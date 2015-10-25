@@ -64,7 +64,7 @@ class BasicPaneFactory
       public BasicPaneFactoryInterfaceBase
 {
 public:
-    BasicPaneFactory (
+    explicit BasicPaneFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~BasicPaneFactory();
 

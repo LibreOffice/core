@@ -206,7 +206,7 @@ public:
         maPathPolyPolygon(rPathPolyPolygon)
     {}
 
-    PathDragObjOwn(SdrDragView& rNewView)
+    explicit PathDragObjOwn(SdrDragView& rNewView)
     :   SdrDragObjOwn(rNewView),
         maPathPolyPolygon()
     {}

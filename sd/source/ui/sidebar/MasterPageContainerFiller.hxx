@@ -53,7 +53,7 @@ public:
         ~ContainerAdapter() {}
     };
 
-    MasterPageContainerFiller (ContainerAdapter& rContainerAdapter);
+    explicit MasterPageContainerFiller (ContainerAdapter& rContainerAdapter);
     virtual ~MasterPageContainerFiller();
 
     /** Run the next step of the task.  After HasNextStep() returns false

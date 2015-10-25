@@ -28,14 +28,14 @@ struct GroupEntry
     sal_uInt32                  mnCount;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >           mXIndexAccess;
 
-    GroupEntry( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex )
+    explicit GroupEntry( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex )
     {
         mXIndexAccess = rIndex;
         mnCount =mXIndexAccess->getCount();
         mnCurrentPos = 0;
     };
 
-    GroupEntry( sal_uInt32 nCount )
+    explicit GroupEntry( sal_uInt32 nCount )
     {
         mnCount = nCount;
         mnCurrentPos = 0;

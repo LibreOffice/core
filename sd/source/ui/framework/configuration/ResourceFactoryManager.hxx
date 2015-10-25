@@ -39,7 +39,7 @@ namespace sd { namespace framework {
 class ResourceFactoryManager
 {
 public:
-    ResourceFactoryManager (
+    explicit ResourceFactoryManager (
         const css::uno::Reference<css::drawing::framework::XControllerManager>& rxManager);
 
     ~ResourceFactoryManager();

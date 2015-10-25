@@ -56,7 +56,7 @@ public:
     class DataComparator
     {
     public:
-        DataComparator (const CacheKey aKey)
+        explicit DataComparator (const CacheKey aKey)
             : maKey(aKey)
         {
         }

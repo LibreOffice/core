@@ -101,7 +101,7 @@ class PropValue
 
         PropValue() {}
 
-        PropValue( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet )
+        explicit PropValue( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet )
             : mXPropSet( rXPropSet )
         {}
 
@@ -158,7 +158,7 @@ struct FontCollectionEntry
                                 ImplInit( rName );
                             };
 
-        FontCollectionEntry( const OUString& rName ) :
+        explicit FontCollectionEntry( const OUString& rName ) :
                             Scaling ( 1.0 ),
                             Family  ( 0 ),
                             Pitch   ( 0 ),
@@ -251,7 +251,7 @@ struct PPTExCharSheet
 {
                 PPTExCharLevel  maCharLevel[ 5 ];
 
-                PPTExCharSheet( int nInstance );
+                explicit PPTExCharSheet( int nInstance );
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel );

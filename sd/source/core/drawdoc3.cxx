@@ -71,7 +71,7 @@ using namespace ::com::sun::star;
 class InsertBookmarkAsPage_FindDuplicateLayouts
 {
 public:
-    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<OUString> &rLayoutsToTransfer )
+    explicit InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<OUString> &rLayoutsToTransfer )
         : mrLayoutsToTransfer(rLayoutsToTransfer) {}
     void operator()( SdDrawDocument&, SdPage*, bool, SdDrawDocument* );
 private:

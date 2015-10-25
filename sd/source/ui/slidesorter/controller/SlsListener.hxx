@@ -71,7 +71,7 @@ class Listener
       public SfxListener
 {
 public:
-    Listener (SlideSorter& rSlideSorter);
+    explicit Listener (SlideSorter& rSlideSorter);
     virtual ~Listener();
 
     /** Connect to the current controller of the view shell as listener.
