@@ -52,7 +52,10 @@ class Tile
 {
  public:
     Tile() : valid(false), m_pBuffer(0) {}
-    ~Tile() { }
+    ~Tile()
+    {
+        g_clear_object(&m_pBuffer);
+    }
 
     /**
        Tells if this tile is valid or not. Initialised to 0 (invalid) during
@@ -83,10 +86,11 @@ class TileBuffer
  TileBuffer(LibreOfficeKitDocument *document = 0,
             int columns = 0)
      : m_pLOKDocument(document)
-        , m_nWidth(columns)
+     , m_nWidth(columns)
     {
         GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileSizePixels, nTileSizePixels);
         m_DummyTile.setPixbuf(pPixBuf);
+        g_object_unref(pPixBuf);
     }
 
     ~TileBuffer() {}
