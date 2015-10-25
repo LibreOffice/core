@@ -50,9 +50,9 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
 
     private static Main rhinoWindow;
     private URL scriptURL;
-    // global list of ScriptEditors, key is URL of file being edited
-    private static Map<URL, ScriptEditorForJavaScript> BEING_EDITED = new
-    HashMap<URL, ScriptEditorForJavaScript>();
+    // global list of ScriptEditors, key is [external form of URL] of file being edited
+    private static Map<String, ScriptEditorForJavaScript> BEING_EDITED = new
+    HashMap<String, ScriptEditorForJavaScript>();
 
     static {
         try {
@@ -98,7 +98,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
      */
     public static ScriptEditorForJavaScript getEditor(URL url) {
         synchronized (BEING_EDITED) {
-            return BEING_EDITED.get(url);
+            return BEING_EDITED.get(url.toExternalForm());
         }
     }
 
@@ -168,11 +168,11 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
             new Runnable() {
                 public void run() {
                     synchronized (BEING_EDITED) {
-                        ScriptEditorForJavaScript editor = BEING_EDITED.get(url);
+                        ScriptEditorForJavaScript editor = BEING_EDITED.get(url.toExternalForm());
 
                         if (editor == null) {
                             editor = new ScriptEditorForJavaScript(context, url);
-                            BEING_EDITED.put(url, editor);
+                            BEING_EDITED.put(url.toExternalForm(), editor);
                         }
                     }
 
@@ -264,11 +264,11 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
 
         // remove all scripts from BEING_EDITED
         synchronized (BEING_EDITED) {
-            java.util.Iterator<URL> iter = BEING_EDITED.keySet().iterator();
-            java.util.ArrayList<URL> keysToRemove = new java.util.ArrayList<URL>();
+            java.util.Iterator<String> iter = BEING_EDITED.keySet().iterator();
+            java.util.ArrayList<String> keysToRemove = new java.util.ArrayList<String>();
 
             while (iter.hasNext()) {
-                URL key = iter.next();
+                String key = iter.next();
                 keysToRemove.add(key);
             }
 
@@ -304,7 +304,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
 
         public void run() {
             synchronized (BEING_EDITED) {
-                BEING_EDITED.remove(this.url);
+                BEING_EDITED.remove(this.url.toExternalForm());
             }
         }
     }
