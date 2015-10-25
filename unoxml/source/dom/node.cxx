@@ -26,8 +26,6 @@
 
 #include <algorithm>
 
-#include <boost/bind.hpp>
-
 #include <rtl/uuid.h>
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
