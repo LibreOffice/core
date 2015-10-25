@@ -148,8 +148,6 @@ public:
 
     ScDocument& getScDocument() { return *mpDoc; }
 
-    ScDocShell& getDocShell() { return *mpDocShell; }
-
     ScDocumentImport& getDocImport();
 
     /** Returns a reference to the source/target spreadsheet document model. */
