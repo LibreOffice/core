@@ -144,7 +144,7 @@ public class ParcelContainer implements XNameAccess {
             }
 
             String location =
-                ScriptMetaData.getLocationPlaceHolder(c.containerUrl, c.getName());
+                ScriptMetaData.getLocationPlaceHolder(c.containerUrl, name);
 
             if (key.equals(location)) {
                 result = c;
