@@ -100,7 +100,7 @@ $(CPP_DOCU_INDEX_FILE) : $(CPP_DOCU_CLEANUP_FLAG)
 $(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
     -$(MKDIRHIER) $(@:d)        
     $(MY_COPY) $< $@
-    cd $(JAVA_SRC_DIR) && unzip -quo $(@:f)
+    cd $(JAVA_SRC_DIR) && unzip -qu $(@:f)
 
 #$(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/%.java : $(PRJ)$/source$/bean$/com$/sun$/star$/beans$/%.java 
 #	-$(MKDIRHIER) $(@:d)        
