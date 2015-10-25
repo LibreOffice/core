@@ -50,7 +50,7 @@ struct LOKDocViewPrivateImpl
     LibreOfficeKit* m_pOffice;
     LibreOfficeKitDocument* m_pDocument;
 
-    TileBuffer m_aTileBuffer;
+    std::unique_ptr<TileBuffer> m_pTileBuffer;
     GThreadPool* lokThreadPool;
 
     gfloat m_fZoom;
@@ -503,9 +503,8 @@ static gboolean postDocumentLoad(gpointer pData)
     // Total number of columns in this document.
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
-
-    priv->m_aTileBuffer = TileBuffer(priv->m_pDocument,
-                                     nColumns);
+    priv->m_pTileBuffer = std::unique_ptr<TileBuffer>(new TileBuffer(priv->m_pDocument,
+                                                                     nColumns));
     gtk_widget_set_size_request(GTK_WIDGET(pLOKDocView),
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);
@@ -634,7 +633,7 @@ setTilesInvalid (LOKDocView* pDocView, const GdkRectangle& rRectangle)
         for (int j = aStart.y; j < aEnd.y; j++)
         {
             GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
-            priv->m_aTileBuffer.setInvalid(i, j, priv->m_fZoom, task, priv->lokThreadPool);
+            priv->m_pTileBuffer->setInvalid(i, j, priv->m_fZoom, task, priv->lokThreadPool);
             g_object_unref(task);
         }
     }
@@ -657,7 +656,7 @@ callback (gpointer pData)
             setTilesInvalid(pDocView, aRectangle);
         }
         else
-            priv->m_aTileBuffer.resetAllTiles();
+            priv->m_pTileBuffer->resetAllTiles();
 
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
@@ -923,7 +922,7 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
             if (bPaint)
             {
                 GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
-                Tile& currentTile = priv->m_aTileBuffer.getTile(nRow, nColumn, priv->m_fZoom, task, priv->lokThreadPool);
+                Tile& currentTile = priv->m_pTileBuffer->getTile(nRow, nColumn, priv->m_fZoom, task, priv->lokThreadPool);
                 GdkPixbuf* pPixBuf = currentTile.getBuffer();
                 gdk_cairo_set_source_pixbuf (pCairo, pPixBuf,
                                              twipToPixel(aTileRectangleTwips.x, priv->m_fZoom),
@@ -1484,10 +1483,10 @@ paintTileInThread (gpointer data)
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
-    TileBuffer& buffer = priv->m_aTileBuffer;
-    int index = pLOEvent->m_nPaintTileX * buffer.m_nWidth + pLOEvent->m_nPaintTileY;
-    if (buffer.m_mTiles.find(index) != buffer.m_mTiles.end() &&
-        buffer.m_mTiles[index].valid)
+    std::unique_ptr<TileBuffer>& buffer = priv->m_pTileBuffer;
+    int index = pLOEvent->m_nPaintTileX * buffer->m_nWidth + pLOEvent->m_nPaintTileY;
+    if (buffer->m_mTiles.find(index) != buffer->m_mTiles.end() &&
+        buffer->m_mTiles[index].valid)
         return;
 
     GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileSizePixels, nTileSizePixels);
@@ -1518,9 +1517,11 @@ paintTileInThread (gpointer data)
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom));
 
     //create a mapping for it
-    buffer.m_mTiles[index].setPixbuf(pPixBuf);
-    buffer.m_mTiles[index].valid = true;
+    buffer->m_mTiles[index].setPixbuf(pPixBuf);
+    buffer->m_mTiles[index].valid = true;
     gdk_threads_add_idle(queueDraw, GTK_WIDGET(pDocView));
+
+    g_object_unref(pPixBuf);
 }
 
 
@@ -2129,8 +2130,8 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     // Total number of columns in this document.
     guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
-    priv->m_aTileBuffer = TileBuffer(priv->m_pDocument,
-                                     nColumns);
+    priv->m_pTileBuffer = std::unique_ptr<TileBuffer>(new TileBuffer(priv->m_pDocument,
+                                                                     nColumns));
     gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);
@@ -2211,7 +2212,7 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_reset_view(LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    priv->m_aTileBuffer.resetAllTiles();
+    priv->m_pTileBuffer->resetAllTiles();
     priv->m_nLoadProgress = 0.0;
 
     memset(&priv->m_aVisibleCursor, 0, sizeof(priv->m_aVisibleCursor));
