@@ -971,69 +971,12 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
 double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
 {
-    // See http://en.cppreference.com/w/cpp/numeric/math/expm1
-
-    if (fValue == 0.0)
-        return fValue;
-
-    if (!::rtl::math::isFinite(fValue))
-    {
-        if (::rtl::math::isInf(fValue))
-        {
-            if (::rtl::math::isSignBitSet(fValue))
-                return -1.0;
-            else
-                return fValue;
-        }
-        // It is a NaN.
-        return fValue;
-    }
-
-    double fe = exp( fValue );
-    if (fe == 1.0)
-        return fValue;
-    if (fe-1.0 == -1.0)
-        return -1.0;
-    return (fe-1.0) * fValue / log(fe);
+    return ::std::expm1(fValue);
 }
 
 double SAL_CALL rtl_math_log1p( double fValue ) SAL_THROW_EXTERN_C()
 {
-    // See http://en.cppreference.com/w/cpp/numeric/math/log1p
-
-    if (fValue == 0.0)
-        return fValue;
-
-    if (fValue == -1.0)
-    {
-        rtl::math::setInf( &fValue, true);
-        return fValue;
-    }
-
-    if (fValue < -1.0)  // includes -Inf
-    {
-        rtl::math::setNan( &fValue);
-        return fValue;
-    }
-
-    if (!::rtl::math::isFinite(fValue))
-    {
-        if (::rtl::math::isInf(fValue))
-            return fValue;
-        // It is a NaN.
-        return fValue;
-    }
-
-    // Use volatile because a compiler may be too smart "optimizing" the
-    // condition such that in certain cases the else path was called even if
-    // (fp==1.0) was true, where the term (fp-1.0) then resulted in 0.0 and
-    // hence the entire expression resulted in NaN.
-    // Happened with g++ 3.4.1 and an input value of 9.87E-18
-    volatile double fp = 1.0 + fValue;
-    if (fp == 1.0)
-        return fValue;
-    else
-        return log(fp) * fValue / (fp-1.0);
+    return ::std::log1p(fValue);
 }
 
 double SAL_CALL rtl_math_atanh( double fValue ) SAL_THROW_EXTERN_C()
