@@ -97,7 +97,10 @@ public final class PdbDecoder {
 
                 //dis.seek(recOffset[i]);
                 dis.reset();
-                dis.skip(recOffset[i]);
+                int nBytesToSkip = recOffset[i];
+                while (nBytesToSkip > 0) {
+                    nBytesToSkip -= dis.skip(nBytesToSkip);
+                }
                 int len = recOffset[i+1] - recOffset[i];
                 byte[] bytes = new byte[len];
                 dis.readFully(bytes);
