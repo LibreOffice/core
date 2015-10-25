@@ -25,9 +25,10 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 
-typedef ::boost::ptr_vector< css::beans::PropertyValue >  SbPropertyValueArr_Impl;
+#include <vector>
+
+typedef ::std::vector<css::beans::PropertyValue> SbPropertyValueArr_Impl;
 
 typedef ::cppu::WeakImplHelper< css::beans::XPropertySet,
                                 css::beans::XPropertyAccess > SbPropertyValuesHelper;

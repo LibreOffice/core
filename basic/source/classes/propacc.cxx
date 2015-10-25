@@ -26,6 +26,7 @@
 
 #include <comphelper/propertysetinfo.hxx>
 
+#include <algorithm>
 #include <limits.h>
 
 using com::sun::star::uno::Reference;
@@ -178,14 +179,13 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
                      css::lang::WrappedTargetException,
                      css::uno::RuntimeException, std::exception)
 {
-    if ( !m_aPropVals.empty() )
+    if (!m_aPropVals.empty())
         throw IllegalArgumentException();
 
     const PropertyValue *pPropVals = rPropertyValues.getConstArray();
     for (sal_Int32 n = 0; n < rPropertyValues.getLength(); ++n)
     {
-        PropertyValue *pPropVal = new PropertyValue(pPropVals[n]);
-        m_aPropVals.push_back( pPropVal );
+        m_aPropVals.push_back(pPropVals[n]);
     }
 }
 
