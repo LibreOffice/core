@@ -123,14 +123,13 @@ public class _NumberingLevel {
                 if ( NumberingLevel.containsKey(propertyName) ) {
                     NumberingLevel.remove(propertyName);
                 } else {
-                    status = false;
-                        if ( status ) {
-                            log.println("FAILED: com.sun.star.text.NumberingLevel -> " +
-                                        "found not described property:");
-                        }
+                    if ( status ) {
+                        log.println("FAILED: com.sun.star.text.NumberingLevel -> " +
+                                    "found not described property:");
+                    }
 
-                        status = false;
-                        log.println("-> '" + propertyName + "'");
+                    status = false;
+                    log.println("-> '" + propertyName + "'");
                 }
 
             }
