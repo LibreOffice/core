@@ -104,7 +104,7 @@ static SvxItemPropertySet& GetStylePropertySet()
 class ModifyListenerForewarder : public SfxListener
 {
 public:
-    ModifyListenerForewarder( SdStyleSheet* pStyleSheet );
+    explicit ModifyListenerForewarder( SdStyleSheet* pStyleSheet );
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 

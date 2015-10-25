@@ -84,7 +84,7 @@ class Ppt97Animation
 {
 
 public: //public methods
-    Ppt97Animation( SvStream& rIn );
+    explicit Ppt97Animation( SvStream& rIn );
 
     Ppt97Animation( const Ppt97Animation& rAnimation );
     Ppt97Animation& operator= ( const Ppt97Animation& rAnimation );

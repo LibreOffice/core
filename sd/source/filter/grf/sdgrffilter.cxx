@@ -91,7 +91,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< com::sun::
 
     public:
 
-    SdGRFFilter_ImplInteractionHdl( com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteraction ) :
+    explicit SdGRFFilter_ImplInteractionHdl( com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteraction ) :
         m_xInter( xInteraction ),
         nFilterError( GRFILTER_OK )
         {}

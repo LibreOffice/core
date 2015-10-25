@@ -50,7 +50,7 @@ namespace sd { namespace framework {
 class ConfigurationUpdaterLock
 {
 public:
-    ConfigurationUpdaterLock (ConfigurationUpdater& rUpdater)
+    explicit ConfigurationUpdaterLock (ConfigurationUpdater& rUpdater)
         : mrUpdater(rUpdater) { mrUpdater.LockUpdates(); }
     ~ConfigurationUpdaterLock() { mrUpdater.UnlockUpdates(); }
 private:

@@ -168,7 +168,7 @@ namespace {
     class FrameworkHelperResourceIdFilter
     {
     public:
-        FrameworkHelperResourceIdFilter (
+        explicit FrameworkHelperResourceIdFilter (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
         bool operator() (const css::drawing::framework::ConfigurationChangeEvent& rEvent)
         { return mxResourceId.is() && rEvent.ResourceId.is()
@@ -296,7 +296,7 @@ class FrameworkHelper::DisposeListener
       public FrameworkHelperDisposeListenerInterfaceBase
 {
 public:
-    DisposeListener (const ::std::shared_ptr<FrameworkHelper>& rpHelper);
+    explicit DisposeListener (const ::std::shared_ptr<FrameworkHelper>& rpHelper);
     virtual ~DisposeListener();
 
     virtual void SAL_CALL disposing() override;
@@ -650,7 +650,7 @@ void FrameworkHelper::RunOnResourceActivation(
 class FlagUpdater
 {
 public:
-    FlagUpdater (bool& rFlag) : mrFlag(rFlag) {}
+    explicit FlagUpdater (bool& rFlag) : mrFlag(rFlag) {}
     void operator() (bool) const {mrFlag = true;}
 private:
     bool& mrFlag;

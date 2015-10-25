@@ -75,7 +75,7 @@ private:
     void Paint(vcl::RenderContext& rRenderContext, SdrTextObj* pObj, bool bVisible, bool bDotted = false);
 
 public:
-    PresLayoutPreview(vcl::Window* pParent);
+    explicit PresLayoutPreview(vcl::Window* pParent);
     virtual ~PresLayoutPreview();
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;

@@ -43,7 +43,7 @@ class ConfigurationControllerBroadcaster
 public:
     /** The given controller is used as origin of thrown exceptions.
     */
-    ConfigurationControllerBroadcaster (
+    explicit ConfigurationControllerBroadcaster (
         const css::uno::Reference<
             css::drawing::framework::XConfigurationController>& rxController);
 

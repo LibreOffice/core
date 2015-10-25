@@ -57,7 +57,7 @@ typedef ::cppu::ImplInheritanceHelper <
 class BroadcastHelperOwner
 {
 public:
-    BroadcastHelperOwner (::osl::Mutex& rMutex) : maBroadcastHelper(rMutex) {};
+    explicit BroadcastHelperOwner (::osl::Mutex& rMutex) : maBroadcastHelper(rMutex) {};
     ::cppu::OBroadcastHelper maBroadcastHelper;
 };
 
@@ -97,7 +97,7 @@ public:
 
     /** Create a new DrawController object for the given ViewShellBase.
     */
-    DrawController (ViewShellBase& rBase) throw();
+    explicit DrawController (ViewShellBase& rBase) throw();
 
     virtual ~DrawController() throw();
 

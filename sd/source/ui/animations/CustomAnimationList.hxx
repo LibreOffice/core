@@ -50,7 +50,7 @@ class CustomAnimationList : public SvTreeListBox, public ISequenceListener
     friend struct stl_append_effect_func;
 
 public:
-    CustomAnimationList( vcl::Window* pParent );
+    explicit CustomAnimationList( vcl::Window* pParent );
     virtual ~CustomAnimationList();
     virtual void dispose() override;
 

@@ -40,7 +40,7 @@ namespace sd
         void addCommunicator( Communicator* pCommunicator );
 #endif
     private:
-        BluetoothServer( std::vector<Communicator*>* pCommunicators );
+        explicit BluetoothServer( std::vector<Communicator*>* pCommunicators );
         virtual ~BluetoothServer();
 
         enum { UNKNOWN, DISCOVERABLE, NOT_DISCOVERABLE } meWasDiscoverable;

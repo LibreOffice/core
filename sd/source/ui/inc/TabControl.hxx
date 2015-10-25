@@ -84,7 +84,7 @@ private:
     class TabControlTransferable : public TransferableHelper
     {
     public:
-        TabControlTransferable( TabControl& rParent ) :
+        explicit TabControlTransferable( TabControl& rParent ) :
             mrParent( rParent ) {}
     private:
 

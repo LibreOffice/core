@@ -54,7 +54,7 @@ public:
         @param rxController
             This is the access point to the drawing framework.
     */
-    ToolBarModule (
+    explicit ToolBarModule (
         const css::uno::Reference<css::frame::XController>& rxController);
     virtual ~ToolBarModule();
 

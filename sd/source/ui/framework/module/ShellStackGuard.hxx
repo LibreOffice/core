@@ -64,7 +64,7 @@ class ShellStackGuard
       public ShellStackGuardInterfaceBase
 {
 public:
-    ShellStackGuard (css::uno::Reference<css::frame::XController>& rxController);
+    explicit ShellStackGuard (css::uno::Reference<css::frame::XController>& rxController);
     virtual ~ShellStackGuard();
 
     virtual void SAL_CALL disposing() override;

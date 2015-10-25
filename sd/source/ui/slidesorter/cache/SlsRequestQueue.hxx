@@ -38,7 +38,7 @@ class RequestData;
 class RequestQueue : public sdr::PageUser
 {
 public:
-    RequestQueue (const SharedCacheContext& rpCacheContext);
+    explicit RequestQueue (const SharedCacheContext& rpCacheContext);
     virtual ~RequestQueue();
 
     /** Insert a request with highest or lowest priority in its priority

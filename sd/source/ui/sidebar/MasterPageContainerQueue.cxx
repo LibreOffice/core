@@ -62,9 +62,9 @@ public:
     };
     class CompareToken
     {
-        public:
+    public:
         MasterPageContainer::Token maToken;
-        CompareToken(MasterPageContainer::Token aToken) : maToken(aToken) {}
+        explicit CompareToken(MasterPageContainer::Token aToken) : maToken(aToken) {}
         bool operator() (const PreviewCreationRequest& rRequest) const
             { return maToken==rRequest.mpDescriptor->maToken; }
     };

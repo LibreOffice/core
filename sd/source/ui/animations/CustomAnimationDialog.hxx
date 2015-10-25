@@ -97,7 +97,7 @@ const sal_Int32 nPropertyTypeScale = 21;
 class PropertySubControl
 {
 public:
-    PropertySubControl( sal_Int32 nType ) : mnType( nType ) {}
+    explicit PropertySubControl( sal_Int32 nType ) : mnType( nType ) {}
     virtual ~PropertySubControl();
 
     virtual             ::com::sun::star::uno::Any getValue() = 0;
@@ -121,7 +121,7 @@ protected:
 class PropertyControl : public ListBox
 {
 public:
-    PropertyControl( vcl::Window* pParent );
+    explicit PropertyControl( vcl::Window* pParent );
     virtual ~PropertyControl();
     virtual void dispose() override;
 

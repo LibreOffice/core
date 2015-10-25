@@ -39,7 +39,7 @@ using namespace ::com::sun::star::style;
 class SdTransformOOo2xDocument
 {
 public:
-    SdTransformOOo2xDocument( SdDrawDocument& rDocument );
+    explicit SdTransformOOo2xDocument( SdDrawDocument& rDocument );
 
     void transform();
 

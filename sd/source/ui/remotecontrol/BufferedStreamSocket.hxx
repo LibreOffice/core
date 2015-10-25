@@ -36,11 +36,11 @@ namespace sd
              * Create a BufferedStreamSocket on top of an
              * osl::StreamSocket.
              */
-            BufferedStreamSocket( const osl::StreamSocket &aSocket );
+            explicit BufferedStreamSocket( const osl::StreamSocket &aSocket );
             /**
              * Create a BufferedStreamSocket on top of a POSIX or WinSock socket.
              */
-            BufferedStreamSocket( int aSocket );
+            explicit BufferedStreamSocket( int aSocket );
             BufferedStreamSocket( const BufferedStreamSocket &aSocket );
             /**
              * Blocks until a line is read.

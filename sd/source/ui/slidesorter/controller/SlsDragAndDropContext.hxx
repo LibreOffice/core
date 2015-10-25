@@ -42,7 +42,7 @@ public:
     /** Create a substitution display of the currently selected pages or,
         when provided, the pages in the transferable.
     */
-    DragAndDropContext (SlideSorter& rSlideSorter);
+    explicit DragAndDropContext (SlideSorter& rSlideSorter);
     ~DragAndDropContext();
 
     /** Call this method (for example as reaction to ESC key press) to avoid

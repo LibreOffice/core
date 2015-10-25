@@ -63,7 +63,7 @@ public:
             When that does not exist either then a internal default value is
             used.
     */
-    BitmapCache (const sal_Int32 nMaximalNormalCacheSize = 0);
+    explicit BitmapCache (const sal_Int32 nMaximalNormalCacheSize = 0);
 
     /** The destructor clears the cache and releases all bitmaps still in it.
     */

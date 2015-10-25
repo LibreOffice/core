@@ -100,7 +100,7 @@ class TextAPIEditSource : public SvxEditSource
     explicit            TextAPIEditSource( const TextAPIEditSource& rSource );
 
 public:
-                        TextAPIEditSource(SdDrawDocument* pDoc);
+                        explicit TextAPIEditSource(SdDrawDocument* pDoc);
     virtual             ~TextAPIEditSource();
 
     void                Dispose();

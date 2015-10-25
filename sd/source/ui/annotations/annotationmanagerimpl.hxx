@@ -50,7 +50,7 @@ typedef ::cppu::WeakComponentImplHelper <
 class AnnotationManagerImpl : private ::cppu::BaseMutex, public AnnotationManagerImplBase
 {
 public:
-    AnnotationManagerImpl( ViewShellBase& rViewShellBase );
+    explicit AnnotationManagerImpl( ViewShellBase& rViewShellBase );
 
     void init();
 

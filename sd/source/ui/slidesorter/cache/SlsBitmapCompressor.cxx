@@ -38,7 +38,7 @@ public:
     Bitmap maPreview;
     Size maOriginalSize;
 
-    DummyReplacement (const Bitmap& rPreview) : maPreview(rPreview)  { }
+    explicit DummyReplacement (const Bitmap& rPreview) : maPreview(rPreview)  { }
     virtual ~DummyReplacement() {}
     virtual sal_Int32 GetMemorySize() const override { return maPreview.GetSizeBytes(); }
 };

@@ -148,7 +148,7 @@ struct AnnotationData
 class UndoAnnotation : public SdrUndoAction
 {
 public:
-    UndoAnnotation( Annotation& rAnnotation );
+    explicit UndoAnnotation( Annotation& rAnnotation );
 
     virtual void Undo() override;
     virtual void Redo() override;

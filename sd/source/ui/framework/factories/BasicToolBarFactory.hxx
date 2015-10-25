@@ -56,7 +56,7 @@ class BasicToolBarFactory
       public BasicToolBarFactoryInterfaceBase
 {
 public:
-    BasicToolBarFactory (
+    explicit BasicToolBarFactory (
         const css::uno::Reference<com::sun::star::uno::XComponentContext>& rxContext);
     virtual ~BasicToolBarFactory();
 

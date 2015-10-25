@@ -144,7 +144,7 @@ class SD_DLLPUBLIC SdOptionsLayoutItem : public SfxPoolItem
 {
 public:
 
-                            SdOptionsLayoutItem( sal_uInt16 nWhich);
+                            explicit SdOptionsLayoutItem( sal_uInt16 nWhich);
                             SdOptionsLayoutItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
@@ -320,7 +320,7 @@ class SD_DLLPUBLIC SdOptionsMiscItem : public SfxPoolItem
 {
 public:
 
-                            SdOptionsMiscItem( sal_uInt16 nWhich);
+                            explicit SdOptionsMiscItem( sal_uInt16 nWhich);
                             SdOptionsMiscItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
@@ -389,7 +389,7 @@ class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem
 {
 public:
 
-                            SdOptionsSnapItem( sal_uInt16 nWhich);
+                            explicit SdOptionsSnapItem( sal_uInt16 nWhich);
                             SdOptionsSnapItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
@@ -562,7 +562,7 @@ class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem
 {
 public:
 
-                            SdOptionsPrintItem( sal_uInt16 nWhich);
+                            explicit SdOptionsPrintItem( sal_uInt16 nWhich);
                             SdOptionsPrintItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
@@ -583,7 +583,7 @@ class SdOptions : public SdOptionsLayout, public SdOptionsContents,
 {
 public:
 
-                        SdOptions( sal_uInt16 nConfigId );
+                        explicit SdOptions( sal_uInt16 nConfigId );
                         virtual ~SdOptions();
 
     void                StoreConfig();
