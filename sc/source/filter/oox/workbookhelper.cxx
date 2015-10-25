@@ -236,8 +236,6 @@ private:
     /** Finalizes the filter process (sets some needed document properties). */
     void                finalize();
 
-    void recalcFormulaCells();
-
 private:
     typedef ::std::unique_ptr< ScEditEngineDefaulter >    EditEngineDefaulterPtr;
     typedef ::std::unique_ptr< FormulaBuffer >          FormulaBufferPtr;
