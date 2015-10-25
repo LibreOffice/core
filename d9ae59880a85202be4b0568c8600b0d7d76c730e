@@ -16,6 +16,24 @@
       "revId": "d9ae59880a85202be4b0568c8600b0d7d76c730e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_88bec7fd",
+        "filename": "sc/source/filter/oox/workbookfragment.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-10-25T16:13:03Z",
+      "side": 1,
+      "message": "I removed the WorkbookGlobals::recalcFormulaCell in the same patch.",
+      "parentUuid": "3a1531f4_7dfccb3e",
+      "revId": "d9ae59880a85202be4b0568c8600b0d7d76c730e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
