@@ -1085,7 +1085,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             {
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
-                bEnabled = bValue ? true : false;
+                bEnabled = bValue;
             }
             else if( rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MinValue")) )
             {
@@ -1103,7 +1103,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             {
                 sal_Bool bValue = sal_False;
                 rEntry.Value >>= bValue;
-                bIgnore = bValue ? true : false;
+                bIgnore = bValue;
             }
             else if( rEntry.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GroupingHint")) )
             {
@@ -1182,7 +1182,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                 if( pVal )
                     pVal->Value >>= bVal;
                 addBool( pCurParent, nCurX, nCurY, nAttachOffset,
-                         aText, true, aPropertyName, bVal?true:false,
+                         aText, true, aPropertyName, bVal,
                          aRightColumn, pControllerProperties, pCtrlTarget );
             }
             else if( aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Radio")) && pCurParent )
