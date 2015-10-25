@@ -93,7 +93,7 @@ class AquaDelayedSettingsChanged : public Idle
                 it != pSalData->maFrames.end(); ++it )
             {
                 if( (*it)->mbShown )
-                    (*it)->SendPaintEvent( NULL );
+                    (*it)->SendPaintEvent();
             }
         }
         Stop();
