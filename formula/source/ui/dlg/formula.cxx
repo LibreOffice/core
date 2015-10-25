@@ -1572,7 +1572,6 @@ bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
     {
         aFormula = aFormula.copy( 1, aFormula.getLength()-2 );
         m_pBtnMatrix->Check( bMatrix );
-        m_pBtnMatrix->Disable();
     } // if ( bMatrix )
 
     m_pTabCtrl->SetCurPageId(TP_STRUCT);
