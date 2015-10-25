@@ -599,7 +599,7 @@ namespace drawinglayer
                                         // offset in X, so iterate over Y first and draw lines
                                         for(sal_Int32 nYPos(nBTop); nYPos < nOTop + nOHeight; nYPos += nBHeight, nPosY++)
                                         {
-                                            for(sal_Int32 nXPos(nPosY % 2 ? nBLeft - nBWidth + nOffsetX : nBLeft);
+                                            for(sal_Int32 nXPos((nPosY % 2) ? nBLeft - nBWidth + nOffsetX : nBLeft);
                                                 nXPos < nOLeft + nOWidth; nXPos += nBWidth)
                                             {
                                                 const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
@@ -626,7 +626,7 @@ namespace drawinglayer
                                         // possible offset in Y, so iterate over X first and draw columns
                                         for(sal_Int32 nXPos(nBLeft); nXPos < nOLeft + nOWidth; nXPos += nBWidth, nPosX++)
                                         {
-                                            for(sal_Int32 nYPos(nPosX % 2 ? nBTop - nBHeight + nOffsetY : nBTop);
+                                            for(sal_Int32 nYPos((nPosX % 2) ? nBTop - nBHeight + nOffsetY : nBTop);
                                                 nYPos < nOTop + nOHeight; nYPos += nBHeight)
                                             {
                                                 const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);

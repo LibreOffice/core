@@ -89,7 +89,7 @@ class BadVectorInit:
     public RecursiveASTVisitor<BadVectorInit>, public loplugin::Plugin
 {
 public:
-    explicit BadVectorInit(InstantiationData const & data): Plugin(data) {}
+    explicit BadVectorInit(InstantiationData const & data): Plugin(data), mbInsideFunction(false) {}
 
     virtual void run() override
     {

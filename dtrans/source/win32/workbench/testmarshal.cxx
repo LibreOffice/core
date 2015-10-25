@@ -68,7 +68,7 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
 
     WaitForSingleObject( g_hEvtThreadWakeup, INFINITE );
 
-    IDataObject* pIDo;
+    IDataObject* pIDo = NULL;
 
 #ifdef RAW_MARSHALING
 

@@ -112,7 +112,7 @@ void testWriter(  const Reference < XComponent > & rCmp )
     printf( "pleast type any text\n" );
     while( true )
     {
-        scanf( "%s" , pcText );
+        scanf( "%1023s" , pcText );
 
         if( !strcmp( pcText , "end" ) )
         {

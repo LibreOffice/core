@@ -21,7 +21,7 @@ class StaticMethods:
 private:
     bool bVisitedThis;
 public:
-    explicit StaticMethods(InstantiationData const & data): Plugin(data) {}
+    explicit StaticMethods(InstantiationData const & data): Plugin(data), bVisitedThis(false) {}
 
     void run() override
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }

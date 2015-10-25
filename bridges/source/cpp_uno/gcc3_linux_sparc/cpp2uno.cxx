@@ -377,7 +377,7 @@ void * pRegReturn = &nRegReturn;
 //  fprintf(stderr,"cpp_mediate nFunctionIndex=%x\n",nFunctionIndex);
 //  fflush(stderr);
 
-    sal_Bool bComplex = nFunctionIndex & 0x80000000 ? sal_True : sal_False;
+    const sal_Bool bComplex = (nFunctionIndex & 0x80000000) ? sal_True : sal_False;
     typelib_TypeClass aType =
         cpp_mediate( nFunctionIndex, vTableOffset, pCallStack+17, (sal_Int64*)&nRegReturn );
 
