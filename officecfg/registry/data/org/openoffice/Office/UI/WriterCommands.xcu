@@ -1292,6 +1292,9 @@
       </node>
       <node oor:name=".uno:EntireCell" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Select Cell</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">C~ell</value>
         </prop>
       </node>
@@ -1375,7 +1378,7 @@
       </node>
       <node oor:name=".uno:UnsetCellsReadOnly" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Unprotect cells</value>
+          <value xml:lang="en-US">Unprotect Cells</value>
         </prop>
       </node>
       <node oor:name=".uno:GoToEndOfDoc" oor:op="replace">

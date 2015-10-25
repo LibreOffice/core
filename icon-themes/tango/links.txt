@@ -371,14 +371,14 @@ sc/res/sf02.png sw/imglst/sf04.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara2.png
 cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
 
-cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
-cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
-cmd/lc_insertcolumnsbefore.png cmd/lc_insertcolumns.png
-cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
-cmd/lc_insertrowsafter.png cmd/lc_insertrows.png
-cmd/sc_insertrowsafter.png cmd/sc_insertrows.png
-cmd/lc_insertcolumnsafter.png cmd/lc_insertcolumns.png
-cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
+#cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
+#cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
+#cmd/lc_insertcolumnsbefore.png cmd/lc_insertcolumns.png
+#cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
+#cmd/lc_insertrowsafter.png cmd/lc_insertrows.png
+#cmd/sc_insertrowsafter.png cmd/sc_insertrows.png
+#cmd/lc_insertcolumnsafter.png cmd/lc_insertcolumns.png
+#cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
 
 # RTL
 cmd/ar/sc_undo.png cmd/fa/sc_undo.png
