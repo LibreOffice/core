@@ -147,7 +147,6 @@ public class _XSheetCellCursor extends MultiMethodTest {
     public void _collapseToCurrentRegion(){
         boolean bResult = true;
         int width = 4, height = 4;
-        int leftCol = -1, topRow = -1;
 
         XSpreadsheet oSheet = oObj.getSpreadsheet();
         UnoRuntime.queryInterface(
@@ -163,37 +162,6 @@ public class _XSheetCellCursor extends MultiMethodTest {
             log.println("After collapseToCurrentRegion()"
                  + " call Region must have size " + width + "x" + height
                  + " but it is " + cols + "x" + rows);
-        }
-
-        // if previous test was successful try more complicated case
-        if (bResult) {
-            if (leftCol != -1 && topRow != -1) {
-                try {
-                    oSheet.getCellByPosition(
-                        leftCol + width, topRow + height).setValue(1);
-                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    log.print("Can't get cell by position:");
-                    e.printStackTrace(log);
-                    bResult = false;
-                }
-
-                oObj.collapseToCurrentRegion() ;
-
-                // checking results
-                cols = UnoRuntime.queryInterface(
-                    XColumnRowRange.class, oObj).getColumns().getCount();
-                rows = UnoRuntime.queryInterface(
-                    XColumnRowRange.class, oObj).getRows().getCount();
-
-                if (cols == width + 1 && rows == height + 1) {
-                    bResult &= true;
-                } else {
-                    bResult = false;
-                    log.println("After collapseToCurrentRegion() call [2]"
-                         + " region must have size " + (width+1) + "x"
-                         + (height + 1) + " but it is " + cols + "x" + rows );
-                }
-            }
         }
 
         tRes.tested("collapseToCurrentRegion()", bResult);
