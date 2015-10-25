@@ -833,6 +833,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Number Format...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:LoadStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1297,6 +1300,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">C~ell</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:GoUp" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1349,6 +1355,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Protect Cells</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:GoToEndOfLine" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1379,6 +1388,9 @@
       <node oor:name=".uno:UnsetCellsReadOnly" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Unprotect Cells</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:GoToEndOfDoc" oor:op="replace">
@@ -1966,6 +1978,9 @@
       <node oor:name=".uno:SplitTable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Split Table...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:WrapAnchorOnly" oor:op="replace">
