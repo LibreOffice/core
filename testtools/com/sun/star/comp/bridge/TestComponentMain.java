@@ -99,6 +99,7 @@ public class TestComponentMain
 
         XAcceptor xAcceptor = Acceptor.create(ctx);
 
+        // coverity[loop_top] - deliberate 'infinite' loop.
         while( true )
         {
             System.err.println("waiting for connect...");
