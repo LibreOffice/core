@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a1531f4_289333a5",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 3558,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-10-25T12:52:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba0121b8_1eacadec",
+      "revId": "9e3f762e200634b3dee667d3bb1a7215ece39031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba0121b8_fbc90bae",
         "filename": "configure.ac",
         "patchSetId": 6
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "ah... so the win10sdktest variables are only useful if you have VS2015... yes a find_ucrt() would be better i think.",
       "parentUuid": "ba0121b8_db48878a",
+      "revId": "9e3f762e200634b3dee667d3bb1a7215ece39031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_88908797",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 3830,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-10-25T12:52:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba0121b8_3eaff1e4",
       "revId": "9e3f762e200634b3dee667d3bb1a7215ece39031",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
