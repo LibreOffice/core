@@ -558,9 +558,9 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 
     return (
         nFirstLineOfst == rOther.GetTextFirstLineOfst() &&
-        nTxtLeft == rOther.GetTextLeft() &&
-        nLeftMargin == rOther.GetLeft()  &&
-        nRightMargin == rOther.GetRight() &&
+        (abs(nTxtLeft - rOther.GetTextLeft()) <=1) &&
+        (abs(nLeftMargin - rOther.GetLeft()) <=1) &&
+        (abs(nRightMargin - rOther.GetRight()) <=1) &&
         nPropFirstLineOfst == rOther.GetPropTextFirstLineOfst() &&
         nPropLeftMargin == rOther.GetPropLeft()  &&
         nPropRightMargin == rOther.GetPropRight() &&
