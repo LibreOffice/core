@@ -79,7 +79,7 @@ $(call gb_Package_get_preparation_target,%) :
 # Package_foo makefiles.
 $(call gb_Package_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PKG,2)
-	$(if $(PACAKGE_DEFINED),,$(call gb_Output_error,Something depends on package $* which does not exist.))
+	$(if $(PACKAGE_DEFINED),,$(call gb_Output_error,Something depends on package $* which does not exist.))
 	rm -f $@ && \
 	mv $(call var2file,$@.tmp,100,$(sort $(FILES))) $@
 
@@ -87,7 +87,7 @@ $(call gb_Package_get_target,%) :
 define gb_Package_Package_internal
 gb_Package_SOURCEDIR_$(1) := $(2)
 gb_Package_OUTDIR_$(1) := $(INSTROOT)
-$(call gb_Package_get_target,$(1)) : PACAKGE_DEFINED := $(true)
+$(call gb_Package_get_target,$(1)) : PACKAGE_DEFINED := $(true)
 $(call gb_Package_get_target,$(1)) : FILES :=
 $(call gb_Package_get_clean_target,$(1)) : FILES := $(call gb_Package_get_target,$(1)) $(call gb_Package_get_preparation_target,$(1))
 $(call gb_Package_get_target,$(1)) : $(call gb_Package_get_preparation_target,$(1))
