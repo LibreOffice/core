@@ -44,7 +44,7 @@ SbxAppData::~SbxAppData()
     SolarMutexGuard g;
 
     delete pBasicFormater;
-    aFacs.clear();
+    m_Factories.clear();
 }
 
 SbxBase::SbxBase()
@@ -124,25 +124,27 @@ void SbxBase::AddFactory( SbxFactory* pFac )
     SbxAppData& r = GetSbxData_Impl();
 
     // From 1996-03-06: take the HandleLast-Flag into account
-    sal_uInt16 nPos = r.aFacs.size(); // Insert position
+    sal_uInt16 nPos = r.m_Factories.size(); // Insert position
     if( !pFac->IsHandleLast() )         // Only if not self HandleLast
     {
         // Rank new factory in front of factories with HandleLast
-        while( nPos > 0 &&
-                r.aFacs[ nPos-1 ].IsHandleLast() )
+        while (nPos > 0 && r.m_Factories[ nPos-1 ]->IsHandleLast())
             nPos--;
     }
-    r.aFacs.insert( r.aFacs.begin() + nPos, pFac );
+    r.m_Factories.insert(r.m_Factories.begin() + nPos, std::unique_ptr<SbxFactory>(pFac));
 }
 
 void SbxBase::RemoveFactory( SbxFactory* pFac )
 {
     SbxAppData& r = GetSbxData_Impl();
-    for(SbxFacs::iterator it = r.aFacs.begin(); it != r.aFacs.end(); ++it)
+    for (auto it = r.m_Factories.begin(); it != r.m_Factories.end(); ++it)
     {
-        if( &(*it) == pFac )
+        if ((*it).get() == pFac)
         {
-            r.aFacs.release( it ).release(); break;
+            std::unique_ptr<SbxFactory> tmp(std::move(*it));
+            r.m_Factories.erase( it );
+            tmp.release();
+            break;
         }
     }
 }
@@ -173,9 +175,9 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     // Unknown type: go over the factories!
     SbxAppData& r = GetSbxData_Impl();
     SbxBase* pNew = NULL;
-    for( SbxFactory& rFac : r.aFacs )
+    for (auto const& rpFac : r.m_Factories)
     {
-        pNew = rFac.Create( nSbxId, nCreator );
+        pNew = rpFac->Create( nSbxId, nCreator );
         if( pNew )
             break;
     }
@@ -187,9 +189,9 @@ SbxObject* SbxBase::CreateObject( const OUString& rClass )
 {
     SbxAppData& r = GetSbxData_Impl();
     SbxObject* pNew = NULL;
-    for( SbxFactory& rFac : r.aFacs )
+    for (auto const& rpFac : r.m_Factories)
     {
-        pNew = rFac.CreateObject( rClass );
+        pNew = rpFac->CreateObject( rClass );
         if( pNew )
             break;
     }

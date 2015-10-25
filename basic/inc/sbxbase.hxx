@@ -23,21 +23,24 @@
 #include <i18nlangtag/lang.h>
 #include <basic/sbxdef.hxx>
 #include <basic/basicdllapi.h>
-#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <boost/noncopyable.hpp>
+
+#include <memory>
+#include <vector>
 
 class SbxFactory;
 class SbxVariable;
 class SbxBasicFormater;
 
-typedef boost::ptr_vector<SbxFactory> SbxFacs;
+typedef std::vector<std::unique_ptr<SbxFactory>> SbxFactories;
 
 // AppData structure for SBX:
 struct SbxAppData
     : private ::boost::noncopyable
 {
     SbxError            eSbxError;  // Error code
-    SbxFacs             aFacs;      // Factories
+    SbxFactories        m_Factories;
     SbxBasicFormater    *pBasicFormater;    // Pointer to Format()-Command helper class
 
     LanguageType        eBasicFormaterLangType;
