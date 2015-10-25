@@ -24,7 +24,6 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <boost/bind.hpp>
 #include <algorithm>
 #include <vector>
 
@@ -80,9 +79,7 @@ namespace basegfx
             const std::vector<B2DRange>::const_iterator aEnd( maRanges.end() );
             return std::any_of( maRanges.begin(),
                                  aEnd,
-                                 boost::bind<bool>( boost::mem_fn( &B2DRange::overlaps ),
-                                                    _1,
-                                                    boost::cref(rRange) ) );
+                                 [&rRange](const B2DRange& aRange) { return aRange.overlaps(rRange); } );
         }
 
         B2DPolyPolygon solveCrossovers() const
