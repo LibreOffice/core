@@ -107,33 +107,33 @@ SbiSymDef* SbiSymPool::First()
 
 SbiSymDef* SbiSymPool::Next()
 {
-    if( ++nCur >= aData.size() )
+    if (m_Data.size() <= ++nCur)
         return NULL;
     else
-        return &aData[ nCur ];
+        return m_Data[ nCur ].get();
 }
 
 
 SbiSymDef* SbiSymPool::AddSym( const OUString& rName )
 {
     SbiSymDef* p = new SbiSymDef( rName );
-    p->nPos    = aData.size();
+    p->nPos    = m_Data.size();
     p->nId     = rStrings.Add( rName );
     p->nProcId = nProcId;
     p->pIn     = this;
-    aData.insert( aData.begin() + p->nPos, p );
+    m_Data.insert( m_Data.begin() + p->nPos, std::unique_ptr<SbiSymDef>(p) );
     return p;
 }
 
 SbiProcDef* SbiSymPool::AddProc( const OUString& rName )
 {
     SbiProcDef* p = new SbiProcDef( pParser, rName );
-    p->nPos    = aData.size();
+    p->nPos    = m_Data.size();
     p->nId     = rStrings.Add( rName );
     // procs are always local
     p->nProcId = 0;
     p->pIn     = this;
-    aData.insert( aData.begin() + p->nPos, p );
+    m_Data.insert( m_Data.begin() + p->nPos, std::unique_ptr<SbiProcDef>(p) );
     return p;
 }
 
@@ -152,7 +152,7 @@ void SbiSymPool::Add( SbiSymDef* pDef )
             return;
         }
 
-        pDef->nPos = aData.size();
+        pDef->nPos = m_Data.size();
         if( !pDef->nId )
         {
             // A unique name must be created in the string pool
@@ -172,17 +172,17 @@ void SbiSymPool::Add( SbiSymDef* pDef )
             pDef->nProcId = nProcId;
         }
         pDef->pIn = this;
-        aData.insert( aData.begin() + pDef->nPos, pDef );
+        m_Data.insert( m_Data.begin() + pDef->nPos, std::unique_ptr<SbiSymDef>(pDef) );
     }
 }
 
 
 SbiSymDef* SbiSymPool::Find( const OUString& rName )
 {
-    sal_uInt16 nCount = aData.size();
+    sal_uInt16 nCount = m_Data.size();
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        SbiSymDef &r = aData[ nCount - i - 1 ];
+        SbiSymDef &r = *m_Data[ nCount - i - 1 ];
         if( ( !r.nProcId || ( r.nProcId == nProcId)) &&
             ( r.aName.equalsIgnoreAsciiCase(rName)))
         {
@@ -204,13 +204,13 @@ SbiSymDef* SbiSymPool::Find( const OUString& rName )
 
 SbiSymDef* SbiSymPool::Get( sal_uInt16 n )
 {
-    if( n >= aData.size() )
+    if (m_Data.size() <= n)
     {
         return NULL;
     }
     else
     {
-        return &aData[ n ];
+        return m_Data[ n ].get();
     }
 }
 
@@ -246,9 +246,9 @@ sal_uInt32 SbiSymPool::Reference( const OUString& rName )
 
 void SbiSymPool::CheckRefs()
 {
-    for( size_t i = 0; i < aData.size(); i++ )
+    for (size_t i = 0; i < m_Data.size(); ++i)
     {
-        SbiSymDef &r = aData[ i ];
+        SbiSymDef &r = *m_Data[ i ];
         if( !r.IsDefined() )
         {
             pParser->Error( ERRCODE_BASIC_UNDEF_LABEL, r.GetName() );
@@ -459,7 +459,9 @@ void SbiProcDef::Match( SbiProcDef* pOld )
         nPos = pOld->nPos;
         nId  = pOld->nId;
         pIn  = pOld->pIn;
-        pIn->aData.replace( nPos, this ).release();
+        std::unique_ptr<SbiSymDef> tmp(this);
+        std::swap(pIn->m_Data[nPos], tmp);
+        tmp.release();
     }
     delete pOld;
 }

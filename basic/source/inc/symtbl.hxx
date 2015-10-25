@@ -20,8 +20,8 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_SYMTBL_HXX
 #define INCLUDED_BASIC_SOURCE_INC_SYMTBL_HXX
 
+#include <memory>
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class SbiConstDef;
 class SbiParser;
@@ -54,8 +54,7 @@ class SbiSymPool {
     friend class SbiProcDef;
 protected:
     SbiStringPool& rStrings;
-    boost::ptr_vector<SbiSymDef>
-                   aData;
+    std::vector<std::unique_ptr<SbiSymDef>> m_Data;
     SbiSymPool*    pParent;
     SbiParser*     pParser;
     SbiSymScope    eScope;
@@ -67,7 +66,7 @@ public:
 
     void   SetParent( SbiSymPool* p )   { pParent = p;      }
     void   SetProcId( short n )         { nProcId = n;      }
-    sal_uInt16 GetSize() const              { return aData.size(); }
+    sal_uInt16 GetSize() const          { return m_Data.size(); }
     SbiSymScope GetScope() const        { return eScope;    }
     void   SetScope( SbiSymScope s )    { eScope = s;       }
     SbiParser* GetParser()              { return pParser;   }
