@@ -194,39 +194,35 @@ static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
 }
 
 SwXModule::SwXModule() :
-    pxViewSettings(0),
-    pxPrintSettings(0)
+    mxViewSettings(),
+    mxPrintSettings()
 {
 }
 
 SwXModule::~SwXModule()
 {
-    delete pxViewSettings;
-    delete pxPrintSettings;
 }
 
 Reference< XPropertySet >  SwXModule::getViewSettings() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(!pxViewSettings)
+    if(!mxViewSettings.is())
     {
-        static_cast<SwXModule*>(this)->pxViewSettings = new Reference< XPropertySet > ;
         OSL_FAIL("Web or Text?");
-        *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, 0 ) );
+        mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, 0 ) );
     }
-    return *pxViewSettings;
+    return mxViewSettings;
 }
 
 Reference< XPropertySet >  SwXModule::getPrintSettings() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(!pxPrintSettings)
+    if(!mxPrintSettings.is())
     {
-        static_cast<SwXModule*>(this)->pxPrintSettings = new Reference< XPropertySet > ;
         OSL_FAIL("Web or Text?");
-        *pxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( PRINT_SETTINGS_MODULE ) );
+        mxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( PRINT_SETTINGS_MODULE ) );
     }
-    return *pxPrintSettings;
+    return mxPrintSettings;
 }
 
 OUString SwXModule::getImplementationName() throw( RuntimeException, std::exception )

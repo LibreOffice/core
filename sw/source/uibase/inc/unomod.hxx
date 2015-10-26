@@ -44,8 +44,8 @@ class SwXModule : public cppu::WeakImplHelper
 >
 {
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *     pxViewSettings;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *     pxPrintSettings;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >     mxViewSettings;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >     mxPrintSettings;
 
 protected:
     virtual ~SwXModule();

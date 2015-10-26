@@ -56,12 +56,11 @@ void UnoControlModelEntryList::DestroyEntry( size_t nEntry )
     UnoControlModelEntryListBase::iterator it = maList.begin();
     ::std::advance( it, nEntry );
 
-    if ( (*it)->bGroup )
-        delete (*it)->pGroup;
+    if ( (*it).bGroup )
+        delete (*it).pGroup;
     else
-        delete (*it)->pxControl;
+        (*it).xControl.clear();
 
-    delete *it;
     maList.erase( it );
 }
 
@@ -69,15 +68,11 @@ size_t  UnoControlModelEntryList::size() const {
     return maList.size();
 }
 
-UnoControlModelEntry* UnoControlModelEntryList::operator[]( size_t i ) const {
-    return ( i < maList.size() ) ? maList[ i ] : NULL;
-}
-
-void UnoControlModelEntryList::push_back( UnoControlModelEntry* item ) {
+void UnoControlModelEntryList::push_back( const UnoControlModelEntry& item ) {
     maList.push_back( item );
 }
 
-void UnoControlModelEntryList::insert( size_t i, UnoControlModelEntry* item ) {
+void UnoControlModelEntryList::insert( size_t i, const UnoControlModelEntry& item ) {
     if ( i < maList.size() ) {
         UnoControlModelEntryListBase::iterator it = maList.begin();
         ::std::advance( it, i );
@@ -87,7 +82,32 @@ void UnoControlModelEntryList::insert( size_t i, UnoControlModelEntry* item ) {
     }
 }
 
+UnoControlModelEntry::UnoControlModelEntry( const UnoControlModelEntry& other)
+    : bGroup(other.bGroup)
+{
+    if (bGroup)
+        pGroup = other.pGroup;
+    else
+        xControl = other.xControl;
+}
 
+UnoControlModelEntry& UnoControlModelEntry::operator=( const UnoControlModelEntry& other)
+{
+    if (!bGroup)
+        xControl.clear();
+    bGroup = other.bGroup;
+    if (bGroup)
+        pGroup = other.pGroup;
+    else
+        xControl = other.xControl;
+    return *this;
+}
+
+UnoControlModelEntry::~UnoControlModelEntry()
+{
+    if (!bGroup)
+        xControl.clear();
+}
 
 //  class StdTabControllerModel
 
@@ -106,9 +126,9 @@ sal_uInt32 StdTabControllerModel::ImplGetControlCount( const UnoControlModelEntr
     size_t nEntries = rList.size();
     for ( size_t n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = rList[ n ];
-        if ( pEntry->bGroup )
-            nCount += ImplGetControlCount( *pEntry->pGroup );
+        const UnoControlModelEntry& rEntry = rList[ n ];
+        if ( rEntry.bGroup )
+            nCount += ImplGetControlCount( *rEntry.pGroup );
         else
             nCount++;
     }
@@ -120,12 +140,12 @@ void StdTabControllerModel::ImplGetControlModels( ::com::sun::star::uno::Referen
     size_t nEntries = rList.size();
     for ( size_t n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = rList[ n ];
-        if ( pEntry->bGroup )
-            ImplGetControlModels( ppRefs, *pEntry->pGroup );
+        const UnoControlModelEntry& rEntry = rList[ n ];
+        if ( rEntry.bGroup )
+            ImplGetControlModels( ppRefs, *rEntry.pGroup );
         else
         {
-            **ppRefs = *pEntry->pxControl;
+            **ppRefs = rEntry.xControl;
             (*ppRefs)++;
         }
     }
@@ -137,11 +157,10 @@ void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rLis
     sal_uInt32 nControls = Controls.getLength();
     for ( sal_uInt32 n = 0; n < nControls; n++ )
     {
-        UnoControlModelEntry* pNewEntry = new UnoControlModelEntry;
-        pNewEntry->bGroup = false;
-        pNewEntry->pxControl = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ;
-        *pNewEntry->pxControl = pRefs[n];
-        rList.push_back( pNewEntry );
+        UnoControlModelEntry aNewEntry;
+        aNewEntry.bGroup = false;
+        aNewEntry.xControl = pRefs[n];
+        rList.push_back( aNewEntry );
     }
 }
 
@@ -149,8 +168,8 @@ sal_uInt32 StdTabControllerModel::ImplGetControlPos( const ::com::sun::star::uno
 {
     for ( size_t n = rList.size(); n; )
     {
-        UnoControlModelEntry* pEntry = rList[ --n ];
-        if ( !pEntry->bGroup && ( *pEntry->pxControl == rCtrl ) )
+        const UnoControlModelEntry& rEntry = rList[ --n ];
+        if ( !rEntry.bGroup && ( rEntry.xControl == rCtrl ) )
             return n;
     }
     return CONTROLPOS_NOTFOUND;
@@ -270,20 +289,20 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
     // The controls might occur as a flat list and will be grouped.
     // Nested groups are not possible.
     // The first element of a group determines its position.
-    UnoControlModelEntry* pNewEntry = new UnoControlModelEntry;
-    pNewEntry->bGroup = true;
-    pNewEntry->pGroup = new UnoControlModelEntryList;
-    pNewEntry->pGroup->SetName( GroupName );
-    ImplSetControlModels( *pNewEntry->pGroup, Group );
+    UnoControlModelEntry aNewEntry;
+    aNewEntry.bGroup = true;
+    aNewEntry.pGroup = new UnoControlModelEntryList;
+    aNewEntry.pGroup->SetName( GroupName );
+    ImplSetControlModels( *aNewEntry.pGroup, Group );
 
     bool bInserted = false;
-    size_t nElements = pNewEntry->pGroup->size();
+    size_t nElements = aNewEntry.pGroup->size();
     for ( size_t n = 0; n < nElements; n++ )
     {
-        UnoControlModelEntry* pEntry = (*pNewEntry->pGroup)[ n ];
-        if ( !pEntry->bGroup )
+        UnoControlModelEntry& rEntry = (*aNewEntry.pGroup)[ n ];
+        if ( !rEntry.bGroup )
         {
-            sal_uInt32 nPos = ImplGetControlPos( *pEntry->pxControl, maControls );
+            sal_uInt32 nPos = ImplGetControlPos( rEntry.xControl, maControls );
             // At the beginning, all Controls should be in a flattened list
             DBG_ASSERT( nPos != CONTROLPOS_NOTFOUND, "setGroup - Element not found" );
             if ( nPos != CONTROLPOS_NOTFOUND )
@@ -291,14 +310,14 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
                 maControls.DestroyEntry( nPos );
                 if ( !bInserted )
                 {
-                    maControls.insert( nPos, pNewEntry );
+                    maControls.insert( nPos, aNewEntry );
                     bInserted = true;
                 }
             }
         }
     }
     if ( !bInserted )
-        maControls.push_back( pNewEntry );
+        maControls.push_back( aNewEntry );
 }
 
 sal_Int32 StdTabControllerModel::getGroupCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -312,8 +331,8 @@ sal_Int32 StdTabControllerModel::getGroupCount(  ) throw(::com::sun::star::uno::
     size_t nEntries = maControls.size();
     for ( size_t n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = maControls[ n ];
-        if ( pEntry->bGroup )
+        UnoControlModelEntry& rEntry = maControls[ n ];
+        if ( rEntry.bGroup )
             nGroups++;
     }
     return nGroups;
@@ -328,16 +347,16 @@ void StdTabControllerModel::getGroup( sal_Int32 nGroup, ::com::sun::star::uno::S
     size_t nEntries = maControls.size();
     for ( size_t n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = maControls[ n ];
-        if ( pEntry->bGroup )
+        UnoControlModelEntry& rEntry = maControls[ n ];
+        if ( rEntry.bGroup )
         {
             if ( nG == (sal_uInt32)nGroup )
             {
-                sal_uInt32 nCount = ImplGetControlCount( *pEntry->pGroup );
+                sal_uInt32 nCount = ImplGetControlCount( *rEntry.pGroup );
                 aSeq = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >( nCount );
                 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > * pRefs = aSeq.getArray();
-                ImplGetControlModels( &pRefs, *pEntry->pGroup );
-                rName = pEntry->pGroup->GetName();
+                ImplGetControlModels( &pRefs, *rEntry.pGroup );
+                rName = rEntry.pGroup->GetName();
                 break;
             }
             nG++;
@@ -354,10 +373,10 @@ void StdTabControllerModel::getGroupByName( const OUString& rName, ::com::sun::s
     size_t nEntries = maControls.size();
     for ( size_t n = 0; n < nEntries; n++ )
     {
-        UnoControlModelEntry* pEntry = maControls[ n ];
-        if ( pEntry->bGroup )
+        UnoControlModelEntry& rEntry = maControls[ n ];
+        if ( rEntry.bGroup )
         {
-            if ( pEntry->pGroup->GetName() == rName )
+            if ( rEntry.pGroup->GetName() == rName )
             {
                 OUString Dummy;
                 getGroup( nGroup, rGroup, Dummy );

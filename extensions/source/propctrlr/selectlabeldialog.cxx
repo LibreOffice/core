@@ -148,6 +148,12 @@ namespace pcr
         disposeOnce();
     }
 
+    // we can't allocate Reference directly on the heap
+    struct ReferenceHolder {
+        Reference<XPropertySet> xPropertySet;
+        ReferenceHolder(const Reference<XPropertySet>& x) : xPropertySet(x) {}
+    };
+
     void OSelectLabelDialog::dispose()
     {
         // delete the entry datas of the listbox entries
@@ -156,7 +162,7 @@ namespace pcr
         {
             void* pData = pLoop->GetUserData();
             if (pData)
-                delete static_cast<Reference< XPropertySet > *>(pData);
+                delete static_cast<ReferenceHolder*>(pData);
             pLoop = m_pControlTree->Next(pLoop);
         }
         m_pMainDesc.clear();
@@ -227,7 +233,7 @@ namespace pcr
 
             // all requirements met -> insert
             SvTreeListEntry* pCurrent = m_pControlTree->InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);
-            pCurrent->SetUserData(new Reference< XPropertySet > (xAsSet));
+            pCurrent->SetUserData(new ReferenceHolder(xAsSet));
             ++nChildren;
 
             if (m_xInitialLabelControl == xAsSet)

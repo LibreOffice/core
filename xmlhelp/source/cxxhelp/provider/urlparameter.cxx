@@ -77,6 +77,15 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace chelp;
 
+namespace {
+
+    // We can't allocate a raw Reference on the heap, so wrap it in this
+    struct Holder {
+        Reference<XInputStream> xStream;
+        Holder(const Reference<XInputStream>& rxStream) : xStream(rxStream) {}
+        Holder() : xStream() {}
+    };
+};
 
 URLParameter::URLParameter( const OUString& aURL,
                             Databases* pDatabases )
@@ -712,7 +721,7 @@ zipOpen(SAL_UNUSED_PARAMETER const char *) {
     OUString language,jar,path;
 
     if( !ugblData->m_pInitial->get_eid().isEmpty() )
-        return static_cast<void*>(new Reference< XHierarchicalNameAccess >);
+        return static_cast<void*>(new Holder);
     else
     {
         jar = ugblData->m_pInitial->get_jar();
@@ -741,7 +750,7 @@ zipOpen(SAL_UNUSED_PARAMETER const char *) {
 
     if( xInputStream.is() )
     {
-        return new Reference<XInputStream>(xInputStream);
+        return new Holder(xInputStream);
     }
     return 0;
 }
@@ -777,16 +786,16 @@ helpOpen(const char * URI) {
     }
 
     if( xInputStream.is() )
-        return new Reference<XInputStream>(xInputStream);
+        return new Holder(xInputStream);
     return 0;
 }
 
 static int
 helpRead(void * context, char * buffer, int len) {
-    Reference< XInputStream > *pRef = static_cast<Reference< XInputStream >*>(context);
+    Holder* pHolder = static_cast<Holder*>(context);
 
     Sequence< sal_Int8 > aSeq;
-    len = (*pRef)->readBytes( aSeq,len);
+    len = pHolder->xStream->readBytes( aSeq,len);
     memcpy(buffer, aSeq.getConstArray(), len);
 
     return len;
@@ -812,8 +821,8 @@ fileRead(void * context, char * buffer, int len) {
 
 static int
 uriClose(void * context) {
-    Reference< XInputStream > *pRef = static_cast<Reference< XInputStream >*>(context);
-    delete pRef;
+    Holder *pHolder = static_cast<Holder*>(context);
+    delete pHolder;
     return 0;
 }
 

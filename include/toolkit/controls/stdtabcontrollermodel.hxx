@@ -36,7 +36,7 @@
 #include <vector>
 
 struct UnoControlModelEntry;
-typedef ::std::vector< UnoControlModelEntry* > UnoControlModelEntryListBase;
+typedef ::std::vector< UnoControlModelEntry > UnoControlModelEntryListBase;
 
 class UnoControlModelEntryList
 {
@@ -54,9 +54,10 @@ public:
     void    Reset();
     void    DestroyEntry( size_t nEntry );
     size_t  size() const;
-    UnoControlModelEntry* operator[]( size_t i ) const;
-    void push_back( UnoControlModelEntry* item );
-    void insert( size_t i, UnoControlModelEntry* item );
+    const UnoControlModelEntry& operator[]( size_t i ) const { return maList[i]; }
+    UnoControlModelEntry& operator[]( size_t i ) { return maList[i]; }
+    void push_back( const UnoControlModelEntry& item );
+    void insert( size_t i, const UnoControlModelEntry& item );
 };
 
 struct UnoControlModelEntry
@@ -64,9 +65,14 @@ struct UnoControlModelEntry
     bool        bGroup;
     union
     {
-        css::uno::Reference< css::awt::XControlModel >* pxControl;
+        css::uno::Reference< css::awt::XControlModel > xControl;
         UnoControlModelEntryList*   pGroup;
     };
+
+    UnoControlModelEntry() : bGroup(false) {}
+    UnoControlModelEntry( const UnoControlModelEntry& other);
+    UnoControlModelEntry& operator=( const UnoControlModelEntry& other);
+    ~UnoControlModelEntry();
 };
 
 struct ComponentEntry

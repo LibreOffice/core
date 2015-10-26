@@ -723,7 +723,7 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
             }
 
             // Do not create an accessible object for the test.
-            if (pItem != NULL && pItem->mpxAcc != NULL)
+            if (pItem != NULL && pItem->mxAcc.is())
                 if (pItem->GetAccessible( mbIsTransientChildrenDisabled ).get() == this )
                 {
                     nIndexInParent = i;

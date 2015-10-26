@@ -265,6 +265,17 @@ class SAL_DLLPUBLIC_RTTI Reference : public BaseReference
         return static_cast< XInterface * >(static_cast< void * >(p));
     }
 
+#ifdef LIBO_INTERNAL_ONLY
+    // there is really no need to allocate these directly on the heap
+private:
+    static void * SAL_CALL operator new ( ::size_t nSize ) = delete;
+    static void SAL_CALL operator delete ( void * pMem ) = delete;
+public:
+    static void * SAL_CALL operator new ( ::size_t, void * pMem )
+       { return pMem; }
+    static void SAL_CALL operator delete ( void *, void * )
+       {}
+#else
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
@@ -277,6 +288,7 @@ public:
     inline static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
+#endif
 
     /** Destructor: Releases interface if set.
     */
