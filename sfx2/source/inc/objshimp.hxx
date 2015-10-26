@@ -89,6 +89,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bQueryLoadTemplate:1,
                         bLoadReadonly:1,
                         bUseUserData:1,
+                        bUseThumbnailSave:1,
                         bSaveVersionOnClose:1,
                         m_bSharedXMLFlag:1, // whether the flag should be stored in xml file
                         m_bAllowShareControlFileClean:1, // whether the flag should be stored in xml file
