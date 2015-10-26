@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_c8171f53",
+        "filename": "configure.ac",
+        "patchSetId": 9
+      },
+      "lineNbr": 3590,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-10-26T22:43:18Z",
+      "side": 1,
+      "message": "May be remove this trailing space?",
+      "range": {
+        "startLine": 3590,
+        "startChar": 61,
+        "endLine": 3590,
+        "endChar": 77
+      },
+      "revId": "4c9bff287252b39d2451d42c7bcefc64ca79afc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
