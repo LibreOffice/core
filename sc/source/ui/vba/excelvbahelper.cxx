@@ -204,7 +204,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
                 pDoc = pOwnClip->GetDocument();
             pTabViewShell->PasteFromClip( nFlags, pDoc,
                 nFunction, bSkipEmpty, bTranspose, false,
-                eMoveMode, IDF_NONE, true );
+                eMoveMode, InsertDeleteFlags::NONE, true );
             pTabViewShell->CellContentChanged();
         }
     }

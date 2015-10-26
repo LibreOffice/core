@@ -498,7 +498,7 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
             ScMarkData aMarkData = GetSourceMarkData();
             //  external drag&drop doesn't copy objects, so they also aren't deleted:
             //  bApi=TRUE, don't show error messages from drag&drop
-            pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL & ~IDF_OBJECTS, true, true );
+            pSourceSh->GetDocFunc().DeleteContents( aMarkData, InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS, true, true );
         }
     }
 
@@ -646,7 +646,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         bool bWasCut = pDoc->IsCutMode();
         if (!bWasCut)
             pDoc->SetClipArea( aDestRange, true );          // Cut
-        rDestDoc.CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, false );
+        rDestDoc.CopyFromClip( aDestRange, aDestMark, InsertDeleteFlags::ALL, NULL, pDoc, false );
         pDoc->SetClipArea( aDestRange, bWasCut );
 
         StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, &rDestDoc );

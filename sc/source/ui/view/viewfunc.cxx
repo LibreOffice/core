@@ -1054,7 +1054,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pUndoDoc, &aFuncMark );
+        pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, pUndoDoc, &aFuncMark );
 
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoSelectionAttr(
@@ -1162,7 +1162,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
             for (; itr != itrEnd; ++itr)
                 if (*itr != nStartTab)
                     pUndoDoc->AddUndoTab( *itr, *itr );
-            rDoc.CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pUndoDoc, &aFuncMark );
+            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, pUndoDoc, &aFuncMark );
 
             aFuncMark.MarkToMulti();
 
@@ -1337,7 +1337,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
             ScRange aCopyRange = aMarkRange;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(nTabCount-1);
-            rDoc.CopyToDocument( aCopyRange, IDF_ATTRIB, true, pUndoDoc, &aFuncMark );
+            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, true, pUndoDoc, &aFuncMark );
             aFuncMark.MarkToMulti();
 
             OUString aName = pStyleSheet->GetName();
@@ -1368,7 +1368,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
                     pUndoDoc->AddUndoTab( *itr, *itr );
 
             ScRange aCopyRange( nCol, nRow, 0, nCol, nRow, nTabCount-1 );
-            rDoc.CopyToDocument( aCopyRange, IDF_ATTRIB, false, pUndoDoc );
+            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, false, pUndoDoc );
 
             ScRange aMarkRange ( nCol, nRow, nTab );
             ScMarkData aUndoMark = aFuncMark;
@@ -1652,17 +1652,17 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
             SCCOLROW nStart = aSpans[i].mnStart;
             SCCOLROW nEnd = aSpans[i].mnEnd;
             if (bRows)
-                rDoc.CopyToDocument( 0,nStart,nTab, MAXCOL,nEnd,nTab, IDF_ALL,false,pUndoDoc );
+                rDoc.CopyToDocument( 0,nStart,nTab, MAXCOL,nEnd,nTab, InsertDeleteFlags::ALL,false,pUndoDoc );
             else
                 rDoc.CopyToDocument( static_cast<SCCOL>(nStart),0,nTab,
                         static_cast<SCCOL>(nEnd),MAXROW,nTab,
-                        IDF_ALL,false,pUndoDoc );
+                        InsertDeleteFlags::ALL,false,pUndoDoc );
         }
 
         //  all Formulas because of references
         SCTAB nTabCount = rDoc.GetTableCount();
         pUndoDoc->AddUndoTab( 0, nTabCount-1 );
-        rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA,false,pUndoDoc );
+        rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,MAXTAB, InsertDeleteFlags::FORMULA,false,pUndoDoc );
 
         pUndoData = new ScRefUndoData( &rDoc );
 
@@ -1747,7 +1747,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
     if ( !bEditable )
     {
         if ( !(bOnlyNotBecauseOfMatrix &&
-                ((nFlags & (IDF_ATTRIB | IDF_EDITATTR)) == nFlags)) )
+                ((nFlags & (InsertDeleteFlags::ATTRIB | InsertDeleteFlags::EDITATTR)) == nFlags)) )
         {
             ErrorMessage(bOnlyNotBecauseOfMatrix ? STR_MATRIXFRAGMENTERR : STR_PROTECTIONERR);
             return;
@@ -1806,9 +1806,9 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
     CellContentChanged();
     ShowAllCursors();
 
-    if ( nFlags & IDF_ATTRIB )
+    if ( nFlags & InsertDeleteFlags::ATTRIB )
     {
-        if ( nFlags & IDF_CONTENTS )
+        if ( nFlags & InsertDeleteFlags::CONTENTS )
             ForgetFormatArea();
         else
             StartFormatArea();              // delete attribute is also attribute-change
@@ -1896,7 +1896,7 @@ void ScViewFunc::SetWidthOrHeight(
                 else
                     pUndoDoc->AddUndoTab( *itr, *itr, true );
                 rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, *itr,
-                        static_cast<SCCOL>(nEnd), MAXROW, *itr, IDF_NONE,
+                        static_cast<SCCOL>(nEnd), MAXROW, *itr, InsertDeleteFlags::NONE,
                         false, pUndoDoc );
             }
             else
@@ -1905,7 +1905,7 @@ void ScViewFunc::SetWidthOrHeight(
                     pUndoDoc->InitUndo( &rDoc, *itr, *itr, false, true );
                 else
                     pUndoDoc->AddUndoTab( *itr, *itr, false, true );
-                rDoc.CopyToDocument( 0, nStart, *itr, MAXCOL, nEnd, *itr, IDF_NONE, false, pUndoDoc );
+                rDoc.CopyToDocument( 0, nStart, *itr, MAXCOL, nEnd, *itr, InsertDeleteFlags::NONE, false, pUndoDoc );
             }
         }
 

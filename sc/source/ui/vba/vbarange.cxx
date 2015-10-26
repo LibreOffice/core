@@ -2799,26 +2799,26 @@ uno::Any ScVbaRange::getCellRange( const uno::Reference< excel::XRange >& rxRang
 
 static InsertDeleteFlags getPasteFlags (sal_Int32 Paste)
 {
-    InsertDeleteFlags nFlags = IDF_NONE;
+    InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
     switch (Paste) {
         case excel::XlPasteType::xlPasteComments:
-        nFlags = IDF_NOTE;break;
+        nFlags = InsertDeleteFlags::NOTE;break;
         case excel::XlPasteType::xlPasteFormats:
-        nFlags = IDF_ATTRIB;break;
+        nFlags = InsertDeleteFlags::ATTRIB;break;
         case excel::XlPasteType::xlPasteFormulas:
-        nFlags = IDF_FORMULA;break;
+        nFlags = InsertDeleteFlags::FORMULA;break;
         case excel::XlPasteType::xlPasteFormulasAndNumberFormats :
         case excel::XlPasteType::xlPasteValues:
-        nFlags = ( IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_SPECIAL_BOOLEAN ); break;
+        nFlags = ( InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING | InsertDeleteFlags::SPECIAL_BOOLEAN ); break;
         case excel::XlPasteType::xlPasteValuesAndNumberFormats:
-        nFlags = IDF_VALUE | IDF_ATTRIB; break;
+        nFlags = InsertDeleteFlags::VALUE | InsertDeleteFlags::ATTRIB; break;
         case excel::XlPasteType::xlPasteColumnWidths:
         case excel::XlPasteType::xlPasteValidation:
-        nFlags = IDF_NONE;break;
+        nFlags = InsertDeleteFlags::NONE;break;
     case excel::XlPasteType::xlPasteAll:
         case excel::XlPasteType::xlPasteAllExceptBorders:
     default:
-        nFlags = IDF_ALL;break;
+        nFlags = InsertDeleteFlags::ALL;break;
     }
     return nFlags;
 }

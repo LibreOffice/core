@@ -334,7 +334,7 @@ void ScTable::InsertCol(
         sc::CopyToDocContext aCxt(*pDocument);
         for (SCSIZE i=0; i<nSize; i++)
         {
-            aCol[nStartCol-1].CopyToColumn(aCxt, nStartRow, nEndRow, IDF_ATTRIB,
+            aCol[nStartCol-1].CopyToColumn(aCxt, nStartRow, nEndRow, InsertDeleteFlags::ATTRIB,
                                                 false, aCol[nStartCol+i] );
             aCol[nStartCol+i].RemoveFlags( nStartRow, nEndRow,
                                                 SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
@@ -394,7 +394,7 @@ void ScTable::DeleteCol(
     }
 
     for (SCSIZE i = 0; i < nSize; i++)
-        aCol[nStartCol + i].DeleteArea(nStartRow, nEndRow, IDF_ALL, false);
+        aCol[nStartCol + i].DeleteArea(nStartRow, nEndRow, InsertDeleteFlags::ALL, false);
 
     if ((nStartRow == 0) && (nEndRow == MAXROW))
     {
@@ -436,14 +436,14 @@ void ScTable::DeleteArea(
 
             // Do not set protected cell in a protected table
 
-        if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
+        if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
         {
             ScPatternAttr aPattern(pDocument->GetPool());
             aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
 
-        if( nDelFlag & IDF_ATTRIB )
+        if( nDelFlag & InsertDeleteFlags::ATTRIB )
             mpCondFormatList->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
     }
 
@@ -468,13 +468,13 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
     {
         ScRange* pRange = aRangeList[i];
 
-        if((nDelFlag & IDF_ATTRIB) && pRange && pRange->aStart.Tab() == nTab)
+        if((nDelFlag & InsertDeleteFlags::ATTRIB) && pRange && pRange->aStart.Tab() == nTab)
             mpCondFormatList->DeleteArea( pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row() );
     }
 
         // Do not set protected cell in a protected sheet
 
-    if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
+    if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
     {
         ScDocumentPool* pPool = pDocument->GetPool();
         SfxItemSet aSet( *pPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
@@ -659,7 +659,7 @@ void ScTable::CopyFromClip(
         for ( SCCOL i = nCol1; i <= nCol2; i++)
             aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, pTable->aCol[i - nDx]); // notes are handles at column level
 
-        if (rCxt.getInsertFlag() & IDF_ATTRIB)
+        if (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB)
         {
             // make sure that there are no old references to the cond formats
             sal_uInt16 nWhichArray[2];
@@ -669,7 +669,7 @@ void ScTable::CopyFromClip(
                 aCol[i].ClearItems(nRow1, nRow2, nWhichArray);
         }
 
-        if ((rCxt.getInsertFlag() & IDF_ATTRIB) != IDF_NONE)
+        if ((rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
         {
             if (nRow1==0 && nRow2==MAXROW && pColWidth && pTable->pColWidth)
                 for (SCCOL i=nCol1; i<=nCol2; i++)
@@ -690,7 +690,7 @@ void ScTable::CopyFromClip(
             }
 
             // Do not set protected cell in a protected sheet
-            if (IsProtected() && (rCxt.getInsertFlag() & IDF_ATTRIB))
+            if (IsProtected() && (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB))
             {
                 ScPatternAttr aPattern(pDocument->GetPool());
                 aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
@@ -831,9 +831,9 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
     {
         SCROW nRow;
-        if ( bAsLink && nFlags == IDF_ALL )
+        if ( bAsLink && nFlags == InsertDeleteFlags::ALL )
         {
-            //  with IDF_ALL, also create links (formulas) for empty cells
+            //  with InsertDeleteFlags::ALL, also create links (formulas) for empty cells
 
             for ( nRow=nRow1; nRow<=nRow2; nRow++ )
             {
@@ -1080,7 +1080,7 @@ void ScTable::CopyToTable(
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
 
-    if (nFlags)
+    if (nFlags != InsertDeleteFlags::NONE)
         for (SCCOL i = nCol1; i <= nCol2; i++)
             aCol[i].CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked,
                                 pDestTab->aCol[i], pMarkData, bAsLink);
@@ -1088,7 +1088,7 @@ void ScTable::CopyToTable(
     if (!bColRowFlags)      // Column widths/Row heights/Flags
         return;
 
-    if(pDestTab->pDocument->IsUndo() && (nFlags & IDF_ATTRIB))
+    if(pDestTab->pDocument->IsUndo() && (nFlags & InsertDeleteFlags::ATTRIB))
     {
         pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->pDocument, *mpCondFormatList));
     }
@@ -1182,13 +1182,13 @@ void ScTable::CopyToTable(
     if (bFlagChange)
         pDestTab->InvalidatePageBreaks();
 
-    if(nFlags & IDF_ATTRIB)
+    if(nFlags & InsertDeleteFlags::ATTRIB)
     {
         pDestTab->mpCondFormatList->DeleteArea(nCol1, nRow1, nCol2, nRow2);
         pDestTab->CopyConditionalFormat(nCol1, nRow1, nCol2, nRow2, 0, 0, this);
     }
 
-    if(nFlags & IDF_OUTLINE) // also only when bColRowFlags
+    if(nFlags & InsertDeleteFlags::OUTLINE) // also only when bColRowFlags
         pDestTab->SetOutlineTable( pOutlineTable );
 }
 
@@ -1206,10 +1206,10 @@ void ScTable::UndoToTable(
             if ( i >= nCol1 && i <= nCol2 )
                 aCol[i].UndoToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i], pMarkData);
             else
-                aCol[i].CopyToColumn(rCxt, 0, MAXROW, IDF_FORMULA, false, pDestTab->aCol[i]);
+                aCol[i].CopyToColumn(rCxt, 0, MAXROW, InsertDeleteFlags::FORMULA, false, pDestTab->aCol[i]);
         }
 
-        if (nFlags & IDF_ATTRIB)
+        if (nFlags & InsertDeleteFlags::ATTRIB)
             pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->pDocument, *mpCondFormatList));
 
         if (bWidth||bHeight)

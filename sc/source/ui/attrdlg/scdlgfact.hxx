@@ -426,7 +426,7 @@ public:
         ScTabViewShell* pTabViewShell) override;
 
     virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(vcl::Window* pParent,
-                                                                    InsertDeleteFlags nCheckDefaults = IDF_NONE) override;
+                                                                    InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE) override;
 
     virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( vcl::Window*        pParent,
                                                             ScDocument&     rDocument,
@@ -446,7 +446,7 @@ public:
                                                              bool bDisallowCellMove = false ) override;
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( vcl::Window*        pParent,
-                                                                    InsertDeleteFlags nCheckDefaults = IDF_NONE,
+                                                                    InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE,
                                                                     const OUString* pStrTitle = NULL ) override;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,

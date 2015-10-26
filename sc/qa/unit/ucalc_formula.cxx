@@ -2214,7 +2214,7 @@ void Test::testFormulaRefUpdateDeleteContent()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SetMarkArea(ScAddress(1,1,0));
-    rFunc.DeleteContents(aMark, IDF_CONTENTS, true, true);
+    rFunc.DeleteContents(aMark, InsertDeleteFlags::CONTENTS, true, true);
 
     CPPUNIT_ASSERT_MESSAGE("B2 should be empty.", m_pDoc->GetCellType(ScAddress(1,1,0)) == CELLTYPE_NONE);
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,1,0)));

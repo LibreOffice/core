@@ -361,7 +361,7 @@ public:
         ScTabViewShell* pTabViewShell) = 0;
 
     virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(vcl::Window* pParent,
-                                                                    InsertDeleteFlags nCheckDefaults = IDF_NONE) = 0;
+                                                                    InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE) = 0;
     virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( vcl::Window*        pParent,
                                                             ScDocument& rDocument,
                                                             FillDir     eFillDir,
@@ -381,7 +381,7 @@ public:
                                                              bool bDisallowCellMove = false ) = 0;
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( vcl::Window*        pParent,
-                                                                    InsertDeleteFlags nCheckDefaults = IDF_NONE,
+                                                                    InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE,
                                                                     const OUString* pStrTitle = NULL ) = 0;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(vcl::Window* pParent, ScViewData& rViewData,

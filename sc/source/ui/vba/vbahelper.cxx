@@ -220,7 +220,7 @@ void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpt
                     pDoc = pOwnClip->GetDocument();
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                    eMoveMode, IDF_NONE, sal_True );
+                    eMoveMode, InsertDeleteFlags::NONE, sal_True );
                 pTabViewShell->CellContentChanged();
             }
         }

@@ -686,7 +686,7 @@ bool ScTable::ReplaceAllStyle(
         {
             if (pUndoDoc)
                 pDocument->CopyToDocument( 0,0,nTab, MAXCOL,MAXROW,nTab,
-                                            IDF_ATTRIB, true, pUndoDoc, &rMark );
+                                            InsertDeleteFlags::ATTRIB, true, pUndoDoc, &rMark );
             ApplySelectionStyle( *pReplaceStyle, rMark );
         }
         else

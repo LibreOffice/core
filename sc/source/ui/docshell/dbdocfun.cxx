@@ -363,19 +363,19 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
                     pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
                     rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0,
                             nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab,
-                            IDF_NONE, false, pUndoDoc );
+                            InsertDeleteFlags::NONE, false, pUndoDoc );
                     rDoc.CopyToDocument( 0, static_cast<SCROW>(nOutStartRow),
                             nTab, MAXCOL, static_cast<SCROW>(nOutEndRow), nTab,
-                            IDF_NONE, false, pUndoDoc );
+                            InsertDeleteFlags::NONE, false, pUndoDoc );
                 }
                 else
                     pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
 
                 //  Datenbereich sichern - incl. Filter-Ergebnis
-                rDoc.CopyToDocument( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab, IDF_ALL, false, pUndoDoc );
+                rDoc.CopyToDocument( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab, InsertDeleteFlags::ALL, false, pUndoDoc );
 
                 //  alle Formeln wegen Referenzen
-                rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1, IDF_FORMULA, false, pUndoDoc );
+                rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1, InsertDeleteFlags::FORMULA, false, pUndoDoc );
 
                 //  DB- und andere Bereiche
                 ScRangeName* pDocRange = rDoc.GetRangeName();
@@ -737,12 +737,12 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             pUndoDoc->InitUndo( &rDoc, nDestTab, nDestTab, false, true );
             rDoc.CopyToDocument( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
                                     aLocalParam.nCol2, aLocalParam.nRow2, nDestTab,
-                                    IDF_ALL, false, pUndoDoc );
+                                    InsertDeleteFlags::ALL, false, pUndoDoc );
             //  Attribute sichern, falls beim Filtern mitkopiert
 
             if (pDestData)
             {
-                rDoc.CopyToDocument( aOldDest, IDF_ALL, false, pUndoDoc );
+                rDoc.CopyToDocument( aOldDest, InsertDeleteFlags::ALL, false, pUndoDoc );
                 pOld = &aOldDest;
             }
         }
@@ -750,7 +750,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         {
             pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
             rDoc.CopyToDocument( 0, rQueryParam.nRow1, nTab, MAXCOL, rQueryParam.nRow2, nTab,
-                                        IDF_NONE, false, pUndoDoc );
+                                        InsertDeleteFlags::NONE, false, pUndoDoc );
         }
 
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
@@ -778,13 +778,13 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
             pAttribDoc = new ScDocument( SCDOCMODE_UNDO );
             pAttribDoc->InitUndo( &rDoc, nDestTab, nDestTab, false, true );
-            rDoc.CopyToDocument( aAttribRange, IDF_ATTRIB, false, pAttribDoc );
+            rDoc.CopyToDocument( aAttribRange, InsertDeleteFlags::ATTRIB, false, pAttribDoc );
         }
 
         if ( bDoSize )
             rDoc.FitBlock( aOldDest, aDestTotal );
         else
-            rDoc.DeleteAreaTab(aOldDest, IDF_ALL);         // einfach loeschen
+            rDoc.DeleteAreaTab(aOldDest, InsertDeleteFlags::ALL);         // einfach loeschen
     }
 
     //  Filtern am Dokument ausfuehren
@@ -838,7 +838,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             {
                 ScRange aHdrRange = aAttribRange;
                 aHdrRange.aEnd.SetRow( aHdrRange.aStart.Row() );
-                pAttribDoc->CopyToDocument( aHdrRange, IDF_ATTRIB, false, &rDoc );
+                pAttribDoc->CopyToDocument( aHdrRange, InsertDeleteFlags::ATTRIB, false, &rDoc );
             }
 
             //  Daten
@@ -1026,19 +1026,19 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                 pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
-                rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, IDF_NONE, false, pUndoDoc );
-                rDoc.CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, false, pUndoDoc );
+                rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, InsertDeleteFlags::NONE, false, pUndoDoc );
+                rDoc.CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, InsertDeleteFlags::NONE, false, pUndoDoc );
             }
             else
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, bOldFilter );
 
             //  Datenbereich sichern - incl. Filter-Ergebnis
             rDoc.CopyToDocument( 0,rParam.nRow1+1,nTab, MAXCOL,rParam.nRow2,nTab,
-                                    IDF_ALL, false, pUndoDoc );
+                                    InsertDeleteFlags::ALL, false, pUndoDoc );
 
             //  alle Formeln wegen Referenzen
             rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
-                                        IDF_FORMULA, false, pUndoDoc );
+                                        InsertDeleteFlags::FORMULA, false, pUndoDoc );
 
             //  DB- und andere Bereiche
             ScRangeName* pDocRange = rDoc.GetRangeName();
@@ -1161,7 +1161,7 @@ void createUndoDoc(std::unique_ptr<ScDocument>& pUndoDoc, ScDocument* pDoc, cons
     SCTAB nTab = rRange.aStart.Tab();
     pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(pDoc, nTab, nTab);
-    pDoc->CopyToDocument(rRange, IDF_ALL, false, pUndoDoc.get());
+    pDoc->CopyToDocument(rRange, InsertDeleteFlags::ALL, false, pUndoDoc.get());
 }
 
 bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut, bool bApi)
@@ -1340,7 +1340,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
 
     rDoc.DeleteAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
                          aRange.aEnd.Col(),   aRange.aEnd.Row(),
-                         nTab, IDF_ALL );
+                         nTab, InsertDeleteFlags::ALL );
     rDoc.RemoveFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
                           aRange.aEnd.Col(),   aRange.aEnd.Row(),
                           nTab, SC_MF_AUTO );

@@ -329,13 +329,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         //  delete contents from cells
 
         case SID_DELETE_CONTENTS:
-            pTabViewShell->DeleteContents( IDF_CONTENTS );
+            pTabViewShell->DeleteContents( InsertDeleteFlags::CONTENTS );
             rReq.Done();
             break;
 
         case SID_DELETE:
             {
-                InsertDeleteFlags nFlags = IDF_NONE;
+                InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
 
                 if ( pReqArgs!=nullptr && pTabViewShell->SelectionEditable() )
                 {
@@ -353,16 +353,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         switch (aFlags[i])
                         {
                             case 'A': // all
-                            nFlags |= IDF_ALL;
+                            nFlags |= InsertDeleteFlags::ALL;
                             bCont = false; // don't continue!
                             break;
-                            case 'S': nFlags |= IDF_STRING; break;
-                            case 'V': nFlags |= IDF_VALUE; break;
-                            case 'D': nFlags |= IDF_DATETIME; break;
-                            case 'F': nFlags |= IDF_FORMULA; break;
-                            case 'N': nFlags |= IDF_NOTE; break;
-                            case 'T': nFlags |= IDF_ATTRIB; break;
-                            case 'O': nFlags |= IDF_OBJECTS; break;
+                            case 'S': nFlags |= InsertDeleteFlags::STRING; break;
+                            case 'V': nFlags |= InsertDeleteFlags::VALUE; break;
+                            case 'D': nFlags |= InsertDeleteFlags::DATETIME; break;
+                            case 'F': nFlags |= InsertDeleteFlags::FORMULA; break;
+                            case 'N': nFlags |= InsertDeleteFlags::NOTE; break;
+                            case 'T': nFlags |= InsertDeleteFlags::ATTRIB; break;
+                            case 'O': nFlags |= InsertDeleteFlags::OBJECTS; break;
                         }
                     }
                 }
@@ -389,7 +389,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         pTabViewShell->ErrorMessage(aTester.GetMessageId());
                 }
 
-                if( nFlags != IDF_NONE )
+                if( nFlags != InsertDeleteFlags::NONE )
                 {
                     pTabViewShell->DeleteContents( nFlags );
 
@@ -397,19 +397,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         OUString  aFlags;
 
-                        if( nFlags == IDF_ALL )
+                        if( nFlags == InsertDeleteFlags::ALL )
                         {
                             aFlags += "A";
                         }
                         else
                         {
-                            if( nFlags & IDF_STRING ) aFlags += "S";
-                            if( nFlags & IDF_VALUE ) aFlags += "V";
-                            if( nFlags & IDF_DATETIME ) aFlags += "D";
-                            if( nFlags & IDF_FORMULA ) aFlags += "F";
-                            if( nFlags & IDF_NOTE ) aFlags += "N";
-                            if( nFlags & IDF_ATTRIB ) aFlags += "T";
-                            if( nFlags & IDF_OBJECTS ) aFlags += "O";
+                            if( nFlags & InsertDeleteFlags::STRING ) aFlags += "S";
+                            if( nFlags & InsertDeleteFlags::VALUE ) aFlags += "V";
+                            if( nFlags & InsertDeleteFlags::DATETIME ) aFlags += "D";
+                            if( nFlags & InsertDeleteFlags::FORMULA ) aFlags += "F";
+                            if( nFlags & InsertDeleteFlags::NOTE ) aFlags += "N";
+                            if( nFlags & InsertDeleteFlags::ATTRIB ) aFlags += "T";
+                            if( nFlags & InsertDeleteFlags::OBJECTS ) aFlags += "O";
                         }
 
                         rReq.AppendItem( SfxStringItem( SID_DELETE, aFlags ) );
@@ -443,7 +443,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_FILL_TAB:
             {
-                InsertDeleteFlags nFlags = IDF_NONE;
+                InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
                 ScPasteFunc nFunction = ScPasteFunc::NONE;
                 bool bSkipEmpty = false;
                 bool bAsLink    = false;
@@ -464,15 +464,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         switch (aFlags[i])
                         {
                             case 'A': // all
-                            nFlags |= IDF_ALL;
+                            nFlags |= InsertDeleteFlags::ALL;
                             bCont = false; // don't continue!
                             break;
-                            case 'S': nFlags |= IDF_STRING; break;
-                            case 'V': nFlags |= IDF_VALUE; break;
-                            case 'D': nFlags |= IDF_DATETIME; break;
-                            case 'F': nFlags |= IDF_FORMULA; break;
-                            case 'N': nFlags |= IDF_NOTE; break;
-                            case 'T': nFlags |= IDF_ATTRIB; break;
+                            case 'S': nFlags |= InsertDeleteFlags::STRING; break;
+                            case 'V': nFlags |= InsertDeleteFlags::VALUE; break;
+                            case 'D': nFlags |= InsertDeleteFlags::DATETIME; break;
+                            case 'F': nFlags |= InsertDeleteFlags::FORMULA; break;
+                            case 'N': nFlags |= InsertDeleteFlags::NOTE; break;
+                            case 'T': nFlags |= InsertDeleteFlags::ATTRIB; break;
                         }
                     }
                 }
@@ -482,7 +482,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     std::unique_ptr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
-                                                                                            IDF_NONE, /* nCheckDefaults */
+                                                                                            InsertDeleteFlags::NONE, /* nCheckDefaults */
                                                                                             &ScGlobal::GetRscString(STR_FILL_TAB)));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     pDlg->SetFillMode(true);
@@ -497,7 +497,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                 }
 
-                if( nFlags != IDF_NONE )
+                if( nFlags != InsertDeleteFlags::NONE )
                 {
                     pTabViewShell->FillTab( nFlags, nFunction, bSkipEmpty, bAsLink );
 
@@ -505,18 +505,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         OUString  aFlags;
 
-                        if( nFlags == IDF_ALL )
+                        if( nFlags == InsertDeleteFlags::ALL )
                         {
                             aFlags += "A";
                         }
                         else
                         {
-                            if( nFlags & IDF_STRING ) aFlags += "S";
-                            if( nFlags & IDF_VALUE ) aFlags += "V";
-                            if( nFlags & IDF_DATETIME ) aFlags += "D";
-                            if( nFlags & IDF_FORMULA ) aFlags += "F";
-                            if( nFlags & IDF_NOTE ) aFlags += "N";
-                            if( nFlags & IDF_ATTRIB ) aFlags += "T";
+                            if( nFlags & InsertDeleteFlags::STRING ) aFlags += "S";
+                            if( nFlags & InsertDeleteFlags::VALUE ) aFlags += "V";
+                            if( nFlags & InsertDeleteFlags::DATETIME ) aFlags += "D";
+                            if( nFlags & InsertDeleteFlags::FORMULA ) aFlags += "F";
+                            if( nFlags & InsertDeleteFlags::NOTE ) aFlags += "N";
+                            if( nFlags & InsertDeleteFlags::ATTRIB ) aFlags += "T";
                         }
 
                         rReq.AppendItem( SfxStringItem( FID_FILL_TAB, aFlags ) );
@@ -1315,7 +1315,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_INS_CELL_CONTENTS:
             {
-                InsertDeleteFlags nFlags = IDF_NONE;
+                InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
                 ScPasteFunc nFunction = ScPasteFunc::NONE;
                 InsCellCmd eMoveMode = INS_NONE;
 
@@ -1347,15 +1347,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             switch (aFlags[i])
                             {
                                 case 'A': // all
-                                nFlags |= IDF_ALL;
+                                nFlags |= InsertDeleteFlags::ALL;
                                 bCont = false; // don't continue!
                                 break;
-                                case 'S': nFlags |= IDF_STRING; break;
-                                case 'V': nFlags |= IDF_VALUE; break;
-                                case 'D': nFlags |= IDF_DATETIME; break;
-                                case 'F': nFlags |= IDF_FORMULA; break;
-                                case 'N': nFlags |= IDF_NOTE; break;
-                                case 'T': nFlags |= IDF_ATTRIB; break;
+                                case 'S': nFlags |= InsertDeleteFlags::STRING; break;
+                                case 'V': nFlags |= InsertDeleteFlags::VALUE; break;
+                                case 'D': nFlags |= InsertDeleteFlags::DATETIME; break;
+                                case 'F': nFlags |= InsertDeleteFlags::FORMULA; break;
+                                case 'N': nFlags |= InsertDeleteFlags::NOTE; break;
+                                case 'T': nFlags |= InsertDeleteFlags::ATTRIB; break;
                             }
                         }
 
@@ -1462,7 +1462,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pTabViewShell->ErrorMessage(aTester.GetMessageId());
                     }
 
-                    if( nFlags != IDF_NONE )
+                    if( nFlags != InsertDeleteFlags::NONE )
                     {
                         {
                             WaitObject aWait( GetViewData()->GetDialogParent() );
@@ -1472,7 +1472,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             {
                                 pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                                    eMoveMode, IDF_NONE, true );    // allow warning dialog
+                                    eMoveMode, InsertDeleteFlags::NONE, true );    // allow warning dialog
                             }
                         }
 
@@ -1480,18 +1480,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             OUString  aFlags;
 
-                            if( nFlags == IDF_ALL )
+                            if( nFlags == InsertDeleteFlags::ALL )
                             {
                                 aFlags += "A";
                             }
                             else
                             {
-                                if( nFlags & IDF_STRING ) aFlags += "S";
-                                if( nFlags & IDF_VALUE ) aFlags += "V";
-                                if( nFlags & IDF_DATETIME ) aFlags += "D";
-                                if( nFlags & IDF_FORMULA ) aFlags += "F";
-                                if( nFlags & IDF_NOTE ) aFlags += "N";
-                                if( nFlags & IDF_ATTRIB ) aFlags += "T";
+                                if( nFlags & InsertDeleteFlags::STRING ) aFlags += "S";
+                                if( nFlags & InsertDeleteFlags::VALUE ) aFlags += "V";
+                                if( nFlags & InsertDeleteFlags::DATETIME ) aFlags += "D";
+                                if( nFlags & InsertDeleteFlags::FORMULA ) aFlags += "F";
+                                if( nFlags & InsertDeleteFlags::NOTE ) aFlags += "N";
+                                if( nFlags & InsertDeleteFlags::ATTRIB ) aFlags += "T";
                             }
 
                             rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
@@ -2295,7 +2295,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_DELETE_NOTE:
-            pTabViewShell->DeleteContents( IDF_NOTE );      // delete all notes in selection
+            pTabViewShell->DeleteContents( InsertDeleteFlags::NOTE );      // delete all notes in selection
             rReq.Done();
             break;
 

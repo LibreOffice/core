@@ -220,7 +220,7 @@ bool ScImportExport::StartPaste()
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
-        pDoc->CopyToDocument( aRange, IDF_ALL | IDF_NOCAPTIONS, false, pUndoDoc );
+        pDoc->CopyToDocument( aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, pUndoDoc );
     }
     return true;
 }
@@ -235,11 +235,11 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
     {
         ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
         pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
-        pDoc->CopyToDocument( aRange, IDF_ALL | IDF_NOCAPTIONS, false, pRedoDoc );
+        pDoc->CopyToDocument( aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, pRedoDoc );
         ScMarkData aDestMark;
         aDestMark.SetMarkArea(aRange);
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc, pRedoDoc, IDF_ALL, NULL));
+            new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, NULL));
     }
     pUndoDoc = NULL;
     if( pDocSh )
@@ -2132,7 +2132,7 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
     bool bOk = StartPaste();
     if (bOk)
     {
-        InsertDeleteFlags nFlags = IDF_ALL & ~IDF_STYLES;
+        InsertDeleteFlags nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
         pImportDoc->CopyToDocument( aRange, nFlags, false, pDoc );
         EndPaste();
@@ -2154,7 +2154,7 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
     bool bOk = StartPaste();
     if (bOk)
     {
-        InsertDeleteFlags nFlags = IDF_ALL & ~IDF_STYLES;
+        InsertDeleteFlags nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
         pImp->WriteToDocument();
         EndPaste();
@@ -2179,7 +2179,7 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
         if (pDocSh)
             pDocSh->MakeDrawLayer();
 
-        InsertDeleteFlags nFlags = IDF_ALL & ~IDF_STYLES;
+        InsertDeleteFlags nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
 
         if (pExtOptions)

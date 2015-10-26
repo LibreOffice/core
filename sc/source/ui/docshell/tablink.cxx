@@ -245,7 +245,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                     pUndoDoc->AddUndoTab( nTab, nTab, true, true );
                 bFirst = false;
                 ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
-                rDoc.CopyToDocument(aRange, IDF_ALL, false, pUndoDoc);
+                rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL, false, pUndoDoc);
                 pUndoDoc->TransferDrawPage( &rDoc, nTab, nTab );
                 pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName,
                                    aOptions, aTabName, GetRefreshDelay() );
@@ -288,7 +288,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                                         (nMode == ScLinkMode::VALUE) );     // nur Werte?
             else
             {
-                rDoc.DeleteAreaTab( 0,0,MAXCOL,MAXROW, nTab, IDF_ALL );
+                rDoc.DeleteAreaTab( 0,0,MAXCOL,MAXROW, nTab, InsertDeleteFlags::ALL );
 
                 bool bShowError = true;
                 if ( nMode == ScLinkMode::VALUE )

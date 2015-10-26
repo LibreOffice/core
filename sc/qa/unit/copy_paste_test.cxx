@@ -116,7 +116,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     CPPUNIT_ASSERT(pViewShell != NULL);
 
     // 6. Paste
-    pViewShell->GetViewData().GetView()->PasteFromClip(IDF_ALL, &aClipDoc);
+    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
     xDocSh->DoClose();
 }

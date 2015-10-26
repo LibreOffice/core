@@ -2235,7 +2235,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         if ( bIsDel )
         {
             pView->MarkRange( aDelRange, false );
-            pView->DeleteContents( IDF_CONTENTS );
+            pView->DeleteContents( InsertDeleteFlags::CONTENTS );
             SCTAB nTab = pViewData->GetTabNo();
             ScRange aBlockRange( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab );
             if ( aBlockRange != aDelRange )
@@ -2334,7 +2334,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     ScDocument* pBrushDoc = pView->GetBrushDocument();
     if ( pBrushDoc )
     {
-        pView->PasteFromClip( IDF_ATTRIB, pBrushDoc );
+        pView->PasteFromClip( InsertDeleteFlags::ATTRIB, pBrushDoc );
         if ( !pView->IsPaintBrushLocked() )
             pView->ResetBrushDocument();            // invalidates pBrushDoc pointer
     }
@@ -4463,7 +4463,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             {
                 pView->Unmark();  // before SetCursor, so CheckSelectionTransfer isn't called with a selection
                 pView->SetCursor( nDestPosX, nDestPosY );
-                bDone = pView->PasteFromClip( IDF_ALL, pTransObj->GetDocument() );  // clip-doc
+                bDone = pView->PasteFromClip( InsertDeleteFlags::ALL, pTransObj->GetDocument() );  // clip-doc
                 if ( bDone )
                 {
                     pView->MarkRange( aDest, false );

@@ -704,7 +704,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_CELL_FORMAT_RESET:
             {
-                pTabViewShell->DeleteContents( IDF_HARDATTR | IDF_EDITATTR );
+                pTabViewShell->DeleteContents( InsertDeleteFlags::HARDATTR | InsertDeleteFlags::EDITATTR );
                 rReq.Done();
             }
             break;

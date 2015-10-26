@@ -15,7 +15,7 @@
 class ScDocument;
 class ScMarkData;
 class ScRange;
-struct InsertDeleteFlags;
+enum class InsertDeleteFlags : sal_uInt16;
 
 namespace sc {
 

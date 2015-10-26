@@ -57,16 +57,16 @@ std::unique_ptr<ScDocument> DocFuncUtil::createDeleteContentsUndoDoc(
     aCopyRange.aEnd.SetTab(nTabCount-1);
 
     //  in case of "Format/Standard" copy all attributes, because CopyToDocument
-    //  with IDF_HARDATTR only is too time-consuming:
+    //  with InsertDeleteFlags::HARDATTR only is too time-consuming:
     InsertDeleteFlags nUndoDocFlags = nFlags;
-    if (nFlags & IDF_ATTRIB)
-        nUndoDocFlags |= IDF_ATTRIB;
-    if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute
-        nUndoDocFlags |= IDF_STRING;    // -> cells will be changed
-    if (nFlags & IDF_NOTE)
-        nUndoDocFlags |= IDF_CONTENTS;  // copy all cells with their notes
+    if (nFlags & InsertDeleteFlags::ATTRIB)
+        nUndoDocFlags |= InsertDeleteFlags::ATTRIB;
+    if (nFlags & InsertDeleteFlags::EDITATTR)          // Edit-Engine-Attribute
+        nUndoDocFlags |= InsertDeleteFlags::STRING;    // -> cells will be changed
+    if (nFlags & InsertDeleteFlags::NOTE)
+        nUndoDocFlags |= InsertDeleteFlags::CONTENTS;  // copy all cells with their notes
     // do not copy note captions to undo document
-    nUndoDocFlags |= IDF_NOCAPTIONS;
+    nUndoDocFlags |= InsertDeleteFlags::NOCAPTIONS;
     rDoc.CopyToDocument(aCopyRange, nUndoDocFlags, bOnlyMarked, pUndoDoc.get(), &rMark);
 
     return pUndoDoc;

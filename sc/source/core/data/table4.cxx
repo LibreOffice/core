@@ -545,9 +545,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (!bHasFiltered)
     {
         if (bVertical)
-            DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), IDF_AUTOFILL);
+            DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), InsertDeleteFlags::AUTOFILL);
         else
-            DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, IDF_AUTOFILL);
+            DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, InsertDeleteFlags::AUTOFILL);
     }
 
     sal_uLong nProgress = 0;
@@ -632,7 +632,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                 if ( bHasFiltered )
                     DeleteArea(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
-                            static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), IDF_AUTOFILL);
+                            static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), InsertDeleteFlags::AUTOFILL);
 
                 if ( pSrcPattern != aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) )
                 {
@@ -1175,7 +1175,7 @@ void ScTable::FillFormulaVertical(
     if (aSpans.empty())
         return;
 
-    aCol[nCol].DeleteRanges(aSpans, IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_FORMULA | IDF_OUTLINE, false);
+    aCol[nCol].DeleteRanges(aSpans, InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING | InsertDeleteFlags::FORMULA | InsertDeleteFlags::OUTLINE, false);
     aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans, NULL);
 
     std::shared_ptr<sc::ColumnBlockPositionSet> pSet(new sc::ColumnBlockPositionSet(*pDocument));
@@ -1528,7 +1528,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCCOLROW nIMin = nIStart;
     SCCOLROW nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
-    InsertDeleteFlags nDel = bAttribs ? IDF_AUTOFILL : (IDF_AUTOFILL & IDF_CONTENTS);
+    InsertDeleteFlags nDel = bAttribs ? InsertDeleteFlags::AUTOFILL : (InsertDeleteFlags::AUTOFILL & InsertDeleteFlags::CONTENTS);
 
     bool bIsFiltered = IsDataFiltered(aFillRange);
     if (!bIsFiltered)

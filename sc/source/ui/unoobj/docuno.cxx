@@ -4085,7 +4085,7 @@ void SAL_CALL ScAnnotationsObj::removeByIndex( sal_Int32 nIndex ) throw(uno::Run
             aMarkData.SelectTable( aPos.Tab(), true );
             aMarkData.SetMultiMarkArea( ScRange(aPos) );
 
-            pDocShell->GetDocFunc().DeleteContents( aMarkData, IDF_NOTE, true, true );
+            pDocShell->GetDocFunc().DeleteContents( aMarkData, InsertDeleteFlags::NOTE, true, true );
         }
     }
 }

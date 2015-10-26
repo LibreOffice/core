@@ -24,7 +24,7 @@
 #include "miscdlgs.hrc"
 
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
-InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | IDF_STRING);
+InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks   = (InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING);
 ScPasteFunc  ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::NONE;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
@@ -40,7 +40,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     bMoveDownDisabled( false ),
     bMoveRightDisabled( false ),
     bUsedShortCut   ( false ),
-    nShortCutInsContentsCmdBits( IDF_NONE ),
+    nShortCutInsContentsCmdBits( InsertDeleteFlags::NONE ),
     nShortCutFormulaCmdBits(ScPasteFunc::NONE),
     bShortCutSkipEmptyCells(false),
     bShortCutTranspose(false),
@@ -73,7 +73,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     if ( pStrTitle )
         SetText( *pStrTitle );
 
-    if ( nCheckDefaults != IDF_NONE )
+    if ( nCheckDefaults != InsertDeleteFlags::NONE )
     {
         ScInsertContentsDlg::nPreviousChecks = nCheckDefaults;
         ScInsertContentsDlg::bPreviousAllCheck = false;
@@ -81,19 +81,19 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     }
 
     mpBtnInsAll->Check     ( ScInsertContentsDlg::bPreviousAllCheck );
-    mpBtnInsStrings->Check ( IS_SET( IDF_STRING,
+    mpBtnInsStrings->Check ( IS_SET( InsertDeleteFlags::STRING,
                                    ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsNumbers->Check ( IS_SET( IDF_VALUE,
+    mpBtnInsNumbers->Check ( IS_SET( InsertDeleteFlags::VALUE,
                                    ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsDateTime->Check( IS_SET( IDF_DATETIME,
+    mpBtnInsDateTime->Check( IS_SET( InsertDeleteFlags::DATETIME,
                                    ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsFormulas->Check( IS_SET( IDF_FORMULA,
+    mpBtnInsFormulas->Check( IS_SET( InsertDeleteFlags::FORMULA,
                                    ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsNotes->Check   ( IS_SET( IDF_NOTE,
+    mpBtnInsNotes->Check   ( IS_SET( InsertDeleteFlags::NOTE,
                                    ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsAttrs->Check   ( IS_SET( IDF_ATTRIB,
+    mpBtnInsAttrs->Check   ( IS_SET( InsertDeleteFlags::ATTRIB,
                                    ScInsertContentsDlg::nPreviousChecks ) );
-    mpBtnInsObjects->Check ( IS_SET( IDF_OBJECTS,
+    mpBtnInsObjects->Check ( IS_SET( InsertDeleteFlags::OBJECTS,
                                    ScInsertContentsDlg::nPreviousChecks ) );
 
     switch( ScInsertContentsDlg::nPreviousFormulaChecks )
@@ -128,22 +128,22 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
 
 InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
 {
-    ScInsertContentsDlg::nPreviousChecks = IDF_NONE;
+    ScInsertContentsDlg::nPreviousChecks = InsertDeleteFlags::NONE;
 
     if ( mpBtnInsStrings->IsChecked() )
-        ScInsertContentsDlg::nPreviousChecks = IDF_STRING;
+        ScInsertContentsDlg::nPreviousChecks = InsertDeleteFlags::STRING;
     if ( mpBtnInsNumbers->IsChecked() )
-        ScInsertContentsDlg::nPreviousChecks |= IDF_VALUE;
+        ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::VALUE;
     if ( mpBtnInsDateTime->IsChecked())
-        ScInsertContentsDlg::nPreviousChecks |= IDF_DATETIME;
+        ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::DATETIME;
     if ( mpBtnInsFormulas->IsChecked())
-        ScInsertContentsDlg::nPreviousChecks |= IDF_FORMULA;
+        ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::FORMULA;
     if ( mpBtnInsNotes->IsChecked()   )
-        ScInsertContentsDlg::nPreviousChecks |= IDF_NOTE;
+        ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::NOTE;
     if ( mpBtnInsAttrs->IsChecked()   )
-        ScInsertContentsDlg::nPreviousChecks |= IDF_ATTRIB;
+        ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::ATTRIB;
     if ( mpBtnInsObjects->IsChecked() )
-        ScInsertContentsDlg::nPreviousChecks |= IDF_OBJECTS;
+        ScInsertContentsDlg::nPreviousChecks |= InsertDeleteFlags::OBJECTS;
 
     ScInsertContentsDlg::bPreviousAllCheck = mpBtnInsAll->IsChecked();
 
@@ -151,7 +151,7 @@ InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
         return nShortCutInsContentsCmdBits;
 
     return ( (ScInsertContentsDlg::bPreviousAllCheck)
-                ? IDF_ALL
+                ? InsertDeleteFlags::ALL
                 : ScInsertContentsDlg::nPreviousChecks );
 }
 
@@ -311,7 +311,7 @@ IMPL_LINK_TYPED( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
     if ( pBtn == mpBtnShortCutPasteValuesOnly )
     {
         bUsedShortCut = true;
-        nShortCutInsContentsCmdBits = IDF_STRING | IDF_VALUE | IDF_DATETIME;
+        nShortCutInsContentsCmdBits = InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME;
         nShortCutFormulaCmdBits = ScPasteFunc::NONE;
         bShortCutSkipEmptyCells = false;
         bShortCutTranspose = false;
@@ -322,7 +322,7 @@ IMPL_LINK_TYPED( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
     else if ( pBtn == mpBtnShortCutPasteValuesFormats )
     {
         bUsedShortCut = true;
-        nShortCutInsContentsCmdBits = IDF_STRING | IDF_VALUE | IDF_DATETIME | IDF_ATTRIB;
+        nShortCutInsContentsCmdBits = InsertDeleteFlags::STRING | InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::ATTRIB;
         nShortCutFormulaCmdBits = ScPasteFunc::NONE;
         bShortCutSkipEmptyCells = false;
         bShortCutTranspose = false;
@@ -333,7 +333,7 @@ IMPL_LINK_TYPED( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
     else if ( pBtn == mpBtnShortCutPasteTranspose )
     {
         bUsedShortCut = true;
-        nShortCutInsContentsCmdBits = IDF_ALL;
+        nShortCutInsContentsCmdBits = InsertDeleteFlags::ALL;
         nShortCutFormulaCmdBits = ScPasteFunc::NONE;
         bShortCutSkipEmptyCells = false;
         bShortCutTranspose = true;

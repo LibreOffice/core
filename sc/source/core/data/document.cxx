@@ -1747,7 +1747,7 @@ bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
 void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, bool bClear )
 {
     if (bClear)
-        DeleteAreaTab( rOld, IDF_ALL );
+        DeleteAreaTab( rOld, InsertDeleteFlags::ALL );
 
     bool bInsCol,bDelCol,bInsRow,bDelRow;
     ScRange aColRange,aRowRange;
@@ -1787,7 +1787,7 @@ void ScDocument::DeleteArea(
 
     std::vector<ScAddress> aGroupPos;
     // Destroy and reconstruct listeners only if content is affected.
-    bool bDelContent = ((nDelFlag & ~IDF_CONTENTS) != nDelFlag);
+    bool bDelContent = ((nDelFlag & ~InsertDeleteFlags::CONTENTS) != nDelFlag);
     if (bDelContent)
     {
         // Record the positions of top and/or bottom formula groups that intersect
@@ -1985,7 +1985,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         sc::AutoCalcSwitch aACSwitch(*pDestDoc, false); // avoid multiple calculations
 
         if (nTab1 > 0)
-            CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
+            CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, InsertDeleteFlags::FORMULA, false, pDestDoc, pMarks );
 
         sc::CopyToDocContext aCxt(*pDestDoc);
         OSL_ASSERT( nTab2 < static_cast<SCTAB>(maTabs.size()) && nTab2 < static_cast<SCTAB>(pDestDoc->maTabs.size()));
@@ -1997,7 +1997,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         }
 
         if (nTab2 < MAXTAB)
-            CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA, false, pDestDoc, pMarks );
+            CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, InsertDeleteFlags::FORMULA, false, pDestDoc, pMarks );
     }
 }
 
@@ -2045,7 +2045,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
 
     sc::CopyToDocContext aCxt(*pDestDoc);
     if (nTab1 > 0)
-        CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
+        CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, InsertDeleteFlags::FORMULA, false, pDestDoc, pMarks );
 
     SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pDestDoc->maTabs.size()));
     for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
@@ -2057,7 +2057,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     }
 
     if (nTab2 < static_cast<SCTAB>(maTabs.size()))
-        CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,maTabs.size(), IDF_FORMULA, false, pDestDoc, pMarks );
+        CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,maTabs.size(), InsertDeleteFlags::FORMULA, false, pDestDoc, pMarks );
 }
 
 // bUseRangeForVBA added for VBA api support to allow content of a specified
@@ -2268,7 +2268,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
                                             aClipRange.aEnd.Col(), aClipRange.aEnd.Row(),
                                             pTransClip->maTabs[i], nFlags, bAsLink );
 
-                if ( pDrawLayer && ( nFlags & IDF_OBJECTS ) )
+                if ( pDrawLayer && ( nFlags & InsertDeleteFlags::OBJECTS ) )
                 {
                     //  Drawing objects are copied to the new area without transposing.
                     //  CopyFromClip is used to adjust the objects to the transposed block's
@@ -2466,7 +2466,7 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark, InsertDeleteFlags nInsFlag )
 {
-    if (nInsFlag & IDF_CONTENTS)
+    if (nInsFlag & InsertDeleteFlags::CONTENTS)
     {
         std::shared_ptr<sc::ColumnBlockPositionSet> pSet(
             new sc::ColumnBlockPositionSet(*this));
@@ -2486,7 +2486,7 @@ void ScDocument::SetDirtyFromClip(
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
     InsertDeleteFlags nInsFlag, sc::ColumnSpanSet& rBroadcastSpans )
 {
-    if (nInsFlag & IDF_CONTENTS)
+    if (nInsFlag & InsertDeleteFlags::CONTENTS)
     {
         SCTAB nMax = static_cast<SCTAB>(maTabs.size());
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
@@ -2520,7 +2520,7 @@ void ScDocument::CopyBlockFromClip(
             maTabs[i]->CopyFromClip(
                 rCxt, nCol1, nRow1, nCol2, nRow2, nDx, nDy, rClipTabs[nClipTab]);
 
-            if (rCxt.getClipDoc()->pDrawLayer && (rCxt.getInsertFlag() & IDF_OBJECTS))
+            if (rCxt.getClipDoc()->pDrawLayer && (rCxt.getInsertFlag() & InsertDeleteFlags::OBJECTS))
             {
                 //  also copy drawing objects
 
@@ -2544,7 +2544,7 @@ void ScDocument::CopyBlockFromClip(
             nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
         }
     }
-    if (rCxt.getInsertFlag() & IDF_CONTENTS)
+    if (rCxt.getInsertFlag() & InsertDeleteFlags::CONTENTS)
     {
         nClipTab = 0;
         for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); i++)
@@ -2726,18 +2726,18 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     /*  Decide which contents to delete before copying. Delete all
         contents if nInsFlag contains any real content flag.
         #i102056# Notes are pasted from clipboard in a second pass,
-        together with the special flag IDF_ADDNOTES that states to not
+        together with the special flag InsertDeleteFlags::ADDNOTES that states to not
         overwrite/delete existing cells but to insert the notes into
         these cells. In this case, just delete old notes from the
         destination area. */
-    InsertDeleteFlags nDelFlag = IDF_NONE;
-    if ( (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES) )
-        nDelFlag |= IDF_NOTE;
-    else if ( nInsFlag & IDF_CONTENTS )
-        nDelFlag |= IDF_CONTENTS;
+    InsertDeleteFlags nDelFlag = InsertDeleteFlags::NONE;
+    if ( (nInsFlag & (InsertDeleteFlags::CONTENTS | InsertDeleteFlags::ADDNOTES)) == (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES) )
+        nDelFlag |= InsertDeleteFlags::NOTE;
+    else if ( nInsFlag & InsertDeleteFlags::CONTENTS )
+        nDelFlag |= InsertDeleteFlags::CONTENTS;
 
-    if (nInsFlag & IDF_ATTRIB)
-        nDelFlag |= IDF_ATTRIB;
+    if (nInsFlag & InsertDeleteFlags::ATTRIB)
+        nDelFlag |= InsertDeleteFlags::ATTRIB;
 
     sc::CopyFromClipContext aCxt(*this, pRefUndoDoc, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
     std::pair<SCTAB,SCTAB> aTabRanges = getMarkedTableRange(maTabs, rMark);
@@ -2788,7 +2788,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             nR2 = nRow2;
 
         const SCCOLROW nThreshold = 8192;
-        bool bPreallocatePattern = ((nInsFlag & IDF_ATTRIB) && (nRow2 - nRow1 > nThreshold));
+        bool bPreallocatePattern = ((nInsFlag & InsertDeleteFlags::ATTRIB) && (nRow2 - nRow1 > nThreshold));
         std::vector< SCTAB > vTables;
 
         if (bPreallocatePattern)
@@ -2918,7 +2918,7 @@ void ScDocument::CopyMultiRangeFromClip(
     if (!bSkipAttrForEmpty)
     {
         // Do the deletion first.
-        InsertDeleteFlags nDelFlag = IDF_CONTENTS;
+        InsertDeleteFlags nDelFlag = InsertDeleteFlags::CONTENTS;
         SCCOL nColSize = rClipParam.getPasteColSize();
         SCROW nRowSize = rClipParam.getPasteRowSize();
 
@@ -3107,8 +3107,8 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                                 bool bSkipEmpty, bool bAsLink )
 {
     InsertDeleteFlags nDelFlags = nFlags;
-    if (nDelFlags & IDF_CONTENTS)
-        nDelFlags |= IDF_CONTENTS;          // Either all contents or delete nothing!
+    if (nDelFlags & InsertDeleteFlags::CONTENTS)
+        nDelFlags |= InsertDeleteFlags::CONTENTS;          // Either all contents or delete nothing!
 
     SCTAB nSrcTab = rSrcArea.aStart.Tab();
 
@@ -3119,7 +3119,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         SCCOL nEndCol = rSrcArea.aEnd.Col();
         SCROW nEndRow = rSrcArea.aEnd.Row();
         std::unique_ptr<ScDocument> pMixDoc;
-        bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & IDF_CONTENTS );
+        bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & InsertDeleteFlags::CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
         SetAutoCalc( false );                   // avoid multiple calculations
@@ -3146,7 +3146,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                     // context used for copying content to the temporary mix document.
                     sc::CopyToDocContext aMixCxt(*pMixDoc);
                     maTabs[i]->CopyToTable(aMixCxt, nStartCol,nStartRow, nEndCol,nEndRow,
-                                            IDF_CONTENTS, false, pMixDoc->maTabs[i] );
+                                            InsertDeleteFlags::CONTENTS, false, pMixDoc->maTabs[i] );
                 }
                 maTabs[i]->DeleteArea( nStartCol,nStartRow, nEndCol,nEndRow, nDelFlags);
                 maTabs[nSrcTab]->CopyToTable(aCxt, nStartCol,nStartRow, nEndCol,nEndRow,
@@ -3170,13 +3170,13 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
                                 bool bSkipEmpty, bool bAsLink )
 {
     InsertDeleteFlags nDelFlags = nFlags;
-    if (nDelFlags & IDF_CONTENTS)
-        nDelFlags |= IDF_CONTENTS;          // Either all contents or delete nothing!
+    if (nDelFlags & InsertDeleteFlags::CONTENTS)
+        nDelFlags |= InsertDeleteFlags::CONTENTS;          // Either all contents or delete nothing!
 
     if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab])
     {
         std::unique_ptr<ScDocument> pMixDoc;
-        bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & IDF_CONTENTS );
+        bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & InsertDeleteFlags::CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
         SetAutoCalc( false );                   // avoid multiple calculations
@@ -3208,7 +3208,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 
                     sc::CopyToDocContext aMixCxt(*pMixDoc);
                     maTabs[i]->CopyToTable(aMixCxt, nStartCol,nStartRow, nEndCol,nEndRow,
-                                            IDF_CONTENTS, true, pMixDoc->maTabs[i], &rMark );
+                                            InsertDeleteFlags::CONTENTS, true, pMixDoc->maTabs[i], &rMark );
                 }
 
                 maTabs[i]->DeleteSelection( nDelFlags, rMark );
@@ -5663,7 +5663,7 @@ void ScDocument::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& 
 
     std::vector<ScAddress> aGroupPos;
     // Destroy and reconstruct listeners only if content is affected.
-    bool bDelContent = ((nDelFlag & ~IDF_CONTENTS) != nDelFlag);
+    bool bDelContent = ((nDelFlag & ~InsertDeleteFlags::CONTENTS) != nDelFlag);
     if (bDelContent)
     {
         // Record the positions of top and/or bottom formula groups that
@@ -5703,7 +5703,7 @@ void ScDocument::DeleteSelectionTab(
 
         std::vector<ScAddress> aGroupPos;
         // Destroy and reconstruct listeners only if content is affected.
-        bool bDelContent = ((nDelFlag & ~IDF_CONTENTS) != nDelFlag);
+        bool bDelContent = ((nDelFlag & ~InsertDeleteFlags::CONTENTS) != nDelFlag);
         if (bDelContent)
         {
             // Record the positions of top and/or bottom formula groups that

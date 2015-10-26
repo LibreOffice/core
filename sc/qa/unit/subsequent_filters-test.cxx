@@ -719,7 +719,7 @@ void ScFiltersTest::testFormulaDepDeleteContentsODS()
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
     aMark.MarkToMulti();
-    bool bGood = rFunc.DeleteContents(aMark, IDF_ALL, true, true);
+    bool bGood = rFunc.DeleteContents(aMark, InsertDeleteFlags::ALL, true, true);
     CPPUNIT_ASSERT(bGood);
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(3,1,0)));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(3,2,0)));
@@ -2623,7 +2623,7 @@ void ScFiltersTest::testOptimalHeightReset()
     ScRange aDelRange(0,0,0,0,0,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aDelRange);
-    bool bRet = rFunc.DeleteContents( aMark, IDF_ALL, false, true );
+    bool bRet = rFunc.DeleteContents( aMark, InsertDeleteFlags::ALL, false, true );
     CPPUNIT_ASSERT_MESSAGE("DeleteContents failed", bRet);
 
     // get the new height of A1

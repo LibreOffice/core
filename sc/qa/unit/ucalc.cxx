@@ -269,7 +269,7 @@ void Test::testPerf()
 
         ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
         pUndoDoc->InitUndo(m_pDoc, 0, 0);
-        m_pDoc->CopyToDocument(ScRange(aPos), IDF_CONTENTS, false, pUndoDoc, &aMark);
+        m_pDoc->CopyToDocument(ScRange(aPos), InsertDeleteFlags::CONTENTS, false, pUndoDoc, &aMark);
 
         // Paste it to A2:A100000, and measure its duration.
         ScRange aPasteRange(0,1,0,0,99999,0);
@@ -277,17 +277,17 @@ void Test::testPerf()
 
         {
             MeasureTimeSwitch aTime(diff);
-            m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
+            m_pDoc->CopyFromClip(aPasteRange, aMark, InsertDeleteFlags::CONTENTS, pUndoDoc, &aClipDoc);
         }
         PERF_ASSERT(diff, scale, 1500.0, "Pasting a single cell to A2:A100000");
 
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo(m_pDoc, 0, 0);
-        m_pDoc->CopyToDocument(aPasteRange, IDF_CONTENTS, false, pRedoDoc, &aMark);
+        m_pDoc->CopyToDocument(aPasteRange, InsertDeleteFlags::CONTENTS, false, pRedoDoc, &aMark);
 
         // Create an undo object for this.
         ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
-        ScUndoPaste aUndo(&getDocShell(), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+        ScUndoPaste aUndo(&getDocShell(), aPasteRange, aMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::CONTENTS, pRefUndoData);
 
         // Make sure it did what it's supposed to do.
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
@@ -340,7 +340,7 @@ void Test::testPerf()
 
         ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
         pUndoDoc->InitUndo(m_pDoc, 0, 0);
-        m_pDoc->CopyToDocument(aSrcRange, IDF_CONTENTS, false, pUndoDoc, &aMark);
+        m_pDoc->CopyToDocument(aSrcRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc, &aMark);
 
         // Paste it to A3:A100001, and measure its duration.
         ScRange aPasteRange(0,2,0,0,100000,0);
@@ -348,17 +348,17 @@ void Test::testPerf()
 
         {
             MeasureTimeSwitch aTime(diff);
-            m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
+            m_pDoc->CopyFromClip(aPasteRange, aMark, InsertDeleteFlags::CONTENTS, pUndoDoc, &aClipDoc);
         }
         PERF_ASSERT(diff, scale, 1000.0, "Pasting A1:A2 to A3:A100001");
 
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo(m_pDoc, 0, 0);
-        m_pDoc->CopyToDocument(aPasteRange, IDF_CONTENTS, false, pRedoDoc, &aMark);
+        m_pDoc->CopyToDocument(aPasteRange, InsertDeleteFlags::CONTENTS, false, pRedoDoc, &aMark);
 
         // Create an undo object for this.
         ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
-        ScUndoPaste aUndo(&getDocShell(), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+        ScUndoPaste aUndo(&getDocShell(), aPasteRange, aMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::CONTENTS, pRefUndoData);
 
         // Make sure it did what it's supposed to do.
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
@@ -417,7 +417,7 @@ void Test::testPerf()
 
         ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
         pUndoDoc->InitUndo(m_pDoc, 0, 0);
-        m_pDoc->CopyToDocument(aSrcRange, IDF_CONTENTS, false, pUndoDoc, &aMark);
+        m_pDoc->CopyToDocument(aSrcRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc, &aMark);
 
         // Paste it to A3:A50001, and measure its duration.
         ScRange aPasteRange(0,2,0,0,50000,0);
@@ -425,17 +425,17 @@ void Test::testPerf()
 
         {
             MeasureTimeSwitch aTime(diff);
-            m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
+            m_pDoc->CopyFromClip(aPasteRange, aMark, InsertDeleteFlags::CONTENTS, pUndoDoc, &aClipDoc);
         }
         PERF_ASSERT(diff, scale, 2000.0, "Pasting");
 
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo(m_pDoc, 0, 0);
-        m_pDoc->CopyToDocument(aPasteRange, IDF_CONTENTS, false, pRedoDoc, &aMark);
+        m_pDoc->CopyToDocument(aPasteRange, InsertDeleteFlags::CONTENTS, false, pRedoDoc, &aMark);
 
         // Create an undo object for this.
         ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
-        ScUndoPaste aUndo(&getDocShell(), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+        ScUndoPaste aUndo(&getDocShell(), aPasteRange, aMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::CONTENTS, pRefUndoData);
 
         // Make sure it did what it's supposed to do.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPasteRange.aStart));
@@ -3259,7 +3259,7 @@ void Test::testCopyPaste()
     std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, pUndoDoc));
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
-    m_pDoc->CopyFromClip(aRange, aMark, IDF_ALL, NULL, &aClipDoc);
+    m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::ALL, NULL, &aClipDoc);
 
     //check values after copying
     OUString aString;
@@ -3342,7 +3342,7 @@ void Test::testCopyPasteAsLink()
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
     // Paste range as link.
-    m_pDoc->CopyFromClip(aRange, aMark, IDF_CONTENTS, NULL, &aClipDoc, true, true);
+    m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::CONTENTS, NULL, &aClipDoc, true, true);
 
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,1,1));
@@ -3393,13 +3393,13 @@ void Test::testCopyPasteTranspose()
 
     ::std::unique_ptr<ScDocument> pTransClip;
     pTransClip.reset(new ScDocument(SCDOCMODE_CLIP));
-    aNewClipDoc.TransposeClip(pTransClip.get(), IDF_ALL, false);
+    aNewClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false);
     ScDocument* pTransposedClip = pTransClip.release();
 
     ScRange aDestRange = ScRange(3,1,1,3,3,1);//target: Sheet2.D2:D4
     ScMarkData aMark;
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_ALL, NULL, pTransposedClip);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, NULL, pTransposedClip);
 
     //check cell content after transposed copy/paste
     OUString aString = m_pDoc->GetString(3, 3, 1);
@@ -3464,7 +3464,7 @@ void Test::testCopyPasteMultiRange()
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
 
     // Paste to D9:E11, and make sure it won't crash (rhbz#1080196).
-    m_pDoc->CopyMultiRangeFromClip(ScAddress(3,8,0), aMark, IDF_CONTENTS, &aClipDoc);
+    m_pDoc->CopyMultiRangeFromClip(ScAddress(3,8,0), aMark, InsertDeleteFlags::CONTENTS, &aClipDoc);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(3,8,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4,8,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,9,0)));
@@ -3608,20 +3608,20 @@ void Test::testCopyPasteSkipEmpty()
     // Create undo document.
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aDestRange, IDF_ALL, false, pUndoDoc, &aMark);
+    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, pUndoDoc, &aMark);
 
     // Paste clipboard content onto A1:A5 but skip empty cells.
     bool bSkipEmpty = true;
-    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_ALL, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
 
     // Create redo document.
     ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
     pRedoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aDestRange, IDF_ALL, false, pRedoDoc, &aMark);
+    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, pRedoDoc, &aMark);
 
     // Create an undo object for this.
     ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
-    ScUndoPaste aUndo(&getDocShell(), aDestRange, aMark, pUndoDoc, pRedoDoc, IDF_ALL, pRefUndoData);
+    ScUndoPaste aUndo(&getDocShell(), aDestRange, aMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, pRefUndoData);
 
     // Check the content after the paste.
     {
@@ -3686,7 +3686,7 @@ void Test::testCopyPasteSkipEmpty2()
     ScRange aDestRange(0,2,0,2,2,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_ALL, NULL, &aClipDoc, false, false, true, true);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, NULL, &aClipDoc, false, false, true, true);
 
     CPPUNIT_ASSERT_EQUAL(OUString("A"), m_pDoc->GetString(ScAddress(0,2,0)));
     CPPUNIT_ASSERT_MESSAGE("B3 should be empty.", m_pDoc->GetCellType(ScAddress(1,2,0)) == CELLTYPE_NONE);
@@ -3737,11 +3737,11 @@ void Test::testCopyPasteSkipEmptyConditionalFormatting()
     // Create undo document.
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aDestRange, IDF_CONTENTS, false, pUndoDoc, &aMark);
+    m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc, &aMark);
 
     // Paste clipboard content onto A1:A5 but skip empty cells.
     bool bSkipEmpty = true;
-    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
 
     ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pList->size());
@@ -3790,7 +3790,7 @@ void Test::testCutPasteRefUndo()
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
 
     // Do the pasting of 12 into C2.  This should update A2 to reference C2.
-    m_pDoc->CopyFromClip(ScAddress(2,1,0), aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
+    m_pDoc->CopyFromClip(ScAddress(2,1,0), aMark, InsertDeleteFlags::CONTENTS, pUndoDoc, &aClipDoc);
     CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(0,1,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "C2"))
@@ -3800,7 +3800,7 @@ void Test::testCutPasteRefUndo()
     if (!checkFormula(*pUndoDoc, ScAddress(0,1,0), "B2"))
         CPPUNIT_FAIL("A2 in the undo document should be referencing B2.");
 
-    ScUndoPaste aUndo(&getDocShell(), ScRange(ScAddress(2,1,0)), aMark, pUndoDoc, NULL, IDF_CONTENTS, NULL, false, NULL);
+    ScUndoPaste aUndo(&getDocShell(), ScRange(ScAddress(2,1,0)), aMark, pUndoDoc, NULL, InsertDeleteFlags::CONTENTS, NULL, false, NULL);
     aUndo.Undo();
 
     // Now A2 should be referencing B2 once again.
@@ -3876,14 +3876,14 @@ void Test::testUndoCut()
     // Set up an undo object for cutting A1:A3.
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 0 ,0);
-    m_pDoc->CopyToDocument(aRange, IDF_ALL, false, pUndoDoc);
+    m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, false, pUndoDoc);
     CPPUNIT_ASSERT_EQUAL(  1.0, pUndoDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL( 10.0, pUndoDoc->GetValue(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(100.0, pUndoDoc->GetValue(ScAddress(0,2,0)));
     ScUndoCut aUndo(&getDocShell(), aRange, aRange.aEnd, aMark, pUndoDoc);
 
     // "Cut" the selection.
-    m_pDoc->DeleteSelection(IDF_ALL, aMark);
+    m_pDoc->DeleteSelection(InsertDeleteFlags::ALL, aMark);
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(0,3,0)); // The SUM should be zero after the "cut".
 
     // Undo it, and check the result.
@@ -3986,7 +3986,7 @@ void Test::testCopyPasteRelativeFormula()
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
 
     // Paste it to B1:B2.
-    InsertDeleteFlags nFlags = IDF_ALL;
+    InsertDeleteFlags nFlags = InsertDeleteFlags::ALL;
     ScRange aDestRange(1,0,0,1,1,0);
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, NULL, &aClipDoc);
@@ -4069,7 +4069,7 @@ void Test::testCopyPasteRepeatOneFormula()
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
 
     // Paste it to C2:C10.
-    InsertDeleteFlags nFlags = IDF_CONTENTS;
+    InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
     ScRange aDestRange(2,1,0,2,9,0);
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, NULL, &aClipDoc);
@@ -4719,7 +4719,7 @@ void Test::testCopyPasteFormulasExternalDoc()
     ScDocument* pClipDoc = new ScDocument(SCDOCMODE_CLIP);
     m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
 
-    InsertDeleteFlags nFlags = IDF_ALL;
+    InsertDeleteFlags nFlags = InsertDeleteFlags::ALL;
     aRange = ScRange(1,1,1,1,6,1);
     ScMarkData aMarkData2;
     aMarkData2.SetMarkArea(aRange);
@@ -5223,7 +5223,7 @@ void Test::testNoteCopyPaste()
 
     // Paste to B6:B8 but only cell notes.
     ScRange aDestRange(1,5,0,1,7,0);
-    m_pDoc->CopyFromClip(aDestRange, aMark, IDF_NOTE, NULL, &aClipDoc);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::NOTE, NULL, &aClipDoc);
 
     // Make sure the notes are there.
     pNote = m_pDoc->GetNote(ScAddress(1,5,0));
@@ -6214,8 +6214,8 @@ void Test::testDeleteContents()
 
     std::unique_ptr<ScDocument> pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
-    m_pDoc->CopyToDocument(aRange, IDF_CONTENTS, false, pUndoDoc.get(), &aMark);
-    ScUndoDeleteContents aUndo(&getDocShell(), aMark, aRange, std::move(pUndoDoc), false, IDF_CONTENTS, true);
+    m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, pUndoDoc.get(), &aMark);
+    ScUndoDeleteContents aUndo(&getDocShell(), aMark, aRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
 
     clearRange(m_pDoc, aRange);
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,15,0))); // formula
@@ -6822,7 +6822,7 @@ void Test::clearRange(ScDocument* pDoc, const ScRange& rRange)
     aMarkData.SetMarkArea(rRange);
     pDoc->DeleteArea(
         rRange.aStart.Col(), rRange.aStart.Row(),
-        rRange.aEnd.Col(), rRange.aEnd.Row(), aMarkData, IDF_CONTENTS);
+        rRange.aEnd.Col(), rRange.aEnd.Row(), aMarkData, InsertDeleteFlags::CONTENTS);
 }
 
 void Test::clearSheet(ScDocument* pDoc, SCTAB nTab)
@@ -6843,7 +6843,7 @@ void Test::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocu
 {
     ScMarkData aMark;
     aMark.SetMarkArea(rDestRange);
-    pDestDoc->CopyFromClip(rDestRange, aMark, IDF_ALL, NULL, pClipDoc);
+    pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, NULL, pClipDoc);
 }
 
 ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pUndoDoc)
@@ -6854,7 +6854,7 @@ ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, Sc
     ScRefUndoData* pRefUndoData = new ScRefUndoData(&rDoc);
 
     return new ScUndoPaste(
-        &rDocSh, rRange, aMarkData, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
+        &rDocSh, rRange, aMarkData, pUndoDoc, NULL, InsertDeleteFlags::ALL, pRefUndoData, false);
 }
 
 void Test::setExpandRefs(bool bExpand)

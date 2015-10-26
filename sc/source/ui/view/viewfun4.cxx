@@ -119,7 +119,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             {
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab );
-                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL, false, pUndoDoc );
+                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL, false, pUndoDoc );
             }
 
             SCROW nRow = nStartRow;
@@ -140,14 +140,14 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             {
                 ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
                 pRedoDoc->InitUndo( &rDoc, nTab, nTab );
-                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL|IDF_NOCAPTIONS, false, pRedoDoc );
+                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, pRedoDoc );
 
                 ScRange aMarkRange(nStartCol, nStartRow, nTab, nStartCol, nEndRow, nTab);
                 ScMarkData aDestMark;
                 aDestMark.SetMarkArea( aMarkRange );
                 pDocSh->GetUndoManager()->AddUndoAction(
                     new ScUndoPaste( pDocSh, aMarkRange, aDestMark,
-                                     pUndoDoc, pRedoDoc, IDF_ALL, NULL));
+                                     pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, NULL));
             }
         }
 
@@ -223,7 +223,7 @@ void ScViewFunc::DoRefConversion( bool bRecord )
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pDoc->CopyToDocument( aCopyRange, IDF_ALL, bMulti, pUndoDoc, &rMark );
+        pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, pUndoDoc, &rMark );
     }
 
     ScRangeListRef xRanges;
@@ -284,11 +284,11 @@ void ScViewFunc::DoRefConversion( bool bRecord )
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pDoc->CopyToDocument( aCopyRange, IDF_ALL, bMulti, pRedoDoc, &rMark );
+        pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, pRedoDoc, &rMark );
 
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoRefConversion( pDocSh,
-                                    aMarkRange, rMark, pUndoDoc, pRedoDoc, bMulti, IDF_ALL) );
+                                    aMarkRange, rMark, pUndoDoc, pRedoDoc, bMulti, InsertDeleteFlags::ALL) );
     }
 
     pDocSh->PostPaint( aMarkRange, PAINT_GRID );

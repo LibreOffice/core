@@ -1247,8 +1247,8 @@ bool ScChangeActionMove::Reject( ScDocument* pDoc )
 
     pTrack->LookUpContents( aToRange, pDoc, 0, 0, 0 );  // Contents to be moved
 
-    pDoc->DeleteAreaTab( aToRange, IDF_ALL );
-    pDoc->DeleteAreaTab( aFrmRange, IDF_ALL );
+    pDoc->DeleteAreaTab( aToRange, InsertDeleteFlags::ALL );
+    pDoc->DeleteAreaTab( aFrmRange, InsertDeleteFlags::ALL );
     // Adjust formula in the Document
     sc::RefUpdateContext aCxt(*pDoc);
     aCxt.meMode = URM_MOVE;

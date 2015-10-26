@@ -103,7 +103,7 @@ bool ScDocument::CopyOneCellFromClip(
         const ScPatternAttr* pAttr = pClipDoc->GetPattern(aSrcPos);
         rCxt.setSingleCellPattern(nColOffset, pAttr);
 
-        if ((rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES)) != IDF_NONE)
+        if ((rCxt.getInsertFlag() & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)) != InsertDeleteFlags::NONE)
             rCxt.setSingleCellNote(nColOffset, pClipDoc->GetNote(aSrcPos));
 
         ScColumn& rSrcCol = pSrcTab->aCol[aSrcPos.Col()];
@@ -118,7 +118,7 @@ bool ScDocument::CopyOneCellFromClip(
     for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); ++i)
     {
         maTabs[i]->CopyOneCellFromClip(rCxt, nCol1, nRow1, nCol2, nRow2);
-        if (rCxt.getInsertFlag() & IDF_ATTRIB)
+        if (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB)
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
                 maTabs[i]->CopyConditionalFormat(nCol1, nRow, nCol2, nRow, nCol1 - aClipRange.aStart.Col(),

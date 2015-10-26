@@ -1226,9 +1226,9 @@ bool canCopyValue(const ScDocument& rDoc, const ScAddress& rPos, InsertDeleteFla
     sal_uInt32 nNumIndex = static_cast<const SfxUInt32Item*>(rDoc.GetAttr(rPos, ATTR_VALUE_FORMAT))->GetValue();
     short nType = rDoc.GetFormatTable()->GetType(nNumIndex);
     if ((nType == css::util::NumberFormat::DATE) || (nType == css::util::NumberFormat::TIME) || (nType == css::util::NumberFormat::DATETIME))
-        return ((nFlags & IDF_DATETIME) != IDF_NONE);
+        return ((nFlags & InsertDeleteFlags::DATETIME) != InsertDeleteFlags::NONE);
 
-    return (nFlags & IDF_VALUE) != IDF_NONE;
+    return (nFlags & InsertDeleteFlags::VALUE) != InsertDeleteFlags::NONE;
 }
 
 class CopyAsLinkHandler
@@ -1310,9 +1310,9 @@ public:
     {
         size_t nRow = aNode.position + nOffset;
 
-        if (mnCopyFlags & (IDF_NOTE|IDF_ADDNOTES))
+        if (mnCopyFlags & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES))
         {
-            bool bCloneCaption = (mnCopyFlags & IDF_NOCAPTIONS) == IDF_NONE;
+            bool bCloneCaption = (mnCopyFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
             duplicateNotes(nRow, nDataSize, bCloneCaption );
         }
 
@@ -1320,7 +1320,7 @@ public:
         {
             case sc::element_type_numeric:
             {
-                if ((mnCopyFlags & (IDF_DATETIME|IDF_VALUE)) == IDF_NONE)
+                if ((mnCopyFlags & (InsertDeleteFlags::DATETIME|InsertDeleteFlags::VALUE)) == InsertDeleteFlags::NONE)
                     return;
 
                 sc::numeric_block::const_iterator it = sc::numeric_block::begin(*aNode.data);
@@ -1342,7 +1342,7 @@ public:
             case sc::element_type_string:
             case sc::element_type_edittext:
             {
-                if (!(mnCopyFlags & IDF_STRING))
+                if (!(mnCopyFlags & InsertDeleteFlags::STRING))
                     return;
 
                 createRefBlock(aNode, nOffset, nDataSize);
@@ -1350,7 +1350,7 @@ public:
             break;
             case sc::element_type_formula:
             {
-                if (!(mnCopyFlags & IDF_FORMULA))
+                if (!(mnCopyFlags & InsertDeleteFlags::FORMULA))
                     return;
 
                 createRefBlock(aNode, nOffset, nDataSize);
@@ -1390,11 +1390,11 @@ class CopyByCloneHandler
     {
         ScAddress aDestPos(mrDestCol.GetCol(), nRow, mrDestCol.GetTab());
 
-        bool bCloneValue          = (mnCopyFlags & IDF_VALUE) != IDF_NONE;
-        bool bCloneDateTime       = (mnCopyFlags & IDF_DATETIME) != IDF_NONE;
-        bool bCloneString         = (mnCopyFlags & IDF_STRING) != IDF_NONE;
-        bool bCloneSpecialBoolean = (mnCopyFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
-        bool bCloneFormula        = (mnCopyFlags & IDF_FORMULA) != IDF_NONE;
+        bool bCloneValue          = (mnCopyFlags & InsertDeleteFlags::VALUE) != InsertDeleteFlags::NONE;
+        bool bCloneDateTime       = (mnCopyFlags & InsertDeleteFlags::DATETIME) != InsertDeleteFlags::NONE;
+        bool bCloneString         = (mnCopyFlags & InsertDeleteFlags::STRING) != InsertDeleteFlags::NONE;
+        bool bCloneSpecialBoolean = (mnCopyFlags & InsertDeleteFlags::SPECIAL_BOOLEAN) != InsertDeleteFlags::NONE;
+        bool bCloneFormula        = (mnCopyFlags & InsertDeleteFlags::FORMULA) != InsertDeleteFlags::NONE;
 
         bool bForceFormula = false;
 
@@ -1512,9 +1512,9 @@ public:
     {
         size_t nRow = aNode.position + nOffset;
 
-        if (mnCopyFlags & (IDF_NOTE|IDF_ADDNOTES))
+        if (mnCopyFlags & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES))
         {
-            bool bCloneCaption = (mnCopyFlags & IDF_NOCAPTIONS) == IDF_NONE;
+            bool bCloneCaption = (mnCopyFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
             duplicateNotes(nRow, nDataSize, bCloneCaption );
         }
 
@@ -1522,7 +1522,7 @@ public:
         {
             case sc::element_type_numeric:
             {
-                if ((mnCopyFlags & (IDF_DATETIME|IDF_VALUE)) == IDF_NONE)
+                if ((mnCopyFlags & (InsertDeleteFlags::DATETIME|InsertDeleteFlags::VALUE)) == InsertDeleteFlags::NONE)
                     return;
 
                 sc::numeric_block::const_iterator it = sc::numeric_block::begin(*aNode.data);
@@ -1543,7 +1543,7 @@ public:
             break;
             case sc::element_type_string:
             {
-                if (!(mnCopyFlags & IDF_STRING))
+                if (!(mnCopyFlags & InsertDeleteFlags::STRING))
                     return;
 
                 sc::string_block::const_iterator it = sc::string_block::begin(*aNode.data);
@@ -1583,7 +1583,7 @@ public:
             break;
             case sc::element_type_edittext:
             {
-                if (!(mnCopyFlags & IDF_STRING))
+                if (!(mnCopyFlags & InsertDeleteFlags::STRING))
                     return;
 
                 sc::edittext_block::const_iterator it = sc::edittext_block::begin(*aNode.data);
@@ -1647,9 +1647,9 @@ void ScColumn::CopyToColumn(
         return;
     }
 
-    if ( (nFlags & IDF_ATTRIB) != IDF_NONE )
+    if ( (nFlags & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE )
     {
-        if ( (nFlags & IDF_STYLES) != IDF_STYLES )
+        if ( (nFlags & InsertDeleteFlags::STYLES) != InsertDeleteFlags::STYLES )
         {   // keep the StyleSheets in the target document
             // e.g. DIF and RTF Clipboard-Import
             for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
@@ -1666,7 +1666,7 @@ void ScColumn::CopyToColumn(
             pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray);
     }
 
-    if ((nFlags & IDF_CONTENTS) != IDF_NONE)
+    if ((nFlags & InsertDeleteFlags::CONTENTS) != InsertDeleteFlags::NONE)
     {
         if (bAsLink)
         {
@@ -1696,12 +1696,12 @@ void ScColumn::UndoToColumn(
     ScColumn& rColumn, const ScMarkData* pMarkData ) const
 {
     if (nRow1 > 0)
-        CopyToColumn(rCxt, 0, nRow1-1, IDF_FORMULA, false, rColumn);
+        CopyToColumn(rCxt, 0, nRow1-1, InsertDeleteFlags::FORMULA, false, rColumn);
 
     CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rColumn, pMarkData);      //TODO: bMarked ????
 
     if (nRow2 < MAXROW)
-        CopyToColumn(rCxt, nRow2+1, MAXROW, IDF_FORMULA, false, rColumn);
+        CopyToColumn(rCxt, nRow2+1, MAXROW, InsertDeleteFlags::FORMULA, false, rColumn);
 }
 
 void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
@@ -1738,10 +1738,10 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
     {
         if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
         {
-            DeleteArea( nStart, nEnd, IDF_CONTENTS );
+            DeleteArea( nStart, nEnd, InsertDeleteFlags::CONTENTS );
             sc::CopyToDocContext aCxt(*pDocument);
             ((ScColumn&)rSrcCol).
-                CopyToColumn(aCxt, nStart, nEnd, IDF_CONTENTS, false, *this);
+                CopyToColumn(aCxt, nStart, nEnd, InsertDeleteFlags::CONTENTS, false, *this);
 
             //  UpdateUsed not needed, already done in TestCopyScenario (obsolete comment ?)
 
@@ -1769,9 +1769,9 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
     {
         if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
         {
-            rDestCol.DeleteArea( nStart, nEnd, IDF_CONTENTS );
+            rDestCol.DeleteArea( nStart, nEnd, InsertDeleteFlags::CONTENTS );
             sc::CopyToDocContext aCxt(*rDestCol.pDocument);
-            CopyToColumn(aCxt, nStart, nEnd, IDF_CONTENTS, false, rDestCol);
+            CopyToColumn(aCxt, nStart, nEnd, InsertDeleteFlags::CONTENTS, false, rDestCol);
 
             //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
 

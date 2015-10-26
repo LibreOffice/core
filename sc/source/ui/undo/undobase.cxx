@@ -443,7 +443,7 @@ void ScMoveUndo::UndoRef()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     ScRange aRange(0,0,0, MAXCOL,MAXROW,pRefUndoDoc->GetTableCount()-1);
-    pRefUndoDoc->CopyToDocument( aRange, IDF_FORMULA, false, &rDoc, NULL, false );
+    pRefUndoDoc->CopyToDocument( aRange, InsertDeleteFlags::FORMULA, false, &rDoc, NULL, false );
     if (pRefUndoData)
         pRefUndoData->DoUndo( &rDoc, (eMode == SC_UNDO_REFFIRST) );
         // HACK: ScDragDropUndo is the only one with REFFIRST.

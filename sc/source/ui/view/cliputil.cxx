@@ -59,13 +59,13 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
         else
         {
             ScDocument* pClipDoc = pOwnClip->GetDocument();
-            InsertDeleteFlags nFlags = IDF_ALL;
+            InsertDeleteFlags nFlags = InsertDeleteFlags::ALL;
             if (pClipDoc->GetClipParam().isMultiRange())
                 // For multi-range paste, we paste values by default.
-                nFlags &= ~IDF_FORMULA;
+                nFlags &= ~InsertDeleteFlags::FORMULA;
 
             pTabViewShell->PasteFromClip( nFlags, pClipDoc,
-                    ScPasteFunc::NONE, false, false, false, INS_NONE, IDF_NONE,
+                    ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                     bShowDialog );      // allow warning dialog
         }
     }

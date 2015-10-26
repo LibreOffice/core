@@ -545,9 +545,9 @@ class DeleteAreaHandler
 public:
     DeleteAreaHandler(ScDocument& rDoc, InsertDeleteFlags nDelFlag) :
         mrDoc(rDoc),
-        mbNumeric(nDelFlag & IDF_VALUE),
-        mbString(nDelFlag & IDF_STRING),
-        mbFormula(nDelFlag & IDF_FORMULA) {}
+        mbNumeric(nDelFlag & InsertDeleteFlags::VALUE),
+        mbString(nDelFlag & InsertDeleteFlags::STRING),
+        mbFormula(nDelFlag & InsertDeleteFlags::FORMULA) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
@@ -659,10 +659,10 @@ void ScColumn::DeleteArea(
     SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag, bool bBroadcast,
     sc::ColumnSpanSet* pBroadcastSpans )
 {
-    InsertDeleteFlags nContMask = IDF_CONTENTS;
-    // IDF_NOCAPTIONS needs to be passed too, if IDF_NOTE is set
-    if( nDelFlag & IDF_NOTE )
-        nContMask |= IDF_NOCAPTIONS;
+    InsertDeleteFlags nContMask = InsertDeleteFlags::CONTENTS;
+    // InsertDeleteFlags::NOCAPTIONS needs to be passed too, if InsertDeleteFlags::NOTE is set
+    if( nDelFlag & InsertDeleteFlags::NOTE )
+        nContMask |= InsertDeleteFlags::NOCAPTIONS;
     InsertDeleteFlags nContFlag = nDelFlag & nContMask;
 
     sc::SingleColumnSpanSet aDeletedRows;
@@ -670,7 +670,7 @@ void ScColumn::DeleteArea(
     sc::ColumnBlockPosition aBlockPos;
     InitBlockPosition(aBlockPos);
 
-    if (!IsEmptyData() && nContFlag)
+    if (!IsEmptyData() && nContFlag != InsertDeleteFlags::NONE)
     {
         DeleteCells(aBlockPos, nStartRow, nEndRow, nDelFlag, aDeletedRows);
         if (pBroadcastSpans)
@@ -683,22 +683,22 @@ void ScColumn::DeleteArea(
         }
     }
 
-    if (nDelFlag & IDF_NOTE)
+    if (nDelFlag & InsertDeleteFlags::NOTE)
     {
-        bool bForgetCaptionOwnership = ((nDelFlag & IDF_FORGETCAPTIONS) != IDF_NONE);
+        bool bForgetCaptionOwnership = ((nDelFlag & InsertDeleteFlags::FORGETCAPTIONS) != InsertDeleteFlags::NONE);
         DeleteCellNotes(aBlockPos, nStartRow, nEndRow, bForgetCaptionOwnership);
     }
 
-    if ( nDelFlag & IDF_EDITATTR )
+    if ( nDelFlag & InsertDeleteFlags::EDITATTR )
     {
-        OSL_ENSURE( nContFlag == IDF_NONE, "DeleteArea: Wrong Flags" );
+        OSL_ENSURE( nContFlag == InsertDeleteFlags::NONE, "DeleteArea: Wrong Flags" );
         RemoveEditAttribs( nStartRow, nEndRow );
     }
 
     // Delete attributes just now
-    if ((nDelFlag & IDF_ATTRIB) == IDF_ATTRIB)
+    if ((nDelFlag & InsertDeleteFlags::ATTRIB) == InsertDeleteFlags::ATTRIB)
         pAttrArray->DeleteArea( nStartRow, nEndRow );
-    else if ((nDelFlag & IDF_HARDATTR) == IDF_HARDATTR)
+    else if ((nDelFlag & InsertDeleteFlags::HARDATTR) == InsertDeleteFlags::HARDATTR)
         pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
 
     if (bBroadcast)
@@ -818,17 +818,17 @@ public:
         {
             if (bCopyCellNotes && !mrCxt.isSkipAttrForEmptyCells())
             {
-                bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == IDF_NONE;
+                bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
                 duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
             }
             return;
         }
 
-        bool bNumeric = (nFlags & IDF_VALUE) != IDF_NONE;
-        bool bDateTime = (nFlags & IDF_DATETIME) != IDF_NONE;
-        bool bString   = (nFlags & IDF_STRING) != IDF_NONE;
-        bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
-        bool bFormula  = (nFlags & IDF_FORMULA) != IDF_NONE;
+        bool bNumeric = (nFlags & InsertDeleteFlags::VALUE) != InsertDeleteFlags::NONE;
+        bool bDateTime = (nFlags & InsertDeleteFlags::DATETIME) != InsertDeleteFlags::NONE;
+        bool bString   = (nFlags & InsertDeleteFlags::STRING) != InsertDeleteFlags::NONE;
+        bool bBoolean  = (nFlags & InsertDeleteFlags::SPECIAL_BOOLEAN) != InsertDeleteFlags::NONE;
+        bool bFormula  = (nFlags & InsertDeleteFlags::FORMULA) != InsertDeleteFlags::NONE;
 
         bool bAsLink = mrCxt.isAsLink();
 
@@ -1001,7 +1001,7 @@ public:
         }
         if (bCopyCellNotes)
         {
-            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == IDF_NONE;
+            bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
             duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
         }
     }
@@ -1040,7 +1040,7 @@ public:
 void ScColumn::CopyFromClip(
     sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn )
 {
-    if ((rCxt.getInsertFlag() & IDF_ATTRIB) != IDF_NONE)
+    if ((rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
     {
         if (rCxt.isSkipAttrForEmptyCells())
         {
@@ -1055,13 +1055,13 @@ void ScColumn::CopyFromClip(
         else
             rColumn.pAttrArray->CopyAreaSafe( nRow1, nRow2, nDy, *pAttrArray );
     }
-    if ((rCxt.getInsertFlag() & IDF_CONTENTS) == IDF_NONE)
+    if ((rCxt.getInsertFlag() & InsertDeleteFlags::CONTENTS) == InsertDeleteFlags::NONE)
         return;
 
-    if (rCxt.isAsLink() && rCxt.getInsertFlag() == IDF_ALL)
+    if (rCxt.isAsLink() && rCxt.getInsertFlag() == InsertDeleteFlags::ALL)
     {
         // We also reference empty cells for "ALL"
-        // IDF_ALL must always contain more flags when compared to "Insert contents" as
+        // InsertDeleteFlags::ALL must always contain more flags when compared to "Insert contents" as
         // contents can be selected one by one!
 
         ScAddress aDestPos( nCol, 0, nTab ); // Adapt Row
@@ -2353,7 +2353,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
     {
         const ScProtectionAttr* pAttr = static_cast<const ScProtectionAttr*>(&pPattern->GetItem(ATTR_PROTECTION));
         if ( pAttr->GetHideCell() )
-            DeleteArea( nTop, nBottom, IDF_CONTENTS );
+            DeleteArea( nTop, nBottom, InsertDeleteFlags::CONTENTS );
         else if ( pAttr->GetHideFormula() )
         {
             // Replace all formula cells between nTop and nBottom with raw value cells.

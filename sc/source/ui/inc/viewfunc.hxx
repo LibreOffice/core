@@ -108,7 +108,7 @@ public:
                                     ScPasteFunc nFunction = ScPasteFunc::NONE, bool bSkipEmpty = false,
                                     bool bTranspose = false, bool bAsLink = false,
                                     InsCellCmd eMoveMode = INS_NONE,
-                                    InsertDeleteFlags nUndoExtraFlags = IDF_NONE,
+                                    InsertDeleteFlags nUndoExtraFlags = InsertDeleteFlags::NONE,
                                     bool bAllowDialogs = false );
 
     void                        FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bAsLink );

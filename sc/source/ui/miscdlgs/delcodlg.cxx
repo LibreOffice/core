@@ -24,9 +24,9 @@
 #include "miscdlgs.hrc"
 
 bool       ScDeleteContentsDlg::bPreviousAllCheck = false;
-InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
-                                                 IDF_NOTE     | IDF_FORMULA |
-                                                 IDF_VALUE);
+InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = (InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING  |
+                                                 InsertDeleteFlags::NOTE     | InsertDeleteFlags::FORMULA |
+                                                 InsertDeleteFlags::VALUE);
 
 ScDeleteContentsDlg::ScDeleteContentsDlg( vcl::Window* pParent,
                                           InsertDeleteFlags nCheckDefaults ) :
@@ -44,26 +44,26 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( vcl::Window* pParent,
     get( aBtnDelObjects, "objects" );
     get( aBtnOk, "ok" );
 
-    if ( nCheckDefaults != IDF_NONE )
+    if ( nCheckDefaults != InsertDeleteFlags::NONE )
     {
         ScDeleteContentsDlg::nPreviousChecks = nCheckDefaults;
         ScDeleteContentsDlg::bPreviousAllCheck = false;
     }
 
     aBtnDelAll->Check     ( ScDeleteContentsDlg::bPreviousAllCheck );
-    aBtnDelStrings->Check ( IS_SET( IDF_STRING,
+    aBtnDelStrings->Check ( IS_SET( InsertDeleteFlags::STRING,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelNumbers->Check ( IS_SET( IDF_VALUE,
+    aBtnDelNumbers->Check ( IS_SET( InsertDeleteFlags::VALUE,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelDateTime->Check( IS_SET( IDF_DATETIME,
+    aBtnDelDateTime->Check( IS_SET( InsertDeleteFlags::DATETIME,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelFormulas->Check( IS_SET( IDF_FORMULA,
+    aBtnDelFormulas->Check( IS_SET( InsertDeleteFlags::FORMULA,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelNotes->Check   ( IS_SET( IDF_NOTE,
+    aBtnDelNotes->Check   ( IS_SET( InsertDeleteFlags::NOTE,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelAttrs->Check   ( IS_SET( IDF_ATTRIB,
+    aBtnDelAttrs->Check   ( IS_SET( InsertDeleteFlags::ATTRIB,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
-    aBtnDelObjects->Check ( IS_SET( IDF_OBJECTS,
+    aBtnDelObjects->Check ( IS_SET( InsertDeleteFlags::OBJECTS,
                                    ScDeleteContentsDlg::nPreviousChecks ) );
 
     DisableChecks( aBtnDelAll->IsChecked() );
@@ -92,27 +92,27 @@ void ScDeleteContentsDlg::dispose()
 
 InsertDeleteFlags ScDeleteContentsDlg::GetDelContentsCmdBits() const
 {
-    ScDeleteContentsDlg::nPreviousChecks = IDF_NONE;
+    ScDeleteContentsDlg::nPreviousChecks = InsertDeleteFlags::NONE;
 
     if ( aBtnDelStrings->IsChecked() )
-        ScDeleteContentsDlg::nPreviousChecks  = IDF_STRING;
+        ScDeleteContentsDlg::nPreviousChecks  = InsertDeleteFlags::STRING;
     if ( aBtnDelNumbers->IsChecked() )
-        ScDeleteContentsDlg::nPreviousChecks |= IDF_VALUE;
+        ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::VALUE;
     if ( aBtnDelDateTime->IsChecked())
-        ScDeleteContentsDlg::nPreviousChecks |= IDF_DATETIME;
+        ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::DATETIME;
     if ( aBtnDelFormulas->IsChecked())
-        ScDeleteContentsDlg::nPreviousChecks |= IDF_FORMULA;
+        ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::FORMULA;
     if ( aBtnDelNotes->IsChecked()   )
-        ScDeleteContentsDlg::nPreviousChecks |= IDF_NOTE;
+        ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::NOTE;
     if ( aBtnDelAttrs->IsChecked()   )
-        ScDeleteContentsDlg::nPreviousChecks |= IDF_ATTRIB;
+        ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::ATTRIB;
     if ( aBtnDelObjects->IsChecked() )
-        ScDeleteContentsDlg::nPreviousChecks |= IDF_OBJECTS;
+        ScDeleteContentsDlg::nPreviousChecks |= InsertDeleteFlags::OBJECTS;
 
     ScDeleteContentsDlg::bPreviousAllCheck = aBtnDelAll->IsChecked();
 
     return ( (ScDeleteContentsDlg::bPreviousAllCheck)
-                ? IDF_ALL
+                ? InsertDeleteFlags::ALL
                 : ScDeleteContentsDlg::nPreviousChecks );
 }
 

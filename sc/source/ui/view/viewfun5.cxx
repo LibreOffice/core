@@ -157,8 +157,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
                     SetCursor( nPosX, nPosY );
                     Unmark();
-                    PasteFromClip( IDF_ALL, pClipDoc.get(),
-                                    ScPasteFunc::NONE, false, false, false, INS_NONE, IDF_NONE,
+                    PasteFromClip( InsertDeleteFlags::ALL, pClipDoc.get(),
+                                    ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                                     bAllowDialogs );
                     bRet = true;
                 }
@@ -578,8 +578,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 }
 
                 pInsDoc->SetClipArea( aSource );
-                PasteFromClip( IDF_ALL, pInsDoc,
-                                ScPasteFunc::NONE, false, false, false, INS_NONE, IDF_NONE,
+                PasteFromClip( InsertDeleteFlags::ALL, pInsDoc,
+                                ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                                 bAllowDialogs );
                 delete pInsDoc;
 

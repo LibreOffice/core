@@ -167,7 +167,7 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     ScMarkData aDestMark;
     aDestMark.SelectOneTable( nDestTab );
     aDestMark.SetMarkArea( aNewRange );
-    pDestDoc->CopyFromClip( aNewRange, aDestMark, IDF_ALL & ~IDF_FORMULA, NULL, pClipDoc, false );
+    pDestDoc->CopyFromClip( aNewRange, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA, NULL, pClipDoc, false );
 
     delete pClipDoc;
     return true;
@@ -651,8 +651,8 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             bArgErr = true;
         }
 
-        pDoc->DeleteAreaTab( 0, 0, MAXCOL, MAXROW, 0, IDF_ALL );
-        pDoc->DeleteAreaTab( 0, 0, 0, 0, nTempSheet, IDF_ALL );
+        pDoc->DeleteAreaTab( 0, 0, MAXCOL, MAXROW, 0, InsertDeleteFlags::ALL );
+        pDoc->DeleteAreaTab( 0, 0, 0, 0, nTempSheet, InsertDeleteFlags::ALL );
     }
 
     if (bOverflow)

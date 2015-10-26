@@ -104,21 +104,21 @@ void ScColumn::DeleteBeforeCopyFromClip(
         SCROW nRow1 = it->mnRow1;
         SCROW nRow2 = it->mnRow2;
 
-        if (nDelFlag & IDF_CONTENTS)
+        if (nDelFlag & InsertDeleteFlags::CONTENTS)
         {
             sc::SingleColumnSpanSet aDeletedRows;
             DeleteCells(aBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows);
             rBroadcastSpans.set(nTab, nCol, aDeletedRows, true);
         }
 
-        if (nDelFlag & IDF_NOTE)
+        if (nDelFlag & InsertDeleteFlags::NOTE)
             DeleteCellNotes(aBlockPos, nRow1, nRow2, false);
 
-        if (nDelFlag & IDF_EDITATTR)
+        if (nDelFlag & InsertDeleteFlags::EDITATTR)
             RemoveEditAttribs(nRow1, nRow2);
 
         // Delete attributes just now
-        if (nDelFlag & IDF_ATTRIB)
+        if (nDelFlag & InsertDeleteFlags::ATTRIB)
         {
             pAttrArray->DeleteArea(nRow1, nRow2);
 
@@ -133,7 +133,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
             if (pCondList)
                 pCondList->DeleteArea(nCol, nRow1, nCol, nRow2);
         }
-        else if ((nDelFlag & IDF_HARDATTR) == IDF_HARDATTR)
+        else if ((nDelFlag & InsertDeleteFlags::HARDATTR) == InsertDeleteFlags::HARDATTR)
             pAttrArray->DeleteHardAttr(nRow1, nRow2);
     }
 }
@@ -154,7 +154,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
     InsertDeleteFlags nFlags = rCxt.getInsertFlag();
 
-    if ((nFlags & IDF_ATTRIB) != IDF_NONE)
+    if ((nFlags & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
     {
         if (!rCxt.isSkipAttrForEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
         {
@@ -164,7 +164,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         }
     }
 
-    if ((nFlags & IDF_CONTENTS) != IDF_NONE)
+    if ((nFlags & InsertDeleteFlags::CONTENTS) != InsertDeleteFlags::NONE)
     {
         std::vector<sc::CellTextAttr> aTextAttrs(nDestSize, rSrcAttr);
 
@@ -225,7 +225,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     }
 
     const ScPostIt* pNote = rCxt.getSingleCellNote(nColOffset);
-    if (pNote && (nFlags & (IDF_NOTE | IDF_ADDNOTES)) != IDF_NONE)
+    if (pNote && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)) != InsertDeleteFlags::NONE)
     {
         // Duplicate the cell note over the whole pasted range.
 
@@ -236,7 +236,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         aNotes.reserve(nDestSize);
         for (size_t i = 0; i < nDestSize; ++i)
         {
-            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == IDF_NONE;
+            bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
             aNotes.push_back(pNote->Clone(rSrcPos, *pDocument, aDestPos, bCloneCaption));
             aDestPos.IncRow();
         }

@@ -39,10 +39,10 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     mnTabStart(-1), mnTabEnd(-1),
     mrDestDoc(rDoc),
     mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc),
-    mnInsertFlag(nInsertFlag), mnDeleteFlag(IDF_NONE),
+    mnInsertFlag(nInsertFlag), mnDeleteFlag(InsertDeleteFlags::NONE),
     mpCondFormatList(NULL),
     mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells),
-    mbCloneNotes (mnInsertFlag & (IDF_NOTE|IDF_ADDNOTES)),
+    mbCloneNotes (mnInsertFlag & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES)),
     mbTableProtected(false)
 {
 }
@@ -160,11 +160,11 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
     // Check the paste flag to see whether we want to paste this cell.  If the
     // flag says we don't want to paste this cell, we'll return with true.
     InsertDeleteFlags nFlags = getInsertFlag();
-    bool bNumeric  = (nFlags & IDF_VALUE) != IDF_NONE;
-    bool bDateTime = (nFlags & IDF_DATETIME) != IDF_NONE;
-    bool bString   = (nFlags & IDF_STRING) != IDF_NONE;
-    bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
-    bool bFormula  = (nFlags & IDF_FORMULA) != IDF_NONE;
+    bool bNumeric  = (nFlags & InsertDeleteFlags::VALUE) != InsertDeleteFlags::NONE;
+    bool bDateTime = (nFlags & InsertDeleteFlags::DATETIME) != InsertDeleteFlags::NONE;
+    bool bString   = (nFlags & InsertDeleteFlags::STRING) != InsertDeleteFlags::NONE;
+    bool bBoolean  = (nFlags & InsertDeleteFlags::SPECIAL_BOOLEAN) != InsertDeleteFlags::NONE;
+    bool bFormula  = (nFlags & InsertDeleteFlags::FORMULA) != InsertDeleteFlags::NONE;
 
     switch (rSrcCell.meType)
     {
