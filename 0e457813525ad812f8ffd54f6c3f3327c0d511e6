@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_884ec7bf",
+        "filename": "sc/source/core/tool/calcconfig.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-26T14:40:53Z",
+      "side": 1,
+      "message": "I\u0027d rather prefer an rtl::Static here instead of a plain static, otherwise we might run into trouble due to life time of static object instances, especially with notifications.",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 10
+      },
+      "revId": "0e457813525ad812f8ffd54f6c3f3327c0d511e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
