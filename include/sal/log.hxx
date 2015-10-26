@@ -19,6 +19,7 @@
 #include <sal/detail/log.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <osl/backtrace.hxx>
 
 // Avoid the use of other sal code in this header as much as possible, so that
 // this code can be called from other sal code without causing endless
@@ -315,6 +316,24 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 #define SAL_DEBUG(stream) \
     SAL_DETAIL_LOG_STREAM( \
         SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG, 0, 0, stream)
+
+/**
+  Produce temporary debugging output from stream along with a
+  stack trace of the calling location.  This macro is meant to
+  be used only while working on code and should never exist
+  in production code.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
+#define SAL_DEBUG_TRACE(stream) \
+    do { \
+        ::std::ostringstream sal_detail_stream; \
+        sal_detail_stream << stream; \
+        sal_detail_stream << " at:\n"; \
+        sal_detail_stream << osl::Backtrace::asString(); \
+        ::sal::detail::log( ::SAL_DETAIL_LOG_LEVEL_DEBUG, 0, 0, \
+                            sal_detail_stream); \
+    } while (false)
 
 #endif
 
