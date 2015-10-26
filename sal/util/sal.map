@@ -688,6 +688,7 @@ LIBO_UDK_5.1 { # symbols available in >= LibO 5.1
         rtl_uString_newConcatAsciiL;
         rtl_uString_newReplaceAllToAsciiL;
         rtl_uString_newReplaceFirstToAsciiL;
+        osl_backtraceAsString;
 } LIBO_UDK_5.0;
 
 PRIVATE_1.0 {
