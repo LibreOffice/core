@@ -99,7 +99,7 @@
 	<xsl:value-of select="translate($productversion,' ','')"/>
 </xsl:variable>
 <!-- this is were the images are -->
-<xsl:param name="imgrepos" select="''"/>
+<xsl:param name="imgtheme" select="''"/>
 <xsl:param name="Id" />
 <xsl:param name="Language" select="'en-US'"/>
 <xsl:variable name="lang" select="$Language"/>
@@ -110,7 +110,7 @@
 
   <!-- parts of help and image urls -->
 <xsl:variable name="help_url_prefix" select="'vnd.sun.star.help://'"/>
-<xsl:variable name="img_url_prefix" select="concat('vnd.sun.star.zip://',$imgrepos,'/')"/>
+<xsl:variable name="img_url_prefix" select="concat('vnd.libreoffice.image://',$imgtheme,'/')"/>
 <xsl:variable name="urlpost" select="concat('?Language=',$lang,$am,'System=',$System,$am,'UseDB=no')"/>
 <xsl:variable name="urlpre" select="$help_url_prefix" /> 
 <xsl:variable name="linkprefix" select="$urlpre"/>
@@ -801,19 +801,6 @@
 
 <!-- Insert an image -->
 <xsl:template name="insertimage">
-	
-	<xsl:variable name="fpath">
-		<xsl:call-template name="getfpath">
-			<xsl:with-param name="s"><xsl:value-of select="@src"/></xsl:with-param>
-		</xsl:call-template>
-	</xsl:variable>
-	
-	<xsl:variable name="fname">
-		<xsl:call-template name="getfname">
-			<xsl:with-param name="s"><xsl:value-of select="@src"/></xsl:with-param>
-		</xsl:call-template>
-	</xsl:variable>
-
   <xsl:variable name="src">
     <xsl:choose>
       <xsl:when test="not($ExtensionId='') and starts-with(@src,$ExtensionId)">
@@ -821,11 +808,11 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
-          <xsl:when test="(@localize='true') and not($lang='en-US')">
-            <xsl:value-of select="concat($img_url_prefix,$fpath,$lang,'/',$fname)"/>
+          <xsl:when test="@localize='true'">
+            <xsl:value-of select="concat($img_url_prefix,@src,'?lang=',$lang)"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="concat($img_url_prefix,$fpath,$fname)"/>
+            <xsl:value-of select="concat($img_url_prefix,@src)"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -927,36 +914,6 @@
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:apply-templates />
-		</xsl:otherwise>
-	</xsl:choose>
-</xsl:template>
-
-<xsl:template name="getfpath">
-	<xsl:param name="s"/>
-	<xsl:param name="p"/>
-	<xsl:choose>
-		<xsl:when test="contains($s,'/')">
-			<xsl:call-template name="getfpath">
-				<xsl:with-param name="p"><xsl:value-of select="concat($p,substring-before($s,'/'),'/')"/></xsl:with-param>
-				<xsl:with-param name="s"><xsl:value-of select="substring-after($s,'/')"/></xsl:with-param>
-			</xsl:call-template>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:value-of select="$p"/>
-		</xsl:otherwise>
-	</xsl:choose>
-</xsl:template>
-
-<xsl:template name="getfname">
-	<xsl:param name="s"/>
-	<xsl:choose>
-		<xsl:when test="contains($s,'/')">
-			<xsl:call-template name="getfname">
-				<xsl:with-param name="s"><xsl:value-of select="substring-after($s,'/')"/></xsl:with-param>
-			</xsl:call-template>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:value-of select="$s"/>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
