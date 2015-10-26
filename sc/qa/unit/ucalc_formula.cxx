@@ -6596,8 +6596,18 @@ void Test::testFuncMDETERM()
         aFormulaBuffer[12] = aColCodes[nSize-1];
         aFormulaBuffer[13] = static_cast<sal_Unicode>( '0' + nSize );
         m_pDoc->SetString(aPos, aFormulaBuffer.toString());
+
+        // On crappy 32-bit targets, presumably without extended precision on
+        // interim results or optimization not catching it, this test fails
+        // when comparing to 0.0, so have a narrow error margin. See also
+        // commit message of 8140309d636d4a870875f2dd75ed3dfff2c0fbaf
+#if SAL_TYPES_SIZEOFPOINTER == 4
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
-                                     0.0, m_pDoc->GetValue(aPos), 10e-4);
+                0.0, m_pDoc->GetValue(aPos), 1e-12);
+#else
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
+                0.0, m_pDoc->GetValue(aPos));
+#endif
     }
 
     int aVals[] = {23, 31, 13, 12, 34, 64, 34, 31, 98, 32, 33, 63, 45, 54, 65, 76};
