@@ -64,7 +64,7 @@ protected:
 
     bool mbAssignedToOutlineStyle;
 
-    SwTextFormatColl *pNextTextFormatColl;
+    SwTextFormatColl *mpNextTextFormatColl;
 
     SwTextFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
                     SwTextFormatColl* pDerFrom = 0,
@@ -73,7 +73,7 @@ protected:
         , mbStayAssignedToListLevelOfOutlineStyle(false)
         , mbAssignedToOutlineStyle(false)
     {
-        pNextTextFormatColl = this;
+        mpNextTextFormatColl = this;
     }
 
     SwTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
@@ -83,7 +83,7 @@ protected:
         , mbStayAssignedToListLevelOfOutlineStyle(false)
         , mbAssignedToOutlineStyle(false)
     {
-        pNextTextFormatColl = this;
+        mpNextTextFormatColl = this;
     }
 
     /// To get UL- / LR- / FontHeight-changes.
@@ -94,7 +94,7 @@ public:
     TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
     inline void SetNextTextFormatColl(SwTextFormatColl& rNext);
-    SwTextFormatColl& GetNextTextFormatColl() const { return *pNextTextFormatColl; }
+    SwTextFormatColl& GetNextTextFormatColl() const { return *mpNextTextFormatColl; }
 
     bool IsAtDocNodeSet() const;
 
@@ -248,7 +248,7 @@ public:
 /// Inline implementations.
 inline void SwTextFormatColl::SetNextTextFormatColl( SwTextFormatColl& rNext )
 {
-    pNextTextFormatColl = &rNext;
+    mpNextTextFormatColl = &rNext;
 }
 #endif
 
