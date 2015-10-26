@@ -26,6 +26,7 @@
 #include <setjmp.h>
 #include <stdio.h>
 #include <sys/frame.h>
+#include "internal/misc.hxx"
 #include "backtrace.h"
 
 #if defined(SPARC)
