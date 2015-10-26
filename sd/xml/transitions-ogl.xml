@@ -59,6 +59,9 @@
  <anim:par pres:preset-id="finedissolve">
   <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="bottomCenter"/>
  </anim:par>
+ <anim:par pres:preset-id="vortex">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="vertical"/>
+ </anim:par>
  <anim:par pres:preset-id="zoom-rotate-in">
   <anim:transitionFilter smil:type="zoom" smil:subtype="rotateIn"/>
  </anim:par>

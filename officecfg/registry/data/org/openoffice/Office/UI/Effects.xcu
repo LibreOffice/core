@@ -1675,6 +1675,11 @@
           <value xml:lang="en-US">Fine Dissolve</value>
         </prop>
       </node>
+      <node oor:name="vortex" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Vortex</value>
+        </prop>
+      </node>
     </node>
   </node>
   <node oor:name="Presets">

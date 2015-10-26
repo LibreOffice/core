@@ -1429,6 +1429,7 @@ public:
                 case animations::TransitionSubType::BOTTOMCENTER:       //   9
                 case animations::TransitionSubType::CORNERSIN:          //  11
                 case animations::TransitionSubType::CORNERSOUT:         //  12
+                case animations::TransitionSubType::VERTICAL:           //  13
                 case animations::TransitionSubType::CIRCLE:             //  27
                 case animations::TransitionSubType::FANOUTHORIZONTAL:   //  55
                 case animations::TransitionSubType::ACROSS:             // 108
@@ -1501,6 +1502,9 @@ public:
                     break;
                 case animations::TransitionSubType::CORNERSOUT:
                     pTransition = makeOutsideCubeFaceToLeft();
+                    break;
+                case animations::TransitionSubType::VERTICAL:
+                    pTransition = makeVortex();
                     break;
                 case animations::TransitionSubType::CIRCLE:
                     pTransition = makeRevolvingCircles(8,128);

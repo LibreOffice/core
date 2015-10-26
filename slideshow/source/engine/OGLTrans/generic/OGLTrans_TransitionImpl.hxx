@@ -189,6 +189,12 @@ private:
       */
     virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
 
+    /** This function is called in display method to prepare the slides, scene, etc.
+      *
+      * Default implementation does nothing.
+      */
+    virtual void finish( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+
     /** This function is called after glx context is ready to let the transition prepare GL related things, like GLSL program.
       *
       * Default implementation does nothing.
@@ -228,6 +234,7 @@ std::shared_ptr<OGLTransitionImpl> makeRochade();
 std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts );
 std::shared_ptr<OGLTransitionImpl> makeStatic();
 std::shared_ptr<OGLTransitionImpl> makeDissolve();
+std::shared_ptr<OGLTransitionImpl> makeVortex();
 std::shared_ptr<OGLTransitionImpl> makeNewsflash();
 
 /** 2D replacements

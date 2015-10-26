@@ -142,6 +142,10 @@ void OGLTransitionImpl::prepare( double, double, double, double, double )
 {
 }
 
+void OGLTransitionImpl::finish( double, double, double, double, double )
+{
+}
+
 void OGLTransitionImpl::prepareTransition( ::sal_Int32, ::sal_Int32 )
 {
 }
@@ -1632,6 +1636,205 @@ std::shared_ptr<OGLTransitionImpl> makeDissolve()
     aSettings.mnRequiredGLVersion = 2.0;
 
     return makeDissolveTransition(aLeavingSlide, aEnteringSlide, aSettings);
+}
+
+namespace
+{
+
+float fdiv(int a, int b)
+{
+    return static_cast<float>(a)/b;
+}
+
+class VortexTransition : public ShaderTransition
+{
+public:
+    VortexTransition(const TransitionScene& rScene, const TransitionSettings& rSettings, int nNX, int nNY)
+        : ShaderTransition(rScene, rSettings),
+          mnNX(nNX),
+          mnNY(nNY)
+    {
+        mvCenters.resize(6*mnNX*mnNY);
+        mvTileXIndexes.resize(6*mnNX*mnNY);
+        mvTileYIndexes.resize(6*mnNX*mnNY);
+        mvVertexIndexesInTiles.resize(6*mnNX*mnNY);
+    }
+
+private:
+    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
+
+    virtual void finish( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
+
+    virtual GLuint makeShader() override;
+
+    GLint mnCenterLocation;
+    GLint mnTileXIndexLocation;
+    GLint mnTileYIndexLocation;
+    GLint mnVertexIndexInTileLocation;
+    GLuint mnCenterBuffer;
+    GLuint mnTileXIndexBuffer;
+    GLuint mnTileYIndexBuffer;
+    GLuint mnVertexIndexInTileBuffer;
+
+    int mnNX, mnNY;
+
+    std::vector<glm::vec2> mvCenters;
+    std::vector<GLint> mvTileXIndexes;
+    std::vector<GLint> mvTileYIndexes;
+    std::vector<GLint> mvVertexIndexesInTiles;
+};
+
+void VortexTransition::prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
+{
+    glDisable(GL_CULL_FACE);
+
+    glBindBuffer(GL_ARRAY_BUFFER, mnCenterBuffer);
+    CHECK_GL_ERROR();
+    glEnableVertexAttribArray(mnCenterLocation);
+    CHECK_GL_ERROR();
+    glVertexAttribPointer(mnCenterLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    CHECK_GL_ERROR();
+
+    glBindBuffer(GL_ARRAY_BUFFER, mnTileXIndexBuffer);
+    CHECK_GL_ERROR();
+    glEnableVertexAttribArray(mnTileXIndexLocation);
+    CHECK_GL_ERROR();
+    glVertexAttribIPointer(mnTileXIndexLocation, 1, GL_INT, 0, 0);
+    CHECK_GL_ERROR();
+
+    glBindBuffer(GL_ARRAY_BUFFER, mnTileYIndexBuffer);
+    CHECK_GL_ERROR();
+    glEnableVertexAttribArray(mnTileYIndexLocation);
+    CHECK_GL_ERROR();
+    glVertexAttribIPointer(mnTileYIndexLocation, 1, GL_INT, 0, 0);
+    CHECK_GL_ERROR();
+
+    glBindBuffer(GL_ARRAY_BUFFER, mnVertexIndexInTileBuffer);
+    CHECK_GL_ERROR();
+    glEnableVertexAttribArray(mnVertexIndexInTileLocation);
+    CHECK_GL_ERROR();
+    glVertexAttribIPointer(mnVertexIndexInTileLocation, 1, GL_INT, 0, 0);
+    CHECK_GL_ERROR();
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    CHECK_GL_ERROR();
+}
+
+void VortexTransition::finish( double, double, double, double, double )
+{
+    glEnable(GL_CULL_FACE);
+}
+
+GLuint VortexTransition::makeShader()
+{
+    GLuint nProgram = OpenGLHelper::LoadShaders( "vortexVertexShader", "vortexFragmentShader" );
+
+    mnCenterLocation = glGetAttribLocation(nProgram, "center");
+    CHECK_GL_ERROR();
+    mnTileXIndexLocation = glGetAttribLocation(nProgram, "tileXIndex");
+    CHECK_GL_ERROR();
+    mnTileYIndexLocation = glGetAttribLocation(nProgram, "tileYIndex");
+    CHECK_GL_ERROR();
+    mnVertexIndexInTileLocation = glGetAttribLocation(nProgram, "vertexIndexInTile");
+    CHECK_GL_ERROR();
+
+    glGenBuffers(1, &mnCenterBuffer);
+    CHECK_GL_ERROR();
+    glGenBuffers(1, &mnTileXIndexBuffer);
+    CHECK_GL_ERROR();
+    glGenBuffers(1, &mnTileYIndexBuffer);
+    CHECK_GL_ERROR();
+    glGenBuffers(1, &mnVertexIndexInTileBuffer);
+    CHECK_GL_ERROR();
+
+    // Two triangles, i.e. six vertices, per tile
+    {
+        int n = 0;
+        for (int x = 0; x < mnNX; x++)
+        {
+            for (int y = 0; y < mnNY; y++)
+            {
+                for (int v = 0; v < 6; v++)
+                {
+                    // Note that Primitive::pushTriangle() has mapped the coordinates from the 0..1
+                    // passed to it (by makeVortex() in this case) to -1..1, and also reflected the Y
+                    // coordinates. Why the code can't use those from the start I don't
+                    // know... Confusing. Anyway, so here when we store the center of each rectangle
+                    // that the vertices belong to, we need to use the actual coordinates.
+                    mvCenters[n] = glm::vec2(2*((x+0.5)/mnNX) - 1, -2*((y+0.5)/mnNY) + 1);
+
+                    mvTileXIndexes[n] = x;
+                    mvTileYIndexes[n] = y;
+                    mvVertexIndexesInTiles[n] = v;
+                    n++;
+                }
+            }
+        }
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, mnCenterBuffer);
+    CHECK_GL_ERROR();
+    glBufferData(GL_ARRAY_BUFFER, mvCenters.size()*sizeof(glm::vec2), mvCenters.data(), GL_STATIC_DRAW);
+    CHECK_GL_ERROR();
+
+    glBindBuffer(GL_ARRAY_BUFFER, mnTileXIndexBuffer);
+    CHECK_GL_ERROR();
+    glBufferData(GL_ARRAY_BUFFER, mvTileXIndexes.size()*sizeof(GLint), mvTileXIndexes.data(), GL_STATIC_DRAW);
+    CHECK_GL_ERROR();
+
+    glBindBuffer(GL_ARRAY_BUFFER, mnTileYIndexBuffer);
+    CHECK_GL_ERROR();
+    glBufferData(GL_ARRAY_BUFFER, mvTileYIndexes.size()*sizeof(GLint), mvTileYIndexes.data(), GL_STATIC_DRAW);
+    CHECK_GL_ERROR();
+
+    glBindBuffer(GL_ARRAY_BUFFER, mnVertexIndexInTileBuffer);
+    CHECK_GL_ERROR();
+    glBufferData(GL_ARRAY_BUFFER, mvVertexIndexesInTiles.size()*sizeof(GLint), mvVertexIndexesInTiles.data(), GL_STATIC_DRAW);
+    CHECK_GL_ERROR();
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    CHECK_GL_ERROR();
+
+    return nProgram;
+}
+
+std::shared_ptr<OGLTransitionImpl>
+makeVortexTransition(const Primitives_t& rLeavingSlidePrimitives,
+                     const Primitives_t& rEnteringSlidePrimitives,
+                     const TransitionSettings& rSettings,
+                     int NX,
+                     int NY)
+{
+    return std::make_shared<VortexTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+                                              rSettings,
+                                              NX, NY);
+}
+
+}
+
+std::shared_ptr<OGLTransitionImpl> makeVortex()
+{
+    const int NX = 40, NY = 40;
+    Primitive Slide;
+
+    for (int x = 0; x < NX; x++)
+    {
+        for (int y = 0; y < NY; y++)
+        {
+            Slide.pushTriangle (glm::vec2 (fdiv(x,NX),fdiv(y,NY)), glm::vec2 (fdiv(x+1,NX),fdiv(y,NY)), glm::vec2 (fdiv(x,NX),fdiv(y+1,NY)));
+            Slide.pushTriangle (glm::vec2 (fdiv(x+1,NX),fdiv(y,NY)), glm::vec2 (fdiv(x,NX),fdiv(y+1,NY)), glm::vec2 (fdiv(x+1,NX),fdiv(y+1,NY)));
+        }
+    }
+    Primitives_t aLeavingSlide;
+    aLeavingSlide.push_back (Slide);
+    Primitives_t aEnteringSlide;
+    aEnteringSlide.push_back (Slide);
+
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+    aSettings.mnRequiredGLVersion = 2.0;
+
+    return makeVortexTransition(aLeavingSlide, aEnteringSlide, aSettings, NX, NY);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeNewsflash()
