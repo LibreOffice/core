@@ -426,8 +426,7 @@ SwDoc::~SwDoc()
     getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAndDestroyAll();
 
     const sw::DocDisposingHint aHint;
-    std::vector< std::weak_ptr<SwUnoCrsr> > vCursorsToKill(mvUnoCrsrTbl.begin(), mvUnoCrsrTbl.end());
-    for(auto& pWeakCursor : vCursorsToKill)
+    for(const auto& pWeakCursor : mvUnoCrsrTbl)
     {
         auto pCursor(pWeakCursor.lock());
         if(pCursor)

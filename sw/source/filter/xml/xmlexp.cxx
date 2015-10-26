@@ -298,7 +298,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                  (RedlineMode_t)(( nRedlineMode & nsRedlineMode_t::REDLINE_SHOW_MASK ) | nsRedlineType_t::REDLINE_INSERT ));
     }
 
-     sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
+    sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
 
     // now we can restore the redline mode (if we changed it previously)
     if( bSaveRedline )
