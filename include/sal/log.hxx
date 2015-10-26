@@ -316,6 +316,24 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     SAL_DETAIL_LOG_STREAM( \
         SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG, 0, 0, stream)
 
+/**
+  Produce temporary debugging output from stream along with a
+  stack trace of the calling location.  This macro is meant to
+  be used only while working on code and should never exist
+  in production code.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
+#define SAL_DEBUG_TRACE(stream) \
+    do { \
+        std::ostringstream sal_detail_stream; \
+        sal_detail_stream << stream; \
+        sal_detail_stream << " at:\n"; \
+        sal_detail_stream << OUString(osl_backtraceAsString(), SAL_NO_ACQUIRE);
+        ::sal::detail::log( ::SAL_DETAIL_LOG_LEVEL_DEBUG, 0, 0, \
+                            sal_detail_stream); \
+    } while (false)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

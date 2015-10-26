@@ -63,6 +63,9 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
 #endif
     ;
 
+/// Build a debugging backtrace from current PC location.
+SAL_DLLPUBLIC rtl_uString *osl_backtraceAsString(void);
+
 #if defined __cplusplus
 }
 #endif
