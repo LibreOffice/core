@@ -56,7 +56,6 @@
 
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>
-#include <vcl/bitmapex.hxx>
 #include <impbmp.hxx>
 #include <svids.hrc>
 #include <sal/macros.h>
@@ -1655,141 +1654,30 @@ getRow( BitmapBuffer *pBuffer, sal_uLong nRow )
         return pBuffer->mpBits + ( pBuffer->mnHeight - nRow - 1 ) * pBuffer->mnScanlineSize;
 }
 
-static GdkPixbuf *
-bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
-{
-    g_return_val_if_fail( pSalBitmap != NULL, NULL );
-    g_return_val_if_fail( pSalAlpha != NULL, NULL );
-
-    BitmapBuffer *pBitmap = pSalBitmap->AcquireBuffer( BITMAP_READ_ACCESS );
-    g_return_val_if_fail( pBitmap != NULL, NULL );
-    g_return_val_if_fail( pBitmap->mnBitCount == 24 || pBitmap->mnBitCount == 32, NULL );
-
-    BitmapBuffer *pAlpha = pSalAlpha->AcquireBuffer( BITMAP_READ_ACCESS );
-    g_return_val_if_fail( pAlpha != NULL, NULL );
-    g_return_val_if_fail( pAlpha->mnBitCount == 8, NULL );
-
-    Size aSize = pSalBitmap->GetSize();
-    g_return_val_if_fail( pSalAlpha->GetSize() == aSize, NULL );
-
-    int nX, nY;
-    guchar *pPixbufData = static_cast<guchar *>(g_malloc (4 * aSize.Width() * aSize.Height() ));
-    guchar *pDestData = pPixbufData;
-
-    for( nY = 0; nY < pBitmap->mnHeight; nY++ )
-    {
-        sal_uInt8 *pData = getRow( pBitmap, nY );
-        sal_uInt8 *pAlphaData = getRow( pAlpha, nY );
-
-        for( nX = 0; nX < pBitmap->mnWidth; nX++ )
-        {
-            BitmapColor aColor;
-            if (pBitmap->mnFormat == BMP_FORMAT_24BIT_TC_BGR)
-            {
-                aColor = BitmapColor(pData[2], pData[1], pData[0]);
-                pData += 3;
-            }
-            else if (pBitmap->mnFormat == BMP_FORMAT_24BIT_TC_RGB)
-            {
-                aColor = BitmapColor(pData[0], pData[1], pData[2]);
-                pData += 3;
-            }
-            else
-            {
-                pBitmap->maColorMask.GetColorFor32Bit(aColor, pData);
-                pData += 4;
-            }
-            *pDestData++ = aColor.GetRed();
-            *pDestData++ = aColor.GetGreen();
-            *pDestData++ = aColor.GetBlue();
-            *pDestData++ = 255 - *pAlphaData++;
-        }
-    }
-
-    pSalBitmap->ReleaseBuffer( pBitmap, BITMAP_READ_ACCESS );
-    pSalAlpha->ReleaseBuffer( pAlpha, BITMAP_READ_ACCESS );
-
-    return gdk_pixbuf_new_from_data( pPixbufData,
-                                     GDK_COLORSPACE_RGB, true, 8,
-                                     aSize.Width(), aSize.Height(),
-                                     aSize.Width() * 4,
-                                     reinterpret_cast<GdkPixbufDestroyNotify>(g_free),
-                                     NULL );
-}
-
 void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
 {
     if( (m_nStyle & (SalFrameStyleFlags::PLUG|SalFrameStyleFlags::SYSTEMCHILD|SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::INTRO|SalFrameStyleFlags::OWNERDRAWDECORATION))
         || ! m_pWindow )
         return;
 
-    if( !ImplGetResMgr() )
-        return;
+    gchar* appicon;
 
-    GdkPixbuf *pBuf;
-    GList *pIcons = NULL;
+    if (nIcon == SV_ICON_ID_TEXT)
+        appicon = g_strdup ("libreoffice-writer");
+    else if (nIcon == SV_ICON_ID_SPREADSHEET)
+        appicon = g_strdup ("libreoffice-calc");
+    else if (nIcon == SV_ICON_ID_DRAWING)
+        appicon = g_strdup ("libreoffice-draw");
+    else if (nIcon == SV_ICON_ID_PRESENTATION)
+        appicon = g_strdup ("libreoffice-impress");
+    else if (nIcon == SV_ICON_ID_DATABASE)
+        appicon = g_strdup ("libreoffice-base");
+    else if (nIcon == SV_ICON_ID_FORMULA)
+        appicon = g_strdup ("libreoffice-math");
+    else
+        appicon = g_strdup ("libreoffice-main");
 
-    sal_uInt16 nOffsets[2] = { SV_ICON_SMALL_START, SV_ICON_LARGE_START };
-    sal_uInt16 nIndex;
-
-    for( nIndex = 0; nIndex < sizeof(nOffsets)/ sizeof(sal_uInt16); nIndex++ )
-    {
-        // #i44723# workaround gcc temporary problem
-        ResId aResId( nOffsets[nIndex] + nIcon, *ImplGetResMgr() );
-        BitmapEx aIcon( aResId );
-
-        // #i81083# convert to 24bit/8bit alpha bitmap
-        Bitmap aBmp = aIcon.GetBitmap();
-        if( aBmp.GetBitCount() != 24 || ! aIcon.IsAlpha() )
-        {
-            if( aBmp.GetBitCount() != 24 )
-                aBmp.Convert( BMP_CONVERSION_24BIT );
-            AlphaMask aMask;
-            if( ! aIcon.IsAlpha() )
-            {
-                switch( aIcon.GetTransparentType() )
-                {
-                    case TRANSPARENT_NONE:
-                    {
-                        sal_uInt8 nTrans = 0;
-                        aMask = AlphaMask( aBmp.GetSizePixel(), &nTrans );
-                    }
-                    break;
-                    case TRANSPARENT_COLOR:
-                        aMask = AlphaMask( aBmp.CreateMask( aIcon.GetTransparentColor() ) );
-                    break;
-                    case TRANSPARENT_BITMAP:
-                        aMask = AlphaMask( aIcon.GetMask() );
-                    break;
-                    default:
-                        OSL_FAIL( "unhandled transparent type" );
-                    break;
-                }
-            }
-            else
-                aMask = aIcon.GetAlpha();
-            aIcon = BitmapEx( aBmp, aMask );
-        }
-
-        ImpBitmap *pIconImpBitmap = aIcon.ImplGetBitmapImpBitmap();
-        ImpBitmap *pIconImpMask   = aIcon.ImplGetMaskImpBitmap();
-
-        if( pIconImpBitmap && pIconImpMask )
-        {
-            SalBitmap *pIconBitmap =
-                pIconImpBitmap->ImplGetSalBitmap();
-            SalBitmap *pIconMask =
-                pIconImpMask->ImplGetSalBitmap();
-
-            if( ( pBuf = bitmapToPixbuf( pIconBitmap, pIconMask ) ) )
-                pIcons = g_list_prepend( pIcons, pBuf );
-        }
-    }
-
-    gtk_window_set_icon_list( GTK_WINDOW(m_pWindow), pIcons );
-
-    g_list_foreach( pIcons, reinterpret_cast<GFunc>(g_object_unref), NULL );
-    g_list_free( pIcons );
+    gtk_window_set_icon_name (GTK_WINDOW (m_pWindow), appicon);
 }
 
 void GtkSalFrame::SetMenu( SalMenu* pSalMenu )

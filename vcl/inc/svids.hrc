@@ -181,9 +181,6 @@
 #define SV_ICON_SIZE32_START                21000
 #define SV_ICON_SIZE16_START                23000
 
-#define SV_ICON_LARGE_START                 24000
-#define SV_ICON_SMALL_START                 25000
-
 #define SV_ICON_ID_OFFICE                       1
 #define SV_ICON_ID_TEXT                         2
 #define SV_ICON_ID_TEXT_TEMPLATE                3
