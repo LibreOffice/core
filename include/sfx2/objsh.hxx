@@ -422,10 +422,12 @@ public:
 
     bool                        IsQueryLoadTemplate() const;
     bool                        IsUseUserData() const;
+    bool                        IsUseThumbnailSave() const;
     bool                        IsLoadReadonly() const;
     bool                        IsSaveVersionOnClose() const;
     void                        SetQueryLoadTemplate( bool b );
     void                        SetUseUserData( bool bNew );
+    void                        SetUseThumbnailSave( bool _bNew );
     void                        SetLoadReadonly( bool _bReadonly );
     void                        SetSaveVersionOnClose( bool bSet );
     void                        ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName );

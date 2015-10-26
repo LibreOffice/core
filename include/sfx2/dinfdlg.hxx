@@ -81,6 +81,7 @@ private:
     bool                         m_bHasTemplate;
     bool                         m_bDeleteUserData;
     bool                         m_bUseUserData;
+    bool                         m_bUseThumbnailSave;
     std::vector< CustomProperty* >    m_aCustomProperties;
     css::uno::Sequence< css::document::CmisProperty > m_aCmisProperties;
 
@@ -90,7 +91,7 @@ public:
     SfxDocumentInfoItem( const OUString &rFileName,
         const css::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
         const css::uno::Sequence< css::document::CmisProperty> & i_cmisProps,
-        bool bUseUserData );
+        bool bUseUserData, bool bUseThumbnailSave );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem();
 
@@ -153,8 +154,11 @@ public:
     bool        HasTemplate() const { return m_bHasTemplate; }
     void        SetDeleteUserData( bool bSet );
     void        SetUseUserData( bool bSet );
+    void        SetUseThumbnailSave( bool bSet );
     bool        IsDeleteUserData() const { return m_bDeleteUserData;}
     bool        IsUseUserData() const { return m_bUseUserData;}
+    bool        IsUseThumbnailSave() const { return m_bUseThumbnailSave;}
+
 
     std::vector< CustomProperty* >  GetCustomProperties() const;
     void        ClearCustomProperties();
@@ -194,6 +198,7 @@ private:
 
     VclPtr<CheckBox>              m_pUseUserDataCB;
     VclPtr<PushButton>            m_pDeleteBtn;
+    VclPtr<CheckBox>              m_pUseThumbnailSaveCB;
 
     VclPtr<FixedText>             m_pTemplFt;
     VclPtr<SelectableFixedText>   m_pTemplValFt;

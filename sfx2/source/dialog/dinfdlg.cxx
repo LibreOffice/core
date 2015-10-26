@@ -215,13 +215,14 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
     , m_bHasTemplate( true )
     , m_bDeleteUserData( false )
     , m_bUseUserData( true )
+    , m_bUseThumbnailSave( true )
 {
 }
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Sequence<document::CmisProperty>& i_cmisProps,
-        bool bIs )
+        bool bIs, bool _bIs )
     : SfxStringItem( SID_DOCINFO, rFile )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
     , m_AutoloadURL( i_xDocProps->getAutoloadURL() )
@@ -244,6 +245,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
     , m_bHasTemplate( true )
     , m_bDeleteUserData( false )
     , m_bUseUserData( bIs )
+    , m_bUseThumbnailSave( _bIs )
 {
     try
     {
@@ -300,6 +302,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     , m_bHasTemplate( rItem.m_bHasTemplate )
     , m_bDeleteUserData( rItem.m_bDeleteUserData )
     , m_bUseUserData( rItem.m_bUseUserData )
+    , m_bUseThumbnailSave( rItem.m_bUseThumbnailSave )
 {
     for ( size_t i = 0; i < rItem.m_aCustomProperties.size(); i++ )
     {
@@ -452,6 +455,11 @@ void SfxDocumentInfoItem::SetUseUserData( bool bSet )
     m_bUseUserData = bSet;
 }
 
+void SfxDocumentInfoItem::SetUseThumbnailSave( bool bSet )
+{
+    m_bUseThumbnailSave = bSet;
+}
+
 std::vector< CustomProperty* > SfxDocumentInfoItem::GetCustomProperties() const
 {
     std::vector< CustomProperty* > aRet;
@@ -496,6 +504,9 @@ bool SfxDocumentInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_DOCINFO_USEUSERDATA:
             bValue = IsUseUserData();
+            break;
+        case MID_DOCINFO_USETHUMBNAILSAVE:
+            bValue = IsUseThumbnailSave();
             break;
         case MID_DOCINFO_DELETEUSERDATA:
             bValue = IsDeleteUserData();
@@ -558,6 +569,11 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
             bRet = (rVal >>= bValue);
             if ( bRet )
                 SetUseUserData( bValue );
+            break;
+        case MID_DOCINFO_USETHUMBNAILSAVE:
+            bRet = (rVal >>=bValue);
+            if ( bRet )
+            SetUseThumbnailSave( bValue );
             break;
         case MID_DOCINFO_DELETEUSERDATA:
             // QUESTION: deleting user data was done here; seems to be superfluous!
@@ -783,6 +799,7 @@ SfxDocumentPage::SfxDocumentPage(vcl::Window* pParent, const SfxItemSet& rItemSe
     get(m_pDocNoValFt, "showrevision");
 
     get(m_pUseUserDataCB, "userdatacb");
+    get(m_pUseThumbnailSaveCB, "thumbnailsavecb");
     get(m_pDeleteBtn, "reset");
 
     get(m_pTemplFt, "templateft");
@@ -826,6 +843,7 @@ void SfxDocumentPage::dispose()
     m_pDeleteBtn.clear();
     m_pTemplFt.clear();
     m_pTemplValFt.clear();
+    m_pUseThumbnailSaveCB.clear();
     SfxTabPage::dispose();
 }
 
@@ -989,6 +1007,22 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
         }
     }
 
+    if ( m_pUseThumbnailSaveCB->IsValueChangedFromSaved() &&
+       GetTabDialog() && GetTabDialog()->GetExampleSet() )
+    {
+        SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
+        const SfxPoolItem* pItem;
+
+        if ( pExpSet && SfxItemState::SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
+        {
+            const SfxDocumentInfoItem* m_pxInfoItem = static_cast<const SfxDocumentInfoItem*>(pItem);
+            bool bUseThumbnail = ( TRISTATE_TRUE == m_pUseThumbnailSaveCB->GetState() );
+            const_cast<SfxDocumentInfoItem*>(m_pxInfoItem)->SetUseThumbnailSave( bUseThumbnail );
+            rSet->Put( SfxDocumentInfoItem( *m_pxInfoItem ) );
+            bRet = true;
+        }
+    }
+
     return bRet;
 }
 
@@ -1087,6 +1121,8 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
             rInfoItem.getEditingCycles() ) );
     }
 
+    bool m_bUseThumbnailSave = rInfoItem.IsUseThumbnailSave();
+
     // Check for cmis properties where otherwise unavailable
     if ( rInfoItem.isCmisDocument( ) )
     {
@@ -1141,6 +1177,8 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     m_pUseUserDataCB->Enable( bEnableUseUserData );
     bHandleDelete = false;
     m_pDeleteBtn->Enable( bEnableUseUserData );
+    m_pUseThumbnailSaveCB->SetState( static_cast<TriState>(m_bUseThumbnailSave) );
+    m_pUseThumbnailSaveCB->SaveValue();
 }
 
 
