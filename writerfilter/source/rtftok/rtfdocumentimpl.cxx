@@ -2138,6 +2138,15 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         {
             parBreak();
             // Not in table? Reset max width.
+            if (m_nCellxMax)
+            {
+                // Was in table, but not anymore -> tblEnd.
+                RTFSprms aAttributes;
+                RTFSprms aSprms;
+                aSprms.set(NS_ooxml::LN_tblEnd, std::make_shared<RTFValue>(1));
+                writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aAttributes, aSprms);
+                Mapper().props(pProperties);
+            }
             m_nCellxMax = 0;
         }
         else if (m_aStates.top().eDestination != Destination::SHAPETEXT)
@@ -4236,6 +4245,15 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
         // We assume text after a row definition always belongs to the table, to handle text before the real INTBL token
         dispatchFlag(RTF_INTBL);
+        if (!m_nCellxMax)
+        {
+            // Wasn't in table, but now is -> tblStart.
+            RTFSprms aAttributes;
+            RTFSprms aSprms;
+            aSprms.set(NS_ooxml::LN_tblStart, std::make_shared<RTFValue>(1));
+            writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aAttributes, aSprms);
+            Mapper().props(pProperties);
+        }
         m_nCellxMax = std::max(m_nCellxMax, nParam);
     }
     break;
