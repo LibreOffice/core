@@ -52,7 +52,7 @@ void UnknownAttribute::FillAttribute( Attribute* pAttrib ) const
     }
 }
 
-FastAttributeList::FastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xTokenHandler,
+FastAttributeList::FastAttributeList( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& xTokenHandler,
                                       sax_fastparser::FastTokenHandlerBase *pTokenHandler)
 : mxTokenHandler( xTokenHandler ),
   mpTokenHandler( pTokenHandler )

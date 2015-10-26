@@ -116,12 +116,12 @@ struct SaxContext
 
 struct ParserData
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler > mxDocumentHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >    mxTokenHandler;
-    FastTokenHandlerBase *mpTokenHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >        mxErrorHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >      mxEntityResolver;
-    ::com::sun::star::lang::Locale          maLocale;
+    css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxDocumentHandler;
+    css::uno::Reference< css::xml::sax::XFastTokenHandler >    mxTokenHandler;
+    FastTokenHandlerBase*                                      mpTokenHandler;
+    css::uno::Reference< css::xml::sax::XErrorHandler >        mxErrorHandler;
+    css::uno::Reference< css::xml::sax::XEntityResolver >      mxEntityResolver;
+    css::lang::Locale                                          maLocale;
 
     ParserData();
     ~ParserData();
@@ -162,14 +162,14 @@ struct Entity : public ParserData
 
     // Allow to disable threading for small documents:
     bool                                    mbEnableThreads;
-    ::com::sun::star::xml::sax::InputSource maStructSource;
+    css::xml::sax::InputSource              maStructSource;
     xmlParserCtxtPtr                        mpParser;
     ::sax_expatwrap::XMLFile2UTFConverter   maConverter;
 
     // Exceptions cannot be thrown through the C-XmlParser (possible
     // resource leaks), therefore any exception thrown by a UNO callback
     // must be saved somewhere until the C-XmlParser is stopped.
-    ::com::sun::star::uno::Any maSavedException;
+    css::uno::Any                           maSavedException;
     void saveException( const Any & e );
     void throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
                          bool mbDuringParse );
@@ -204,14 +204,14 @@ public:
     ~FastSaxParserImpl();
 
     // XFastParser
-    void parseStream( const ::com::sun::star::xml::sax::InputSource& aInputSource ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception);
-    void setFastDocumentHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
-    void setTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
-    void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    OUString getNamespaceURL( const OUString& rPrefix ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    void setErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
-    void setEntityResolver( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >& Resolver ) throw (::com::sun::star::uno::RuntimeException);
-    void setLocale( const ::com::sun::star::lang::Locale& rLocale ) throw (::com::sun::star::uno::RuntimeException);
+    void parseStream( const css::xml::sax::InputSource& aInputSource ) throw (css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception);
+    void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) throw (css::uno::RuntimeException);
+    void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) throw (css::uno::RuntimeException);
+    void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    OUString getNamespaceURL( const OUString& rPrefix ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) throw (css::uno::RuntimeException);
+    void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) throw (css::uno::RuntimeException);
+    void setLocale( const css::lang::Locale& rLocale ) throw (css::uno::RuntimeException);
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -241,8 +241,8 @@ private:
     void sendPendingCharacters();
 
     sal_Int32 GetToken( const xmlChar* pName, sal_Int32 nameLen );
-    sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int prefixLen, const xmlChar* pName, int nameLen ) throw (::com::sun::star::xml::sax::SAXException);
-    OUString GetNamespaceURL( const OString& rPrefix ) throw (::com::sun::star::xml::sax::SAXException);
+    sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int prefixLen, const xmlChar* pName, int nameLen ) throw (css::xml::sax::SAXException);
+    OUString GetNamespaceURL( const OString& rPrefix ) throw (css::xml::sax::SAXException);
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen );
     void DefineNamespace( const OString& rPrefix, const OUString& namespaceURL );

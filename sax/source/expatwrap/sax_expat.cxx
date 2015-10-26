@@ -80,12 +80,12 @@ namespace {
                                             pThis->rDocumentLocator->getColumnNumber()\
                                      ) );\
         }\
-        catch( const com::sun::star::uno::RuntimeException &e ) {\
+        catch( const css::uno::RuntimeException &e ) {\
             pThis->bExceptionWasThrown = true; \
             pThis->bRTExceptionWasThrown = true; \
             pImpl->rtexception = e; \
         }\
-        catch( const com::sun::star::uno::Exception &e ) {\
+        catch( const css::uno::Exception &e ) {\
             pThis->bExceptionWasThrown = true; \
             pThis->bRTExceptionWasThrown = true; \
             pImpl->rtexception = WrappedTargetRuntimeException("Non-runtime UNO exception caught during parse", e.Context, makeAny(e)); \
@@ -107,7 +107,7 @@ public:
     SaxExpatParser();
     virtual ~SaxExpatParser();
 
-    // ::com::sun::star::lang::XInitialization:
+    // css::lang::XInitialization:
     virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments)
         throw (css::uno::RuntimeException, css::uno::Exception, std::exception) override;
 
@@ -317,7 +317,7 @@ extern "C"
 // LocatorImpl
 
 class LocatorImpl :
-    public WeakImplHelper< XLocator, com::sun::star::io::XSeekable >
+    public WeakImplHelper< XLocator, css::io::XSeekable >
     // should use a different interface for stream positions!
 {
 public:
@@ -386,7 +386,7 @@ SaxExpatParser::~SaxExpatParser()
     delete m_pImpl;
 }
 
-// ::com::sun::star::lang::XInitialization:
+// css::lang::XInitialization:
 void SAL_CALL
 SaxExpatParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
     throw (css::uno::RuntimeException, css::uno::Exception, std::exception)

@@ -1297,7 +1297,7 @@ void Converter::convertDate(
 
 static void convertTime(
         OUStringBuffer& i_rBuffer,
-        const com::sun::star::util::DateTime& i_rDateTime)
+        const css::util::DateTime& i_rDateTime)
 {
     if (i_rDateTime.Hours   < 10) {
         i_rBuffer.append('0');
@@ -1326,7 +1326,7 @@ static void convertTime(
 
 static void convertTimeZone(
         OUStringBuffer& i_rBuffer,
-        const com::sun::star::util::DateTime& i_rDateTime,
+        const css::util::DateTime& i_rDateTime,
         sal_Int16 const* pTimeZoneOffset)
 {
     if (pTimeZoneOffset)
@@ -1342,7 +1342,7 @@ static void convertTimeZone(
 /** convert util::DateTime to ISO "time" or "dateTime" string */
 void Converter::convertTimeOrDateTime(
         OUStringBuffer& i_rBuffer,
-        const com::sun::star::util::DateTime& i_rDateTime,
+        const css::util::DateTime& i_rDateTime,
         sal_Int16 const* pTimeZoneOffset)
 {
     if (i_rDateTime.Year == 0 ||
@@ -1361,7 +1361,7 @@ void Converter::convertTimeOrDateTime(
 /** convert util::DateTime to ISO "date" or "dateTime" string */
 void Converter::convertDateTime(
         OUStringBuffer& i_rBuffer,
-        const com::sun::star::util::DateTime& i_rDateTime,
+        const css::util::DateTime& i_rDateTime,
         sal_Int16 const*const pTimeZoneOffset,
         bool i_bAddTimeIf0AM )
 {
@@ -2530,7 +2530,7 @@ sal_Int16 Converter::GetUnitFromString(const OUString& rString, sal_Int16 nDefau
 
 bool Converter::convertAny(OUStringBuffer&    rsValue,
                            OUStringBuffer&    rsType ,
-                           const com::sun::star::uno::Any& rValue)
+                           const css::uno::Any& rValue)
 {
     bool bConverted = false;
 
@@ -2539,11 +2539,11 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
 
     switch (rValue.getValueTypeClass())
     {
-        case com::sun::star::uno::TypeClass_BYTE :
-        case com::sun::star::uno::TypeClass_SHORT :
-        case com::sun::star::uno::TypeClass_UNSIGNED_SHORT :
-        case com::sun::star::uno::TypeClass_LONG :
-        case com::sun::star::uno::TypeClass_UNSIGNED_LONG :
+        case css::uno::TypeClass_BYTE :
+        case css::uno::TypeClass_SHORT :
+        case css::uno::TypeClass_UNSIGNED_SHORT :
+        case css::uno::TypeClass_LONG :
+        case css::uno::TypeClass_UNSIGNED_LONG :
             {
                 sal_Int32 nTempValue = 0;
                 if (rValue >>= nTempValue)
@@ -2555,7 +2555,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
             }
             break;
 
-        case com::sun::star::uno::TypeClass_BOOLEAN :
+        case css::uno::TypeClass_BOOLEAN :
             {
                 bool bTempValue = false;
                 if (rValue >>= bTempValue)
@@ -2567,8 +2567,8 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
             }
             break;
 
-        case com::sun::star::uno::TypeClass_FLOAT :
-        case com::sun::star::uno::TypeClass_DOUBLE :
+        case css::uno::TypeClass_FLOAT :
+        case css::uno::TypeClass_DOUBLE :
             {
                 double fTempValue = 0.0;
                 if (rValue >>= fTempValue)
@@ -2580,7 +2580,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
             }
             break;
 
-        case com::sun::star::uno::TypeClass_STRING :
+        case css::uno::TypeClass_STRING :
             {
                 OUString sTempValue;
                 if (rValue >>= sTempValue)
@@ -2592,17 +2592,17 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
             }
             break;
 
-        case com::sun::star::uno::TypeClass_STRUCT :
+        case css::uno::TypeClass_STRUCT :
             {
-                com::sun::star::util::Date     aDate    ;
-                com::sun::star::util::Time     aTime    ;
-                com::sun::star::util::DateTime aDateTime;
+                css::util::Date     aDate    ;
+                css::util::Time     aTime    ;
+                css::util::DateTime aDateTime;
 
                 if (rValue >>= aDate)
                 {
                     rsType.append("date");
                     bConverted = true;
-                    com::sun::star::util::DateTime aTempValue;
+                    css::util::DateTime aTempValue;
                     aTempValue.Day              = aDate.Day;
                     aTempValue.Month            = aDate.Month;
                     aTempValue.Year             = aDate.Year;
@@ -2617,7 +2617,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 {
                     rsType.append("time");
                     bConverted = true;
-                    com::sun::star::util::Duration aTempValue;
+                    css::util::Duration aTempValue;
                     aTempValue.Days             = 0;
                     aTempValue.Months           = 0;
                     aTempValue.Years            = 0;
