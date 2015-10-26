@@ -338,7 +338,10 @@ void DesktopLOKTest::testPasteWriter()
     CPPUNIT_ASSERT_EQUAL(OString("hello"), OString(pText));
     free(pText);
 
+    // textt/plain should be rejected.
     CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "textt/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+    // Writer is expected to support text/html.
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aText.getStr(), aText.getLength()));
 
     comphelper::LibreOfficeKit::setActive(false);
 }
