@@ -316,6 +316,18 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     SAL_DETAIL_LOG_STREAM( \
         SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, stream)
 
+/**
+  Produce temporary debugging output from stream along with a
+  stack trace of the calling location.  This macro is meant to
+  be used only while working on code and should never exist
+  in production code.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
+#define SAL_DEBUG_TRACE(stream) \
+    SAL_DETAIL_LOG_STREAM( \
+        SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE, NULL, NULL, stream)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
