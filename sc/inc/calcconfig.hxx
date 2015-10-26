@@ -48,7 +48,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool mbEmptyStringAsZero:1;
     bool mbHasStringRefSyntax:1;
 
-    comphelper::ConfigurationListenerProperty<bool> mbOpenCLEnabled;
+    static bool isOpenCLEnabled();
 
     bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;
