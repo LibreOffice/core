@@ -217,7 +217,7 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pT
             mpCellLineStylePopup.reset(
                 new CellLineStylePopup(
                     this,
-                    [this] (svx::sidebar::PopupContainer* pParent) { return this->CreateCellBorderStylePopupControl(pParent); } ));
+                    [this] (svx::sidebar::PopupContainer* pParent) { return this->CreateCellLineStylePopupControl(pParent); } ));
         }
 
         if(mpCellLineStylePopup.get())
