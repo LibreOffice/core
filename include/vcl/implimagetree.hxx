@@ -40,10 +40,6 @@ class ImplImageTree {
 public:
     VCL_DLLPUBLIC static ImplImageTree & get();
 
-    ImplImageTree();
-
-    ~ImplImageTree();
-
     VCL_DLLPUBLIC OUString getImageUrl(
         OUString const & name, OUString const & style, OUString const & lang);
 
@@ -63,6 +59,10 @@ public:
     css::uno::Reference< css::container::XNameAccess > getNameAccess();
 
 private:
+    ImplImageTree();
+
+    ~ImplImageTree();
+
     ImplImageTree(const ImplImageTree&) = delete;
     ImplImageTree& operator=(const ImplImageTree&) = delete;
 
