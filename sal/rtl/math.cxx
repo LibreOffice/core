@@ -32,9 +32,9 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <float.h>
 #include <limits.h>
+#include <math.h>
 #include <stdlib.h>
 
 static int const n10Count = 16;
