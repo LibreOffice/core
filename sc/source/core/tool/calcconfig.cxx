@@ -117,6 +117,22 @@ void ScCalcConfig::SetStringRefSyntax( formula::FormulaGrammar::AddressConventio
     mbHasStringRefSyntax = true;
 }
 
+formula::FormulaGrammar::AddressConvention
+ScCalcConfig::GrammarToStringRefSyntax( formula::FormulaGrammar::Grammar eGram ) const
+{
+    switch (eGram)
+    {
+        case formula::FormulaGrammar::GRAM_NATIVE:
+            return formula::FormulaGrammar::CONV_OOO;
+        case formula::FormulaGrammar::GRAM_NATIVE_XL_A1:
+            return formula::FormulaGrammar::CONV_XL_A1;
+        case formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1:
+            return formula::FormulaGrammar::CONV_XL_R1C1;
+        default:
+            return formula::FormulaGrammar::CONV_UNSPECIFIED;
+    }
+}
+
 bool ScCalcConfig::operator== (const ScCalcConfig& r) const
 {
     return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&
