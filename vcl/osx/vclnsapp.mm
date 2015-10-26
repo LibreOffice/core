@@ -24,10 +24,10 @@
 
 #include <sal/main.h>
 #include <vcl/cmdevt.hxx>
+#include <vcl/implimagetree.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-#include "impimagetree.hxx"
 #include "osx/saldata.hxx"
 #include "osx/salframe.h"
 #include "osx/salframeview.h"
@@ -412,7 +412,7 @@
         {
             ApplicationEvent aEv(ApplicationEvent::TYPE_PRIVATE_DOSHUTDOWN);
             GetpApp()->AppEvent( aEv );
-            ImplImageTreeSingletonRef()->shutDown();
+            ImplImageTree::get().shutDown();
             // DeInitVCL should be called in ImplSVMain - unless someon _exits first which
             // can occur in Desktop::doShutdown for example
         }

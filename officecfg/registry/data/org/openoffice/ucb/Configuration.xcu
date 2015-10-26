@@ -179,6 +179,17 @@
                 <value/>
               </prop>
             </node>
+            <node oor:name="Provider16" oor:op="replace">
+              <prop oor:name="ServiceName">
+                <value>com.sun.star.ucb.ImageContentProvider</value>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>vnd.libreoffice.image</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
             <node oor:name="Provider900" oor:op="replace">
               <prop oor:name="ServiceName">
                 <value/>

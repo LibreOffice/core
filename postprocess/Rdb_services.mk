@@ -98,6 +98,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	ucb/source/ucp/file/ucpfile1 \
 	$(if $(ENABLE_CURL),ucb/source/ucp/ftp/ucpftp1) \
 	ucb/source/ucp/hierarchy/ucphier1 \
+	ucb/source/ucp/image/ucpimage \
 	ucb/source/ucp/package/ucppkg1 \
 	ucb/source/ucp/tdoc/ucptdoc1 \
 	UnoControls/util/ctl \

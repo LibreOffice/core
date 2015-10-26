@@ -34,15 +34,16 @@
 #include "osl/file.hxx"
 #include "osl/diagnose.h"
 #include "rtl/bootstrap.hxx"
+#include "rtl/uri.hxx"
 
 #include "tools/stream.hxx"
 #include "tools/urlobj.hxx"
 #include "vcl/bitmapex.hxx"
 #include <vcl/dibtools.hxx>
+#include <vcl/implimagetree.hxx>
 #include "vcl/pngread.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
-#include "impimagetree.hxx"
 #include <vcldemo-debug.hxx>
 
 #include <vcl/BitmapProcessor.hxx>
@@ -93,12 +94,76 @@ static void loadImageFromStream(std::shared_ptr<SvStream> xStream, OUString cons
 
 }
 
+ImplImageTree & ImplImageTree::get() {
+    static ImplImageTree instance;
+    return instance;
+}
+
 ImplImageTree::ImplImageTree()
 {
 }
 
 ImplImageTree::~ImplImageTree()
 {
+}
+
+OUString ImplImageTree::getImageUrl(
+    OUString const & name, OUString const & style, OUString const & lang)
+{
+    OUString aStyle(style);
+    while (!aStyle.isEmpty())
+    {
+        try {
+            setStyle(aStyle);
+
+            std::vector< OUString > paths;
+            paths.push_back(getRealImageName(name));
+
+            if (!lang.isEmpty())
+            {
+                sal_Int32 pos = name.lastIndexOf('/');
+                if (pos != -1)
+                {
+                    std::vector<OUString> aFallbacks(
+                        LanguageTag(lang).getFallbackStrings(true));
+                    for (std::vector< OUString >::reverse_iterator it( aFallbacks.rbegin());
+                         it != aFallbacks.rend(); ++it)
+                    {
+                        paths.push_back( getRealImageName( createPath(name, pos, *it) ) );
+                    }
+                }
+            }
+
+            try {
+                if (checkPathAccess()) {
+                    const uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[maCurrentStyle].maNameAccess;
+
+                    for (std::vector<OUString>::const_reverse_iterator j(paths.rbegin()); j != paths.rend(); ++j)
+                    {
+                        if (rNameAccess->hasByName(*j))
+                        {
+                            return "vnd.sun.star.zip://"
+                                + rtl::Uri::encode(
+                                    maIconSet[maCurrentStyle].maURL + ".zip",
+                                    rtl_UriCharClassRegName,
+                                    rtl_UriEncodeIgnoreEscapes,
+                                    RTL_TEXTENCODING_UTF8)
+                                + "/" + *j;
+                                // assuming *j contains no problematic chars
+                        }
+                    }
+                }
+            } catch (css::uno::RuntimeException &) {
+                throw;
+            } catch (const css::uno::Exception & e) {
+                SAL_INFO("vcl", "exception " << e.Message);
+            }
+        }
+        catch (css::uno::RuntimeException &) {}
+
+        aStyle = fallbackStyle(aStyle);
+    }
+    return OUString();
 }
 
 OUString ImplImageTree::fallbackStyle(const OUString &style)
@@ -361,9 +426,7 @@ css::uno::Reference<css::container::XNameAccess> ImplImageTree::getNameAccess()
 /// Recursively dump all names ...
 css::uno::Sequence<OUString> ImageTree_getAllImageNames()
 {
-    static ImplImageTreeSingletonRef aImageTree;
-
-    css::uno::Reference<css::container::XNameAccess> xRef(aImageTree->getNameAccess());
+    css::uno::Reference<css::container::XNameAccess> xRef(ImplImageTree::get().getNameAccess());
 
     return xRef->getElementNames();
 }

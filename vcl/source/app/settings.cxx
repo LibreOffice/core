@@ -42,6 +42,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/implimagetree.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/outdev.hxx>
@@ -56,7 +57,6 @@
 using namespace ::com::sun::star;
 
 #include "svdata.hxx"
-#include "impimagetree.hxx"
 
 struct ImplMouseData
 {

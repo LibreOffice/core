@@ -17,29 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMPIMAGETREE_HXX
-#define INCLUDED_VCL_INC_IMPIMAGETREE_HXX
+#ifndef INCLUDED_INCLUDE_VCL_IMPLIMAGETREE_HXX
+#define INCLUDED_INCLUDE_VCL_IMPLIMAGETREE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <memory>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "rtl/ustring.hxx"
-#include "salhelper/singletonref.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/dllapi.h>
 
 namespace com { namespace sun { namespace star { namespace container {
     class XNameAccess;
 } } } }
-class BitmapEx;
 
 class ImplImageTree {
 public:
+    VCL_DLLPUBLIC static ImplImageTree & get();
+
     ImplImageTree();
 
     ~ImplImageTree();
+
+    VCL_DLLPUBLIC OUString getImageUrl(
+        OUString const & name, OUString const & style, OUString const & lang);
 
     bool loadImage(
         OUString const & name, OUString const & style,
@@ -109,8 +115,6 @@ private:
     */
     static OUString fallbackStyle(const OUString &style);
 };
-
-typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;
 
 #endif
 

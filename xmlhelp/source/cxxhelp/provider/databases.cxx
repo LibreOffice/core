@@ -120,7 +120,6 @@ OUString Databases::expandURL( const OUString& aURL, Reference< uno::XComponentC
 
 Databases::Databases( bool showBasic,
                       const OUString& instPath,
-                      const com::sun::star::uno::Sequence< OUString >& imagesZipPaths,
                       const OUString& productName,
                       const OUString& productVersion,
                       const OUString& styleSheet,
@@ -137,9 +136,7 @@ Databases::Databases( bool showBasic,
       prodVersion( "%PRODUCTVERSION" ),
       vendName( "%VENDORNAME" ),
       vendVersion( "%VENDORVERSION" ),
-      vendShort( "%VENDORSHORT" ),
-      m_aImagesZipPaths( imagesZipPaths ),
-      m_aSymbolsStyleName( "" )
+      vendShort( "%VENDORSHORT" )
 {
     m_xSMgr = Reference< XMultiComponentFactory >( m_xContext->getServiceManager(), UNO_QUERY );
 
@@ -207,106 +204,33 @@ Databases::~Databases()
     }
 }
 
-static bool impl_getZipFile(
-        Sequence< OUString > & rImagesZipPaths,
-        const OUString & rZipName,
-        OUString & rFileName )
+OString Databases::getImageTheme()
 {
-    OUString aWorkingDir;
-    osl_getProcessWorkingDir( &aWorkingDir.pData );
-    const OUString *pPathArray = rImagesZipPaths.getArray();
-    for ( int i = 0; i < rImagesZipPaths.getLength(); ++i )
-    {
-        OUString aFileName = pPathArray[ i ];
-        if ( !aFileName.isEmpty() )
-        {
-            if ( !aFileName.endsWith("/") )
-            {
-                aFileName += "/";
-            }
-            aFileName += rZipName;
-            // the icons are not read when the URL is a symlink
-            osl::File::getAbsoluteFileURL( aWorkingDir, aFileName, rFileName );
+    uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
+        configuration::theDefaultProvider::get(m_xContext);
 
-            // test existence
-            osl::DirectoryItem aDirItem;
-            if ( osl::DirectoryItem::get( rFileName, aDirItem ) == osl::FileBase::E_None )
-                return true;
-        }
-    }
-    return false;
-}
+    // set root path
+    uno::Sequence < uno::Any > lParams(1);
+    beans::PropertyValue                       aParam ;
+    aParam.Name    = "nodepath";
+    aParam.Value <<= OUString("org.openoffice.Office.Common");
+    lParams[0] = uno::makeAny(aParam);
 
-OString Databases::getImagesZipFileURL()
-{
+    // open it
+    uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
+                OUString("com.sun.star.configuration.ConfigurationAccess"),
+                lParams) );
+
+    uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
+    uno::Any aResult = xAccess->getByHierarchicalName(OUString("Misc/SymbolStyle"));
     OUString aSymbolsStyleName;
-    try
+    aResult >>= aSymbolsStyleName;
+
+    if ( aSymbolsStyleName.isEmpty() || aSymbolsStyleName == "auto" )
     {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
-            configuration::theDefaultProvider::get(m_xContext);
-
-        // set root path
-        uno::Sequence < uno::Any > lParams(1);
-        beans::PropertyValue                       aParam ;
-        aParam.Name    = "nodepath";
-        aParam.Value <<= OUString("org.openoffice.Office.Common");
-        lParams[0] = uno::makeAny(aParam);
-
-        // open it
-        uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                    OUString("com.sun.star.configuration.ConfigurationAccess"),
-                    lParams) );
-
-        bool bChanged = false;
-        uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
-        uno::Any aResult = xAccess->getByHierarchicalName(OUString("Misc/SymbolStyle"));
-        if ( (aResult >>= aSymbolsStyleName) && m_aSymbolsStyleName != aSymbolsStyleName )
-        {
-            m_aSymbolsStyleName = aSymbolsStyleName;
-            bChanged = true;
-        }
-
-        if ( m_aImagesZipFileURL.isEmpty() || bChanged )
-        {
-            OUString aImageZip;
-            bool bFound = false;
-
-            if ( !aSymbolsStyleName.isEmpty() )
-            {
-                if ( aSymbolsStyleName == "auto" )
-                {
-                    // with the layered images*.zip, tango is the most
-                    // complete theme, so show that one
-                    // FIXME instead of using a general vnd.sun.star.zip://
-                    // for imgrepos, we should have some vnd.sun.star.image://
-                    // so that we don't have to re-open the stream for every
-                    // image in the help
-                    aSymbolsStyleName = "tango";
-                }
-                OUString aZipName = "images_" + aSymbolsStyleName + ".zip";
-
-                bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
-            }
-
-            if ( ! bFound )
-                bFound = impl_getZipFile( m_aImagesZipPaths, OUString( "images.zip" ), aImageZip );
-
-            if ( ! bFound )
-                aImageZip.clear();
-
-            m_aImagesZipFileURL = OUStringToOString(
-                        rtl::Uri::encode(
-                            aImageZip,
-                            rtl_UriCharClassPchar,
-                            rtl_UriEncodeIgnoreEscapes,
-                            RTL_TEXTENCODING_UTF8 ), RTL_TEXTENCODING_UTF8 );
-        }
+        aSymbolsStyleName = "tango";
     }
-    catch ( NoSuchElementException const & )
-    {
-    }
-
-    return m_aImagesZipFileURL;
+    return aSymbolsStyleName.toUtf8();
 }
 
 void Databases::replaceName( OUString& oustring ) const

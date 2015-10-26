@@ -890,8 +890,8 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                           pDatabases->getProductVersion().getLength(),
                           RTL_TEXTENCODING_UTF8 ) + OString('\'');
 
-        parString[last++] = "imgrepos";
-        parString[last++] = OString('\'') + pDatabases->getImagesZipFileURL() + OString('\'');
+        parString[last++] = "imgtheme";
+        parString[last++] = OString('\'') + pDatabases->getImageTheme() + OString('\'');
         parString[last++] = "hp";
         parString[last++] = OString('\'') + urlParam->getByName( "HelpPrefix" ) + OString('\'');
 

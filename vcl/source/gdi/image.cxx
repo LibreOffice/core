@@ -30,7 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/imagerepository.hxx>
-#include <impimagetree.hxx>
+#include <vcl/implimagetree.hxx>
 #include <image.h>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -370,8 +370,6 @@ void ImageList::ImplInit( sal_uInt16 nItems, const Size &rSize )
 
 void ImageAryData::Load(const OUString &rPrefix)
 {
-    static ImplImageTreeSingletonRef aImageTree;
-
     OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
     OUString aFileName = rPrefix;
@@ -379,7 +377,7 @@ void ImageAryData::Load(const OUString &rPrefix)
 #if OSL_DEBUG_LEVEL > 0
     bool bSuccess =
 #endif
-        aImageTree->loadImage( aFileName, aIconTheme, maBitmapEx, true );
+        ImplImageTree::get().loadImage(aFileName, aIconTheme, maBitmapEx, true);
 #if OSL_DEBUG_LEVEL > 0
     if ( !bSuccess )
     {

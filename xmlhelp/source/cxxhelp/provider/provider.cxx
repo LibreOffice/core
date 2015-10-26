@@ -35,7 +35,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
-#include <rtl/bootstrap.hxx>
 
 #include "databases.hxx"
 #include "provider.hxx"
@@ -324,22 +323,9 @@ void ContentProvider::init()
     }
 
     OUString productversion( setupversion + " " + setupextension );
-
-    uno::Sequence< OUString > aImagesZipPaths( 2 );
-    xHierAccess = getHierAccess( sProvider,  "org.openoffice.Office.Common" );
-
-    OUString aPath( getKey( xHierAccess, "Path/Current/UserConfig" ) );
-    subst( aPath );
-    aImagesZipPaths[ 0 ] = aPath;
-
-    aPath = "$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config";
-    rtl::Bootstrap::expandMacros(aPath);
-    aImagesZipPaths[ 1 ] = aPath;
-
     bool showBasic = getBooleanKey(xHierAccess,"Help/ShowBasic");
     m_pDatabases = new Databases( showBasic,
                                   instPath,
-                                  aImagesZipPaths,
                                   utl::ConfigManager::getProductName(),
                                   productversion,
                                   stylesheet,

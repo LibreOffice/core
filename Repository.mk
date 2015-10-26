@@ -416,6 +416,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(ENABLE_TELEPATHY),tubes) \
 	ucpexpand1 \
 	ucpext \
+	ucpimage \
 	ucpcmis1 \
 	ucptdoc1 \
 	unordf \

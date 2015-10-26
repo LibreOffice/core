@@ -35,6 +35,7 @@
 #include "vcl/cvtgrf.hxx"
 #include "vcl/scheduler.hxx"
 #include "vcl/image.hxx"
+#include "vcl/implimagetree.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/unowrap.hxx"
 #include "vcl/configsettings.hxx"
@@ -68,7 +69,6 @@
 #include "salsys.hxx"
 #include "saltimer.hxx"
 #include "salimestatus.hxx"
-#include "impimagetree.hxx"
 #include "xconnection.hxx"
 
 #include "vcl/opengl/OpenGLContext.hxx"
@@ -368,7 +368,7 @@ void DeInitVCL()
     DBG_ASSERT( nBadTopWindows==0, aBuf.getStr() );
 #endif
 
-    ImplImageTreeSingletonRef()->shutDown();
+    ImplImageTree::get().shutDown();
 
     osl_removeSignalHandler( pExceptionHandler);
     pExceptionHandler = NULL;

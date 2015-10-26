@@ -24,6 +24,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
+#include <vcl/implimagetree.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/alpha.hxx>
@@ -36,7 +37,6 @@
 #include <vcl/settings.hxx>
 
 #include <image.h>
-#include <impimagetree.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 // BitmapEx::Create
@@ -107,11 +107,9 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
 
 void BitmapEx::loadFromIconTheme( const OUString& rIconName )
 {
-    static ImplImageTreeSingletonRef aImageTree;
-
     OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-    if( !aImageTree->loadImage( rIconName, aIconTheme, *this, true ) )
+    if( !ImplImageTree::get().loadImage( rIconName, aIconTheme, *this, true ) )
     {
 #ifdef DBG_UTIL
         OStringBuffer aErrorStr(
