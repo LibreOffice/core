@@ -421,11 +421,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         else if ( rProp.Name == "IsErrorDocument" )
             xRow->appendBoolean( rProp, m_aURLParameter.isErrorDocument() );
         else if ( rProp.Name == "MediaType" )
-            if( m_aURLParameter.isPicture() )
-                xRow->appendString(
-                    rProp,
-                    OUString( "image/gif" ) );
-            else if( m_aURLParameter.isActive() )
+            if( m_aURLParameter.isActive() )
                 xRow->appendString(
                     rProp,
                     OUString( "text/plain" ) );

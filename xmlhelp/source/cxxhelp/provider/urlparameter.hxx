@@ -116,7 +116,6 @@ namespace chelp {
                       Databases* pDatabases )
             throw( com::sun::star::ucb::IllegalIdentifierException );
 
-        bool isPicture() const { return m_aModule == "picture"; }
         bool isActive() const { return !m_aActive.isEmpty() && m_aActive == "true"; }
         bool isQuery() const { return m_aId.isEmpty() && !m_aQuery.isEmpty(); }
         bool isFile() const { return !m_aId.isEmpty(); }

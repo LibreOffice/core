@@ -396,60 +396,16 @@ void URLParameter::open( const Command& aCommand,
     if( ! xDataSink.is() )
         return;
 
-    if( isPicture() )
+    // a standard document or else an active help text, plug in the new input stream
+    InputStreamTransformer* p = new InputStreamTransformer( this,m_pDatabases,isRoot() );
+    try
     {
-        Reference< XInputStream > xStream;
-        Reference< XHierarchicalNameAccess > xNA =
-            m_pDatabases->jarFile( OUString( "picture.jar" ),
-                                   get_language() );
-
-        OUString path = get_path();
-        if( xNA.is() )
-        {
-            try
-            {
-                Any aEntry = xNA->getByHierarchicalName( path );
-                Reference< XActiveDataSink > xSink;
-                if( ( aEntry >>= xSink ) && xSink.is() )
-                    xStream = xSink->getInputStream();
-            }
-            catch ( NoSuchElementException & )
-            {
-            }
-        }
-        if( xStream.is() )
-        {
-            sal_Int32 ret;
-            Sequence< sal_Int8 > aSeq( 4096 );
-            while( true )
-            {
-                try
-                {
-                    ret = xStream->readBytes( aSeq,4096 );
-                    xDataSink->writeBytes( aSeq );
-                    if( ret < 4096 )
-                        break;
-                }
-                catch( const Exception& )
-                {
-                    break;
-                }
-            }
-        }
+        xDataSink->writeBytes( Sequence< sal_Int8 >( p->getData(),p->getLen() ) );
     }
-    else
+    catch( const Exception& )
     {
-        // a standard document or else an active help text, plug in the new input stream
-        InputStreamTransformer* p = new InputStreamTransformer( this,m_pDatabases,isRoot() );
-        try
-        {
-            xDataSink->writeBytes( Sequence< sal_Int8 >( p->getData(),p->getLen() ) );
-        }
-        catch( const Exception& )
-        {
-        }
-        delete p;
     }
+    delete p;
     xDataSink->closeOutput();
 }
 
@@ -464,32 +420,8 @@ void URLParameter::open( const Command& aCommand,
     (void)CommandId;
     (void)Environment;
 
-    if( isPicture() )
-    {
-        Reference< XInputStream > xStream;
-        Reference< XHierarchicalNameAccess > xNA =
-            m_pDatabases->jarFile( OUString( "picture.jar" ),
-                                   get_language() );
-
-        OUString path = get_path();
-        if( xNA.is() )
-        {
-            try
-            {
-                Any aEntry = xNA->getByHierarchicalName( path );
-                Reference< XActiveDataSink > xSink;
-                if( ( aEntry >>= xSink ) && xSink.is() )
-                    xStream = xSink->getInputStream();
-            }
-            catch ( NoSuchElementException & )
-            {
-            }
-        }
-        xDataSink->setInputStream( turnToSeekable(xStream) );
-    }
-    else
-        // a standard document or else an active help text, plug in the new input stream
-        xDataSink->setInputStream( new InputStreamTransformer( this,m_pDatabases,isRoot() ) );
+    // a standard document or else an active help text, plug in the new input stream
+    xDataSink->setInputStream( new InputStreamTransformer( this,m_pDatabases,isRoot() ) );
 }
 
 
