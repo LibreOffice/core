@@ -53,8 +53,6 @@ void main() {
             gl_FragColor = ((time-START)/(PART - START))*vec4(sn, sn, sn, 1.0) + (1.0 - (time - START)/(PART - START))*texture2D(leavingSlideTexture, v_texturePosition);
         else
             gl_FragColor = texture2D(leavingSlideTexture, v_texturePosition);
-    } else if ( time < PART ) {
-            gl_FragColor = texture2D(leavingSlideTexture, v_texturePosition);
     } else if ( time > END ) {
         gl_FragColor = ((1.0 - time)/(1.0 - END))*vec4(sn, sn, sn, 1.0) + ((time - END)/(1.0 - END))*texture2D(enteringSlideTexture, v_texturePosition);
     } else 
