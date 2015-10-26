@@ -1017,6 +1017,13 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
     }
 
     pWindow->SetClipboard(xClipboard);
+    if (!pDoc->isMimeTypeSupported())
+    {
+        if (gImpl)
+            gImpl->maLastExceptionMsg = "Document doesn't support this mime type";
+        return false;
+    }
+
     OUString aCommand(".uno:Paste");
     uno::Sequence<beans::PropertyValue> aPropertyValues;
     if (!comphelper::dispatchCommand(aCommand, aPropertyValues))

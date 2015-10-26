@@ -3189,6 +3189,16 @@ vcl::Window* SwXTextDocument::getWindow()
     return &pDocShell->GetView()->GetEditWin();
 }
 
+bool SwXTextDocument::isMimeTypeSupported()
+{
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    if (!pWrtShell)
+        return false;
+
+    TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromSystemClipboard(&pWrtShell->GetView().GetEditWin()));
+    return aDataHelper.GetXTransferable().is() && SwTransferable::IsPaste(*pWrtShell, aDataHelper);
+}
+
 int SwXTextDocument::getPart()
 {
     SolarMutexGuard aGuard;
