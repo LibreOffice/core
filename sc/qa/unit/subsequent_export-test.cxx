@@ -150,7 +150,7 @@ public:
     void testMatrixMultiplication();
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
-
+    void testRefStringUnspecified();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -210,7 +210,7 @@ public:
     CPPUNIT_TEST(testMatrixMultiplication);
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
-
+    CPPUNIT_TEST(testRefStringUnspecified);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2913,6 +2913,34 @@ void ScExportTest::testRefStringConfigXLSX()
 
     xDocSh->DoClose();
     xNewDocSh->DoClose();
+}
+
+void ScExportTest::testRefStringUnspecified()
+{
+    ScDocShell* pShell = new ScDocShell(
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    pShell->DoInitNew();
+
+    ScDocument& rDoc = pShell->GetDocument();
+    ScCalcConfig aConfig = rDoc.GetCalcConfig();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default string ref syntax value doesn't match", formula::FormulaGrammar::CONV_UNSPECIFIED,
+                            aConfig.meStringRefAddressSyntax);
+
+    // change formula syntax (i.e. not string ref syntax) to ExcelA1
+    rDoc.SetGrammar( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
+
+    ScDocShellRef xDocSh = saveAndReload( pShell, ODS );
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.Is());
+
+    // with string ref syntax at its default value, we should've saved ExcelA1
+    ScDocument& rDoc2 = xDocSh->GetDocument();
+    aConfig = rDoc2.GetCalcConfig();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("String ref syntax doesn't match", formula::FormulaGrammar::CONV_XL_A1,
+                            aConfig.meStringRefAddressSyntax);
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
