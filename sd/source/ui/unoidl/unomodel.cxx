@@ -2544,6 +2544,17 @@ vcl::Window* SdXImpressDocument::getWindow()
     return pViewShell->GetActiveWindow();
 }
 
+bool SdXImpressDocument::isMimeTypeSupported()
+{
+    SolarMutexGuard aGuard;
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return false;
+
+    TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromSystemClipboard(pViewShell->GetActiveWindow()));
+    return EditEngine::HasValidData(aDataHelper.GetTransferable());
+}
+
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
     uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);

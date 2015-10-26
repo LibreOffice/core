@@ -261,6 +261,8 @@ public:
     virtual void resetSelection() override;
     /// @see vcl::ITiledRenderable::getWindow().
     virtual vcl::Window* getWindow() override;
+    /// @see vcl::ITiledRenderable::isMimeTypeSupported().
+    virtual bool isMimeTypeSupported() override;
 
     // XComponent
 
