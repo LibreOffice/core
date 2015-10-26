@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_88ad278b",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-10-26T08:23:55Z",
+      "side": 1,
+      "message": "my fault: instead of SID_JUMP_TO_SPECIFIC_PAGE use nSlotId. Then the build error on MacOS will go away.",
+      "revId": "6a83a68da96e3f700c22a52b29676cb133fd3d5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
