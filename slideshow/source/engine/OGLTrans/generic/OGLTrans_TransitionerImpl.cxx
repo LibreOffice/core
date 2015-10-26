@@ -252,20 +252,16 @@ private:
 #if defined( GLX_EXT_texture_from_pixmap )
     GLXPixmap maLeavingPixmapGL;
     GLXPixmap maEnteringPixmapGL;
+    Pixmap maLeavingPixmap;
+    Pixmap maEnteringPixmap;
+    bool mbFreeLeavingPixmap;
+    bool mbFreeEnteringPixmap;
 #endif
 #if defined( UNX ) && !defined( MACOSX )
     bool mbRestoreSync;
 #endif
     bool mbUseLeavingPixmap;
     bool mbUseEnteringPixmap;
-#if defined( GLX_EXT_texture_from_pixmap )
-    bool mbFreeLeavingPixmap;
-    bool mbFreeEnteringPixmap;
-#endif
-#if defined( UNX ) && !defined( MACOSX )
-    Pixmap maLeavingPixmap;
-    Pixmap maEnteringPixmap;
-#endif
 
     /** the form the raw bytes are in for the bitmaps
     */
@@ -1381,20 +1377,16 @@ OGLTransitionerImpl::OGLTransitionerImpl()
 #if defined( GLX_EXT_texture_from_pixmap )
     , maLeavingPixmapGL(0)
     , maEnteringPixmapGL(0)
+    , maLeavingPixmap(0)
+    , maEnteringPixmap(0)
+    , mbFreeLeavingPixmap(false)
+    , mbFreeEnteringPixmap(false)
 #endif
 #if defined( UNX ) && !defined( MACOSX )
     , mbRestoreSync(false)
 #endif
     , mbUseLeavingPixmap(false)
     , mbUseEnteringPixmap(false)
-#if defined( GLX_EXT_texture_from_pixmap )
-    , mbFreeLeavingPixmap(false)
-    , mbFreeEnteringPixmap(false)
-#endif
-#if defined( UNX ) && !defined( MACOSX )
-    , maLeavingPixmap(0)
-    , maEnteringPixmap(0)
-#endif
     , maSlideBitmapLayout()
     , maSlideSize()
     , mbBrokenTexturesATI(false)
