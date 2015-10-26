@@ -44,14 +44,14 @@ typedef std::vector<TokenValue> TokenValueList;
 /// Receives notification of sax document events to write into an XOutputStream.
 class FastSaxSerializer
 {
-    typedef ::com::sun::star::uno::Sequence< ::sal_Int8 > Int8Sequence;
-    typedef ::com::sun::star::uno::Sequence< ::sal_Int32 > Int32Sequence;
+    typedef css::uno::Sequence< ::sal_Int8 > Int8Sequence;
+    typedef css::uno::Sequence< ::sal_Int32 > Int32Sequence;
 
 public:
     FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream );
     ~FastSaxSerializer();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream();
+    css::uno::Reference< css::io::XOutputStream > getOutputStream();
     /// called by FSHelper to put data in for writeTokenValueList
     TokenValueList& getTokenValueList() { return maTokenValues; }
 
@@ -158,7 +158,7 @@ private:
      *  to ensure correct order of ForSort methods.
      */
     CachedOutputStream maCachedOutputStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxFastTokenHandler;
+    css::uno::Reference< css::xml::sax::XFastTokenHandler > mxFastTokenHandler;
 
     class ForMerge : public ForMergeBase
     {
@@ -241,7 +241,7 @@ private:
 
         The latter in the case that we are inside a mark().
      */
-    void writeBytes( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData );
+    void writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData );
     void writeBytes( const char* pStr, size_t nLen );
 };
 

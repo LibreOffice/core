@@ -31,18 +31,18 @@ public:
     Text2UnicodeConverter( const OString & sEncoding );
     ~Text2UnicodeConverter();
 
-    ::com::sun::star::uno::Sequence < sal_Unicode > convert( const ::com::sun::star::uno::Sequence<sal_Int8> & );
+    css::uno::Sequence < sal_Unicode > convert( const css::uno::Sequence<sal_Int8> & );
     bool canContinue() {  return m_bCanContinue; }
 
 private:
     void init( rtl_TextEncoding encoding );
 
-    rtl_TextToUnicodeConverter  m_convText2Unicode;
-    rtl_TextToUnicodeContext    m_contextText2Unicode;
-    bool                    m_bCanContinue;
-    bool                    m_bInitialized;
-    rtl_TextEncoding            m_rtlEncoding;
-    ::com::sun::star::uno::Sequence<sal_Int8> m_seqSource;
+    rtl_TextToUnicodeConverter   m_convText2Unicode;
+    rtl_TextToUnicodeContext     m_contextText2Unicode;
+    bool                         m_bCanContinue;
+    bool                         m_bInitialized;
+    rtl_TextEncoding             m_rtlEncoding;
+    css::uno::Sequence<sal_Int8> m_seqSource;
 };
 
 /*----------------------------------------
@@ -56,18 +56,18 @@ public:
     Unicode2TextConverter( rtl_TextEncoding encoding );
     ~Unicode2TextConverter();
 
-    ::com::sun::star::uno::Sequence<sal_Int8> convert( const sal_Unicode * , sal_Int32 nLength );
+    css::uno::Sequence<sal_Int8> convert( const sal_Unicode * , sal_Int32 nLength );
     bool canContinue() {  return m_bCanContinue; }
 
 private:
     void init( rtl_TextEncoding encoding );
 
-    rtl_UnicodeToTextConverter  m_convUnicode2Text;
-    rtl_UnicodeToTextContext    m_contextUnicode2Text;
-    bool                    m_bCanContinue;
-    bool                    m_bInitialized;
-    rtl_TextEncoding            m_rtlEncoding;
-    ::com::sun::star::uno::Sequence<sal_Unicode>        m_seqSource;
+    rtl_UnicodeToTextConverter      m_convUnicode2Text;
+    rtl_UnicodeToTextContext        m_contextUnicode2Text;
+    bool                            m_bCanContinue;
+    bool                            m_bInitialized;
+    rtl_TextEncoding                m_rtlEncoding;
+    css::uno::Sequence<sal_Unicode> m_seqSource;
 };
 
 
@@ -88,39 +88,39 @@ public:
 
     ~XMLFile2UTFConverter();
 
-    void setInputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > &r ) { m_in = r; }
+    void setInputStream( css::uno::Reference< css::io::XInputStream > &r ) { m_in = r; }
     void setEncoding( const OString &s ) { m_sEncoding = s; }
 
 
 
     // @param nMaxToRead The number of chars, that should be read. Note that this is no exact number. There
     //                   may be returned less or more bytes than ordered.
-    sal_Int32 readAndConvert( ::com::sun::star::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead )
-        throw ( ::com::sun::star::io::IOException,
-                ::com::sun::star::io::NotConnectedException ,
-                ::com::sun::star::io::BufferSizeExceededException ,
-                ::com::sun::star::uno::RuntimeException );
+    sal_Int32 readAndConvert( css::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead )
+        throw ( css::io::IOException,
+                css::io::NotConnectedException ,
+                css::io::BufferSizeExceededException ,
+                css::uno::RuntimeException );
 
 private:
 
     // Called only on first Sequence of bytes. Tries to figure out file format and encoding information.
     // @return TRUE, when encoding information could be retrieved
     // @return FALSE, when no encoding information was found in file
-    bool scanForEncoding( ::com::sun::star::uno::Sequence<sal_Int8> &seq );
+    bool scanForEncoding( css::uno::Sequence<sal_Int8> &seq );
 
     // Called only on first Sequence of bytes. Tries to figure out
     // if enough data is available to scan encoding
     // @return TRUE, when encoding is retrievable
     // @return FALSE, when more data is needed
-    static bool isEncodingRecognizable( const ::com::sun::star::uno::Sequence< sal_Int8 > & seq );
+    static bool isEncodingRecognizable( const css::uno::Sequence< sal_Int8 > & seq );
 
     // When encoding attribute is within the text (in the first line), it is removed.
-    static void removeEncoding( ::com::sun::star::uno::Sequence<sal_Int8> &seq );
+    static void removeEncoding( css::uno::Sequence<sal_Int8> &seq );
 
     // Initializes decoding depending on m_sEncoding setting
     void initializeDecoding();
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  m_in;
+    css::uno::Reference< css::io::XInputStream >  m_in;
 
     bool m_bStarted;
     OString m_sEncoding;

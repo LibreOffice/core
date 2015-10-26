@@ -70,8 +70,8 @@ public:
 private:
     LONG m_nRefCnt;
     //CWinClipboard& m_rCWinClipboard;
-    //const const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >&  m_rXClipboardOwner;
-    //const const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >&               m_rXTDataSource;
+    //const const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >&  m_rXClipboardOwner;
+    //const const css::uno::Reference< css::datatransfer::XTransferable >&               m_rXTDataSource;
 
     //friend class CWinClipboard;
     friend class CEnumFormatEtc;
