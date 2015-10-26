@@ -32,7 +32,7 @@ OUString SAL_CALL LOKClipboard::getName() throw (uno::RuntimeException, std::exc
 
 LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, size_t nSize)
     : m_aMimeType(pMimeType),
-      m_aText(pData, nSize)
+      m_aSequence(reinterpret_cast<const sal_Int8*>(pData), nSize)
 {
 }
 
@@ -40,8 +40,13 @@ uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavo
 throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if (m_aMimeType == "text/plain;charset=utf-8" && rFlavor.MimeType == "text/plain;charset=utf-16")
-        aRet <<= OStringToOUString(m_aText, RTL_TEXTENCODING_UTF8);
+    if (rFlavor.DataType == cppu::UnoType<OUString>::get())
+    {
+        sal_Char* pText = reinterpret_cast<sal_Char*>(m_aSequence.getArray());
+        aRet <<= OUString(pText, rtl_str_getLength(pText), RTL_TEXTENCODING_UTF8);
+    }
+    else
+        aRet <<= m_aSequence;
     return aRet;
 }
 

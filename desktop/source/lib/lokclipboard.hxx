@@ -35,7 +35,7 @@ public:
 class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
     OString m_aMimeType;
-    OString m_aText;
+    css::uno::Sequence<sal_Int8> m_aSequence;
 
     /// Provides a list of flavors, used by getTransferDataFlavors() and isDataFlavorSupported().
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector();
