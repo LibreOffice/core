@@ -958,8 +958,8 @@ inline void SwFont::SetHighlightColor( const Color& aNewColor )
 // Used for the "continuous underline" feature.
 class SwUnderlineFont
 {
-    Point aPos;
-    SwFont* pFnt;
+    Point m_aPos;
+    SwFont* m_pFont;
 
 public:
     // sets the font which should paint the common baseline
@@ -969,12 +969,12 @@ public:
 
     SwFont& GetFont()
     {
-        OSL_ENSURE( pFnt, "No underline font" );
-        return *pFnt;
+        OSL_ENSURE( m_pFont, "No underline font" );
+        return *m_pFont;
     }
-    const Point& GetPos() const { return aPos; }
+    const Point& GetPos() const { return m_aPos; }
     // the x coordinate of the starting point has to be set for each portion
-    void SetPos( const Point& rPoint ) { aPos = rPoint;  }
+    void SetPos( const Point& rPoint ) { m_aPos = rPoint;  }
 };
 
 #ifdef DBG_UTIL

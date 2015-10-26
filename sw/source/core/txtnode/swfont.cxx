@@ -1507,13 +1507,13 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
  * @note Used for the "continuous underline" feature.
  **/
 SwUnderlineFont::SwUnderlineFont( SwFont& rFnt, const Point& rPoint )
-        : aPos( rPoint ), pFnt( &rFnt )
+        : m_aPos( rPoint ), m_pFont( &rFnt )
 {
 };
 
 SwUnderlineFont::~SwUnderlineFont()
 {
-     delete pFnt;
+     delete m_pFont;
 }
 
 /// Helper for filters to find true lineheight of a font
