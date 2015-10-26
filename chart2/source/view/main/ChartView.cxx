@@ -58,7 +58,6 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <boost/bind.hpp>
 #include <unotools/streamwrap.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/charthelper.hxx>
@@ -2625,7 +2624,7 @@ void ChartView::createShapes()
     }
 
     //make sure add-in is refreshed after creating the shapes
-    const ::comphelper::ScopeGuard aGuard( boost::bind( &ChartView::impl_refreshAddIn, this ) );
+    const ::comphelper::ScopeGuard aGuard( [this]() { this->impl_refreshAddIn(); } );
 
     m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle(0,0,0,0);
     impl_deleteCoordinateSystems();
