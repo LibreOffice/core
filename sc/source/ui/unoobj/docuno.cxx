@@ -856,6 +856,19 @@ vcl::Window* ScModelObj::getWindow()
     return pViewData->GetActiveWin();
 }
 
+bool ScModelObj::isMimeTypeSupported()
+{
+    SolarMutexGuard aGuard;
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return 0;
+
+
+    TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromSystemClipboard(pViewData->GetActiveWin()));
+    return EditEngine::HasValidData(aDataHelper.GetTransferable());
+}
+
 void ScModelObj::initializeForTiledRendering()
 {
     SolarMutexGuard aGuard;

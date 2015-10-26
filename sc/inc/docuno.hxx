@@ -415,6 +415,9 @@ public:
 
     /// @see vcl::ITiledRenderable::getWindow().
     virtual vcl::Window* getWindow() override;
+
+    /// @see vcl::ITiledRenderable::isMimeTypeSupported().
+    virtual bool isMimeTypeSupported() override;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper<
