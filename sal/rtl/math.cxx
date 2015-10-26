@@ -36,7 +36,6 @@
 #include <limits.h>
 #include <math.h>
 #include <stdlib.h>
-#include <cmath>
 
 static int const n10Count = 16;
 static double const n10s[2][n10Count] = {
