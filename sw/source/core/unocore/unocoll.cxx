@@ -1993,8 +1993,8 @@ sal_Bool SwXReferenceMarks::hasElements() throw( uno::RuntimeException, std::exc
 
 void SwUnoCollection::Invalidate()
 {
-    bObjectValid = false;
-    pDoc = 0;
+    m_bObjectValid = false;
+    m_pDoc = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

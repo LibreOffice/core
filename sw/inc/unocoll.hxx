@@ -53,20 +53,20 @@ const SvEventDescription* sw_GetSupportedMacroItems();
 
 class SwUnoCollection
 {
-    SwDoc*      pDoc;
-    bool    bObjectValid;
+    SwDoc*      m_pDoc;
+    bool    m_bObjectValid;
 
     public:
         SwUnoCollection(SwDoc* p) :
-            pDoc(p),
-            bObjectValid(true){}
+            m_pDoc(p),
+            m_bObjectValid(true){}
 
     virtual ~SwUnoCollection() {}
 
     virtual void                Invalidate();
-    bool                        IsValid() const {return bObjectValid;}
+    bool                        IsValid() const {return m_bObjectValid;}
 
-    SwDoc*          GetDoc() const {return pDoc;}
+    SwDoc*          GetDoc() const {return m_pDoc;}
 };
 
 #define SW_SERVICE_TYPE_TEXTTABLE                       0
