@@ -118,7 +118,7 @@ sub read_filelist
     foreach my $line (@{$content})
     {
         chomp $line;
-        foreach my $file (split /\s+/, $line)
+        foreach my $file (split /\s+(?=\/)/, $line)
         {
             if ($file ne "")
             {
