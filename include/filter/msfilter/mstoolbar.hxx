@@ -70,6 +70,7 @@ class MSFILTER_DLLPUBLIC TBBase
 friend class Indent;
     static int nIndent; // num spaces to indent before printing
 protected:
+    static void indent_printf(FILE* fp, const char* format, ... );
     sal_uInt32 nOffSet; // usually for debug we can store the offset in the stream to this record
 public:
     TBBase() : nOffSet( 0 ) {}

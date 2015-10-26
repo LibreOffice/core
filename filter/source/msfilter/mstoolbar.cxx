@@ -161,7 +161,19 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
     return bRes;
 }
 
+void
+TBBase::indent_printf( FILE* fp, const char* format, ... )
+{
+   va_list ap;
+   va_start ( ap, format );
 
+   // indent nIndent spaces
+   for ( int i=0; i<nIndent; ++i)
+      fprintf(fp," ");
+   // append the rest of the message
+   vfprintf( fp, format, ap );
+   va_end( ap );
+}
 
 TBCHeader::TBCHeader()
     : bSignature(0x3)
