@@ -25,6 +25,7 @@
 #include "sal/detail/log.h"
 #include "sal/log.hxx"
 #include "sal/types.h"
+#include "internal/misc.hxx"
 
 #include "logformat.hxx"
 
@@ -70,6 +71,7 @@ char const * toString(sal_detail_LogLevel level) {
     case SAL_DETAIL_LOG_LEVEL_WARN:
         return "warn";
     case SAL_DETAIL_LOG_LEVEL_DEBUG:
+    case SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE:
         return "debug";
     }
 }
@@ -199,7 +201,14 @@ void log(
               + (std::strncmp(where, SRCDIR "/", nStrLen) == 0
                  ? nStrLen : 0));
     }
-    s << message << '\n';
+
+    s << message;
+    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE) {
+        s << " at:\n";
+        s << OUString(osl_backtraceAsString(), SAL_NO_ACQUIRE);
+    }
+    s << '\n';
+
 #if defined ANDROID
     int android_log_level;
     switch (level) {
