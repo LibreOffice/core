@@ -448,6 +448,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // parameter, e.g. from replayed macro
                 pDocInfItem->UpdateDocumentInfo(getDocProperties(), true);
                 SetUseUserData( pDocInfItem->IsUseUserData() );
+                SetUseThumbnailSave( pDocInfItem->IsUseThumbnailSave() );
             }
             else
             {
@@ -477,7 +478,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
 
                 SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(), aCmisProperties,
-                    IsUseUserData() );
+                    IsUseUserData(), IsUseThumbnailSave() );
                 if ( !GetSlotState( SID_DOCTEMPLATE ) )
                     // templates not supported
                     aDocInfoItem.SetTemplate(false);
@@ -505,9 +506,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         if ( aNewCmisProperties.getLength( ) > 0 )
                             xCmisDoc->updateCmisProperties( aNewCmisProperties );
                         SetUseUserData( pDocInfoItem->IsUseUserData() );
+                        SetUseThumbnailSave( pDocInfoItem-> IsUseThumbnailSave() );
                         // add data from dialog for possible recording purpose
                         rReq.AppendItem( SfxDocumentInfoItem( GetTitle(),
-                            getDocProperties(), aNewCmisProperties, IsUseUserData() ) );
+                            getDocProperties(), aNewCmisProperties, IsUseUserData(), IsUseThumbnailSave() ) );
                     }
 
                     rReq.Done();

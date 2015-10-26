@@ -560,6 +560,11 @@ bool SfxObjectShell::IsUseUserData() const
     return pImp->bUseUserData;
 }
 
+bool SfxObjectShell::IsUseThumbnailSave() const
+{
+    return pImp->bUseThumbnailSave;
+}
+
 void SfxObjectShell::SetQueryLoadTemplate( bool bNew )
 {
     if ( pImp->bQueryLoadTemplate != bNew )
@@ -572,6 +577,13 @@ void SfxObjectShell::SetUseUserData( bool bNew )
     if ( pImp->bUseUserData != bNew )
         SetModified();
     pImp->bUseUserData = bNew;
+}
+
+void SfxObjectShell::SetUseThumbnailSave( bool _bNew )
+{
+    if ( pImp->bUseThumbnailSave != _bNew )
+        SetModified();
+    pImp->bUseThumbnailSave = _bNew;
 }
 
 bool SfxObjectShell::IsLoadReadonly() const

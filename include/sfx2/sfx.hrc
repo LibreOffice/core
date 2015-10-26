@@ -228,6 +228,7 @@
 #define MID_DOCINFO_DEFAULTTARGET            0x30
 #define MID_DOCINFO_USEUSERDATA              0x31
 #define MID_DOCINFO_DELETEUSERDATA           0x32
+#define MID_DOCINFO_USETHUMBNAILSAVE         0x33
 
 // only for FastPropertySet
 #define MID_TYPE                             0x38
