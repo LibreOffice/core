@@ -694,7 +694,7 @@ bool Spline2Poly(tools::Polygon& rSpln, bool Periodic, tools::Polygon& rPoly)
     sal_uInt16  n;             // number of partial polynoms to draw
     sal_uInt16  i;             // actual partial polynom
     bool        bOk;           // all still ok?
-    sal_uInt16  PolyMax=16380; // max number of polygon points
+    const sal_uInt16  PolyMax=16380; // max number of polygon points
 
     bOk=CalcSpline(rSpln,Periodic,n,ax,ay,bx,by,cx,cy,dx,dy,tv);
     if (bOk) {
