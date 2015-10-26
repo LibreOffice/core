@@ -905,13 +905,9 @@ res/lx03189.png cmd/lc_open.png
 res/sc05501.png cmd/sc_open.png
 res/lx03256.png cmd/lc_insertplugin.png
 
-res/mainapp_16.png cmd/sc_showsinglepage.png
-res/mainapp_16.png cmd/sc_showsinglepage.png
-res/mainapp_16.png cmd/sc_showsinglepage.png
 res/mainapp_16_8.png cmd/sc_showsinglepage.png
 
 res/mainapp.png res/newdoc.png
-res/mainapp_32.png res/newdoc.png
 res/printeradmin_16_8.png res/printeradmin_16.png
 res/printeradmin_32_8.png res/printeradmin_32.png
 res/reload.png cmd/sc_reload.png

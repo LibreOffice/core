@@ -9,12 +9,8 @@
 # a list of explicit image loads
 #
 
-res/mainapp_16.png
-res/mainapp_32.png
 sw/res/punkt.png
 sw/res/punkt_h.png
-res/sx03251.png
-res/lx03251.png
 
 -- literal
 
@@ -49,15 +45,7 @@ svx/res/caution_11x16.png
 svx/res/notcertificate_16.png
 res/sc10223.png
 res/sc10224.png
-res/sx03250.png
-res/sx03249.png
-res/sx03246.png
-res/sx03245.png
 res/sx03139.png
-res/sx03248.png
-res/sx03247.png
-res/sx03255.png
-res/sx03242.png
 -- literal
 
 # default / startup menus:
