@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/backtrace.hxx>
+#include <rtl/ustrbuf.hxx>
+
 #ifdef SOLARIS
 
 #include <dlfcn.h>
@@ -207,7 +210,8 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 #include <stdio.h>
 #include "backtrace.h"
 
-typedef unsigned     ptrdiff_t;
+// This used to be required but not for modern mac apparently.
+//     typedef unsigned     ptrdiff_t;
 
 /* glib backtrace is only available on MacOsX 10.5 or higher
    so we do it on our own */
@@ -249,15 +253,15 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
-                    fprintf( fp, "%s+0x%x", dli.dli_fname, offset );
+                    fprintf( fp, "%s+0x%x", dli.dli_fname, (unsigned int)offset );
                 }
                 if ( dli.dli_sname && dli.dli_saddr )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_saddr;
-                    fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
+                    fprintf( fp, "(%s+0x%x)", dli.dli_sname, (unsigned int)offset );
                 }
             }
-            fprintf( fp, "[0x%x]\n", (unsigned int)*pFramePtr );
+            fprintf( fp, "[0x%x]\n", *pFramePtr );
         }
 
         fflush( fp );
@@ -277,5 +281,14 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
 }
 #endif
+
+// FIXME: no-op for now; it needs implementing, cf. above.
+rtl_uString *osl_backtraceAsString()
+{
+    OUStringBuffer aBuf;
+    OUString aStr = aBuf.makeStringAndClear();
+    rtl_uString_acquire( aStr.pData );
+    return aStr.pData;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

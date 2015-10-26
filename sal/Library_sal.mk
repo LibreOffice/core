@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_externals,sal,\
 $(eval $(call gb_Library_use_system_win32_libs,sal,\
 	advapi32 \
 	comdlg32 \
+	dbghelp \
 	mpr \
 	ole32 \
 	shell32 \
@@ -191,7 +192,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 ))
 endif
 ifneq ($(filter $(OS),SOLARIS FREEBSD NETBSD MACOSX AIX OPENBSD DRAGONFLY)$(filter $(OS)$(CPUNAME),LINUXSPARC),)
-$(eval $(call gb_Library_add_cobjects,sal,\
+$(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/backtrace \
 ))
 endif
@@ -215,6 +216,7 @@ else # $(OS) == WNT
 # .ENDIF
 
 $(eval $(call gb_Library_add_exception_objects,sal,\
+	sal/osl/w32/backtrace \
 	sal/osl/w32/file \
 	sal/osl/w32/file_dirvol \
 	sal/osl/w32/file_url \
