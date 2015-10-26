@@ -3198,6 +3198,13 @@ bool SwXTextDocument::isMimeTypeSupported()
         return false;
 
     TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromSystemClipboard(&pWrtShell->GetView().GetEditWin()));
+    if (SdrView* pSdrView = pWrtShell->GetDrawView())
+    {
+        if (pSdrView->GetTextEditObject())
+            // Editing shape text
+            return EditEngine::HasValidData(aDataHelper.GetTransferable());
+    }
+
     return aDataHelper.GetXTransferable().is() && SwTransferable::IsPaste(*pWrtShell, aDataHelper);
 }
 
