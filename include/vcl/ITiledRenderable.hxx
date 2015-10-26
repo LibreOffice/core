@@ -149,10 +149,7 @@ public:
     }
 
     /// Returns the current vcl::Window of the component.
-    virtual vcl::Window* getWindow()
-    {
-        return 0;
-    }
+    virtual vcl::Window* getWindow() = 0;
 };
 
 } // namespace vcl
