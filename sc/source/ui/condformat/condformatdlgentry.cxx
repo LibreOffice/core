@@ -999,9 +999,9 @@ void ScColorScale3FrmtEntry::Init()
 
             if(pEntry->GetColor() == Color(COL_LIGHTRED))
                 maLbColMin->SelectEntryPos(i);
-            if(pEntry->GetColor() == Color(COL_GREEN))
+            if(pEntry->GetColor() == Color(COL_YELLOW))
                 maLbColMiddle->SelectEntryPos(i);
-            if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
+            if(pEntry->GetColor() == Color(0x00CC00)) // Green 3
                 maLbColMax->SelectEntryPos(i);
         }
         maLbColMin->SetUpdateMode( true );
