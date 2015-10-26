@@ -35,7 +35,7 @@
 #include <rscrsc.hxx>
 
 
-RscTypCont :: RscTypCont( RscError * pErrHdl,
+RscTypCont::RscTypCont( RscError * pErrHdl,
                           RSCBYTEORDER_TYPE nOrder,
                           const OString& rSearchPath,
                           sal_uInt32 nFlagsP )
@@ -166,7 +166,7 @@ void Pre_dtorTree( RscTop * pRscTop )
     }
 }
 
-RscTypCont :: ~RscTypCont()
+RscTypCont::~RscTypCont()
 {
     // delete all subtrees
     aVersion.pClass->Destroy( aVersion );
@@ -254,7 +254,7 @@ RscTop * RscTypCont::SearchType( Atom nId )
     return NULL;
 }
 
-sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
+sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName,
                                      sal_uInt32 nConst, sal_uInt32 nId, bool bFirst )
 {
     RscSysEntry *pSysEntry;
@@ -297,7 +297,7 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
     return pSysEntry->nKey;
 }
 
-void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
+void RscTypCont::WriteInc( FILE * fOutput, sal_uLong lFileKey )
 {
 
     if( NOFILE_INDEX == lFileKey )
@@ -395,7 +395,7 @@ IMPL_LINK_TYPED( RscEnumerateObj, CallBackWriteSrc, const NameNode&, rNode, void
     }
 }
 
-void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut )
+void RscEnumerateObj::WriteRcFile( RscWriteRc & rMem, FILE * fOut )
 {
     // structure definition from which the resource is built
     /*
@@ -504,7 +504,7 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
     return aError;
 }
 
-void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
+void RscTypCont::WriteSrc( FILE * fOutput, sal_uLong nFileKey,
                              bool bName )
 {
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
@@ -580,7 +580,7 @@ IMPL_LINK_TYPED( RscDel, Delete, const NameNode&, r, void )
         pNode->pObjBiTree = pNode->GetObjNode()->DelObjNode( pNode, lFileKey );
 }
 
-void RscTypCont :: Delete( sal_uLong lFileKey )
+void RscTypCont::Delete( sal_uLong lFileKey )
 {
     // delete resource instance
     RscDel aDel( pRoot, lFileKey );

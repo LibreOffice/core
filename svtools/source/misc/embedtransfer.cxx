@@ -174,7 +174,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                 {
                     bRet = SetBitmapEx( m_pGraphic->GetBitmapEx(), rFlavor );
                 }
-                else if ( m_xObj.is() && :: svt::EmbeddedObjectRef::TryRunningState( m_xObj ) )
+                else if ( m_xObj.is() && ::svt::EmbeddedObjectRef::TryRunningState( m_xObj ) )
                 {
                     uno::Reference< datatransfer::XTransferable > xTransferable( m_xObj->getComponent(), uno::UNO_QUERY );
                     if ( xTransferable.is() )

@@ -170,10 +170,10 @@ public:
     virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
-// :: css::sdb::XBookmarksSupplier
+//::css::sdb::XBookmarksSupplier
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getBookmarks(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-// :: css::sdb::XQueryDefinitionsSupplier
+//::css::sdb::XQueryDefinitionsSupplier
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getQueryDefinitions(  ) throw(css::uno::RuntimeException, std::exception) override;
 
 // css::sdbc::XIsolatedConnection

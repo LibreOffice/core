@@ -277,7 +277,7 @@ public:
 
     // css::container::XChild
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getParent() throw ( css::uno::RuntimeException, std::exception) override { return OFormComponents::getParent(); }
-    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw ( :: css::lang::NoSupportException , css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw (::css::lang::NoSupportException , css::uno::RuntimeException, std::exception) override;
 
     // css::container::XNamed
     virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;

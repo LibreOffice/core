@@ -314,7 +314,7 @@ void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectio
 }
 
 // XGridColumnFactory
-Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString& ColumnType) throw ( :: css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString& ColumnType) throw (::css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     const Sequence< OUString >& rColumnTypes = frm::getColumnTypes();

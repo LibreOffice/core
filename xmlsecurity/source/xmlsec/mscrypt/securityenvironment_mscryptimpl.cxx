@@ -101,11 +101,11 @@ void traceTrustStatus(DWORD err)
     }
 }
 
-SecurityEnvironment_MSCryptImpl :: SecurityEnvironment_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_hProv( NULL ) , m_pszContainer( NULL ) , m_hKeyStore( NULL ), m_hCertStore( NULL ), m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList(), m_xServiceManager( aFactory ), m_bEnableDefault( sal_False ), m_hMySystemStore(NULL), m_hRootSystemStore(NULL), m_hTrustSystemStore(NULL), m_hCaSystemStore(NULL){
+SecurityEnvironment_MSCryptImpl::SecurityEnvironment_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_hProv( NULL ) , m_pszContainer( NULL ) , m_hKeyStore( NULL ), m_hCertStore( NULL ), m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList(), m_xServiceManager( aFactory ), m_bEnableDefault( sal_False ), m_hMySystemStore(NULL), m_hRootSystemStore(NULL), m_hTrustSystemStore(NULL), m_hCaSystemStore(NULL){
 
 }
 
-SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
+SecurityEnvironment_MSCryptImpl::~SecurityEnvironment_MSCryptImpl() {
 
     if( m_hProv != NULL ) {
         CryptReleaseContext( m_hProv, 0 ) ;
@@ -172,12 +172,12 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
 }
 
 /* XServiceInfo */
-OUString SAL_CALL SecurityEnvironment_MSCryptImpl :: getImplementationName() throw( RuntimeException ) {
+OUString SAL_CALL SecurityEnvironment_MSCryptImpl::getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SecurityEnvironment_MSCryptImpl :: supportsService( const OUString& serviceName) throw( RuntimeException ) {
+sal_Bool SAL_CALL SecurityEnvironment_MSCryptImpl::supportsService( const OUString& serviceName) throw( RuntimeException ) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -188,33 +188,33 @@ sal_Bool SAL_CALL SecurityEnvironment_MSCryptImpl :: supportsService( const OUSt
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl :: getSupportedServiceNames() throw( RuntimeException ) {
+Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupportedServiceNames() throw( RuntimeException ) {
     return impl_getSupportedServiceNames() ;
 }
 
 //Helper for XServiceInfo
-Sequence< OUString > SecurityEnvironment_MSCryptImpl :: impl_getSupportedServiceNames() {
+Sequence< OUString > SecurityEnvironment_MSCryptImpl::impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
     seqServiceNames[0] = "com.sun.star.xml.crypto.SecurityEnvironment";
     return seqServiceNames ;
 }
 
-OUString SecurityEnvironment_MSCryptImpl :: impl_getImplementationName() throw( RuntimeException ) {
+OUString SecurityEnvironment_MSCryptImpl::impl_getImplementationName() throw( RuntimeException ) {
     return OUString("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl") ;
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL SecurityEnvironment_MSCryptImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
+Reference< XInterface > SAL_CALL SecurityEnvironment_MSCryptImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
     return Reference< XInterface >( *new SecurityEnvironment_MSCryptImpl( aServiceManager ) ) ;
 }
 
-Reference< XSingleServiceFactory > SecurityEnvironment_MSCryptImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
+Reference< XSingleServiceFactory > SecurityEnvironment_MSCryptImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
 /* XUnoTunnel */
-sal_Int64 SAL_CALL SecurityEnvironment_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
+sal_Int64 SAL_CALL SecurityEnvironment_MSCryptImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw( RuntimeException )
 {
     if( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
@@ -231,12 +231,12 @@ namespace
     class theSecurityEnvironment_MSCryptImplUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSecurityEnvironment_MSCryptImplUnoTunnelId > {};
 }
 
-const Sequence< sal_Int8>& SecurityEnvironment_MSCryptImpl :: getUnoTunnelId() {
+const Sequence< sal_Int8>& SecurityEnvironment_MSCryptImpl::getUnoTunnelId() {
     return theSecurityEnvironment_MSCryptImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */
-SecurityEnvironment_MSCryptImpl* SecurityEnvironment_MSCryptImpl :: getImplementation( const Reference< XInterface >& rObj ) {
+SecurityEnvironment_MSCryptImpl* SecurityEnvironment_MSCryptImpl::getImplementation( const Reference< XInterface >& rObj ) {
     Reference< XUnoTunnel > xUT( rObj , UNO_QUERY ) ;
     if( xUT.is() ) {
         return ( SecurityEnvironment_MSCryptImpl* )xUT->getSomething( getUnoTunnelId() ) ;
@@ -245,11 +245,11 @@ SecurityEnvironment_MSCryptImpl* SecurityEnvironment_MSCryptImpl :: getImplement
 }
 
 /* Native methods */
-HCRYPTPROV SecurityEnvironment_MSCryptImpl :: getCryptoProvider() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
+HCRYPTPROV SecurityEnvironment_MSCryptImpl::getCryptoProvider() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
     return m_hProv ;
 }
 
-void SecurityEnvironment_MSCryptImpl :: setCryptoProvider( HCRYPTPROV aProv ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
+void SecurityEnvironment_MSCryptImpl::setCryptoProvider( HCRYPTPROV aProv ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
     if( m_hProv != NULL ) {
         CryptReleaseContext( m_hProv, 0 ) ;
         m_hProv = NULL ;
@@ -260,21 +260,21 @@ void SecurityEnvironment_MSCryptImpl :: setCryptoProvider( HCRYPTPROV aProv ) th
     }
 }
 
-LPCTSTR SecurityEnvironment_MSCryptImpl :: getKeyContainer() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
+LPCTSTR SecurityEnvironment_MSCryptImpl::getKeyContainer() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
     return m_pszContainer ;
 }
 
-void SecurityEnvironment_MSCryptImpl :: setKeyContainer( LPCTSTR aKeyContainer ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
+void SecurityEnvironment_MSCryptImpl::setKeyContainer( LPCTSTR aKeyContainer ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
     //TODO: Don't know whether or not it should be copied.
     m_pszContainer = aKeyContainer ;
 }
 
 
-HCERTSTORE SecurityEnvironment_MSCryptImpl :: getCryptoSlot() throw( Exception , RuntimeException ) {
+HCERTSTORE SecurityEnvironment_MSCryptImpl::getCryptoSlot() throw( Exception , RuntimeException ) {
     return m_hKeyStore ;
 }
 
-void SecurityEnvironment_MSCryptImpl :: setCryptoSlot( HCERTSTORE aSlot) throw( Exception , RuntimeException ) {
+void SecurityEnvironment_MSCryptImpl::setCryptoSlot( HCERTSTORE aSlot) throw( Exception , RuntimeException ) {
     if( m_hKeyStore != NULL ) {
         CertCloseStore( m_hKeyStore, CERT_CLOSE_STORE_FORCE_FLAG ) ;
         m_hKeyStore = NULL ;
@@ -285,11 +285,11 @@ void SecurityEnvironment_MSCryptImpl :: setCryptoSlot( HCERTSTORE aSlot) throw( 
     }
 }
 
-HCERTSTORE SecurityEnvironment_MSCryptImpl :: getCertDb() throw( Exception , RuntimeException ) {
+HCERTSTORE SecurityEnvironment_MSCryptImpl::getCertDb() throw( Exception , RuntimeException ) {
     return m_hCertStore ;
 }
 
-void SecurityEnvironment_MSCryptImpl :: setCertDb( HCERTSTORE aCertDb ) throw( Exception , RuntimeException ) {
+void SecurityEnvironment_MSCryptImpl::setCertDb( HCERTSTORE aCertDb ) throw( Exception , RuntimeException ) {
     if( m_hCertStore != NULL ) {
         CertCloseStore( m_hCertStore, CERT_CLOSE_STORE_FORCE_FLAG ) ;
         m_hCertStore = NULL ;
@@ -300,7 +300,7 @@ void SecurityEnvironment_MSCryptImpl :: setCertDb( HCERTSTORE aCertDb ) throw( E
     }
 }
 
-void SecurityEnvironment_MSCryptImpl :: adoptSymKey( HCRYPTKEY aSymKey ) throw( Exception , RuntimeException ) {
+void SecurityEnvironment_MSCryptImpl::adoptSymKey( HCRYPTKEY aSymKey ) throw( Exception , RuntimeException ) {
     HCRYPTKEY   symkey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
 
@@ -322,7 +322,7 @@ void SecurityEnvironment_MSCryptImpl :: adoptSymKey( HCRYPTKEY aSymKey ) throw( 
     }
 }
 
-HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getSymKey( unsigned int position ) throw( Exception , RuntimeException ) {
+HCRYPTKEY SecurityEnvironment_MSCryptImpl::getSymKey( unsigned int position ) throw( Exception , RuntimeException ) {
     HCRYPTKEY symkey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
     unsigned int pos ;
@@ -336,7 +336,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getSymKey( unsigned int position ) 
     return symkey ;
 }
 
-HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPubKey( unsigned int position ) throw( Exception , RuntimeException ) {
+HCRYPTKEY SecurityEnvironment_MSCryptImpl::getPubKey( unsigned int position ) throw( Exception , RuntimeException ) {
     HCRYPTKEY pubkey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
     unsigned int pos ;
@@ -350,7 +350,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPubKey( unsigned int position ) 
     return pubkey ;
 }
 
-HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPriKey( unsigned int position ) throw( Exception , RuntimeException ) {
+HCRYPTKEY SecurityEnvironment_MSCryptImpl::getPriKey( unsigned int position ) throw( Exception , RuntimeException ) {
     HCRYPTKEY prikey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
     unsigned int pos ;
@@ -365,7 +365,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPriKey( unsigned int position ) 
 }
 
 //Methods from XSecurityEnvironment
-Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPersonalCertificates() throw( SecurityException , RuntimeException )
+Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPersonalCertificates() throw( SecurityException , RuntimeException )
 {
     sal_Int32 length ;
     X509Certificate_MSCryptImpl* xcert ;
@@ -441,7 +441,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
 }
 
 
-Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException ) {
+Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException ) {
     unsigned int i ;
     LPSTR   pszName ;
     X509Certificate_MSCryptImpl *xcert = NULL ;
@@ -638,12 +638,12 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
     return xcert ;
 }
 
-Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( const OUString& issuerName, const OUString& serialNumber ) throw( SecurityException , RuntimeException ) {
+Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const OUString& serialNumber ) throw( SecurityException , RuntimeException ) {
     Sequence< sal_Int8 > serial = numericStringToBigInteger( serialNumber ) ;
     return getCertificate( issuerName, serial ) ;
 }
 
-Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildCertificatePath( const Reference< XCertificate >& begin ) throw( SecurityException , RuntimeException ) {
+Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::buildCertificatePath( const Reference< XCertificate >& begin ) throw( SecurityException , RuntimeException ) {
     PCCERT_CHAIN_CONTEXT pChainContext ;
     PCCERT_CONTEXT pCertContext ;
     const X509Certificate_MSCryptImpl* xcert ;
@@ -765,7 +765,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
     return Sequence< Reference < XCertificate > >();
 }
 
-Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFromRaw( const Sequence< sal_Int8 >& rawCertificate ) throw( SecurityException , RuntimeException ) {
+Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromRaw( const Sequence< sal_Int8 >& rawCertificate ) throw( SecurityException , RuntimeException ) {
     X509Certificate_MSCryptImpl* xcert ;
 
     if( rawCertificate.getLength() > 0 ) {
@@ -778,7 +778,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFr
     return xcert ;
 }
 
-Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFromAscii( const OUString& asciiCertificate ) throw( SecurityException , RuntimeException ) {
+Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromAscii( const OUString& asciiCertificate ) throw( SecurityException , RuntimeException ) {
     xmlChar* chCert ;
     xmlSecSize certSize ;
 
@@ -826,7 +826,7 @@ HCERTSTORE getCertStoreForIntermediatCerts(
 //explicitly that all validation steps are carried out even if one or several
 //errors occur. See also
 //http://wiki.openoffice.org/wiki/Certificate_Path_Validation#Validation_status
-sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
+sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
     const Reference< ::com::sun::star::security::XCertificate >& aCert,
     const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts)
     throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException )
@@ -998,7 +998,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     return validity ;
 }
 
-sal_Int32 SecurityEnvironment_MSCryptImpl :: getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
+sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
     sal_Int32 characters ;
     PCCERT_CONTEXT pCertContext ;
     const X509Certificate_MSCryptImpl* xcert ;
@@ -1047,11 +1047,11 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: getCertificateCharacters( const ::c
     return characters ;
 }
 
-void SecurityEnvironment_MSCryptImpl :: enableDefaultCrypt( sal_Bool enable ) throw( Exception, RuntimeException ) {
+void SecurityEnvironment_MSCryptImpl::enableDefaultCrypt( sal_Bool enable ) throw( Exception, RuntimeException ) {
     m_bEnableDefault = enable ;
 }
 
-sal_Bool SecurityEnvironment_MSCryptImpl :: defaultEnabled() throw( Exception, RuntimeException ) {
+sal_Bool SecurityEnvironment_MSCryptImpl::defaultEnabled() throw( Exception, RuntimeException ) {
     return m_bEnableDefault ;
 }
 
@@ -1075,7 +1075,7 @@ OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() th
 }
 
 /* Native methods */
-xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl :: createKeysManager() throw( Exception, RuntimeException ) {
+xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() throw( Exception, RuntimeException ) {
 
     unsigned int i ;
     HCRYPTKEY symKey ;
@@ -1164,7 +1164,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl :: createKeysManager() throw( 
 
     return pKeysMngr ;
 }
-void SecurityEnvironment_MSCryptImpl :: destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( Exception, RuntimeException ) {
+void SecurityEnvironment_MSCryptImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( Exception, RuntimeException ) {
     if( pKeysMngr != NULL ) {
         xmlSecKeysMngrDestroy( pKeysMngr ) ;
     }

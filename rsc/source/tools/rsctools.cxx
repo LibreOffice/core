@@ -153,18 +153,18 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
 }
 
 
-RscPtrPtr :: RscPtrPtr()
+RscPtrPtr::RscPtrPtr()
 {
     nCount = 0;
     pMem = NULL;
 }
 
-RscPtrPtr :: ~RscPtrPtr()
+RscPtrPtr::~RscPtrPtr()
 {
     Reset();
 }
 
-void RscPtrPtr :: Reset()
+void RscPtrPtr::Reset()
 {
     sal_uInt32 i;
 
@@ -181,7 +181,7 @@ void RscPtrPtr :: Reset()
     pMem = NULL;
 }
 
-sal_uInt32 RscPtrPtr :: Append( void * pBuffer )
+sal_uInt32 RscPtrPtr::Append( void * pBuffer )
 {
     if( !pMem )
         pMem = static_cast<void **>(rtl_allocateMemory( (nCount +1) * sizeof( void * ) ));
@@ -193,7 +193,7 @@ sal_uInt32 RscPtrPtr :: Append( void * pBuffer )
     return nCount++;
 }
 
-void * RscPtrPtr :: GetEntry( sal_uInt32 nEntry )
+void * RscPtrPtr::GetEntry( sal_uInt32 nEntry )
 {
     if( nEntry < nCount )
         return pMem[ nEntry ];
@@ -218,13 +218,13 @@ RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
     pMem = NULL;
 }
 
-RscWriteRc :: ~RscWriteRc()
+RscWriteRc::~RscWriteRc()
 {
     if( pMem )
         rtl_freeMemory( pMem );
 }
 
-sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
+sal_uInt32 RscWriteRc::IncSize( sal_uInt32 nSize )
 {
     sal_uInt32 nOrigPos = nLen;
     nLen += nSize;
@@ -235,7 +235,7 @@ sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
     return nOrigPos;
 }
 
-char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
+char * RscWriteRc::GetPointer( sal_uInt32 nSize )
 {
     if( !pMem )
     {
@@ -246,7 +246,7 @@ char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
 }
 
 
-void RscWriteRc :: Put( sal_uInt16 nVal )
+void RscWriteRc::Put( sal_uInt16 nVal )
 {
     sal_uInt32  nOldLen;
 
@@ -254,7 +254,7 @@ void RscWriteRc :: Put( sal_uInt16 nVal )
     PutAt( nOldLen, nVal );
 }
 
-void RscWriteRc :: PutUTF8( char * pStr )
+void RscWriteRc::PutUTF8( char * pStr )
 {
     sal_uInt32 nStrLen = 0;
     if( pStr )

@@ -832,7 +832,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
         Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
-        :: OUString sLastSegmentName = pURL->getName();
+        OUString sLastSegmentName = pURL->getName();
         bool bFolderExists = true;
         sal_Int32 i = 1;
         while (bFolderExists)

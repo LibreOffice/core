@@ -308,7 +308,7 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnCla
     return aInst;
 }
 
-void RscIdRange :: Destroy( const RSCINST & rInst )
+void RscIdRange::Destroy( const RSCINST & rInst )
 {
     reinterpret_cast<RscId *>(rInst.pData)->Destroy();
 }
@@ -419,7 +419,7 @@ void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
         fprintf( fOutput, "FALSE" );
 }
 
-RscBreakRange :: RscBreakRange( Atom nId, sal_uInt32 nTypeId )
+RscBreakRange::RscBreakRange( Atom nId, sal_uInt32 nTypeId )
     : RscRange( nId, nTypeId )
 {
     nOutRange = 0xFFFFFFFF;

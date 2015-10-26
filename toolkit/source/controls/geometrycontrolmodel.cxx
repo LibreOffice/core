@@ -226,7 +226,7 @@
     }
 
 
-    void OGeometryControlModel_Base::ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: com::sun::star::uno::Any& aValue)
+    void OGeometryControlModel_Base::ImplSetPropertyValueByHandle(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aValue)
     {
         switch ( nHandle )
         {

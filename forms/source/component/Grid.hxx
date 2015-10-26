@@ -135,7 +135,7 @@ public:
     virtual void SAL_CALL removeSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) throw(css::uno::RuntimeException, std::exception) override;
 
     // XGridColumnFactory
-    virtual css::uno::Reference< css::beans::XPropertySet> SAL_CALL createColumn(const OUString& ColumnType) throw ( :: css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet> SAL_CALL createColumn(const OUString& ColumnType) throw (::css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getColumnTypes() throw ( css::uno::RuntimeException, std::exception) override;
 
     // XPersistObject

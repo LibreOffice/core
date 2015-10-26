@@ -69,7 +69,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
     {
         QFont aFixedFont;
         QString aFontName;
-        :: OUString sFontName;
+        OUString sFontName;
 
         aFixedFont = KGlobalSettings::fixedFont();
         aFontName = aFixedFont.family();

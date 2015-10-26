@@ -370,7 +370,7 @@ OString RscExpression::GetMacro()
     return aLeft.makeStringAndClear();
 }
 
-RscFile :: RscFile()
+RscFile::RscFile()
 {
     bLoaded  = false;
     bIncFile = false;
@@ -378,7 +378,7 @@ RscFile :: RscFile()
     bScanned = false;
 }
 
-RscFile :: ~RscFile()
+RscFile::~RscFile()
 {
     for ( size_t i = 0, n = aDepLst.size(); i < n; ++i )
         delete aDepLst[ i ];
@@ -408,7 +408,7 @@ bool RscFile::Depend( sal_uLong lDepend, sal_uLong lFree )
     return true;
 }
 
-bool RscFile :: InsertDependFile( sal_uLong lIncFile, size_t lPos )
+bool RscFile::InsertDependFile( sal_uLong lIncFile, size_t lPos )
 {
     for ( size_t i = 0, n = aDepLst.size(); i < n; ++i )
     {
@@ -489,7 +489,7 @@ RscFileTab::RscFileTab()
 {
 }
 
-RscFileTab :: ~RscFileTab()
+RscFileTab::~RscFileTab()
 {
 
     aDefTree.Remove();
@@ -502,7 +502,7 @@ RscFileTab :: ~RscFileTab()
     };
 }
 
-sal_uLong  RscFileTab :: Find( const OString& rName )
+sal_uLong  RscFileTab::Find( const OString& rName )
 {
     sal_uIntPtr aIndex = FirstIndex();
     while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && (Get(aIndex)->aFileName != rName) )
@@ -635,7 +635,7 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
     return pDef;
 }
 
-void RscFileTab :: DeleteFileContext( sal_uLong lFileKey )
+void RscFileTab::DeleteFileContext( sal_uLong lFileKey )
 {
     RscFile     * pFName;
 
@@ -652,7 +652,7 @@ void RscFileTab :: DeleteFileContext( sal_uLong lFileKey )
     }
 }
 
-sal_uLong  RscFileTab :: NewCodeFile( const OString& rName )
+sal_uLong  RscFileTab::NewCodeFile( const OString& rName )
 {
     sal_uLong lKey = Find( rName );
     if( UNIQUEINDEX_ENTRY_NOTFOUND == lKey )
@@ -666,7 +666,7 @@ sal_uLong  RscFileTab :: NewCodeFile( const OString& rName )
     return lKey;
 }
 
-sal_uLong  RscFileTab :: NewIncFile(const OString& rName,
+sal_uLong  RscFileTab::NewIncFile(const OString& rName,
                                     const OString& rPath)
 {
     sal_uLong lKey = Find( rName );

@@ -223,7 +223,7 @@ void print_node( const LocaleNode* p, int depth=0 )
      printf("\n");
 }
 
-void LocaleNode :: generateCode (const OFileWriter &of) const
+void LocaleNode::generateCode (const OFileWriter &of) const
 {
     OUString aDTD = getAttr().getValueByName("versionDTD");
     if ( aDTD != LOCALE_VERSION_DTD )
@@ -1908,7 +1908,7 @@ bool isIso4217( const OUString& rStr )
         ;
 }
 
-void LCCurrencyNode :: generateCode (const OFileWriter &of) const
+void LCCurrencyNode::generateCode (const OFileWriter &of) const
 {
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {

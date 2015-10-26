@@ -181,7 +181,7 @@ sal_Bool OPropertyArrayAggregationHelper::hasPropertyByName(const OUString& _rPr
 }
 
 
-const Property* OPropertyArrayAggregationHelper::findPropertyByName(const :: OUString& _rName ) const
+const Property* OPropertyArrayAggregationHelper::findPropertyByName(const OUString& _rName ) const
 {
     return lcl_findPropertyByName( m_aProperties, _rName );
 }

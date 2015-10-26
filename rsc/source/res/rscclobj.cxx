@@ -50,7 +50,7 @@ bool RefNode::PutObjNode( ObjNode * pPutObject )
 // if the node with the same name is in pObjBiTree,
 // return NULL and no insert,
 // if not return the pointer to the Object
-ObjNode * RefNode :: GetObjNode( const RscId & rRscId )
+ObjNode * RefNode::GetObjNode( const RscId & rRscId )
 {
     if( pObjBiTree )
         return pObjBiTree->Search( rRscId );

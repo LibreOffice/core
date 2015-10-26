@@ -29,37 +29,37 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 
-XMLSignatureTemplateImpl :: XMLSignatureTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
+XMLSignatureTemplateImpl::XMLSignatureTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
     :m_xTemplate( NULL ),
      m_xServiceManager( aFactory ),
      m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN )
 {
 }
 
-XMLSignatureTemplateImpl :: ~XMLSignatureTemplateImpl() {
+XMLSignatureTemplateImpl::~XMLSignatureTemplateImpl() {
 }
 
 /* XXMLSignatureTemplate */
-void SAL_CALL XMLSignatureTemplateImpl :: setTemplate( const Reference< XXMLElementWrapper >& aTemplate )
+void SAL_CALL XMLSignatureTemplateImpl::setTemplate( const Reference< XXMLElementWrapper >& aTemplate )
     throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception)
 {
     m_xTemplate = aTemplate ;
 }
 
 /* XXMLSignatureTemplate */
-Reference< XXMLElementWrapper > SAL_CALL XMLSignatureTemplateImpl :: getTemplate()
+Reference< XXMLElementWrapper > SAL_CALL XMLSignatureTemplateImpl::getTemplate()
     throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     return m_xTemplate ;
 }
 
-void SAL_CALL XMLSignatureTemplateImpl :: setTarget( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement )
+void SAL_CALL XMLSignatureTemplateImpl::setTarget( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement )
     throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception)
 {
     targets.push_back( aXmlElement );
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl :: getTargets()
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl::getTargets()
     throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32 length = targets.size();
@@ -105,12 +105,12 @@ void SAL_CALL XMLSignatureTemplateImpl::setStatus(
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLSignatureTemplateImpl :: getImplementationName() throw( RuntimeException, std::exception ) {
+OUString SAL_CALL XMLSignatureTemplateImpl::getImplementationName() throw( RuntimeException, std::exception ) {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignatureTemplateImpl :: supportsService( const OUString& serviceName) throw( RuntimeException, std::exception ) {
+sal_Bool SAL_CALL XMLSignatureTemplateImpl::supportsService( const OUString& serviceName) throw( RuntimeException, std::exception ) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -121,28 +121,28 @@ sal_Bool SAL_CALL XMLSignatureTemplateImpl :: supportsService( const OUString& s
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSignatureTemplateImpl :: getSupportedServiceNames() throw( RuntimeException, std::exception ) {
+Sequence< OUString > SAL_CALL XMLSignatureTemplateImpl::getSupportedServiceNames() throw( RuntimeException, std::exception ) {
     return impl_getSupportedServiceNames() ;
 }
 
 //Helper for XServiceInfo
-Sequence< OUString > XMLSignatureTemplateImpl :: impl_getSupportedServiceNames() {
+Sequence< OUString > XMLSignatureTemplateImpl::impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
     seqServiceNames[0] = "com.sun.star.xml.crypto.XMLSignatureTemplate";
     return seqServiceNames ;
 }
 
-OUString XMLSignatureTemplateImpl :: impl_getImplementationName() throw( RuntimeException ) {
+OUString XMLSignatureTemplateImpl::impl_getImplementationName() throw( RuntimeException ) {
     return OUString("com.sun.star.xml.security.framework.XMLSignatureTemplateImpl") ;
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSignatureTemplateImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
+Reference< XInterface > SAL_CALL XMLSignatureTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
     return Reference< XInterface >( *new XMLSignatureTemplateImpl( aServiceManager ) ) ;
 }
 
-Reference< XSingleServiceFactory > XMLSignatureTemplateImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
+Reference< XSingleServiceFactory > XMLSignatureTemplateImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 

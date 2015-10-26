@@ -143,7 +143,7 @@ LocaleSet_t const & CContentReader::getLocale( const StyleName_t& Style )
     if ( m_StyleMap.empty() )
         return m_DefaultLocale;
 
-    StyleLocaleMap_t :: const_iterator style_Iter;
+    StyleLocaleMap_t::const_iterator style_Iter;
 
     if ( ( style_Iter = m_StyleMap.find( Style ) ) == m_StyleMap.end( ) )
         return m_DefaultLocale;

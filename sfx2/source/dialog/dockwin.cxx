@@ -1247,7 +1247,7 @@ void SfxDockingWindow::ReleaseChildWindow_Impl()
     and thus the behavior of his DockinWindow class when docking where the
     called virtual method:
 
-    SfxDockingWindow :: CalcDockingSize (SfxChildAlignment eAlign)
+    SfxDockingWindow::CalcDockingSize (SfxChildAlignment eAlign)
 
     is overridden (see below).
 */

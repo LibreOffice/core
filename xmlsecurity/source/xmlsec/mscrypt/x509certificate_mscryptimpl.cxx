@@ -164,19 +164,19 @@ OUString replaceTagSWithTagST(OUString oldDN)
 }
 /* end */
 
-X509Certificate_MSCryptImpl :: X509Certificate_MSCryptImpl() :
+X509Certificate_MSCryptImpl::X509Certificate_MSCryptImpl() :
     m_pCertContext( NULL )
 {
 }
 
-X509Certificate_MSCryptImpl :: ~X509Certificate_MSCryptImpl() {
+X509Certificate_MSCryptImpl::~X509Certificate_MSCryptImpl() {
     if( m_pCertContext != NULL ) {
         CertFreeCertificateContext( m_pCertContext ) ;
     }
 }
 
 //Methods from XCertificate
-sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::sun::star::uno::RuntimeException) {
+sal_Int16 SAL_CALL X509Certificate_MSCryptImpl::getVersion() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         return ( char )m_pCertContext->pCertInfo->dwVersion ;
     } else {
@@ -184,7 +184,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl :: getSerialNumber() throw ( ::com::sun::star::uno::RuntimeException) {
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSerialNumber() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         Sequence< sal_Int8 > serial( m_pCertContext->pCertInfo->SerialNumber.cbData ) ;
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->SerialNumber.cbData ; i ++ )
@@ -196,7 +196,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-OUString SAL_CALL X509Certificate_MSCryptImpl :: getIssuerName() throw ( ::com::sun::star::uno::RuntimeException) {
+OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         DWORD cbIssuer ;
 
@@ -242,7 +242,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getIssuerName() throw ( ::com::
     }
 }
 
-OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
     {
@@ -286,7 +286,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
     }
 }
 
-::com::sun::star::util::DateTime SAL_CALL X509Certificate_MSCryptImpl :: getNotValidBefore() throw ( ::com::sun::star::uno::RuntimeException ) {
+::com::sun::star::util::DateTime SAL_CALL X509Certificate_MSCryptImpl::getNotValidBefore() throw ( ::com::sun::star::uno::RuntimeException ) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         SYSTEMTIME explTime ;
         DateTime dateTime ;
@@ -312,7 +312,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
     }
 }
 
-::com::sun::star::util::DateTime SAL_CALL X509Certificate_MSCryptImpl :: getNotValidAfter() throw ( ::com::sun::star::uno::RuntimeException) {
+::com::sun::star::util::DateTime SAL_CALL X509Certificate_MSCryptImpl::getNotValidAfter() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         SYSTEMTIME explTime ;
         DateTime dateTime ;
@@ -338,7 +338,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
     }
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl :: getIssuerUniqueID() throw ( ::com::sun::star::uno::RuntimeException) {
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getIssuerUniqueID() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         Sequence< sal_Int8 > issuerUid( m_pCertContext->pCertInfo->IssuerUniqueId.cbData ) ;
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->IssuerUniqueId.cbData; i ++ )
@@ -350,7 +350,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
     }
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl :: getSubjectUniqueID() throw ( ::com::sun::star::uno::RuntimeException ) {
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectUniqueID() throw ( ::com::sun::star::uno::RuntimeException ) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         Sequence< sal_Int8 > subjectUid( m_pCertContext->pCertInfo->SubjectUniqueId.cbData ) ;
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->SubjectUniqueId.cbData; i ++ )
@@ -362,7 +362,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
     }
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > > SAL_CALL X509Certificate_MSCryptImpl :: getExtensions() throw ( ::com::sun::star::uno::RuntimeException ) {
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > > SAL_CALL X509Certificate_MSCryptImpl::getExtensions() throw ( ::com::sun::star::uno::RuntimeException ) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 ) {
         CertificateExtension_XmlSecImpl* xExtn ;
         Sequence< Reference< XCertificateExtension > > xExtns( m_pCertContext->pCertInfo->cExtension ) ;
@@ -391,7 +391,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl :: findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*oid*/ ) throw (::com::sun::star::uno::RuntimeException) {
+::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl::findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*oid*/ ) throw (::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 ) {
         CertificateExtension_XmlSecImpl* xExtn ;
         Sequence< Reference< XCertificateExtension > > xExtns( m_pCertContext->pCertInfo->cExtension ) ;
@@ -417,7 +417,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
 }
 
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl :: getEncoded() throw ( ::com::sun::star::uno::RuntimeException) {
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getEncoded() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->cbCertEncoded > 0 ) {
         Sequence< sal_Int8 > rawCert( m_pCertContext->cbCertEncoded ) ;
 
@@ -431,7 +431,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
 }
 
 //Helper methods
-void X509Certificate_MSCryptImpl :: setMswcryCert( const CERT_CONTEXT* cert ) {
+void X509Certificate_MSCryptImpl::setMswcryCert( const CERT_CONTEXT* cert ) {
     if( m_pCertContext != NULL ) {
         CertFreeCertificateContext( m_pCertContext ) ;
         m_pCertContext = NULL ;
@@ -442,7 +442,7 @@ void X509Certificate_MSCryptImpl :: setMswcryCert( const CERT_CONTEXT* cert ) {
     }
 }
 
-const CERT_CONTEXT* X509Certificate_MSCryptImpl :: getMswcryCert() const {
+const CERT_CONTEXT* X509Certificate_MSCryptImpl::getMswcryCert() const {
     if( m_pCertContext != NULL ) {
         return m_pCertContext ;
     } else {
@@ -450,7 +450,7 @@ const CERT_CONTEXT* X509Certificate_MSCryptImpl :: getMswcryCert() const {
     }
 }
 
-void X509Certificate_MSCryptImpl :: setRawCert( Sequence< sal_Int8 > rawCert ) throw ( ::com::sun::star::uno::RuntimeException) {
+void X509Certificate_MSCryptImpl::setRawCert( Sequence< sal_Int8 > rawCert ) throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL ) {
         CertFreeCertificateContext( m_pCertContext ) ;
         m_pCertContext = NULL ;
@@ -462,7 +462,7 @@ void X509Certificate_MSCryptImpl :: setRawCert( Sequence< sal_Int8 > rawCert ) t
 }
 
 /* XUnoTunnel */
-sal_Int64 SAL_CALL X509Certificate_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw( RuntimeException ) {
+sal_Int64 SAL_CALL X509Certificate_MSCryptImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw( RuntimeException ) {
     if( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return ( sal_Int64 )this ;
     }
@@ -476,12 +476,12 @@ namespace
     class theX509Certificate_MSCryptImplUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theX509Certificate_MSCryptImplUnoTunnelId > {};
 }
 
-const Sequence< sal_Int8>& X509Certificate_MSCryptImpl :: getUnoTunnelId() {
+const Sequence< sal_Int8>& X509Certificate_MSCryptImpl::getUnoTunnelId() {
     return theX509Certificate_MSCryptImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */
-X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( const Reference< XInterface >& rObj ) {
+X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl::getImplementation( const Reference< XInterface >& rObj ) {
     Reference< XUnoTunnel > xUT( rObj , UNO_QUERY ) ;
     if( xUT.is() ) {
         return ( X509Certificate_MSCryptImpl* )xUT->getSomething( getUnoTunnelId() ) ;

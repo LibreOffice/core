@@ -35,30 +35,30 @@ using namespace ::com::sun::star::security ;
 using ::com::sun::star::security::XCertificateExtension ;
 
 
-SanExtensionImpl :: SanExtensionImpl() :
+SanExtensionImpl::SanExtensionImpl() :
     m_critical( sal_False )
 {
 }
 
-SanExtensionImpl :: ~SanExtensionImpl() {
+SanExtensionImpl::~SanExtensionImpl() {
 }
 
 
 //Methods from XCertificateExtension
-sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno::RuntimeException ) {
+sal_Bool SAL_CALL SanExtensionImpl::isCritical() throw( ::com::sun::star::uno::RuntimeException ) {
     return m_critical ;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl :: getExtensionId() throw( ::com::sun::star::uno::RuntimeException ) {
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionId() throw( ::com::sun::star::uno::RuntimeException ) {
     return m_xExtnId ;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl :: getExtensionValue() throw( ::com::sun::star::uno::RuntimeException ) {
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionValue() throw( ::com::sun::star::uno::RuntimeException ) {
     return m_xExtnValue ;
 }
 
 //Methods from XSanExtension
-::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > SAL_CALL SanExtensionImpl :: getAlternativeNames() throw( ::com::sun::star::uno::RuntimeException ){
+::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > SAL_CALL SanExtensionImpl::getAlternativeNames() throw( ::com::sun::star::uno::RuntimeException ){
 
     if (!m_Entries.hasElements())
     {

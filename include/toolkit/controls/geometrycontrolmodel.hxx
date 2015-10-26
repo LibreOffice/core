@@ -83,9 +83,9 @@ namespace com { namespace sun { namespace star {
         bool        m_bCloneable;
 
     protected:
-        static css::uno::Any          ImplGetDefaultValueByHandle(sal_Int32 nHandle);
+        static css::uno::Any   ImplGetDefaultValueByHandle(sal_Int32 nHandle);
         css::uno::Any          ImplGetPropertyValueByHandle(sal_Int32 nHandle) const;
-        void                                ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: css::uno::Any& aValue);
+        void                   ImplSetPropertyValueByHandle(sal_Int32 nHandle, const css::uno::Any& aValue);
 
     protected:
         /**

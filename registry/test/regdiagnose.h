@@ -28,8 +28,8 @@
 #define _REG_ENSURE(c, f, l, m) \
     do \
     {  \
-        if (!(c) && :: osl_assertFailedLine(f, l, m)) \
-            :: osl_breakDebug(); \
+        if (!(c) && ::osl_assertFailedLine(f, l, m)) \
+           ::osl_breakDebug(); \
     } while (0)
 
 

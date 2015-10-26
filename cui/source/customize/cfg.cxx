@@ -5295,7 +5295,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 * The SvxIconReplacementDialog class
 *
 *******************************************************************************/
-SvxIconReplacementDialog :: SvxIconReplacementDialog(
+SvxIconReplacementDialog::SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage, bool /*bYestoAll*/ )
     :
 MessBox( pWindow, WB_DEF_YES, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
@@ -5310,7 +5310,7 @@ MessBox( pWindow, WB_DEF_YES, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_R
     AddButton( StandardButtonType::Cancel, 4);
 }
 
-SvxIconReplacementDialog :: SvxIconReplacementDialog(
+SvxIconReplacementDialog::SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage )
     : MessBox( pWindow, WB_YES_NO_CANCEL, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 {
@@ -5318,7 +5318,7 @@ SvxIconReplacementDialog :: SvxIconReplacementDialog(
     SetMessText( ReplaceIconName( aMessage ));
 }
 
-OUString SvxIconReplacementDialog :: ReplaceIconName( const OUString& rMessage )
+OUString SvxIconReplacementDialog::ReplaceIconName( const OUString& rMessage )
 {
     OUString name;
     OUString message = CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING );
@@ -5332,7 +5332,7 @@ OUString SvxIconReplacementDialog :: ReplaceIconName( const OUString& rMessage )
     return name;
 }
 
-sal_uInt16 SvxIconReplacementDialog :: ShowDialog()
+sal_uInt16 SvxIconReplacementDialog::ShowDialog()
 {
     this->Execute();
     return ( this->GetCurButtonId() );

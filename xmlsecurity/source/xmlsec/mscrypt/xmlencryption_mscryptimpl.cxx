@@ -47,15 +47,15 @@ using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XMLEncryptionException ;
 
-XMLEncryption_MSCryptImpl :: XMLEncryption_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) {
+XMLEncryption_MSCryptImpl::XMLEncryption_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) {
 }
 
-XMLEncryption_MSCryptImpl :: ~XMLEncryption_MSCryptImpl() {
+XMLEncryption_MSCryptImpl::~XMLEncryption_MSCryptImpl() {
 }
 
 /* XXMLEncryption */
 Reference< XXMLEncryptionTemplate >
-SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
+SAL_CALL XMLEncryption_MSCryptImpl::encrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
 ) throw( com::sun::star::xml::crypto::XMLEncryptionException,
@@ -191,7 +191,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
 
 /* XXMLEncryption */
 Reference< XXMLEncryptionTemplate > SAL_CALL
-XMLEncryption_MSCryptImpl :: decrypt(
+XMLEncryption_MSCryptImpl::decrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
 ) throw( com::sun::star::xml::crypto::XMLEncryptionException ,
@@ -320,12 +320,12 @@ XMLEncryption_MSCryptImpl :: decrypt(
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLEncryption_MSCryptImpl :: getImplementationName() throw( RuntimeException ) {
+OUString SAL_CALL XMLEncryption_MSCryptImpl::getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLEncryption_MSCryptImpl :: supportsService( const OUString& serviceName) throw( RuntimeException ) {
+sal_Bool SAL_CALL XMLEncryption_MSCryptImpl::supportsService( const OUString& serviceName) throw( RuntimeException ) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -336,28 +336,28 @@ sal_Bool SAL_CALL XMLEncryption_MSCryptImpl :: supportsService( const OUString& 
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLEncryption_MSCryptImpl :: getSupportedServiceNames() throw( RuntimeException ) {
+Sequence< OUString > SAL_CALL XMLEncryption_MSCryptImpl::getSupportedServiceNames() throw( RuntimeException ) {
     return impl_getSupportedServiceNames() ;
 }
 
 //Helper for XServiceInfo
-Sequence< OUString > XMLEncryption_MSCryptImpl :: impl_getSupportedServiceNames() {
+Sequence< OUString > XMLEncryption_MSCryptImpl::impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
     seqServiceNames[0] = "com.sun.star.xml.crypto.XMLEncryption";
     return seqServiceNames ;
 }
 
-OUString XMLEncryption_MSCryptImpl :: impl_getImplementationName() throw( RuntimeException ) {
+OUString XMLEncryption_MSCryptImpl::impl_getImplementationName() throw( RuntimeException ) {
     return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_MSCryptImpl") ;
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLEncryption_MSCryptImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
+Reference< XInterface > SAL_CALL XMLEncryption_MSCryptImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
     return Reference< XInterface >( *new XMLEncryption_MSCryptImpl( aServiceManager ) ) ;
 }
 
-Reference< XSingleServiceFactory > XMLEncryption_MSCryptImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
+Reference< XSingleServiceFactory > XMLEncryption_MSCryptImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
     //Reference< XSingleServiceFactory > xFactory ;
     //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
     //return xFactory ;
