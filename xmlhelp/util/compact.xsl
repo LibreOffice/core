@@ -24,6 +24,11 @@
     <!-- To remove attributes or nodes, 
          simply write a matching template that doesn't do anything. 
          Therefore, it is removed -->
+    <xsl:template match="image/@localize">
+        <xsl:copy>
+            <xsl:apply-templates select="@*[normalize-space()]|node()|text()"/>
+        </xsl:copy>
+    </xsl:template>
     <xsl:template match="@localize"/>
     <xsl:template match="@xml-lang"/>
     <xsl:template match="alt"/>
