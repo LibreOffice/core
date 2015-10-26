@@ -2377,7 +2377,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         }
     }
 
-    if( aSub[nActual].IsCapital() && nLn )
+    if( m_aSub[m_nActual].IsCapital() && nLn )
     {
         nTextBreak = GetCapitalBreak( rInf.GetShell(), rInf.GetpOut(),
             rInf.GetScriptInfo(), rInf.GetText(), nTextWidth, rInf.GetIdx(),
@@ -2393,7 +2393,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         sal_Int32 nTmpLen;
         bool bTextReplaced = false;
 
-        if ( !aSub[nActual].IsCaseMap() )
+        if ( !m_aSub[m_nActual].IsCaseMap() )
         {
             pTmpText = &rInf.GetText();
             nTmpIdx = rInf.GetIdx();
@@ -2402,8 +2402,8 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         else
         {
             const OUString aSnippet(rInf.GetText().copy(rInf.GetIdx(), nLn));
-            aTmpText = aSub[nActual].CalcCaseMap( aSnippet );
-            const bool bTitle = SVX_CASEMAP_TITEL == aSub[nActual].GetCaseMap() &&
+            aTmpText = m_aSub[m_nActual].CalcCaseMap( aSnippet );
+            const bool bTitle = SVX_CASEMAP_TITEL == m_aSub[m_nActual].GetCaseMap() &&
                                 g_pBreakIt->GetBreakIter().is();
 
             // Uaaaaahhhh!!! In title case mode, we would get wrong results
@@ -2412,12 +2412,12 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
                 // check if rInf.GetIdx() is begin of word
                 if ( !g_pBreakIt->GetBreakIter()->isBeginWord(
                      rInf.GetText(), rInf.GetIdx(),
-                     g_pBreakIt->GetLocale( aSub[nActual].GetLanguage() ),
+                     g_pBreakIt->GetLocale( m_aSub[m_nActual].GetLanguage() ),
                      i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
                 {
                     // In this case, the beginning of aTmpText is wrong.
                     OUString aSnippetTmp(aSnippet.copy(0, 1));
-                    aSnippetTmp = aSub[nActual].CalcCaseMap( aSnippetTmp );
+                    aSnippetTmp = m_aSub[m_nActual].CalcCaseMap( aSnippetTmp );
                     aTmpText = aTmpText.replaceAt( 0, aSnippetTmp.getLength(), OUString(aSnippet[0]) );
                 }
             }
@@ -2466,7 +2466,7 @@ sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                     rInf.GetIdx(), nLn );
         if( rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(), nLn,
-                            rInf.GetKanaComp(), (sal_uInt16)GetHeight( nActual ) ) )
+                            rInf.GetKanaComp(), (sal_uInt16)GetHeight( m_nActual ) ) )
         {
             long nKernAdd = nKern;
             sal_Int32 nTmpBreak = nTextBreak2;
