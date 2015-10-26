@@ -1645,15 +1645,6 @@ void GtkSalFrame::SetTitle( const OUString& rTitle )
         gtk_window_set_title( GTK_WINDOW(m_pWindow), OUStringToOString( rTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
-static inline sal_uInt8 *
-getRow( BitmapBuffer *pBuffer, sal_uLong nRow )
-{
-    if( BMP_SCANLINE_ADJUSTMENT( pBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
-        return pBuffer->mpBits + nRow * pBuffer->mnScanlineSize;
-    else
-        return pBuffer->mpBits + ( pBuffer->mnHeight - nRow - 1 ) * pBuffer->mnScanlineSize;
-}
-
 void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
 {
     if( (m_nStyle & (SalFrameStyleFlags::PLUG|SalFrameStyleFlags::SYSTEMCHILD|SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::INTRO|SalFrameStyleFlags::OWNERDRAWDECORATION))
