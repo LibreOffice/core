@@ -331,12 +331,15 @@ void DesktopLOKTest::testPasteWriter()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     OString aText("hello");
 
-    pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength());
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SelectAll", 0);
     char* pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", 0);
     CPPUNIT_ASSERT_EQUAL(OString("hello"), OString(pText));
     free(pText);
+
+    CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "textt/plain;charset=utf-8", aText.getStr(), aText.getLength()));
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 

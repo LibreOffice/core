@@ -436,6 +436,8 @@ public:
     virtual OUString getPartPageRectangles() SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::getWindow().
     virtual vcl::Window* getWindow() SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::isMimeTypeSupported().
+    virtual bool isMimeTypeSupported() SAL_OVERRIDE;
 
     // ::com::sun::star::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;

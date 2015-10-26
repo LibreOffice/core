@@ -150,6 +150,11 @@ public:
 
     /// Returns the current vcl::Window of the component.
     virtual vcl::Window* getWindow() = 0;
+
+    virtual bool isMimeTypeSupported()
+    {
+        return false;
+    }
 };
 
 } // namespace vcl
