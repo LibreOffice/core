@@ -1,8 +1,8 @@
 --- Objects/obmalloc.c
 +++ Objects/obmalloc.c
-@@ -9,8 +9,8 @@
-  #endif
- #endif
+@@ -413,8 +413,8 @@
+ 
+ #ifdef WITH_PYMALLOC
  
 +#define WITH_VALGRIND
  #ifdef WITH_VALGRIND
@@ -10,7 +10,7 @@
  
  /* If we're using GCC, use __builtin_expect() to reduce overhead of
     the valgrind checks */
-@@ -771,7 +771,7 @@
+@@ -1181,7 +1181,7 @@
  
  #ifdef WITH_VALGRIND
      if (UNLIKELY(running_on_valgrind == -1))
