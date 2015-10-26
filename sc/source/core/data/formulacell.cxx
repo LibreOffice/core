@@ -3890,7 +3890,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             return false;
     }
 
-    if (!ScInterpreter::GetGlobalConfig().mbOpenCLEnabled.get())
+    if (!ScCalcConfig::isOpenCLEnabled())
         return false;
 
     // TODO : Disable invariant formula group interpretation for now in order

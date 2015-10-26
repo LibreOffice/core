@@ -33,12 +33,17 @@ static rtl::Reference<ConfigurationListener> getMiscListener()
     return xListener;
 }
 
+bool ScCalcConfig::isOpenCLEnabled()
+{
+    static comphelper::ConfigurationListenerProperty<bool> gOpenCLEnabled(getMiscListener(), OUString("UseOpenCL"));
+    return gOpenCLEnabled.get();
+}
+
 ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
     meStringConversion(StringConversion::LOCALE),     // old LibreOffice behavior
     mbEmptyStringAsZero(false),
-    mbHasStringRefSyntax(false),
-    mbOpenCLEnabled(getMiscListener(), "UseOpenCL")
+    mbHasStringRefSyntax(false)
 {
     setOpenCLConfigToDefault();
 

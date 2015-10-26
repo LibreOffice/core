@@ -912,7 +912,7 @@ void ScInterpreter::ScMatInv()
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
 
-        if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled.get())
+        if (ScCalcConfig::isOpenCLEnabled())
         {
             sc::FormulaGroupInterpreter *pInterpreter = sc::FormulaGroupInterpreter::getStatic();
             if (pInterpreter != NULL)
