@@ -15,6 +15,7 @@
 #include <iostream>
 
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/optional.hpp>
 #include <gdk/gdkkeysyms.h>
 
 #define LOK_USE_UNSTABLE_API
@@ -288,6 +289,33 @@ static void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
 
     GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(rWindow.m_pDocView), GDK_SELECTION_CLIPBOARD);
+
+    GdkAtom* pTargets;
+    gint nTargets;
+    boost::optional<GdkAtom> oTarget;
+    if (gtk_clipboard_wait_for_targets(pClipboard, &pTargets, &nTargets))
+    {
+        for (gint i = 0; i < nTargets; ++i)
+        {
+            gchar* pName = gdk_atom_name(pTargets[i]);
+            if (std::string(pName) == "text/html")
+                oTarget = pTargets[i];
+            g_free(pName);
+        }
+        g_free(pTargets);
+    }
+
+    if (oTarget)
+    {
+        GtkSelectionData* pSelectionData = gtk_clipboard_wait_for_contents(pClipboard, *oTarget);
+        gint nLength;
+        const guchar* pData = gtk_selection_data_get_data_with_length(pSelectionData, &nLength);
+        bool bSuccess = pDocument->pClass->paste(pDocument, "text/html", reinterpret_cast<const char*>(pData), nLength);
+        gtk_selection_data_free(pSelectionData);
+        if (bSuccess)
+            return;
+    }
+
     gchar* pText = gtk_clipboard_wait_for_text(pClipboard);
     if (pText)
         pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", pText, strlen(pText));

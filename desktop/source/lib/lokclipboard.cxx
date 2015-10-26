@@ -43,7 +43,7 @@ throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeExc
     if (rFlavor.DataType == cppu::UnoType<OUString>::get())
     {
         sal_Char* pText = reinterpret_cast<sal_Char*>(m_aSequence.getArray());
-        aRet <<= OUString(pText, rtl_str_getLength(pText), RTL_TEXTENCODING_UTF8);
+        aRet <<= OUString(pText, m_aSequence.getLength(), RTL_TEXTENCODING_UTF8);
     }
     else
         aRet <<= m_aSequence;
