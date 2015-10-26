@@ -26,6 +26,7 @@
 #include <setjmp.h>
 #include <stdio.h>
 #include <sys/frame.h>
+#include "internal/misc.hxx"
 #include "backtrace.h"
 
 #if defined(SPARC)
@@ -257,7 +258,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
                     fprintf( fp, "(%s+0x%tx)", dli.dli_sname, offset );
                 }
             }
-            fprintf( fp, "[0x%x]\n", (unsigned int)*pFramePtr );
+            fprintf( fp, "[0x%x]\n", *pFramePtr );
         }
 
         fflush( fp );
