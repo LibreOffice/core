@@ -972,12 +972,12 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
 double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
 {
-    return ::std::expm1(fValue);
+    return expm1(fValue);
 }
 
 double SAL_CALL rtl_math_log1p( double fValue ) SAL_THROW_EXTERN_C()
 {
-    return ::std::log1p(fValue);
+    return log1p(fValue);
 }
 
 double SAL_CALL rtl_math_atanh( double fValue ) SAL_THROW_EXTERN_C()
@@ -988,13 +988,13 @@ double SAL_CALL rtl_math_atanh( double fValue ) SAL_THROW_EXTERN_C()
 /** Parent error function (erf) */
 double SAL_CALL rtl_math_erf( double x ) SAL_THROW_EXTERN_C()
 {
-    return ::std::erf(x);
+    return erf(x);
 }
 
 /** Parent complementary error function (erfc) */
 double SAL_CALL rtl_math_erfc( double x ) SAL_THROW_EXTERN_C()
 {
-    return ::std::erfc(x);
+    return erfc(x);
 }
 
 /** improved accuracy of asinh for |x| large and for x near zero
