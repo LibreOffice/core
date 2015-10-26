@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/backtrace.hxx>
+
 #ifdef SOLARIS
 
 #include <dlfcn.h>
@@ -277,5 +279,14 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
 }
 #endif
+
+// FIXME: no-op for now; it needs implementing, cf. above.
+rtl_uString *osl_backtraceAsString()
+{
+    OUStringBuffer aBuf;
+    OUString aStr = aBuf.makeStringAndClear();
+    rtl_uString_acquire( aStr.pData );
+    return aStr.pData;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
