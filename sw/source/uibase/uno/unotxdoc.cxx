@@ -3197,6 +3197,8 @@ vcl::Window* SwXTextDocument::getWindow()
 
 bool SwXTextDocument::isMimeTypeSupported()
 {
+    SolarMutexGuard aGuard;
+
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     if (!pWrtShell)
         return false;
