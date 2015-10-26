@@ -148,7 +148,6 @@ namespace chelp {
 
         Databases( bool showBasic,
                  const OUString& instPath,
-                 const com::sun::star::uno::Sequence< OUString >& imagesZipPaths,
                  const OUString& productName,
                  const OUString& productVersion,
                  const OUString& styleSheet,
@@ -156,7 +155,7 @@ namespace chelp {
 
         ~Databases();
 
-        OString getImagesZipFileURL();
+        OString getImageTheme();
 
         OUString getInstallPathAsURL();
 
@@ -273,9 +272,6 @@ namespace chelp {
             prodName,prodVersion,vendName,vendVersion,vendShort;
 
         OUString          m_aInstallDirectory;                // Installation directory
-        com::sun::star::uno::Sequence< OUString > m_aImagesZipPaths;
-        OString           m_aImagesZipFileURL;
-        OUString          m_aSymbolsStyleName;
 
         std::vector< OUString >    m_avModules;
 

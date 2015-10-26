@@ -23,12 +23,12 @@
 #include "vcl/dialog.hxx"
 #include "vcl/event.hxx"
 #include "vcl/fixed.hxx"
+#include "vcl/implimagetree.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/settings.hxx"
 
 #include <comphelper/string.hxx>
 #include "controldata.hxx"
-#include "impimagetree.hxx"
 #include "window.h"
 
 #define FIXEDLINE_TEXT_BORDER    4
@@ -1035,12 +1035,12 @@ bool FixedImage::SetModeImage( const Image& rImage )
 
 Image FixedImage::loadThemeImage(const OString &rFileName)
 {
-    static ImplImageTreeSingletonRef aImageTree;
     OUString sIconTheme =
         Application::GetSettings().GetStyleSettings().DetermineIconTheme();
     const OUString sFileName(OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
     BitmapEx aBitmap;
-    bool bSuccess = aImageTree->loadImage(sFileName, sIconTheme, aBitmap, true);
+    bool bSuccess = ImplImageTree::get().loadImage(
+        sFileName, sIconTheme, aBitmap, true);
     SAL_WARN_IF(!bSuccess, "vcl.layout", "Unable to load " << sFileName
         << " from theme " << sIconTheme);
     return Image(aBitmap);
