@@ -67,6 +67,9 @@ struct SC_DLLPUBLIC ScCalcConfig
     void MergeDocumentSpecific( const ScCalcConfig& r );
     void SetStringRefSyntax( formula::FormulaGrammar::AddressConvention eConv );
 
+    formula::FormulaGrammar::AddressConvention
+    GrammarToStringRefSyntax( formula::FormulaGrammar::Grammar eGram ) const;
+
     bool operator== (const ScCalcConfig& r) const;
     bool operator!= (const ScCalcConfig& r) const;
 };
