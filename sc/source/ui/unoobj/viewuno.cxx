@@ -1336,7 +1336,7 @@ void ScTabViewObj::EndMouseListening()
 {
     lang::EventObject aEvent;
     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-    for (const XMouseClickHandlerUnoRef rListener : aMouseClickHandlers)
+    for (const auto& rListener : aMouseClickHandlers)
     {
         try
         {
@@ -1353,7 +1353,7 @@ void ScTabViewObj::EndActivationListening()
 {
     lang::EventObject aEvent;
     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-    for (const XActivationEventListenerUnoRef rListener : aActivationListeners)
+    for (const auto& rListener : aActivationListeners)
     {
         try
         {
@@ -1373,9 +1373,7 @@ void SAL_CALL ScTabViewObj::addEnhancedMouseClickHandler( const uno::Reference< 
 
     if (aListener.is())
     {
-        uno::Reference<awt::XEnhancedMouseClickHandler> *pObj =
-                new uno::Reference<awt::XEnhancedMouseClickHandler>( aListener );
-        aMouseClickHandlers.push_back( pObj );
+        aMouseClickHandlers.push_back( aListener );
     }
 }
 
@@ -1404,9 +1402,7 @@ void SAL_CALL ScTabViewObj::addActivationEventListener( const uno::Reference< sh
 
     if (aListener.is())
     {
-        uno::Reference<sheet::XActivationEventListener> *pObj =
-                new uno::Reference<sheet::XActivationEventListener>( aListener );
-        aActivationListeners.push_back( pObj );
+        aActivationListeners.push_back( aListener );
     }
 }
 
@@ -1696,9 +1692,7 @@ void SAL_CALL ScTabViewObj::addSelectionChangeListener(
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<view::XSelectionChangeListener>* pObj =
-            new uno::Reference<view::XSelectionChangeListener>( xListener );
-    aSelectionChgListeners.push_back( pObj );
+    aSelectionChgListeners.push_back( xListener );
 }
 
 void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
@@ -1729,7 +1723,7 @@ void ScTabViewObj::SelectionChanged()
     aShell.ExecuteStyle( aReq );
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for (const XSelectionChangeListenerUnoRef rListener : aSelectionChgListeners)
+    for (const auto& rListener : aSelectionChgListeners)
         rListener->selectionChanged( aEvent );
 
     // handle sheet events
@@ -1978,9 +1972,7 @@ void SAL_CALL ScTabViewObj::addPropertyChangeListener( const OUString& /* aPrope
                std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<beans::XPropertyChangeListener>* pObj =
-            new uno::Reference<beans::XPropertyChangeListener>( xListener );
-    aPropertyChgListeners.push_back( pObj );
+    aPropertyChgListeners.push_back( xListener );
 }
 
 void SAL_CALL ScTabViewObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
@@ -2021,7 +2013,7 @@ void ScTabViewObj::VisAreaChanged()
 {
     beans::PropertyChangeEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for (const XViewPropertyChangeListenerUnoRef rListener : aPropertyChgListeners)
+    for (const auto& rListener : aPropertyChgListeners)
         rListener->propertyChange( aEvent );
 }
 
@@ -2083,9 +2075,7 @@ void SAL_CALL ScTabViewObj::addRangeSelectionListener(
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XRangeSelectionListener>* pObj =
-            new uno::Reference<sheet::XRangeSelectionListener>( xListener );
-    aRangeSelListeners.push_back( pObj );
+    aRangeSelListeners.push_back( xListener );
 }
 
 void SAL_CALL ScTabViewObj::removeRangeSelectionListener(
@@ -2109,9 +2099,7 @@ void SAL_CALL ScTabViewObj::addRangeSelectionChangeListener(
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XRangeSelectionChangeListener>* pObj =
-            new uno::Reference<sheet::XRangeSelectionChangeListener>( xListener );
-    aRangeChgListeners.push_back( pObj );
+    aRangeChgListeners.push_back( xListener );
 }
 
 void SAL_CALL ScTabViewObj::removeRangeSelectionChangeListener(
@@ -2139,7 +2127,7 @@ void ScTabViewObj::RangeSelDone( const OUString& rText )
     // copy on the stack because listener could remove itself
     XRangeSelectionListenerVector const listeners(aRangeSelListeners);
 
-    for (const XRangeSelectionListenerUnoRef rListener : listeners)
+    for (const auto& rListener : listeners)
         rListener->done( aEvent );
 }
 
@@ -2152,7 +2140,7 @@ void ScTabViewObj::RangeSelAborted( const OUString& rText )
     // copy on the stack because listener could remove itself
     XRangeSelectionListenerVector const listeners(aRangeSelListeners);
 
-    for (const XRangeSelectionListenerUnoRef rListener : listeners)
+    for (const auto& rListener : listeners)
         rListener->aborted( aEvent );
 }
 
@@ -2165,7 +2153,7 @@ void ScTabViewObj::RangeSelChanged( const OUString& rText )
     // copy on the stack because listener could remove itself
     XRangeSelectionChangeListenerVector const listener(aRangeChgListeners);
 
-    for (const XRangeSelectionChangeListenerUnoRef rListener : listener)
+    for (const auto& rListener : listener)
         rListener->descriptorChanged( aEvent );
 }
 

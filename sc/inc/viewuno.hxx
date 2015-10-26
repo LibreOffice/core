@@ -41,7 +41,6 @@
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 
 #include "address.hxx"
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScTabViewShell;
 class ScPreviewShell;
@@ -160,29 +159,12 @@ class ScTabViewObj : public ScViewPaneBase,
                      public com::sun::star::sheet::XSelectedSheetsSupplier
 {
 private:
-    typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XRangeSelectionListener > XRangeSelectionListenerUnoRef;
-    typedef boost::ptr_vector<XRangeSelectionListenerUnoRef> XRangeSelectionListenerVector;
-
-    typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XRangeSelectionChangeListener > XRangeSelectionChangeListenerUnoRef;
-    typedef boost::ptr_vector<XRangeSelectionChangeListenerUnoRef> XRangeSelectionChangeListenerVector;
-
-    typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::view::XSelectionChangeListener > XSelectionChangeListenerUnoRef;
-    typedef boost::ptr_vector<XSelectionChangeListenerUnoRef> XSelectionChangeListenerVector;
-
-    typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertyChangeListener > XViewPropertyChangeListenerUnoRef;
-    typedef boost::ptr_vector<XViewPropertyChangeListenerUnoRef> XViewPropertyChangeListenerVector;
-
-    typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::awt::XEnhancedMouseClickHandler > XMouseClickHandlerUnoRef;
-    typedef boost::ptr_vector<XMouseClickHandlerUnoRef> XMouseClickHandlerVector;
-
-    typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XActivationEventListener > XActivationEventListenerUnoRef;
-    typedef boost::ptr_vector<XActivationEventListenerUnoRef> XActivationEventListenerVector;
+    typedef std::vector<css::uno::Reference<css::sheet::XRangeSelectionListener> > XRangeSelectionListenerVector;
+    typedef std::vector<css::uno::Reference<css::sheet::XRangeSelectionChangeListener> > XRangeSelectionChangeListenerVector;
+    typedef std::vector<css::uno::Reference<css::view::XSelectionChangeListener> > XSelectionChangeListenerVector;
+    typedef std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> > XViewPropertyChangeListenerVector;
+    typedef std::vector<css::uno::Reference<css::awt::XEnhancedMouseClickHandler> > XMouseClickHandlerVector;
+    typedef std::vector<css::uno::Reference<css::sheet::XActivationEventListener> > XActivationEventListenerVector;
 
     SfxItemPropertySet                      aPropSet;
     XSelectionChangeListenerVector          aSelectionChgListeners;
