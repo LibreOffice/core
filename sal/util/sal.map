@@ -711,6 +711,11 @@ PRIVATE_1.2 { # LibreOffice 3.5
         sal_detail_logFormat;
 } PRIVATE_1.1;
 
+PRIVATE_1.3 { # LibreOffice 5.1
+    global:
+        osl_backtraceAsString;
+} PRIVATE_1.2;
+
 PRIVATE_textenc.1 { # LibreOffice 3.6
     global:
         _ZN3sal6detail7textenc20convertCharToUnicode*;
