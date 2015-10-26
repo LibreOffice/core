@@ -862,7 +862,7 @@ bool ScModelObj::isMimeTypeSupported()
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
-        return 0;
+        return false;
 
 
     TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromSystemClipboard(pViewData->GetActiveWin()));
