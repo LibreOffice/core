@@ -260,6 +260,8 @@ public:
     virtual void resetSelection() SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::getWindow().
     virtual vcl::Window* getWindow() SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::isMimeTypeSupported().
+    virtual bool isMimeTypeSupported() SAL_OVERRIDE;
 
     // XComponent
 
