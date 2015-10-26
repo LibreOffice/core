@@ -167,8 +167,7 @@ public:
         std::for_each(randomPoly.begin(),
                       randomPoly.end(),
                       [this](const B2DPolygon& aPolygon) mutable {
-                          this->aRandomIntersections.appendElement(aPolygon.getB2DRange(),
-                              B2VectorOrientation::Negative, 1); } );
+                          this->aRandomIntersections.appendElement(aPolygon.getB2DRange(), B2VectorOrientation::Negative); } );
 #endif
     }
 
