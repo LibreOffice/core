@@ -516,6 +516,8 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         // Increase RSID
         m_pDoc->setRsid( m_pDoc->getRsid() );
+
+        m_pDoc->cleanupUnoCrsrTbl();
     }
     SetError( nErr ? nErr : nVBWarning, OUString(  OSL_LOG_PREFIX  ) );
 

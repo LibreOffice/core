@@ -1678,9 +1678,9 @@ std::shared_ptr<SwUnoCrsr> SwDoc::CreateUnoCrsr( const SwPosition& rPos, bool bT
 {
     std::shared_ptr<SwUnoCrsr> pNew;
     if( bTblCrsr )
-        pNew.reset(new SwUnoTableCrsr( rPos ));
+        pNew = std::make_shared<SwUnoTableCrsr>(rPos);
     else
-        pNew.reset(new SwUnoCrsr( rPos ));
+        pNew = std::make_shared<SwUnoCrsr>(rPos);
 
     mvUnoCrsrTbl.push_back( pNew );
     return pNew;
