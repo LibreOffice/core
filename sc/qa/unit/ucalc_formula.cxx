@@ -6596,8 +6596,8 @@ void Test::testFuncMDETERM()
         aFormulaBuffer[12] = aColCodes[nSize-1];
         aFormulaBuffer[13] = static_cast<sal_Unicode>( '0' + nSize );
         m_pDoc->SetString(aPos, aFormulaBuffer.toString());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
-                                     0.0, m_pDoc->GetValue(aPos));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
+                                     0.0, m_pDoc->GetValue(aPos), 10e-4);
     }
 
     int aVals[] = {23, 31, 13, 12, 34, 64, 34, 31, 98, 32, 33, 63, 45, 54, 65, 76};
