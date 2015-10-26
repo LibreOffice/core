@@ -461,22 +461,28 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         else if ( aPropertyName == SC_UNO_SYNTAXSTRINGREF )
         {
             ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
+            formula::FormulaGrammar::AddressConvention eConv = aCalcConfig.meStringRefAddressSyntax;
+
+            // don't save "unspecified" string ref syntax ... query formula grammar
+            // and save that instead
+            if( eConv == formula::FormulaGrammar::CONV_UNSPECIFIED)
+            {
+                eConv = rDoc.GetAddressConvention();
+            }
 
             // write if it has been read|imported or explicitly changed
             // or if ref syntax isn't what would be native for our file format
             // i.e. CalcA1 in this case
             if ( aCalcConfig.mbHasStringRefSyntax ||
-                 (aCalcConfig.meStringRefAddressSyntax != formula::FormulaGrammar::CONV_OOO) )
+                 (eConv != formula::FormulaGrammar::CONV_OOO) )
             {
-                formula::FormulaGrammar::AddressConvention aConv = aCalcConfig.meStringRefAddressSyntax;
-
-                switch (aConv)
+                switch (eConv)
                 {
                     case formula::FormulaGrammar::CONV_OOO:
                     case formula::FormulaGrammar::CONV_XL_A1:
                     case formula::FormulaGrammar::CONV_XL_R1C1:
                     case formula::FormulaGrammar::CONV_A1_XL_A1:
-                         aRet <<= static_cast<sal_Int16>( aConv );
+                         aRet <<= static_cast<sal_Int16>( eConv );
                          break;
 
                     case formula::FormulaGrammar::CONV_UNSPECIFIED:
