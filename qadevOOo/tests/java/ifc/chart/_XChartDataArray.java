@@ -184,10 +184,9 @@ public class _XChartDataArray extends MultiMethodTest {
     */
     public void _getRowDescriptions() {
         requiredMethod("setRowDescriptions()");
-        bResult = true;
 
         String[] dscs = oObj.getRowDescriptions();
-        bResult &= dscs.length == rowDscs.length;
+        bResult = dscs.length == rowDscs.length;
         if (bResult) {
             for (int i = 0; i < dscs.length; i++) {
                 log.println("Row " + i + ": got " + dscs[i] + " expected: " + rowDscs[i]);
