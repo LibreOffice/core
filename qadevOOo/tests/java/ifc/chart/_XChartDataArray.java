@@ -160,10 +160,9 @@ public class _XChartDataArray extends MultiMethodTest {
     */
     public void _getColumnDescriptions() {
         requiredMethod("setColumnDescriptions()");
-        bResult = true;
 
         String[] dscs = oObj.getColumnDescriptions();
-        bResult &= dscs.length == colDscs.length;
+        bResult = dscs.length == colDscs.length;
         if (bResult) {
             for (int i = 0; i < dscs.length; i++) {
                 log.println("Col " + i + ": got " + dscs[i] + " expected: " + colDscs[i]);
