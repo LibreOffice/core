@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_e8a3fb4d",
+        "filename": "extensions/source/propctrlr/selectlabeldialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-26T16:17:02Z",
+      "side": 1,
+      "message": "seeing there /is/ occasional reason to allocate Reference on the heap, maybe it makes more sense to leave the Reference operators new/delete alone in this patch, and just keep those parts of this change where there is no good reason for heap allocation",
+      "revId": "09c92695a03a8df02efef31b8afa015aa305d380",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_089f5704",
+        "filename": "sw/inc/unotxdoc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-26T16:17:02Z",
+      "side": 1,
+      "message": "mixing such random clean-up into a targeted patch is not very helpful",
+      "revId": "09c92695a03a8df02efef31b8afa015aa305d380",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
