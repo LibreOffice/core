@@ -161,6 +161,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
     return bRes;
 }
 
+#if OSL_DEBUG_LEVEL > 1
 void
 TBBase::indent_printf( FILE* fp, const char* format, ... )
 {
@@ -174,6 +175,7 @@ TBBase::indent_printf( FILE* fp, const char* format, ... )
    vfprintf( fp, format, ap );
    va_end( ap );
 }
+#endif
 
 TBCHeader::TBCHeader()
     : bSignature(0x3)
