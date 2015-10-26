@@ -38,6 +38,8 @@
 #include <stdlib.h>
 #include <cmath>
 
+using namespace std;
+
 static int const n10Count = 16;
 static double const n10s[2][n10Count] = {
     { 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8,
