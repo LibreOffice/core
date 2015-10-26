@@ -38,9 +38,7 @@ float snoise(vec2 P) {
 }
 
 void main() {
-     // No idea why the multiplication by 10 (and not 16, which would seem more logical to me, as
-     // the permTexture is 16*16 pixels in size).
-     float sn = snoise(10.0*v_texturePosition);
+     float sn = snoise(256*v_texturePosition);
      if( sn < time)
          gl_FragColor = texture2D(enteringSlideTexture, v_texturePosition);
      else
