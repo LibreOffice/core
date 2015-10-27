@@ -1684,7 +1684,7 @@ private:
     std::vector<GLint> mvVertexIndexesInTiles;
 };
 
-void VortexTransition::prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
+void VortexTransition::prepare( double, double, double, double, double )
 {
     glDisable(GL_CULL_FACE);
 
