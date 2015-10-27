@@ -1,0 +1,65 @@
+cmd/32/adddirect.png                mimetypes/text-x-preview.png
+cmd/32/open.png                     actions/document-open.png
+cmd/32/reload.png                   actions/view-refresh.png
+cmd/32/save.png                     devices/media-floppy.png
+cmd/32/setdocumentproperties.png    actions/document-properties.png
+cmd/32/closedoc.png                 actions/window-close.png
+
+cmd/32/print.png                    actions/document-print.png
+cmd/32/printpreview.png             actions/document-print-preview.png
+
+cmd/32/cut.png                      actions/edit-cut.png
+cmd/32/copy.png                     actions/edit-copy.png
+cmd/32/paste.png                    actions/edit-paste.png
+cmd/32/selectall.png                actions/edit-select-all.png
+
+cmd/32/undo.png                     actions/edit-undo.png
+cmd/32/redo.png                     actions/edit-redo.png
+
+cmd/32/recsearch.png                actions/edit-find.png
+cmd/32/searchdialog.png             actions/edit-find-replace.png
+#cmd/32/spelldialog.png              actions/tools-check-spelling.png       # had to replace the unclear text
+
+#cmd/32/insertgraphic.png            actions/insert-image.png               # pulled a modified version of the 32px from src/photos.svg
+#cmd/32/hyperlinkdialog.png          actions/insert-link.png                # down arrow was removed from icon
+cmd/32/insertbookmark.png           actions/bookmark-new.png
+cmd/32/avmediaplayer.png            categories/applications-multimedia.png
+
+cmd/32/alignblock.png               actions/format-justify-fill.png
+cmd/32/alignhorizontalcenter.png    actions/format-justify-center.png
+cmd/32/alignleft.png                actions/format-justify-left.png
+cmd/32/alignright.png               actions/format-justify-right.png
+
+#cmd/32/bold.png                     actions/format-text-bold.png            # pulled icon from v2.20
+#cmd/32/italics.png                  actions/format-text-italic.png          # pulled icon from v2.20
+#cmd/32/underline.png                actions/format-text-underline.png       # pulled icon from v2.20
+#cmd/32/strikeout.png                actions/format-text-strikethrough.png   # pulled icon from v2.20
+
+cmd/32/incrementindent.png          actions/format-indent-more.png
+cmd/32/decrementindent.png          actions/format-indent-less.png
+
+cmd/32/paralefttoright.png          actions/format-text-direction-ltr.png
+cmd/32/pararighttoleft.png          actions/format-text-direction-rtl.png
+
+cmd/32/firstpage.png                actions/go-first.png
+cmd/32/navigateback.png             actions/go-previous.png
+cmd/32/navigateforward.png          actions/go-next.png
+cmd/32/lastpage.png                 actions/go-last.png
+cmd/32/downsearch.png               actions/go-down.png
+cmd/32/upsearch.png                 actions/go-up.png
+
+cmd/32/rotateleft.png               actions/object-rotate-left.png
+cmd/32/rotateright.png              actions/object-rotate-right.png
+
+cmd/32/sortascending.png            actions/view-sort-ascending.png
+cmd/32/sortdescending.png           actions/view-sort-descending.png
+
+cmd/32/zoomin.png                   actions/zoom-in.png
+cmd/32/zoomout.png                  actions/zoom-out.png
+cmd/32/zoom100percent.png           actions/zoom-original.png
+cmd/32/fullscreen.png               actions/view-fullscreen.png
+
+cmd/32/helpindex.png                apps/help-browser.png
+cmd/32/delete                       actions/edit-delete.png
+cmd/32/quit.png                     actions/application-exit.png
+
