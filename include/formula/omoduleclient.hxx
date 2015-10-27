@@ -28,13 +28,13 @@ namespace formula {
 
 /** Base class for objects which use any global module-specific resources.
 */
-class FORMULA_DLLPUBLIC OModuleClient
+class FORMULA_DLLPUBLIC OModuleClientUI
 {
-    OModuleClient(const OModuleClient&) = delete;
-    OModuleClient& operator=( const OModuleClient& ) = delete;
+    OModuleClientUI(const OModuleClientUI&) = delete;
+    OModuleClientUI& operator=( const OModuleClientUI& ) = delete;
 public:
-    OModuleClient();
-    ~OModuleClient();
+    OModuleClientUI();
+    ~OModuleClientUI();
 };
 
 }

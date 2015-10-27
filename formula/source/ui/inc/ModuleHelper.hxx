@@ -29,11 +29,11 @@ namespace formula
 
     //= OModule
 
-    class OModuleClient;
+    class OModuleClientUI;
     class OModuleImpl;
     class OModule
     {
-        friend class OModuleClient;
+        friend class OModuleClientUI;
 
     private:
         OModule() = delete; //TODO: get rid of this class

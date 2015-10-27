@@ -23,11 +23,11 @@
 
 #include "ModuleHelper.hxx"
 
-formula::OModuleClient::OModuleClient() {
+formula::OModuleClientUI::OModuleClientUI() {
     OModule::registerClient();
 }
 
-formula::OModuleClient::~OModuleClient() {
+formula::OModuleClientUI::~OModuleClientUI() {
     OModule::revokeClient();
 }
 
