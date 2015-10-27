@@ -71,6 +71,7 @@ class VCL_DLLPUBLIC PPDKey
     const PPDValue*     m_pDefaultValue;
     bool                m_bQueryValue;
     PPDValue            m_aQueryValue;
+    OUString            m_aGroup;
 
 public:
     enum UIType { PickOne, PickMany, Boolean };
@@ -95,6 +96,7 @@ public:
     const PPDValue*     getValue( const OUString& rOption ) const;
     const PPDValue*     getValueCaseInsensitive( const OUString& rOption ) const;
     const PPDValue*     getDefaultValue() const { return m_pDefaultValue; }
+    const OUString&     getGroup() const { return m_aGroup; }
 
     const OUString&     getKey() const { return m_aKey; }
     bool                isUIKey() const { return m_bUIOption; }
@@ -182,7 +184,7 @@ private:
     ~PPDParser();
 
     void parseOrderDependency(const OString& rLine);
-    void parseOpenUI(const OString& rLine);
+    void parseOpenUI(const OString& rLine, const OString& rPPDGroup);
     void parseConstraint(const OString& rLine);
     void parse( std::list< OString >& rLines );
 
