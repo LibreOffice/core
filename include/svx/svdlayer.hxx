@@ -25,6 +25,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <algorithm>
+#include <vector>
 
 class SdrModel;
 
