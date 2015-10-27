@@ -920,7 +920,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     if( !rHTMLWrt.bPreserveForm )
     {
         rHTMLWrt.OutForm( true, &rNode );
-        bPreserveForm = (rHTMLWrt.pxFormComps && rHTMLWrt.pxFormComps->is() );
+        bPreserveForm = rHTMLWrt.mxFormComps.is();
         rHTMLWrt.bPreserveForm = bPreserveForm;
     }
 

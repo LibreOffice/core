@@ -76,7 +76,7 @@ public:
     bool mbHover;
     BitmapEx maPreview1;
     OUString maTitle;
-    css::uno::Reference< css::accessibility::XAccessible >* mpxAcc;
+    css::uno::Reference< css::accessibility::XAccessible > mxAcc;
 
     ThumbnailViewItem (ThumbnailView &rView, sal_uInt16 nId);
 

@@ -59,7 +59,7 @@ struct ValueSetItem
     OUString            maText;
     void*               mpData;
     bool                mbSelected;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
+    css::uno::Reference< css::accessibility::XAccessible > mxAcc;
 
     explicit ValueSetItem( ValueSet& rParent );
     ~ValueSetItem();

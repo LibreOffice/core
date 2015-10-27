@@ -42,7 +42,7 @@ ValueSetItem::ValueSetItem( ValueSet& rParent )
     , mbVisible(true)
     , mpData(NULL)
     , mbSelected(false)
-    , mpxAcc(NULL)
+    , mxAcc()
 {
 }
 
@@ -50,10 +50,9 @@ ValueSetItem::ValueSetItem( ValueSet& rParent )
 
 ValueSetItem::~ValueSetItem()
 {
-    if( mpxAcc )
+    if( mxAcc.is() )
     {
-        static_cast< ValueItemAcc* >( mpxAcc->get() )->ParentDestroyed();
-        delete mpxAcc;
+        static_cast< ValueItemAcc* >( mxAcc.get() )->ParentDestroyed();
     }
 }
 
@@ -61,10 +60,10 @@ ValueSetItem::~ValueSetItem()
 
 uno::Reference< accessibility::XAccessible > ValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
-    if( !mpxAcc )
-        mpxAcc = new uno::Reference< accessibility::XAccessible >( new ValueItemAcc( this, bIsTransientChildrenDisabled ) );
+    if( !mxAcc.is() )
+        mxAcc = new ValueItemAcc( this, bIsTransientChildrenDisabled );
 
-    return *mpxAcc;
+    return mxAcc;
 }
 
 
@@ -897,7 +896,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
             }
 
             // Do not create an accessible object for the test.
-            if (pItem != NULL && pItem->mpxAcc != NULL)
+            if (pItem != NULL && pItem->mxAcc.is())
                 if (pItem->GetAccessible( mbIsTransientChildrenDisabled ).get() == this )
                 {
                     nIndexInParent = i;

@@ -232,11 +232,11 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
     if( !bTag_On )
     {
         // die Form beenden wenn alle Controls ausgegeben wurden
-        if( pxFormComps && pxFormComps->is() &&
-            (*pxFormComps)->getCount() == nFormCntrlCnt )
+        if( mxFormComps.is() &&
+            mxFormComps->getCount() == nFormCntrlCnt )
         {
-            OutForm( false, *pxFormComps );
-            (*pxFormComps) = 0;
+            OutForm( false, mxFormComps );
+            mxFormComps.clear();
         }
         return;
     }
@@ -321,26 +321,24 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
     }
 
     if( xNewFormComps.is() &&
-        (!pxFormComps || !(xNewFormComps == *pxFormComps)) )
+        (!mxFormComps.is() || !(xNewFormComps == mxFormComps)) )
     {
         // Es soll eine Form aufgemacht werden ...
-        if( pxFormComps && pxFormComps->is() )
+        if( mxFormComps.is() )
         {
             // .. es ist aber noch eine Form offen: Das ist in
             // jedem Fall eine Fehler, aber wir schliessen die alte
             // Form trotzdem
-            OutForm( false, *pxFormComps );
+            OutForm( false, mxFormComps );
 
             //!!!nWarn = 1; // Control wird falscher Form zugeordnet
         }
 
-        if( !pxFormComps )
-            pxFormComps = new uno::Reference< container::XIndexContainer > ;
-        *pxFormComps = xNewFormComps;
+        mxFormComps = xNewFormComps;
 
-        OutForm( true, *pxFormComps );
+        OutForm( true, mxFormComps );
         uno::Reference< beans::XPropertySet >  xTmp;
-        OutHiddenControls( *pxFormComps, xTmp );
+        OutHiddenControls( mxFormComps, xTmp );
     }
 }
 
@@ -1270,8 +1268,8 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     // Controls sind nicht absatz-gebunden, deshalb kein LF mehr ausgeben!
     rHTMLWrt.bLFPossible = false;
 
-    if( rHTMLWrt.pxFormComps && rHTMLWrt.pxFormComps->is() )
-        rHTMLWrt.OutHiddenControls( *rHTMLWrt.pxFormComps, xPropSet );
+    if( rHTMLWrt.mxFormComps.is() )
+        rHTMLWrt.OutHiddenControls( rHTMLWrt.mxFormComps, xPropSet );
     return rWrt;
 }
 
