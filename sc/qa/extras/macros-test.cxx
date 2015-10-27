@@ -71,7 +71,7 @@ void ScMacrosTest::testMSP()
     const OUString aFileNameBase("MasterScriptProviderProblem.ods");
     OUString aFileName;
     createFileURL(aFileNameBase, aFileName);
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load MasterScriptProviderProblem.ods", xComponent.is());
 
@@ -103,7 +103,7 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
     const OUString aFileNameBase("testTypePassword.ods");
     OUString aFileName;
     createFileURL(aFileNameBase, aFileName);
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load testTypePassword.ods", xComponent.is());
 
@@ -158,7 +158,7 @@ void ScMacrosTest::testStarBasic()
     const OUString aFileNameBase("StarBasic.ods");
     OUString aFileName;
     createFileURL(aFileNameBase, aFileName);
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
@@ -302,7 +302,7 @@ void ScMacrosTest::testVba()
     {
         OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName + "xls", aFileName);
-        uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+        uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
         OUString sMsg( "Failed to load " + aFileName );
         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 

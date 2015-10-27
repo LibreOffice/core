@@ -162,7 +162,7 @@ bool ScfPropertySet::HasProperty( const OUString& rPropName ) const
     try
     {
         Reference< XPropertyState > xPropState( mxPropSet, UNO_QUERY_THROW );
-        bHasProp = xPropState->getPropertyState( rPropName ) == ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+        bHasProp = xPropState->getPropertyState( rPropName ) == css::beans::PropertyState_DIRECT_VALUE;
     }
     catch( Exception& )
     {

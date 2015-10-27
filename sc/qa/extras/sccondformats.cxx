@@ -126,7 +126,7 @@ void ScConditionalFormatTest::testUndoAnchor()
     OUString aFileURL;
     createFileURL(OUString("document_with_linked_graphic.ods"), aFileURL);
     // open the document with graphic included
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileURL);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
     // Get the document model

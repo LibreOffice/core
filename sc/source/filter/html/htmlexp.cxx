@@ -160,7 +160,7 @@ static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
 }
 
 static void lcl_AddStamp( OUString& rStr, const OUString& rName,
-    const ::com::sun::star::util::DateTime& rDateTime,
+    const css::util::DateTime& rDateTime,
     const LocaleDataWrapper& rLoc )
 {
     Date aD(rDateTime.Day, rDateTime.Month, rDateTime.Year);

@@ -63,7 +63,7 @@ public:
     virtual ~ScDPFunctionDlg();
     virtual void            dispose() override;
     sal_uInt16              GetFuncMask() const;
-    ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
+    css::sheet::DataPilotFieldReference GetFieldRef() const;
 
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );

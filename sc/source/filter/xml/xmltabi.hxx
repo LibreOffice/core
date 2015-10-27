@@ -52,15 +52,13 @@ public:
 
     ScXMLTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 };
@@ -72,15 +70,13 @@ class ScXMLTableProtectionContext : public SvXMLImportContext
 public:
     ScXMLTableProtectionContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableProtectionContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 };

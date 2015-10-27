@@ -28,7 +28,7 @@
 class SdrModel;
 
 class ScDrawModelBroadcaster : public SfxListener,
-    public ::cppu::WeakImplHelper< com::sun::star::document::XEventBroadcaster >
+    public ::cppu::WeakImplHelper< css::document::XEventBroadcaster >
 {
     mutable ::osl::Mutex maListenerMutex;
     ::cppu::OInterfaceContainerHelper maEventListeners;
@@ -39,10 +39,10 @@ public:
     ScDrawModelBroadcaster( SdrModel *pDrawModel );
     virtual ~ScDrawModelBroadcaster();
 
-    virtual void SAL_CALL addEventListener( const com::sun::star::uno::Reference< com::sun::star::document::XEventListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const com::sun::star::uno::Reference< com::sun::star::document::XEventListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::document::XEventListener >& xListener )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::document::XEventListener >& xListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };

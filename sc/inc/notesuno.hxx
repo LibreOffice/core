@@ -34,11 +34,11 @@ class SvxUnoText;
 class ScPostIt;
 
 class ScAnnotationObj : public cppu::WeakImplHelper<
-                            com::sun::star::container::XChild,
-                            com::sun::star::text::XSimpleText,
-                            com::sun::star::sheet::XSheetAnnotation,
-                            com::sun::star::sheet::XSheetAnnotationShapeSupplier,
-                            com::sun::star::lang::XServiceInfo >,
+                            css::container::XChild,
+                            css::text::XSimpleText,
+                            css::sheet::XSheetAnnotation,
+                            css::sheet::XSheetAnnotationShapeSupplier,
+                            css::lang::XServiceInfo >,
                         public SfxListener
 {
 public:
@@ -48,69 +48,67 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XChild
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                            getParent() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setParent( const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::uno::XInterface >& Parent )
-                                    throw(::com::sun::star::lang::NoSupportException,
-                                            ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
+                            getParent() throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   setParent( const css::uno::Reference<
+                                        css::uno::XInterface >& Parent )
+                                    throw(css::lang::NoSupportException,
+                                            css::uno::RuntimeException, std::exception) override;
 
                             /// XSimpleText
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL
-                            createTextCursor() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL
-                            createTextCursorByRange( const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::text::XTextRange >& aTextPosition )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   insertString( const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::text::XTextRange >& xRange,
+    virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL
+                            createTextCursor() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL
+                            createTextCursorByRange( const css::uno::Reference< css::text::XTextRange >& aTextPosition )
+                                    throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   insertString( const css::uno::Reference<
+                                        css::text::XTextRange >& xRange,
                                         const OUString& aString, sal_Bool bAbsorb )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   insertControlCharacter( const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::text::XTextRange >& xRange,
+                                    throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange,
                                         sal_Int16 nControlCharacter, sal_Bool bAbsorb )
-                                    throw(::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException, std::exception) override;
+                                    throw(css::lang::IllegalArgumentException,
+                                        css::uno::RuntimeException, std::exception) override;
 
                             /// XTextRange
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
-                            getText() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
-                            getStart() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
-                            getEnd() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getString() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::text::XText > SAL_CALL
+                            getText() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
+                            getStart() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
+                            getEnd() throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getString() throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL   setString( const OUString& aString )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                    throw(css::uno::RuntimeException, std::exception) override;
 
                             /// XSheetAnnotation
-    virtual ::com::sun::star::table::CellAddress SAL_CALL getPosition()
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::table::CellAddress SAL_CALL getPosition()
+                                    throw(css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getAuthor()
-        throw(::com::sun::star::uno::RuntimeException,
+        throw(css::uno::RuntimeException,
               std::exception) override;
     virtual OUString SAL_CALL getDate()
-        throw(::com::sun::star::uno::RuntimeException,
+        throw(css::uno::RuntimeException,
               std::exception) override;
     virtual sal_Bool SAL_CALL getIsVisible()
-                                    throw(::com::sun::star::uno::RuntimeException,
+                                    throw(css::uno::RuntimeException,
                                           std::exception) override;
     virtual void SAL_CALL setIsVisible( sal_Bool bIsVisible )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                    throw(css::uno::RuntimeException, std::exception) override;
 
                             /// XSheetAnnotationShapeSupplier
-    virtual ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > SAL_CALL
+    virtual css::uno::Reference < css::drawing::XShape > SAL_CALL
                             getAnnotationShape()
-                                throw(::com::sun::star::uno::RuntimeException,
+                                throw(css::uno::RuntimeException,
                                       std::exception) override;
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+                                throw(css::uno::RuntimeException, std::exception) override;
 
 private:
     SvxUnoText&         GetUnoText();

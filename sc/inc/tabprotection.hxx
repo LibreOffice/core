@@ -62,10 +62,10 @@ public:
     virtual bool isPasswordEmpty() const = 0;
     virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const = 0;
     virtual void setPassword(const OUString& aPassText) = 0;
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
+    virtual css::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHas2 = PASSHASH_UNSPECIFIED) const = 0;
     virtual void setPasswordHash(
-        const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+        const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) = 0;
     virtual bool verifyPassword(const OUString& aPassText) const = 0;
 };
@@ -92,10 +92,10 @@ public:
     virtual bool isPasswordEmpty() const override;
     virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPassword(const OUString& aPassText) override;
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
+    virtual css::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPasswordHash(
-        const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+        const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
     virtual bool verifyPassword(const OUString& aPassText) const override;
 
@@ -178,10 +178,10 @@ public:
     virtual bool isPasswordEmpty() const override;
     virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPassword(const OUString& aPassText) override;
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
+    virtual css::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPasswordHash(
-        const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+        const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
     virtual bool verifyPassword(const OUString& aPassText) const override;
 

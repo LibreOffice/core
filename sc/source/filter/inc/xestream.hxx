@@ -216,7 +216,7 @@ public:
     void EncryptBytes( SvStream& rStrm, ::std::vector<sal_uInt8>& aBytes );
 
 private:
-    void Init( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData );
+    void Init( const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
 
     static sal_uInt32 GetBlockPos( sal_Size nStrmPos );
     static sal_uInt16 GetOffsetInBlock( sal_Size nStrmPos );
@@ -293,7 +293,7 @@ public:
 class XclExpXmlStream : public oox::core::XmlFilterBase
 {
 public:
-    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rCC, bool bExportVBA );
+    XclExpXmlStream( const css::uno::Reference< css::uno::XComponentContext >& rCC, bool bExportVBA );
     virtual ~XclExpXmlStream();
 
     /** Returns the filter root data. */
@@ -314,7 +314,7 @@ public:
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,
                                         const OUString& sRelativeStream,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xParentRelation,
+                                        const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
                                         const char* sContentType,
                                         const char* sRelationshipType,
                                         OUString* pRelationshipId = NULL );

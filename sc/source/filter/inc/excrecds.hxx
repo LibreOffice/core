@@ -196,7 +196,7 @@ class XclExpSheetProtection : public XclExpProtection
 class XclExpPassHash : public XclExpRecord
 {
 public:
-    XclExpPassHash(const ::com::sun::star::uno::Sequence<sal_Int8>& aHash);
+    XclExpPassHash(const css::uno::Sequence<sal_Int8>& aHash);
     virtual ~XclExpPassHash();
 
 private:

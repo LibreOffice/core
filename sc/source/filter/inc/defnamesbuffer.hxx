@@ -81,13 +81,13 @@ public:
     /** Returns the original name as imported from or exported to the file. */
     const OUString& getUpcaseModelName() const;
     /** Returns an Any with a SingleReference or ComplexReference, or an empty Any. */
-    ::com::sun::star::uno::Any getReference( const ::com::sun::star::table::CellAddress& rBaseAddr ) const;
+    css::uno::Any getReference( const css::table::CellAddress& rBaseAddr ) const;
 
 protected:
-    DefinedNameModel    maModel;            /// Model data for this defined name.
-    mutable OUString maUpModelName;  /// Model name converted to uppercase ASCII.
-    OUString     maCalcName;         /// Final name used in the Calc document.
-    ::com::sun::star::uno::Any maRefAny;    /// Single cell/range reference.
+    DefinedNameModel    maModel;        /// Model data for this defined name.
+    mutable OUString    maUpModelName;  /// Model name converted to uppercase ASCII.
+    OUString            maCalcName;     /// Final name used in the Calc document.
+    css::uno::Any       maRefAny;       /// Single cell/range reference.
 };
 
 class DefinedName : public DefinedNameBase
@@ -123,7 +123,7 @@ public:
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
     inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
     /** Tries to resolve the defined name to an absolute cell range. */
-    bool                getAbsoluteRange( ::com::sun::star::table::CellRangeAddress& orRange ) const;
+    bool                getAbsoluteRange( css::table::CellRangeAddress& orRange ) const;
 
 private:
     typedef ::std::unique_ptr< StreamDataSequence >   StreamDataSeqPtr;

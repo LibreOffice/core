@@ -57,11 +57,11 @@ class ScDocument;
 // DataProvider
 class ScChart2DataProvider : public
                 ::cppu::WeakImplHelper<
-                    ::com::sun::star::chart2::data::XDataProvider,
-                    ::com::sun::star::chart2::data::XSheetDataProvider,
-                    ::com::sun::star::chart2::data::XRangeXMLConversion,
-                    ::com::sun::star::beans::XPropertySet,
-                    ::com::sun::star::lang::XServiceInfo>,
+                    css::chart2::data::XDataProvider,
+                    css::chart2::data::XSheetDataProvider,
+                    css::chart2::data::XRangeXMLConversion,
+                    css::beans::XPropertySet,
+                    css::lang::XServiceInfo>,
                 SfxListener
 {
 public:
@@ -72,114 +72,109 @@ public:
 
     // XDataProvider
     virtual sal_Bool SAL_CALL createDataSourcePossible(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSource > SAL_CALL createDataSource(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<
+        css::chart2::data::XDataSource > SAL_CALL createDataSource(
+            const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue > SAL_CALL detectArguments(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<
+        css::beans::PropertyValue > SAL_CALL detectArguments(
+            const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource )
+            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
+    virtual css::uno::Reference<
+        css::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
             const OUString& aRangeRepresentation )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
         createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation )
             throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XSheetDataProvider
     virtual sal_Bool SAL_CALL createDataSequenceByFormulaTokensPossible(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& aTokens )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::sheet::FormulaToken >& aTokens )
+            throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
+    virtual css::uno::Reference< css::chart2::data::XDataSequence >
         SAL_CALL createDataSequenceByFormulaTokens(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& aTokens )
-                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< css::sheet::FormulaToken >& aTokens )
+                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // XRangeXMLConversion
     virtual OUString SAL_CALL convertRangeToXML( const OUString& sRangeRepresentation )
-        throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) override;
+        throw ( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
 
     virtual OUString SAL_CALL convertRangeFromXML( const OUString& sXMLRange )
-        throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception ) override;
+        throw ( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
 
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySetInfo> SAL_CALL
-        getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL
+        getPropertySetInfo() throw( css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Any& rValue)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::beans::PropertyVetoException,
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Any& rValue)
+        throw( css::beans::UnknownPropertyException,
+                css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+    virtual css::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw( css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertyChangeListener>& xListener)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XPropertyChangeListener>& xListener)
+        throw( css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertyChangeListener>& rListener)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XPropertyChangeListener>& rListener)
+        throw( css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XVetoableChangeListener>& rListener)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XVetoableChangeListener>& rListener)
+        throw( css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XVetoableChangeListener>& rListener)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XVetoableChangeListener>& rListener)
+        throw( css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString&
-            rServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
+            rServiceName) throw( css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
+    virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() throw(
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+                css::uno::RuntimeException, std::exception) override;
 
 private:
 
@@ -191,8 +186,8 @@ private:
 // DataSource
 class ScChart2DataSource : public
                 ::cppu::WeakImplHelper<
-                    ::com::sun::star::chart2::data::XDataSource,
-                    ::com::sun::star::lang::XServiceInfo>,
+                    css::chart2::data::XDataSource,
+                    css::lang::XServiceInfo>,
                 SfxListener
 {
 public:
@@ -202,29 +197,29 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataSource
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL
-        getDataSequences() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference<
+            css::chart2::data::XLabeledDataSequence > > SAL_CALL
+        getDataSequences() throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString&
-            rServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
+            rServiceName) throw( css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
+    virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() throw(
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+                css::uno::RuntimeException, std::exception) override;
 
     // implementation
 
-    void AddLabeledSequence(const com::sun::star::uno::Reference < com::sun::star::chart2::data::XLabeledDataSequence >& xNew);
+    void AddLabeledSequence(const css::uno::Reference < css::chart2::data::XLabeledDataSequence >& xNew);
 
 private:
 
     ScDocument*                 m_pDocument;
-    typedef std::list < com::sun::star::uno::Reference< com::sun::star::chart2::data::XLabeledDataSequence > >  LabeledList;
+    typedef std::list < css::uno::Reference< css::chart2::data::XLabeledDataSequence > >  LabeledList;
     LabeledList                 m_aLabeledSequences;
 
 };
@@ -232,138 +227,134 @@ private:
 // DataSequence
 class ScChart2DataSequence : public
                 ::cppu::WeakImplHelper<
-                    ::com::sun::star::chart2::data::XDataSequence,
-                    ::com::sun::star::chart2::data::XTextualDataSequence,
-                    ::com::sun::star::chart2::data::XNumericalDataSequence,
-                    com::sun::star::chart2::XTimeBased,
-                    ::com::sun::star::util::XCloneable,
-                    ::com::sun::star::util::XModifyBroadcaster,
-                    ::com::sun::star::beans::XPropertySet,
-                    ::com::sun::star::lang::XServiceInfo>,
+                    css::chart2::data::XDataSequence,
+                    css::chart2::data::XTextualDataSequence,
+                    css::chart2::data::XNumericalDataSequence,
+                    css::chart2::XTimeBased,
+                    css::util::XCloneable,
+                    css::util::XModifyBroadcaster,
+                    css::beans::XPropertySet,
+                    css::lang::XServiceInfo>,
                 SfxListener,
                 boost::noncopyable
 {
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
-            const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >& xDP,
+            const css::uno::Reference< css::chart2::data::XDataProvider >& xDP,
             ::std::vector<ScTokenRef>&& rTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataSequence
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+    virtual css::uno::Sequence< css::uno::Any >
         SAL_CALL getData()
-            throw (::com::sun::star::uno::RuntimeException,
+            throw (css::uno::RuntimeException,
                    std::exception) override;
     virtual OUString SAL_CALL getSourceRangeRepresentation()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString >
-        SAL_CALL generateLabel(::com::sun::star::chart2::data::LabelOrigin nOrigin)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString >
+        SAL_CALL generateLabel(css::chart2::data::LabelOrigin nOrigin)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Get the number format key for the n-th data entry
      * If nIndex == -1, then you will get the number format key for the first non-empty entry
      */
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException,
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException,
                std::exception) override;
 
     // XNumericalDataSequence
-    virtual ::com::sun::star::uno::Sequence< double >
+    virtual css::uno::Sequence< double >
         SAL_CALL getNumericalData()
-            throw (::com::sun::star::uno::RuntimeException,
+            throw (css::uno::RuntimeException,
                    std::exception) override;
 
     // XTextualDataSequence
-    virtual ::com::sun::star::uno::Sequence< OUString >
+    virtual css::uno::Sequence< OUString >
         SAL_CALL getTextualData()
-            throw (::com::sun::star::uno::RuntimeException,
+            throw (css::uno::RuntimeException,
                    std::exception) override;
 
     // XTimeBased
-    virtual sal_Bool SAL_CALL switchToNext(sal_Bool bWrap) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL setToPointInTime(sal_Int32 nPoint) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL switchToNext(sal_Bool bWrap) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL setToPointInTime(sal_Int32 nPoint) throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL setRange(sal_Int32 nStart, sal_Int32 nEnd) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRange(sal_Int32 nStart, sal_Int32 nEnd) throw (css::uno::RuntimeException, std::exception) override;
 
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySetInfo> SAL_CALL
-        getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<
+        css::beans::XPropertySetInfo> SAL_CALL
+        getPropertySetInfo() throw( css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Any& rValue)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::beans::PropertyVetoException,
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Any& rValue)
+        throw( css::beans::UnknownPropertyException,
+                css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+    virtual css::uno::Any SAL_CALL getPropertyValue(
             const OUString& rPropertyName)
-        throw(::com::sun::star::beans::UnknownPropertyException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException,
+        throw(css::beans::UnknownPropertyException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException,
               std::exception) override;
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertyChangeListener>& xListener)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XPropertyChangeListener>& xListener)
+        throw( css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertyChangeListener>& rListener)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XPropertyChangeListener>& rListener)
+        throw( css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XVetoableChangeListener>& rListener)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XVetoableChangeListener>& rListener)
+        throw( css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XVetoableChangeListener>& rListener)
-        throw( ::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<  css::beans::XVetoableChangeListener>& rListener)
+        throw( css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
 
     // XCloneable
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException,
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException,
                std::exception) override;
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+            css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString&
-            rServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception) override;
+            rServiceName) throw( css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
+    virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() throw(
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+                css::uno::RuntimeException, std::exception) override;
 
 private:
     void setDataChangedHint(bool b);
@@ -443,12 +434,12 @@ private:
      * numerical and textural data series if they turn out to be bottlenecks
      * under certain scenarios.
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_aMixedDataCache;
+    css::uno::Sequence< css::uno::Any > m_aMixedDataCache;
 
-    ::com::sun::star::uno::Sequence<sal_Int32>  m_aHiddenValues;
+    css::uno::Sequence<sal_Int32>  m_aHiddenValues;
 
     // properties
-    ::com::sun::star::chart2::data::DataSequenceRole  m_aRole;
+    css::chart2::data::DataSequenceRole  m_aRole;
     bool                        m_bIncludeHiddenCells;
 
     // internals
@@ -460,7 +451,7 @@ private:
     std::vector<ScTokenRef>     m_aTokens;
     RangeIndexMapPtr            m_pRangeIndices;
     ExtRefListenerPtr           m_pExtRefListener;
-    com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
+    css::uno::Reference < css::chart2::data::XDataProvider > m_xDataProvider;
     SfxItemPropertySet          m_aPropSet;
 
     std::unique_ptr<HiddenRangeListener> m_pHiddenListener;

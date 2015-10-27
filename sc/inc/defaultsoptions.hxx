@@ -65,7 +65,7 @@ private:
 class ScDefaultsCfg : public ScDefaultsOptions, public utl::ConfigItem
 {
 private:
-    static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static css::uno::Sequence<OUString> GetPropertyNames();
     virtual void ImplCommit() override;
 
 public:
@@ -73,7 +73,7 @@ public:
 
     void SetOptions( const ScDefaultsOptions& rNew );
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

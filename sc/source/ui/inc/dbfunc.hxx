@@ -93,7 +93,7 @@ public:
     void SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName = NULL);
 
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
-                        const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters );
+                        const css::uno::Sequence< css::sheet::DataPilotFieldFilter >& rFilters );
 
     void            MakeOutline( bool bColumns, bool bRecord = true );
     void            RemoveOutline( bool bColumns, bool bRecord = true );

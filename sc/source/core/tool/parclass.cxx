@@ -488,7 +488,7 @@ void ScParameterClassification::GenerateDocumentation()
     MergeArgumentsFromFunctionResource();
     ScAddress aAddress;
     ScCompiler aComp(NULL,aAddress);
-    ScCompiler::OpCodeMapPtr xMap( aComp.GetOpCodeMap(::com::sun::star::sheet::FormulaLanguage::ENGLISH));
+    ScCompiler::OpCodeMapPtr xMap( aComp.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
     if (!xMap)
         return;
     fflush( stderr);

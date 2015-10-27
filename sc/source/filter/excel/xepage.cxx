@@ -113,7 +113,7 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     pAttrList->add( XML_copies,             OString::number(  mrData.mnCopies ).getStr() );
     // OOXTODO: devMode settings part RelationshipId: FSNS( XML_r, XML_id ),
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList > aAttrs(pAttrList);
+    css::uno::Reference< css::xml::sax::XFastAttributeList > aAttrs(pAttrList);
     rStrm.GetCurrentStream()->singleElement( XML_pageSetup, aAttrs );
 }
 

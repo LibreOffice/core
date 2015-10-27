@@ -123,7 +123,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
     {
         // connect to Calc data (if no range string, leave chart alone, with its own data)
 
-        uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
+        uno::Reference< css::chart2::data::XDataReceiver > xReceiver;
         uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
         if( xCompSupp.is())
             xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
@@ -494,7 +494,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     uno::Reference < embed::XEmbeddedObject > xObj =
         pViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID_60 ).GetByteSequence(), aName );
 
-    uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
+    uno::Reference< css::chart2::data::XDataReceiver > xReceiver;
     uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
     if( xCompSupp.is())
         xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );

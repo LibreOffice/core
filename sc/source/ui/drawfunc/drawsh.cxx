@@ -92,7 +92,7 @@ static void lcl_setModified( SfxObjectShell*  pShell )
 {
     if ( pShell )
     {
-        com::sun::star::uno::Reference< com::sun::star::util::XModifiable > xModif( pShell->GetModel(), com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::util::XModifiable > xModif( pShell->GetModel(), css::uno::UNO_QUERY );
         if ( xModif.is() )
             xModif->setModified( sal_True );
     }
@@ -341,7 +341,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
     aNamesItem.AddEvent( ScResId(RID_SCSTR_ONCLICK), OUString(), SFX_EVENT_MOUSECLICK_OBJECT );
     pItemSet->Put( aNamesItem, SID_EVENTCONFIG );
 
-    com::sun::star::uno::Reference < com::sun::star::frame::XFrame > xFrame;
+    css::uno::Reference < css::frame::XFrame > xFrame;
     if (GetViewShell())
         xFrame = GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
 

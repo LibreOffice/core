@@ -56,7 +56,7 @@ public:
 
     /** Converts a non-empty vector into a UNO sequence containing elements of the same type. */
     template< typename Type >
-    static ::com::sun::star::uno::Sequence< Type >
+    static css::uno::Sequence< Type >
                             VectorToSequence( const ::std::vector< Type >& rVector );
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
@@ -80,16 +80,16 @@ public:
 
     /** Opens a password dialog and returns the encryption data.
         @return  The encryption data or an empty sequence on 'Cancel' or any error. */
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > QueryEncryptionDataForMedium( SfxMedium& rMedium,
+    static css::uno::Sequence< css::beans::NamedValue > QueryEncryptionDataForMedium( SfxMedium& rMedium,
                             ::comphelper::IDocPasswordVerifier& rVerifier,
                             const ::std::vector< OUString >* pDefaultPasswords = 0 );
 };
 
 template< typename Type >
-::com::sun::star::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< Type >& rVector )
+css::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< Type >& rVector )
 {
     OSL_ENSURE( !rVector.empty(), "ScfApiHelper::VectorToSequence - vector is empty" );
-    return ::com::sun::star::uno::Sequence< Type >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );
+    return css::uno::Sequence< Type >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );
 }
 
 // Property sets ==============================================================
@@ -125,8 +125,8 @@ public:
     void                Set( css::uno::Reference< css::beans::XPropertySet > xPropSet );
     /** Queries the passed interface for an XPropertySet and releases the old UNO property set. */
     template< typename InterfaceType >
-    inline void         Set( ::com::sun::star::uno::Reference< InterfaceType > xInterface )
-                            { Set( css::uno::Reference< css::beans::XPropertySet >( xInterface, ::com::sun::star::uno::UNO_QUERY ) ); }
+    inline void         Set( css::uno::Reference< InterfaceType > xInterface )
+                            { Set( css::uno::Reference< css::beans::XPropertySet >( xInterface, css::uno::UNO_QUERY ) ); }
 
     /** Returns true, if the contained XPropertySet interface is valid. */
     inline bool         Is() const { return mxPropSet.is(); }
@@ -176,7 +176,7 @@ public:
     /** Puts the passed value into the property set. */
     template< typename Type >
     inline void         SetProperty( const OUString& rPropName, const Type& rValue )
-                            { SetAnyProperty( rPropName, ::com::sun::star::uno::makeAny( rValue ) ); }
+                            { SetAnyProperty( rPropName, css::uno::makeAny( rValue ) ); }
 
     /** Puts the passed Boolean value into the property set. */
     inline void         SetBoolProperty( const OUString& rPropName, bool bValue )

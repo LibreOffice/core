@@ -29,10 +29,10 @@ namespace com { namespace sun { namespace star { namespace i18n {
 class ScScriptTypeData
 {
 public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIter;
+    css::uno::Reference< css::i18n::XBreakIterator > xBreakIter;
 
-        ScScriptTypeData() {}
-        ~ScScriptTypeData() {}
+    ScScriptTypeData() {}
+    ~ScScriptTypeData() {}
 };
 
 #endif

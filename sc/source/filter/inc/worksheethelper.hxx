@@ -127,9 +127,9 @@ struct PageBreakModel
 /** Stores data about a hyperlink range. */
 struct HyperlinkModel : public ::oox::ole::StdHlinkInfo
 {
-    ::com::sun::star::table::CellRangeAddress
+    css::table::CellRangeAddress
                         maRange;            /// The cell area containing the hyperlink.
-    OUString     maTooltip;          /// Additional tooltip text.
+    OUString            maTooltip;          /// Additional tooltip text.
 
     explicit            HyperlinkModel();
 };
@@ -193,26 +193,26 @@ public:
     /** Returns the index of the current sheet. */
     sal_Int32           getSheetIndex() const;
     /** Returns the XSpreadsheet interface of the current sheet. */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >&
+    const css::uno::Reference< css::sheet::XSpreadsheet >&
                         getSheet() const;
 
     /** Returns the XCell interface for the passed cell address. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
-                        getCell( const ::com::sun::star::table::CellAddress& rAddress ) const;
+    css::uno::Reference< css::table::XCell >
+                        getCell( const css::table::CellAddress& rAddress ) const;
     /** Returns the XCellRange interface for the passed cell range address. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
-                        getCellRange( const ::com::sun::star::table::CellRangeAddress& rRange ) const;
+    css::uno::Reference< css::table::XCellRange >
+                        getCellRange( const css::table::CellRangeAddress& rRange ) const;
 
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
+    css::uno::Reference< css::drawing::XDrawPage >
                         getDrawPage() const;
 
     /** Returns the absolute cell position in 1/100 mm. */
-    ::com::sun::star::awt::Point getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
+    css::awt::Point getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Returns the cell size in 1/100 mm. */
-    ::com::sun::star::awt::Size getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
+    css::awt::Size getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Returns the size of the entire drawing page in 1/100 mm. */
-    ::com::sun::star::awt::Size getDrawPageSize() const;
+    css::awt::Size getDrawPageSize() const;
 
     /** Returns the buffer for cell contents and cell formatting. */
     SheetDataBuffer&    getSheetData() const;
@@ -247,11 +247,11 @@ public:
     void                setVmlDrawingPath( const OUString& rVmlDrawingPath );
 
     /** Extends the used area of this sheet by the passed cell position. */
-    void                extendUsedArea( const ::com::sun::star::table::CellAddress& rAddress );
+    void                extendUsedArea( const css::table::CellAddress& rAddress );
     /** Extends the used area of this sheet by the passed cell range. */
-    void                extendUsedArea( const ::com::sun::star::table::CellRangeAddress& rRange );
+    void                extendUsedArea( const css::table::CellRangeAddress& rRange );
     /** Extends the shape bounding box by the position and size of the passed rectangle (in 1/100 mm). */
-    void                extendShapeBoundingBox( const ::com::sun::star::awt::Rectangle& rShapeRect );
+    void                extendShapeBoundingBox( const css::awt::Rectangle& rShapeRect );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if width has not been set with setDefaultColumnWidth(). */
@@ -274,17 +274,17 @@ public:
     void                setRowModel( const RowModel& rModel );
 
     /** Inserts a value cell directly into the Calc sheet. */
-    void putValue( const com::sun::star::table::CellAddress& rAddress, double fValue );
+    void putValue( const css::table::CellAddress& rAddress, double fValue );
 
     /** Inserts a string cell directly into the Calc sheet. */
-    void putString( const com::sun::star::table::CellAddress& rAddress, const OUString& rText );
+    void putString( const css::table::CellAddress& rAddress, const OUString& rText );
     /** Inserts a rich-string cell directly into the Calc sheet. */
     void putRichString(
-        const com::sun::star::table::CellAddress& rAddress,
+        const css::table::CellAddress& rAddress,
         const RichString& rString, const oox::xls::Font* pFirstPortionFont );
     /** Inserts a formula cell directly into the Calc sheet. */
     void putFormulaTokens(
-        const com::sun::star::table::CellAddress& rAddress, const ApiTokenSequence& rTokens );
+        const css::table::CellAddress& rAddress, const ApiTokenSequence& rTokens );
 
     /** Initial conversion before importing the worksheet. */
     void                initializeWorksheetImport();
@@ -293,17 +293,17 @@ public:
     /** Final import of drawing objects. Has to be called after all content has been imported */
     void finalizeDrawingImport();
 
-    void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString&  );
+    void                setCellFormula( const css::table::CellAddress& rTokenAddress, const OUString&  );
 
     void setCellFormula(
-        const com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
+        const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
         const OUString& rCellValue, sal_Int32 nValueType );
 
-    void                setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString&  );
+    void                setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const css::table::CellAddress& rTokenAddress, const OUString&  );
 
     void createSharedFormulaMapEntry(
-        const com::sun::star::table::CellAddress& rAddress,
-        const com::sun::star::table::CellRangeAddress& rRange,
+        const css::table::CellAddress& rAddress,
+        const css::table::CellRangeAddress& rRange,
         sal_Int32 nSharedId, const OUString& rTokens );
 
     void setCellFormulaValue(

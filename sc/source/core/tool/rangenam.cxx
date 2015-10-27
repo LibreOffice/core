@@ -527,10 +527,10 @@ bool ScRangeData::HasReferences() const
 sal_uInt32 ScRangeData::GetUnoType() const
 {
     sal_uInt32 nUnoType = 0;
-    if ( HasType(RT_CRITERIA) )  nUnoType |= com::sun::star::sheet::NamedRangeFlag::FILTER_CRITERIA;
-    if ( HasType(RT_PRINTAREA) ) nUnoType |= com::sun::star::sheet::NamedRangeFlag::PRINT_AREA;
-    if ( HasType(RT_COLHEADER) ) nUnoType |= com::sun::star::sheet::NamedRangeFlag::COLUMN_HEADER;
-    if ( HasType(RT_ROWHEADER) ) nUnoType |= com::sun::star::sheet::NamedRangeFlag::ROW_HEADER;
+    if ( HasType(RT_CRITERIA) )  nUnoType |= css::sheet::NamedRangeFlag::FILTER_CRITERIA;
+    if ( HasType(RT_PRINTAREA) ) nUnoType |= css::sheet::NamedRangeFlag::PRINT_AREA;
+    if ( HasType(RT_COLHEADER) ) nUnoType |= css::sheet::NamedRangeFlag::COLUMN_HEADER;
+    if ( HasType(RT_ROWHEADER) ) nUnoType |= css::sheet::NamedRangeFlag::ROW_HEADER;
     return nUnoType;
 }
 

@@ -1511,18 +1511,18 @@ void ScDPSaveData::DimensionsChanged()
     mpDimOrder.reset();
 }
 
-bool operator == (const ::com::sun::star::sheet::DataPilotFieldSortInfo &l, const ::com::sun::star::sheet::DataPilotFieldSortInfo &r )
+bool operator == (const css::sheet::DataPilotFieldSortInfo &l, const css::sheet::DataPilotFieldSortInfo &r )
 {
     return l.Field == r.Field && l.IsAscending == r.IsAscending && l.Mode == r.Mode;
 }
-bool operator == (const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &l, const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &r )
+bool operator == (const css::sheet::DataPilotFieldAutoShowInfo &l, const css::sheet::DataPilotFieldAutoShowInfo &r )
 {
     return l.IsEnabled == r.IsEnabled &&
         l.ShowItemsMode == r.ShowItemsMode &&
         l.ItemCount == r.ItemCount &&
         l.DataField == r.DataField;
 }
-bool operator == (const ::com::sun::star::sheet::DataPilotFieldReference &l, const ::com::sun::star::sheet::DataPilotFieldReference &r )
+bool operator == (const css::sheet::DataPilotFieldReference &l, const css::sheet::DataPilotFieldReference &r )
 {
     return l.ReferenceType == r.ReferenceType &&
         l.ReferenceField == r.ReferenceField &&

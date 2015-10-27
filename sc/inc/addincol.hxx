@@ -85,13 +85,13 @@ private:
     OUString     aUpperName;         ///< for entering formulas
     OUString     aUpperLocal;        ///< for entering formulas
     OUString     aDescription;
-    com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod> xFunction;
-    com::sun::star::uno::Any            aObject;
+    css::uno::Reference< css::reflection::XIdlMethod> xFunction;
+    css::uno::Any       aObject;
     long                nArgCount;
     ScAddInArgDesc*     pArgDescs;
     long                nCallerPos;
     sal_uInt16          nCategory;
-    OString        sHelpId;
+    OString             sHelpId;
     mutable ::std::vector< LocalizedName > maCompNames;
     mutable bool        bCompInitialized;
 
@@ -99,9 +99,8 @@ public:
                 ScUnoAddInFuncData( const OUString& rNam, const OUString& rLoc,
                                     const OUString& rDesc,
                                     sal_uInt16 nCat, const OString&,
-                                    const com::sun::star::uno::Reference<
-                                        com::sun::star::reflection::XIdlMethod>& rFunc,
-                                    const com::sun::star::uno::Any& rO,
+                                    const css::uno::Reference< css::reflection::XIdlMethod>& rFunc,
+                                    const css::uno::Any& rO,
                                     long nAC, const ScAddInArgDesc* pAD,
                                     long nCP );
                 ~ScUnoAddInFuncData();
@@ -110,9 +109,9 @@ public:
     const OUString&  GetLocalName() const        { return aLocalName; }
     const OUString&  GetUpperName() const        { return aUpperName; }
     const OUString&  GetUpperLocal() const       { return aUpperLocal; }
-    const com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod>&   GetFunction() const
+    const css::uno::Reference< css::reflection::XIdlMethod>&   GetFunction() const
                                                         { return xFunction; }
-    const com::sun::star::uno::Any& GetObject() const   { return aObject; }
+    const css::uno::Any& GetObject() const   { return aObject; }
     long                    GetArgumentCount() const    { return nArgCount; }
     const ScAddInArgDesc*   GetArguments() const        { return pArgDescs; }
     long                    GetCallerPos() const        { return nCallerPos; }
@@ -123,8 +122,8 @@ public:
     const ::std::vector< LocalizedName >&  GetCompNames() const;
     bool                    GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const;
 
-    void    SetFunction( const com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod>& rNewFunc,
-                         const com::sun::star::uno::Any& rNewObj );
+    void    SetFunction( const css::uno::Reference< css::reflection::XIdlMethod>& rNewFunc,
+                         const css::uno::Any& rNewObj );
     void    SetArguments( long nNewCount, const ScAddInArgDesc* pNewDescs );
     void    SetCallerPos( long nNewPos );
     void    SetCompNames( const ::std::vector< LocalizedName >& rNew );
@@ -142,10 +141,8 @@ private:
 
     void        Initialize();
     void        ReadConfiguration();
-    void        ReadFromAddIn( const com::sun::star::uno::Reference<
-                                com::sun::star::uno::XInterface>& xInterface );
-    void        UpdateFromAddIn( const com::sun::star::uno::Reference<
-                                  com::sun::star::uno::XInterface>& xInterface,
+    void        ReadFromAddIn( const css::uno::Reference< css::uno::XInterface>& xInterface );
+    void        UpdateFromAddIn( const css::uno::Reference< css::uno::XInterface>& xInterface,
                                 const OUString& rServiceName );
     void        LoadComponent( const ScUnoAddInFuncData& rFuncData );
 
@@ -185,9 +182,9 @@ class ScUnoAddInCall
 {
 private:
     const ScUnoAddInFuncData*   pFuncData;
-    com::sun::star::uno::Sequence<com::sun::star::uno::Any>         aArgs;
-    com::sun::star::uno::Sequence<com::sun::star::uno::Any>         aVarArg;
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xCaller;
+    css::uno::Sequence<css::uno::Any>         aArgs;
+    css::uno::Sequence<css::uno::Any>         aVarArg;
+    css::uno::Reference<css::uno::XInterface> xCaller;
     bool                        bValidCount;
     // result:
     sal_uInt16                  nErrCode;
@@ -195,10 +192,9 @@ private:
     double                      fValue;
     OUString                    aString;
     ScMatrixRef                 xMatrix;
-    com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVarRes;
+    css::uno::Reference<css::sheet::XVolatileResult> xVarRes;
 
-    void            ExecuteCallWithArgs(
-                        com::sun::star::uno::Sequence<com::sun::star::uno::Any>& rCallArgs);
+    void            ExecuteCallWithArgs(css::uno::Sequence<css::uno::Any>& rCallArgs);
 
 public:
                     // exact name
@@ -207,17 +203,16 @@ public:
                     ~ScUnoAddInCall();
 
     bool                NeedsCaller() const;
-    void                SetCaller( const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XInterface>& rInterface );
+    void                SetCaller( const css::uno::Reference<css::uno::XInterface>& rInterface );
     void                SetCallerFromObjectShell( SfxObjectShell* pSh );
 
     bool                ValidParamCount() { return bValidCount;}
     ScAddInArgumentType GetArgType( long nPos );
-    void                SetParam( long nPos, const com::sun::star::uno::Any& rValue );
+    void                SetParam( long nPos, const css::uno::Any& rValue );
 
     void                ExecuteCall();
 
-    void                SetResult( const com::sun::star::uno::Any& rNewRes );
+    void                SetResult( const css::uno::Any& rNewRes );
 
     sal_uInt16          GetErrCode() const      { return nErrCode; }
     bool                HasString() const       { return bHasString; }
@@ -226,7 +221,7 @@ public:
     double              GetValue() const        { return fValue; }
     const OUString&     GetString() const       { return aString; }
     ScMatrixRef         GetMatrix() const       { return xMatrix;}
-    com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>
+    css::uno::Reference<css::sheet::XVolatileResult>
                         GetVarRes() const       { return xVarRes; }
 };
 

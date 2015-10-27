@@ -247,7 +247,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
     mfCellValue(0.0),
     mnRepeatCount(1),
     mnNumberFormat(-1),
-    mnCellType(::com::sun::star::util::NumberFormat::UNDEFINED),
+    mnCellType(css::util::NumberFormat::UNDEFINED),
     mbIsNumeric(false),
     mbIsEmpty(true)
 {

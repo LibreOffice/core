@@ -1399,7 +1399,7 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const OUString& aName )
 
 uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
     const OUString& aApplication, const OUString& aTopic,
-    const OUString& aItem, ::com::sun::star::sheet::DDELinkMode nMode )
+    const OUString& aItem, css::sheet::DDELinkMode nMode )
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

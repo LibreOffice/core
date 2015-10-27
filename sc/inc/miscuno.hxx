@@ -32,20 +32,20 @@
 
 #define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii )            \
 OUString SAL_CALL ClassName::getImplementationName()                      \
-    throw(::com::sun::star::uno::RuntimeException, std::exception)                                   \
+    throw(css::uno::RuntimeException, std::exception)                                   \
 {                                                                                    \
     return OUString(ClassNameAscii);                         \
 }                                                                                    \
 sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
-    throw(::com::sun::star::uno::RuntimeException, std::exception)                                   \
+    throw(css::uno::RuntimeException, std::exception)                                   \
 {                                                                                    \
     return cppu::supportsService(this, ServiceName);                                \
 }                                                                                    \
-::com::sun::star::uno::Sequence< OUString >                                   \
+css::uno::Sequence< OUString >                                   \
     SAL_CALL ClassName::getSupportedServiceNames()                           \
-    throw(::com::sun::star::uno::RuntimeException, std::exception)                                   \
+    throw(css::uno::RuntimeException, std::exception)                                   \
 {                                                                                    \
-    ::com::sun::star::uno::Sequence< OUString > aRet(1);                      \
+    css::uno::Sequence< OUString > aRet(1);                      \
     OUString* pArray = aRet.getArray();                                       \
     pArray[0] = ServiceAscii;                  \
     return aRet;                                                                     \
@@ -85,116 +85,112 @@ sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
     { uno::Any aR; aR <<= uno::Reference<x>(static_cast<y*>(this)); return aR; }
 
 class ScIndexEnumeration : public cppu::WeakImplHelper<
-                                com::sun::star::container::XEnumeration,
-                                com::sun::star::lang::XServiceInfo >
+                                css::container::XEnumeration,
+                                css::lang::XServiceInfo >
 {
 private:
-    com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> xIndex;
-    OUString           sServiceName;
+    css::uno::Reference<css::container::XIndexAccess> xIndex;
+    OUString                sServiceName;
     sal_Int32               nPos;
 
 public:
-                            ScIndexEnumeration(const com::sun::star::uno::Reference<
-                                com::sun::star::container::XIndexAccess>& rInd, const OUString& rServiceName);
+                            ScIndexEnumeration(const css::uno::Reference<
+                                css::container::XIndexAccess>& rInd, const OUString& rServiceName);
     virtual                 ~ScIndexEnumeration();
 
                             // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
-                                throw(::com::sun::star::container::NoSuchElementException,
-                                        ::com::sun::star::lang::WrappedTargetException,
-                                        ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasMoreElements() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL nextElement()
+                                throw(css::container::NoSuchElementException,
+                                        css::lang::WrappedTargetException,
+                                        css::uno::RuntimeException, std::exception) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+                                throw(css::uno::RuntimeException, std::exception) override;
 };
 
 //  new (uno 3) variant
 class ScNameToIndexAccess : public cppu::WeakImplHelper<
-                                com::sun::star::container::XIndexAccess,
-                                com::sun::star::lang::XServiceInfo >
+                                css::container::XIndexAccess,
+                                css::lang::XServiceInfo >
 {
 private:
-    com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xNameAccess;
-    com::sun::star::uno::Sequence<OUString> aNames;
+    css::uno::Reference<css::container::XNameAccess> xNameAccess;
+    css::uno::Sequence<OUString> aNames;
 
 public:
                             ScNameToIndexAccess(
-                                const com::sun::star::uno::Reference<
-                                    com::sun::star::container::XNameAccess>& rNameObj );
+                                const css::uno::Reference< css::container::XNameAccess>& rNameObj );
     virtual                 ~ScNameToIndexAccess();
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
-                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
-                                        ::com::sun::star::lang::WrappedTargetException,
-                                        ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
+                                throw(css::lang::IndexOutOfBoundsException,
+                                        css::lang::WrappedTargetException,
+                                        css::uno::RuntimeException, std::exception) override;
 
                             // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType(  )
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+                                throw(css::uno::RuntimeException, std::exception) override;
 };
 
 class SC_DLLPUBLIC ScUnoHelpFunctions
 {
 public:
-    static com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
-                            AnyToInterface( const com::sun::star::uno::Any& rAny );
-    static bool             GetBoolProperty( const com::sun::star::uno::Reference<
-                                                com::sun::star::beans::XPropertySet>& xProp,
+    static css::uno::Reference<css::uno::XInterface>
+                            AnyToInterface( const css::uno::Any& rAny );
+    static bool             GetBoolProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, bool bDefault = false );
-    static sal_Int32        GetLongProperty( const com::sun::star::uno::Reference<
-                                                com::sun::star::beans::XPropertySet>& xProp,
+    static sal_Int32        GetLongProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, long nDefault = 0 );
-    static sal_Int32        GetEnumProperty( const com::sun::star::uno::Reference<
-                                                com::sun::star::beans::XPropertySet>& xProp,
+    static sal_Int32        GetEnumProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, long nDefault );
     static OUString  GetStringProperty(
-        const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xProp,
+        const css::uno::Reference<css::beans::XPropertySet>& xProp,
         const OUString& rName, const OUString& rDefault );
 
-    static bool             GetBoolFromAny( const com::sun::star::uno::Any& aAny );
-    static sal_Int16        GetInt16FromAny( const com::sun::star::uno::Any& aAny );
-    static sal_Int32        GetInt32FromAny( const com::sun::star::uno::Any& aAny );
-    static sal_Int32        GetEnumFromAny( const com::sun::star::uno::Any& aAny );
-    static void             SetBoolInAny( com::sun::star::uno::Any& rAny, bool bValue );
+    static bool             GetBoolFromAny( const css::uno::Any& aAny );
+    static sal_Int16        GetInt16FromAny( const css::uno::Any& aAny );
+    static sal_Int32        GetInt32FromAny( const css::uno::Any& aAny );
+    static sal_Int32        GetEnumFromAny( const css::uno::Any& aAny );
+    static void             SetBoolInAny( css::uno::Any& rAny, bool bValue );
 
     static void             SetOptionalPropertyValue(
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rPropSet,
-        const sal_Char* pPropName, const ::com::sun::star::uno::Any& rVal );
+        css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+        const sal_Char* pPropName, const css::uno::Any& rVal );
 
     template<typename ValueType>
     static void             SetOptionalPropertyValue(
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rPropSet,
+        css::uno::Reference< css::beans::XPropertySet >& rPropSet,
         const sal_Char* pPropName, const ValueType& rVal )
     {
-        ::com::sun::star::uno::Any any;
+        css::uno::Any any;
         any <<= rVal;
         SetOptionalPropertyValue(rPropSet, pPropName, any);
     }
 
     template<typename ValueType>
-    static com::sun::star::uno::Sequence<ValueType> VectorToSequence( const std::vector<ValueType>& rVector )
+    static css::uno::Sequence<ValueType> VectorToSequence( const std::vector<ValueType>& rVector )
     {
         if (rVector.empty())
-            return com::sun::star::uno::Sequence<ValueType>();
+            return css::uno::Sequence<ValueType>();
 
-        return com::sun::star::uno::Sequence<ValueType>(&rVector[0], static_cast<sal_Int32>(rVector.size()));
+        return css::uno::Sequence<ValueType>(&rVector[0], static_cast<sal_Int32>(rVector.size()));
     }
 };
 

@@ -2999,7 +2999,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBas
 
 // XIndent
 
-void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ScCellRangesBase::decrementIndent() throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( pDocShell && !aRanges.empty() )        // leer = nichts zu tun
@@ -3011,7 +3011,7 @@ void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::R
     }
 }
 
-void SAL_CALL ScCellRangesBase::incrementIndent() throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ScCellRangesBase::incrementIndent() throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( pDocShell && !aRanges.empty() )        // leer = nichts zu tun
@@ -3390,7 +3390,7 @@ void SAL_CALL ScCellRangesBase::removeChartDataChangeEventListener( const uno::R
     }
 }
 
-double SAL_CALL ScCellRangesBase::getNotANumber() throw(::com::sun::star::uno::RuntimeException, std::exception)
+double SAL_CALL ScCellRangesBase::getNotANumber() throw(css::uno::RuntimeException, std::exception)
 {
     //  im ScChartArray wird DBL_MIN verwendet, weil das Chart es so will
     return DBL_MIN;
@@ -4303,7 +4303,7 @@ OUString SAL_CALL ScCellRangesObj::getRangeAddressesAsString()
 
 void SAL_CALL ScCellRangesObj::addRangeAddress( const table::CellRangeAddress& rRange,
                                     sal_Bool bMergeRanges )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception)
+                                    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScRange aRange(static_cast<SCCOL>(rRange.StartColumn),
@@ -4324,8 +4324,8 @@ static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const ScR
 }
 
 void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress& rRange )
-                                throw(::com::sun::star::container::NoSuchElementException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception)
+                                throw(css::container::NoSuchElementException,
+                                    css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -4373,7 +4373,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress
 
 void SAL_CALL ScCellRangesObj::addRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRanges,
                                     sal_Bool bMergeRanges )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception)
+                                    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount(rRanges.getLength());
@@ -4394,8 +4394,8 @@ void SAL_CALL ScCellRangesObj::addRangeAddresses( const uno::Sequence<table::Cel
 }
 
 void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRangeSeq )
-                                throw(::com::sun::star::container::NoSuchElementException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception)
+                                throw(css::container::NoSuchElementException,
+                                    css::uno::RuntimeException, std::exception)
 {
     // use sometimes a better/faster implementation
     sal_uInt32 nCount(rRangeSeq.getLength());
@@ -8407,7 +8407,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             sal_Int16 nValue = 0;
             if (aValue >>= nValue)
             {
-                if (nValue == com::sun::star::text::WritingMode2::RL_TB)
+                if (nValue == css::text::WritingMode2::RL_TB)
                     rFunc.SetLayoutRTL(nTab, true, true);
                 else
                     rFunc.SetLayoutRTL(nTab, false, true);
@@ -8584,9 +8584,9 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         else if ( pEntry->nWID == SC_WID_UNO_TABLAYOUT )
         {
             if (rDoc.IsLayoutRTL(nTab))
-                rAny <<= sal_Int16(com::sun::star::text::WritingMode2::RL_TB);
+                rAny <<= sal_Int16(css::text::WritingMode2::RL_TB);
             else
-                rAny <<= sal_Int16(com::sun::star::text::WritingMode2::LR_TB);
+                rAny <<= sal_Int16(css::text::WritingMode2::LR_TB);
         }
         else if ( pEntry->nWID == SC_WID_UNO_AUTOPRINT )
         {

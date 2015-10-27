@@ -41,8 +41,8 @@ public:
     inline BiffDecoderBase* clone() { return implClone(); }
 
     /** Implementation of the ::comphelper::IDocPasswordVerifier interface. */
-    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) override;
-    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) override;
+    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, css::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) override;
+    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) override;
 
     /** Returns true, if the decoder has been initialized correctly. */
     inline bool         isValid() const { return mbValid; }
@@ -60,8 +60,8 @@ private:
 
     /** Derived classes implement password verification and initialization of
         the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) = 0;
-    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) = 0;
+    virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) = 0;
+    virtual bool implVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) = 0;
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
@@ -87,8 +87,8 @@ private:
     virtual BiffDecoder_XOR* implClone() override;
 
     /** Implements password verification and initialization of the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
-    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) override;
+    virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
+    virtual bool implVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
@@ -99,7 +99,7 @@ private:
 
 private:
     ::oox::core::BinaryCodec_XOR maCodec;   /// Cipher algorithm implementation.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
+    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
     sal_uInt16          mnKey;
     sal_uInt16          mnHash;
 };
@@ -115,8 +115,8 @@ private:
     virtual BiffDecoder_RCF* implClone() override;
 
     /** Implements password verification and initialization of the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
-    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) override;
+    virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
+    virtual bool implVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
@@ -127,7 +127,7 @@ private:
 
 private:
     ::oox::core::BinaryCodec_RCF maCodec;   /// Cipher algorithm implementation.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
+    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
     ::std::vector< sal_uInt8 > maSalt;
     ::std::vector< sal_uInt8 > maVerifier;
     ::std::vector< sal_uInt8 > maVerifierHash;

@@ -1181,7 +1181,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
                                     throw (::uno::RuntimeException)
 {
     bool bReturn(false);
-    if ( e.Buttons == ::com::sun::star::awt::MouseButton::LEFT )
+    if ( e.Buttons == css::awt::MouseButton::LEFT )
         mbLeftMousePressed = true;
 
     uno::Reference< uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
@@ -1274,7 +1274,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
 bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
                                     throw (uno::RuntimeException)
 {
-    if ( e.Buttons == ::com::sun::star::awt::MouseButton::LEFT )
+    if ( e.Buttons == css::awt::MouseButton::LEFT )
     {
         try
         {
@@ -2212,8 +2212,8 @@ ScTabViewObj* ScTabViewObj::getImplementation(const uno::Reference<uno::XInterfa
     return pRet;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL ScTabViewObj::getTransferable()
-    throw (::com::sun::star::uno::RuntimeException,
+css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::getTransferable()
+    throw (css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aGuard;
@@ -2240,9 +2240,9 @@ ScTabViewObj* ScTabViewObj::getImplementation(const uno::Reference<uno::XInterfa
     return xTransferable;
 }
 
-void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans )
-    throw (::com::sun::star::datatransfer::UnsupportedFlavorException,
-           ::com::sun::star::uno::RuntimeException,
+void SAL_CALL ScTabViewObj::insertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& xTrans )
+    throw (css::datatransfer::UnsupportedFlavorException,
+           css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aGuard;

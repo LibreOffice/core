@@ -572,7 +572,7 @@ struct ScShapeChild
     ScShapeChild(const ScShapeChild& rOld);
     ~ScShapeChild();
     mutable rtl::Reference< ::accessibility::AccessibleShape > mpAccShape;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
+    css::uno::Reference< css::drawing::XShape > mxShape;
     sal_Int32 mnRangeId;
 };
 
@@ -631,10 +631,10 @@ public:
 
     virtual bool ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const css::uno::Reference< css::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException) override;
+    )   throw (css::uno::RuntimeException) override;
 
     ///=====  Internal  ========================================================
 
@@ -836,7 +836,7 @@ void ScShapeChildren::VisAreaChanged() const
     ///=====  IAccessibleParent  ==============================================
 
 bool ScShapeChildren::ReplaceChild (::accessibility::AccessibleShape* /* pCurrentChild */,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& /* _rxShape */,
+    const css::uno::Reference< css::drawing::XShape >& /* _rxShape */,
         const long /* _nIndex */, const ::accessibility::AccessibleShapeTreeInfo& /* _rShapeTreeInfo */)
         throw (uno::RuntimeException)
 {
@@ -1627,7 +1627,7 @@ ScShapeChildren* ScAccessibleDocumentPagePreview::GetShapeChildren()
 }
 
 OUString ScAccessibleDocumentPagePreview::getAccessibleName()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

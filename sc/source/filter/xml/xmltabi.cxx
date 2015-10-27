@@ -138,8 +138,7 @@ ScXMLExternalTabData::ScXMLExternalTabData() :
 ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
+                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nStartOffset(-1),
     bStartFormPage(false),
@@ -221,8 +220,7 @@ ScXMLTableContext::~ScXMLTableContext()
 
 SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap(GetScImport().GetTableElemTokenMap());
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLName);

@@ -34,7 +34,7 @@ public:
 
     /** Creates an external data provider that is able to use spreadsheet data. */
     virtual void        createDataProvider(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc ) override;
+                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc ) override;
 
     /** Creates a data sequence from the passed formula. */
     virtual css::uno::Reference<css::chart2::data::XDataSequence>

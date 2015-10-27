@@ -31,8 +31,8 @@ class ExcelFilter : public ::oox::core::XmlFilterBase
 {
 public:
     explicit            ExcelFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
-                            throw( ::com::sun::star::uno::RuntimeException );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+                            throw( css::uno::RuntimeException );
     virtual             ~ExcelFilter();
 
     void                registerWorkbookGlobals( WorkbookGlobals& rBookGlob );
@@ -48,7 +48,7 @@ public:
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() override;
     virtual void useInternalChartDataTable( bool bInternal ) override;
 
-    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const override;

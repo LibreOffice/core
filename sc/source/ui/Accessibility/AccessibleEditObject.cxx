@@ -127,14 +127,14 @@ void ScAccessibleEditObject::GotFocus()
 
 //=====  XInterface  ==========================================================
 
-com::sun::star::uno::Any SAL_CALL
-    ScAccessibleEditObject::queryInterface (const com::sun::star::uno::Type & rType)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL
+    ScAccessibleEditObject::queryInterface (const css::uno::Type & rType)
+    throw (css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aReturn = ScAccessibleContextBase::queryInterface (rType);
+    css::uno::Any aReturn = ScAccessibleContextBase::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
-            static_cast< ::com::sun::star::accessibility::XAccessibleSelection* >(this)
+            static_cast< css::accessibility::XAccessibleSelection* >(this)
             );
     return aReturn;
 }
@@ -397,13 +397,13 @@ void ScAccessibleEditObject::CreateTextHelper()
 }
 
 sal_Int32 SAL_CALL ScAccessibleEditObject::getForeground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return GetFgBgColor(OUString(SC_UNONAME_CCOLOR));
 }
 
 sal_Int32 SAL_CALL ScAccessibleEditObject::getBackground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return GetFgBgColor(OUString(SC_UNONAME_CELLBACK));
 }
@@ -464,7 +464,7 @@ throw ( IndexOutOfBoundsException,
     {
         if( xContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
         {
-            uno::Reference< ::com::sun::star::accessibility::XAccessibleText >
+            uno::Reference< css::accessibility::XAccessibleText >
                 xText(xAcc, uno::UNO_QUERY);
             if( xText.is() )
             {

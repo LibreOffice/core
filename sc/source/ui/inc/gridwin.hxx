@@ -339,7 +339,7 @@ public:
     /// Get the cell selection, coordinates are in logic units.
     void GetCellSelection(std::vector<Rectangle>& rLogicRects);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
     void            FakeButtonUp();
 
@@ -367,7 +367,7 @@ public:
     void            LaunchPageFieldMenu( SCCOL nCol, SCROW nRow );
     void            LaunchDPFieldMenu( SCCOL nCol, SCROW nRow );
 
-    ::com::sun::star::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
+    css::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
 
     void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev);
 

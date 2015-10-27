@@ -171,7 +171,7 @@ void SheetDataBuffer::setStringCell( const CellModel& rModel, sal_Int32 nStringI
         setBlankCell( rModel );
 }
 
-void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const ::com::sun::star::util::DateTime& rDateTime )
+void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const css::util::DateTime& rDateTime )
 {
     // write serial date/time value into the cell
     double fSerial = getUnitConverter().calcSerialFromDateTime( rDateTime );
@@ -355,7 +355,7 @@ void addIfNotInMyMap( StylesBuffer& rStyles, std::map< FormatKeyPair, ApiCellRan
     }
 }
 
-void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ::com::sun::star::table::CellRangeAddress& rAddress, bool bProcessRowRange )
+void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const css::table::CellRangeAddress& rAddress, bool bProcessRowRange )
 {
     RowRangeStyle aStyleRows;
     aStyleRows.mnNumFmt.first = nXfId;

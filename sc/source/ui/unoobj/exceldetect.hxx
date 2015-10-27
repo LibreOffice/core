@@ -19,20 +19,20 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 }}}}
 
-class ScExcelBiffDetect : public cppu::WeakImplHelper<com::sun::star::document::XExtendedFilterDetection, com::sun::star::lang::XServiceInfo>
+class ScExcelBiffDetect : public cppu::WeakImplHelper<css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
 {
 public:
-    ScExcelBiffDetect( const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext );
+    ScExcelBiffDetect( const css::uno::Reference<css::uno::XComponentContext>& xContext );
     virtual ~ScExcelBiffDetect();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& aName ) throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& aName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
     // XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& lDescriptor )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL detect( css::uno::Sequence<css::beans::PropertyValue>& lDescriptor )
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

@@ -692,7 +692,7 @@ SvxFieldData* ScEditFieldObj::getData()
     return mpData.get();
 }
 
-void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const com::sun::star::uno::Any& rVal)
+void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const css::uno::Any& rVal)
 {
     OUString aStrVal;
     if (mpEditSource)

@@ -34,7 +34,7 @@ class ScXMLExportDDELinks
 public:
     ScXMLExportDDELinks(ScXMLExport& rExport);
     ~ScXMLExportDDELinks();
-    void WriteDDELinks(::com::sun::star::uno::Reference < ::com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
+    void WriteDDELinks(css::uno::Reference < css::sheet::XSpreadsheetDocument >& xSpreadDoc);
 };
 
 #endif

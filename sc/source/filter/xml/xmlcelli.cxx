@@ -133,8 +133,7 @@ ScXMLTableRowCellContext::Field::~Field()
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       const bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :
     ScXMLImportContext(rImport, nPrfx, rLName),
@@ -667,8 +666,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
 
 SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -731,7 +729,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             XMLTableShapeImportHelper* pTableShapeImport =
                     static_cast< XMLTableShapeImportHelper* >( rXMLImport.GetShapeImport().get() );
             pTableShapeImport->SetOnTable(false);
-            com::sun::star::table::CellAddress aCellAddress;
+            css::table::CellAddress aCellAddress;
             ScUnoConversion::FillApiAddress( aCellAddress, aCellPos );
             pTableShapeImport->SetCell(aCellAddress);
             pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(

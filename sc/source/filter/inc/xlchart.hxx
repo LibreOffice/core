@@ -1273,8 +1273,8 @@ struct XclChTextKey : public ::std::pair< XclChTextType, ::std::pair< sal_uInt16
 };
 
 /** Function prototype receiving a chart document and returning a title shape. */
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-    (*XclChGetShapeFunc)( const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument >& );
+typedef css::uno::Reference< css::drawing::XShape >
+    (*XclChGetShapeFunc)( const css::uno::Reference< css::chart::XChartDocument >& );
 
 // Property helpers ===========================================================
 
@@ -1287,7 +1287,7 @@ public:
     /** Returns a named formatting object from the chart document. */
     css::uno::Any GetObject( const OUString& rObjName );
     /** Insertes a named formatting object into the chart document. */
-    OUString      InsertObject( const ::com::sun::star::uno::Any& rObj );
+    OUString      InsertObject( const css::uno::Any& rObj );
 
 private:
     css::uno::Reference< css::lang::XMultiServiceFactory > mxFactory;              /// Factory to create the container.
@@ -1398,7 +1398,7 @@ struct XclChRootData
     typedef std::shared_ptr< XclChObjectTable >           XclChObjectTableRef;
     typedef std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
+    css::uno::Reference< css::chart2::XChartDocument >
                         mxChartDoc;             /// The chart document.
     Rectangle           maChartRect;            /// Position and size of the chart shape.
     XclChTypeProvRef    mxTypeInfoProv;         /// Provides info about chart types.
@@ -1419,13 +1419,13 @@ struct XclChRootData
     /** Starts the API chart document conversion. Must be called once before any API access. */
     void                InitConversion(
                             const XclRoot& rRoot,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
+                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
                             const Rectangle& rChartRect );
     /** Finishes the API chart document conversion. Must be called once before any API access. */
     void                FinishConversion();
 
     /** Returns the drawing shape interface of the specified title object. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
                         GetTitleShape( const XclChTextKey& rTitleKey ) const;
 };
 

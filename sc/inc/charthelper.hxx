@@ -40,11 +40,11 @@ public:
     static sal_uInt16 DoUpdateAllCharts( ScDocument* pDoc );
     static void AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab );
     static void UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const SCTAB nDestTab );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartFromSdrObject( SdrObject* pObject );
-    static void GetChartRanges( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc,
-            ::com::sun::star::uno::Sequence< OUString >& rRanges );
-    static void SetChartRanges( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc,
-            const ::com::sun::star::uno::Sequence< OUString >& rRanges );
+    static css::uno::Reference< css::chart2::XChartDocument > GetChartFromSdrObject( SdrObject* pObject );
+    static void GetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
+            css::uno::Sequence< OUString >& rRanges );
+    static void SetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
+            const css::uno::Sequence< OUString >& rRanges );
 
     static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrObject* pObject );
     static void FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrPage* pPage );

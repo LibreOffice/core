@@ -97,7 +97,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {
         {OUString(SC_UNONAME_HIDDENVALUES), 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(),                 0, 0 },
-        {OUString(SC_UNONAME_ROLE), 0, cppu::UnoType<com::sun::star::chart2::data::DataSequenceRole>::get(),                  0, 0 },
+        {OUString(SC_UNONAME_ROLE), 0, cppu::UnoType<css::chart2::data::DataSequenceRole>::get(),                  0, 0 },
         {OUString(SC_UNONAME_INCLUDEHIDDENCELLS), 0,        cppu::UnoType<bool>::get(),                  0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -105,10 +105,9 @@ const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
 }
 
 template< typename T >
-::com::sun::star::uno::Sequence< T > lcl_VectorToSequence(
-    const ::std::vector< T > & rCont )
+css::uno::Sequence< T > lcl_VectorToSequence( const ::std::vector< T > & rCont )
 {
-    ::com::sun::star::uno::Sequence< T > aResult( rCont.size());
+    css::uno::Sequence< T > aResult( rCont.size());
     ::std::copy( rCont.begin(), rCont.end(), aResult.getArray());
     return aResult;
 }

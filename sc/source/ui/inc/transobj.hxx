@@ -46,7 +46,7 @@ private:
     TransferableObjectDescriptor    aObjDesc;
     SfxObjectShellRef               aDocShellRef;
     SfxObjectShellRef               aDrawPersistRef;
-    com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges> xDragSourceRanges;
+    css::uno::Reference<css::sheet::XSheetCellRanges> xDragSourceRanges;
     SCCOL                           nDragHandleX;
     SCROW                           nDragHandleY;
     SCTAB                           nVisibleTab;
@@ -74,7 +74,7 @@ public:
     virtual void        AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
-                                        const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) override;
+                                        const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        ObjectReleased() override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 

@@ -27,8 +27,8 @@
 class ScTabViewShell;
 
 typedef ::cppu::WeakComponentImplHelper<
-        ::com::sun::star::view::XSelectionChangeListener,
-        ::com::sun::star::lang::XServiceInfo >
+        css::view::XSelectionChangeListener,
+        css::lang::XServiceInfo >
     ScChartRangeSelectionListener_Base;
 
 class ScChartRangeSelectionListener :
@@ -42,13 +42,13 @@ public:
 protected:
     // ____ XSelectionChangeListener ____
     virtual void SAL_CALL selectionChanged(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ XEventListener (base of XSelectionChangeListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // ____ WeakComponentImplHelperBase ____
     // is called when dispose() is called at this component
@@ -56,12 +56,12 @@ protected:
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(
         const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     ScTabViewShell * m_pViewShell;

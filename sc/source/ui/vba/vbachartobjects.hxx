@@ -45,8 +45,8 @@ public:
     void removeByName(const OUString& _sChartName);
 
     // XChartObjects
-    virtual ::com::sun::star::uno::Any SAL_CALL Add( double Left, double Top, double Width, double Height ) throw (::com::sun::star::script::BasicErrorException, std::exception) override;
-    virtual void SAL_CALL Delete(  ) throw (::com::sun::star::script::BasicErrorException, std::exception) override;
+    virtual css::uno::Any SAL_CALL Add( double Left, double Top, double Width, double Height ) throw (css::script::BasicErrorException, std::exception) override;
+    virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, std::exception) override;
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
     // XElementAccess

@@ -22,25 +22,25 @@
 namespace {
 
 class OrcusFormatDetect : public ::cppu::WeakImplHelper<
-                          ::com::sun::star::document::XExtendedFilterDetection,
-                          ::com::sun::star::lang::XServiceInfo >
+                          css::document::XExtendedFilterDetection,
+                          css::lang::XServiceInfo >
 {
 public:
     explicit            OrcusFormatDetect();
     virtual             ~OrcusFormatDetect();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual OUString SAL_CALL
-                        detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq )
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                        detect( css::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq )
+                            throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
 };
@@ -54,25 +54,25 @@ OrcusFormatDetect::~OrcusFormatDetect()
 }
 
 OUString OrcusFormatDetect::getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("");
 }
 
 sal_Bool OrcusFormatDetect::supportsService(const OUString& /*rServiceName*/)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception )
 {
     return false;
 }
 
 css::uno::Sequence<OUString> OrcusFormatDetect::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception )
 {
     return css::uno::Sequence<OUString>();
 }
 
 OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception )
 {
     utl::MediaDescriptor aMediaDescriptor( rMediaDescSeq );
     bool bAborted = aMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED(), false);
@@ -101,9 +101,9 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_sc_OrcusFormatDetect_get_implementation(::com::sun::star::uno::XComponentContext* ,
-                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_sc_OrcusFormatDetect_get_implementation(css::uno::XComponentContext* ,
+                                                           css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new OrcusFormatDetect());
 }

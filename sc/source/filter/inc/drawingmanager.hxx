@@ -58,13 +58,13 @@ class BiffDrawingBase : public WorksheetHelper
 {
 public:
     explicit            BiffDrawingBase( const WorksheetHelper& rHelper,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage );
+                            const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage );
 
     /** Final processing after import of the all drawing objects. */
     void                finalizeImport();
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
+    css::uno::Reference< css::drawing::XDrawPage >
                         mxDrawPage;         /// UNO draw page used to insert the shapes.
 };
 

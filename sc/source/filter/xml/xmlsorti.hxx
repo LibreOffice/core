@@ -33,10 +33,10 @@ class ScXMLSortContext : public SvXMLImportContext
 {
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
-    com::sun::star::uno::Sequence <com::sun::star::util::SortField> aSortFields;
-    com::sun::star::table::CellAddress aOutputPosition;
+    css::uno::Sequence <css::util::SortField> aSortFields;
+    css::table::CellAddress aOutputPosition;
     LanguageTagODF maLanguageTagODF;
-    OUString   sAlgorithm;
+    OUString    sAlgorithm;
     sal_Int16   nUserListIndex;
     bool        bCopyOutputData;
     bool        bBindFormatsToContent;
@@ -50,16 +50,14 @@ public:
 
     ScXMLSortContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
     virtual ~ScXMLSortContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 
@@ -81,16 +79,14 @@ public:
 
     ScXMLSortByContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLSortContext* pTempSortContext);
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLSortContext* pTempSortContext);
 
     virtual ~ScXMLSortByContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 };

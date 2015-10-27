@@ -29,19 +29,19 @@
 class ScDocument;
 
 class ScAddInListener : public cppu::WeakImplHelper<
-                            com::sun::star::sheet::XResultListener,
-                            com::sun::star::lang::XServiceInfo >,
+                            css::sheet::XResultListener,
+                            css::lang::XServiceInfo >,
                         public SvtBroadcaster
 {
 private:
-    com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVolRes;
-    com::sun::star::uno::Any aResult;
+    css::uno::Reference<css::sheet::XVolatileResult> xVolRes;
+    css::uno::Any aResult;
     ScAddInDocs* pDocs; // documents where this is used
 
     static ::std::list<ScAddInListener*> aAllListeners;
 
     // always allocated via CreateListener
-    ScAddInListener( com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVR,
+    ScAddInListener( css::uno::Reference<css::sheet::XVolatileResult> xVR,
                     ScDocument* pD );
 
 public:
@@ -49,11 +49,10 @@ public:
 
     // create Listener and put it into global list
     static ScAddInListener* CreateListener(
-                                com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVR,
+                                css::uno::Reference<css::sheet::XVolatileResult> xVR,
                                 ScDocument* pDoc );
 
-    static ScAddInListener*Get( com::sun::star::uno::Reference<
-                                    com::sun::star::sheet::XVolatileResult> xVR );
+    static ScAddInListener* Get( css::uno::Reference<css::sheet::XVolatileResult> xVR );
 
     static void RemoveDocument( ScDocument* pDocument );
 
@@ -63,26 +62,26 @@ public:
     void AddDocument( ScDocument* pDoc )
          { pDocs->insert( pDoc ); }
 
-    const com::sun::star::uno::Any& GetResult() const
+    const css::uno::Any& GetResult() const
           { return aResult; }
 
     // XResultListener
-    virtual void SAL_CALL modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
-                              throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::sheet::ResultEvent& aEvent )
+                              throw(css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-                              throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+                              throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                         throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                         throw(css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                  throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                  throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+                                throw(css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX

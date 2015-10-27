@@ -284,7 +284,7 @@ class ScDPResultData
     //! keep things like measure lists here
 
     std::vector<ScSubTotalFunc> maMeasureFuncs;
-    std::vector<com::sun::star::sheet::DataPilotFieldReference> maMeasureRefs;
+    std::vector<css::sheet::DataPilotFieldReference> maMeasureRefs;
     std::vector<sal_uInt16> maMeasureRefOrients;
     std::vector<OUString> maMeasureNames;
 
@@ -300,7 +300,7 @@ public:
 
     void SetMeasureData(
         std::vector<ScSubTotalFunc>& rFunctions,
-        std::vector<com::sun::star::sheet::DataPilotFieldReference>& rRefs,
+        std::vector<css::sheet::DataPilotFieldReference>& rRefs,
         std::vector<sal_uInt16>& rRefOrient, std::vector<OUString>& rNames );
 
     void                SetDataLayoutOrientation( sal_uInt16 nOrient );
@@ -310,7 +310,7 @@ public:
     ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
     OUString            GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
     OUString            GetMeasureDimensionName(long nMeasure) const;
-    const ::com::sun::star::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
+    const css::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
     sal_uInt16          GetMeasureRefOrient(long nMeasure) const;
 
     bool                IsLateInit() const              { return bLateInit; }
@@ -390,15 +390,13 @@ public:
                                         const ::std::vector<SCROW>& aDataMembers,
                                         const ::std::vector<ScDPValue>& aValues );
     void FillMemberResults(
-        com::sun::star::uno::Sequence<
-            com::sun::star::sheet::MemberResult>* pSequences,
+        css::uno::Sequence< css::sheet::MemberResult>* pSequences,
         long& rPos, long nMeasure, bool bRoot, const OUString* pMemberName, const OUString* pMemberCaption );
 
     void FillDataResults(
-        const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Sequence<
-                com::sun::star::sheet::DataResult> >& rSequence,
+        const ScDPResultMember* pRefMember,
+        ScDPResultFilterContext& rFilterCxt,
+        css::uno::Sequence< css::uno::Sequence<  css::sheet::DataResult> >& rSequence,
         long nMeasure) const;
 
     void                UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const;
@@ -466,7 +464,7 @@ public:
     void FillDataRow(
         const ScDPResultMember* pRefMember,
         ScDPResultFilterContext& rFilterCxt,
-        com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
+        css::uno::Sequence<css::sheet::DataResult>& rSequence,
         long nMeasure, bool bIsSubTotalRow,
         const ScDPSubTotalState& rSubState) const;
 
@@ -546,16 +544,16 @@ public:
                                      const ScDPResultDimension* pDataDim,
                                      const ::std::vector<SCROW>& aDataMembers,
                                      const ::std::vector<ScDPValue>& aValues ) const;   //! Test
-    void                FillMemberResults( com::sun::star::uno::Sequence<
-                                                com::sun::star::sheet::MemberResult>* pSequences,
+    void                FillMemberResults( css::uno::Sequence<
+                                                css::sheet::MemberResult>* pSequences,
                                             long nStart, long nMeasure );
 
     void FillDataResults(
         const ScDPResultMember* pRefMember,
         ScDPResultFilterContext& rFilterCxt,
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Sequence<
-                com::sun::star::sheet::DataResult> >& rSequence,
+        css::uno::Sequence<
+            css::uno::Sequence<
+                css::sheet::DataResult> >& rSequence,
         long nMeasure) const;
 
     void                UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const;
@@ -627,7 +625,7 @@ public:
     void FillDataRow(
         const ScDPResultDimension* pRefDim,
         ScDPResultFilterContext& rFilterCxt,
-        com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
+        css::uno::Sequence<css::sheet::DataResult>& rSequence,
         long nMeasure, bool bIsSubTotalRow, const ScDPSubTotalState& rSubState) const;
 
     void                UpdateDataRow( const ScDPResultDimension* pRefDim, long nMeasure, bool bIsSubTotalRow,

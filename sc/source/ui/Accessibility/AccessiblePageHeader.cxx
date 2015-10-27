@@ -82,8 +82,7 @@ struct Dispose
     }
 };
 
-ScAccessiblePageHeader::ScAccessiblePageHeader( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::accessibility::XAccessible>& rxParent,
+ScAccessiblePageHeader::ScAccessiblePageHeader( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell, bool bHeader, sal_Int32 nIndex ) :
 ScAccessibleContextBase( rxParent, bHeader ? AccessibleRole::HEADER : AccessibleRole::FOOTER ),
     mpViewShell( pViewShell ),

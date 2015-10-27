@@ -843,9 +843,9 @@ sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const S
         item set, and which script type we should prefer according to the
         current language settings. */
 
-    static const WhichAndScript WAS_LATIN( ATTR_FONT, ::com::sun::star::i18n::ScriptType::LATIN );
-    static const WhichAndScript WAS_ASIAN( ATTR_CJK_FONT, ::com::sun::star::i18n::ScriptType::ASIAN );
-    static const WhichAndScript WAS_CMPLX( ATTR_CTL_FONT, ::com::sun::star::i18n::ScriptType::COMPLEX );
+    static const WhichAndScript WAS_LATIN( ATTR_FONT, css::i18n::ScriptType::LATIN );
+    static const WhichAndScript WAS_ASIAN( ATTR_CJK_FONT, css::i18n::ScriptType::ASIAN );
+    static const WhichAndScript WAS_CMPLX( ATTR_CTL_FONT, css::i18n::ScriptType::COMPLEX );
 
     /*  do not let a font from a parent style override an explicit
         cell font. */
@@ -925,7 +925,7 @@ bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rI
     bool bUsed = ScfTools::CheckItems( rItemSet, pnCommonIds, bDeep );
     if( !bUsed )
     {
-        namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+        namespace ApiScriptType = css::i18n::ScriptType;
         // if WEAK is passed, guess script type from existing items in the item set
         if( nScript == ApiScriptType::WEAK )
             nScript = GetFirstUsedScript( rRoot, rItemSet );
@@ -2084,7 +2084,7 @@ XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleShee
     mnParentXFId( XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_STYLEPARENT ) )
 {
     bool bDefStyle = (rStyleSheet.GetName() == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ));
-    sal_Int16 nScript = bDefStyle ? GetDefApiScript() : ::com::sun::star::i18n::ScriptType::WEAK;
+    sal_Int16 nScript = bDefStyle ? GetDefApiScript() : css::i18n::ScriptType::WEAK;
     Init( const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet(), nScript,
         NUMBERFORMAT_ENTRY_NOT_FOUND, EXC_FONT_NOTFOUND, false, bDefStyle );
 }

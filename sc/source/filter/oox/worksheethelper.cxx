@@ -1626,19 +1626,19 @@ void WorksheetHelper::finalizeDrawingImport()
     mrSheetGlob.finalizeDrawingImport();
 }
 
-void WorksheetHelper::setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
+void WorksheetHelper::setCellFormula( const css::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
 {
     getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
 }
 
 void WorksheetHelper::setCellFormula(
-    const ::com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
+    const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
     const OUString& rCellValue, sal_Int32 nValueType )
 {
     getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType);
 }
 
-void WorksheetHelper::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
+void WorksheetHelper::setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const css::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
 {
     getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
 }

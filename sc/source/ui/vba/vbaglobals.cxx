@@ -151,7 +151,7 @@ ScVbaGlobals::getThisWorkbook() throw (uno::RuntimeException, std::exception)
     return getApplication()->getThisWorkbook();
 }
 void SAL_CALL
-ScVbaGlobals::Calculate()  throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaGlobals::Calculate()  throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception)
 {
     return getApplication()->Calculate();
 }

@@ -154,26 +154,26 @@ public:
 
     ScEditEngineDefaulter& getEditEngine() const;
     /** Returns a reference to the source/target spreadsheet document model. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
+    css::uno::Reference< css::sheet::XSpreadsheetDocument >
                         getDocument() const;
 
     /** Returns a reference to the specified spreadsheet in the document model. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
+    css::uno::Reference< css::sheet::XSpreadsheet >
                         getSheetFromDoc( sal_Int32 nSheet ) const;
     /** Returns a reference to the specified spreadsheet in the document model. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
+    css::uno::Reference< css::sheet::XSpreadsheet >
                         getSheetFromDoc( const OUString& rSheet ) const;
 
     /** Returns the XCellRange interface for the passed cell range address. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
+    css::uno::Reference< css::table::XCellRange >
                         getCellRangeFromDoc(
-                            const ::com::sun::star::table::CellRangeAddress& rRange ) const;
+                            const css::table::CellRangeAddress& rRange ) const;
 
     /** Returns the cell or page styles container from the Calc document. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    css::uno::Reference< css::container::XNameContainer >
                         getStyleFamily( bool bPageStyles ) const;
     /** Returns the specified cell or page style from the Calc document. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
+    css::uno::Reference< css::style::XStyle >
                         getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
 
     /** Creates and returns a defined name on-the-fly in the Calc document.
@@ -181,7 +181,7 @@ public:
         @param orName  (in/out-parameter) Returns the resulting used name. */
     ScRangeData* createNamedRangeObject(
                             OUString& orName,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken>& rTokens,
+                            const css::uno::Sequence< css::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,
                             sal_Int32 nNameFlags = 0 ) const;
 
@@ -190,29 +190,29 @@ public:
         @param orName  (in/out-parameter) Returns the resulting used name. */
     ScRangeData* createLocalNamedRangeObject(
                             OUString& orName,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken>& rTokens,
+                            const css::uno::Sequence< css::sheet::FormulaToken>& rTokens,
                             sal_Int32 nIndex,
                             sal_Int32 nNameFlags = 0, sal_Int32 nTab = -1 ) const;
 
     /** Creates and returns a database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer.
         @param orName  (in/out-parameter) Returns the resulting used name. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRange >
+    css::uno::Reference< css::sheet::XDatabaseRange >
                         createDatabaseRangeObject(
                             OUString& orName,
-                            const ::com::sun::star::table::CellRangeAddress& rRangeAddr ) const;
+                            const css::table::CellRangeAddress& rRangeAddr ) const;
 
     /** Creates and returns an unnamed database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRange >
+    css::uno::Reference< css::sheet::XDatabaseRange >
                         createUnnamedDatabaseRangeObject(
-                            const ::com::sun::star::table::CellRangeAddress& rRangeAddr ) const;
+                            const css::table::CellRangeAddress& rRangeAddr ) const;
 
     /** Finds the (already existing) database range of the given formula token index. */
     ScDBData* findDatabaseRangeByIndex( sal_uInt16 nIndex ) const;
 
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
+    css::uno::Reference< css::style::XStyle >
                         createStyleObject(
                             OUString& orStyleName,
                             bool bPageStyle ) const;

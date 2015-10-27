@@ -41,46 +41,46 @@ public:
 
     bool empty() const { return mvAddresses.empty(); }
 
-    const ::com::sun::star::table::CellRangeAddress& front() const
+    const css::table::CellRangeAddress& front() const
     { return mvAddresses.front(); }
 
-    ::com::sun::star::table::CellRangeAddress& operator[]( size_t i )
+    css::table::CellRangeAddress& operator[]( size_t i )
     { return mvAddresses[ i ]; }
 
-    ::std::vector< ::com::sun::star::table::CellRangeAddress >::const_iterator begin() const
+    ::std::vector< css::table::CellRangeAddress >::const_iterator begin() const
     { return mvAddresses.begin(); }
-    ::std::vector< ::com::sun::star::table::CellRangeAddress >::iterator begin()
+    ::std::vector< css::table::CellRangeAddress >::iterator begin()
     { return mvAddresses.begin(); }
 
-    ::std::vector< ::com::sun::star::table::CellRangeAddress >::const_iterator end() const
+    ::std::vector< css::table::CellRangeAddress >::const_iterator end() const
     { return mvAddresses.end(); }
 
-    ::std::vector< ::com::sun::star::table::CellRangeAddress >::reverse_iterator rbegin()
+    ::std::vector< css::table::CellRangeAddress >::reverse_iterator rbegin()
     { return mvAddresses.rbegin(); }
 
-    ::std::vector< ::com::sun::star::table::CellRangeAddress >::reverse_iterator rend()
+    ::std::vector< css::table::CellRangeAddress >::reverse_iterator rend()
     { return mvAddresses.rend(); }
 
     void clear() { mvAddresses.clear(); }
 
-    void erase( ::std::vector< ::com::sun::star::table::CellRangeAddress >::iterator it )
+    void erase( ::std::vector< css::table::CellRangeAddress >::iterator it )
     { mvAddresses.erase( it ); }
 
     void pop_back() { mvAddresses.pop_back(); }
 
-    void push_back( const ::com::sun::star::table::CellRangeAddress& rAddress )
+    void push_back( const css::table::CellRangeAddress& rAddress )
     { mvAddresses.push_back( rAddress ); }
 
     /** Returns the base address of this range list (top-left cell of first range). */
-    ::com::sun::star::table::CellAddress
+    css::table::CellAddress
                         getBaseAddress() const;
 
     /** Converts to a sequence. */
-    com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >
+    css::uno::Sequence< css::table::CellRangeAddress >
     toSequence() const;
 
 private:
-    ::std::vector< ::com::sun::star::table::CellRangeAddress > mvAddresses;
+    ::std::vector< css::table::CellRangeAddress > mvAddresses;
 };
 
 /** A 2D cell address struct for binary filters. */
@@ -91,7 +91,7 @@ struct BinAddress
 
     inline explicit     BinAddress() : mnCol( 0 ), mnRow( 0 ) {}
     inline explicit     BinAddress( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
-    inline explicit     BinAddress( const ::com::sun::star::table::CellAddress& rAddr ) : mnCol( rAddr.Column ), mnRow( rAddr.Row ) {}
+    inline explicit     BinAddress( const css::table::CellAddress& rAddr ) : mnCol( rAddr.Column ), mnRow( rAddr.Row ) {}
 
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
@@ -130,9 +130,9 @@ struct BinRange
     inline explicit     BinRange( const BinAddress& rFirst, const BinAddress& rLast ) : maFirst( rFirst ), maLast( rLast ) {}
     inline explicit     BinRange( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nCol2, sal_Int32 nRow2 ) :
                             maFirst( nCol1, nRow1 ), maLast( nCol2, nRow2 ) {}
-    inline explicit     BinRange( const ::com::sun::star::table::CellAddress& rAddr ) : maFirst( rAddr ), maLast( rAddr ) {}
-    inline explicit     BinRange( const ::com::sun::star::table::CellAddress& rFirst, const ::com::sun::star::table::CellAddress& rLast ) : maFirst( rFirst ), maLast( rLast ) {}
-    inline explicit     BinRange( const ::com::sun::star::table::CellRangeAddress& rRange ) : maFirst( rRange.StartColumn, rRange.StartRow ), maLast( rRange.EndColumn, rRange.EndRow ) {}
+    inline explicit     BinRange( const css::table::CellAddress& rAddr ) : maFirst( rAddr ), maLast( rAddr ) {}
+    inline explicit     BinRange( const css::table::CellAddress& rFirst, const css::table::CellAddress& rLast ) : maFirst( rFirst ), maLast( rLast ) {}
+    inline explicit     BinRange( const css::table::CellRangeAddress& rRange ) : maFirst( rRange.StartColumn, rRange.StartRow ), maLast( rRange.EndColumn, rRange.EndRow ) {}
 
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
@@ -252,17 +252,17 @@ public:
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
     /** Returns the biggest valid cell address in the own Calc document. */
-    inline const ::com::sun::star::table::CellAddress&
+    inline const css::table::CellAddress&
                         getMaxApiAddress() const { return maMaxApiPos; }
 
     /** Returns the biggest valid cell address in the imported/exported
         Excel document. */
-    inline const ::com::sun::star::table::CellAddress&
+    inline const css::table::CellAddress&
                         getMaxXlsAddress() const { return maMaxXlsPos; }
 
     /** Returns the biggest valid cell address in both Calc and the
         imported/exported Excel document. */
-    inline const ::com::sun::star::table::CellAddress&
+    inline const css::table::CellAddress&
                         getMaxAddress() const { return maMaxPos; }
 
     /** Checks if the passed column index is valid.
@@ -300,7 +300,7 @@ public:
         @return  true = Passed address is valid (no index overflow).
      */
     bool                checkCellAddress(
-                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const css::table::CellAddress& rAddress,
                             bool bTrackOverflow );
 
     /** Converts the passed string to a single cell address, without checking
@@ -312,12 +312,12 @@ public:
         @return  true = Cell address could be parsed from the passed string.
      */
     static bool        convertToCellAddressUnchecked(
-                            ::com::sun::star::table::CellAddress& orAddress,
+                            css::table::CellAddress& orAddress,
                             const OUString& rString,
                             sal_Int16 nSheet );
 
     static bool convertToCellAddressUnchecked(
-        com::sun::star::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet );
+        css::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet );
 
     /** Tries to convert the passed string to a single cell address.
 
@@ -329,13 +329,13 @@ public:
         @return  true = Converted address is valid (no index overflow).
      */
     bool                convertToCellAddress(
-                            ::com::sun::star::table::CellAddress& orAddress,
+                            css::table::CellAddress& orAddress,
                             const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
 
     bool convertToCellAddress(
-        com::sun::star::table::CellAddress& rAddress,
+        css::table::CellAddress& rAddress,
         const char* pStr, sal_Int16 nSheet, bool bTrackOverflow );
 
     /** Returns a valid cell address by moving it into allowed dimensions.
@@ -345,7 +345,7 @@ public:
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the address is outside of the supported sheet limits.
         @return  A valid API cell address struct. */
-    ::com::sun::star::table::CellAddress
+    css::table::CellAddress
                         createValidCellAddress(
                             const OUString& rString,
                             sal_Int16 nSheet,
@@ -359,7 +359,7 @@ public:
         @param nSheet  Sheet index to be inserted into orAddress.
      */
     static void        convertToCellAddressUnchecked(
-                            ::com::sun::star::table::CellAddress& orAddress,
+                            css::table::CellAddress& orAddress,
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet );
 
@@ -373,7 +373,7 @@ public:
         @return  true = Converted address is valid (no index overflow).
      */
     bool                convertToCellAddress(
-                            ::com::sun::star::table::CellAddress& orAddress,
+                            css::table::CellAddress& orAddress,
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
@@ -385,7 +385,7 @@ public:
         @param bTrackOverflow  true = Update the internal overflow flags, if
             the address is outside of the supported sheet limits.
         @return  A valid API cell address struct. */
-    ::com::sun::star::table::CellAddress
+    css::table::CellAddress
                         createValidCellAddress(
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet,
@@ -407,7 +407,7 @@ public:
             overflow is not allowed via parameter bAllowOverflow.
      */
     bool                checkCellRange(
-                            const ::com::sun::star::table::CellRangeAddress& rRange,
+                            const css::table::CellRangeAddress& rRange,
                             bool bAllowOverflow, bool bTrackOverflow );
 
     /** Checks the passed cell range, may try to fit it to current sheet limits.
@@ -437,7 +437,7 @@ public:
             allowed via parameter bAllowOverflow.
      */
     bool                validateCellRange(
-                            ::com::sun::star::table::CellRangeAddress& orRange,
+                            css::table::CellRangeAddress& orRange,
                             bool bAllowOverflow, bool bTrackOverflow );
 
     /** Converts the passed string to a cell range address, without checking
@@ -449,7 +449,7 @@ public:
         @return  true = Range address could be parsed from the passed string.
      */
     static bool         convertToCellRangeUnchecked(
-                            ::com::sun::star::table::CellRangeAddress& orRange,
+                            css::table::CellRangeAddress& orRange,
                             const OUString& rString,
                             sal_Int16 nSheet );
 
@@ -478,7 +478,7 @@ public:
             allowed via parameter bAllowOverflow.
      */
     bool                convertToCellRange(
-                            ::com::sun::star::table::CellRangeAddress& orRange,
+                            css::table::CellRangeAddress& orRange,
                             const OUString& rString,
                             sal_Int16 nSheet,
                             bool bAllowOverflow, bool bTrackOverflow );
@@ -491,7 +491,7 @@ public:
         @param nSheet  Sheet index to be inserted into orRange.
      */
     static void         convertToCellRangeUnchecked(
-                            ::com::sun::star::table::CellRangeAddress& orRange,
+                            css::table::CellRangeAddress& orRange,
                             const BinRange& rBinRange,
                             sal_Int16 nSheet );
 
@@ -518,7 +518,7 @@ public:
             allowed via parameter bAllowOverflow.
      */
     bool                convertToCellRange(
-                            ::com::sun::star::table::CellRangeAddress& orRange,
+                            css::table::CellRangeAddress& orRange,
                             const BinRange& rBinRange,
                             sal_Int16 nSheet,
                             bool bAllowOverflow, bool bTrackOverflow );
@@ -595,14 +595,14 @@ private:
                                 sal_Unicode cSameSheet );
     };
 
-    ::com::sun::star::table::CellAddress maMaxApiPos;   /// Maximum valid cell address in Calc.
-    ::com::sun::star::table::CellAddress maMaxXlsPos;   /// Maximum valid cell address in Excel.
-    ::com::sun::star::table::CellAddress maMaxPos;      /// Maximum valid cell address in Calc/Excel.
-    ControlCharacters   maLinkChars;                    /// Control characters for external link import (BIFF).
-    ControlCharacters   maDConChars;                    /// Control characters for DCON* record import (BIFF).
-    bool                mbColOverflow;                  /// Flag for "columns overflow".
-    bool                mbRowOverflow;                  /// Flag for "rows overflow".
-    bool                mbTabOverflow;                  /// Flag for "tables overflow".
+    css::table::CellAddress maMaxApiPos;     /// Maximum valid cell address in Calc.
+    css::table::CellAddress maMaxXlsPos;     /// Maximum valid cell address in Excel.
+    css::table::CellAddress maMaxPos;        /// Maximum valid cell address in Calc/Excel.
+    ControlCharacters       maLinkChars;     /// Control characters for external link import (BIFF).
+    ControlCharacters       maDConChars;     /// Control characters for DCON* record import (BIFF).
+    bool                    mbColOverflow;   /// Flag for "columns overflow".
+    bool                    mbRowOverflow;   /// Flag for "rows overflow".
+    bool                    mbTabOverflow;   /// Flag for "tables overflow".
 };
 
 } // namespace xls

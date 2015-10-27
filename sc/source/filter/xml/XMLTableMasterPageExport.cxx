@@ -58,7 +58,7 @@ void XMLTableMasterPageExport::exportHeaderFooterContent(
     }
 }
 
-void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Reference < com::sun::star::sheet::XHeaderFooterContent >& xHeaderFooter,
+void XMLTableMasterPageExport::exportHeaderFooter(const css::uno::Reference < css::sheet::XHeaderFooterContent >& xHeaderFooter,
                                                     const XMLTokenEnum aName,
                                                     const bool bDisplay)
 {

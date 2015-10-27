@@ -34,37 +34,34 @@
 
 typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::excel::XGlobals > ScVbaGlobals_BASE;
 
-    class ScVbaGlobals : public ScVbaGlobals_BASE
-    {
-        css::uno::Reference< ov::excel::XApplication > mxApplication;
-        css::uno::Reference<
- ov::excel::XApplication > SAL_CALL getApplication()
+class ScVbaGlobals : public ScVbaGlobals_BASE
+{
+    css::uno::Reference< ov::excel::XApplication > mxApplication;
+    css::uno::Reference< ov::excel::XApplication > SAL_CALL getApplication()
                         throw (css::uno::RuntimeException);
-    public:
+public:
 
-        ScVbaGlobals( css::uno::Sequence< css::uno::Any > const& aArgs,
-            css::uno::Reference< css::uno::XComponentContext >const& rxContext );
-        //ScVbaGlobals(
-        //    css::uno::Reference< css::uno::XComponentContext >const& rxContext,  );
-        virtual ~ScVbaGlobals();
+    ScVbaGlobals( css::uno::Sequence< css::uno::Any > const& aArgs,
+                 css::uno::Reference< css::uno::XComponentContext >const& rxContext );
+    virtual ~ScVbaGlobals();
 
-        // XGlobals
-        virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getActiveWorkbook() throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< ov::excel::XWindow > SAL_CALL getActiveWindow() throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException, std::exception) override;
+    // XGlobals
+    virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getActiveWorkbook() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ov::excel::XWindow > SAL_CALL getActiveWindow() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Calculate(  ) throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Calculate(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Any SAL_CALL getSelection() throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getActiveCell() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getActiveCell() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const css::uno::Any& RowIndex, const css::uno::Any& ColumnIndex ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Columns( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL Evaluate( const OUString& Name ) throw (css::uno::RuntimeException, std::exception) override;
 
-        virtual css::uno::Any SAL_CALL WorkSheets(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Any SAL_CALL WorkBooks(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL WorkSheets(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL WorkBooks(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL WorksheetFunction(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL Windows( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL Sheets( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
@@ -82,7 +79,7 @@ typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::excel::XGlobals > ScV
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
-    };
-#endif
+};
 
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

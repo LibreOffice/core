@@ -216,7 +216,7 @@ public:
             const OUString& rErrRef, const std::vector<OUString>& rTabNames,
             const ScComplexRefData& rRef, bool bSingleRef, bool bFromRangeName ) const = 0;
 
-        virtual ::com::sun::star::i18n::ParseResult
+        virtual css::i18n::ParseResult
                     parseAnyToken( const OUString& rFormula,
                                    sal_Int32 nSrcPos,
                                    const CharClass* pCharClass) const = 0;
@@ -229,8 +229,7 @@ public:
          */
         virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
                 const ScDocument* pDoc,
-                const ::com::sun::star::uno::Sequence<
-                    com::sun::star::sheet::ExternalLinkInfo>* pExternalLinks ) const = 0;
+                const css::uno::Sequence< css::sheet::ExternalLinkInfo>* pExternalLinks ) const = 0;
 
         virtual OUString makeExternalNameStr( sal_uInt16 nFileId, const OUString& rFile,
                 const OUString& rName ) const = 0;
@@ -288,7 +287,7 @@ private:
     SvNumberFormatter* mpFormatter;
 
     // For CONV_XL_OOX, may be set via API by MOOXML filter.
-    com::sun::star::uno::Sequence<com::sun::star::sheet::ExternalLinkInfo> maExternalLinks;
+    css::uno::Sequence<css::sheet::ExternalLinkInfo> maExternalLinks;
 
     sal_Unicode cSymbol[MAXSTRLEN];                 // current Symbol
     OUString    aFormula;                           // formula source code
@@ -418,8 +417,8 @@ public:
 
     /// Set external link info for ScAddress::CONV_XL_OOX.
     void SetExternalLinks(
-        const ::com::sun::star::uno::Sequence<
-            com::sun::star::sheet::ExternalLinkInfo>& rLinks )
+        const css::uno::Sequence<
+            css::sheet::ExternalLinkInfo>& rLinks )
     {
         maExternalLinks = rLinks;
     }
@@ -460,7 +459,7 @@ private:
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const override;
     virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const override;
     virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, formula::FormulaGrammar::Grammar _eGrammar ) const override;
-    virtual void fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const override;
+    virtual void fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const override;
 
     virtual bool HandleExternalReference(const formula::FormulaToken& _aToken) override;
     virtual bool HandleRange() override;

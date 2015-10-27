@@ -110,7 +110,7 @@ struct ScAccessibleShapeData
     ~ScAccessibleShapeData();
     mutable rtl::Reference< ::accessibility::AccessibleShape > pAccShape;
     mutable ScAddress*          pRelationCell; // if it is NULL this shape is anchored on the table
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
+    css::uno::Reference< css::drawing::XShape > xShape;
     mutable bool            bSelected;
     bool                    bSelectable;
 };
@@ -263,19 +263,17 @@ public:
 
     virtual bool ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const css::uno::Reference< css::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException) override;
+    )   throw (css::uno::RuntimeException) override;
 
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
-        (::com::sun::star::beans::XPropertySet* pSet)
-        throw (::com::sun::star::uno::RuntimeException) override;
-    virtual  ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>
-        GetAccessibleCaption (const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& xShape)
-            throw (::com::sun::star::uno::RuntimeException) override;
+        (css::beans::XPropertySet* pSet)
+        throw (css::uno::RuntimeException) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible>
+        GetAccessibleCaption (const css::uno::Reference<css::drawing::XShape>& xShape)
+            throw (css::uno::RuntimeException) override;
     ///=====  Internal  ========================================================
     void SetDrawBroadcaster();
 
@@ -287,7 +285,7 @@ public:
     // gets the index of the shape starting on 0 (without the index of the table)
     // returns the selected shape
     bool IsSelected(sal_Int32 nIndex,
-        com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& rShape) const;
+        css::uno::Reference<css::drawing::XShape>& rShape) const;
 
     bool SelectionChanged();
 
@@ -309,7 +307,7 @@ private:
     mutable SortedShapes maZOrderedShapes; // a null pointer represents the sheet in the correct order
 
     mutable ::accessibility::AccessibleShapeTreeInfo maShapeTreeInfo;
-    mutable com::sun::star::uno::Reference<com::sun::star::view::XSelectionSupplier> xSelectionSupplier;
+    mutable css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier;
     mutable size_t mnSdrObjCount;
     mutable sal_uInt32 mnShapesSelected;
     ScTabViewShell* mpViewShell;
@@ -317,7 +315,7 @@ private:
     ScSplitPos meSplitPos;
 
     void FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const;
-    bool FindSelectedShapesChanges(const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& xShapes, bool bCommitChange) const;
+    bool FindSelectedShapesChanges(const css::uno::Reference<css::drawing::XShapes>& xShapes, bool bCommitChange) const;
     void FillSelectionSupplier() const;
 
     ScAddress* GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
@@ -449,7 +447,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
 }
 
 bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentChild,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const css::uno::Reference< css::drawing::XShape >& _rxShape,
         const long _nIndex, const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo)
     throw (uno::RuntimeException)
 {
@@ -494,7 +492,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
     return bResult;
 }
 
-::accessibility::AccessibleControlShape * ScChildrenShapes::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException)
+::accessibility::AccessibleControlShape * ScChildrenShapes::GetAccControlShapeFromModel(css::beans::XPropertySet* pSet) throw (css::uno::RuntimeException)
 {
     sal_Int32 count = GetCount();
     for (sal_Int32 index=0;index<count;index++)
@@ -514,9 +512,9 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
     return NULL;
 }
 
-::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible >
-ScChildrenShapes::GetAccessibleCaption (const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape>& xShape)
-            throw (::com::sun::star::uno::RuntimeException)
+css::uno::Reference < css::accessibility::XAccessible >
+ScChildrenShapes::GetAccessibleCaption (const css::uno::Reference < css::drawing::XShape>& xShape)
+            throw (css::uno::RuntimeException)
 {
     sal_Int32 count = GetCount();
     for (sal_Int32 index=0;index<count;index++)
@@ -524,7 +522,7 @@ ScChildrenShapes::GetAccessibleCaption (const ::com::sun::star::uno::Reference <
         ScAccessibleShapeData* pShape = maZOrderedShapes[index];
             if (pShape && pShape->xShape == xShape )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xNewChild(  pShape->pAccShape.get() );
+                css::uno::Reference< css::accessibility::XAccessible > xNewChild(  pShape->pAccShape.get() );
                 if(xNewChild.get())
                 return xNewChild;
             }
@@ -1695,11 +1693,11 @@ uno::Any SAL_CALL ScAccessibleDocument::queryInterface( uno::Type const & rType 
 {
     uno::Any aAnyTmp;
     if(rType == cppu::UnoType<XAccessibleGetAccFlowTo>::get())
-       {
-         com::sun::star::uno::Reference<XAccessibleGetAccFlowTo> AccFromXShape = this;
-            aAnyTmp <<= AccFromXShape;
+    {
+         css::uno::Reference<XAccessibleGetAccFlowTo> AccFromXShape = this;
+         aAnyTmp <<= AccFromXShape;
          return aAnyTmp;
-       }
+    }
     uno::Any aAny (ScAccessibleDocumentImpl::queryInterface(rType));
     return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
 }
@@ -1852,7 +1850,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
 OUString SAL_CALL
     ScAccessibleDocument::getAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -2320,7 +2318,7 @@ ScAddress   ScAccessibleDocument::GetCurCellAddress() const
 }
 
 uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -2347,7 +2345,7 @@ uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
     return anyAtrribute;
 }
 
-com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::GetScAccFlowToSequence()
+css::uno::Sequence< css::uno::Any > ScAccessibleDocument::GetScAccFlowToSequence()
 {
     if ( getAccessibleChildCount() )
     {
@@ -2395,9 +2393,9 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
     return aEmpty;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-        SAL_CALL ScAccessibleDocument::getAccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+css::uno::Sequence< css::uno::Any >
+        SAL_CALL ScAccessibleDocument::getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType)
+        throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -2405,7 +2403,7 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
     const sal_Int32 FINDREPLACEFLOWTO = 2;
     if ( nType == SPELLCHECKFLOWTO )
     {
-        uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+        uno::Reference< css::drawing::XShape > xShape;
         rAny >>= xShape;
         if ( xShape.is() )
         {
@@ -2451,9 +2449,9 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
                                 uno::Reference < XAccessible > xChildSel = xAccChildSelection->getSelectedAccessibleChild( 0 );
                                 if ( xChildSel.is() )
                                 {
-                                    uno::Reference < ::com::sun::star::accessibility::XAccessibleContext > xChildSelContext( xChildSel->getAccessibleContext() );
+                                    uno::Reference < css::accessibility::XAccessibleContext > xChildSelContext( xChildSel->getAccessibleContext() );
                                     if ( xChildSelContext.is() &&
-                                        xChildSelContext->getAccessibleRole() == ::com::sun::star::accessibility::AccessibleRole::PARAGRAPH )
+                                        xChildSelContext->getAccessibleRole() == css::accessibility::AccessibleRole::PARAGRAPH )
                                     {
                                         uno::Sequence<uno::Any> aRet( 1 );
                                         aRet[0] = uno::makeAny( xChildSel );

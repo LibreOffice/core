@@ -242,7 +242,7 @@ class AbstractScDPFunctionDlg : public VclAbstractDialog
 {
 public:
     virtual sal_uInt16  GetFuncMask() const = 0;
-    virtual ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const = 0;
+    virtual css::sheet::DataPilotFieldReference GetFieldRef() const = 0;
 };
 
 class AbstractScDPSubtotalDlg : public VclAbstractDialog
@@ -351,7 +351,7 @@ public:
         bool bEnableExternal) = 0;
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const com::sun::star::uno::Sequence<OUString>& rServices,
+                                                                        const css::uno::Sequence<OUString>& rServices,
                                                                         int nId ) = 0;
 
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove = false) = 0 ;

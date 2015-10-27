@@ -91,7 +91,7 @@ ScUnoAddInCollection* ScGlobal::pAddInCollection = NULL;
 ScUserList*     ScGlobal::pUserList = NULL;
 OUString**      ScGlobal::ppRscString = NULL;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
-::com::sun::star::lang::Locale*     ScGlobal::pLocale = NULL;
+css::lang::Locale*     ScGlobal::pLocale = NULL;
 SvtSysLocale*   ScGlobal::pSysLocale = NULL;
 const CharClass*  ScGlobal::pCharClass = NULL;
 const LocaleDataWrapper*  ScGlobal::pLocaleData = NULL;
@@ -100,7 +100,7 @@ CollatorWrapper* ScGlobal::pCollator = NULL;
 CollatorWrapper* ScGlobal::pCaseCollator = NULL;
 ::utl::TransliterationWrapper* ScGlobal::pTransliteration = NULL;
 ::utl::TransliterationWrapper* ScGlobal::pCaseTransliteration = NULL;
-::com::sun::star::uno::Reference< ::com::sun::star::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = NULL;
+css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = NULL;
 IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 OUString*       ScGlobal::pEmptyOUString = NULL;
@@ -1122,11 +1122,11 @@ IntlWrapper*         ScGlobal::GetScIntlWrapper()
     }
     return pScIntlWrapper;
 }
-::com::sun::star::lang::Locale*     ScGlobal::GetLocale()
+css::lang::Locale*     ScGlobal::GetLocale()
 {
     if ( !pLocale )
     {
-        pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale());
+        pLocale = new css::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale());
     }
     return pLocale;
 }

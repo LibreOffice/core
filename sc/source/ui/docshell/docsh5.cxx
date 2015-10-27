@@ -943,7 +943,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                     Reference< XNameContainer > xLib;
                     if( xLibContainer.is() )
                     {
-                        com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                        css::uno::Any aLibAny = xLibContainer->getByName( aLibName );
                         aLibAny >>= xLib;
                     }
                     if( xLib.is() )
@@ -951,7 +951,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                         xLib->getByName( sSrcCodeName ) >>= sSource;
                     }
                 }
-                catch ( const com::sun::star::uno::Exception& )
+                catch ( const css::uno::Exception& )
                 {
                 }
                 VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );

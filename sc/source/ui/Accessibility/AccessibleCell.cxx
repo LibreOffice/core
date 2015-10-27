@@ -509,8 +509,8 @@ static OUString ReplaceFourChar(const OUString& oldOUString)
 }
 
 uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException,
+    throw (css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aGuard;
@@ -543,7 +543,7 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
 }
 
 // cell has its own ParaIndent property, so when calling character attributes on cell, the ParaIndent should replace the ParaLeftMargin if its value is not zero.
-uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
+uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

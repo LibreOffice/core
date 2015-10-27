@@ -46,7 +46,7 @@ class SC_DLLPUBLIC ScPreviewShell: public SfxViewShell
     VclPtr<ScrollBar>      pVerScroll;
     VclPtr<vcl::Window>    pCorner;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSourceData;  // ViewData
+    css::uno::Sequence< css::beans::PropertyValue > aSourceData;  // ViewData
     TriState        nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
     long            nMaxVertPos;
@@ -71,8 +71,8 @@ protected:
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
 
-    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) override;
-    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    WriteUserDataSequence (css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    ReadUserDataSequence (const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
 
 public:
                     TYPEINFO_OVERRIDE();

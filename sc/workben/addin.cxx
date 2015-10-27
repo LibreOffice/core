@@ -108,7 +108,7 @@ UString ScTestAddIn::getImplementationName_Static()
     return L"stardiv.StarCalc.ScTestAddIn";
 }
 
-::com::sun::star::uno::Sequence< OUString > ScTestAddIn::getSupportedServiceNames_Static()
+css::uno::Sequence< OUString > ScTestAddIn::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -310,24 +310,24 @@ void ScTestAddIn::setLocale(const lang::Locale& eLocale) THROWS( (UsrSystemExcep
     aFuncLoc = eLocale;
 }
 
-::com::sun::star::lang::Locale SAL_CALL ScTestAddIn::getLocale(  ) throw(::com::sun::star::uno::RuntimeException)
+css::lang::Locale SAL_CALL ScTestAddIn::getLocale(  ) throw(css::uno::RuntimeException)
 {
     return aFuncLoc;
 }
 
 // XTestAddIn
 
-sal_Int32 SAL_CALL ScTestAddIn::countParams( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArgs ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL ScTestAddIn::countParams( const css::uno::Sequence< css::uno::Any >& aArgs ) throw(css::uno::RuntimeException)
 {
     return aArgs.getLength();
 }
 
-double SAL_CALL ScTestAddIn::addOne( double fValue ) throw(::com::sun::star::uno::RuntimeException)
+double SAL_CALL ScTestAddIn::addOne( double fValue ) throw(css::uno::RuntimeException)
 {
     return fValue + 1.0;
 }
 
-OUString SAL_CALL ScTestAddIn::repeatStr( const OUString& aStr, sal_Int32 nCount ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ScTestAddIn::repeatStr( const OUString& aStr, sal_Int32 nCount ) throw(css::uno::RuntimeException)
 {
     String aRet;
     String aStrStr = OUStringToString( aStr, CHARSET_SYSTEM );
@@ -337,7 +337,7 @@ OUString SAL_CALL ScTestAddIn::repeatStr( const OUString& aStr, sal_Int32 nCount
     return StringToOUString( aRet, CHARSET_SYSTEM );
 }
 
-OUString SAL_CALL ScTestAddIn::getDateString( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCaller, double fValue ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ScTestAddIn::getDateString( const css::uno::Reference< css::beans::XPropertySet >& xCaller, double fValue ) throw(css::uno::RuntimeException)
 {
     uno::Any aDateAny = xCaller->getPropertyValue( L"NullDate" );
     {
@@ -361,7 +361,7 @@ OUString SAL_CALL ScTestAddIn::getDateString( const ::com::sun::star::uno::Refer
     return L"**ERROR**";
 }
 
-sal_Int32 SAL_CALL ScTestAddIn::getColorValue( const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >& xRange ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL ScTestAddIn::getColorValue( const css::uno::Reference< css::table::XCellRange >& xRange ) throw(css::uno::RuntimeException)
 {
     uno::Reference<beans::XPropertySet> xProp( xRange, uno::UNO_QUERY );
     if (xProp.is())
@@ -402,7 +402,7 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
     return 0.0;     // error
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > > SAL_CALL ScTestAddIn::transpose( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& aMatrix ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL ScTestAddIn::transpose( const css::uno::Sequence< css::uno::Sequence< double > >& aMatrix ) throw(css::uno::RuntimeException)
 {
     long nRowCount = aMatrix.getLength();
     long nColCount = 0;
@@ -422,7 +422,7 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
     return aRet;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int32 > > SAL_CALL ScTestAddIn::transposeInt( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int32 > >& aMatrix ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< css::uno::Sequence< sal_Int32 > > SAL_CALL ScTestAddIn::transposeInt( const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& aMatrix ) throw(css::uno::RuntimeException)
 {
     long nRowCount = aMatrix.getLength();
     long nColCount = 0;
@@ -442,7 +442,7 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
     return aRet;
 }
 
-OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::sun::star::uno::Any& aFirst, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aFollow ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const css::uno::Any& aFirst, const css::uno::Sequence< css::uno::Any >& aFollow ) throw(css::uno::RuntimeException)
 {
     String aSeparator;
     if ( !aFirst.hasValue() )   // not specified
@@ -478,7 +478,7 @@ OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::su
     return StringToOUString(aRet, CHARSET_SYSTEM);
 }
 
-::com::sun::star::uno::Any SAL_CALL ScTestAddIn::getStrOrVal( sal_Int32 nFlag ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Any SAL_CALL ScTestAddIn::getStrOrVal( sal_Int32 nFlag ) throw(css::uno::RuntimeException)
 {
     uno::Any aRet;
 
@@ -504,7 +504,7 @@ OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::su
     return aRet;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::sheet::XVolatileResult > SAL_CALL ScTestAddIn::callAsync( const OUString& aString ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Reference< css::sheet::XVolatileResult > SAL_CALL ScTestAddIn::callAsync( const OUString& aString ) throw(css::uno::RuntimeException)
 {
     String aStr = OUStringToString( aString, CHARSET_SYSTEM );
     char c = (char) aStr;
@@ -523,23 +523,23 @@ OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::su
 }
 
 // XServiceName
-OUString SAL_CALL ScTestAddIn::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ScTestAddIn::getServiceName(  ) throw(css::uno::RuntimeException)
 {
     return SCTESTADDIN_SERVICE;     // name of specific AddIn service
 }
 
 // XServiceInfo
-OUString SAL_CALL ScTestAddIn::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ScTestAddIn::getImplementationName(  ) throw(css::uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL ScTestAddIn::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL ScTestAddIn::supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL ScTestAddIn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL ScTestAddIn::getSupportedServiceNames(  ) throw(css::uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }

@@ -27,19 +27,19 @@
 
 #include <cppuhelper/implbase.hxx>
 
-com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScTestAddIn_CreateInstance(
-    const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& );
+css::uno::Reference<css::uno::XInterface> ScTestAddIn_CreateInstance(
+    const css::uno::Reference<css::lang::XMultiServiceFactory>& );
 
 class ScTestAddIn : public cppu::WeakImplHelper<
-                        com::sun::star::sheet::XAddIn,
+                        css::sheet::XAddIn,
                         stardiv::starcalc::test::XTestAddIn,
-                        com::sun::star::lang::XServiceName,
-                        com::sun::star::lang::XServiceInfo >
+                        css::lang::XServiceName,
+                        css::lang::XServiceInfo >
 {
 private:
-    com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>  xAlphaResult;   //! Test
-    com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>  xNumResult;     //! Test
-    com::sun::star::lang::Locale                                            aFuncLoc;
+    css::uno::Reference<css::sheet::XVolatileResult>  xAlphaResult;   //! Test
+    css::uno::Reference<css::sheet::XVolatileResult>  xNumResult;     //! Test
+    css::lang::Locale                                 aFuncLoc;
 
 public:
                             ScTestAddIn();
@@ -51,40 +51,40 @@ public:
 //  virtual XIdlClassRef    getIdlClass();
 
     static UString          getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
                             // XAddIn
-    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticFunctionName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticFunctionName ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) throw(css::uno::RuntimeException);
 
                             // XLocalizable
-    virtual void SAL_CALL setLocale( const ::com::sun::star::lang::Locale& eLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setLocale( const css::lang::Locale& eLocale ) throw(css::uno::RuntimeException);
+    virtual css::lang::Locale SAL_CALL getLocale(  ) throw(css::uno::RuntimeException);
 
                             // XTestAddIn
-    virtual sal_Int32 SAL_CALL countParams( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArgs ) throw(::com::sun::star::uno::RuntimeException);
-    virtual double SAL_CALL addOne( double fValue ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL repeatStr( const OUString& aStr, sal_Int32 nCount ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getDateString( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xCaller, double fValue ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getColorValue( const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >& xRange ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > > SAL_CALL transpose( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& aMatrix ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int32 > > SAL_CALL transposeInt( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int32 > >& aMatrix ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XVolatileResult > SAL_CALL callAsync( const OUString& aString ) throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL repeatMultiple( sal_Int32 nCount, const ::com::sun::star::uno::Any& aFirst, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aFollow ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getStrOrVal( sal_Int32 nFlag ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL countParams( const css::uno::Sequence< css::uno::Any >& aArgs ) throw(css::uno::RuntimeException);
+    virtual double SAL_CALL addOne( double fValue ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL repeatStr( const OUString& aStr, sal_Int32 nCount ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getDateString( const css::uno::Reference< css::beans::XPropertySet >& xCaller, double fValue ) throw(css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getColorValue( const css::uno::Reference< css::table::XCellRange >& xRange ) throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL transpose( const css::uno::Sequence< css::uno::Sequence< double > >& aMatrix ) throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::uno::Sequence< sal_Int32 > > SAL_CALL transposeInt( const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& aMatrix ) throw(css::uno::RuntimeException);
+    virtual css::uno::Reference< css::sheet::XVolatileResult > SAL_CALL callAsync( const OUString& aString ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL repeatMultiple( sal_Int32 nCount, const css::uno::Any& aFirst, const css::uno::Sequence< css::uno::Any >& aFollow ) throw(css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getStrOrVal( sal_Int32 nFlag ) throw(css::uno::RuntimeException);
 
                             // XServiceName
-    virtual OUString SAL_CALL getServiceName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName(  ) throw(css::uno::RuntimeException);
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException);
 };
 
 #endif

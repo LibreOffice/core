@@ -66,8 +66,7 @@ public:
                    bool bAddrInsert = false );
 
     bool DoImportUno( const ScAddress& rPos,
-                      const com::sun::star::uno::Sequence<
-                          com::sun::star::beans::PropertyValue>& aArgs );
+                      const css::uno::Sequence<css::beans::PropertyValue>& aArgs );
 
     static void     ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame );
 

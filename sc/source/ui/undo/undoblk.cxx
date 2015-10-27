@@ -1103,7 +1103,7 @@ void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
         if (pOwnClip)
         {
             // keep a reference in case the clipboard is changed during PasteFromClip
-            com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> aOwnClipRef( pOwnClip );
+            css::uno::Reference<css::datatransfer::XTransferable> aOwnClipRef( pOwnClip );
             pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     aPasteOptions.nFunction, aPasteOptions.bSkipEmpty, aPasteOptions.bTranspose,
                                     aPasteOptions.bAsLink, aPasteOptions.eMoveMode, InsertDeleteFlags::NONE,

@@ -334,7 +334,7 @@ ScVbaApplication::Worksheets( const uno::Any& aIndex ) throw (uno::RuntimeExcept
 }
 
 uno::Any SAL_CALL
-ScVbaApplication::WorksheetFunction( ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaApplication::WorksheetFunction( ) throw (css::uno::RuntimeException, std::exception)
 {
     return uno::makeAny( uno::Reference< script::XInvocation >( new ScVbaWSFunction( this, mxContext ) ) );
 }

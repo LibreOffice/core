@@ -250,7 +250,7 @@ public:
     void                finalizeImport();
 
     /** Returns an API font descriptor with own font information. */
-    const ::com::sun::star::awt::FontDescriptor& getFontDescriptor() const { return maApiData.maDesc;}
+    const css::awt::FontDescriptor& getFontDescriptor() const { return maApiData.maDesc;}
     /** Returns true, if the font requires rich text formatting in Calc.
         @descr  Example: Font escapement is a cell attribute in Excel, but Calc
         needs an rich text cell for this attribute. */
@@ -357,7 +357,7 @@ struct ProtectionModel
 /** Contains all API cell protection attributes. */
 struct ApiProtectionData
 {
-    typedef ::com::sun::star::util::CellProtection ApiCellProtection;
+    typedef css::util::CellProtection ApiCellProtection;
 
     ApiCellProtection   maCellProt;
 
@@ -421,7 +421,7 @@ struct BorderModel
 /** Contains API attributes of a complete cell border. */
 struct ApiBorderData
 {
-    typedef ::com::sun::star::table::BorderLine2     ApiBorderLine;
+    typedef css::table::BorderLine2     ApiBorderLine;
 
     ApiBorderLine       maLeft;             /// Left line format
     ApiBorderLine       maRight;            /// Right line format
@@ -476,7 +476,7 @@ private:
 
     /** Converts border line data to an API struct, returns true, if the line is marked as used. */
     bool                convertBorderLine(
-                            ::com::sun::star::table::BorderLine2& rBorderLine,
+                            css::table::BorderLine2& rBorderLine,
                             const BorderLineModel& rModel );
 
 private:

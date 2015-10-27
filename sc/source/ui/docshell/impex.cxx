@@ -255,14 +255,14 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
 }
 
 bool ScImportExport::ImportData( const OUString& /* rMimeType */,
-                     const ::com::sun::star::uno::Any & /* rValue */ )
+                     const css::uno::Any & /* rValue */ )
 {
     OSL_ENSURE( false, "Implementation is missing" );
     return false;
 }
 
 bool ScImportExport::ExportData( const OUString& rMimeType,
-                                 ::com::sun::star::uno::Any & rValue )
+                                 css::uno::Any & rValue )
 {
     SvMemoryStream aStrm;
     // mba: no BaseURL for data exchange
@@ -270,7 +270,7 @@ bool ScImportExport::ExportData( const OUString& rMimeType,
                 SotExchange::GetFormatIdFromMimeType( rMimeType ) ))
     {
         aStrm.WriteUChar( 0 );
-        rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+        rValue <<= css::uno::Sequence< sal_Int8 >(
                                         static_cast<sal_Int8 const *>(aStrm.GetData()),
                                         aStrm.Seek( STREAM_SEEK_TO_END ) );
         return true;

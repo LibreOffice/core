@@ -783,7 +783,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                         //  of days with a "Number of days" value.
 
                         rOldInfo = pNumGroupDim->GetInfo();
-                        rParts = com::sun::star::sheet::DataPilotFieldGroupBy::DAYS;               // not found in CollectDateParts
+                        rParts = css::sheet::DataPilotFieldGroupBy::DAYS;               // not found in CollectDateParts
                         bFoundParts = true;
                         bFound = true;
                     }

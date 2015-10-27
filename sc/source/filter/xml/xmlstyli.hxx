@@ -93,21 +93,21 @@ public:
 
     XMLTableStyleContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle = false );
     virtual ~XMLTableStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void FillPropertySet(const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
+    virtual void FillPropertySet(const css::uno::Reference<
+                css::beans::XPropertySet > & rPropSet ) override;
 
     virtual void SetDefaults() override;
 
-      void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
+      void AddProperty(sal_Int16 nContextID, const css::uno::Any& aValue);
     XMLPropertyState* FindProperty(const sal_Int16 nContextID);
 
     sal_Int32 GetNumberFormat();// { return nNumberFormat; }
@@ -115,7 +115,7 @@ public:
     SCTAB GetLastSheet() const       { return nLastSheet; }
     void SetLastSheet(SCTAB nNew)    { nLastSheet = nNew; }
 
-    void ApplyCondFormat( const com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress>& xCellRanges );
+    void ApplyCondFormat( const css::uno::Sequence<css::table::CellRangeAddress>& xCellRanges );
 
 private:
     using XMLPropStyleContext::SetStyle;
@@ -123,14 +123,10 @@ private:
 
 class XMLTableStylesContext : public SvXMLStylesContext
 {
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer > xCellStyles;
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer > xColumnStyles;
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer > xRowStyles;
-    ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer > xTableStyles;
+    css::uno::Reference< css::container::XNameContainer > xCellStyles;
+    css::uno::Reference< css::container::XNameContainer > xColumnStyles;
+    css::uno::Reference< css::container::XNameContainer > xRowStyles;
+    css::uno::Reference< css::container::XNameContainer > xTableStyles;
     const OUString sCellStyleServiceName;
     const OUString sColumnStyleServiceName;
     const OUString sRowStyleServiceName;
@@ -156,19 +152,18 @@ protected:
             sal_uInt16 nFamily,
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
 public:
 
     XMLTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
             const OUString& rLName ,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const bool bAutoStyles );
     virtual ~XMLTableStylesContext();
 
@@ -176,8 +171,7 @@ public:
 
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const override;
-    virtual ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer >
+    virtual css::uno::Reference< css::container::XNameContainer >
         GetStylesContainer( sal_uInt16 nFamily ) const override;
     virtual OUString GetServiceName( sal_uInt16 nFamily ) const override;
 
@@ -189,13 +183,11 @@ class ScXMLMasterStylesContext : public SvXMLStylesContext
 protected:
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const override;
 
@@ -204,8 +196,7 @@ public:
 
     ScXMLMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList);
 
     virtual ~ScXMLMasterStylesContext();
     virtual void EndElement() override;
@@ -217,7 +208,7 @@ namespace com { namespace sun { namespace star {
 
 class ScMasterPageContext : public XMLTextMasterPageContext
 {
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet;
+    css::uno::Reference<css::beans::XPropertySet> xPropSet;
     bool                bContainsRightHeader;
     bool                bContainsRightFooter;
 
@@ -228,20 +219,19 @@ public:
 
     ScMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             bool bOverwrite );
     virtual ~ScMasterPageContext();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual SvXMLImportContext *CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
             const bool bFirst ) override;
@@ -259,16 +249,14 @@ class ScCellTextStyleContext : public XMLTextStyleContext
 public:
     ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
             bool bDefaultStyle = false );
     virtual ~ScCellTextStyleContext();
 
     // override FillPropertySet to store style information
     virtual void FillPropertySet(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
+            const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 };
 
 #endif

@@ -34,8 +34,7 @@ using namespace xmloff::token;
 ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sLink(),
     sTableName(),
@@ -86,8 +85,7 @@ ScXMLTableSourceContext::~ScXMLTableSourceContext()
 
 SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }

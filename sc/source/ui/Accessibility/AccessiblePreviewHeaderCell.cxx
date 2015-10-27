@@ -77,8 +77,7 @@ using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::accessibility::XAccessible>& rxParent,
+ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell,
                             const ScAddress& rCellPos, bool bIsColHdr, bool bIsRowHdr,
                             sal_Int32 nIndex ) :

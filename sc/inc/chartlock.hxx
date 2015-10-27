@@ -37,12 +37,10 @@ public:
                     ScChartLockGuard( ScDocument* pDoc );
     virtual         ~ScChartLockGuard();
 
-    void            AlsoLockThisChart( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel >& xModel );
+    void            AlsoLockThisChart( const css::uno::Reference< css::frame::XModel >& xModel );
 
 private:
-    std::vector< ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::frame::XModel > > maChartModels;
+    std::vector< css::uno::WeakReference< css::frame::XModel > > maChartModels;
 
     ScChartLockGuard( const ScChartLockGuard& ) = delete;
 };
@@ -58,8 +56,7 @@ public:
 
     void            StartOrContinueLocking();
     void            StopLocking();
-    void            AlsoLockThisChart( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel >& xModel );
+    void            AlsoLockThisChart( const css::uno::Reference< css::frame::XModel >& xModel );
 
 private:
     ScDocument*                         mpDoc;

@@ -224,7 +224,7 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
     return &pMember->maValues;
 }
 
-double ScDPResultTree::getLeafResult(const com::sun::star::sheet::DataPilotFieldFilter& rFilter) const
+double ScDPResultTree::getLeafResult(const css::sheet::DataPilotFieldFilter& rFilter) const
 {
     NamePairType aPair(
         ScGlobal::pCharClass->uppercase(rFilter.FieldName),

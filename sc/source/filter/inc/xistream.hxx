@@ -55,8 +55,8 @@ public:
     XclImpDecrypterRef  Clone() const;
 
     /** Implementation of the ::comphelper::IDocPasswordVerifier interface */
-    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) override;
-    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) override;
+    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, css::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) override;
+    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
 
     /** Updates the decrypter on start of a new record or after seeking stream. */
     void                Update( SvStream& rStrm, sal_uInt16 nRecSize );
@@ -73,9 +73,9 @@ private:
     virtual XclImpDecrypter* OnClone() const = 0;
     /** Derived classes implement password verification and initialization of
         the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+    virtual css::uno::Sequence< css::beans::NamedValue >
         OnVerifyPassword( const OUString& rPassword ) = 0;
-    virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) = 0;
+    virtual bool OnVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) = 0;
 
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize ) = 0;
@@ -101,9 +101,9 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpBiff5Decrypter* OnClone() const override;
     /** Implements password verification and initialization of the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+    virtual css::uno::Sequence< css::beans::NamedValue >
         OnVerifyPassword( const OUString& rPassword ) override;
-    virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) override;
+    virtual bool OnVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize ) override;
     /** Implementation of the decryption. */
@@ -111,7 +111,7 @@ private:
 
 private:
     ::msfilter::MSCodec_XorXLS95 maCodec;       /// Crypto algorithm implementation.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
+    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
     sal_uInt16          mnKey;
     sal_uInt16          mnHash;
 };
@@ -130,9 +130,9 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpBiff8Decrypter* OnClone() const override;
     /** Implements password verification and initialization of the decoder. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+    virtual css::uno::Sequence< css::beans::NamedValue >
         OnVerifyPassword( const OUString& rPassword ) override;
-    virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) override;
+    virtual bool OnVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize ) override;
     /** Implementation of the decryption. */
@@ -145,7 +145,7 @@ private:
 
 private:
     ::msfilter::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
+    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
     ::std::vector< sal_uInt8 > maSalt;
     ::std::vector< sal_uInt8 > maVerifier;
     ::std::vector< sal_uInt8 > maVerifierHash;

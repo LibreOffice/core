@@ -345,7 +345,7 @@ FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
     maAddress(rAddr), maRange(rRange), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
 
 FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
-    const com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
+    const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
     const OUString& rCellValue, sal_Int32 nValueType ) :
     maAddress(rAddr), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
 
@@ -466,7 +466,7 @@ void FormulaBuffer::createSharedFormulaMapEntry(
     rSharedFormulas.push_back( aEntry );
 }
 
-void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, const OUString& rTokenStr )
+void FormulaBuffer::setCellFormula( const css::table::CellAddress& rAddress, const OUString& rTokenStr )
 {
     assert( rAddress.Sheet >= 0 && (size_t)rAddress.Sheet < maCellFormulas.size() );
     maCellFormulas[ rAddress.Sheet ].push_back( TokenAddressItem( rTokenStr, rAddress ) );
@@ -480,7 +480,7 @@ void FormulaBuffer::setCellFormula(
         SharedFormulaDesc(rAddress, nSharedId, rCellValue, nValueType));
 }
 
-void FormulaBuffer::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
+void FormulaBuffer::setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const css::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
 {
 
     TokenAddressItem tokenPair( rTokenStr, rTokenAddress );

@@ -54,10 +54,10 @@ private:
 
     ScMyOLEFixer                        aFixupOLEs;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xCurrentSheet;
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > xCurrentCellRange;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
-    ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
+    css::uno::Reference< css::sheet::XSpreadsheet > xCurrentSheet;
+    css::uno::Reference< css::table::XCellRange > xCurrentCellRange;
+    css::uno::Reference< css::drawing::XDrawPage > xDrawPage;
+    css::uno::Reference < css::drawing::XShapes > xShapes;
     OUString                       sCurrentSheetName;
     ScAddress                           maCurrentCellPos;
     ScRangeList                         maMatrixRangeList;
@@ -76,25 +76,25 @@ public:
     void                                SetRowStyle(const OUString& rCellStyleName);
     void                                AddColumn(bool bIsCovered);
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
-    static bool                         IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape)
+    static bool                         IsOLE(css::uno::Reference< css::drawing::XShape >& rShape)
                                             { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
     ScAddress                           GetCurrentCellPos() const { return maCurrentCellPos; };
     void                                AddColStyle(const sal_Int32 nRepeat, const OUString& rCellStyleName);
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
-    OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
+    OUString                            GetCurrentSheetName() const { return sCurrentSheetName; }
     SCTAB                               GetCurrentSheet() const { return (maCurrentCellPos.Tab() >= 0) ? maCurrentCellPos.Tab() : 0; }
     SCCOL                               GetCurrentColCount() const { return std::min<sal_Int32>(nCurrentColCount, MAXCOL); }
     SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
+    css::uno::Reference< css::sheet::XSpreadsheet >
                                         GetCurrentXSheet() const { return xCurrentSheet; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
+    css::uno::Reference< css::drawing::XDrawPage >
                                         GetCurrentXDrawPage();
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
                                         GetCurrentXShapes();
     bool                                HasDrawPage();
     bool                                HasXShapes();
-    void                                AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
+    void                                AddOLE(css::uno::Reference <css::drawing::XShape>& rShape,
                                                const OUString &rRangeList);
 
     void                                AddMatrixRange( const SCCOL nStartColumn,

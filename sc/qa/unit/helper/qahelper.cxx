@@ -552,7 +552,7 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     {
         pSet->Put(SfxStringItem(SID_PASSWORD, *pPassword));
     }
-    pSet->Put(SfxUInt16Item(SID_MACROEXECMODE,::com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN));
+    pSet->Put(SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN));
     SAL_INFO( "sc.qa", "about to load " << rURL );
     if (!xDocShRef->DoLoad(pSrcMed))
     {

@@ -43,7 +43,7 @@ public:
     virtual void Print( FILE* ) override;
 #endif
     bool Read(SvStream &rS) override;
-    bool ImportToolBarControl( ScCTBWrapper&, const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar );
+    bool ImportToolBarControl( ScCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar );
 };
 
 class ScCTB : public TBBase

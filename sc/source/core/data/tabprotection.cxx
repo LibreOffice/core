@@ -102,10 +102,10 @@ public:
     bool isPasswordEmpty() const { return mbEmptyPass;}
     bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
     void setPassword(const OUString& aPassText);
-    ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
+    css::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
     void setPasswordHash(
-        const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
+        const css::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
     bool verifyPassword(const OUString& aPassText) const;
 
@@ -120,7 +120,7 @@ public:
 
 private:
     OUString maPassText;
-    ::com::sun::star::uno::Sequence<sal_Int8>   maPassHash;
+    css::uno::Sequence<sal_Int8>   maPassHash;
     ::std::vector<bool> maOptions;
     bool mbEmptyPass;
     bool mbProtected;

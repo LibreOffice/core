@@ -1225,7 +1225,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh);
     if (pModelObj)
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties;
+        css::uno::Sequence< css::beans::PropertyValue > aProperties;
         sal_Int32 nCount = 0;
         const SfxItemPropertyMap& rMap = ScCellObj::GetCellPropertyMap();
         PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
@@ -1239,7 +1239,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
                 {
                     if ( aIt->nWID == nWhich )
                     {
-                        ::com::sun::star::uno::Any aVal;
+                        css::uno::Any aVal;
                         pItem->QueryValue( aVal, aIt->nMemberId );
                         aProperties.realloc( nCount + 1 );
                         aProperties[ nCount ].Name = aIt->sName;

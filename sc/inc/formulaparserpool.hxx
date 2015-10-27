@@ -37,13 +37,13 @@ public:
     bool                hasFormulaParser( const OUString& rNamespace );
 
     /** Returns the formula parser that is registered for the passed namespace. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser >
+    css::uno::Reference< css::sheet::XFormulaParser >
                         getFormulaParser( const OUString& rNamespace );
 
 private:
     typedef std::unordered_map<
         OUString,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser >,
+        css::uno::Reference< css::sheet::XFormulaParser >,
         OUStringHash,
         ::std::equal_to< OUString > > ParserMap;
 

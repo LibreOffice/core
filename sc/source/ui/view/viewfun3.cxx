@@ -481,7 +481,7 @@ void ScViewFunc::PasteFromSystem()
             SotClipboardFormatId nFormat; // output param for GetExchangeAction
             sal_uInt16 nEventAction;      // output param for GetExchangeAction
 
-            uno::Reference<com::sun::star::datatransfer::XTransferable> xTransferable( aDataHelper.GetXTransferable() );
+            uno::Reference<css::datatransfer::XTransferable> xTransferable( aDataHelper.GetXTransferable() );
             sal_uInt16 nAction = SotExchange::GetExchangeAction(
                                     aDataHelper.GetDataFlavorExVector(),
                                     nDestination,

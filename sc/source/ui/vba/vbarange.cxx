@@ -1679,7 +1679,7 @@ ScVbaRange::setFormula(const uno::Any &rFormula ) throw (uno::RuntimeException, 
 }
 
 uno::Any
-ScVbaRange::getFormulaR1C1() throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaRange::getFormulaR1C1() throw (css::uno::RuntimeException, std::exception)
 {
     return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
@@ -1691,7 +1691,7 @@ ScVbaRange::setFormulaR1C1(const uno::Any& rFormula ) throw (uno::RuntimeExcepti
 }
 
 uno::Any
-ScVbaRange::getFormula() throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaRange::getFormula() throw (css::uno::RuntimeException, std::exception)
 {
     return getFormulaValue( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 }
@@ -2846,7 +2846,7 @@ getPasteFormulaBits( sal_Int32 Operation)
     return nFormulaBits;
 }
 void SAL_CALL
-ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, const uno::Any& SkipBlanks, const uno::Any& Transpose ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, const uno::Any& SkipBlanks, const uno::Any& Transpose ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
         throw uno::RuntimeException("That command cannot be used on multiple selections" );

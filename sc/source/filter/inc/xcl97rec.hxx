@@ -248,20 +248,20 @@ protected:
 
 public:
                                 XclObjAny( XclExpObjectManager& rObjMgr,
-                                    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,
+                                    const css::uno::Reference< css::drawing::XShape >& rShape,
                                     ScDocument* pDoc);
     virtual                     ~XclObjAny();
 
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
                                 GetShape() const { return mxShape; }
 
     virtual void                Save( XclExpStream& rStrm ) override;
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
     static void                 WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj );
-    static void                 WriteFromTo( XclExpXmlStream& rStrm, const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape, SCTAB nTab );
+    static void                 WriteFromTo( XclExpXmlStream& rStrm, const css::uno::Reference< css::drawing::XShape >& rShape, SCTAB nTab );
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
                                 mxShape;
     ScDocument* mpDoc;
 };

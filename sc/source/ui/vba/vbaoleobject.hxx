@@ -53,8 +53,8 @@ public:
     virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException, std::exception) override;
     virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getLinkedCell() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getLinkedCell() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) throw (css::uno::RuntimeException, std::exception) override;
 };
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECT_HXX
 

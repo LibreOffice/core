@@ -2144,7 +2144,7 @@ void ScTabView::SetNewVisArea()
     if (pViewFrame)
     {
         SfxFrame& rFrame = pViewFrame->GetFrame();
-        com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = rFrame.GetController();
+        css::uno::Reference<css::frame::XController> xController = rFrame.GetController();
         if (xController.is())
         {
             ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );

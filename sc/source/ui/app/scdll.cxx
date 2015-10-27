@@ -277,7 +277,7 @@ void ScDLL::Init()
     // Add 3DObject Factory
     E3dObjFactory();
 
-    // Add ::com::sun::star::form::component::FormObject Factory
+    // Add css::form::component::FormObject Factory
     FmFormObjFactory();
 
     pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, sal::static_int_cast<sal_uInt16>(pMod->GetAppOptions().GetAppMetric()) ) );

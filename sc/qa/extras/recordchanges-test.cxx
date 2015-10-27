@@ -37,7 +37,7 @@ public:
 void ScRecordChangesTest::testSetRecordChanges()
 {
 
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop("private:factory/scalc");
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop("private:factory/scalc");
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComponent, UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xDocSettingsPropSet (xDoc, UNO_QUERY_THROW);
@@ -67,7 +67,7 @@ void ScRecordChangesTest::testCheckRecordChangesProtection()
     // test with protected changes
     OUString aFileName;
     createFileURL( "RecordChangesProtected.ods", aFileName);
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName);
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComponent, UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xDocSettingsPropSet (xDoc, UNO_QUERY_THROW);

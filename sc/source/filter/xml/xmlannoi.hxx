@@ -45,9 +45,9 @@ struct ScXMLAnnotationStyleEntry
 
 struct ScXMLAnnotationData
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
                         mxShape;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
                         mxShapes;
     OUString     maAuthor;
     OUString     maCreateDate;
@@ -68,8 +68,7 @@ public:
 
     ScXMLAnnotationContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLAnnotationData& rAnnotationData,
                         ScXMLTableRowCellContext* pCellContext);
 
@@ -77,18 +76,17 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
 
     virtual void Characters( const OUString& rChars ) override;
 
     virtual void EndElement() override;
 
     void SetShape(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+        const css::uno::Reference< css::drawing::XShape >& rxShape,
+        const css::uno::Reference< css::drawing::XShapes >& rxShapes,
         const OUString& rStyleName, const OUString& rTextStyle );
 
     void AddContentStyle( sal_uInt16 nFamily, const OUString& rName, const ESelection& rSelection );

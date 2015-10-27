@@ -35,8 +35,8 @@ namespace xls {
 
 struct NumFmtModel
 {
-    ::com::sun::star::lang::Locale maLocale;
-    OUString     maFmtCode;
+    css::lang::Locale   maLocale;
+    OUString            maFmtCode;
     sal_Int16           mnPredefId;
 
     explicit            NumFmtModel();
@@ -60,17 +60,17 @@ public:
     void                setFormatCode( const OUString& rFmtCode );
     /** Sets the passed format code, encoded in UTF-8. */
     void                setFormatCode(
-                            const ::com::sun::star::lang::Locale& rLocale,
+                            const css::lang::Locale& rLocale,
                             const sal_Char* pcFmtCode );
     /** Sets the passed predefined format code identifier. */
     void                setPredefinedId(
-                            const ::com::sun::star::lang::Locale& rLocale,
+                            const css::lang::Locale& rLocale,
                             sal_Int16 nPredefId );
 
     /** Final processing after import of all style settings. Returns the API format index. */
     sal_Int32           finalizeImport(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& rxNumFmts,
-                            const ::com::sun::star::lang::Locale& rFromLocale );
+                            const css::uno::Reference< css::util::XNumberFormats >& rxNumFmts,
+                            const css::lang::Locale& rFromLocale );
     sal_uLong fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
     /** Writes the number format to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;

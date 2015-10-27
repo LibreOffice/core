@@ -418,9 +418,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     nSet=aAppOptions.GetLinkMode();
                 }
 
-                if (nCanUpdate == com::sun::star::document::UpdateDocMode::NO_UPDATE)
+                if (nCanUpdate == css::document::UpdateDocMode::NO_UPDATE)
                     nSet = LM_NEVER;
-                else if (nCanUpdate == com::sun::star::document::UpdateDocMode::FULL_UPDATE)
+                else if (nCanUpdate == css::document::UpdateDocMode::FULL_UPDATE)
                     nSet = LM_ALWAYS;
 
                 if (nSet == LM_ALWAYS
@@ -480,8 +480,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 bool bDone = false;
                 ScDBCollection* pDBColl = aDocument.GetDBCollection();
 
-                if ((nCanUpdate != com::sun::star::document::UpdateDocMode::NO_UPDATE) &&
-                   (nCanUpdate != com::sun::star::document::UpdateDocMode::QUIET_UPDATE))
+                if ((nCanUpdate != css::document::UpdateDocMode::NO_UPDATE) &&
+                   (nCanUpdate != css::document::UpdateDocMode::QUIET_UPDATE))
                 {
                     ScRange aRange;
                     ScTabViewShell* pViewSh = GetBestViewShell();
@@ -1173,7 +1173,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJus
                         bDone = true;
                     else
                         pChangeTrack->SetProtection(
-                            com::sun::star::uno::Sequence< sal_Int8 > (0) );
+                            css::uno::Sequence< sal_Int8 > (0) );
                 }
                 else
                 {
@@ -1184,7 +1184,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJus
             }
             else
             {
-                com::sun::star::uno::Sequence< sal_Int8 > aPass;
+                css::uno::Sequence< sal_Int8 > aPass;
                 SvPasswordHelper::GetHashPassword( aPass, aPassword );
                 pChangeTrack->SetProtection( aPass );
             }
@@ -2090,7 +2090,7 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
 #if defined WNT
 bool ScDocShell::DdeGetData( const OUString& rItem,
                              const OUString& rMimeType,
-                             ::com::sun::star::uno::Any & rValue )
+                             css::uno::Any & rValue )
 {
     if( SotClipboardFormatId::STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
@@ -2098,7 +2098,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
         {
             OString aFmtByte(OUStringToOString(aDdeTextFmt,
                 osl_getThreadTextEncoding()));
-            rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+            rValue <<= css::uno::Sequence< sal_Int8 >(
                                         reinterpret_cast<const sal_Int8*>(aFmtByte.getStr()),
                                         aFmtByte.getLength() + 1 );
             return true;
@@ -2116,7 +2116,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
             if( aObj.ExportByteString( aData, osl_getThreadTextEncoding(),
                                         SotClipboardFormatId::SYLK ) )
             {
-                rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+                rValue <<= css::uno::Sequence< sal_Int8 >(
                                             reinterpret_cast<const sal_Int8*>(aData.getStr()),
                                             aData.getLength() + 1 );
                 return true;
@@ -2138,7 +2138,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
 
 bool ScDocShell::DdeSetData( const OUString& rItem,
                              const OUString& rMimeType,
-                             const ::com::sun::star::uno::Any & rValue )
+                             const css::uno::Any & rValue )
 {
     if( SotClipboardFormatId::STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
     {

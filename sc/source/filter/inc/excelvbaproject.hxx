@@ -34,15 +34,15 @@ class ExcelVbaProject : public ::oox::ole::VbaProject
 {
 public:
     explicit            ExcelVbaProject(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& rxDocument );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::sheet::XSpreadsheetDocument >& rxDocument );
 
 protected:
     /** Adds dummy modules for sheets without imported code name. */
     virtual void        prepareImport() override;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
+    css::uno::Reference< css::sheet::XSpreadsheetDocument >
                         mxDocument;
 };
 

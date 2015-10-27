@@ -94,7 +94,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                 SfxItemSet aAttr( pView->GetModel()->GetItemPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
                 aAttr.Put( SvxWritingModeItem(
                     nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
-                        com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
+                        css::text::WritingMode_LR_TB : css::text::WritingMode_TB_RL,
                         SDRATTR_TEXTDIRECTION ) );
                 pView->SetAttributes( aAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();  // Bidi slots may be disabled

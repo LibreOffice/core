@@ -596,9 +596,9 @@ struct XclPTFieldInfo : public XclPTVisNameInfo
     /** Returns the API enum representing the orientation (first of row/col/page/data).
         @param nMask  Restricts the axes taken into account.
         @return  The first found axis orientation, that is allowed in nMask parameter. */
-    ::com::sun::star::sheet::DataPilotFieldOrientation GetApiOrient( sal_uInt16 nMask ) const;
+    css::sheet::DataPilotFieldOrientation GetApiOrient( sal_uInt16 nMask ) const;
     /** Adds the axis orientation represented by the passed API enum. */
-    void                AddApiOrient( ::com::sun::star::sheet::DataPilotFieldOrientation eOrient );
+    void                AddApiOrient( css::sheet::DataPilotFieldOrientation eOrient );
 
     /** Returns a vector of all set subtotal functions. */
     void                GetSubtotals( XclPTSubtotalVec& rSubtotals ) const;
@@ -676,9 +676,9 @@ struct XclPTDataFieldInfo : public XclPTVisNameInfo
     explicit            XclPTDataFieldInfo();
 
     /** Returns the API enum representing the aggregation function. */
-    ::com::sun::star::sheet::GeneralFunction GetApiAggFunc() const;
+    css::sheet::GeneralFunction GetApiAggFunc() const;
     /** Sets the aggregation function represented by the passed API enum. */
-    void                SetApiAggFunc( ::com::sun::star::sheet::GeneralFunction eAggFunc );
+    void                SetApiAggFunc( css::sheet::GeneralFunction eAggFunc );
 
     /** Returns the API constant representing the result reference type. */
     sal_Int32           GetApiRefType() const;

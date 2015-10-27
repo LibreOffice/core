@@ -371,7 +371,7 @@ private:
 
     Idle                aTrackIdle;
 
-    com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
+    css::uno::Reference< css::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
 public:
     boost::ptr_vector< ScInterpreterTableOpParams > aTableOpList; // list of ScInterpreterTableOpParams currently in use
@@ -398,10 +398,10 @@ private:
     sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter
     sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
     sal_uInt16              nSrcVer;                        // file version (load/save)
-    SCROW               nSrcMaxRow;                     // number of lines to load/save
+    SCROW                   nSrcMaxRow;                     // number of lines to load/save
     sal_uInt16              nFormulaTrackCount;
-    HardRecalcState     eHardRecalcState;               // off, temporary, eternal
-    SCTAB               nVisibleTab;                    // for OLE etc., don't use inside ScDocument
+    HardRecalcState         eHardRecalcState;               // off, temporary, eternal
+    SCTAB                   nVisibleTab;                    // for OLE etc., don't use inside ScDocument
 
     ScLkUpdMode         eLinkMode;
 
@@ -588,7 +588,7 @@ public:
     SdrObject*      GetObjectAtPoint( SCTAB nTab, const Point& rPos );
     bool            HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartByName( const OUString& rChartName );
+    css::uno::Reference< css::chart2::XChartDocument > GetChartByName( const OUString& rChartName );
 
     SC_DLLPUBLIC void            GetChartRanges( const OUString& rChartName, std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );
     void            SetChartRanges( const OUString& rChartName, const std::vector< ScRangeList >& rRanges );
@@ -600,8 +600,8 @@ public:
                                     bool bColHeaders, bool bRowHeaders, bool bAdd );
     void            GetOldChartParameters( const OUString& rName,
                                     ScRangeList& rRanges, bool& rColHeaders, bool& rRowHeaders );
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::embed::XEmbeddedObject >
+    css::uno::Reference<
+            css::embed::XEmbeddedObject >
                     FindOleObjectByName( const OUString& rName );
 
     SC_DLLPUBLIC void           MakeTable( SCTAB nTab,bool _bNeedsNameCheck = true );
@@ -1429,7 +1429,7 @@ public:
         const std::vector<sal_uInt32>& rIndex ) const;
     const SfxPoolItem*  GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
 
-    SC_DLLPUBLIC const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();
+    SC_DLLPUBLIC const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
     bool            HasStringWeakCharacters( const OUString& rString );
     SC_DLLPUBLIC SvtScriptType  GetStringScriptType( const OUString& rString );
     SC_DLLPUBLIC SvtScriptType  GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat );
@@ -1610,8 +1610,8 @@ public:
     SC_DLLPUBLIC void           SetColBreak(SCCOL nCol, SCTAB nTab, bool bPage, bool bManual);
     void                        RemoveRowBreak(SCROW nRow, SCTAB nTab, bool bPage, bool bManual);
     void                        RemoveColBreak(SCCOL nCol, SCTAB nTab, bool bPage, bool bManual);
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::sheet::TablePageBreakData> GetRowBreakData(SCTAB nTab) const;
+    css::uno::Sequence<
+        css::sheet::TablePageBreakData> GetRowBreakData(SCTAB nTab) const;
 
     SC_DLLPUBLIC bool           RowHidden(SCROW nRow, SCTAB nTab, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
     SC_DLLPUBLIC bool           HasHiddenRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const;
@@ -2063,9 +2063,9 @@ public:
     void            AddUnoObject( SfxListener& rObject );
     void            RemoveUnoObject( SfxListener& rObject );
     void            BroadcastUno( const SfxHint &rHint );
-    void            AddUnoListenerCall( const ::com::sun::star::uno::Reference<
-                                            ::com::sun::star::util::XModifyListener >& rListener,
-                                        const ::com::sun::star::lang::EventObject& rEvent );
+    void            AddUnoListenerCall( const css::uno::Reference<
+                                            css::util::XModifyListener >& rListener,
+                                        const css::lang::EventObject& rEvent );
 
     void            SetInLinkUpdate(bool bSet);             // TableLink or AreaLink
     bool            IsInLinkUpdate() const;                 // including DdeLink
@@ -2091,9 +2091,9 @@ public:
     void SC_DLLPUBLIC GetSortParam( ScSortParam& rParam, SCTAB nTab );
     void SC_DLLPUBLIC SetSortParam( ScSortParam& rParam, SCTAB nTab );
 
-    inline void     SetVbaEventProcessor( const com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >& rxVbaEvents )
+    inline void     SetVbaEventProcessor( const css::uno::Reference< css::script::vba::XVBAEventProcessor >& rxVbaEvents )
                         { mxVbaEvents = rxVbaEvents; }
-    inline com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
+    inline css::uno::Reference< css::script::vba::XVBAEventProcessor >
                     GetVbaEventProcessor() const { return mxVbaEvents; }
 
     /** Should only be GRAM_PODF or GRAM_ODFF. */

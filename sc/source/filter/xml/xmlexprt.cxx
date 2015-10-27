@@ -337,7 +337,7 @@ sal_Int16 ScXMLExport::GetMeasureUnit()
 }
 
 ScXMLExport::ScXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+    const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLExportFlags nExportFlag)
 :   SvXMLExport( GetMeasureUnit(),
         rContext, implementationName, XML_SPREADSHEET, nExportFlag ),
@@ -4973,8 +4973,8 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
 }
 
 // XFilter
-sal_Bool SAL_CALL ScXMLExport::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScXMLExport::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDoc)
@@ -4986,7 +4986,7 @@ sal_Bool SAL_CALL ScXMLExport::filter( const ::com::sun::star::uno::Sequence< ::
 }
 
 void SAL_CALL ScXMLExport::cancel()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDoc)
@@ -4995,16 +4995,16 @@ void SAL_CALL ScXMLExport::cancel()
 }
 
 // XInitialization
-void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ScXMLExport::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SvXMLExport::initialize(aArguments);
 }
 
 // XUnoTunnel
-sal_Int64 SAL_CALL ScXMLExport::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL ScXMLExport::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
+    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return SvXMLExport::getSomething(aIdentifier);

@@ -30,10 +30,10 @@ namespace xls {
 
 struct TableModel
 {
-    ::com::sun::star::table::CellRangeAddress
+    css::table::CellRangeAddress
                         maRange;            /// Original (unchecked) range of the table.
-    OUString     maProgName;         /// Programmatical name.
-    OUString     maDisplayName;      /// Display name.
+    OUString            maProgName;         /// Programmatical name.
+    OUString            maDisplayName;      /// Display name.
     sal_Int32           mnId;               /// Unique table identifier.
     sal_Int32           mnType;             /// Table type (worksheet, query, etc.).
     sal_Int32           mnHeaderRows;       /// Number of header rows.
@@ -69,9 +69,9 @@ public:
     inline const OUString& getDisplayName() const { return maModel.maDisplayName; }
 
     /** Returns the original (unchecked) total range of the table. */
-    inline const ::com::sun::star::table::CellRangeAddress& getOriginalRange() const { return maModel.maRange; }
+    inline const css::table::CellRangeAddress& getOriginalRange() const { return maModel.maRange; }
     /** Returns the cell range of this table. */
-    inline const ::com::sun::star::table::CellRangeAddress& getRange() const { return maDestRange; }
+    inline const css::table::CellRangeAddress& getRange() const { return maDestRange; }
     /** Returns the number of columns of this table. */
     inline sal_Int32    getWidth() const { return maDestRange.EndColumn - maDestRange.StartColumn + 1; }
     /** Returns the number of rows of this table. */
@@ -86,7 +86,7 @@ private:
     AutoFilterBuffer    maAutoFilters;      /// Filter settings for this table.
     TableColumnsBuffer  maTableColumns;     /// Column names of this table.
     OUString            maDBRangeName;      /// Name of the database range in the Calc document.
-    ::com::sun::star::table::CellRangeAddress
+    css::table::CellRangeAddress
                         maDestRange;        /// Validated range of the table in the worksheet.
     sal_Int32           mnTokenIndex;       /// Token index used in API token array.
 };

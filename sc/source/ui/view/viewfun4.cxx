@@ -77,8 +77,7 @@ using namespace com::sun::star;
 bool bPasteIsDrop = false;
 
 void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
-                                const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::datatransfer::XTransferable >& rxTransferable )
+                                const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
     if ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE ) )
@@ -669,8 +668,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 }
 
 bool ScViewFunc::PasteBookmark( SotClipboardFormatId nFormatId,
-                                const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
+                                const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY )
 {
     INetBookmark aBookmark;
@@ -764,7 +762,7 @@ bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
         // doesn't have a field item data.
         return false;
 
-    if (pField->GetClassId() != com::sun::star::text::textfield::Type::URL)
+    if (pField->GetClassId() != css::text::textfield::Type::URL)
         // not a URL field.
         return false;
 

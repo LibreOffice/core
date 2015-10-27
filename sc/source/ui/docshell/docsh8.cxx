@@ -170,15 +170,15 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
     try
     {
         ::ucbhelper::Content aDestPath( aDestPathObj.GetMainURL(INetURLObject::NO_DECODE),
-                            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                            uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext() );
-        uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
+        uno::Reference< css::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
         OUString aTransferName = "transfer";
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, uno::makeAny(
-                ::com::sun::star::ucb::TransferInfo( bMoveData, rSourceObj.GetMainURL(INetURLObject::NO_DECODE), aName,
-                                                       ::com::sun::star::ucb::NameClash::ERROR ) ) );
+                css::ucb::TransferInfo( bMoveData, rSourceObj.GetMainURL(INetURLObject::NO_DECODE), aName,
+                                                       css::ucb::NameClash::ERROR ) ) );
         }
         else
         {
@@ -203,7 +203,7 @@ bool ScDocShell::KillFile( const INetURLObject& rURL )
     try
     {
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
-                        uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                        uno::Reference< css::ucb::XCommandEnvironment >(),
                         comphelper::getProcessComponentContext() );
         aCnt.executeCommand( OUString( "delete" ),
                                 comphelper::makeBoolAny( true ) );
@@ -223,7 +223,7 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
     try
     {
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
-                        uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                        uno::Reference< css::ucb::XCommandEnvironment >(),
                         comphelper::getProcessComponentContext() );
         bRet = aCnt.isDocument();
     }

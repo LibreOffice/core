@@ -191,7 +191,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     bool bScriptReturnedFalse = false;  // default: do not abort
 
     // Set up parameters
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aParams(2);
+    css::uno::Sequence< css::uno::Any > aParams(2);
 
     //  1) entered or calculated value
     OUString aValStr = rInput;
@@ -206,13 +206,13 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
             aValStr = pCell->GetString().getString();
     }
     if ( bIsValue )
-        aParams[0] = ::com::sun::star::uno::makeAny( nValue );
+        aParams[0] = css::uno::makeAny( nValue );
     else
-        aParams[0] = ::com::sun::star::uno::makeAny( OUString( aValStr ) );
+        aParams[0] = css::uno::makeAny( OUString( aValStr ) );
 
     //  2) Position of the cell
     OUString aPosStr(rPos.Format(SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention()));
-    aParams[1] = ::com::sun::star::uno::makeAny(aPosStr);
+    aParams[1] = css::uno::makeAny(aPosStr);
 
     //  use link-update flag to prevent closing the document
     //  while the macro is running
@@ -223,9 +223,9 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     if ( pCell )
         pDocument->LockTable( rPos.Tab() );
 
-    ::com::sun::star::uno::Any aRet;
-    ::com::sun::star::uno::Sequence< sal_Int16 > aOutArgsIndex;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aOutArgs;
+    css::uno::Any aRet;
+    css::uno::Sequence< sal_Int16 > aOutArgsIndex;
+    css::uno::Sequence< css::uno::Any > aOutArgs;
 
     ErrCode eRet = pDocSh->CallXScript(
         aErrorTitle, aParams, aRet, aOutArgsIndex, aOutArgs );

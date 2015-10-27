@@ -28,13 +28,13 @@
 
 struct ScMyDrawPage
 {
-    com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage;
+    css::uno::Reference<css::drawing::XDrawPage> xDrawPage;
     bool bHasForms;
 
     ScMyDrawPage() : bHasForms(false) {}
 };
 
-typedef std::list< com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > ScMyTableXShapes;
+typedef std::list< css::uno::Reference<css::drawing::XShape> > ScMyTableXShapes;
 typedef std::vector<ScMyTableXShapes> ScMyTableShapes;
 typedef std::vector<ScMyDrawPage> ScMyDrawPages;
 
@@ -63,17 +63,17 @@ public:
     sal_Int32 GetLastRow(const sal_Int32 nTable) const;
     void AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 nTable);
     void SetDrawPageHasForms(const sal_Int32 nTable, bool bHasForms);
-    com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> GetDrawPage(const sal_Int32 nTable);
+    css::uno::Reference<css::drawing::XDrawPage> GetDrawPage(const sal_Int32 nTable);
     bool HasDrawPage() const { return pDrawPages != NULL; }
-    bool HasForm(const sal_Int32 nTable, com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& xDrawPage);
+    bool HasForm(const sal_Int32 nTable, css::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
     void AddNewShape(const ScMyShape& aMyShape);
     void SortShapesContainer();
     ScMyShapesContainer* GetShapesContainer() { return pShapesContainer; }
     bool HasShapes();
-    void AddTableShape(const sal_Int32 nTable, const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape);
+    void AddTableShape(const sal_Int32 nTable, const css::uno::Reference<css::drawing::XShape>& xShape);
     ScMyTableShapes* GetTableShapes() { return pTableShapes; }
     ScMyDetectiveObjContainer* GetDetectiveObjContainer() { return pDetectiveObjContainer; }
-    void AddNoteObj(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape, const ScAddress& rPos);
+    void AddNoteObj(const css::uno::Reference<css::drawing::XShape>& xShape, const ScAddress& rPos);
     void SortNoteShapes();
     ScMyNoteShapesContainer* GetNoteShapes() { return pNoteShapes; }
 };

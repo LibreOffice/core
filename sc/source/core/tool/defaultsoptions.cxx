@@ -170,6 +170,6 @@ void ScDefaultsCfg::SetOptions( const ScDefaultsOptions& rNew )
     SetModified();
 }
 
-void ScDefaultsCfg::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void ScDefaultsCfg::Notify( const css::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

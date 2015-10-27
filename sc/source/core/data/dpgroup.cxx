@@ -280,21 +280,21 @@ bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildIte
 
     switch (nChildPart)        // inner part
     {
-        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
+        case css::sheet::DataPilotFieldGroupBy::MONTHS:
             // a month is only contained in its quarter
-            if (nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS)
+            if (nGroupPart == css::sheet::DataPilotFieldGroupBy::QUARTERS)
                 // months and quarters are both 1-based
                 return (nGroupValue - 1 == (nChildValue - 1) / 3);
             break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
+        case css::sheet::DataPilotFieldGroupBy::DAYS:
             // a day is only contained in its quarter or month
-            if (nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS ||
-                nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS)
+            if (nGroupPart == css::sheet::DataPilotFieldGroupBy::MONTHS ||
+                nGroupPart == css::sheet::DataPilotFieldGroupBy::QUARTERS)
             {
                 Date aDate(1, 1, SC_DP_LEAPYEAR);
                 aDate += (nChildValue - 1);            // days are 1-based
                 sal_Int32 nCompare = aDate.GetMonth();
-                if (nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS)
+                if (nGroupPart == css::sheet::DataPilotFieldGroupBy::QUARTERS)
                     nCompare = ( ( nCompare - 1 ) / 3 ) + 1;    // get quarter from date
 
                 return nGroupValue == nCompare;

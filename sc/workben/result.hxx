@@ -30,8 +30,7 @@
 
 typedef boost::ptr_vector<css::uno::Reference< css::sheet::XResultListener >*> XResultListenerArr_Impl;
 
-class ScAddInResult : public cppu::WeakImplHelper<
-                                com::sun::star::sheet::XVolatileResult>
+class ScAddInResult : public cppu::WeakImplHelper< css::sheet::XVolatileResult>
 {
 private:
     String                  aArg;
@@ -48,8 +47,8 @@ public:
     virtual                 ~ScAddInResult();
 
                             // XVolatileResult
-    virtual void SAL_CALL addResultListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeResultListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addResultListener( const css::uno::Reference< css::sheet::XResultListener >& aListener ) throw(css::uno::RuntimeException);
+    virtual void SAL_CALL removeResultListener( const css::uno::Reference< css::sheet::XResultListener >& aListener ) throw(css::uno::RuntimeException);
 };
 
 #endif

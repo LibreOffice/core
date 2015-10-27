@@ -701,7 +701,7 @@ void ScDocument::UpdateChartListenerCollection()
             {
                 uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
                 OSL_ENSURE( xIPObj.is(), "No embedded object is given!");
-                uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
+                uno::Reference< css::chart2::data::XDataReceiver > xReceiver;
                 uno::Reference< embed::XComponentSupplier > xCompSupp( xIPObj, uno::UNO_QUERY );
                 if( xCompSupp.is())
                     xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );

@@ -166,7 +166,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                                         const awt::Rectangle& aRect,
                                         const uno::Sequence<table::CellRangeAddress>& aRanges,
                                         sal_Bool bColumnHeaders, sal_Bool bRowHeaders )
-                                    throw(::com::sun::star::uno::RuntimeException,
+                                    throw(css::uno::RuntimeException,
                                           std::exception)
 {
     SolarMutexGuard aGuard;

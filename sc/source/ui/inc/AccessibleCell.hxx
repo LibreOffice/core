@@ -33,7 +33,7 @@
 class ScTabViewShell;
 class ScAccessibleDocument;
 
-typedef cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleExtendedAttributes>
+typedef cppu::ImplHelper1< css::accessibility::XAccessibleExtendedAttributes>
                     ScAccessibleCellAttributeImpl;
 
 /** @descr
@@ -47,8 +47,7 @@ class ScAccessibleCell
 {
 public:
     static rtl::Reference<ScAccessibleCell> create(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScAddress& rCellAddress,
         sal_Int32 nIndex,
@@ -57,8 +56,7 @@ public:
 
 private:
     ScAccessibleCell(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScAddress& rCellAddress,
         sal_Int32 nIndex,
@@ -86,22 +84,21 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        SAL_CALL getAccessibleAtPoint(
-        const ::com::sun::star::awt::Point& rPoint )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible >
+        SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL grabFocus(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen() const
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox() const
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 public:
     ///=====  XAccessibleContext  ==============================================
@@ -110,25 +107,25 @@ public:
     /// override to calculate this on demand
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount()
-                    throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                    throw (css::uno::RuntimeException, std::exception) override;
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
-        throw (::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) override;
+        throw (css::uno::RuntimeException,
+                css::lang::IndexOutOfBoundsException, std::exception) override;
 
     /// Return the set of current states.
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+    virtual css::uno::Reference<
+            css::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual css::uno::Reference<
+        css::accessibility::XAccessibleRelationSet> SAL_CALL
            getAccessibleRelationSet()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     ///=====  XServiceInfo  ====================================================
 
@@ -136,22 +133,22 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Returns a list of all supported services.
     */
-    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
+    virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException,
+    virtual css::uno::Any SAL_CALL getExtendedAttributes()
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException,
                std::exception) override;
 
     // Override this method to handle cell's ParaIndent attribute specially.
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes )
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 private:
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccDoc;
@@ -159,14 +156,11 @@ private:
     ScSplitPos meSplitPos;
 
     bool IsDefunc(
-        const com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
     virtual bool IsEditable(
-        const com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates) override;
+        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates) override;
     bool IsOpaque(
-        const com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
     bool IsSelected();
 
     static ScDocument* GetDocument(ScTabViewShell* mpViewShell);

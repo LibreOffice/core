@@ -436,8 +436,7 @@ public:
     void            AddHighlightRange( const ScRange& rRange, const Color& rColor );
     void            ClearHighlightRanges();
 
-    void            DoChartSelection( const ::com::sun::star::uno::Sequence<
-                                      ::com::sun::star::chart2::data::HighlightedRange > & rHilightRanges );
+    void            DoChartSelection( const css::uno::Sequence< css::chart2::data::HighlightedRange > & rHilightRanges );
 
     long            GetGridWidth( ScHSplitPos eWhich );
     long            GetGridHeight( ScVSplitPos eWhich );

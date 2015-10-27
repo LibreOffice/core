@@ -38,7 +38,7 @@ class ExternalSheetDataContext : public WorkbookContextBase
 public:
     explicit            ExternalSheetDataContext(
                             WorkbookFragmentBase& rFragment,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >& rxSheetCache );
+                            const css::uno::Reference< css::sheet::XExternalSheetCache >& rxSheetCache );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
@@ -62,12 +62,12 @@ private:
     void                importExtCellString( SequenceInputStream& rStrm );
 
     /** Sets the passed cell value to the current position in the sheet cache. */
-    void                setCellValue( const ::com::sun::star::uno::Any& rValue );
+    void                setCellValue( const css::uno::Any& rValue );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
+    css::uno::Reference< css::sheet::XExternalSheetCache >
                         mxSheetCache;               /// The sheet cache used to store external cell values.
-    ::com::sun::star::table::CellAddress maCurrPos; /// Position of current cell.
+    css::table::CellAddress maCurrPos; /// Position of current cell.
     sal_Int32           mnCurrType;                 /// Data type of current cell.
 };
 

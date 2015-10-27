@@ -158,7 +158,7 @@ public:
 
 /// String to Range API
     static bool     GetAddressFromString(
-                            ::com::sun::star::table::CellAddress& rAddress,
+                            css::table::CellAddress& rAddress,
                             const OUString& rAddressStr,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
@@ -166,7 +166,7 @@ public:
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
     static bool     GetRangeFromString(
-                            ::com::sun::star::table::CellRangeAddress& rRange,
+                            css::table::CellRangeAddress& rRange,
                             const OUString& rRangeStr,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
@@ -211,7 +211,7 @@ public:
 /// Range to String API
     static void         GetStringFromAddress(
                             OUString& rString,
-                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const css::table::CellAddress& rAddress,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
@@ -219,7 +219,7 @@ public:
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
                             OUString& rString,
-                            const ::com::sun::star::table::CellRangeAddress& rRange,
+                            const css::table::CellRangeAddress& rRange,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
@@ -227,7 +227,7 @@ public:
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
                             OUString& rString,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
+                            const css::uno::Sequence< css::table::CellRangeAddress >& rRangeSeq,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',

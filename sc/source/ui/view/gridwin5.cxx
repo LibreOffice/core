@@ -450,10 +450,10 @@ void ScGridWindow::HideNoteMarker()
     mpNoteMarker.reset();
 }
 
-com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+css::uno::Reference< css::accessibility::XAccessible >
     ScGridWindow::CreateAccessible()
 {
-    com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc= GetAccessible(false);
+    css::uno::Reference< css::accessibility::XAccessible > xAcc= GetAccessible(false);
     if (xAcc.is())
     {
         return xAcc;

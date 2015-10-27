@@ -96,9 +96,9 @@ class ScServiceProvider
 {
 public:
                             // pDocShell is not needed for all Services
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    static css::uno::Reference< css::uno::XInterface >
                             MakeInstance( sal_uInt16 nType, ScDocShell* pDocShell );
-    static ::com::sun::star::uno::Sequence<OUString> GetAllServiceNames();
+    static css::uno::Sequence<OUString> GetAllServiceNames();
     static sal_uInt16       GetProviderType(const OUString& rServiceName);
 };
 

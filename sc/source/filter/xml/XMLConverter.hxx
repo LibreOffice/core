@@ -42,10 +42,10 @@ public:
 
 // helper methods
     static ScDocument*  GetScDocument(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel );
+                            css::uno::Reference< css::frame::XModel > xModel );
 
 // IMPORT: GeneralFunction / ScSubTotalFunc
-    static ::com::sun::star::sheet::GeneralFunction
+    static css::sheet::GeneralFunction
                         GetFunctionFromString(
                             const OUString& rString );
     static ScSubTotalFunc GetSubTotalFuncFromString(
@@ -54,7 +54,7 @@ public:
 // EXPORT: GeneralFunction / ScSubTotalFunc
     static void         GetStringFromFunction(
                             OUString& rString,
-                            const ::com::sun::star::sheet::GeneralFunction eFunction,
+                            const css::sheet::GeneralFunction eFunction,
                             bool bAppendStr = false );
     static void         GetStringFromFunction(
                             OUString& rString,
@@ -62,14 +62,14 @@ public:
                             bool bAppendStr = false );
 
 // IMPORT: DataPilotFieldOrientation
-    static ::com::sun::star::sheet::DataPilotFieldOrientation
+    static css::sheet::DataPilotFieldOrientation
                         GetOrientationFromString(
                             const OUString& rString );
 
 // EXPORT: DataPilotFieldOrientation
     static void         GetStringFromOrientation(
                             OUString& rString,
-                            const ::com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
+                            const css::sheet::DataPilotFieldOrientation eOrientation,
                             bool bAppendStr = false );
 
 // IMPORT: Detective
@@ -123,12 +123,12 @@ enum ScXMLConditionToken
 struct ScXMLConditionParseResult
 {
     ScXMLConditionToken meToken;            /// The leading condition token.
-    ::com::sun::star::sheet::ValidationType
+    css::sheet::ValidationType
                         meValidation;       /// A data validation type if existing.
-    ::com::sun::star::sheet::ConditionOperator
+    css::sheet::ConditionOperator
                         meOperator;         /// A comparison operator if existing.
-    OUString     maOperand1;         /// First operand of the token or comparison value.
-    OUString     maOperand2;         /// Second operand of 'between' conditions.
+    OUString            maOperand1;         /// First operand of the token or comparison value.
+    OUString            maOperand2;         /// Second operand of 'between' conditions.
     sal_Int32           mnEndIndex;         /// Index of first character following the condition.
 };
 

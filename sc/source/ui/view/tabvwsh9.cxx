@@ -69,7 +69,7 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
         return;
 
     sal_Int8 nType( pGalleryItem->GetType() );
-    if ( nType == com::sun::star::gallery::GalleryItemType::GRAPHIC )
+    if ( nType == css::gallery::GalleryItemType::GRAPHIC )
     {
         MakeDrawLayer();
 
@@ -79,7 +79,7 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
         OUString aPath, aFilter;
         PasteGraphic( aPos, aGraphic, aPath, aFilter );
     }
-    else if ( nType == com::sun::star::gallery::GalleryItemType::MEDIA )
+    else if ( nType == css::gallery::GalleryItemType::MEDIA )
     {
         //  for sounds (linked or not), insert a hyperlink button,
         //  like in Impress and Writer

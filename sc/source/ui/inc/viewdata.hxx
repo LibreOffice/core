@@ -142,11 +142,11 @@ private:
                     ScViewDataTable();
 
     void            WriteUserDataSequence(
-                        com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
+                        css::uno::Sequence <css::beans::PropertyValue>& rSettings,
                         const ScViewData& rViewData, SCTAB nTab ) const;
 
     void            ReadUserDataSequence(
-                        const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
+                        const css::uno::Sequence <css::beans::PropertyValue>& rSettings,
                         ScViewData& rViewData, SCTAB nTab, bool& rHasZoom);
 public:
     ~ScViewDataTable();
@@ -251,8 +251,8 @@ public:
     void            ReadUserData(const OUString& rData);
     void            WriteExtOptions( ScExtDocOptions& rOpt ) const;
     void            ReadExtOptions( const ScExtDocOptions& rOpt );
-    void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings) const;
-    void            ReadUserDataSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
+    void            WriteUserDataSequence(css::uno::Sequence <css::beans::PropertyValue>& rSettings) const;
+    void            ReadUserDataSequence(const css::uno::Sequence <css::beans::PropertyValue>& rSettings);
 
     ScDocument*     GetDocument() const;
 

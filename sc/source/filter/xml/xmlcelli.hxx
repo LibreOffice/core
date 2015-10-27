@@ -130,16 +130,14 @@ public:
 
     ScXMLTableRowCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,
-                       const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        const bool bIsCovered, const sal_Int32 nRepeatedRows );
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                       const bool bIsCovered, const sal_Int32 nRepeatedRows );
 
     virtual ~ScXMLTableRowCellContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     void PushParagraphSpan(const OUString& rSpan, const OUString& rStyleName);
     void PushParagraphFieldDate(const OUString& rStyleName);

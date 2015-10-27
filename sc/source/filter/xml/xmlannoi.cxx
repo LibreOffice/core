@@ -111,7 +111,7 @@ ScXMLAnnotationContext::~ScXMLAnnotationContext()
 {
 }
 
-void ScXMLAnnotationContext::StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList)
+void ScXMLAnnotationContext::StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList)
 {
     if (pShapeContext)
         pShapeContext->StartElement(xAttrList);
@@ -119,8 +119,7 @@ void ScXMLAnnotationContext::StartElement(const com::sun::star::uno::Reference< 
 
 SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                            const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 

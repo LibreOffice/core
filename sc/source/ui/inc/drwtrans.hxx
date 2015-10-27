@@ -77,7 +77,7 @@ public:
     virtual void        AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
-                                        const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) override;
+                                        const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        ObjectReleased() override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
@@ -95,8 +95,8 @@ public:
     sal_uInt16              GetDragSourceFlags() const      { return nDragSourceFlags; }
 
     static ScDrawTransferObj* GetOwnClipboard( vcl::Window* pUIWin );
-    virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;
+    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     const ScRangeListVector& GetProtectedChartRangesVector() const { return m_aProtectedChartRangesVector; }
 };

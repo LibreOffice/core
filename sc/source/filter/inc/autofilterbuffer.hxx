@@ -36,7 +36,7 @@ namespace xls {
 /** Contains UNO API filter settings for a column in a filtered range. */
 struct ApiFilterSettings
 {
-    typedef ::std::vector<com::sun::star::sheet::TableFilterField3> FilterFieldVector;
+    typedef ::std::vector<css::sheet::TableFilterField3> FilterFieldVector;
 
     FilterFieldVector   maFilterFields;     /// List of UNO API filter settings.
     OptValue< bool >    mobNeedsRegExp;     /// If set, requires regular expressions to be enabled/disabled.
@@ -112,7 +112,7 @@ private:
 /** A filter criterion for a custom filter. */
 struct FilterCriterionModel
 {
-    ::com::sun::star::uno::Any maValue; /// Comparison operand.
+    css::uno::Any       maValue; /// Comparison operand.
     sal_Int32           mnOperator;     /// Comparison operator.
     sal_uInt8           mnDataType;     /// Operand data type (BIFF only).
     sal_uInt8           mnStrLen;       /// Length of string operand (BIFF5-BIFF8 only).
@@ -197,15 +197,13 @@ public:
     FilterColumn&       createFilterColumn();
 
     /** Applies the filter to the passed filter descriptor. */
-    void                finalizeImport(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::sheet::XSheetFilterDescriptor3>& rxFilterDesc );
+    void                finalizeImport( const css::uno::Reference< css::sheet::XSheetFilterDescriptor3>& rxFilterDesc );
 
 private:
     typedef RefVector< FilterColumn > FilterColumnVector;
 
     FilterColumnVector  maFilterColumns;
-    ::com::sun::star::table::CellRangeAddress maRange;
+    css::table::CellRangeAddress maRange;
 };
 
 class AutoFilterBuffer : public WorkbookHelper
@@ -222,7 +220,7 @@ public:
 
     /** Applies the filters to the passed database range object.
         @return  True = this buffer contains valid auto filter settings. */
-    bool                finalizeImport( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRange >& rxDatabaseRange );
+    bool                finalizeImport( const css::uno::Reference< css::sheet::XDatabaseRange >& rxDatabaseRange );
 
 private:
     /** Returns the auto filter object used to perform auto filtering. */

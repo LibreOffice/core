@@ -431,7 +431,7 @@ void processDataStream( ScDocShell& rShell, const sc::ImportPostProcessData& rDa
 
 }
 
-bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
+bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css::embed::XStorage >& xStor )
 {
     LoadMediumGuard aLoadGuard(&aDocument);
 
@@ -513,7 +513,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
     return bRet;
 }
 
-bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
+bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const css::uno::Reference< css::embed::XStorage >& xStor )
 {
     aDocument.EnableIdle(false);
 
@@ -569,7 +569,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
         if (GetMedium())
         {
             const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
-            nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
+            nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : css::document::UpdateDocMode::NO_UPDATE;
         }
 
         {
@@ -984,7 +984,7 @@ bool ScDocShell::LoadFrom( SfxMedium& rMedium )
     if (GetMedium())
     {
         const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
-        nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
+        nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : css::document::UpdateDocMode::NO_UPDATE;
     }
 
     //  until loading/saving only the styles in XML is implemented,
@@ -1053,7 +1053,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     rMedium.GetPhysicalName();  //! Call CreateFileStream directly, if available
 
     const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
-    nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
+    nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : css::document::UpdateDocMode::NO_UPDATE;
 
     const SfxFilter* pFilter = rMedium.GetFilter();
     if (pFilter)
@@ -2646,7 +2646,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     bDocumentModifiedPending( false ),
     bUpdateEnabled  ( true ),
     nDocumentLock   ( 0 ),
-    nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG),
+    nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG),
     pOldAutoDBRange ( NULL ),
     pDocHelper      ( NULL ),
     pAutoStyleList  ( NULL ),
@@ -2691,7 +2691,7 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
     bDocumentModifiedPending( false ),
     bUpdateEnabled  ( true ),
     nDocumentLock   ( 0 ),
-    nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG),
+    nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG),
     pOldAutoDBRange ( NULL ),
     pDocHelper      ( NULL ),
     pAutoStyleList  ( NULL ),
@@ -3157,13 +3157,13 @@ bool ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
             // when password protection is applied change tracking must always be active
             SetChangeRecording( true );
 
-            ::com::sun::star::uno::Sequence< sal_Int8 > aProtectionHash;
+            css::uno::Sequence< sal_Int8 > aProtectionHash;
             SvPasswordHelper::GetHashPassword( aProtectionHash, rNewPassword );
             pChangeTrack->SetProtection( aProtectionHash );
         }
         else
         {
-            pChangeTrack->SetProtection( ::com::sun::star::uno::Sequence< sal_Int8 >() );
+            pChangeTrack->SetProtection( css::uno::Sequence< sal_Int8 >() );
         }
         bRes = true;
 
@@ -3177,7 +3177,7 @@ bool ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
     return bRes;
 }
 
-bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
+bool ScDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash )
 {
     bool bRes = false;
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();

@@ -113,7 +113,7 @@ OUString ScDPUtil::getDateGroupName(
             return OUString::number(nValue);
         case sheet::DataPilotFieldGroupBy::QUARTERS:
             return ScGlobal::pLocaleData->getQuarterAbbreviation(sal_Int16(nValue-1));    // nValue is 1-based
-        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
+        case css::sheet::DataPilotFieldGroupBy::MONTHS:
             return ScGlobal::GetCalendar()->getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, sal_Int16(nValue-1), 0);    // 0-based, get short name
         case sheet::DataPilotFieldGroupBy::DAYS:
@@ -337,16 +337,16 @@ sal_Int32 ScDPUtil::getDatePartValue(
 
         switch ( nDatePart )
         {
-            case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:
+            case css::sheet::DataPilotFieldGroupBy::YEARS:
                 nResult = aDate.GetYear();
                 break;
-            case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS:
+            case css::sheet::DataPilotFieldGroupBy::QUARTERS:
                 nResult = 1 + (aDate.GetMonth() - 1) / 3;     // 1..4
                 break;
-            case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
+            case css::sheet::DataPilotFieldGroupBy::MONTHS:
                 nResult = aDate.GetMonth();     // 1..12
                 break;
-            case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
+            case css::sheet::DataPilotFieldGroupBy::DAYS:
                 {
                     Date aYearStart(1, 1, aDate.GetYear());
                     nResult = (aDate - aYearStart) + 1;       // Jan 01 has value 1
@@ -398,7 +398,7 @@ OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc
     return aRet.makeStringAndClear();
 }
 
-ScSubTotalFunc ScDPUtil::toSubTotalFunc(com::sun::star::sheet::GeneralFunction eGenFunc)
+ScSubTotalFunc ScDPUtil::toSubTotalFunc(css::sheet::GeneralFunction eGenFunc)
 {
     ScSubTotalFunc eSubTotal;
     switch (eGenFunc)
