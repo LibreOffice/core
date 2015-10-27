@@ -67,8 +67,6 @@
 #include <cassert>
 #include <limits>
 
-#include <boost/bind.hpp>
-
 using namespace ::com::sun::star;
 
 
@@ -3000,7 +2998,7 @@ const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
         return NULL;
 
     // And find the first attribute with feature.
-    it = std::find_if(it, aAttribs.end(), boost::bind(&EditCharAttrib::IsFeature, _1) == true);
+    it = std::find_if(it, aAttribs.end(), [](const EditCharAttrib& aAttrib) { return aAttrib.IsFeature(); } );
     return it == aAttribs.end() ? NULL : &(*it);
 }
 
@@ -3023,7 +3021,7 @@ public:
 void CharAttribList::DeleteEmptyAttribs( SfxItemPool& rItemPool )
 {
     std::for_each(aAttribs.begin(), aAttribs.end(), RemoveEmptyAttrItem(rItemPool));
-    aAttribs.erase_if(boost::bind(&EditCharAttrib::IsEmpty, _1) == true);
+    aAttribs.erase_if([](const EditCharAttrib& aAttrib) { return aAttrib.IsEmpty(); } );
     bHasEmptyAttribs = false;
 }
 
