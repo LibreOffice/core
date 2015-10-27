@@ -9,13 +9,21 @@
 #
 
 # we link all object files from these libraries into one, merged library
+
 MERGE_LIBRARY_LIST := \
-	avmedia \
+       acc \
+       $(call gb_Helper_optional,AVMEDIA,avmedia) \
+       $(if $(filter MACOSX,$(OS)),\
+               avmediaMacAVF \
+               $(if $(ENABLE_MACOSX_SANDBOX),,avmediaQuickTime) \
+       ) \
 	$(if $(filter $(OS),ANDROID),,basebmp) \
 	basegfx \
+        bib \
 	canvastools \
 	configmgr \
 	cppcanvas \
+	ctl \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	deployment \
 	deploymentmisc \
@@ -23,11 +31,21 @@ MERGE_LIBRARY_LIST := \
 	$(if $(USING_X11),desktop_detector) \
 	drawinglayer \
 	editeng \
+        eme \
+        evtatt \
 	filterconfig \
 	fsstorage \
 	fwe \
 	fwi \
 	fwk \
+       $(call gb_Helper_optional,DBCONNECTIVITY, \
+               flat \
+               file) \
+       $(if $(filter $(ENABLE_FIREBIRD_SDBC),TRUE),firebird_sdbc) \
+       fps_office \
+       for \
+       forui \
+       frm \
 	$(call gb_Helper_optional,DESKTOP,helplinker) \
 	i18npool \
 	i18nutil \
@@ -56,9 +74,27 @@ MERGE_LIBRARY_LIST := \
 	utl \
 	uui \
 	vcl \
-	xmlscript \
 	xo \
 	xstor \
+       xmlscript \
+       xmlfa \
+       xmlfd \
+       xof \
+       $(if $(filter $(OS),WNT), \
+               ado \
+               $(if $(DISABLE_ATL),,oleautobridge) \
+               smplmail \
+               wininetbe1 \
+       ) \
+       $(if $(filter $(OS),MACOSX), \
+               $(if $(ENABLE_MACOSX_SANDBOX),, \
+                       AppleRemote \
+               ) \
+               fps_aqua \
+               MacOSXSpell \
+       ) \
+
+
 
 
 # allow module-deps.pl to color based on this.
