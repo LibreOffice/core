@@ -271,6 +271,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 break;
             }
         case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
+        case SID_ATTR_CHAR_BACK_COLOR: nEEWhich = EE_CHAR_BKGCOLOR; break;
         case SID_ATTR_CHAR_UNDERLINE:
         {
             if( rReq.GetArgs() )
@@ -707,6 +708,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 }
                 break;
             case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
+            case SID_ATTR_CHAR_BACK_COLOR: nEEWhich = EE_CHAR_BKGCOLOR; break;
             case SID_ATTR_CHAR_UNDERLINE: nEEWhich = EE_CHAR_UNDERLINE;break;
             case SID_ATTR_CHAR_OVERLINE: nEEWhich = EE_CHAR_OVERLINE;break;
             case SID_ATTR_CHAR_CONTOUR: nEEWhich = EE_CHAR_OUTLINE; break;
