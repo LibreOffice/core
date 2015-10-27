@@ -16,6 +16,24 @@
       "revId": "3d318424a5a3493ceaa4e824024a722876d1430b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_63170cee",
+        "filename": "setup_native/source/win32/customactions/shellextensions/checkdirectory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-27T12:07:31Z",
+      "side": 1,
+      "message": "Also, the directory is called tools instead of tool",
+      "parentUuid": "9a061dce_19a5de03",
+      "revId": "3d318424a5a3493ceaa4e824024a722876d1430b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
