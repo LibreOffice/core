@@ -33,6 +33,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/txtimp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }

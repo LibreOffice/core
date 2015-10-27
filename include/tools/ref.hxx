@@ -20,11 +20,8 @@
 #define INCLUDED_TOOLS_REF_HXX
 
 #include <sal/config.h>
-
 #include <cassert>
-
 #include <tools/toolsdllapi.h>
-#include <vector>
 
 /**
    This implements similar functionality to boost::intrusive_ptr
@@ -91,55 +88,6 @@ protected:
 };
 
 }
-
-template<typename T>
-class SvRefMemberList : private std::vector<T>
-{
-private:
-    typedef typename std::vector<T> base_t;
-
-public:
-    using base_t::size;
-    using base_t::front;
-    using base_t::back;
-    using base_t::operator[];
-    using base_t::begin;
-    using base_t::end;
-    using typename base_t::iterator;
-    using typename base_t::const_iterator;
-    using base_t::rbegin;
-    using base_t::rend;
-    using typename base_t::reverse_iterator;
-    using base_t::empty;
-
-    inline ~SvRefMemberList() { clear(); }
-    inline void clear()
-    {
-        for( typename base_t::const_iterator it = base_t::begin(); it != base_t::end(); ++it )
-        {
-              T p = *it;
-              if( p )
-                  p->ReleaseRef();
-        }
-        base_t::clear();
-    }
-
-    inline void push_back( T p )
-    {
-        base_t::push_back( p );
-        p->AddFirstRef();
-    }
-
-    inline T pop_back()
-    {
-        T p = base_t::back();
-        base_t::pop_back();
-        if( p )
-            p->ReleaseRef();
-        return p;
-    }
-};
-
 
 /** Classes that want to be referenced-counted via SvRef<T>, should extend this base class */
 class TOOLS_DLLPUBLIC SvRefBase

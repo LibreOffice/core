@@ -24,6 +24,7 @@
 #include "scdllapi.h"
 
 #include <set>
+#include <vector>
 
 namespace sc {
 

@@ -14,6 +14,7 @@
 #include <svl/listener.hxx>
 
 #include <unordered_map>
+#include <vector>
 
 class ScRangeList;
 

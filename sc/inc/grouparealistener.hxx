@@ -14,6 +14,7 @@
 #include <calcmacros.hxx>
 
 #include <svl/listener.hxx>
+#include <vector>
 
 class ScFormulaCell;
 class ScDocument;
