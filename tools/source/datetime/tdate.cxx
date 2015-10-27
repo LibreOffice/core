@@ -31,6 +31,15 @@ static const sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
 
 #define MAX_DAYS    3636532
 
+namespace
+{
+
+inline long ImpYearToDays( sal_uInt16 nYear )
+{
+    const long nYr(static_cast<long>(nYear) - 1);
+    return nYr*365 + nYr/4 - nYr/100 + nYr/400;
+}
+
 inline bool ImpIsLeapYear( sal_uInt16 nYear )
 {
     return ( ( ((nYear % 4) == 0) && ((nYear % 100) != 0) ) ||
@@ -49,6 +58,8 @@ inline sal_uInt16 ImplDaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
         else
             return aDaysInMonth[nMonth-1];
     }
+}
+
 }
 
 // static
@@ -75,12 +86,9 @@ long Date::GetAsNormalizedDays() const
 
 long Date::DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
-    long nDays;
-
     Normalize( nDay, nMonth, nYear);
 
-    nDays = ((sal_uIntPtr)nYear-1) * 365;
-    nDays += ((nYear-1) / 4) - ((nYear-1) / 100) + ((nYear-1) / 400);
+    long nDays = ImpYearToDays(nYear);
     for( sal_uInt16 i = 1; i < nMonth; i++ )
         nDays += ImplDaysInMonth(i,nYear);
     nDays += nDay;
@@ -98,8 +106,7 @@ static void DaysToDate( long nDays,
     {
         nTempDays = (long)nDays;
         rYear = (sal_uInt16)((nTempDays / 365) - i);
-        nTempDays -= ((sal_uIntPtr)rYear-1) * 365;
-        nTempDays -= ((rYear-1) / 4) - ((rYear-1) / 100) + ((rYear-1) / 400);
+        nTempDays -= ImpYearToDays(rYear);
         bCalc = false;
         if ( nTempDays < 1 )
         {
