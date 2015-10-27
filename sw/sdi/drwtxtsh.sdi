@@ -656,6 +656,14 @@ interface TextDrawFont
         StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
+    SID_ATTR_CHAR_BACK_COLOR // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTextCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_ATTR_CHAR_WORDLINEMODE // status(final|play)
     [
         ExecMethod = Execute ;

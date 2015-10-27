@@ -237,6 +237,13 @@ interface _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_ATTR_CHAR_BACK_COLOR // api:
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_CHAR_DLG_EFFECT
     [
         ExecMethod = Exec ;
