@@ -33,13 +33,6 @@ namespace basegfx
         sal_uInt16*                 mpZBuffer;
 
     public:
-        // reset
-        void resetZ()
-        {
-            reset();
-            memset(mpZBuffer, 0, sizeof(sal_uInt16) * mnCount);
-        }
-
         // constructor/destructor
         BZPixelRaster(sal_uInt32 nWidth, sal_uInt32 nHeight)
         :   BPixelRaster(nWidth, nHeight),

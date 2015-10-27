@@ -112,36 +112,6 @@ namespace basegfx
         bool decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const;
     };
 
-    // addition, subtraction
-    inline B3DHomMatrix operator+(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
-    {
-        B3DHomMatrix aSum(rMatA);
-        aSum += rMatB;
-        return aSum;
-    }
-
-    inline B3DHomMatrix operator-(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
-    {
-        B3DHomMatrix aDiv(rMatA);
-        aDiv -= rMatB;
-        return aDiv;
-    }
-
-    // multiplication, division by constant value
-    inline B3DHomMatrix operator*(const B3DHomMatrix& rMat, double fValue)
-    {
-        B3DHomMatrix aNew(rMat);
-        aNew *= fValue;
-        return aNew;
-    }
-
-    inline B3DHomMatrix operator/(const B3DHomMatrix& rMat, double fValue)
-    {
-        B3DHomMatrix aNew(rMat);
-        aNew *= 1.0 / fValue;
-        return aNew;
-    }
-
     inline B3DHomMatrix operator*(const B3DHomMatrix& rMatA, const B3DHomMatrix& rMatB)
     {
         B3DHomMatrix aMul(rMatB);
