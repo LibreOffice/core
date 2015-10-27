@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_63ef0cb1",
+        "filename": "chart2/uiconfig/ui/sidebarerrorbar.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-27T14:22:17Z",
+      "side": 0,
+      "message": "When I added this frame, I assumed the label would get updated depending on the error bar currently edited so it\u0027d read \"Y error bars\", \"X error bars\", depending on the type of e.b. :)\n\nThen again, there\u0027s a method to update the panel title, so maybe we can show the type of error bar there ...",
+      "revId": "232a98b1aa771d557385aaac75df67240fa365e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
