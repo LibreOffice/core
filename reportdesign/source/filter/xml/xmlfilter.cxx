@@ -459,7 +459,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     {
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
-        SfxMediumRef pMedium = new SfxMedium(
+        tools::SvRef<SfxMedium> pMedium = new SfxMedium(
                 sFileName, ( StreamMode::READ | StreamMode::NOCREATE ) );
 
         if( pMedium )

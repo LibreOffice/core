@@ -96,7 +96,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
     case FILETYPE_GRF:
         if( !bLoadError )
         {
-            SfxMediumRef xTmpMed;
+            tools::SvRef<SfxMedium> xTmpMed;
 
             if( SotClipboardFormatId::GDIMETAFILE == nFmt || SotClipboardFormatId::BITMAP == nFmt ||
                 SotClipboardFormatId::SVXB == nFmt )
@@ -266,7 +266,7 @@ bool SvFileObject::LoadFile_Impl()
         bLoadAgain = bDataReady = bInNewData = false;
         bWaitForData = true;
 
-        SfxMediumRef xTmpMed = xMed;
+        tools::SvRef<SfxMedium> xTmpMed = xMed;
         bInCallDownload = true;
         xMed->Download( LINK( this, SvFileObject, LoadGrfReady_Impl ) );
         bInCallDownload = false;
@@ -485,7 +485,7 @@ IMPL_LINK_NOARG_TYPED( SvFileObject, LoadGrfReady_Impl, void*, void )
         if( xMed.Is() )
         {
             xMed->SetDoneLink( Link<void*,void>() );
-            pDelMed = new SfxMediumRef(xMed);
+            pDelMed = new tools::SvRef<SfxMedium>(xMed);
             nPostUserEventId = Application::PostUserEvent(
                         LINK( this, SvFileObject, DelMedium_Impl ),
                         pDelMed);
@@ -496,7 +496,7 @@ IMPL_LINK_NOARG_TYPED( SvFileObject, LoadGrfReady_Impl, void*, void )
 
 IMPL_LINK_TYPED( SvFileObject, DelMedium_Impl, void*, p, void )
 {
-    SfxMediumRef* deleteMedium = static_cast<SfxMediumRef*>(p);
+    tools::SvRef<SfxMedium>* deleteMedium = static_cast<tools::SvRef<SfxMedium>*>(p);
     nPostUserEventId = 0;
     assert(pDelMed == deleteMedium);
     pDelMed = NULL;

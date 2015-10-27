@@ -28,14 +28,14 @@ namespace sfx2 { class FileDialogHelper; }
 
 class SvFileObject : public sfx2::SvLinkSource
 {
-    OUString            sFileNm;
-    OUString            sFilter;
-    OUString            sReferer;
+    OUString                     sFileNm;
+    OUString                     sFilter;
+    OUString                     sReferer;
     Link<const OUString&, void>  aEndEditLink;
-    SfxMediumRef        xMed;
-    ImplSVEvent*        nPostUserEventId;
-    SfxMediumRef*       pDelMed;
-    VclPtr<vcl::Window> pOldParent;
+    tools::SvRef<SfxMedium>      xMed;
+    ImplSVEvent*                 nPostUserEventId;
+    tools::SvRef<SfxMedium>*     pDelMed;
+    VclPtr<vcl::Window>          pOldParent;
 
     sal_uInt8 nType;
 

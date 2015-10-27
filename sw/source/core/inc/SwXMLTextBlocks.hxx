@@ -34,12 +34,12 @@ class SvxMacroTableDtor;
 class SwXMLTextBlocks : public SwImpBlocks
 {
 protected:
-    bool         bAutocorrBlock;
-    bool         bBlock;
-    SfxObjectShellRef xDocShellRef;
-    sal_uInt16       nFlags;
-    OUString aPackageName;
-    SfxMediumRef xMedium;
+    bool                    bAutocorrBlock;
+    bool                    bBlock;
+    SfxObjectShellRef       xDocShellRef;
+    sal_uInt16              nFlags;
+    OUString                aPackageName;
+    tools::SvRef<SfxMedium> xMedium;
 
     void ReadInfo();
     void WriteInfo();

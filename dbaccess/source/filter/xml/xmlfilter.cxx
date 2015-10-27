@@ -295,7 +295,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     {
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
-        SfxMediumRef pMedium(0);
+        tools::SvRef<SfxMedium> pMedium(0);
         if (!xStorage.is())
         {
             OUString sStreamRelPath;

@@ -264,8 +264,6 @@ public:
     static sal_uInt32   CreatePasswordToModifyHash( const OUString& aPasswd, bool bWriter );
 };
 
-typedef tools::SvRef<SfxMedium> SfxMediumRef;
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
