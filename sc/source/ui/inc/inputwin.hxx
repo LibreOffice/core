@@ -82,7 +82,7 @@ public:
 
     virtual void            SetFormulaMode( bool bSet ) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;

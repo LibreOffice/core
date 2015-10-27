@@ -25,7 +25,7 @@
 #include "miscuno.hxx"
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace css::uno;
 
 #define CFGPATH_FILTER          "Office.Calc/Filter/Import"
 

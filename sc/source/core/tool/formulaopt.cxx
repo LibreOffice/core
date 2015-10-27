@@ -695,7 +695,7 @@ void ScFormulaCfg::SetOptions( const ScFormulaOptions& rNew )
     SetModified();
 }
 
-void ScFormulaCfg::Notify( const ::com::sun::star::uno::Sequence< OUString >& rNames)
+void ScFormulaCfg::Notify( const css::uno::Sequence< OUString >& rNames)
 {
     UpdateFromProperties( rNames );
 }

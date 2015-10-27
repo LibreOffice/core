@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-typedef cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleValue>
+typedef cppu::ImplHelper1< css::accessibility::XAccessibleValue>
                     ScAccessibleCellBaseImpl;
 
 class ScAccessibleCellBase
@@ -36,8 +36,7 @@ class ScAccessibleCellBase
 public:
     //=====  internal  ========================================================
     ScAccessibleCellBase(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScAddress& rCellAddress,
         sal_Int32 nIndex);
@@ -46,13 +45,13 @@ protected:
 public:
 
     virtual bool SAL_CALL isVisible()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     ///=====  XInterface  =====================================================
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface(
+        css::uno::Type const & rType )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL acquire() throw () override;
 
@@ -61,48 +60,48 @@ public:
     ///=====  XAccessibleComponent  ============================================
 
     virtual sal_Int32 SAL_CALL getForeground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int32 SAL_CALL getBackground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     ///=====  XAccessibleContext  ==============================================
 
     /// Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     /// Return this object's description.
     virtual OUString SAL_CALL
         createAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
         createAccessibleName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 public:
     ///=====  XAccessibleValue  ================================================
 
-    virtual ::com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
         getCurrentValue()
-        throw (::com::sun::star::uno::RuntimeException,
+        throw (css::uno::RuntimeException,
                std::exception) override;
 
     virtual sal_Bool SAL_CALL
-        setCurrentValue( const ::com::sun::star::uno::Any& aNumber )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        setCurrentValue( const css::uno::Any& aNumber )
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
         getMaximumValue(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
         getMinimumValue(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     ///=====  XServiceInfo  ====================================================
 
@@ -110,20 +109,20 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     ///=====  XTypeProvider  ===================================================
 
     /// returns the possible types
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
         getTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Returns a implementation id.
     */
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     ScAddress maCellAddress;
@@ -134,18 +133,17 @@ protected:
 
 private:
     virtual bool IsEditable(
-        const com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
 protected:
     OUString SAL_CALL GetNote()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     OUString SAL_CALL GetAllDisplayNote()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception);
     OUString SAL_CALL getShadowAttrs()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception);
     OUString SAL_CALL getBorderAttrs()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+        throw (css::uno::RuntimeException, std::exception);
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }
 };

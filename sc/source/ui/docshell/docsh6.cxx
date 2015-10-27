@@ -473,7 +473,7 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
             {
                 // switch native symbols to English.
                 ScCompiler aComp(NULL, ScAddress());
-                ScCompiler::OpCodeMapPtr xMap = aComp.GetOpCodeMap(::com::sun::star::sheet::FormulaLanguage::ENGLISH);
+                ScCompiler::OpCodeMapPtr xMap = aComp.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH);
                 ScCompiler::SetNativeSymbols(xMap);
             }
             else

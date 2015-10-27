@@ -362,7 +362,7 @@ sal_Int32 XclExpChRoot::CalcChartYFromHmm( sal_Int32 nPosY ) const
     return ::limit_cast< sal_Int32, double >( (nPosY - mxChData->mnBorderGapY) / mxChData->mfUnitSizeY, 0, EXC_CHART_TOTALUNITS );
 }
 
-XclChRectangle XclExpChRoot::CalcChartRectFromHmm( const ::com::sun::star::awt::Rectangle& rRect ) const
+XclChRectangle XclExpChRoot::CalcChartRectFromHmm( const css::awt::Rectangle& rRect ) const
 {
     XclChRectangle aRect;
     aRect.mnX = CalcChartXFromHmm( rRect.X );
@@ -1220,9 +1220,9 @@ void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget,
                 // calculate absolute position for CHTEXT record
                 Reference< cssc::XChartDocument > xChart1Doc( GetChartDocument(), UNO_QUERY_THROW );
                 Reference< XShape > xTitleShape( xChart1Doc->getTitle(), UNO_SET_THROW );
-                ::com::sun::star::awt::Point aPos = xTitleShape->getPosition();
-                ::com::sun::star::awt::Size aSize = xTitleShape->getSize();
-                ::com::sun::star::awt::Rectangle aRect( aPos.X, aPos.Y, aSize.Width, aSize.Height );
+                css::awt::Point aPos = xTitleShape->getPosition();
+                css::awt::Size aSize = xTitleShape->getSize();
+                css::awt::Rectangle aRect( aPos.X, aPos.Y, aSize.Width, aSize.Height );
                 maData.maRect = CalcChartRectFromHmm( aRect );
                 ::insert_value( maData.mnFlags2, EXC_CHTEXT_POS_MOVED, 0, 4 );
                 // manual title position implies manual plot area
@@ -2309,12 +2309,12 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
             mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_CHARTSIZE, EXC_CHFRAMEPOS_PARENT ) );
             XclChFramePos& rFramePos = mxFramePos->GetFramePosData();
             rFramePos.mnTLMode = EXC_CHFRAMEPOS_CHARTSIZE;
-            ::com::sun::star::awt::Point aLegendPos = xChart1Legend->getPosition();
+            css::awt::Point aLegendPos = xChart1Legend->getPosition();
             rFramePos.maRect.mnX = maData.maRect.mnX = CalcChartXFromHmm( aLegendPos.X );
             rFramePos.maRect.mnY = maData.maRect.mnY = CalcChartYFromHmm( aLegendPos.Y );
             // legend size, Excel expects points in CHFRAMEPOS record
             rFramePos.mnBRMode = EXC_CHFRAMEPOS_ABSSIZE_POINTS;
-            ::com::sun::star::awt::Size aLegendSize = xChart1Legend->getSize();
+            css::awt::Size aLegendSize = xChart1Legend->getSize();
             rFramePos.maRect.mnWidth = static_cast< sal_uInt16 >( aLegendSize.Width * EXC_POINTS_PER_HMM + 0.5 );
             rFramePos.maRect.mnHeight = static_cast< sal_uInt16 >( aLegendSize.Height * EXC_POINTS_PER_HMM + 0.5 );
             maData.maRect.mnWidth = CalcChartXFromHmm( aLegendSize.Width );
@@ -3290,7 +3290,7 @@ void XclExpChAxesSet::WriteBody( XclExpStream& rStrm )
 static void lcl_getChartSubTitle(const Reference<XChartDocument>& xChartDoc,
                                  OUString& rSubTitle)
 {
-    Reference< ::com::sun::star::chart::XChartDocument > xChartDoc1(xChartDoc, UNO_QUERY);
+    Reference< css::chart::XChartDocument > xChartDoc1(xChartDoc, UNO_QUERY);
     if (!xChartDoc1.is())
         return;
 

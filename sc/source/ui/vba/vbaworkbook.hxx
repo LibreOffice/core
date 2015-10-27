@@ -52,7 +52,7 @@ public:
     virtual css::uno::Any SAL_CALL Windows( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL Protect( const css::uno::Any & aPassword ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL SaveAs( const css::uno::Any& FileName, const css::uno::Any& FileFormat, const css::uno::Any& Password, const css::uno::Any& WriteResPassword, const css::uno::Any& ReadOnlyRecommended, const css::uno::Any& CreateBackup, const css::uno::Any& AccessMode, const css::uno::Any& ConflictResolution, const css::uno::Any& AddToMru, const css::uno::Any& TextCodepage, const css::uno::Any& TextVisualLayout, const css::uno::Any& Local ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL SaveAs( const css::uno::Any& FileName, const css::uno::Any& FileFormat, const css::uno::Any& Password, const css::uno::Any& WriteResPassword, const css::uno::Any& ReadOnlyRecommended, const css::uno::Any& CreateBackup, const css::uno::Any& AccessMode, const css::uno::Any& ConflictResolution, const css::uno::Any& AddToMru, const css::uno::Any& TextCodepage, const css::uno::Any& TextVisualLayout, const css::uno::Any& Local ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL Names( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Any SAL_CALL Styles( const css::uno::Any& Item ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;

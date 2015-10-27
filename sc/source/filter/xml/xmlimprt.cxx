@@ -1977,7 +1977,7 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
 }
 
 ScXMLImport::ScXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+    const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlag)
 :   SvXMLImport( rContext, implementationName, nImportFlag ),
     pDoc( NULL ),
@@ -2443,7 +2443,7 @@ void ScXMLImport::ExamineDefaultStyle()
     }
 }
 
-void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps)
+void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& rChangeProps)
 {
     if (pDoc)
     {
@@ -2951,8 +2951,8 @@ void ScXMLImport::SetStylesToRangesFinished()
 }
 
 // XImporter
-void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ScXMLImport::setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
+throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::setTargetDocument( xDoc );
@@ -2972,9 +2972,9 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
         xActionLockable->addActionLock();
 }
 
-// ::com::sun::star::xml::sax::XDocumentHandler
+// css::xml::sax::XDocumentHandler
 void SAL_CALL ScXMLImport::startDocument()
-throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception )
+throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception )
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::startDocument();
@@ -3188,8 +3188,8 @@ void ScXMLImport::SetStringRefSyntaxIfMissing()
 }
 
 void SAL_CALL ScXMLImport::endDocument()
-    throw(::com::sun::star::xml::sax::SAXException,
-          ::com::sun::star::uno::RuntimeException,
+    throw(css::xml::sax::SAXException,
+          css::uno::RuntimeException,
           std::exception)
 {
     ScXMLImport::MutexGuard aGuard(*this);

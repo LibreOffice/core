@@ -50,7 +50,7 @@ public:
 
     static OUString getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc);
 
-    static ScSubTotalFunc toSubTotalFunc(com::sun::star::sheet::GeneralFunction eGenFunc);
+    static ScSubTotalFunc toSubTotalFunc(css::sheet::GeneralFunction eGenFunc);
 };
 
 #endif

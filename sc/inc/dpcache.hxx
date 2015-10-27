@@ -142,7 +142,7 @@ public:
 
     /**
      * Return a group type identifier.  The values correspond with
-     * com::sun::star::sheet::DataPilotFieldGroupBy constant values.
+     * css::sheet::DataPilotFieldGroupBy constant values.
      *
      * @param nDim 0-based dimension index.
      *

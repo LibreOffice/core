@@ -88,7 +88,7 @@ public:
     /** Returns the type of the item. */
     inline sal_Int32    getType() const { return mnType; }
     /** Returns the value of the item. */
-    inline const ::com::sun::star::uno::Any& getValue() const { return maValue; }
+    inline const css::uno::Any& getValue() const { return maValue; }
     /** Returns the string representation of the item. */
     OUString     getName() const;
     /** Returns true if the item is unused. */
@@ -98,7 +98,7 @@ private:
 friend class PivotCacheItemList;
     // #FIXME hack Sets the value of this item to the given string ( and overwrites type if necessary
     void                setStringValue( const OUString& sName );
-    ::com::sun::star::uno::Any maValue;     /// Value of the item.
+    css::uno::Any       maValue;     /// Value of the item.
     sal_Int32           mnType;             /// Value type (OOXML token identifier).
     bool                mbUnused;
 };
@@ -174,8 +174,8 @@ struct PCSharedItemsModel
 
 struct PCFieldGroupModel
 {
-    ::com::sun::star::util::DateTime maStartDate;   /// Manual or calculated start date for range grouping.
-    ::com::sun::star::util::DateTime maEndDate;     /// Manual or calculated end date for range grouping.
+    css::util::DateTime maStartDate;   /// Manual or calculated start date for range grouping.
+    css::util::DateTime maEndDate;     /// Manual or calculated end date for range grouping.
     double              mfStartValue;       /// Manual or calculated start value for range grouping.
     double              mfEndValue;         /// Manual or calculated end value for range grouping.
     double              mfInterval;         /// Interval for numeric range grouping.
@@ -279,13 +279,13 @@ public:
 
     /** Creates inplace numeric grouping settings. */
     void                convertNumericGrouping(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxDPField ) const;
+                            const css::uno::Reference< css::sheet::XDataPilotField >& rxDPField ) const;
     /** Creates inplace date grouping settings or a new date group field. */
     OUString     createDateGroupField(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField ) const;
+                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField ) const;
     /** Creates a new grouped DataPilot field and returns its name. */
     OUString     createParentGroupField(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField,
+                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames ) const;
 
@@ -358,8 +358,8 @@ struct PCWorksheetSourceModel
     OUString     maRelId;            /// Relation identifier for an external document URL.
     OUString     maSheet;            /// Sheet name for cell range or sheet-local defined names.
     OUString     maDefName;          /// Defined name containing a cell range if present.
-    ::com::sun::star::table::CellRangeAddress
-                        maRange;            /// Source cell range of the data.
+    css::table::CellRangeAddress
+                 maRange;            /// Source cell range of the data.
 
     explicit            PCWorksheetSourceModel();
 };
@@ -397,7 +397,7 @@ public:
     /** Returns true, if the pivot cache is based on a dummy sheet created in finalizeImport. */
     inline bool         isBasedOnDummySheet() const { return mbDummySheet; }
     /** Returns the internal cell range the cache is based on. */
-    inline const ::com::sun::star::table::CellRangeAddress&
+    inline const css::table::CellRangeAddress&
                         getSourceRange() const { return maSheetSrcModel.maRange; }
     /** Returns the relation identifier of the pivot cache records fragment. */
     inline const OUString& getRecordsRelId() const { return maDefModel.maRelId; }

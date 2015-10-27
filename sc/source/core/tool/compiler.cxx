@@ -194,7 +194,7 @@ bool ScCompiler::IsEnglishSymbol( const OUString& rName )
 
 void ScCompiler::InitCharClassEnglish()
 {
-    ::com::sun::star::lang::Locale aLocale( "en", "US", "");
+    css::lang::Locale aLocale( "en", "US", "");
     pCharClassEnglish = new CharClass(
             ::comphelper::getProcessComponentContext(), LanguageTag( aLocale));
 }
@@ -208,7 +208,7 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
     if( eGrammar == FormulaGrammar::GRAM_EXTERNAL )
     {
         meGrammar = eGrammar;
-        mxSymbols = GetOpCodeMap( ::com::sun::star::sheet::FormulaLanguage::NATIVE);
+        mxSymbols = GetOpCodeMap( css::sheet::FormulaLanguage::NATIVE);
     }
     else
     {
@@ -218,7 +218,7 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
         OSL_ENSURE( xMap, "ScCompiler::SetGrammar: unknown formula language");
         if (!xMap)
         {
-            xMap = GetOpCodeMap( ::com::sun::star::sheet::FormulaLanguage::NATIVE);
+            xMap = GetOpCodeMap( css::sheet::FormulaLanguage::NATIVE);
             eMyGrammar = xMap->getGrammar();
         }
 
@@ -4836,7 +4836,7 @@ FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaT
     return extendRangeReference( rTok1, rTok2, aPos,bReuseDoubleRef );
 }
 
-void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const
+void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const
 {
     // All known AddIn functions.
     sheet::FormulaOpCodeMapEntry aEntry;

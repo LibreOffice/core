@@ -75,7 +75,7 @@ CellAddress ApiCellRangeList::getBaseAddress() const
     return CellAddress( mvAddresses.front().Sheet, mvAddresses.front().StartColumn, mvAddresses.front().StartRow );
 }
 
-com::sun::star::uno::Sequence< CellRangeAddress > ApiCellRangeList::toSequence() const
+css::uno::Sequence< CellRangeAddress > ApiCellRangeList::toSequence() const
 {
     return ContainerHelper::vectorToSequence( mvAddresses );
 }
@@ -348,7 +348,7 @@ bool AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
 }
 
 bool AddressConverter::convertToCellAddressUnchecked(
-        com::sun::star::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet )
+        css::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet )
 {
     orAddress.Sheet = nSheet;
     return parseOoxAddress2d(orAddress.Column, orAddress.Row, pStr);
@@ -363,7 +363,7 @@ bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
 }
 
 bool AddressConverter::convertToCellAddress(
-    com::sun::star::table::CellAddress& rAddress,
+    css::table::CellAddress& rAddress,
     const char* pStr, sal_Int16 nSheet, bool bTrackOverflow )
 {
     if (!convertToCellAddressUnchecked(rAddress, pStr, nSheet))

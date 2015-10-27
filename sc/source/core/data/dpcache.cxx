@@ -578,7 +578,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                     else
                     {
                         OUString aQueryStr = rEntry.GetQueryItem().maString.getString();
-                        ::com::sun::star::uno::Sequence< sal_Int32 > xOff;
+                        css::uno::Sequence< sal_Int32 > xOff;
                         OUString aCell = pTransliteration->transliterate(
                             aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(), &xOff);
                         OUString aQuer = pTransliteration->transliterate(

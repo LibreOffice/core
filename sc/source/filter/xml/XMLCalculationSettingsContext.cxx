@@ -35,8 +35,7 @@ using namespace xmloff::token;
 ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     fIterationEpsilon(0.001),
     nIterationCount(100),
@@ -103,8 +102,7 @@ ScXMLCalculationSettingsContext::~ScXMLCalculationSettingsContext()
 
 SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                            const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -152,8 +150,7 @@ void ScXMLCalculationSettingsContext::EndElement()
 ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -185,8 +182,7 @@ ScXMLNullDateContext::~ScXMLNullDateContext()
 
 SvXMLImportContext *ScXMLNullDateContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
+                                            const css::uno::Reference< css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
@@ -200,8 +196,7 @@ void ScXMLNullDateContext::EndElement()
 ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -243,8 +238,7 @@ ScXMLIterationContext::~ScXMLIterationContext()
 
 SvXMLImportContext *ScXMLIterationContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
+                                            const css::uno::Reference< css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 

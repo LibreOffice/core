@@ -30,10 +30,10 @@ private:
 public:
             ScAddInCfg();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
 
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any>
-            GetProperties(const com::sun::star::uno::Sequence< OUString >& rNames)
+    css::uno::Sequence< css::uno::Any>
+            GetProperties(const css::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
 
     using ConfigItem::GetNodeNames;

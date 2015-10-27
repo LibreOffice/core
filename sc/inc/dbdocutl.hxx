@@ -43,8 +43,8 @@ public:
         StrData();
     };
     static void PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::sdbc::XRow>& xRow, long nRowPos,
+                        const css::uno::Reference< css::sdbc::XRow>& xRow,
+                        long nRowPos,
                         long nType, bool bCurrency, StrData* pStrData = NULL );
 };
 

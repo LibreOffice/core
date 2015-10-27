@@ -129,9 +129,9 @@ public:
     bool ExportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId=SotClipboardFormatId::STRING );
 
     static bool ImportData( const OUString& rMimeType,
-                     const ::com::sun::star::uno::Any & rValue );
+                     const css::uno::Any & rValue );
     bool ExportData( const OUString& rMimeType,
-                     ::com::sun::star::uno::Any & rValue  );
+                     css::uno::Any & rValue  );
 
     // after import
     bool IsOverflowRow() const { return bOverflowRow; }

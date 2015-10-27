@@ -407,7 +407,7 @@ void XclExpPCField::InitNumGroupField( const ScDPObject& rDPObj, const ScDPNumGr
     {
         // special case: group by days with step count
         meFieldType = EXC_PCFIELD_DATEGROUP;
-        maNumGroupInfo.SetScDateType( com::sun::star::sheet::DataPilotFieldGroupBy::DAYS );
+        maNumGroupInfo.SetScDateType( css::sheet::DataPilotFieldGroupBy::DAYS );
         SetDateGroupLimit( rNumInfo, true );
     }
     else
@@ -1030,7 +1030,7 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
     if( const DataPilotFieldSortInfo* pSortInfo = rSaveDim.GetSortInfo() )
     {
         maFieldExtInfo.SetApiSortMode( pSortInfo->Mode );
-        if( pSortInfo->Mode == ::com::sun::star::sheet::DataPilotFieldSortMode::DATA )
+        if( pSortInfo->Mode == css::sheet::DataPilotFieldSortMode::DATA )
             maFieldExtInfo.mnSortField = mrPTable.GetDataFieldIndex( pSortInfo->Field, EXC_SXVDEX_SORT_OWN );
         ::set_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SORT_ASC, pSortInfo->IsAscending );
     }
@@ -1093,7 +1093,7 @@ void XclExpPTField::SetDataPropertiesFromDim( const ScDPSaveDimension& rSaveDim 
         if( const XclExpPTField* pRefField = mrPTable.GetField( pFieldRef->ReferenceField ) )
         {
             rDataInfo.mnRefField = pRefField->GetFieldIndex();
-            if( pFieldRef->ReferenceItemType == ::com::sun::star::sheet::DataPilotFieldReferenceItemType::NAMED )
+            if( pFieldRef->ReferenceItemType == css::sheet::DataPilotFieldReferenceItemType::NAMED )
                 rDataInfo.mnRefItem = pRefField->GetItemIndex( pFieldRef->ReferenceItemName, 0 );
         }
     }

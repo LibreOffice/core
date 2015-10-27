@@ -618,7 +618,7 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
         long nLineWidth = 35 * ::std::min( rLineData.mnWidth, EXC_OBJ_LINE_THICK );
         rSdrObj.SetMergedItem( XLineWidthItem( nLineWidth ) );
         rSdrObj.SetMergedItem( XLineColorItem( EMPTY_OUSTRING, GetPalette().GetColor( rLineData.mnColorIdx ) ) );
-        rSdrObj.SetMergedItem( XLineJointItem( com::sun::star::drawing::LineJoint_MITER ) );
+        rSdrObj.SetMergedItem( XLineJointItem( css::drawing::LineJoint_MITER ) );
 
         sal_uLong nDotLen = ::std::max< sal_uLong >( 70 * rLineData.mnWidth, 35 );
         sal_uLong nDashLen = 3 * nDotLen;
@@ -1505,7 +1505,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                     if( SdrObjCustomShape* pObjCustomShape = dynamic_cast< SdrObjCustomShape* >( &rSdrObj ) )
                     {
                         double fAngle = 180.0;
-                        com::sun::star::beans::PropertyValue aTextRotateAngle;
+                        css::beans::PropertyValue aTextRotateAngle;
                         aTextRotateAngle.Name = "TextRotateAngle";
                         aTextRotateAngle.Value <<= fAngle;
                         SdrCustomShapeGeometryItem aGeometryItem(static_cast<const SdrCustomShapeGeometryItem&>(pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
@@ -1706,10 +1706,10 @@ SdrObjectPtr XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
         /*  Set the size to the embedded object, this prevents that font sizes
             of text objects are changed in the chart when the object is
             inserted into the draw page. */
-        sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+        sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT;
         MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xEmbObj->getMapUnit( nAspect ) );
         Size aSize( vcl::Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( aUnit ) ) );
-        ::com::sun::star::awt::Size aAwtSize( aSize.Width(), aSize.Height() );
+        css::awt::Size aAwtSize( aSize.Width(), aSize.Height() );
         xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
 
         // #i121334# This call will change the chart's default background fill from white to transparent.
@@ -2053,7 +2053,7 @@ void XclImpTbxObjBase::ConvertLabel( ScfPropertySet& rPropSet ) const
         //In this case, DFF_Prop_wzDescription will not be set in excel file.
         //So In the end of SvxMSDffManager::ImportShape, description will not be set. But actually in excel,
         //the alt text is the label value. So here set description as label text first which is called before ImportShape.
-        Reference< ::com::sun::star::beans::XPropertySet > xPropset( mxShape, UNO_QUERY );
+        Reference< css::beans::XPropertySet > xPropset( mxShape, UNO_QUERY );
         try{
         if(xPropset.is())
             xPropset->setPropertyValue( "Description", makeAny(::rtl::OUString(aLabel)) );
@@ -2564,14 +2564,14 @@ void XclImpSpinButtonObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, 
 void XclImpSpinButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 {
     // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
-    rPropSet.SetProperty( "Border", ::com::sun::star::awt::VisualEffect::NONE );
+    rPropSet.SetProperty( "Border", css::awt::VisualEffect::NONE );
     rPropSet.SetProperty< sal_Int32 >( "DefaultSpinValue", mnValue );
     rPropSet.SetProperty< sal_Int32 >( "SpinValueMin", mnMin );
     rPropSet.SetProperty< sal_Int32 >( "SpinValueMax", mnMax );
     rPropSet.SetProperty< sal_Int32 >( "SpinIncrement", mnStep );
 
     // Excel spin buttons always vertical
-    rPropSet.SetProperty( "Orientation", ::com::sun::star::awt::ScrollBarOrientation::VERTICAL );
+    rPropSet.SetProperty( "Orientation", css::awt::ScrollBarOrientation::VERTICAL );
 }
 
 OUString XclImpSpinButtonObj::DoGetServiceName() const
@@ -2601,7 +2601,7 @@ void XclImpScrollBarObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, s
 void XclImpScrollBarObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 {
     // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
-    rPropSet.SetProperty( "Border", ::com::sun::star::awt::VisualEffect::NONE );
+    rPropSet.SetProperty( "Border", css::awt::VisualEffect::NONE );
     rPropSet.SetProperty< sal_Int32 >( "DefaultScrollValue", mnValue );
     rPropSet.SetProperty< sal_Int32 >( "ScrollValueMin", mnMin );
     rPropSet.SetProperty< sal_Int32 >( "ScrollValueMax", mnMax );
@@ -3373,7 +3373,7 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpTbxObjBase& rTbxOb
         // set controls form, needed in virtual function InsertControl()
         InitControlForm();
         // try to insert the control into the form
-        ::com::sun::star::awt::Size aDummySize;
+        css::awt::Size aDummySize;
         Reference< XShape > xShape;
         XclImpDffConvData& rConvData = GetConvData();
         if( rConvData.mxCtrlForm.is() && InsertControl( xFormComp, aDummySize, &xShape, true ) )
@@ -3414,7 +3414,7 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicOb
                 if( GetConvData().mxCtrlForm.is() )
                 {
                      Reference< XFormComponent >  xFComp;
-                     com::sun::star::awt::Size aSz;  // not used in import
+                     css::awt::Size aSz;  // not used in import
                      ReadOCXCtlsStream( mxCtlsStrm, xFComp, rPicObj.GetCtlsStreamPos(),  rPicObj.GetCtlsStreamSize() );
                      // recreate the method formally known as
                      // ReadOCXExcelKludgeStream( )
@@ -3599,7 +3599,7 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
 }
 
 bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& rxFormComp,
-        const ::com::sun::star::awt::Size& /*rSize*/, Reference< XShape >* pxShape,
+        const css::awt::Size& /*rSize*/, Reference< XShape >* pxShape,
         bool /*bFloatingCtrl*/ )
 {
     if( GetDocShell() ) try

@@ -99,7 +99,7 @@ ScMacroManager::~ScMacroManager()
 {
 }
 
-typedef ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener > ContainerListenerHelper;
+typedef ::cppu::WeakImplHelper< css::container::XContainerListener > ContainerListenerHelper;
 
 class VBAProjectListener : public ContainerListenerHelper
 {

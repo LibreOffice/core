@@ -111,7 +111,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     }
     sal_Int32 nStart = 0;
     sal_Int32 nEnd = aString.getLength();
-    ::com::sun::star::util::SearchResult aSearchResult;
+    css::util::SearchResult aSearchResult;
     if (pSearchText)
     {
         if ( bDoBack )
@@ -727,7 +727,7 @@ bool ScTable::SearchAndReplace(
         else
         {
             //  SearchParam no longer needed - SearchOptions contains all settings
-            com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
+            css::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
             aSearchOptions.Locale = *ScGlobal::GetLocale();
 
             if (aSearchOptions.searchString.isEmpty())
@@ -741,8 +741,8 @@ bool ScTable::SearchAndReplace(
             //  This is also done in SvxSearchDialog CommandHdl, but not in API object.
             if ( !rSearchItem.IsUseAsianOptions() )
                 aSearchOptions.transliterateFlags &=
-                    ( com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
-                      com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
+                    ( css::i18n::TransliterationModules_IGNORE_CASE |
+                      css::i18n::TransliterationModules_IGNORE_WIDTH );
 
             pSearchText = new utl::TextSearch( aSearchOptions );
 

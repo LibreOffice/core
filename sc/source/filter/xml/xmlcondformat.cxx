@@ -30,8 +30,7 @@ ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rIm
 
 SvXMLImportContext* ScXMLConditionalFormatsContext::CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetCondFormatsTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -58,7 +57,7 @@ void ScXMLConditionalFormatsContext::EndElement()
 }
 
 ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList):
+                        const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     OUString sRange;
@@ -92,8 +91,7 @@ ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImpo
 
 SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetCondFormatTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -149,8 +147,7 @@ ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport
 
 SvXMLImportContext* ScXMLColorScaleFormatContext::CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetColorScaleTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -168,7 +165,7 @@ SvXMLImportContext* ScXMLColorScaleFormatContext::CreateChildContext( sal_uInt16
 }
 
 ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mpDataBarFormat(NULL),
@@ -292,8 +289,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
 
 SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetFormattingTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -324,8 +320,7 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
 
 ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -384,8 +379,7 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_u
 
 SvXMLImportContext* ScXMLIconSetFormatContext::CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap = GetScImport().GetFormattingTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -569,7 +563,8 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
 }
 
 ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName,
+                        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat ):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -643,7 +638,8 @@ void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const O
 }
 
 ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName,
+                        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mpFormatEntry( NULL )
@@ -694,7 +690,8 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
 }
 
 ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName,
+                        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleEntry*& pColorScaleEntry):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -770,7 +767,8 @@ condformat::ScCondFormatDateType getDateFromString(const OUString& rString)
 }
 
 ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName,
+                        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat ):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {

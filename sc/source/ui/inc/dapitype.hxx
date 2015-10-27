@@ -61,7 +61,7 @@ private:
 
 public:
             ScDataPilotServiceDlg( vcl::Window* pParent,
-                    const com::sun::star::uno::Sequence<OUString>& rServices );
+                    const css::uno::Sequence<OUString>& rServices );
             virtual ~ScDataPilotServiceDlg();
     virtual void dispose() override;
 

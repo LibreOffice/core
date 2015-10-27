@@ -49,8 +49,8 @@ class ScXMLFilterContext : public SvXMLImportContext
     ScQueryParam& mrQueryParam;
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
-    com::sun::star::table::CellAddress aOutputPosition;
-    com::sun::star::table::CellRangeAddress aConditionSourceRangeAddress;
+    css::table::CellAddress aOutputPosition;
+    css::table::CellRangeAddress aConditionSourceRangeAddress;
     bool        bSkipDuplicates;
     bool        bCopyOutputData;
     bool        bConditionSourceRange;
@@ -63,8 +63,7 @@ public:
 
     ScXMLFilterContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScQueryParam& rParam,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -72,8 +71,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 
@@ -94,8 +92,7 @@ public:
 
     ScXMLAndContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                      const OUString& rLName,
-                     const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                      ScQueryParam& rParam,
                      ScXMLFilterContext* pTempFilterContext);
 
@@ -103,8 +100,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 };
@@ -121,8 +117,7 @@ public:
 
     ScXMLOrContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName,
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                     ScQueryParam& rParam,
                     ScXMLFilterContext* pTempFilterContext);
 
@@ -130,8 +125,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 };
@@ -155,8 +149,7 @@ public:
 
     ScXMLConditionContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                            const OUString& rLName,
-                           const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                           const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                            ScQueryParam& rParam,
                            ScXMLFilterContext* pTempFilterContext);
 
@@ -164,8 +157,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 
@@ -180,8 +172,7 @@ class ScXMLSetItemContext : public SvXMLImportContext
 public:
     ScXMLSetItemContext(ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLConditionContext& rParent);
 
     virtual ~ScXMLSetItemContext();
@@ -189,8 +180,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList>& xAttrList) override;
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
 
     virtual void EndElement() override;
 };
@@ -221,16 +211,14 @@ public:
 
     ScXMLDPFilterContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLDataPilotTableContext* pTempDataPilotTableContext);
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDataPilotTableContext* pTempDataPilotTableContext);
 
     virtual ~ScXMLDPFilterContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 
@@ -274,16 +262,14 @@ public:
 
     ScXMLDPAndContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLDPFilterContext* pTempFilterContext);
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPAndContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 };
@@ -299,16 +285,14 @@ public:
 
     ScXMLDPOrContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLDPFilterContext* pTempFilterContext);
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPOrContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 };
@@ -330,16 +314,14 @@ public:
 
     ScXMLDPConditionContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLDPFilterContext* pTempFilterContext);
+                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPConditionContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     static void getOperatorXML(
         const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions);

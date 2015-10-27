@@ -906,12 +906,12 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
 
     uno::Any aRet(SfxBaseModel::queryInterface( rType ));
     if ( !aRet.hasValue()
-        && rType != cppu::UnoType<com::sun::star::document::XDocumentEventBroadcaster>::get()
-        && rType != cppu::UnoType<com::sun::star::frame::XController>::get()
-        && rType != cppu::UnoType<com::sun::star::frame::XFrame>::get()
-        && rType != cppu::UnoType<com::sun::star::script::XInvocation>::get()
-        && rType != cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get()
-        && rType != cppu::UnoType<com::sun::star::awt::XWindow>::get())
+        && rType != cppu::UnoType<css::document::XDocumentEventBroadcaster>::get()
+        && rType != cppu::UnoType<css::frame::XController>::get()
+        && rType != cppu::UnoType<css::frame::XFrame>::get()
+        && rType != cppu::UnoType<css::script::XInvocation>::get()
+        && rType != cppu::UnoType<css::beans::XFastPropertySet>::get()
+        && rType != cppu::UnoType<css::awt::XWindow>::get())
     {
         GetFormatter();
         if ( xNumberAgg.is() )
@@ -1775,7 +1775,7 @@ sal_Int16 SAL_CALL ScModelObj::resetActionLocks() throw(uno::RuntimeException, s
     return nRet;
 }
 
-void SAL_CALL ScModelObj::lockControllers() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ScModelObj::lockControllers() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SfxBaseModel::lockControllers();
@@ -1783,7 +1783,7 @@ void SAL_CALL ScModelObj::lockControllers() throw (::com::sun::star::uno::Runtim
         pDocShell->LockPaint();
 }
 
-void SAL_CALL ScModelObj::unlockControllers() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ScModelObj::unlockControllers() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (hasControllersLocked())

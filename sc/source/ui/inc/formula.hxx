@@ -44,8 +44,8 @@ class ScFormulaDlg : public formula::FormulaDlg,
                      public IAnyRefDialog
 {
     ScFormulaReferenceHelper m_aHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser>          m_xParser;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
+    css::uno::Reference< css::sheet::XFormulaParser>          m_xParser;
+    css::uno::Reference< css::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
 
     static ScDocument*  pDoc;
     static ScAddress    aCursorPos;
@@ -75,10 +75,10 @@ public:
     virtual OUString getCurrentFormula() const override;
 
     virtual formula::IFunctionManager* getFunctionManager() override;
-    virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
-    virtual ::com::sun::star::table::CellAddress getReferencePosition() const override;
+    virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) override;
+    virtual css::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const override;
+    virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
+    virtual css::table::CellAddress getReferencePosition() const override;
 
     virtual bool    Close() override;
 

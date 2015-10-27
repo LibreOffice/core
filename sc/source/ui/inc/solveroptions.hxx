@@ -40,10 +40,10 @@ class ScSolverOptionsDialog : public ModalDialog
     VclPtr<PushButton> m_pBtnEdit;
 
     SvLBoxButtonData* mpCheckButtonData;
-    com::sun::star::uno::Sequence<OUString> maImplNames;
-    com::sun::star::uno::Sequence<OUString> maDescriptions;
+    css::uno::Sequence<OUString> maImplNames;
+    css::uno::Sequence<OUString> maDescriptions;
     OUString        maEngine;
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
+    css::uno::Sequence<css::beans::PropertyValue> maProperties;
 
     DECL_LINK_TYPED( EngineSelectHdl, ListBox&, void );
     DECL_LINK_TYPED( SettingsSelHdl, SvTreeListBox*, void );
@@ -56,16 +56,16 @@ class ScSolverOptionsDialog : public ModalDialog
 
 public:
     ScSolverOptionsDialog( vcl::Window* pParent,
-                           const com::sun::star::uno::Sequence<OUString>& rImplNames,
-                           const com::sun::star::uno::Sequence<OUString>& rDescriptions,
+                           const css::uno::Sequence<OUString>& rImplNames,
+                           const css::uno::Sequence<OUString>& rDescriptions,
                            const OUString& rEngine,
-                           const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
+                           const css::uno::Sequence<css::beans::PropertyValue>& rProperties );
     virtual ~ScSolverOptionsDialog();
     virtual void dispose() override;
 
     // already updated in selection handler
     const OUString& GetEngine() const { return maEngine; }
-    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& GetProperties();
+    const css::uno::Sequence<css::beans::PropertyValue>& GetProperties();
 };
 
 class ScSolverIntegerDialog : public ModalDialog

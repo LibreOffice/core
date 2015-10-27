@@ -121,10 +121,9 @@ public:
     void clear();
 
     const ValuesType* getResults(
-        const com::sun::star::uno::Sequence<
-            com::sun::star::sheet::DataPilotFieldFilter>& rFilters) const;
+        const css::uno::Sequence< css::sheet::DataPilotFieldFilter>& rFilters) const;
 
-    double getLeafResult(const com::sun::star::sheet::DataPilotFieldFilter& rFilter) const;
+    double getLeafResult(const css::sheet::DataPilotFieldFilter& rFilter) const;
 
 #if DEBUG_PIVOT_TABLE
     void dump() const;

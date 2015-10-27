@@ -83,10 +83,10 @@ public:
 
     const OUString& GetName() const { return maName;}
 
-    void            SetUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
-                            const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
-    com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >  GetUnoListener() const;
-    com::sun::star::uno::Reference< com::sun::star::chart::XChartData >                     GetUnoSource() const;
+    void            SetUno( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& rListener,
+                            const css::uno::Reference< css::chart::XChartData >& rSource );
+    css::uno::Reference< css::chart::XChartDataChangeEventListener >  GetUnoListener() const;
+    css::uno::Reference< css::chart::XChartData >                     GetUnoSource() const;
 
     bool            IsUno() const   { return (pUnoData != NULL); }
 
@@ -179,8 +179,8 @@ public:
                                     bool bDirty = false );
     // use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
     void            FreeUnused();
-    void            FreeUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
-                             const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
+    void            FreeUno( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& rListener,
+                             const css::uno::Reference< css::chart::XChartData >& rSource );
     void            StartTimer();
     void            UpdateDirtyCharts();
     void            SetDirty();

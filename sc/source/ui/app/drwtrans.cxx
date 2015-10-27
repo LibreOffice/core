@@ -448,7 +448,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
 }
 
 bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
-                                        const ::com::sun::star::datatransfer::DataFlavor& /* rFlavor */ )
+                                        const css::datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
 
@@ -486,7 +486,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                 }
 
                 {
-                    com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                    css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
                     if( SvxDrawingLayerExport( pDrawModel, xDocOut ) )
                         rxOStm->Commit();
                 }
@@ -776,12 +776,12 @@ namespace
     class theScDrawTransferObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScDrawTransferObjUnoTunnelId > {};
 }
 
-const com::sun::star::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
+const css::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
 {
     return theScDrawTransferObjUnoTunnelId::get().getSeq();
 }
 
-sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException, std::exception )
+sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception )
 {
     sal_Int64 nRet;
     if( ( rId.getLength() == 16 ) &&

@@ -31,49 +31,49 @@
 class ScUnoConversion
 {
 public:
-    static LanguageType GetLanguage( const com::sun::star::lang::Locale& rLocale );
-    static void FillLocale( com::sun::star::lang::Locale& rLocale, LanguageType eLang );
+    static LanguageType GetLanguage( const css::lang::Locale& rLocale );
+    static void FillLocale( css::lang::Locale& rLocale, LanguageType eLang );
 
     // CellAddress -> ScAddress
     static inline void  FillScAddress(
                             ScAddress& rScAddress,
-                            const ::com::sun::star::table::CellAddress& rApiAddress );
+                            const css::table::CellAddress& rApiAddress );
     // ScAddress -> CellAddress
     static inline void  FillApiAddress(
-                            ::com::sun::star::table::CellAddress& rApiAddress,
+                            css::table::CellAddress& rApiAddress,
                             const ScAddress& rScAddress );
     // CellRangeAddress -> ScRange
     static inline void  FillScRange(
                             ScRange& rScRange,
-                            const ::com::sun::star::table::CellRangeAddress& rApiRange );
+                            const css::table::CellRangeAddress& rApiRange );
     // ScRange -> CellRangeAddress
     static inline void  FillApiRange(
-                            ::com::sun::star::table::CellRangeAddress& rApiRange,
+                            css::table::CellRangeAddress& rApiRange,
                             const ScRange& rScRange );
     // CellRangeAddress-Start -> CellAddress
     static inline void  FillApiStartAddress(
-                            ::com::sun::star::table::CellAddress& rApiAddress,
-                            const ::com::sun::star::table::CellRangeAddress& rApiRange );
+                            css::table::CellAddress& rApiAddress,
+                            const css::table::CellRangeAddress& rApiRange );
 
     /** Returns true, if the passed ranges have at least one common cell. */
     static inline bool  Intersects(
-                            const ::com::sun::star::table::CellRangeAddress& rApiARange1,
-                            const ::com::sun::star::table::CellRangeAddress& rApiARange2 );
+                            const css::table::CellRangeAddress& rApiARange1,
+                            const css::table::CellRangeAddress& rApiARange2 );
     /** Returns true, if the passed range rApiInner is completely inside the passed range rApiOuter. */
     static inline bool  Contains(
-                            const ::com::sun::star::table::CellRangeAddress& rApiOuter,
-                            const ::com::sun::star::table::CellRangeAddress& rApiInner );
+                            const css::table::CellRangeAddress& rApiOuter,
+                            const css::table::CellRangeAddress& rApiInner );
 };
 
 inline void ScUnoConversion::FillScAddress(
         ScAddress& rScAddress,
-        const ::com::sun::star::table::CellAddress& rApiAddress )
+        const css::table::CellAddress& rApiAddress )
 {
     rScAddress.Set( (SCCOL)rApiAddress.Column, (SCROW)rApiAddress.Row, (SCTAB)rApiAddress.Sheet );
 }
 
 inline void ScUnoConversion::FillApiAddress(
-        ::com::sun::star::table::CellAddress& rApiAddress,
+        css::table::CellAddress& rApiAddress,
         const ScAddress& rScAddress )
 {
     rApiAddress.Column = rScAddress.Col();
@@ -83,14 +83,14 @@ inline void ScUnoConversion::FillApiAddress(
 
 inline void ScUnoConversion::FillScRange(
         ScRange& rScRange,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange )
+        const css::table::CellRangeAddress& rApiRange )
 {
     rScRange.aStart.Set( (SCCOL)rApiRange.StartColumn, (SCROW)rApiRange.StartRow, (SCTAB)rApiRange.Sheet );
     rScRange.aEnd.Set( (SCCOL)rApiRange.EndColumn, (SCROW)rApiRange.EndRow, (SCTAB)rApiRange.Sheet );
 }
 
 inline void ScUnoConversion::FillApiRange(
-        ::com::sun::star::table::CellRangeAddress& rApiRange,
+        css::table::CellRangeAddress& rApiRange,
         const ScRange& rScRange )
 {
     rApiRange.StartColumn = rScRange.aStart.Col();
@@ -101,8 +101,8 @@ inline void ScUnoConversion::FillApiRange(
 }
 
 inline void ScUnoConversion::FillApiStartAddress(
-        ::com::sun::star::table::CellAddress& rApiAddress,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange )
+        css::table::CellAddress& rApiAddress,
+        const css::table::CellRangeAddress& rApiRange )
 {
     rApiAddress.Column = rApiRange.StartColumn;
     rApiAddress.Row = rApiRange.StartRow;
@@ -110,8 +110,8 @@ inline void ScUnoConversion::FillApiStartAddress(
 }
 
 inline bool ScUnoConversion::Intersects(
-        const ::com::sun::star::table::CellRangeAddress& rApiRange1,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange2 )
+        const css::table::CellRangeAddress& rApiRange1,
+        const css::table::CellRangeAddress& rApiRange2 )
 {
     return (rApiRange1.Sheet == rApiRange2.Sheet) &&
         (::std::max( rApiRange1.StartColumn, rApiRange2.StartColumn ) <= ::std::min( rApiRange1.EndColumn, rApiRange2.EndColumn )) &&
@@ -119,8 +119,8 @@ inline bool ScUnoConversion::Intersects(
 }
 
 inline bool ScUnoConversion::Contains(
-        const ::com::sun::star::table::CellRangeAddress& rApiOuter,
-        const ::com::sun::star::table::CellRangeAddress& rApiInner )
+        const css::table::CellRangeAddress& rApiOuter,
+        const css::table::CellRangeAddress& rApiInner )
 {
     return (rApiOuter.Sheet == rApiInner.Sheet) &&
         (rApiOuter.StartColumn <= rApiInner.StartColumn) && (rApiInner.EndColumn <= rApiOuter.EndColumn) &&
@@ -128,8 +128,8 @@ inline bool ScUnoConversion::Contains(
 }
 
 inline bool operator==(
-        const ::com::sun::star::table::CellAddress& rApiAddress1,
-        const ::com::sun::star::table::CellAddress& rApiAddress2 )
+        const css::table::CellAddress& rApiAddress1,
+        const css::table::CellAddress& rApiAddress2 )
 {
     return
         (rApiAddress1.Column == rApiAddress2.Column) &&
@@ -138,8 +138,8 @@ inline bool operator==(
 }
 
 inline bool operator==(
-        const ::com::sun::star::table::CellRangeAddress& rApiRange1,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange2 )
+        const css::table::CellRangeAddress& rApiRange1,
+        const css::table::CellRangeAddress& rApiRange2 )
 {
     return
         (rApiRange1.StartColumn == rApiRange2.StartColumn) &&
@@ -150,8 +150,8 @@ inline bool operator==(
 }
 
 inline bool operator!=(
-        const ::com::sun::star::table::CellRangeAddress& rApiRange1,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange2 )
+        const css::table::CellRangeAddress& rApiRange1,
+        const css::table::CellRangeAddress& rApiRange2 )
 {
     return !(rApiRange1 == rApiRange2);
 }

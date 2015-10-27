@@ -318,9 +318,9 @@ sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_Int32 nPosY ) const
     return static_cast< sal_Int32 >( mxChData->mfUnitSizeY * nPosY + mxChData->mnBorderGapY + 0.5 );
 }
 
-::com::sun::star::awt::Rectangle XclImpChRoot::CalcHmmFromChartRect( const XclChRectangle& rRect ) const
+css::awt::Rectangle XclImpChRoot::CalcHmmFromChartRect( const XclChRectangle& rRect ) const
 {
-    return ::com::sun::star::awt::Rectangle(
+    return css::awt::Rectangle(
         CalcHmmFromChartX( rRect.mnX ),
         CalcHmmFromChartY( rRect.mnY ),
         CalcHmmFromChartX( rRect.mnWidth ),
@@ -1191,17 +1191,17 @@ void XclImpChText::ConvertTitlePosition( const XclChTextKey& rTitleKey ) const
     {
         Reference< XShape > xTitleShape( GetTitleShape( rTitleKey ), UNO_SET_THROW );
         // the call to XShape.getSize() may recalc the chart view
-        ::com::sun::star::awt::Size aTitleSize = xTitleShape->getSize();
+        css::awt::Size aTitleSize = xTitleShape->getSize();
         // rotated titles need special handling...
         sal_Int32 nScRot = XclTools::GetScRotation( GetRotation(), 0 );
         double fRad = nScRot * F_PI18000;
         double fSin = fabs( sin( fRad ) );
         double fCos = fabs( cos( fRad ) );
-        ::com::sun::star::awt::Size aBoundSize(
+        css::awt::Size aBoundSize(
             static_cast< sal_Int32 >( fCos * aTitleSize.Width + fSin * aTitleSize.Height + 0.5 ),
             static_cast< sal_Int32 >( fSin * aTitleSize.Width + fCos * aTitleSize.Height + 0.5 ) );
         // calculate the title position from the values in the CHTEXT record
-        ::com::sun::star::awt::Point aTitlePos(
+        css::awt::Point aTitlePos(
             CalcHmmFromChartX( maData.maRect.mnX ),
             CalcHmmFromChartY( maData.maRect.mnY ) );
         // add part of height to X direction, if title is rotated down (clockwise)
@@ -2586,7 +2586,7 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
                 RelativePosition aRelPos(
                     CalcRelativeFromChartX( pFramePos->maRect.mnX ),
                     CalcRelativeFromChartY( pFramePos->maRect.mnY ),
-                    ::com::sun::star::drawing::Alignment_TOP_LEFT );
+                    css::drawing::Alignment_TOP_LEFT );
                 aLegendProp.SetProperty( EXC_CHPROP_RELATIVEPOSITION, aRelPos );
             }
             else
@@ -2883,7 +2883,7 @@ void XclImpChTypeGroup::CreateDataSeries( Reference< XChartType > xChartType, sa
     if( bSpline && !maTypeInfo.IsSeriesFrameFormat() && (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_RADAR) )
     {
         ScfPropertySet aTypeProp( xChartType );
-        aTypeProp.SetProperty( EXC_CHPROP_CURVESTYLE, ::com::sun::star::chart2::CurveStyle_CUBIC_SPLINES );
+        aTypeProp.SetProperty( EXC_CHPROP_CURVESTYLE, css::chart2::CurveStyle_CUBIC_SPLINES );
     }
 }
 
@@ -3977,7 +3977,7 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
             if( (rFramePos.mnTLMode == EXC_CHFRAMEPOS_PARENT) && (rFramePos.mnBRMode == EXC_CHFRAMEPOS_PARENT) )
             {
                 Reference< cssc::XDiagramPositioning > xPositioning( xDiagram1, UNO_QUERY_THROW );
-                ::com::sun::star::awt::Rectangle aDiagramRect = CalcHmmFromChartRect( rFramePos.maRect );
+                css::awt::Rectangle aDiagramRect = CalcHmmFromChartRect( rFramePos.maRect );
                 // for pie charts, always set inner plot area size to exclude the data labels as Excel does
                 const XclImpChTypeGroup* pFirstTypeGroup = mxPrimAxesSet->GetFirstTypeGroup().get();
                 if( pFirstTypeGroup && (pFirstTypeGroup->GetTypeInfo().meTypeCateg == EXC_CHTYPECATEG_PIE) )

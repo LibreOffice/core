@@ -101,11 +101,9 @@ public:
     bool isAnchorValid() const;
 
     /** Calculates the resulting shape anchor in EMUs. */
-    ::oox::drawingml::EmuRectangle calcAnchorRectEmu(
-                            const ::com::sun::star::awt::Size& rPageSizeHmm ) const;
+    ::oox::drawingml::EmuRectangle calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm ) const;
     /** Calculates the resulting shape anchor in 1/100 mm. */
-    ::com::sun::star::awt::Rectangle calcAnchorRectHmm(
-                            const ::com::sun::star::awt::Size& rPageSizeHmm ) const;
+    css::awt::Rectangle calcAnchorRectHmm( const css::awt::Size& rPageSizeHmm ) const;
     AnchorType          getEditAs() const { return meEditAs; }
 private:
     /** Converts the passed anchor to an absolute position in EMUs. */

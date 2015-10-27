@@ -107,17 +107,17 @@ public:
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
     void                InitConversion(
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::chart2::XChartDocument>& xChartDoc, const Rectangle& rChartRect ) const;
+                            const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc,
+                            const Rectangle& rChartRect ) const;
 
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion( XclImpDffConverter& rDffConv ) const;
 
     /** Returns the data provider for the chart document. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
+    css::uno::Reference< css::chart2::data::XDataProvider >
                         GetDataProvider() const;
     /** Returns the drawing shape interface of the specified title object. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
                         GetTitleShape( const XclChTextKey& rTitleKey ) const;
 
     /** Converts the passed horizontal coordinate from Excel chart units into 1/100 mm. */
@@ -125,7 +125,7 @@ public:
     /** Converts the passed vertical coordinate from Excel chart units into 1/100 mm. */
     sal_Int32           CalcHmmFromChartY( sal_Int32 nPosY ) const;
     /** Converts the passed rectangle from Excel chart units into 1/100 mm. */
-    ::com::sun::star::awt::Rectangle CalcHmmFromChartRect( const XclChRectangle& rRect ) const;
+    css::awt::Rectangle CalcHmmFromChartRect( const XclChRectangle& rRect ) const;
 
     /** Converts the passed horizontal coordinate from 1/100 mm into a relative position. */
     double              CalcRelativeFromHmmX( sal_Int32 nPosX ) const;
@@ -1305,8 +1305,7 @@ public:
 
     /** Converts and writes all properties to the passed chart. */
     void                Convert(
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::chart2::XChartDocument>& xChartDoc,
+        const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc,
         XclImpDffConverter& rDffConv,
         const OUString& rObjName,
         const Rectangle& rChartRect ) const;
@@ -1331,7 +1330,7 @@ private:
     void                FinalizeTitle();
 
     /** Creates and returns a new diagram object and converts global chart settings. */
-    com::sun::star::uno::Reference<com::sun::star::chart2::XDiagram>
+    css::uno::Reference<css::chart2::XDiagram>
         CreateDiagram() const;
 
 private:
@@ -1362,7 +1361,7 @@ public:
     /** Converts all objects and inserts them into the chart drawing page. */
     void                ConvertObjects(
                             XclImpDffConverter& rDffConv,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+                            const css::uno::Reference< css::frame::XModel >& rxModel,
                             const Rectangle& rChartRect );
 
     /** Calculate the resulting rectangle of the passed anchor. */

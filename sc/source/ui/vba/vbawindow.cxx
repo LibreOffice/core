@@ -56,8 +56,8 @@ SCTAB, OUStringHash,
 typedef std::vector< uno::Reference< sheet::XSpreadsheet > > Sheets;
 
 typedef ::cppu::WeakImplHelper< container::XEnumerationAccess
-    , com::sun::star::container::XIndexAccess
-    , com::sun::star::container::XNameAccess
+    , css::container::XIndexAccess
+    , css::container::XNameAccess
     > SelectedSheets_BASE;
 
 class SelectedSheetsEnum : public ::cppu::WeakImplHelper< container::XEnumeration >

@@ -44,8 +44,8 @@ public:
     static bool setPropertyValue( ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
                                     const OUString& aPropertyName,
-                                    const ::com::sun::star::uno::Any& aValue );
-    static ::com::sun::star::uno::Any getPropertyValue(
+                                    const css::uno::Any& aValue );
+    static css::uno::Any getPropertyValue(
                                     const ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
                                     const OUString& PropertyName );
@@ -65,18 +65,18 @@ public:
     // get/setPropertyValue override to used stored options instead of document
 
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
-                                    const ::com::sun::star::uno::Any& aValue )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::beans::PropertyVetoException,
-                                    ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException,
+                                    const css::uno::Any& aValue )
+                                throw(css::beans::UnknownPropertyException,
+                                    css::beans::PropertyVetoException,
+                                    css::lang::IllegalArgumentException,
+                                    css::lang::WrappedTargetException,
+                                    css::uno::RuntimeException,
                                     std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+    virtual css::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::beans::UnknownPropertyException,
+                                    css::lang::WrappedTargetException,
+                                    css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

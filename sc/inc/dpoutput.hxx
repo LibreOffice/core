@@ -47,8 +47,7 @@ class ScDPOutput
 {
 private:
     ScDocument*             pDoc;
-    com::sun::star::uno::Reference<
-        com::sun::star::sheet::XDimensionsSupplier> xSource;
+    css::uno::Reference< css::sheet::XDimensionsSupplier> xSource;
     ScAddress               aStartPos;
     ScDPOutLevelData*       pColFields;
     ScDPOutLevelData*       pRowFields;
@@ -56,17 +55,15 @@ private:
     long                    nColFieldCount;
     long                    nRowFieldCount;
     long                    nPageFieldCount;
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Sequence<
-            com::sun::star::sheet::DataResult> > aData;
-    OUString           aDataDescription;
+    css::uno::Sequence< css::uno::Sequence< css::sheet::DataResult> > aData;
+    OUString                aDataDescription;
 
     // Number format related parameters
-    sal_uInt32*                 pColNumFmt;
-    sal_uInt32*                 pRowNumFmt;
+    sal_uInt32*             pColNumFmt;
+    sal_uInt32*             pRowNumFmt;
     long                    nColFmtCount;
     long                    nRowFmtCount;
-    sal_uInt32                  nSingleNumFmt;
+    sal_uInt32              nSingleNumFmt;
 
     // Output geometry related parameters
     long                    nColCount;
@@ -88,9 +85,9 @@ private:
     bool                    mbHeaderLayout:1;  // true : grid, false : standard
 
     void            DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                const com::sun::star::sheet::DataResult& rData );
+                                const css::sheet::DataResult& rData );
     void            HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                const com::sun::star::sheet::MemberResult& rData,
+                                const css::sheet::MemberResult& rData,
                                 bool bColHeader, long nLevel );
 
     void FieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable);
@@ -104,24 +101,23 @@ private:
 
 public:
                     ScDPOutput( ScDocument* pD,
-                                const com::sun::star::uno::Reference<
-                                    com::sun::star::sheet::XDimensionsSupplier>& xSrc,
+                                const css::uno::Reference< css::sheet::XDimensionsSupplier>& xSrc,
                                 const ScAddress& rPos, bool bFilter );
                     ~ScDPOutput();
 
     void            SetPosition( const ScAddress& rPos );
 
     void            Output();           //! Refresh?
-    ScRange GetOutputRange( sal_Int32 nRegionType = ::com::sun::star::sheet::DataPilotOutputRangeType::WHOLE );
-    ScRange GetOutputRange( sal_Int32 nRegionType = ::com::sun::star::sheet::DataPilotOutputRangeType::WHOLE ) const;
+    ScRange GetOutputRange( sal_Int32 nRegionType = css::sheet::DataPilotOutputRangeType::WHOLE );
+    ScRange GetOutputRange( sal_Int32 nRegionType = css::sheet::DataPilotOutputRangeType::WHOLE ) const;
     long            GetHeaderRows();
     bool            HasError();         // range overflow or exception from source
 
-    void            GetPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTablePositionData& rPosData);
+    void            GetPositionData(const ScAddress& rPos, css::sheet::DataPilotTablePositionData& rPosData);
 
     /** Get filtering criteria based on the position of the cell within data
         field region. */
-    bool            GetDataResultPositionData(::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
+    bool            GetDataResultPositionData(::std::vector< css::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
 
     long            GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient );
     bool GetHeaderDrag(
@@ -136,8 +132,7 @@ public:
 
     static void GetDataDimensionNames(
         OUString& rSourceName, OUString& rGivenName,
-        const com::sun::star::uno::Reference<
-            com::sun::star::uno::XInterface>& xDim );
+        const css::uno::Reference< css::uno::XInterface>& xDim );
 };
 
 #endif

@@ -793,8 +793,8 @@ public:
     void        RemoveColBreak(SCCOL nCol, bool bPage, bool bManual);
     void        SetRowBreak(SCROW nRow, bool bPage, bool bManual);
     void        SetColBreak(SCCOL nCol, bool bPage, bool bManual);
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::sheet::TablePageBreakData> GetRowBreakData() const;
+    css::uno::Sequence<
+        css::sheet::TablePageBreakData> GetRowBreakData() const;
 
     bool        RowHidden(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
     bool        RowHiddenLeaf(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;

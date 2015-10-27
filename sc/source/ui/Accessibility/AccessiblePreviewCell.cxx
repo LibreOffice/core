@@ -46,9 +46,9 @@ using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-ScAccessiblePreviewCell::ScAccessiblePreviewCell( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::accessibility::XAccessible>& rxParent,
-                            ScPreviewShell* pViewShell, /* const */ ScAddress& rCellAddress,
+ScAccessiblePreviewCell::ScAccessiblePreviewCell( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+                            ScPreviewShell* pViewShell,
+                            /* const */ ScAddress& rCellAddress,
                             sal_Int32 nIndex ) :
     ScAccessibleCellBase( rxParent, ( pViewShell ? &pViewShell->GetDocument() : NULL ), rCellAddress, nIndex ),
     mpViewShell( pViewShell ),

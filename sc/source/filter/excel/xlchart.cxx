@@ -977,7 +977,7 @@ void XclChPropSetHelper::WriteLineProperties(
     Any aDashNameAny;
     if( eApiStyle == cssd::LineStyle_DASH )
     {
-        OUString aDashName = rDashTable.InsertObject( ::com::sun::star::uno::makeAny( aApiDash ) );
+        OUString aDashName = rDashTable.InsertObject( css::uno::makeAny( aApiDash ) );
         if( !aDashName.isEmpty() )
             aDashNameAny <<= aDashName;
     }

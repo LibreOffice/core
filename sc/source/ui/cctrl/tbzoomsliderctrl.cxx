@@ -84,8 +84,8 @@ VclPtr<vcl::Window> ScZoomSliderControl::CreateItemWindow( vcl::Window *pParent 
     // #i98000# Don't try to get a value via SfxViewFrame::Current here.
     // The view's value is always notified via StateChanged later.
     VclPtrInstance<ScZoomSliderWnd> pSlider( pParent,
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >( m_xFrame->getController(),
-        ::com::sun::star::uno::UNO_QUERY ), m_xFrame, 100 );
+        css::uno::Reference< css::frame::XDispatchProvider >( m_xFrame->getController(),
+        css::uno::UNO_QUERY ), m_xFrame, 100 );
     return pSlider.get();
 }
 
@@ -216,8 +216,10 @@ long ScZoomSliderWnd::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
     return nRect;
 }
 
-ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , sal_uInt16 nCurrentZoom ):
+ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent,
+                const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
+                const css::uno::Reference< css::frame::XFrame >& _xFrame,
+                sal_uInt16 nCurrentZoom ):
                 Window( pParent ),
                 mpImpl( new ScZoomSliderWnd_Impl( nCurrentZoom ) ),
                 aLogicalSize( 115, 40 ),
@@ -286,10 +288,10 @@ void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
 
     SvxZoomSliderItem   aZoomSliderItem( mpImpl->mnCurrentZoom );
 
-    ::com::sun::star::uno::Any  a;
+    css::uno::Any  a;
     aZoomSliderItem.QueryValue( a );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name = "ScalingFactor";
     aArgs[0].Value = a;
 
@@ -324,10 +326,10 @@ void ScZoomSliderWnd::MouseMove( const MouseEvent& rMEvt )
             // commit state change
             SvxZoomSliderItem aZoomSliderItem( mpImpl->mnCurrentZoom );
 
-            ::com::sun::star::uno::Any a;
+            css::uno::Any a;
             aZoomSliderItem.QueryValue( a );
 
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+            css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name = "ScalingFactor";
             aArgs[0].Value = a;
 
@@ -351,7 +353,7 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
             mpImpl->mnMaxZoom >= mpImpl->mnCurrentZoom &&
             mpImpl->mnMaxZoom > mpImpl->mnSliderCenter,
             "Looks like the zoom slider item is corrupted" );
-       const com::sun::star::uno::Sequence < sal_Int32 > rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
+       const css::uno::Sequence < sal_Int32 > rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
        mpImpl->maSnappingPointOffsets.clear();
        mpImpl->maSnappingPointZooms.clear();
 

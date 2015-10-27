@@ -113,7 +113,7 @@ public:
     /** Converts the passed vertical coordinate from 1/100 mm to Excel chart units. */
     sal_Int32           CalcChartYFromHmm( sal_Int32 nPosY ) const;
     /** Converts the passed rectangle from 1/100 mm to Excel chart units. */
-    XclChRectangle      CalcChartRectFromHmm( const ::com::sun::star::awt::Rectangle& rRect ) const;
+    XclChRectangle      CalcChartRectFromHmm( const css::awt::Rectangle& rRect ) const;
 
     /** Reads all line properties from the passed property set. */
     void                ConvertLineFormat(
@@ -943,7 +943,7 @@ public:
     explicit            XclExpChLabelRange( const XclExpChRoot& rRoot );
 
     /** Converts category axis scaling settings. */
-    void                Convert( const ::com::sun::star::chart2::ScaleData& rScaleData,
+    void                Convert( const css::chart2::ScaleData& rScaleData,
                             const ScfPropertySet& rChart1Axis, bool bMirrorOrient );
     /** Converts position settings of a crossing axis at this axis. */
     void                ConvertAxisPosition( const ScfPropertySet& rPropSet );
@@ -968,7 +968,7 @@ public:
     explicit            XclExpChValueRange( const XclExpChRoot& rRoot );
 
     /** Converts value axis scaling settings. */
-    void                Convert( const ::com::sun::star::chart2::ScaleData& rScaleData );
+    void                Convert( const css::chart2::ScaleData& rScaleData );
     /** Converts position settings of a crossing axis at this axis. */
     void                ConvertAxisPosition( const ScfPropertySet& rPropSet );
 
@@ -1165,7 +1165,7 @@ class XclExpChartDrawing : public XclExpRecordBase, protected XclExpRoot
 public:
     explicit            XclExpChartDrawing(
                             const XclExpRoot& rRoot,
-                            const ::com::sun::star::uno::Reference< css::frame::XModel >& rxModel,
+                            const css::uno::Reference< css::frame::XModel >& rxModel,
                             const Size& rChartSize );
     virtual             ~XclExpChartDrawing();
 

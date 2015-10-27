@@ -51,24 +51,24 @@ class ScXMLImportWrapper
     ScDocShell& mrDocShell;
     ScDocument&     rDoc;
     SfxMedium*      pMedium;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xStorage;
+    css::uno::Reference< css::embed::XStorage > xStorage;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator();
+    css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator();
 
-    sal_uInt32 ImportFromComponent(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext,
-        com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
-        com::sun::star::uno::Reference<com::sun::star::xml::sax::XParser>& xParser,
-        com::sun::star::xml::sax::InputSource& aParserInput,
+    sal_uInt32 ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+        css::uno::Reference<css::frame::XModel>& xModel,
+        css::uno::Reference<css::xml::sax::XParser>& xParser,
+        css::xml::sax::InputSource& aParserInput,
         const OUString& sComponentName, const OUString& sDocName, const OUString& sOldDocName,
-        com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
+        css::uno::Sequence<css::uno::Any>& aArgs,
         bool bMustBeSuccessfull);
 
-    bool ExportToComponent(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext,
-        com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
-        com::sun::star::uno::Reference<com::sun::star::xml::sax::XWriter>& xWriter,
-        com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
+    bool ExportToComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+        css::uno::Reference<css::frame::XModel>& xModel,
+        css::uno::Reference<css::xml::sax::XWriter>& xWriter,
+        css::uno::Sequence<css::beans::PropertyValue>& aDescriptor,
         const OUString& sName, const OUString& sMediaType, const OUString& sComponentName,
-        com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
+        css::uno::Sequence<css::uno::Any>& aArgs,
         ScMySharedData*& pSharedData);
 
 public:
@@ -91,12 +91,12 @@ public:
 class ScXMLChartExportWrapper
 {
 public:
-    ScXMLChartExportWrapper( com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel, SfxMedium& rMed );
+    ScXMLChartExportWrapper( css::uno::Reference< css::frame::XModel > xModel, SfxMedium& rMed );
     bool Export();
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::frame::XModel > mxModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > mxStorage;
+    css::uno::Reference< css::frame::XModel > mxModel;
+    css::uno::Reference< css::embed::XStorage > mxStorage;
     SfxMedium& mrMedium;
 };
 

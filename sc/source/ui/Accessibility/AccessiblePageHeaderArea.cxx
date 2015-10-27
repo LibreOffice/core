@@ -261,7 +261,7 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName()
 }
 
 Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
     if (mxParent.is())
@@ -278,7 +278,7 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen() const
 }
 
 Rectangle ScAccessiblePageHeaderArea::GetBoundingBox() const
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Rectangle aRect;
     if (mxParent.is())

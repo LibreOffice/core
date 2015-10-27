@@ -38,10 +38,10 @@ struct ScCalcConfig;
 enum class SvtScriptType;
 
 #define SC_COLLATOR_IGNORES ( \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
+    css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
 
 #define SC_TRANSLITERATION_IGNORECASE ( \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
+    css::i18n::TransliterationModules_IGNORE_CASE )
 #define SC_TRANSLITERATION_CASESENSE 0
 
 //  Calc has lots of names...
@@ -485,14 +485,14 @@ class ScGlobal
 
     static  SvNumberFormatter*  pEnglishFormatter;          // for UNO / XML export
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XOrdinalSuffix> xOrdinalSuffix;
+    static css::uno::Reference< css::i18n::XOrdinalSuffix> xOrdinalSuffix;
     static CalendarWrapper*     pCalendar;
     static CollatorWrapper*     pCaseCollator;
     static CollatorWrapper*     pCollator;
     static ::utl::TransliterationWrapper* pTransliteration;
     static ::utl::TransliterationWrapper* pCaseTransliteration;
     static IntlWrapper*         pScIntlWrapper;
-    static ::com::sun::star::lang::Locale*      pLocale;
+    static css::lang::Locale*   pLocale;
 
     static ScFieldEditEngine*   pFieldEditEngine;
 
@@ -508,7 +508,7 @@ public:
     SC_DLLPUBLIC static CollatorWrapper*        GetCollator();
     static CollatorWrapper*     GetCaseCollator();
     static IntlWrapper*         GetScIntlWrapper();
-    static ::com::sun::star::lang::Locale*      GetLocale();
+    static css::lang::Locale*   GetLocale();
 
     SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration();
     static ::utl::TransliterationWrapper* GetCaseTransliteration();

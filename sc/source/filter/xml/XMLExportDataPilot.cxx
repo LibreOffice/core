@@ -513,37 +513,37 @@ void ScXMLExportDataPilot::WriteDatePart(sal_Int32 nPart)
 {
     switch(nPart)
     {
-    case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS :
+    case css::sheet::DataPilotFieldGroupBy::SECONDS :
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_SECONDS);
         }
         break;
-    case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES :
+    case css::sheet::DataPilotFieldGroupBy::MINUTES :
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_MINUTES);
         }
         break;
-    case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS :
+    case css::sheet::DataPilotFieldGroupBy::HOURS :
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_HOURS);
         }
         break;
-    case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS :
+    case css::sheet::DataPilotFieldGroupBy::DAYS :
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_DAYS);
         }
         break;
-    case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS :
+    case css::sheet::DataPilotFieldGroupBy::MONTHS :
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_MONTHS);
         }
         break;
-    case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS :
+    case css::sheet::DataPilotFieldGroupBy::QUARTERS :
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_QUARTERS);
         }
         break;
-    case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS :
+    case css::sheet::DataPilotFieldGroupBy::YEARS :
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUPED_BY, XML_YEARS);
         }

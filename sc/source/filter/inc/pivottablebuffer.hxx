@@ -139,14 +139,14 @@ public:
 
     /** Finalizes the field after import, creates grouping and other settings. */
     void                finalizeImport(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotDescriptor >& rxDPDesc );
+                            const css::uno::Reference< css::sheet::XDataPilotDescriptor >& rxDPDesc );
     /** Finalizes the grouped date field after import. */
     void                finalizeDateGroupingImport(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField,
+                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
                             sal_Int32 nBaseFieldIdx );
     /** Finalizes the grouped field after import. */
     void                finalizeParentGroupingImport(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField,
+                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
 
@@ -166,7 +166,7 @@ public:
 
 private:
     /** Converts dimension and other settings for row, column, page, or hidden fields. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >
+    css::uno::Reference< css::sheet::XDataPilotField >
                         convertRowColPageField( sal_Int32 nAxis );
 
 private:
@@ -271,7 +271,7 @@ struct PTDefinitionModel : public AutoFormatModel
 
 struct PTLocationModel
 {
-    ::com::sun::star::table::CellRangeAddress
+    css::table::CellRangeAddress
                         maRange;            /// Target cell range for the pivot table.
     sal_Int32           mnFirstHeaderRow;   /// First row of header cells (relative in pivot table).
     sal_Int32           mnFirstDataRow;     /// First row of data cells (relative in pivot table).
@@ -321,22 +321,22 @@ public:
     void                finalizeImport();
     /** Creates all date group fields for the specified cache field after import. */
     void                finalizeDateGroupingImport(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField,
+                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
                             sal_Int32 nBaseFieldIdx );
     /** Creates all grouped fields for the specified cache field after import. */
     void                finalizeParentGroupingImport(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField,
+                            const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
 
     /** Returns the associated data pilot field for the specified pivot table field. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >
+    css::uno::Reference< css::sheet::XDataPilotField >
                         getDataPilotField( const OUString& rFieldName ) const;
     /** Returns the associated data pilot field for the specified pivot table field. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >
+    css::uno::Reference< css::sheet::XDataPilotField >
                         getDataPilotField( sal_Int32 nFieldIdx ) const;
     /** Returns the data layout field used to store all data fields in row/col dimension. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >
+    css::uno::Reference< css::sheet::XDataPilotField >
                         getDataLayoutField() const;
 
     /** Returns the cache field with the specified index. */
@@ -365,19 +365,19 @@ private:
     static void         importFields( IndexVector& orFields, SequenceInputStream& rStrm );
 
 private:
-    ScDPObject* mpDPObject;
+    ScDPObject*           mpDPObject;
     PivotTableFieldVector maFields;         /// All pivot table fields.
-    PivotTableField     maDataField;        /// Data layout field.
-    IndexVector         maRowFields;        /// Indexes to fields in row dimension.
-    IndexVector         maColFields;        /// Indexes to fields in column dimension.
-    PageFieldVector     maPageFields;       /// Settings for all fields in page dimension.
-    DataFieldVector     maDataFields;       /// Settings for all fields in data area.
+    PivotTableField       maDataField;        /// Data layout field.
+    IndexVector           maRowFields;        /// Indexes to fields in row dimension.
+    IndexVector           maColFields;        /// Indexes to fields in column dimension.
+    PageFieldVector       maPageFields;       /// Settings for all fields in page dimension.
+    DataFieldVector       maDataFields;       /// Settings for all fields in data area.
     PivotTableFilterVector maFilters;       /// All field filters.
-    PTDefinitionModel   maDefModel;         /// Global pivot table settings.
-    PTLocationModel     maLocationModel;    /// Location settings of the pivot table.
-    const PivotCache*   mpPivotCache;       /// The pivot cache this table is based on.
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotDescriptor >
-                        mxDPDescriptor;     /// Descriptor of the DataPilot object.
+    PTDefinitionModel     maDefModel;         /// Global pivot table settings.
+    PTLocationModel       maLocationModel;    /// Location settings of the pivot table.
+    const PivotCache*     mpPivotCache;       /// The pivot cache this table is based on.
+    css::uno::Reference< css::sheet::XDataPilotDescriptor >
+                          mxDPDescriptor;     /// Descriptor of the DataPilot object.
 };
 
 class PivotTableBuffer : public WorkbookHelper

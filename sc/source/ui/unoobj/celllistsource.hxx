@@ -41,10 +41,10 @@ namespace calc
 
     class OCellListSource;
     // the base for our interfaces
-    typedef ::cppu::WeakAggComponentImplHelper4 <   ::com::sun::star::form::binding::XListEntrySource
-                                                ,   ::com::sun::star::util::XModifyListener
-                                                ,   ::com::sun::star::lang::XServiceInfo
-                                                ,   ::com::sun::star::lang::XInitialization
+    typedef ::cppu::WeakAggComponentImplHelper4 <   css::form::binding::XListEntrySource
+                                                ,   css::util::XModifyListener
+                                                ,   css::lang::XServiceInfo
+                                                ,   css::lang::XInitialization
                                                 >   OCellListSource_Base;
     // the base for the property handling
     typedef ::comphelper::OPropertyContainer        OCellListSource_PBase;
@@ -58,9 +58,9 @@ namespace calc
                             ,public OCellListSource_PABase
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
+        css::uno::Reference< css::sheet::XSpreadsheetDocument >
                     m_xDocument;            /// the document where our cell lives
-        ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
+        css::uno::Reference< css::table::XCellRange >
                     m_xRange;               /// the range of cells we're bound to
         ::cppu::OInterfaceContainerHelper
                     m_aListEntryListeners;  /// our listeners
@@ -68,7 +68,7 @@ namespace calc
 
     public:
         OCellListSource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& _rxDocument
+            const css::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument
         );
 
         using OCellListSource_PBase::getFastPropertyValue;
@@ -84,36 +84,36 @@ namespace calc
         DECLARE_XTYPEPROVIDER()
 
         // XListEntrySource
-        virtual sal_Int32 SAL_CALL getListEntryCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getListEntry( sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAllListEntries(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addListEntryListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntryListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeListEntryListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntryListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getListEntryCount(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getListEntry( sal_Int32 Position ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getAllListEntries(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addListEntryListener( const css::uno::Reference< css::form::binding::XListEntryListener >& Listener ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeListEntryListener( const css::uno::Reference< css::form::binding::XListEntryListener >& Listener ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) override;
 
         // OComponentHelper/XComponent
         virtual void SAL_CALL disposing() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
         // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     private:
         void    checkDisposed( ) const;
@@ -123,7 +123,7 @@ namespace calc
             @precond
                 our m_xRange is not <NULL/>
         */
-        ::com::sun::star::table::CellRangeAddress
+        css::table::CellRangeAddress
                 getRangeAddress( ) const;
 
         /** retrievs the text of a cell within our range

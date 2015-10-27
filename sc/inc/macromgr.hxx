@@ -40,7 +40,7 @@ public:
 private:
     typedef std::unordered_map< OUString, bool, OUStringHash, ::std::equal_to< OUString > > NameBoolMap;
     NameBoolMap mhFuncToVolatile;
-    com::sun::star::uno::Reference< com::sun::star::container::XContainerListener > mxContainerListener;
+    css::uno::Reference< css::container::XContainerListener > mxContainerListener;
 
     ::std::unique_ptr<ScUserMacroDepTracker> mpDepTracker;
     ScDocument* mpDoc;

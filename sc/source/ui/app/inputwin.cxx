@@ -1109,12 +1109,12 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
     if ( pViewFrm )
     {
-        Reference< com::sun::star::beans::XPropertySet > xPropSet( pViewFrm->GetFrame().GetFrameInterface(), UNO_QUERY );
-        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        Reference< css::beans::XPropertySet > xPropSet( pViewFrm->GetFrame().GetFrameInterface(), UNO_QUERY );
+        Reference< css::frame::XLayoutManager > xLayoutManager;
 
         if ( xPropSet.is() )
         {
-            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+            css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
             aValue >>= xLayoutManager;
         }
 
@@ -2023,7 +2023,7 @@ void ScTextWnd::ImplInitSettings()
     Invalidate();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScTextWnd::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > ScTextWnd::CreateAccessible()
 {
     return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), NULL, this,
         OUString(ScResId(STR_ACC_EDITLINE_NAME)),

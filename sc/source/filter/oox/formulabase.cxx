@@ -1279,7 +1279,7 @@ bool OpCodeProviderImpl::fillEntrySeq( OpCodeEntrySequence& orEntrySeq,
 {
     try
     {
-        orEntrySeq = rxMapper->getAvailableMappings( ::com::sun::star::sheet::FormulaLanguage::ODFF, nMapGroup );
+        orEntrySeq = rxMapper->getAvailableMappings( css::sheet::FormulaLanguage::ODFF, nMapGroup );
         return orEntrySeq.hasElements();
     }
     catch( Exception& )
@@ -1306,7 +1306,7 @@ bool OpCodeProviderImpl::fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiT
 {
     orIntFuncTokenMap.clear();
     orExtFuncTokenMap.clear();
-    if( fillEntrySeq( orEntrySeq, rxMapper, ::com::sun::star::sheet::FormulaMapGroup::FUNCTIONS ) )
+    if( fillEntrySeq( orEntrySeq, rxMapper, css::sheet::FormulaMapGroup::FUNCTIONS ) )
     {
         const FormulaOpCodeMapEntry* pEntry = orEntrySeq.getConstArray();
         const FormulaOpCodeMapEntry* pEntryEnd = pEntry + orEntrySeq.getLength();
@@ -1499,7 +1499,7 @@ ApiParserWrapper::ApiParserWrapper(
     OSL_ENSURE( mxParser.is(), "ApiParserWrapper::ApiParserWrapper - cannot create API formula parser object" );
     maParserProps.set( mxParser );
     maParserProps.setProperty( PROP_CompileEnglish, true );
-    maParserProps.setProperty( PROP_FormulaConvention, ::com::sun::star::sheet::AddressConvention::XL_OOX );
+    maParserProps.setProperty( PROP_FormulaConvention, css::sheet::AddressConvention::XL_OOX );
     maParserProps.setProperty( PROP_IgnoreLeadingSpaces, false );
     maParserProps.setProperty( PROP_OpCodeMap, getOoxParserMap() );
 }

@@ -48,7 +48,7 @@ public:
                                     ScXMLImport& rImport,
                                     sal_uInt16 nPrfx,
                                     const OUString& rLName,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
                                     ScMyImpCellRangeSource* pCellRangeSource
                                     );
     virtual                     ~ScXMLCellRangeSourceContext();
@@ -56,7 +56,7 @@ public:
     virtual SvXMLImportContext* CreateChildContext(
                                     sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
+                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList
                                     ) override;
     virtual void                EndElement() override;
 };

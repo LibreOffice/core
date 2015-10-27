@@ -824,7 +824,7 @@ OUString ScDPDimensionSaveData::CreateDateGroupDimName(
     sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource,
     const std::vector<OUString>* pDeletedNames )
 {
-    using namespace ::com::sun::star::sheet::DataPilotFieldGroupBy;
+    using namespace css::sheet::DataPilotFieldGroupBy;
     OUString aPartName;
     switch( nDatePart )
     {

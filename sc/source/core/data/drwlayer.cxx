@@ -353,7 +353,7 @@ void ScDrawLayer::UseHyphenator()
 {
     if (!bHyphenatorSet)
     {
-        com::sun::star::uno::Reference< com::sun::star::linguistic2::XHyphenator >
+        css::uno::Reference< css::linguistic2::XHyphenator >
                                     xHyphenator = LinguMgr::GetHyphenator();
 
         GetDrawOutliner().SetHyphenator( xHyphenator );
@@ -2130,9 +2130,9 @@ void ScDrawLayer::SetChanged( bool bFlg /* = true */ )
     FmFormModel::SetChanged( bFlg );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ScDrawLayer::createUnoModel()
+css::uno::Reference< css::uno::XInterface > ScDrawLayer::createUnoModel()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRet;
+    css::uno::Reference< css::uno::XInterface > xRet;
     if( pDoc && pDoc->GetDocumentShell() )
         xRet = pDoc->GetDocumentShell()->GetModel();
 

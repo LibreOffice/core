@@ -805,15 +805,15 @@ struct ScMyImportValidation
     OUString                                   sFormulaNmsp1;
     OUString                                   sFormulaNmsp2;
     OUString                                   sBaseCellAddress;   // string is used directly
-    com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
-    com::sun::star::sheet::ValidationType           aValidationType;
-    com::sun::star::sheet::ConditionOperator        aOperator;
-    formula::FormulaGrammar::Grammar                eGrammar1;
-    formula::FormulaGrammar::Grammar                eGrammar2;
-    sal_Int16                                       nShowList;
-    bool                                            bShowErrorMessage;
-    bool                                            bShowImputMessage;
-    bool                                            bIgnoreBlanks;
+    css::sheet::ValidationAlertStyle           aAlertStyle;
+    css::sheet::ValidationType                 aValidationType;
+    css::sheet::ConditionOperator              aOperator;
+    formula::FormulaGrammar::Grammar           eGrammar1;
+    formula::FormulaGrammar::Grammar           eGrammar2;
+    sal_Int16                                  nShowList;
+    bool                                       bShowErrorMessage;
+    bool                                       bShowImputMessage;
+    bool                                       bIgnoreBlanks;
 };
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
@@ -949,10 +949,10 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     std::vector<OUString>          aTableStyles;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
     ScMyStyleNumberFormats* pStyleNumberFormats;
-    com::sun::star::uno::Reference <com::sun::star::util::XNumberFormats> xNumberFormats;
-    com::sun::star::uno::Reference <com::sun::star::util::XNumberFormatTypes> xNumberFormatTypes;
+    css::uno::Reference <css::util::XNumberFormats> xNumberFormats;
+    css::uno::Reference <css::util::XNumberFormatTypes> xNumberFormatTypes;
 
-    com::sun::star::uno::Reference <com::sun::star::sheet::XSheetCellRangeContainer> xSheetCellRanges;
+    css::uno::Reference <css::sheet::XSheetCellRangeContainer> xSheetCellRanges;
 
     OUString           sPrevStyleName;
     OUString           sPrevCurrency;
@@ -973,13 +973,12 @@ protected:
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
-                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual XMLShapeImportHelper* CreateShapeImport() override;
 
 public:
     ScXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlag);
 
     virtual ~ScXMLImport() throw();
@@ -994,17 +993,17 @@ public:
     SvXMLImportContext *CreateMetaContext(
                                     const OUString& rLocalName );
     SvXMLImportContext *CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
-                                     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext(
                                     const OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(const OUString& rLocalName,
-                                     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, bool bAutoStyles );
+                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                     bool bAutoStyles );
     SvXMLImportContext *CreateBodyContext(
                                     const OUString& rLocalName,
-                                    const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
+                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
 
-    virtual void SetStatistics(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats) override;
+    virtual void SetStatistics( const css::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
 
     ScDocumentImport& GetDoc();
 
@@ -1141,15 +1140,15 @@ public:
     ScXMLChangeTrackingImportHelper* GetChangeTrackingImportHelper();
     void InsertStyles();
 
-    void SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps);
-    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps) override;
-    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) override;
+    void SetChangeTrackingViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& rChangeProps);
+    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
     void SetTableStyle(const OUString& rValue) { aTableStyles.push_back(rValue); }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const OUString& rCurrency);
     bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString& sCurrencySymbol, const OUString& sBankSymbol);
-    void SetType(com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet>& rProperties,
+    void SetType(css::uno::Reference <css::beans::XPropertySet>& rProperties,
         sal_Int32& rNumberFormat,
         const sal_Int16 nCellType,
         const OUString& rCurrency);
@@ -1160,7 +1159,7 @@ public:
     bool HasNewCondFormatData() { return mbHasNewCondFormatData; }
 
 private:
-    void AddStyleRange(const com::sun::star::table::CellRangeAddress& rCellRange);
+    void AddStyleRange(const css::table::CellRangeAddress& rCellRange);
     void SetStyleToRanges();
 
     void ExamineDefaultStyle();
@@ -1174,13 +1173,13 @@ public:
     void SetStylesToRangesFinished();
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL startDocument()
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL endDocument()
-        throw(::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException,
+        throw(css::xml::sax::SAXException,
+              css::uno::RuntimeException,
               std::exception) override;
 
     virtual void DisposingModel() override;

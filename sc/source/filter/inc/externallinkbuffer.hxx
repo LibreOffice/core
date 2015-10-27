@@ -93,7 +93,7 @@ public:
 
     /** Returns the DDE item info needed by the XML formula parser. */
     bool                getDdeItemInfo(
-                            ::com::sun::star::sheet::DDEItemInfo& orItemInfo ) const;
+                            css::sheet::DDEItemInfo& orItemInfo ) const;
 
     /** Returns the complete DDE link data of this DDE item. */
     bool                getDdeLinkData(
@@ -106,13 +106,13 @@ private:
     void                setResultSize( sal_Int32 nColumns, sal_Int32 nRows );
 
 private:
-    typedef Matrix< ::com::sun::star::uno::Any > ResultMatrix;
+    typedef Matrix< css::uno::Any > ResultMatrix;
 
     const ExternalLink& mrParentLink;       /// External link this name belongs to.
     ExternalNameModel   maExtNameModel;     /// Additional name data.
     ResultMatrix        maResults;          /// DDE/OLE link results.
     ResultMatrix::iterator maCurrIt;        /// Current position in result matrix.
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDDELink >
+    css::uno::Reference< css::sheet::XDDELink >
                         mxDdeLink;          /// Interface of a DDE link.
     bool                mbDdeLinkCreated;   /// True = already tried to create the DDE link.
 };
@@ -229,7 +229,7 @@ public:
     /** Returns the target URL of this external link. */
     inline const OUString& getTargetUrl() const { return maTargetUrl; }
     /** Returns the link info needed by the XML formula parser. */
-    ::com::sun::star::sheet::ExternalLinkInfo getLinkInfo() const;
+    css::sheet::ExternalLinkInfo getLinkInfo() const;
 
     /** Returns the type of the external library if this is a library link. */
     FunctionLibraryType getFuncLibraryType() const;
@@ -239,7 +239,7 @@ public:
     /** Returns the external sheet cache index or for the passed sheet. */
     sal_Int32           getSheetCacheIndex( sal_Int32 nTabId = 0 ) const;
     /** Returns the sheet cache of the external sheet with the passed index. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
+    css::uno::Reference< css::sheet::XExternalSheetCache >
                         getSheetCache( sal_Int32 nTabId ) const;
 
     /** Returns the internal sheet range or range of external sheet caches for the passed sheet range (BIFF only). */
@@ -265,10 +265,10 @@ private:
 
     ExternalLinkType    meLinkType;         /// Type of this link object.
     FunctionLibraryType meFuncLibType;      /// Type of the function library, if link type is LINKTYPE_LIBRARY.
-    OUString     maRelId;            /// Relation identifier for the external link fragment.
-    OUString     maClassName;        /// DDE service, OLE class name.
-    OUString     maTargetUrl;        /// Target link, DDE topic, OLE target.
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalDocLink >
+    OUString            maRelId;            /// Relation identifier for the external link fragment.
+    OUString            maClassName;        /// DDE service, OLE class name.
+    OUString            maTargetUrl;        /// Target link, DDE topic, OLE target.
+    css::uno::Reference< css::sheet::XExternalDocLink >
                         mxDocLink;          /// Interface for an external document.
     Int16Vector         maCalcSheets;       /// Internal sheet indexes.
     Int32Vector         maSheetCaches;      /// External sheet cache indexes.
@@ -315,7 +315,7 @@ public:
     void                importExternalSheets( SequenceInputStream& rStrm );
 
     /** Returns the sequence of link infos needed by the XML formula parser. */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::ExternalLinkInfo >
+    css::uno::Sequence< css::sheet::ExternalLinkInfo >
                         getLinkInfos() const;
 
     /** Returns the external link for the passed reference identifier. */

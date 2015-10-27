@@ -34,9 +34,9 @@ namespace xls {
 class OOXMLFormulaParserImpl;
 
 typedef ::cppu::WeakImplHelper<
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XInitialization,
-    ::com::sun::star::sheet::XFilterFormulaParser > OOXMLFormulaParser_BASE;
+    css::lang::XServiceInfo,
+    css::lang::XInitialization,
+    css::sheet::XFilterFormulaParser > OOXMLFormulaParser_BASE;
 
 /** OOXML formula parser/compiler service for usage in ODF filters. */
 class OOXMLFormulaParser : public OOXMLFormulaParser_BASE
@@ -48,45 +48,45 @@ public:
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
     virtual ::rtl::OUString SAL_CALL
-                        getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                        getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
                         supportsService( const ::rtl::OUString& rService )
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-                        getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
+                        getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
     virtual void SAL_CALL initialize(
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )
-                            throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            const css::uno::Sequence< css::uno::Any >& rArgs )
+                            throw( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.sheet.XFilterFormulaParser interface ----------------------
 
     virtual ::rtl::OUString SAL_CALL
                         getSupportedNamespace()
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            throw( css::uno::RuntimeException, std::exception ) override;
 
     // com.sun.star.sheet.XFormulaParser interface ----------------------------
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL
+    virtual css::uno::Sequence< css::sheet::FormulaToken > SAL_CALL
                         parseFormula(
                             const ::rtl::OUString& rFormula,
-                            const ::com::sun::star::table::CellAddress& rReferencePos )
-                        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            const css::table::CellAddress& rReferencePos )
+                        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual ::rtl::OUString SAL_CALL
                         printFormula(
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& rTokens,
-                            const ::com::sun::star::table::CellAddress& rReferencePos )
-                        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                            const css::uno::Sequence< css::sheet::FormulaToken >& rTokens,
+                            const css::table::CellAddress& rReferencePos )
+                        throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
     typedef std::shared_ptr< OOXMLFormulaParserImpl >   ParserImplRef;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+    css::uno::Reference< css::lang::XComponent >
                         mxComponent;
     ParserImplRef       mxParserImpl;       /// Implementation of import parser.
 };

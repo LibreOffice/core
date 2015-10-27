@@ -105,9 +105,9 @@ private:
 class ScFormulaCfg : public ScFormulaOptions, public utl::ConfigItem
 {
     typedef std::map<OUString,sal_uInt16> PropsToIds;
-    static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static css::uno::Sequence<OUString> GetPropertyNames();
     static ScFormulaCfg::PropsToIds GetPropNamesToId();
-    void UpdateFromProperties( const com::sun::star::uno::Sequence<OUString>& rNames );
+    void UpdateFromProperties( const css::uno::Sequence<OUString>& rNames );
 
     virtual void ImplCommit() override;
 
@@ -116,7 +116,7 @@ public:
 
     void SetOptions( const ScFormulaOptions& rNew );
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

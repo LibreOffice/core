@@ -132,7 +132,7 @@ void ScServerObject::EndListeningAll()
 }
 
 bool ScServerObject::GetData(
-        ::com::sun::star::uno::Any & rData /*out param*/,
+        css::uno::Any & rData /*out param*/,
         const OUString & rMimeType, bool /* bSynchron */ )
 {
     if (!pDocSh)
@@ -173,7 +173,7 @@ bool ScServerObject::GetData(
             OString aByteData;
             if( aObj.ExportByteString( aByteData, osl_getThreadTextEncoding(), SotClipboardFormatId::SYLK ) )
             {
-                rData <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+                rData <<= css::uno::Sequence< sal_Int8 >(
                                         reinterpret_cast<const sal_Int8*>(aByteData.getStr()),
                                         aByteData.getLength() + 1 );
                 return true;

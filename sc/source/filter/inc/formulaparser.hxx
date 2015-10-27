@@ -105,12 +105,12 @@ public:
 
     /** Converts an OOXML formula string. */
     ApiTokenSequence    importFormula(
-                            const ::com::sun::star::table::CellAddress& rBaseAddr,
+                            const css::table::CellAddress& rBaseAddr,
                             const OUString& rFormulaString ) const;
 
     /** Imports and converts a BIFF12 token array from the passed stream. */
     ApiTokenSequence    importFormula(
-                            const ::com::sun::star::table::CellAddress& rBaseAddr,
+                            const css::table::CellAddress& rBaseAddr,
                             FormulaType eType,
                             SequenceInputStream& rStrm ) const;
 

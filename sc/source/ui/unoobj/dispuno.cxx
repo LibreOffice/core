@@ -169,7 +169,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setMasterDispatchProvider(
 // XEventListener
 
 void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject& /* Source */ )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception)
+                                throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -333,8 +333,8 @@ void SAL_CALL ScDispatch::removeStatusListener(
 
 // XSelectionChangeListener
 
-void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventObject& /* aEvent */ )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ScDispatch::selectionChanged( const css::lang::EventObject& /* aEvent */ )
+    throw (css::uno::RuntimeException, std::exception)
 {
     //  currently only called for URL cURLDocDataSource
 
@@ -368,8 +368,8 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
 
 // XEventListener
 
-void SAL_CALL ScDispatch::disposing( const ::com::sun::star::lang::EventObject& rSource )
-                                throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ScDispatch::disposing( const css::lang::EventObject& rSource )
+                                throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference<view::XSelectionSupplier> xSupplier(rSource.Source, uno::UNO_QUERY);
     xSupplier->removeSelectionChangeListener(this);

@@ -615,9 +615,9 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     mbMultiSel( false ),
     mbScrollHor( false )
 {
-    namespace FormCompType = ::com::sun::star::form::FormComponentType;
-    namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
-    namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
+    namespace FormCompType = css::form::FormComponentType;
+    namespace AwtVisualEffect = css::awt::VisualEffect;
+    namespace AwtScrollOrient = css::awt::ScrollBarOrientation;
 
     ScfPropertySet aCtrlProp( XclControlHelper::GetControlModel( xShape ) );
     if( !xShape.is() || !aCtrlProp.Is() )
@@ -1063,7 +1063,7 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
     Reference< XModel > xModel;
     aShapeProp.GetProperty( xModel, "Model" );
     mxChartDoc.set( xModel,UNO_QUERY );
-    ::com::sun::star::awt::Rectangle aBoundRect;
+    css::awt::Rectangle aBoundRect;
     aShapeProp.GetProperty( aBoundRect, "BoundRect" );
     Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
     mxChart.reset( new XclExpChart( GetRoot(), xModel, aChartRect ) );
@@ -1332,7 +1332,7 @@ XclMacroHelper::SetMacroLink( const OUString& rMacroName )
     return false;
 }
 
-XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, ScDocument* pDoc ) :
+XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > xShape, ScDocument* pDoc ) :
     XclObjAny( rRoot, xShape, pDoc ),
     XclMacroHelper( rRoot )
 {

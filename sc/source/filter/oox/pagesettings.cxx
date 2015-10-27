@@ -558,7 +558,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     {
                         Reference<text::XTextContent> xContent = createField( maFileNameService );
                         PropertySet aPropSet( xContent );
-                        aPropSet.setProperty( PROP_FileFormat, ::com::sun::star::text::FilenameDisplayFormat::NAME_AND_EXT );
+                        aPropSet.setProperty( PROP_FileFormat, css::text::FilenameDisplayFormat::NAME_AND_EXT );
                         appendField( xContent );
                     }
                     break;
@@ -568,7 +568,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                             Reference<text::XTextContent> xContent = createField( maFileNameService );
                             PropertySet aPropSet( xContent );
                             // FilenameDisplayFormat::PATH not supported by Calc
-                            aPropSet.setProperty( PROP_FileFormat, ::com::sun::star::text::FilenameDisplayFormat::FULL );
+                            aPropSet.setProperty( PROP_FileFormat, css::text::FilenameDisplayFormat::FULL );
                             appendField( xContent );
                             /*  path only is not supported -- if we find a '&Z&F'
                                 combination for path/name, skip the '&F' part */
@@ -988,7 +988,7 @@ void PageSettingsConverter::writePageSettingsProperties(
     if( !rModel.maGraphicUrl.isEmpty() )
     {
         aPropMap.setProperty( PROP_BackGraphicURL, rModel.maGraphicUrl);
-        aPropMap.setProperty( PROP_BackGraphicLocation, ::com::sun::star::style::GraphicLocation_TILED);
+        aPropMap.setProperty( PROP_BackGraphicLocation, css::style::GraphicLocation_TILED);
     }
 
     rPropSet.setProperties( aPropMap );

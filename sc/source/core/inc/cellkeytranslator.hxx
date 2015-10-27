@@ -35,9 +35,9 @@ struct ScCellKeyword
 {
     const sal_Char* mpName;
     OpCode meOpCode;
-    const ::com::sun::star::lang::Locale& mrLocale;
+    const css::lang::Locale& mrLocale;
 
-    ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const ::com::sun::star::lang::Locale& rLocale);
+    ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const css::lang::Locale& rLocale);
 };
 
 typedef std::unordered_map< OUString, ::std::list<ScCellKeyword>, OUStringHash > ScCellKeywordHashMap;
@@ -63,7 +63,7 @@ typedef std::unordered_map< OUString, ::std::list<ScCellKeyword>, OUStringHash >
 class ScCellKeywordTranslator
 {
 public:
-    static void transKeyword(OUString& rName, const ::com::sun::star::lang::Locale* pLocale = NULL, OpCode eOpCode = ocNone);
+    static void transKeyword(OUString& rName, const css::lang::Locale* pLocale = NULL, OpCode eOpCode = ocNone);
     ~ScCellKeywordTranslator();
 
 private:
@@ -71,9 +71,9 @@ private:
 
     void init();
     void addToMap(const OUString& rKey, const sal_Char* pName,
-                  const ::com::sun::star::lang::Locale& rLocale,
+                  const css::lang::Locale& rLocale,
                   OpCode eOpCode = ocNone);
-    void addToMap(const TransItem* pItems, const ::com::sun::star::lang::Locale& rLocale);
+    void addToMap(const TransItem* pItems, const css::lang::Locale& rLocale);
 
     static ::std::unique_ptr<ScCellKeywordTranslator> spInstance;
     ScCellKeywordHashMap maStringNameMap;

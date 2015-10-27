@@ -101,7 +101,7 @@ void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEn
 }
 
 ::sfx2::SvBaseLink::UpdateResult ScAreaLink::DataChanged(
-    const OUString&, const ::com::sun::star::uno::Any& )
+    const OUString&, const css::uno::Any& )
 {
     //  bei bInCreate nichts tun, damit Update gerufen werden kann, um den Status im
     //  LinkManager zu setzen, ohne die Daten im Dokument zu aendern

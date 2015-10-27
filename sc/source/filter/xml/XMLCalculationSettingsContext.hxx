@@ -27,7 +27,7 @@
 
 class ScXMLCalculationSettingsContext : public SvXMLImportContext
 {
-    com::sun::star::util::Date aNullDate;
+    css::util::Date aNullDate;
     double fIterationEpsilon;
     sal_Int32 nIterationCount;
     sal_uInt16 nYear2000;
@@ -43,17 +43,15 @@ class ScXMLCalculationSettingsContext : public SvXMLImportContext
 public:
     ScXMLCalculationSettingsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+                        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLCalculationSettingsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    void SetNullDate(const com::sun::star::util::Date& aDate) { aNullDate = aDate; }
+    void SetNullDate(const css::util::Date& aDate) { aNullDate = aDate; }
     void SetIterationStatus(const bool bValue) { bIsIterationEnabled = bValue; }
     void SetIterationCount(const sal_Int32 nValue) { nIterationCount = nValue; }
     void SetIterationEpsilon(const double fValue) { fIterationEpsilon = fValue; }
@@ -67,15 +65,13 @@ class ScXMLNullDateContext : public SvXMLImportContext
 public:
     ScXMLNullDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
+                        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLNullDateContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 };
@@ -87,15 +83,13 @@ class ScXMLIterationContext : public SvXMLImportContext
 public:
     ScXMLIterationContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
+                        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLIterationContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) override;
+                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
     virtual void EndElement() override;
 };

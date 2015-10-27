@@ -59,7 +59,7 @@ ScDrawPage* ScDrawPage::Clone(SdrModel* const pNewModel) const
     return pNewPage;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ScDrawPage::createUnoPage()
+css::uno::Reference< css::uno::XInterface > ScDrawPage::createUnoPage()
 {
     return static_cast<cppu::OWeakObject*>( new ScPageObj( this ) );
 }

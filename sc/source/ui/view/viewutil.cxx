@@ -104,31 +104,31 @@ sal_Int32 ScViewUtil::GetTransliterationType( sal_uInt16 nSlotID )
     switch ( nSlotID )
     {
         case SID_TRANSLITERATE_SENTENCE_CASE:
-            nType = com::sun::star::i18n::TransliterationModulesExtra::SENTENCE_CASE;
+            nType = css::i18n::TransliterationModulesExtra::SENTENCE_CASE;
             break;
         case SID_TRANSLITERATE_TITLE_CASE:
-            nType = com::sun::star::i18n::TransliterationModulesExtra::TITLE_CASE;
+            nType = css::i18n::TransliterationModulesExtra::TITLE_CASE;
             break;
         case SID_TRANSLITERATE_TOGGLE_CASE:
-            nType = com::sun::star::i18n::TransliterationModulesExtra::TOGGLE_CASE;
+            nType = css::i18n::TransliterationModulesExtra::TOGGLE_CASE;
             break;
         case SID_TRANSLITERATE_UPPER:
-            nType = com::sun::star::i18n::TransliterationModules_LOWERCASE_UPPERCASE;
+            nType = css::i18n::TransliterationModules_LOWERCASE_UPPERCASE;
             break;
         case SID_TRANSLITERATE_LOWER:
-            nType = com::sun::star::i18n::TransliterationModules_UPPERCASE_LOWERCASE;
+            nType = css::i18n::TransliterationModules_UPPERCASE_LOWERCASE;
             break;
         case SID_TRANSLITERATE_HALFWIDTH:
-            nType = com::sun::star::i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
+            nType = css::i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
             break;
         case SID_TRANSLITERATE_FULLWIDTH:
-            nType = com::sun::star::i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
+            nType = css::i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
             break;
         case SID_TRANSLITERATE_HIRAGANA:
-            nType = com::sun::star::i18n::TransliterationModules_KATAKANA_HIRAGANA;
+            nType = css::i18n::TransliterationModules_KATAKANA_HIRAGANA;
             break;
         case SID_TRANSLITERATE_KATAGANA:
-            nType = com::sun::star::i18n::TransliterationModules_HIRAGANA_KATAKANA;
+            nType = css::i18n::TransliterationModules_HIRAGANA_KATAKANA;
             break;
     }
     return nType;

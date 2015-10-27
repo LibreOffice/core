@@ -33,13 +33,13 @@ namespace {
 /** Date part flags in order of the list box entries. */
 static const sal_Int32 spnDateParts[] =
 {
-    com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS,
-    com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES,
-    com::sun::star::sheet::DataPilotFieldGroupBy::HOURS,
-    com::sun::star::sheet::DataPilotFieldGroupBy::DAYS,
-    com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS,
-    com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS,
-    com::sun::star::sheet::DataPilotFieldGroupBy::YEARS
+    css::sheet::DataPilotFieldGroupBy::SECONDS,
+    css::sheet::DataPilotFieldGroupBy::MINUTES,
+    css::sheet::DataPilotFieldGroupBy::HOURS,
+    css::sheet::DataPilotFieldGroupBy::DAYS,
+    css::sheet::DataPilotFieldGroupBy::MONTHS,
+    css::sheet::DataPilotFieldGroupBy::QUARTERS,
+    css::sheet::DataPilotFieldGroupBy::YEARS
 };
 
 static const sal_uInt16 nDatePartResIds[] =
@@ -238,7 +238,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( vcl::Window* pParent,
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
 
     if( nDatePart == 0 )
-        nDatePart = com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS;
+        nDatePart = css::sheet::DataPilotFieldGroupBy::MONTHS;
     for( size_t nIdx = 0; nIdx < nCount; ++nIdx )
         mpLbUnits->CheckEntryPos( static_cast< sal_uInt16 >( nIdx ), (nDatePart & spnDateParts[ nIdx ]) != 0 );
 
@@ -321,7 +321,7 @@ sal_Int32 ScDPDateGroupDlg::GetDatePart() const
 {
     // return DAYS for special "number of days" mode
     if( mpRbNumDays->IsChecked() )
-        return com::sun::star::sheet::DataPilotFieldGroupBy::DAYS;
+        return css::sheet::DataPilotFieldGroupBy::DAYS;
 
     // return listbox contents for "units" mode
     sal_Int32 nDatePart = 0;

@@ -47,7 +47,7 @@ class   ScFormatRangeStyles;
 class ScMyIteratorBase
 {
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) = 0;
+    virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) = 0;
 
 public:
                                 ScMyIteratorBase();
@@ -56,7 +56,7 @@ public:
     virtual void                SetCellData( ScMyCell& rMyCell ) = 0;
     virtual void                Sort() = 0;
 
-    void                        UpdateAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    void                        UpdateAddress( css::table::CellAddress& rCellAddress );
 };
 
 struct ScMyShape
@@ -65,7 +65,7 @@ struct ScMyShape
     ScAddress   aEndAddress;
     sal_Int32       nEndX;
     sal_Int32       nEndY;
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
+    css::uno::Reference<css::drawing::XShape> xShape;
 
     bool operator<(const ScMyShape& aShape) const;
 };
@@ -77,7 +77,7 @@ class ScMyShapesContainer : ScMyIteratorBase
 private:
     ScMyShapeList               aShapeList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) override;
+    virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyShapesContainer();
     virtual                     ~ScMyShapesContainer();
@@ -93,7 +93,7 @@ public:
 
 struct ScMyNoteShape
 {
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
+    css::uno::Reference<css::drawing::XShape> xShape;
     ScAddress aPos;
 
     bool operator<(const ScMyNoteShape& aNote) const;
@@ -106,7 +106,7 @@ class ScMyNoteShapesContainer : ScMyIteratorBase
 private:
     ScMyNoteShapeList           aNoteShapeList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) override;
+    virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyNoteShapesContainer();
     virtual                     ~ScMyNoteShapesContainer();
@@ -121,7 +121,7 @@ public:
 
 struct ScMyMergedRange
 {
-    com::sun::star::table::CellRangeAddress aCellRange;
+    css::table::CellRangeAddress aCellRange;
     sal_Int32                   nRows;
     bool                        bIsFirst;
     bool                        operator<(const ScMyMergedRange& aRange) const;
@@ -134,11 +134,11 @@ class ScMyMergedRangesContainer : ScMyIteratorBase
 private:
     ScMyMergedRangeList         aRangeList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) override;
+    virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyMergedRangesContainer();
     virtual                     ~ScMyMergedRangesContainer();
-    void                        AddRange(const com::sun::star::table::CellRangeAddress& rMergedRange);
+    void                        AddRange(const css::table::CellRangeAddress& rMergedRange);
 
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell ) override;
@@ -152,7 +152,7 @@ struct ScMyAreaLink
     OUString             sFilterOptions;
     OUString             sURL;
     OUString             sSourceStr;
-    ::com::sun::star::table::CellRangeAddress aDestRange;
+    css::table::CellRangeAddress aDestRange;
     sal_Int32                   nRefresh;
 
     inline                      ScMyAreaLink() : nRefresh( 0 ) {}
@@ -171,7 +171,7 @@ class ScMyAreaLinksContainer : ScMyIteratorBase
 private:
     ScMyAreaLinkList            aAreaLinkList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) override;
+    virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyAreaLinksContainer();
     virtual                     ~ScMyAreaLinksContainer();
@@ -185,9 +185,9 @@ public:
     void                        SkipTable(SCTAB nSkip);
 };
 
-struct ScMyCellRangeAddress : com::sun::star::table::CellRangeAddress
+struct ScMyCellRangeAddress : css::table::CellRangeAddress
 {
-    ScMyCellRangeAddress(const com::sun::star::table::CellRangeAddress& rRange);
+    ScMyCellRangeAddress(const css::table::CellRangeAddress& rRange);
     bool                        operator<(const ScMyCellRangeAddress& rCellRangeAddress ) const;
 };
 
@@ -198,11 +198,11 @@ class ScMyEmptyDatabaseRangesContainer : ScMyIteratorBase
 private:
     ScMyEmptyDatabaseRangeList  aDatabaseList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) override;
+    virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyEmptyDatabaseRangesContainer();
     virtual                     ~ScMyEmptyDatabaseRangesContainer();
-    void                        AddNewEmptyDatabaseRange(const com::sun::star::table::CellRangeAddress& aCellRangeAddress);
+    void                        AddNewEmptyDatabaseRange(const css::table::CellRangeAddress& aCellRangeAddress);
 
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell ) override;
@@ -212,10 +212,10 @@ public:
 
 struct ScMyDetectiveObj
 {
-    ::com::sun::star::table::CellAddress        aPosition;
-    ::com::sun::star::table::CellRangeAddress   aSourceRange;
-    ScDetectiveObjType                          eObjType;
-    bool                                        bHasError;
+    css::table::CellAddress        aPosition;
+    css::table::CellRangeAddress   aSourceRange;
+    ScDetectiveObjType             eObjType;
+    bool                           bHasError;
     bool operator<(const ScMyDetectiveObj& rDetObj) const;
 };
 
@@ -227,7 +227,7 @@ class ScMyDetectiveObjContainer : ScMyIteratorBase
 private:
     ScMyDetectiveObjList        aDetectiveObjList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) override;
+    virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyDetectiveObjContainer();
     virtual                     ~ScMyDetectiveObjContainer();
@@ -247,9 +247,9 @@ public:
 
 struct ScMyDetectiveOp
 {
-    ::com::sun::star::table::CellAddress    aPosition;
-    ScDetOpType                             eOpType;
-    sal_Int32                               nIndex;
+    css::table::CellAddress    aPosition;
+    ScDetOpType                eOpType;
+    sal_Int32                  nIndex;
     bool operator<(const ScMyDetectiveOp& rDetOp) const;
 };
 
@@ -261,7 +261,7 @@ class ScMyDetectiveOpContainer : ScMyIteratorBase
 private:
     ScMyDetectiveOpList         aDetectiveOpList;
 protected:
-    virtual bool                GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress ) override;
+    virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyDetectiveOpContainer();
     virtual                     ~ScMyDetectiveOpContainer();
@@ -279,9 +279,9 @@ struct ScMyCell
 {
     ScAddress maCellAddress; /// Use this instead of the UNO one.
 
-    com::sun::star::table::CellAddress      aCellAddress;
-    com::sun::star::table::CellRangeAddress aMergeRange;
-    com::sun::star::table::CellRangeAddress aMatrixRange;
+    css::table::CellAddress      aCellAddress;
+    css::table::CellRangeAddress aMergeRange;
+    css::table::CellRangeAddress aMatrixRange;
 
     ScMyAreaLink                aAreaLink;
     ScMyShapeList               aShapeList;
@@ -293,7 +293,7 @@ struct ScMyCell
     sal_Int32                   nValidationIndex;
     sal_Int32                   nStyleIndex;
     sal_Int32                   nNumberFormat;
-    com::sun::star::table::CellContentType  nType;
+    css::table::CellContentType nType;
 
     ScRefCellValue              maBaseCell;
 
@@ -317,9 +317,9 @@ struct ScMyCell
 
 class ScMyNotEmptyCellsIterator : boost::noncopyable
 {
-    com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet> xTable;
-    com::sun::star::uno::Reference<com::sun::star::table::XCellRange> xCellRange;
-    com::sun::star::table::CellAddress  aLastAddress;
+    css::uno::Reference<css::sheet::XSpreadsheet> xTable;
+    css::uno::Reference<css::table::XCellRange> xCellRange;
+    css::table::CellAddress             aLastAddress;
 
     ScMyShapesContainer*                pShapes;
     ScMyNoteShapesContainer*            pNoteShapes;
@@ -336,7 +336,7 @@ class ScMyNotEmptyCellsIterator : boost::noncopyable
     SCROW                       nCellRow;
     SCTAB                       nCurrentTable;
 
-    void                        UpdateAddress( ::com::sun::star::table::CellAddress& rAddress );
+    void                        UpdateAddress( css::table::CellAddress& rAddress );
     void SetCellData( ScMyCell& rMyCell, const css::table::CellAddress& rAddress );
 
     void                        HasAnnotation( ScMyCell& aCell );
@@ -362,7 +362,7 @@ public:
                                     { pDetectiveOp = pNewDetectiveOp; }
 
     void                        SetCurrentTable(const SCTAB nTable,
-                                    com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& rxTable);
+                                    css::uno::Reference<css::sheet::XSpreadsheet>& rxTable);
     void                        SkipTable(SCTAB nSkip);
 
     bool                        GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);

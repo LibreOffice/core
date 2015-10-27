@@ -471,7 +471,7 @@ void ScTabControl::DoDrag( const vcl::Region& /* rRegion */ )
     // maSize is set in ScTransferObj ctor
 
     ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
-    com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> xTransferable( pTransferObj );
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable( pTransferObj );
 
     pTransferObj->SetDragSourceFlags( SC_DROP_TABLE );
 

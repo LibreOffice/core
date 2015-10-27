@@ -54,7 +54,7 @@ public:
             ScServerObject( ScDocShell* pShell, const OUString& rItem );
     virtual ~ScServerObject();
 
-    virtual bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual bool GetData( css::uno::Any & rData /*out param*/,
                              const OUString & rMimeType,
                              bool bSynchron = false ) override;
 

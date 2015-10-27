@@ -66,7 +66,7 @@ struct BuiltinFormat
 
 /** Defines a built-in number format that maps to an own predefined format. */
 #define NUMFMT_PREDEF( INDEX, PREDEFINED ) \
-    { INDEX, 0, ::com::sun::star::i18n::NumberFormatIndex::PREDEFINED, -1 }
+    { INDEX, 0, css::i18n::NumberFormatIndex::PREDEFINED, -1 }
 
 /** Defines a built-in number format that is the same as the specified in nReuseId. */
 #define NUMFMT_REUSE( INDEX, REUSED_INDEX ) \

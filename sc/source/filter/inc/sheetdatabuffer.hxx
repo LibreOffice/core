@@ -37,7 +37,7 @@ namespace xls {
 /** Stores basic data about cell values and formatting. */
 struct CellModel
 {
-    ::com::sun::star::table::CellAddress
+    css::table::CellAddress
                         maCellAddr;         /// The address of the current cell.
     sal_Int32           mnCellType;         /// Data type of the cell value.
     sal_Int32           mnXfId;             /// XF (cell formatting) identifier.
@@ -49,7 +49,7 @@ struct CellModel
 /** Stores data about cell formulas. */
 struct CellFormulaModel
 {
-    ::com::sun::star::table::CellRangeAddress
+    css::table::CellRangeAddress
                         maFormulaRef;       /// Formula range for array/shared formulas and data tables.
     sal_Int32           mnFormulaType;      /// Type of the formula (regular, array, shared, table).
     sal_Int32           mnSharedId;         /// Identifier of a shared formula (OOXML only).
@@ -57,9 +57,9 @@ struct CellFormulaModel
     explicit            CellFormulaModel();
 
     /** Returns true, if the passed cell address is valid for an array formula. */
-    bool                isValidArrayRef( const ::com::sun::star::table::CellAddress& rCellAddr );
+    bool                isValidArrayRef( const css::table::CellAddress& rCellAddr );
     /** Returns true, if the passed cell address is valid for a shared formula. */
-    bool                isValidSharedRef( const ::com::sun::star::table::CellAddress& rCellAddr );
+    bool                isValidSharedRef( const css::table::CellAddress& rCellAddr );
 };
 
 /** Stores data about table operations. */
@@ -112,7 +112,7 @@ public:
     /** Inserts a shared string cell into the sheet. */
     void                setStringCell( const CellModel& rModel, sal_Int32 nStringId );
     /** Inserts a date/time cell into the sheet and adjusts number format. */
-    void                setDateTimeCell( const CellModel& rModel, const ::com::sun::star::util::DateTime& rDateTime );
+    void                setDateTimeCell( const CellModel& rModel, const css::util::DateTime& rDateTime );
     /** Inserts a boolean cell into the sheet and adjusts number format. */
     void                setBooleanCell( const CellModel& rModel, bool bValue );
     /** Inserts an error cell from the passed error code into the sheet. */
@@ -125,25 +125,25 @@ public:
     void                setDateCell( const CellModel& rModel, const OUString& rDateString );
 
     void                createSharedFormula(
-            const com::sun::star::table::CellAddress& rRange,
+            const css::table::CellAddress& rRange,
             const ApiTokenSequence& rTokens);
 
     /** Inserts the passed token array as array formula. */
     void                createArrayFormula(
-                            const ::com::sun::star::table::CellRangeAddress& rRange,
+                            const css::table::CellRangeAddress& rRange,
                             const ApiTokenSequence& rTokens );
     /** Sets a multiple table operation to the passed range. */
     void                createTableOperation(
-                            const ::com::sun::star::table::CellRangeAddress& rRange,
+                            const css::table::CellRangeAddress& rRange,
                             const DataTableModel& rModel );
 
     /** Sets default cell formatting for the specified range of rows. */
     void                setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCustomFormat );
     /** Merges the cells in the passed cell range. */
-    void                setMergedRange( const ::com::sun::star::table::CellRangeAddress& rRange );
+    void                setMergedRange( const css::table::CellRangeAddress& rRange );
     /** Sets a standard number format (constant from com.sun.star.util.NumberFormat) to the specified cell. */
     void                setStandardNumFmt(
-                            const ::com::sun::star::table::CellAddress& rCellAddr,
+                            const css::table::CellAddress& rCellAddr,
                             sal_Int16 nStdNumFmt );
     /** Processes the cell formatting data of the passed cell.
         @param nNumFmtId  If set, overrides number format of the cell XF. */
@@ -154,7 +154,7 @@ public:
 
     /** Sets the passed formula token array into a cell. */
     void                setCellFormula(
-                            const ::com::sun::star::table::CellAddress& rCellAddr,
+                            const css::table::CellAddress& rCellAddr,
                             const ApiTokenSequence& rTokens );
 
 private:
@@ -166,22 +166,22 @@ private:
 
     /** Inserts the passed array formula into the sheet. */
     void                finalizeArrayFormula(
-                            const ::com::sun::star::table::CellRangeAddress& rRange,
+                            const css::table::CellRangeAddress& rRange,
                             const ApiTokenSequence& rTokens ) const;
     /** Inserts the passed table operation into the sheet. */
     void finalizeTableOperation(
-        const ::com::sun::star::table::CellRangeAddress& rRange, const DataTableModel& rModel );
+        const css::table::CellRangeAddress& rRange, const DataTableModel& rModel );
 
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
-    void                applyCellMerging( const ::com::sun::star::table::CellRangeAddress& rRange );
-    void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ::com::sun::star::table::CellRangeAddress& rAddress, bool bProcessRowRange = false );
+    void                applyCellMerging( const css::table::CellRangeAddress& rRange );
+    void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const css::table::CellRangeAddress& rAddress, bool bProcessRowRange = false );
 private:
     /** Stores cell range address and formula token array of an array formula. */
-    typedef ::std::pair< ::com::sun::star::table::CellRangeAddress, ApiTokenSequence > ArrayFormula;
+    typedef ::std::pair< css::table::CellRangeAddress, ApiTokenSequence > ArrayFormula;
     typedef ::std::list< ArrayFormula > ArrayFormulaList;
 
     /** Stores cell range address and settings of a table operation. */
-    typedef ::std::pair< ::com::sun::star::table::CellRangeAddress, DataTableModel > TableOperation;
+    typedef ::std::pair< css::table::CellRangeAddress, DataTableModel > TableOperation;
     typedef ::std::list< TableOperation > TableOperationList;
 
     /** Stores information about a range of rows with equal cell formatting. */
@@ -217,13 +217,13 @@ private:
     /** Stores information about a merged cell range. */
     struct MergedRange
     {
-        ::com::sun::star::table::CellRangeAddress
+        css::table::CellRangeAddress
                             maRange;            /// The formatted cell range.
         sal_Int32           mnHorAlign;         /// Horizontal alignment in the range.
 
-        explicit            MergedRange( const ::com::sun::star::table::CellRangeAddress& rRange );
-        explicit            MergedRange( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nHorAlign );
-        bool                tryExpand( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nHorAlign );
+        explicit            MergedRange( const css::table::CellRangeAddress& rRange );
+        explicit            MergedRange( const css::table::CellAddress& rAddress, sal_Int32 nHorAlign );
+        bool                tryExpand( const css::table::CellAddress& rAddress, sal_Int32 nHorAlign );
     };
     typedef ::std::list< MergedRange > MergedRangeList;
 
@@ -233,7 +233,7 @@ private:
     TableOperationList  maTableOperations;      /// All table operations in the sheet.
     ::std::map< BinAddress, ApiTokenSequence >
                         maSharedFormulas;       /// Maps shared formula base address to defined name token index.
-    ::com::sun::star::table::CellAddress
+    css::table::CellAddress
                         maSharedFmlaAddr;       /// Address of a cell containing a pending shared formula.
     css::table::CellAddress maSharedBaseAddr;       /// Base address of the pending shared formula.
     XfIdRowRange        maXfIdRowRange;         /// Cached XF identifier for a range of rows.

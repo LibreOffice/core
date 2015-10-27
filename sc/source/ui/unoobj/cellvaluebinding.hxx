@@ -42,11 +42,11 @@ namespace calc
 
     class OCellValueBinding;
     // the base for our interfaces
-    typedef ::cppu::WeakAggComponentImplHelper5 <   ::com::sun::star::form::binding::XValueBinding
-                                                ,   ::com::sun::star::lang::XServiceInfo
-                                                ,   ::com::sun::star::util::XModifyBroadcaster
-                                                ,   ::com::sun::star::util::XModifyListener
-                                                ,   ::com::sun::star::lang::XInitialization
+    typedef ::cppu::WeakAggComponentImplHelper5 <   css::form::binding::XValueBinding
+                                                ,   css::lang::XServiceInfo
+                                                ,   css::util::XModifyBroadcaster
+                                                ,   css::util::XModifyListener
+                                                ,   css::lang::XInitialization
                                                 >   OCellValueBinding_Base;
     // the base for the property handling
     typedef ::comphelper::OPropertyContainer        OCellValueBinding_PBase;
@@ -60,11 +60,11 @@ namespace calc
                             ,public OCellValueBinding_PABase
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
+        css::uno::Reference< css::sheet::XSpreadsheetDocument >
                     m_xDocument;            /// the document where our cell lives
-        ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
+        css::uno::Reference< css::table::XCell >
                     m_xCell;                /// the cell we're bound to, for double value access
-        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >
+        css::uno::Reference< css::text::XTextRange >
                     m_xCellText;            /// the cell we're bound to, for text access
         ::cppu::OInterfaceContainerHelper
                     m_aModifyListeners;     /// our modify listeners
@@ -73,7 +73,7 @@ namespace calc
 
     public:
         OCellValueBinding(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& _rxDocument,
+            const css::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument,
             bool _bListPos
         );
 
@@ -90,43 +90,43 @@ namespace calc
         DECLARE_XTYPEPROVIDER()
 
         // XValueBinding
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getSupportedValueTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsType( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL getValue( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::form::binding::IncompatibleTypesException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::form::binding::IncompatibleTypesException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getSupportedValueTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsType( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) throw (css::form::binding::IncompatibleTypesException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setValue( const css::uno::Any& aValue ) throw (css::form::binding::IncompatibleTypesException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
         // OComponentHelper/XComponent
         virtual void SAL_CALL disposing() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
         // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     private:
         void    checkDisposed( ) const;
-        void    checkValueType( const ::com::sun::star::uno::Type& _rType ) const;
+        void    checkValueType( const css::uno::Type& _rType ) const;
         void    checkInitialized();
 
         /** notifies our modify listeners

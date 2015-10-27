@@ -175,8 +175,8 @@ class ScDocCfg : public ScDocOptions
     DECL_LINK_TYPED( CalcCommitHdl, ScLinkConfigItem&, void );
     DECL_LINK_TYPED( LayoutCommitHdl, ScLinkConfigItem&, void );
 
-    static com::sun::star::uno::Sequence<OUString> GetCalcPropertyNames();
-    static com::sun::star::uno::Sequence<OUString> GetLayoutPropertyNames();
+    static css::uno::Sequence<OUString> GetCalcPropertyNames();
+    static css::uno::Sequence<OUString> GetLayoutPropertyNames();
 
 public:
             ScDocCfg();

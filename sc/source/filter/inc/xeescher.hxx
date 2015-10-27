@@ -169,7 +169,7 @@ public:
 protected:
     /** Tries to get spreadsheet cell link and source range link from the passed shape. */
     void                ConvertSheetLinks(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+                            css::uno::Reference< css::drawing::XShape > xShape );
 
     /** Returns the Excel token array of the cell link, or 0, if no link present. */
     inline const XclTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
@@ -201,7 +201,7 @@ public:
     void                WriteMacroSubRec( XclExpStream& rStrm  );
     /** Sets the name of a macro for object of passed type
         @return  true = The passed event descriptor was valid, macro name has been found. */
-    bool                SetMacroLink( const ::com::sun::star::script::ScriptEventDescriptor& rEvent,  const XclTbxEventType& nEventType );
+    bool                SetMacroLink( const css::script::ScriptEventDescriptor& rEvent,  const XclTbxEventType& nEventType );
 
     /** Sets the name of a macro
         @return  true = The passed macro name has been found. */
@@ -211,7 +211,7 @@ public:
 class XclExpShapeObj : public XclObjAny, public XclMacroHelper
 {
 public:
-    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, ScDocument* pDoc );
+    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > xShape, ScDocument* pDoc );
     virtual             ~XclExpShapeObj();
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
@@ -226,7 +226,7 @@ class XclExpOcxControlObj : public XclObj, public XclExpControlHelper
 public:
     explicit            XclExpOcxControlObj(
                             XclExpObjectManager& rObjMgr,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
+                            css::uno::Reference< css::drawing::XShape > xShape,
                             const Rectangle* pChildAnchor,
                             const OUString& rClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
@@ -248,12 +248,12 @@ class XclExpTbxControlObj : public XclObj, public XclMacroHelper
 public:
     explicit            XclExpTbxControlObj(
                             XclExpObjectManager& rObjMgr,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
+                            css::uno::Reference< css::drawing::XShape > xShape,
                             const Rectangle* pChildAnchor );
 
     /** Sets the name of a macro attached to this control.
         @return  true = The passed event descriptor was valid, macro name has been found. */
-    bool                SetMacroLink( const ::com::sun::star::script::ScriptEventDescriptor& rEvent );
+    bool                SetMacroLink( const css::script::ScriptEventDescriptor& rEvent );
 
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
@@ -291,7 +291,7 @@ class XclExpChartObj : public XclObj, protected XclExpRoot
 public:
     explicit            XclExpChartObj(
                             XclExpObjectManager& rObjMgr,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
+                            css::uno::Reference< css::drawing::XShape > xShape,
                             const Rectangle* pChildAnchor );
     virtual             ~XclExpChartObj();
 
@@ -401,7 +401,7 @@ public:
     std::shared_ptr< XclExpRecordBase > ProcessDrawing( SdrPage* pSdrPage );
     /** Processes a collection of UNO shapes and returns the record block
         containing all related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    std::shared_ptr< XclExpRecordBase > ProcessDrawing( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+    std::shared_ptr< XclExpRecordBase > ProcessDrawing( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
 
     /** Finalizes the object manager after conversion of all sheets. */
     void                EndDocument();

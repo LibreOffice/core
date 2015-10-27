@@ -51,7 +51,7 @@ void ScLinkConfigItem::SetCommitLink( const Link<ScLinkConfigItem&,void>& rLink 
     aCommitLink = rLink;
 }
 
-void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& /* aPropertyNames */ )
+void ScLinkConfigItem::Notify( const css::uno::Sequence<OUString>& /* aPropertyNames */ )
 {
     //TODO: not implemented yet...
 }

@@ -104,8 +104,8 @@ public:
 };
 
 typedef ::cppu::WeakImplHelper< container::XEnumerationAccess
-    , com::sun::star::container::XIndexAccess
-    , com::sun::star::container::XNameAccess
+    , css::container::XIndexAccess
+    , css::container::XNameAccess
     > WindowsAccessImpl_BASE;
 
 class WindowsAccessImpl : public WindowsAccessImpl_BASE

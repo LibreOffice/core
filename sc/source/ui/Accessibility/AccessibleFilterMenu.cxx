@@ -94,7 +94,7 @@ ScAccessibleFilterMenu::~ScAccessibleFilterMenu()
 
 // XAccessibleComponent
 
-Reference<XAccessible> ScAccessibleFilterMenu::getAccessibleAtPoint( const ::com::sun::star::awt::Point& /*rPoint*/ )
+Reference<XAccessible> ScAccessibleFilterMenu::getAccessibleAtPoint( const css::awt::Point& /*rPoint*/ )
         throw (RuntimeException, std::exception)
 {
     return this;
@@ -160,18 +160,16 @@ OUString ScAccessibleFilterMenu::getImplementationName()
 // XAccessibleEventBroadcaster
 
 void ScAccessibleFilterMenu::addAccessibleEventListener(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ScAccessibleContextBase::addAccessibleEventListener(xListener);
     for_each(maMenuItems.begin(), maMenuItems.end(), AddRemoveEventListener(xListener, true));
 }
 
 void ScAccessibleFilterMenu::removeAccessibleEventListener(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ScAccessibleContextBase::removeAccessibleEventListener(xListener);
     for_each(maMenuItems.begin(), maMenuItems.end(), AddRemoveEventListener(xListener, false));

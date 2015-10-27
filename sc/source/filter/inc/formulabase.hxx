@@ -286,8 +286,7 @@ public:
     void resize( size_t n ) { mvTokens.resize( n ); }
 
     /** Appends a new token with the passed op-code, returns its data field. */
-    ::com::sun::star::uno::Any&
-                        append( sal_Int32 nOpCode );
+    css::uno::Any&      append( sal_Int32 nOpCode );
 
     /** Appends a new token with the passed op-code and data. */
     template< typename Type >
@@ -599,7 +598,7 @@ class OpCodeProvider : public FunctionProvider // not derived from WorkbookHelpe
 {
 public:
     explicit            OpCodeProvider(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
+                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
                             FilterType eFilter, BiffType eBiff, bool bImportFilter,
                             bool bCallerKnowsAboutMacroExport = false );
     virtual             ~OpCodeProvider();
@@ -612,7 +611,7 @@ public:
     const FunctionInfo* getFuncInfoFromApiToken( const ApiToken& rToken ) const;
 
     /** Returns the op-code map that is used by the OOXML formula parser. */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry >
+    css::uno::Sequence< css::sheet::FormulaOpCodeMapEntry >
                         getOoxParserMap() const;
 
 private:
@@ -627,7 +626,7 @@ class ApiParserWrapper : public OpCodeProvider
 {
 public:
     explicit            ApiParserWrapper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
+                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
                             const OpCodeProvider& rOpCodeProv );
 
     /** Returns read/write access to the formula parser property set. */
@@ -636,10 +635,10 @@ public:
     /** Calls the XFormulaParser::parseFormula() function of the API parser. */
     ApiTokenSequence    parseFormula(
                             const OUString& rFormula,
-                            const ::com::sun::star::table::CellAddress& rRefPos );
+                            const css::table::CellAddress& rRefPos );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser >
+    css::uno::Reference< css::sheet::XFormulaParser >
                         mxParser;
     PropertySet         maParserProps;
 };
@@ -659,7 +658,7 @@ public:
         @param bAbsolute  True = adds dollar signs before column and row.
      */
     static OUString generateAddress2dString(
-                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const css::table::CellAddress& rAddress,
                             bool bAbsolute );
 
     /** Generates a cell address string in A1 notation from the passed binary
@@ -686,7 +685,7 @@ public:
 
         @param rMatrix  The matrix containing double values or strings.
      */
-    static OUString generateApiArray( const Matrix< ::com::sun::star::uno::Any >& rMatrix );
+    static OUString generateApiArray( const Matrix< css::uno::Any >& rMatrix );
 
     /** Tries to extract a single cell reference from a formula token sequence.
 
@@ -699,7 +698,7 @@ public:
             com.sun.star.sheet.ComplexReference object. If the token sequence
             contains too many, or unexpected tokens, an empty Any is returned.
      */
-    ::com::sun::star::uno::Any
+    css::uno::Any
                         extractReference( const ApiTokenSequence& rTokens ) const;
 
     /** Tries to extract a cell range address from a formula token sequence.
@@ -721,7 +720,7 @@ public:
             address which has been extracted to orRange, false otherwise.
      */
     bool                extractCellRange(
-                            ::com::sun::star::table::CellRangeAddress& orRange,
+                            css::table::CellRangeAddress& orRange,
                             const ApiTokenSequence& rTokens,
                             bool bAllowRelative ) const;
 

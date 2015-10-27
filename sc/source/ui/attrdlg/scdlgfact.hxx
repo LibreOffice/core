@@ -293,7 +293,7 @@ class AbstractScDPFunctionDlg_Impl : public AbstractScDPFunctionDlg
 {
     DECL_ABSTDLG_BASE( AbstractScDPFunctionDlg_Impl, ScDPFunctionDlg)
     virtual sal_uInt16 GetFuncMask() const override;
-    virtual ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const override;
+    virtual css::sheet::DataPilotFieldReference GetFieldRef() const override;
 };
 
 class AbstractScDPSubtotalDlg_Impl : public AbstractScDPSubtotalDlg
@@ -417,7 +417,7 @@ public:
         bool bEnableExternal) override;
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const com::sun::star::uno::Sequence<OUString>& rServices,
+                                                                        const css::uno::Sequence<OUString>& rServices,
                                                                         int nId ) override;
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove = false ) override;
 

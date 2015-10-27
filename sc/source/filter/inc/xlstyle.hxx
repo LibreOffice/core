@@ -361,7 +361,7 @@ struct XclFontData
     /** Returns the API font text encoding. */
     sal_Int16           GetApiFontEncoding() const;
     /** Returns the API font posture. */
-    ::com::sun::star::awt::FontSlant GetApiPosture() const;
+    css::awt::FontSlant GetApiPosture() const;
     /** Returns the API font weight. */
     float               GetApiWeight() const;
     /** Returns the API font underline style. */
@@ -376,7 +376,7 @@ struct XclFontData
     /** Sets the API font family. */
     void                SetApiFamily( sal_Int16 nApiFamily );
     /** Sets the API font posture. */
-    void                SetApiPosture( ::com::sun::star::awt::FontSlant eApiPosture );
+    void                SetApiPosture( css::awt::FontSlant eApiPosture );
     /** Sets the API font weight. */
     void                SetApiWeight( float fApiWeight );
     /** Sets the API font underline style. */

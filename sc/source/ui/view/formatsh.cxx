@@ -403,20 +403,20 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 const SfxStringItem* pFamilyItem = rReq.GetArg<SfxStringItem>(SID_STYLE_FAMILYNAME);
                 if ( pFamilyItem && pNameItem )
                 {
-                    com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xModel(pDocSh->GetModel(), com::sun::star::uno::UNO_QUERY);
+                    css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(pDocSh->GetModel(), css::uno::UNO_QUERY);
                     try
                     {
-                        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xStyles;
-                        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xCont = xModel->getStyleFamilies();
+                        css::uno::Reference< css::container::XNameAccess > xStyles;
+                        css::uno::Reference< css::container::XNameAccess > xCont = xModel->getStyleFamilies();
                         xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
-                        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xInfo;
+                        css::uno::Reference< css::beans::XPropertySet > xInfo;
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
                         OUString aUIName;
                         xInfo->getPropertyValue("DisplayName") >>= aUIName;
                         if ( !aUIName.isEmpty() )
                             rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                     }
-                    catch( com::sun::star::uno::Exception& )
+                    catch( css::uno::Exception& )
                     {
                     }
                 }

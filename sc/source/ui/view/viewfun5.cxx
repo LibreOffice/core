@@ -497,7 +497,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             pModel->GetItemPool().FreezeIdRanges();
             xStm->Seek(0);
 
-            com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+            css::uno::Reference< css::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
             SvxDrawingLayerImport( pModel.get(), xInputStream );
 
             // set everything to right layer:

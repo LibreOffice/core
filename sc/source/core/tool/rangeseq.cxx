@@ -325,8 +325,8 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix,
 }
 
 bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
-        com::sun::star::uno::TypeClass & o_eClass,
-        const com::sun::star::uno::Any & rAny )
+        css::uno::TypeClass & o_eClass,
+        const css::uno::Any & rAny )
 {
     bool bRet = false;
     o_eClass = rAny.getValueTypeClass();
@@ -354,7 +354,7 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
     return bRet;
 }
 
-ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::Any & rAny )
+ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const css::uno::Any & rAny )
 {
     ScMatrixRef xMatrix;
     uno::Sequence< uno::Sequence< uno::Any > > aSequence;

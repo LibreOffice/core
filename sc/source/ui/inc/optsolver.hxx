@@ -69,14 +69,14 @@ class ScOptSolverSave
     OUString    maVariable;
     std::vector<ScOptConditionRow> maConditions;
     OUString    maEngine;
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
+    css::uno::Sequence<css::beans::PropertyValue> maProperties;
 
 public:
             ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
                              const OUString& rTarget, const OUString& rVariable,
                              const std::vector<ScOptConditionRow>& rConditions,
                              const OUString& rEngine,
-                             const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
+                             const css::uno::Sequence<css::beans::PropertyValue>& rProperties );
 
     const OUString&   GetObjective() const    { return maObjective; }
     bool              GetMax() const          { return mbMax; }
@@ -86,7 +86,7 @@ public:
     const OUString&   GetVariable() const     { return maVariable; }
     const std::vector<ScOptConditionRow>& GetConditions() const { return maConditions; }
     const OUString&   GetEngine() const       { return maEngine; }
-    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& GetProperties() const
+    const css::uno::Sequence<css::beans::PropertyValue>& GetProperties() const
                                             { return maProperties; }
 };
 
@@ -175,10 +175,10 @@ private:
     std::vector<ScOptConditionRow> maConditions;
     long            nScrollPos;
 
-    com::sun::star::uno::Sequence<OUString> maImplNames;
-    com::sun::star::uno::Sequence<OUString> maDescriptions;
+    css::uno::Sequence<OUString> maImplNames;
+    css::uno::Sequence<OUString> maDescriptions;
     OUString        maEngine;
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
+    css::uno::Sequence<css::beans::PropertyValue> maProperties;
 
     void    Init(const ScAddress& rCursorPos);
     bool    CallSolver();

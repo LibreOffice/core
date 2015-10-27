@@ -28,8 +28,7 @@ class ScAccessibleDocumentBase
 public:
     //=====  internal  ========================================================
     ScAccessibleDocumentBase(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent);
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
 protected:
     virtual ~ScAccessibleDocumentBase();
 };

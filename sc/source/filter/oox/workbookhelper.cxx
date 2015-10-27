@@ -475,7 +475,7 @@ Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( c
     {
         ScDocument& rDoc =  getScDocument();
         if( rDoc.GetTableCount() <= aDestRange.Sheet )
-            throw ::com::sun::star::lang::IndexOutOfBoundsException();
+            throw css::lang::IndexOutOfBoundsException();
         ScRange aScRange;
         ScUnoConversion::FillScRange(aScRange, aDestRange);
         ScDBData* pNewDBData = new ScDBData( STR_DB_LOCAL_NONAME, aScRange.aStart.Tab(),

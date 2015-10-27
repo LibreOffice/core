@@ -495,7 +495,7 @@ sal_uInt16 AbstractScDPFunctionDlg_Impl::GetFuncMask() const
      return pDlg->GetFuncMask();
 }
 
-::com::sun::star::sheet::DataPilotFieldReference AbstractScDPFunctionDlg_Impl::GetFieldRef() const
+css::sheet::DataPilotFieldReference AbstractScDPFunctionDlg_Impl::GetFieldRef() const
 {
     return pDlg->GetFieldRef();
 }
@@ -663,7 +663,7 @@ AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilo
 }
 
 AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const com::sun::star::uno::Sequence<OUString>& rServices,
+                                                                        const css::uno::Sequence<OUString>& rServices,
                                                             int nId )
 {
     VclPtr<ScDataPilotServiceDlg> pDlg;

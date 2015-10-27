@@ -187,6 +187,6 @@ void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
     SetModified();
 }
 
-void ScPrintCfg::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void ScPrintCfg::Notify( const css::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

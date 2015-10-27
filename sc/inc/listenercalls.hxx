@@ -35,13 +35,12 @@ namespace com { namespace sun { namespace star {
 
 struct ScUnoListenerEntry
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XModifyListener >   xListener;
-    ::com::sun::star::lang::EventObject             aEvent;
+    css::uno::Reference<
+        css::util::XModifyListener >   xListener;
+    css::lang::EventObject             aEvent;
 
-    ScUnoListenerEntry( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::util::XModifyListener >& rL,
-                        const ::com::sun::star::lang::EventObject& rE ) :
+    ScUnoListenerEntry( const css::uno::Reference< css::util::XModifyListener >& rL,
+                        const css::lang::EventObject& rE ) :
         xListener( rL ),
         aEvent( rE )
     {}
@@ -59,9 +58,8 @@ public:
                 ScUnoListenerCalls();
                 ~ScUnoListenerCalls();
 
-    void        Add( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::util::XModifyListener >& rListener,
-                        const ::com::sun::star::lang::EventObject& rEvent );
+    void        Add( const css::uno::Reference< css::util::XModifyListener >& rListener,
+                     const css::lang::EventObject& rEvent );
     void        ExecuteAndClear();
 };
 

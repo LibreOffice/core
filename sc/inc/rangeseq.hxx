@@ -30,19 +30,19 @@ class ScRange;
 class ScRangeToSequence
 {
 public:
-    static bool FillLongArray( com::sun::star::uno::Any& rAny,
+    static bool FillLongArray( css::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static bool FillLongArray( com::sun::star::uno::Any& rAny,
+    static bool FillLongArray( css::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static bool FillDoubleArray( com::sun::star::uno::Any& rAny,
+    static bool FillDoubleArray( css::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static bool FillDoubleArray( com::sun::star::uno::Any& rAny,
+    static bool FillDoubleArray( css::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
-    static bool FillStringArray( com::sun::star::uno::Any& rAny,
+    static bool FillStringArray( css::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange );
-    static bool FillStringArray( com::sun::star::uno::Any& rAny,
+    static bool FillStringArray( css::uno::Any& rAny,
                                 const ScMatrix* pMatrix, SvNumberFormatter* pFormatter );
-    static bool FillMixedArray( com::sun::star::uno::Any& rAny,
+    static bool FillMixedArray( css::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange,
                                 bool bAllowNV = false );
 
@@ -52,7 +52,7 @@ public:
             implementation of XFormulaParser. If <FALSE/>, boolean values are
             treated as ordinary double values 1 (true) and 0 (false).
      */
-    static bool FillMixedArray( com::sun::star::uno::Any& rAny,
+    static bool FillMixedArray( css::uno::Any& rAny,
                                 const ScMatrix* pMatrix, bool bDataTypes = false );
 };
 
@@ -69,8 +69,8 @@ public:
      */
     static  bool        ConvertAnyToDouble(
                             double & o_fVal,
-                            com::sun::star::uno::TypeClass & o_eClass,
-                            const com::sun::star::uno::Any & rAny );
+                            css::uno::TypeClass & o_eClass,
+                            const css::uno::Any & rAny );
 
 };
 
@@ -85,7 +85,7 @@ public:
         @returns a new'd ScMatrix as ScMatrixRef, NULL if rAny couldn't be read
         as type Sequence<Sequence<Any>>
      */
-    static  ScMatrixRef CreateMixedMatrix( const com::sun::star::uno::Any & rAny );
+    static  ScMatrixRef CreateMixedMatrix( const css::uno::Any & rAny );
 
 };
 
@@ -94,7 +94,7 @@ class ScByteSequenceToString
 public:
     //  rAny must contain Sequence<sal_Int8>,
     //  may or may not contain 0-bytes at the end
-    static bool GetString( OUString& rString, const com::sun::star::uno::Any& rAny,
+    static bool GetString( OUString& rString, const css::uno::Any& rAny,
                             sal_uInt16 nEncoding );
 };
 

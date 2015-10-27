@@ -213,7 +213,7 @@ private:
 public:
     static void     SetGlobalDrawPersist(SfxObjectShell* pPersist);
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() override;
+    virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
 };
 
 #endif

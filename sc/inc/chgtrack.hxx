@@ -876,7 +876,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     static  const SCROW         nContentRowsPerSlot;
     static  const SCSIZE        nContentSlots;
 
-    com::sun::star::uno::Sequence< sal_Int8 >   aProtectPass;
+    css::uno::Sequence< sal_Int8 >   aProtectPass;
     ScChangeActionMap   aMap;
     ScChangeActionMap   aGeneratedMap;
     ScChangeActionMap   aPasteCutMap;
@@ -1184,9 +1184,9 @@ public:
     void                SetActionMax(sal_uLong nTempActionMax)
                             { nActionMax = nTempActionMax; } // only to use in the XML import
 
-    void                SetProtection( const com::sun::star::uno::Sequence< sal_Int8 >& rPass )
+    void                SetProtection( const css::uno::Sequence< sal_Int8 >& rPass )
                             { aProtectPass = rPass; }
-    com::sun::star::uno::Sequence< sal_Int8 >   GetProtection() const
+    css::uno::Sequence< sal_Int8 >   GetProtection() const
                                     { return aProtectPass; }
     bool IsProtected() const { return aProtectPass.getLength() != 0; }
 

@@ -37,14 +37,14 @@ public:
      */
     struct SharedFormulaEntry
     {
-        com::sun::star::table::CellAddress maAddress;
-        com::sun::star::table::CellRangeAddress maRange;
+        css::table::CellAddress maAddress;
+        css::table::CellRangeAddress maRange;
         OUString maTokenStr;
         sal_Int32 mnSharedId;
 
         SharedFormulaEntry(
-            const com::sun::star::table::CellAddress& rAddress,
-            const com::sun::star::table::CellRangeAddress& rRange,
+            const css::table::CellAddress& rAddress,
+            const css::table::CellRangeAddress& rRange,
             const OUString& rTokenStr, sal_Int32 nSharedId );
     };
 
@@ -53,37 +53,37 @@ public:
      */
     struct SharedFormulaDesc
     {
-        com::sun::star::table::CellAddress maAddress;
+        css::table::CellAddress maAddress;
         sal_Int32 mnSharedId;
         OUString maCellValue;
         sal_Int32 mnValueType;
 
         SharedFormulaDesc(
-            const com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
+            const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
             const OUString& rCellValue, sal_Int32 nValueType );
     };
 
     struct TokenAddressItem
     {
         OUString maTokenStr;
-        ::com::sun::star::table::CellAddress maCellAddress;
-        TokenAddressItem( const OUString& rTokenStr, const ::com::sun::star::table::CellAddress& rCellAddress ) : maTokenStr( rTokenStr ), maCellAddress( rCellAddress ) {}
+        css::table::CellAddress maCellAddress;
+        TokenAddressItem( const OUString& rTokenStr, const css::table::CellAddress& rCellAddress ) : maTokenStr( rTokenStr ), maCellAddress( rCellAddress ) {}
     };
 
     struct TokenRangeAddressItem
     {
         TokenAddressItem maTokenAndAddress;
-        ::com::sun::star::table::CellRangeAddress maCellRangeAddress;
-        TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const ::com::sun::star::table::CellRangeAddress& rCellRangeAddress ) : maTokenAndAddress( rTokenAndAddress ), maCellRangeAddress( rCellRangeAddress ) {}
+        css::table::CellRangeAddress maCellRangeAddress;
+        TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const css::table::CellRangeAddress& rCellRangeAddress ) : maTokenAndAddress( rTokenAndAddress ), maCellRangeAddress( rCellRangeAddress ) {}
     };
 
     struct FormulaValue
     {
-        com::sun::star::table::CellAddress maCellAddress;
+        css::table::CellAddress maCellAddress;
         OUString maValueStr;
         sal_Int32 mnCellType;
     };
-    typedef std::pair<com::sun::star::table::CellAddress, double> ValueAddressPair;
+    typedef std::pair<css::table::CellAddress, double> ValueAddressPair;
 
     struct SheetItem
     {
@@ -118,10 +118,10 @@ private:
 public:
     explicit            FormulaBuffer( const WorkbookHelper& rHelper );
     void                finalizeImport();
-    void                setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, const OUString&  );
+    void                setCellFormula( const css::table::CellAddress& rAddress, const OUString&  );
 
     void setCellFormula(
-        const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId,
+        const css::table::CellAddress& rAddress, sal_Int32 nSharedId,
         const OUString& rCellValue, sal_Int32 nValueType );
 
     void setCellFormulaValue(

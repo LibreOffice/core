@@ -430,18 +430,18 @@ class XclControlHelper
 {
 public:
     /** Returns the API control model from the passed API shape object. */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                        GetControlModel( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    static css::uno::Reference< css::awt::XControlModel >
+                        GetControlModel( css::uno::Reference< css::drawing::XShape > xShape );
 
     /** Fills the macro descriptor according to the passed macro name. */
     static bool         FillMacroDescriptor(
-                            ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,
+                            css::script::ScriptEventDescriptor& rDescriptor,
                             XclTbxEventType eEventType,
                             const OUString& rXclMacroName,
                             SfxObjectShell* pDocShell = 0 );
     /** Tries to extract an Excel macro name from the passed macro descriptor. */
     static OUString     ExtractFromMacroDescriptor(
-                            const ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,
+                            const css::script::ScriptEventDescriptor& rDescriptor,
                             XclTbxEventType eEventType, SfxObjectShell* pShell = NULL );
 };
 

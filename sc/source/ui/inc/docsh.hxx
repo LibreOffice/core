@@ -130,8 +130,8 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
                         ScDocShell & mrDocShell;
     };
 
-    SAL_DLLPRIVATE bool          LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
-    SAL_DLLPRIVATE bool          SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    SAL_DLLPRIVATE bool          LoadXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
+    SAL_DLLPRIVATE bool          SaveXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
     SAL_DLLPRIVATE SCTAB         GetSaveTab();
 
     SAL_DLLPRIVATE bool          SaveCurrentChart( SfxMedium& rMedium );
@@ -151,7 +151,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SAL_DLLPRIVATE void          UnlockDocument_Impl(sal_uInt16 nNew);
 
     SAL_DLLPRIVATE void          EnableSharedSettings( bool bEnable );
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadSharedDocument();
+    SAL_DLLPRIVATE css::uno::Reference< css::frame::XModel > LoadSharedDocument();
 
     SAL_DLLPRIVATE void          UseSheetSaveEntries();
 
@@ -192,7 +192,7 @@ public:
 
     virtual std::set<Color> GetDocColors() override;
 
-    virtual bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& ) override;
+    virtual bool    InitNew( const css::uno::Reference< css::embed::XStorage >& ) override;
     virtual bool    Load( SfxMedium& rMedium ) override;
     virtual bool    LoadFrom( SfxMedium& rMedium ) override;
     virtual bool    ConvertFrom( SfxMedium &rMedium ) override;
@@ -205,7 +205,7 @@ public:
     virtual bool    IsInformationLost() override;
     virtual void    LoadStyles( SfxObjectShell &rSource ) override;
 
-    virtual bool    SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& ) override;      // SfxInPlaceObject
+    virtual bool    SaveCompleted( const css::uno::Reference< css::embed::XStorage >& ) override;      // SfxInPlaceObject
     virtual bool    DoSaveCompleted( SfxMedium * pNewStor) override;     // SfxObjectShell
     virtual bool    QuerySlotExecutable( sal_uInt16 nSlotId ) override;
 
@@ -365,9 +365,9 @@ public:
 
 #if defined WNT
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
-                                ::com::sun::star::uno::Any & rValue ) override;
+                                css::uno::Any & rValue ) override;
     virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue ) override;
+                                const css::uno::Any & rValue ) override;
 #endif
 
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem ) override;
@@ -422,7 +422,7 @@ public:
     virtual bool    HasChangeRecordProtection() const override;
     virtual void    SetChangeRecording( bool bActivate ) override;
     virtual bool    SetProtectionPassword( const OUString &rPassword ) override;
-    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
+    virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     void SnapVisArea( Rectangle& rRect ) const;
 
@@ -479,8 +479,8 @@ namespace HelperNotifyChanges
 
     inline void Notify(ScModelObj &rModelObj, const ScRangeList &rChangeRanges,
         const OUString &rType = OUString("cell-change"),
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProperties =
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >())
+        const css::uno::Sequence< css::beans::PropertyValue >& rProperties =
+            css::uno::Sequence< css::beans::PropertyValue >())
     {
         rModelObj.NotifyChanges(rType, rChangeRanges, rProperties);
     }

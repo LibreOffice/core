@@ -44,15 +44,15 @@ public:
             ScLinkConfigItem( const OUString& rSubTree, ConfigItemMode nMode );
     void    SetCommitLink( const Link<ScLinkConfigItem&,void>& rLink );
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
     virtual void    ImplCommit() override;
 
     void    SetModified()   { ConfigItem::SetModified(); }
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any>
-            GetProperties(const com::sun::star::uno::Sequence< OUString >& rNames)
+    css::uno::Sequence< css::uno::Any>
+            GetProperties(const css::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
-    bool    PutProperties( const com::sun::star::uno::Sequence< OUString >& rNames,
-                            const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues)
+    bool    PutProperties( const css::uno::Sequence< OUString >& rNames,
+                            const css::uno::Sequence< css::uno::Any>& rValues)
                             { return ConfigItem::PutProperties( rNames, rValues ); }
 
     using ConfigItem::EnableNotification;

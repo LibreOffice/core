@@ -163,7 +163,7 @@ openNewDoc(const OUString& aSheetName )
         uno::Reference<lang::XComponent > xComponent( xComponentLoader->loadComponentFromURL(
                 OUString( "private:factory/scalc" ),
                 OUString( "_blank" ), 0,
-                uno::Sequence < ::com::sun::star::beans::PropertyValue >() ) );
+                uno::Sequence < css::beans::PropertyValue >() ) );
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xComponent, uno::UNO_QUERY_THROW );
         if ( xSpreadDoc.is() )
         {

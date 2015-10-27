@@ -115,35 +115,32 @@ public:
 
     SC_DLLPUBLIC void           PasteFromSystem();
     SC_DLLPUBLIC bool           PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi = false );
-    void                        PasteFromTransferable( const ::com::sun::star::uno::Reference<
-                                                       ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
+    void                        PasteFromTransferable( const css::uno::Reference<
+                                                       css::datatransfer::XTransferable >& rxTransferable );
 
     void            PasteDraw();
     void            PasteDraw( const Point& rLogicPos, SdrModel* pModel, bool bGroup,
                         const OUString& rSrcShellID, const OUString& rDestShellID );
 
     bool            PasteOnDrawObjectLinked(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
+                        const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                         SdrObject& rHitObj);
 
     bool            PasteDataFormat( SotClipboardFormatId nFormatId,
-                                        const ::com::sun::star::uno::Reference<
-                                            ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
+                                        const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                         SCCOL nPosX, SCROW nPosY, Point* pLogicPos = NULL,
                                         bool bLink = false, bool bAllowDialogs = false );
 
     bool            PasteFile( const Point&, const OUString&, bool bLink=false );
-    bool            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const OUString& = OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
+    bool            PasteObject( const Point&, const css::uno::Reference < css::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const OUString& = OUString(), sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
     bool            PasteBitmapEx( const Point&, const BitmapEx& );
     bool            PasteMetaFile( const Point&, const GDIMetaFile& );
     bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                     const OUString& rFile, const OUString& rFilter );
     bool            PasteBookmark( SotClipboardFormatId nFormatId,
-                                const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
+                                const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY );
-    bool            PasteLink( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
+    bool            PasteLink( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
 
     void            InsertBookmark( const OUString& rDescription, const OUString& rURL,
                                     SCCOL nPosX, SCROW nPosY, const OUString* pTarget = NULL,
@@ -338,8 +335,7 @@ protected:
 
 private:
     void            PasteRTF( SCCOL nCol, SCROW nStartRow,
-                                const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
+                                const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
 
     bool             PasteMultiRangesFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
                                    bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,

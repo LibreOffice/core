@@ -549,7 +549,7 @@ ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
 }
 
 ApiScriptFontName::ApiScriptFontName() :
-    mnFamily( ::com::sun::star::awt::FontFamily::DONTKNOW ),
+    mnFamily( css::awt::FontFamily::DONTKNOW ),
     mnTextEnc( RTL_TEXTENCODING_DONTKNOW )
 {
 }
@@ -560,18 +560,18 @@ ApiFontData::ApiFontData() :
         220,                                            // height 11 points
         0,
         OUString(),
-        ::com::sun::star::awt::FontFamily::DONTKNOW,
+        css::awt::FontFamily::DONTKNOW,
         RTL_TEXTENCODING_DONTKNOW,
-        ::com::sun::star::awt::FontPitch::DONTKNOW,
+        css::awt::FontPitch::DONTKNOW,
         100.0,
-        ::com::sun::star::awt::FontWeight::NORMAL,
-        ::com::sun::star::awt::FontSlant_NONE,
-        ::com::sun::star::awt::FontUnderline::NONE,
-        ::com::sun::star::awt::FontStrikeout::NONE,
+        css::awt::FontWeight::NORMAL,
+        css::awt::FontSlant_NONE,
+        css::awt::FontUnderline::NONE,
+        css::awt::FontStrikeout::NONE,
         0.0,
         sal_False,
         sal_False,
-        ::com::sun::star::awt::FontType::DONTKNOW ),
+        css::awt::FontType::DONTKNOW ),
     mnColor( API_RGB_TRANSPARENT ),
     mnEscapement( API_ESCAPE_NONE ),
     mnEscapeHeight( API_ESCAPEHEIGHT_NONE ),
@@ -1129,13 +1129,13 @@ void AlignmentModel::setBiffVerAlign( sal_uInt8 nVerAlign )
 }
 
 ApiAlignmentData::ApiAlignmentData() :
-    meHorJustify( ::com::sun::star::table::CellHoriJustify_STANDARD ),
-    mnHorJustifyMethod( ::com::sun::star::table::CellJustifyMethod::AUTO ),
-    mnVerJustify( ::com::sun::star::table::CellVertJustify2::STANDARD ),
-    mnVerJustifyMethod( ::com::sun::star::table::CellJustifyMethod::AUTO ),
-    meOrientation( ::com::sun::star::table::CellOrientation_STANDARD ),
+    meHorJustify( css::table::CellHoriJustify_STANDARD ),
+    mnHorJustifyMethod( css::table::CellJustifyMethod::AUTO ),
+    mnVerJustify( css::table::CellVertJustify2::STANDARD ),
+    mnVerJustifyMethod( css::table::CellJustifyMethod::AUTO ),
+    meOrientation( css::table::CellOrientation_STANDARD ),
     mnRotation( 0 ),
-    mnWritingMode( ::com::sun::star::text::WritingMode2::PAGE ),
+    mnWritingMode( css::text::WritingMode2::PAGE ),
     mnIndent( 0 ),
     mbWrapText( false ),
     mbShrink( false )
@@ -1313,7 +1313,7 @@ void Alignment::finalizeImport()
 
 ::SvxFrameDirection Alignment::GetScFrameDir() const
 {
-    namespace csstxt = ::com::sun::star::text;
+    namespace csstxt = css::text;
     ::SvxFrameDirection eFrameDir = ::FRMDIR_ENVIRONMENT;
     switch( maApiData.mnWritingMode )
     {
@@ -1424,7 +1424,7 @@ void Protection::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 
 namespace {
 
-bool lcl_isBorder(const ::com::sun::star::table::BorderLine& rBorder)
+bool lcl_isBorder(const css::table::BorderLine& rBorder)
 {
     return (rBorder.InnerLineWidth > 0) || (rBorder.OuterLineWidth > 0);
 }
@@ -2081,7 +2081,7 @@ Xf::Xf( const WorkbookHelper& rHelper ) :
     mnScNumFmt(0),
     maAlignment( rHelper ),
     maProtection( rHelper ),
-    meRotationRef( ::com::sun::star::table::CellVertJustify2::STANDARD ),
+    meRotationRef( css::table::CellVertJustify2::STANDARD ),
     mpStyleSheet( NULL )
 {
 }
@@ -2373,7 +2373,7 @@ Xf::createPattern( bool bSkipPoolDefs )
         {
             if( (pAlignment->getApiData().mnRotation != 0) && pBorder->getApiData().hasAnyOuterBorder() )
             {
-                meRotationRef = ::com::sun::star::table::CellVertJustify2::BOTTOM;
+                meRotationRef = css::table::CellVertJustify2::BOTTOM;
                 eRotateMode = SVX_ROTATE_MODE_BOTTOM;
             }
         }

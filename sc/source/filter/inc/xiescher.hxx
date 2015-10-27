@@ -470,7 +470,7 @@ public:
 
     /** Returns the SdrObject from the passed control shape and sets the bounding rectangle. */
     SdrObjectPtr        CreateSdrObjectFromShape(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const css::uno::Reference< css::drawing::XShape >& rxShape,
                             const Rectangle& rAnchorRect ) const;
 
     /** Sets additional properties to the form control model, calls virtual DoProcessControl(). */
@@ -486,7 +486,7 @@ protected:
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
 
     void ApplySheetLinkProps() const;
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    mutable css::uno::Reference< css::drawing::XShape >
                                    mxShape;        /// The UNO wrapper of the control shape.
     std::shared_ptr< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
 private:
@@ -497,7 +497,7 @@ private:
 
 private:
     const XclImpRoot&            mrRoot;     /// Not derived from XclImpRoot to allow multiple inheritance.
-    std::shared_ptr< ScRange > mxSrcRange; /// Source data range in the Calc document.
+    std::shared_ptr< ScRange >   mxSrcRange; /// Source data range in the Calc document.
     XclCtrlBindMode              meBindMode; /// Value binding mode.
 };
 
@@ -514,7 +514,7 @@ public:
     inline OUString GetServiceName() const { return DoGetServiceName(); }
     /** Fills the passed macro event descriptor. */
     bool                FillMacroDescriptor(
-                            ::com::sun::star::script::ScriptEventDescriptor& rDescriptor ) const;
+                            css::script::ScriptEventDescriptor& rDescriptor ) const;
 
 protected:
     /** Sets control text formatting. */
@@ -984,11 +984,11 @@ private:
 
     /** Inserts the passed control rxFComp into the form. Needs call to SetCurrentForm() before. */
     virtual bool    InsertControl(
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::form::XFormComponent >& rxFormComp,
-                            const ::com::sun::star::awt::Size& rSize,
-                            ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShape >* pxShape,
+                            const css::uno::Reference<
+                                css::form::XFormComponent >& rxFormComp,
+                            const css::awt::Size& rSize,
+                            css::uno::Reference<
+                                css::drawing::XShape >* pxShape,
                             bool bFloatingCtrl ) override;
 
 private:
@@ -999,7 +999,7 @@ private:
         SdrModel&           mrSdrModel;         /// The SdrModel of the drawing manager.
         SdrPage&            mrSdrPage;          /// The SdrPage of the drawing manager.
         XclImpSolverContainer maSolverCont;     /// The solver container for connector rules.
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
+        css::uno::Reference< css::form::XForm >
                             mxCtrlForm;         /// Controls form of current drawing page.
         sal_Int32           mnLastCtrlIndex;    /// Last insertion index of a form control (for macro events).
         bool                mbHasCtrlForm;      /// True = mxCtrlForm is initialized (but maybe still null).
@@ -1169,7 +1169,7 @@ public:
     ScRange             GetUsedArea( SCTAB nScTab ) const;
     /** Sets the container to receive overridden shape/ctrl names from
         the filter. */
-    void SetOleNameOverrideInfo( const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& rxOverrideInfo ) {  mxOleCtrlNameOverride = rxOverrideInfo; }
+    void SetOleNameOverrideInfo( const css::uno::Reference< css::container::XNameContainer >& rxOverrideInfo ) {  mxOleCtrlNameOverride = rxOverrideInfo; }
     /** Returns the name of overridden name ( or zero length string ) for
         associated object id. */
     OUString GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
@@ -1179,7 +1179,7 @@ private:
     typedef std::shared_ptr< XclImpSheetDrawing >     XclImpSheetDrawingRef;
     typedef std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;
 
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxOleCtrlNameOverride;
+    css::uno::Reference< css::container::XNameContainer > mxOleCtrlNameOverride;
     DefObjNameMap       maDefObjNames;      /// Default base names for all object types.
     SvMemoryStream      maDggStrm;          /// Copy of global DFF data (DGG container) in memory.
     XclImpSheetDrawingMap maSheetDrawings;  /// Drawing managers of all sheets.

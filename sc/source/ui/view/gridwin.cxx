@@ -2811,13 +2811,13 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
             SfxViewFrame* pViewFrame = pViewData->GetViewShell()->GetViewFrame();
             if (pViewFrame)
             {
-                com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pViewFrame->GetFrame().GetController();
+                css::uno::Reference<css::frame::XController> xController = pViewFrame->GetFrame().GetController();
                 if (xController.is())
                 {
                     ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
                     if (pImp && pImp->IsMouseListening())
                     {
-                        ::com::sun::star::awt::MouseEvent aEvent;
+                        css::awt::MouseEvent aEvent;
                         lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
                         if ( rNEvt.GetWindow() )
                             aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();

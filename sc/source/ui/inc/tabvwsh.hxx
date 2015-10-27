@@ -119,8 +119,7 @@ private:
 
     ::editeng::SvxBorderLine*           pCurFrameLine;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XDispatchProviderInterceptor >
+    css::uno::Reference< css::frame::XDispatchProviderInterceptor >
                             xDisProvInterceptor;
 
     Point                   aWinPos;
@@ -180,8 +179,7 @@ private:
     SfxShell*       GetMySubShell() const;
 
     void            DoReadUserData( const OUString& rData );
-    void          DoReadUserDataSequence( const ::com::sun::star::uno::Sequence<
-                                     ::com::sun::star::beans::PropertyValue >& rSettings );
+    void            DoReadUserDataSequence( const css::uno::Sequence< css::beans::PropertyValue >& rSettings );
 
     DECL_LINK_TYPED( SimpleRefClose, const OUString*, void );
     DECL_LINK_TYPED( SimpleRefDone, const OUString&, void );
@@ -211,8 +209,8 @@ protected:
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
-    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) override;
-    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    WriteUserDataSequence (css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    ReadUserDataSequence (const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
 
     virtual void    UIDeactivated( SfxInPlaceClient* pClient ) override;
 

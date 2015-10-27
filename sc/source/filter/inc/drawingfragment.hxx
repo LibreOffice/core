@@ -46,13 +46,13 @@ class ShapeMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
 {
 public:
     explicit            ShapeMacroAttacher( const OUString& rMacroName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape );
+                            const css::uno::Reference< css::drawing::XShape >& rxShape );
 
 private:
     virtual void        attachMacro( const OUString& rMacroUrl ) override;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
+    css::uno::Reference< css::drawing::XShape > mxShape;
 };
 
 class Shape : public ::oox::drawingml::Shape, public WorksheetHelper
@@ -66,7 +66,7 @@ public:
 protected:
     virtual void        finalizeXShape(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes ) override;
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes ) override;
 
 private:
     OUString     maMacroName;
@@ -114,7 +114,7 @@ protected:
 private:
     typedef ::std::unique_ptr< ShapeAnchor > ShapeAnchorRef;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
                         mxDrawPage;             /// Drawing page of this sheet.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
@@ -126,14 +126,14 @@ class VmlControlMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
 {
 public:
     explicit            VmlControlMacroAttacher( const OUString& rMacroName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rxCtrlFormIC,
+                            const css::uno::Reference< css::container::XIndexContainer >& rxCtrlFormIC,
                             sal_Int32 nCtrlIndex, sal_Int32 nCtrlType, sal_Int32 nDropStyle );
 
 private:
     virtual void        attachMacro( const OUString& rMacroUrl ) override;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > mxCtrlFormIC;
+    css::uno::Reference< css::container::XIndexContainer > mxCtrlFormIC;
     sal_Int32           mnCtrlIndex;
     sal_Int32           mnCtrlType;
     sal_Int32           mnDropStyle;
@@ -145,7 +145,7 @@ public:
     explicit            VmlDrawing( const WorksheetHelper& rHelper );
 
     /** Returns the drawing shape for a cell note at the specified position. */
-    const ::oox::vml::ShapeBase* getNoteShape( const ::com::sun::star::table::CellAddress& rPos ) const;
+    const ::oox::vml::ShapeBase* getNoteShape( const css::table::CellAddress& rPos ) const;
 
     /** Filters cell note shapes. */
     virtual bool        isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const override;
@@ -155,20 +155,20 @@ public:
 
     /** Calculates the shape rectangle from a cell anchor string. */
     virtual bool        convertClientAnchor(
-                            ::com::sun::star::awt::Rectangle& orShapeRect,
+                            css::awt::Rectangle& orShapeRect,
                             const OUString& rShapeAnchor ) const override;
 
     /** Creates a UNO control shape for legacy drawing controls. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    virtual css::uno::Reference< css::drawing::XShape >
                         createAndInsertClientXShape(
                             const ::oox::vml::ShapeBase& rShape,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const override;
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rShapeRect ) const override;
 
     /** Updates the bounding box covering all shapes of this drawing. */
     virtual void        notifyXShapeInserted(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect,
+                            const css::uno::Reference< css::drawing::XShape >& rxShape,
+                            const css::awt::Rectangle& rShapeRect,
                             const ::oox::vml::ShapeBase& rShape, bool bGroupChild ) override;
 
 private:

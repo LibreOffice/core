@@ -16,7 +16,7 @@
 
 using namespace com::sun::star;
 
-ScXMLChartExportWrapper::ScXMLChartExportWrapper( com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel, SfxMedium& rMed ):
+ScXMLChartExportWrapper::ScXMLChartExportWrapper( css::uno::Reference< css::frame::XModel > xModel, SfxMedium& rMed ):
     mxModel(xModel),
     mrMedium(rMed)
 {

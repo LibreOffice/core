@@ -137,7 +137,7 @@ public:
         result to rTabData.  This method is used, for example, to generate
         a drill-down data table. */
     void filterTable(const std::vector<Criterion>& rCriteria,
-                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rTabData,
+                     css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rTabData,
                      const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     static SCROW getOrder(long nDim, SCROW nIndex);

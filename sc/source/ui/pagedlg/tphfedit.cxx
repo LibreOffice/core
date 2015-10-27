@@ -127,7 +127,7 @@ void ScEditWindow::dispose()
     // delete Accessible object before deleting EditEngine and EditView
     if (pAcc)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
+        css::uno::Reference< css::accessibility::XAccessible > xTemp = xAcc;
         if (xTemp.is())
             pAcc->dispose();
     }
@@ -285,7 +285,7 @@ void ScEditWindow::GetFocus()
     pEdView->ShowCursor();
     pActiveEdWnd = this;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
+    css::uno::Reference< css::accessibility::XAccessible > xTemp = xAcc;
     if (xTemp.is() && pAcc)
     {
         pAcc->GotFocus();
@@ -298,7 +298,7 @@ void ScEditWindow::GetFocus()
 
 void ScEditWindow::LoseFocus()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
+    css::uno::Reference< css::accessibility::XAccessible > xTemp = xAcc;
     if (xTemp.is() && pAcc)
     {
         pAcc->LostFocus();
@@ -308,7 +308,7 @@ void ScEditWindow::LoseFocus()
     Control::LoseFocus();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
     OUString sName;
     OUString sDescription(GetHelpText());
@@ -332,7 +332,7 @@ void ScEditWindow::LoseFocus()
     }
     pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView, this,
         OUString(sName), OUString(sDescription), ScAccessibleEditObject::EditControl);
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccessible = pAcc;
+    css::uno::Reference< css::accessibility::XAccessible > xAccessible = pAcc;
     xAcc = xAccessible;
     return pAcc;
 }

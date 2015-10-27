@@ -120,7 +120,7 @@ void ScTableLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEnd
 }
 
 ::sfx2::SvBaseLink::UpdateResult ScTableLink::DataChanged(
-    const OUString&, const ::com::sun::star::uno::Any& )
+    const OUString&, const css::uno::Any& )
 {
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument().GetLinkManager();
     if (pLinkManager!=NULL)

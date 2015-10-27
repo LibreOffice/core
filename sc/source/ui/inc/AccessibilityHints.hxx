@@ -36,21 +36,21 @@
 
 class ScAccWinFocusLostHint : public SfxHint
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
                 xOldAccessible;
 public:
                 ScAccWinFocusLostHint(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld );
+                    const css::uno::Reference< css::uno::XInterface >& xOld );
                 virtual ~ScAccWinFocusLostHint();
 };
 
 class ScAccWinFocusGotHint : public SfxHint
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
                 xNewAccessible;
 public:
                 ScAccWinFocusGotHint(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xNew );
+                    const css::uno::Reference< css::uno::XInterface >& xNew );
                 virtual ~ScAccWinFocusGotHint();
 };
 
@@ -59,7 +59,7 @@ class ScAccGridWinFocusLostHint : public ScAccWinFocusLostHint
     ScSplitPos  eOldGridWin;
 public:
                 ScAccGridWinFocusLostHint( ScSplitPos eOldGridWin,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld );
+                    const css::uno::Reference< css::uno::XInterface >& xOld );
                 virtual ~ScAccGridWinFocusLostHint();
 
     ScSplitPos  GetOldGridWin() const { return eOldGridWin; }
@@ -70,7 +70,7 @@ class ScAccGridWinFocusGotHint : public ScAccWinFocusGotHint
     ScSplitPos  eNewGridWin;
 public:
                 ScAccGridWinFocusGotHint( ScSplitPos eNewGridWin,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xNew );
+                    const css::uno::Reference< css::uno::XInterface >& xNew );
                 virtual ~ScAccGridWinFocusGotHint();
 
     ScSplitPos  GetNewGridWin() const { return eNewGridWin; }

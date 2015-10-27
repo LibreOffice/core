@@ -35,9 +35,9 @@ using namespace xmloff::token;
 ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
+                                      const css::uno::Reference<
+                                      css::xml::sax::XAttributeList>& xAttrList,
+                                      ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
     sAlgorithm(),
@@ -105,8 +105,7 @@ ScXMLSortContext::~ScXMLSortContext()
 
 SvXMLImportContext *ScXMLSortContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext *pContext(0);
 
@@ -200,9 +199,8 @@ void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString
 ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLSortContext* pTempSortContext) :
+                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      ScXMLSortContext* pTempSortContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pSortContext(pTempSortContext),
     sDataType(GetXMLToken(XML_AUTOMATIC)),
@@ -245,8 +243,7 @@ ScXMLSortByContext::~ScXMLSortByContext()
 
 SvXMLImportContext *ScXMLSortByContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }

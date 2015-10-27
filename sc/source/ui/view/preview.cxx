@@ -1514,9 +1514,9 @@ void ScPreview::LoseFocus()
     Window::LoseFocus();
 }
 
-com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()
+css::uno::Reference<css::accessibility::XAccessible> ScPreview::CreateAccessible()
 {
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> xAcc= GetAccessible(false);
+    css::uno::Reference<css::accessibility::XAccessible> xAcc= GetAccessible(false);
     if (xAcc.is())
     {
         return xAcc;
