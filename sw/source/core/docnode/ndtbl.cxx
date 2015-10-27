@@ -1461,7 +1461,7 @@ bool SwDoc::TableToText( const SwTableNode* pTableNd, sal_Unicode cCh )
     }
 
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.eFlags = TBL_BOXNAME;
+    aMsgHint.m_eFlags = TBL_BOXNAME;
     getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     bool bRet = GetNodes().TableToText( aRg, cCh, pUndo );
@@ -1730,7 +1730,7 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
         SwTableFormulaUpdate aMsgHint( &rTable );
-        aMsgHint.eFlags = TBL_BOXPTR;
+        aMsgHint.m_eFlags = TBL_BOXPTR;
         getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
         bRet = rTable.InsertCol( this, rBoxes, nCnt, bBehind );
@@ -1792,7 +1792,7 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
         SwTableFormulaUpdate aMsgHint( &rTable );
-        aMsgHint.eFlags = TBL_BOXPTR;
+        aMsgHint.m_eFlags = TBL_BOXPTR;
         getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
         bRet = rTable.InsertRow( this, rBoxes, nCnt, bBehind );
@@ -2125,7 +2125,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
         SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-        aMsgHint.eFlags = TBL_BOXPTR;
+        aMsgHint.m_eFlags = TBL_BOXPTR;
         getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
         if (rTable.IsNewModel())
@@ -2199,7 +2199,7 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
         SwTableFormulaUpdate aMsgHint( &rTable );
-        aMsgHint.eFlags = TBL_BOXPTR;
+        aMsgHint.m_eFlags = TBL_BOXPTR;
         getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
         if (bVert)
@@ -2312,7 +2312,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
 
         // Merge them
         SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-        aMsgHint.eFlags = TBL_BOXPTR;
+        aMsgHint.m_eFlags = TBL_BOXPTR;
         getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
         if( pTableNd->GetTable().Merge( this, aBoxes, aMerged, pMergeBox, pUndo ))
@@ -3148,7 +3148,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     SwHistory aHistory;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        aMsgHint.pHistory = &aHistory;
+        aMsgHint.m_pHistory = &aHistory;
     }
 
     {
@@ -3163,12 +3163,12 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
                 pLine = pLine->GetUpper()->GetUpper();
 
             // pLine contains the top-level Line now
-            aMsgHint.nSplitLine = rTable.GetTabLines().GetPos( pLine );
+            aMsgHint.m_nSplitLine = rTable.GetTabLines().GetPos( pLine );
         }
 
         OUString sNewTableNm( GetUniqueTableName() );
-        aMsgHint.DATA.pNewTableNm = &sNewTableNm;
-        aMsgHint.eFlags = TBL_SPLITTBL;
+        aMsgHint.m_aData.pNewTableNm = &sNewTableNm;
+        aMsgHint.m_eFlags = TBL_SPLITTBL;
         getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
     }
 
@@ -3525,9 +3525,9 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
 
     // Adapt all "TableFormulas"
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.DATA.pDelTable = &pDelTableNd->GetTable();
-    aMsgHint.eFlags = TBL_MERGETBL;
-    aMsgHint.pHistory = pHistory;
+    aMsgHint.m_aData.pDelTable = &pDelTableNd->GetTable();
+    aMsgHint.m_eFlags = TBL_MERGETBL;
+    aMsgHint.m_pHistory = pHistory;
     getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     // The actual merge
@@ -3986,7 +3986,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
         return false;
 
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.eFlags = TBL_BOXPTR;
+    aMsgHint.m_eFlags = TBL_BOXPTR;
     getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());

@@ -607,34 +607,34 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                             0 == ( pTableNd = rTextNd.FindTableNode() ) )
                             continue;
 
-                        switch( pUpdateField->eFlags )
+                        switch( pUpdateField->m_eFlags )
                         {
                         case TBL_CALC:
                             // re-set the value flag
                             // JP 17.06.96: internal representation of all formulas
                             //              (reference to other table!!!)
                             if( nsSwExtendedSubType::SUB_CMD & pField->GetSubType() )
-                                pField->PtrToBoxNm( pUpdateField->pTable );
+                                pField->PtrToBoxNm( pUpdateField->m_pTable );
                             else
                                 pField->ChgValid( false );
                             break;
                         case TBL_BOXNAME:
                             // is &m_rDoc the wanted table?
-                            if( &pTableNd->GetTable() == pUpdateField->pTable )
+                            if( &pTableNd->GetTable() == pUpdateField->m_pTable )
                                 // to the external representation
-                                pField->PtrToBoxNm( pUpdateField->pTable );
+                                pField->PtrToBoxNm( pUpdateField->m_pTable );
                             break;
                         case TBL_BOXPTR:
                             // to the internal representation
                             // JP 17.06.96: internal representation on all formulas
                             //              (reference to other table!!!)
-                            pField->BoxNmToPtr( pUpdateField->pTable );
+                            pField->BoxNmToPtr( pUpdateField->m_pTable );
                             break;
                         case TBL_RELBOXNAME:
                             // is &m_rDoc the wanted table?
-                            if( &pTableNd->GetTable() == pUpdateField->pTable )
+                            if( &pTableNd->GetTable() == pUpdateField->m_pTable )
                                 // to the relative representation
-                                pField->ToRelBoxNm( pUpdateField->pTable );
+                                pField->ToRelBoxNm( pUpdateField->m_pTable );
                             break;
                         default:
                             break;
@@ -664,7 +664,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 
     // all fields/boxes are now invalid, so we can start to calculate
     if( pHt && ( RES_TABLEFML_UPDATE != pHt->Which() ||
-                TBL_CALC != static_cast<SwTableFormulaUpdate*>(pHt)->eFlags ))
+                TBL_CALC != static_cast<SwTableFormulaUpdate*>(pHt)->m_eFlags ))
         return ;
 
     SwCalc* pCalc = 0;
@@ -696,7 +696,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 
                     // if &m_rDoc field is not in the to-be-updated table, skip it
                     if( pHt && &pTableNd->GetTable() !=
-                                            static_cast<SwTableFormulaUpdate*>(pHt)->pTable )
+                                            static_cast<SwTableFormulaUpdate*>(pHt)->m_pTable )
                         continue;
 
                     if( !pCalc )
@@ -761,7 +761,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
             {
                 const SwTableNode* pTableNd = pBox->GetSttNd()->FindTableNode();
                 if( !pHt || &pTableNd->GetTable() ==
-                                            static_cast<SwTableFormulaUpdate*>(pHt)->pTable )
+                                            static_cast<SwTableFormulaUpdate*>(pHt)->m_pTable )
                 {
                     double nValue;
                     if( !pCalc )

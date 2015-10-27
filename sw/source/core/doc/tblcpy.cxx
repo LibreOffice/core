@@ -693,7 +693,7 @@ bool SwTable::InsNewTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes
     {
         // Change table formulas into relative representation
         SwTableFormulaUpdate aMsgHint( &rCpyTable );
-        aMsgHint.eFlags = TBL_RELBOXNAME;
+        aMsgHint.m_eFlags = TBL_RELBOXNAME;
         pCpyDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
     }
 
@@ -743,7 +743,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
     {
         // Convert Table formulas to their relative representation
         SwTableFormulaUpdate aMsgHint( &rCpyTable );
-        aMsgHint.eFlags = TBL_RELBOXNAME;
+        aMsgHint.m_eFlags = TBL_RELBOXNAME;
         pCpyDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
     }
 
@@ -987,7 +987,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
     {
         // Convert Table formulas to their relative representation
         SwTableFormulaUpdate aMsgHint( &rCpyTable );
-        aMsgHint.eFlags = TBL_RELBOXNAME;
+        aMsgHint.m_eFlags = TBL_RELBOXNAME;
         pCpyDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
     }
 

@@ -1351,7 +1351,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             // needs to clean up. To keep table formulas correct, change
             // all table formulas to internal (BOXPTR) representation.
             SwTableFormulaUpdate aMsgHint( &pTableNode->GetTable() );
-            aMsgHint.eFlags = TBL_BOXPTR;
+            aMsgHint.m_eFlags = TBL_BOXPTR;
             pDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
             pTableNode->GetTable().GCLines();
 

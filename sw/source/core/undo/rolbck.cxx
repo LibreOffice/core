@@ -91,7 +91,7 @@ SwHistorySetFormat::SwHistorySetFormat( const SfxPoolItem* pFormatHt, sal_uLong 
                     if (pTableNode)
                     {
                         SwTableFormulaUpdate aMsgHint( &pTableNode->GetTable() );
-                        aMsgHint.eFlags = TBL_BOXNAME;
+                        aMsgHint.m_eFlags = TBL_BOXNAME;
                         rNew.ChgDefinedIn( rOld.GetDefinedIn() );
                         rNew.ChangeState( &aMsgHint );
                     }
@@ -729,7 +729,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
                                 {
                                     SwTableFormulaUpdate aMsgHint(
                                         &pTableNode->GetTable() );
-                                    aMsgHint.eFlags = TBL_BOXNAME;
+                                    aMsgHint.m_eFlags = TBL_BOXNAME;
                                     rNew.ChgDefinedIn( rOld.GetDefinedIn() );
                                     rNew.ChangeState( &aMsgHint );
                                 }

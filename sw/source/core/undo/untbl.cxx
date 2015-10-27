@@ -903,7 +903,7 @@ sal_uInt16 _SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )
             if (m_pSwTable && m_bSaveFormula)
             {
                 SwTableFormulaUpdate aMsgHint(m_pSwTable);
-                aMsgHint.eFlags = TBL_BOXNAME;
+                aMsgHint.m_eFlags = TBL_BOXNAME;
                 SwTableBoxFormula* pFormulaItem = const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem));
                 pFormulaItem->ChgDefinedIn( pFormat );
                 pFormulaItem->ChangeState( &aMsgHint );
@@ -1677,7 +1677,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pTableNd, "no TableNode" );
 
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.eFlags = TBL_BOXPTR;
+    aMsgHint.m_eFlags = TBL_BOXPTR;
     rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     CHECK_TABLE( pTableNd->GetTable() )
@@ -1861,7 +1861,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
         if( USHRT_MAX == nSetColType )
         {
             SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-            aMsgHint.eFlags = TBL_BOXPTR;
+            aMsgHint.m_eFlags = TBL_BOXPTR;
             rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
             SwTable &rTable = pTableNd->GetTable();
             if( nMax > nMin && rTable.IsNewModel() )
@@ -1873,7 +1873,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
             SwTable& rTable = pTableNd->GetTable();
 
             SwTableFormulaUpdate aMsgHint( &rTable );
-            aMsgHint.eFlags = TBL_BOXPTR;
+            aMsgHint.m_eFlags = TBL_BOXPTR;
             rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
             SwTableBox* pBox = rTable.GetTableBox( nCurrBox );
@@ -1952,7 +1952,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pTableNd, "no TableNode" );
 
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
-    aMsgHint.eFlags = TBL_BOXPTR;
+    aMsgHint.m_eFlags = TBL_BOXPTR;
     rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     _FndBox aTmpBox( 0, 0 );
@@ -2907,7 +2907,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
     SwTable& rTable = pTableNd->GetTable();
 
     SwTableFormulaUpdate aMsgHint( &rTable );
-    aMsgHint.eFlags = TBL_BOXPTR;
+    aMsgHint.m_eFlags = TBL_BOXPTR;
     pDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     switch( nMode )
@@ -3022,7 +3022,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
     SwTable* pTable = &pTableNd->GetTable();
 
     SwTableFormulaUpdate aMsgHint( pTable );
-    aMsgHint.eFlags = TBL_BOXPTR;
+    aMsgHint.m_eFlags = TBL_BOXPTR;
     pDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     // get lines for layout update

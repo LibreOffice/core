@@ -162,16 +162,16 @@ enum TableFormulaUpdateFlags { TBL_CALC = 0,
 class SwTableFormulaUpdate : public SwMsgPoolItem
 {
 public:
-    const SwTable* pTable;         ///< Pointer to the current table
+    const SwTable* m_pTable;         ///< Pointer to the current table
     union {
         const SwTable* pDelTable;  ///< Merge: Pointer to the table to be removed
         const OUString* pNewTableNm; ///< Split: the name of the new table
-    } DATA;
-    SwHistory* pHistory;
-    sal_uInt16 nSplitLine;       ///< Split: from this BaseLine on will be splitted
-    TableFormulaUpdateFlags eFlags;
-    bool bModified : 1;
-    bool bBehindSplitLine : 1;
+    } m_aData;
+    SwHistory* m_pHistory;
+    sal_uInt16 m_nSplitLine;       ///< Split: from this BaseLine on will be splitted
+    TableFormulaUpdateFlags m_eFlags;
+    bool m_bModified : 1;
+    bool m_bBehindSplitLine : 1;
 
     /** Is sent if a table should be recalculated */
     SwTableFormulaUpdate( const SwTable* );

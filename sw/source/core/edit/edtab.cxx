@@ -322,7 +322,7 @@ bool SwEditShell::GetTableBoxFormulaAttrs( SfxItemSet& rSet ) const
             const SwTable& rTable = pSelBox->GetSttNd()->FindTableNode()->GetTable();
 
             SwTableFormulaUpdate aTableUpdate( &rTable );
-            aTableUpdate.eFlags = TBL_BOXNAME;
+            aTableUpdate.m_eFlags = TBL_BOXNAME;
             static_cast<SwDoc*>(GetDoc())->getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
 
             rSet.Put( pTableFormat->GetAttrSet() );

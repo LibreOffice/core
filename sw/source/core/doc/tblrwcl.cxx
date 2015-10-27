@@ -2033,7 +2033,7 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
     {
         // Convert Table formulas to their relative representation
         SwTableFormulaUpdate aMsgHint( this );
-        aMsgHint.eFlags = TBL_RELBOXNAME;
+        aMsgHint.m_eFlags = TBL_RELBOXNAME;
         GetFrameFormat()->GetDoc()->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
     }
 
@@ -2122,7 +2122,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     {
         // Conver the Table formulas to their relative representation
         SwTableFormulaUpdate aMsgHint( this );
-        aMsgHint.eFlags = TBL_RELBOXNAME;
+        aMsgHint.m_eFlags = TBL_RELBOXNAME;
         pSrcDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
     }
 

@@ -1066,21 +1066,21 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTable, OUString& rNewStr,
         if( pFnd )
             pTable = pFnd;
 
-        if( TBL_MERGETBL == rTableUpd.eFlags )
+        if( TBL_MERGETBL == rTableUpd.m_eFlags )
         {
             if( pFnd )
             {
-                if( pFnd == rTableUpd.DATA.pDelTable )
+                if( pFnd == rTableUpd.m_aData.pDelTable )
                 {
-                    if( rTableUpd.pTable != &rTable ) // not the current one
-                        rNewStr += rTableUpd.pTable->GetFrameFormat()->GetName() + "."; // set new table name
-                    rTableUpd.bModified = true;
+                    if( rTableUpd.m_pTable != &rTable ) // not the current one
+                        rNewStr += rTableUpd.m_pTable->GetFrameFormat()->GetName() + "."; // set new table name
+                    rTableUpd.m_bModified = true;
                 }
-                else if( pFnd != rTableUpd.pTable ||
-                    ( rTableUpd.pTable != &rTable && &rTable != rTableUpd.DATA.pDelTable))
+                else if( pFnd != rTableUpd.m_pTable ||
+                    ( rTableUpd.m_pTable != &rTable && &rTable != rTableUpd.m_aData.pDelTable))
                     rNewStr += sTableNm + "."; // keep table name
                 else
-                    rTableUpd.bModified = true;
+                    rTableUpd.m_bModified = true;
             }
             else
                 rNewStr += sTableNm + ".";     // keep table name
@@ -1121,7 +1121,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTable, OUString& rNewStr,
     if( pTable->GetTabSortBoxes().find( pSttBox ) == pTable->GetTabSortBoxes().end() )
         pSttBox = 0;
 
-    if( TBL_SPLITTBL == rTableUpd.eFlags )
+    if( TBL_SPLITTBL == rTableUpd.m_eFlags )
     {
         // Where are the boxes - in the old or in the new table?
         bool bInNewTable = false;
@@ -1133,21 +1133,21 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTable, OUString& rNewStr,
                     nSttLnPos = SwTableFormula::GetLnPosInTable( *pTable, pSttBox );
 
             if( USHRT_MAX != nSttLnPos && USHRT_MAX != nEndLnPos &&
-                ((rTableUpd.nSplitLine <= nSttLnPos) ==
-                (rTableUpd.nSplitLine <= nEndLnPos)) )
+                ((rTableUpd.m_nSplitLine <= nSttLnPos) ==
+                (rTableUpd.m_nSplitLine <= nEndLnPos)) )
             {
                 // stay in same table
-                bInNewTable = rTableUpd.nSplitLine <= nEndLnPos &&
-                                    pTable == rTableUpd.pTable;
+                bInNewTable = rTableUpd.m_nSplitLine <= nEndLnPos &&
+                                    pTable == rTableUpd.m_pTable;
             }
             else
             {
                 // this is definitely an invalid formula, also mark as modified for Undo
-                rTableUpd.bModified = true;
+                rTableUpd.m_bModified = true;
                 if( pEndBox )
                     bInNewTable = USHRT_MAX != nEndLnPos &&
-                                    rTableUpd.nSplitLine <= nEndLnPos &&
-                                    pTable == rTableUpd.pTable;
+                                    rTableUpd.m_nSplitLine <= nEndLnPos &&
+                                    pTable == rTableUpd.m_pTable;
             }
         }
         else
@@ -1155,25 +1155,25 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTable, OUString& rNewStr,
             sal_uInt16 nSttLnPos = SwTableFormula::GetLnPosInTable( *pTable, pSttBox );
             // Put it in the new table?
             bInNewTable = USHRT_MAX != nSttLnPos &&
-                            rTableUpd.nSplitLine <= nSttLnPos &&
-                            pTable == rTableUpd.pTable;
+                            rTableUpd.m_nSplitLine <= nSttLnPos &&
+                            pTable == rTableUpd.m_pTable;
         }
 
         // formula goes into new table
-        if( rTableUpd.bBehindSplitLine )
+        if( rTableUpd.m_bBehindSplitLine )
         {
             if( !bInNewTable )
             {
-                rTableUpd.bModified = true;
-                rNewStr += rTableUpd.pTable->GetFrameFormat()->GetName() + ".";
+                rTableUpd.m_bModified = true;
+                rNewStr += rTableUpd.m_pTable->GetFrameFormat()->GetName() + ".";
             }
             else if( !sTableNm.isEmpty() )
                 rNewStr += sTableNm + ".";
         }
         else if( bInNewTable )
         {
-            rTableUpd.bModified = true;
-            rNewStr += *rTableUpd.DATA.pNewTableNm + ".";
+            rTableUpd.m_bModified = true;
+            rNewStr += *rTableUpd.m_aData.pNewTableNm + ".";
         }
         else if( !sTableNm.isEmpty() )
             rNewStr += sTableNm + ".";
@@ -1194,7 +1194,7 @@ void SwTableFormula::ToSplitMergeBoxNm( SwTableFormulaUpdate& rTableUpd )
     if( pNd && 0 != ( pNd = pNd->FindTableNode() ))
         pTable = &static_cast<const SwTableNode*>(pNd)->GetTable();
     else
-        pTable = rTableUpd.pTable;
+        pTable = rTableUpd.m_pTable;
 
     m_sFormula = ScanString( &SwTableFormula::_SplitMergeBoxNm, *pTable, static_cast<void*>(&rTableUpd) );
     m_eNmType = INTRNL_NAME;

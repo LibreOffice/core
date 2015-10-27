@@ -63,12 +63,12 @@ SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDcPos )
 
 SwTableFormulaUpdate::SwTableFormulaUpdate( const SwTable* pNewTable )
     : SwMsgPoolItem( RES_TABLEFML_UPDATE ),
-    pTable( pNewTable ), pHistory( 0 ), nSplitLine( USHRT_MAX ),
-    eFlags( TBL_CALC )
+    m_pTable( pNewTable ), m_pHistory( 0 ), m_nSplitLine( USHRT_MAX ),
+    m_eFlags( TBL_CALC )
 {
-    DATA.pDelTable = 0;
-    bModified = bBehindSplitLine = false;
-    OSL_ENSURE( pTable, "No Table pointer" );
+    m_aData.pDelTable = 0;
+    m_bModified = m_bBehindSplitLine = false;
+    OSL_ENSURE( m_pTable, "No Table pointer" );
 }
 
 SwAutoFormatGetDocNode::SwAutoFormatGetDocNode( const SwNodes* pNds )
