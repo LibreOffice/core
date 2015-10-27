@@ -1,3 +1,14 @@
+--- Include/objimpl.h
++++ Include/objimpl.h
+@@ -250,7 +250,7 @@
+         union _gc_head *gc_prev;
+         Py_ssize_t gc_refs;
+     } gc;
+-    double dummy;  /* force worst-case alignment */
++    long double dummy;  /* force worst-case alignment */
+ } PyGC_Head;
+ 
+ extern PyGC_Head *_PyGC_generation0;
 --- Objects/obmalloc.c
 +++ Objects/obmalloc.c
 @@ -413,8 +413,8 @@
