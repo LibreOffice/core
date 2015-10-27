@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_43f930c8",
+        "filename": "vcl/unx/generic/printer/ppdparser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-10-27T10:52:53Z",
+      "side": 1,
+      "message": "No need to create 1 more string copy, can do it directly:\n\naCurrentGroup \u003d GetCommandLineToken( ... );",
+      "revId": "7f78ab333da84437fbf1a87a086056a1615013b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
