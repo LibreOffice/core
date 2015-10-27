@@ -55,6 +55,7 @@
 #include <oox/ole/olehelper.hxx>
 
 #include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SwDoc;
 class SwPaM;

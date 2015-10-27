@@ -860,8 +860,7 @@ WW8_WrPlcPn::WW8_WrPlcPn(WW8Export& rWr, ePLCFT ePl, WW8_FC nStartFc)
     , nFkpStartPage(0)
     , ePlc(ePl)
 {
-    WW8_WrFkp* pF = new WW8_WrFkp(ePlc, nStartFc);
-    aFkps.push_back( pF );
+    m_Fkps.push_back(o3tl::make_unique<WW8_WrFkp>(ePlc, nStartFc));
 }
 
 WW8_WrPlcPn::~WW8_WrPlcPn()
@@ -870,13 +869,13 @@ WW8_WrPlcPn::~WW8_WrPlcPn()
 
 sal_uInt8 *WW8_WrPlcPn::CopyLastSprms(sal_uInt8 &rLen)
 {
-    WW8_WrFkp& rF = aFkps.back();
+    WW8_WrFkp& rF = *m_Fkps.back();
     return rF.CopyLastSprms(rLen);
 }
 
 void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pSprms)
 {
-    WW8_WrFkp* pF = &aFkps.back();
+    WW8_WrFkp* pF = m_Fkps.back().get();
 
     // big sprm? build the sprmPHugePapx
     sal_uInt8* pNewSprms = const_cast<sal_uInt8*>(pSprms);
@@ -915,7 +914,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
         pF->Combine();
         pF = new WW8_WrFkp(ePlc, pF->GetEndFc()); // Start new Fkp == end of old Fkp
 
-        aFkps.push_back( pF );
+        m_Fkps.push_back(std::unique_ptr<WW8_WrFkp>(pF));
         if( !pF->Append( nEndFc, nVarLen, pNewSprms ) )
         {
             OSL_ENSURE( false, "Sprm liess sich nicht einfuegen" );
@@ -929,18 +928,20 @@ void WW8_WrPlcPn::WriteFkps()
 {
     nFkpStartPage = (sal_uInt16) ( SwWW8Writer::FillUntil( rWrt.Strm() ) >> 9 );
 
-    for( size_t i = 0; i < aFkps.size(); i++ )
-        aFkps[ i ].Write( rWrt.Strm(), *rWrt.m_pGrf );
+    for( size_t i = 0; i < m_Fkps.size(); i++ )
+    {
+        m_Fkps[ i ]->Write( rWrt.Strm(), *rWrt.m_pGrf );
+    }
 
     if( CHP == ePlc )
     {
         rWrt.pFib->pnChpFirst = nFkpStartPage;
-        rWrt.pFib->cpnBteChp = aFkps.size();
+        rWrt.pFib->cpnBteChp = m_Fkps.size();
     }
     else
     {
         rWrt.pFib->pnPapFirst = nFkpStartPage;
-        rWrt.pFib->cpnBtePap = aFkps.size();
+        rWrt.pFib->cpnBtePap = m_Fkps.size();
     }
 }
 
@@ -949,16 +950,20 @@ void WW8_WrPlcPn::WritePlc()
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
     sal_uInt16 i;
 
-    for( i = 0; i < aFkps.size(); i++ )
+    for (i = 0; i < m_Fkps.size(); ++i)
+    {
         SwWW8Writer::WriteLong( *rWrt.pTableStrm,
-                                aFkps[ i ].GetStartFc() );
+                                m_Fkps[ i ]->GetStartFc() );
+    }
 
     SwWW8Writer::WriteLong( *rWrt.pTableStrm,
-                                aFkps[ i - 1 ].GetEndFc() );
+                                m_Fkps[ i - 1 ]->GetEndFc() );
 
     // fuer jedes FKP die Page ausgeben
-    for ( i = 0; i < aFkps.size(); i++)
+    for (i = 0; i < m_Fkps.size(); ++i)
+    {
         SwWW8Writer::WriteLong( *rWrt.pTableStrm, i + nFkpStartPage );
+    }
 
     if( CHP == ePlc )
     {

@@ -39,7 +39,6 @@
 #include <vcl/graph.hxx>
 
 #include <boost/optional.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <memory>
 #include <map>
@@ -1253,13 +1252,13 @@ public:
 };
 
 // Plc for Chpx and Papx ( incl PN-Plc )
-typedef boost::ptr_vector<WW8_WrFkp> WW8_WrFkpPtrs;
+typedef std::vector<std::unique_ptr<WW8_WrFkp>> WW8_WrFkpPtrs;
 
 class WW8_WrPlcPn                   // Plc for Page Numbers
 {
 private:
     WW8Export& rWrt;
-    WW8_WrFkpPtrs aFkps;            // PTRARR
+    WW8_WrFkpPtrs m_Fkps;
     sal_uInt16 nFkpStartPage;
     ePLCFT ePlc;
 
