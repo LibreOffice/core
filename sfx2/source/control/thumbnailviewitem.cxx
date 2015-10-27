@@ -106,7 +106,7 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
     , mbVisible(true)
     , mbSelected(false)
     , mbHover(false)
-    , mpxAcc(NULL)
+    , mxAcc()
     , mbEditTitle(false)
     , mpTitleED(NULL)
     , maTextEditMaxArea()
@@ -117,10 +117,9 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
 ThumbnailViewItem::~ThumbnailViewItem()
 {
     mpTitleED.disposeAndClear();
-    if( mpxAcc )
+    if( mxAcc.is() )
     {
-        static_cast< ThumbnailViewItemAcc* >( mpxAcc->get() )->ParentDestroyed();
-        delete mpxAcc;
+        static_cast< ThumbnailViewItemAcc* >( mxAcc.get() )->ParentDestroyed();
     }
 }
 
@@ -218,10 +217,10 @@ void ThumbnailViewItem::setTitle (const OUString& rTitle)
 
 uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
-    if( !mpxAcc )
-        mpxAcc = new uno::Reference< accessibility::XAccessible >( new ThumbnailViewItemAcc( this, bIsTransientChildrenDisabled ) );
+    if( !mxAcc.is() )
+        mxAcc = new ThumbnailViewItemAcc( this, bIsTransientChildrenDisabled );
 
-    return *mpxAcc;
+    return mxAcc;
 }
 
 void ThumbnailViewItem::setDrawArea (const Rectangle &area)

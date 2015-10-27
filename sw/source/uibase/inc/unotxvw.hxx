@@ -62,10 +62,10 @@ class SwXTextView :
 
     SwView*                     m_pView;
     const SfxItemPropertySet*   m_pPropSet;   // property map for SwXTextView properties
-                                        // (not related to pxViewSettings!)
+                                        // (not related to mxViewSettings!)
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *         pxViewSettings;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextViewCursor > *   pxTextViewCursor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >     mxViewSettings;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextViewCursor >   mxTextViewCursor;
 
     SdrObject* GetControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & Model,
