@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVX_SVDUNDO_HXX
 #define INCLUDED_SVX_SVDUNDO_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <svl/solar.hrc>
 #include <svl/undo.hxx>
 #include <svl/style.hxx>
