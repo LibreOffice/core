@@ -21,10 +21,6 @@
 
 
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
-
 PRJ = ../..
 PRJNAME = sal
 TARGET = qa_ByteSequence
@@ -39,7 +35,7 @@ all:
  
 .ELSE
 
-APP1OBJS = $(SLO)/ByteSequence.obj $(SLO)/main.obj
+APP1OBJS = $(SLO)/ByteSequence.obj
 APP1RPATH = NONE
 APP1STDLIBS = $(GTESTLIB) $(SALLIB)
 APP1TARGET = rtl_ByteSequence
@@ -48,5 +44,3 @@ APP1TEST = enabled
 .INCLUDE: target.mk
 
 .ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
-
-.END # "$(OOO_SUBSEQUENT_TESTS)" == ""
