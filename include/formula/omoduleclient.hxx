@@ -33,8 +33,8 @@ class FORMULA_DLLPUBLIC OModuleClient
     OModuleClient(const OModuleClient&) = delete;
     OModuleClient& operator=( const OModuleClient& ) = delete;
 public:
-    OModuleClient();
-    ~OModuleClient();
+    OModuleClientUI();
+    ~OModuleClientUI();
 };
 
 }

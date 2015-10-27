@@ -69,7 +69,7 @@ public:
 class StructPage : public TabPage
 {
 private:
-    OModuleClient           m_aModuleClient;
+    OModuleClientUI         m_aModuleClient;
     Link<StructPage&,void>  aSelLink;
 
     VclPtr<StructListBox>   m_pTlbStruct;
