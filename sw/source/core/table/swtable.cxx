@@ -1476,17 +1476,17 @@ bool SwTable::IsTableComplex() const
 SwTableLine::SwTableLine( SwTableLineFormat *pFormat, sal_uInt16 nBoxes,
                             SwTableBox *pUp )
     : SwClient( pFormat ),
-    aBoxes(),
-    pUpper( pUp )
+    m_aBoxes(),
+    m_pUpper( pUp )
 {
-    aBoxes.reserve( nBoxes );
+    m_aBoxes.reserve( nBoxes );
 }
 
 SwTableLine::~SwTableLine()
 {
-    for (size_t i = 0; i < aBoxes.size(); ++i)
+    for (size_t i = 0; i < m_aBoxes.size(); ++i)
     {
-        delete aBoxes[i];
+        delete m_aBoxes[i];
     }
     // the TabelleLine can be deleted if it's the last client of the FrameFormat
     SwModify* pMod = GetFrameFormat();

@@ -344,23 +344,23 @@ public:
 /// SwTableLine is one table row in the document model.
 class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrameFormat.
 {
-    SwTableBoxes aBoxes;
-    SwTableBox *pUpper;
+    SwTableBoxes m_aBoxes;
+    SwTableBox *m_pUpper;
 
 public:
     TYPEINFO_OVERRIDE();
 
-    SwTableLine() : pUpper(0) {}
+    SwTableLine() : m_pUpper(0) {}
 
     SwTableLine( SwTableLineFormat*, sal_uInt16 nBoxes, SwTableBox *pUp );
     virtual ~SwTableLine();
 
-          SwTableBoxes &GetTabBoxes() { return aBoxes; }
-    const SwTableBoxes &GetTabBoxes() const { return aBoxes; }
+          SwTableBoxes &GetTabBoxes() { return m_aBoxes; }
+    const SwTableBoxes &GetTabBoxes() const { return m_aBoxes; }
 
-          SwTableBox *GetUpper() { return pUpper; }
-    const SwTableBox *GetUpper() const { return pUpper; }
-    void SetUpper( SwTableBox *pNew ) { pUpper = pNew; }
+          SwTableBox *GetUpper() { return m_pUpper; }
+    const SwTableBox *GetUpper() const { return m_pUpper; }
+    void SetUpper( SwTableBox *pNew ) { m_pUpper = pNew; }
 
     SwFrameFormat* GetFrameFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
