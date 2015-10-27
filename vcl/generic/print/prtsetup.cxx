@@ -367,12 +367,19 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
         for( int i = 0; i < m_pParent->m_aJobData.m_pParser->getKeys(); i++ )
         {
             const PPDKey* pKey = m_pParent->m_aJobData.m_pParser->getKey( i );
+
+            // skip options already shown somewhere else
+            // also skip options from the "InstallableOptions" PPD group
+            // Options in that group define hardware features that are not
+            // job-specific and should better be handled in the system-wide
+            // printer configuration. Keyword is defined in PPD specification
+            // (version 4.3), section 5.4.
             if( pKey->isUIKey()                   &&
                 pKey->getKey() != "PageSize"      &&
                 pKey->getKey() != "InputSlot"     &&
                 pKey->getKey() != "PageRegion"    &&
-                pKey->getKey() != "Duplex"
-                )
+                pKey->getKey() != "Duplex"        &&
+                pKey->getGroup() != "InstallableOptions")
             {
                 OUString aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
                 sal_uInt16 nPos = m_pPPDKeyBox->InsertEntry( aEntry );
