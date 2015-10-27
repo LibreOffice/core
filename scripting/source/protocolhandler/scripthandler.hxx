@@ -109,10 +109,10 @@ public:
 
     /* Implementation for X(Notifying)Dispatch */
     virtual void SAL_CALL dispatchWithNotification(
-    const css::util::URL& aURL,
-    const css::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& Listener )
-    throw ( css::uno::RuntimeException, std::exception ) override;
+        const css::util::URL& aURL,
+        const css::uno::Sequence< css::beans::PropertyValue >& lArgs,
+        const css::uno::Reference< css::frame::XDispatchResultListener >& Listener )
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL dispatch(
         const css::util::URL& aURL,
         const css::uno::Sequence< css::beans::PropertyValue >& lArgs )

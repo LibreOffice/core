@@ -69,7 +69,7 @@ public:
 
     virtual OUString SAL_CALL
         getRootStorageURI()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw ( css::uno::RuntimeException, std::exception ) override;
 
     virtual OUString SAL_CALL
         getScriptURI( const OUString& rStorageURI )

@@ -327,7 +327,7 @@ namespace dlgprov
 
 
     void SAL_CALL DialogEventsAttacherImpl::attachEvents( const Sequence< Reference< XInterface > >& Objects,
-        const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>&,
+        const css::uno::Reference<css::script::XScriptListener>&,
         const Any& Helper )
         throw (IllegalArgumentException, IntrospectionException, CannotCreateAdapterException,
                ServiceNotRegisteredException, RuntimeException, std::exception)
@@ -448,10 +448,10 @@ namespace dlgprov
 
 
     DialogUnoScriptListenerImpl::DialogUnoScriptListenerImpl( const Reference< XComponentContext >& rxContext,
-            const Reference< ::com::sun::star::frame::XModel >& rxModel,
-            const Reference< ::com::sun::star::awt::XControl >& rxControl,
-            const Reference< ::com::sun::star::uno::XInterface >& rxHandler,
-            const Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess,
+            const Reference< css::frame::XModel >& rxModel,
+            const Reference< css::awt::XControl >& rxControl,
+            const Reference< css::uno::XInterface >& rxHandler,
+            const Reference< css::beans::XIntrospectionAccess >& rxIntrospectionAccess,
             bool bDialogProviderMode )
         : DialogSFScriptListenerImpl( rxContext, rxModel )
         ,m_xControl( rxControl )

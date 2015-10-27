@@ -44,8 +44,8 @@ namespace basprov
 
 
     typedef ::cppu::WeakImplHelper<
-        ::com::sun::star::script::browse::XBrowseNode,
-        ::com::sun::star::script::XInvocation > BasicMethodNodeImpl_BASE;
+        css::script::browse::XBrowseNode,
+        css::script::XInvocation > BasicMethodNodeImpl_BASE;
 
     class BasicMethodNodeImpl : public BasicMethodNodeImpl_BASE,
                                 public ::scripting_helper::OMutexHolder,
@@ -54,8 +54,8 @@ namespace basprov
                                 public ::comphelper::OPropertyArrayUsageHelper< BasicMethodNodeImpl >
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-    OUString m_sScriptingContext;
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        OUString m_sScriptingContext;
         SbMethod* m_pMethod;
         bool m_bIsAppScript;
 
@@ -71,7 +71,7 @@ namespace basprov
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
 
     public:
-        BasicMethodNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+        BasicMethodNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const OUString& sScriptingContext,
             SbMethod* pMethod, bool isAppScript = true );
         virtual ~BasicMethodNodeImpl();
@@ -84,37 +84,37 @@ namespace basprov
 
         // XBrowseNode
         virtual OUString SAL_CALL getName(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL hasChildNodes(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Int16 SAL_CALL getType(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // XInvocation
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL invoke(
+        virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  )
+            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL invoke(
             const OUString& aFunctionName,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
-            ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException,
-                   ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
-            throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::script::CannotConvertException,
-                   ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Any SAL_CALL getValue( const OUString& aPropertyName )
-            throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< css::uno::Any >& aParams,
+            css::uno::Sequence< sal_Int16 >& aOutParamIndex,
+            css::uno::Sequence< css::uno::Any >& aOutParam )
+            throw (css::lang::IllegalArgumentException, css::script::CannotConvertException,
+                   css::reflection::InvocationTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setValue( const OUString& aPropertyName, const css::uno::Any& aValue )
+            throw (css::beans::UnknownPropertyException, css::script::CannotConvertException,
+                   css::reflection::InvocationTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName )
+            throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL hasMethod( const OUString& aName )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL hasProperty( const OUString& aName )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
     };
 
 

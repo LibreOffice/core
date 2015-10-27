@@ -123,7 +123,7 @@ public:
     virtual sal_Int32 SAL_CALL  getIseven( sal_Int32 nVal ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
     virtual sal_Int32 SAL_CALL  getIsodd( sal_Int32 nVal ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
 
-    virtual double SAL_CALL     getMultinomial( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& aVLst, const css::uno::Sequence< com::sun::star::uno::Any >& aOptVLst ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+    virtual double SAL_CALL     getMultinomial( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& aVLst, const css::uno::Sequence< css::uno::Any >& aOptVLst ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
     virtual double SAL_CALL     getSeriessum( double fX, double fN, double fM, const css::uno::Sequence< css::uno::Sequence< double > >& aCoeffList ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
     virtual double SAL_CALL     getQuotient( double fNum, double fDenum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
 

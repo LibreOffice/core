@@ -470,7 +470,7 @@ public:
         throw RuntimeException("ReadOnly container" );
 
     }
-    virtual void SAL_CALL removeByName( const OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception) override
+    virtual void SAL_CALL removeByName( const OUString& ) throw (css::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception) override
     {
         throw RuntimeException("ReadOnly container" );
     }
@@ -582,7 +582,7 @@ public:
     virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) override;
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (css::uno::RuntimeException, std::exception) override;
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) override;
     // XInterface
@@ -590,7 +590,7 @@ public:
 
     // XTypeProvider
     DECLARE_XTYPEPROVIDER()
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
     {
         if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
         {
@@ -1043,7 +1043,7 @@ public:
 
     // XVBAToOOEventDescGen
     virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) throw (RuntimeException, std::exception) override;
-    virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) throw (css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -1079,7 +1079,7 @@ VBAToOOEventDescGen::getEventDescriptions( const OUString& sCntrlServiceName, co
 }
 
 Reference< XScriptEventsSupplier > SAL_CALL
-VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, const OUString& sCodeName  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, const OUString& sCodeName  ) throw (css::uno::RuntimeException, std::exception)
 {
     ScriptEventHelper evntHelper( xControl );
     Reference< XScriptEventsSupplier > xSupplier =
@@ -1088,17 +1088,17 @@ VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, 
     return xSupplier;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-ooo_vba_EventListener_get_implementation(::com::sun::star::uno::XComponentContext* context,
-                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+ooo_vba_EventListener_get_implementation(css::uno::XComponentContext* context,
+                                         css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new EventListener(context));
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-ooo_vba_VBAToOOEventDesc_get_implementation(::com::sun::star::uno::XComponentContext* context,
-                                            ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+ooo_vba_VBAToOOEventDesc_get_implementation(css::uno::XComponentContext* context,
+                                            css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new VBAToOOEventDescGen(context));
 }

@@ -32,16 +32,16 @@ namespace analysis {
 
 
 /** Returns the result for the unmodified BESSEL function of first kind (J), n-th order, at point x. */
-double BesselJ( double x, sal_Int32 n ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sheet::NoConvergenceException );
+double BesselJ( double x, sal_Int32 n ) throw( css::lang::IllegalArgumentException, css::sheet::NoConvergenceException );
 
 /** Returns the result for the modified BESSEL function of first kind (I), n-th order, at point x. */
-double BesselI( double x, sal_Int32 n ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sheet::NoConvergenceException );
+double BesselI( double x, sal_Int32 n ) throw( css::lang::IllegalArgumentException, css::sheet::NoConvergenceException );
 
 /** Returns the result for the unmodified BESSEL function of second kind (Y), n-th order, at point x. */
-double BesselY( double x, sal_Int32 n ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sheet::NoConvergenceException );
+double BesselY( double x, sal_Int32 n ) throw( css::lang::IllegalArgumentException, css::sheet::NoConvergenceException );
 
 /** Returns the result for the modified BESSEL function of second kind (K), n-th order, at point x. */
-double BesselK( double x, sal_Int32 n ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sheet::NoConvergenceException );
+double BesselK( double x, sal_Int32 n ) throw( css::lang::IllegalArgumentException, css::sheet::NoConvergenceException );
 
 } // namespace analysis
 } // namespace sca

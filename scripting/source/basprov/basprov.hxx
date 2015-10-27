@@ -43,10 +43,10 @@ namespace basprov
 
 
     typedef ::cppu::WeakImplHelper<
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::script::provider::XScriptProvider,
-        ::com::sun::star::script::browse::XBrowseNode > BasicProviderImpl_BASE;
+        css::lang::XServiceInfo,
+        css::lang::XInitialization,
+        css::script::provider::XScriptProvider,
+        css::script::browse::XBrowseNode > BasicProviderImpl_BASE;
 
 
     class BasicProviderImpl : public BasicProviderImpl_BASE
@@ -54,49 +54,49 @@ namespace basprov
     private:
         BasicManager*   m_pAppBasicManager;
         BasicManager*   m_pDocBasicManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >             m_xLibContainerApp;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >             m_xLibContainerDoc;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::document::XScriptInvocationContext >    m_xInvocationContext;
+        css::uno::Reference< css::script::XLibraryContainer >             m_xLibContainerApp;
+        css::uno::Reference< css::script::XLibraryContainer >             m_xLibContainerDoc;
+        css::uno::Reference< css::uno::XComponentContext >                m_xContext;
+        css::uno::Reference< css::document::XScriptInvocationContext >    m_xInvocationContext;
         OUString  m_sScriptingContext;
         bool m_bIsAppScriptCtx;
         bool m_bIsUserCtx;
 
         bool isLibraryShared(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& rxLibContainer,
+            const css::uno::Reference< css::script::XLibraryContainer >& rxLibContainer,
             const OUString& rLibName );
 
     public:
         BasicProviderImpl(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+            const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~BasicProviderImpl();
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XScriptProvider
-        virtual ::com::sun::star::uno::Reference < ::com::sun::star::script::provider::XScript > SAL_CALL getScript(
+        virtual css::uno::Reference < css::script::provider::XScript > SAL_CALL getScript(
             const OUString& scriptURI )
-            throw (  ::com::sun::star::script::provider::ScriptFrameworkErrorException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (  css::script::provider::ScriptFrameworkErrorException, css::uno::RuntimeException, std::exception) override;
 
         // XBrowseNode
         virtual OUString SAL_CALL getName(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL hasChildNodes(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Int16 SAL_CALL getType(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
     };
 
 
