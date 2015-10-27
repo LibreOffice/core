@@ -542,7 +542,10 @@ void SlideSorterController::HandleModelChange()
 
 IMPL_LINK_TYPED(SlideSorterController, ApplicationEventHandler, VclSimpleEvent&, rEvent, void)
 {
-    WindowEventHandler(static_cast<VclWindowEvent&>(rEvent));
+    auto windowEvent = dynamic_cast<VclWindowEvent *>(&rEvent);
+    if (windowEvent != nullptr) {
+        WindowEventHandler(*windowEvent);
+    }
 }
 IMPL_LINK_TYPED(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
