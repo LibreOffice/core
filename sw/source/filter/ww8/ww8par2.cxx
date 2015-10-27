@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <comphelper/string.hxx>
 #include <tools/solar.h>
 #include <vcl/vclenum.hxx>

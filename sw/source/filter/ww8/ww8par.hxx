@@ -55,7 +55,6 @@
 #include <oox/ole/olehelper.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class SwDoc;
 class SwPaM;
@@ -165,7 +164,7 @@ private:
     const WW8Fib&    rFib;
     SvStream&        rSt;
     std::vector<WW8LSTInfo* > maLSTInfos;
-    boost::ptr_vector<WW8LFOInfo > pLFOInfos;// D. from PLF LFO, sorted exactly like in the WW8 Stream
+    std::vector<std::unique_ptr<WW8LFOInfo>> m_LFOInfos;// D. from PLF LFO, sorted exactly like in the WW8 Stream
     sal_uInt16       nUniqueList; // current number for creating unique list names
     sal_uInt8* GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms, sal_uInt8 nLen);
     WW8LSTInfo* GetLSTByListId(    sal_uInt32  nIdLst     ) const;

@@ -429,7 +429,7 @@ struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
     // an dem Tag, wo MS ihr Listenformat auf mehr als 15 Level aufbohren.
 
     bool bOverride  :1;// Flag, ob die NumRule nicht in maLSTInfos steht,
-                                                     //   sondern fuer pLFOInfos NEU angelegt wurde
+                        //   sondern fuer m_LFOInfos NEU angelegt wurde
     bool bSimpleList:1;// Flag, ob diese NumRule nur einen Level verwendet
     bool bUsedInDoc :1;// Flag, ob diese NumRule im Doc verwendet wird,
                                                      //   oder beim Reader-Ende geloescht werden sollte
@@ -1321,7 +1321,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             aLFO.bSimpleList = pParentListInfo->bSimpleList;
         }
         // und rein ins Merk-Array mit dem Teil
-        WW8LFOInfo* pLFOInfo = new WW8LFOInfo(aLFO);
+        std::unique_ptr<WW8LFOInfo> pLFOInfo(new WW8LFOInfo(aLFO));
         if (pParentListInfo)
         {
             //Copy the basic paragraph properties for each level from the
@@ -1331,7 +1331,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             for (int i = 0; i < nMaxSize; ++i)
                 pLFOInfo->maParaSprms[i] = pParentListInfo->maParaSprms[i];
         }
-        pLFOInfos.push_back(pLFOInfo);
+        m_LFOInfos.push_back(std::move(pLFOInfo));
         bOk = true;
     }
 
@@ -1340,10 +1340,10 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
         // 2.2 fuer alle LFO die zugehoerigen LFOLVL einlesen
 
-        size_t nLFOInfos = pLFOInfos.size();
+        size_t nLFOInfos = m_LFOInfos.size();
         for (size_t nLfo = 0; nLfo < nLFOInfos; ++nLfo)
         {
-            WW8LFOInfo& rLFOInfo = pLFOInfos[nLfo];
+            WW8LFOInfo& rLFOInfo = *m_LFOInfos[nLfo];
             // stehen hierfuer ueberhaupt LFOLVL an ?
             if( rLFOInfo.bOverride )
             {
@@ -1510,17 +1510,14 @@ WW8ListManager::~WW8ListManager()
         }
         delete *aIter;
     }
-    boost::ptr_vector<WW8LFOInfo >::reverse_iterator aIter;
-    for (aIter = pLFOInfos.rbegin() ;
-        aIter < pLFOInfos.rend();
-        ++aIter )
+    for (auto aIter = m_LFOInfos.rbegin(); aIter < m_LFOInfos.rend(); ++aIter)
     {
-        if (aIter->bOverride
-            && aIter->pNumRule
-            && !aIter->bUsedInDoc
-            && aIter->pNumRule->IsAutoRule())
+        if ((*aIter)->bOverride
+            && (*aIter)->pNumRule
+            && !(*aIter)->bUsedInDoc
+            && (*aIter)->pNumRule->IsAutoRule())
         {
-            rDoc.DelNumRule( aIter->pNumRule->GetName() );
+            rDoc.DelNumRule( (*aIter)->pNumRule->GetName() );
         }
     }
 }
@@ -1557,10 +1554,10 @@ bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
 SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     const sal_uInt8 nLevel, std::vector<sal_uInt8> &rParaSprms, SwTextNode *pNode)
 {
-    if (pLFOInfos.size() <= nLFOPosition)
+    if (m_LFOInfos.size() <= nLFOPosition)
         return 0;
 
-    WW8LFOInfo& rLFOInfo = pLFOInfos[nLFOPosition];
+    WW8LFOInfo& rLFOInfo = *m_LFOInfos[nLFOPosition];
 
     bool bFirstUse = !rLFOInfo.bUsedInDoc;
     rLFOInfo.bUsedInDoc = true;
