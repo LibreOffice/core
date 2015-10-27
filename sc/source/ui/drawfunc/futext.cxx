@@ -56,6 +56,7 @@ static void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
     rBindings.Invalidate( SID_ATTR_CHAR_OVERLINE );
     rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
+    rBindings.Invalidate( SID_ATTR_CHAR_BACK_COLOR );
     rBindings.Invalidate( SID_ATTR_CHAR_FONT );
     rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
     rBindings.Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
