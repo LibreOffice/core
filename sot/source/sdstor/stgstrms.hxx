@@ -151,7 +151,7 @@ class StgTmpStrm : public SvMemoryStream
     virtual void FlushData() override;
 
 public:
-    explicit StgTmpStrm( sal_uLong=16 );
+    explicit StgTmpStrm( sal_uInt64=16 );
     virtual ~StgTmpStrm();
     bool Copy( StgTmpStrm& );
     virtual void SetSize( sal_uInt64 ) override;
