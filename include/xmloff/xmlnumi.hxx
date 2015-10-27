@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLOFF_XMLNUMI_HXX
 #define INCLUDED_XMLOFF_XMLNUMI_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <xmloff/xmlstyle.hxx>
