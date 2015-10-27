@@ -43,12 +43,12 @@
 SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib )
     : SwLayoutFrm( rSect.GetFormat(), pSib )
     , SwFlowFrm( static_cast<SwFrm&>(*this) )
-    , pSection( &rSect )
-    , bFootnoteAtEnd(false)
-    , bEndnAtEnd(false)
-    , bContentLock(false)
-    , bOwnFootnoteNum(false)
-    , bFootnoteLock(false)
+    , m_pSection( &rSect )
+    , m_bFootnoteAtEnd(false)
+    , m_bEndnAtEnd(false)
+    , m_bContentLock(false)
+    , m_bOwnFootnoteNum(false)
+    , m_bFootnoteLock(false)
 {
     mnFrmType = FRM_SECTION;
 
@@ -59,12 +59,12 @@ SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib )
 SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, bool bMaster ) :
     SwLayoutFrm( rSect.GetFormat(), rSect.getRootFrm() ),
     SwFlowFrm( (SwFrm&)*this ),
-    pSection( rSect.GetSection() ),
-    bFootnoteAtEnd( rSect.IsFootnoteAtEnd() ),
-    bEndnAtEnd( rSect.IsEndnAtEnd() ),
-    bContentLock( false ),
-    bOwnFootnoteNum( false ),
-    bFootnoteLock( false )
+    m_pSection( rSect.GetSection() ),
+    m_bFootnoteAtEnd( rSect.IsFootnoteAtEnd() ),
+    m_bEndnAtEnd( rSect.IsEndnAtEnd() ),
+    m_bContentLock( false ),
+    m_bOwnFootnoteNum( false ),
+    m_bFootnoteLock( false )
 {
     mnFrmType = FRM_SECTION;
 
@@ -200,12 +200,12 @@ void SwSectionFrm::DelEmpty( bool bRemove )
         {   // If we already were half dead before this DelEmpty,
             // we are likely in the list and have to remove us from
             // it
-            if( !pSection && getRootFrm() )
+            if( !m_pSection && getRootFrm() )
                 getRootFrm()->RemoveFromList( this );
         }
         else if( getRootFrm() )
             getRootFrm()->InsertEmptySct( this );
-        pSection = NULL;  // like this a reanimation is virtually impossible though
+        m_pSection = NULL;  // like this a reanimation is virtually impossible though
     }
 }
 
@@ -692,7 +692,7 @@ void SwSectionFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     if ( IsJoinLocked() || IsColLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
         return;
-    if( !pSection ) // Via DelEmpty
+    if( !m_pSection ) // Via DelEmpty
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
@@ -744,7 +744,7 @@ void SwSectionFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 #endif
     SwLayoutFrm::MakeAll(getRootFrm()->GetCurrShell()->GetOut());
     UnlockJoin();
-    if( pSection && IsSuperfluous() )
+    if( m_pSection && IsSuperfluous() )
         DelEmpty( false );
 }
 
@@ -756,7 +756,7 @@ bool SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *, bool , bool & )
 
 const SwSectionFormat* SwSectionFrm::_GetEndSectFormat() const
 {
-    const SwSectionFormat *pFormat = pSection->GetFormat();
+    const SwSectionFormat *pFormat = m_pSection->GetFormat();
     while( !pFormat->GetEndAtTextEnd().IsAtEnd() )
     {
         if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
@@ -805,7 +805,7 @@ SwContentFrm *SwSectionFrm::FindLastContent( sal_uInt8 nMode )
     if( nMode )
     {
         const SwSectionFormat *pFormat = IsEndnAtEnd() ? GetEndSectFormat() :
-                                     pSection->GetFormat();
+                                     m_pSection->GetFormat();
         do {
             while( pSect->HasFollow() )
                 pSect = pSect->GetFollow();
@@ -1212,7 +1212,7 @@ class ExtraFormatToPositionObjs
 /// "formats" the frame; Frm and PrtArea
 void SwSectionFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttr )
 {
-    if( !pSection ) // via DelEmpty
+    if( !m_pSection ) // via DelEmpty
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
@@ -2203,9 +2203,9 @@ SwFrm* SwFrm::_GetIndNext()
 
 bool SwSectionFrm::IsDescendantFrom( const SwSectionFormat* pFormat ) const
 {
-    if( !pSection || !pFormat )
+    if( !m_pSection || !pFormat )
         return false;
-    const SwSectionFormat *pMyFormat = pSection->GetFormat();
+    const SwSectionFormat *pMyFormat = m_pSection->GetFormat();
     while( pFormat != pMyFormat )
     {
         if( dynamic_cast< const SwSectionFormat *>( pMyFormat->GetRegisteredIn()) !=  nullptr )
@@ -2220,10 +2220,10 @@ void SwSectionFrm::CalcFootnoteAtEndFlag()
 {
     SwSectionFormat *pFormat = GetSection()->GetFormat();
     sal_uInt16 nVal = pFormat->GetFootnoteAtTextEnd( false ).GetValue();
-    bFootnoteAtEnd = FTNEND_ATPGORDOCEND != nVal;
-    bOwnFootnoteNum = FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
+    m_bFootnoteAtEnd = FTNEND_ATPGORDOCEND != nVal;
+    m_bOwnFootnoteNum = FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
                  FTNEND_ATTXTEND_OWNNUMANDFMT == nVal;
-    while( !bFootnoteAtEnd && !bOwnFootnoteNum )
+    while( !m_bFootnoteAtEnd && !m_bOwnFootnoteNum )
     {
         if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
             pFormat = static_cast<SwSectionFormat*>(pFormat->GetRegisteredIn());
@@ -2232,8 +2232,8 @@ void SwSectionFrm::CalcFootnoteAtEndFlag()
         nVal = pFormat->GetFootnoteAtTextEnd( false ).GetValue();
         if( FTNEND_ATPGORDOCEND != nVal )
         {
-            bFootnoteAtEnd = true;
-            bOwnFootnoteNum = bOwnFootnoteNum ||FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
+            m_bFootnoteAtEnd = true;
+            m_bOwnFootnoteNum = m_bOwnFootnoteNum ||FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
                          FTNEND_ATTXTEND_OWNNUMANDFMT == nVal;
         }
     }
@@ -2241,20 +2241,20 @@ void SwSectionFrm::CalcFootnoteAtEndFlag()
 
 bool SwSectionFrm::IsEndnoteAtMyEnd() const
 {
-    return pSection->GetFormat()->GetEndAtTextEnd( false ).IsAtEnd();
+    return m_pSection->GetFormat()->GetEndAtTextEnd( false ).IsAtEnd();
 }
 
 void SwSectionFrm::CalcEndAtEndFlag()
 {
     SwSectionFormat *pFormat = GetSection()->GetFormat();
-    bEndnAtEnd = pFormat->GetEndAtTextEnd( false ).IsAtEnd();
-    while( !bEndnAtEnd )
+    m_bEndnAtEnd = pFormat->GetEndAtTextEnd( false ).IsAtEnd();
+    while( !m_bEndnAtEnd )
     {
         if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
             pFormat = static_cast<SwSectionFormat*>(pFormat->GetRegisteredIn());
         else
             break;
-        bEndnAtEnd = pFormat->GetEndAtTextEnd( false ).IsAtEnd();
+        m_bEndnAtEnd = pFormat->GetEndAtTextEnd( false ).IsAtEnd();
     }
 }
 

@@ -36,12 +36,12 @@ class SwLayouter;
 
 class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
 {
-    SwSection* pSection;
-    bool bFootnoteAtEnd; // footnotes at the end of section
-    bool bEndnAtEnd; // endnotes at the end of section
-    bool bContentLock; // content locked
-    bool bOwnFootnoteNum; // special numbering of footnotes
-    bool bFootnoteLock; // ftn, don't leave this section bwd
+    SwSection* m_pSection;
+    bool m_bFootnoteAtEnd; // footnotes at the end of section
+    bool m_bEndnAtEnd; // endnotes at the end of section
+    bool m_bContentLock; // content locked
+    bool m_bOwnFootnoteNum; // special numbering of footnotes
+    bool m_bFootnoteLock; // ftn, don't leave this section bwd
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
@@ -82,8 +82,8 @@ public:
 
                  SwContentFrm *FindLastContent( sal_uInt8 nMode = 0 );
     inline const SwContentFrm *FindLastContent( sal_uInt8 nMode = 0 ) const;
-    inline SwSection* GetSection() { return pSection; }
-    inline const SwSection* GetSection() const { return pSection; }
+    inline SwSection* GetSection() { return m_pSection; }
+    inline const SwSection* GetSection() const { return m_pSection; }
     inline void ColLock()       { mbColLocked = true; }
     inline void ColUnlock()     { mbColLocked = false; }
 
@@ -111,7 +111,7 @@ public:
      */
     bool ToMaximize( bool bCheckFollow ) const;
     inline bool _ToMaximize() const
-        { if( !pSection ) return false; return ToMaximize( false ); }
+        { if( !m_pSection ) return false; return ToMaximize( false ); }
     bool MoveAllowed( const SwFrm* ) const;
     bool CalcMinDiff( SwTwips& rMinDiff ) const;
 
@@ -140,17 +140,17 @@ public:
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 
-    bool IsFootnoteAtEnd() const { return bFootnoteAtEnd; }
-    bool IsEndnAtEnd() const { return bEndnAtEnd;   }
-    bool IsAnyNoteAtEnd() const { return bFootnoteAtEnd || bEndnAtEnd; }
+    bool IsFootnoteAtEnd() const { return m_bFootnoteAtEnd; }
+    bool IsEndnAtEnd() const { return m_bEndnAtEnd;   }
+    bool IsAnyNoteAtEnd() const { return m_bFootnoteAtEnd || m_bEndnAtEnd; }
 
-    void SetContentLock( bool bNew ) { bContentLock = bNew; }
-    bool IsContentLocked() const { return bContentLock; }
+    void SetContentLock( bool bNew ) { m_bContentLock = bNew; }
+    bool IsContentLocked() const { return m_bContentLock; }
 
-    bool IsOwnFootnoteNum() const { return bOwnFootnoteNum; }
+    bool IsOwnFootnoteNum() const { return m_bOwnFootnoteNum; }
 
-    void SetFootnoteLock( bool bNew ) { bFootnoteLock = bNew; }
-    bool IsFootnoteLock() const { return bFootnoteLock; }
+    void SetFootnoteLock( bool bNew ) { m_bFootnoteLock = bNew; }
+    bool IsFootnoteLock() const { return m_bFootnoteLock; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwSectionFrm)
 };

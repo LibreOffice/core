@@ -663,10 +663,10 @@ SwSectionFrm* SwSectionFrm::FindMaster() const
 {
     OSL_ENSURE( IsFollow(), "SwSectionFrm::FindMaster(): !IsFollow" );
 
-    if (!pSection)
+    if (!m_pSection)
         return nullptr;
 
-    SwIterator<SwSectionFrm,SwFormat> aIter( *pSection->GetFormat() );
+    SwIterator<SwSectionFrm,SwFormat> aIter( *m_pSection->GetFormat() );
     SwSectionFrm* pSect = aIter.First();
     while ( pSect )
     {
