@@ -71,7 +71,7 @@ void OGLTransitionImpl::setScene(TransitionScene const& rScene)
     maScene = rScene;
 }
 
-void OGLTransitionImpl::prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex )
+void OGLTransitionImpl::prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
 {
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
     for(size_t i(0); i != rSceneObjects.size(); ++i) {
@@ -146,7 +146,7 @@ void OGLTransitionImpl::finish( double, double, double, double, double )
 {
 }
 
-void OGLTransitionImpl::prepareTransition( ::sal_Int32, ::sal_Int32 )
+void OGLTransitionImpl::prepareTransition( sal_Int32, sal_Int32 )
 {
 }
 
@@ -154,7 +154,7 @@ void OGLTransitionImpl::finishTransition()
 {
 }
 
-void OGLTransitionImpl::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+void OGLTransitionImpl::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
@@ -164,7 +164,7 @@ void OGLTransitionImpl::displaySlides_( double nTime, ::sal_Int32 glLeavingSlide
     displaySlide( nTime, glEnteringSlideTex, maScene.getEnteringSlide(), SlideWidthScale, SlideHeightScale );
 }
 
-void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex,
+void OGLTransitionImpl::display( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
                                  double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
 {
     const double SlideWidthScale = SlideWidth/DispWidth;
@@ -194,7 +194,7 @@ void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthS
 void
 OGLTransitionImpl::displaySlide(
         const double nTime,
-        const ::sal_Int32 glSlideTex, const Primitives_t& primitives,
+        const sal_Int32 glSlideTex, const Primitives_t& primitives,
         double SlideWidthScale, double SlideHeightScale )
 {
     CHECK_GL_ERROR();
@@ -607,10 +607,10 @@ public:
     {}
 
 private:
-    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
 };
 
-void RochadeTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+void RochadeTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
@@ -688,7 +688,7 @@ T clamp(const T& rIn)
     return glm::clamp(rIn, T(-1.0), T(1.0));
 }
 
-std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles )
+std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( sal_uInt16 nCircles , sal_uInt16 nPointsOnCircles )
 {
     double dAngle(2*3.1415926/static_cast<double>( nPointsOnCircles ));
     if(nCircles < 2 || nPointsOnCircles < 4)
@@ -803,7 +803,7 @@ std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles ,
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
-std::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows )
+std::shared_ptr<OGLTransitionImpl> makeHelix( sal_uInt16 nRows )
 {
     double invN(1.0/static_cast<double>(nRows));
     double iDn = 0.0;
@@ -835,7 +835,7 @@ std::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows )
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
-std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m )
+std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( sal_uInt16 n, sal_uInt16 m )
 {
     double invN(1.0/static_cast<double>(n));
     double invM(1.0/static_cast<double>(m));
@@ -1233,10 +1233,10 @@ public:
     {}
 
 private:
-    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
 };
 
-void FadeSmoothlyTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+void FadeSmoothlyTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
@@ -1314,10 +1314,10 @@ public:
     {}
 
 private:
-    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
 };
 
-void FadeThroughBlackTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
+void FadeThroughBlackTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
@@ -1387,8 +1387,8 @@ protected:
     {}
 
 private:
-    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
-    virtual void prepareTransition( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex ) override;
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
     virtual void finishTransition() override;
     virtual GLuint makeShader() = 0;
 
@@ -1403,7 +1403,7 @@ private:
     GLuint m_nHelperTexture;
 };
 
-void ShaderTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex,
+void ShaderTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
                                               double SlideWidthScale, double SlideHeightScale )
 {
     CHECK_GL_ERROR();
@@ -1424,7 +1424,7 @@ void ShaderTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideT
     CHECK_GL_ERROR();
 }
 
-void ShaderTransition::prepareTransition( ::sal_Int32 /* glLeavingSlideTex */, ::sal_Int32 /* glEnteringSlideTex */ )
+void ShaderTransition::prepareTransition( sal_Int32 /* glLeavingSlideTex */, sal_Int32 /* glEnteringSlideTex */ )
 {
     m_nProgramObject = makeShader();
 

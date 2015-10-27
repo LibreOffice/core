@@ -149,10 +149,10 @@ public:
 
     /** Prepare transition.
       */
-    void prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+    void prepare( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex );
     /** Display a step of the transition.
       */
-    void display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+    void display( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
     /** Clean up after transition.
       */
     void finish();
@@ -178,7 +178,7 @@ protected:
     void setScene(TransitionScene const& rScene);
     // void setSettings(TransitionSettings const& rSettings);
 
-    void displaySlide( double nTime, ::sal_Int32 glSlideTex, const Primitives_t& primitives, double SlideWidthScale, double SlideHeightScale );
+    void displaySlide( double nTime, sal_Int32 glSlideTex, const Primitives_t& primitives, double SlideWidthScale, double SlideHeightScale );
     void displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
     void applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale );
 
@@ -199,7 +199,7 @@ private:
       *
       * Default implementation does nothing.
       */
-    virtual void prepareTransition( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+    virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex );
 
     /** This function is called when the transition needs to clear after itself, like delete own textures etc.
       *
@@ -212,7 +212,7 @@ private:
       * Default implementation applies overall operations and then
       * displays both slides.
       */
-    virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
 
 private:
     TransitionScene maScene;
@@ -223,9 +223,9 @@ private:
 // "Constructors" of available transitions
 std::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft();
 std::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft();
-std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m );
-std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles );
-std::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows );
+std::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( sal_uInt16 n, sal_uInt16 m );
+std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( sal_uInt16 nCircles , sal_uInt16 nPointsOnCircles );
+std::shared_ptr<OGLTransitionImpl> makeHelix( sal_uInt16 nRows );
 std::shared_ptr<OGLTransitionImpl> makeFallLeaving();
 std::shared_ptr<OGLTransitionImpl> makeTurnAround();
 std::shared_ptr<OGLTransitionImpl> makeTurnDown();

@@ -606,15 +606,15 @@ namespace
         uno::Sequence< sal_Int8 >  maComponentTags;
         uno::Sequence< sal_Int32 > maBitCounts;
 
-        virtual ::sal_Int8 SAL_CALL getType(  ) throw (uno::RuntimeException, std::exception) override
+        virtual sal_Int8 SAL_CALL getType(  ) throw (uno::RuntimeException, std::exception) override
         {
             return rendering::ColorSpaceType::RGB;
         }
-        virtual uno::Sequence< ::sal_Int8 > SAL_CALL getComponentTags(  ) throw (uno::RuntimeException, std::exception) override
+        virtual uno::Sequence< sal_Int8 > SAL_CALL getComponentTags(  ) throw (uno::RuntimeException, std::exception) override
         {
             return maComponentTags;
         }
-        virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) throw (uno::RuntimeException, std::exception) override
+        virtual sal_Int8 SAL_CALL getRenderingIntent(  ) throw (uno::RuntimeException, std::exception) override
         {
             return rendering::RenderingIntent::PERCEPTUAL;
         }
@@ -736,19 +736,19 @@ namespace
         }
 
         // XIntegerBitmapColorSpace
-        virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (uno::RuntimeException, std::exception) override
+        virtual sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (uno::RuntimeException, std::exception) override
         {
             return 32;
         }
-        virtual uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) throw (uno::RuntimeException, std::exception) override
+        virtual uno::Sequence< sal_Int32 > SAL_CALL getComponentBitCounts(  ) throw (uno::RuntimeException, std::exception) override
         {
             return maBitCounts;
         }
-        virtual ::sal_Int8 SAL_CALL getEndianness(  ) throw (uno::RuntimeException, std::exception) override
+        virtual sal_Int8 SAL_CALL getEndianness(  ) throw (uno::RuntimeException, std::exception) override
         {
             return util::Endianness::LITTLE;
         }
-        virtual uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+        virtual uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< sal_Int8 >& deviceColor,
                                                                                 const uno::Reference< rendering::XColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
                                                                                                                                                         uno::RuntimeException, std::exception) override
         {
@@ -780,7 +780,7 @@ namespace
                 return targetColorSpace->convertFromARGB(aIntermediate);
             }
         }
-        virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+        virtual uno::Sequence< sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< sal_Int8 >& deviceColor,
                                                                                     const uno::Reference< rendering::XIntegerBitmapColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
                                                                                                                                                                         uno::RuntimeException, std::exception) override
         {
@@ -798,7 +798,7 @@ namespace
                 return targetColorSpace->convertIntegerFromARGB(aIntermediate);
             }
         }
-        virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
+        virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
         {
             const sal_Int8* pIn( deviceColor.getConstArray() );
             const sal_Size  nLen( deviceColor.getLength() );
@@ -819,7 +819,7 @@ namespace
             return aRes;
         }
 
-        virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
+        virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
         {
             const sal_Int8* pIn( deviceColor.getConstArray() );
             const sal_Size  nLen( deviceColor.getLength() );
@@ -841,7 +841,7 @@ namespace
             return aRes;
         }
 
-        virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
+        virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const uno::Sequence< sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
         {
             const sal_Int8* pIn( deviceColor.getConstArray() );
             const sal_Size  nLen( deviceColor.getLength() );
@@ -864,7 +864,7 @@ namespace
             return aRes;
         }
 
-        virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
+        virtual uno::Sequence< sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
         {
             const rendering::RGBColor* pIn( rgbColor.getConstArray() );
             const sal_Size             nLen( rgbColor.getLength() );
@@ -882,7 +882,7 @@ namespace
             return aRes;
         }
 
-        virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
+        virtual uno::Sequence< sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
         {
             const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
             const sal_Size              nLen( rgbColor.getLength() );
@@ -900,7 +900,7 @@ namespace
             return aRes;
         }
 
-        virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
+        virtual uno::Sequence< sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override
         {
             const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
             const sal_Size              nLen( rgbColor.getLength() );
@@ -1406,7 +1406,7 @@ public:
     {}
 
     // XTransitionFactory
-    virtual sal_Bool SAL_CALL hasTransition( ::sal_Int16 transitionType, ::sal_Int16 transitionSubType ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasTransition( sal_Int16 transitionType, sal_Int16 transitionSubType ) throw (uno::RuntimeException, std::exception) override
     {
         // A set of css::animation::TransitionSubType that don't have any meaning (in the SMIL 2.0
         // standard) for MISCSHAPEWIPE have been chosen to refer to some of these "fancy" optional
@@ -1451,8 +1451,8 @@ public:
     }
 
     virtual uno::Reference< presentation::XTransition > SAL_CALL createTransition(
-        ::sal_Int16                                           transitionType,
-        ::sal_Int16                                           transitionSubType,
+        sal_Int16                                             transitionType,
+        sal_Int16                                             transitionSubType,
         const uno::Reference< presentation::XSlideShowView >& view,
         const uno::Reference< rendering::XBitmap >&           leavingBitmap,
         const uno::Reference< rendering::XBitmap >&           enteringBitmap )
