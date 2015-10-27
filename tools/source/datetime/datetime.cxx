@@ -265,10 +265,12 @@ DateTime DateTime::CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const
     Date _aDate(
         (sal_uInt16)( nDays + 1 ), nMonths,
         sal::static_int_cast< sal_uInt16 >(nYears + 1601) );
-    tools::Time _aTime( sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
-                 sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 ) )      % sal_Int64( 60 ) ),
-                 sal_uIntPtr( ( aTime / ( a100nPerSecond ) )           % sal_Int64( 60 ) ),
-                 (aTime % a100nPerSecond) * 100 );
+    tools::Time _aTime(
+        static_cast<sal_uInt32>( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
+        static_cast<sal_uInt32>( ( aTime / ( a100nPerSecond * 60 ) )      % sal_Int64( 60 ) ),
+        static_cast<sal_uInt32>( ( aTime / ( a100nPerSecond ) )           % sal_Int64( 60 ) ),
+        static_cast<sal_uInt64>(aTime % a100nPerSecond) * 100
+    );
 
     return DateTime( _aDate, _aTime );
 }
