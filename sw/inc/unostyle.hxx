@@ -62,11 +62,11 @@ class SwXStyleFamilies :  public cppu::WeakImplHelper
 {
     SwDocShell*         m_pDocShell;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxCharStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxParaStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxFrameStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxPageStyles;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   m_pxNumberingStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >   m_xCharStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >   m_xParaStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >   m_xFrameStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >   m_xPageStyles;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >   m_xNumberingStyles;
 protected:
     virtual ~SwXStyleFamilies();
 public:

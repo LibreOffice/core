@@ -204,7 +204,7 @@ void ImageProducer::addConsumer( const css::uno::Reference< css::awt::XImageCons
 {
     DBG_ASSERT( rxConsumer.is(), "::AddConsumer(...): No consumer referenced!" );
     if( rxConsumer.is() )
-        maConsList.push_back( new css::uno::Reference< css::awt::XImageConsumer > ( rxConsumer ));
+        maConsList.push_back( rxConsumer );
 }
 
 

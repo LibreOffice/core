@@ -300,7 +300,7 @@ public:
     OUString aNonConvertableCharacters;
     OUString aBulletGrfs[MAXLEVEL];   // die Grafiken fuer Listen
 
-    css::uno::Reference<css::container::XIndexContainer>* pxFormComps; // die aktuelle Form
+    css::uno::Reference<css::container::XIndexContainer> mxFormComps; // die aktuelle Form
 
     SwDoc *pTemplate;               // die HTML-Vorlage
     Color *pDfltColor;              // default Farbe

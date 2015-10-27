@@ -52,9 +52,7 @@ VCLXMenu::VCLXMenu( Menu* pMenu )
 
 VCLXMenu::~VCLXMenu()
 {
-    for ( size_t n = maPopupMenuRefs.size(); n; ) {
-        delete maPopupMenuRefs[ --n ];
-    }
+    maPopupMenuRefs.clear();
     if ( mpMenu )
     {
         mpMenu->RemoveEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
@@ -425,10 +423,7 @@ throw(css::uno::RuntimeException, std::exception)
 
     if ( mpMenu && pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu() )
     {
-        // Selbst eine Ref halten!
-        css::uno::Reference< css::awt::XPopupMenu > * pNewRef = new css::uno::Reference< css::awt::XPopupMenu > ;
-        *pNewRef = rxPopupMenu;
-        maPopupMenuRefs.push_back( pNewRef );
+        maPopupMenuRefs.push_back( rxPopupMenu );
 
         mpMenu->SetPopupMenu( nItemId, static_cast<PopupMenu*>( pVCLMenu->GetMenu() ) );
     }
@@ -447,11 +442,11 @@ throw(css::uno::RuntimeException, std::exception)
     {
         for ( size_t n = maPopupMenuRefs.size(); n; )
         {
-            css::uno::Reference< css::awt::XPopupMenu > * pRef = maPopupMenuRefs[ --n ];
-            Menu* pM = static_cast<VCLXMenu*>(pRef->get())->GetMenu();
+            css::uno::Reference< css::awt::XPopupMenu >& rRef = maPopupMenuRefs[ --n ];
+            Menu* pM = static_cast<VCLXMenu*>(rRef.get())->GetMenu();
             if ( pM == pMenu )
             {
-                aRef = *pRef;
+                aRef = rRef;
                 break;
             }
         }

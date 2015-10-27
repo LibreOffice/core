@@ -92,8 +92,8 @@ SwXTextView::SwXTextView(SwView* pSwView) :
     m_SelChangedListeners(m_aMutex),
     m_pView(pSwView),
     m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_VIEW ) ),
-    pxViewSettings(0),
-    pxTextViewCursor(0)
+    mxViewSettings(),
+    mxTextViewCursor()
 {
 
 }
@@ -105,17 +105,17 @@ SwXTextView::~SwXTextView()
 
 void SwXTextView::Invalidate()
 {
-    if(pxViewSettings)
+    if(mxViewSettings.is())
     {
-         HelperBaseNoState *pSettings = static_cast < HelperBaseNoState * > ( pxViewSettings->get() );
+        HelperBaseNoState *pSettings = static_cast < HelperBaseNoState * > ( mxViewSettings.get() );
         static_cast < SwXViewSettings* > ( pSettings )->Invalidate();
-        DELETEZ(pxViewSettings);
+        mxViewSettings.clear();
     }
-    if(pxTextViewCursor)
+    if(mxTextViewCursor.is())
     {
-        text::XTextViewCursor* pCrsr = pxTextViewCursor->get();
+        text::XTextViewCursor* pCrsr = mxTextViewCursor.get();
         static_cast<SwXTextViewCursor*>(pCrsr)->Invalidate();
-        DELETEZ(pxTextViewCursor);
+        mxTextViewCursor.clear();
     }
 
     m_refCount++; //prevent second d'tor call
@@ -497,12 +497,11 @@ uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor() throw( uno
     SolarMutexGuard aGuard;
     if(GetView())
     {
-        if(!pxTextViewCursor)
+        if(!mxTextViewCursor.is())
         {
-            static_cast<SwXTextView*>(this)->pxTextViewCursor = new uno::Reference< text::XTextViewCursor > ;
-            *pxTextViewCursor = new  SwXTextViewCursor(GetView());
+            mxTextViewCursor = new SwXTextViewCursor(GetView());
         }
-        return *pxTextViewCursor;
+        return mxTextViewCursor;
     }
     else
         throw uno::RuntimeException();
@@ -513,15 +512,14 @@ uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings() throw( uno
     SolarMutexGuard aGuard;
     if(m_pView)
     {
-        if(!pxViewSettings)
+        if(!mxViewSettings.is())
         {
-            static_cast<SwXTextView*>(this)->pxViewSettings = new uno::Reference< beans::XPropertySet > ;
-            *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, m_pView ) );
+            mxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, m_pView ) );
         }
     }
     else
         throw uno::RuntimeException();
-    return *pxViewSettings;
+    return mxViewSettings;
 }
 
 Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAutomatic*/ )

@@ -143,34 +143,34 @@ private:
     bool                    bObjectValid;
 
     SwXDrawPage*            pDrawPage;
-    css::uno::Reference< css::drawing::XDrawPage > *            pxXDrawPage;
+    css::uno::Reference< css::drawing::XDrawPage >              mxXDrawPage;
 
-    css::uno::Reference< css::text::XText >                 xBodyText;
-    SwXBodyText*            pBodyText;
-    css::uno::Reference< css::uno::XAggregation >           xNumFormatAgg;
+    css::uno::Reference< css::text::XText >                     xBodyText;
+    SwXBodyText*                                                pBodyText;
+    css::uno::Reference< css::uno::XAggregation >               xNumFormatAgg;
 
-    css::uno::Reference< css::container::XIndexAccess > *     pxXNumberingRules;
-    css::uno::Reference< css::container::XIndexAccess > *     pxXFootnotes;
-    css::uno::Reference< css::beans::XPropertySet > *        pxXFootnoteSettings;
-    css::uno::Reference< css::container::XIndexAccess > *       pxXEndnotes;
-    css::uno::Reference< css::beans::XPropertySet > *        pxXEndnoteSettings;
-    css::uno::Reference< css::container::XNameAccess > *            pxXReferenceMarks;
-    css::uno::Reference< css::container::XEnumerationAccess > *     pxXTextFieldTypes;
-    css::uno::Reference< css::container::XNameAccess > *            pxXTextFieldMasters;
-    css::uno::Reference< css::container::XNameAccess > *            pxXTextSections;
-    css::uno::Reference< css::container::XNameAccess > *            pxXBookmarks;
-    css::uno::Reference< css::container::XNameAccess > *            pxXTextTables;
-    css::uno::Reference< css::container::XNameAccess > *            pxXTextFrames;
-    css::uno::Reference< css::container::XNameAccess > *            pxXGraphicObjects;
-    css::uno::Reference< css::container::XNameAccess > *            pxXEmbeddedObjects;
-    css::uno::Reference< css::container::XNameAccess > *            pxXStyleFamilies;
-    mutable css::uno::Reference< css::style::XAutoStyles > *    pxXAutoStyles;
-    css::uno::Reference< css::container::XIndexReplace > *      pxXChapterNumbering;
-    css::uno::Reference< css::container::XIndexAccess > *       pxXDocumentIndexes;
+    css::uno::Reference< css::container::XIndexAccess >         mxXNumberingRules;
+    css::uno::Reference< css::container::XIndexAccess >         mxXFootnotes;
+    css::uno::Reference< css::beans::XPropertySet >             mxXFootnoteSettings;
+    css::uno::Reference< css::container::XIndexAccess >         mxXEndnotes;
+    css::uno::Reference< css::beans::XPropertySet >             mxXEndnoteSettings;
+    css::uno::Reference< css::container::XNameAccess >          mxXReferenceMarks;
+    css::uno::Reference< css::container::XEnumerationAccess >   mxXTextFieldTypes;
+    css::uno::Reference< css::container::XNameAccess >          mxXTextFieldMasters;
+    css::uno::Reference< css::container::XNameAccess >          mxXTextSections;
+    css::uno::Reference< css::container::XNameAccess >          mxXBookmarks;
+    css::uno::Reference< css::container::XNameAccess >          mxXTextTables;
+    css::uno::Reference< css::container::XNameAccess >          mxXTextFrames;
+    css::uno::Reference< css::container::XNameAccess >          mxXGraphicObjects;
+    css::uno::Reference< css::container::XNameAccess >          mxXEmbeddedObjects;
+    css::uno::Reference< css::container::XNameAccess >          mxXStyleFamilies;
+    mutable css::uno::Reference< css::style::XAutoStyles >      mxXAutoStyles;
+    css::uno::Reference< css::container::XIndexReplace >        mxXChapterNumbering;
+    css::uno::Reference< css::container::XIndexAccess >         mxXDocumentIndexes;
 
-    css::uno::Reference< css::beans::XPropertySet > *           pxXLineNumberingProperties;
-    css::uno::Reference< css::container::XNameAccess > *        pxLinkTargetSupplier;
-    css::uno::Reference< css::container::XEnumerationAccess >*  pxXRedlines;
+    css::uno::Reference< css::beans::XPropertySet >             mxXLineNumberingProperties;
+    css::uno::Reference< css::container::XNameAccess >          mxLinkTargetSupplier;
+    css::uno::Reference< css::container::XEnumerationAccess >   mxXRedlines;
     css::uno::Reference< css::container::XNameContainer>        xXFormsContainer;
 
     //temporary frame to enable PDF export if no valid view is available

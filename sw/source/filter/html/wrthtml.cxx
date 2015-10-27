@@ -97,7 +97,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , nHTMLMode(0)
     , eCSS1Unit(FUNIT_NONE)
     , pFootEndNotes(NULL)
-    , pxFormComps(NULL)
+    , mxFormComps()
     , pTemplate(NULL)
     , pDfltColor(NULL)
     , pStartNdIdx(NULL)
@@ -285,7 +285,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     pFootEndNotes = 0;
     pFormatFootnote = 0;
     bOutTable = bOutHeader = bOutFooter = bOutFlyFrame = false;
-    pxFormComps = 0;
+    mxFormComps.clear();
     nFormCntrlCnt = 0;
     bPreserveForm = false;
     bClearLeft = bClearRight = false;
@@ -412,8 +412,8 @@ sal_uLong SwHTMLWriter::WriteStream()
     Out_SwDoc( pOrigPam );
     nTextAttrsToIgnore = 0;
 
-    if( pxFormComps && pxFormComps->is() )
-        OutForm( false, *pxFormComps );
+    if( mxFormComps.is() )
+        OutForm( false, mxFormComps );
 
     if( pFootEndNotes )
         OutFootEndNotes();
@@ -474,8 +474,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     delete pStartNdIdx;
     pStartNdIdx = 0;
 
-    delete pxFormComps;
-    pxFormComps = 0;
+    mxFormComps.clear();
 
     OSL_ENSURE( !pFootEndNotes,
             "SwHTMLWriter::Write: Footnotes nicht durch OutFootEndNotes geloescht" );

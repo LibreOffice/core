@@ -20,15 +20,13 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_IMGPROD_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_IMGPROD_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <tools/link.hxx>
 #include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/awt/XImageConsumer.hpp>
 #include <com/sun/star/awt/XImageProducer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/weak.hxx>
-
+#include <vector>
 
 
 // - ImageProducer -
@@ -50,7 +48,7 @@ class ImageProducer :   public css::awt::XImageProducer,
 {
 private:
 
-    typedef boost::ptr_vector< css::uno::Reference< css::awt::XImageConsumer > > ConsumerList_t;
+    typedef std::vector< css::uno::Reference< css::awt::XImageConsumer > > ConsumerList_t;
 
     OUString        maURL;
     ConsumerList_t  maConsList;

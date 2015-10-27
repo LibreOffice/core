@@ -43,7 +43,7 @@ class PopupMenu;
 class VclMenuEvent;
 
 typedef ::std::vector<
-    css::uno::Reference< css::awt::XPopupMenu >*
+    css::uno::Reference< css::awt::XPopupMenu >
 > PopupMenuRefList;
 
 
