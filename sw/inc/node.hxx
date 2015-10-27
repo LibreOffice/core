@@ -494,15 +494,15 @@ private:
 class SW_DLLPUBLIC SwTableNode : public SwStartNode, public SwModify
 {
     friend class SwNodes;
-    SwTable* pTable;
+    SwTable* m_pTable;
 protected:
     virtual ~SwTableNode();
 
 public:
     SwTableNode( const SwNodeIndex & );
 
-    const SwTable& GetTable() const { return *pTable; }
-    SwTable& GetTable() { return *pTable; }
+    const SwTable& GetTable() const { return *m_pTable; }
+    SwTable& GetTable() { return *m_pTable; }
     SwTabFrm *MakeFrm( SwFrm* );
 
     /// Creates the frms for the table node (i.e. the TabFrms).

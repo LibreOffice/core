@@ -1597,7 +1597,7 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
 
     // "Delete" the Table and merge all Lines/Boxes
     _DelTabPara aDelPara( *this, cCh, pUndo );
-    for( SwTableLine *pLine : pTableNd->pTable->GetTabLines() )
+    for( SwTableLine *pLine : pTableNd->m_pTable->GetTabLines() )
         lcl_DelLine( pLine, &aDelPara );
 
     // We just created a TextNode with fitting separator for every TableLine.
@@ -1609,7 +1609,7 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     // first Text Node
     {
         // What about UNDO?
-        const SfxItemSet& rTableSet = pTableNd->pTable->GetFrameFormat()->GetAttrSet();
+        const SfxItemSet& rTableSet = pTableNd->m_pTable->GetFrameFormat()->GetAttrSet();
         const SfxPoolItem *pBreak, *pDesc;
         if( SfxItemState::SET != rTableSet.GetItemState( RES_PAGEDESC, false, &pDesc ))
             pDesc = 0;
@@ -2342,7 +2342,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
 SwTableNode::SwTableNode( const SwNodeIndex& rIdx )
     : SwStartNode( rIdx, ND_TABLENODE )
 {
-    pTable = new SwTable( 0 );
+    m_pTable = new SwTable( 0 );
 }
 
 SwTableNode::~SwTableNode()
@@ -2353,12 +2353,12 @@ SwTableNode::~SwTableNode()
                                 pTableFormat );
     pTableFormat->ModifyNotification( &aMsgHint, &aMsgHint );
     DelFrms();
-    delete pTable;
+    delete m_pTable;
 }
 
 SwTabFrm *SwTableNode::MakeFrm( SwFrm* pSib )
 {
-    return new SwTabFrm( *pTable, pSib );
+    return new SwTabFrm( *m_pTable, pSib );
 }
 
 /**
@@ -2435,7 +2435,7 @@ void SwTableNode::DelFrms()
        The TabFrms are attached to the FrameFormat of the SwTable.
        We need to delete them in a more cumbersome way, for the Master to also delete the Follows. */
 
-    SwIterator<SwTabFrm,SwFormat> aIter( *(pTable->GetFrameFormat()) );
+    SwIterator<SwTabFrm,SwFormat> aIter( *(m_pTable->GetFrameFormat()) );
     SwTabFrm *pFrm = aIter.First();
     while ( pFrm )
     {
@@ -2472,8 +2472,8 @@ void SwTableNode::DelFrms()
 void SwTableNode::SetNewTable( SwTable* pNewTable, bool bNewFrames )
 {
     DelFrms();
-    delete pTable;
-    pTable = pNewTable;
+    delete m_pTable;
+    m_pTable = pNewTable;
     if( bNewFrames )
     {
         SwNodeIndex aIdx( *EndOfSectionNode());
