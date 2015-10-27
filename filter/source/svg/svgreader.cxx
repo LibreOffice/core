@@ -81,6 +81,12 @@ template<typename Func> void visitElements(Func& rFunc,
                                            const uno::Reference<xml::dom::XElement>& rElem,
                                            SvgiVisitorCaller eCaller)
 {
+    //tdf#65864
+    if (eCaller == SHAPE_WRITER && rElem->getTagName() == "path" && rElem->getParentNode()->getNodeName() == "clipPath" &&
+        rElem->getParentNode()->getParentNode()->getNodeName() == "defs") {
+        return;
+    }
+
     if( rElem->hasAttributes() )
         rFunc(rElem, rElem->getAttributes());
     else
@@ -90,9 +96,6 @@ template<typename Func> void visitElements(Func& rFunc,
     rFunc.push();
 
     // recurse over children
-    if (eCaller == SHAPE_WRITER && rElem->getTagName() == "defs") {
-        return;
-    }
     uno::Reference<xml::dom::XNodeList> xChildren( rElem->getChildNodes() );
     const sal_Int32 nNumNodes( xChildren->getLength() );
     for( sal_Int32 i=0; i<nNumNodes; ++i )
