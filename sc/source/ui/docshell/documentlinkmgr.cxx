@@ -100,7 +100,7 @@ bool DocumentLinkManager::idleCheckLinks()
     const sfx2::SvBaseLinks& rLinks = mpImpl->mpLinkManager->GetLinks();
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
-        sfx2::SvBaseLink* pBase = *rLinks[i];
+        sfx2::SvBaseLink* pBase = rLinks[i].get();
         ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
         if (!pDdeLink || !pDdeLink->NeedsUpdate())
             continue;
@@ -121,7 +121,7 @@ bool DocumentLinkManager::hasDdeLinks() const
     const sfx2::SvBaseLinks& rLinks = mpImpl->mpLinkManager->GetLinks();
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
-        sfx2::SvBaseLink* pBase = *rLinks[i];
+        sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (dynamic_cast<ScDdeLink*>(pBase))
             return true;
     }
@@ -142,7 +142,7 @@ bool DocumentLinkManager::updateDdeLinks( vcl::Window* pWin )
     bool bAny = false;
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
-        sfx2::SvBaseLink* pBase = *rLinks[i];
+        sfx2::SvBaseLink* pBase = rLinks[i].get();
         ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
         if (!pDdeLink)
             continue;
@@ -186,7 +186,7 @@ bool DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& 
     bool bFound = false;
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
         if (!pDdeLink)
             continue;
@@ -212,7 +212,7 @@ size_t DocumentLinkManager::getDdeLinkCount() const
     const sfx2::SvBaseLinks& rLinks = mpImpl->mpLinkManager->GetLinks();
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
         if (!pDdeLink)
             continue;
@@ -231,7 +231,7 @@ void DocumentLinkManager::disconnectDdeLinks()
     const sfx2::SvBaseLinks& rLinks = mpImpl->mpLinkManager->GetLinks();
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
         if (pDdeLink)
             pDdeLink->Disconnect();

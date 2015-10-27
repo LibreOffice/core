@@ -730,19 +730,18 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 
 SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
 {
-    // update ScGlobal::pDrawClipDocShellRef
+    // update ScGlobal::xDrawClipDocShellRef
 
-    delete ScGlobal::pDrawClipDocShellRef;
+    ScGlobal::xDrawClipDocShellRef.Clear();
     if (bAnyOle)
     {
-        ScGlobal::pDrawClipDocShellRef =
-                        new ScDocShellRef(new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS));      // there must be a ref
-        (*ScGlobal::pDrawClipDocShellRef)->DoInitNew();
-        return *ScGlobal::pDrawClipDocShellRef;
+        ScGlobal::xDrawClipDocShellRef = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS); // there must be a ref
+        ScGlobal::xDrawClipDocShellRef->DoInitNew();
+        return ScGlobal::xDrawClipDocShellRef.get();
     }
     else
     {
-        ScGlobal::pDrawClipDocShellRef = NULL;
+        ScGlobal::xDrawClipDocShellRef.Clear();
         return NULL;
     }
 }

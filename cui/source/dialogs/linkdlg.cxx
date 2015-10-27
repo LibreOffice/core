@@ -301,7 +301,7 @@ IMPL_LINK_NOARG_TYPED(SvBaseLinksDlg, UpdateNowClickHdl, Button*, void)
 
             // first look for the entry in the array
             for( size_t i = 0; i < pLinkMgr->GetLinks().size(); ++i )
-                if( &xLink == *pLinkMgr->GetLinks()[ i ] )
+                if( xLink == pLinkMgr->GetLinks()[ i ] )
                 {
                     xLink->SetUseCache( false );
                     SetType( *xLink, aPosArr[ n ], xLink->GetUpdateMode() );
@@ -594,15 +594,15 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
         SvBaseLinks& rLnks = (SvBaseLinks&)pLinkMgr->GetLinks();
         for( size_t n = 0; n < rLnks.size(); ++n )
         {
-            tools::SvRef<SvBaseLink>* pLinkRef = rLnks[ n ];
-            if( !pLinkRef->Is() )
+            tools::SvRef<SvBaseLink>& rLinkRef = rLnks[ n ];
+            if( !rLinkRef.Is() )
             {
                 rLnks.erase( rLnks.begin() + n );
                 --n;
                 continue;
             }
-            if( (*pLinkRef)->IsVisible() )
-                InsertEntry( **pLinkRef );
+            if( rLinkRef->IsVisible() )
+                InsertEntry( *rLinkRef );
         }
 
         if( !rLnks.empty() )
@@ -692,12 +692,12 @@ void SvBaseLinksDlg::SetActLink( SvBaseLink * pLink )
         sal_uLong nSelect = 0;
         for( size_t n = 0; n < rLnks.size(); ++n )
         {
-            tools::SvRef<SvBaseLink>* pLinkRef = rLnks[ n ];
+            const tools::SvRef<SvBaseLink>& rLinkRef = rLnks[ n ];
             // #109573# only visible links have been inserted into the TreeListBox,
             // invisible ones have to be skipped here
-            if( (*pLinkRef)->IsVisible() )
+            if( rLinkRef->IsVisible() )
             {
-                if( pLink == *pLinkRef )
+                if( pLink == rLinkRef.get() )
                 {
                     m_pTbLinks->Select( m_pTbLinks->GetEntry( nSelect ) );
                     LinksSelectHdl( 0 );

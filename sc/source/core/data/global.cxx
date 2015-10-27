@@ -81,8 +81,9 @@
 #include "scmod.hxx"
 #include "appoptio.hxx"
 #include "editutil.hxx"
+#include "docsh.hxx"
 
-tools::SvRef<ScDocShell>*  ScGlobal::pDrawClipDocShellRef = NULL;
+tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
 SvxSearchItem*  ScGlobal::pSearchItem = NULL;
 ScAutoFormat*   ScGlobal::pAutoFormat = NULL;
 LegacyFuncCollection* ScGlobal::pLegacyFuncCollection = NULL;

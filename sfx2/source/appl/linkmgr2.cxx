@@ -74,13 +74,12 @@ LinkManager::~LinkManager()
 {
     for( size_t n = 0; n < aLinkTbl.size(); ++n)
     {
-        tools::SvRef<SvBaseLink>* pTmp = aLinkTbl[ n ];
-        if( pTmp->Is() )
+        tools::SvRef<SvBaseLink>& rTmp = aLinkTbl[ n ];
+        if( rTmp.Is() )
         {
-            (*pTmp)->Disconnect();
-            (*pTmp)->SetLinkManager( NULL );
+            rTmp->Disconnect();
+            rTmp->SetLinkManager( NULL );
         }
-        delete pTmp;
     }
 }
 
@@ -111,19 +110,18 @@ void LinkManager::Remove( SvBaseLink *pLink )
     bool bFound = false;
     for( size_t n = 0; n < aLinkTbl.size(); )
     {
-        tools::SvRef<SvBaseLink>* pTmp = aLinkTbl[ n ];
-        if( pLink == *pTmp )
+        tools::SvRef<SvBaseLink>& rTmp = aLinkTbl[ n ];
+        if( pLink == rTmp.get() )
         {
-            (*pTmp)->Disconnect();
-            (*pTmp)->SetLinkManager( NULL );
-            (*pTmp).Clear();
+            rTmp->Disconnect();
+            rTmp->SetLinkManager( NULL );
+            rTmp.Clear();
             bFound = true;
         }
 
         // Remove empty ones if they exist
-        if( !pTmp->Is() )
+        if( !rTmp.Is() )
         {
-            delete pTmp;
             aLinkTbl.erase( aLinkTbl.begin() + n );
             if( bFound )
                 return ;
@@ -143,13 +141,12 @@ void LinkManager::Remove( size_t nPos, size_t nCnt )
 
         for( size_t n = nPos; n < nPos + nCnt; ++n)
         {
-            tools::SvRef<SvBaseLink>* pTmp = aLinkTbl[ n ];
-            if( pTmp->Is() )
+            tools::SvRef<SvBaseLink>& rTmp = aLinkTbl[ n ];
+            if( rTmp.Is() )
             {
-                (*pTmp)->Disconnect();
-                (*pTmp)->SetLinkManager( NULL );
+                rTmp->Disconnect();
+                rTmp->SetLinkManager( NULL );
             }
-            delete pTmp;
         }
         aLinkTbl.erase( aLinkTbl.begin() + nPos, aLinkTbl.begin() + nPos + nCnt );
     }
@@ -160,19 +157,17 @@ bool LinkManager::Insert( SvBaseLink* pLink )
 {
     for( size_t n = 0; n < aLinkTbl.size(); ++n )
     {
-        tools::SvRef<SvBaseLink>* pTmp = aLinkTbl[ n ];
-        if( !pTmp->Is() )
+        tools::SvRef<SvBaseLink>& rTmp = aLinkTbl[ n ];
+        if( !rTmp.Is() )
         {
-            delete pTmp;
             aLinkTbl.erase( aLinkTbl.begin() + n-- );
         }
-        else if( pLink == *pTmp )
+        else if( pLink == rTmp.get() )
             return false; // No duplicate links inserted
     }
 
-    tools::SvRef<SvBaseLink>* pTmp = new tools::SvRef<SvBaseLink>( pLink );
     pLink->SetLinkManager( this );
-    aLinkTbl.push_back( pTmp );
+    aLinkTbl.push_back( tools::SvRef<SvBaseLink>(pLink) );
     return true;
 }
 
@@ -295,13 +290,13 @@ void LinkManager::UpdateAllLinks(
     std::vector<SvBaseLink*> aTmpArr;
     for( size_t n = 0; n < aLinkTbl.size(); ++n )
     {
-        SvBaseLink* pLink = *aLinkTbl[ n ];
-        if( !pLink )
+        tools::SvRef<SvBaseLink>& rLink = aLinkTbl[ n ];
+        if( !rLink.Is() )
         {
             Remove( n-- );
             continue;
         }
-        aTmpArr.push_back( pLink );
+        aTmpArr.push_back( rLink.get() );
     }
 
     for( size_t n = 0; n < aTmpArr.size(); ++n )
@@ -311,7 +306,7 @@ void LinkManager::UpdateAllLinks(
         // search first in the array after the entry
         bool bFound = false;
         for( size_t i = 0; i < aLinkTbl.size(); ++i )
-            if( pLink == *aLinkTbl[ i ] )
+            if( pLink == aLinkTbl[ i ].get() )
             {
                 bFound = true;
                 break;
@@ -419,7 +414,7 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
 
     for (size_t i = 0; i < n; ++i)
     {
-        ::sfx2::SvBaseLink* p = *rLinks[i];
+        ::sfx2::SvBaseLink* p = rLinks[i].get();
         OUString aType, aFile, aLink, aFilter;
         if (!GetDisplayNames(p, &aType, &aFile, &aLink, &aFilter))
             continue;

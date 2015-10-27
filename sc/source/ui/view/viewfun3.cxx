@@ -217,7 +217,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
             if ( bSysClip && bIncludeObjects )
             {
                 bool bAnyOle = pDoc->HasOLEObjectsInArea( aRange );
-                // Update ScGlobal::pDrawClipDocShellRef.
+                // Update ScGlobal::xDrawClipDocShellRef.
                 ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
             }
 
@@ -264,9 +264,9 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
 
                 ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
-                if ( ScGlobal::pDrawClipDocShellRef )
+                if ( ScGlobal::xDrawClipDocShellRef.Is() )
                 {
-                    SfxObjectShellRef aPersistRef( &(*ScGlobal::pDrawClipDocShellRef) );
+                    SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef );
                     pTransferObj->SetDrawPersist( aPersistRef );// keep persist for ole objects alive
 
                 }
@@ -373,9 +373,9 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 ScTransferObj* pTransferObj = new ScTransferObj( pDocClip.release(), aObjDesc );
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-                if ( ScGlobal::pDrawClipDocShellRef )
+                if ( ScGlobal::xDrawClipDocShellRef.Is() )
                 {
-                    SfxObjectShellRef aPersistRef( &(*ScGlobal::pDrawClipDocShellRef) );
+                    SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef );
                     pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
                 }
 

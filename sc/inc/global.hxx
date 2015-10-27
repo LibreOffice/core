@@ -542,7 +542,7 @@ public:
     SC_DLLPUBLIC static double              nScreenPPTX;
     SC_DLLPUBLIC static double              nScreenPPTY;
 
-    static tools::SvRef<ScDocShell>*   pDrawClipDocShellRef;
+    static tools::SvRef<ScDocShell>   xDrawClipDocShellRef;
 
     static sal_uInt16           nDefFontHeight;
     SC_DLLPUBLIC static sal_uInt16           nStdRowHeight;

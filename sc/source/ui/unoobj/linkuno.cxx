@@ -115,7 +115,7 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
         size_t nCount = pLinkManager->GetLinks().size();
         for (size_t i=0; i<nCount; i++)
         {
-            ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+            ::sfx2::SvBaseLink* pBase = pLinkManager->GetLinks()[i].get();
             if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
             {
                 ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
@@ -584,7 +584,7 @@ static ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, size_t nPos )
         size_t nAreaCount = 0;
         for (size_t i=0; i<nTotalCount; i++)
         {
-            ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+            ::sfx2::SvBaseLink* pBase = pLinkManager->GetLinks()[i].get();
             if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
             {
                 if ( nAreaCount == nPos )
@@ -1006,7 +1006,7 @@ sal_Int32 SAL_CALL ScAreaLinksObj::getCount() throw(uno::RuntimeException, std::
         size_t nTotalCount = pLinkManager->GetLinks().size();
         for (size_t i=0; i<nTotalCount; i++)
         {
-            ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+            ::sfx2::SvBaseLink* pBase = pLinkManager->GetLinks()[i].get();
             if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
                 ++nAreaCount;
         }

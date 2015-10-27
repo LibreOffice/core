@@ -1482,7 +1482,7 @@ static ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const OUSt
     sal_uInt16 nCount = pLinkManager->GetLinks().size();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
             if ( static_cast<ScAreaLink*>(pBase)->IsEqual( rDoc, rFlt, rOpt, rSrc, rDest ) )
                 return static_cast<ScAreaLink*>(pBase);

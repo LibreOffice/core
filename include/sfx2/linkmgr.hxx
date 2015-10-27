@@ -44,7 +44,7 @@ namespace sfx2
     // FormatID "RegisterStatusInfoId" and a string as the data container.
     // This contains the following enum.
 
-typedef std::vector<tools::SvRef<SvBaseLink>*> SvBaseLinks;
+typedef std::vector<tools::SvRef<SvBaseLink> > SvBaseLinks;
 
 typedef std::set<SvLinkSource*> SvLinkSources;
 

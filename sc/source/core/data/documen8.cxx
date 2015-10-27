@@ -725,7 +725,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     sal_uInt16 i;
     for (i=0; i<nCount; i++)
     {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (ScDdeLink* pLink = dynamic_cast<ScDdeLink*>(pBase))
             if ( !bExport40 || pLink->GetMode() == SC_DDE_DEFAULT )
                 ++nDdeCount;
@@ -740,7 +740,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
 
     for (i=0; i<nCount; i++)
     {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (ScDdeLink* pLink = dynamic_cast<ScDdeLink*>(pBase))
         {
             if ( !bExport40 || pLink->GetMode() == SC_DDE_DEFAULT )
@@ -809,7 +809,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
     std::vector<ScExternalRefLink*> aRefLinks;
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         ScExternalRefLink* pRefLink = dynamic_cast<ScExternalRefLink*>(pBase);
         if (pRefLink)
             aRefLinks.push_back(pRefLink);
@@ -891,7 +891,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
     const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     for (size_t i = 0, n = rLinks.size(); i < n; ++i)
     {
-        const sfx2::SvBaseLink* pBase = *rLinks[i];
+        const sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (const ScDdeLink* p = dynamic_cast<const ScDdeLink*>(pBase))
         {
             ScDdeLink* pNew = new ScDdeLink(pDestDoc, *p);
@@ -919,7 +919,7 @@ ScDdeLink* lclGetDdeLink(
         if( pnDdePos ) *pnDdePos = 0;
         for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
         {
-            ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
+            ::sfx2::SvBaseLink* pLink = rLinks[ nIndex ].get();
             if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink )  )
             {
                 if( (OUString(pDdeLink->GetAppl()) == rAppl) &&
@@ -946,7 +946,7 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, size_t nDdePos 
         size_t nDdeIndex = 0;       // counts only the DDE links
         for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
         {
-            ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
+            ::sfx2::SvBaseLink* pLink = rLinks[ nIndex ].get();
             if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink )  )
             {
                 if( nDdeIndex == nDdePos )
@@ -1044,7 +1044,7 @@ bool ScDocument::HasAreaLinks() const
     const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     sal_uInt16 nCount = rLinks.size();
     for (sal_uInt16 i=0; i<nCount; i++)
-        if (0 != dynamic_cast<const ScAreaLink* >((*rLinks[i]).get()))
+        if (0 != dynamic_cast<const ScAreaLink* >(rLinks[i].get()))
             return true;
 
     return false;
@@ -1059,7 +1059,7 @@ void ScDocument::UpdateAreaLinks()
     const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
     for (size_t i=0; i<rLinks.size(); i++)
     {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
             pBase->Update();
     }
@@ -1075,7 +1075,7 @@ void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
     sal_uInt16 nPos = 0;
     while ( nPos < rLinks.size() )
     {
-        const ::sfx2::SvBaseLink* pBase = *rLinks[nPos];
+        const ::sfx2::SvBaseLink* pBase = rLinks[nPos].get();
         const ScAreaLink* pLink = dynamic_cast<const ScAreaLink*>(pBase);
         if (pLink && pLink->GetDestArea().aStart.Tab() == nTab)
             pMgr->Remove(nPos);
@@ -1097,7 +1097,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
     sal_uInt16 nCount = rLinks.size();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (ScAreaLink* pLink = dynamic_cast<ScAreaLink*>(pBase))
         {
             ScRange aOutRange = pLink->GetDestArea();
@@ -1132,13 +1132,13 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
         while ( nFirstIndex < nCount )
         {
             bool bFound = false;
-            ::sfx2::SvBaseLink* pFirst = *rLinks[nFirstIndex];
+            ::sfx2::SvBaseLink* pFirst = rLinks[nFirstIndex].get();
             if (ScAreaLink* pFirstLink = dynamic_cast<ScAreaLink*>(pFirst))
             {
                 ScAddress aFirstPos = pFirstLink->GetDestArea().aStart;
                 for ( sal_uInt16 nSecondIndex = nFirstIndex + 1; nSecondIndex < nCount && !bFound; ++nSecondIndex )
                 {
-                    ::sfx2::SvBaseLink* pSecond = *rLinks[nSecondIndex];
+                    ::sfx2::SvBaseLink* pSecond = rLinks[nSecondIndex].get();
                     ScAreaLink* pSecondLink = dynamic_cast<ScAreaLink*>(pSecond);
                     if (pSecondLink && pSecondLink->GetDestArea().aStart == aFirstPos)
                     {
