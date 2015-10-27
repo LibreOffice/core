@@ -521,19 +521,19 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
             {
                 sError = SFX2_RESSTR(STR_DDE_ERROR);
 
-                sal_Int32 nFndPos = sError.indexOf( '%' );
+                sal_Int32 nFndPos = sError.indexOf( "%1" );
                 if( -1 != nFndPos )
                 {
-                    sError = sError.replaceAt( nFndPos, 1, sApp );
+                    sError = sError.replaceAt( nFndPos, 2, sApp );
                     nFndPos = nFndPos + sApp.getLength();
 
-                    if( -1 != ( nFndPos = sError.indexOf( '%', nFndPos )))
+                    if( -1 != ( nFndPos = sError.indexOf( "%2", nFndPos )))
                     {
-                        sError = sError.replaceAt( nFndPos, 1, sTopic );
+                        sError = sError.replaceAt( nFndPos, 2, sTopic );
                         nFndPos = nFndPos + sTopic.getLength();
 
-                        if( -1 != ( nFndPos = sError.indexOf( '%', nFndPos )))
-                            sError = sError.replaceAt( nFndPos, 1, sItem );
+                        if( -1 != ( nFndPos = sError.indexOf( "%3", nFndPos )))
+                            sError = sError.replaceAt( nFndPos, 2, sItem );
                     }
                 }
             }

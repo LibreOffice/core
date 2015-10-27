@@ -318,7 +318,7 @@ String STR_QUERY_UPDATE_LINKS
 
 String STR_DDE_ERROR
 {
-    Text [ en-US ] = "DDE link to % for % area % are not available." ;
+    Text [ en-US ] = "DDE link to %1 for %2 area %3 are not available." ;
 };
 
 String STR_SECURITY_WARNING_NO_HYPERLINKS
