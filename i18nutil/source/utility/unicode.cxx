@@ -1242,8 +1242,12 @@ OUString ToggleUnicodeCodepoint::ReplacementString()
         sal_Int32 nPos = 0;
         while( nPos < sIn.getLength() )
         {
+            OUStringBuffer aTmp = OUString::number(sIn.iterateCodePoints(&nPos),16);
+            //pad with zeros - minimum length of 4.
+            for( sal_Int32 i = 4 - aTmp.getLength(); i > 0; --i )
+                aTmp.insert( 0,"0" );
             maOutput.append( "U+" );
-            maOutput.append( OUString::number(sIn.iterateCodePoints(&nPos),16) );
+            maOutput.append( aTmp );
         }
     }
     return maOutput.toString();
