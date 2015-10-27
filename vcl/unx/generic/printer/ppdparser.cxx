@@ -956,8 +956,22 @@ namespace
 
 void PPDParser::parse( ::std::list< OString >& rLines )
 {
+    // Name for PPD group into which all options are put for which the PPD
+    // does not explicitly define a group.
+    // This is similar to how CUPS handles it,
+    // s. Sweet, Michael R. (2001): Common UNIX Printing System, p. 251:
+    // "Each option in turn is associated with a group stored in the
+    // ppd_group_t structure. Groups can be specified in the PPD file; if an
+    // option is not associated with a group, it is put in a "General" or
+    // "Extra" group depending on the option.
+    static const OString aDefaultPPDGroupName("General");
+
     std::list< OString >::iterator line = rLines.begin();
     PPDParser::hash_type::const_iterator keyit;
+
+    // name of the PPD group that is currently being processed
+    OString aCurrentGroup = aDefaultPPDGroupName;
+
     while( line != rLines.end() )
     {
         OString aCurrentLine( *line );
@@ -971,11 +985,13 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         sal_Int32 nPos = aKey.indexOf('/');
         if (nPos != -1)
             aKey = aKey.copy(0, nPos);
+        if (aKey.isEmpty())
+            continue;
         aKey = aKey.copy(1); // remove the '*'
+        if (aKey.isEmpty())
+            continue;
 
         if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseUI")) ||
-            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenGroup")) ||
-            aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseGroup")) ||
             aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("End")) ||
             aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenSubGroup")) ||
             aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseSubGroup")))
@@ -983,9 +999,26 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             continue;
         }
 
-        if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenUI")))
+        if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("CloseGroup")))
         {
-            parseOpenUI( aCurrentLine );
+            aCurrentGroup = aDefaultPPDGroupName;
+            continue;
+        }
+        else if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenGroup")))
+        {
+            OString aGroupName = aCurrentLine;
+            sal_Int32 nPosition = aGroupName.indexOf('/');
+            if (nPosition != -1)
+            {
+                aGroupName = aGroupName.copy(0, nPosition);
+            }
+
+            aCurrentGroup = GetCommandLineToken(1, aGroupName);
+            continue;
+        }
+        else if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OpenUI")))
+        {
+            parseOpenUI( aCurrentLine, aCurrentGroup);
             continue;
         }
         else if (aKey.equalsL(RTL_CONSTASCII_STRINGPARAM("OrderDependency")))
@@ -1220,7 +1253,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
     }
 }
 
-void PPDParser::parseOpenUI(const OString& rLine)
+void PPDParser::parseOpenUI(const OString& rLine, const OString& rPPDGroup)
 {
     String aTranslation;
     OString aKey = rLine;
@@ -1259,6 +1292,8 @@ void PPDParser::parseOpenUI(const OString& rLine)
         pKey->m_eUIType = PPDKey::PickMany;
     else
         pKey->m_eUIType = PPDKey::PickOne;
+
+    pKey->m_aGroup = OStringToOUString(rPPDGroup, RTL_TEXTENCODING_MS_1252);
 }
 
 void PPDParser::parseOrderDependency(const OString& rLine)
