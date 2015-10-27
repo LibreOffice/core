@@ -28,7 +28,7 @@
 class MultiImageImportHelper
 {
 private:
-    std::vector< SvXMLImportContextRef* >       maImplContextVector;
+    std::vector< SvXMLImportContextRef >        maImplContextVector;
     bool                                        mbSupportsMultipleContents;
 
 protected:

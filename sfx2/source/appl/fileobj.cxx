@@ -48,7 +48,7 @@
 
 SvFileObject::SvFileObject()
     : nPostUserEventId(0)
-    , pDelMed(NULL)
+    , mxDelMed()
     , pOldParent(NULL)
     , nType(FILETYPE_TEXT)
     , bLoadAgain(true)
@@ -73,7 +73,6 @@ SvFileObject::~SvFileObject()
     }
     if (nPostUserEventId)
         Application::RemoveUserEvent(nPostUserEventId);
-    delete pDelMed;
 }
 
 bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
@@ -485,22 +484,18 @@ IMPL_LINK_NOARG_TYPED( SvFileObject, LoadGrfReady_Impl, void*, void )
         if( xMed.Is() )
         {
             xMed->SetDoneLink( Link<void*,void>() );
-            pDelMed = new tools::SvRef<SfxMedium>(xMed);
+            mxDelMed = xMed;
             nPostUserEventId = Application::PostUserEvent(
-                        LINK( this, SvFileObject, DelMedium_Impl ),
-                        pDelMed);
+                        LINK( this, SvFileObject, DelMedium_Impl ));
             xMed.Clear();
         }
     }
 }
 
-IMPL_LINK_TYPED( SvFileObject, DelMedium_Impl, void*, p, void )
+IMPL_LINK_NOARG_TYPED( SvFileObject, DelMedium_Impl, void*, void )
 {
-    tools::SvRef<SfxMedium>* deleteMedium = static_cast<tools::SvRef<SfxMedium>*>(p);
     nPostUserEventId = 0;
-    assert(pDelMed == deleteMedium);
-    pDelMed = NULL;
-    delete deleteMedium;
+    mxDelMed.Clear();
 }
 
 IMPL_LINK_TYPED( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )

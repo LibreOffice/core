@@ -360,13 +360,13 @@ void ScDrawView::DoCopy()
     std::vector<ScRange> aRanges;
     getChartSourceRanges(pDoc, rMarkList, aRanges);
 
-    // update ScGlobal::pDrawClipDocShellRef
+    // update ScGlobal::xDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc(!aRanges.empty()) );
-    if (ScGlobal::pDrawClipDocShellRef)
+    if (ScGlobal::xDrawClipDocShellRef.Is())
     {
         // Copy data referenced by the chart objects to the draw clip
         // document. We need to do this before GetMarkedObjModel() below.
-        ScDocShellRef xDocSh = *ScGlobal::pDrawClipDocShellRef;
+        ScDocShellRef xDocSh = ScGlobal::xDrawClipDocShellRef;
         ScDocument& rClipDoc = xDocSh->GetDocument();
         copyChartRefDataToClipDoc(pDoc, &rClipDoc, aRanges);
     }
@@ -388,9 +388,9 @@ void ScDrawView::DoCopy()
     ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
     uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-    if ( ScGlobal::pDrawClipDocShellRef )
+    if ( ScGlobal::xDrawClipDocShellRef.Is() )
     {
-        pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    // keep persist for ole objects alive
+        pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef.get() );    // keep persist for ole objects alive
     }
 
     pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
@@ -403,7 +403,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     CheckOle( rMarkList, bAnyOle, bOneOle );
 
-    // update ScGlobal::pDrawClipDocShellRef
+    // update ScGlobal::xDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
     SdrModel* pModel = GetMarkedObjModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
@@ -424,9 +424,9 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
     uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-    if ( ScGlobal::pDrawClipDocShellRef )
+    if ( ScGlobal::xDrawClipDocShellRef.Is() )
     {
-        pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    // keep persist for ole objects alive
+        pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef.get() );    // keep persist for ole objects alive
     }
 
     return xTransferable;

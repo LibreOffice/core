@@ -7682,7 +7682,7 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
             sal_uInt16 nCount = pLinkManager->GetLinks().size();
             for ( sal_uInt16 i=0; i<nCount; i++ )
             {
-                ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+                ::sfx2::SvBaseLink* pBase = pLinkManager->GetLinks()[i].get();
                 if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
                 {
                     ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
