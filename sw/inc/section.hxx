@@ -150,7 +150,7 @@ private:
     mutable SwSectionData m_Data;
 
     tools::SvRef<SwServerObject> m_RefObj; // Set if DataServer.
-    ::sfx2::SvBaseLinkRef m_RefLink;
+    tools::SvRef<sfx2::SvBaseLink> m_RefLink;
 
     SAL_DLLPRIVATE void ImplSetHiddenFlag(
             bool const bHidden, bool const bCondition);

@@ -69,10 +69,10 @@ static void StartTimer( SvLinkSourceTimer ** ppTimer, SvLinkSource * pOwner,
 
 struct SvLinkSource_Entry_Impl
 {
-    SvBaseLinkRef       xSink;
-    OUString            aDataMimeType;
-    sal_uInt16          nAdviseModes;
-    bool            bIsDataSink;
+    tools::SvRef<SvBaseLink>  xSink;
+    OUString                  aDataMimeType;
+    sal_uInt16                nAdviseModes;
+    bool                      bIsDataSink;
 
     SvLinkSource_Entry_Impl( SvBaseLink* pLink, const OUString& rMimeType,
                                 sal_uInt16 nAdvMode )

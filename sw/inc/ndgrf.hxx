@@ -38,7 +38,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
 
     GraphicObject maGrfObj;
     GraphicObject *mpReplacementGraphic;
-    ::sfx2::SvBaseLinkRef refLink;       ///< If graphics only as link then pointer is set.
+    tools::SvRef<sfx2::SvBaseLink> refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
     OUString aLowResGrf;                   ///< HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
     bool bInSwapIn              :1;
@@ -181,7 +181,7 @@ public:
     bool IsGrfLink() const                  { return refLink.Is(); }
     bool IsLinkedFile() const;
     bool IsLinkedDDE() const;
-    ::sfx2::SvBaseLinkRef GetLink() const    { return refLink; }
+    tools::SvRef<sfx2::SvBaseLink> GetLink() const    { return refLink; }
     bool GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const;
     void ReleaseLink();
 

@@ -72,7 +72,7 @@ namespace
                   OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
                   dynamic_cast<const SwBaseLink*>( pLnk) !=  nullptr )
             {
-                    ::sfx2::SvBaseLinkRef xLink = pLnk;
+                    tools::SvRef<sfx2::SvBaseLink> xLink = pLnk;
 
                     OUString sFName;
                     sfx2::LinkManager::GetDisplayNames( xLink, 0, &sFName );
@@ -400,7 +400,7 @@ bool DocumentLinksAdministrationManager::EmbedAllLinks()
         ::sfx2::SvBaseLink* pLnk = 0;
         while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks ) ) )
         {
-            ::sfx2::SvBaseLinkRef xLink = pLnk;
+            tools::SvRef<sfx2::SvBaseLink> xLink = pLnk;
             // Tell the link that it's being destroyed!
             xLink->Closed();
 

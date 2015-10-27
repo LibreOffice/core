@@ -31,7 +31,7 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
     OUString aName;
     OUString aExpansion;
 
-    ::sfx2::SvBaseLinkRef refLink;
+    tools::SvRef<sfx2::SvBaseLink> refLink;
     SwDoc* pDoc;
 
     sal_uInt16 nRefCnt;

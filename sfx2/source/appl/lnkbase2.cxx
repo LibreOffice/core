@@ -569,7 +569,7 @@ ImplDdeItem::~ImplDdeItem()
 {
     bIsInDTOR = true;
     // So that no-one gets the idea to delete the pointer when Disconnecting!
-    SvBaseLinkRef aRef( pLink );
+    tools::SvRef<SvBaseLink> aRef( pLink );
     aRef->Disconnect();
 }
 
@@ -625,7 +625,7 @@ void ImplDdeItem::AdviseLoop( bool bOpen )
         {
             // So that no-one gets the idea to delete the pointer
             // when Disconnecting!
-            SvBaseLinkRef aRef( pLink );
+            tools::SvRef<SvBaseLink> aRef( pLink );
             aRef->Disconnect();
         }
     }

@@ -297,7 +297,7 @@ IMPL_LINK_NOARG_TYPED(SvBaseLinksDlg, UpdateNowClickHdl, Button*, void)
     {
         for( size_t n = 0; n < aLnkArr.size(); ++n )
         {
-            SvBaseLinkRef xLink = aLnkArr[ n ];
+            tools::SvRef<SvBaseLink> xLink = aLnkArr[ n ];
 
             // first look for the entry in the array
             for( size_t i = 0; i < pLinkMgr->GetLinks().size(); ++i )
@@ -420,7 +420,7 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
     if(m_pTbLinks->GetSelectionCount() <= 1)
     {
         sal_uLong nPos;
-        SvBaseLinkRef xLink = GetSelEntry( &nPos );
+        tools::SvRef<SvBaseLink> xLink = GetSelEntry( &nPos );
         if( !xLink.Is() )
             return;
 
@@ -472,7 +472,7 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
             m_pTbLinks->RemoveSelection();
             for( sal_uLong i = 0; i < aLinkList.size(); i++ )
             {
-                SvBaseLinkRef xLink = aLinkList[i];
+                tools::SvRef<SvBaseLink> xLink = aLinkList[i];
                 // tell the link that it will be resolved!
                 xLink->Closed();
 
@@ -507,7 +507,7 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, UpdateWaitingHdl, Idle*, void )
     for( sal_uLong nPos = m_pTbLinks->GetEntryCount(); nPos; )
     {
         SvTreeListEntry* pBox = m_pTbLinks->GetEntry( --nPos );
-        SvBaseLinkRef xLink( static_cast<SvBaseLink*>(pBox->GetUserData()) );
+        tools::SvRef<SvBaseLink> xLink( static_cast<SvBaseLink*>(pBox->GetUserData()) );
         if( xLink.Is() )
         {
             OUString sCur( ImplGetStateStr( *xLink ) ),
@@ -594,7 +594,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
         SvBaseLinks& rLnks = (SvBaseLinks&)pLinkMgr->GetLinks();
         for( size_t n = 0; n < rLnks.size(); ++n )
         {
-            SvBaseLinkRef* pLinkRef = rLnks[ n ];
+            tools::SvRef<SvBaseLink>* pLinkRef = rLnks[ n ];
             if( !pLinkRef->Is() )
             {
                 rLnks.erase( rLnks.begin() + n );
@@ -692,7 +692,7 @@ void SvBaseLinksDlg::SetActLink( SvBaseLink * pLink )
         sal_uLong nSelect = 0;
         for( size_t n = 0; n < rLnks.size(); ++n )
         {
-            SvBaseLinkRef* pLinkRef = rLnks[ n ];
+            tools::SvRef<SvBaseLink>* pLinkRef = rLnks[ n ];
             // #109573# only visible links have been inserted into the TreeListBox,
             // invisible ones have to be skipped here
             if( (*pLinkRef)->IsVisible() )

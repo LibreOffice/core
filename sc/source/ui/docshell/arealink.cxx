@@ -132,7 +132,7 @@ void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEn
             SetName( aNewLinkName );
         }
 
-        sfx2::SvBaseLinkRef const xThis(this); // keep yourself alive
+        tools::SvRef<sfx2::SvBaseLink> const xThis(this); // keep yourself alive
         Refresh( aFile, aFilter, aArea, GetRefreshDelay() );
     }
 

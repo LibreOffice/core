@@ -56,10 +56,10 @@ namespace nsTransferBufferType
 class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
-    SfxObjectShellLock             m_aDocShellRef;
+    SfxObjectShellLock              m_aDocShellRef;
     TransferableDataHelper          m_aOleData;
     TransferableObjectDescriptor    m_aObjDesc;
-    ::sfx2::SvBaseLinkRef            m_xDdeLink;
+    tools::SvRef<sfx2::SvBaseLink>  m_xDdeLink;
 
     SwWrtShell      *m_pWrtShell;
     /* #96392# Added pCreatorView to distinguish SwFrameShell from
