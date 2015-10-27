@@ -29,6 +29,7 @@
 #include <hintids.hxx>
 #include <string.h>
 #include <osl/endian.h>
+#include <o3tl/make_unique.hxx>
 #include <docsh.hxx>
 #include <drawdoc.hxx>
 
@@ -1235,10 +1236,10 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc)
     WW8_CP nStartCp = nStartFc - nOldFc;    // subtract the beginning of the text
     if ( !nStartCp )
     {
-        if ( !aPcts.empty() )
+        if (!m_Pcts.empty())
         {
-            OSL_ENSURE( 1 == aPcts.size(), "Leeres Piece !!");
-            aPcts.pop_back( );
+            OSL_ENSURE(1 == m_Pcts.size(), "empty Piece!");
+            m_Pcts.pop_back();
         }
     }
 
@@ -1246,39 +1247,40 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc)
 
     nStartCp >>= 1;     // for Unicode: number of characters / 2
 
-    if( !aPcts.empty() )
-        nStartCp += aPcts.back().GetStartCp();
+    if (!m_Pcts.empty())
+    {
+        nStartCp += m_Pcts.back()->GetStartCp();
+    }
 
-    WW8_WrPc* pPc = new WW8_WrPc( nStartFc, nStartCp );
-    aPcts.push_back( pPc );
+    m_Pcts.push_back(o3tl::make_unique<WW8_WrPc>(nStartFc, nStartCp));
 }
 
 void WW8_WrPct::WritePc( WW8Export& rWrt )
 {
     sal_uLong nPctStart;
     sal_uLong nOldPos, nEndPos;
-    boost::ptr_vector<WW8_WrPc>::iterator aIter;
 
     nPctStart = rWrt.pTableStrm->Tell();                    // Start piece table
     rWrt.pTableStrm->WriteChar( ( char )0x02 );                       // Status byte PCT
     nOldPos = nPctStart + 1;                                // remember Position
     SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );          // then the length
 
-    for( aIter = aPcts.begin(); aIter != aPcts.end(); ++aIter )     // ranges
-        SwWW8Writer::WriteLong( *rWrt.pTableStrm,
-                                aIter->GetStartCp() );
+    for (auto const& it : m_Pcts) // ranges
+    {
+        SwWW8Writer::WriteLong( *rWrt.pTableStrm, it->GetStartCp() );
+    }
 
     // calculate the last Pos
     sal_uLong nStartCp = rWrt.pFib->fcMac - nOldFc;
     nStartCp >>= 1;             // For Unicode: number of characters / 2
-    nStartCp += aPcts.back().GetStartCp();
+    nStartCp += m_Pcts.back()->GetStartCp();
     SwWW8Writer::WriteLong( *rWrt.pTableStrm, nStartCp );
 
     // piece references
-    for ( aIter = aPcts.begin(); aIter != aPcts.end(); ++aIter )
+    for (auto const& it : m_Pcts)
     {
-        SwWW8Writer::WriteShort( *rWrt.pTableStrm, aIter->GetStatus());
-        SwWW8Writer::WriteLong( *rWrt.pTableStrm, aIter->GetStartFc());
+        SwWW8Writer::WriteShort(*rWrt.pTableStrm, it->GetStatus());
+        SwWW8Writer::WriteLong(*rWrt.pTableStrm, it->GetStartFc());
         SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0);          // PRM=0
     }
 
@@ -1295,18 +1297,18 @@ void WW8_WrPct::WritePc( WW8Export& rWrt )
 
 void WW8_WrPct::SetParaBreak()
 {
-    OSL_ENSURE( !aPcts.empty(),"SetParaBreak : aPcts.empty()" );
-    aPcts.back().SetStatus();
+    OSL_ENSURE( !m_Pcts.empty(), "SetParaBreak : m_Pcts.empty()" );
+    m_Pcts.back()->SetStatus();
 }
 
 WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
 {
     OSL_ENSURE( nFc >= (sal_uLong)nOldFc, "FilePos lies in front of last piece" );
-    OSL_ENSURE( ! aPcts.empty(), "Fc2Cp no piece available" );
+    OSL_ENSURE( ! m_Pcts.empty(), "Fc2Cp no piece available" );
 
     nFc -= nOldFc;
     nFc /= 2; // Unicode
-    return nFc + aPcts.back().GetStartCp();
+    return nFc + m_Pcts.back()->GetStartCp();
 }
 
 void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen )

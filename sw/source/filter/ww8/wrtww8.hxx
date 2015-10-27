@@ -41,6 +41,7 @@
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <memory>
 #include <map>
 #include <vector>
 
@@ -276,7 +277,7 @@ public:
 // class WW8_WrPct to construct the piece table
 class WW8_WrPct
 {
-    boost::ptr_vector<WW8_WrPc > aPcts;
+    std::vector<std::unique_ptr<WW8_WrPc>> m_Pcts;
     WW8_FC nOldFc;
 public:
     explicit WW8_WrPct(WW8_FC nStartFc);
