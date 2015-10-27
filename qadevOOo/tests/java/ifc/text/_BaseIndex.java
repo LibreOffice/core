@@ -145,6 +145,9 @@ public class _BaseIndex extends MultiPropertyTest {
                                        Object newValue, Object resValue,
                                        Exception exception)
                                 throws Exception {
+
+                super.checkResult(propName, oldValue, newValue, resValue, exception);
+
                 PropertyValue[][] res = (PropertyValue[][]) UnoRuntime.queryInterface(
                                                                      XIndexAccess.class,
                                                                      resValue).getByIndex(0);
