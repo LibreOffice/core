@@ -31,7 +31,6 @@ sa	sal\qa\rtl\doublelock					nmake	-	all	sa_qa_rtl_doublelock sa_util sa_cpprt.u
 sa	sal\qa\rtl\locale						nmake	-	all	sa_qa_rtl_locale sa_util sa_cpprt.u NULL
 sa	sal\qa\rtl\math							nmake	-	all	sa_qa_rtl_math sa_util sa_cpprt.u NULL
 sa	sal\qa\rtl\oustringbuffer				nmake	-	all	sa_qa_rtl_oustringbuffer sa_util sa_cpprt.u NULL
-sa	sal\qa\rtl\process						nmake	-	all	sa_qa_rtl_process sa_util sa_cpprt.u NULL
 sa	sal\qa\rtl\random						nmake	-	all	sa_qa_rtl_random sa_util sa_cpprt.u NULL
 sa	sal\qa\rtl\uri							nmake	-	all	sa_qa_rtl_uri sa_util sa_cpprt.u NULL
 sa	sal\qa\rtl\uuid							nmake	-	all	sa_qa_rtl_uuid sa_util sa_cpprt.u NULL
