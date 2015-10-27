@@ -2609,7 +2609,7 @@ void SwUiWriterTest::testUnicodeNotationToggle()
 
     pWrtShell->EndPara();
     sOriginalDocString = pWrtShell->GetCrsr()->GetNode().GetTextNode()->GetText();
-    CPPUNIT_ASSERT_EQUAL(OUString("uU+2b"), sOriginalDocString);
+    CPPUNIT_ASSERT_EQUAL(OUString("uU+002b"), sOriginalDocString);
 
     lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
     sExpectedString = "u+";
