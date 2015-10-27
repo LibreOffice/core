@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <comphelper/string.hxx>
 #include <tools/solar.h>
 #include <vcl/vclenum.hxx>
@@ -89,7 +88,7 @@ public:
     {}
 };
 
-typedef boost::ptr_vector<WW8SelBoxInfo> WW8MergeGroups;
+typedef std::vector<std::unique_ptr<WW8SelBoxInfo>> WW8MergeGroups;
 
 WW8TabBandDesc::WW8TabBandDesc()
 {
@@ -123,7 +122,7 @@ class WW8TabDesc: private boost::noncopyable
     SwTableBoxes* pTabBoxes;        // boxes array in current row
     SwTableBox* pTabBox;            // current cell
 
-    WW8MergeGroups aMergeGroups;   // list of all cells to be merged
+    WW8MergeGroups m_MergeGroups;   // list of all cells to be merged
 
     WW8_TCell* pAktWWCell;
 
@@ -2617,7 +2616,7 @@ void WW8TabDesc::MergeCells()
                         }
 
                         // 3. push to group array
-                        aMergeGroups.push_back(pActMGroup);
+                        m_MergeGroups.push_back(std::unique_ptr<WW8SelBoxInfo>(pActMGroup));
                     }
 
                     // if necessary add the current box to a merge group
@@ -2697,13 +2696,10 @@ void WW8TabDesc::FinishSwTable()
     MergeCells();
 
     // if needed group cells together that should be merged
-    if( !aMergeGroups.empty() )
+    if (!m_MergeGroups.empty())
     {
         // process all merge groups one by one
-        for (
-                WW8MergeGroups::iterator groupIt = aMergeGroups.begin();
-                groupIt != aMergeGroups.end();
-                ++groupIt)
+        for (auto const& groupIt : m_MergeGroups)
         {
             sal_uInt16 nActBoxCount = groupIt->size();
 
@@ -2721,11 +2717,11 @@ void WW8TabDesc::FinishSwTable()
             }
         }
         pIo->m_pFormatOfJustInsertedApo = 0;
-        aMergeGroups.clear();
+        m_MergeGroups.clear();
     }
 }
 
-// browse aMergeGroups, detect the index of the first fitting group or -1 otherwise
+// browse m_MergeGroups, detect the index of the first fitting group or -1 otherwise
 
 // Parameter: nXcenter  = center position of asking box
 //            nWidth    = width of asking box
@@ -2734,7 +2730,7 @@ void WW8TabDesc::FinishSwTable()
 
 WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
 {
-    if( !aMergeGroups.empty() )
+    if (!m_MergeGroups.empty())
     {
         // still valid area near the boundery
         const short nToleranz = 4;
@@ -2745,10 +2741,10 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
         short nGrX2;
 
         // improvement: search backwards
-        for ( short iGr = aMergeGroups.size() - 1; iGr >= 0; --iGr )
+        for (short iGr = m_MergeGroups.size() - 1; iGr >= 0; --iGr)
         {
             // the currently inspected group
-            WW8SelBoxInfo& rActGroup = aMergeGroups[ iGr ];
+            WW8SelBoxInfo& rActGroup = *m_MergeGroups[ iGr ];
             if (!rActGroup.bGroupLocked)
             {
                 // approximate group boundery with room (tolerance) to the *outside*
