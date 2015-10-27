@@ -148,7 +148,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
 
     for (size_t nObj = 0; nObj < nObjCount; ++nObj)
     {
-        SdrTextObj* pObj = static_cast<SdrTextObj*>( GetObj(nObj) );
+        auto pObj = GetObj(nObj);
 
         if (pObj->GetObjInventor() == SdrInventor &&
             pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
