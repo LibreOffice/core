@@ -79,8 +79,8 @@ protected:
 };
 
 class FORMULA_DLLPUBLIC FormulaDlg:
-    private OModuleClient, public SfxModelessDialog, public IFormulaEditorHelper
-        // order of base classes is important, as OModuleClient controls the
+    private OModuleClientUI, public SfxModelessDialog, public IFormulaEditorHelper
+        // order of base classes is important, as OModuleClientUI controls the
         // lifecycle of the ResMgr passed into SfxModelessDialog (via
         // formula::ModuleRes), and at least with DBG_UTIL calling TestRes in
         // ~Resource, the ResMgr must outlive the Resource (from which

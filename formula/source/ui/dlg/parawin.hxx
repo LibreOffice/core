@@ -44,7 +44,7 @@ class IControlReferenceHandler;
 class ParaWin : public TabPage
 {
 private:
-        OModuleClient        m_aModuleClient;
+        OModuleClientUI      m_aModuleClient;
         Link<ParaWin&,void>  aFxLink;
         Link<ParaWin&,void>  aArgModifiedLink;
 
