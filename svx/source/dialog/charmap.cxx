@@ -1590,7 +1590,7 @@ void SubsetMap::InitList()
                     aAllSubsets.push_back( Subset( 0x14400, 0x1467F, RID_SUBSETSTR_ANATOLIAN_HIEROGLYPHS ) );
                     break;
                 case UBLOCK_CHEROKEE_SUPPLEMENT:
-                    aAllSubsets.push_back( Subset( 0xAB70, 0xABFF, RID_SUBSETSTR_CHEROKEE_SUPPLEMENT ) );
+                    aAllSubsets.push_back( Subset( 0xAB70, 0xABBF, RID_SUBSETSTR_CHEROKEE_SUPPLEMENT ) );
                     break;
                 case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E:
                     aAllSubsets.push_back( Subset( 0x2B820, 0x2CEAF, RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E ) );
