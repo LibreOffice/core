@@ -14,13 +14,24 @@ sa	sal\qa                                  nmake   -   all sa_qa sa_util sa_cppr
 sa	sal\osl\unx								nmake	-	u	sa_oslu sa_tc.u sa_inc NULL
 sa	sal\osl\all								nmake	-	all	sa_oslall sa_tc.u sa_inc NULL
 sa	sal\util								nmake	-	all	sa_util sa_tc.u sa_oslall sa_uwinapi.n sa_kill.n sa_onlineupdate.n sa_osln.n sa_oslp.p sa_oslu.u sa_rtl sa_textenc NULL
-sa	sal\qa\sal								nmake	-	all	sa_qa_sal sa_util  sa_cpprt.u NULL
-sa	sal\qa\osl\condition					nmake	-	all	sa_qa_osl_condition sa_util sa_cpprt.u NULL
-sa	sal\qa\osl\pipe							nmake	-	all	sa_qa_osl_pipe sa_util  sa_cpprt.u NULL
 sa	sal\qa\ByteSequence						nmake	-	all	sa_qa_ByteSequence sa_util sa_cpprt.u NULL
 sa	sal\qa\OStringBuffer					nmake	-	all	sa_qa_OStringBuffer sa_util sa_cpprt.u NULL
+sa	sal\qa\sal								nmake	-	all	sa_qa_sal sa_util  sa_cpprt.u NULL
+sa	sal\qa\osl\condition					nmake	-	all	sa_qa_osl_condition sa_util sa_cpprt.u NULL
 sa	sal\qa\osl\mutex						nmake	-	all	sa_qa_osl_mutex sa_util sa_cpprt.u NULL
+sa	sal\qa\osl\pipe							nmake	-	all	sa_qa_osl_pipe sa_util  sa_cpprt.u NULL
 sa	sal\qa\osl\profile						nmake	-	all	sa_qa_osl_profile sa_util sa_cpprt.u NULL
 sa	sal\qa\osl\setthreadname				nmake	-	all	sa_qa_osl_setthreadname sa_util sa_cpprt.u NULL
 sa	sal\qa\osl\thread						nmake	-	all	sa_qa_osl_thread sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\alloc						nmake	-	all	sa_qa_rtl_alloc sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\cipher						nmake	-	all	sa_qa_rtl_cipher sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\crc32						nmake	-	all	sa_qa_rtl_crc32 sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\digest						nmake	-	all	sa_qa_rtl_digest sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\doublelock					nmake	-	all	sa_qa_rtl_doublelock sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\locale						nmake	-	all	sa_qa_rtl_locale sa_util sa_cpprt.u NULL
 sa	sal\qa\rtl\math							nmake	-	all	sa_qa_rtl_math sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\oustringbuffer				nmake	-	all	sa_qa_rtl_oustringbuffer sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\process						nmake	-	all	sa_qa_rtl_process sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\random						nmake	-	all	sa_qa_rtl_random sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\uri							nmake	-	all	sa_qa_rtl_uri sa_util sa_cpprt.u NULL
+sa	sal\qa\rtl\uuid							nmake	-	all	sa_qa_rtl_uuid sa_util sa_cpprt.u NULL

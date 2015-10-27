@@ -21,10 +21,6 @@
 
 
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
-
 PRJ=..$/..$/..
 
 PRJNAME=sal
@@ -65,5 +61,3 @@ APP1TEST = enabled
 .INCLUDE :  target.mk
 
 .ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
-
-.END

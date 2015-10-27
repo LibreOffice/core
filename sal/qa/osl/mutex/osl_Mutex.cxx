@@ -30,6 +30,13 @@
 #include "gtest/gtest.h"
 #include <osl_Mutex_Const.h>
 
+#ifdef WNT
+#include <tools/prewin.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <tools/postwin.h>
+#endif
+
 using namespace osl;
 using namespace rtl;
 
@@ -111,7 +118,7 @@ public:
 
     ~IncreaseThread( )
     {
-        ASSERT_TRUE(sal_False == this -> isRunning( )) << "#IncreaseThread does not shutdown properly.\n";
+        EXPECT_TRUE(sal_False == this -> isRunning( )) << "#IncreaseThread does not shutdown properly.\n";
     }
 protected:
     struct resource *pResource;
@@ -139,7 +146,7 @@ public:
 
     ~DecreaseThread( )
     {
-        ASSERT_TRUE(sal_False == this -> isRunning( )) << "#DecreaseThread does not shutdown properly.\n";
+        EXPECT_TRUE(sal_False == this -> isRunning( )) << "#DecreaseThread does not shutdown properly.\n";
     }
 protected:
     struct resource *pResource;
@@ -177,7 +184,7 @@ public:
 
     ~PutThread( )
     {
-        ASSERT_TRUE(sal_False == this -> isRunning( )) << "#PutThread does not shutdown properly.\n";
+        EXPECT_TRUE(sal_False == this -> isRunning( )) << "#PutThread does not shutdown properly.\n";
     }
 protected:
     struct chain* pChain;
@@ -215,7 +222,7 @@ public:
 
     ~HoldThread( )
     {
-        ASSERT_TRUE(sal_False == this -> isRunning( )) << "#HoldThread does not shutdown properly.\n";
+        EXPECT_TRUE(sal_False == this -> isRunning( )) << "#HoldThread does not shutdown properly.\n";
     }
 protected:
     Mutex* pMyMutex;
@@ -237,7 +244,7 @@ public:
 
     ~WaitThread( )
     {
-        ASSERT_TRUE(sal_False == this -> isRunning( )) << "#WaitThread does not shutdown properly.\n";
+        EXPECT_TRUE(sal_False == this -> isRunning( )) << "#WaitThread does not shutdown properly.\n";
     }
 protected:
     Mutex* pMyMutex;
@@ -261,7 +268,7 @@ public:
 
     ~GlobalMutexThread( )
     {
-        ASSERT_TRUE(sal_False == this -> isRunning( )) << "#GlobalMutexThread does not shutdown properly.\n";
+        EXPECT_TRUE(sal_False == this -> isRunning( )) << "#GlobalMutexThread does not shutdown properly.\n";
     }
 protected:
     void SAL_CALL run( )
@@ -562,7 +569,7 @@ public:
 
     ~GuardThread( )
     {
-        ASSERT_TRUE(sal_False == this -> isRunning( )) << "#GuardThread does not shutdown properly.\n";
+        EXPECT_TRUE(sal_False == this -> isRunning( )) << "#GuardThread does not shutdown properly.\n";
     }
 protected:
     Mutex* pMyMutex;
@@ -640,7 +647,7 @@ public:
 
     ~ClearGuardThread( )
     {
-        ASSERT_TRUE(sal_False == this -> isRunning( )) << "#ClearGuardThread does not shutdown properly.\n";
+        EXPECT_TRUE(sal_False == this -> isRunning( )) << "#ClearGuardThread does not shutdown properly.\n";
     }
 protected:
     Mutex* pMyMutex;
@@ -767,7 +774,7 @@ public:
 
     ~ResetGuardThread( )
     {
-        ASSERT_TRUE(sal_False == this -> isRunning( )) << "#ResetGuardThread does not shutdown properly.\n";
+        EXPECT_TRUE(sal_False == this -> isRunning( )) << "#ResetGuardThread does not shutdown properly.\n";
     }
 protected:
     Mutex* pMyMutex;

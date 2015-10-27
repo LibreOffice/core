@@ -31,6 +31,13 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
+#ifdef WNT
+#define WIN32_LEAN_AND_MEAN
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#endif
+
 #ifdef UNX
 #include <unistd.h>
 #include <time.h>

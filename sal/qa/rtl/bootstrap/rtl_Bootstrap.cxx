@@ -32,6 +32,13 @@
 #include <stdlib.h>
 #include <algorithm> // STL
 
+#ifdef WNT
+#define WIN32_LEAN_AND_MEAN
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#endif
+
 #include "gtest/gtest.h"
 //#include "stringhelper.hxx"
 //#include "valueequal.hxx"

@@ -21,10 +21,6 @@
 
 
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
-
 PRJ = ../../..
 PRJNAME = sal
 TARGET = qa_rtl_profile
@@ -50,4 +46,3 @@ APP1TEST = enabled
 
 .ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
 
-.END # "$(OOO_SUBSEQUENT_TESTS)" == ""

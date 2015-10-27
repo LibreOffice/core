@@ -40,6 +40,13 @@
 
 #include "gtest/gtest.h"
 
+#ifdef WNT
+#define WIN32_LEAN_AND_MEAN
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#endif
+
 // -----------------------------------------------------------------------------
 #define CONST_TEST_STRING "gregorian"
 
