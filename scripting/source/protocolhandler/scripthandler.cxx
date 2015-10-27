@@ -93,7 +93,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
 
 Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     const URL& aURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     (void)sTargetFrameName;
     (void)nSearchFlags;
@@ -161,9 +161,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                 {
                     if ( xListener.is() )
                     {
-                        ::com::sun::star::frame::DispatchResultEvent aEvent(
+                        css::frame::DispatchResultEvent aEvent(
                                 static_cast< ::cppu::OWeakObject* >( this ),
-                                ::com::sun::star::frame::DispatchResultState::FAILURE,
+                                css::frame::DispatchResultState::FAILURE,
                                 invokeResult );
                         try
                         {
@@ -285,17 +285,17 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         // always call dispatchFinished(), because we didn't load a document but
         // executed a macro instead!
-        ::com::sun::star::frame::DispatchResultEvent aEvent;
+        css::frame::DispatchResultEvent aEvent;
 
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
         aEvent.Result = invokeResult;
         if ( bSuccess )
         {
-            aEvent.State = ::com::sun::star::frame::DispatchResultState::SUCCESS;
+            aEvent.State = css::frame::DispatchResultState::SUCCESS;
         }
         else
         {
-            aEvent.State = ::com::sun::star::frame::DispatchResultState::FAILURE;
+            aEvent.State = css::frame::DispatchResultState::FAILURE;
         }
 
         try
@@ -522,11 +522,9 @@ extern "C"
         )
         {
             // Define variables which are used in following macros.
-            ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XSingleServiceFactory > xFactory ;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-            xServiceManager( static_cast<
-            ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
+            css::uno::Reference< css::lang::XSingleServiceFactory > xFactory;
+            css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
+                static_cast< css::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
 
             if ( ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName().equals(
                 OUString::createFromAscii( pImplementationName ) ) )

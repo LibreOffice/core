@@ -38,32 +38,32 @@ namespace basprov
 
 
     typedef ::cppu::WeakImplHelper<
-        ::com::sun::star::script::browse::XBrowseNode > BasicModuleNodeImpl_BASE;
+        css::script::browse::XBrowseNode > BasicModuleNodeImpl_BASE;
 
 
     class BasicModuleNodeImpl : public BasicModuleNodeImpl_BASE
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-    OUString m_sScriptingContext;
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        OUString m_sScriptingContext;
         SbModule* m_pModule;
         bool m_bIsAppScript;
 
     public:
-        BasicModuleNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+        BasicModuleNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const OUString& sScriptingContext,
             SbModule* pModule, bool isAppScript = true );
         virtual ~BasicModuleNodeImpl();
 
         // XBrowseNode
         virtual OUString SAL_CALL getName(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Bool SAL_CALL hasChildNodes(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
         virtual sal_Int16 SAL_CALL getType(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
     };
 
 

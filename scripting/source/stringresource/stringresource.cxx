@@ -177,7 +177,7 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
 
 OUString StringResourceImpl::implResolveString
     ( const OUString& ResourceID, LocaleItem* pLocaleItem )
-        throw (::com::sun::star::resource::MissingResourceException)
+        throw (css::resource::MissingResourceException)
 {
     OUString aRetStr;
     bool bSuccess = false;
@@ -194,20 +194,20 @@ OUString StringResourceImpl::implResolveString
     {
         OUString errorMsg("StringResourceImpl: No entry for ResourceID: ");
         errorMsg = errorMsg.concat( ResourceID );
-        throw ::com::sun::star::resource::MissingResourceException( errorMsg );
+        throw css::resource::MissingResourceException( errorMsg );
     }
     return aRetStr;
 }
 
 OUString StringResourceImpl::resolveString( const OUString& ResourceID )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return implResolveString( ResourceID, m_pCurrentLocaleItem );
 }
 
 OUString StringResourceImpl::resolveStringForLocale( const OUString& ResourceID, const Locale& locale )
-    throw ( ::com::sun::star::resource::MissingResourceException, RuntimeException, std::exception)
+    throw ( css::resource::MissingResourceException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     LocaleItem* pLocaleItem = getItemForLocale( locale, false );
@@ -265,7 +265,7 @@ Sequence< OUString > StringResourceImpl::implGetResourceIDs( LocaleItem* pLocale
 }
 
 Sequence< OUString > StringResourceImpl::getResourceIDsForLocale
-    ( const Locale& locale ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    ( const Locale& locale ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     LocaleItem* pLocaleItem = getItemForLocale( locale, false );
@@ -432,7 +432,7 @@ void StringResourceImpl::setStringForLocale
 }
 
 void StringResourceImpl::implRemoveId( const OUString& ResourceID, LocaleItem* pLocaleItem )
-    throw (::com::sun::star::resource::MissingResourceException)
+    throw (css::resource::MissingResourceException)
 {
     if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
     {
@@ -442,7 +442,7 @@ void StringResourceImpl::implRemoveId( const OUString& ResourceID, LocaleItem* p
         {
             OUString errorMsg("StringResourceImpl: No entries for ResourceID: ");
             errorMsg = errorMsg.concat( ResourceID );
-            throw ::com::sun::star::resource::MissingResourceException( errorMsg );
+            throw css::resource::MissingResourceException( errorMsg );
         }
         rHashMap.erase( it );
         pLocaleItem->m_bModified = true;
@@ -451,7 +451,7 @@ void StringResourceImpl::implRemoveId( const OUString& ResourceID, LocaleItem* p
 }
 
 void StringResourceImpl::removeId( const OUString& ResourceID )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     implCheckReadOnly( "StringResourceImpl::removeId(): Read only" );
@@ -459,7 +459,7 @@ void StringResourceImpl::removeId( const OUString& ResourceID )
 }
 
 void StringResourceImpl::removeIdForLocale( const OUString& ResourceID, const Locale& locale )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     implCheckReadOnly( "StringResourceImpl::removeIdForLocale(): Read only" );
@@ -642,7 +642,7 @@ sal_Int32 StringResourceImpl::getUniqueNumericId(  )
 
 LocaleItem* StringResourceImpl::getItemForLocale
     ( const Locale& locale, bool bException )
-        throw (::com::sun::star::lang::IllegalArgumentException)
+        throw (css::lang::IllegalArgumentException)
 {
     LocaleItem* pRetItem = NULL;
 
@@ -811,7 +811,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 1 );
     }
 
-    com::sun::star::lang::Locale aCurrentLocale;
+    css::lang::Locale aCurrentLocale;
     bool bLocaleOk = (aArguments[2] >>= aCurrentLocale);
     if( !bLocaleOk )
     {
@@ -859,12 +859,12 @@ void StringResourcePersistenceImpl::removeModifyListener( const Reference< XModi
 
 // XStringResourceResolver
 OUString StringResourcePersistenceImpl::resolveString( const OUString& ResourceID )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, std::exception)
 {
     return StringResourceImpl::resolveString( ResourceID ) ;
 }
 OUString StringResourcePersistenceImpl::resolveStringForLocale( const OUString& ResourceID, const Locale& locale )
-    throw ( ::com::sun::star::resource::MissingResourceException, RuntimeException, std::exception)
+    throw ( css::resource::MissingResourceException, RuntimeException, std::exception)
 {
     return StringResourceImpl::resolveStringForLocale( ResourceID, locale );
 }
@@ -928,17 +928,17 @@ void StringResourcePersistenceImpl::setStringForLocale
     StringResourceImpl::setStringForLocale( ResourceID, Str, locale );
 }
 Sequence< OUString > StringResourcePersistenceImpl::getResourceIDsForLocale
-    ( const Locale& locale ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    ( const Locale& locale ) throw (css::uno::RuntimeException, std::exception)
 {
     return StringResourceImpl::getResourceIDsForLocale( locale );
 }
 void StringResourcePersistenceImpl::removeId( const OUString& ResourceID )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
 {
     StringResourceImpl::removeId( ResourceID );
 }
 void StringResourcePersistenceImpl::removeIdForLocale( const OUString& ResourceID, const Locale& locale )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
 {
     StringResourceImpl::removeIdForLocale( ResourceID, locale );
 }
@@ -975,7 +975,7 @@ sal_Bool StringResourcePersistenceImpl::isModified(  )
 }
 
 void StringResourcePersistenceImpl::setComment( const OUString& Comment )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     m_aComment = Comment;
 }
@@ -995,7 +995,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
 (
     const OUString& aNameBase,
     const OUString& aComment,
-    const Reference< ::com::sun::star::embed::XStorage >& Storage,
+    const Reference< css::embed::XStorage >& Storage,
     bool bUsedForStore,
     bool bStoreAll
 )
@@ -1106,7 +1106,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
 
 void StringResourcePersistenceImpl::storeToURL( const OUString& URL,
     const OUString& NameBase, const OUString& Comment,
-    const Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+    const Reference< css::task::XInteractionHandler >& Handler )
         throw (Exception, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1125,7 +1125,7 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
 (
     const OUString& Location,
     const OUString& aNameBase,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
+    const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
 )
     throw (Exception, RuntimeException, std::exception)
 {
@@ -1151,7 +1151,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 (
     const OUString& Location,
     const OUString& aNameBase,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
+    const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
 )
     throw (Exception, RuntimeException, std::exception)
 {
@@ -2356,12 +2356,12 @@ void StringResourceWithStorageImpl::removeModifyListener( const Reference< XModi
 
 // XStringResourceResolver
 OUString StringResourceWithStorageImpl::resolveString( const OUString& ResourceID )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, std::exception)
 {
     return StringResourceImpl::resolveString( ResourceID ) ;
 }
 OUString StringResourceWithStorageImpl::resolveStringForLocale( const OUString& ResourceID, const Locale& locale )
-    throw ( ::com::sun::star::resource::MissingResourceException, RuntimeException, std::exception)
+    throw ( css::resource::MissingResourceException, RuntimeException, std::exception)
 {
     return StringResourceImpl::resolveStringForLocale( ResourceID, locale );
 }
@@ -2382,7 +2382,7 @@ Sequence< OUString > StringResourceWithStorageImpl::getResourceIDs(  )
     return StringResourceImpl::getResourceIDs();
 }
 Sequence< OUString > StringResourceWithStorageImpl::getResourceIDsForLocale
-    ( const Locale& locale ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    ( const Locale& locale ) throw (css::uno::RuntimeException, std::exception)
 {
     return StringResourceImpl::getResourceIDsForLocale( locale );
 }
@@ -2430,12 +2430,12 @@ void StringResourceWithStorageImpl::setStringForLocale
     StringResourceImpl::setStringForLocale( ResourceID, Str, locale );
 }
 void StringResourceWithStorageImpl::removeId( const OUString& ResourceID )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
 {
     StringResourceImpl::removeId( ResourceID );
 }
 void StringResourceWithStorageImpl::removeIdForLocale( const OUString& ResourceID, const Locale& locale )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
 {
     StringResourceImpl::removeIdForLocale( ResourceID, locale );
 }
@@ -2478,7 +2478,7 @@ sal_Bool StringResourceWithStorageImpl::isModified(  )
     return StringResourcePersistenceImpl::isModified();
 }
 void StringResourceWithStorageImpl::setComment( const OUString& Comment )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     StringResourcePersistenceImpl::setComment( Comment );
 }
@@ -2490,7 +2490,7 @@ void StringResourceWithStorageImpl::storeToStorage( const Reference< XStorage >&
 }
 void StringResourceWithStorageImpl::storeToURL( const OUString& URL,
     const OUString& NameBase, const OUString& Comment,
-    const Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+    const Reference< css::task::XInteractionHandler >& Handler )
         throw (Exception, RuntimeException, std::exception)
 {
     StringResourcePersistenceImpl::storeToURL( URL, NameBase, Comment, Handler );
@@ -2697,12 +2697,12 @@ void StringResourceWithLocationImpl::removeModifyListener( const Reference< XMod
 
 // XStringResourceResolver
 OUString StringResourceWithLocationImpl::resolveString( const OUString& ResourceID )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, std::exception)
 {
     return StringResourceImpl::resolveString( ResourceID ) ;
 }
 OUString StringResourceWithLocationImpl::resolveStringForLocale( const OUString& ResourceID, const Locale& locale )
-    throw ( ::com::sun::star::resource::MissingResourceException, RuntimeException, std::exception)
+    throw ( css::resource::MissingResourceException, RuntimeException, std::exception)
 {
     return StringResourceImpl::resolveStringForLocale( ResourceID, locale );
 }
@@ -2723,7 +2723,7 @@ Sequence< OUString > StringResourceWithLocationImpl::getResourceIDs(  )
     return StringResourceImpl::getResourceIDs();
 }
 Sequence< OUString > StringResourceWithLocationImpl::getResourceIDsForLocale
-    ( const Locale& locale ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    ( const Locale& locale ) throw (css::uno::RuntimeException, std::exception)
 {
     return StringResourceImpl::getResourceIDsForLocale( locale );
 }
@@ -2771,12 +2771,12 @@ void StringResourceWithLocationImpl::setStringForLocale
     StringResourceImpl::setStringForLocale( ResourceID, Str, locale );
 }
 void StringResourceWithLocationImpl::removeId( const OUString& ResourceID )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
 {
     StringResourceImpl::removeId( ResourceID );
 }
 void StringResourceWithLocationImpl::removeIdForLocale( const OUString& ResourceID, const Locale& locale )
-    throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
+    throw (css::resource::MissingResourceException, RuntimeException, NoSupportException, std::exception)
 {
     StringResourceImpl::removeIdForLocale( ResourceID, locale );
 }
@@ -2821,7 +2821,7 @@ sal_Bool StringResourceWithLocationImpl::isModified(  )
     return StringResourcePersistenceImpl::isModified();
 }
 void StringResourceWithLocationImpl::setComment( const OUString& Comment )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     StringResourcePersistenceImpl::setComment( Comment );
 }
@@ -2833,7 +2833,7 @@ void StringResourceWithLocationImpl::storeToStorage( const Reference< XStorage >
 }
 void StringResourceWithLocationImpl::storeToURL( const OUString& URL,
     const OUString& NameBase, const OUString& Comment,
-    const Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+    const Reference< css::task::XInteractionHandler >& Handler )
         throw (Exception, RuntimeException, std::exception)
 {
     StringResourcePersistenceImpl::storeToURL( URL, NameBase, Comment, Handler );
@@ -2854,7 +2854,7 @@ void StringResourceWithLocationImpl::importBinary( const Sequence< ::sal_Int8 >&
 
 // XStringResourceWithLocation
 void StringResourceWithLocationImpl::storeAsURL( const OUString& URL )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     setURL( URL );
     store();

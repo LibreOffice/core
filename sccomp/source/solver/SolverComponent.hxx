@@ -55,9 +55,9 @@ struct ScSolverCellEqual
 typedef std::unordered_map< css::table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
 
 typedef cppu::WeakImplHelper<
-                com::sun::star::sheet::XSolver,
-                com::sun::star::sheet::XSolverDescription,
-                com::sun::star::lang::XServiceInfo >
+                css::sheet::XSolver,
+                css::sheet::XSolverDescription,
+                css::lang::XServiceInfo >
         SolverComponent_Base;
 
 class SolverComponent : public comphelper::OMutexAndBroadcastHelper,
@@ -69,22 +69,22 @@ protected:
     static ResMgr* pSolverResMgr;
 
     // settings
-    com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument > mxDoc;
-    com::sun::star::table::CellAddress                                            maObjective;
-    com::sun::star::uno::Sequence< com::sun::star::table::CellAddress >           maVariables;
-    com::sun::star::uno::Sequence< com::sun::star::sheet::SolverConstraint >      maConstraints;
-    bool                                                                      mbMaximize;
+    css::uno::Reference< css::sheet::XSpreadsheetDocument > mxDoc;
+    css::table::CellAddress                                 maObjective;
+    css::uno::Sequence< css::table::CellAddress >           maVariables;
+    css::uno::Sequence< css::sheet::SolverConstraint >      maConstraints;
+    bool                                                    mbMaximize;
     // set via XPropertySet
-    bool                                                                      mbNonNegative;
-    bool                                                                      mbInteger;
-    sal_Int32                                                                     mnTimeout;
-    sal_Int32                                                                     mnEpsilonLevel;
-    bool                                                                      mbLimitBBDepth;
+    bool                                                    mbNonNegative;
+    bool                                                    mbInteger;
+    sal_Int32                                               mnTimeout;
+    sal_Int32                                               mnEpsilonLevel;
+    bool                                                    mbLimitBBDepth;
     // results
-    bool                                                                      mbSuccess;
-    double                                                                        mfResultValue;
-    com::sun::star::uno::Sequence< double >                                       maSolution;
-    OUString                                                                 maStatus;
+    bool                                                    mbSuccess;
+    double                                                  mfResultValue;
+    css::uno::Sequence< double >                            maSolution;
+    OUString                                                maStatus;
 
     static OUString GetResourceString( sal_uInt32 nId );
     static css::uno::Reference<css::table::XCell> GetCell(
@@ -104,53 +104,53 @@ public:
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-                                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+                                throw (css::uno::RuntimeException, std::exception) override;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;     // from OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;    // from OPropertyArrayUsageHelper
 
                             // XSolver
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument > SAL_CALL getDocument()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setDocument( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::sheet::XSpreadsheetDocument >& _document )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::table::CellAddress SAL_CALL getObjective() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setObjective( const ::com::sun::star::table::CellAddress& _objective )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellAddress > SAL_CALL getVariables()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setVariables( const ::com::sun::star::uno::Sequence<
-                                    ::com::sun::star::table::CellAddress >& _variables )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::SolverConstraint > SAL_CALL getConstraints()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setConstraints( const ::com::sun::star::uno::Sequence<
-                                    ::com::sun::star::sheet::SolverConstraint >& _constraints )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getMaximize() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setMaximize( sal_Bool _maximize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sheet::XSpreadsheetDocument > SAL_CALL getDocument()
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   setDocument( const css::uno::Reference<
+                                    css::sheet::XSpreadsheetDocument >& _document )
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::table::CellAddress SAL_CALL getObjective() throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   setObjective( const css::table::CellAddress& _objective )
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::table::CellAddress > SAL_CALL getVariables()
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   setVariables( const css::uno::Sequence<
+                                    css::table::CellAddress >& _variables )
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::sheet::SolverConstraint > SAL_CALL getConstraints()
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   setConstraints( const css::uno::Sequence<
+                                    css::sheet::SolverConstraint >& _constraints )
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getMaximize() throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   setMaximize( sal_Bool _maximize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual sal_Bool SAL_CALL getSuccess() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getResultValue() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getSolution()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getSuccess() throw(css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getResultValue() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< double > SAL_CALL getSolution()
+                                throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL solve() throw(::com::sun::star::uno::RuntimeException, std::exception) override = 0;
+    virtual void SAL_CALL solve() throw(css::uno::RuntimeException, std::exception) override = 0;
 
                             // XSolverDescription
-    virtual OUString SAL_CALL getComponentDescription() throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-    virtual OUString SAL_CALL getStatusDescription() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getComponentDescription() throw (css::uno::RuntimeException, std::exception) override = 0;
+    virtual OUString SAL_CALL getStatusDescription() throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getPropertyDescription( const OUString& aPropertyName )
-                                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw (css::uno::RuntimeException, std::exception) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override = 0;
+                                throw(css::uno::RuntimeException, std::exception) override = 0;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+                                throw(css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

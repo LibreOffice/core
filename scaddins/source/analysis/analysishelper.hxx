@@ -779,7 +779,7 @@ private:
 
                                 /** Converts a string to double using the number formatter. If the formatter is not
                                     valid, ::rtl::math::stringToDouble() with english separators will be used.
-                                    @throws com::sun::star::lang::IllegalArgumentException
+                                    @throws css::lang::IllegalArgumentException
                                         on strings not representing any double value.
                                     @return  the converted double value. */
     double                      convertToDouble(
@@ -798,7 +798,7 @@ public:
 
                                 /** Converts an Any to double (without initialization).
                                     The Any can be empty or contain a double or string.
-                                    @throws com::sun::star::lang::IllegalArgumentException
+                                    @throws css::lang::IllegalArgumentException
                                         on other Any types or on invalid strings.
                                     @return  true if the Any contains a double or a non-empty valid string,
                                              false if the Any is empty or the string is empty */
@@ -809,7 +809,7 @@ public:
 
                                 /** Converts an Any to double (with initialization).
                                     The Any can be empty or contain a double or string.
-                                    @throws com::sun::star::lang::IllegalArgumentException
+                                    @throws css::lang::IllegalArgumentException
                                         on other Any types or on invalid strings.
                                     @return  true if the Any contains a double or a non-empty valid string,
                                              false if the Any is empty or the string is empty */
@@ -821,7 +821,7 @@ public:
 
                                 /** Converts an Any to double (with initialization).
                                     The Any can be empty or contain a double or string.
-                                    @throws com::sun::star::lang::IllegalArgumentException
+                                    @throws css::lang::IllegalArgumentException
                                         on other Any types or on invalid strings.
                                     @return  the value of the double or string or fDefault if the Any or string is empty */
     double                      getDouble(
@@ -832,7 +832,7 @@ public:
 
                                 /** Converts an Any to sal_Int32 (with initialization).
                                     The Any can be empty or contain a double or string.
-                                    @throws com::sun::star::lang::IllegalArgumentException
+                                    @throws css::lang::IllegalArgumentException
                                         on other Any types or on invalid values or strings.
                                     @return  true if the Any contains a double or a non-empty valid string,
                                              false if the Any is empty or the string is empty */
@@ -844,7 +844,7 @@ public:
 
                                 /** Converts an Any to sal_Int32 (with initialization).
                                     The Any can be empty or contain a double or string.
-                                    @throws com::sun::star::lang::IllegalArgumentException
+                                    @throws css::lang::IllegalArgumentException
                                         on other Any types or on invalid values or strings.
                                     @return  the truncated value of the double or string or nDefault if the Any or string is empty */
     sal_Int32                   getInt32(

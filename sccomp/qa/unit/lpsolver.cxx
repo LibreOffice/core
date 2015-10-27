@@ -44,7 +44,7 @@ void LpSolverTest::setUp()
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(m_xContext);
     uno::Reference<lang::XComponent> xComponent(xComponentLoader->loadComponentFromURL(
             "private:factory/scalc", "_blank", 0,
-            uno::Sequence < ::com::sun::star::beans::PropertyValue >()));
+            uno::Sequence < css::beans::PropertyValue >()));
     m_xDocument.set(xComponent, uno::UNO_QUERY_THROW);
 }
 

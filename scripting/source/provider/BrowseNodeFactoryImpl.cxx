@@ -483,7 +483,7 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override
+        throw ( css::uno::RuntimeException, std::exception ) override
     {
         Any aRet = t_BrowseNodeBase::queryInterface( aType );
         if ( aRet.hasValue() )
@@ -517,12 +517,12 @@ public:
     // XTypeProvider (implemnented by base, but needs to be overridden for
     //                delegating to aggregate)
     virtual Sequence< Type > SAL_CALL getTypes()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override
+        throw ( css::uno::RuntimeException, std::exception ) override
     {
         return m_xWrappedTypeProv->getTypes();
     }
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override
+        throw ( css::uno::RuntimeException, std::exception ) override
     {
         return css::uno::Sequence<sal_Int8>();
     }

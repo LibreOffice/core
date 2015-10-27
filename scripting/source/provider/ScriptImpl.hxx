@@ -36,7 +36,7 @@ namespace func_provider
 {
 
 class ScriptImpl :
-            public ::cppu::WeakImplHelper < ::drafts::com::sun::star::script::framework::provider::XScript >
+            public ::cppu::WeakImplHelper < ::draftscss::script::framework::provider::XScript >
 {
 
 public:
@@ -47,7 +47,7 @@ public:
     */
     ScriptImpl(
         const css::uno::Reference< css::beans::XPropertySet > & scriptingContext,
-        const css::uno::Reference< ::drafts::com::sun::star::script::framework::runtime::XScriptInvocation > & runtimeMgr,
+        const css::uno::Reference< ::draftscss::script::framework::runtime::XScriptInvocation > & runtimeMgr,
         const OUString& scriptURI )
     throw ( css::uno::RuntimeException );
 
@@ -89,7 +89,7 @@ public:
 
 private:
     css::uno::Reference< css::beans::XPropertySet > m_XScriptingContext;
-    css::uno::Reference < ::drafts::com::sun::star::script::framework::runtime::XScriptInvocation > m_RunTimeManager;
+    css::uno::Reference < ::draftscss::script::framework::runtime::XScriptInvocation > m_RunTimeManager;
     OUString m_ScriptURI;
 
     /* copy ctor disabled, i.e. not defined */

@@ -41,7 +41,7 @@ namespace basprov
 
 
     typedef ::cppu::WeakImplHelper<
-        ::com::sun::star::script::provider::XScript > BasicScriptImpl_BASE;
+        css::script::provider::XScript > BasicScriptImpl_BASE;
 
 
     class BasicScriptImpl : public BasicScriptImpl_BASE, public SfxListener,
@@ -52,14 +52,14 @@ namespace basprov
     {
     private:
         SbMethodRef         m_xMethod;
-        OUString     m_funcName;
+        OUString            m_funcName;
         BasicManager*       m_documentBasicManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::document::XScriptInvocationContext >
+        css::uno::Reference< css::document::XScriptInvocationContext >
                             m_xDocumentScriptContext;
         // hack, OPropertyContainer doesn't allow you to define a property of unknown
         // type ( I guess because an Any can't contain an Any... I've always wondered why?
     // as its not unusual to do that in corba )
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_caller;
+        css::uno::Sequence< css::uno::Any > m_caller;
     protected:
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(  ) override;
@@ -76,7 +76,7 @@ namespace basprov
             const OUString& funcName,
             SbMethodRef xMethod,
             BasicManager& documentBasicManager,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::document::XScriptInvocationContext >& documentScriptContext
+            const css::uno::Reference< css::document::XScriptInvocationContext >& documentScriptContext
         );
         virtual ~BasicScriptImpl();
 
@@ -87,17 +87,17 @@ namespace basprov
         DECLARE_XTYPEPROVIDER()
 
         // XScript
-        virtual ::com::sun::star::uno::Any SAL_CALL invoke(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
-            ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam )
+        virtual css::uno::Any SAL_CALL invoke(
+            const css::uno::Sequence< css::uno::Any >& aParams,
+            css::uno::Sequence< sal_Int16 >& aOutParamIndex,
+            css::uno::Sequence< css::uno::Any >& aOutParam )
             throw (
-                    ::com::sun::star::script::provider::ScriptFrameworkErrorException,
-                    ::com::sun::star::reflection::InvocationTargetException,
-                    ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                    css::script::provider::ScriptFrameworkErrorException,
+                    css::reflection::InvocationTargetException,
+                    css::uno::RuntimeException, std::exception ) override;
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
+            throw (css::uno::RuntimeException, std::exception) override;
 
         // SfxListener
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

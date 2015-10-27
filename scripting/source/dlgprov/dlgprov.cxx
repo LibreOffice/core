@@ -97,7 +97,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
         aInetObj.removeSegment();
         OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
         bool bReadOnly = true;
-        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+        css::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         OUString aComment;
 
         Sequence<Any> aArgs( 6 );

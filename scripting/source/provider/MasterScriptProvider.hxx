@@ -76,7 +76,7 @@ public:
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw ( css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) throw ( css::uno::RuntimeException, std::exception) override;
