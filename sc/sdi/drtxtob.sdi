@@ -63,6 +63,7 @@ interface TableDrawText
     SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_COLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_BACK_COLOR    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_WEIGHT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_POSTURE       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_UNDERLINE     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
