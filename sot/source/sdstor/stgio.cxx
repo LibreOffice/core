@@ -127,7 +127,7 @@ bool StgIo::CommitAll()
             if( m_aHdr.Store( *this ) )
             {
                 m_pStrm->Flush();
-                const ErrCode n = pStrm->GetError();
+                const ErrCode n = m_pStrm->GetError();
                 SetError( n );
 #ifdef DBG_UTIL
                 if( n==SVSTREAM_OK ) ValidateFATs();
