@@ -1163,12 +1163,12 @@ StgTmpStrm::~StgTmpStrm()
     }
 }
 
-sal_uLong StgTmpStrm::GetSize() const
+sal_uInt64 StgTmpStrm::GetSize() const
 {
-    sal_uLong n;
+    sal_uInt64 n;
     if( m_pStrm )
     {
-        sal_uLong old = m_pStrm->Tell();
+        sal_uInt64 old = m_pStrm->Tell();
         n = m_pStrm->Seek( STREAM_SEEK_TO_END );
         m_pStrm->Seek( old );
     }
