@@ -275,9 +275,11 @@ sal_Int32 lcl_getTransitionEffectIndex(
     if( pDoc )
     {
         sal_Int32 nCurrentIndex = 0;
-        const ::sd::TransitionPresetList & rPresetList = ::sd::TransitionPreset::getTransitionPresetList();
-        ::sd::TransitionPresetList::const_iterator aIt( rPresetList.begin());
-        const ::sd::TransitionPresetList::const_iterator aEndIt( rPresetList.end());
+        ::sd::TransitionPresetList aPresetList = ::sd::TransitionPreset::getTransitionPresetList();
+        aPresetList.sort([] (const ::sd::TransitionPresetPtr& a, const ::sd::TransitionPresetPtr& b)
+                         { return a->getUIName() < b->getUIName(); });
+        ::sd::TransitionPresetList::const_iterator aIt( aPresetList.begin());
+        const ::sd::TransitionPresetList::const_iterator aEndIt( aPresetList.end());
         for( ; aIt != aEndIt; ++aIt, ++nCurrentIndex )
         {
             if( rTransition.operator==( *(*aIt) ))
@@ -1047,9 +1049,11 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AutoPreviewClicked, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
 {
-    const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
-    TransitionPresetList::const_iterator aIter( rPresetList.begin() );
-    const TransitionPresetList::const_iterator aEnd( rPresetList.end() );
+    TransitionPresetList aPresetList = TransitionPreset::getTransitionPresetList();
+    aPresetList.sort([] (const TransitionPresetPtr& a, const TransitionPresetPtr& b)
+                     { return a->getUIName() < b->getUIName(); });
+    TransitionPresetList::const_iterator aIter( aPresetList.begin() );
+    const TransitionPresetList::const_iterator aEnd( aPresetList.end() );
     sal_uInt16 nIndex = 0;
     ::std::size_t nUIIndex = 0;
     while( aIter != aEnd )
