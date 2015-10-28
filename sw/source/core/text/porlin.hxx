@@ -130,6 +130,7 @@ public:
     inline bool IsTabCntPortion() const { return nWhichPor == POR_TABCENTER; }
     inline bool IsTabDecimalPortion() const { return nWhichPor == POR_TABDECIMAL; }
     inline bool IsTabLeftPortion() const { return nWhichPor == POR_TABLEFT; }
+    inline bool IsTabRightPortion() const { return nWhichPor == POR_TABRIGHT; }
     inline bool IsFootnoteNumPortion() const { return nWhichPor == POR_FTNNUM; }
     inline bool IsFootnotePortion() const { return nWhichPor == POR_FTN; }
     inline bool IsTmpEndPortion() const { return nWhichPor == POR_TMPEND; }
