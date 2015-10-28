@@ -253,8 +253,41 @@ void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
     Window::DataChanged(rDataChangedEvent);
 }
 
-bool TabBar::Notify (NotifyEvent&)
+bool TabBar::Notify (NotifyEvent& rEvent)
 {
+    if(rEvent.GetType() == MouseNotifyEvent::COMMAND)
+    {
+        const CommandEvent& rCommandEvent = *rEvent.GetCommandEvent();
+        if(rCommandEvent.GetCommand() == CommandEventId::Wheel)
+        {
+            const CommandWheelData* pData = rCommandEvent.GetWheelData();
+            if(!pData->GetModifier() && (pData->GetMode() == CommandWheelMode::SCROLL))
+            {
+                auto pItem = std::find_if(maItems.begin(), maItems.end(),
+                    [] (Item const& rItem) { return rItem.mpButton->IsChecked(); });
+                if(pItem == maItems.end())
+                    return true;
+                if(pData->GetNotchDelta()<0)
+                {
+                    if(pItem+1 == maItems.end())
+                        return true;
+                    ++pItem;
+                }
+                else
+                {
+                    if(pItem == maItems.begin())
+                        return true;
+                    --pItem;
+                }
+                try
+                {
+                    pItem->maDeckActivationFunctor(pItem->msDeckId);
+                }
+                catch(const css::uno::Exception&) {};
+                return true;
+            }
+        }
+    }
     return false;
 }
 
