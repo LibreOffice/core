@@ -442,7 +442,7 @@ bool PresenterPaneBase::IsVisible() const
 }
 
 void PresenterPaneBase::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

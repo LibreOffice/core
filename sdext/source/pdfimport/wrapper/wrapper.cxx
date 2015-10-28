@@ -1225,7 +1225,7 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
         {
             nBytes = xInput->readBytes( aBuf, nBufSize );
         }
-        catch( com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             osl_closeFile( aFile );
             throw;

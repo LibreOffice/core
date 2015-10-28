@@ -504,7 +504,7 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
 }
 
 void PresenterButton::ThrowIfDisposed() const
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

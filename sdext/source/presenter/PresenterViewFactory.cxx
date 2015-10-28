@@ -514,7 +514,7 @@ Reference<XView> PresenterViewFactory::CreateHelpView(
 }
 
 void PresenterViewFactory::ThrowIfDisposed() const
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

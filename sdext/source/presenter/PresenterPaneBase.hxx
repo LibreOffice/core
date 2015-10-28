@@ -90,7 +90,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL isAnchorOnly()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XWindowListener
 

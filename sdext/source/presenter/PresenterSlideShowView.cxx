@@ -990,7 +990,7 @@ void PresenterSlideShowView::CreateBackgroundPolygons()
 }
 
 void PresenterSlideShowView::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
