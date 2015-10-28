@@ -34,7 +34,7 @@
 
 namespace {
 
-class Provider final:
+class Provider :
     private osl::Mutex,
     public cppu::WeakComponentImplHelper<
         css::lang::XServiceInfo, css::ucb::XContentProvider>
