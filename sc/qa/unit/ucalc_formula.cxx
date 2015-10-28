@@ -4188,6 +4188,29 @@ void Test::testFuncVLOOKUP()
     m_pDoc->SetString(ScAddress(2,0,0), "=VLOOKUP(\"C\";A1:A16;1)");
     CPPUNIT_ASSERT_EQUAL(OUString("C"), m_pDoc->GetString(ScAddress(2,0,0)));
 
+
+    // A21:E24, test position dependent implicit intersection as argument to a
+    // scalar value parameter in a function that has a ReferenceOrForceArray
+    // type parameter somewhere else and formula is not in array mode,
+    // VLOOKUP(Value;ReferenceOrForceArray;...)
+    const char* aData2[][5] = {
+        { "1", "one",   "3", "=VLOOKUP(C21:C24;A21:B24;2;0)", "three" },
+        { "2", "two",   "1", "=VLOOKUP(C21:C24;A21:B24;2;0)", "one"   },
+        { "3", "three", "4", "=VLOOKUP(C21:C24;A21:B24;2;0)", "four"  },
+        { "4", "four",  "2", "=VLOOKUP(C21:C24;A21:B24;2;0)", "two"   }
+    };
+
+    ScAddress aPos2(0,20,0);
+    ScRange aRange2 = insertRangeData(m_pDoc, aPos2, aData2, SAL_N_ELEMENTS(aData2));
+    CPPUNIT_ASSERT(aRange2.aStart == aPos2);
+
+    aPos2.SetCol(3);    // column D formula results
+    for (size_t i=0; i < SAL_N_ELEMENTS(aData2); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aData2[i][4]), m_pDoc->GetString(aPos2));
+        aPos2.IncRow();
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
