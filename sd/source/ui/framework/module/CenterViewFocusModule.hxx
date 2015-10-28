@@ -31,7 +31,7 @@
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper <
-    ::com::sun::star::drawing::framework::XConfigurationChangeListener
+    css::drawing::framework::XConfigurationChangeListener
     > CenterViewFocusModuleInterfaceBase;
 
 } // end of anonymous namespace.
@@ -55,7 +55,7 @@ class CenterViewFocusModule
 {
 public:
     explicit CenterViewFocusModule (
-        ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
+        css::uno::Reference<css::frame::XController>& rxController);
     virtual ~CenterViewFocusModule();
 
     virtual void SAL_CALL disposing() override;
@@ -63,20 +63,20 @@ public:
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
-        const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
 
     virtual void SAL_CALL disposing (
-        const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     class ViewShellContainer;
 
     bool mbValid;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
+    css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
     ViewShellBase* mpBase;
     /** This flag indicates whether in the last configuration change cycle a
@@ -90,8 +90,7 @@ private:
         shell to the top of the shell stack.
     */
     void HandleNewView(
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XConfiguration>& rxConfiguration);
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
 };
 
 } } // end of namespace sd::framework

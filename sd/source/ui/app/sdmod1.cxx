@@ -572,11 +572,11 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     DBG_ASSERT( !aFileToOpen.isEmpty(), "The autopilot should have asked for a file itself already!" );
                     if (!aFileToOpen.isEmpty())
                     {
-                        com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > aPasswrd( pPilotDlg->GetPassword() );
+                        css::uno::Sequence< css::beans::NamedValue > aPasswrd( pPilotDlg->GetPassword() );
 
                         SfxStringItem aFile( SID_FILE_NAME, aFileToOpen );
                         SfxStringItem aReferer( SID_REFERER, OUString());
-                        SfxUnoAnyItem aPassword( SID_ENCRYPTIONDATA, com::sun::star::uno::makeAny(aPasswrd) );
+                        SfxUnoAnyItem aPassword( SID_ENCRYPTIONDATA, css::uno::makeAny(aPasswrd) );
 
                         if ( xTargetFrame.is() )
                         {
@@ -612,7 +612,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 if ( pFrameItem )
                                     pFrame = &pFrameItem->GetFrame()->GetFrame();
                             }
-                            catch (const ::com::sun::star::uno::Exception&)
+                            catch (const css::uno::Exception&)
                             {
                                 DBG_ASSERT (false, "caught IllegalArgumentException while loading document from Impress autopilot");
                             }

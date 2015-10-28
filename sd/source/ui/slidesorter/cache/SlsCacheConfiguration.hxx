@@ -43,7 +43,7 @@ public:
         MultiPaneGUI/SlideSorter/PreviewCache.   When the specified value
         does not exist then an empty Any is returned.
     */
-    ::com::sun::star::uno::Any GetValue (const OUString& rName);
+    css::uno::Any GetValue (const OUString& rName);
 
 private:
     /** When a caller holds a reference after we have released ours we use
@@ -51,8 +51,7 @@ private:
     */
     static std::weak_ptr<CacheConfiguration> mpWeakInstance;
     static Timer maReleaseTimer;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameAccess> mxCacheNode;
+    css::uno::Reference<css::container::XNameAccess> mxCacheNode;
 
     CacheConfiguration();
 

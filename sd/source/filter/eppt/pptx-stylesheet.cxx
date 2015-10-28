@@ -69,28 +69,28 @@ PPTExCharSheet::PPTExCharSheet( int nInstance )
     }
 }
 
-void PPTExCharSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+void PPTExCharSheet::SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
                                     FontCollection& rFontCollection, int nLevel )
 {
     PortionObj  aPortionObj( rXPropSet, rFontCollection );
 
     PPTExCharLevel& rLev = maCharLevel[ nLevel ];
 
-    if ( aPortionObj.meCharColor == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aPortionObj.meCharColor == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnFontColor = aPortionObj.mnCharColor;
-    if ( aPortionObj.meCharEscapement == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aPortionObj.meCharEscapement == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnEscapement = aPortionObj.mnCharEscapement;
-    if ( aPortionObj.meCharHeight == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aPortionObj.meCharHeight == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnFontHeight = aPortionObj.mnCharHeight;
-    if ( aPortionObj.meFontName == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aPortionObj.meFontName == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnFont = aPortionObj.mnFont;
-    if ( aPortionObj.meAsianOrComplexFont == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aPortionObj.meAsianOrComplexFont == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnAsianOrComplexFont = aPortionObj.mnAsianOrComplexFont;
     rLev.mnFlags = aPortionObj.mnCharAttr;
 }
 
 void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, bool bSimpleText,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
+    const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExCharLevel& rLev = maCharLevel[ nLev ];
 
@@ -106,7 +106,7 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
     if ( nFontColor == COL_AUTO )
     {
         bool bIsDark = false;
-        ::com::sun::star::uno::Any aAny;
+        css::uno::Any aAny;
         if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), true ) )
             aAny >>= bIsDark;
         nFontColor = bIsDark ? 0xffffff : 0x000000;
@@ -223,16 +223,16 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
     }
 }
 
-void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
                                         FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel )
 {
     ParagraphObj aParagraphObj( rXPropSet, pBuProv );
     aParagraphObj.CalculateGraphicBulletSize( rCharLevel.mnFontHeight );
     PPTExParaLevel& rLev = maParaLevel[ nLevel ];
 
-    if ( aParagraphObj.meTextAdjust == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aParagraphObj.meTextAdjust == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnAdjust = aParagraphObj.mnTextAdjust;
-    if ( aParagraphObj.meLineSpacing == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aParagraphObj.meLineSpacing == css::beans::PropertyState_DIRECT_VALUE )
     {
         sal_Int16 nLineSpacing = aParagraphObj.mnLineSpacing;
         if ( nLineSpacing > 0 ) // if nLinespacing is < 0 the linespacing is an absolute spacing
@@ -261,24 +261,24 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         }
         rLev.mnLineFeed = nLineSpacing;
     }
-    if ( aParagraphObj.meLineSpacingBottom == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aParagraphObj.meLineSpacingBottom == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnLowerDist = aParagraphObj.mnLineSpacingBottom;
-    if ( aParagraphObj.meLineSpacingTop == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aParagraphObj.meLineSpacingTop == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnUpperDist = aParagraphObj.mnLineSpacingTop;
-    if ( aParagraphObj.meForbiddenRules == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aParagraphObj.meForbiddenRules == css::beans::PropertyState_DIRECT_VALUE )
     {
         rLev.mnAsianSettings &=~1;
         if ( aParagraphObj.mbForbiddenRules )
             rLev.mnAsianSettings |= 1;
     }
-    if ( aParagraphObj.meParagraphPunctation == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aParagraphObj.meParagraphPunctation == css::beans::PropertyState_DIRECT_VALUE )
     {
         rLev.mnAsianSettings &=~4;
         if ( aParagraphObj.mbParagraphPunctation )
             rLev.mnAsianSettings |= 4;
     }
 
-    if ( aParagraphObj.meBiDi == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    if ( aParagraphObj.meBiDi == css::beans::PropertyState_DIRECT_VALUE )
         rLev.mnBiDi = aParagraphObj.mnBiDi;
 
     rLev.mbIsBullet = aParagraphObj.mbIsBullet; //( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
@@ -286,7 +286,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
     if ( !nLevel )
     {
         if (aParagraphObj.bExtendedParameters &&
-             aParagraphObj.meBullet == ::com::sun::star::beans::PropertyState_DIRECT_VALUE)
+             aParagraphObj.meBullet == css::beans::PropertyState_DIRECT_VALUE)
         {
             for ( sal_Int16 i = 0; i < 5; i++ )
             {
@@ -313,7 +313,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
 }
 
 void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, bool bSimpleText,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
+    const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExParaLevel& rLev = maParaLevel[ nLev ];
 
@@ -349,7 +349,7 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
     if ( nBulletColor == COL_AUTO )
     {
         bool bIsDark = false;
-        ::com::sun::star::uno::Any aAny;
+        css::uno::Any aAny;
         if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), true ) )
             aAny >>= bIsDark;
         nBulletColor = bIsDark ? 0xffffff : 0x000000;
@@ -405,7 +405,7 @@ PPTExStyleSheet::~PPTExStyleSheet()
     }
 }
 
-void PPTExStyleSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+void PPTExStyleSheet::SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
                                         FontCollection& rFontCollection, int nInstance, int nLevel )
 {
     if ( nInstance == EPP_TEXTTYPE_notUsed )

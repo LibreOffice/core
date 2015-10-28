@@ -711,7 +711,7 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
 
 void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 {
-    std::vector<com::sun::star::presentation::ClickAction>::const_iterator pIter =
+    std::vector<css::presentation::ClickAction>::const_iterator pIter =
             std::find(maCurrentActions.begin(),maCurrentActions.end(),eCA);
 
     if ( pIter != maCurrentActions.end() )

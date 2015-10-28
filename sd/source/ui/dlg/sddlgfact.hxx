@@ -122,7 +122,7 @@ class AbstractAssistentDlg_Impl : public AbstractAssistentDlg
     virtual OUString GetDocPath() const override;
     virtual bool GetStartWithFlag() const override;
     virtual bool IsDocEmpty() const override;
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword() override;
+    virtual css::uno::Sequence< css::beans::NamedValue > GetPassword() override;
 };
 
 class SdModifyFieldDlg;
@@ -212,7 +212,7 @@ class SdPublishingDlg;
 class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl,SdPublishingDlg)
-    virtual void GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams ) override;
+    virtual void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams ) override;
 };
 
 class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog

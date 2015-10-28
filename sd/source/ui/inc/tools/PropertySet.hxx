@@ -101,13 +101,13 @@ public:
 
 protected:
     /** Return the requested property value.
-        @throw com::sun::star::beans::UnknownPropertyException when the
+        @throw css::beans::UnknownPropertyException when the
             property is not supported.
     */
     virtual css::uno::Any GetPropertyValue (const OUString& rsPropertyName) = 0;
     /** Set the given property value.
         @return the old value.
-        @throw com::sun::star::beans::UnknownPropertyException when the
+        @throw css::beans::UnknownPropertyException when the
             property is not supported.
     */
     virtual css::uno::Any SetPropertyValue (

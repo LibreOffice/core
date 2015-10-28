@@ -44,7 +44,7 @@ class EventMultiplexerEvent;
 }
 
 typedef ::cppu::WeakComponentImplHelper <
-    com::sun::star::document::XEventListener
+    css::document::XEventListener
     > AnnotationManagerImplBase;
 
 class AnnotationManagerImpl : private ::cppu::BaseMutex, public AnnotationManagerImplBase
@@ -58,8 +58,8 @@ public:
     virtual void SAL_CALL disposing () override;
 
     // XEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     void ExecuteAnnotation (SfxRequest& rRequest);
     void GetAnnotationState (SfxItemSet& rItemSet);
@@ -70,15 +70,15 @@ public:
 
     void SelectNextAnnotation(bool bForeward);
 
-    void SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit = false );
-    void GetSelectedAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
+    void SelectAnnotation( css::uno::Reference< css::office::XAnnotation > xAnnotation, bool bEdit = false );
+    void GetSelectedAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
     void InsertAnnotation();
-    void DeleteAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation );
+    void DeleteAnnotation( css::uno::Reference< css::office::XAnnotation > xAnnotation );
     void DeleteAnnotationsByAuthor( const OUString& sAuthor );
     void DeleteAllAnnotations();
 
-    void ExecuteAnnotationContextMenu( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu = false );
+    void ExecuteAnnotationContextMenu( css::uno::Reference< css::office::XAnnotation > xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu = false );
 
     static Color GetColorDark(sal_uInt16 aAuthorIndex);
     static Color GetColorLight(sal_uInt16 aAuthorIndex);
@@ -118,9 +118,9 @@ private:
 
     AnnotationTagVector maTagVector;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView > mxView;
-    ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotationAccess > mxCurrentPage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > mxSelectedAnnotation;
+    css::uno::Reference< css::drawing::XDrawView > mxView;
+    css::uno::Reference< css::office::XAnnotationAccess > mxCurrentPage;
+    css::uno::Reference< css::office::XAnnotation > mxSelectedAnnotation;
 
     bool mbShowAnnotations;
     ImplSVEvent * mnUpdateTagsEvent;
@@ -131,7 +131,7 @@ OUString getAnnotationDateTimeString( const css::uno::Reference< css::office::XA
 
 SfxItemPool* GetAnnotationPool();
 
-com::sun::star::util::DateTime getCurrentDateTime();
+css::util::DateTime getCurrentDateTime();
 
 }
 

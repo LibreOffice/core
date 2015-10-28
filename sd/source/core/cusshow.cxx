@@ -52,7 +52,7 @@ SdCustomShow::SdCustomShow( const SdCustomShow& rShow )
     pDoc = rShow.GetDoc();
 }
 
-SdCustomShow::SdCustomShow(SdDrawDocument* pDrawDoc, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xShow )
+SdCustomShow::SdCustomShow(SdDrawDocument* pDrawDoc, css::uno::Reference< css::uno::XInterface > xShow )
   : maPages(),
   pDoc(pDrawDoc),
   mxUnoCustomShow( xShow )

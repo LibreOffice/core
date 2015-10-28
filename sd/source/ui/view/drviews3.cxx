@@ -896,7 +896,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
     maMarkRect = mpDrawView->GetAllMarkedRect();
 
-    const bool bRTL = GetDoc() && GetDoc()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
+    const bool bRTL = GetDoc() && GetDoc()->GetDefaultWritingMode() == css::text::WritingMode_RL_TB;
     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
 
     if( mpDrawView->AreObjectsMarked() )
@@ -970,7 +970,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                 if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SfxItemState::DEFAULT )
                 {
                     const SvxFrameDirectionItem& rItem = static_cast<const SvxFrameDirectionItem&>( aEditAttr.Get( EE_PARA_WRITINGDIR ) );
-                    rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, rItem.GetValue() == ::com::sun::star::text::WritingMode_RL_TB));
+                    rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, rItem.GetValue() == css::text::WritingMode_RL_TB));
                 }
             }
         }

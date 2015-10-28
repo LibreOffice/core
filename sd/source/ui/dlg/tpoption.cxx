@@ -412,8 +412,8 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( m_pCbxCompatibility->IsChecked() );
         aOptsItem.GetOptionsMisc().SetPrinterIndependentLayout (
             m_pCbxUsePrinterMetrics->IsChecked()
-            ? ::com::sun::star::document::PrinterIndependentLayout::DISABLED
-            : ::com::sun::star::document::PrinterIndependentLayout::ENABLED);
+            ? css::document::PrinterIndependentLayout::DISABLED
+            : css::document::PrinterIndependentLayout::ENABLED);
         rAttrs->Put( aOptsItem );
 
         bModified = true;

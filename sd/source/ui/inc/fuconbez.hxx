@@ -62,7 +62,7 @@ protected:
 
     sal_uInt16      nEditMode;
 
-    ::com::sun::star::uno::Any maTargets;   // used for creating a path for custom animations
+    css::uno::Any maTargets;   // used for creating a path for custom animations
 };
 
 } // end of namespace sd

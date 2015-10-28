@@ -130,10 +130,10 @@ private: //private methods
     ///paragraph level that is animated ( that paragraph and higher levels )
     sal_Int32 GetParagraphLevel() const;
 
-    ///@see com::sun::star::presentation::TextAnimationType
+    ///@see css::presentation::TextAnimationType
     sal_Int16 GetTextAnimationType() const;
 
-    ///@see com::sun::star::presentation::EffectNodeType
+    ///@see css::presentation::EffectNodeType
     sal_Int16 GetEffectNodeType() const;
 
     /// @return -1 for start on mouseclick or >= 0 for a delay in seconds for automatic start

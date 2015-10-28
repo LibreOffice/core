@@ -132,10 +132,10 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
     return 0;
 }
 
-com::sun::star::util::DateTime getCurrentDateTime()
+css::util::DateTime getCurrentDateTime()
 {
     DateTime aCurrentDate( DateTime::SYSTEM );
-    return com::sun::star::util::DateTime( 0, aCurrentDate.GetSec(),
+    return css::util::DateTime( 0, aCurrentDate.GetSec(),
             aCurrentDate.GetMin(), aCurrentDate.GetHour(),
             aCurrentDate.GetDay(), aCurrentDate.GetMonth(),
             aCurrentDate.GetYear(), false );
@@ -149,7 +149,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
         const SvtSysLocale aSysLocale;
         const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
 
-        com::sun::star::util::DateTime aDateTime( xAnnotation->getDateTime() );
+        css::util::DateTime aDateTime( xAnnotation->getDateTime() );
 
         Date aSysDate( Date::SYSTEM );
         Date aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
@@ -230,7 +230,7 @@ void SAL_CALL AnnotationManagerImpl::disposing ()
 }
 
 // XEventListener
-void SAL_CALL AnnotationManagerImpl::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception)
 {
     if( aEvent.EventName == "OnAnnotationInserted" || aEvent.EventName == "OnAnnotationRemoved" || aEvent.EventName == "OnAnnotationChanged" )
     {
@@ -238,7 +238,7 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const ::com::sun::star::docume
     }
 }
 
-void SAL_CALL AnnotationManagerImpl::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL AnnotationManagerImpl::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -717,7 +717,7 @@ void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
     }
 }
 
-void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit /* = sal_False */ )
+void AnnotationManagerImpl::SelectAnnotation( css::uno::Reference< css::office::XAnnotation > xAnnotation, bool bEdit /* = sal_False */ )
 {
     mxSelectedAnnotation = xAnnotation;
 
@@ -735,7 +735,7 @@ void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< 
     }
 }
 
-void AnnotationManagerImpl::GetSelectedAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
+void AnnotationManagerImpl::GetSelectedAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation )
 {
     xAnnotation = mxSelectedAnnotation;
 }
@@ -976,7 +976,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     sal_uInt16 nId = 0;
 
     // set slot images
-    Reference< ::com::sun::star::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
+    Reference< css::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
     if( xFrame.is() )
     {
         for( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )

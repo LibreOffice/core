@@ -26,7 +26,7 @@ class SdXImpressDocument;
 
 namespace sd
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DocumentSettings_createInstance( SdXImpressDocument* pDoc ) throw();
+    css::uno::Reference< css::uno::XInterface > SAL_CALL DocumentSettings_createInstance( SdXImpressDocument* pDoc ) throw();
 }
 
 #endif

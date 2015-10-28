@@ -302,7 +302,7 @@ uno::Reference<XAccessible > SAL_CALL
 
 awt::Rectangle SAL_CALL
     AccessibleDocumentViewBase::getBounds()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -415,14 +415,14 @@ void SAL_CALL
 
 OUString SAL_CALL
     AccessibleDocumentViewBase::getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleDocumentViewBase");
 }
 
-::com::sun::star::uno::Sequence< OUString> SAL_CALL
+css::uno::Sequence< OUString> SAL_CALL
     AccessibleDocumentViewBase::getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     return AccessibleContextBase::getSupportedServiceNames ();
@@ -430,9 +430,9 @@ OUString SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
+css::uno::Sequence< css::uno::Type> SAL_CALL
     AccessibleDocumentViewBase::getTypes()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -526,7 +526,7 @@ void AccessibleDocumentViewBase::impl_dispose()
 
 void SAL_CALL
     AccessibleDocumentViewBase::disposing (const lang::EventObject& rEventObject)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -546,7 +546,7 @@ void SAL_CALL
 //=====  XPropertyChangeListener  =============================================
 
 void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     // Empty
 }
@@ -554,8 +554,8 @@ void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyC
 //=====  XWindowListener  =====================================================
 
 void SAL_CALL
-    AccessibleDocumentViewBase::windowResized (const ::com::sun::star::awt::WindowEvent& )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    AccessibleDocumentViewBase::windowResized (const css::awt::WindowEvent& )
+    throw (css::uno::RuntimeException, std::exception)
 {
     if( IsDisposed() )
         return;
@@ -566,8 +566,8 @@ void SAL_CALL
 }
 
 void SAL_CALL
-    AccessibleDocumentViewBase::windowMoved (const ::com::sun::star::awt::WindowEvent& )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    AccessibleDocumentViewBase::windowMoved (const css::awt::WindowEvent& )
+    throw (css::uno::RuntimeException, std::exception)
 {
     if( IsDisposed() )
         return;
@@ -578,8 +578,8 @@ void SAL_CALL
 }
 
 void SAL_CALL
-    AccessibleDocumentViewBase::windowShown (const ::com::sun::star::lang::EventObject& )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    AccessibleDocumentViewBase::windowShown (const css::lang::EventObject& )
+    throw (css::uno::RuntimeException, std::exception)
 {
     if( IsDisposed() )
         return;
@@ -590,8 +590,8 @@ void SAL_CALL
 }
 
 void SAL_CALL
-    AccessibleDocumentViewBase::windowHidden (const ::com::sun::star::lang::EventObject& )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    AccessibleDocumentViewBase::windowHidden (const css::lang::EventObject& )
+    throw (css::uno::RuntimeException, std::exception)
 {
     if( IsDisposed() )
         return;
@@ -603,16 +603,16 @@ void SAL_CALL
 
 //=====  XFocusListener  ==================================================
 
-void AccessibleDocumentViewBase::focusGained (const ::com::sun::star::awt::FocusEvent& e)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void AccessibleDocumentViewBase::focusGained (const css::awt::FocusEvent& e)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     if (e.Source == mxWindow)
         Activated ();
 }
 
-void AccessibleDocumentViewBase::focusLost (const ::com::sun::star::awt::FocusEvent& e)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void AccessibleDocumentViewBase::focusLost (const css::awt::FocusEvent& e)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     if (e.Source == mxWindow)
@@ -632,7 +632,7 @@ void SAL_CALL AccessibleDocumentViewBase::disposing()
 /// Create a name for this view.
 OUString
     AccessibleDocumentViewBase::CreateAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString ("AccessibleDocumentViewBase");
 }
@@ -642,7 +642,7 @@ OUString
 */
 OUString
     AccessibleDocumentViewBase::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     OUString sDescription;
 
@@ -731,8 +731,8 @@ void
 }
 
 uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException,
+    throw (css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException,
            std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -856,11 +856,11 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
     return anyAtrribute;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-        SAL_CALL AccessibleDocumentViewBase::getAccFlowTo(const ::com::sun::star::uno::Any&, sal_Int32 )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+css::uno::Sequence< css::uno::Any >
+        SAL_CALL AccessibleDocumentViewBase::getAccFlowTo(const css::uno::Any&, sal_Int32 )
+        throw ( css::uno::RuntimeException, std::exception )
 {
-    ::com::sun::star::uno::Sequence< uno::Any> aRet;
+    css::uno::Sequence< uno::Any> aRet;
 
     return aRet;
 }

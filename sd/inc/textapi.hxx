@@ -42,13 +42,13 @@ public:
 
     virtual             ~TextApiObject() throw();
 
-    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL dispose() throw(css::uno::RuntimeException);
 
     OutlinerParaObject* CreateText();
     void                SetText( OutlinerParaObject& rText );
     OUString            GetText();
 
-    static TextApiObject* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& );
+    static TextApiObject* getImplementation( const css::uno::Reference< css::text::XText >& );
 
 private:
     TextAPIEditSource*  mpSource;

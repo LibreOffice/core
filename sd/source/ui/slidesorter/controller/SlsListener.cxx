@@ -496,7 +496,7 @@ void SAL_CALL Listener::propertyChange (
 //===== frame::XFrameActionListener  ==========================================
 
 void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     switch (rEvent.Action)
     {
@@ -630,7 +630,7 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
 }
 
 void Listener::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

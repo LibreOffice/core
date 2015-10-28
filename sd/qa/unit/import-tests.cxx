@@ -547,9 +547,9 @@ void SdImportTest::testFdo72998()
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>(pPage->GetObj(2));
         CPPUNIT_ASSERT( pObj );
         const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-        const ::com::sun::star::uno::Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( OUString( "ViewBox" ) );
+        const css::uno::Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( OUString( "ViewBox" ) );
         CPPUNIT_ASSERT_MESSAGE( "Missing ViewBox", pViewBox );
-        com::sun::star::awt::Rectangle aViewBox;
+        css::awt::Rectangle aViewBox;
         CPPUNIT_ASSERT( (*pViewBox >>= aViewBox ) );
         CPPUNIT_ASSERT_MESSAGE( "Width should be zero - for forcing scale to 1", !aViewBox.Width );
         CPPUNIT_ASSERT_MESSAGE( "Height should be zero - for forcing scale to 1", !aViewBox.Height );
@@ -635,7 +635,7 @@ void SdImportTest::testFdo64512()
 void SdImportTest::testFdo71075()
 {
     double values[] = { 12.0, 13.0, 14.0 };
-    ::com::sun::star::uno::Any aAny;
+    css::uno::Any aAny;
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71075.odp"), ODP);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
@@ -1254,8 +1254,8 @@ void SdImportTest::testRowHeight()
 
     sal_Int32 nHeight;
     const OUString sHeight("Height");
-    uno::Reference< com::sun::star::table::XTable > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
-    uno::Reference< com::sun::star::table::XTableRows > xRows( xTable->getRows(), uno::UNO_QUERY_THROW);
+    uno::Reference< css::table::XTable > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< css::table::XTableRows > xRows( xTable->getRows(), uno::UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xRefRow( xRows->getByIndex(0), uno::UNO_QUERY_THROW );
     xRefRow->getPropertyValue( sHeight ) >>= nHeight;
     CPPUNIT_ASSERT_EQUAL( sal_Int32(508), nHeight);

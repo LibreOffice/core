@@ -621,11 +621,10 @@ void ShowWindow::AddWindowToPaintView()
 }
 
 // Override the sd::Window's CreateAccessible to create a different accessible object
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible>
+css::uno::Reference<css::accessibility::XAccessible>
     ShowWindow::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(false);
+    css::uno::Reference< css::accessibility::XAccessible > xAcc = GetAccessible(false);
     if (xAcc.get())
     {
         return xAcc;

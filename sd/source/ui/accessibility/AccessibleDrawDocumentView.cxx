@@ -238,7 +238,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 OUString SAL_CALL
     AccessibleDrawDocumentView::getAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -276,7 +276,7 @@ OUString SAL_CALL
 
 void SAL_CALL
     AccessibleDrawDocumentView::disposing (const lang::EventObject& rEventObject)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -294,7 +294,7 @@ void SAL_CALL
 
 void SAL_CALL
     AccessibleDrawDocumentView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -361,10 +361,10 @@ void SAL_CALL
             rtl::Reference< sd::SlideShow > xSlideshow( sd::SlideShow::GetSlideShow( mpSdViewSh->GetViewShellBase() ) );
             if( xSlideshow.is() && xSlideshow->isRunning() && xSlideshow->isFullScreen() )
             {
-                ::com::sun::star::uno::Reference< drawing::XDrawPage > xSlide;
+                css::uno::Reference< drawing::XDrawPage > xSlide;
                 // MT IA2: Not used...
                 // sal_Int32 currentPageIndex = xSlideshow->getCurrentPageIndex();
-                ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > mpSlideController = xSlideshow->getController();
+                css::uno::Reference< css::presentation::XSlideShowController > mpSlideController = xSlideshow->getController();
                 if( mpSlideController.is() )
                 {
                     xSlide = mpSlideController->getCurrentSlide();
@@ -395,14 +395,14 @@ void SAL_CALL
 
 OUString SAL_CALL
     AccessibleDrawDocumentView::getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleDrawDocumentView");
 }
 
-::com::sun::star::uno::Sequence< OUString> SAL_CALL
+css::uno::Sequence< OUString> SAL_CALL
     AccessibleDrawDocumentView::getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     // Get list of supported service names from base class...
@@ -554,7 +554,7 @@ OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
 
 /// Create a name for this view.
 OUString AccessibleDrawDocumentView::CreateAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     OUString sName;
 
@@ -607,7 +607,7 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName()
 */
 OUString
     AccessibleDrawDocumentView::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     OUString sDescription;
 
@@ -841,9 +841,9 @@ void SAL_CALL AccessibleDrawDocumentView::disposing()
     AccessibleDocumentViewBase::disposing ();
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-        SAL_CALL AccessibleDrawDocumentView::getAccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+css::uno::Sequence< css::uno::Any >
+        SAL_CALL AccessibleDrawDocumentView::getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType)
+        throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -851,7 +851,7 @@ void SAL_CALL AccessibleDrawDocumentView::disposing()
     const sal_Int32 FINDREPLACEFLOWTO = 2;
     if ( nType == SPELLCHECKFLOWTO )
     {
-        uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+        uno::Reference< css::drawing::XShape > xShape;
         rAny >>= xShape;
         if ( mpChildrenManager && xShape.is() )
         {
@@ -933,7 +933,7 @@ void SAL_CALL AccessibleDrawDocumentView::disposing()
     }
 
 Rt:
-    ::com::sun::star::uno::Sequence< uno::Any> aRet;
+    css::uno::Sequence< uno::Any> aRet;
     return aRet;
 }
 uno::Reference<XAccessible> AccessibleDrawDocumentView::GetSelAccContextInTable()

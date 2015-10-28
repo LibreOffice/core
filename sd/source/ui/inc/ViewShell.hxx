@@ -277,8 +277,8 @@ public:
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                   ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
 
-    virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
-    virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false );
 
     /** this method is called when the visible area of the view from this viewshell is changed */
     virtual void VisAreaChanged(const Rectangle& rRect);
@@ -291,11 +291,10 @@ public:
         @return
             This default implementation returns an empty reference.
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>
+    virtual css::uno::Reference<css::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
 
-    virtual void SwitchViewFireFocus( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc );
+    virtual void SwitchViewFireFocus( css::uno::Reference< css::accessibility::XAccessible > xAcc );
     void SwitchActiveViewFireFocus( );
     // Move these two methods from DrawViewShell to enable slide show view
     void    NotifyAccUpdate();

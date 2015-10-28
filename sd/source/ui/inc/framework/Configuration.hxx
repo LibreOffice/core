@@ -33,8 +33,8 @@
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper <
-    ::com::sun::star::drawing::framework::XConfiguration,
-    ::com::sun::star::container::XNamed,
+    css::drawing::framework::XConfiguration,
+    css::container::XNamed,
     css::lang::XServiceInfo
     > ConfigurationInterfaceBase;
 
@@ -78,8 +78,7 @@ public:
             then events with type "ResourceActivationEvent" and
             "ResourceDeactivationEvent" are broadcasted.
     */
-    Configuration (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
+    Configuration (const css::uno::Reference<css::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
         bool bBroadcastRequestEvents);
     virtual ~Configuration();
 
@@ -88,33 +87,32 @@ public:
     // XConfiguration
 
     virtual void SAL_CALL addResource (
-        const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
+        const css::uno::Reference<css::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removeResource(
-        const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
+        const css::uno::Reference<css::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
-        com::sun::star::drawing::framework::XResourceId> > SAL_CALL getResources (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XResourceId>& rxAnchorId,
+    virtual css::uno::Sequence< css::uno::Reference<
+        css::drawing::framework::XResourceId> > SAL_CALL getResources (
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId,
         const OUString& rsResourceURLPrefix,
-        ::com::sun::star::drawing::framework::AnchorBindingMode eMode)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        css::drawing::framework::AnchorBindingMode eMode)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL hasResource (
-        const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
+        const css::uno::Reference<css::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XCloneable
 
-    virtual ::com::sun::star::uno::Reference<com::sun::star::util::XCloneable>
+    virtual css::uno::Reference<css::util::XCloneable>
         SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XNamed
 
@@ -122,13 +120,13 @@ public:
         debugging purposes.
     */
     virtual OUString SAL_CALL getName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** This call is ignored because the XNamed interface is (mis)used to
         give access to a human readable name for debugging purposes.
     */
     virtual void SAL_CALL setName (const OUString& rName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -149,8 +147,7 @@ private:
     /** The broadcaster used for notifying listeners of requests for
         configuration changes.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster>
+    css::uno::Reference<css::drawing::framework::XConfigurationControllerBroadcaster>
         mxBroadcaster;
 
     bool mbBroadcastRequestEvents;
@@ -161,8 +158,7 @@ private:
             The new Configuration is created with a copy of the elements in
             this container.
     */
-    Configuration (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
+    Configuration (const css::uno::Reference<css::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
         bool bBroadcastRequestEvents,
         const ResourceContainer& rResourceContainer);
 
@@ -177,15 +173,14 @@ private:
             into account when the actual event type field is determined.
     */
     void PostEvent (
-        const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
-            rxResourceId,
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         const bool bActivation);
 
     /** When the called object has already been disposed this method throws
         an exception and does not return.
     */
     void ThrowIfDisposed() const
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 };
 
 /** Return whether the two given configurations contain the same resource
@@ -193,10 +188,8 @@ private:
     treated like empty configurations.
 */
 bool AreConfigurationsEquivalent (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration1,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration2);
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration1,
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration2);
 
 } } // end of namespace sd::framework
 

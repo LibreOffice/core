@@ -30,11 +30,11 @@ namespace sd
 */
 struct AfterEffectNode
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxNode;
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxMaster;
+    css::uno::Reference< css::animations::XAnimationNode > mxNode;
+    css::uno::Reference< css::animations::XAnimationNode > mxMaster;
     bool mbOnNextEffect;
 
-    AfterEffectNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xMaster, bool bOnNextEffect )
+    AfterEffectNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const css::uno::Reference< css::animations::XAnimationNode >& xMaster, bool bOnNextEffect )
         : mxNode( xNode ), mxMaster( xMaster ), mbOnNextEffect( bOnNextEffect ) {}
 };
 

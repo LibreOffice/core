@@ -187,17 +187,17 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
             {
-                Reference< ::com::sun::star::awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
+                Reference< css::awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
 
                 if( !xControlModel.is() )
                     return;
 
-                Reference< ::com::sun::star::beans::XPropertySet > xPropSet( xControlModel, UNO_QUERY );
+                Reference< css::beans::XPropertySet > xPropSet( xControlModel, UNO_QUERY );
 
                 if( !xPropSet.is() )
                     return;
 
-                ::com::sun::star::form::FormButtonType  eButtonType;
+                css::form::FormButtonType  eButtonType;
                 Any                                     aTmp( xPropSet->getPropertyValue( "ButtonType" ) );
 
                 if( aTmp >>= eButtonType )
@@ -605,7 +605,7 @@ bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* 
                 pDoc->setUnoModel( Reference< XInterface >::query( xComponent ) );
 
                 {
-                    com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                    css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
                     if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" ) )
                         rxOStm->Commit();
                 }
@@ -734,7 +734,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
     }
 }
 
-sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+sal_Int64 SAL_CALL SdTransferable::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception )
 {
     sal_Int64 nRet;
 
@@ -774,7 +774,7 @@ namespace
     class theSdTransferableUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdTransferableUnoTunnelId > {};
 }
 
-const ::com::sun::star::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
+const css::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
 {
     return theSdTransferableUnoTunnelId::get().getSeq();
 }
@@ -783,10 +783,10 @@ SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >
 {
     try
     {
-        Reference< ::com::sun::star::lang::XUnoTunnel > xUnoTunnel( rxData, UNO_QUERY_THROW );
+        Reference< css::lang::XUnoTunnel > xUnoTunnel( rxData, UNO_QUERY_THROW );
         return reinterpret_cast<SdTransferable*>(sal::static_int_cast<sal_uIntPtr>(xUnoTunnel->getSomething( SdTransferable::getUnoTunnelId()) ) );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
     return NULL;

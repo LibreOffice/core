@@ -39,21 +39,21 @@ namespace sd {
 class EffectMigration
 {
 public:
-    static ::com::sun::star::presentation::AnimationSpeed ConvertDuration( double fDuration );
-    static double ConvertAnimationSpeed( ::com::sun::star::presentation::AnimationSpeed eSpeed );
+    static css::presentation::AnimationSpeed ConvertDuration( double fDuration );
+    static double ConvertAnimationSpeed( css::presentation::AnimationSpeed eSpeed );
 
-    static bool ConvertPreset( const OUString& rPresetId, const OUString* pPresetSubType, ::com::sun::star::presentation::AnimationEffect& rEffect );
-    static bool ConvertAnimationEffect( const ::com::sun::star::presentation::AnimationEffect& rEffect, OUString& rPresetId, OUString& rPresetSubType );
+    static bool ConvertPreset( const OUString& rPresetId, const OUString* pPresetSubType, css::presentation::AnimationEffect& rEffect );
+    static bool ConvertAnimationEffect( const css::presentation::AnimationEffect& rEffect, OUString& rPresetId, OUString& rPresetSubType );
 
-    static void SetFadeEffect( SdPage* pPage, ::com::sun::star::presentation::FadeEffect eNewEffect);
-    static ::com::sun::star::presentation::FadeEffect GetFadeEffect( const SdPage* pPage );
+    static void SetFadeEffect( SdPage* pPage, css::presentation::FadeEffect eNewEffect);
+    static css::presentation::FadeEffect GetFadeEffect( const SdPage* pPage );
 
-    static void SetAnimationEffect( SvxShape* pShape, ::com::sun::star::presentation::AnimationEffect eValue );
-    static ::com::sun::star::presentation::AnimationEffect GetAnimationEffect( SvxShape* pShape );
-    static void SetTextAnimationEffect( SvxShape* pShape, ::com::sun::star::presentation::AnimationEffect eValue );
-    static ::com::sun::star::presentation::AnimationEffect GetTextAnimationEffect( SvxShape* pShape );
-    static void SetAnimationSpeed( SvxShape* pShape, ::com::sun::star::presentation::AnimationSpeed eSpeed );
-    static ::com::sun::star::presentation::AnimationSpeed GetAnimationSpeed( SvxShape* pShape );
+    static void SetAnimationEffect( SvxShape* pShape, css::presentation::AnimationEffect eValue );
+    static css::presentation::AnimationEffect GetAnimationEffect( SvxShape* pShape );
+    static void SetTextAnimationEffect( SvxShape* pShape, css::presentation::AnimationEffect eValue );
+    static css::presentation::AnimationEffect GetTextAnimationEffect( SvxShape* pShape );
+    static void SetAnimationSpeed( SvxShape* pShape, css::presentation::AnimationSpeed eSpeed );
+    static css::presentation::AnimationSpeed GetAnimationSpeed( SvxShape* pShape );
     static void SetDimColor( SvxShape* pShape, sal_Int32 nColor );
     static sal_Int32 GetDimColor( SvxShape* pShape );
     static void SetDimHide( SvxShape* pShape, bool bDimHide );

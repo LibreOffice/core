@@ -489,23 +489,23 @@ bool PPTWriter::ImplCloseDocument()
 
             switch( pDesc->Family )
             {
-                case ::com::sun::star::awt::FontFamily::ROMAN :
+                case css::awt::FontFamily::ROMAN :
                     lfPitchAndFamily |= FF_ROMAN;
                 break;
 
-                case ::com::sun::star::awt::FontFamily::SWISS :
+                case css::awt::FontFamily::SWISS :
                     lfPitchAndFamily |= FF_SWISS;
                 break;
 
-                case ::com::sun::star::awt::FontFamily::MODERN :
+                case css::awt::FontFamily::MODERN :
                     lfPitchAndFamily |= FF_MODERN;
                 break;
 
-                case ::com::sun::star::awt::FontFamily::SCRIPT:
+                case css::awt::FontFamily::SCRIPT:
                     lfPitchAndFamily |= FF_SCRIPT;
                 break;
 
-                case ::com::sun::star::awt::FontFamily::DECORATIVE:
+                case css::awt::FontFamily::DECORATIVE:
                      lfPitchAndFamily |= FF_DECORATIVE;
                 break;
 
@@ -515,7 +515,7 @@ bool PPTWriter::ImplCloseDocument()
             }
             switch( pDesc->Pitch )
             {
-                case ::com::sun::star::awt::FontPitch::FIXED:
+                case css::awt::FontPitch::FIXED:
                     lfPitchAndFamily |= FIXED_PITCH;
                 break;
 
@@ -553,8 +553,8 @@ bool PPTWriter::ImplCloseDocument()
 }
 
 bool PropValue::GetPropertyValue(
-    ::com::sun::star::uno::Any& rAny,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+    css::uno::Any& rAny,
+    const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
     const OUString& rString,
     bool bTestPropertyAvailability )
 {
@@ -564,12 +564,11 @@ bool PropValue::GetPropertyValue(
         bRetValue = false;
         try
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
-                aXPropSetInfo( rXPropSet->getPropertySetInfo() );
+            css::uno::Reference< css::beans::XPropertySetInfo >  aXPropSetInfo( rXPropSet->getPropertySetInfo() );
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rString );
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             bRetValue = false;
         }
@@ -582,7 +581,7 @@ bool PropValue::GetPropertyValue(
             if ( !rAny.hasValue() )
                 bRetValue = false;
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             bRetValue = false;
         }
@@ -590,19 +589,18 @@ bool PropValue::GetPropertyValue(
     return bRetValue;
 }
 
-::com::sun::star::beans::PropertyState PropValue::GetPropertyState(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+css::beans::PropertyState PropValue::GetPropertyState(
+    const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
     const OUString& rPropertyName )
 {
-    ::com::sun::star::beans::PropertyState eRetValue = ::com::sun::star::beans::PropertyState_AMBIGUOUS_VALUE;
+    css::beans::PropertyState eRetValue = css::beans::PropertyState_AMBIGUOUS_VALUE;
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > aXPropState
-                ( rXPropSet, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::beans::XPropertyState > aXPropState( rXPropSet, css::uno::UNO_QUERY );
         if ( aXPropState.is() )
             eRetValue = aXPropState->getPropertyState( rPropertyName );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
 
     }
@@ -614,17 +612,17 @@ bool PropValue::ImplGetPropertyValue( const OUString& rString )
     return GetPropertyValue( mAny, mXPropSet, rString );
 }
 
-bool PropValue::ImplGetPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & aXPropSet, const OUString& rString )
+bool PropValue::ImplGetPropertyValue( const css::uno::Reference< css::beans::XPropertySet > & aXPropSet, const OUString& rString )
 {
     return GetPropertyValue( mAny, aXPropSet, rString );
 }
 
 bool PropStateValue::ImplGetPropertyValue( const OUString& rString, bool bGetPropertyState )
 {
-    ePropState = ::com::sun::star::beans::PropertyState_AMBIGUOUS_VALUE;
+    ePropState = css::beans::PropertyState_AMBIGUOUS_VALUE;
     bool bRetValue = true;
 #ifdef UNX
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+        css::uno::Reference< css::beans::XPropertySetInfo >
             aXPropSetInfo( mXPropSet->getPropertySetInfo() );
         if ( !aXPropSetInfo.is() )
             return false;
@@ -637,9 +635,9 @@ bool PropStateValue::ImplGetPropertyValue( const OUString& rString, bool bGetPro
         else if ( bGetPropertyState )
             ePropState = mXPropState->getPropertyState( rString );
         else
-            ePropState = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+            ePropState = css::beans::PropertyState_DIRECT_VALUE;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         bRetValue = false;
     }
@@ -665,7 +663,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         if ( nDepth > 4)
             nDepth = 4;
 
-        if ( ( pPara->meTextAdjust == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+        if ( ( pPara->meTextAdjust == css::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_Adjust, pPara->mnTextAdjust ) ) )
             nPropertyFlags |= 0x00000800;
         nLineSpacing = pPara->mnLineSpacing;
@@ -697,23 +695,23 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
                 else
                     nLineSpacing = (sal_Int16)( (double)nLineSpacing / 4.40972 );
             }
-            if ( ( pPara->meLineSpacing == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            if ( ( pPara->meLineSpacing == css::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
                 nPropertyFlags |= 0x00001000;
         }
-        if ( ( pPara->meLineSpacingTop == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+        if ( ( pPara->meLineSpacingTop == css::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mnLineSpacingTop ) ) )
             nPropertyFlags |= 0x00002000;
-        if ( ( pPara->meLineSpacingBottom == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+        if ( ( pPara->meLineSpacingBottom == css::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LowerDist, pPara->mnLineSpacingBottom ) ) )
             nPropertyFlags |= 0x00004000;
-        if ( ( pPara->meForbiddenRules == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+        if ( ( pPara->meForbiddenRules == css::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mbForbiddenRules ? 1 : 0 ) ) )
             nPropertyFlags |= 0x00020000;
-        if ( ( pPara->meParagraphPunctation == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+        if ( ( pPara->meParagraphPunctation == css::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mbParagraphPunctation ? 1 : 0 ) ) )
             nPropertyFlags |= 0x00080000;
-        if ( ( pPara->meBiDi == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+        if ( ( pPara->meBiDi == css::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, nDepth, ParaAttr_BiDi, pPara->mnBiDi ) ) )
             nPropertyFlags |= 0x00200000;
 
@@ -755,7 +753,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             if ( nBulletColor == COL_AUTO )
             {
                 bool bIsDark = false;
-                ::com::sun::star::uno::Any aAny;
+                css::uno::Any aAny;
                 if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, OUString( "IsBackgroundDark" ), true ) )
                     aAny >>= bIsDark;
                 nBulletColor = bIsDark ? 0xffffff : 0x000000;
@@ -808,7 +806,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             if ( nCharColor == COL_AUTO )   // nCharColor depends to the background color
             {
                 bool bIsDark = false;
-                ::com::sun::star::uno::Any aAny;
+                css::uno::Any aAny;
                 if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, OUString( "IsBackgroundDark" ), true ) )
                     aAny >>= bIsDark;
                 nCharColor = bIsDark ? 0xffffff : 0x000000;
@@ -825,13 +823,13 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 if ( !nCharColor )          // special threatment for
                     nCharColor = 0xffffff;  // black fontcolor
 
-                ::com::sun::star::uno::Any aAny;
-                ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
+                css::uno::Any aAny;
+                css::drawing::FillStyle aFS( css::drawing::FillStyle_NONE );
                 if ( PropValue::GetPropertyValue( aAny, mXPropSet, OUString( "FillStyle" ) ) )
                     aAny >>= aFS;
                 switch( aFS )
                 {
-                    case ::com::sun::star::drawing::FillStyle_GRADIENT :
+                    case css::drawing::FillStyle_GRADIENT :
                     {
                         Point aEmptyPoint;
                         Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
@@ -840,21 +838,21 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                         aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                     }
                     break;
-                    case ::com::sun::star::drawing::FillStyle_SOLID :
+                    case css::drawing::FillStyle_SOLID :
                     {
                         if ( PropValue::GetPropertyValue( aAny, mXPropSet, OUString( "FillColor" ) ) )
                             nBackgroundColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
                     }
                     break;
-                    case ::com::sun::star::drawing::FillStyle_NONE :
+                    case css::drawing::FillStyle_NONE :
                     {
-                        ::com::sun::star::uno::Any aBackAny;
-                        ::com::sun::star::drawing::FillStyle aBackFS( ::com::sun::star::drawing::FillStyle_NONE );
+                        css::uno::Any aBackAny;
+                        css::drawing::FillStyle aBackFS( css::drawing::FillStyle_NONE );
                         if ( PropValue::GetPropertyValue( aBackAny, mXBackgroundPropSet, OUString( "FillStyle" ) ) )
                             aBackAny >>= aBackFS;
                         switch( aBackFS )
                         {
-                            case ::com::sun::star::drawing::FillStyle_GRADIENT :
+                            case css::drawing::FillStyle_GRADIENT :
                             {
                                 Point aEmptyPoint;
                                 Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
@@ -863,7 +861,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                                 aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                             }
                             break;
-                            case ::com::sun::star::drawing::FillStyle_SOLID :
+                            case css::drawing::FillStyle_SOLID :
                             {
                                 if ( PropValue::GetPropertyValue( aAny, mXBackgroundPropSet, OUString( "FillColor" ) ) )
                                     nBackgroundColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
@@ -891,11 +889,11 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     // not possible to export the 'embossed' flag
                     if ( ( GetCurrentGroupLevel() > 0 ) && ( GetCurrentGroupIndex() >= 1 ) )
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > aGroupedShape( GetCurrentGroupAccess()->getByIndex( GetCurrentGroupIndex() - 1 ), uno::UNO_QUERY );
+                        css::uno::Reference< css::drawing::XShape > aGroupedShape( GetCurrentGroupAccess()->getByIndex( GetCurrentGroupIndex() - 1 ), uno::UNO_QUERY );
                         if( aGroupedShape.is() )
                         {
-                            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aPropSetOfNextShape
-                                ( aGroupedShape, ::com::sun::star::uno::UNO_QUERY );
+                            css::uno::Reference< css::beans::XPropertySet > aPropSetOfNextShape
+                                ( aGroupedShape, css::uno::UNO_QUERY );
                             if ( aPropSetOfNextShape.is() )
                             {
                                 if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
@@ -937,19 +935,19 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 nPropertyFlags |= ( i & 0x3f ) << 10 ;
                 nCharAttr  |= ( i & 0x3f ) << 10;
             }
-            if ( ( rPortion.meFontName == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            if ( ( rPortion.meFontName == css::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Font, rPortion.mnFont ) ) )
                 nPropertyFlags |= 0x00010000;
-            if ( ( rPortion.meAsianOrComplexFont == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            if ( ( rPortion.meAsianOrComplexFont == css::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_AsianOrComplexFont, rPortion.mnAsianOrComplexFont ) ) )
                 nPropertyFlags |= 0x00200000;
-            if ( ( rPortion.meCharHeight == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            if ( ( rPortion.meCharHeight == css::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontHeight, rPortion.mnCharHeight ) ) )
                 nPropertyFlags |= 0x00020000;
-            if ( ( rPortion.meCharColor == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            if ( ( rPortion.meCharColor == css::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontColor, nCharColor & 0xffffff ) ) )
                 nPropertyFlags |= 0x00040000;
-            if ( ( rPortion.meCharEscapement == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            if ( ( rPortion.meCharEscapement == css::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Escapement, rPortion.mnCharEscapement ) ) )
                 nPropertyFlags |= 0x00080000;
 
@@ -981,14 +979,14 @@ bool PPTWriter::ImplGetText()
 {
     mnTextSize = 0;
     mbFontIndependentLineSpacing = false;
-    mXText = ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XSimpleText >
-            ( mXShape, ::com::sun::star::uno::UNO_QUERY );
+    mXText = css::uno::Reference<
+        css::text::XSimpleText >
+            ( mXShape, css::uno::UNO_QUERY );
 
     if ( mXText.is() )
     {
         mnTextSize = mXText->getString().getLength();
-        ::com::sun::star::uno::Any aAny;
+        css::uno::Any aAny;
         if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ), true ) )
             aAny >>= mbFontIndependentLineSpacing;
     }
@@ -1022,8 +1020,7 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     {
         // Maddeningly, in those two areas of PPT is the BoundingBox already
         // vertical. Therefore, we need to put down it BEFORE THE ROTATION.
-        ::com::sun::star::awt::Point
-            aTopLeft( (sal_Int32)( maRect.Left() + fWidthHalf - fHeightHalf ), (sal_Int32)( maRect.Top() + fHeightHalf - fWidthHalf ) );
+        css::awt::Point aTopLeft( (sal_Int32)( maRect.Left() + fWidthHalf - fHeightHalf ), (sal_Int32)( maRect.Top() + fHeightHalf - fWidthHalf ) );
         const long nRotatedWidth(maRect.GetHeight());
         const long nRotatedHeight(maRect.GetWidth());
         const Size aNewSize(nRotatedWidth, nRotatedHeight);
@@ -1213,7 +1210,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             sal_Int16   nDepth, nMask, nNumberingRule[ 10 ];
             sal_uInt32  nTextOfs = pPara->nTextOfs;
             sal_uInt32  nTabs = pPara->maTabStop.getLength();
-            const ::com::sun::star::style::TabStop* pTabStop = pPara->maTabStop.getConstArray();
+            const css::style::TabStop* pTabStop = pPara->maTabStop.getConstArray();
 
             for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
             {
@@ -1284,12 +1281,12 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         sal_uInt16 nType;
                         switch ( pTabStop[ i ].Alignment )
                         {
-                            case ::com::sun::star::style::TabAlign_DECIMAL :    nType = 3; break;
-                            case ::com::sun::star::style::TabAlign_RIGHT :      nType = 2; break;
-                            case ::com::sun::star::style::TabAlign_CENTER :     nType = 1; break;
+                            case css::style::TabAlign_DECIMAL :    nType = 3; break;
+                            case css::style::TabAlign_RIGHT :      nType = 2; break;
+                            case css::style::TabAlign_CENTER :     nType = 1; break;
 
-                            case ::com::sun::star::style::TabAlign_LEFT :
-                            default:                                            nType = 0;
+                            case css::style::TabAlign_LEFT :
+                            default:                               nType = 0;
                         };
                         pRuleOut->WriteUInt16( nPosition )
                                  .WriteUInt16( nType );
@@ -1383,8 +1380,8 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 }
 
 void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
-    ::com::sun::star::presentation::AnimationEffect eAe,
-    ::com::sun::star::presentation::AnimationEffect eTe,
+    css::presentation::AnimationEffect eAe,
+    css::presentation::AnimationEffect eTe,
     sal_uInt16 nOrder )
 {
     EscherExContainer aAnimationInfo( rSt, EPP_AnimationInfo );
@@ -1401,461 +1398,461 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     sal_uInt8   nSubEffect = 0;         // build by word or letter
     sal_uInt8   nOleVerb = 0;           // Determines object's class (sound, video, other)
 
-    if ( eAe == ::com::sun::star::presentation::AnimationEffect_NONE )
+    if ( eAe == css::presentation::AnimationEffect_NONE )
     {
         nBuildType = 0;
         eAe = eTe;
     }
     switch ( eAe )
     {
-        case ::com::sun::star::presentation::AnimationEffect_NONE :
+        case css::presentation::AnimationEffect_NONE :
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LEFT :
+        case css::presentation::AnimationEffect_FADE_FROM_LEFT :
         {
             nFlyDirection = 2;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_TOP :
+        case css::presentation::AnimationEffect_FADE_FROM_TOP :
         {
             nFlyDirection = 3;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_RIGHT :
+        case css::presentation::AnimationEffect_FADE_FROM_RIGHT :
         {
             nFlyDirection = 0;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_BOTTOM :
+        case css::presentation::AnimationEffect_FADE_FROM_BOTTOM :
         {
             nFlyDirection = 1;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER :
+        case css::presentation::AnimationEffect_FADE_TO_CENTER :
         {
             nFlyDirection = 1;
             nFlyMethod = 11;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER :
+        case css::presentation::AnimationEffect_FADE_FROM_CENTER :
         {
             nFlyDirection = 0;
             nFlyMethod = 11;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LEFT :
+        case css::presentation::AnimationEffect_MOVE_FROM_LEFT :
         {
             nFlyDirection = 0;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_TOP :
+        case css::presentation::AnimationEffect_MOVE_FROM_TOP :
         {
             nFlyDirection = 1;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_RIGHT :
+        case css::presentation::AnimationEffect_MOVE_FROM_RIGHT :
         {
             nFlyDirection = 2;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_BOTTOM :
+        case css::presentation::AnimationEffect_MOVE_FROM_BOTTOM :
         {
             nFlyDirection = 3;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRIPES :
+        case css::presentation::AnimationEffect_VERTICAL_STRIPES :
         {
             nFlyDirection = 0;
             nFlyMethod = 2;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRIPES :
+        case css::presentation::AnimationEffect_HORIZONTAL_STRIPES :
         {
             nFlyDirection = 1;
             nFlyMethod = 2;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_CLOCKWISE :
+        case css::presentation::AnimationEffect_CLOCKWISE :
         {
             nFlyDirection = 1;
             nFlyMethod = 3;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_COUNTERCLOCKWISE :
+        case css::presentation::AnimationEffect_COUNTERCLOCKWISE :
         {
             nFlyDirection = 0;
             nFlyMethod = 3;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERLEFT :
+        case css::presentation::AnimationEffect_FADE_FROM_UPPERLEFT :
         {
             nFlyDirection = 7;
             nFlyMethod = 9;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERRIGHT :
+        case css::presentation::AnimationEffect_FADE_FROM_UPPERRIGHT :
         {
             nFlyDirection = 6;
             nFlyMethod = 9;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERLEFT :
+        case css::presentation::AnimationEffect_FADE_FROM_LOWERLEFT :
         {
             nFlyDirection = 5;
             nFlyMethod = 9;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERRIGHT :
+        case css::presentation::AnimationEffect_FADE_FROM_LOWERRIGHT :
         {
             nFlyDirection = 4;
             nFlyMethod = 9;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_CLOSE_VERTICAL :
+        case css::presentation::AnimationEffect_CLOSE_VERTICAL :
         {
             nFlyDirection = 1;
             nFlyMethod = 13;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_CLOSE_HORIZONTAL :
+        case css::presentation::AnimationEffect_CLOSE_HORIZONTAL :
         {
             nFlyDirection = 3;
             nFlyMethod = 13;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_OPEN_VERTICAL :
+        case css::presentation::AnimationEffect_OPEN_VERTICAL :
         {
             nFlyDirection = 0;
             nFlyMethod = 13;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL :
+        case css::presentation::AnimationEffect_OPEN_HORIZONTAL :
         {
             nFlyDirection = 2;
             nFlyMethod = 13;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_PATH :
+        case css::presentation::AnimationEffect_PATH :
         {
             nFlyDirection = 28;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_LEFT :
+        case css::presentation::AnimationEffect_MOVE_TO_LEFT :
         {
             nFlyDirection = 0;
             nFlyMethod = 1;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_TOP :
+        case css::presentation::AnimationEffect_MOVE_TO_TOP :
         {
             nFlyDirection = 0;
             nFlyMethod = 1;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_RIGHT :
+        case css::presentation::AnimationEffect_MOVE_TO_RIGHT :
         {
             nFlyDirection = 0;
             nFlyMethod = 1;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_BOTTOM :
+        case css::presentation::AnimationEffect_MOVE_TO_BOTTOM :
         {
             nFlyDirection = 0;
             nFlyMethod = 1;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_SPIRALIN_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_SPIRALIN_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_RIGHT :
+        case css::presentation::AnimationEffect_SPIRALIN_LEFT :
+        case css::presentation::AnimationEffect_SPIRALIN_RIGHT :
+        case css::presentation::AnimationEffect_SPIRALOUT_LEFT :
+        case css::presentation::AnimationEffect_SPIRALOUT_RIGHT :
         {
             nFlyDirection = 0x1c;
             nFlyMethod = 0xc;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_DISSOLVE :
+        case css::presentation::AnimationEffect_DISSOLVE :
         {
             nFlyDirection = 0;
             nFlyMethod = 5;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_LEFT :
+        case css::presentation::AnimationEffect_WAVYLINE_FROM_LEFT :
         {
             nFlyDirection = 2;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_TOP :
+        case css::presentation::AnimationEffect_WAVYLINE_FROM_TOP :
         {
             nFlyDirection = 3;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_RIGHT :
+        case css::presentation::AnimationEffect_WAVYLINE_FROM_RIGHT :
         {
             nFlyDirection = 0;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_BOTTOM :
+        case css::presentation::AnimationEffect_WAVYLINE_FROM_BOTTOM :
         {
             nFlyDirection = 1;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_RANDOM :
+        case css::presentation::AnimationEffect_RANDOM :
         {
             nFlyDirection = 0;
             nFlyMethod = 1;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_LINES :
+        case css::presentation::AnimationEffect_VERTICAL_LINES :
         {
             nFlyDirection = 1;
             nFlyMethod = 8;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_LINES :
+        case css::presentation::AnimationEffect_HORIZONTAL_LINES :
         {
             nFlyDirection = 0;
             nFlyMethod = 8;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_LEFT :
+        case css::presentation::AnimationEffect_LASER_FROM_LEFT :
         {
             nFlyDirection = 2;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_TOP :
+        case css::presentation::AnimationEffect_LASER_FROM_TOP :
         {
             nFlyDirection = 3;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_RIGHT :
+        case css::presentation::AnimationEffect_LASER_FROM_RIGHT :
         {
             nFlyDirection = 0;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_BOTTOM :
+        case css::presentation::AnimationEffect_LASER_FROM_BOTTOM :
         {
             nFlyDirection = 1;
             nFlyMethod = 10;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_UPPERLEFT :
+        case css::presentation::AnimationEffect_LASER_FROM_UPPERLEFT :
         {
             nFlyDirection = 7;
             nFlyMethod = 9;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_UPPERRIGHT :
+        case css::presentation::AnimationEffect_LASER_FROM_UPPERRIGHT :
         {
             nFlyDirection = 6;
             nFlyMethod = 9;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_LOWERLEFT :
+        case css::presentation::AnimationEffect_LASER_FROM_LOWERLEFT :
         {
             nFlyDirection = 5;
             nFlyMethod = 9;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_LOWERRIGHT :
+        case css::presentation::AnimationEffect_LASER_FROM_LOWERRIGHT :
         {
             nFlyDirection = 4;
             nFlyMethod = 9;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_APPEAR :
+        case css::presentation::AnimationEffect_APPEAR :
         break;
-        case ::com::sun::star::presentation::AnimationEffect_HIDE :
+        case css::presentation::AnimationEffect_HIDE :
         {
             nFlyDirection = 0;
             nFlyMethod = 1;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERLEFT :
+        case css::presentation::AnimationEffect_MOVE_FROM_UPPERLEFT :
         {
             nFlyDirection = 4;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT :
+        case css::presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT :
         {
             nFlyDirection = 5;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT :
+        case css::presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT :
         {
             nFlyDirection = 7;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERLEFT :
+        case css::presentation::AnimationEffect_MOVE_FROM_LOWERLEFT :
         {
             nFlyDirection = 6;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_UPPERLEFT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_UPPERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_LOWERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_LOWERLEFT :
+        case css::presentation::AnimationEffect_MOVE_TO_UPPERLEFT :
+        case css::presentation::AnimationEffect_MOVE_TO_UPPERRIGHT :
+        case css::presentation::AnimationEffect_MOVE_TO_LOWERRIGHT :
+        case css::presentation::AnimationEffect_MOVE_TO_LOWERLEFT :
             nAfterEffect |= 2;
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT :
         {
             nFlyDirection = 8;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_TOP :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_FROM_TOP :
+        case css::presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT :
         {
             nFlyDirection = 11;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERRIGHT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERRIGHT :
         {
             nFlyDirection = 10;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERLEFT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM :
+        case css::presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERLEFT :
         {
             nFlyDirection = 9;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_TOP :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_TO_LEFT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_TO_TOP :
+        case css::presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT :
+        case css::presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM :
+        case css::presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT :
             nAfterEffect |= 2;
         break;
-        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_CHECKERBOARD :
+        case css::presentation::AnimationEffect_VERTICAL_CHECKERBOARD :
         {
             nFlyDirection = 1;
             nFlyMethod = 3;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD :
+        case css::presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD :
         {
             nFlyDirection = 0;
             nFlyMethod = 3;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_ROTATE :
-        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_ROTATE :
+        case css::presentation::AnimationEffect_HORIZONTAL_ROTATE :
+        case css::presentation::AnimationEffect_VERTICAL_ROTATE :
         {
             nFlyDirection = 27;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRETCH :
-        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRETCH :
+        case css::presentation::AnimationEffect_HORIZONTAL_STRETCH :
+        case css::presentation::AnimationEffect_VERTICAL_STRETCH :
         {
             nFlyDirection = 22;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_UPPERLEFT :
+        case css::presentation::AnimationEffect_STRETCH_FROM_LEFT :
+        case css::presentation::AnimationEffect_STRETCH_FROM_UPPERLEFT :
         {
             nFlyDirection = 23;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_TOP :
-        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_UPPERRIGHT :
+        case css::presentation::AnimationEffect_STRETCH_FROM_TOP :
+        case css::presentation::AnimationEffect_STRETCH_FROM_UPPERRIGHT :
         {
             nFlyDirection = 24;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LOWERRIGHT :
+        case css::presentation::AnimationEffect_STRETCH_FROM_RIGHT :
+        case css::presentation::AnimationEffect_STRETCH_FROM_LOWERRIGHT :
         {
             nFlyDirection = 25;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_BOTTOM :
-        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LOWERLEFT :
+        case css::presentation::AnimationEffect_STRETCH_FROM_BOTTOM :
+        case css::presentation::AnimationEffect_STRETCH_FROM_LOWERLEFT :
         {
             nFlyDirection = 26;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN :
+        case css::presentation::AnimationEffect_ZOOM_IN :
         {
             nFlyDirection = 16;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_SMALL :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_SPIRAL :
+        case css::presentation::AnimationEffect_ZOOM_IN_SMALL :
+        case css::presentation::AnimationEffect_ZOOM_IN_SPIRAL :
         {
             nFlyDirection = 17;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT :
+        case css::presentation::AnimationEffect_ZOOM_OUT :
         {
             nFlyDirection = 18;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_SMALL :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_SPIRAL :
+        case css::presentation::AnimationEffect_ZOOM_OUT_SMALL :
+        case css::presentation::AnimationEffect_ZOOM_OUT_SPIRAL :
         {
             nFlyDirection = 19;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_UPPERLEFT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_TOP :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_UPPERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_LOWERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_BOTTOM :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_LOWERLEFT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_CENTER :
+        case css::presentation::AnimationEffect_ZOOM_IN_FROM_LEFT :
+        case css::presentation::AnimationEffect_ZOOM_IN_FROM_UPPERLEFT :
+        case css::presentation::AnimationEffect_ZOOM_IN_FROM_TOP :
+        case css::presentation::AnimationEffect_ZOOM_IN_FROM_UPPERRIGHT :
+        case css::presentation::AnimationEffect_ZOOM_IN_FROM_RIGHT :
+        case css::presentation::AnimationEffect_ZOOM_IN_FROM_LOWERRIGHT :
+        case css::presentation::AnimationEffect_ZOOM_IN_FROM_BOTTOM :
+        case css::presentation::AnimationEffect_ZOOM_IN_FROM_LOWERLEFT :
+        case css::presentation::AnimationEffect_ZOOM_IN_FROM_CENTER :
         {
             nFlyDirection = 16;
             nFlyMethod = 12;
         }
         break;
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_UPPERLEFT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_TOP :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_UPPERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_LOWERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_BOTTOM :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_LOWERLEFT :
-        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_CENTER :
+        case css::presentation::AnimationEffect_ZOOM_OUT_FROM_LEFT :
+        case css::presentation::AnimationEffect_ZOOM_OUT_FROM_UPPERLEFT :
+        case css::presentation::AnimationEffect_ZOOM_OUT_FROM_TOP :
+        case css::presentation::AnimationEffect_ZOOM_OUT_FROM_UPPERRIGHT :
+        case css::presentation::AnimationEffect_ZOOM_OUT_FROM_RIGHT :
+        case css::presentation::AnimationEffect_ZOOM_OUT_FROM_LOWERRIGHT :
+        case css::presentation::AnimationEffect_ZOOM_OUT_FROM_BOTTOM :
+        case css::presentation::AnimationEffect_ZOOM_OUT_FROM_LOWERLEFT :
+        case css::presentation::AnimationEffect_ZOOM_OUT_FROM_CENTER :
             nAfterEffect |= 2;
             break;
         default:
@@ -1863,7 +1860,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     }
     if ( mnDiaMode >= 1 )
         nFlags |= 4;
-    if ( eTe != ::com::sun::star::presentation::AnimationEffect_NONE )
+    if ( eTe != css::presentation::AnimationEffect_NONE )
         nBuildType = 2;
     if ( ImplGetPropertyValue( OUString( "SoundOn" ) ) )
     {
@@ -1899,7 +1896,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
        .WriteUInt16( 0 );                               // PadWord
 }
 
-void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eCa, bool bMediaClickAction )
+void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAction eCa, bool bMediaClickAction )
 {
     sal_uInt32 nSoundRef = 0;   // a reference to a sound in the sound collection, or NULL.
     sal_uInt32 nHyperLinkID = 0;// a persistent unique identifier to an external hyperlink object (only valid when action == HyperlinkAction).
@@ -1938,31 +1935,31 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         nAction = 6;
     else switch( eCa )
     {
-        case ::com::sun::star::presentation::ClickAction_STOPPRESENTATION :
+        case css::presentation::ClickAction_STOPPRESENTATION :
             nJump += 2;
             //fall-through
-        case ::com::sun::star::presentation::ClickAction_LASTPAGE :
+        case css::presentation::ClickAction_LASTPAGE :
             nJump++;
             //fall-through
-        case ::com::sun::star::presentation::ClickAction_FIRSTPAGE :
+        case css::presentation::ClickAction_FIRSTPAGE :
             nJump++;
             //fall-through
-        case ::com::sun::star::presentation::ClickAction_PREVPAGE :
+        case css::presentation::ClickAction_PREVPAGE :
             nJump++;
             //fall-through
-        case ::com::sun::star::presentation::ClickAction_NEXTPAGE :
+        case css::presentation::ClickAction_NEXTPAGE :
         {
             nJump++;
             nAction = 3;
         }
         break;
-        case ::com::sun::star::presentation::ClickAction_SOUND :
+        case css::presentation::ClickAction_SOUND :
         {
             if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
                 nSoundRef = maSoundCollection.GetId( *static_cast<OUString const *>(mAny.getValue()) );
         }
         break;
-        case ::com::sun::star::presentation::ClickAction_PROGRAM :
+        case css::presentation::ClickAction_PROGRAM :
         {
             if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
             {
@@ -1976,7 +1973,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         }
         break;
 
-        case ::com::sun::star::presentation::ClickAction_BOOKMARK :
+        case css::presentation::ClickAction_BOOKMARK :
         {
             if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
             {
@@ -2003,7 +2000,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         }
         break;
 
-        case ::com::sun::star::presentation::ClickAction_DOCUMENT :
+        case css::presentation::ClickAction_DOCUMENT :
         {
             if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
             {
@@ -2023,10 +2020,10 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         }
         break;
 
-        case ::com::sun::star::presentation::ClickAction_INVISIBLE :
-        case ::com::sun::star::presentation::ClickAction_VERB :
-        case ::com::sun::star::presentation::ClickAction_VANISH :
-        case ::com::sun::star::presentation::ClickAction_MACRO :
+        case css::presentation::ClickAction_INVISIBLE :
+        case css::presentation::ClickAction_VERB :
+        case css::presentation::ClickAction_VANISH :
+        case css::presentation::ClickAction_MACRO :
         default :
         break;
     }
@@ -2057,28 +2054,28 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
     for ( int i = 0; i < 4; i++, rSt.WriteUInt32( 0 ) ) ;
 }
 
-bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPropSet,
-                                ::com::sun::star::presentation::AnimationEffect& eEffect,
-                                ::com::sun::star::presentation::AnimationEffect& eTextEffect,
+bool PPTWriter::ImplGetEffect( const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+                                css::presentation::AnimationEffect& eEffect,
+                                css::presentation::AnimationEffect& eTextEffect,
                                 bool& bIsSound )
 {
-    ::com::sun::star::uno::Any aAny;
+    css::uno::Any aAny;
     if ( GetPropertyValue( aAny, rPropSet, OUString( "Effect" ) ) )
         aAny >>= eEffect;
     else
-        eEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
+        eEffect = css::presentation::AnimationEffect_NONE;
 
     if ( GetPropertyValue( aAny, rPropSet, OUString( "TextEffect" ) ) )
         aAny >>= eTextEffect;
     else
-        eTextEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
+        eTextEffect = css::presentation::AnimationEffect_NONE;
     if ( GetPropertyValue( aAny, rPropSet, OUString( "SoundOn" ) ) )
         aAny >>= bIsSound;
     else
         bIsSound = false;
 
-    bool bHasEffect = ( ( eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
-                        || ( eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
+    bool bHasEffect = ( ( eEffect != css::presentation::AnimationEffect_NONE )
+                        || ( eTextEffect != css::presentation::AnimationEffect_NONE )
                         || bIsSound );
     return bHasEffect;
 };
@@ -2161,7 +2158,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
     sal_uInt32  nInstance, nGroups, nShapes, nShapeCount, nPer, nLastPer, nIndices, nOlePictureId;
     sal_uInt16  nEffectCount;
-    ::com::sun::star::awt::Point   aTextRefPoint;
+    css::awt::Point   aTextRefPoint;
 
     ResetGroupTable( nShapes = mXShapes->getCount() );
 
@@ -2206,14 +2203,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
         {
             bool bIsSound;
             bool bMediaClickAction = false;
-            ::com::sun::star::presentation::AnimationEffect eAe;
-            ::com::sun::star::presentation::AnimationEffect eTe;
+            css::presentation::AnimationEffect eAe;
+            css::presentation::AnimationEffect eTe;
 
             if ( ImplGetPropertyValue( OUString( "PresentationOrder" ) ) )
                 nEffectCount = *static_cast<sal_uInt16 const *>(mAny.getValue());
 
             bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
-            ::com::sun::star::presentation::ClickAction eCa = ::com::sun::star::presentation::ClickAction_NONE;
+            css::presentation::ClickAction eCa = css::presentation::ClickAction_NONE;
             if ( ImplGetPropertyValue( OUString( "OnClick" ) ) )
                 mAny >>= eCa;
 
@@ -2223,15 +2220,15 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             bool bPolyPolygon  = mType == "drawing.PolyPolygon";
             bool bPolyLine = mType == "drawing.PolyLine";
 
-            const ::com::sun::star::awt::Size   aSize100thmm( mXShape->getSize() );
-            const ::com::sun::star::awt::Point  aPoint100thmm( mXShape->getPosition() );
+            const css::awt::Size   aSize100thmm( mXShape->getSize() );
+            const css::awt::Point  aPoint100thmm( mXShape->getPosition() );
             Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
             EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
 
             if ( bGroup )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
-                    aXIndexAccess( mXShape, ::com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference< css::container::XIndexAccess >
+                    aXIndexAccess( mXShape, css::uno::UNO_QUERY );
                 if ( EnterGroup( aXIndexAccess ) )
                 {
                     SvMemoryStream* pTmp = NULL;
@@ -2241,7 +2238,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         pTmp = new SvMemoryStream( 0x200, 0x200 );
                         ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
                     }
-                    if ( eCa != ::com::sun::star::presentation::ClickAction_NONE )
+                    if ( eCa != css::presentation::ClickAction_NONE )
                     {
                         if ( !pTmp )
                             pTmp = new SvMemoryStream( 0x200, 0x200 );
@@ -2256,22 +2253,22 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 bool bIsFontwork = false;
                 bool bIsHatching = false;
-                ::com::sun::star::uno::Any aAny;
-                ::com::sun::star::drawing::FillStyle eFS;
+                css::uno::Any aAny;
+                css::drawing::FillStyle eFS;
                 if ( GetPropertyValue( aAny, mXPropSet, OUString( "IsFontwork" ), true ) )
                     aAny >>= bIsFontwork;
                 if ( GetPropertyValue( aAny, mXPropSet, OUString( "FillStyle" ), true ) )
                 {
                     aAny >>= eFS;
-                    bIsHatching = eFS == ::com::sun::star::drawing::FillStyle_HATCH;
+                    bIsHatching = eFS == css::drawing::FillStyle_HATCH;
                 }
                 if ( bIsHatching || bIsFontwork || ( mType == "drawing.Measure" ) || ( mType == "drawing.Caption" ) )
                 {
                     if ( ImplGetPropertyValue( OUString( "BoundRect" ) ) )
                     {
-                        ::com::sun::star::awt::Rectangle aRect( *static_cast<css::awt::Rectangle const *>(mAny.getValue()) );
-                        maPosition = MapPoint( ::com::sun::star::awt::Point( aRect.X, aRect.Y ) );
-                        maSize = MapSize( ::com::sun::star::awt::Size( aRect.Width, aRect.Height ) );
+                        css::awt::Rectangle aRect( *static_cast<css::awt::Rectangle const *>(mAny.getValue()) );
+                        maPosition = MapPoint( css::awt::Point( aRect.X, aRect.Y ) );
+                        maSize = MapSize( css::awt::Size( aRect.Width, aRect.Height ) );
                         maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
                     }
                     mType = "drawing.dontknow";
@@ -2298,8 +2295,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         if ( pObj )
                         {
                             Rectangle aBound = pObj->GetCurrentBoundRect();
-                            maPosition = MapPoint( ::com::sun::star::awt::Point( aBound.Left(), aBound.Top() ) );
-                            maSize = MapSize( ::com::sun::star::awt::Size ( aBound.GetWidth(), aBound.GetHeight() ) );
+                            maPosition = MapPoint( css::awt::Point( aBound.Left(), aBound.Top() ) );
+                            maSize = MapSize( css::awt::Size ( aBound.GetWidth(), aBound.GetHeight() ) );
                             maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
                             mnAngle = 0;
                         }
@@ -2324,7 +2321,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( ImplGetPropertyValue( OUString( "CornerRadius" ) ) )
                 {
                     mAny >>= nRadius;
-                    nRadius = MapSize( ::com::sun::star::awt::Size( nRadius, 0 ) ).Width;
+                    nRadius = MapSize( css::awt::Size( nRadius, 0 ) ).Width;
                 }
                 if ( nRadius )
                 {
@@ -2349,35 +2346,35 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( mType == "drawing.Ellipse" )
             {
-                ::com::sun::star::drawing::CircleKind  eCircleKind( ::com::sun::star::drawing::CircleKind_FULL );
+                css::drawing::CircleKind  eCircleKind( css::drawing::CircleKind_FULL );
                 PolyStyle ePolyKind = POLY_CHORD;
                 if ( ImplGetPropertyValue( OUString( "CircleKind" ) ) )
                 {
                     mAny >>= eCircleKind;
                     switch ( eCircleKind )
                     {
-                        case ::com::sun::star::drawing::CircleKind_SECTION :
+                        case css::drawing::CircleKind_SECTION :
                         {
                             ePolyKind = POLY_PIE;
                         }
                         break;
-                        case ::com::sun::star::drawing::CircleKind_ARC :
+                        case css::drawing::CircleKind_ARC :
                         {
                             ePolyKind = POLY_ARC;
                         }
                         break;
 
-                        case ::com::sun::star::drawing::CircleKind_CUT :
+                        case css::drawing::CircleKind_CUT :
                         {
                             ePolyKind = POLY_CHORD;
                         }
                         break;
 
                         default:
-                            eCircleKind = ::com::sun::star::drawing::CircleKind_FULL;
+                            eCircleKind = css::drawing::CircleKind_FULL;
                     }
                 }
-                if ( eCircleKind == ::com::sun::star::drawing::CircleKind_FULL )
+                if ( eCircleKind == css::drawing::CircleKind_FULL )
                 {
                     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                     ImplCreateShape( ESCHER_ShpInst_Ellipse, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
@@ -2394,9 +2391,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if( !ImplGetPropertyValue( OUString( "CircleEndAngle" ) ) )
                         continue;
                     nEndAngle = *static_cast<sal_Int32 const *>(mAny.getValue());
-                    ::com::sun::star::awt::Point aPoint( mXShape->getPosition() );
-                    ::com::sun::star::awt::Size  aSize( mXShape->getSize() );
-                    ::com::sun::star::awt::Point aStart, aEnd, aCenter;
+                    css::awt::Point aPoint( mXShape->getPosition() );
+                    css::awt::Size  aSize( mXShape->getSize() );
+                    css::awt::Point aStart, aEnd, aCenter;
                     Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
                     aStart.X = (sal_Int32)( ( cos( (double)( nStartAngle * F_PI18000 ) ) * 100.0 ) );
                     aStart.Y = - (sal_Int32)( ( sin( (double)( nStartAngle * F_PI18000 ) ) * 100.0 ) );
@@ -2426,7 +2423,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     }
                     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                     ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );       // Flags: Connector | HasSpt
-                    ::com::sun::star::awt::Rectangle aNewRect;
+                    css::awt::Rectangle aNewRect;
                     switch ( ePolyKind )
                     {
                         case POLY_PIE :
@@ -2445,32 +2442,29 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         break;
                     }
                     maRect = MapRectangle( aNewRect );
-                    maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                    maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                    maPosition = css::awt::Point( maRect.Left(), maRect.Top() );
+                    maSize = css::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
                     if ( bNeedText && ImplGetText() )
                         aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, false );
                 }
             }
             else if ( mType == "drawing.Control" )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XControlShape  >
-                    aXControlShape( mXShape, ::com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference< css::drawing::XControlShape  > aXControlShape( mXShape, css::uno::UNO_QUERY );
                 if ( !aXControlShape.is() )
                     continue;
-                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                    aXControlModel( aXControlShape->getControl() );
+                css::uno::Reference< css::awt::XControlModel > aXControlModel( aXControlShape->getControl() );
                 if ( !aXControlModel.is() )
                     continue;
 
-                sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+                sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT;
                 try
                 {
                     // try to get the aspect when available
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        xShapeProps( mXShape, ::com::sun::star::uno::UNO_QUERY_THROW );
+                    css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
                     xShapeProps->getPropertyValue("Aspect") >>= nAspect;
                 }
-                catch( ::com::sun::star::uno::Exception& )
+                catch( css::uno::Exception& )
                 {}
 
                 mpExEmbed->WriteUInt32( 0xf | ( EPP_ExControl << 16 ) )
@@ -2502,7 +2496,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                            .WriteUInt32( 4 )    // index to the persist table
                            .WriteUInt32( 0x0012de00 );
 
-                ::com::sun::star::awt::Size     aSize;
+                css::awt::Size     aSize;
                 OUString          aControlName;
                 tools::SvRef<SotStorage>    xTemp( new SotStorage( new SvMemoryStream(), true ) );
                 if ( oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xTemp, aXControlModel, aSize, aControlName ) )
@@ -2581,13 +2575,13 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             else if ( mType == "drawing.Connector" )
             {
                 sal_uInt16 nSpType, nSpFlags;
-                ::com::sun::star::awt::Rectangle aNewRect;
+                css::awt::Rectangle aNewRect;
                 if ( !aPropOpt.CreateConnectorProperties( mXShape, aSolverContainer, aNewRect, nSpType, nSpFlags ) )
                     continue;
 
                 maRect = MapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                maPosition = css::awt::Point( maRect.Left(), maRect.Top() );
+                maSize = css::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
 
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( nSpType, nSpFlags, aSolverContainer );
@@ -2601,14 +2595,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( mType == "drawing.Line" )
             {
-                ::com::sun::star::awt::Rectangle aNewRect;
+                css::awt::Rectangle aNewRect;
                 aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_LINE, false, aNewRect );
                 maRect = MapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                maPosition = css::awt::Point( maRect.Left(), maRect.Top() );
+                maSize = css::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
                 if ( ImplGetText() )
                 {
-                    aTextRefPoint = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
+                    aTextRefPoint = css::awt::Point( maRect.Left(), maRect.Top() );
                     mnTextSize = 0;
                     bAdditionalText = true;
                     // #i119551# PPT does not support groups of polygons and text (MS patch KB2289187)
@@ -2638,11 +2632,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
-                ::com::sun::star::awt::Rectangle aNewRect;
+                css::awt::Rectangle aNewRect;
                 aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect );
                 maRect = MapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                maPosition = css::awt::Point( maRect.Left(), maRect.Top() );
+                maSize = css::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
                 aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                 mnAngle = 0;
             }
@@ -2658,11 +2652,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
-                ::com::sun::star::awt::Rectangle aNewRect;
+                css::awt::Rectangle aNewRect;
                 aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect );
                 maRect = MapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                maPosition = css::awt::Point( maRect.Left(), maRect.Top() );
+                maSize = css::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
                 aPropOpt.CreateLineProperties( mXPropSet, false );
                 mnAngle = 0;
             }
@@ -2678,11 +2672,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
-                ::com::sun::star::awt::Rectangle aNewRect;
+                css::awt::Rectangle aNewRect;
                 aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, true, aNewRect );
                 maRect = MapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                maPosition = css::awt::Point( maRect.Left(), maRect.Top() );
+                maSize = css::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
                 aPropOpt.CreateLineProperties( mXPropSet, false );
                 mnAngle = 0;
             }
@@ -2698,11 +2692,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
-                ::com::sun::star::awt::Rectangle aNewRect;
+                css::awt::Rectangle aNewRect;
                 aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, true, aNewRect );
                 maRect = MapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                maPosition = css::awt::Point( maRect.Left(), maRect.Top() );
+                maSize = css::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
                 aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                 mnAngle = 0;
             }
@@ -2722,9 +2716,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 else
                 {
-                    mXText = ::com::sun::star::uno::Reference<
-                        ::com::sun::star::text::XSimpleText >
-                            ( mXShape, ::com::sun::star::uno::UNO_QUERY );
+                    mXText = css::uno::Reference< css::text::XSimpleText >( mXShape, css::uno::UNO_QUERY );
 
                     if ( mXText.is() )
                         mnTextSize = mXText->getString().getLength();
@@ -3029,15 +3021,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                     mnExEmbed++;
 
-                    sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+                    sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT;
                     try
                     {
                         // try to get the aspect when available
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                            xShapeProps( mXShape, ::com::sun::star::uno::UNO_QUERY_THROW );
+                        css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
                         xShapeProps->getPropertyValue("Aspect") >>= nAspect;
                     }
-                    catch( ::com::sun::star::uno::Exception& )
+                    catch( css::uno::Exception& )
                     {}
 
                     mpExEmbed->WriteUInt32( 1 | ( EPP_ExOleObjAtom << 16 ) )
@@ -3128,7 +3119,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
                 if ( aPropOpt.CreateMediaGraphicProperties( mXShape ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
-                ::com::sun::star::uno::Any aAny;
+                css::uno::Any aAny;
                 if ( PropValue::GetPropertyValue( aAny, mXPropSet, OUString( "MediaURL" ), true ) )
                 {
                     OUString aMediaURL;
@@ -3200,7 +3191,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     pTmp = new SvMemoryStream( 0x200, 0x200 );
                     ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
                 }
-                if ( eCa != ::com::sun::star::presentation::ClickAction_NONE )
+                if ( eCa != css::presentation::ClickAction_NONE )
                 {
                     if ( !pTmp )
                         pTmp = new SvMemoryStream( 0x200, 0x200 );
@@ -3222,7 +3213,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 continue;
             }
 
-            bool bClientData = ( bEffect || ( eCa != ::com::sun::star::presentation::ClickAction_NONE ) ||
+            bool bClientData = ( bEffect || ( eCa != css::presentation::ClickAction_NONE ) ||
                                         nPlaceHolderAtom || nOlePictureId );
             if ( bClientData )
             {
@@ -3275,8 +3266,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     // e.g. the object effect is an AnimationEffect_FADE_FROM_LEFT and the
                     // text effect is a AnimationEffect_FADE_FROM_TOP, in PowerPoint there
                     // can be used only one effect
-                    if ( mnTextSize && ( eTe != ::com::sun::star::presentation::AnimationEffect_NONE )
-                        && ( eAe != ::com::sun::star::presentation::AnimationEffect_NONE )
+                    if ( mnTextSize && ( eTe != css::presentation::AnimationEffect_NONE )
+                        && ( eAe != css::presentation::AnimationEffect_NONE )
                             && ( eTe != eAe ) )
                     {
                         sal_uInt32 nFillStyleFlags, nLineStyleFlags;
@@ -3292,7 +3283,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         ImplWriteObjectEffect( *pClientData, eAe, eTe, ++nEffectCount );
                 }
 
-                if ( eCa != ::com::sun::star::presentation::ClickAction_NONE )
+                if ( eCa != css::presentation::ClickAction_NONE )
                 {
                     if ( !pClientData )
                         pClientData = new SvMemoryStream( 0x200, 0x200 );
@@ -3410,7 +3401,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
         {
             bAdditionalText = false;
 
-            ::com::sun::star::uno::Any  aAny;
+            css::uno::Any  aAny;
             EscherPropertyContainer     aPropOpt;
             mnAngle = ( PropValue::GetPropertyValue( aAny,
                 mXPropSet, OUString( "RotateAngle" ), true ) )
@@ -3686,7 +3677,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         mXText = uno::Reference< text::XSimpleText >( xCell, uno::UNO_QUERY_THROW );
                         mnTextSize = mXText->getString().getLength();
 
-                        ::com::sun::star::uno::Any aAny;
+                        css::uno::Any aAny;
                         if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ), true ) )
                             aAny >>= mbFontIndependentLineSpacing;
 

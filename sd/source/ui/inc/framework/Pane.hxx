@@ -36,9 +36,9 @@ namespace vcl { class Window; }
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper <
-    ::com::sun::star::drawing::framework::XPane,
-    ::com::sun::star::drawing::framework::XPane2,
-      ::com::sun::star::lang::XUnoTunnel
+      css::drawing::framework::XPane,
+      css::drawing::framework::XPane2,
+      css::lang::XUnoTunnel
     > PaneInterfaceBase;
 
 } // end of anonymous namespace.
@@ -72,15 +72,14 @@ public:
             NULL.
     */
     Pane (
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XResourceId>& rxPaneId,
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         vcl::Window* pWindow)
         throw ();
     virtual ~Pane();
 
     virtual void SAL_CALL disposing() override;
 
-    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     /** This method is typically used together with the XUnoTunnel to obtain
         a Window pointer from an XPane object.
@@ -118,40 +117,40 @@ public:
 
     //----- XResource ---------------------------------------------------------
 
-    virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
+    virtual css::uno::Reference<css::drawing::framework::XResourceId>
         SAL_CALL getResourceId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** For the typical pane it makes no sense to be displayed without a
         view.  Therefore this default implementation returns always <TRUE/>.
     */
     virtual sal_Bool SAL_CALL isAnchorOnly()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //----- XUnoTunnel --------------------------------------------------------
 
-    virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId)
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxPaneId;
+    css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
     VclPtr<vcl::Window> mpWindow;
-    ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxWindow;
-    ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas> mxCanvas;
+    css::uno::Reference<css::awt::XWindow> mxWindow;
+    css::uno::Reference<css::rendering::XCanvas> mxCanvas;
 
     /** Override this method, not getCanvas(), when you want to provide a
         different canvas.
     */
-    virtual ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas>
+    virtual css::uno::Reference<css::rendering::XCanvas>
         CreateCanvas()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     /** Throw DisposedException when the object has already been disposed or
         is currently being disposed.  Otherwise this method returns
         normally.
     */
     void ThrowIfDisposed() const
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 };
 
 } } // end of namespace sd::framework

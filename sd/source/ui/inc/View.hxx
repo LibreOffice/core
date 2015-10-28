@@ -120,15 +120,12 @@ public:
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::datatransfer::XTransferable>
+    css::uno::Reference<css::datatransfer::XTransferable>
         CreateClipboardDataObject (::sd::View*, vcl::Window& rWindow);
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::datatransfer::XTransferable>
+    css::uno::Reference<css::datatransfer::XTransferable>
         CreateDragDataObject (::sd::View*, vcl::Window& rWindow,
             const Point& rDragPos);
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::datatransfer::XTransferable>
+    css::uno::Reference<css::datatransfer::XTransferable>
         CreateSelectionDataObject (::sd::View*, vcl::Window& rWindow);
 
     void                    UpdateSelectionClipboard( bool bForceDeselect );

@@ -67,8 +67,8 @@ using ::com::sun::star::beans::XPropertySet;
 //============================ PPTWriter ==================================
 
 PPTWriter::PPTWriter( tools::SvRef<SotStorage>& rSvStorage,
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
-            ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
+            css::uno::Reference< css::frame::XModel > & rXModel,
+            css::uno::Reference< css::task::XStatusIndicator > & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
     PPTWriterBase           ( rXModel, rXStatInd ),
     mnCnvrtFlags            ( nCnvrtFlags ),
@@ -98,7 +98,7 @@ PPTWriter::PPTWriter( tools::SvRef<SotStorage>& rSvStorage,
 {
 }
 
-void PPTWriter::exportPPTPre( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData )
+void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rMediaData )
 {
     if ( !mrStg.Is() )
         return;
@@ -126,7 +126,7 @@ void PPTWriter::exportPPTPre( const std::vector< com::sun::star::beans::Property
     if ( !mpPicStrm )
         mpPicStrm = mrStg->OpenSotStream( OUString( "Pictures" ) );
 
-    for (std::vector< com::sun::star::beans::PropertyValue >::const_iterator aIter( rMediaData.begin() ), aEnd( rMediaData.end() );
+    for (std::vector< css::beans::PropertyValue >::const_iterator aIter( rMediaData.begin() ), aEnd( rMediaData.end() );
         aIter != aEnd ; ++aIter)
     {
         if ( (*aIter).Name == "BaseURI" )
@@ -187,7 +187,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
 
     mnDiaMode = 0;
     bool bVisible = true;
-    ::com::sun::star::presentation::FadeEffect eFe = ::com::sun::star::presentation::FadeEffect_NONE;
+    css::presentation::FadeEffect eFe = css::presentation::FadeEffect_NONE;
 
     if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "Visible" ) ) )
         aAny >>= bVisible;
@@ -231,7 +231,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
                                 || ( mnDiaMode == 2 )
                                 || ( bIsSound )
                                 || ( bStopSound )
-                                || ( eFe != ::com::sun::star::presentation::FadeEffect_NONE );
+                                || ( eFe != css::presentation::FadeEffect_NONE );
     if ( bNeedsSSSlideInfoAtom )
     {
         sal_uInt8   nDirection = 0;
@@ -242,7 +242,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
 
         if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "Speed" ) ) )
         {
-            ::com::sun::star::presentation::AnimationSpeed aAs;
+            css::presentation::AnimationSpeed aAs;
             aAny >>= aAs;
             nSpeed = (sal_uInt8)aAs;
         }
@@ -559,12 +559,12 @@ void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sa
     }
 }
 
-void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet )
+void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, css::uno::Reference< css::beans::XPropertySet >& rXPagePropSet )
 {
     if ( rXPagePropSet.is() )
     {
         OUString aString;
-        ::com::sun::star::uno::Any aAny;
+        css::uno::Any aAny;
         if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "HeaderText" ), true ) )
         {
             if ( aAny >>= aString )
@@ -583,13 +583,13 @@ void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, ::com::sun::star
     }
 }
 
-void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet )
+void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPropertySet >& rXPagePropSet )
 {
     if ( rXPagePropSet.is() )
     {
         bool bVal = false;
         sal_uInt32 nVal = 0;
-        ::com::sun::star::uno::Any aAny;
+        css::uno::Any aAny;
         if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "IsHeaderVisible" ), true ) )
         {
             if ( ( aAny >>= bVal ) && bVal )
@@ -731,8 +731,8 @@ bool PPTWriter::ImplCreateDocument()
             return false;
         SetCurrentStyleSheet( GetMasterIndex( NORMAL ) );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
-            aXName( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::container::XNamed >
+            aXName( mXDrawPage, css::uno::UNO_QUERY );
 
         if ( aXName.is() )
             maSlideNameList.push_back( aXName->getName() );
@@ -754,17 +754,14 @@ bool PPTWriter::ImplCreateDocument()
     }
     mpPptEscherEx->CloseContainer();        // EPP_SlideListWithText
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentationSupplier >
-        aXPresSupplier( mXModel, ::com::sun::star::uno::UNO_QUERY );            ;
+    css::uno::Reference< css::presentation::XPresentationSupplier >
+        aXPresSupplier( mXModel, css::uno::UNO_QUERY );            ;
     if ( aXPresSupplier.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation >
-            aXPresentation( aXPresSupplier->getPresentation() );
+        css::uno::Reference< css::presentation::XPresentation > aXPresentation( aXPresSupplier->getPresentation() );
         if ( aXPresentation.is() )
         {
-            mXPropSet = ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >
-                    ( aXPresentation, ::com::sun::star::uno::UNO_QUERY );
+            mXPropSet = css::uno::Reference< css::beans::XPropertySet >( aXPresentation, css::uno::UNO_QUERY );
             if ( mXPropSet.is() )
             {
                 OUString aCustomShow;
@@ -847,15 +844,13 @@ bool PPTWriter::ImplCreateDocument()
                 for ( i = nCustomShowNameLen; i < 32; i++, mpStrm->WriteUInt16( 0 ) ) ;
 
                 mpStrm->WriteUInt32( nFlags );
-                ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XCustomPresentationSupplier >
-                    aXCPSup( mXModel, ::com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference< css::presentation::XCustomPresentationSupplier > aXCPSup( mXModel, css::uno::UNO_QUERY );
                 if ( aXCPSup.is() )
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        aXCont( aXCPSup->getCustomPresentations() );
+                    css::uno::Reference< css::container::XNameContainer > aXCont( aXCPSup->getCustomPresentations() );
                     if ( aXCont.is() )
                     {
-                        ::com::sun::star::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
+                        css::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
                         const OUString* pUString = aNameSeq.getArray();
                         sal_uInt32 nCount = aNameSeq.getLength();
                         if ( nCount )
@@ -878,7 +873,7 @@ bool PPTWriter::ImplCreateDocument()
                                     if ( mAny.getValue() )
                                     {
 
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > aXIC;
+                                        css::uno::Reference< css::container::XIndexContainer > aXIC;
                                         if ( mAny >>= aXIC )
                                         {
                                             mpPptEscherEx->BeginAtom();
@@ -889,13 +884,10 @@ bool PPTWriter::ImplCreateDocument()
                                                 mAny = aXIC->getByIndex( j );
                                                 if ( mAny.getValue() )
                                                 {
-                                                    ::com::sun::star::uno::Reference<
-                                                        ::com::sun::star::drawing::XDrawPage > aXDrawPage;
+                                                    css::uno::Reference< css::drawing::XDrawPage > aXDrawPage;
                                                     if ( mAny >>= aXDrawPage )
                                                     {
-                                                        ::com::sun::star::uno::Reference<
-                                                            ::com::sun::star::container::XNamed >
-                                                            aXName( aXDrawPage, ::com::sun::star::uno::UNO_QUERY );
+                                                        css::uno::Reference< css::container::XNamed > aXName( aXDrawPage, css::uno::UNO_QUERY );
                                                         if ( aXName.is() )
                                                         {
                                                             OUString aSlideName( aXName->getName() );
@@ -1178,7 +1170,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->CloseContainer();    // EPP_Notes
 };
 
-void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet )
+void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertySet > & rXPropSet )
 {
     //************************ ******
     //** DEFAULT BACKGROUND SHAPE **
@@ -1194,13 +1186,13 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
 
     EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
     aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
-    ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
+    css::drawing::FillStyle aFS( css::drawing::FillStyle_NONE );
     if ( ImplGetPropertyValue( rXPropSet, OUString( "FillStyle" ) ) )
         mAny >>= aFS;
 
     switch( aFS )
     {
-        case ::com::sun::star::drawing::FillStyle_GRADIENT :
+        case css::drawing::FillStyle_GRADIENT :
         {
             aPropOpt.CreateGradientProperties( rXPropSet );
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x1f001e );
@@ -1209,15 +1201,15 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
         }
         break;
 
-        case ::com::sun::star::drawing::FillStyle_BITMAP :
+        case css::drawing::FillStyle_BITMAP :
             aPropOpt.CreateGraphicProperties( rXPropSet, OUString( "FillBitmapURL" ), true );
         break;
 
-        case ::com::sun::star::drawing::FillStyle_HATCH :
+        case css::drawing::FillStyle_HATCH :
             aPropOpt.CreateGraphicProperties( rXPropSet, OUString( "FillHatch" ), true );
         break;
 
-        case ::com::sun::star::drawing::FillStyle_SOLID :
+        case css::drawing::FillStyle_SOLID :
         {
             if ( ImplGetPropertyValue( rXPropSet, OUString( "FillColor" ) ) )
             {
@@ -1225,7 +1217,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
                 nFillBackColor = nFillColor ^ 0xffffff;
             }
         }   // PASSTHROUGH INTENDED
-        case ::com::sun::star::drawing::FillStyle_NONE :
+        case css::drawing::FillStyle_NONE :
         default:
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
         break;
@@ -1310,7 +1302,7 @@ void PPTWriter::ImplWriteOLE( )
                 {
                     OUString aName;
                     //Initialize the graphic size which will be used on export
-                    ::com::sun::star::awt::Size  aSize( pPtr->xShape->getSize() );
+                    css::awt::Size  aSize( pPtr->xShape->getSize() );
                     tools::SvRef<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
                     bool bOk = oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xDest, pPtr->xControlModel, aSize, aName );
                     if ( bOk )
@@ -1448,10 +1440,12 @@ bool PPTWriter::ImplWriteAtomEnding()
 
 // - exported function -
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, tools::SvRef<SotStorage>& rSvStorage,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
-                            SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< css::beans::PropertyValue >& rMediaData,
+                    tools::SvRef<SotStorage>& rSvStorage,
+                    css::uno::Reference< css::frame::XModel > & rXModel,
+                    css::uno::Reference< css::task::XStatusIndicator > & rXStatInd,
+                    SvMemoryStream* pVBA,
+                    sal_uInt32 nCnvrtFlags )
 {
     PPTWriter* pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
     pPPTWriter->exportPPT(rMediaData);

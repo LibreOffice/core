@@ -483,7 +483,7 @@ SfxItemSet* SdPage::getOrCreateItems()
     return mpItems;
 }
 
-bool SdPage::setAlienAttributes( const com::sun::star::uno::Any& rAttributes )
+bool SdPage::setAlienAttributes( const css::uno::Any& rAttributes )
 {
     SfxItemSet* pSet = getOrCreateItems();
 
@@ -497,7 +497,7 @@ bool SdPage::setAlienAttributes( const com::sun::star::uno::Any& rAttributes )
     return false;
 }
 
-void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
+void SdPage::getAlienAttributes( css::uno::Any& rAttributes )
 {
     const SfxPoolItem* pItem;
 
@@ -583,7 +583,7 @@ sal_Int32 SdPage::getHash() const
     return stringify().hashCode();
 }
 
-void SdPage::createAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
+void SdPage::createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation )
 {
     sd::createAnnotation( xAnnotation, this );
 }

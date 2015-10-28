@@ -1234,18 +1234,18 @@ void SdDrawDocument::SetTextDefaults() const
     pItemPool->SetPoolDefaultItem( aNumBulletItem );
 }
 
-::com::sun::star::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
+css::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
 {
     const SfxPoolItem*                  pItem = ( pItemPool ? pItemPool->GetPoolDefaultItem( EE_PARA_WRITINGDIR ) : NULL );
-    ::com::sun::star::text::WritingMode eRet = ::com::sun::star::text::WritingMode_LR_TB;
+    css::text::WritingMode eRet = css::text::WritingMode_LR_TB;
 
     if( pItem )
     {
         switch( static_cast<const SvxFrameDirectionItem&>( *pItem ).GetValue() )
         {
-            case( FRMDIR_HORI_LEFT_TOP ): eRet = ::com::sun::star::text::WritingMode_LR_TB; break;
-            case( FRMDIR_HORI_RIGHT_TOP ): eRet = ::com::sun::star::text::WritingMode_RL_TB; break;
-            case( FRMDIR_VERT_TOP_RIGHT ): eRet = ::com::sun::star::text::WritingMode_TB_RL; break;
+            case( FRMDIR_HORI_LEFT_TOP ): eRet = css::text::WritingMode_LR_TB; break;
+            case( FRMDIR_HORI_RIGHT_TOP ): eRet = css::text::WritingMode_RL_TB; break;
+            case( FRMDIR_VERT_TOP_RIGHT ): eRet = css::text::WritingMode_TB_RL; break;
 
             default:
                 OSL_FAIL( "Frame direction not supported yet" );
@@ -1256,16 +1256,16 @@ void SdDrawDocument::SetTextDefaults() const
     return eRet;
 }
 
-void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode eMode )
+void SdDrawDocument::SetDefaultWritingMode(css::text::WritingMode eMode )
 {
     if( pItemPool )
     {
         SvxFrameDirection nVal;
         switch( eMode )
         {
-        case ::com::sun::star::text::WritingMode_LR_TB: nVal = FRMDIR_HORI_LEFT_TOP; break;
-        case ::com::sun::star::text::WritingMode_RL_TB: nVal = FRMDIR_HORI_RIGHT_TOP; break;
-        case ::com::sun::star::text::WritingMode_TB_RL: nVal = FRMDIR_VERT_TOP_RIGHT; break;
+        case css::text::WritingMode_LR_TB: nVal = FRMDIR_HORI_LEFT_TOP; break;
+        case css::text::WritingMode_RL_TB: nVal = FRMDIR_HORI_RIGHT_TOP; break;
+        case css::text::WritingMode_TB_RL: nVal = FRMDIR_VERT_TOP_RIGHT; break;
         default:
             OSL_FAIL( "Frame direction not supported yet" );
             return;
@@ -1276,7 +1276,7 @@ void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode e
 
         SvxAdjustItem aAdjust( SVX_ADJUST_LEFT, EE_PARA_JUST );
 
-        if( eMode == ::com::sun::star::text::WritingMode_RL_TB )
+        if( eMode == css::text::WritingMode_RL_TB )
             aAdjust.SetEnumValue( SVX_ADJUST_RIGHT );
 
         pItemPool->SetPoolDefaultItem( aAdjust );

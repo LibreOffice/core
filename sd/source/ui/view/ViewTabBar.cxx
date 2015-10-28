@@ -265,35 +265,35 @@ void SAL_CALL ViewTabBar::disposing(
 void SAL_CALL ViewTabBar::addTabBarButtonAfter (
     const TabBarButton& rButton,
     const TabBarButton& rAnchor)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
     AddTabBarButton(rButton, rAnchor);
 }
 
 void SAL_CALL ViewTabBar::appendTabBarButton (const TabBarButton& rButton)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
     AddTabBarButton(rButton);
 }
 
 void SAL_CALL ViewTabBar::removeTabBarButton (const TabBarButton& rButton)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
     RemoveTabBarButton(rButton);
 }
 
 sal_Bool SAL_CALL ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
     return HasTabBarButton(rButton);
 }
 
 Sequence<TabBarButton> SAL_CALL ViewTabBar::getTabBarButtons()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
     return GetTabBarButtons();
@@ -414,8 +414,8 @@ int ViewTabBar::GetHeight()
 }
 
 void ViewTabBar::AddTabBarButton (
-    const ::com::sun::star::drawing::framework::TabBarButton& rButton,
-    const ::com::sun::star::drawing::framework::TabBarButton& rAnchor)
+    const css::drawing::framework::TabBarButton& rButton,
+    const css::drawing::framework::TabBarButton& rAnchor)
 {
     sal_uInt32 nIndex;
 
@@ -441,13 +441,13 @@ void ViewTabBar::AddTabBarButton (
 }
 
 void ViewTabBar::AddTabBarButton (
-    const ::com::sun::star::drawing::framework::TabBarButton& rButton)
+    const css::drawing::framework::TabBarButton& rButton)
 {
     AddTabBarButton(rButton, maTabBarButtons.size());
 }
 
 void ViewTabBar::AddTabBarButton (
-    const ::com::sun::star::drawing::framework::TabBarButton& rButton,
+    const css::drawing::framework::TabBarButton& rButton,
     sal_Int32 nPosition)
 {
     if (nPosition>=0
@@ -463,7 +463,7 @@ void ViewTabBar::AddTabBarButton (
 }
 
 void ViewTabBar::RemoveTabBarButton (
-    const ::com::sun::star::drawing::framework::TabBarButton& rButton)
+    const css::drawing::framework::TabBarButton& rButton)
 {
     sal_uInt16 nIndex;
     for (nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
@@ -479,7 +479,7 @@ void ViewTabBar::RemoveTabBarButton (
 }
 
 bool ViewTabBar::HasTabBarButton (
-    const ::com::sun::star::drawing::framework::TabBarButton& rButton)
+    const css::drawing::framework::TabBarButton& rButton)
 {
     bool bResult (false);
 
@@ -495,11 +495,11 @@ bool ViewTabBar::HasTabBarButton (
     return bResult;
 }
 
-::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
+css::uno::Sequence<css::drawing::framework::TabBarButton>
     ViewTabBar::GetTabBarButtons()
 {
     sal_uInt32 nCount (maTabBarButtons.size());
-    ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
+    css::uno::Sequence<css::drawing::framework::TabBarButton>
           aList (nCount);
 
     for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)

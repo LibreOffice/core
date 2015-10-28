@@ -55,7 +55,7 @@ namespace {
 //----- CallbackCaller --------------------------------------------------------
 
 typedef ::cppu::WeakComponentImplHelper <
-    ::com::sun::star::drawing::framework::XConfigurationChangeListener
+    css::drawing::framework::XConfigurationChangeListener
     > CallbackCallerInterfaceBase;
 
 /** A CallbackCaller registers as listener at an XConfigurationController
@@ -112,7 +112,7 @@ private:
 //----- LifetimeController ----------------------------------------------------
 
 typedef ::cppu::WeakComponentImplHelper <
-    ::com::sun::star::lang::XEventListener
+    css::lang::XEventListener
     > LifetimeControllerInterfaceBase;
 
 /** This class helps controlling the lifetime of the
@@ -287,7 +287,7 @@ public:
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper <
-        ::com::sun::star::lang::XEventListener
+        css::lang::XEventListener
         > FrameworkHelperDisposeListenerInterfaceBase;
 }
 

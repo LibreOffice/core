@@ -57,7 +57,7 @@ public:
     virtual const SdrPage* GetPage (CacheKey aKey) override;
     virtual std::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible) override;
     virtual sal_Int32 GetPriority (CacheKey aKey) override;
-    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel() override;
+    virtual css::uno::Reference<css::uno::XInterface> GetModel() override;
 
 private:
     Reference<container::XIndexAccess> mxSlides;
@@ -188,7 +188,7 @@ void SAL_CALL PresenterPreviewCache::resume()
 }
 
 void PresenterPreviewCache::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -376,9 +376,9 @@ void PresenterPreviewCache::PresenterCacheContext::CallListeners (
 } } // end of namespace ::sd::presenter
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation(::com::sun::star::uno::XComponentContext* context,
-                                                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation(css::uno::XComponentContext* context,
+                                                                css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new sd::presenter::PresenterPreviewCache(context));
 }

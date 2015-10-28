@@ -2681,11 +2681,11 @@ uno::Reference< uno::XInterface > SdPage::createUnoPage()
 }
 
 /** returns the SdPage implementation for the given XDrawPage or 0 if not available */
-SdPage* SdPage::getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage )
+SdPage* SdPage::getImplementation( const css::uno::Reference< css::drawing::XDrawPage >& xPage )
 {
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUnoTunnel( xPage, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::lang::XUnoTunnel > xUnoTunnel( xPage, css::uno::UNO_QUERY );
         if( xUnoTunnel.is() )
         {
             SvxDrawPage* pUnoPage = reinterpret_cast<SvxDrawPage*>(sal::static_int_cast<sal_uIntPtr>(xUnoTunnel->getSomething( SvxDrawPage::getUnoTunnelId()) ) );
@@ -2693,7 +2693,7 @@ SdPage* SdPage::getImplementation( const ::com::sun::star::uno::Reference< ::com
                 return static_cast< SdPage* >( pUnoPage->GetSdrPage() );
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         OSL_FAIL("sd::SdPage::getImplementation(), exception caught!" );
     }
@@ -3059,7 +3059,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 
         Point aPos( nX, nY );
 
-        const bool bRTL = rModel.GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
+        const bool bRTL = rModel.GetDefaultWritingMode() == css::text::WritingMode_RL_TB;
 
         const long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
         const long nOffsetY = aPartArea.Height() + nGapH;

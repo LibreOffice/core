@@ -177,7 +177,7 @@ OUString TextApiObject::GetText()
     return mpSource->GetText();
 }
 
-TextApiObject* TextApiObject::getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& xText )
+TextApiObject* TextApiObject::getImplementation( const css::uno::Reference< css::text::XText >& xText )
 {
     TextApiObject* pImpl = dynamic_cast< TextApiObject* >( xText.get() );
 

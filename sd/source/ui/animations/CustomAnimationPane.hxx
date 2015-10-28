@@ -77,7 +77,7 @@ public:
     void onChangeSpeed();
 
     // methods
-    void preview( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode );
+    void preview( const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
     void remove( CustomAnimationEffectPtr& pEffect );
 
     // Control
@@ -107,13 +107,13 @@ private:
     void moveSelection( bool bUp );
     void onPreview( bool bForcePreview );
 
-    void createPath( PathKind eKind, std::vector< ::com::sun::star::uno::Any >& rTargets, double fDuration );
+    void createPath( PathKind eKind, std::vector< css::uno::Any >& rTargets, double fDuration );
 
     STLPropertySet* createSelectionSet();
     void changeSelection( STLPropertySet* pResultSet, STLPropertySet* pOldSet );
 
-    static ::com::sun::star::uno::Any getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect );
-    bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const ::com::sun::star::uno::Any& rValue );
+    static css::uno::Any getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect );
+    bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const css::uno::Any& rValue );
     void UpdateLook();
 
     DECL_LINK_TYPED( implControlListBoxHdl, ListBox&, void );
@@ -153,14 +153,14 @@ private:
 
     Size        maMinSize;
 
-    EffectSequence maListSelection;
-    ::com::sun::star::uno::Any maViewSelection;
+    EffectSequence  maListSelection;
+    css::uno::Any   maViewSelection;
 
     MainSequencePtr mpMainSequence;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > mxCurrentPage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView > mxView;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
+    css::uno::Reference< css::drawing::XDrawPage > mxCurrentPage;
+    css::uno::Reference< css::drawing::XDrawView > mxView;
+    css::uno::Reference< css::frame::XModel > mxModel;
 
     /** The mpCustomAnimationPresets is initialized either on demand or
         after a short time after the construction of a new object of this

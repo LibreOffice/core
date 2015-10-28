@@ -49,10 +49,10 @@ class SlideSorter;
 namespace sd { namespace slidesorter { namespace controller {
 
 typedef cppu::WeakComponentImplHelper<
-    ::com::sun::star::document::XEventListener,
-    ::com::sun::star::beans::XPropertyChangeListener,
-    ::com::sun::star::accessibility::XAccessibleEventListener,
-    ::com::sun::star::frame::XFrameActionListener
+    css::document::XEventListener,
+    css::beans::XPropertyChangeListener,
+    css::accessibility::XAccessibleEventListener,
+    css::frame::XFrameActionListener
     > ListenerInterfaceBase;
 
 class SlideSorterController;
@@ -96,27 +96,27 @@ public:
 
     //=====  lang::XEventListener  ============================================
     virtual void SAL_CALL
-        disposing (const ::com::sun::star::lang::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  document::XEventListener  ========================================
     virtual void SAL_CALL
         notifyEvent (
-            const ::com::sun::star::document::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::document::EventObject& rEventObject)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  beans::XPropertySetListener  =====================================
     virtual void SAL_CALL
         propertyChange (
-            const com::sun::star::beans::PropertyChangeEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::beans::PropertyChangeEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //===== accessibility::XAccessibleEventListener  ==========================
     virtual void SAL_CALL
         notifyEvent (
-            const ::com::sun::star::accessibility::AccessibleEventObject&
+            const css::accessibility::AccessibleEventObject&
             rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //===== frame::XFrameActionListener  ======================================
     /** For certain actions the listener connects to a new controller of the
@@ -124,8 +124,8 @@ public:
         in the center pane is replaced by another view shell.
     */
     virtual void SAL_CALL
-        frameAction (const ::com::sun::star::frame::FrameActionEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        frameAction (const css::frame::FrameActionEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL disposing() override;
 
@@ -144,8 +144,8 @@ private:
     bool mbListeningToFrame;
     bool mbIsMainViewChangePending;
 
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XController> mxControllerWeak;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame> mxFrameWeak;
+    css::uno::WeakReference< css::frame::XController> mxControllerWeak;
+    css::uno::WeakReference< css::frame::XFrame> mxFrameWeak;
 
     /** This object is used to lock the model between some
         events.  It is references counted in order to cope with events that
@@ -174,7 +174,7 @@ private:
         disposed.
     */
     void ThrowIfDisposed()
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 
     DECL_LINK_TYPED(EventMultiplexerCallback, tools::EventMultiplexerEvent&, void);
 };

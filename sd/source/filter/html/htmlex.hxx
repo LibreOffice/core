@@ -165,7 +165,7 @@ class HtmlExport
     bool    CreateImageNumberFile();
 
     bool    checkForExistingFiles();
-    bool    checkFileExists( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess, OUString const & aFileName );
+    bool    checkFileExists( css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess, OUString const & aFileName );
 
     OUString getDocumentTitle();
     bool    SavePresentation();
@@ -204,7 +204,7 @@ class HtmlExport
     /// Output document metadata.
     OUString DocumentMetadata() const;
 
-    void InitExportParameters( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams);
+    void InitExportParameters( const css::uno::Sequence< css::beans::PropertyValue >& rParams);
     void ExportHtml();
     void ExportKiosk();
     void ExportWebCast();

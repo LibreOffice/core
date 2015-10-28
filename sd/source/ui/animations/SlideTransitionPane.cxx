@@ -890,7 +890,7 @@ void SlideTransitionPane::playCurrentEffect()
     if( mxView.is() )
     {
 
-        Reference< ::com::sun::star::animations::XAnimationNode > xNode;
+        Reference< css::animations::XAnimationNode > xNode;
         SlideShow::StartPreview( mrBase, mxView->getCurrentPage(), xNode );
     }
 }

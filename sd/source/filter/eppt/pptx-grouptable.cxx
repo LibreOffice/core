@@ -52,7 +52,7 @@ void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
     }
 }
 
-bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
+bool GroupTable::EnterGroup( css::uno::Reference< css::container::XIndexAccess >& rXIndexAccessRef )
 {
     bool bRet = false;
     if ( rXIndexAccessRef.is() )

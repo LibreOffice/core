@@ -82,7 +82,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
     sal_Int8 nType( pGalleryItem->GetType() );
     // insert graphic
-    if (nType == com::sun::star::gallery::GalleryItemType::GRAPHIC)
+    if (nType == css::gallery::GalleryItemType::GRAPHIC)
     {
         Graphic aGraphic( pGalleryItem->GetGraphic() );
 
@@ -174,7 +174,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
         }
     }
     // insert sound
-    else if( nType == com::sun::star::gallery::GalleryItemType::MEDIA )
+    else if( nType == css::gallery::GalleryItemType::MEDIA )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
         GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON, &aMediaURLItem, 0L );

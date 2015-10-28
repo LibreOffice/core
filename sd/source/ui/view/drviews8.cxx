@@ -45,16 +45,16 @@
 
 namespace sd {
 
-void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
+void DrawViewShell::ScannerEvent( const css::lang::EventObject& )
 {
     if( mxScannerManager.is() )
     {
-        const ::com::sun::star::scanner::ScannerContext aContext( mxScannerManager->getAvailableScanners().getConstArray()[ 0 ] );
-        const ::com::sun::star::scanner::ScanError      eError = mxScannerManager->getError( aContext );
+        const css::scanner::ScannerContext aContext( mxScannerManager->getAvailableScanners().getConstArray()[ 0 ] );
+        const css::scanner::ScanError      eError = mxScannerManager->getError( aContext );
 
-        if( ::com::sun::star::scanner::ScanError_ScanErrorNone == eError )
+        if( css::scanner::ScanError_ScanErrorNone == eError )
         {
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBitmap( mxScannerManager->getBitmap( aContext ) );
+            const css::uno::Reference< css::awt::XBitmap > xBitmap( mxScannerManager->getBitmap( aContext ) );
 
             if( xBitmap.is() )
             {

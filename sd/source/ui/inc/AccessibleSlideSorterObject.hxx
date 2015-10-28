@@ -40,11 +40,11 @@ class SlideSorter;
 namespace accessibility {
 
 typedef ::cppu::WeakComponentImplHelper<
-    ::com::sun::star::accessibility::XAccessible,
-    ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
-    ::com::sun::star::accessibility::XAccessibleContext,
-    ::com::sun::star::accessibility::XAccessibleComponent,
-    ::com::sun::star::lang::XServiceInfo > AccessibleSlideSorterObjectBase;
+    css::accessibility::XAccessible,
+    css::accessibility::XAccessibleEventBroadcaster,
+    css::accessibility::XAccessibleContext,
+    css::accessibility::XAccessibleComponent,
+    css::lang::XServiceInfo > AccessibleSlideSorterObjectBase;
 
 /** This class makes page objects of the slide sorter accessible.
 */
@@ -63,8 +63,7 @@ public:
             The number of the page in the range [0,nPageCount).
     */
     AccessibleSlideSorterObject(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
+        const css::uno::Reference<css::accessibility::XAccessible >& rxParent,
         ::sd::slidesorter::SlideSorter& rSlideSorter,
         sal_uInt16 nPageNumber);
     virtual ~AccessibleSlideSorterObject();
@@ -79,104 +78,101 @@ public:
 
     void FireAccessibleEvent (
         short nEventId,
-        const ::com::sun::star::uno::Any& rOldValue,
-        const ::com::sun::star::uno::Any& rNewValue);
+        const css::uno::Any& rOldValue,
+        const css::uno::Any& rNewValue);
 
     virtual void SAL_CALL disposing() override;
 
     //===== XAccessible =======================================================
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext > SAL_CALL
         getAccessibleContext()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //===== XAccessibleEventBroadcaster =======================================
     virtual void SAL_CALL
         addAccessibleEventListener(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& rxListener)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
         removeAccessibleEventListener(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& rxListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        getAccessibleChildCount() throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleParent()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int16 SAL_CALL
         getAccessibleRole()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL
         getAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual OUString SAL_CALL
         getAccessibleName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::lang::Locale SAL_CALL
+    virtual css::lang::Locale SAL_CALL
         getLocale()
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::accessibility::IllegalAccessibleComponentStateException, std::exception) override;
+        throw (css::uno::RuntimeException,
+            css::accessibility::IllegalAccessibleComponentStateException, std::exception) override;
 
     //=====  XAccessibleComponent  ================================================
 
     virtual sal_Bool SAL_CALL containsPoint (
-        const ::com::sun::star::awt::Point& aPoint)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::awt::Point& aPoint)
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint (
-            const ::com::sun::star::awt::Point& aPoint)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::awt::Point& aPoint)
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Rectangle SAL_CALL getBounds()
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getLocation()
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getLocationOnScreen()
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Size SAL_CALL getSize()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL grabFocus()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int32 SAL_CALL getForeground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int32 SAL_CALL getBackground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  XServiceInfo  ====================================================
 
@@ -184,23 +180,22 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const OUString& sServiceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** Returns a list of all supported services.
     */
-    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
+    virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> mxParent;
+    css::uno::Reference<css::accessibility::XAccessible> mxParent;
     sal_uInt16 mnPageNumber;
     ::sd::slidesorter::SlideSorter& mrSlideSorter;
     sal_uInt32 mnClientId;
@@ -211,7 +206,7 @@ private:
         foul deed.
     */
     void ThrowIfDisposed()
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 
     /** Check whether or not the object has been disposed (or is in the
         state of being disposed).

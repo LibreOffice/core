@@ -22,7 +22,7 @@
 
 namespace sd
 {
-inline void bool2any( bool bBool, ::com::sun::star::uno::Any& rAny )
+inline void bool2any( bool bBool, css::uno::Any& rAny )
 {
     rAny.setValue( &bBool, cppu::UnoType<bool>::get() );
 }

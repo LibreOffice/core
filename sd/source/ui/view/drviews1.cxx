@@ -241,7 +241,7 @@ void DrawViewShell::SelectionHasChanged()
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         OSL_FAIL(
             OString(OString("sd::DrawViewShell::SelectionHasChanged(), "

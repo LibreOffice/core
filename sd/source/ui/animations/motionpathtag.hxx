@@ -35,7 +35,7 @@ class View;
 class CustomAnimationPane;
 
 /// Base class for all functions.
-class MotionPathTag : public SmartTag, public IPolyPolygonEditorController, public SfxListener, public ::com::sun::star::util::XChangesListener
+class MotionPathTag : public SmartTag, public IPolyPolygonEditorController, public SfxListener, public css::util::XChangesListener
 {
 public:
     MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, const CustomAnimationEffectPtr& pEffect );
@@ -85,9 +85,9 @@ public:
     bool OnMove( const KeyEvent& rKEvt );
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire(  ) throw () override;
     virtual void SAL_CALL release(  ) throw () override;
 
@@ -104,9 +104,9 @@ private:
     CustomAnimationPane& mrPane;
     CustomAnimationEffectPtr mpEffect;
     ::basegfx::B2DPolyPolygon mxPolyPoly;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxOrigin;
+    css::uno::Reference< css::drawing::XShape > mxOrigin;
     SdrPathObj* mpPathObj;
-    ::com::sun::star::awt::Point maOriginPos;
+    css::awt::Point maOriginPos;
     SdrMark* mpMark;
     OUString msLastPath;
     bool mbInUpdatePath;

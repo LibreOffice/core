@@ -140,10 +140,10 @@ IMPL_LINK_NOARG_TYPED(CacheCompactor, CompactionCallback, Timer *, void)
     {
         Run();
     }
-    catch (const ::com::sun::star::uno::RuntimeException&)
+    catch (const css::uno::RuntimeException&)
     {
     }
-    catch (const ::com::sun::star::uno::Exception&)
+    catch (const css::uno::Exception&)
     {
     }
 

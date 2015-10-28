@@ -73,7 +73,7 @@ void SlideShowViewListeners::removeListener( const Reference< util::XModifyListe
         maListeners.erase( aIter );
 }
 
-bool SlideShowViewListeners::notify( const lang::EventObject& _rEvent ) throw( com::sun::star::uno::Exception )
+bool SlideShowViewListeners::notify( const lang::EventObject& _rEvent ) throw( css::uno::Exception )
 {
     ::osl::MutexGuard aGuard( mrMutex );
 
@@ -290,7 +290,7 @@ Reference< rendering::XSpriteCanvas > SAL_CALL SlideShowView::getCanvas(  ) thro
     return mpCanvas.get() ? mpCanvas->getUNOSpriteCanvas() : Reference< rendering::XSpriteCanvas >();
 }
 
-void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowView::clear() throw (css::uno::RuntimeException, std::exception)
 {
     // paint background in black
     ::osl::MutexGuard aGuard( m_aMutex );

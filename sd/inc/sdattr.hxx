@@ -87,7 +87,7 @@ class DiaEffectItem : public SfxEnumItem
 {
 public:
             TYPEINFO_OVERRIDE();
-            DiaEffectItem( ::com::sun::star::presentation::FadeEffect eFade = com::sun::star::presentation::FadeEffect_NONE );
+            DiaEffectItem( css::presentation::FadeEffect eFade = css::presentation::FadeEffect_NONE );
             DiaEffectItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const override;

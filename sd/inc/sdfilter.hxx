@@ -44,14 +44,14 @@ public:
     virtual bool            Export() = 0;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             mxModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >    mxStatusIndicator;
+    css::uno::Reference< css::frame::XModel >             mxModel;
+    css::uno::Reference< css::task::XStatusIndicator >    mxStatusIndicator;
 
     SfxMedium&                  mrMedium;
     ::sd::DrawDocShell&         mrDocShell;
     SdDrawDocument&             mrDocument;
-    bool                    mbIsDraw : 1;
-    bool                    mbShowProgress : 1;
+    bool                        mbIsDraw : 1;
+    bool                        mbShowProgress : 1;
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module*       OpenLibrary( const OUString& rLibraryName );
 #endif

@@ -48,14 +48,14 @@ AccessiblePresentationShape::~AccessiblePresentationShape()
 
 OUString SAL_CALL
     AccessiblePresentationShape::getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessiblePresentationShape");
 }
 
 /// Set this object's name if is different to the current name.
 OUString AccessiblePresentationShape::CreateAccessibleBaseName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     OUString sName;
 
@@ -104,7 +104,7 @@ OUString AccessiblePresentationShape::CreateAccessibleBaseName()
 
 OUString
     AccessiblePresentationShape::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     //    return createAccessibleName ();
     DescriptionGenerator aDG (mxShape);

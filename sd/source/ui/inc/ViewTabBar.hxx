@@ -41,10 +41,10 @@ namespace sd {
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper <
-        ::com::sun::star::drawing::framework::XToolBar,
-        ::com::sun::star::drawing::framework::XTabBar,
-        ::com::sun::star::drawing::framework::XConfigurationChangeListener,
-        ::com::sun::star::lang::XUnoTunnel
+        css::drawing::framework::XToolBar,
+        css::drawing::framework::XTabBar,
+        css::drawing::framework::XConfigurationChangeListener,
+        css::lang::XUnoTunnel
         > ViewTabBarInterfaceBase;
 }
 
@@ -58,10 +58,8 @@ class ViewTabBar
 {
 public:
     ViewTabBar (
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XResourceId>& rxViewTabBarId,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XController>& rxController);
+        const css::uno::Reference< css::drawing::framework::XResourceId>& rxViewTabBarId,
+        const css::uno::Reference< css::frame::XController>& rxController);
     virtual ~ViewTabBar();
 
     virtual void SAL_CALL disposing() override;
@@ -74,55 +72,55 @@ public:
 
     virtual void SAL_CALL
         notifyConfigurationChange (
-            const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing(
-        const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //----- XTabBar -----------------------------------------------------------
 
     virtual void
         SAL_CALL addTabBarButtonAfter (
-            const ::com::sun::star::drawing::framework::TabBarButton& rButton,
-            const ::com::sun::star::drawing::framework::TabBarButton& rAnchor)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::TabBarButton& rButton,
+            const css::drawing::framework::TabBarButton& rAnchor)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void
         SAL_CALL appendTabBarButton (
-            const ::com::sun::star::drawing::framework::TabBarButton& rButton)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::TabBarButton& rButton)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void
         SAL_CALL removeTabBarButton (
-            const ::com::sun::star::drawing::framework::TabBarButton& rButton)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::TabBarButton& rButton)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool
         SAL_CALL hasTabBarButton (
-            const ::com::sun::star::drawing::framework::TabBarButton& rButton)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::TabBarButton& rButton)
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
+    virtual css::uno::Sequence<css::drawing::framework::TabBarButton>
         SAL_CALL getTabBarButtons()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //----- XResource ---------------------------------------------------------
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId> SAL_CALL getResourceId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<
+        css::drawing::framework::XResourceId> SAL_CALL getResourceId()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL isAnchorOnly()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //----- XUnoTunnel --------------------------------------------------------
 
-    virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** The returned value is calculated as the difference between the
         total height of the control and the heigh of its first tab page.
@@ -136,33 +134,30 @@ public:
     int GetHeight();
 
     void AddTabBarButton (
-        const ::com::sun::star::drawing::framework::TabBarButton& rButton,
-        const ::com::sun::star::drawing::framework::TabBarButton& rAnchor);
+        const css::drawing::framework::TabBarButton& rButton,
+        const css::drawing::framework::TabBarButton& rAnchor);
     void AddTabBarButton (
-        const ::com::sun::star::drawing::framework::TabBarButton& rButton);
+        const css::drawing::framework::TabBarButton& rButton);
     void RemoveTabBarButton (
-        const ::com::sun::star::drawing::framework::TabBarButton& rButton);
+        const css::drawing::framework::TabBarButton& rButton);
     bool HasTabBarButton (
-        const ::com::sun::star::drawing::framework::TabBarButton& rButton);
-    ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
+        const css::drawing::framework::TabBarButton& rButton);
+    css::uno::Sequence<css::drawing::framework::TabBarButton>
         GetTabBarButtons();
 
 private:
     VclPtr< ::TabControl> mpTabControl;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XController> mxController;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfigurationController> mxConfigurationController;
-    typedef ::std::vector<com::sun::star::drawing::framework::TabBarButton> TabBarButtonList;
+    css::uno::Reference<css::frame::XController> mxController;
+    css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
+    typedef ::std::vector<css::drawing::framework::TabBarButton> TabBarButtonList;
     TabBarButtonList maTabBarButtons;
     VclPtr<TabPage> mpTabPage;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId> mxViewTabBarId;
+    css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
     ViewShellBase* mpViewShellBase;
 
     void UpdateActiveButton();
     void AddTabBarButton (
-        const ::com::sun::star::drawing::framework::TabBarButton& rButton,
+        const css::drawing::framework::TabBarButton& rButton,
         sal_Int32 nPosition);
     void UpdateTabBarButtons();
 
@@ -172,11 +167,9 @@ private:
         members.
     */
     static vcl::Window* GetAnchorWindow(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XResourceId>& rxViewTabBarId,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XController>& rxController);
-    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewTabBarId,
+        const css::uno::Reference<css::frame::XController>& rxController);
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 };
 
 } // end of namespace sd

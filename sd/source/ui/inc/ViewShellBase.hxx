@@ -130,7 +130,7 @@ public:
     /** Return a new renderer that can be used for example for printing the
         document.
     */
-    virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable() override;
+    virtual css::uno::Reference<css::view::XRenderable> GetRenderable() override;
 
     /// Forwarded to the print manager.
     virtual SfxPrinter* GetPrinter (bool bCreate = false) override;
@@ -142,8 +142,7 @@ public:
 
     /// Forward methods to main sub shell.
     virtual void WriteUserDataSequence (
-        ::com::sun::star::uno::Sequence <
-        ::com::sun::star::beans::PropertyValue >&,
+        css::uno::Sequence< css::beans::PropertyValue >&,
         bool bBrowse = false) override;
 
     /** Pass the given properties to the main view shell.  After that we
@@ -151,8 +150,7 @@ public:
         pane.
     */
     virtual void ReadUserDataSequence (
-        const ::com::sun::star::uno::Sequence <
-        ::com::sun::star::beans::PropertyValue >&,
+        const css::uno::Sequence< css::beans::PropertyValue >&,
         bool bBrowse = false) override;
 
     virtual void UIActivating( SfxInPlaceClient* ) override;

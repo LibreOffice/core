@@ -149,7 +149,7 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
 
     mpPrinter = pNewPrinter;
     mbOwnPrinter = true;
-    if ( mpDoc->GetPrinterIndependentLayout() == ::com::sun::star::document::PrinterIndependentLayout::DISABLED )
+    if ( mpDoc->GetPrinterIndependentLayout() == css::document::PrinterIndependentLayout::DISABLED )
         UpdateFontList();
     UpdateRefDevice();
 }
@@ -158,7 +158,7 @@ void DrawDocShell::UpdateFontList()
 {
     delete mpFontList;
     OutputDevice* pRefDevice = NULL;
-    if ( mpDoc->GetPrinterIndependentLayout() == ::com::sun::star::document::PrinterIndependentLayout::DISABLED )
+    if ( mpDoc->GetPrinterIndependentLayout() == css::document::PrinterIndependentLayout::DISABLED )
         pRefDevice = GetPrinter(true);
     else
         pRefDevice = SD_MOD()->GetVirtualRefDevice();
@@ -205,11 +205,11 @@ void DrawDocShell::UpdateRefDevice()
         VclPtr< OutputDevice > pRefDevice;
         switch (mpDoc->GetPrinterIndependentLayout())
         {
-            case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
+            case css::document::PrinterIndependentLayout::DISABLED:
                 pRefDevice = mpPrinter.get();
                 break;
 
-            case ::com::sun::star::document::PrinterIndependentLayout::ENABLED:
+            case css::document::PrinterIndependentLayout::ENABLED:
                 pRefDevice = SD_MOD()->GetVirtualRefDevice();
                 break;
 
@@ -239,7 +239,7 @@ void DrawDocShell::UpdateRefDevice()
 /**
  * Creates new document, opens streams
  */
-bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+bool DrawDocShell::InitNew( const css::uno::Reference< css::embed::XStorage >& xStorage )
 {
     bool bRet = SfxObjectShell::InitNew( xStorage );
 
@@ -625,7 +625,7 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
  * Reopen own streams to ensure that nobody else can prevent use from opening
  * them.
  */
-bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+bool DrawDocShell::SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage )
 {
     bool bRet = false;
 
@@ -909,9 +909,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
             SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
                 *pDrViewSh,
                 *pDrViewSh->GetView());
-            ::com::sun::star::uno::Reference<
-                  ::com::sun::star::drawing::XDrawPage> xDrawPage (
-                      pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::drawing::XDrawPage> xDrawPage( pPage->getUnoPage(), css::uno::UNO_QUERY);
             pUnoDrawView->setCurrentPage (xDrawPage);
             delete pUnoDrawView;
 
@@ -991,9 +989,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
             SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
                 *pDrViewSh,
                 *pDrViewSh->GetView());
-            ::com::sun::star::uno::Reference<
-                  ::com::sun::star::drawing::XDrawPage> xDrawPage (
-                      pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::drawing::XDrawPage> xDrawPage( pPage->getUnoPage(), css::uno::UNO_QUERY);
             pUnoDrawView->setCurrentPage (xDrawPage);
             delete pUnoDrawView;
 

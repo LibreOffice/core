@@ -248,7 +248,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
                 rSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF) );
                 rSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR) );
                 rSet.Put( SvxBackgroundColorItem( Color (COL_AUTO), EE_CHAR_BKGCOLOR )  );
-                rSet.Put( XLineStyleItem(com::sun::star::drawing::LineStyle_NONE) );
+                rSet.Put( XLineStyleItem(css::drawing::LineStyle_NONE) );
                 rSet.Put( XFillStyleItem(drawing::FillStyle_NONE) );
                 rSet.Put( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
                 rSet.Put( makeSdrTextAutoGrowHeightItem(false) );
@@ -1258,7 +1258,7 @@ void SdStyleSheetPool::RemoveStyleFamily( const SdPage* pPage )
     }
 }
 
-void SdStyleSheetPool::throwIfDisposed() throw(::com::sun::star::uno::RuntimeException)
+void SdStyleSheetPool::throwIfDisposed() throw(css::uno::RuntimeException)
 {
     if( mpDoc == NULL )
         throw DisposedException();

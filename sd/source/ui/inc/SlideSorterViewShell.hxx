@@ -181,11 +181,10 @@ public:
         @return
             Returns an <type>AccessibleSlideSorterView</type> object.
    */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>
+    virtual css::uno::Reference<css::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow) override;
     // handle SlideSorterView specially because AccessibleSlideSorterView doesn't inherit from AccessibleDocumentViewBase
-    virtual void SwitchViewFireFocus( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc ) override;
+    virtual void SwitchViewFireFocus( css::uno::Reference< css::accessibility::XAccessible > xAcc ) override;
 
     SlideSorter& GetSlideSorter() const;
 

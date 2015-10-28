@@ -86,7 +86,7 @@ PresentationViewShellBase::~PresentationViewShellBase()
 
 void PresentationViewShellBase::InitializeFramework()
 {
-    com::sun::star::uno::Reference<com::sun::star::frame::XController>
+    css::uno::Reference<css::frame::XController>
         xController (GetController());
     sd::framework::PresentationModule::Initialize(xController);
 }

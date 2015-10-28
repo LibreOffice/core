@@ -45,13 +45,13 @@ namespace sd {
 
 typedef ::cppu::ImplInheritanceHelper <
     SfxBaseController,
-    ::com::sun::star::view::XSelectionSupplier,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::drawing::XDrawView,
-    ::com::sun::star::view::XSelectionChangeListener,
-    ::com::sun::star::view::XFormLayerAccess,
-    ::com::sun::star::drawing::framework::XControllerManager,
-    ::com::sun::star::lang::XUnoTunnel
+    css::view::XSelectionSupplier,
+    css::lang::XServiceInfo,
+    css::drawing::XDrawView,
+    css::view::XSelectionChangeListener,
+    css::view::XFormLayerAccess,
+    css::drawing::framework::XControllerManager,
+    css::lang::XUnoTunnel
     > DrawControllerInterfaceBase;
 
 class BroadcastHelperOwner
@@ -139,11 +139,11 @@ public:
     */
     void BroadcastContextChange() const;
     void NotifyAccUpdate();
-    void fireChangeLayer( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>* pCurrentLayer ) throw();
+    void fireChangeLayer( css::uno::Reference< css::drawing::XLayer>* pCurrentLayer ) throw();
     // change the parameter to int
     //void fireSwitchCurrentPage( String pageName) throw();
     void fireSwitchCurrentPage( sal_Int32 pageIndex) throw();
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>* mpCurrentLayer;
+    css::uno::Reference< css::drawing::XLayer>* mpCurrentLayer;
     bool IsDisposing() const { return mbDisposing; }
 
     /** Return a pointer to the ViewShellBase object that the DrawController
@@ -161,77 +161,77 @@ public:
     */
     void ReleaseViewShellBase();
 
-    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
 
     // XComponent
-    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XController
-    virtual sal_Bool SAL_CALL suspend( sal_Bool Suspend ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL suspend( sal_Bool Suspend ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     // XSelectionSupplier
-    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL select( const css::uno::Any& aSelection ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getSelection(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XFormLayerAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& Form ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isFormDesignMode(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFormDesignMode( sal_Bool DesignMode ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const css::uno::Reference< css::form::XForm >& Form ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isFormDesignMode(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFormDesignMode( sal_Bool DesignMode ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XControlAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::XControl > SAL_CALL getControl( const css::uno::Reference< css::awt::XControlModel >& xModel ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
 
     // XDrawView
     virtual void SAL_CALL
         setCurrentPage (
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XDrawPage >& xPage)
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<
+            css::drawing::XDrawPage >& xPage)
+        throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XDrawPage > SAL_CALL
+    virtual css::uno::Reference<
+        css::drawing::XDrawPage > SAL_CALL
         getCurrentPage()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // lang::XEventListener
     virtual void SAL_CALL
-        disposing (const ::com::sun::star::lang::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // view::XSelectionChangeListener
     virtual void  SAL_CALL
-        selectionChanged (const ::com::sun::star::lang::EventObject& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        selectionChanged (const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XControllerManager
 
     virtual css::uno::Reference<css::drawing::framework::XConfigurationController> SAL_CALL
         getConfigurationController()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
         getModuleController()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XUnoTunnel
 
-    virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId)
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     /** This method must return the name to index table. This table
@@ -240,14 +240,14 @@ protected:
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     static void FillPropertyTable (
-        ::std::vector< ::com::sun::star::beans::Property>& rProperties);
+        ::std::vector< css::beans::Property>& rProperties);
 
     /**
      * The same as getFastProperyValue, but return the value through
      * rValue and nHandle is always valid.
      */
     virtual void SAL_CALL getFastPropertyValue(
-        ::com::sun::star::uno::Any& rValue,
+        css::uno::Any& rValue,
         sal_Int32 nHandle ) const override;
 
     /** Convert the value rValue and return the result in rConvertedValue and the
@@ -265,31 +265,31 @@ protected:
         @throws IllegalArgumentException
      */
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        ::com::sun::star::uno::Any & rConvertedValue,
-        ::com::sun::star::uno::Any & rOldValue,
+        css::uno::Any & rConvertedValue,
+        css::uno::Any & rOldValue,
         sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException) override;
+        const css::uno::Any& rValue )
+        throw (css::lang::IllegalArgumentException) override;
 
     /** The same as setFastProperyValue, but no exception is thrown and nHandle
         is always valid. You must not broadcast the changes in this method.
      */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception, std::exception) override;
+        const css::uno::Any& rValue )
+        throw (css::uno::Exception, std::exception) override;
 
     /** When the called object has been disposed already this method throws
         a Disposed exception and does not return.
     */
     void ThrowIfDisposed() const
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 
     using cppu::OPropertySetHelper::disposing;
     using cppu::OPropertySetHelper::getFastPropertyValue;
 
 private:
-    const ::com::sun::star::uno::Type m_aSelectionTypeIdentifier;
+    const css::uno::Type m_aSelectionTypeIdentifier;
 
     /** This pointer to the ViewShellBase can be NULL (after a call to
         ReleaseViewShellBase()).
@@ -324,8 +324,8 @@ private:
     */
     void FirePropertyChange (
         sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rNewValue,
-        const ::com::sun::star::uno::Any& rOldValue);
+        const css::uno::Any& rNewValue,
+        const css::uno::Any& rOldValue);
 
     void ProvideFrameworkControllers();
     void DisposeFrameworkControllers();

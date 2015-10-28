@@ -100,15 +100,15 @@ public:
     explicit PropertySubControl( sal_Int32 nType ) : mnType( nType ) {}
     virtual ~PropertySubControl();
 
-    virtual             ::com::sun::star::uno::Any getValue() = 0;
-    virtual             void setValue( const ::com::sun::star::uno::Any& rValue, const OUString& rPresetId ) = 0;
+    virtual             css::uno::Any getValue() = 0;
+    virtual             void setValue( const css::uno::Any& rValue, const OUString& rPresetId ) = 0;
 
     virtual Control*    getControl() = 0;
 
     static PropertySubControl*
                         create( sal_Int32 nType,
                                 vcl::Window* pParent,
-                                const ::com::sun::star::uno::Any& rValue,
+                                const css::uno::Any& rValue,
                                 const OUString& rPresetId,
                                 const Link<LinkParamNone*,void>& rModifyHdl );
 

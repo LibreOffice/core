@@ -1290,12 +1290,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 try
                 {
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::scanner::ScannerContext >
+                    const css::uno::Sequence< css::scanner::ScannerContext >
                         aContexts( mxScannerManager->getAvailableScanners() );
 
                     if( aContexts.getLength() )
                     {
-                        ::com::sun::star::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
+                        css::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
                         mxScannerManager->configureScannerAndScan( aContext, mxScannerListener );
                     }
                 }
@@ -1317,7 +1317,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 try
                 {
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::scanner::ScannerContext > aContexts( mxScannerManager->getAvailableScanners() );
+                    const css::uno::Sequence< css::scanner::ScannerContext > aContexts( mxScannerManager->getAvailableScanners() );
 
                     if( aContexts.getLength() )
                     {
@@ -2038,7 +2038,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 css::uno::Reference < css::ui::dialogs::XExecutableDialog > xDialog = css::ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
                 xDialog->execute();
             }
-            catch( ::com::sun::star::uno::RuntimeException& )
+            catch( css::uno::RuntimeException& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }

@@ -27,19 +27,19 @@
 namespace sd {
 
     class DrawSubControllerInterfaceBase : public ::cppu::WeakComponentImplHelper<
-                    ::com::sun::star::drawing::XDrawSubController,
-                    ::com::sun::star::lang::XServiceInfo >
+                    css::drawing::XDrawSubController,
+                    css::lang::XServiceInfo >
     {
     public:
         DrawSubControllerInterfaceBase( ::osl::Mutex& aMutex )
             :  ::cppu::WeakComponentImplHelper<
-                    ::com::sun::star::drawing::XDrawSubController,
-                    ::com::sun::star::lang::XServiceInfo >( aMutex ) {}
+                    css::drawing::XDrawSubController,
+                    css::lang::XServiceInfo >( aMutex ) {}
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override = 0;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
     };
 
 }

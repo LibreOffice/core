@@ -52,10 +52,10 @@ static const sal_Int32 ConfigurationUpdateEvent = 2;
 namespace sd { namespace tools {
 
 typedef cppu::WeakComponentImplHelper<
-      ::com::sun::star::beans::XPropertyChangeListener,
-      ::com::sun::star::frame::XFrameActionListener,
-      ::com::sun::star::view::XSelectionChangeListener,
-      ::com::sun::star::drawing::framework::XConfigurationChangeListener
+      css::beans::XPropertyChangeListener,
+      css::frame::XFrameActionListener,
+      css::view::XSelectionChangeListener,
+      css::drawing::framework::XConfigurationChangeListener
     > EventMultiplexerImplementationInterfaceBase;
 
 class EventMultiplexer::Implementation
@@ -81,20 +81,20 @@ public:
 
     //===== lang::XEventListener ==============================================
     virtual void SAL_CALL
-        disposing (const ::com::sun::star::lang::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //===== beans::XPropertySetListener =======================================
     virtual void SAL_CALL
         propertyChange (
-            const com::sun::star::beans::PropertyChangeEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::beans::PropertyChangeEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //===== view::XSelectionChangeListener ====================================
     virtual void SAL_CALL
         selectionChanged (
-            const com::sun::star::lang::EventObject& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //===== frame::XFrameActionListener  ======================================
     /** For certain actions the listener connects to a new controller of the
@@ -102,14 +102,14 @@ public:
         in the center pane is replaced by another view shell.
     */
     virtual void SAL_CALL
-        frameAction (const ::com::sun::star::frame::FrameActionEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        frameAction (const css::frame::FrameActionEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //===== drawing::framework::XConfigurationChangeListener ==================
     virtual void SAL_CALL
         notifyConfigurationChange (
-            const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL disposing() override;
 
@@ -129,16 +129,12 @@ private:
     /// Remember whether we are listening to the frame.
     bool mbListeningToFrame;
 
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::frame::XController> mxControllerWeak;
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::frame::XFrame> mxFrameWeak;
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::view::XSelectionSupplier> mxSlideSorterSelectionWeak;
+    css::uno::WeakReference<css::frame::XController> mxControllerWeak;
+    css::uno::WeakReference<css::frame::XFrame> mxFrameWeak;
+    css::uno::WeakReference<css::view::XSelectionSupplier> mxSlideSorterSelectionWeak;
     SdDrawDocument* mpDocument;
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::drawing::framework::XConfigurationController>
-        mxConfigurationControllerWeak;
+    css::uno::WeakReference<css::drawing::framework::XConfigurationController>
+         mxConfigurationControllerWeak;
 
     void ReleaseListeners();
 
@@ -153,7 +149,7 @@ private:
         disposed.
     */
     void ThrowIfDisposed()
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 
     DECL_LINK_TYPED(SlideSorterSelectionChangeListener, LinkParamNone*, void);
 };
@@ -514,7 +510,7 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
 
 void SAL_CALL EventMultiplexer::Implementation::frameAction (
     const frame::FrameActionEvent& rEvent)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Reference<frame::XFrame> xFrame (mxFrameWeak);
     if (rEvent.Frame == xFrame)
@@ -546,7 +542,7 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
 
 void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
     const lang::EventObject& )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     CallListeners (EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION);
 }
@@ -630,7 +626,7 @@ void SAL_CALL EventMultiplexer::Implementation::disposing()
 }
 
 void EventMultiplexer::Implementation::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

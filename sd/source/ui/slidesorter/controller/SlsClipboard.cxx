@@ -634,7 +634,7 @@ sal_Int8 Clipboard::AcceptDrop (
             if (pDragTransferable != NULL
                 && pDragTransferable->IsPageTransferable()
                 && ((rEvent.maDragEvent.DropAction
-                        & ::com::sun::star::datatransfer::dnd::DNDConstants::ACTION_DEFAULT) != 0)
+                        & css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT) != 0)
                 && (mrSlideSorter.GetModel().GetDocument()->GetDocSh()
                     != pDragTransferable->GetPageDocShell()))
             {

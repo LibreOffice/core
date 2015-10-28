@@ -125,7 +125,7 @@ sal_Int32 SAL_CALL
 
 uno::Reference<XAccessible> SAL_CALL
     AccessibleOutlineView::getAccessibleChild (sal_Int32 nIndex)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     // Forward request to children manager.
@@ -136,7 +136,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 OUString SAL_CALL
     AccessibleOutlineView::getAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -184,7 +184,7 @@ void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::R
 
 OUString SAL_CALL
     AccessibleOutlineView::getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleOutlineView");
 }
@@ -193,7 +193,7 @@ OUString SAL_CALL
 
 void SAL_CALL
     AccessibleOutlineView::disposing (const lang::EventObject& rEventObject)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     AccessibleDocumentViewBase::disposing (rEventObject);
 }
@@ -228,7 +228,7 @@ void SAL_CALL AccessibleOutlineView::disposing()
 
 void SAL_CALL
     AccessibleOutlineView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -262,7 +262,7 @@ void SAL_CALL
 /// Create a name for this view.
 OUString
     AccessibleOutlineView::CreateAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -274,7 +274,7 @@ OUString
 */
 OUString
     AccessibleOutlineView::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

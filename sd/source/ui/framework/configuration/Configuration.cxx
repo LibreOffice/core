@@ -95,7 +95,7 @@ void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResour
     ThrowIfDisposed();
 
     if ( ! rxResourceId.is() || rxResourceId->getResourceURL().isEmpty())
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
 
     if (mpResourceContainer->find(rxResourceId) == mpResourceContainer->end())
     {
@@ -113,7 +113,7 @@ void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxRes
     ThrowIfDisposed();
 
     if ( ! rxResourceId.is() || rxResourceId->getResourceURL().isEmpty())
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
 
     ResourceContainer::iterator iResource (mpResourceContainer->find(rxResourceId));
     if (iResource != mpResourceContainer->end())
@@ -130,7 +130,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     const Reference<XResourceId>& rxAnchorId,
     const OUString& rsResourceURLPrefix,
     AnchorBindingMode eMode)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -281,7 +281,7 @@ void Configuration::PostEvent (
 }
 
 void Configuration::ThrowIfDisposed() const
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -337,10 +337,10 @@ bool AreConfigurationsEquivalent (
 } } // end of namespace sd::framework
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation(
-        ::com::sun::star::uno::XComponentContext*,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+        css::uno::XComponentContext*,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new sd::framework::Configuration(NULL, false));
 }

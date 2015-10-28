@@ -54,9 +54,9 @@ Reference< XAnimationNode > SdPage::getAnimationNode() throw (RuntimeException)
     if( !mxAnimationNode.is() )
     {
         mxAnimationNode.set( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
-        Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
+        Sequence< css::beans::NamedValue > aUserData( 1 );
         aUserData[0].Name = "node-type";
-        aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT;
+        aUserData[0].Value <<= css::presentation::EffectNodeType::TIMING_ROOT;
         mxAnimationNode->setUserData( aUserData );
     }
 
@@ -89,7 +89,7 @@ bool SdPage::hasAnimationNode() const
     return mxAnimationNode.is();
 }
 
-void SdPage::SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect)
+void SdPage::SetFadeEffect(css::presentation::FadeEffect eNewEffect)
 {
     EffectMigration::SetFadeEffect( this, eNewEffect );
 }

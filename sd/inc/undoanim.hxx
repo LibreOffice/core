@@ -53,7 +53,7 @@ struct UndoAnimationPathImpl;
 class UndoAnimationPath : public SdrUndoAction
 {
 public:
-    UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
     virtual ~UndoAnimationPath();
 
     virtual void Undo() override;

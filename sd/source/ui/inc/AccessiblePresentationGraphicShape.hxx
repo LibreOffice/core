@@ -43,21 +43,21 @@ public:
     */
     virtual OUString SAL_CALL
         getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  internal  ========================================================
 
     /// Create a name string that contains the accessible name.
     virtual OUString
         CreateAccessibleBaseName ()
-        throw (::com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::RuntimeException) override;
 
     /// Create a description string that contains the accessible description.
     virtual OUString
         CreateAccessibleDescription ()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     /// Return this object's role.
-    virtual sal_Int16 SAL_CALL getAccessibleRole () throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole () throw (css::uno::RuntimeException, std::exception) override;
 };
 
 } // end of namespace accessibility

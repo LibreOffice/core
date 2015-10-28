@@ -34,11 +34,11 @@
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::lang::XUnoTunnel
-                                            ,   ::com::sun::star::awt::XWindowListener
-                                            ,   ::com::sun::star::view::XSelectionSupplier
-                                            ,   ::com::sun::star::drawing::framework::XRelocatableResource
-                                            ,   ::com::sun::star::drawing::framework::XView
+typedef ::cppu::WeakComponentImplHelper    <   css::lang::XUnoTunnel
+                                            ,   css::awt::XWindowListener
+                                            ,   css::view::XSelectionSupplier
+                                            ,   css::drawing::framework::XRelocatableResource
+                                            ,   css::drawing::framework::XView
                                             >   ViewShellWrapperInterfaceBase;
 
 } // end of anonymous namespace.
@@ -69,15 +69,14 @@ public:
     */
     ViewShellWrapper (
         ::std::shared_ptr<ViewShell> pViewShell,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XResourceId>& rxViewId,
-        const ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow>& rxWindow);
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const css::uno::Reference<css::awt::XWindow>& rxWindow);
     virtual ~ViewShellWrapper();
 
     virtual void SAL_CALL disposing() override;
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
 
-    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     /** This method is typically used together with the XUnoTunnel interface
         to obtain a pointer to the wrapped ViewShell object for a given
@@ -87,63 +86,63 @@ public:
 
     // XUnoTunnel
 
-    virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XResource
 
-    virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
+    virtual css::uno::Reference<css::drawing::framework::XResourceId>
         SAL_CALL getResourceId()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL isAnchorOnly()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XSelectionSupplier
 
-    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getSelection()
-        throw (::com::sun::star::uno::RuntimeException,
+    virtual sal_Bool SAL_CALL select( const css::uno::Any& aSelection ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getSelection()
+        throw (css::uno::RuntimeException,
                std::exception) override;
-    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XRelocatableResource
 
     virtual sal_Bool SAL_CALL relocateToAnchor (
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XResource>& xResource)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference<
+            css::drawing::framework::XResource>& xResource)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XWindowListener
 
     virtual void SAL_CALL windowResized(
-        const ::com::sun::star::awt::WindowEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::awt::WindowEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL windowMoved(
-        const ::com::sun::star::awt::WindowEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::awt::WindowEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL windowShown(
-        const ::com::sun::star::lang::EventObject& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL windowHidden(
-        const ::com::sun::star::lang::EventObject& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
 
     virtual void SAL_CALL disposing(
-        const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    ::std::shared_ptr< ViewShell >                                                            mpViewShell;
-    ::std::shared_ptr< ::sd::slidesorter::SlideSorterViewShell >                              mpSlideSorterViewShell;
-    const ::com::sun::star::uno::Reference< com::sun::star::drawing::framework::XResourceId >   mxViewId;
-    ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow >                             mxWindow;
+    ::std::shared_ptr< ViewShell >                                      mpViewShell;
+    ::std::shared_ptr< ::sd::slidesorter::SlideSorterViewShell >        mpSlideSorterViewShell;
+    const css::uno::Reference< css::drawing::framework::XResourceId >   mxViewId;
+    css::uno::Reference<css::awt::XWindow >                             mxWindow;
 };
 
 } } // end of namespace sd::framework

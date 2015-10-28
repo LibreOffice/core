@@ -82,10 +82,8 @@ public:
 
     OUString GetTitle() const { return msTitle; }
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > CreateAccessibleObject (
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent);
+    css::uno::Reference<css::accessibility::XAccessible > CreateAccessibleObject (
+            const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
 
 private:
     TitleBarType meType;

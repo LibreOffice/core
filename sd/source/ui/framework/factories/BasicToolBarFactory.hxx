@@ -57,14 +57,14 @@ class BasicToolBarFactory
 {
 public:
     explicit BasicToolBarFactory (
-        const css::uno::Reference<com::sun::star::uno::XComponentContext>& rxContext);
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~BasicToolBarFactory();
 
     virtual void SAL_CALL disposing() override;
 
     // ToolBarFactory
 
-    virtual css::uno::Reference<com::sun::star::drawing::framework::XResource> SAL_CALL
+    virtual css::uno::Reference<css::drawing::framework::XResource> SAL_CALL
         createResource (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxToolBarId)
@@ -72,14 +72,14 @@ public:
 
     virtual void SAL_CALL
         releaseResource (
-            const css::uno::Reference<com::sun::star::drawing::framework::XResource>&
+            const css::uno::Reference<css::drawing::framework::XResource>&
                 rxToolBar)
         throw (css::uno::RuntimeException, std::exception) override;
 
     // XInitialization
 
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence<com::sun::star::uno::Any>& aArguments)
+        const css::uno::Sequence<css::uno::Any>& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     // lang::XEventListener

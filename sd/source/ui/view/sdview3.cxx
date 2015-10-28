@@ -674,7 +674,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             Reference< XComponent > xComponent( xShell->GetModel(), UNO_QUERY );
             xStm->Seek( 0 );
 
-            com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+            css::uno::Reference< css::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
             bReturn = SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Impress.XMLOasisImporter" );
 
             if( pModel->GetPageCount() == 0 )

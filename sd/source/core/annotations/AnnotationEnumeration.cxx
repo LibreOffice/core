@@ -40,7 +40,7 @@ class AnnotationEnumeration: public ::cppu::WeakImplHelper< css::office::XAnnota
 public:
     explicit AnnotationEnumeration( const AnnotationVector& rAnnotations );
 
-    // ::com::sun::star::office::XAnnotationEnumeration:
+    // css::office::XAnnotationEnumeration:
     virtual sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::office::XAnnotation > SAL_CALL nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException, std::exception) override;
 
@@ -62,7 +62,7 @@ AnnotationEnumeration::AnnotationEnumeration( const AnnotationVector& rAnnotatio
     maIter = maAnnotations.begin();
 }
 
-// ::com::sun::star::office::XAnnotationEnumeration:
+// css::office::XAnnotationEnumeration:
 sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements() throw (css::uno::RuntimeException, std::exception)
 {
     return maIter != maAnnotations.end();

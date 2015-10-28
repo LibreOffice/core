@@ -144,7 +144,7 @@ void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
     SdTransferable::DragFinished(nDropAction);
 }
 
-sal_Int64 SAL_CALL SdPageObjsTLB::SdPageObjsTransferable::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+sal_Int64 SAL_CALL SdPageObjsTLB::SdPageObjsTransferable::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception )
 {
     sal_Int64 nRet;
 
@@ -164,23 +164,23 @@ namespace
     class theSdPageObjsTLBUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdPageObjsTLBUnoTunnelId > {};
 }
 
-const ::com::sun::star::uno::Sequence< sal_Int8 >& SdPageObjsTLB::SdPageObjsTransferable::getUnoTunnelId()
+const css::uno::Sequence< sal_Int8 >& SdPageObjsTLB::SdPageObjsTransferable::getUnoTunnelId()
 {
     return theSdPageObjsTLBUnoTunnelId::get().getSeq();
 }
 
-SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData )
+SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData )
     throw()
 {
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUnoTunnel( rxData, ::com::sun::star::uno::UNO_QUERY_THROW );
+        css::uno::Reference< css::lang::XUnoTunnel > xUnoTunnel( rxData, css::uno::UNO_QUERY_THROW );
 
         return reinterpret_cast<SdPageObjsTLB::SdPageObjsTransferable*>(
                 sal::static_int_cast<sal_uIntPtr>(
                     xUnoTunnel->getSomething( SdPageObjsTLB::SdPageObjsTransferable::getUnoTunnelId()) ) );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
     return 0;
@@ -1354,7 +1354,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
             }
         }
     }
-    catch (com::sun::star::uno::Exception&)
+    catch (css::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }

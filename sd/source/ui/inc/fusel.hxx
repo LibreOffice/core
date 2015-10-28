@@ -79,8 +79,8 @@ protected:
     SdrHdl*         pHdl;
     bool            bSuppressChangesOfSelection;
     bool            bMirrorSide0;
-    sal_uInt16          nEditMode;
-        ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
+    sal_uInt16      nEditMode;
+    css::uno::Reference< css::media::XPlayer > mxPlayer;
 
 private:
     /** This pointer stores a canidate for assigning a style in the water

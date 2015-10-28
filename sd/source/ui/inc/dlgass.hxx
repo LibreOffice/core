@@ -57,7 +57,7 @@ public:
     bool GetStartWithFlag() const;
 
     bool IsDocEmpty() const;
-    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword();
+    css::uno::Sequence< css::beans::NamedValue > GetPassword();
 };
 
 #endif

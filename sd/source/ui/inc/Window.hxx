@@ -186,8 +186,7 @@ protected:
             The returned reference is empty if an accessible object could
             not be created.
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>
+    virtual css::uno::Reference<css::accessibility::XAccessible>
         CreateAccessible() override;
 
     OUString GetSurroundingText() const override;

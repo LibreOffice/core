@@ -50,12 +50,11 @@ public:
     SdOptionsItem( const SdOptionsGeneric& rParent, const OUString& rSubTree );
     virtual ~SdOptionsItem();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetProperties(
-                                const ::com::sun::star::uno::Sequence< OUString >& rNames );
-    bool                    PutProperties( const com::sun::star::uno::Sequence< OUString >& rNames,
-                                           const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues );
+    css::uno::Sequence< css::uno::Any > GetProperties( const css::uno::Sequence< OUString >& rNames );
+    bool                    PutProperties( const css::uno::Sequence< OUString >& rNames,
+                                           const css::uno::Sequence< css::uno::Any>& rValues );
     void                    SetModified();
 };
 
@@ -65,14 +64,14 @@ friend class SdOptionsItem;
 
 private:
 
-    OUString         maSubTree;
+    OUString                maSubTree;
     SdOptionsItem*          mpCfgItem;
-    sal_uInt16                  mnConfigId;
+    sal_uInt16              mnConfigId;
     bool                    mbInit          : 1;
     bool                    mbEnableModify  : 1;
 
     SAL_DLLPRIVATE void Commit( SdOptionsItem& rCfgItem ) const;
-    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< OUString > GetPropertyNames() const;
+    SAL_DLLPRIVATE css::uno::Sequence< OUString > GetPropertyNames() const;
 
 protected:
 
@@ -82,8 +81,8 @@ protected:
 protected:
 
     virtual void            GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const = 0;
-    virtual bool            ReadData( const ::com::sun::star::uno::Any* pValues ) = 0;
-    virtual bool            WriteData( ::com::sun::star::uno::Any* pValues ) const = 0;
+    virtual bool            ReadData( const css::uno::Any* pValues ) = 0;
+    virtual bool            WriteData( css::uno::Any* pValues ) const = 0;
 
 public:
 
@@ -114,8 +113,8 @@ private:
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
+    virtual bool ReadData( const css::uno::Any* pValues ) override;
+    virtual bool WriteData( css::uno::Any* pValues ) const override;
 
 public:
             SdOptionsLayout( sal_uInt16 nConfigId, bool bUseConfig );
@@ -163,8 +162,8 @@ private:
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
+    virtual bool ReadData( const css::uno::Any* pValues ) override;
+    virtual bool WriteData( css::uno::Any* pValues ) const override;
 
 public:
 
@@ -233,8 +232,8 @@ private:
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
+    virtual bool ReadData( const css::uno::Any* pValues ) override;
+    virtual bool WriteData( css::uno::Any* pValues ) const override;
 
 public:
 
@@ -352,8 +351,8 @@ private:
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
+    virtual bool ReadData( const css::uno::Any* pValues ) override;
+    virtual bool WriteData( css::uno::Any* pValues ) const override;
 
 public:
 
@@ -412,8 +411,8 @@ private:
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
+    virtual bool ReadData( const css::uno::Any* pValues ) override;
+    virtual bool WriteData( css::uno::Any* pValues ) const override;
 
 public:
 
@@ -431,8 +430,8 @@ class SdOptionsGrid : public SdOptionsGeneric, public SvxOptionsGrid
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
+    virtual bool ReadData( const css::uno::Any* pValues ) override;
+    virtual bool WriteData( css::uno::Any* pValues ) const override;
 
 public:
 
@@ -503,8 +502,8 @@ private:
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const override;
-    virtual bool ReadData( const ::com::sun::star::uno::Any* pValues ) override;
-    virtual bool WriteData( ::com::sun::star::uno::Any* pValues ) const override;
+    virtual bool ReadData( const css::uno::Any* pValues ) override;
+    virtual bool WriteData( css::uno::Any* pValues ) const override;
 
 public:
 

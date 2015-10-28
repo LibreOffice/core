@@ -34,8 +34,7 @@ class FrameWindowPane
 {
 public:
     FrameWindowPane (
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XResourceId>& rxPaneId,
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         vcl::Window* pWindow);
     virtual ~FrameWindowPane() throw();
 
@@ -44,7 +43,7 @@ public:
         Therefore this method always returns <FALSE/>.
     */
     virtual sal_Bool SAL_CALL isAnchorOnly()
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 } } // end of namespace sd::framework

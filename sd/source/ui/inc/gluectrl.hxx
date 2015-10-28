@@ -31,10 +31,10 @@ enum class SdrEscapeDirection;
 class GlueEscDirLB : public ListBox
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
 public:
                  GlueEscDirLB( vcl::Window* pParent,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+                              const css::uno::Reference< css::frame::XFrame >& rFrame );
                  virtual ~GlueEscDirLB();
 
     virtual void Select() override;

@@ -64,7 +64,7 @@ public:
         const OUString& rsTitle,
         const OUString& rsTargetDir,
         const OUString& rsContentIdentifier,
-        const Reference<com::sun::star::ucb::XCommandEnvironment>& rxFolderEnvironment)
+        const Reference<css::ucb::XCommandEnvironment>& rxFolderEnvironment)
         : mnPriority(nPriority),
           msTitle(rsTitle),
           msTargetDir(rsTargetDir),
@@ -76,7 +76,7 @@ public:
     OUString msTargetDir;
     OUString msContentIdentifier;
     //    Reference<sdbc::XResultSet> mxFolderResultSet;
-    Reference<com::sun::star::ucb::XCommandEnvironment> mxFolderEnvironment;
+    Reference<css::ucb::XCommandEnvironment> mxFolderEnvironment;
 
     class Comparator
     {
@@ -211,7 +211,7 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning()
 
     if (maFolderContent.isFolder())
     {
-        mxEntryEnvironment = Reference<com::sun::star::ucb::XCommandEnvironment>();
+        mxEntryEnvironment = Reference<css::ucb::XCommandEnvironment>();
 
         //  We are interested only in three properties: the entry's name,
         //  its URL, and its content type.
@@ -222,7 +222,7 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning()
 
         //  Create a cursor to iterate over the templates in this folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
-        mxEntryResultSet = Reference<com::sun::star::sdbc::XResultSet>(
+        mxEntryResultSet = Reference<css::sdbc::XResultSet>(
             maFolderContent.createCursor(aProps, eInclude));
     }
     else
@@ -235,8 +235,8 @@ TemplateScanner::State TemplateScanner::ScanEntry()
 {
     State eNextState (ERROR);
 
-    Reference<com::sun::star::ucb::XContentAccess> xContentAccess (mxEntryResultSet, UNO_QUERY);
-    Reference<com::sun::star::sdbc::XRow> xRow (mxEntryResultSet, UNO_QUERY);
+    Reference<css::ucb::XContentAccess> xContentAccess (mxEntryResultSet, UNO_QUERY);
+    Reference<css::sdbc::XRow> xRow (mxEntryResultSet, UNO_QUERY);
 
     if (xContentAccess.is() && xRow.is() && mxEntryResultSet.is())
     {
@@ -299,7 +299,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning()
     try
     {
         //  Create content for template folders.
-        mxFolderEnvironment = Reference<com::sun::star::ucb::XCommandEnvironment>();
+        mxFolderEnvironment = Reference<css::ucb::XCommandEnvironment>();
         ::ucbhelper::Content aTemplateDir (mxTemplateRoot, mxFolderEnvironment, comphelper::getProcessComponentContext());
 
         //  Define the list of properties we are interested in.
@@ -314,7 +314,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning()
         if (mxFolderResultSet.is())
             eNextState = GATHER_FOLDER_LIST;
     }
-    catch (::com::sun::star::uno::Exception&)
+    catch (css::uno::Exception&)
     {
        eNextState = ERROR;
     }
@@ -326,7 +326,7 @@ TemplateScanner::State TemplateScanner::GatherFolderList()
 {
     State eNextState (ERROR);
 
-    Reference<com::sun::star::ucb::XContentAccess> xContentAccess (mxFolderResultSet, UNO_QUERY);
+    Reference<css::ucb::XContentAccess> xContentAccess (mxFolderResultSet, UNO_QUERY);
     if (xContentAccess.is() && mxFolderResultSet.is())
     {
         while (mxFolderResultSet->next())

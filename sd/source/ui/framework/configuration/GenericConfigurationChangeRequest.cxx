@@ -29,13 +29,13 @@ namespace sd { namespace framework {
 
 GenericConfigurationChangeRequest::GenericConfigurationChangeRequest (
     const Reference<XResourceId>& rxResourceId,
-    const Mode eMode) throw(::com::sun::star::lang::IllegalArgumentException)
+    const Mode eMode) throw(css::lang::IllegalArgumentException)
     : GenericConfigurationChangeRequestInterfaceBase(MutexOwner::maMutex),
       mxResourceId(rxResourceId),
       meMode(eMode)
 {
     if ( ! rxResourceId.is() || rxResourceId->getResourceURL().isEmpty())
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
 }
 
 GenericConfigurationChangeRequest::~GenericConfigurationChangeRequest() throw()

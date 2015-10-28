@@ -218,7 +218,7 @@ Any PresenterTextView::SetPropertyValue (
 }
 
 void PresenterTextView::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (PresenterTextViewInterfaceBase::rBHelper.bDisposed
         || PresenterTextViewInterfaceBase::rBHelper.bInDispose
@@ -299,9 +299,9 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
             {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DefaultFontType::CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
-        aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
-        aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN);
-        aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
+        aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN);
+        aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN);
+        aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
 
         for (int i = 0;  i < 3;  ++i)
         {
@@ -518,9 +518,9 @@ void PresenterTextView::Implementation::CheckTop()
 } } // end of namespace ::sd::presenter
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_PresenterTextView_get_implementation(::com::sun::star::uno::XComponentContext* context,
-                                                            ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_PresenterTextView_get_implementation(css::uno::XComponentContext* context,
+                                                            css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new sd::presenter::PresenterTextView(context));
 }

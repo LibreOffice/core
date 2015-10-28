@@ -66,8 +66,7 @@ public:
         requestResourceDeactivation().  The mpConfigurationUpdater makes the
         current configuration reflect the content of this one.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfiguration> mxRequestedConfiguration;
+    css::uno::Reference<css::drawing::framework::XConfiguration> mxRequestedConfiguration;
 
     ViewShellBase* mpBase;
 
@@ -571,10 +570,10 @@ ConfigurationController::Implementation::~Implementation()
 } } // end of namespace sd::framework
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_comp_Draw_framework_configuration_ConfigurationController_get_implementation(
-        ::com::sun::star::uno::XComponentContext*,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+        css::uno::XComponentContext*,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new sd::framework::ConfigurationController());
 }

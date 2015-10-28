@@ -94,9 +94,9 @@ public:
             css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     bool getMasterPageMode() const throw();
@@ -109,23 +109,23 @@ public:
             The returned value may be empty when the internal state of this
             view is not valid (like during destruction.)
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> getActiveLayer() throw ();
+    css::uno::Reference< css::drawing::XLayer> getActiveLayer() throw ();
 protected:
     /** Make the specified object the active layer.
         @param rxLayer
             The new layer object.
     */
-    void setActiveLayer (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>& rxLayer) throw (css::uno::RuntimeException, std::exception);
+    void setActiveLayer (const css::uno::Reference< css::drawing::XLayer>& rxLayer) throw (css::uno::RuntimeException, std::exception);
 
     void SetZoom( sal_Int16 nZoom );
     sal_Int16 GetZoom() const;
 
-    void SetViewOffset(const com::sun::star::awt::Point& rWinPos );
-    com::sun::star::awt::Point GetViewOffset() const;
+    void SetViewOffset(const css::awt::Point& rWinPos );
+    css::awt::Point GetViewOffset() const;
 
     void SetZoomType( sal_Int16 nType );
 
-    ::com::sun::star::uno::Any getDrawViewMode() const;
+    css::uno::Any getDrawViewMode() const;
 
 private:
     DrawViewShell& mrDrawViewShell;

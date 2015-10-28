@@ -545,7 +545,7 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
     return nNodes;
 }
 
-void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+void AnimationImporter::fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     try
     {
@@ -588,7 +588,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
                             {
                                 sal_Int16 nNodeType = 0;
                                 p->Value >>= nNodeType;
-                                if( nNodeType != ::com::sun::star::presentation::EffectNodeType::ON_CLICK )
+                                if( nNodeType != css::presentation::EffectNodeType::ON_CLICK )
                                 {
                                     // first effect does not start on click, so correct
                                     // first click nodes begin to 0s
@@ -609,7 +609,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
     }
 }
 
-void AnimationImporter::fixInteractiveSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+void AnimationImporter::fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     try
     {
@@ -941,7 +941,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString == "true" ? ::com::sun::star::drawing::LineStyle_SOLID : ::com::sun::star::drawing::LineStyle_NONE;
+            rValue <<= aString == "true" ? css::drawing::LineStyle_SOLID : css::drawing::LineStyle_NONE;
             bRet = true;
         }
     }
@@ -952,7 +952,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString == "bold" ? com::sun::star::awt::FontWeight::BOLD : com::sun::star::awt::FontWeight::NORMAL;
+            rValue <<= aString == "bold" ? css::awt::FontWeight::BOLD : css::awt::FontWeight::NORMAL;
             bRet = true;
         }
     }
@@ -963,7 +963,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString == "italic" ? com::sun::star::awt::FontSlant_ITALIC : com::sun::star::awt::FontSlant_NONE;
+            rValue <<= aString == "italic" ? css::awt::FontSlant_ITALIC : css::awt::FontSlant_NONE;
             bRet = true;
         }
     }
@@ -974,7 +974,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString == "true" ? com::sun::star::awt::FontUnderline::SINGLE : com::sun::star::awt::FontUnderline::NONE;
+            rValue <<= aString == "true" ? css::awt::FontUnderline::SINGLE : css::awt::FontUnderline::NONE;
             bRet = true;
         }
     }
@@ -1132,15 +1132,15 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         sal_Int32 nPPTNodeType = 0;
         if( rSet.getProperty( DFF_ANIM_NODE_TYPE ) >>= nPPTNodeType )
         {
-            sal_Int16 nNodeType = ::com::sun::star::presentation::EffectNodeType::DEFAULT;
+            sal_Int16 nNodeType = css::presentation::EffectNodeType::DEFAULT;
             switch( nPPTNodeType )
             {
-                case DFF_ANIM_NODE_TYPE_ON_CLICK:       nNodeType = ::com::sun::star::presentation::EffectNodeType::ON_CLICK;   break;
-                case DFF_ANIM_NODE_TYPE_WITH_PREVIOUS:  nNodeType = ::com::sun::star::presentation::EffectNodeType::WITH_PREVIOUS; break;
-                case DFF_ANIM_NODE_TYPE_AFTER_PREVIOUS: nNodeType = ::com::sun::star::presentation::EffectNodeType::AFTER_PREVIOUS; break;
-                case DFF_ANIM_NODE_TYPE_MAIN_SEQUENCE:  nNodeType = ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE; break;
-                case DFF_ANIM_NODE_TYPE_TIMING_ROOT:    nNodeType = ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT; break;
-                case DFF_ANIM_NODE_TYPE_INTERACTIVE_SEQ:nNodeType = ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE; break;
+                case DFF_ANIM_NODE_TYPE_ON_CLICK:       nNodeType = css::presentation::EffectNodeType::ON_CLICK;   break;
+                case DFF_ANIM_NODE_TYPE_WITH_PREVIOUS:  nNodeType = css::presentation::EffectNodeType::WITH_PREVIOUS; break;
+                case DFF_ANIM_NODE_TYPE_AFTER_PREVIOUS: nNodeType = css::presentation::EffectNodeType::AFTER_PREVIOUS; break;
+                case DFF_ANIM_NODE_TYPE_MAIN_SEQUENCE:  nNodeType = css::presentation::EffectNodeType::MAIN_SEQUENCE; break;
+                case DFF_ANIM_NODE_TYPE_TIMING_ROOT:    nNodeType = css::presentation::EffectNodeType::TIMING_ROOT; break;
+                case DFF_ANIM_NODE_TYPE_INTERACTIVE_SEQ:nNodeType = css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE; break;
             }
 
             sal_Int32 nSize = aUserData.getLength();
@@ -3721,11 +3721,11 @@ void AnimationImporter::dump_atom( const Atom* , bool  )
 {
 }
 
-void AnimationImporter::dump_target( ::com::sun::star::uno::Any&  )
+void AnimationImporter::dump_target( css::uno::Any&  )
 {
 }
 
-void AnimationImporter::dump( ::com::sun::star::uno::Any&  )
+void AnimationImporter::dump( css::uno::Any&  )
 {
 }
 

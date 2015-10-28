@@ -47,7 +47,7 @@ public:
     virtual const SdrPage* GetPage (cache::CacheKey aKey) override;
     virtual std::shared_ptr<std::vector<cache::CacheKey> > GetEntryList (bool bVisible) override;
     virtual sal_Int32 GetPriority (cache::CacheKey aKey) override;
-    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel() override;
+    virtual css::uno::Reference<css::uno::XInterface> GetModel() override;
 
 private:
     model::SlideSorterModel& mrModel;

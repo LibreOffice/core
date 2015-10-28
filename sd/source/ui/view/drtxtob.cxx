@@ -375,7 +375,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                             bLeftToRight = false;
                     }
                     else
-                        bLeftToRight = static_cast<const SvxWritingModeItem&>( aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
+                        bLeftToRight = static_cast<const SvxWritingModeItem&>( aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == css::text::WritingMode_LR_TB;
 
                     rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
                     rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
@@ -537,11 +537,11 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 case FRMDIR_ENVIRONMENT:
                 {
                     SdDrawDocument& rDoc = mpView->GetDoc();
-                    ::com::sun::star::text::WritingMode eMode = rDoc.GetDefaultWritingMode();
+                    css::text::WritingMode eMode = rDoc.GetDefaultWritingMode();
                     bool bIsLeftToRight(false);
 
-                    if(::com::sun::star::text::WritingMode_LR_TB == eMode
-                        || ::com::sun::star::text::WritingMode_TB_RL == eMode)
+                    if(css::text::WritingMode_LR_TB == eMode
+                        || css::text::WritingMode_TB_RL == eMode)
                     {
                         bIsLeftToRight = true;
                     }

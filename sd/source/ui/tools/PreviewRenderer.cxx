@@ -142,7 +142,7 @@ Image PreviewRenderer::RenderPage (
                 Cleanup();
             }
         }
-        catch (const com::sun::star::uno::Exception&)
+        catch (const css::uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -201,7 +201,7 @@ Image PreviewRenderer::RenderSubstitution (
             mpPreviewDevice->PixelToLogic(Point(0,0)),
             mpPreviewDevice->PixelToLogic(aSize)));
     }
-    catch (const com::sun::star::uno::Exception&)
+    catch (const css::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -316,7 +316,7 @@ void PreviewRenderer::PaintPage (
     {
         mpView->CompleteRedraw(mpPreviewDevice.get(), aRegion, pRedirector.get());
     }
-    catch (const ::com::sun::star::uno::Exception&)
+    catch (const css::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }

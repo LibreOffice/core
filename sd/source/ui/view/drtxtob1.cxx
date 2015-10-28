@@ -310,7 +310,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             SfxItemSet aAttr( mpView->GetDoc().GetPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
             aAttr.Put( SvxWritingModeItem(
                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
-                    com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
+                    css::text::WritingMode_LR_TB : css::text::WritingMode_TB_RL,
                     SDRATTR_TEXTDIRECTION ) );
             rReq.Done( aAttr );
             mpView->SetAttributes( aAttr );

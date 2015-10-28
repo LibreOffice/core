@@ -45,7 +45,7 @@ QueueProcessor::QueueProcessor (
       mbIsPaused(false)
 {
     // Look into the configuration if there for overriding values.
-    ::com::sun::star::uno::Any aTimeBetweenReqeusts;
+    css::uno::Any aTimeBetweenReqeusts;
     aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue("TimeBetweenHighPriorityRequests");
     if (aTimeBetweenReqeusts.has<sal_Int32>())
         aTimeBetweenReqeusts >>= mnTimeBetweenHighPriorityRequests;
@@ -171,11 +171,11 @@ void QueueProcessor::ProcessOneRequest (
             }
         }
     }
-    catch (::com::sun::star::uno::RuntimeException &)
+    catch (css::uno::RuntimeException &)
     {
         OSL_FAIL("RuntimeException caught in QueueProcessor");
     }
-    catch (::com::sun::star::uno::Exception &)
+    catch (css::uno::Exception &)
     {
         OSL_FAIL("Exception caught in QueueProcessor");
     }

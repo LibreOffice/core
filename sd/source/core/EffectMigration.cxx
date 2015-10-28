@@ -161,7 +161,7 @@ cut-through-black               cut         toBlack
 wedge                           wedge
 */
 
-void EffectMigration::SetFadeEffect( SdPage* pPage, ::com::sun::star::presentation::FadeEffect eNewEffect)
+void EffectMigration::SetFadeEffect( SdPage* pPage, css::presentation::FadeEffect eNewEffect)
 {
     deprecated_FadeEffect_conversion_table_entry* pEntry = deprecated_FadeEffect_conversion_table;
     while( (pEntry->meFadeEffect != FadeEffect_NONE) && (pEntry->meFadeEffect != eNewEffect) )

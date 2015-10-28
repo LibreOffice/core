@@ -194,14 +194,14 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
 }
 
 // XSearchable
-uno::Reference< ::com::sun::star::util::XSearchDescriptor > SAL_CALL SdUnoSearchReplaceShape::createSearchDescriptor(  )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< css::util::XSearchDescriptor > SAL_CALL SdUnoSearchReplaceShape::createSearchDescriptor(  )
+    throw(css::uno::RuntimeException, std::exception)
 {
     return new SdUnoSearchReplaceDescriptor(false);
 }
 
-uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape::findAll( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XSearchDescriptor >& xDesc )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape::findAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+    throw(css::uno::RuntimeException, std::exception)
 {
     SdUnoSearchReplaceDescriptor* pDescr = SdUnoSearchReplaceDescriptor::getImplementation( xDesc );
     if( pDescr == NULL )
@@ -307,8 +307,8 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
     return xRet;
 }
 
-uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findFirst( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XSearchDescriptor >& xDesc )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findFirst( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+    throw(css::uno::RuntimeException, std::exception)
 {
     uno::Reference< text::XTextRange > xRange( GetCurrentShape(), uno::UNO_QUERY );
     if( xRange.is() )
@@ -342,8 +342,8 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() co
 
 }
 
-uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xStartAt, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XSearchDescriptor >& xDesc )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNext( const css::uno::Reference< css::uno::XInterface >& xStartAt, const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+    throw(css::uno::RuntimeException, std::exception)
 {
     SdUnoSearchReplaceDescriptor* pDescr = SdUnoSearchReplaceDescriptor::getImplementation( xDesc );
 
@@ -722,40 +722,40 @@ SdUnoSearchReplaceDescriptor::~SdUnoSearchReplaceDescriptor() throw()
 
 // XSearchDescriptor
 OUString SAL_CALL SdUnoSearchReplaceDescriptor::getSearchString()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return maSearchStr;
 }
 
 void SAL_CALL SdUnoSearchReplaceDescriptor::setSearchString( const OUString& aString )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     maSearchStr = aString;
 }
 
 // XReplaceDescriptor
 OUString SAL_CALL SdUnoSearchReplaceDescriptor::getReplaceString()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return maReplaceStr;
 }
 
 void SAL_CALL SdUnoSearchReplaceDescriptor::setReplaceString( const OUString& aReplaceString )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     maReplaceStr = aReplaceString;
 }
 
 // XPropertySet
-uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SdUnoSearchReplaceDescriptor::getPropertySetInfo()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdUnoSearchReplaceDescriptor::getPropertySetInfo()
+    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return mpPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue )
+    throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -783,7 +783,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aP
 }
 
 uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString& PropertyName )
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -809,10 +809,10 @@ uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString
     return aAny;
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const OUString& , const css::uno::Reference< css::beans::XPropertyChangeListener >&  ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const OUString& , const css::uno::Reference< css::beans::XPropertyChangeListener >&  ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const OUString& , const css::uno::Reference< css::beans::XVetoableChangeListener >&  ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const OUString& , const css::uno::Reference< css::beans::XVetoableChangeListener >&  ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) {}
 
 /* ================================================================= */
 
@@ -827,26 +827,26 @@ SdUnoFindAllAccess::~SdUnoFindAllAccess() throw()
 
 // XElementAccess
 uno::Type SAL_CALL SdUnoFindAllAccess::getElementType()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL SdUnoFindAllAccess::hasElements()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return maSequence.getLength() > 0;
 }
 
 // XIndexAccess
 sal_Int32 SAL_CALL SdUnoFindAllAccess::getCount()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return maSequence.getLength();
 }
 
 uno::Any SAL_CALL SdUnoFindAllAccess::getByIndex( sal_Int32 Index )
-    throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
 

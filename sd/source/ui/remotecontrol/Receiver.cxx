@@ -137,7 +137,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         float y = aCommand[2].toFloat();
         SolarMutexGuard aSolarGuard;
 
-        const ::com::sun::star::geometry::RealPoint2D pos(x,y);
+        const css::geometry::RealPoint2D pos(x,y);
         // std::cerr << "Pointer at ("<<pos.X<<","<<pos.Y<<")" << std::endl;
 
         if (xSlideShow.is()) try
@@ -196,7 +196,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         float y = aCommand[2].toFloat();
 
         SAL_INFO( "sdremote", "Pointer at ("<<x<<","<<y<<")" );
-        const ::com::sun::star::geometry::RealPoint2D pos(x,y);
+        const css::geometry::RealPoint2D pos(x,y);
 
         SolarMutexGuard aSolarGuard;
         if (xSlideShow.is()) try

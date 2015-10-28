@@ -123,7 +123,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         case XATTR_FILLFLOATTRANSPARENCE :
                         case XATTR_FILLGRADIENT :
                         {
-                            if ( ( pAny->getValueType() == ::cppu::UnoType< ::com::sun::star::awt::Gradient>::get() )
+                            if ( ( pAny->getValueType() == ::cppu::UnoType< css::awt::Gradient>::get() )
                                 && ( aIt->nMemberId == MID_FILLGRADIENT ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
@@ -137,7 +137,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         break;
                         case XATTR_FILLHATCH :
                         {
-                            if ( ( pAny->getValueType() == ::cppu::UnoType< ::com::sun::star::drawing::Hatch>::get() )
+                            if ( ( pAny->getValueType() == ::cppu::UnoType< css::drawing::Hatch>::get() )
                                 && ( aIt->nMemberId == MID_FILLHATCH ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
@@ -151,8 +151,8 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         break;
                         case XATTR_FILLBITMAP :
                         {
-                            if ( ( ( pAny->getValueType() == cppu::UnoType<com::sun::star::awt::XBitmap>::get()) ||
-                                    ( pAny->getValueType() == cppu::UnoType<com::sun::star::graphic::XGraphic>::get()) ) &&
+                            if ( ( ( pAny->getValueType() == cppu::UnoType<css::awt::XBitmap>::get()) ||
+                                    ( pAny->getValueType() == cppu::UnoType<css::graphic::XGraphic>::get()) ) &&
                                     ( aIt->nMemberId == MID_BITMAP ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );

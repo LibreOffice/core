@@ -171,7 +171,7 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase& rBase )
     return GetSlideShow( rBase.GetDocument() );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > SlideShow::GetSlideShowController(ViewShellBase& rBase )
+css::uno::Reference< css::presentation::XSlideShowController > SlideShow::GetSlideShowController(ViewShellBase& rBase )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
 
@@ -183,8 +183,8 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase& rBase )
 }
 
 bool SlideShow::StartPreview( ViewShellBase& rBase,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
+    const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
+    const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
     vcl::Window* pParent /* = 0 */ )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );

@@ -387,9 +387,9 @@ void SdLayer::set( LayerAttribute what, bool flag ) throw()
     //TODO: uno::Exception?
 }
 
-// ::com::sun::star::container::XChild
+// css::container::XChild
 uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -400,8 +400,8 @@ uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent()
 }
 
 void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& )
-    throw (::com::sun::star::lang::NoSupportException,
-        ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::lang::NoSupportException,
+        css::uno::RuntimeException, std::exception)
 {
     throw lang::NoSupportException ();
 }
