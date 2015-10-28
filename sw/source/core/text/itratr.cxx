@@ -435,14 +435,16 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
 {
     const SwFmtAnchor& rFmtA = pNd->GetAnchor();
 
-    if ((FLY_AT_PARA == rFmtA.GetAnchorId()) ||
-        (FLY_AT_CHAR == rFmtA.GetAnchorId()))
+    if ((FLY_AT_PARA != rFmtA.GetAnchorId()) &&
+        (FLY_AT_CHAR != rFmtA.GetAnchorId()))
     {
-        const SwPosition *pPos = rFmtA.GetCntntAnchor();
-        OSL_ENSURE(pPos && pIn, "Unexpected NULL arguments");
-        if (!pPos || !pIn || pIn->nIndx != pPos->nNode.GetIndex())
-            return;
+        return;
     }
+
+    const SwPosition *pPos = rFmtA.GetCntntAnchor();
+    OSL_ENSURE(pPos && pIn, "Unexpected NULL arguments");
+    if (!pPos || !pIn || pIn->nIndx != pPos->nNode.GetIndex())
+        return;
 
     long nMin, nMax;
     SwHTMLTableLayout *pLayout = 0;
