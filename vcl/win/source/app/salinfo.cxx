@@ -174,7 +174,7 @@ Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
    The first dimension is the button combination, the second dimension
    is the button identifier.
 */
-static int DEFAULT_BTN_MAPPING_TABLE[][8] =
+static const int DEFAULT_BTN_MAPPING_TABLE[][8] =
 {
     //  Undefined        OK             CANCEL         ABORT          RETRY          IGNORE         YES             NO
     { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //OK
