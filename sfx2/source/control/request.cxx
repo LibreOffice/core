@@ -68,7 +68,7 @@ struct SfxRequest_Impl: public SfxListener
     SfxAllItemSet*  pInternalArgs;
     SfxViewFrame*   pViewFrame;
 
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
 
     explicit SfxRequest_Impl( SfxRequest *pOwner )
         : pAnti( pOwner)
@@ -237,7 +237,7 @@ SfxRequest::SfxRequest
 SfxRequest::SfxRequest
 (
     const SfxSlot* pSlot,       // executed <Slot-Id>
-    const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rArgs,
+    const css::uno::Sequence < css::beans::PropertyValue >& rArgs,
     SfxCallMode     nMode,      // Synch/API/...
     SfxItemPool&   rPool        // necessary for the SfxItemSet for parameters
 )
@@ -360,7 +360,7 @@ void SfxRequest_Impl::Record
 
         uno::Reference< util::XURLTransformer > xTransform = util::URLTransformer::create( xContext );
 
-        com::sun::star::util::URL aURL;
+        css::util::URL aURL;
         aURL.Complete = aCmd;
         xTransform->parseStrict(aURL);
 
@@ -377,7 +377,7 @@ void SfxRequest::Record_Impl
 (
     SfxShell&       rSh,    // the <SfxShell>, which has executed the Request
     const SfxSlot&  rSlot,  // the <SfxSlot>, which has executed the Request
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,
+    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder,
     SfxViewFrame* pViewFrame
 )
 
@@ -706,7 +706,7 @@ bool SfxRequest::IsDone() const
 
 
 
-com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame* pView )
+css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame* pView )
 
 /*  [Description]
 
@@ -718,16 +718,16 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
 */
 
 {
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
 
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+    css::uno::Reference< css::beans::XPropertySet > xSet(
         (pView ? pView : SfxViewFrame::Current())->GetFrame().GetFrameInterface(),
-        com::sun::star::uno::UNO_QUERY);
+        css::uno::UNO_QUERY);
 
     if(xSet.is())
     {
-        com::sun::star::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
-        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+        css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
+        css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
         aProp >>= xSupplier;
         if(xSupplier.is())
             xRecorder = xSupplier->getDispatchRecorder();

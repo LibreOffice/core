@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > & rDisp, const ::com::sun::star::util::URL& rURL, SfxStateCache *pStateCache, const SfxSlot* pS )
+BindDispatch_Impl::BindDispatch_Impl( const css::uno::Reference< css::frame::XDispatch > & rDisp, const css::util::URL& rURL, SfxStateCache *pStateCache, const SfxSlot* pS )
     : xDisp( rDisp )
     , aURL( rURL )
     , pCache( pStateCache )
@@ -63,22 +63,22 @@ BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::
     aStatus.IsEnabled = sal_True;
 }
 
-void SAL_CALL BindDispatch_Impl::disposing( const ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL BindDispatch_Impl::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
 {
     if ( xDisp.is() )
     {
-        xDisp->removeStatusListener( static_cast<com::sun::star::frame::XStatusListener*>(this), aURL );
-        xDisp = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > ();
+        xDisp->removeStatusListener( static_cast<css::frame::XStatusListener*>(this), aURL );
+        xDisp = css::uno::Reference< css::frame::XDispatch > ();
     }
 }
 
-void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& rEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw( css::uno::RuntimeException, std::exception )
 {
     aStatus = rEvent;
     if ( !pCache )
         return;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef( static_cast<cppu::OWeakObject*>(this), ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XStatusListener >  xRef( static_cast<cppu::OWeakObject*>(this), css::uno::UNO_QUERY );
     if ( aStatus.Requery )
         pCache->Invalidate( true );
     else
@@ -93,9 +93,9 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
         else if (aStatus.State.hasValue())
         {
             eState = SfxItemState::DEFAULT;
-            ::com::sun::star::uno::Any aAny = aStatus.State;
+            css::uno::Any aAny = aStatus.State;
 
-            ::com::sun::star::uno::Type pType = aAny.getValueType();
+            css::uno::Type pType = aAny.getValueType();
             if ( pType == cppu::UnoType< bool >::get() )
             {
                 bool bTemp = false;
@@ -153,8 +153,8 @@ void BindDispatch_Impl::Release()
 {
     if ( xDisp.is() )
     {
-        xDisp->removeStatusListener( static_cast<com::sun::star::frame::XStatusListener*>(this), aURL );
-        xDisp = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > ();
+        xDisp->removeStatusListener( static_cast<css::frame::XStatusListener*>(this), aURL );
+        xDisp = css::uno::Reference< css::frame::XDispatch > ();
     }
 
     pCache = NULL;
@@ -227,7 +227,7 @@ void SfxStateCache::Invalidate( bool bWithMsg )
 
 // gets the corresponding function from the dispatcher or the cache
 
-const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & xProv )
+const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , const css::uno::Reference< css::frame::XDispatchProvider > & xProv )
 {
 
     if ( bSlotDirty )
@@ -253,7 +253,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             }
 
             // create the dispatch URL from the slot data
-            ::com::sun::star::util::URL aURL;
+            css::util::URL aURL;
             OUString aCmd = ".uno:";
             aURL.Protocol = aCmd;
             aURL.Path = OUString::createFromAscii( pSlot->GetUnoName() );
@@ -262,11 +262,11 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             aURL.Main = aCmd;
 
             // try to get a dispatch object for this command
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
+            css::uno::Reference< css::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
             if ( xDisp.is() )
             {
                 // test the dispatch object if it is just a wrapper for a SfxDispatcher
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel( xDisp, ::com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference< css::lang::XUnoTunnel > xTunnel( xDisp, css::uno::UNO_QUERY );
                 SfxOfficeDispatch* pDisp = NULL;
                 if ( xTunnel.is() )
                 {
@@ -300,8 +300,8 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             }
             else if ( rDispat.GetFrame() )
             {
-                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider > xFrameProv(
-                        rDispat.GetFrame()->GetFrame().GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference < css::frame::XDispatchProvider > xFrameProv(
+                        rDispat.GetFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY );
                 if ( xFrameProv != xProv )
                     return GetSlotServer( rDispat, xFrameProv );
             }
@@ -478,17 +478,17 @@ void SfxStateCache::SetCachedState( bool bAlways )
 
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SfxStateCache::GetDispatch() const
+css::uno::Reference< css::frame::XDispatch >  SfxStateCache::GetDispatch() const
 {
     if ( pDispatch )
         return pDispatch->xDisp;
-    return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > ();
+    return css::uno::Reference< css::frame::XDispatch > ();
 }
 
 void SfxStateCache::Dispatch( const SfxItemSet* pSet, bool bForceSynchron )
 {
     // protect pDispatch against destruction in the call
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XStatusListener > xKeepAlive( pDispatch );
+    css::uno::Reference < css::frame::XStatusListener > xKeepAlive( pDispatch );
     if ( pDispatch )
     {
         uno::Sequence < beans::PropertyValue > aArgs;

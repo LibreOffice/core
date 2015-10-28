@@ -100,7 +100,7 @@ void SfxMenuManager::Construct( SfxVirtualMenu& rMenu )
 }
 
 
-void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs, Menu* pMenu )
+void InsertVerbs_Impl( SfxBindings* pBindings, const css::uno::Sequence < css::embed::VerbDescriptor >& aVerbs, Menu* pMenu )
 {
     SfxViewShell *pView = pBindings->GetDispatcher()->GetFrame()->GetViewShell();
     if ( pView && aVerbs.getLength() )
@@ -306,7 +306,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
 
     InsertVerbs_Impl( &pFrame->GetBindings(), pFrame->GetViewShell()->GetVerbs(), pSVMenu );
     Menu* pMenu = NULL;
-    ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
+    css::ui::ContextMenuExecuteEvent aEvent;
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
     aEvent.ExecutePosition.X = rPoint.X();
     aEvent.ExecutePosition.Y = rPoint.Y();
@@ -356,7 +356,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
 
     InsertVerbs_Impl( &pFrame->GetBindings(), pFrame->GetViewShell()->GetVerbs(), pSVMenu );
     Menu* pMenu = NULL;
-    ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
+    css::ui::ContextMenuExecuteEvent aEvent;
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
     aEvent.ExecutePosition.X = rPoint.X();
     aEvent.ExecutePosition.Y = rPoint.Y();

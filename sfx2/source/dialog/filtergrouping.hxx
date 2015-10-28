@@ -36,7 +36,7 @@ namespace sfx2
         sal_Int32 m_nIterator;
 
     public:
-        explicit TSortedFilterList(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >& xFilterList);
+        explicit TSortedFilterList(const css::uno::Reference< css::container::XEnumeration >& xFilterList);
         const SfxFilter* First();
         const SfxFilter* Next();
 
@@ -50,7 +50,7 @@ namespace sfx2
     */
     void appendFiltersForSave(
         TSortedFilterList& _rFilterMatcher,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
+        const css::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
         OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl,
         const OUString& _rFactory
@@ -58,7 +58,7 @@ namespace sfx2
 
     void appendExportFilters(
         TSortedFilterList& _rFilterMatcher,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
+        const css::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
         OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl
         );
@@ -69,7 +69,7 @@ namespace sfx2
     */
     void appendFiltersForOpen(
         TSortedFilterList& _rFilterMatcher,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
+        const css::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
         OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl
     );

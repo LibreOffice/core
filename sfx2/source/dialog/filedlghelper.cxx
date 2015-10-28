@@ -852,7 +852,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     sal_Int16 nDialog,
     vcl::Window* _pPreferredParentWindow,
     const OUString& sStandardDir,
-    const ::com::sun::star::uno::Sequence< OUString >& rBlackList
+    const css::uno::Sequence< OUString >& rBlackList
     )
     :m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
@@ -1084,7 +1084,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     {
         mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ).toString() );
         try {
-                com::sun::star::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
+                css::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
                 xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, sal_True );
         }
         catch( const Exception & ) { }
@@ -2233,7 +2233,7 @@ FileDialogHelper::FileDialogHelper(
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
     const OUString& rStandardDir,
-    const ::com::sun::star::uno::Sequence< OUString >& rBlackList)
+    const css::uno::Sequence< OUString >& rBlackList)
     : m_nError(0)
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, NULL, rStandardDir, rBlackList );
@@ -2260,7 +2260,7 @@ FileDialogHelper::FileDialogHelper(
     const OUString& aFilterUIName,
     const OUString& aExtName,
     const OUString& rStandardDir,
-    const ::com::sun::star::uno::Sequence< OUString >& rBlackList,
+    const css::uno::Sequence< OUString >& rBlackList,
     vcl::Window* _pPreferredParent )
     : m_nError(0)
 {
@@ -2584,7 +2584,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              const OUString* pPath,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,
-                             const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
+                             const css::uno::Sequence< OUString >& rBlackList )
 {
     ErrCode nRet;
     FileDialogHelper aDialog( nDialogType, nFlags,
@@ -2610,9 +2610,9 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
         ::comphelper::DocPasswordRequestType_MS :
         ::comphelper::DocPasswordRequestType_STANDARD;
 
-    ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, aURL, bool( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY ) ) );
+    ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, css::task::PasswordRequestMode_PASSWORD_CREATE, aURL, bool( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY ) ) );
 
-    uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
+    uno::Reference< css::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
     xInteractionHandler->handle( rRequest );
     if ( pPasswordRequest->isPassword() )
     {

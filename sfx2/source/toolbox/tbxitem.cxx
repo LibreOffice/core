@@ -155,10 +155,10 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
     if ( xModel.is() )
     {
         // Get tunnel from model to retrieve the SfxObjectShell pointer from it
-        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xObj( xModel, UNO_QUERY );
+        css::uno::Reference < css::lang::XUnoTunnel > xObj( xModel, UNO_QUERY );
         if ( xObj.is() )
         {
-            ::com::sun::star::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
+            css::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
             sal_Int64 nHandle = xObj->getSomething( aSeq );
             if ( nHandle )
                 pObjShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
@@ -253,7 +253,7 @@ unsigned short SfxToolBoxControl::GetSlotId() const
 
 
 
-void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_bDisposed )
         return;
@@ -398,7 +398,7 @@ void SfxToolBoxControl::Dispatch(
 {
     if ( rProvider.is() )
     {
-        ::com::sun::star::util::URL aTargetURL;
+        css::util::URL aTargetURL;
         aTargetURL.Complete = rCommand;
         Reference < XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aTargetURL );
@@ -409,7 +409,7 @@ void SfxToolBoxControl::Dispatch(
     }
 }
 
-void SfxToolBoxControl::Dispatch( const OUString& aCommand, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
+void SfxToolBoxControl::Dispatch( const OUString& aCommand, css::uno::Sequence< css::beans::PropertyValue >& aArgs )
 {
     Reference < XController > xController;
 
@@ -420,7 +420,7 @@ void SfxToolBoxControl::Dispatch( const OUString& aCommand, ::com::sun::star::un
     Reference < XDispatchProvider > xProvider( xController, UNO_QUERY );
     if ( xProvider.is() )
     {
-        ::com::sun::star::util::URL aTargetURL;
+        css::util::URL aTargetURL;
         aTargetURL.Complete = aCommand;
         getURLTransformer()->parseStrict( aTargetURL );
 
@@ -430,15 +430,15 @@ void SfxToolBoxControl::Dispatch( const OUString& aCommand, ::com::sun::star::un
     }
 }
 
-void SAL_CALL SfxToolBoxControl::disposing( const ::com::sun::star::lang::EventObject& aEvent )
-throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL SfxToolBoxControl::disposing( const css::lang::EventObject& aEvent )
+throw( css::uno::RuntimeException, std::exception )
 {
     svt::ToolboxController::disposing( aEvent );
 }
 
 // XStatusListener
 void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent )
-throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+throw ( css::uno::RuntimeException, std::exception )
 {
     SfxViewFrame* pViewFrame = NULL;
     Reference < XController > xController;
@@ -485,7 +485,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
             if ( rEvent.IsEnabled )
             {
                 eState = SfxItemState::DEFAULT;
-                ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
+                css::uno::Type pType = rEvent.State.getValueType();
 
                 if ( pType == cppu::UnoType<void>::get() )
                 {
@@ -516,7 +516,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
-                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::ItemStatus>::get() )
+                else if ( pType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
@@ -525,11 +525,11 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
                         tmpState != SfxItemState::READONLY && tmpState != SfxItemState::DONTCARE &&
                         tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
-                        throw ::com::sun::star::uno::RuntimeException("unknown status");
+                        throw css::uno::RuntimeException("unknown status");
                     eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
                 }
-                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )
+                else if ( pType == cppu::UnoType< css::frame::status::Visibility>::get() )
                 {
                     Visibility aVisibilityStatus;
                     rEvent.State >>= aVisibilityStatus;
@@ -556,56 +556,56 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 }
 
 // XSubToolbarController
-sal_Bool SAL_CALL SfxToolBoxControl::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SfxToolBoxControl::opensSubToolbar() throw (css::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
-OUString SAL_CALL SfxToolBoxControl::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL SfxToolBoxControl::getSubToolbarName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
-void SAL_CALL SfxToolBoxControl::functionSelected( const OUString& /*aCommand*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::functionSelected( const OUString& /*aCommand*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     // must be implemented by sub-class
 }
 
-void SAL_CALL SfxToolBoxControl::updateImage() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::updateImage() throw (css::uno::RuntimeException, std::exception)
 {
     // must be implemented by sub-class
 }
 
 // XToolbarController
-void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Select( (sal_uInt16)KeyModifier );
 }
 
-void SAL_CALL SfxToolBoxControl::click() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::click() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Click();
 }
 
-void SAL_CALL SfxToolBoxControl::doubleClick() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::doubleClick() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     DoubleClick();
 }
 
-Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception)
+Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     VclPtr<vcl::Window> pWindow = CreatePopupWindow();
     if ( pWindow )
         return VCLUnoHelper::GetInterface( pWindow );
     else
-        return Reference< ::com::sun::star::awt::XWindow >();
+        return Reference< css::awt::XWindow >();
 }
 
-Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< ::com::sun::star::awt::XWindow >& rParent ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< css::awt::XWindow >& rParent ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));
@@ -748,14 +748,14 @@ VclPtr<vcl::Window> SfxToolBoxControl::CreateItemWindow( vcl::Window * )
 class SfxFrameStatusListener : public svt::FrameStatusListener
 {
     public:
-        SfxFrameStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+        SfxFrameStatusListener( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                const css::uno::Reference< css::frame::XFrame >& xFrame,
                                 SfxPopupWindow* pCallee );
         virtual ~SfxFrameStatusListener();
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event )
+            throw ( css::uno::RuntimeException, std::exception ) override;
 
     private:
         VclPtr<SfxPopupWindow> m_pCallee;
@@ -778,8 +778,8 @@ SfxFrameStatusListener::~SfxFrameStatusListener()
 
 
 // XStatusListener
-void SAL_CALL SfxFrameStatusListener::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& rEvent )
-throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL SfxFrameStatusListener::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+throw ( css::uno::RuntimeException, std::exception )
 {
     SfxViewFrame* pViewFrame = NULL;
     Reference < XController > xController;
@@ -827,7 +827,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
             if ( rEvent.IsEnabled )
             {
                 eState = SfxItemState::DEFAULT;
-                ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
+                css::uno::Type pType = rEvent.State.getValueType();
 
                 if ( pType == cppu::UnoType<void>::get() )
                 {
@@ -858,7 +858,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
-                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::ItemStatus>::get() )
+                else if ( pType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
@@ -867,11 +867,11 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     if (tmpState != SfxItemState::UNKNOWN && tmpState != SfxItemState::DISABLED &&
                         tmpState != SfxItemState::READONLY && tmpState != SfxItemState::DONTCARE &&
                         tmpState != SfxItemState::DEFAULT && tmpState != SfxItemState::SET)
-                        throw ::com::sun::star::uno::RuntimeException("unknown status");
+                        throw css::uno::RuntimeException("unknown status");
                     eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
                 }
-                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )
+                else if ( pType == cppu::UnoType< css::frame::status::Visibility>::get() )
                 {
                     Visibility aVisibilityStatus;
                     rEvent.State >>= aVisibilityStatus;

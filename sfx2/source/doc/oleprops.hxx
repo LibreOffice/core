@@ -294,10 +294,10 @@ public:
     bool                GetStringValue( OUString& rValue, sal_Int32 nPropId ) const;
     /** Returns the value of a time stamp property with the passed ID in rValue.
         @return  true = Property found, rValue is valid; false = Property not found. */
-    bool                GetFileTimeValue( ::com::sun::star::util::DateTime& rValue, sal_Int32 nPropId ) const;
+    bool                GetFileTimeValue( css::util::DateTime& rValue, sal_Int32 nPropId ) const;
     /** Returns the value of a date property with the passed ID in rValue.
         @return  true = Property found, rValue is valid; false = Property not found. */
-    bool                GetDateValue( ::com::sun::star::util::Date& rValue, sal_Int32 nPropId ) const;
+    bool                GetDateValue( css::util::Date& rValue, sal_Int32 nPropId ) const;
 
     /** Adds the passed property to the property set. Drops an existing old property. */
     void                SetProperty( SfxOlePropertyRef xProp );
@@ -311,21 +311,21 @@ public:
         @return  true = Property inserted; false = String was empty, property not inserted. */
     bool                SetStringValue( sal_Int32 nPropId, const OUString& rValue, bool bSkipEmpty = false );
     /** Inserts a time stamp property with the passed value. */
-    void                SetFileTimeValue( sal_Int32 nPropId, const ::com::sun::star::util::DateTime& rValue );
+    void                SetFileTimeValue( sal_Int32 nPropId, const css::util::DateTime& rValue );
     /** Inserts a date property with the passed value. */
-    void                SetDateValue( sal_Int32 nPropId, const ::com::sun::star::util::Date& rValue );
+    void                SetDateValue( sal_Int32 nPropId, const css::util::Date& rValue );
     /** Inserts a thumbnail property from the passed meta file. */
     void                SetThumbnailValue( sal_Int32 nPropId,
-                            const ::com::sun::star::uno::Sequence<sal_uInt8> & i_rData);
+                            const css::uno::Sequence<sal_uInt8> & i_rData);
     /** Inserts a BLOB property with the passed data. */
     void                SetBlobValue( sal_Int32 nPropId,
-                            const ::com::sun::star::uno::Sequence<sal_uInt8> & i_rData);
+                            const css::uno::Sequence<sal_uInt8> & i_rData);
 
     /** Returns the value of the property with the passed ID in a UNO any. */
-    com::sun::star::uno::Any GetAnyValue( sal_Int32 nPropId ) const;
+    css::uno::Any GetAnyValue( sal_Int32 nPropId ) const;
     /** Inserts a property created from the passed any.
         @return  true = Property converted and inserted; false = Property type not supported. */
-    bool                SetAnyValue( sal_Int32 nPropId, const com::sun::star::uno::Any& rValue );
+    bool                SetAnyValue( sal_Int32 nPropId, const css::uno::Any& rValue );
 
     /** Returns the custom name for the passed property ID, or an empty string, if name not found. */
     OUString            GetPropertyName( sal_Int32 nPropId ) const;

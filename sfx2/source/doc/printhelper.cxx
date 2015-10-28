@@ -63,8 +63,8 @@ struct IMPL_PrintListener_DataContainer : public SfxListener
 {
     SfxObjectShellRef                               m_pObjectShell;
     ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer;
-    uno::Reference< com::sun::star::view::XPrintJob>     m_xPrintJob;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintOptions;
+    uno::Reference< css::view::XPrintJob>           m_xPrintJob;
+    css::uno::Sequence< css::beans::PropertyValue > m_aPrintOptions;
 
     explicit IMPL_PrintListener_DataContainer( ::osl::Mutex& aMutex)
             :   m_pObjectShell          ( 0 )
@@ -95,16 +95,16 @@ Size impl_Size_Struct2Object( const awt::Size& aSize )
 
 class SfxPrintJob_Impl : public cppu::WeakImplHelper
 <
-    com::sun::star::view::XPrintJob
+    css::view::XPrintJob
 >
 {
     IMPL_PrintListener_DataContainer* m_pData;
 
 public:
     explicit SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData );
-    virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrintOptions(  ) throw (RuntimeException, std::exception) override;
-    virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (RuntimeException, std::exception) override;
-    virtual Reference< ::com::sun::star::view::XPrintable > SAL_CALL getPrintable(  ) throw (RuntimeException, std::exception) override;
+    virtual Sequence< css::beans::PropertyValue > SAL_CALL getPrintOptions(  ) throw (RuntimeException, std::exception) override;
+    virtual Sequence< css::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (RuntimeException, std::exception) override;
+    virtual Reference< css::view::XPrintable > SAL_CALL getPrintable(  ) throw (RuntimeException, std::exception) override;
     virtual void SAL_CALL cancelJob() throw (RuntimeException, std::exception) override;
 };
 
@@ -113,12 +113,12 @@ SfxPrintJob_Impl::SfxPrintJob_Impl( IMPL_PrintListener_DataContainer* pData )
 {
 }
 
-Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrintOptions() throw (RuntimeException, std::exception)
+Sequence< css::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrintOptions() throw (RuntimeException, std::exception)
 {
     return m_pData->m_aPrintOptions;
 }
 
-Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter() throw (RuntimeException, std::exception)
+Sequence< css::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter() throw (RuntimeException, std::exception)
 {
     if( m_pData->m_pObjectShell.Is() )
     {
@@ -126,10 +126,10 @@ Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::ge
         if ( xPrintable.is() )
             return xPrintable->getPrinter();
     }
-    return Sequence< ::com::sun::star::beans::PropertyValue >();
+    return Sequence< css::beans::PropertyValue >();
 }
 
-Reference< ::com::sun::star::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPrintable() throw (RuntimeException, std::exception)
+Reference< css::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPrintable() throw (RuntimeException, std::exception)
 {
     Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->GetModel() : NULL, UNO_QUERY );
     return xPrintable;
@@ -147,11 +147,11 @@ SfxPrintHelper::SfxPrintHelper()
     m_pData = new IMPL_PrintListener_DataContainer(m_aMutex);
 }
 
-void SAL_CALL SfxPrintHelper::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     if ( aArguments.getLength() )
     {
-        com::sun::star::uno::Reference < com::sun::star::frame::XModel > xModel;
+        css::uno::Reference < css::frame::XModel > xModel;
         aArguments[0] >>= xModel;
         uno::Reference < lang::XUnoTunnel > xObj( xModel, uno::UNO_QUERY );
         uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
@@ -252,7 +252,7 @@ namespace
 //  XPrintable
 
 
-uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() throw(::com::sun::star::uno::RuntimeException, std::exception)
+uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() throw(css::uno::RuntimeException, std::exception)
 {
     // object already disposed?
     SolarMutexGuard aGuard;
@@ -341,7 +341,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         {
             OUString aPrinterName;
             if ( ! ( rProp.Value >>= aPrinterName ) )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
 
             if ( aPrinterName != pPrinter->GetName() )
             {
@@ -368,7 +368,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             if ( !( rProp.Value >>= eOrient ) )
             {
                 if ( !( rProp.Value >>= lDummy ) )
-                    throw ::com::sun::star::lang::IllegalArgumentException();
+                    throw css::lang::IllegalArgumentException();
                 eOrient = ( view::PaperOrientation) lDummy;
             }
 
@@ -385,7 +385,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             if ( !( rProp.Value >>= nPaperFormat ) )
             {
                 if ( !( rProp.Value >>= lDummy ) )
-                    throw ::com::sun::star::lang::IllegalArgumentException();
+                    throw css::lang::IllegalArgumentException();
                 nPaperFormat = ( view::PaperFormat ) lDummy;
             }
 
@@ -402,7 +402,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             awt::Size aTempSize ;
             if ( !( rProp.Value >>= aTempSize ) )
             {
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             }
             else
             {
@@ -415,7 +415,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         {
             OUString aTmp;
             if ( !( rProp.Value >>= aTmp ) )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             sal_uInt16 nCount = pPrinter->GetPaperBinCount();
             for (sal_uInt16 nBin=0; nBin<nCount; nBin++)
             {
@@ -450,7 +450,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 }
 
 void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter)
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     // object already disposed?
     SolarMutexGuard aGuard;
@@ -541,34 +541,34 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 {
                     ::ucbhelper::Content aSource(
                             OUString((*ppTempFile)->GetURL()),
-                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                            css::uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext());
 
                     ::ucbhelper::Content aTarget(
                             OUString(aSplitter.GetMainURL(INetURLObject::NO_DECODE)),
-                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                            css::uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext());
 
                     aTarget.transferContent(
                             aSource,
                             ::ucbhelper::InsertOperation_COPY,
                             OUString(sFileName),
-                            ::com::sun::star::ucb::NameClash::OVERWRITE);
+                            css::ucb::NameClash::OVERWRITE);
                 }
             }
-            catch (const ::com::sun::star::ucb::ContentCreationException&)
+            catch (const css::ucb::ContentCreationException&)
             {
                 OSL_FAIL("content create exception");
             }
-            catch (const ::com::sun::star::ucb::CommandAbortedException&)
+            catch (const css::ucb::CommandAbortedException&)
             {
                 OSL_FAIL("command abort exception");
             }
-            catch (const ::com::sun::star::uno::RuntimeException&)
+            catch (const css::uno::RuntimeException&)
             {
                 OSL_FAIL("runtime exception");
             }
-            catch (const ::com::sun::star::uno::Exception&)
+            catch (const css::uno::Exception&)
             {
                 OSL_FAIL("unknown exception");
             }
@@ -585,7 +585,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 //  XPrintable
 
 void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >& rOptions)
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
@@ -615,7 +615,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );
     sal_Int32 nProps = 0;
     bool  bWaitUntilEnd = false;
-    sal_Int16 nDuplexMode = ::com::sun::star::view::DuplexMode::UNKNOWN;
+    sal_Int16 nDuplexMode = css::view::DuplexMode::UNKNOWN;
     for ( int n = 0; n < rOptions.getLength(); ++n )
     {
         // get Property-Value from options
@@ -631,7 +631,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 (!(rProp.Value>>=sTemp))
                )
             {
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             }
 
             OUString      sPath;
@@ -650,7 +650,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 OUString sSystemPath(sTemp);
                 OUString sFileURL;
                 if (::osl::FileBase::getFileURLFromSystemPath(sSystemPath,sFileURL)!=::osl::FileBase::E_None)
-                    throw ::com::sun::star::lang::IllegalArgumentException();
+                    throw css::lang::IllegalArgumentException();
                 aCheckedArgs[nProps].Name = rProp.Name;
                 aCheckedArgs[nProps++].Value <<= sFileURL;
                 // and append the local filename
@@ -701,7 +701,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         {
             sal_Int32 nCopies = 0;
             if ( !( rProp.Value >>= nCopies ) )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
 
             aCheckedArgs[nProps].Name = rProp.Name;
             aCheckedArgs[nProps++].Value <<= nCopies;
@@ -718,7 +718,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= bTemp;
             }
             else
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
         }
 
         // Pages-Property
@@ -731,14 +731,14 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sTemp;
             }
             else
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
         }
 
         // MonitorVisible
         else if ( rProp.Name == "MonitorVisible" )
         {
             if( !(rProp.Value >>= bMonitor) )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             aCheckedArgs[nProps].Name = rProp.Name;
             aCheckedArgs[nProps++].Value <<= bMonitor;
         }
@@ -747,7 +747,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         else if ( rProp.Name == "Wait" )
         {
             if ( !(rProp.Value >>= bWaitUntilEnd) )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             aCheckedArgs[nProps].Name = rProp.Name;
             aCheckedArgs[nProps++].Value <<= bWaitUntilEnd;
         }
@@ -755,7 +755,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         else if ( rProp.Name == "DuplexMode" )
         {
             if ( !(rProp.Value >>= nDuplexMode ) )
-                throw ::com::sun::star::lang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
             aCheckedArgs[nProps].Name = rProp.Name;
             aCheckedArgs[nProps++].Value <<= nDuplexMode;
         }
@@ -802,7 +802,7 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
         || pPrintHint->GetWhich() == SFX_PRINTABLESTATE_CANCELJOB )
         return;
 
-    if ( pPrintHint->GetWhich() == com::sun::star::view::PrintableState_JOB_STARTED )
+    if ( pPrintHint->GetWhich() == css::view::PrintableState_JOB_STARTED )
     {
         if ( !m_xPrintJob.is() )
             m_xPrintJob = new SfxPrintJob_Impl( this );
@@ -816,20 +816,20 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
 
     view::PrintJobEvent aEvent;
     aEvent.Source = m_xPrintJob;
-    aEvent.State = (com::sun::star::view::PrintableState) pPrintHint->GetWhich();
+    aEvent.State = (css::view::PrintableState) pPrintHint->GetWhich();
 
     ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
     while (pIterator.hasMoreElements())
         static_cast<view::XPrintJobListener*>(pIterator.next())->printJobEvent( aEvent );
 }
 
-void SAL_CALL SfxPrintHelper::addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxPrintHelper::addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<view::XPrintJobListener>::get(), xListener );
 }
 
-void SAL_CALL SfxPrintHelper::removePrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxPrintHelper::removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<view::XPrintJobListener>::get(), xListener );

@@ -39,24 +39,24 @@ class SfxDispatcher;
 class BindDispatch_Impl :   public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
 friend class SfxStateCache;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          xDisp;
-    ::com::sun::star::util::URL                     aURL;
-    ::com::sun::star::frame::FeatureStateEvent      aStatus;
+    css::uno::Reference< css::frame::XDispatch >   xDisp;
+    css::util::URL                     aURL;
+    css::frame::FeatureStateEvent      aStatus;
     SfxStateCache*          pCache;
     const SfxSlot*          pSlot;
 
 public:
                             BindDispatch_Impl(
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > & rDisp,
-                                const ::com::sun::star::util::URL& rURL,
+                                const css::uno::Reference< css::frame::XDispatch > & rDisp,
+                                const css::util::URL& rURL,
                                 SfxStateCache* pStateCache, const SfxSlot* pSlot );
 
-    virtual void SAL_CALL           statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL           disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL           statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL           disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
     void                    Release();
-    const ::com::sun::star::frame::FeatureStateEvent& GetStatus() const { return aStatus;}
-    void                    Dispatch( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aProps, bool bForceSynchron = false );
+    const css::frame::FeatureStateEvent& GetStatus() const { return aStatus;}
+    void                    Dispatch( const css::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron = false );
 };
 
 class SfxStateCache
@@ -65,15 +65,15 @@ friend class BindDispatch_Impl;
     BindDispatch_Impl*      pDispatch;
     sal_uInt16              nId;           // Slot-Id
     SfxControllerItem*      pInternalController;
-    com::sun::star::uno::Reference < com::sun::star::frame::XDispatch > xMyDispatch;
+    css::uno::Reference < css::frame::XDispatch > xMyDispatch;
     SfxControllerItem*      pController;    // Pointer to first bound Controller (interlinked with each other)
     SfxSlotServer           aSlotServ;      // SlotServer, SlotPtr = 0 -> not on Stack
     SfxPoolItem*            pLastItem;      // Last sent Item, never -1
     SfxItemState            eLastState;     // Last sent State
-    bool                bCtrlDirty:1;   // Update Controller?
-    bool                bSlotDirty:1;   // Present Funktion, must be updated
-    bool                bItemVisible:1; // item visibility
-    bool                bItemDirty;     // Validity of pLastItem
+    bool                    bCtrlDirty:1;   // Update Controller?
+    bool                    bSlotDirty:1;   // Present Funktion, must be updated
+    bool                    bItemVisible:1; // item visibility
+    bool                    bItemDirty;     // Validity of pLastItem
 
 private:
                             SfxStateCache( const SfxStateCache& rOrig ) = delete;
@@ -85,10 +85,10 @@ public:
 
     sal_uInt16                  GetId() const;
 
-    const SfxSlotServer*    GetSlotServer( SfxDispatcher &rDispat, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & xProv );
+    const SfxSlotServer*    GetSlotServer( SfxDispatcher &rDispat, const css::uno::Reference< css::frame::XDispatchProvider > & xProv );
     const SfxSlotServer*    GetSlotServer( SfxDispatcher &rDispat )
-                            { return GetSlotServer( rDispat, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > () ); }
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          GetDispatch() const;
+                            { return GetSlotServer( rDispat, css::uno::Reference< css::frame::XDispatchProvider > () ); }
+    css::uno::Reference< css::frame::XDispatch >          GetDispatch() const;
     void                    Dispatch( const SfxItemSet* pSet, bool bForceSynchron = false );
     bool                    IsControllerDirty() const
                             { return bCtrlDirty; }
@@ -105,10 +105,10 @@ public:
                             { DBG_ASSERT( !pInternalController, "Only one internal controller allowed!" ); pInternalController = pCtrl; }
     void                    ReleaseInternalController() { pInternalController = 0; }
     SfxControllerItem*      GetInternalController() const { return pInternalController; }
-    com::sun::star::uno::Reference < com::sun::star::frame::XDispatch >
+    css::uno::Reference < css::frame::XDispatch >
                             GetInternalDispatch() const
                             { return xMyDispatch; }
-    void                    SetInternalDispatch( const com::sun::star::uno::Reference < com::sun::star::frame::XDispatch >& rDisp )
+    void                    SetInternalDispatch( const css::uno::Reference < css::frame::XDispatch >& rDisp )
                             { xMyDispatch = rDisp; }
 };
 

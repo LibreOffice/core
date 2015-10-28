@@ -69,7 +69,7 @@ bool SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 }
 
 
-bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SfxScriptOrganizerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     OUString aValue;
     nMemberId &= ~CONVERT_TWIPS;
@@ -89,7 +89,7 @@ bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
     return true;
 }
 
-bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SfxScriptOrganizerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     OUString aValue;
     bool bRet = false;

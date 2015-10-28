@@ -41,7 +41,7 @@ class OwnSubFilterService : public cppu::WeakImplHelper < document::XFilter
     SfxObjectShell* m_pObjectShell;
 
 public:
-    explicit OwnSubFilterService(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments)
+    explicit OwnSubFilterService(const css::uno::Sequence< css::uno::Any >& aArguments)
         throw (uno::Exception, uno::RuntimeException);
 
     virtual ~OwnSubFilterService();
@@ -69,8 +69,8 @@ OwnSubFilterService::OwnSubFilterService(const css::uno::Sequence< css::uno::Any
     if ( ( aArguments[1] >>= m_xStream ) && m_xStream.is()
       && ( aArguments[0] >>= m_xModel ) && m_xModel.is() )
     {
-        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xObj( m_xModel, uno::UNO_QUERY_THROW );
-        ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+        css::uno::Reference < css::lang::XUnoTunnel > xObj( m_xModel, uno::UNO_QUERY_THROW );
+        css::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
         sal_Int64 nHandle = xObj->getSomething( aSeq );
         if ( nHandle )
             m_pObjectShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));

@@ -44,13 +44,13 @@
 #include <cppuhelper/implbase.hxx>
 
 //TO-Do, merge into framework/inc/helpers/mischelpers.hxx and deliver
-class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<com::sun::star::beans::XPropertyChangeListener>
+class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<css::beans::XPropertyChangeListener>
 {
     private:
-        com::sun::star::uno::WeakReference<com::sun::star::beans::XPropertyChangeListener> mxOwner;
+        css::uno::WeakReference<css::beans::XPropertyChangeListener> mxOwner;
 
     public:
-        explicit WeakPropertyChangeListener(com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner)
+        explicit WeakPropertyChangeListener(css::uno::Reference<css::beans::XPropertyChangeListener> xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -59,22 +59,22 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<com::sun::star:
         {
         }
 
-        virtual void SAL_CALL propertyChange(const com::sun::star::beans::PropertyChangeEvent &rEvent )
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent &rEvent )
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->propertyChange(rEvent);
 
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
-            com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
-                com::sun::star::uno::UNO_QUERY);
+            css::uno::Reference<css::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
+                css::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->disposing(rEvent);
 

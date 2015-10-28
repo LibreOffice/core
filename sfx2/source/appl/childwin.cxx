@@ -56,8 +56,8 @@ SfxChildWinFactory::~SfxChildWinFactory()
 
 struct SfxChildWindow_Impl
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      xListener;
+    css::uno::Reference< css::frame::XFrame >             xFrame;
+    css::uno::Reference< css::lang::XEventListener >      xListener;
     SfxChildWinFactory* pFact;
     bool                bHideNotDelete;
     bool                bVisible;
@@ -69,7 +69,7 @@ struct SfxChildWindow_Impl
 
 
 
-class DisposeListener : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XEventListener >
+class DisposeListener : public ::cppu::WeakImplHelper< css::lang::XEventListener >
 {
     public:
         DisposeListener( SfxChildWindow*      pOwner ,
@@ -78,22 +78,22 @@ class DisposeListener : public ::cppu::WeakImplHelper< ::com::sun::star::lang::X
             ,   m_pData ( pData  )
         {}
 
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aSource ) throw (css::uno::RuntimeException, std::exception) override
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > xSelfHold( this );
+            css::uno::Reference< css::lang::XEventListener > xSelfHold( this );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( aSource.Source, ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::lang::XComponent > xComp( aSource.Source, css::uno::UNO_QUERY );
             if( xComp.is() )
                 xComp->removeEventListener( this );
 
             if( m_pOwner && m_pData )
             {
-                m_pData->xListener = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >();
+                m_pData->xListener = css::uno::Reference< css::lang::XEventListener >();
 
                 if ( m_pData->pWorkWin )
                 {
                     // m_pOwner and m_pData will be killed
-                    m_pData->xFrame    = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
+                    m_pData->xFrame    = css::uno::Reference< css::frame::XFrame >();
                     m_pData->pWorkWin->GetBindings().Execute( m_pOwner->GetType() );
                 }
                 else
@@ -180,13 +180,13 @@ void SfxChildWindow::Destroy()
         ClearWorkwin();
         try
         {
-            ::com::sun::star::uno::Reference < ::com::sun::star::util::XCloseable > xClose( GetFrame(), ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference < css::util::XCloseable > xClose( GetFrame(), css::uno::UNO_QUERY );
             if ( xClose.is() )
                 xClose->close( sal_True );
             else
                 GetFrame()->dispose();
         }
-        catch (const com::sun::star::uno::Exception&)
+        catch (const css::uno::Exception&)
         {
         }
     }
@@ -319,7 +319,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     SvtViewOptions aWinOpt(E_WINDOW, sName);
     aWinOpt.SetWindowState(OStringToOUString(rInfo.aWinState, RTL_TEXTENCODING_UTF8));
 
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
+    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
     aSeq[0].Name = "Data";
     aSeq[0].Value <<= aWinData.makeStringAndClear();
     aWinOpt.SetUserData( aSeq );
@@ -389,7 +389,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
     if (xWinOpt->Exists() && xWinOpt->HasVisible() )
         rInfo.bVisible  = xWinOpt->IsVisible(); // set state from configuration. Can be overwritten by UserData, see below
 
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = xWinOpt->GetUserData();
+    css::uno::Sequence < css::beans::NamedValue > aSeq = xWinOpt->GetUserData();
 
     OUString aTmp;
     if ( aSeq.getLength() )
@@ -719,7 +719,7 @@ bool SfxChildWindow::QueryClose()
 
     if ( pImp->xFrame.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >  xCtrl = pImp->xFrame->getController();
+        css::uno::Reference< css::frame::XController >  xCtrl = pImp->xFrame->getController();
         if ( xCtrl.is() )
             bAllow = xCtrl->suspend( sal_True );
     }
@@ -730,12 +730,12 @@ bool SfxChildWindow::QueryClose()
     return bAllow;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  SfxChildWindow::GetFrame()
+css::uno::Reference< css::frame::XFrame >  SfxChildWindow::GetFrame()
 {
     return pImp->xFrame;
 }
 
-void SfxChildWindow::SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & rFrame )
+void SfxChildWindow::SetFrame( const css::uno::Reference< css::frame::XFrame > & rFrame )
 {
     // Do nothing if nothing will be changed ...
     if( pImp->xFrame != rFrame )
@@ -748,7 +748,7 @@ void SfxChildWindow::SetFrame( const ::com::sun::star::uno::Reference< ::com::su
         // Use already existing or create new one.
         if( rFrame.is() )
             if( !pImp->xListener.is() )
-                pImp->xListener = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >( new DisposeListener( this, pImp ) );
+                pImp->xListener = css::uno::Reference< css::lang::XEventListener >( new DisposeListener( this, pImp ) );
 
         // Set new frame in data container
         // and build new listener connection, if necessary.

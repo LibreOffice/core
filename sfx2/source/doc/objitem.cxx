@@ -35,7 +35,7 @@ SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
     return new SfxObjectShellItem( Which(), pObjSh );
 }
 
-bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxObjectShellItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     if ( pObjSh )
     {
@@ -45,26 +45,25 @@ bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /
     }
     else
     {
-        rVal <<= ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >();
+        rVal <<= css::uno::Reference< css::frame::XModel >();
     }
     return true;
 }
 
-bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxObjectShellItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // This item MUST have a model. Please don't change this, there are UNO-based
     // implementations which need it!!
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel;
+    css::uno::Reference< css::frame::XModel > xModel;
 
     if ( rVal >>= xModel )
     {
         if ( xModel.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(
-                xModel, ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::lang::XUnoTunnel > xTunnel( xModel, css::uno::UNO_QUERY );
             if ( xTunnel.is() )
             {
-                ::com::sun::star::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
+                css::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
                 sal_Int64 nHandle = xTunnel->getSomething( aSeq );
                 if ( nHandle )
                 {

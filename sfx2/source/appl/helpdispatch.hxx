@@ -24,22 +24,22 @@
 
 #include "helpinterceptor.hxx"
 
-class HelpDispatch_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XDispatch >
+class HelpDispatch_Impl : public ::cppu::WeakImplHelper< css::frame::XDispatch >
 {
 private:
     HelpInterceptor_Impl&       m_rInterceptor;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
+    css::uno::Reference< css::frame::XDispatch >
                                 m_xRealDispatch;
 
 public:
     HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDisp );
+                       const css::uno::Reference< css::frame::XDispatch >& _xDisp );
     virtual ~HelpDispatch_Impl();
 
     // XDispatch
-    virtual void SAL_CALL   dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_APPL_HELPDISPATCH_HXX

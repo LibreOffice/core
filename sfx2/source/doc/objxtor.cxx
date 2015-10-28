@@ -148,30 +148,30 @@ OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
 
 
 
-class SfxModelListener_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::util::XCloseListener >
+class SfxModelListener_Impl : public ::cppu::WeakImplHelper< css::util::XCloseListener >
 {
     SfxObjectShell* mpDoc;
 public:
     explicit SfxModelListener_Impl( SfxObjectShell* pDoc ) : mpDoc(pDoc) {};
-    virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
-        throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException, std::exception) override ;
-    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception ) override ;
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception ) override ;
+    virtual void SAL_CALL queryClosing( const css::lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
+        throw ( css::uno::RuntimeException, css::util::CloseVetoException, std::exception) override ;
+    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent ) throw ( css::uno::RuntimeException, std::exception ) override ;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw ( css::uno::RuntimeException, std::exception ) override ;
 
 };
 
-void SAL_CALL SfxModelListener_Impl::queryClosing( const com::sun::star::lang::EventObject& , sal_Bool )
-    throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException, std::exception)
+void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject& , sal_Bool )
+    throw ( css::uno::RuntimeException, css::util::CloseVetoException, std::exception)
 {
 }
 
-void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL SfxModelListener_Impl::notifyClosing( const css::lang::EventObject& ) throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     mpDoc->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
 }
 
-void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL SfxModelListener_Impl::disposing( const css::lang::EventObject& _rEvent ) throw ( css::uno::RuntimeException, std::exception )
 {
     // am I ThisComponent in AppBasic?
     SolarMutexGuard aSolarGuard;
@@ -894,7 +894,7 @@ uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SfxObjectShell::GetModel() const
+css::uno::Reference< css::frame::XModel > SfxObjectShell::GetModel() const
 {
     return GetBaseModel();
 }
@@ -911,7 +911,7 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SfxObjectShell::GetBaseModel() const
+css::uno::Reference< css::frame::XModel > SfxObjectShell::GetBaseModel() const
 {
     return pImp->pBaseModel.get();
 }
@@ -1178,7 +1178,7 @@ bool SfxObjectShell::SetProtectionPassword( const OUString & /*rPassword*/ )
 }
 
 
-bool SfxObjectShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > & /*rPasswordHash*/ )
+bool SfxObjectShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > & /*rPasswordHash*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
     DBG_ASSERT( false, "function not implemented" );

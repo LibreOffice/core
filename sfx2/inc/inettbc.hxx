@@ -39,9 +39,9 @@ private:
 
     struct ExecuteInfo
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-        ::com::sun::star::util::URL                                                aTargetURL;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
+        css::uno::Reference< css::frame::XDispatch >     xDispatch;
+        css::util::URL                                   aTargetURL;
+        css::uno::Sequence< css::beans::PropertyValue >  aArgs;
     };
 
     DECL_STATIC_LINK_TYPED( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, void );

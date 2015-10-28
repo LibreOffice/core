@@ -636,16 +636,16 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
     return nErr;
 }
 
-const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno::Sequence < beans::NamedValue >& aSeq, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+const SfxFilter* SfxFilterMatcher::GetFilterForProps( const css::uno::Sequence < beans::NamedValue >& aSeq, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
     uno::Reference< container::XContainerQuery > xTypeCFG;
     if( xServiceManager.is() )
-        xTypeCFG   = uno::Reference < com::sun::star::container::XContainerQuery >( xServiceManager->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
+        xTypeCFG   = uno::Reference < css::container::XContainerQuery >( xServiceManager->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
     if ( xTypeCFG.is() )
     {
         // make query for all types matching the properties
-        uno::Reference < com::sun::star::container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
+        uno::Reference < css::container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
         while ( xEnum->hasMoreElements() )
         {
             ::comphelper::SequenceAsHashMap aProps( xEnum->nextElement() );
@@ -699,7 +699,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const OUString& rMediaType, S
         return 0;
     }
 
-    com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
+    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
     aSeq[0].Name = "MediaType";
     aSeq[0].Value <<= rMediaType;
     return GetFilterForProps( aSeq, nMust, nDont );
@@ -728,7 +728,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4EA( const OUString& rType, SfxFilte
         return 0;
     }
 
-    com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
+    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
     aSeq[0].Name = "Name";
     aSeq[0].Value <<= OUString( rType );
     return GetFilterForProps( aSeq, nMust, nDont );
@@ -767,7 +767,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const OUString& rExt, Sf
     if ( sExt.startsWith(".") )
         sExt = sExt.copy(1);
 
-    com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
+    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
     aSeq[0].Name = "Extensions";
     uno::Sequence < OUString > aExts(1);
     aExts[0] = sExt;
@@ -780,7 +780,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( SotClipboardFormatId n
     if (nId == SotClipboardFormatId::NONE)
         return 0;
 
-    com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
+    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
     OUString aName = SotExchange::GetFormatName( nId );
     aSeq[0].Name = "ClipboardFormat";
     aSeq[0].Value <<= aName;

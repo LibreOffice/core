@@ -109,7 +109,7 @@ void SfxMenuImageControl_Impl::Update()
 
 
 
-static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFrame,
+static Image RetrieveAddOnImage( Reference< css::frame::XFrame >& rFrame,
                                  const OUString& aImageId,
                                  const OUString& aURL,
                                  bool bBigImage
@@ -285,7 +285,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
     // Merge Addon popup menus into the SV Menu
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
-    Reference< com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
+    Reference< css::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
 
     if ( pSVMenu->IsMenuBar() )
     {
@@ -495,7 +495,7 @@ IMPL_LINK_NOARG_TYPED(SfxVirtualMenu, SettingsChanged, LinkParamNone*, void)
     sal_uInt16 nItemCount = pSVMenu->GetItemCount();
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
     bool bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
-    Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame().GetFrameInterface() );
+    Reference<css::frame::XFrame> xFrame( pViewFrame->GetFrame().GetFrameInterface() );
 
     if ( !bIsAddonPopupMenu )
     {
@@ -567,7 +567,7 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
     if ( bIcons )
     {
         sal_uInt16          nItemCount          = pMenu->GetItemCount();
-        Reference<com::sun::star::frame::XFrame> aXFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
+        Reference<css::frame::XFrame> aXFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
 
         for ( sal_uInt16 nPos=0; nPos < nItemCount; ++nPos )
         {
@@ -735,7 +735,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
 {
     // Create special popup menu that is filled with the 3rd party components popup menu items
     ::framework::MenuConfiguration aConf( ::comphelper::getProcessComponentContext() );
-    Reference<com::sun::star::frame::XFrame> xFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
+    Reference<css::frame::XFrame> xFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
 
     PopupMenu* pAddonMenu = NULL;
     try
@@ -743,7 +743,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
         Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         pAddonMenu = framework::AddonMenuManager::CreateAddonMenu(xFrame, xContext);
     }
-    catch ( const ::com::sun::star::lang::WrappedTargetException& )
+    catch ( const css::lang::WrappedTargetException& )
     {
     }
 

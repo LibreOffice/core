@@ -44,7 +44,7 @@ class SfxPickList : public SfxListener
 
     std::vector< PickListEntry* >   m_aPicklistVector;
     sal_uInt32                      m_nAllowedMenuSize;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > m_xStringLength;
+    css::uno::Reference< css::util::XStringWidth > m_xStringLength;
 
                             SfxPickList( sal_uInt32 nMenuSize );
                             virtual ~SfxPickList();

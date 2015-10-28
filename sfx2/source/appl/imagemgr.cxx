@@ -56,7 +56,7 @@ typedef std::unordered_map< OUString,
 
 
 Image SAL_CALL GetImage(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const css::uno::Reference< css::frame::XFrame >& rFrame,
     const OUString& aURL,
     bool bBig
 )
@@ -115,21 +115,20 @@ Image SAL_CALL GetImage(
         }
     }
 
-    sal_Int16 nImageType( ::com::sun::star::ui::ImageType::COLOR_NORMAL|
-                            ::com::sun::star::ui::ImageType::SIZE_DEFAULT );
+    sal_Int16 nImageType( css::ui::ImageType::COLOR_NORMAL| css::ui::ImageType::SIZE_DEFAULT );
     if ( bBig )
-        nImageType |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
+        nImageType |= css::ui::ImageType::SIZE_LARGE;
 
     if ( xDocImgMgr.is() )
     {
-        Sequence< Reference< ::com::sun::star::graphic::XGraphic > > aGraphicSeq;
+        Sequence< Reference< css::graphic::XGraphic > > aGraphicSeq;
         Sequence< OUString > aImageCmdSeq( 1 );
         aImageCmdSeq[0] = aCommandURL;
 
         try
         {
             aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
-            Reference< ::com::sun::star::graphic::XGraphic > xGraphic = aGraphicSeq[0];
+            Reference< css::graphic::XGraphic > xGraphic = aGraphicSeq[0];
             Image aImage( xGraphic );
 
             if ( !!aImage )
@@ -181,13 +180,13 @@ Image SAL_CALL GetImage(
                 m_aModuleIdToImageMgrMap.insert( ModuleIdToImagegMgr::value_type( aModuleId, xModuleImageManager ));
             }
 
-            Sequence< Reference< ::com::sun::star::graphic::XGraphic > > aGraphicSeq;
+            Sequence< Reference< css::graphic::XGraphic > > aGraphicSeq;
             Sequence< OUString > aImageCmdSeq( 1 );
             aImageCmdSeq[0] = aCommandURL;
 
             aGraphicSeq = xModuleImageManager->getImages( nImageType, aImageCmdSeq );
 
-            Reference< ::com::sun::star::graphic::XGraphic > xGraphic = aGraphicSeq[0];
+            Reference< css::graphic::XGraphic > xGraphic = aGraphicSeq[0];
             Image aImage( xGraphic );
 
             if ( !!aImage )

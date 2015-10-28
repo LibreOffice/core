@@ -722,7 +722,7 @@ bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nReg
 }
 
 bool TemplateLocalView::saveTemplateAs (sal_uInt16 nItemId,
-                                        com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
+                                        css::uno::Reference<css::frame::XModel> &rModel,
                                         const OUString &rName)
 {
 
@@ -769,7 +769,7 @@ bool TemplateLocalView::saveTemplateAs (sal_uInt16 nItemId,
 }
 
 bool TemplateLocalView::saveTemplateAs(TemplateContainerItem *pDstItem,
-                                       com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
+                                       css::uno::Reference<css::frame::XModel> &rModel,
                                        const OUString &rName)
 {
     uno::Reference< frame::XStorable > xStorable(rModel, uno::UNO_QUERY_THROW );

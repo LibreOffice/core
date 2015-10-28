@@ -923,8 +923,8 @@ Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
     double fDouble = 0.0;
     bool bBool = false;
     OUString aString;
-    ::com::sun::star::util::DateTime aApiDateTime;
-    ::com::sun::star::util::Date aApiDate;
+    css::util::DateTime aApiDateTime;
+    css::util::Date aApiDate;
 
     if( GetInt32Value( nInt32, nPropId ) )
         aValue <<= nInt32;
@@ -951,8 +951,8 @@ bool SfxOleSection::SetAnyValue( sal_Int32 nPropId, const Any& rValue )
     sal_Int32 nInt32 = 0;
     double fDouble = 0.0;
     OUString aString;
-    ::com::sun::star::util::DateTime aApiDateTime;
-    ::com::sun::star::util::Date aApiDate;
+    css::util::DateTime aApiDateTime;
+    css::util::Date aApiDate;
 
     if( rValue.getValueType() == cppu::UnoType<bool>::get() )
         SetBoolValue( nPropId, ::comphelper::getBOOL( rValue ) );

@@ -126,32 +126,32 @@ namespace sfx2
         virtual void SAL_CALL release(  ) throw () override;
 
         // XUndoManager
-        virtual void SAL_CALL enterUndoContext( const OUString& i_title ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL enterHiddenUndoContext(  ) throw (::com::sun::star::document::EmptyUndoStackException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL leaveUndoContext(  ) throw (::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL undo(  ) throw (::com::sun::star::document::EmptyUndoStackException, ::com::sun::star::document::UndoContextNotClosedException, ::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL redo(  ) throw (::com::sun::star::document::EmptyUndoStackException, ::com::sun::star::document::UndoContextNotClosedException, ::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL isUndoPossible(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL isRedoPossible(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getCurrentUndoActionTitle(  ) throw (::com::sun::star::document::EmptyUndoStackException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getCurrentRedoActionTitle(  ) throw (::com::sun::star::document::EmptyUndoStackException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAllUndoActionTitles(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAllRedoActionTitles(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL clear(  ) throw (::com::sun::star::document::UndoContextNotClosedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL clearRedo(  ) throw (::com::sun::star::document::UndoContextNotClosedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL reset(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL enterUndoContext( const OUString& i_title ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL enterHiddenUndoContext(  ) throw (css::document::EmptyUndoStackException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL leaveUndoContext(  ) throw (css::util::InvalidStateException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addUndoAction( const css::uno::Reference< css::document::XUndoAction >& i_action ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL undo(  ) throw (css::document::EmptyUndoStackException, css::document::UndoContextNotClosedException, css::document::UndoFailedException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL redo(  ) throw (css::document::EmptyUndoStackException, css::document::UndoContextNotClosedException, css::document::UndoFailedException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isUndoPossible(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isRedoPossible(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getCurrentUndoActionTitle(  ) throw (css::document::EmptyUndoStackException, css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getCurrentRedoActionTitle(  ) throw (css::document::EmptyUndoStackException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getAllUndoActionTitles(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getAllRedoActionTitles(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL clear(  ) throw (css::document::UndoContextNotClosedException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL clearRedo(  ) throw (css::document::UndoContextNotClosedException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL reset(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XLockable, base of XUndoManager
-        virtual void SAL_CALL lock(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL unlock(  ) throw (::com::sun::star::util::NotLockedException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL isLocked(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL lock(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL unlock(  ) throw (css::util::NotLockedException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isLocked(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XChild, base of XUndoManager
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
     private:
         std::unique_ptr< DocumentUndoManager_Impl > m_pImpl;

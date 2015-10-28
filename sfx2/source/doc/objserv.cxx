@@ -123,7 +123,7 @@ void SfxObjectShell::InitInterface_Impl()
 {
 }
 
-class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::util::XCloseListener >
+class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper< css::util::XCloseListener >
 {
     bool m_bGotOwnership;
     bool m_bPreventClose;
@@ -1346,7 +1346,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
                 aResult = xLocSigner->verifyDocumentContentSignatures( GetMedium()->GetZipStorageToSign_Impl(),
                                                                 uno::Reference< io::XInputStream >() );
         }
-        catch( com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
         }
     }

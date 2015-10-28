@@ -521,27 +521,23 @@ bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
 #if !HAVE_FEATURE_SCRIPTING
     (void) rScriptURL;
 #else
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::uno::XComponentContext > xContext =
+    css::uno::Reference< css::uno::XComponentContext > xContext =
             ::comphelper::getProcessComponentContext();
 
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::uri::XUriReferenceFactory >
-            xFactory = ::com::sun::star::uri::UriReferenceFactory::create( xContext );
+    css::uno::Reference< css::uri::XUriReferenceFactory >
+            xFactory = css::uri::UriReferenceFactory::create( xContext );
 
     try
     {
-        ::com::sun::star::uno::Reference
-            < ::com::sun::star::uri::XVndSunStarScriptUrl >
-                xUrl( xFactory->parse( rScriptURL ),
-                    ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::uri::XVndSunStarScriptUrl >
+                xUrl( xFactory->parse( rScriptURL ),  css::uno::UNO_QUERY );
 
         if ( xUrl.is() )
         {
             result = true;
         }
     }
-    catch (const ::com::sun::star::uno::RuntimeException&)
+    catch (const css::uno::RuntimeException&)
     {
         // ignore, will just return FALSE
     }

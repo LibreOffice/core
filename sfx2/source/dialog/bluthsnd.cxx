@@ -17,7 +17,7 @@
 
 #include "bluthsndapi.hxx"
 
-SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame,
                             const OUString& rType )
 {
     SaveResult		eSaveResult;
@@ -36,7 +36,7 @@ SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const ::com::s
     return eResult;
 }
 
-SfxBluetoothModel::SendMailResult SfxBluetoothModel::Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& /*xFrame*/ )
+SfxBluetoothModel::SendMailResult SfxBluetoothModel::Send( const css::uno::Reference< css::frame::XFrame >& /*xFrame*/ )
 {
     char bthsend[300];
     SendMailResult eResult = SEND_MAIL_OK;
