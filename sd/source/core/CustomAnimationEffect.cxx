@@ -3002,9 +3002,8 @@ MainSequence::MainSequence()
 {
     if( mxTimingRootNode.is() )
     {
-        Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-        aUserData[0].Name = "node-type";
-        aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
+        Sequence< ::com::sun::star::beans::NamedValue > aUserData
+            { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
         mxTimingRootNode->setUserData( aUserData );
     }
     init();
@@ -3090,9 +3089,8 @@ void MainSequence::createMainSequence()
         {
             mxSequenceRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
-            uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-            aUserData[0].Name = "node-type";
-            aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
+            uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData
+                { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
             mxSequenceRoot->setUserData( aUserData );
 
             // empty sequence until now, set duration to 0.0
@@ -3149,9 +3147,8 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
     // create a new interactive sequence container
     Reference< XTimeContainer > xISRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
-    uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-    aUserData[0].Name = "node-type";
-    aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ;
+    uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData
+        { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE) } };
     xISRoot->setUserData( aUserData );
 
     Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );

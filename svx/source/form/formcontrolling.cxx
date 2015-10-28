@@ -309,10 +309,7 @@ namespace svx
 
     void FormControllerHelper::execute( sal_Int32 _nSlotId, const OUString& _rParamName, const Any& _rParamValue ) const
     {
-        Sequence< NamedValue > aArguments(1);
-        aArguments[0].Name = _rParamName;
-        aArguments[0].Value = _rParamValue;
-
+        Sequence< NamedValue > aArguments { { _rParamName, _rParamValue } };
         impl_operateForm_nothrow( EXECUTE_ARGS, FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ), aArguments );
     }
 

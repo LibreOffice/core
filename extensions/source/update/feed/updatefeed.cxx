@@ -442,9 +442,7 @@ UpdateInformationProvider::load(const OUString& rURL)
 
     // Disable KeepAlive in webdav - don't want millions of office
     // instances phone home & clog up servers
-    uno::Sequence< beans::NamedValue > aProps( 1 );
-    aProps[ 0 ] = beans::NamedValue(
-        "KeepAlive", uno::makeAny(sal_False));
+    uno::Sequence< beans::NamedValue > aProps { { "KeepAlive", uno::makeAny(sal_False) } };
 
     ucb::OpenCommandArgument3 aOpenArgument;
     aOpenArgument.Mode = ucb::OpenMode::DOCUMENT;

@@ -59,9 +59,8 @@ void LineWidthPopup::PopupModeEndCallback()
         if (pControl->IsCloseByEdit())
         {
             SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_LINE_WIDTH_GLOBAL_VALUE );
-            ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
-            aSeq[0].Name = "LineWidth";
-            aSeq[0].Value <<= ::rtl::OUString::number(pControl->GetTmpCustomWidth());
+            css::uno::Sequence < css::beans::NamedValue > aSeq
+                { { "LineWidth", css::uno::makeAny(OUString::number(pControl->GetTmpCustomWidth())) } };
             aWinOpt.SetUserData( aSeq );
         }
     }

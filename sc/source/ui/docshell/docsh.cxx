@@ -724,15 +724,13 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 if ( xFactory.is() )
                                 {
                                     uno::Reference< task::XJob > xJob( xFactory->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
-                                    uno::Sequence< beans::NamedValue > aArgsForJob(1);
                                     ScViewData* pViewData = GetViewData();
                                     SfxViewShell* pViewShell = ( pViewData ? pViewData->GetViewShell() : NULL );
                                     SfxViewFrame* pViewFrame = ( pViewShell ? pViewShell->GetViewFrame() : NULL );
                                     SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : NULL );
                                     uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : 0 );
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
-                                    aArgsForJob[0] = beans::NamedValue( OUString( "SpreadsheetView" ),
-                                            uno::makeAny( xSpreadsheetView ) );
+                                    uno::Sequence< beans::NamedValue > aArgsForJob { { "SpreadsheetView", uno::makeAny( xSpreadsheetView ) } };
                                     xJob->execute( aArgsForJob );
                                 }
                             }

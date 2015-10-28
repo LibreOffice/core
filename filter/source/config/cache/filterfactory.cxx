@@ -100,9 +100,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
             OSL_FAIL("Who use this deprecated functionality?");
             _FILTER_CONFIG_LOG_("FilterFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
-            css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-            lQuery[0].Name    = PROPNAME_TYPE;
-            lQuery[0].Value <<= sFilter;
+            css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPE, css::uno::makeAny(sFilter) } };
 
             css::uno::Reference< css::container::XEnumeration > xSet = createSubSetEnumerationByProperties(lQuery);
             while(xSet->hasMoreElements())

@@ -112,9 +112,7 @@ void ImageButtonToolbarController::executeControlCommand( const css::frame::Cont
                     m_pToolbar->SetItemImage( m_nID, aImage );
 
                     // send notification
-                    uno::Sequence< beans::NamedValue > aInfo( 1 );
-                    aInfo[0].Name  = "URL";
-                    aInfo[0].Value <<= aURL;
+                    uno::Sequence< beans::NamedValue > aInfo { { "URL", css::uno::makeAny(aURL) } };
                     addNotifyInfo( OUString( "ImageChanged" ),
                                 getDispatchFromCommand( m_aCommandURL ),
                                 aInfo );

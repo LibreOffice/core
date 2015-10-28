@@ -690,11 +690,11 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::ex
             OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
                           nPos   = pTabControl->GetPagePos( sal_uInt16( ID ));
 
-            css::uno::Sequence< css::beans::NamedValue > aSeq( 2 );
-            aSeq[0].Name  = m_aTitlePropName;
-            aSeq[0].Value = css::uno::makeAny( aTitle );
-            aSeq[1].Name  = m_aPosPropName;
-            aSeq[1].Value = css::uno::makeAny( sal_Int32( nPos ));
+            css::uno::Sequence< css::beans::NamedValue > aSeq
+            {
+                { m_aTitlePropName, css::uno::makeAny( aTitle ) },
+                { m_aPosPropName,   css::uno::makeAny( sal_Int32( nPos )) }
+            };
             return aSeq;
         }
     }

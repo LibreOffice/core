@@ -610,11 +610,11 @@ IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, Button*, void)
             }
         }
 
-        uno::Sequence< beans::NamedValue > aSettings(2);
-        aSettings[0].Name = TG_SETTING_LASTMARK;
-        aSettings[0].Value <<= sLastSelectedMark;
-        aSettings[1].Name = TG_SETTING_LASTPATH;
-        aSettings[1].Value <<= comphelper::containerToSequence<OUString>(aLastSelectedPath);
+        uno::Sequence< beans::NamedValue > aSettings
+        {
+            { TG_SETTING_LASTMARK, css::uno::makeAny(sLastSelectedMark) },
+            { TG_SETTING_LASTPATH, css::uno::makeAny(comphelper::containerToSequence<OUString>(aLastSelectedPath)) }
+        };
 
         // write
         SvtViewOptions aViewSettings( E_DIALOG, TG_SETTING_MANAGER );

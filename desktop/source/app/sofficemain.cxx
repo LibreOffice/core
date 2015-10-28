@@ -117,9 +117,7 @@ extern "C" void PtylTestEncryptionAndExport(const char *pathname)
     utl::MediaDescriptor media;
     media[utl::MediaDescriptor::PROP_FILTERNAME()] <<= OUString("MS Word 2007 XML");
     OUString password("myPassword");
-    css::uno::Sequence<css::beans::NamedValue> encryptionData(1);
-    encryptionData[0].Name = "OOXPassword";
-    encryptionData[0].Value = css::uno::makeAny(password);
+    css::uno::Sequence<css::beans::NamedValue> encryptionData { { "OOXPassword", css::uno::makeAny(password) } };
     media[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= encryptionData;
 
     css::uno::Reference<css::frame::XModel> model(component, css::uno::UNO_QUERY);
