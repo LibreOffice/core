@@ -143,9 +143,7 @@ Date::Date( DateInitSystem )
     GetLocalTime( &aDateTime );
 
     // Combine to date
-    nDate = ((sal_uIntPtr)aDateTime.wDay) +
-            (((sal_uIntPtr)aDateTime.wMonth)*100) +
-            (((sal_uIntPtr)aDateTime.wYear)*10000);
+    setDateFromDMY( aDateTime.wDay, aDateTime.wMonth, aDateTime.wYear );
 #else
     time_t     nTmpTime;
     struct tm aTime;
@@ -156,42 +154,33 @@ Date::Date( DateInitSystem )
     // compute date
     if ( localtime_r( &nTmpTime, &aTime ) )
     {
-        nDate = ((sal_uIntPtr)aTime.tm_mday) +
-                (((sal_uIntPtr)(aTime.tm_mon+1))*100) +
-                (((sal_uIntPtr)(aTime.tm_year+1900))*10000);
+        setDateFromDMY( static_cast<sal_uInt16>(aTime.tm_mday),
+            static_cast<sal_uInt16>(aTime.tm_mon+1),
+            static_cast<sal_uInt16>(aTime.tm_year+1900) );
     }
     else
-        nDate = 1 + 100 + (((sal_uIntPtr)1900)*10000);
+        setDateFromDMY( 1, 100, 1900 );
 #endif
 }
 
 Date::Date( const ::com::sun::star::util::DateTime& rDateTime )
 {
-  init( rDateTime.Day, rDateTime.Month, rDateTime.Year );
+    setDateFromDMY( rDateTime.Day, rDateTime.Month, rDateTime.Year );
 }
 
 void Date::SetDay( sal_uInt16 nNewDay )
 {
-    sal_uIntPtr  nMonth  = GetMonth();
-    sal_uIntPtr  nYear   = GetYear();
-
-    nDate = ((sal_uIntPtr)(nNewDay%100)) + (nMonth*100) + (nYear*10000);
+    setDateFromDMY( nNewDay, GetMonth(), GetYear() );
 }
 
 void Date::SetMonth( sal_uInt16 nNewMonth )
 {
-    sal_uIntPtr  nDay    = GetDay();
-    sal_uIntPtr  nYear   = GetYear();
-
-    nDate = nDay + (((sal_uIntPtr)(nNewMonth%100))*100) + (nYear*10000);
+    setDateFromDMY( GetDay(), nNewMonth, GetYear() );
 }
 
 void Date::SetYear( sal_uInt16 nNewYear )
 {
-    sal_uIntPtr  nDay   = GetDay();
-    sal_uIntPtr  nMonth = GetMonth();
-
-    nDate = nDay + (nMonth*100) + (((sal_uIntPtr)(nNewYear%10000))*10000);
+    setDateFromDMY( GetDay(), GetMonth(), nNewYear );
 }
 
 DayOfWeek Date::GetDayOfWeek() const
@@ -364,9 +353,7 @@ bool Date::Normalize()
     if (!Normalize( nDay, nMonth, nYear))
         return false;
 
-    SetDay( nDay);
-    SetMonth( nMonth);
-    SetYear( nYear);
+    setDateFromDMY( nDay, nMonth, nYear );
 
     return true;
 }
@@ -433,13 +420,13 @@ Date& Date::operator +=( long nDays )
 
     nTempDays += nDays;
     if ( nTempDays > MAX_DAYS )
-        nDate = 31 + (12*100) + (((sal_uIntPtr)9999)*10000);
+        setDateFromDMY( 31, 12, 9999 );
     else if ( nTempDays <= 0 )
-        nDate = 1 + 100;
+        setDateFromDMY( 1, 100, 0 );
     else
     {
         DaysToDate( nTempDays, nDay, nMonth, nYear );
-        nDate = ((sal_uIntPtr)nDay) + (((sal_uIntPtr)nMonth)*100) + (((sal_uIntPtr)nYear)*10000);
+        setDateFromDMY( nDay, nMonth, nYear );
     }
 
     return *this;
@@ -458,13 +445,13 @@ Date& Date::operator -=( long nDays )
 
     nTempDays -= nDays;
     if ( nTempDays > MAX_DAYS )
-        nDate = 31 + (12*100) + (((sal_uIntPtr)9999)*10000);
+        setDateFromDMY( 31, 12, 9999 );
     else if ( nTempDays <= 0 )
-        nDate = 1 + 100;
+        setDateFromDMY( 1, 100, 0 );
     else
     {
         DaysToDate( nTempDays, nDay, nMonth, nYear );
-        nDate = ((sal_uIntPtr)nDay) + (((sal_uIntPtr)nMonth)*100) + (((sal_uIntPtr)nYear)*10000);
+        setDateFromDMY( nDay, nMonth, nYear );
     }
 
     return *this;
@@ -481,7 +468,7 @@ Date& Date::operator ++()
     {
         nTempDays++;
         DaysToDate( nTempDays, nDay, nMonth, nYear );
-        nDate = ((sal_uIntPtr)nDay) + (((sal_uIntPtr)nMonth)*100) + (((sal_uIntPtr)nYear)*10000);
+        setDateFromDMY( nDay, nMonth, nYear );
     }
 
     return *this;
@@ -498,7 +485,7 @@ Date& Date::operator --()
     {
         nTempDays--;
         DaysToDate( nTempDays, nDay, nMonth, nYear );
-        nDate = ((sal_uIntPtr)nDay) + (((sal_uIntPtr)nMonth)*100) + (((sal_uIntPtr)nYear)*10000);
+        setDateFromDMY( nDay, nMonth, nYear );
     }
     return *this;
 }

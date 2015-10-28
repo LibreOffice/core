@@ -32,7 +32,7 @@ class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Date
 {
 private:
     sal_uInt32      nDate;
-    void            init( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
+    void            setDateFromDMY( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
                         { nDate = (   sal_uInt32( nDay   % 100 ) ) +
                                   ( ( sal_uInt32( nMonth % 100 ) ) * 100 ) +
                                   ( ( sal_uInt32( nYear  % 10000 ) ) * 10000); }
@@ -56,11 +56,11 @@ public:
                     Date( const Date& rDate )
                         { nDate = rDate.nDate; }
                     Date( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
-                        { init(nDay, nMonth, nYear); }
+                        { setDateFromDMY(nDay, nMonth, nYear); }
                     Date( const css::util::Date& _rDate )
                     {
                         SAL_WARN_IF(_rDate.Year < 0, "tools.datetime", "Negative year in css::util::Date to ::Date conversion");
-                        init(_rDate.Day, _rDate.Month, _rDate.Year);
+                        setDateFromDMY(_rDate.Day, _rDate.Month, _rDate.Year);
                     }
                     Date( const css::util::DateTime& _rDateTime );
 
