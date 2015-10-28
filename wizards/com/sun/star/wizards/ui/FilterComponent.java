@@ -119,7 +119,7 @@ public class FilterComponent
                     String sControlNameSuffix = sIncSuffix + "_" + getIndexNumber(sControlName);
                     XListBox xCurFieldListBox = UnoRuntime.queryInterface(XListBox.class, CurUnoDialog.xDlgContainer.getControl(sControlName));
                     String CurDisplayFieldName = xCurFieldListBox.getSelectedItem();
-                    FieldColumn CurFieldColumn = new FieldColumn(oQueryMetaData, CurDisplayFieldName);
+                    FieldColumn CurFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(CurDisplayFieldName);
 
                     String sControlNameTextValue = "txtValue" + sControlNameSuffix;
                     XControl xValueControl = CurUnoDialog.xDlgContainer.getControl(sControlNameTextValue);
@@ -303,7 +303,7 @@ public class FilterComponent
             String FieldName;
             if (_CurDBMetaData != null)
             {
-                FieldColumn CurDBFieldColumn = _CurDBMetaData.getFieldColumnByDisplayName(_filtercondition.Name);
+                FieldColumn CurDBFieldColumn = _CurDBMetaData.getFieldColumnByFieldName(_filtercondition.Name);
                 FieldName = CurDBFieldColumn.getFieldTitle();
             }
             else
