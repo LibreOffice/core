@@ -60,7 +60,7 @@ void SdOptionsItem::ImplCommit()
         mrParent.Commit( *this );
 };
 
-void SdOptionsItem::Notify( const com::sun::star::uno::Sequence<OUString>& )
+void SdOptionsItem::Notify( const css::uno::Sequence<OUString>& )
 {}
 
 Sequence< Any > SdOptionsItem::GetProperties( const Sequence< OUString >& rNames )

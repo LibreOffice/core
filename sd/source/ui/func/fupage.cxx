@@ -225,7 +225,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     aNewAttr.Put( aBoxItem );
 
     aNewAttr.Put( SvxFrameDirectionItem(
-        mpDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP,
+        mpDoc->GetDefaultWritingMode() == css::text::WritingMode_RL_TB ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP,
         EE_PARA_WRITINGDIR ) );
 
     // Retrieve page-data for dialog
@@ -473,7 +473,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             if( SfxItemState::SET == pTempSet->GetItemState( EE_PARA_WRITINGDIR, false, &pItem ) )
             {
                 sal_uInt32 nVal = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
-                mpDoc->SetDefaultWritingMode( nVal == FRMDIR_HORI_RIGHT_TOP ? ::com::sun::star::text::WritingMode_RL_TB : ::com::sun::star::text::WritingMode_LR_TB );
+                mpDoc->SetDefaultWritingMode( nVal == FRMDIR_HORI_RIGHT_TOP ? css::text::WritingMode_RL_TB : css::text::WritingMode_LR_TB );
             }
 
             mpDoc->SetChanged();

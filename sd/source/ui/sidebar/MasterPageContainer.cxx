@@ -132,7 +132,7 @@ private:
     enum InitializationState { NOT_INITIALIZED, INITIALIZING, INITIALIZED } meInitializationState;
 
     std::unique_ptr<MasterPageContainerQueue> mpRequestQueue;
-    ::com::sun::star::uno::Reference<com::sun::star::frame::XModel> mxModel;
+    css::uno::Reference<css::frame::XModel> mxModel;
     SdDrawDocument* mpDocument;
     PreviewRenderer maPreviewRenderer;
     /** Remember whether the first page object has already been used to
@@ -519,7 +519,7 @@ MasterPageContainer::Implementation::~Implementation()
         {
             xCloseable->close(true);
         }
-        catch (const ::com::sun::star::util::CloseVetoException&)
+        catch (const css::util::CloseVetoException&)
         {
         }
     }

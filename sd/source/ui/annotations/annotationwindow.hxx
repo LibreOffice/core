@@ -83,13 +83,13 @@ class AnnotationWindow : public FloatingWindow
 
         OutlinerView*           mpOutlinerView;
         Outliner*               mpOutliner;
-        VclPtr<ScrollBar>              mpVScrollbar;
-        ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > mxAnnotation;
+        VclPtr<ScrollBar>       mpVScrollbar;
+        css::uno::Reference< css::office::XAnnotation > mxAnnotation;
         bool                    mbReadonly;
         bool                    mbProtected;
         bool                    mbMouseOverButton;
         VclPtr<AnnotationTextWindow>   mpTextWindow;
-        VclPtr<MultiLineEdit>          mpMeta;
+        VclPtr<MultiLineEdit>   mpMeta;
         Rectangle               maRectMetaButton;
         basegfx::B2DPolygon     maPopupTriangle;
 
@@ -107,7 +107,7 @@ class AnnotationWindow : public FloatingWindow
 
         SvxLanguageItem GetLanguage();
 
-        void setAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, bool bGrabFocus = false );
+        void setAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bGrabFocus = false );
 
         void ExecuteSlot( sal_uInt16 nSID );
 

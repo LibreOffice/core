@@ -72,8 +72,7 @@ public:
 
     virtual void ArrangeGUIElements() override;
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>
+    virtual css::uno::Reference<css::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow) override;
 
     virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;

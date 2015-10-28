@@ -61,7 +61,7 @@ using ::com::sun::star::beans::NamedValue;
 
 namespace sd {
 
-TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+TransitionPreset::TransitionPreset( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     // first locate preset id
     Sequence< NamedValue > aUserData( xNode->getUserData() );

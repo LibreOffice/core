@@ -36,36 +36,36 @@ namespace sd { namespace colortoolpanel
 {
 
     // class SingleColorPanel
-    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::drawing::framework::XView
-                                                ,   ::com::sun::star::ui::XToolPanel
-                                                ,   ::com::sun::star::awt::XPaintListener
+    typedef ::cppu::WeakComponentImplHelper    <   css::drawing::framework::XView
+                                                ,   css::ui::XToolPanel
+                                                ,   css::awt::XPaintListener
                                                 >   SingleColorPanel_Base;
     class SingleColorPanel  :public ::cppu::BaseMutex
                             ,public SingleColorPanel_Base
     {
     public:
         SingleColorPanel(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XConfigurationController >& i_rConfigController,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >& i_rResourceId
+            const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+            const css::uno::Reference< css::drawing::framework::XConfigurationController >& i_rConfigController,
+            const css::uno::Reference< css::drawing::framework::XResourceId >& i_rResourceId
         );
 
         // XToolPanel
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getWindow(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL createAccessible( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& ParentAccessible ) throw (::com::sun::star::uno::RuntimeException);
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getWindow(  ) throw (css::uno::RuntimeException);
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL createAccessible( const css::uno::Reference< css::accessibility::XAccessible >& ParentAccessible ) throw (css::uno::RuntimeException);
 
         // XView
         // (no methods)
 
         // XResource
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId > SAL_CALL getResourceId(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL isAnchorOnly(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual css::uno::Reference< css::drawing::framework::XResourceId > SAL_CALL getResourceId(  ) throw (css::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL isAnchorOnly(  ) throw (css::uno::RuntimeException);
 
         // XPaintListener
-        virtual void SAL_CALL windowPaint( const ::com::sun::star::awt::PaintEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL windowPaint( const css::awt::PaintEvent& e ) throw (css::uno::RuntimeException);
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException);
 
         // XComponent equivalents
         virtual void SAL_CALL disposing();
@@ -74,9 +74,9 @@ namespace sd { namespace colortoolpanel
         ~SingleColorPanel();
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::framework::XResourceId >   m_xResourceId;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xWindow;
+        css::uno::Reference< css::uno::XComponentContext >            m_xContext;
+        css::uno::Reference< css::drawing::framework::XResourceId >   m_xResourceId;
+        css::uno::Reference< css::awt::XWindow >                      m_xWindow;
     };
 
 } } // namespace sd::colortoolpanel

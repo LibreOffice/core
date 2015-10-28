@@ -175,7 +175,7 @@ PPTWriterBase::~PPTWriterBase()
         mXStatusIndicator->end();
 }
 
-void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData )
+void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& rMediaData )
 {
     if ( !InitSOIface() )
         return;
@@ -431,7 +431,7 @@ bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
 
     if ( !ImplGetPropertyValue( mXPagePropSet, OUString( "Background" ) ) )                // load background shape
         return false;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet;
+    css::uno::Reference< css::beans::XPropertySet > aXBackgroundPropSet;
     if ( !( mAny >>= aXBackgroundPropSet ) )
         return false;
 
@@ -440,9 +440,9 @@ bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
     return true;
 };
 
-sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet )
+sal_Int32 PPTWriterBase::GetLayoutOffset( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet )
 {
-    ::com::sun::star::uno::Any aAny;
+    css::uno::Any aAny;
     sal_Int32 nLayout = 20;
     if ( GetPropertyValue( aAny, rXPropSet, OUString( "Layout" ), true ) )
         aAny >>= nLayout;
@@ -452,7 +452,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference
     return nLayout;
 }
 
-sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet )
+sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet )
 {
     sal_Int32 nLayout = GetLayoutOffset( rXPropSet );
 
@@ -466,7 +466,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const ::com::sun::star::uno::Refe
     return nLayout;
 }
 
-PHLayout& PPTWriterBase::GetLayout(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet )
+PHLayout& PPTWriterBase::GetLayout(  const css::uno::Reference< css::beans::XPropertySet >& rXPropSet )
 {
     return pPHLayout[ GetLayoutOffsetFixed( rXPropSet ) ];
 }
@@ -484,18 +484,14 @@ PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset )
 sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
 {
     sal_uInt32 nRetValue = 0;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XMasterPageTarget >
-        aXMasterPageTarget( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::drawing::XMasterPageTarget >aXMasterPageTarget( mXDrawPage, css::uno::UNO_QUERY );
 
     if ( aXMasterPageTarget.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
-            aXDrawPage = aXMasterPageTarget->getMasterPage();
+        css::uno::Reference< css::drawing::XDrawPage >aXDrawPage = aXMasterPageTarget->getMasterPage();
         if ( aXDrawPage.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                aXPropertySet( aXDrawPage, ::com::sun::star::uno::UNO_QUERY );
-
+            css::uno::Reference< css::beans::XPropertySet > aXPropertySet( aXDrawPage, css::uno::UNO_QUERY );
             if ( aXPropertySet.is() )
             {
                 if ( ImplGetPropertyValue( aXPropertySet, OUString( "Number" ) ) )
@@ -664,8 +660,7 @@ bool PPTWriterBase::CreateMainNotes()
         return false;
     SetCurrentStyleSheet( 0 );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XMasterPageTarget >
-        aXMasterPageTarget( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::drawing::XMasterPageTarget > aXMasterPageTarget( mXDrawPage, css::uno::UNO_QUERY );
 
     if ( !aXMasterPageTarget.is() )
         return false;
@@ -674,15 +669,11 @@ bool PPTWriterBase::CreateMainNotes()
     if ( !mXDrawPage.is() )
         return false;
 
-    mXPropSet = ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-            ( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
+    mXPropSet = css::uno::Reference< css::beans::XPropertySet >( mXDrawPage, css::uno::UNO_QUERY );
     if ( !mXPropSet.is() )
         return false;
 
-    mXShapes = ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShapes >
-            ( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
+    mXShapes = css::uno::Reference< css::drawing::XShapes >( mXDrawPage, css::uno::UNO_QUERY );
     if ( !mXShapes.is() )
         return false;
 
@@ -708,10 +699,10 @@ awt::Point PPTWriterBase::MapPoint( const awt::Point& rPoint )
 
 Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
 {
-    ::com::sun::star::awt::Point    aPoint( rRect.X, rRect.Y );
-    ::com::sun::star::awt::Size     aSize( rRect.Width, rRect.Height );
-    ::com::sun::star::awt::Point    aP( MapPoint( aPoint ) );
-    ::com::sun::star::awt::Size     aS( MapSize( aSize ) );
+    css::awt::Point    aPoint( rRect.X, rRect.Y );
+    css::awt::Size     aSize( rRect.Width, rRect.Height );
+    css::awt::Point    aP( MapPoint( aPoint ) );
+    css::awt::Size     aS( MapSize( aSize ) );
     return Rectangle( Point( aP.X, aP.Y ), Size( aS.Width, aS.Height ) );
 }
 

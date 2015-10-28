@@ -44,12 +44,12 @@ public:
 
     // XSelectionSupplier
 
-    virtual sal_Bool SAL_CALL select (const ::com::sun::star::uno::Any& aSelection)
-        throw(::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL select (const css::uno::Any& aSelection)
+        throw(css::lang::IllegalArgumentException,
+            css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getSelection()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getSelection()
+        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL addSelectionChangeListener (
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
@@ -62,12 +62,12 @@ public:
     // XDrawView
 
     virtual void SAL_CALL setCurrentPage (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage)
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::drawing::XDrawPage >& xPage)
+        throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL
+    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL
         getCurrentPage()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     // XFastPropertySet
 
@@ -87,9 +87,9 @@ public:
             css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     slidesorter::SlideSorter& mrSlideSorter;

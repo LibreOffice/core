@@ -84,14 +84,14 @@ using namespace ::com::sun::star::ucb;
 using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
-class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< com::sun::star::task::XInteractionHandler >
+class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task::XInteractionHandler >
 {
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInter;
+    css::uno::Reference< css::task::XInteractionHandler > m_xInter;
     sal_uInt16 nFilterError;
 
     public:
 
-    explicit SdGRFFilter_ImplInteractionHdl( com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteraction ) :
+    explicit SdGRFFilter_ImplInteractionHdl( css::uno::Reference< css::task::XInteractionHandler > xInteraction ) :
         m_xInter( xInteraction ),
         nFilterError( GRFILTER_OK )
         {}
@@ -100,21 +100,21 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< com::sun::
 
     sal_uInt16 GetErrorCode() const { return nFilterError; };
 
-    virtual void SAL_CALL   handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& )
-                                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL   handle( const css::uno::Reference< css::task::XInteractionRequest >& )
+                                throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 SdGRFFilter_ImplInteractionHdl::~SdGRFFilter_ImplInteractionHdl()
 {
 }
 
-void SdGRFFilter_ImplInteractionHdl::handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest )
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+void SdGRFFilter_ImplInteractionHdl::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
+        throw( css::uno::RuntimeException, std::exception )
 {
     if( !m_xInter.is() )
         return;
 
-    com::sun::star::drawing::GraphicFilterRequest aErr;
+    css::drawing::GraphicFilterRequest aErr;
     if ( xRequest->getRequest() >>= aErr )
         nFilterError = (sal_uInt16)aErr.ErrCode;
     else

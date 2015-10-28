@@ -57,7 +57,7 @@ public:
     const OUString& getPresetId() const { return maPresetId; }
 
 private:
-    TransitionPreset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    TransitionPreset( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
 
     sal_Int16 mnTransition;
     sal_Int16 mnSubtype;
@@ -67,7 +67,7 @@ private:
     OUString maUIName;
 
     static bool importTransitionsFile( TransitionPresetList& rList,
-                                       ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+                                       css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceFactory,
                                        UStringMap& rTransitionNameMap,
                                        const OUString& aFilename );
 };

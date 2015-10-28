@@ -31,15 +31,12 @@ class ConfigurationTracer
 {
 public:
     static void TraceConfiguration (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         const char* pMessage);
 #ifdef DEBUG
     static void TraceBoundResources (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XResourceId>& rxResourceId,
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         const int nIndentation);
 #endif
 };

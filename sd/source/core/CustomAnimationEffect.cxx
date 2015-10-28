@@ -130,7 +130,7 @@ private:
     MainSequence* mpMainSequence;
 };
 
-CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+CustomAnimationEffect::CustomAnimationEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 :   mnNodeType(-1),
     mnPresetClass(-1),
     mfBegin(-1.0),
@@ -153,7 +153,7 @@ CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Refer
     setNode( xNode );
 }
 
-void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+void CustomAnimationEffect::setNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     mxNode = xNode;
     mxAudio.clear();
@@ -629,7 +629,7 @@ bool CustomAnimationEffect::calculateIterateDuration()
     return bChange;
 }
 
-void CustomAnimationEffect::setTarget( const ::com::sun::star::uno::Any& rTarget )
+void CustomAnimationEffect::setTarget( const css::uno::Any& rTarget )
 {
     try
     {
@@ -818,7 +818,7 @@ void CustomAnimationEffect::setAutoReverse( bool bAutoReverse )
     }
 }
 
-void CustomAnimationEffect::replaceNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+void CustomAnimationEffect::replaceNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     sal_Int16 nNodeType = mnNodeType;
     Any aTarget = maTarget;
@@ -1477,7 +1477,7 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
     return bChanged;
 }
 
-void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSource, double fVolume /* = 1.0 */ )
+void CustomAnimationEffect::createAudio( const css::uno::Any& rSource, double fVolume /* = 1.0 */ )
 {
     DBG_ASSERT( !mxAudio.is(), "sd::CustomAnimationEffect::createAudio(), node already has an audio!" );
 
@@ -1549,7 +1549,7 @@ void CustomAnimationEffect::removeAudio()
 
 }
 
-void CustomAnimationEffect::setAudio( const Reference< ::com::sun::star::animations::XAudio >& xAudio )
+void CustomAnimationEffect::setAudio( const Reference< css::animations::XAudio >& xAudio )
 {
     if( mxAudio != xAudio ) try
     {
@@ -1666,7 +1666,7 @@ EffectSequenceHelper::EffectSequenceHelper()
 {
 }
 
-EffectSequenceHelper::EffectSequenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot )
+EffectSequenceHelper::EffectSequenceHelper( const css::uno::Reference< css::animations::XTimeContainer >& xSequenceRoot )
 : mxSequenceRoot( xSequenceRoot ), mnSequenceType( EffectNodeType::DEFAULT )
 {
     Reference< XAnimationNode > xNode( mxSequenceRoot, UNO_QUERY_THROW );
@@ -1799,8 +1799,8 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
         pEffect->setEffectSequence( this );
         pEffect->setTarget( rTarget );
         pEffect->setTargetSubItem( nSubItem );
-        pEffect->setNodeType( ::com::sun::star::presentation::EffectNodeType::ON_CLICK );
-        pEffect->setPresetClass( ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH );
+        pEffect->setNodeType( css::presentation::EffectNodeType::ON_CLICK );
+        pEffect->setPresetClass( css::presentation::EffectPresetClass::MOTIONPATH );
         pEffect->setAcceleration( 0.5 );
         pEffect->setDecelerate( 0.5 );
         pEffect->setFill( AnimationFill::HOLD );
@@ -1987,7 +1987,7 @@ void EffectSequenceHelper::implRebuild()
     }
 }
 
-stl_CustomAnimationEffect_search_node_predict::stl_CustomAnimationEffect_search_node_predict( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xSearchNode )
+stl_CustomAnimationEffect_search_node_predict::stl_CustomAnimationEffect_search_node_predict( const css::uno::Reference< css::animations::XAnimationNode >& xSearchNode )
 : mxSearchNode( xSearchNode )
 {
 }
@@ -2133,7 +2133,7 @@ EffectSequence::iterator EffectSequenceHelper::find( const CustomAnimationEffect
     return std::find( maEffects.begin(), maEffects.end(), pEffect );
 }
 
-CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const
+CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const
 {
     CustomAnimationEffectPtr pEffect;
 
@@ -2199,7 +2199,7 @@ bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
     return bChanges;
 }
 
-bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape )
+bool EffectSequenceHelper::hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
     EffectSequence::iterator aIter( maEffects.begin() );
     while( aIter != maEffects.end() )
@@ -2212,7 +2212,7 @@ bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com:
     return false;
 }
 
-void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTarget )
+void EffectSequenceHelper::insertTextRange( const css::uno::Any& aTarget )
 {
     bool bChanges = false;
 
@@ -2232,7 +2232,7 @@ void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTar
         rebuild();
 }
 
-void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTarget )
+void EffectSequenceHelper::disposeTextRange( const css::uno::Any& aTarget )
 {
     ParagraphTarget aParaTarget;
     if( !(aTarget >>= aParaTarget ) )
@@ -2829,7 +2829,7 @@ void EffectSequenceHelper::notify_listeners()
     std::for_each( maListeners.begin(), maListeners.end(), aFunc );
 }
 
-void EffectSequenceHelper::create( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+void EffectSequenceHelper::create( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     DBG_ASSERT( xNode.is(), "sd::EffectSequenceHelper::create(), illegal argument" );
 
@@ -2976,19 +2976,19 @@ class AnimationChangeListener : public cppu::WeakImplHelper< XChangesListener >
 public:
     explicit AnimationChangeListener( MainSequence* pMainSequence ) : mpMainSequence( pMainSequence ) {}
 
-    virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (RuntimeException, std::exception) override;
 private:
     MainSequence* mpMainSequence;
 };
 
-void SAL_CALL AnimationChangeListener::changesOccurred( const ::com::sun::star::util::ChangesEvent& ) throw (RuntimeException, std::exception)
+void SAL_CALL AnimationChangeListener::changesOccurred( const css::util::ChangesEvent& ) throw (RuntimeException, std::exception)
 {
     if( mpMainSequence )
         mpMainSequence->startRecreateTimer();
 }
 
-void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::EventObject& ) throw (RuntimeException, std::exception)
+void SAL_CALL AnimationChangeListener::disposing( const css::lang::EventObject& ) throw (RuntimeException, std::exception)
 {
 }
 
@@ -3002,14 +3002,14 @@ MainSequence::MainSequence()
 {
     if( mxTimingRootNode.is() )
     {
-        Sequence< ::com::sun::star::beans::NamedValue > aUserData
+        Sequence< css::beans::NamedValue > aUserData
             { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
         mxTimingRootNode->setUserData( aUserData );
     }
     init();
 }
 
-MainSequence::MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+MainSequence::MainSequence( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
     : mxTimingRootNode( xNode, UNO_QUERY )
     , mbTimerMode( false )
     , mbRebuilding( false )
@@ -3037,7 +3037,7 @@ void MainSequence::init()
     createMainSequence();
 }
 
-void MainSequence::reset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode )
+void MainSequence::reset( const css::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode )
 {
     reset();
 
@@ -3046,7 +3046,7 @@ void MainSequence::reset( const ::com::sun::star::uno::Reference< ::com::sun::st
     createMainSequence();
 }
 
-Reference< ::com::sun::star::animations::XAnimationNode > MainSequence::getRootNode()
+Reference< css::animations::XAnimationNode > MainSequence::getRootNode()
 {
     DBG_ASSERT( mnRebuildLockGuard == 0, "MainSequence::getRootNode(), rebuild is locked, is this really what you want?" );
 
@@ -3089,7 +3089,7 @@ void MainSequence::createMainSequence()
         {
             mxSequenceRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
-            uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData
+            uno::Sequence< css::beans::NamedValue > aUserData
                 { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
             mxSequenceRoot->setUserData( aUserData );
 
@@ -3140,14 +3140,14 @@ void MainSequence::reset()
     }
 }
 
-InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape )
+InteractiveSequencePtr MainSequence::createInteractiveSequence( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
     InteractiveSequencePtr pIS;
 
     // create a new interactive sequence container
     Reference< XTimeContainer > xISRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
-    uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData
+    uno::Sequence< css::beans::NamedValue > aUserData
         { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE) } };
     xISRoot->setUserData( aUserData );
 
@@ -3162,7 +3162,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
     return pIS;
 }
 
-CustomAnimationEffectPtr MainSequence::findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const
+CustomAnimationEffectPtr MainSequence::findEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const
 {
     CustomAnimationEffectPtr pEffect = EffectSequenceHelper::findEffect( xNode );
 
@@ -3237,7 +3237,7 @@ bool MainSequence::disposeShape( const Reference< XShape >& xShape )
     return bChanges;
 }
 
-bool MainSequence::hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape )
+bool MainSequence::hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
     if( EffectSequenceHelper::hasEffect( xShape ) )
         return true;
@@ -3255,7 +3255,7 @@ bool MainSequence::hasEffect( const com::sun::star::uno::Reference< com::sun::st
     return false;
 }
 
-void MainSequence::insertTextRange( const com::sun::star::uno::Any& aTarget )
+void MainSequence::insertTextRange( const css::uno::Any& aTarget )
 {
     EffectSequenceHelper::insertTextRange( aTarget );
 
@@ -3266,7 +3266,7 @@ void MainSequence::insertTextRange( const com::sun::star::uno::Any& aTarget )
     }
 }
 
-void MainSequence::disposeTextRange( const com::sun::star::uno::Any& aTarget )
+void MainSequence::disposeTextRange( const css::uno::Any& aTarget )
 {
     EffectSequenceHelper::disposeTextRange( aTarget );
 
@@ -3370,7 +3370,7 @@ void MainSequence::notify_change()
     notify_listeners();
 }
 
-bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTriggerShape )
+bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const css::uno::Reference< css::drawing::XShape >& xTriggerShape )
 {
     EffectSequenceHelper* pOldSequence = pEffect->getEffectSequence();
 

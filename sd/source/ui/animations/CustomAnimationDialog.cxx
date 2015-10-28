@@ -1045,7 +1045,7 @@ private:
     VclPtr<MetricField>    mpMFTextDelay;
     VclPtr<FixedText>      mpFTTextDelay;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
+    css::uno::Reference< css::media::XPlayer > mxPlayer;
 };
 
 CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent, const STLPropertySet* pSet )

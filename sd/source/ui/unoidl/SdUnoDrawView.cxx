@@ -404,7 +404,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
             aValue <<= GetZoom();
             break;
         case DrawController::PROPERTY_ZOOMTYPE:
-            aValue <<= (sal_Int16)com::sun::star::view::DocumentZoomType::BY_VALUE;
+            aValue <<= (sal_Int16)css::view::DocumentZoomType::BY_VALUE;
             break;
         case DrawController::PROPERTY_VIEWOFFSET:
             aValue <<= GetViewOffset();
@@ -511,16 +511,16 @@ void SdUnoDrawView::SetZoomType ( sal_Int16 nType )
             SvxZoomType eZoomType;
             switch( nType )
             {
-                case com::sun::star::view::DocumentZoomType::OPTIMAL:
+                case css::view::DocumentZoomType::OPTIMAL:
                     eZoomType = SvxZoomType::OPTIMAL;
                     break;
 
-                case com::sun::star::view::DocumentZoomType::PAGE_WIDTH:
-                case com::sun::star::view::DocumentZoomType::PAGE_WIDTH_EXACT:
+                case css::view::DocumentZoomType::PAGE_WIDTH:
+                case css::view::DocumentZoomType::PAGE_WIDTH_EXACT:
                     eZoomType = SvxZoomType::PAGEWIDTH;
                     break;
 
-                case com::sun::star::view::DocumentZoomType::ENTIRE_PAGE:
+                case css::view::DocumentZoomType::ENTIRE_PAGE:
                     eZoomType = SvxZoomType::WHOLEPAGE;
                     break;
 

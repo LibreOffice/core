@@ -47,7 +47,7 @@ public:
 
     void add( CustomAnimationEffectPtr pEffect );
 
-    SD_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > create( const OUString& rstrSubType );
+    SD_DLLPUBLIC css::uno::Reference< css::animations::XAnimationNode > create( const OUString& rstrSubType );
 
     const OUString& getPresetId() const { return maPresetId; }
     const OUString& getLabel() const { return maLabel; }
@@ -96,7 +96,7 @@ public:
 
     static const CustomAnimationPresets& getCustomAnimationPresets();
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
+    SAL_DLLPRIVATE css::uno::Reference< css::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
 
     CustomAnimationPresetPtr getEffectDescriptor( const OUString& rPresetId ) const;
 
@@ -115,12 +115,12 @@ private:
     SAL_DLLPRIVATE void importEffects();
     SAL_DLLPRIVATE void importResources();
 
-    SAL_DLLPRIVATE void importPresets( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  );
+    SAL_DLLPRIVATE void importPresets( const css::uno::Reference< css::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  );
 
     SAL_DLLPRIVATE const OUString& translateName( const OUString& rId, const UStringMap& rNameMap ) const;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxRootNode;
+    css::uno::Reference< css::animations::XAnimationNode > mxRootNode;
     EffectDescriptorMap maEffectDiscriptorMap;
     UStringMap maEffectNameMap;
     UStringMap maPropertyNameMap;

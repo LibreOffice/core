@@ -95,7 +95,7 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 
 void GraphicViewShellBase::InitializeFramework()
 {
-    com::sun::star::uno::Reference<com::sun::star::frame::XController>
+    css::uno::Reference<css::frame::XController>
         xController (GetController());
     sd::framework::DrawModule::Initialize(xController);
 }

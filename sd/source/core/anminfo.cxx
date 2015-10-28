@@ -105,7 +105,7 @@ SdrObjUserData* SdAnimationInfo::Clone(SdrObject* pObject) const
 
 void SdAnimationInfo::SetBookmark( const OUString& rBookmark )
 {
-    if( meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK )
+    if( meClickAction == css::presentation::ClickAction_BOOKMARK )
     {
         OUString sURL("#");
         sURL += rBookmark;
@@ -131,7 +131,7 @@ OUString SdAnimationInfo::GetBookmark()
             sBookmark = pURLField->GetURL();
     }
 
-    if( (meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK) && sBookmark.startsWith("#") )
+    if( (meClickAction == css::presentation::ClickAction_BOOKMARK) && sBookmark.startsWith("#") )
         sBookmark = sBookmark.copy( 1 );
 
     return sBookmark;

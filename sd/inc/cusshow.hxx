@@ -38,7 +38,7 @@ private:
     SdDrawDocument* pDoc;
 
     // this is a weak reference to a possible living api wrapper for this custom show
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > mxUnoCustomShow;
+    css::uno::WeakReference< css::uno::XInterface > mxUnoCustomShow;
 
     // forbidden and not implemented
     SdCustomShow();
@@ -46,7 +46,7 @@ private:
 public:
     // single argument ctors shall be explicit
     explicit SdCustomShow(SdDrawDocument* pDrawDoc);
-    SdCustomShow(SdDrawDocument* pDrawDoc, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xShow );
+    SdCustomShow(SdDrawDocument* pDrawDoc, css::uno::Reference< css::uno::XInterface > xShow );
 
     virtual ~SdCustomShow();
 
@@ -68,7 +68,7 @@ public:
 
     SdDrawDocument* GetDoc() const { return pDoc; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoCustomShow();
+    css::uno::Reference< css::uno::XInterface > getUnoCustomShow();
 };
 
 #endif // INCLUDED_SD_INC_CUSSHOW_HXX

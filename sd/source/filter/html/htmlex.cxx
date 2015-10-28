@@ -3061,7 +3061,7 @@ bool HtmlExport::CopyFile( const OUString& rSourceFile, const OUString& rDestFil
     }
 }
 
-bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess, OUString const & aFileName )
+bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess, OUString const & aFileName )
 {
     try
     {
@@ -3069,7 +3069,7 @@ bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileA
         url += aFileName;
         return xFileAccess->exists( url );
     }
-    catch( com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         OSL_FAIL(OString(OString("sd::HtmlExport::checkFileExists(), exception caught: ") +
              OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );

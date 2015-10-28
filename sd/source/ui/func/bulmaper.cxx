@@ -51,8 +51,8 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
         const SvxNumberFormat& rSrcLevel = aNumRule.GetLevel(nLevel);
         SvxNumberFormat aNewLevel( rSrcLevel );
 
-        if(rSrcLevel.GetNumberingType() != com::sun::star::style::NumberingType::CHAR_SPECIAL &&
-           rSrcLevel.GetNumberingType() != com::sun::star::style::NumberingType::NUMBER_NONE )
+        if(rSrcLevel.GetNumberingType() != css::style::NumberingType::CHAR_SPECIAL &&
+           rSrcLevel.GetNumberingType() != css::style::NumberingType::NUMBER_NONE )
         {
             // if enumeration instead bullet is chosen, adjust bullet font to template font
 
@@ -100,7 +100,7 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
             aNewLevel.SetBulletFont(&aMyFont);
             aNumRule.SetLevel(nLevel, aNewLevel );
         }
-        else if( rSrcLevel.GetNumberingType() == com::sun::star::style::NumberingType::CHAR_SPECIAL )
+        else if( rSrcLevel.GetNumberingType() == css::style::NumberingType::CHAR_SPECIAL )
         {
             aNewLevel.SetPrefix("");
             aNewLevel.SetSuffix("");

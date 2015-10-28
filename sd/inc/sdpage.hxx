@@ -80,7 +80,7 @@ namespace sd {
         bool operator==( const HeaderFooterSettings& rSettings ) const;
     };
 
-    typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > > AnnotationVector;
+    typedef std::vector< css::uno::Reference< css::office::XAnnotation > > AnnotationVector;
 }
 
 namespace sd {
@@ -129,12 +129,12 @@ protected:
     sd::AnnotationVector    maAnnotations;
 
     /** holds the smil animation sequences for this page */
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxAnimationNode;
+    css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
 
     /** a helper class to manipulate effects inside the main sequence */
     std::shared_ptr< sd::MainSequence > mpMainSequence;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() override;
+    virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 
     SfxItemSet* mpItems;
 
@@ -214,8 +214,8 @@ public:
     void        SetSelected(bool bSel)               { mbSelected = bSel; }
     bool        IsSelected() const                   { return mbSelected; }
 
-    void        SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect);
-    ::com::sun::star::presentation::FadeEffect  GetFadeEffect() const;
+    void        SetFadeEffect(css::presentation::FadeEffect eNewEffect);
+    css::presentation::FadeEffect  GetFadeEffect() const;
 
     void        SetPresChange(PresChange eChange)    { mePresChange = eChange; }
     PresChange  GetPresChange() const                { return mePresChange; }
@@ -291,14 +291,14 @@ public:
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const override;
 
-    bool setAlienAttributes( const com::sun::star::uno::Any& rAttributes );
-    void getAlienAttributes( com::sun::star::uno::Any& rAttributes );
+    bool setAlienAttributes( const css::uno::Any& rAttributes );
+    void getAlienAttributes( css::uno::Any& rAttributes );
 
     /** @return the main animation node */
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getAnimationNode() throw (::com::sun::star::uno::RuntimeException);
+    css::uno::Reference< css::animations::XAnimationNode > getAnimationNode() throw (css::uno::RuntimeException);
 
     /** sets the main animation node */
-    void setAnimationNode( ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) throw (::com::sun::star::uno::RuntimeException);
+    void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode >& xNode ) throw (css::uno::RuntimeException);
 
     /// @return a helper class to manipulate effects inside the main sequence
     std::shared_ptr< sd::MainSequence > getMainSequence();
@@ -310,7 +310,7 @@ public:
     bool hasAnimationNode() const;
 
     /// @return the SdPage implementation for the given XDrawPage or 0 if not available
-    static SdPage* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage );
+    static SdPage* getImplementation( const css::uno::Reference< css::drawing::XDrawPage >& xPage );
 
     /** removes all custom animations for the given shape */
     void removeAnimations( const SdrObject* pObj );
@@ -368,9 +368,9 @@ public:
     */
     bool IsPrecious() const { return mbIsPrecious; }
 
-    void createAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
-    void addAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, int nIndex = -1 );
-    void removeAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
+    void createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation );
+    void addAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, int nIndex = -1 );
+    void removeAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
     sal_Int32 getHash() const;
     OString stringify() const;

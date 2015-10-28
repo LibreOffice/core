@@ -1360,14 +1360,12 @@ void ViewShell::ExecReq( SfxRequest& rReq )
 /** This default implementation returns only an empty reference.  See derived
     classes for more interesting examples.
 */
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible>
+css::uno::Reference<css::accessibility::XAccessible>
 ViewShell::CreateAccessibleDocumentView (::sd::Window* )
 {
     OSL_FAIL("ViewShell::CreateAccessibleDocumentView should not be called!, perhaps Meyers, 3rd edition, Item 9:\n");
 
-    return ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> ();
+    return css::uno::Reference<css::accessibility::XAccessible> ();
 }
 
 ::sd::WindowUpdater* ViewShell::GetWindowUpdater() const
@@ -1542,7 +1540,7 @@ bool ViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
     return true;
 }
 
-void ViewShell::SwitchViewFireFocus(::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc )
+void ViewShell::SwitchViewFireFocus(css::uno::Reference< css::accessibility::XAccessible > xAcc )
 {
     if (xAcc.get())
     {

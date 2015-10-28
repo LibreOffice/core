@@ -163,7 +163,7 @@ private:
 
     sd::PresentationSettings maPresentationSettings;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 > mxPresentation;
+    css::uno::Reference< css::presentation::XPresentation2 > mxPresentation;
 
     bool                mbNewOrLoadCompleted;
 
@@ -179,7 +179,7 @@ private:
     bool                mbAllocDocSh;       // => AllocModel()
     DocumentType        meDocType;
     CharClass*          mpCharClass;
-    ::com::sun::star::lang::Locale* mpLocale;
+    css::lang::Locale*  mpLocale;
 
     ::std::unique_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
     ::std::unique_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
@@ -194,16 +194,14 @@ private:
                         DECL_DLLPRIVATE_LINK_TYPED(OnlineSpellEventHdl, EditStatus&, void);
 
     std::vector< OUString > maAnnotationAuthors;
-    std::vector<com::sun::star::uno::Reference<
-        com::sun::star::xml::dom::XNode> > maLayoutInfo;
+    std::vector<css::uno::Reference< css::xml::dom::XNode> > maLayoutInfo;
 
-    std::vector<com::sun::star::uno::Reference<
-        com::sun::star::xml::dom::XNode> > maPresObjectInfo;
+    std::vector<css::uno::Reference< css::xml::dom::XNode> > maPresObjectInfo;
 
     bool                mbUseEmbedFonts;
 protected:
 
-    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() override;
+    SAL_DLLPRIVATE virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
 
 public:
 
@@ -279,14 +277,13 @@ public:
     /// load xml-based impress layout definitions into document
     SAL_DLLPRIVATE void InitLayoutVector();
     /// return reference to vector of Impress layout definitions
-    SAL_DLLPRIVATE const std::vector<com::sun::star::uno::Reference<
-        com::sun::star::xml::dom::XNode> >& GetLayoutVector() const
+    SAL_DLLPRIVATE const std::vector<css::uno::Reference< css::xml::dom::XNode> >& GetLayoutVector() const
     { return maLayoutInfo; }
 
    /// load xml-based impress master presentation object definitions into document
     SAL_DLLPRIVATE void InitObjectVector();
     /// return reference to vector of master presentation object definitions
-    SAL_DLLPRIVATE const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> >& GetObjectVector() const { return maPresObjectInfo; }
+    SAL_DLLPRIVATE const std::vector<css::uno::Reference<css::xml::dom::XNode> >& GetObjectVector() const { return maPresObjectInfo; }
     /** Insert pages into this document
 
         This method inserts whole pages into this document, either
@@ -379,7 +376,7 @@ public:
     SAL_DLLPRIVATE const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }
     SAL_DLLPRIVATE sd::PresentationSettings& getPresentationSettings() { return maPresentationSettings; }
 
-    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 >& getPresentation() const;
+    SAL_DLLPRIVATE const css::uno::Reference< css::presentation::XPresentation2 >& getPresentation() const;
 
     SAL_DLLPRIVATE void                SetSummationOfParagraphs( bool bOn = true ) { mbSummationOfParagraphs = bOn; }
     SAL_DLLPRIVATE bool            IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }
@@ -388,9 +385,9 @@ public:
         depends on the current printer metrics.
         @param nMode
             Use <const
-            scope="com::sun::star::document::PrinterIndependentLayout">ENABLED</const>
+            scope="css::document::PrinterIndependentLayout">ENABLED</const>
             to make formatting printer-independent and <const
-            scope="com::sun::star::document::PrinterIndependentLayout">DISABLED</const>
+            scope="css::document::PrinterIndependentLayout">DISABLED</const>
             to make formatting depend on the current printer metrics.
     */
     SAL_DLLPRIVATE void SetPrinterIndependentLayout (sal_Int32 nMode);
@@ -399,9 +396,9 @@ public:
         depends on the current printer metrics.
         @return
             Use <const
-            scope="com::sun::star::document::PrinterIndependentLayout">ENABLED</const>
+            scope="css::document::PrinterIndependentLayout">ENABLED</const>
             when formatting is printer-independent and <const
-            scope="com::sun::star::document::PrinterIndependentLayout">DISABLED</const>
+            scope="css::document::PrinterIndependentLayout">DISABLED</const>
             when formatting depends on the current printer metrics.
     */
     SAL_DLLPRIVATE sal_Int32 GetPrinterIndependentLayout() { return mnPrinterIndependentLayout;}
@@ -461,8 +458,8 @@ public:
                                 bool bMergeMasterPages = false, bool bAllMasterPages = false,
                                 bool bUndo = true, bool bTreadSourceAsConst = false) override;
 
-    ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
-    SAL_DLLPRIVATE void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
+    css::text::WritingMode GetDefaultWritingMode() const;
+    SAL_DLLPRIVATE void SetDefaultWritingMode( css::text::WritingMode eMode );
 
     /** replacespOldPage from all custom shows with pNewPage or removes pOldPage from
         all custom shows if pNewPage is 0.

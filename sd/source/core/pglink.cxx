@@ -55,7 +55,7 @@ SdPageLink::~SdPageLink()
 \************************************************************************/
 
 ::sfx2::SvBaseLink::UpdateResult SdPageLink::DataChanged(
-    const OUString&, const ::com::sun::star::uno::Any& )
+    const OUString&, const css::uno::Any& )
 {
     SdDrawDocument* pDoc = static_cast<SdDrawDocument*>( pPage->GetModel() );
     sfx2::LinkManager* pLinkManager = pDoc!=NULL ? pDoc->GetLinkManager() : NULL;

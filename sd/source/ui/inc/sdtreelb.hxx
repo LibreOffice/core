@@ -76,8 +76,8 @@ public:
         ::sd::DrawDocShell&     GetDocShell() const { return mrDocShell;}
         NavigatorDragType   GetDragType() const { return meDragType;}
 
-        static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-        static SdPageObjsTransferable* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
+        static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+        static SdPageObjsTransferable* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
         /** Return a temporary transferable data flavor that is used
             internally in the navigator for reordering entries.  Its
             lifetime ends with the office application.
@@ -100,7 +100,7 @@ public:
         SAL_DLLPRIVATE virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
         SAL_DLLPRIVATE virtual void      DragFinished( sal_Int8 nDropAction ) override;
 
-        SAL_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        SAL_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;
     };
 
     friend class SdPageObjsTLB::SdPageObjsTransferable;
@@ -125,13 +125,13 @@ protected:
     SfxMedium*              mpOwnMedium;
     Image                   maImgOle;
     Image                   maImgGraphic;
-    bool                mbLinkableSelected;
+    bool                    mbLinkableSelected;
     OUString                maDocName;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef; ///< for the loading of bookmarks
     VclPtr<SdNavigatorWin>  mpDropNavWin;
     SfxViewFrame*           mpFrame;
     std::vector<OUString>   maTreeItem;
-    bool                mbSaveTreeItemState;
+    bool                    mbSaveTreeItemState;
     OUString                maSelectionEntryText;
 
     // DragSourceHelper
@@ -184,12 +184,12 @@ public:
     SdPageObjsTLB( vcl::Window* pParent, const SdResId& rSdResId );
     SdPageObjsTLB( vcl::Window* pParent, WinBits nStyle );
                             virtual ~SdPageObjsTLB();
-    virtual void      dispose() override;
+    virtual void            dispose() override;
 
    // helper function for   GetEntryAltText and GetEntryLongDescription
-    OUString          getAltLongDescText( SvTreeListEntry* pEntry , bool isAltText) const;
-    OUString          GetEntryAltText( SvTreeListEntry* pEntry ) const override;
-    OUString          GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
+    OUString                getAltLongDescText( SvTreeListEntry* pEntry , bool isAltText) const;
+    OUString                GetEntryAltText( SvTreeListEntry* pEntry ) const override;
+    OUString                GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
     virtual void            SelectHdl() override;
     virtual void            KeyInput( const KeyEvent& rKEvt ) override;
 

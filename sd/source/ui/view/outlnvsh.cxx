@@ -1821,14 +1821,14 @@ sal_uLong OutlineViewShell::Read(SvStream& rInput, const OUString& rBaseURL, sal
     return bRet;
 }
 
-void OutlineViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )
+void OutlineViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse )
 {
     WriteFrameViewData();
 
     ViewShell::WriteUserDataSequence( rSequence, bBrowse );
 }
 
-void OutlineViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )
+void OutlineViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse )
 {
     WriteFrameViewData();
 
@@ -1848,8 +1848,7 @@ void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
     <type>AccessibleDrawDocumentView</type>.  Otherwise return an empty
     reference.
 */
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible>
+css::uno::Reference<css::accessibility::XAccessible>
     OutlineViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
     OSL_ASSERT (GetViewShell()!=NULL);
@@ -1862,14 +1861,13 @@ void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
                 GetViewShell()->GetController(),
                 pWindow->GetAccessibleParentWindow()->GetAccessible());
         pDocumentView->Init();
-        return ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>
-            (static_cast< ::com::sun::star::uno::XWeak*>(pDocumentView),
-                ::com::sun::star::uno::UNO_QUERY);
+        return css::uno::Reference<css::accessibility::XAccessible>
+            (static_cast< css::uno::XWeak*>(pDocumentView),
+                css::uno::UNO_QUERY);
     }
 
     OSL_TRACE ("OutlineViewShell::CreateAccessibleDocumentView: no controller");
-    return ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >();
+    return css::uno::Reference< css::accessibility::XAccessible >();
 }
 
 void OutlineViewShell::GetState (SfxItemSet& rSet)

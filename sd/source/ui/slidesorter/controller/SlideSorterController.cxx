@@ -868,7 +868,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
     if ( ! pWindow)
         return;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible >
         xAccessible (pWindow->GetAccessible(false));
     if ( ! xAccessible.is())
         return;
@@ -896,7 +896,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
     OUString sOldName (rsOldName);
     OUString sNewName (pChild->GetPage()->GetName());
     pChild->FireAccessibleEvent(
-        ::com::sun::star::accessibility::AccessibleEventId::NAME_CHANGED,
+        css::accessibility::AccessibleEventId::NAME_CHANGED,
         makeAny(sOldName),
         makeAny(sNewName));
 }

@@ -251,7 +251,7 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 // calling SetVerticalWriting() again since this item may not yet
                 // be set at the object and thus may differ from vertical state of
                 // the object.
-                aSet.Put(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL, SDRATTR_TEXTDIRECTION));
+                aSet.Put(SvxWritingModeItem(css::text::WritingMode_TB_RL, SDRATTR_TEXTDIRECTION));
                 pObj->SetMergedItemSet(aSet);
             }
 

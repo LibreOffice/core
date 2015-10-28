@@ -89,7 +89,7 @@ public:
         same model but have different preview sizes may access previews of
         each other in order to create fast previews of the previews.
     */
-    virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> GetModel() = 0;
 };
 
 typedef std::shared_ptr<CacheContext> SharedCacheContext;

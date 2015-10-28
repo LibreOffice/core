@@ -56,9 +56,8 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing() override;
-    virtual void SAL_CALL disposing (
-        const com::sun::star::lang::EventObject& rEvent)
-    throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
+    throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     rtl::Reference<Communicator> mCommunicator;

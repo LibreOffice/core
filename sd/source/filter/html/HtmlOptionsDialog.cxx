@@ -82,20 +82,20 @@ public:
 
     // XPropertyAccess
     virtual Sequence< PropertyValue > SAL_CALL getPropertyValues() throw ( RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & aProps )
-        throw ( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException,
-                ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue > & aProps )
+        throw ( css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
 
     // XExecuteDialog
     virtual sal_Int16 SAL_CALL execute()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL setTitle( const OUString& aTitle )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-        throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
+        throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
 
 };
 
@@ -238,9 +238,9 @@ void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation(::com::sun::star::uno::XComponentContext*,
-                                                              ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation(css::uno::XComponentContext*,
+                                                              css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SdHtmlOptionsDialog());
 }

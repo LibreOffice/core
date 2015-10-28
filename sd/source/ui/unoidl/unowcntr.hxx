@@ -23,9 +23,9 @@
 #include <cppuhelper/weakref.hxx>
 #include <list>
 
-typedef bool (*weakref_searchfunc)( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef, void* pSearchData );
+typedef bool (*weakref_searchfunc)( css::uno::WeakReference< css::uno::XInterface > xRef, void* pSearchData );
 
-typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >* > WeakRefList;
+typedef ::std::list< css::uno::WeakReference< css::uno::XInterface >* > WeakRefList;
 
 class SvUnoWeakContainer
 {
@@ -37,12 +37,12 @@ public:
     ~SvUnoWeakContainer() throw();
 
     /** inserts the given ref into this container */
-    void insert( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > xRef ) throw();
+    void insert( css::uno::WeakReference< css::uno::XInterface > xRef ) throw();
 
     /** searches the container for a ref that returns true on the given
         search function
     */
-    bool findRef( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >& rRef, void* pSearchData, weakref_searchfunc pSearchFunc );
+    bool findRef( css::uno::WeakReference< css::uno::XInterface >& rRef, void* pSearchData, weakref_searchfunc pSearchFunc );
 
     void dispose();
 };

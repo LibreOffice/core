@@ -484,7 +484,7 @@ bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
     return false;
 }
 
-CustomAnimationCreateDialog::CustomAnimationCreateDialog( vcl::Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration  )
+CustomAnimationCreateDialog::CustomAnimationCreateDialog( vcl::Window* pParent, CustomAnimationPane* pPane, const std::vector< css::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration  )
 :   TabDialog( pParent, "CustomAnimationCreate", "modules/simpress/ui/customanimationcreatedialog.ui" )
 ,   mpPane( pPane )
 ,   mrTargets( rTargets )

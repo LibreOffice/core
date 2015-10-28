@@ -60,10 +60,8 @@ public:
             would not keep a strong reference to the new object.
     */
     AccessiblePageShape (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XDrawPage>& rxPage,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference<css::drawing::XDrawPage>& rxPage,
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         const AccessibleShapeTreeInfo& rShapeTreeInfo,
         long nIndex = -1);
 
@@ -90,43 +88,42 @@ public:
         @raises IndexOutOfBoundsException
             Throws always an exception because there are no children.
     */
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Rectangle SAL_CALL getBounds()
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int32 SAL_CALL getForeground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Int32 SAL_CALL getBackground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  XComponent  ======================================================
 
     virtual void SAL_CALL
         dispose()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  XServiceInfo  ====================================================
 
     virtual OUString SAL_CALL
         getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
+    virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
-        disposing (const ::com::sun::star::lang::EventObject& Source)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& Source)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     using AccessibleShape::disposing;
 
@@ -135,20 +132,19 @@ protected:
     */
     virtual OUString
         CreateAccessibleBaseName()
-        throw (::com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::RuntimeException) override;
 
     virtual OUString
         CreateAccessibleName()
-        throw (::com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::RuntimeException) override;
 
     /// Create a description string that contains the accessible description.
     virtual OUString
         CreateAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::RuntimeException) override;
 
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XDrawPage> mxPage;
+    css::uno::Reference<css::drawing::XDrawPage> mxPage;
 
     AccessiblePageShape (const AccessiblePageShape&) = delete;
     AccessibleShape& operator= (const AccessiblePageShape&) = delete;

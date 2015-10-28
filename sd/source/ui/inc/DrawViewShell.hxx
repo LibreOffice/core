@@ -298,7 +298,7 @@ public:
     */
     virtual void ShowUIControls (bool bVisible = true) override;
 
-    void            ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
+    void            ScannerEvent( const css::lang::EventObject& rEventObject );
 
     bool IsLayerModeActive() const { return mbIsLayerModeActive;}
 
@@ -307,8 +307,8 @@ public:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                     ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) override;
 
-    virtual void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) override;
-    virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
+    virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
 
     virtual void    VisAreaChanged(const Rectangle& rRect) override;
 
@@ -319,8 +319,7 @@ public:
         @return
             Returns an <type>AccessibleDrawDocumentView</type> object.
    */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>
+    virtual css::uno::Reference<css::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow) override;
 
     /** Return the number of layers managed by the layer tab control.  This
@@ -465,10 +464,10 @@ private:
         SdPage* pPage,
         const sal_Int32 nInsertPosition = -1) override;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager2 > mxScannerManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      mxScannerListener;
-    TransferableClipboardListener*                                                  mpClipEvtLstnr;
-    bool                                                                            mbPastePossible;
+    css::uno::Reference< css::scanner::XScannerManager2 > mxScannerManager;
+    css::uno::Reference< css::lang::XEventListener >      mxScannerListener;
+    TransferableClipboardListener*                        mpClipEvtLstnr;
+    bool                                                  mbPastePossible;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint) override;
 

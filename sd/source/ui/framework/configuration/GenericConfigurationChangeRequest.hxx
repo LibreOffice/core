@@ -32,8 +32,8 @@
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper <
-      ::com::sun::star::drawing::framework::XConfigurationChangeRequest,
-      ::com::sun::star::container::XNamed
+      css::drawing::framework::XConfigurationChangeRequest,
+      css::container::XNamed
     > GenericConfigurationChangeRequestInterfaceBase;
 
 } // end of anonymous namespace.
@@ -65,10 +65,10 @@ public:
             resource.
     */
     GenericConfigurationChangeRequest (
-        const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
+        const css::uno::Reference<css::drawing::framework::XResourceId>&
             rxResourceId,
         const Mode eMode)
-        throw (::com::sun::star::lang::IllegalArgumentException);
+        throw (css::lang::IllegalArgumentException);
 
     virtual ~GenericConfigurationChangeRequest() throw();
 
@@ -82,9 +82,8 @@ public:
             The configuration to which the requested change is made.
     */
     virtual void SAL_CALL execute (
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XConfiguration>& rxConfiguration)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XNamed
 
@@ -92,13 +91,13 @@ public:
         debugging purposes.
     */
     virtual OUString SAL_CALL getName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     /** This call is ignored because the XNamed interface is (mis)used to
         give access to a human readable name for debugging purposes.
     */
     virtual void SAL_CALL setName (const OUString& rName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     const css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;

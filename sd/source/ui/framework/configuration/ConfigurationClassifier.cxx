@@ -52,8 +52,8 @@ bool ConfigurationClassifier::Partition()
 }
 
 void ConfigurationClassifier::PartitionResources (
-    const ::com::sun::star::uno::Sequence<Reference<XResourceId> >& rS1,
-    const ::com::sun::star::uno::Sequence<Reference<XResourceId> >& rS2)
+    const css::uno::Sequence<Reference<XResourceId> >& rS1,
+    const css::uno::Sequence<Reference<XResourceId> >& rS2)
 {
     ResourceIdVector aC1minusC2;
     ResourceIdVector aC2minusC1;
@@ -85,8 +85,8 @@ void ConfigurationClassifier::PartitionResources (
 }
 
 void ConfigurationClassifier::ClassifyResources (
-    const ::com::sun::star::uno::Sequence<Reference<XResourceId> >& rS1,
-    const ::com::sun::star::uno::Sequence<Reference<XResourceId> >& rS2,
+    const css::uno::Sequence<Reference<XResourceId> >& rS1,
+    const css::uno::Sequence<Reference<XResourceId> >& rS2,
     ResourceIdVector& rS1minusS2,
     ResourceIdVector& rS2minusS1,
     ResourceIdVector& rS1andS2)

@@ -440,7 +440,7 @@ void DrawViewShell::HidePage()
         pFormShell->PrepareClose(false);
 }
 
-void DrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )
+void DrawViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse )
 {
     WriteFrameViewData();
 
@@ -452,14 +452,14 @@ void DrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::
     rSequence[nIndex].Value <<= mbZoomOnPage;
 }
 
-void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )
+void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse )
 {
     WriteFrameViewData();
 
     ViewShell::ReadUserDataSequence( rSequence, bBrowse );
 
     const sal_Int32 nLength = rSequence.getLength();
-    const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
+    const css::beans::PropertyValue *pValue = rSequence.getConstArray();
     for (sal_Int32 i = 0 ; i < nLength; i++, pValue++ )
     {
         if ( pValue->Name == sUNO_View_ZoomOnPage )
@@ -535,8 +535,7 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
     <type>AccessibleDrawDocumentView</type>.  Otherwise return an empty
     reference.
 */
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible>
+css::uno::Reference<css::accessibility::XAccessible>
     DrawViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
     if (GetViewShellBase().GetController() != NULL)
@@ -548,14 +547,13 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
                 GetViewShellBase().GetController(),
                 pWindow->GetAccessibleParentWindow()->GetAccessible());
         pDocumentView->Init();
-        return ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>
-            (static_cast< ::com::sun::star::uno::XWeak*>(pDocumentView),
-                ::com::sun::star::uno::UNO_QUERY);
+        return css::uno::Reference<css::accessibility::XAccessible>
+            (static_cast< css::uno::XWeak*>(pDocumentView),
+                css::uno::UNO_QUERY);
     }
 
     OSL_TRACE ("DrawViewShell::CreateAccessibleDocumentView: no controller");
-    return ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>();
+    return css::uno::Reference< css::accessibility::XAccessible>();
 }
 
 int DrawViewShell::GetActiveTabLayerIndex() const
@@ -582,7 +580,7 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
             css::uno::Reference<SdUnoDrawView> pUnoDrawView(new SdUnoDrawView (
                 *this,
                 *GetView()));
-            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
+            css::uno::Reference< css::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
             GetViewShellBase().GetDrawController().fireChangeLayer( &rLayer );
         }
     }

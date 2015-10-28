@@ -396,7 +396,7 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 }
 
 #define addValue( n, v ) push_back( std::pair< OUString, Any >( OUString( n ), v ) )
-void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rValues, bool )
+void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rValues, bool )
 {
     std::vector< std::pair< OUString, Any > > aUserData;
 
@@ -546,7 +546,7 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
     }
 }
 
-void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool )
+void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool )
 {
     const sal_Int32 nLength = rSequence.getLength();
     if (nLength)
@@ -565,7 +565,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
         sal_Int32 aSnapGridWidthYNum = GetSnapGridWidthY().GetNumerator();
         sal_Int32 aSnapGridWidthYDom = GetSnapGridWidthY().GetDenominator();
 
-        const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
+        const css::beans::PropertyValue *pValue = rSequence.getConstArray();
         for (sal_Int32 i = 0 ; i < nLength; i++, pValue++ )
         {
             if ( pValue->Name == sUNO_View_ViewId )

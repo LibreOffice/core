@@ -74,9 +74,9 @@ public:
     DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
 
 protected:
-    virtual ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas>
+    virtual css::uno::Reference<css::rendering::XCanvas>
         CreateCanvas()
-        throw (::com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::RuntimeException) override;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

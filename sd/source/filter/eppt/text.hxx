@@ -55,12 +55,12 @@ struct SOParagraph
     sal_Int16               nBulletRealSize;        // scale in percent
     sal_Int16               nDepth;                 // actual depth
     sal_Unicode             cBulletId;              // if Numbering Type == CharSpecial
-    ::com::sun::star::awt::FontDescriptor       aFontDesc;
+    css::awt::FontDescriptor       aFontDesc;
 
-    bool                bExtendedBulletsUsed;
+    bool                    bExtendedBulletsUsed;
     sal_uInt16              nBulletId;
     sal_uInt32              nMappedNumType;
-    bool                bNumberingIsNumber;
+    bool                    bNumberingIsNumber;
 
     SOParagraph()
         : bExtendedParameters(false)
@@ -123,19 +123,19 @@ class PortionObj : public PropStateValue
 
         void            ImplClear();
         void            ImplConstruct( const PortionObj& rPortionObj );
-        static sal_uInt32 ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, OUString& rURL );
+        static sal_uInt32 ImplGetTextField( css::uno::Reference< css::text::XTextRange > & rXTextRangeRef,
+                            const css::uno::Reference< css::beans::XPropertySet > & rXPropSetRef, OUString& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
         void            ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue = false );
 
     public:
 
-        ::com::sun::star::beans::PropertyState  meCharColor;
-        ::com::sun::star::beans::PropertyState  meCharHeight;
-        ::com::sun::star::beans::PropertyState  meFontName;
-        ::com::sun::star::beans::PropertyState  meAsianOrComplexFont;
-        ::com::sun::star::beans::PropertyState  meCharEscapement;
-        ::com::sun::star::lang::Locale          meCharLocale;
+        css::beans::PropertyState  meCharColor;
+        css::beans::PropertyState  meCharHeight;
+        css::beans::PropertyState  meFontName;
+        css::beans::PropertyState  meAsianOrComplexFont;
+        css::beans::PropertyState  meCharEscapement;
+        css::lang::Locale          meCharLocale;
         sal_uInt16      mnCharAttrHard;
 
         sal_uInt32      mnCharColor;
@@ -151,9 +151,9 @@ class PortionObj : public PropStateValue
         sal_uInt16*     mpText;
         FieldEntry*     mpFieldEntry;
 
-                        PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
+                        PortionObj( css::uno::Reference< css::text::XTextRange > & rXTextRangeRef,
                                         bool bLast, FontCollection& rFontCollection );
-                        PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
+                        PortionObj( const css::uno::Reference< css::beans::XPropertySet > & rXPropSetRef,
                                         FontCollection& rFontCollection );
                         PortionObj( const PortionObj& rPortionObj );
                         ~PortionObj();
@@ -191,22 +191,22 @@ class ParagraphObj : public PropStateValue, public SOParagraph
 
     public:
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > maTabStop;
+        css::uno::Sequence< css::style::TabStop > maTabStop;
 
         sal_uInt32          mnTextSize;
 
-        bool            mbIsBullet;
-        bool            mbFirstParagraph;
-        bool            mbLastParagraph;
+        bool                mbIsBullet;
+        bool                mbFirstParagraph;
+        bool                mbLastParagraph;
 
-        ::com::sun::star::beans::PropertyState  meBullet;
-        ::com::sun::star::beans::PropertyState  meTextAdjust;
-        ::com::sun::star::beans::PropertyState  meLineSpacing;
-        ::com::sun::star::beans::PropertyState  meLineSpacingTop;
-        ::com::sun::star::beans::PropertyState  meLineSpacingBottom;
-        ::com::sun::star::beans::PropertyState  meForbiddenRules;
-        ::com::sun::star::beans::PropertyState  meParagraphPunctation;
-        ::com::sun::star::beans::PropertyState  meBiDi;
+        css::beans::PropertyState  meBullet;
+        css::beans::PropertyState  meTextAdjust;
+        css::beans::PropertyState  meLineSpacing;
+        css::beans::PropertyState  meLineSpacingTop;
+        css::beans::PropertyState  meLineSpacingBottom;
+        css::beans::PropertyState  meForbiddenRules;
+        css::beans::PropertyState  meParagraphPunctation;
+        css::beans::PropertyState  meBiDi;
 
         sal_uInt16                              mnTextAdjust;
         sal_Int16                               mnLineSpacing;
@@ -217,11 +217,11 @@ class ParagraphObj : public PropStateValue, public SOParagraph
         bool                                mbParagraphPunctation;
         sal_uInt16                              mnBiDi;
 
-                        ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
+                        ParagraphObj( css::uno::Reference< css::text::XTextContent > & rXTextContentRef,
                             ParaFlags, FontCollection& rFontCollection,
                                 PPTExBulletProvider& rBuProv );
                         ParagraphObj( const ParagraphObj& rParargraphObj );
-                        ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
+                        ParagraphObj( const css::uno::Reference< css::beans::XPropertySet > & rXPropSetRef,
                                       PPTExBulletProvider* pBuProv );
 
     bool empty() const { return mvPortions.empty(); }
@@ -248,7 +248,7 @@ class TextObj
     void            ImplCalculateTextPositions();
 
 public:
-    TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > &
+    TextObj( css::uno::Reference< css::text::XSimpleText > &
             rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv );
 
     ParagraphObj*   GetParagraph(int idx);

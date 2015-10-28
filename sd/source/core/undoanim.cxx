@@ -119,7 +119,7 @@ struct UndoAnimationPathImpl: private boost::noncopyable
     OUString msUndoPath;
     OUString msRedoPath;
 
-    UndoAnimationPathImpl( SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+    UndoAnimationPathImpl( SdPage* pThePage, const css::uno::Reference< css::animations::XAnimationNode >& xNode )
         : mpPage( pThePage )
         , mnEffectOffset( -1 )
     {
@@ -151,7 +151,7 @@ struct UndoAnimationPathImpl: private boost::noncopyable
     }
 };
 
-UndoAnimationPath::UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+UndoAnimationPath::UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 : SdrUndoAction( *pDoc )
 , mpImpl( new UndoAnimationPathImpl( pThePage, xNode ) )
 {

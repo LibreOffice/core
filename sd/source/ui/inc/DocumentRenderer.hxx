@@ -31,7 +31,7 @@ namespace sd {
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper <
-        ::com::sun::star::view::XRenderable
+        css::view::XRenderable
         > DocumentRendererInterfaceBase;
 }
 

@@ -39,10 +39,8 @@ public:
         two given configurations.
     */
     ConfigurationClassifier (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration1,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration2);
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration1,
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration2);
 
     /** Calculate three lists of resource ids.  These contain the resources
         that belong to one configuration but not the other, or that belong
@@ -53,8 +51,7 @@ public:
     */
     bool Partition();
 
-    typedef ::std::vector<com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId> > ResourceIdVector;
+    typedef ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId> > ResourceIdVector;
 
     /** Return the resources that belong to the configuration given as
         rxConfiguration1 to the constructor but that do not belong to
@@ -77,10 +74,8 @@ public:
     const ResourceIdVector& GetC2minusC1() const { return maC2minusC1;}
 
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfiguration> mxConfiguration1;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfiguration> mxConfiguration2;
+    css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration1;
+    css::uno::Reference<css::drawing::framework::XConfiguration> mxConfiguration2;
 
     /** After the call to Classify() this vector holds all elements from
         mxConfiguration1 that are not in mxConfiguration2.
@@ -108,12 +103,8 @@ private:
             Another sequence of XResourceId objects.
     */
     void PartitionResources (
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::framework::XResourceId> >& rS1,
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::framework::XResourceId> >& rS2);
+        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId> >& rS1,
+        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId> >& rS2);
 
     /** Compare the given sequences of resource ids and put their elements
         in one of three vectors depending on whether an element belongs to
@@ -126,12 +117,8 @@ private:
             Another sequence of XResourceId objects.
     */
     static void ClassifyResources (
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::framework::XResourceId> >& rS1,
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::framework::XResourceId> >& rS2,
+        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId> >& rS1,
+        const css::uno::Sequence<css::uno::Reference<css::drawing::framework::XResourceId> >& rS2,
         ResourceIdVector& rS1minusS2,
         ResourceIdVector& rS2minusS1,
         ResourceIdVector& rS1andS2);
@@ -151,8 +138,7 @@ private:
     */
     static void CopyResources (
         const ResourceIdVector& rSource,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         ResourceIdVector& rTarget);
 };
 

@@ -36,13 +36,13 @@ ExSoundEntry::ExSoundEntry(const OUString& rString)
     try
     {
         ::ucbhelper::Content aCnt( aSoundURL,
-            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+            css::uno::Reference< css::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         sal_Int64 nVal = 0;
         ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue("Size") );
         nFileSize = (sal_uInt32)nVal;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
 
     }
@@ -94,7 +94,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
     try
     {
         ::ucbhelper::Content aCnt( aSoundURL,
-            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+            css::uno::Reference< css::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
 
         // create SoundContainer
@@ -142,7 +142,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
             delete[] pBuf;
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
 
     }

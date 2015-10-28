@@ -213,7 +213,7 @@ void Ppt97Animation::SetAnimateAssociatedShape( bool bAnimate )
     }
 }
 
-sal_Int16 Ppt97Animation::GetEffectNodeType() const //see com::sun::star::presentation::EffectNodeType
+sal_Int16 Ppt97Animation::GetEffectNodeType() const //see css::presentation::EffectNodeType
 {
     sal_Int16 nRet = presentation::EffectNodeType::ON_CLICK;
     if( m_aAtom.nFlags & 0x04 )

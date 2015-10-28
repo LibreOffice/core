@@ -46,7 +46,7 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape()
 
 OUString SAL_CALL
     AccessiblePresentationGraphicShape::getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessiblePresentationGraphicShape");
 }
@@ -54,7 +54,7 @@ OUString SAL_CALL
 /// Set this object's name if is different to the current name.
 OUString
     AccessiblePresentationGraphicShape::CreateAccessibleBaseName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     OUString sName;
 
@@ -76,7 +76,7 @@ OUString
 
 OUString
     AccessiblePresentationGraphicShape::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     //    return createAccessibleName ();
     DescriptionGenerator aDG (mxShape);
@@ -100,7 +100,7 @@ OUString
 }
 
 sal_Int16 SAL_CALL AccessiblePresentationGraphicShape::getAccessibleRole ()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return  AccessibleRole::GRAPHIC ;
 }

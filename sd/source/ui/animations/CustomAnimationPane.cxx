@@ -696,7 +696,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
     while( aIter != aEnd )
     {
         CustomAnimationEffectPtr pEffect( (*aIter++) );
-        if( pEffect.get() && pEffect->getPresetClass() == ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH )
+        if( pEffect.get() && pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH )
         {
             rtl::Reference< MotionPathTag > xMotionPathTag;
             // first try to find if there is already a tag for this
@@ -1034,10 +1034,10 @@ static bool hasVisibleShape( const Reference< XShape >& xShape )
             FillStyle eFillStyle;
             xSet->getPropertyValue( sFillStyle ) >>= eFillStyle;
 
-            ::com::sun::star::drawing::LineStyle eLineStyle;
+            css::drawing::LineStyle eLineStyle;
             xSet->getPropertyValue( sLineStyle ) >>= eLineStyle;
 
-            return eFillStyle != FillStyle_NONE || eLineStyle != ::com::sun::star::drawing::LineStyle_NONE;
+            return eFillStyle != FillStyle_NONE || eLineStyle != css::drawing::LineStyle_NONE;
         }
     }
     catch( Exception& )
@@ -2202,7 +2202,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
 void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimationNode )
 {
     Reference< XParallelTimeContainer > xRoot = ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() );
-    Sequence< ::com::sun::star::beans::NamedValue > aUserData
+    Sequence< css::beans::NamedValue > aUserData
         { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::TIMING_ROOT) } };
     xRoot->setUserData( aUserData );
     xRoot->appendChild( xAnimationNode );

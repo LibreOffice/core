@@ -34,12 +34,12 @@ const sal_Int32 STLPropertyState_AMBIGUOUS = 3;
 
 struct STLPropertyMapEntry
 {
-    ::com::sun::star::uno::Any maValue;
+    css::uno::Any maValue;
     sal_Int32 mnState;
 
     STLPropertyMapEntry()
         : mnState( STLPropertyState_AMBIGUOUS ) {}
-    STLPropertyMapEntry( ::com::sun::star::uno::Any aValue, sal_Int32 nState = STLPropertyState_DEFAULT )
+    STLPropertyMapEntry( css::uno::Any aValue, sal_Int32 nState = STLPropertyState_DEFAULT )
         : maValue( aValue ), mnState( nState ) {}
 
 };
@@ -54,9 +54,9 @@ public:
     STLPropertySet();
     ~STLPropertySet();
 
-    void setPropertyDefaultValue( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue );
-    void setPropertyValue( sal_Int32 nHandle, const com::sun::star::uno::Any& rValue, sal_Int32 nState = STLPropertyState_DIRECT );
-    ::com::sun::star::uno::Any getPropertyValue( sal_Int32 nHandle ) const;
+    void setPropertyDefaultValue( sal_Int32 nHandle, const css::uno::Any& rValue );
+    void setPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue, sal_Int32 nState = STLPropertyState_DIRECT );
+    css::uno::Any getPropertyValue( sal_Int32 nHandle ) const;
 
     sal_Int32 getPropertyState( sal_Int32 nHandle ) const;
     void setPropertyState( sal_Int32 nHandle, sal_Int32 nState );

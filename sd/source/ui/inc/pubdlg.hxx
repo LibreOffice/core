@@ -199,7 +199,7 @@ public:
     virtual ~SdPublishingDlg();
     virtual void dispose() override;
 
-    void GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams );
+    void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams );
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX

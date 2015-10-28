@@ -39,7 +39,7 @@ class CustomAnimationCreateDialog : public TabDialog
 {
     friend class CustomAnimationCreateTabPage;
 public:
-    CustomAnimationCreateDialog( vcl::Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration );
+    CustomAnimationCreateDialog( vcl::Window* pParent, CustomAnimationPane* pPane, const std::vector< css::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration );
     virtual ~CustomAnimationCreateDialog();
     virtual void dispose() override;
 
@@ -58,7 +58,7 @@ private:
 
 private:
     VclPtr<CustomAnimationPane> mpPane;
-    const std::vector< ::com::sun::star::uno::Any >& mrTargets;
+    const std::vector< css::uno::Any >& mrTargets;
 
     double mfDuration;
     bool mbIsPreview;

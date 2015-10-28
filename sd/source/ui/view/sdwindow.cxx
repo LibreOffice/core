@@ -948,8 +948,7 @@ void Window::DropScroll(const Point& rMousePos)
     }
 }
 
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible>
+css::uno::Reference<css::accessibility::XAccessible>
     Window::CreateAccessible()
 {
     // If current viewshell is PresentationViewShell, just return empty because the correct ShowWin will be created later.
@@ -957,7 +956,7 @@ void Window::DropScroll(const Point& rMousePos)
     {
         return vcl::Window::CreateAccessible ();
     }
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(false);
+    css::uno::Reference< css::accessibility::XAccessible > xAcc = GetAccessible(false);
     if (xAcc.get())
     {
         return xAcc;

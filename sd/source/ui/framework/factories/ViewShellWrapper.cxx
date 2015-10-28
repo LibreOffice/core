@@ -121,7 +121,7 @@ sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly()
 
 //----- XSelectionSupplier --------------------------------------------------
 
-sal_Bool SAL_CALL ViewShellWrapper::select( const ::com::sun::star::uno::Any& aSelection ) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection ) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     if (!mpSlideSorterViewShell)
         return false;

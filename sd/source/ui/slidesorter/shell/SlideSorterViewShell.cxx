@@ -146,15 +146,14 @@ SlideSorterViewShell::~SlideSorterViewShell()
         ::sd::Window* pWindow = GetActiveWindow();
         if (pWindow!=NULL)
         {
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XComponent> xComponent (
+            css::uno::Reference<css::lang::XComponent> xComponent (
                     pWindow->GetAccessible(false),
-                    ::com::sun::star::uno::UNO_QUERY);
+                    css::uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         OSL_FAIL("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
     }
@@ -250,8 +249,7 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
     to the base class to return a default object (probably an empty
     reference).
 */
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible>
+css::uno::Reference<css::accessibility::XAccessible>
     SlideSorterViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
     // When the view is not set then the initialization is not yet complete
@@ -267,14 +265,14 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
         pWindow->GetAccessibleParentWindow()->GetAccessible(),
         pWindow);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> xRet(pAccessibleView);
+    css::uno::Reference< css::accessibility::XAccessible> xRet(pAccessibleView);
 
     pAccessibleView->Init();
 
     return xRet;
 }
 
-void SlideSorterViewShell::SwitchViewFireFocus(::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc )
+void SlideSorterViewShell::SwitchViewFireFocus(css::uno::Reference< css::accessibility::XAccessible > xAcc )
 {
     if (xAcc.get())
     {

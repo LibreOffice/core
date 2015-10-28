@@ -461,7 +461,7 @@ void SlideSorterService::Resize()
 }
 
 void SlideSorterService::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (SlideSorterServiceInterfaceBase::rBHelper.bDisposed || SlideSorterServiceInterfaceBase::rBHelper.bInDispose)
     {
@@ -473,9 +473,9 @@ void SlideSorterService::ThrowIfDisposed()
 } } // end of namespace ::sd::slidesorter
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_SlideSorter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-                                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_SlideSorter_get_implementation(css::uno::XComponentContext* context,
+                                                      css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new sd::slidesorter::SlideSorterService(context));
 }

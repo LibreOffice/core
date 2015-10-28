@@ -386,7 +386,7 @@ void SAL_CALL AccessibleSlideSorterObject::grabFocus()
 }
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     svtools::ColorConfig aColorConfig;
@@ -395,7 +395,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground()
 }
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
@@ -405,20 +405,20 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground()
 // XServiceInfo
 OUString SAL_CALL
        AccessibleSlideSorterObject::getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleSlideSorterObject");
 }
 
 sal_Bool SAL_CALL AccessibleSlideSorterObject::supportsService (const OUString& sServiceName)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence< OUString> SAL_CALL
        AccessibleSlideSorterObject::getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 

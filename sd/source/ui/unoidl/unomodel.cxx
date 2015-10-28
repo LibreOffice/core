@@ -325,21 +325,21 @@ namespace
 }
 
 // XUnoTunnel
-const ::com::sun::star::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() throw()
 {
     return theSdXImpressDocumentUnoTunnelId::get().getSeq();
 }
 
 SdXImpressDocument* SdXImpressDocument::getImplementation( const uno::Reference< uno::XInterface >& xInt )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xInt, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XUnoTunnel > xUT( xInt, css::uno::UNO_QUERY );
     if( xUT.is() )
         return reinterpret_cast<SdXImpressDocument*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( SdXImpressDocument::getUnoTunnelId() )));
     else
         return NULL;
 }
 
-sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception)
 {
     if( rIdentifier.getLength() == 16 )
     {
@@ -378,7 +378,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         *pTypes++ = cppu::UnoType<drawing::XDrawPagesSupplier>::get();
         *pTypes++ = cppu::UnoType<document::XLinkTargetSupplier>::get();
         *pTypes++ = cppu::UnoType<style::XStyleFamiliesSupplier>::get();
-        *pTypes++ = cppu::UnoType<com::sun::star::ucb::XAnyCompareFactory>::get();
+        *pTypes++ = cppu::UnoType<css::ucb::XAnyCompareFactory>::get();
         *pTypes++ = cppu::UnoType<view::XRenderable>::get();
         if( mbImpressDoc )
         {
@@ -644,7 +644,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
     return xRet;
 }
 
-void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container::XIndexAccess >& xData ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container::XIndexAccess >& xData ) throw(css::uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1463,7 +1463,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getStyleFa
 }
 
 // XAnyCompareFactory
-uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SdXImpressDocument::createAnyCompareByName( const OUString& )
+uno::Reference< css::ucb::XAnyCompare > SAL_CALL SdXImpressDocument::createAnyCompareByName( const OUString& )
     throw (uno::RuntimeException, std::exception)
 {
     return SvxCreateNumRuleCompare();
@@ -2587,7 +2587,7 @@ void SdXImpressDocument::initializeDocument()
     }
 }
 
-void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SdXImpressDocument::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     if( !mbDisposed )
     {
@@ -2622,7 +2622,7 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
             uno::Reference< presentation::XPresentation > xPresentation( mxPresentation );
             if( xPresentation.is() )
             {
-                uno::Reference< ::com::sun::star::presentation::XPresentation2 > xPres( mpDoc->getPresentation().get() );
+                uno::Reference< css::presentation::XPresentation2 > xPres( mpDoc->getPresentation().get() );
                 uno::Reference< lang::XComponent > xPresComp( xPres, uno::UNO_QUERY );
                 if( xPresComp.is() )
                     xPresComp->dispose();
@@ -3405,7 +3405,7 @@ void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName 
     if( xModel.is() )
     {
         uno::Reference< uno::XInterface > xSource( static_cast<uno::XWeak*>( xModel.get() ) );
-        ::com::sun::star::document::EventObject aEvent( xSource, rEventName );
+        css::document::EventObject aEvent( xSource, rEventName );
         xModel->notifyEvent(aEvent );
     }
 }
@@ -3416,7 +3416,7 @@ void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName,
 
     if( xModel.is() )
     {
-        ::com::sun::star::document::EventObject aEvent( xSource, rEventName );
+        css::document::EventObject aEvent( xSource, rEventName );
         xModel->notifyEvent(aEvent );
     }
 }

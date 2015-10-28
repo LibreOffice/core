@@ -78,7 +78,7 @@ public:
     virtual ~ImplSdPPTImport();
 
     bool         Import();
-    virtual bool ReadFormControl(  tools::SvRef<SotStorage>& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const override;
+    virtual bool ReadFormControl(  tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const override;
 };
 
 class SdPPTImport

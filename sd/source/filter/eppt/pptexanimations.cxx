@@ -530,7 +530,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 sal_Int16 nNodeType = exportAnimPropertySet( rStrm, xNode );
                 sal_Int32 nFlags = 12;
-                if ( ( nGroupLevel == 1 ) && ( nNodeType == ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ) )
+                if ( ( nGroupLevel == 1 ) && ( nNodeType == css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE ) )
                 {
                     nFlags |= 0x20;
                     bTakeBackInteractiveSequenceTimingForChild = true;
@@ -751,7 +751,7 @@ Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const
 {
     try
     {
-        Reference< ::com::sun::star::util::XCloneable > xClonable( xNode, UNO_QUERY_THROW );
+        Reference< css::util::XCloneable > xClonable( xNode, UNO_QUERY_THROW );
         Reference< XAnimationNode > xCloneNode( xClonable->createClone(), UNO_QUERY_THROW );
 
         Any aEmpty;
@@ -788,7 +788,7 @@ bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNode, s
 }
 
 void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnimationNode >& xNode,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >*, const sal_Int32, const sal_Int16 nFillDefault )
+        const css::uno::Reference< css::animations::XAnimationNode >*, const sal_Int32, const sal_Int16 nFillDefault )
 {
     EscherExAtom    aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
     AnimationNode   aAnim;
@@ -815,7 +815,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
     }
     // attribute Duration
     double fDuration = 0.0;
-    com::sun::star::animations::Timing eTiming;
+    css::animations::Timing eTiming;
     if ( xNode->getDuration() >>= eTiming )
     {
         if ( eTiming == Timing_INDEFINITE )
@@ -842,8 +842,8 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
             if( GetNodeType( xNode, nType ) )
             switch( nType )
             {
-                case ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT : aAnim.mnNodeType = 0x12; break;
-                case ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE : aAnim.mnNodeType = 0x18; break;
+                case css::presentation::EffectNodeType::TIMING_ROOT : aAnim.mnNodeType = 0x12; break;
+                case css::presentation::EffectNodeType::MAIN_SEQUENCE : aAnim.mnNodeType = 0x18; break;
             }
         }
         break;
@@ -948,7 +948,7 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
 
 sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Reference< XAnimationNode >& xNode )
 {
-    sal_Int16 nNodeType = ::com::sun::star::presentation::EffectNodeType::DEFAULT;
+    sal_Int16 nNodeType = css::presentation::EffectNodeType::DEFAULT;
 
     EscherExContainer aAnimPropertySet( rStrm, DFF_msofbtAnimPropertySet );
 
@@ -958,7 +958,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
 
     // storing user data into pAny, to allow direct access later
     const Sequence< NamedValue > aUserData = xNode->getUserData();
-    const ::com::sun::star::uno::Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT ];
+    const css::uno::Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT ];
     GetUserData( aUserData, pAny, sizeof( pAny ) );
 
     if( pAny[ DFF_ANIM_AFTEREFFECT ] )
@@ -990,12 +990,12 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
             sal_uInt32 nPPTNodeType = DFF_ANIM_NODE_TYPE_ON_CLICK;
             switch( nNodeType )
             {
-                case ::com::sun::star::presentation::EffectNodeType::ON_CLICK : nPPTNodeType = DFF_ANIM_NODE_TYPE_ON_CLICK; break;
-                case ::com::sun::star::presentation::EffectNodeType::WITH_PREVIOUS : nPPTNodeType = DFF_ANIM_NODE_TYPE_WITH_PREVIOUS; break;
-                case ::com::sun::star::presentation::EffectNodeType::AFTER_PREVIOUS : nPPTNodeType = DFF_ANIM_NODE_TYPE_AFTER_PREVIOUS; break;
-                case ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE : nPPTNodeType = DFF_ANIM_NODE_TYPE_MAIN_SEQUENCE; break;
-                case ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT : nPPTNodeType = DFF_ANIM_NODE_TYPE_TIMING_ROOT; break;
-                case ::com::sun::star::presentation::EffectNodeType::INTERACTIVE_SEQUENCE: nPPTNodeType = DFF_ANIM_NODE_TYPE_INTERACTIVE_SEQ; break;
+                case css::presentation::EffectNodeType::ON_CLICK : nPPTNodeType = DFF_ANIM_NODE_TYPE_ON_CLICK; break;
+                case css::presentation::EffectNodeType::WITH_PREVIOUS : nPPTNodeType = DFF_ANIM_NODE_TYPE_WITH_PREVIOUS; break;
+                case css::presentation::EffectNodeType::AFTER_PREVIOUS : nPPTNodeType = DFF_ANIM_NODE_TYPE_AFTER_PREVIOUS; break;
+                case css::presentation::EffectNodeType::MAIN_SEQUENCE : nPPTNodeType = DFF_ANIM_NODE_TYPE_MAIN_SEQUENCE; break;
+                case css::presentation::EffectNodeType::TIMING_ROOT : nPPTNodeType = DFF_ANIM_NODE_TYPE_TIMING_ROOT; break;
+                case css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE: nPPTNodeType = DFF_ANIM_NODE_TYPE_INTERACTIVE_SEQ; break;
             }
             exportAnimPropertyuInt32( rStrm, DFF_ANIM_NODE_TYPE, nPPTNodeType, TRANSLATE_NONE );
         }
@@ -1123,17 +1123,17 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     return nNodeType;
 }
 
-bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const ::com::sun::star::uno::Any& rAny, const TranslateMode eTranslateMode )
+bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const css::uno::Any& rAny, const TranslateMode eTranslateMode )
 {
     bool bRet = false;
     if ( rAny.hasValue() )
     {
         switch( rAny.getValueType().getTypeClass() )
         {
-            case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT :
-            case ::com::sun::star::uno::TypeClass_SHORT :
-            case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG :
-            case ::com::sun::star::uno::TypeClass_LONG :
+            case css::uno::TypeClass_UNSIGNED_SHORT :
+            case css::uno::TypeClass_SHORT :
+            case css::uno::TypeClass_UNSIGNED_LONG :
+            case css::uno::TypeClass_LONG :
             {
                 sal_Int32 nVal = 0;
                 if ( rAny >>= nVal )
@@ -1144,7 +1144,7 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
             }
             break;
 
-            case ::com::sun::star::uno::TypeClass_DOUBLE :
+            case css::uno::TypeClass_DOUBLE :
             {
                 double fVal = 0.0;
                 if ( rAny >>= fVal )
@@ -1154,7 +1154,7 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
                 }
             }
             break;
-            case ::com::sun::star::uno::TypeClass_FLOAT :
+            case css::uno::TypeClass_FLOAT :
             {
                 float fVal = 0.0;
                 if ( rAny >>= fVal )
@@ -1174,7 +1174,7 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
                 }
             }
             break;
-            case ::com::sun::star::uno::TypeClass_STRING :
+            case css::uno::TypeClass_STRING :
             {
                 OUString aStr;
                 if ( rAny >>= aStr )
@@ -1281,7 +1281,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
             {
                 Any aAny;
                 Event aEvent;
-                com::sun::star::animations::Timing eTiming;
+                css::animations::Timing eTiming;
                 if ( i == 0 )
                 {
                     if ( nFlags & 0x20 )
@@ -1456,10 +1456,10 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
     }
     else if ( rAttributeName == "FillStyle" )
     {
-        ::com::sun::star::drawing::FillStyle eFillStyle;
+        css::drawing::FillStyle eFillStyle;
         if ( rSourceValue >>= eFillStyle )
         {
-            if ( eFillStyle == ::com::sun::star::drawing::FillStyle_NONE )
+            if ( eFillStyle == css::drawing::FillStyle_NONE )
                 aDest += "none";    // ?
             else
                 aDest += "solid";
@@ -1467,10 +1467,10 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
     }
     else if ( rAttributeName == "LineStyle" )
     {
-        ::com::sun::star::drawing::LineStyle eLineStyle;
+        css::drawing::LineStyle eLineStyle;
         if ( rSourceValue >>= eLineStyle )
         {
-            if ( eLineStyle == ::com::sun::star::drawing::LineStyle_NONE )
+            if ( eLineStyle == css::drawing::LineStyle_NONE )
                 aDest += "false";
             else
                 aDest += "true";
@@ -1481,7 +1481,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
         float fFontWeight = 0.0;
         if ( rSourceValue >>= fFontWeight )
         {
-            if ( fFontWeight == com::sun::star::awt::FontWeight::BOLD )
+            if ( fFontWeight == css::awt::FontWeight::BOLD )
                 aDest += "bold";
             else
                 aDest += "normal";
@@ -1492,7 +1492,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
         sal_Int16 nFontUnderline = 0;
         if ( rSourceValue >>= nFontUnderline )
         {
-            if ( nFontUnderline == com::sun::star::awt::FontUnderline::NONE )
+            if ( nFontUnderline == css::awt::FontUnderline::NONE )
                 aDest += "false";
             else
                 aDest += "true";
@@ -1500,10 +1500,10 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
     }
     else if ( rAttributeName == "CharPosture" )
     {
-        ::com::sun::star::awt::FontSlant eFontSlant;
+        css::awt::FontSlant eFontSlant;
         if ( rSourceValue >>= eFontSlant )
         {
-            if ( eFontSlant == com::sun::star::awt::FontSlant_ITALIC )
+            if ( eFontSlant == css::awt::FontSlant_ITALIC )
                 aDest += "italic";
             else
                 aDest += "normal";  // ?
@@ -1850,7 +1850,7 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
     // repeat count (0)
     double fRepeat = 0.0;
     float fRepeatCount = 0.0;
-    com::sun::star::animations::Timing eTiming;
+    css::animations::Timing eTiming;
     aAny = xNode->getRepeatCount();
     if ( aAny >>= eTiming )
     {

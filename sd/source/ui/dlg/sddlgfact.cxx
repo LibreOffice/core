@@ -224,7 +224,7 @@ bool AbstractAssistentDlg_Impl::IsDocEmpty() const
     return pDlg->IsDocEmpty();
 }
 
-com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > AbstractAssistentDlg_Impl::GetPassword()
+css::uno::Sequence< css::beans::NamedValue > AbstractAssistentDlg_Impl::GetPassword()
 {
     return pDlg->GetPassword();
 }
@@ -344,7 +344,7 @@ const GDIMetaFile& AbstractSdVectorizeDlg_Impl::GetGDIMetaFile() const
     return pDlg->GetGDIMetaFile();
 }
 
-void AbstractSdPublishingDlg_Impl::GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams )
+void AbstractSdPublishingDlg_Impl::GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams )
 {
     pDlg->GetParameterSequence( rParams );
 }

@@ -88,7 +88,7 @@ void ImpressViewShellBase::Execute (SfxRequest& rRequest)
 
 void ImpressViewShellBase::InitializeFramework()
 {
-    ::com::sun::star::uno::Reference<com::sun::star::frame::XController>
+    css::uno::Reference<css::frame::XController>
         xController (GetController());
     sd::framework::ImpressModule::Initialize(xController);
 }

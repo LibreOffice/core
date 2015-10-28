@@ -1246,8 +1246,8 @@ void SdExportTest::testCellLeftAndRightMargin()
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT( pTableObj );
 
-    uno::Reference< com::sun::star::table::XTable > xTable (pTableObj->getTable(), uno::UNO_QUERY_THROW);
-    uno::Reference< com::sun::star::table::XMergeableCell > xCell( xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
+    uno::Reference< css::table::XTable > xTable (pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< css::table::XMergeableCell > xCell( xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xCellPropSet(xCell, uno::UNO_QUERY_THROW);
 
     uno::Any aLeftMargin = xCellPropSet->getPropertyValue("TextLeftDistance");
@@ -1286,7 +1286,7 @@ void SdExportTest::testTableCellBorder()
     table::BorderLine2 aBorderLine;
 
     uno::Reference< table::XTable > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
-    uno::Reference< com::sun::star::table::XMergeableCell > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    uno::Reference< css::table::XMergeableCell > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xCellPropSet (xCell, uno::UNO_QUERY_THROW);
 
     xCellPropSet->getPropertyValue("LeftBorder") >>= aBorderLine;

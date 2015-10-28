@@ -188,11 +188,11 @@ private:
         InitializeFolderScanning(), GatherFolderList(), ScanFolder(),
         InitializeEntryScanning(), and ScanEntry().
     */
-    com::sun::star::uno::Reference<com::sun::star::ucb::XContent> mxTemplateRoot;
-    com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment> mxFolderEnvironment;
-    com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment> mxEntryEnvironment;
-    com::sun::star::uno::Reference<com::sun::star::sdbc::XResultSet> mxFolderResultSet;
-    com::sun::star::uno::Reference<com::sun::star::sdbc::XResultSet> mxEntryResultSet;
+    css::uno::Reference<css::ucb::XContent> mxTemplateRoot;
+    css::uno::Reference<css::ucb::XCommandEnvironment> mxFolderEnvironment;
+    css::uno::Reference<css::ucb::XCommandEnvironment> mxEntryEnvironment;
+    css::uno::Reference<css::sdbc::XResultSet> mxFolderResultSet;
+    css::uno::Reference<css::sdbc::XResultSet> mxEntryResultSet;
 
     /** Obtain the root folder of the template folder hierarchy.  The result
         is stored in mxTemplateRoot for later use.

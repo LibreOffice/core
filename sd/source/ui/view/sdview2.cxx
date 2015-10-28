@@ -94,12 +94,12 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {}
 };
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateClipboardDataObject( View*, vcl::Window& )
+css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDataObject( View*, vcl::Window& )
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object ist destroyed automatically
     SdTransferable* pTransferable = new SdTransferable( &mrDoc, NULL, false );
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
+    css::uno::Reference< css::datatransfer::XTransferable > xRet( pTransferable );
 
     SD_MOD()->pTransferClip = pTransferable;
 
@@ -157,10 +157,10 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, vcl::Window& rWindow, const Point& rDragPos )
+css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, vcl::Window& rWindow, const Point& rDragPos )
 {
     SdTransferable* pTransferable = new SdTransferable( &mrDoc, pWorkView, false );
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
+    css::uno::Reference< css::datatransfer::XTransferable > xRet( pTransferable );
 
     SD_MOD()->pTransferDrag = pTransferable;
 
@@ -206,10 +206,10 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, vcl::Window& rWindow )
+css::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView, vcl::Window& rWindow )
 {
     SdTransferable*                 pTransferable = new SdTransferable( &mrDoc, pWorkView, true );
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
+    css::uno::Reference< css::datatransfer::XTransferable > xRet( pTransferable );
     TransferableObjectDescriptor    aObjDesc;
     const Rectangle                 aMarkRect( GetAllMarkedRect() );
     OUString                        aDisplayName;

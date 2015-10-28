@@ -148,7 +148,7 @@ public:
 
     /** Return the XController object of the main view.
     */
-    ::com::sun::star::uno::Reference<com::sun::star::frame::XController>
+    css::uno::Reference<css::frame::XController>
         GetXController() const;
 
     /** Return the ViewShellBase object.
@@ -217,7 +217,7 @@ private:
     std::unique_ptr<controller::SlideSorterController> mpSlideSorterController;
     std::unique_ptr<model::SlideSorterModel> mpSlideSorterModel;
     std::unique_ptr<view::SlideSorterView> mpSlideSorterView;
-    ::com::sun::star::uno::WeakReference<com::sun::star::frame::XController> mxControllerWeak;
+    css::uno::WeakReference<css::frame::XController> mxControllerWeak;
     ViewShell* mpViewShell;
     ViewShellBase* mpViewShellBase;
     VclPtr<sd::Window> mpContentWindow;

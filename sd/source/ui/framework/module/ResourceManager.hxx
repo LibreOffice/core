@@ -30,7 +30,7 @@
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper <
-    ::com::sun::star::drawing::framework::XConfigurationChangeListener
+    css::drawing::framework::XConfigurationChangeListener
     > ResourceManagerInterfaceBase;
 
 } // end of anonymous namespace.
@@ -49,10 +49,8 @@ class ResourceManager
 {
 public:
     ResourceManager (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XController>& rxController,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XResourceId>& rxResourceId);
+        const css::uno::Reference<css::frame::XController>& rxController,
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
     virtual ~ResourceManager();
 
     /** Remember the given URL as one of a center pane view for which to
@@ -67,17 +65,17 @@ public:
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
-        const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
 
     virtual void SAL_CALL disposing (
-        const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
+    css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
 
 private:
@@ -94,13 +92,11 @@ private:
 
     void HandleMainViewSwitch (
         const OUString& rsViewURL,
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         const bool bIsActivated);
     void HandleResourceRequest(
         bool bActivation,
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XConfiguration>& rxConfiguration);
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
     void UpdateForMainViewShell();
 };
 

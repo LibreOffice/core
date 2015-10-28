@@ -112,7 +112,7 @@ model::SharedPageDescriptor ViewCacheContext::GetDescriptor (cache::CacheKey aKe
     return mrModel.GetPageDescriptor(nPageIndex);
 }
 
-::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ViewCacheContext::GetModel()
+css::uno::Reference<css::uno::XInterface> ViewCacheContext::GetModel()
 {
     if (mrModel.GetDocument() == NULL)
         return NULL;

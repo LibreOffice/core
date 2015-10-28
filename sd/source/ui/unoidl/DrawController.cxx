@@ -107,7 +107,7 @@ IMPLEMENT_FORWARD_XINTERFACE2(
 // XTypeProvider
 
 Sequence<Type> SAL_CALL DrawController::getTypes()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     // OPropertySetHelper does not provide getTypes, so we have to
@@ -185,7 +185,7 @@ void SAL_CALL DrawController::removeEventListener (
 }
 
 // XController
-sal_Bool SAL_CALL DrawController::suspend( sal_Bool Suspend ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DrawController::suspend( sal_Bool Suspend ) throw (css::uno::RuntimeException, std::exception)
 {
     if( Suspend )
     {
@@ -456,7 +456,7 @@ void DrawController::NotifyAccUpdate()
     fire (&nHandle, &aNewValue, &aOldValue, 1, sal_False);
 }
 
-void DrawController::fireChangeLayer( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>* pCurrentLayer ) throw()
+void DrawController::fireChangeLayer( css::uno::Reference< css::drawing::XLayer>* pCurrentLayer ) throw()
 {
     if( pCurrentLayer != mpCurrentLayer )
     {
@@ -609,7 +609,7 @@ void DrawController::FillPropertyTable (
     rProperties.push_back(
         beans::Property("VisibleArea",
             PROPERTY_WORKAREA,
-            ::cppu::UnoType< ::com::sun::star::awt::Rectangle>::get(),
+            ::cppu::UnoType< css::awt::Rectangle>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY));
     rProperties.push_back(
         beans::Property(
@@ -651,12 +651,12 @@ void DrawController::FillPropertyTable (
     rProperties.push_back(
         beans::Property("ViewOffset",
             PROPERTY_VIEWOFFSET,
-            ::cppu::UnoType< ::com::sun::star::awt::Point>::get(),
+            ::cppu::UnoType< css::awt::Point>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property("DrawViewMode",
             PROPERTY_DRAWVIEWMODE,
-            ::cppu::UnoType< ::com::sun::star::awt::Point>::get(),
+            ::cppu::UnoType< css::awt::Point>::get(),
             beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
     // add new property to update current page's acc information
     rProperties.push_back(
@@ -689,7 +689,7 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
 }
 
 Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception)
+        throw ( css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -754,7 +754,7 @@ sal_Bool DrawController::convertFastPropertyValue (
     Any & rOldValue,
     sal_Int32 nHandle,
     const Any& rValue)
-    throw ( com::sun::star::lang::IllegalArgumentException)
+    throw ( css::lang::IllegalArgumentException)
 {
     bool bResult = false;
 
@@ -775,7 +775,7 @@ sal_Bool DrawController::convertFastPropertyValue (
         catch (const beans::UnknownPropertyException&)
         {
             // The property is unknown and thus an illegal argument to this method.
-            throw com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         }
     }
 
@@ -785,7 +785,7 @@ sal_Bool DrawController::convertFastPropertyValue (
 void DrawController::setFastPropertyValue_NoBroadcast (
     sal_Int32 nHandle,
     const Any& rValue)
-    throw ( com::sun::star::uno::Exception, std::exception)
+    throw ( css::uno::Exception, std::exception)
 {
     SolarMutexGuard aGuard;
     if (nHandle == PROPERTY_SUB_CONTROLLER)
@@ -855,7 +855,7 @@ void DrawController::DisposeFrameworkControllers()
 }
 
 void DrawController::ThrowIfDisposed() const
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose || mbDisposing)
     {

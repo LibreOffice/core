@@ -82,7 +82,7 @@ public:
     virtual OUString GetDocPath() const = 0;
     virtual bool GetStartWithFlag() const = 0;
     virtual bool IsDocEmpty() const = 0;
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword() = 0;
+    virtual css::uno::Sequence< css::beans::NamedValue > GetPassword() = 0;
 };
 
 class AbstractSdModifyFieldDlg : public VclAbstractDialog
@@ -154,7 +154,7 @@ public:
 class AbstractSdPublishingDlg : public VclAbstractDialog
 {
 public:
-    virtual void GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams ) = 0;
+    virtual void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams ) = 0;
 };
 
 class AbstractHeaderFooterDialog : public VclAbstractDialog

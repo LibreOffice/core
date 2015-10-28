@@ -199,7 +199,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
                         if( bFirst )
                             bFirst = false;
                         else
-                            pCreated->setNodeType( ::com::sun::star::presentation::EffectNodeType::WITH_PREVIOUS );
+                            pCreated->setNodeType( css::presentation::EffectNodeType::WITH_PREVIOUS );
                     }
                 }
             }

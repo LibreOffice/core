@@ -50,9 +50,9 @@ private:
         has been modified and have to be restored.
     */
 
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
+    css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfiguration>
+    css::uno::Reference<css::drawing::framework::XConfiguration>
         mxConfiguration;
 };
 

@@ -938,7 +938,7 @@ namespace {
         {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PK_HANDOUT));
 
-            Reference< com::sun::star::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
+            Reference< css::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
             const OUString sPageNumber( "Number" );
 
             // Collect the page objects of the handout master.

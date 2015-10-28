@@ -1653,7 +1653,7 @@ OUString AssistentDlgImpl::GetUiTextForCommand (const OUString& sCommandURL)
         }
         while(false);
     }
-    catch (com::sun::star::uno::Exception& )
+    catch (css::uno::Exception& )
     {
     }
 
@@ -1680,13 +1680,13 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
             Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier (
                 ui::theModuleUIConfigurationManagerSupplier::get(xContext));
 
-            Reference<com::sun::star::ui::XUIConfigurationManager> xManager (
+            Reference<css::ui::XUIConfigurationManager> xManager (
                 xSupplier->getUIConfigurationManager(
                     "com.sun.star.presentation.PresentationDocument"));
             if ( ! xManager.is())
                 break;
 
-            Reference<com::sun::star::ui::XImageManager> xImageManager (
+            Reference<css::ui::XImageManager> xImageManager (
                 xManager->getImageManager(),
                 UNO_QUERY_THROW);
 
@@ -1701,7 +1701,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
         }
         while(false);
     }
-    catch (com::sun::star::uno::Exception& )
+    catch (css::uno::Exception& )
     {
     }
 

@@ -86,7 +86,7 @@ void SAL_CALL Listener::repeat( const css::uno::Reference<
 //----- XSlideShowListener ----------------------------------------------------
 
 void SAL_CALL Listener::paused()
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -145,7 +145,7 @@ void SAL_CALL Listener::disposing()
 
 void SAL_CALL Listener::disposing (
     const css::lang::EventObject& rEvent)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     (void) rEvent;
     dispose();

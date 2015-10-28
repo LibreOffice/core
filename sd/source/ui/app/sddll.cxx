@@ -304,7 +304,7 @@ void SdDLL::Init()
     // register 3D-Objekt-Factory
     E3dObjFactory();
 
-    // register ::com::sun::star::form::component::Form-Object-Factory
+    // register css::form::component::Form-Object-Factory
     FmFormObjFactory();
 
     // register Object-Factory

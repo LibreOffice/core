@@ -74,7 +74,7 @@ private:
     XColorListRef           pColList;
 
     bool                    bTreeUpdated;
-    std::vector<com::sun::star::presentation::ClickAction> maCurrentActions;
+    std::vector<css::presentation::ClickAction> maCurrentActions;
     OUString                aLastFile;
     ::std::vector< long >   aVerbVector;
 
@@ -85,11 +85,11 @@ private:
 
     void                    UpdateTree();
     void                    OpenFileDialog();
-    ::com::sun::star::presentation::ClickAction     GetActualClickAction();
-    void                    SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
+    css::presentation::ClickAction     GetActualClickAction();
+    void                    SetActualClickAction( css::presentation::ClickAction eCA );
     void                    SetEditText( OUString const & rStr );
     OUString                GetEditText( bool bURL = false );
-    static sal_uInt16       GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
+    static sal_uInt16       GetClickActionSdResId( css::presentation::ClickAction eCA );
 
 public:
             SdTPAction( vcl::Window* pParent, const SfxItemSet& rInAttrs );

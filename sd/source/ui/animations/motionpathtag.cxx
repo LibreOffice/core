@@ -881,7 +881,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
     if( mpPathObj )
     {
-        ::com::sun::star::awt::Point aPos;
+        css::awt::Point aPos;
         if (mxOrigin.is())
             aPos = mxOrigin->getPosition();
         if( (aPos.X != maOriginPos.X) || (aPos.Y != maOriginPos.Y) )
@@ -1199,7 +1199,7 @@ void SAL_CALL MotionPathTag::disposing( const EventObject& /*Source*/ ) throw (R
         Dispose();
 }
 
-Any SAL_CALL MotionPathTag::queryInterface( const ::com::sun::star::uno::Type& aType ) throw (RuntimeException, std::exception)
+Any SAL_CALL MotionPathTag::queryInterface( const css::uno::Type& aType ) throw (RuntimeException, std::exception)
 {
     if( aType == cppu::UnoType<XChangesListener>::get() )
         return Any( Reference< XChangesListener >( this ) );

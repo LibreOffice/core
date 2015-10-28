@@ -114,8 +114,8 @@ private:
     VclPtr<PushButton>   mpPB_PLAY;
     VclPtr<CheckBox>     mpCB_AUTO_PREVIEW;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView >             mxView;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                  mxModel;
+    css::uno::Reference< css::drawing::XDrawView >             mxView;
+    css::uno::Reference< css::frame::XModel >                  mxModel;
 
     bool         mbHasSelection;
     bool         mbUpdatingControls;

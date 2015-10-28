@@ -201,7 +201,7 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
         // common: first any is VCL pointer to window (for VCL canvas)
         aArg[0] = makeAny(reinterpret_cast<sal_Int64>(pWindow));
         aArg[1] = Any();
-        aArg[2] = makeAny(::com::sun::star::awt::Rectangle());
+        aArg[2] = makeAny(css::awt::Rectangle());
         aArg[3] = makeAny(sal_False);
         aArg[4] = makeAny(mxWindow);
 

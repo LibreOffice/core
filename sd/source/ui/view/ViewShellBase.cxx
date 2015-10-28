@@ -664,8 +664,7 @@ void ViewShellBase::GetState (SfxItemSet& rSet)
 }
 
 void ViewShellBase::WriteUserDataSequence (
-    ::com::sun::star::uno::Sequence <
-    ::com::sun::star::beans::PropertyValue >& rSequence,
+    css::uno::Sequence< css::beans::PropertyValue >& rSequence,
     bool bBrowse)
 {
     // Forward call to main sub shell.
@@ -675,8 +674,7 @@ void ViewShellBase::WriteUserDataSequence (
 }
 
 void ViewShellBase::ReadUserDataSequence (
-    const ::com::sun::star::uno::Sequence <
-    ::com::sun::star::beans::PropertyValue >& rSequence,
+    const css::uno::Sequence< css::beans::PropertyValue >& rSequence,
     bool bBrowse)
 {
     // Forward call to main sub shell.
@@ -866,7 +864,7 @@ OUString ViewShellBase::GetInitialViewShellType()
             break;
 
         sal_Int32 nView = 0;
-        ::com::sun::star::uno::Any aAny = xViewData->getByIndex(nView);
+        css::uno::Any aAny = xViewData->getByIndex(nView);
         Sequence<beans::PropertyValue> aProperties;
         if ( ! (aAny >>= aProperties))
             break;
@@ -977,7 +975,7 @@ OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const 
         {
             Reference< XNameAccess > const xNameAccess(
                     frame::theUICommandDescription::get(xContext) );
-            Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
+            Reference< css::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
             Sequence< PropertyValue > aPropSeq;
             if( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
             {

@@ -56,7 +56,7 @@ bool SdHTMLFilter::Export()
 
     SfxItemSet *pSet = mrMedium.GetItemSet();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aParams;
+    css::uno::Sequence< css::beans::PropertyValue > aParams;
 
     const SfxPoolItem* pItem;
 

@@ -1516,7 +1516,7 @@ void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor ) throw (RuntimeExcep
 
 // XShapeEventListener
 
-void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& /* aOriginalEvent */ )
+void SlideshowImpl::click( const Reference< XShape >& xShape, const css::awt::MouseEvent& /* aOriginalEvent */ )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2115,7 +2115,7 @@ IMPL_LINK_NOARG_TYPED(SlideshowImpl, ContextMenuHdl, void*, void)
     SfxViewFrame* pViewFrame = getViewFrame();
     if( pViewFrame )
     {
-        Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
+        Reference< css::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
         if( xFrame.is() )
         {
             pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, "slot:10617" , false ) );
@@ -2808,7 +2808,7 @@ sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex() throw (RuntimeException
     return mpSlideController.get() ? mpSlideController->getCurrentSlideIndex() : -1;
 }
 
-// ::com::sun::star::presentation::XSlideShowController:
+// css::presentation::XSlideShowController:
 
 ::sal_Int32 SAL_CALL SlideshowImpl::getSlideCount() throw (RuntimeException, std::exception)
 {
@@ -3248,22 +3248,22 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException, std::excepti
 
 // XIndexAccess
 
-::sal_Int32 SAL_CALL SlideshowImpl::getCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL SlideshowImpl::getCount(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return getSlideCount();
 }
 
-::com::sun::star::uno::Any SAL_CALL SlideshowImpl::getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL SlideshowImpl::getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     return Any( getSlideByIndex( Index ) );
 }
 
-::com::sun::star::uno::Type SAL_CALL SlideshowImpl::getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Type SAL_CALL SlideshowImpl::getElementType(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<XDrawPage>::get();
 }
 
-sal_Bool SAL_CALL SlideshowImpl::hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SlideshowImpl::hasElements(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return getSlideCount() != 0;
 }
@@ -3479,9 +3479,9 @@ void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >&
         maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::repeat, _1,  boost::cref(xNode), boost::cref(nRepeat) ));
 }
 
-// ::com::sun::star::presentation::XSlideShowListener:
+// css::presentation::XSlideShowListener:
 
-void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowListenerProxy::paused(  ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3489,7 +3489,7 @@ void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::R
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::paused ) );
 }
 
-void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3505,7 +3505,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeEx
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionStarted ) );
 }
 
-void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3513,7 +3513,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun:
         maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionEnded ) );
 }
 
-void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3556,7 +3556,7 @@ void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) thro
 
 // XEventListener
 
-void SAL_CALL SlideShowListenerProxy::disposing( const ::com::sun::star::lang::EventObject& aDisposeEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowListenerProxy::disposing( const css::lang::EventObject& aDisposeEvent ) throw (RuntimeException, std::exception)
 {
     maListeners.disposeAndClear( aDisposeEvent );
     mxController.clear();
@@ -3565,7 +3565,7 @@ void SAL_CALL SlideShowListenerProxy::disposing( const ::com::sun::star::lang::E
 
 // XShapeEventListener
 
-void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, const css::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     if( mxController.is() )

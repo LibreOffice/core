@@ -33,7 +33,7 @@
 namespace sd { namespace tools {
 
 typedef cppu::WeakComponentImplHelper<
-    ::com::sun::star::frame::XStatusListener
+    css::frame::XStatusListener
     > SlotStateListenerInterfaceBase;
 
 /** Listen for state changes of slots.  This class has been created in order
@@ -52,8 +52,7 @@ public:
     */
     SlotStateListener (
         Link<const OUString&,void>& rCallback,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XDispatchProvider>& rxDispatchProvider,
+        const css::uno::Reference<css::frame::XDispatchProvider>& rxDispatchProvider,
         const OUString& rSlotName);
 
     /** The constructor de-registers all remaining listeners.  Usually a prior
@@ -74,8 +73,7 @@ public:
         @throws DisposedException
     */
     void ConnectToDispatchProvider (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XDispatchProvider>& rxDispatchProvider);
+        const css::uno::Reference<css::frame::XDispatchProvider>& rxDispatchProvider);
 
     /** Observe the slot specified by the given name.  Note that
         ConnectToFrame() has to have been called earlier.
@@ -94,14 +92,14 @@ public:
     */
     virtual void SAL_CALL
         statusChanged (
-            const ::com::sun::star::frame::FeatureStateEvent& rState)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::frame::FeatureStateEvent& rState)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
-        disposing(const com::sun::star::lang::EventObject& rEvent)
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
+        disposing(const css::lang::EventObject& rEvent)
+        throw(css::uno::RuntimeException, std::exception) override;
 
 protected:
     /** This method is called by the WeakComponentImplHelper base class in
@@ -116,11 +114,10 @@ private:
     /** Remember the URLs that describe slots whose state changes we are
         listening to.
     */
-    typedef ::std::vector<com::sun::star::util::URL> RegisteredURLList;
+    typedef ::std::vector<css::util::URL> RegisteredURLList;
     RegisteredURLList maRegisteredURLList;
 
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::frame::XDispatchProvider> mxDispatchProviderWeak;
+    css::uno::WeakReference<css::frame::XDispatchProvider> mxDispatchProviderWeak;
 
     /** Deregister all currently active state change listeners.
     */
@@ -130,17 +127,17 @@ private:
         disposed.
     */
     void ThrowIfDisposed()
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 
     /** Transform the given string into a URL object.
     */
-    static ::com::sun::star::util::URL MakeURL (const OUString& rSlotName);
+    static css::util::URL MakeURL (const OUString& rSlotName);
 
     /** Return an XDispatch object for the given URL.
     */
-    ::com::sun::star::uno::Reference<com::sun::star::frame::XDispatch>
+    css::uno::Reference<css::frame::XDispatch>
         GetDispatch (
-            const ::com::sun::star::util::URL& rURL) const;
+            const css::util::URL& rURL) const;
 };
 
 } } // end of namespace ::sd::tools

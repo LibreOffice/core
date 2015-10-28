@@ -425,7 +425,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             const ::std::vector< double > aDXArray{};
 
                             // create locale; this may need some more information in the future
-                            const ::com::sun::star::lang::Locale aLocale;
+                            const css::lang::Locale aLocale;
 
                             // create primitive and add
                             const drawinglayer::primitive2d::Primitive2DReference xRef(

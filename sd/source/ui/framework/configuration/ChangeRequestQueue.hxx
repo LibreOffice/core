@@ -31,8 +31,7 @@ namespace sd { namespace framework {
     ChangeRequestQueueProcessor to process these requests.
 */
 class ChangeRequestQueue
-    : public ::std::list<com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfigurationChangeRequest> >
+    : public ::std::list<css::uno::Reference< css::drawing::framework::XConfigurationChangeRequest> >
 {
 public:
     /** Create an empty queue.

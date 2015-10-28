@@ -31,7 +31,7 @@ class PresentationModule
 {
 public:
     static void Initialize (
-        ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController);
+        css::uno::Reference<css::frame::XController>& rxController);
 };
 
 } } // end of namespace sd::framework

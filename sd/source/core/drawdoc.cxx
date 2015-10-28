@@ -227,11 +227,11 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         aLinguConfig.GetOptions( aOptions );
 
         SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage,
-            ::com::sun::star::i18n::ScriptType::LATIN), EE_CHAR_LANGUAGE );
+            css::i18n::ScriptType::LATIN), EE_CHAR_LANGUAGE );
         SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CJK,
-            ::com::sun::star::i18n::ScriptType::ASIAN), EE_CHAR_LANGUAGE_CJK );
+            css::i18n::ScriptType::ASIAN), EE_CHAR_LANGUAGE_CJK );
         SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CTL,
-            ::com::sun::star::i18n::ScriptType::COMPLEX), EE_CHAR_LANGUAGE_CTL );
+            css::i18n::ScriptType::COMPLEX), EE_CHAR_LANGUAGE_CTL );
 
         if (!comphelper::LibreOfficeKit::isActive())
             mbOnlineSpell = aOptions.bIsSpellAuto;
@@ -239,7 +239,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     LanguageType eRealLanguage = MsLangId::getRealLanguage( meLanguage );
     LanguageTag aLanguageTag( eRealLanguage);
-    mpLocale = new ::com::sun::star::lang::Locale( aLanguageTag.getLocale());
+    mpLocale = new css::lang::Locale( aLanguageTag.getLocale());
     mpCharClass = new CharClass( aLanguageTag );
 
     // If the current application language is a language that uses right-to-left text...
@@ -247,7 +247,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     if( MsLangId::isRightToLeft( eRealCTLLanguage ) )
     {
         // ... then we have to set this as a default
-        SetDefaultWritingMode( ::com::sun::star::text::WritingMode_RL_TB );
+        SetDefaultWritingMode( css::text::WritingMode_RL_TB );
     }
 
     // for korean and japanese languages we have a different default for apply spacing between asian, latin and ctl text
@@ -909,8 +909,8 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
 {
     switch (nMode)
     {
-        case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
-        case ::com::sun::star::document::PrinterIndependentLayout::ENABLED:
+        case css::document::PrinterIndependentLayout::DISABLED:
+        case css::document::PrinterIndependentLayout::ENABLED:
             // Just store supported modes and inform the doc shell
             mnPrinterIndependentLayout = nMode;
 

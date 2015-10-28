@@ -65,7 +65,7 @@ public:
     virtual void SAL_CALL acquire() throw () override { ::cppu::WeakComponentImplHelper< XAnnotation >::acquire(); }
     virtual void SAL_CALL release() throw () override { ::cppu::WeakComponentImplHelper< XAnnotation >::release(); }
 
-    // ::com::sun::star::beans::XPropertySet:
+    // css::beans::XPropertySet:
     virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException, std::exception) override;
     virtual void SAL_CALL setPropertyValue(const OUString & aPropertyName, const Any & aValue) throw (RuntimeException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, std::exception) override;
     virtual Any SAL_CALL getPropertyValue(const OUString & PropertyName) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception) override;
@@ -74,12 +74,12 @@ public:
     virtual void SAL_CALL addVetoableChangeListener(const OUString & PropertyName, const Reference< XVetoableChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString & PropertyName, const Reference< XVetoableChangeListener > & aListener) throw (RuntimeException, UnknownPropertyException, WrappedTargetException, std::exception) override;
 
-    // ::com::sun::star::office::XAnnotation:
-    virtual ::com::sun::star::uno::Any SAL_CALL getAnchor() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::office::XAnnotation:
+    virtual css::uno::Any SAL_CALL getAnchor() throw (css::uno::RuntimeException, std::exception) override;
     virtual RealPoint2D SAL_CALL getPosition() throw (RuntimeException, std::exception) override;
     virtual void SAL_CALL setPosition(const RealPoint2D & the_value) throw (RuntimeException, std::exception) override;
-    virtual ::com::sun::star::geometry::RealSize2D SAL_CALL getSize() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSize( const ::com::sun::star::geometry::RealSize2D& _size ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::geometry::RealSize2D SAL_CALL getSize() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSize( const css::geometry::RealSize2D& _size ) throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getAuthor() throw (RuntimeException, std::exception) override;
     virtual void SAL_CALL setAuthor(const OUString & the_value) throw (RuntimeException, std::exception) override;
     virtual util::DateTime SAL_CALL getDateTime() throw (RuntimeException, std::exception) override;
@@ -240,7 +240,7 @@ Any SAL_CALL Annotation::getAnchor() throw (RuntimeException, std::exception)
     return aRet;
 }
 
-// ::com::sun::star::office::XAnnotation:
+// css::office::XAnnotation:
 RealPoint2D SAL_CALL Annotation::getPosition() throw (RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
@@ -257,7 +257,7 @@ void SAL_CALL Annotation::setPosition(const RealPoint2D & the_value) throw (Runt
     }
 }
 
-// ::com::sun::star::office::XAnnotation:
+// css::office::XAnnotation:
 RealSize2D SAL_CALL Annotation::getSize() throw (RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
