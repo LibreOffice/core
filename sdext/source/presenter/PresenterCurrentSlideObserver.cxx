@@ -78,13 +78,13 @@ void SAL_CALL PresenterCurrentSlideObserver::endEvent (
 void SAL_CALL PresenterCurrentSlideObserver::repeat (
     const css::uno::Reference<css::animations::XAnimationNode>& rNode,
     sal_Int32)
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rNode;
 }
 
 void SAL_CALL PresenterCurrentSlideObserver::paused()
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 

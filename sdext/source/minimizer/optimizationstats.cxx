@@ -54,7 +54,7 @@ const uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenEnum e
 
 
 
-com::sun::star::beans::PropertyValues OptimizationStats::GetStatusSequence()
+css::beans::PropertyValues OptimizationStats::GetStatusSequence()
 {
     int i = 0;
     uno::Sequence< PropertyValue > aStatsSequence( maStats.size() );

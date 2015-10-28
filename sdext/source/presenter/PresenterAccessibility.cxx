@@ -331,10 +331,10 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL setCaretPosition (sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Unicode SAL_CALL getCharacter (sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
     virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL
         getCharacterAttributes (
@@ -1541,7 +1541,7 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getCaretPosition()
 }
 
 sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setCaretPosition (sal_Int32 nIndex)
-    throw (::com::sun::star::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
+    throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -1555,7 +1555,7 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setCaretPosition (sa
 }
 
 sal_Unicode SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacter (sal_Int32 nIndex)
-    throw (::com::sun::star::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
+    throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 

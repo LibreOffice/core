@@ -37,7 +37,7 @@ SaxAttrList::SaxAttrList( const std::unordered_map< OUString, OUString, OUString
 }
 
 SaxAttrList::SaxAttrList( const SaxAttrList& rClone ) :
-    cppu::WeakImplHelper<com::sun::star::xml::sax::XAttributeList, com::sun::star::util::XCloneable>(rClone),
+    cppu::WeakImplHelper<css::xml::sax::XAttributeList, css::util::XCloneable>(rClone),
     m_aAttributes( rClone.m_aAttributes ),
     m_aIndexMap( rClone.m_aIndexMap )
 {
@@ -84,7 +84,7 @@ OUString SAL_CALL SaxAttrList::getValueByName(const OUString& i_rName) throw(std
     return (it != m_aIndexMap.end()) ? m_aAttributes[it->second].m_aValue : OUString();
 }
 
-com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL SaxAttrList::createClone() throw(std::exception)
+css::uno::Reference< css::util::XCloneable > SAL_CALL SaxAttrList::createClone() throw(std::exception)
 {
     return new SaxAttrList( *this );
 }

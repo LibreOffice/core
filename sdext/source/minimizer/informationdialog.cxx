@@ -296,7 +296,7 @@ void InformationDialog::InitDialog()
     if ( k >= 0 )
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
+    css::uno::Reference< css::awt::XItemListener > xItemListener;
     InsertImage( *this,
                  OUString( "aboutimage" ),
                  OUString( "private:standardimage/query" ),
@@ -359,15 +359,15 @@ bool InformationDialog::execute()
 
 
 void OKActionListener::actionPerformed( const ActionEvent& rEvent )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( rEvent.ActionCommand == "button" )
     {
         mrInformationDialog.endExecute( true );
     }
 }
-void OKActionListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+void OKActionListener::disposing( const css::lang::EventObject& /* Source */ )
+    throw ( css::uno::RuntimeException, std::exception )
 {
 }
 

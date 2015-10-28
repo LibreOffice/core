@@ -349,7 +349,7 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
     return xNode;
 }
 
-com::sun::star::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken ) const
+css::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken ) const
 {
     Any aRetValue;
     const OptimizerSettings& rSettings( maSettings.front() );
@@ -383,7 +383,7 @@ com::sun::star::uno::Any ConfigurationAccess::GetConfigProperty( const PPPOptimi
     return aRetValue;
 }
 
-void ConfigurationAccess::SetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken, const com::sun::star::uno::Any& rValue )
+void ConfigurationAccess::SetConfigProperty( const PPPOptimizerTokenEnum ePropertyToken, const css::uno::Any& rValue )
 {
     OptimizerSettings& rSettings( maSettings.front() );
     try
