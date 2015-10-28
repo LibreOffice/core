@@ -24,11 +24,17 @@
 #include <sal/types.h>
 
 #if defined XMLOFF_DLLIMPLEMENTATION
-#define XMLOFF_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#   define XMLOFF_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
 #else
-#define XMLOFF_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
+#if defined(_MSC_VER)
+// "SAL_DLLPUBLIC_IMPORT" is not necessary, but reduce linker warning 4217 under win
+#   define XMLOFF_DLLPUBLIC
+#else
+#   define XMLOFF_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+#endif // defined(_MSC_VER)
 
-#endif
+#endif //defined XMLOFF_DLLIMPLEMENTATION
+
+#endif // INCLUDED_XMLOFF_DLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
