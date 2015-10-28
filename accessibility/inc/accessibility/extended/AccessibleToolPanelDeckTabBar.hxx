@@ -34,8 +34,8 @@ namespace accessibility
 {
 
     class AccessibleToolPanelTabBar_Impl;
-    typedef VCLXAccessibleComponent   AccessibleToolPanelTabBar_Base;
-    class AccessibleToolPanelTabBar : public AccessibleToolPanelTabBar_Base
+
+    class AccessibleToolPanelTabBar: public VCLXAccessibleComponent
     {
     public:
         AccessibleToolPanelTabBar(
@@ -44,7 +44,7 @@ namespace accessibility
             ::svt::PanelTabBar& i_rTabBar
         );
 
-        using AccessibleToolPanelTabBar_Base::NotifyAccessibleEvent;
+        using VCLXAccessibleComponent::NotifyAccessibleEvent;
 
     protected:
         virtual ~AccessibleToolPanelTabBar();

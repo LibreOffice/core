@@ -33,8 +33,8 @@ namespace accessibility
 {
 
     class AccessibleToolPanelDeck_Impl;
-    typedef VCLXAccessibleComponent   AccessibleToolPanelDeck_Base;
-    class AccessibleToolPanelDeck : public AccessibleToolPanelDeck_Base
+
+    class AccessibleToolPanelDeck: public VCLXAccessibleComponent
     {
     public:
         AccessibleToolPanelDeck(
@@ -42,7 +42,7 @@ namespace accessibility
             ::svt::ToolPanelDeck& i_rPanelDeck
         );
 
-        using AccessibleToolPanelDeck_Base::NotifyAccessibleEvent;
+        using VCLXAccessibleComponent::NotifyAccessibleEvent;
 
     protected:
         virtual ~AccessibleToolPanelDeck();

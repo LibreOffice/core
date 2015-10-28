@@ -269,7 +269,7 @@ namespace accessibility
     // AccessibleToolPanelTabBar
     AccessibleToolPanelTabBar::AccessibleToolPanelTabBar( const Reference< XAccessible >& i_rAccessibleParent,
             ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar )
-        :AccessibleToolPanelTabBar_Base( i_rTabBar.GetWindowPeer() )
+        :VCLXAccessibleComponent( i_rTabBar.GetWindowPeer() )
         ,m_xImpl( new AccessibleToolPanelTabBar_Impl( *this, i_rAccessibleParent, i_rPanelDeck, i_rTabBar ) )
     {
     }
@@ -370,7 +370,7 @@ namespace accessibility
 
     void SAL_CALL AccessibleToolPanelTabBar::disposing()
     {
-        AccessibleToolPanelTabBar_Base::disposing();
+        VCLXAccessibleComponent::disposing();
         m_xImpl->dispose();
     }
 
@@ -384,7 +384,7 @@ namespace accessibility
 
     void AccessibleToolPanelTabBar::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet )
     {
-        AccessibleToolPanelTabBar_Base::FillAccessibleStateSet( i_rStateSet );
+        VCLXAccessibleComponent::FillAccessibleStateSet( i_rStateSet );
         i_rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
         ENSURE_OR_RETURN_VOID( !m_xImpl->isDisposed(), "AccessibleToolPanelTabBar::FillAccessibleStateSet: already disposed!" );

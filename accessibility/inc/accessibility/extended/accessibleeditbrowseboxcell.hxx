@@ -94,12 +94,10 @@ namespace accessibility
 
     // = EditBrowseBoxTableCell
 
-    typedef ::cppu::WeakComponentImplHelper<   css::accessibility::XAccessible
-                                           >   EditBrowseBoxTableCellAccess_Base;
     // XAccessible providing an EditBrowseBoxTableCell
-    class EditBrowseBoxTableCellAccess
-                        :public ::comphelper::OBaseMutex
-                        ,public EditBrowseBoxTableCellAccess_Base
+    class EditBrowseBoxTableCellAccess:
+        public comphelper::OBaseMutex,
+        public cppu::WeakComponentImplHelper<css::accessibility::XAccessible>
     {
     protected:
         css::uno::WeakReference< css::accessibility::XAccessibleContext >

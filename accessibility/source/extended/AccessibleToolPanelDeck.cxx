@@ -226,7 +226,7 @@ namespace accessibility
     // AccessibleToolPanelDeck
     AccessibleToolPanelDeck::AccessibleToolPanelDeck( const Reference< XAccessible >& i_rAccessibleParent,
             ::svt::ToolPanelDeck& i_rPanelDeck )
-        :AccessibleToolPanelDeck_Base( i_rPanelDeck.GetWindowPeer() )
+        :VCLXAccessibleComponent( i_rPanelDeck.GetWindowPeer() )
         ,m_xImpl( new AccessibleToolPanelDeck_Impl( *this, i_rAccessibleParent, i_rPanelDeck ) )
     {
     }
@@ -328,7 +328,7 @@ namespace accessibility
 
     void SAL_CALL AccessibleToolPanelDeck::disposing()
     {
-        AccessibleToolPanelDeck_Base::disposing();
+        VCLXAccessibleComponent::disposing();
         m_xImpl->dispose();
     }
 
@@ -342,7 +342,7 @@ namespace accessibility
 
     void AccessibleToolPanelDeck::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet )
     {
-        AccessibleToolPanelDeck_Base::FillAccessibleStateSet( i_rStateSet );
+        VCLXAccessibleComponent::FillAccessibleStateSet( i_rStateSet );
         if ( m_xImpl->isDisposed() )
         {
             i_rStateSet.AddState( AccessibleStateType::DEFUNC );

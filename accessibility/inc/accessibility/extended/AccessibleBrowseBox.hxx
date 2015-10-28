@@ -189,11 +189,9 @@ private:
     <p>The instance holds its XAccessibleContext with a hard reference, while
     the context holds this instance weak.</p>
 */
-typedef ::cppu::WeakImplHelper<   css::accessibility::XAccessible
-                              >   AccessibleBrowseBoxAccess_Base;
-
-class AccessibleBrowseBoxAccess :public AccessibleBrowseBoxAccess_Base
-                                ,public ::svt::IAccessibleBrowseBox
+class AccessibleBrowseBoxAccess:
+    public cppu::WeakImplHelper<css::accessibility::XAccessible>,
+    public ::svt::IAccessibleBrowseBox
 {
 private:
     ::osl::Mutex                m_aMutex;

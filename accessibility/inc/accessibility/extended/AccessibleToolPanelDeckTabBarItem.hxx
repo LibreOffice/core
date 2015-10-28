@@ -34,8 +34,9 @@ namespace accessibility
 {
 
     class AccessibleToolPanelDeckTabBarItem_Impl;
-    typedef ::comphelper::OAccessibleExtendedComponentHelper AccessibleToolPanelDeckTabBarItem_Base;
-    class AccessibleToolPanelDeckTabBarItem : public AccessibleToolPanelDeckTabBarItem_Base
+
+    class AccessibleToolPanelDeckTabBarItem:
+        public comphelper::OAccessibleExtendedComponentHelper
     {
     public:
         AccessibleToolPanelDeckTabBarItem(
@@ -45,8 +46,8 @@ namespace accessibility
             const size_t i_nItemPos
         );
 
-        using AccessibleToolPanelDeckTabBarItem_Base::NotifyAccessibleEvent;
-        using AccessibleToolPanelDeckTabBarItem_Base::lateInit;
+        using OAccessibleExtendedComponentHelper::NotifyAccessibleEvent;
+        using OAccessibleExtendedComponentHelper::lateInit;
 
     protected:
         virtual ~AccessibleToolPanelDeckTabBarItem();
