@@ -7,7 +7,6 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="spacing">12</property>
-    <property name="homogeneous">True</property>
     <child>
       <object class="GtkFrame" id="frame2">
         <property name="visible">True</property>
