@@ -1185,15 +1185,17 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
     while( nUPlus != -1 )
     {
         nUnicode = sIn.copy(0, nUPlus).toString().toUInt32(16);
-        //strip out all null or invalid Unicode values
-        if( !nUnicode || nUnicode > 0x10ffff )
+        //prevent creating control characters or invalid Unicode values
+        if( nUnicode < 0x20 || nUnicode > 0x10ffff )
             maInput = sIn.copy(nUPlus);
         sIn = sIn.copy(nUPlus+2);
         nUPlus =  sIn.indexOf("U+");
     }
 
     nUnicode = sIn.toString().toUInt32(16);
-    if( !nUnicode || nUnicode > 0x10ffff )
+    if( nUnicode < 0x20 )
+        return OUString();
+    else if( nUnicode > 0x10ffff )
        maInput.truncate().append( sIn[sIn.getLength()-1] );
     return maInput.toString();
 }
