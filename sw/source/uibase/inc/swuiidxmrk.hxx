@@ -170,6 +170,7 @@ public:
     SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark);
 
     virtual void        Apply() override;
+    virtual void        dispose() override;
 };
 
 class SwAuthMarkModalDlg;
