@@ -93,6 +93,13 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    bInhibitActivate;
 
+    Image                   aInserted;
+    Image                   aDeleted;
+    Image                   aFormated;
+    Image                   aTableChgd;
+    Image                   aFormatCollSet;
+    Image                   aAutoFormat;
+
     DECL_DLLPRIVATE_LINK( AcceptHdl,     void* );
     DECL_DLLPRIVATE_LINK( AcceptAllHdl,  void* );
     DECL_DLLPRIVATE_LINK( RejectHdl,     void* );
