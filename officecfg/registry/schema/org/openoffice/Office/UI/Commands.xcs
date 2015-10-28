@@ -36,6 +36,11 @@
           <desc>A localized text that describes the identifier of a command in a structured menu.  </desc>
         </info>
       </prop>
+      <prop oor:name="PopupLabel" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized text that describes the identifier of a command in a popup menu.</desc>
+        </info>
+      </prop>
       <prop oor:name="Properties" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>

@@ -59,11 +59,13 @@ static const char CONFIGURATION_CMD_ELEMENT_ACCESS[]    = "/UserInterface/Comman
 static const char CONFIGURATION_POP_ELEMENT_ACCESS[]    = "/UserInterface/Popups";
 static const char CONFIGURATION_PROPERTY_LABEL[]        = "Label";
 static const char CONFIGURATION_PROPERTY_CONTEXT_LABEL[] = "ContextLabel";
+static const char CONFIGURATION_PROPERTY_POPUP_LABEL[]   = "PopupLabel";
 
 // Property names of the resulting Property Set
 static const char PROPSET_LABEL[]                       = "Label";
 static const char PROPSET_NAME[]                        = "Name";
 static const char PROPSET_POPUP[]                       = "Popup";
+static const char PROPSET_POPUPLABEL[]                  = "PopupLabel";
 static const char PROPSET_PROPERTIES[]                  = "Properties";
 
 // Special resource URLs to retrieve additional information
@@ -123,6 +125,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
             OUString            aLabel;
             OUString            aContextLabel;
             OUString            aCommandName;
+            OUString            aPopupLabel;
             bool                bPopup : 1,
                                 bCommandNameCreated : 1;
             sal_Int32           nProperties;
@@ -151,9 +154,11 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         OUString                     m_aConfigPopupAccess;
         OUString                     m_aPropUILabel;
         OUString                     m_aPropUIContextLabel;
+        OUString                     m_aPropUIPopupLabel;
         OUString                     m_aPropLabel;
         OUString                     m_aPropName;
         OUString                     m_aPropPopup;
+        OUString                     m_aPropPopupLabel;
         OUString                     m_aPropProperties;
         OUString                     m_aPrivateResourceURL;
         Reference< XNameAccess >          m_xGenericUICommands;
@@ -178,9 +183,11 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aM
     m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aPropUILabel( CONFIGURATION_PROPERTY_LABEL ),
     m_aPropUIContextLabel( CONFIGURATION_PROPERTY_CONTEXT_LABEL ),
+    m_aPropUIPopupLabel( CONFIGURATION_PROPERTY_POPUP_LABEL ),
     m_aPropLabel( PROPSET_LABEL ),
     m_aPropName( PROPSET_NAME ),
     m_aPropPopup( PROPSET_POPUP ),
+    m_aPropPopupLabel( PROPSET_POPUPLABEL ),
     m_aPropProperties( PROPSET_PROPERTIES ),
     m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xGenericUICommands( rGenericUICommands ),
@@ -299,7 +306,7 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
         if ( !pIter->second.bCommandNameCreated )
             fillInfoFromResult( pIter->second, pIter->second.aLabel );
 
-        Sequence< PropertyValue > aPropSeq( 4 );
+        Sequence< PropertyValue > aPropSeq( 5 );
         aPropSeq[0].Name  = m_aPropLabel;
         aPropSeq[0].Value = !pIter->second.aContextLabel.isEmpty() ?
                 makeAny( pIter->second.aContextLabel ): makeAny( pIter->second.aLabel );
@@ -309,6 +316,8 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
         aPropSeq[2].Value <<= pIter->second.bPopup;
         aPropSeq[3].Name  = m_aPropProperties;
         aPropSeq[3].Value <<= pIter->second.nProperties;
+        aPropSeq[4].Name  = m_aPropPopupLabel;
+        aPropSeq[4].Value <<= pIter->second.aPopupLabel;
         return makeAny( aPropSeq );
     }
 
@@ -335,6 +344,7 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
                     aCmdToInfo.bPopup = _bPopup;
                     xNameAccess->getByName( m_aPropUILabel )        >>= aCmdToInfo.aLabel;
                     xNameAccess->getByName( m_aPropUIContextLabel ) >>= aCmdToInfo.aContextLabel;
+                    xNameAccess->getByName( m_aPropUIPopupLabel )   >>= aCmdToInfo.aPopupLabel;
                     xNameAccess->getByName( m_aPropProperties )     >>= aCmdToInfo.nProperties;
 
                     m_aCmdInfoCache.insert( CommandToInfoCache::value_type( aNameSeq[i], aCmdToInfo ));

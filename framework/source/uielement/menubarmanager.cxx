@@ -1096,6 +1096,13 @@ bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLT
 
 OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
 {
+    if ( !m_bHasMenuBar )
+    {
+        // This is a context menu, prefer "PopupLabel" over "Label".
+        OUString aPopupLabel = framework::RetrieveLabelFromCommand(rCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"PopupLabel");
+        if ( !aPopupLabel.isEmpty() )
+            return aPopupLabel;
+    }
     return framework::RetrieveLabelFromCommand(rCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Label");
 }
 
