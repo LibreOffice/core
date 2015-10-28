@@ -616,7 +616,6 @@ IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, CloseHdl, Button*, void)
     }
     else
     {
-        SwViewShell::SetCareWin( 0 );
         m_rDialog.EndDialog();
     }
 }
@@ -974,6 +973,12 @@ SwIndexMarkModalDlg::SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, 
 void SwIndexMarkModalDlg::Apply()
 {
     m_aContent.Apply();
+}
+
+void SwIndexMarkModalDlg::dispose()
+{
+    SwViewShell::SetCareWin(0);
+    SvxStandardDialog::dispose();
 }
 
 class SwCreateAuthEntryDlg_Impl : public ModalDialog
