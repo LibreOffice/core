@@ -355,7 +355,7 @@ Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryD
 
 
 void PresenterProtocolHandler::ThrowIfDisposed() const
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -513,7 +513,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::removeStatusListener (
 }
 
 void PresenterProtocolHandler::Dispatch::ThrowIfDisposed() const
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

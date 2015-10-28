@@ -1217,7 +1217,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
 }
 
 void PresenterController::ThrowIfDisposed() const
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

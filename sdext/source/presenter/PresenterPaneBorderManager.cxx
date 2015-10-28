@@ -491,7 +491,7 @@ void PresenterPaneBorderManager::ReleaseMouse (const Reference<awt::XWindow>& rx
 }
 
 void PresenterPaneBorderManager::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

@@ -115,10 +115,10 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
         for(int i=1; i< elem.Text.getLength(); i++)
         {
             sal_Int16 nType = xCC->getCharacterDirection( str, i );
-            if ( nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT           ||
-                 nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC    ||
-                 nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT_EMBEDDING ||
-                 nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT_OVERRIDE
+            if ( nType == css::i18n::DirectionProperty_RIGHT_TO_LEFT           ||
+                 nType == css::i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC    ||
+                 nType == css::i18n::DirectionProperty_RIGHT_TO_LEFT_EMBEDDING ||
+                 nType == css::i18n::DirectionProperty_RIGHT_TO_LEFT_OVERRIDE
                 )
                 isRTL = true;
         }
@@ -696,7 +696,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
             for(int i=0; i< str.getLength(); i++)
             {
                 sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
-                if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
+                if (nType == css::i18n::ScriptType::COMPLEX)
                     isComplex = true;
             }
             bool bPara = strspn("ParagraphElement", typeid(rParent).name());
@@ -728,7 +728,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                     for(int i=0; i< str.getLength(); i++)
                     {
                         sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
-                        if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
+                        if (nType == css::i18n::ScriptType::COMPLEX)
                             isComplex = true;
                     }
                     if (bPara && pPara && isComplex)

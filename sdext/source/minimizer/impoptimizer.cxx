@@ -265,7 +265,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
         if ( xGraphicPropertySet->getPropertyValue( "MimeType" ) >>= aSourceMimeType )
         {
             sal_Int8 nGraphicType( xGraphic->getType() );
-            if ( nGraphicType == com::sun::star::graphic::GraphicType::PIXEL )
+            if ( nGraphicType == css::graphic::GraphicType::PIXEL )
             {
                 bool bTransparent = false;
                 bool bAlpha       = false;
@@ -615,7 +615,7 @@ bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 case TK_InformationDialog: rArguments[ i ].Value >>= mxInformationDialog; break;
                 case TK_Settings :
                 {
-                    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aSettings;
+                    css::uno::Sequence< css::beans::PropertyValue > aSettings;
                     int j, nJCount;
                     rArguments[ i ].Value >>= aSettings;
                     for ( j = 0, nJCount = aSettings.getLength(); j < nJCount; j++ )

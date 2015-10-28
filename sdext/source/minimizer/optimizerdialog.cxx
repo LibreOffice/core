@@ -329,7 +329,7 @@ OUString OptimizerDialog::GetSelectedString( OUString const & token )
 
 
 
-void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rStatus )
+void OptimizerDialog::UpdateStatus( const css::uno::Sequence< css::beans::PropertyValue >& rStatus )
 {
     if ( mxReschedule.is() )
     {
@@ -489,15 +489,15 @@ void ItemListener::itemStateChanged( const ItemEvent& Event )
 
     }
 }
-void ItemListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+void ItemListener::disposing( const css::lang::EventObject& /* Source */ )
+    throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
 
 
 void ActionListener::actionPerformed( const ActionEvent& rEvent )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     switch( TKGet( rEvent.ActionCommand ) )
     {
@@ -639,15 +639,15 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
         default: break;
     }
 }
-void ActionListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+void ActionListener::disposing( const css::lang::EventObject& /* Source */ )
+    throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
 
 
 void ActionListenerListBox0Pg0::actionPerformed( const ActionEvent& rEvent )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( !rEvent.ActionCommand.isEmpty() )
     {
@@ -658,30 +658,30 @@ void ActionListenerListBox0Pg0::actionPerformed( const ActionEvent& rEvent )
     }
     mrOptimizerDialog.UpdateControlStates();
 }
-void ActionListenerListBox0Pg0::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+void ActionListenerListBox0Pg0::disposing( const css::lang::EventObject& /* Source */ )
+    throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
 
 
 void TextListenerFormattedField0Pg1::textChanged( const TextEvent& /* rEvent */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     double fDouble = 0;
     Any aAny = mrOptimizerDialog.getControlProperty( "FormattedField0Pg1", "EffectiveValue" );
     if ( aAny >>= fDouble )
         mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
 }
-void TextListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+void TextListenerFormattedField0Pg1::disposing( const css::lang::EventObject& /* Source */ )
+    throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
 
 
 void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     OUString aString;
     Any aAny = mrOptimizerDialog.getControlProperty( "ComboBox0Pg1", "Text" );
@@ -702,15 +702,15 @@ void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
         mrOptimizerDialog.SetConfigProperty( TK_ImageResolution, Any( aString.toInt32() ) );
     }
 }
-void TextListenerComboBox0Pg1::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+void TextListenerComboBox0Pg1::disposing( const css::lang::EventObject& /* Source */ )
+    throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
 
 
 void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     double fDouble;
     Any aAny = mrOptimizerDialog.getControlProperty( "FormattedField0Pg1", "EffectiveValue" );
@@ -724,7 +724,7 @@ void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )
     }
 }
 void SpinListenerFormattedField0Pg1::down( const SpinEvent& /* rEvent */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     double fDouble;
     Any aAny = mrOptimizerDialog.getControlProperty( "FormattedField0Pg1", "EffectiveValue" );
@@ -738,19 +738,19 @@ void SpinListenerFormattedField0Pg1::down( const SpinEvent& /* rEvent */ )
     }
 }
 void SpinListenerFormattedField0Pg1::first( const SpinEvent& /* rEvent */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( static_cast< double >( 0 ) ) );
     mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)0 ) );
 }
 void SpinListenerFormattedField0Pg1::last( const SpinEvent& /* rEvent */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( static_cast< double >( 100 ) ) );
     mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)100 ) );
 }
-void SpinListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+void SpinListenerFormattedField0Pg1::disposing( const css::lang::EventObject& /* Source */ )
+    throw ( css::uno::RuntimeException, std::exception )
 {
 }
 

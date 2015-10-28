@@ -322,7 +322,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
 }
 
 void PresenterPaneFactory::ThrowIfDisposed() const
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

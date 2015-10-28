@@ -87,7 +87,7 @@ namespace {
         css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
         rtl::Reference<PresenterScreen> mpPresenterScreen;
 
-        void ThrowIfDisposed() const throw (::com::sun::star::lang::DisposedException);
+        void ThrowIfDisposed() const throw (css::lang::DisposedException);
     };
 }
 
@@ -249,7 +249,7 @@ void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject& 
 }
 
 void PresenterScreenListener::ThrowIfDisposed() const throw (
-    ::com::sun::star::lang::DisposedException)
+    css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

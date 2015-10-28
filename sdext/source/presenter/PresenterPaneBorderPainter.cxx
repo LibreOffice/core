@@ -377,7 +377,7 @@ awt::Rectangle PresenterPaneBorderPainter::RemoveBorder (
 }
 
 void PresenterPaneBorderPainter::ThrowIfDisposed() const
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

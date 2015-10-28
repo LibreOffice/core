@@ -65,7 +65,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
         {
             xAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, Any( true ) );
         }
-        catch( com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {}
     }
 

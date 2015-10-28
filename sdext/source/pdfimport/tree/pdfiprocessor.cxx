@@ -53,7 +53,7 @@ namespace pdfi
 {
 
  PDFIProcessor::PDFIProcessor( const uno::Reference< task::XStatusIndicator >& xStat ,
-            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  xContext) :
+            css::uno::Reference< css::uno::XComponentContext >  xContext) :
 
     m_xContext(xContext),
     prevCharWidth(0),

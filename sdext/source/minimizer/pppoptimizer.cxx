@@ -50,7 +50,7 @@ PPPOptimizer::~PPPOptimizer()
 // XDispatchProvider
 
 
-Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispatch(
+Reference< css::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispatch(
     const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException, std::exception )
 {
     Reference < XDispatch > xRet;
@@ -64,12 +64,12 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispat
 
 
 
-Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizer::queryDispatches(
-    const Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( RuntimeException, std::exception )
+Sequence< Reference< css::frame::XDispatch > > SAL_CALL PPPOptimizer::queryDispatches(
+    const Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw( RuntimeException, std::exception )
 {
-    Sequence< Reference< com::sun::star::frame::XDispatch> > aReturn( aDescripts.getLength() );
-    Reference< com::sun::star::frame::XDispatch>* pReturn = aReturn.getArray();
-    const com::sun::star::frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
+    Sequence< Reference< css::frame::XDispatch> > aReturn( aDescripts.getLength() );
+    Reference< css::frame::XDispatch>* pReturn = aReturn.getArray();
+    const css::frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
     for (sal_Int32 i = 0; i < aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
     {
         *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
