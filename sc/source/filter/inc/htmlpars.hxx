@@ -254,11 +254,6 @@ struct ScHTMLPos
                             { return ScAddress( mnCol, mnRow, 0 ); }
 };
 
-inline bool operator==( const ScHTMLPos& rPos1, const ScHTMLPos& rPos2 )
-{
-    return (rPos1.mnRow == rPos2.mnRow) && (rPos1.mnCol == rPos2.mnCol);
-}
-
 inline bool operator<( const ScHTMLPos& rPos1, const ScHTMLPos& rPos2 )
 {
     return (rPos1.mnRow < rPos2.mnRow) || ((rPos1.mnRow == rPos2.mnRow) && (rPos1.mnCol < rPos2.mnCol));
@@ -276,11 +271,6 @@ struct ScHTMLSize
     inline void         Set( SCCOL nCols, SCROW nRows )
                             { mnCols = nCols; mnRows = nRows; }
 };
-
-inline bool operator==( const ScHTMLSize& rSize1, const ScHTMLSize& rSize2 )
-{
-    return (rSize1.mnRows == rSize2.mnRows) && (rSize1.mnCols == rSize2.mnCols);
-}
 
 /** A single entry containing a line of text or representing a table. */
 struct ScHTMLEntry : public ScEEParseEntry

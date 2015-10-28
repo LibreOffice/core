@@ -170,74 +170,6 @@ public:
             "From and one of To or By, or To or By alone must be valid" );
     }
 
-    virtual void startAnimation()
-    {
-        if (this->isDisposed() || !mpAnim)
-            return;
-        BaseType::startAnimation();
-
-        // start animation
-        mpAnim->start( BaseType::getShape(),
-                       BaseType::getShapeAttributeLayer() );
-
-        // setup start and end value. Determine animation
-        // start value only when animation actually
-        // started up (this order is part of the Animation
-        // interface contract)
-        const ValueType aAnimationStartValue( mpAnim->getUnderlyingValue() );
-
-        // first of all, determine general type of
-        // animation, by inspecting which of the FromToBy values
-        // are actually valid.
-        // See http://www.w3.org/TR/smil20/animation.html#AnimationNS-FromToBy
-        // for a definition
-        if( maFrom )
-        {
-            // From-to or From-by animation. According to
-            // SMIL spec, the To value takes precedence
-            // over the By value, if both are specified
-            if( maTo )
-            {
-                // From-To animation
-                maStartValue = *maFrom;
-                maEndValue = *maTo;
-            }
-            else if( maBy )
-            {
-                // From-By animation
-                maStartValue = *maFrom;
-                maEndValue = maStartValue + *maBy;
-            }
-        }
-        else
-        {
-            maStartValue = aAnimationStartValue;
-            maStartInterpolationValue = maStartValue;
-
-            // By or To animation. According to SMIL spec,
-            // the To value takes precedence over the By
-            // value, if both are specified
-            if( maTo )
-            {
-                // To animation
-
-                // According to the SMIL spec
-                // (http://www.w3.org/TR/smil20/animation.html#animationNS-ToAnimation),
-                // the to animation interpolates between
-                // the _running_ underlying value and the to value (as the end value)
-                mbDynamicStartValue = true;
-                maPreviousValue = maStartValue;
-                maEndValue = *maTo;
-            }
-            else if( maBy )
-            {
-                // By animation
-                maStartValue = aAnimationStartValue;
-                maEndValue = maStartValue + *maBy;
-            }
-        }
-    }
-
     virtual void endAnimation()
     {
         // end animation
@@ -338,13 +270,6 @@ public:
             else
                 (*mpAnim)( getPresentationValue( maEndValue ) );
         }
-    }
-
-    /// Disposable:
-    virtual void dispose()
-    {
-        mpAnim.reset();
-        BaseType::dispose();
     }
 
 private:
@@ -521,17 +446,6 @@ public:
     {
         ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
         ENSURE_OR_THROW( !rValues.empty(), "Empty value vector" );
-    }
-
-    virtual void startAnimation()
-    {
-        if (this->isDisposed() || !mpAnim)
-            return;
-        BaseType::startAnimation();
-
-        // start animation
-        mpAnim->start( BaseType::getShape(),
-                       BaseType::getShapeAttributeLayer() );
     }
 
     virtual void endAnimation()

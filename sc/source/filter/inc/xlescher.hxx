@@ -342,16 +342,6 @@ inline XclImpStream& operator>>( XclImpStream& rStrm, XclObjAnchor& rAnchor )
     return rStrm;
 }
 
-template< typename StreamType >
-StreamType& operator<<( StreamType& rStrm, const XclObjAnchor& rAnchor )
-{
-    return rStrm
-        << rAnchor.maFirst.mnCol << rAnchor.mnLX
-        << static_cast<sal_uInt16>(rAnchor.maFirst.mnRow) << static_cast<sal_uInt16>(rAnchor.mnTY)
-        << rAnchor.maLast.mnCol  << rAnchor.mnRX
-        << static_cast<sal_uInt16>(rAnchor.maLast.mnRow)  << static_cast<sal_uInt16>(rAnchor.mnBY);
-}
-
 inline SvStream& WriteXclObjAnchor( SvStream& rStrm, const XclObjAnchor& rAnchor )
 {
     return rStrm

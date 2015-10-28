@@ -68,13 +68,6 @@ bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
     return ::std::equal( rCmp1.mpnData, STATIC_ARRAY_END( rCmp1.mpnData ), rCmp2.mpnData );
 }
 
-bool operator<( const XclGuid& rCmp1, const XclGuid& rCmp2 )
-{
-    return ::std::lexicographical_compare(
-        rCmp1.mpnData, STATIC_ARRAY_END( rCmp1.mpnData ),
-        rCmp2.mpnData, STATIC_ARRAY_END( rCmp2.mpnData ) );
-}
-
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid )
 {
     rStrm.Read( rGuid.mpnData, 16 );     // mpnData always in little endian
