@@ -29,7 +29,7 @@
 
 namespace accessibility {
 
-typedef ::cppu::ImplHelper < css::accessibility::XAccessibleTable >
+typedef ::cppu::ImplHelper1 < css::accessibility::XAccessibleTable >
         AccessibleGridControlTableImplHelper;
 
 /** The Grid Control accessible table objects inherit from this base class. It

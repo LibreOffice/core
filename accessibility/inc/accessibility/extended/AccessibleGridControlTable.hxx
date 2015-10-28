@@ -31,7 +31,7 @@
 namespace accessibility {
 
 
-typedef ::cppu::ImplHelper < css::accessibility::XAccessibleSelection >
+typedef ::cppu::ImplHelper1 < css::accessibility::XAccessibleSelection >
         AccessibleGridControlTableSelectionImplHelper;
 /** This class represents the accessible object of the data table of a
     Grid control. */
