@@ -18,15 +18,10 @@
 
 #include <sal/macros.h>
 
-#ifdef WNT
-
 // necessary to include system headers without warnings
 #ifdef _MSC_VER
 #pragma warning(disable:4668 4917)
 #endif
-
-#define USE_APP_SHORTCUTS
-// the systray icon is only available on windows
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
@@ -56,16 +51,14 @@ using ::com::sun::star::beans::PropertyValue;
 
 #define ID_QUICKSTART               1
 #define IDM_EXIT                    2
-#if defined(USE_APP_SHORTCUTS)
-#   define IDM_OPEN                    3
-#   define IDM_WRITER                  4
-#   define IDM_CALC                    5
-#   define IDM_IMPRESS                 6
-#   define IDM_DRAW                    7
-#   define IDM_BASE                    8
-#   define IDM_TEMPLATE                9
-#   define IDM_MATH                   12
-#endif
+#define IDM_OPEN                    3
+#define IDM_WRITER                  4
+#define IDM_CALC                    5
+#define IDM_IMPRESS                 6
+#define IDM_DRAW                    7
+#define IDM_BASE                    8
+#define IDM_TEMPLATE                9
+#define IDM_MATH                    12
 #define IDM_INSTALL                 10
 
 
@@ -133,10 +126,8 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
             mi.cch = text.getLength();
         }
 
-#if defined(USE_APP_SHORTCUTS)
         if ( IDM_TEMPLATE == id )
             mi.fState |= MFS_DEFAULT;
-#endif
     }
 
     InsertMenuItemW( hMenu, pos++, TRUE, &mi );
@@ -157,7 +148,6 @@ static HMENU createSystrayMenu( )
     if( !pShutdownIcon )
         return NULL;
 
-#if defined(USE_APP_SHORTCUTS)
     // collect the URLs of the entries in the File/New menu
     ::std::set< OUString > aFileNewAppsAvailable;
     SvtDynamicMenuOptions aOpt;
@@ -217,7 +207,6 @@ static HMENU createSystrayMenu( )
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
     addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString("SHELL32"));
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
-#endif
     addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, "" );
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
     addMenuItem( hMenu, IDM_EXIT,   0, pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ), pos, false, "" );
@@ -322,9 +311,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             switch( lParam )
             {
                 case WM_LBUTTONDBLCLK:
-#if defined(USE_APP_SHORTCUTS)
                     PostMessage( aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, (LPARAM)hWnd );
-#endif
                     break;
 
                 case WM_RBUTTONDOWN:
@@ -337,16 +324,13 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     CheckMenuItem( popupMenu, IDM_INSTALL, MF_BYCOMMAND| (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
 
                     EnableMenuItem( popupMenu, IDM_EXIT, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
-#if defined(USE_APP_SHORTCUTS)
                     EnableMenuItem( popupMenu, IDM_OPEN, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
                     EnableMenuItem( popupMenu, IDM_TEMPLATE, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
-#endif
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, NULL );
                     PostMessage( hWnd, 0, 0, 0 );
                     switch( m )
                     {
-#if defined(USE_APP_SHORTCUTS)
                         case IDM_OPEN:
                         case IDM_WRITER:
                         case IDM_CALC:
@@ -356,7 +340,6 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                         case IDM_BASE:
                         case IDM_MATH:
                             break;
-#endif
                         case IDM_INSTALL:
                             CheckMenuItem( popupMenu, IDM_INSTALL, MF_BYCOMMAND| (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
                             break;
@@ -417,7 +400,6 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
         case WM_COMMAND:
             switch( LOWORD(wParam) )
             {
-#if defined(USE_APP_SHORTCUTS)
                 case IDM_OPEN:
                     if ( !ShutdownIcon::bModalMode )
                         ShutdownIcon::FileOpen();
@@ -444,7 +426,6 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     if ( !ShutdownIcon::bModalMode )
                         ShutdownIcon::FromTemplate();
                 break;
-#endif
                 case IDM_INSTALL:
                     ShutdownIcon::SetAutostart( !ShutdownIcon::GetAutostart() );
                     break;
@@ -838,8 +819,6 @@ void ShutdownIcon::EnableAutostartW32( const OUString &aShortcut )
 
     CreateShortcut( quickstartExe, aOfficepath, aShortcut, OUString(), OUString() );
 }
-
-#endif // WNT
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

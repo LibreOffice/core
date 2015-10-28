@@ -46,16 +46,14 @@ typedef ::cppu::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::beans::XFastPropertySet > ShutdownIconServiceBase;
 
-#if defined(USE_APP_SHORTCUTS)
-#define WRITER_URL      "private:factory/swriter"
-#define CALC_URL        "private:factory/scalc"
-#define IMPRESS_URL     "private:factory/simpress"
-#define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=6686"
-#define DRAW_URL        "private:factory/sdraw"
-#define MATH_URL        "private:factory/smath"
-#define BASE_URL        "private:factory/sdatabase?Interactive"
-#define STARTMODULE_URL ".uno:ShowStartModule"
-#endif
+#define WRITER_URL          "private:factory/swriter"
+#define CALC_URL            "private:factory/scalc"
+#define IMPRESS_URL         "private:factory/simpress"
+#define IMPRESS_WIZARD_URL  "private:factory/simpress?slot=6686"
+#define DRAW_URL            "private:factory/sdraw"
+#define MATH_URL            "private:factory/smath"
+#define BASE_URL            "private:factory/sdatabase?Interactive"
+#define STARTMODULE_URL     ".uno:ShowStartModule"
 
 class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 {
