@@ -23,7 +23,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <cppuhelper/compbase1.hxx>
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <basegfx/range/b3drange.hxx>
@@ -77,12 +76,11 @@ namespace drawinglayer
             That's all for 3D!
          */
         class DRAWINGLAYER_DLLPUBLIC BasePrimitive3D
-        :   private boost::noncopyable,
-            protected comphelper::OBaseMutex,
+        :   protected comphelper::OBaseMutex,
             public BasePrimitive3DImplBase
         {
-        private:
-        protected:
+            BasePrimitive3D(const BasePrimitive3D&) = delete;
+            BasePrimitive3D& operator=( const BasePrimitive3D& ) = delete;
         public:
             // constructor/destructor
             BasePrimitive3D();

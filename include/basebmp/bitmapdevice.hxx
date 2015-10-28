@@ -26,7 +26,6 @@
 #include <basebmp/basebmpdllapi.h>
 
 #include <boost/shared_array.hpp>
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
 
@@ -74,8 +73,7 @@ protected:
     works best when given as an eight bit grey bitmap. Everything else
     is accepted, but potentially slow.
  */
-class BASEBMP_DLLPUBLIC BitmapDevice : public std::enable_shared_from_this<BitmapDevice>,
-                                       private boost::noncopyable
+class BASEBMP_DLLPUBLIC BitmapDevice : public std::enable_shared_from_this<BitmapDevice>
 {
 public:
     /** Query size of device in pixel columns (X) and rows (Y, "scanlines")
@@ -561,6 +559,8 @@ protected:
                                      const RawMemorySharedArray&      rMem,
                                      const PaletteMemorySharedVector& rPalette );
     BASEBMP_DLLPRIVATE virtual ~BitmapDevice();
+    BitmapDevice(const BitmapDevice&) = delete;
+    BitmapDevice& operator=( const BitmapDevice& ) = delete;
 
 private:
     BASEBMP_DLLPRIVATE virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const = 0;

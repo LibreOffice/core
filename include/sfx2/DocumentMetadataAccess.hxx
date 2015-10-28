@@ -30,8 +30,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <boost/noncopyable.hpp>
-
 #include <memory>
 
 
@@ -72,9 +70,10 @@ struct DocumentMetadataAccess_Impl;
 
 
 class SFX2_DLLPUBLIC DocumentMetadataAccess :
-    private boost::noncopyable,
     public ::cppu::WeakImplHelper1< css::rdf::XDocumentMetadataAccess>
 {
+    DocumentMetadataAccess(const DocumentMetadataAccess&) = delete;
+    DocumentMetadataAccess& operator=( const DocumentMetadataAccess& ) = delete;
 public:
     explicit DocumentMetadataAccess(css::uno::Reference< css::uno::XComponentContext > const & i_xContext,
                 IXmlIdRegistrySupplier const & i_rRegistrySupplier,

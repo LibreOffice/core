@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
@@ -32,11 +31,12 @@ namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
 } } } }
 
-class SVL_DLLPUBLIC SvxAsianConfig: private boost::noncopyable {
+class SVL_DLLPUBLIC SvxAsianConfig {
 public:
     SvxAsianConfig();
-
     ~SvxAsianConfig();
+    SvxAsianConfig(const SvxAsianConfig&) = delete;
+    SvxAsianConfig& operator=( const SvxAsianConfig& ) = delete;
 
     void Commit();
 

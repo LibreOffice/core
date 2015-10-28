@@ -26,7 +26,6 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <linguistic/lngdllapi.h>
-#include <boost/noncopyable.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
@@ -64,7 +63,6 @@ class SpellAlternatives
         css::linguistic2::XSpellAlternatives,
         css::linguistic2::XSetSpellAlternatives
     >
-    , private ::boost::noncopyable
 {
     css::uno::Sequence< OUString >  aAlt;   // list of alternatives, may be empty.
     OUString                        aWord;
@@ -76,6 +74,8 @@ public:
     SpellAlternatives(const OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
                       const css::uno::Sequence< OUString > &rAlternatives );
     virtual ~SpellAlternatives();
+    SpellAlternatives(const SpellAlternatives&) = delete;
+    SpellAlternatives& operator=( const SpellAlternatives& ) = delete;
 
     // XSpellAlternatives
     virtual OUString SAL_CALL getWord(  ) throw (css::uno::RuntimeException, std::exception) override;

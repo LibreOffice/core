@@ -28,8 +28,6 @@
 
 #include <memory>
 
-#include <boost/noncopyable.hpp>
-
 namespace vcl { class Window; }
 
 
@@ -45,8 +43,9 @@ namespace svt
     //= TabDeckLayouter
 
     class SVT_DLLPUBLIC TabDeckLayouter :public IDeckLayouter
-                                        ,public ::boost::noncopyable
     {
+        TabDeckLayouter(const TabDeckLayouter&) = delete;
+        TabDeckLayouter& operator=( const TabDeckLayouter& ) = delete;
     public:
         /** creates a new layouter
             @param i_rParent

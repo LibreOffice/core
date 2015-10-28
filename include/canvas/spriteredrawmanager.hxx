@@ -32,8 +32,6 @@
 #include <vector>
 #include <algorithm>
 
-#include <boost/noncopyable.hpp>
-
 #include <canvas/canvastoolsdllapi.h>
 
 /* Definition of SpriteRedrawManager class */
@@ -58,7 +56,7 @@ namespace canvas
         there) will reside in a common sprite area and handled
         together in the forEachSpriteArea functor call.
      */
-    class CANVASTOOLS_DLLPUBLIC SpriteRedrawManager : private ::boost::noncopyable
+    class CANVASTOOLS_DLLPUBLIC SpriteRedrawManager
     {
     public:
         /** Data container for the connected components list
@@ -195,6 +193,8 @@ namespace canvas
         typedef ::std::vector< Sprite::Reference >              VectorOfSprites;
 
         SpriteRedrawManager();
+        SpriteRedrawManager(const SpriteRedrawManager&) = delete;
+        SpriteRedrawManager& operator=( const SpriteRedrawManager& ) = delete;
 
         /** Must be called when user of this object gets
             disposed. Frees all internal references.

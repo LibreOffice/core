@@ -37,7 +37,6 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -66,8 +65,7 @@ class TabBar;
 class TabBarConfiguration;
 
 class SFX2_DLLPUBLIC SidebarController
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public SidebarControllerInterfaceBase
 {
 public:
@@ -75,6 +73,8 @@ public:
         SidebarDockingWindow* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~SidebarController();
+    SidebarController(const SidebarController&) = delete;
+    SidebarController& operator=( const SidebarController& ) = delete;
 
     /** Return the SidebarController object that is associated with
         the given XFrame.

@@ -34,7 +34,6 @@
 #include <map>
 #include <unordered_map>
 #include <boost/optional.hpp>
-#include <boost/noncopyable.hpp>
 
 class SvBorder;
 
@@ -56,8 +55,7 @@ class Paint;
     look of the sidebar and its controls.
 */
 class SFX2_DLLPUBLIC Theme
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public ThemeInterfaceBase
 {
 public:
@@ -154,6 +152,8 @@ public:
 
     Theme();
     virtual ~Theme();
+    Theme(const Theme&) = delete;
+    Theme& operator=( const Theme& ) = delete;
 
     virtual void SAL_CALL disposing() override;
 

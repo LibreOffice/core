@@ -23,7 +23,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <cppuhelper/compbase1.hxx>
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -70,7 +69,7 @@ namespace drawinglayer
             This is by purpose, this base class shall not be incarnated and be used directly as
             a XPrimitive2D.
 
-            It is derived from boost::noncopyable to make clear that a primitive is a read-only
+            It is noncopyable to make clear that a primitive is a read-only
             instance and copying or changing values is not intended. The idea is to hold all data
             needed for visualisation of this primitive in unchangeable form.
 
@@ -136,12 +135,11 @@ namespace drawinglayer
             in their get2DDecomposition/getB2DRange implementations.
          */
         class DRAWINGLAYER_DLLPUBLIC BasePrimitive2D
-        :   private boost::noncopyable,
-            protected comphelper::OBaseMutex,
+        :   protected comphelper::OBaseMutex,
             public BasePrimitive2DImplBase
         {
-        private:
-        protected:
+            BasePrimitive2D(const BasePrimitive2D&) = delete;
+            BasePrimitive2D& operator=( const BasePrimitive2D& ) = delete;
         public:
             // constructor/destructor
             BasePrimitive2D();

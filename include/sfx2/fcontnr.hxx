@@ -32,8 +32,6 @@
 
 #include <tools/ref.hxx>
 
-#include <boost/noncopyable.hpp>
-
 namespace vcl { class Window; }
 class SfxFilter;
 class SfxObjectFactory;
@@ -93,7 +91,7 @@ public:
 
 class SfxFilterMatcher_Impl;
 
-class SFX2_DLLPUBLIC SfxFilterMatcher : private boost::noncopyable
+class SFX2_DLLPUBLIC SfxFilterMatcher
 {
     friend class SfxFilterMatcherIter;
     SfxFilterMatcher_Impl &m_rImpl;
@@ -101,6 +99,8 @@ public:
                         SfxFilterMatcher( const OUString& rFact );
                         SfxFilterMatcher();
                         ~SfxFilterMatcher();
+                        SfxFilterMatcher(const SfxFilterMatcher&) = delete;
+    SfxFilterMatcher&   operator=( const SfxFilterMatcher& ) = delete;
 
     SAL_DLLPRIVATE static bool IsFilterInstalled_Impl( const SfxFilter* pFilter );
     DECL_DLLPRIVATE_LINK_TYPED( MaybeFileHdl_Impl, OUString*, bool );
@@ -121,7 +121,7 @@ public:
 };
 
 class SfxFilterContainer_Impl;
-class SFX2_DLLPUBLIC SfxFilterMatcherIter : private boost::noncopyable
+class SFX2_DLLPUBLIC SfxFilterMatcherIter
 
 {
     SfxFilterFlags nOrMask;
@@ -133,6 +133,8 @@ class SFX2_DLLPUBLIC SfxFilterMatcherIter : private boost::noncopyable
 
 public:
     SfxFilterMatcherIter( const SfxFilterMatcher& rMatcher, SfxFilterFlags nMask = SfxFilterFlags::NONE, SfxFilterFlags nNotMask = SFX_FILTER_NOTINSTALLED );
+    SfxFilterMatcherIter(const SfxFilterMatcherIter&) = delete;
+    SfxFilterMatcherIter& operator=( const SfxFilterMatcherIter& ) = delete;
     const SfxFilter* First();
     const SfxFilter* Next();
 };

@@ -21,7 +21,6 @@
 #define INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
 
 #include <sal/types.h>
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace basegfx
@@ -117,7 +116,7 @@ namespace canvas
     typedef std::shared_ptr< IRenderModule > IRenderModuleSharedPtr;
 
     /// Little RAII wrapper for guarding access to IRenderModule interface
-    class RenderModuleGuard : private ::boost::noncopyable
+    class RenderModuleGuard
     {
     public:
         explicit RenderModuleGuard( const IRenderModuleSharedPtr& rRenderModule ) :
@@ -131,6 +130,8 @@ namespace canvas
             mpRenderModule->unlock();
         }
 
+        RenderModuleGuard(const RenderModuleGuard&) = delete;
+        RenderModuleGuard& operator=( const RenderModuleGuard& ) = delete;
     private:
         const IRenderModuleSharedPtr mpRenderModule;
     };

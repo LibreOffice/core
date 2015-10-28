@@ -38,7 +38,6 @@
 #include <vcl/font.hxx>
 #include <vector>
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 
 class SdrModel;
@@ -323,8 +322,11 @@ public:
 struct ProcessData;
 struct PPTStyleSheet;
 struct HeaderFooterEntry;
-struct PptSlidePersistEntry : private boost::noncopyable
+struct PptSlidePersistEntry
 {
+    PptSlidePersistEntry(const PptSlidePersistEntry&) = delete;
+    PptSlidePersistEntry& operator=( const PptSlidePersistEntry& ) = delete;
+
     PptSlidePersistAtom aPersistAtom;
     PptSlideAtom        aSlideAtom;
     PptNotesAtom        aNotesAtom;
@@ -356,9 +358,12 @@ public:
 
 #define PPTSLIDEPERSIST_ENTRY_NOTFOUND 0xFFFF
 
-class MSFILTER_DLLPUBLIC PptSlidePersistList: private boost::noncopyable
+class MSFILTER_DLLPUBLIC PptSlidePersistList
 {
 private:
+    PptSlidePersistList(const PptSlidePersistList&) = delete;
+    PptSlidePersistList& operator=( const PptSlidePersistList& ) = delete;
+
     typedef std::vector<std::unique_ptr<PptSlidePersistEntry>> Entries_t;
     Entries_t mvEntries;
 

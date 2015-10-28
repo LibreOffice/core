@@ -24,7 +24,6 @@
 
 #include <com/sun/star/awt/XUserInputInterception.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 class NotifyEvent;
@@ -43,11 +42,13 @@ namespace sfx2
     /** helper class for implementing the XUserInputInterception interface
         for a controller implementation
     */
-    class SFX2_DLLPUBLIC UserInputInterception : public ::boost::noncopyable
+    class SFX2_DLLPUBLIC UserInputInterception
     {
     public:
         UserInputInterception( ::cppu::OWeakObject& _rControllerImpl, ::osl::Mutex& _rMutex );
         ~UserInputInterception();
+        UserInputInterception(const UserInputInterception&) = delete;
+        UserInputInterception& operator=( const UserInputInterception& ) = delete;
 
         // delegator functions for your XUserInputInterception implementation
         void    addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) throw (css::uno::RuntimeException);

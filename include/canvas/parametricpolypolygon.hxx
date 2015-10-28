@@ -27,7 +27,6 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <canvas/canvastoolsdllapi.h>
 
 namespace basegfx
@@ -45,8 +44,7 @@ namespace canvas
                                                    css::lang::XServiceInfo > ParametricPolyPolygon_Base;
 
     class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon : public ::comphelper::OBaseMutex,
-                                  public ParametricPolyPolygon_Base,
-                                  private ::boost::noncopyable
+                                  public ParametricPolyPolygon_Base
     {
     public:
         enum GradientType
@@ -117,6 +115,8 @@ namespace canvas
 
     protected:
         virtual ~ParametricPolyPolygon(); // we're a ref-counted UNO class. _We_ destroy ourselves.
+        ParametricPolyPolygon(const ParametricPolyPolygon&) = delete;
+        ParametricPolyPolygon& operator=( const ParametricPolyPolygon& ) = delete;
 
     private:
         static ParametricPolyPolygon* createLinearHorizontalGradient( const css::uno::Reference<

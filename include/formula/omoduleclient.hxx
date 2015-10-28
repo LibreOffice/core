@@ -22,15 +22,16 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <formula/formuladllapi.h>
 
 namespace formula {
 
 /** Base class for objects which use any global module-specific resources.
 */
-class FORMULA_DLLPUBLIC OModuleClient: private boost::noncopyable
+class FORMULA_DLLPUBLIC OModuleClient
 {
+    OModuleClient(const OModuleClient&) = delete;
+    OModuleClient& operator=( const OModuleClient& ) = delete;
 public:
     OModuleClient();
     ~OModuleClient();

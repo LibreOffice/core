@@ -26,7 +26,6 @@
 #include <tools/solar.h>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
-#include <boost/noncopyable.hpp>
 #include <vector>
 
 struct SvParser_Impl;
@@ -228,8 +227,7 @@ public:
  *
  *======================================================================*/
 
-class SVT_DLLPUBLIC SvKeyValueIterator : public SvRefBase,
-    private boost::noncopyable
+class SVT_DLLPUBLIC SvKeyValueIterator : public SvRefBase
 {
     struct Impl;
     Impl* mpImpl;
@@ -239,6 +237,8 @@ public:
     */
     SvKeyValueIterator();
     virtual ~SvKeyValueIterator();
+    SvKeyValueIterator(const SvKeyValueIterator&) = delete;
+    SvKeyValueIterator& operator=( const SvKeyValueIterator& ) = delete;
 
     /** Operation.
     */

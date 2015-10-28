@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <osl/process.h>
 #include <unotest/detail/unotestdllapi.hxx>
@@ -35,10 +34,12 @@ namespace test {
 
 // Start up and shut down an OOo instance (details about the OOo instance are
 // tunneled in via "arg-..." bootstrap variables):
-class OOO_DLLPUBLIC_UNOTEST OfficeConnection: private boost::noncopyable {
+class OOO_DLLPUBLIC_UNOTEST OfficeConnection
+{
+    OfficeConnection(const OfficeConnection&) = delete;
+    OfficeConnection& operator=( const OfficeConnection& ) = delete;
 public:
     OfficeConnection();
-
     ~OfficeConnection();
 
     void setUp();

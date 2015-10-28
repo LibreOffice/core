@@ -27,8 +27,6 @@
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
 
-#include <boost/noncopyable.hpp>
-
 class Rectangle;
 namespace vcl { class Window; }
 namespace com { namespace sun { namespace star { namespace accessibility {
@@ -119,8 +117,9 @@ namespace svt
         but still being abstract
     */
     class SVT_DLLPUBLIC ToolPanelBase   :public IToolPanel
-                                        ,public ::boost::noncopyable
     {
+        ToolPanelBase(const ToolPanelBase&) = delete;
+        ToolPanelBase& operator=( const ToolPanelBase& ) = delete;
     protected:
         ToolPanelBase();
         virtual ~ToolPanelBase();

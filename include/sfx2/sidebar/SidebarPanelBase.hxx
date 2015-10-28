@@ -32,7 +32,6 @@
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUpdateModel.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <vcl/vclptr.hxx>
 
 
@@ -54,8 +53,7 @@ typedef cppu::WeakComponentImplHelper5<css::ui::XContextChangeEventListener,
 /** Base class for sidebar panels that provides some convenience
     functionality.
 */
-class SFX2_DLLPUBLIC SidebarPanelBase : private ::boost::noncopyable,
-                                        private ::cppu::BaseMutex,
+class SFX2_DLLPUBLIC SidebarPanelBase : private ::cppu::BaseMutex,
                                         public SidebarPanelBaseInterfaceBase
 {
 public:
@@ -105,6 +103,8 @@ protected:
     SidebarPanelBase(const OUString& rsResourceURL, const css::uno::Reference<css::frame::XFrame>& rxFrame,
                      vcl::Window* pWindow, const css::ui::LayoutSize& rLayoutSize);
     virtual ~SidebarPanelBase();
+    SidebarPanelBase(const SidebarPanelBase&) = delete;
+    SidebarPanelBase& operator=( const SidebarPanelBase& ) = delete;
 
     virtual void SAL_CALL disposing()
         throw (css::uno::RuntimeException) override;
