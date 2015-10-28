@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_6ebb730f",
+        "filename": "include/xmloff/dllapi.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-10-28T16:38:58Z",
+      "side": 1,
+      "message": "Interesting - is that a general problem, or just in xmloff? Looking at https://msdn.microsoft.com/de-de/library/aa3se25k.aspx I wonder if this is a mergelib artifact?",
+      "revId": "1bbdc0b9b934434942048836ea084f34bc4b1b1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
