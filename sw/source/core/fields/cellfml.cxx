@@ -81,7 +81,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
     rCalcPara.rCalc.SetCalcError( CALC_SYNTAX );    // default: error
 
     // no content box?
-    if( !pSttNd  )
+    if( !m_pStartNode  )
         return nRet;
 
     if( rCalcPara.IncStackCnt() )
@@ -138,7 +138,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
             break;
         }
 
-        SwTextNode* pTextNd = pDoc->GetNodes()[ pSttNd->GetIndex() + 1 ]->GetTextNode();
+        SwTextNode* pTextNd = pDoc->GetNodes()[ m_pStartNode->GetIndex() + 1 ]->GetTextNode();
         if( !pTextNd )
             break;
 

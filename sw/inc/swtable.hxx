@@ -391,9 +391,9 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
     SwTableBox( const SwTableBox & ) = delete;
     SwTableBox &operator=( const SwTableBox &) = delete;
 
-    SwTableLines aLines;
-    const SwStartNode * pSttNd;
-    SwTableLine *pUpper;
+    SwTableLines m_aLines;
+    const SwStartNode * m_pStartNode;
+    SwTableLine *m_pUpper;
 
     std::unique_ptr<Color> mpUserColor;
     std::unique_ptr<Color> mpNumFormatColor;
@@ -417,12 +417,12 @@ public:
     SwTableBox( SwTableBoxFormat*, const SwNodeIndex&, SwTableLine *pUp = 0 );
     virtual ~SwTableBox();
 
-          SwTableLines &GetTabLines() { return aLines; }
-    const SwTableLines &GetTabLines() const { return aLines; }
+          SwTableLines &GetTabLines() { return m_aLines; }
+    const SwTableLines &GetTabLines() const { return m_aLines; }
 
-          SwTableLine *GetUpper() { return pUpper; }
-    const SwTableLine *GetUpper() const { return pUpper; }
-    void SetUpper( SwTableLine *pNew ) { pUpper = pNew; }
+          SwTableLine *GetUpper() { return m_pUpper; }
+    const SwTableLine *GetUpper() const { return m_pUpper; }
+    void SetUpper( SwTableLine *pNew ) { m_pUpper = pNew; }
 
     SwFrameFormat* GetFrameFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
@@ -438,7 +438,7 @@ public:
     void ChgFrameFormat( SwTableBoxFormat *pNewFormat );
 
     void RemoveFromTable();
-    const SwStartNode *GetSttNd() const { return pSttNd; }
+    const SwStartNode *GetSttNd() const { return m_pStartNode; }
     sal_uLong GetSttIdx() const;
 
     // Search next/previous box with content.

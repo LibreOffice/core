@@ -2765,7 +2765,7 @@ void SwXMLTableContext::MakeTable()
     SwTableLine *pLine1 = pTableNode->GetTable().GetTabLines()[0U];
     OSL_ENSURE( pBox1 == pLine1->GetTabBoxes()[0U],
                 "Why is box 1 change?" );
-    pBox1->pSttNd = pSttNd1;
+    pBox1->m_pStartNode = pSttNd1;
     pLine1->GetTabBoxes().erase( pLine1->GetTabBoxes().begin() );
 
     pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
@@ -2879,7 +2879,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         if( !pPrevSttNd && pBox1 != NULL )
 
         {
-            pBox1->pSttNd = pStNd;
+            pBox1->m_pStartNode = pStNd;
             SwContentNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
                                                             ->GetContentNode();
             SwPosition aPos( *pCNd );

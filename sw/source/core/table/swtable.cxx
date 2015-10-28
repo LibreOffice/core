@@ -240,7 +240,7 @@ void DelBoxNode( SwTableSortBoxes& rSortCntBoxes )
 {
     for (size_t n = 0; n < rSortCntBoxes.size(); ++n)
     {
-        rSortCntBoxes[ n ]->pSttNd = 0;
+        rSortCntBoxes[ n ]->m_pStartNode = 0;
     }
 }
 
@@ -1612,8 +1612,8 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
 }
 
 SwTableBox::SwTableBox()
-    : pSttNd(0)
-    , pUpper(0)
+    : m_pStartNode(0)
+    , m_pUpper(0)
     , mnRowSpan(1)
     , mbDummyFlag(false)
     , mbDirectFormatting(false)
@@ -1622,32 +1622,32 @@ SwTableBox::SwTableBox()
 
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLine *pUp )
     : SwClient(0)
-    , aLines()
-    , pSttNd(0)
-    , pUpper(pUp)
+    , m_aLines()
+    , m_pStartNode(0)
+    , m_pUpper(pUp)
     , mnRowSpan(1)
     , mbDummyFlag(false)
     , mbDirectFormatting(false)
 {
-    aLines.reserve( nLines );
+    m_aLines.reserve( nLines );
     CheckBoxFormat( pFormat )->Add( this );
 }
 
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
                         SwTableLine *pUp )
     : SwClient(0)
-    , aLines()
-    , pUpper(pUp)
+    , m_aLines()
+    , m_pUpper(pUp)
     , mnRowSpan(1)
     , mbDummyFlag(false)
     , mbDirectFormatting(false)
 {
     CheckBoxFormat( pFormat )->Add( this );
 
-    pSttNd = rIdx.GetNode().GetStartNode();
+    m_pStartNode = rIdx.GetNode().GetStartNode();
 
     // insert into the table
-    const SwTableNode* pTableNd = pSttNd->FindTableNode();
+    const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
     OSL_ENSURE( pTableNd, "In which table is that box?" );
     SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTableNd->GetTable().
                                 GetTabSortBoxes();
@@ -1657,9 +1657,9 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
 
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, SwTableLine *pUp )
     : SwClient(0)
-    , aLines()
-    , pSttNd(&rSttNd)
-    , pUpper(pUp)
+    , m_aLines()
+    , m_pStartNode(&rSttNd)
+    , m_pUpper(pUp)
     , mnRowSpan(1)
     , mbDummyFlag(false)
     , mbDirectFormatting(false)
@@ -1667,7 +1667,7 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, Sw
     CheckBoxFormat( pFormat )->Add( this );
 
     // insert into the table
-    const SwTableNode* pTableNd = pSttNd->FindTableNode();
+    const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
     OSL_ENSURE( pTableNd, "In which table is the box?" );
     SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTableNd->GetTable().
                                 GetTabSortBoxes();
@@ -1677,16 +1677,16 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, Sw
 
 void SwTableBox::RemoveFromTable()
 {
-    if (pSttNd) // box containing contents?
+    if (m_pStartNode) // box containing contents?
     {
         // remove from table
-        const SwTableNode* pTableNd = pSttNd->FindTableNode();
+        const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
         assert(pTableNd && "In which table is that box?");
         SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTableNd->GetTable().
                                     GetTabSortBoxes();
         SwTableBox *p = this;   // error: &this
         rSrtArr.erase( p );        // remove
-        pSttNd = 0; // clear it so this is only run once
+        m_pStartNode = 0; // clear it so this is only run once
     }
 }
 
@@ -1824,13 +1824,13 @@ void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm )
 
 Point SwTableBox::GetCoordinates() const
 {
-    if( !pSttNd )       // box without content?
+    if( !m_pStartNode )       // box without content?
     {
         // search for the next first box?
         return Point( 0, 0 );
     }
 
-    const SwTable& rTable = pSttNd->FindTableNode()->GetTable();
+    const SwTable& rTable = m_pStartNode->FindTableNode()->GetTable();
     sal_uInt16 nX, nY;
     const SwTableBox* pBox = this;
     do {
@@ -1849,13 +1849,13 @@ Point SwTableBox::GetCoordinates() const
 
 OUString SwTableBox::GetName() const
 {
-    if( !pSttNd )       // box without content?
+    if( !m_pStartNode )       // box without content?
     {
         // search for the next first box?
         return OUString();
     }
 
-    const SwTable& rTable = pSttNd->FindTableNode()->GetTable();
+    const SwTable& rTable = m_pStartNode->FindTableNode()->GetTable();
     sal_uInt16 nPos;
     OUString sNm, sTmp;
     const SwTableBox* pBox = this;
@@ -1888,7 +1888,7 @@ bool SwTableBox::IsInHeadline( const SwTable* pTable ) const
         return false;
 
     if( !pTable )
-        pTable = &pSttNd->FindTableNode()->GetTable();
+        pTable = &m_pStartNode->FindTableNode()->GetTable();
 
     const SwTableLine* pLine = GetUpper();
     while( pLine->GetUpper() )
@@ -1900,7 +1900,7 @@ bool SwTableBox::IsInHeadline( const SwTable* pTable ) const
 
 sal_uLong SwTableBox::GetSttIdx() const
 {
-    return pSttNd ? pSttNd->GetIndex() : 0;
+    return m_pStartNode ? m_pStartNode->GetIndex() : 0;
 }
 
     // retrieve information from the client
@@ -2381,7 +2381,7 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
     sal_uLong nNdPos = IsValidNumTextNd();
     if( ULONG_MAX != nNdPos )
     {
-        OUString aText( pSttNd->GetNodes()[ nNdPos ]->GetTextNode()->GetRedlineText() );
+        OUString aText( m_pStartNode->GetNodes()[ nNdPos ]->GetTextNode()->GetRedlineText() );
         // Keep Tabs
         lcl_TabToBlankAtSttEnd( aText );
         rIsEmptyTextNd = aText.isEmpty();
@@ -2429,7 +2429,7 @@ bool SwTableBox::IsNumberChanged() const
         sal_uLong nNdPos;
         if( pNumFormat && pValue && ULONG_MAX != ( nNdPos = IsValidNumTextNd() ) )
         {
-            OUString sNewText, sOldText( pSttNd->GetNodes()[ nNdPos ]->
+            OUString sNewText, sOldText( m_pStartNode->GetNodes()[ nNdPos ]->
                                     GetTextNode()->GetRedlineText() );
             lcl_DelTabsAtSttEnd( sOldText );
 
@@ -2449,15 +2449,15 @@ bool SwTableBox::IsNumberChanged() const
 sal_uLong SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
 {
     sal_uLong nPos = ULONG_MAX;
-    if( pSttNd )
+    if( m_pStartNode )
     {
-        SwNodeIndex aIdx( *pSttNd );
+        SwNodeIndex aIdx( *m_pStartNode );
         sal_uLong nIndex = aIdx.GetIndex();
-        const sal_uLong nIndexEnd = pSttNd->GetNodes()[ nIndex ]->EndOfSectionIndex();
+        const sal_uLong nIndexEnd = m_pStartNode->GetNodes()[ nIndex ]->EndOfSectionIndex();
         const SwTextNode *pTextNode = 0;
         while( ++nIndex < nIndexEnd )
         {
-            const SwNode* pNode = pSttNd->GetNodes()[nIndex];
+            const SwNode* pNode = m_pStartNode->GetNodes()[nIndex];
             if( pNode->IsTableNode() )
             {
                 pTextNode = 0;
@@ -2535,8 +2535,8 @@ sal_uInt16 SwTableBox::IsFormulaOrValueBox() const
             !pFormat->GetDoc()->GetNumberFormatter()->IsTextFormat(
                 pFormat->GetTableBoxNumFormat().GetValue() ))
         nWhich = RES_BOXATR_VALUE;
-    else if( pSttNd && pSttNd->GetIndex() + 2 == pSttNd->EndOfSectionIndex()
-            && 0 != ( pTNd = pSttNd->GetNodes()[ pSttNd->GetIndex() + 1 ]
+    else if( m_pStartNode && m_pStartNode->GetIndex() + 2 == m_pStartNode->EndOfSectionIndex()
+            && 0 != ( pTNd = m_pStartNode->GetNodes()[ m_pStartNode->GetIndex() + 1 ]
             ->GetTextNode() ) && pTNd->GetText().isEmpty())
         nWhich = USHRT_MAX;
 
@@ -2562,7 +2562,7 @@ void SwTableBox::ActualiseValueBox()
             OUString sNewText;
             pNumFormatr->GetOutputString( fVal, nFormatId, sNewText, &pCol );
 
-            const OUString& rText = pSttNd->GetNodes()[ nNdPos ]->GetTextNode()->GetText();
+            const OUString& rText = m_pStartNode->GetNodes()[ nNdPos ]->GetTextNode()->GetText();
             if( rText != sNewText )
                 ChgTextToNum( *this, sNewText, pCol, false ,nNdPos);
         }
