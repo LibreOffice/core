@@ -10,6 +10,10 @@
 #
 
 # Consecutively number a series of defines, for example sc/inc/globstr.hrc
+# Duplicated values are renumbered but preserved, i.e. for ...START and ...END
+# definitions, and commented with "XXX was duplicate".
+# To insert and renumber use a higher value for the inserted definition than
+# any other used, for example 9999.
 # WARNING: this does not expect other defines in between and would mess around
 # with them.
 
@@ -25,13 +29,16 @@ BEGIN {
         if (dup[a[3]])
         {
             dupmsg = " // XXX was duplicate " a[3] " of " dup[a[3]];
+            a[3] = map[a[3]];
         }
         else
         {
             dup[a[3]] = a[2];
             dupmsg = "";
+            ++id;
+            map[a[3]] = id;
+            a[3] = id;
         }
-        a[3] = ++id;
         lastline = s[0];
         for (i=1; i<=n; ++i)
         {
