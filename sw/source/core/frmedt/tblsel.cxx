@@ -1503,7 +1503,8 @@ static SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
         while ( pTmp->GetPrev() )
         {
             pTmp = static_cast<const SwLayoutFrm*>(pTmp->GetPrev());
-            long nTmp = pTmp->GetFormat()->GetFrmSize().GetWidth();
+            sal_Int64 nTmp = pTmp->GetFormat()->GetFrmSize().GetWidth();
+            // multiply in 64-bit to avoid overflow here!
             nRet += ( bRTL ? ( -1 ) : 1 ) * nTmp * nAct / nWish;
         }
         pTmp = pTmp->GetUpper()->GetUpper();
