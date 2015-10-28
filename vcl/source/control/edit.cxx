@@ -1804,6 +1804,8 @@ void Edit::Resize()
 
 void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
+    ApplySettings(*pDev);
+
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
     vcl::Font aFont = GetDrawPixelFont( pDev );
