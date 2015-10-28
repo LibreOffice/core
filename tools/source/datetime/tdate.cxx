@@ -95,18 +95,23 @@ long Date::DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
     return nDays;
 }
 
-static void DaysToDate( long nDays,
-                        sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear )
+static Date lcl_DaysToDate( long nDays )
 {
+    if ( nDays >= MAX_DAYS )
+        return Date( 31, 12, 9999 );
+
+    if ( nDays <= 0 )
+        return Date( 1, 0, 0 );
+
     long    nTempDays;
     long    i = 0;
     bool    bCalc;
 
+    sal_uInt16 nYear;
     do
     {
-        nTempDays = (long)nDays;
-        rYear = (sal_uInt16)((nTempDays / 365) - i);
-        nTempDays -= ImpYearToDays(rYear);
+        nYear = (sal_uInt16)((nDays / 365) - i);
+        nTempDays = nDays - ImpYearToDays(nYear);
         bCalc = false;
         if ( nTempDays < 1 )
         {
@@ -117,7 +122,7 @@ static void DaysToDate( long nDays,
         {
             if ( nTempDays > 365 )
             {
-                if ( (nTempDays != 366) || !ImpIsLeapYear( rYear ) )
+                if ( (nTempDays != 366) || !ImpIsLeapYear( nYear ) )
                 {
                     i--;
                     bCalc = true;
@@ -127,13 +132,14 @@ static void DaysToDate( long nDays,
     }
     while ( bCalc );
 
-    rMonth = 1;
-    while ( (sal_uIntPtr)nTempDays > ImplDaysInMonth( rMonth, rYear ) )
+    sal_uInt16 nMonth = 1;
+    while ( (sal_uIntPtr)nTempDays > ImplDaysInMonth( nMonth, nYear ) )
     {
-        nTempDays -= ImplDaysInMonth( rMonth, rYear );
-        rMonth++;
+        nTempDays -= ImplDaysInMonth( nMonth, nYear );
+        nMonth++;
     }
-    rDay = (sal_uInt16)nTempDays;
+
+    return Date( static_cast<sal_uInt16>(nTempDays), nMonth, nYear );
 }
 
 Date::Date( DateInitSystem )
@@ -278,11 +284,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
                 long nTempDays = GetAsNormalizedDays();
 
                 nTempDays +=  6 - (GetDayOfWeek()+(7-(short)eStartDay)) % 7;
-                sal_uInt16  nDay;
-                sal_uInt16  nMonth;
-                sal_uInt16  nYear;
-                DaysToDate( nTempDays, nDay, nMonth, nYear );
-                nWeek = Date( nDay, nMonth, nYear ).GetWeekOfYear( eStartDay, nMinimumNumberOfDaysInWeek );
+                nWeek = lcl_DaysToDate( nTempDays ).GetWeekOfYear( eStartDay, nMinimumNumberOfDaysInWeek );
             }
         }
     }
@@ -409,84 +411,29 @@ bool Date::Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_uInt16 & rYear
 
 Date& Date::operator +=( long nDays )
 {
-    sal_uInt16  nDay;
-    sal_uInt16  nMonth;
-    sal_uInt16  nYear;
-
-    if (nDays == 0)
-        return *this;
-
-    long nTempDays = GetAsNormalizedDays();
-
-    nTempDays += nDays;
-    if ( nTempDays > MAX_DAYS )
-        setDateFromDMY( 31, 12, 9999 );
-    else if ( nTempDays <= 0 )
-        setDateFromDMY( 1, 100, 0 );
-    else
-    {
-        DaysToDate( nTempDays, nDay, nMonth, nYear );
-        setDateFromDMY( nDay, nMonth, nYear );
-    }
+    if (nDays != 0)
+        *this = lcl_DaysToDate( GetAsNormalizedDays() + nDays );
 
     return *this;
 }
 
 Date& Date::operator -=( long nDays )
 {
-    sal_uInt16  nDay;
-    sal_uInt16  nMonth;
-    sal_uInt16  nYear;
-
-    if (nDays == 0)
-        return *this;
-
-    long nTempDays = GetAsNormalizedDays();
-
-    nTempDays -= nDays;
-    if ( nTempDays > MAX_DAYS )
-        setDateFromDMY( 31, 12, 9999 );
-    else if ( nTempDays <= 0 )
-        setDateFromDMY( 1, 100, 0 );
-    else
-    {
-        DaysToDate( nTempDays, nDay, nMonth, nYear );
-        setDateFromDMY( nDay, nMonth, nYear );
-    }
+    if (nDays != 0)
+        *this = lcl_DaysToDate( GetAsNormalizedDays() - nDays );
 
     return *this;
 }
 
 Date& Date::operator ++()
 {
-    sal_uInt16  nDay;
-    sal_uInt16  nMonth;
-    sal_uInt16  nYear;
-    long nTempDays = GetAsNormalizedDays();
-
-    if ( nTempDays < MAX_DAYS )
-    {
-        nTempDays++;
-        DaysToDate( nTempDays, nDay, nMonth, nYear );
-        setDateFromDMY( nDay, nMonth, nYear );
-    }
-
+    *this = lcl_DaysToDate( GetAsNormalizedDays() + 1 );
     return *this;
 }
 
 Date& Date::operator --()
 {
-    sal_uInt16  nDay;
-    sal_uInt16  nMonth;
-    sal_uInt16  nYear;
-    long nTempDays = GetAsNormalizedDays();
-
-    if ( nTempDays > 1 )
-    {
-        nTempDays--;
-        DaysToDate( nTempDays, nDay, nMonth, nYear );
-        setDateFromDMY( nDay, nMonth, nYear );
-    }
+    *this = lcl_DaysToDate( GetAsNormalizedDays() - 1 );
     return *this;
 }
 
