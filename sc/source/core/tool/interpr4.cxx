@@ -1655,7 +1655,13 @@ bool ScInterpreter::ConvertMatrixParameters()
                     ScParameterClassification::Type eType =
                         ScParameterClassification::GetParameterType( pCur, nParams - i);
                     if ( eType != ScParameterClassification::Reference &&
-                            eType != ScParameterClassification::ReferenceOrForceArray)
+                            eType != ScParameterClassification::ReferenceOrForceArray &&
+                            // For scalar Value: convert to Array/JumpMatrix
+                            // only if in array formula context, else (function
+                            // has ForceArray or ReferenceOrForceArray
+                            // parameter *somewhere else*) pick a normal
+                            // position dependent implicit intersection later.
+                            (eType != ScParameterClassification::Value || bMatrixFormula))
                     {
                         SCCOL nCol1, nCol2;
                         SCROW nRow1, nRow2;
