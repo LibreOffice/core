@@ -2533,15 +2533,15 @@ void SdXImpressDocument::resetSelection()
     pSdrView->UnmarkAll();
 }
 
-vcl::Window* SdXImpressDocument::getWindow()
+void SdXImpressDocument::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)
 {
     SolarMutexGuard aGuard;
 
     DrawViewShell* pViewShell = GetViewShell();
     if (!pViewShell)
-        return 0;
+        return;
 
-    return pViewShell->GetActiveWindow();
+    pViewShell->GetActiveWindow()->SetClipboard(xClipboard);
 }
 
 bool SdXImpressDocument::isMimeTypeSupported()

@@ -3139,11 +3139,11 @@ OUString SwXTextDocument::getPartPageRectangles()
     return pWrtShell->getPageRectangles();
 }
 
-vcl::Window* SwXTextDocument::getWindow()
+void SwXTextDocument::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)
 {
     SolarMutexGuard aGuard;
 
-    return &pDocShell->GetView()->GetEditWin();
+    pDocShell->GetView()->GetEditWin().SetClipboard(xClipboard);
 }
 
 bool SwXTextDocument::isMimeTypeSupported()

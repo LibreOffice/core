@@ -148,8 +148,8 @@ public:
         return OUString();
     }
 
-    /// Returns the current vcl::Window of the component.
-    virtual vcl::Window* getWindow() = 0;
+    /// Sets the clipboard of the component.
+    virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) = 0;
 
     /// If the current contents of the clipboard is something we can paste.
     virtual bool isMimeTypeSupported() = 0;

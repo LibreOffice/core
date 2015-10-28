@@ -259,8 +259,8 @@ public:
     virtual void setGraphicSelection(int nType, int nX, int nY) override;
     /// @see lok::Document::resetSelection().
     virtual void resetSelection() override;
-    /// @see vcl::ITiledRenderable::getWindow().
-    virtual vcl::Window* getWindow() override;
+    /// @see vcl::ITiledRenderable::setClipboard().
+    virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) override;
     /// @see vcl::ITiledRenderable::isMimeTypeSupported().
     virtual bool isMimeTypeSupported() override;
 

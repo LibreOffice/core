@@ -431,8 +431,8 @@ public:
     virtual void resetSelection() override;
     /// @see vcl::ITiledRenderable::getPartPageRectangles().
     virtual OUString getPartPageRectangles() override;
-    /// @see vcl::ITiledRenderable::getWindow().
-    virtual vcl::Window* getWindow() override;
+    /// @see vcl::ITiledRenderable::setClipboard().
+    virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) override;
     /// @see vcl::ITiledRenderable::isMimeTypeSupported().
     virtual bool isMimeTypeSupported() override;
 
