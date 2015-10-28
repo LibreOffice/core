@@ -51,26 +51,26 @@ class SfxQueryStatus_Impl:
 {
     public:
 
-        SfxQueryStatus_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
+        SfxQueryStatus_Impl( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
         virtual ~SfxQueryStatus_Impl();
 
         // Query method
         SfxItemState QueryState( SfxPoolItem*& pPoolItem );
 
         // XEventListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
-        bool                                                                   m_bQueryInProgress;
-        SfxItemState                                                               m_eState;
-        SfxPoolItem*                                                               m_pItem;
-        sal_uInt16                                                                     m_nSlotID;
-        osl::Condition                                                             m_aCondition;
-        ::com::sun::star::util::URL                                                m_aCommand;
-        com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >         m_xDispatch;
+        bool                                                 m_bQueryInProgress;
+        SfxItemState                                         m_eState;
+        SfxPoolItem*                                         m_pItem;
+        sal_uInt16                                           m_nSlotID;
+        osl::Condition                                       m_aCondition;
+        css::util::URL                                       m_aCommand;
+        css::uno::Reference< css::frame::XDispatch >         m_xDispatch;
 };
 
 SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand ) :
@@ -109,7 +109,7 @@ throw( RuntimeException, std::exception )
     if ( rEvent.IsEnabled )
     {
         m_eState = SfxItemState::DEFAULT;
-        ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
+        css::uno::Type pType = rEvent.State.getValueType();
 
         if ( pType == cppu::UnoType<bool>::get() )
         {
@@ -135,14 +135,14 @@ throw( RuntimeException, std::exception )
             rEvent.State >>= sTemp ;
             m_pItem = new SfxStringItem( m_nSlotID, sTemp );
         }
-        else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::ItemStatus>::get() )
+        else if ( pType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
         {
             ItemStatus aItemStatus;
             rEvent.State >>= aItemStatus;
             m_eState = (SfxItemState) aItemStatus.State;
             m_pItem = new SfxVoidItem( m_nSlotID );
         }
-        else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )
+        else if ( pType == cppu::UnoType< css::frame::status::Visibility>::get() )
         {
             Visibility aVisibilityStatus;
             rEvent.State >>= aVisibilityStatus;

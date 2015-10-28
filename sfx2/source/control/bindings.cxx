@@ -163,13 +163,13 @@ public:
 
 class SfxAsyncExec_Impl
 {
-    ::com::sun::star::util::URL aCommand;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDisp;
+    css::util::URL aCommand;
+    css::uno::Reference< css::frame::XDispatch > xDisp;
     Timer           aTimer;
 
 public:
 
-    SfxAsyncExec_Impl( const ::com::sun::star::util::URL& rCmd, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDisp )
+    SfxAsyncExec_Impl( const css::util::URL& rCmd, const css::uno::Reference< css::frame::XDispatch >& rDisp )
         : aCommand( rCmd )
         , xDisp( rDisp )
     {
@@ -203,8 +203,8 @@ enum class SfxPopupAction
 class SfxBindings_Impl
 {
 public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchRecorder > xRecorder;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv;
+    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
+    css::uno::Reference< css::frame::XDispatchProvider >  xProv;
     SfxUnoControllerArr_Impl*
                             pUnoCtrlArr;
     SfxWorkWindow*          pWorkWin;
@@ -321,7 +321,7 @@ void SfxBindings::DeleteControllers_Impl()
     // Delete all Caches
     for ( nCache = pImp->pCaches->size(); nCache > 0; --nCache )
     {
-        // Get Cache via ::com::sun::star::sdbcx::Index
+        // Get Cache via css::sdbcx::Index
         SfxStateCache *pCache = (*pImp->pCaches)[ nCache-1 ];
 
         // unbind all controllers in the cache
@@ -1295,7 +1295,7 @@ void SfxBindings::UpdateSlotServer_Impl()
     {
         if ( !nRegLevel )
         {
-            ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
+            css::uno::Reference < css::frame::XFrame > xFrame
                 ( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
             pImp->bContextChanged = false;
         }
@@ -1758,7 +1758,7 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
         {
             for ( sal_uInt16 nCache = pImp->pCaches->size(); nCache > 0; --nCache )
             {
-                // Get Cache via ::com::sun::star::sdbcx::Index
+                // Get Cache via css::sdbcx::Index
                 SfxStateCache *pCache = (*pImp->pCaches)[nCache-1];
 
                 // No interested Controller present
@@ -1811,9 +1811,9 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
 
         pDispatcher = pDisp;
 
-        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider > xProv;
+        css::uno::Reference < css::frame::XDispatchProvider > xProv;
         if ( pDisp )
-            xProv = ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider >
+            xProv = css::uno::Reference < css::frame::XDispatchProvider >
                                         ( pDisp->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
 
         SetDispatchProvider_Impl( xProv );
@@ -1886,7 +1886,7 @@ void SfxBindings::StartUpdate_Impl( bool bComplete )
 
 SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp;
+    css::uno::Reference< css::frame::XDispatch >  xDisp;
     SfxStateCache *pCache = GetStateCache( nSlot );
     if ( pCache )
         xDisp = pCache->GetDispatch();
@@ -1896,7 +1896,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
         if ( !pSlot || !pSlot->pUnoName )
             return SfxItemState::DISABLED;
 
-        ::com::sun::star::util::URL aURL;
+        css::util::URL aURL;
         OUString aCmd( ".uno:" );
         aURL.Protocol = aCmd;
         aURL.Path = OUString::createFromAscii(pSlot->GetUnoName());
@@ -1909,7 +1909,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
 
         if ( xDisp.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel( xDisp, ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::lang::XUnoTunnel > xTunnel( xDisp, css::uno::UNO_QUERY );
             SfxOfficeDispatch* pDisp = NULL;
             if ( xTunnel.is() )
             {
@@ -1938,8 +1938,8 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
                 }
                 else
                 {
-                    ::com::sun::star::uno::Any aAny = pBind->GetStatus().State;
-                    ::com::sun::star::uno::Type pType = aAny.getValueType();
+                    css::uno::Any aAny = pBind->GetStatus().State;
+                    css::uno::Type pType = aAny.getValueType();
 
                     if ( pType == cppu::UnoType<bool>::get() )
                     {
@@ -2002,7 +2002,7 @@ void SfxBindings::SetSubBindings_Impl( SfxBindings *pSub )
 {
     if ( pImp->pSubBindings )
     {
-        pImp->pSubBindings->SetDispatchProvider_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > () );
+        pImp->pSubBindings->SetDispatchProvider_Impl( css::uno::Reference< css::frame::XDispatchProvider > () );
         pImp->pSubBindings->pImp->pSuperBindings = NULL;
     }
 
@@ -2069,7 +2069,7 @@ void SfxBindings::InvalidateUnoControllers_Impl()
         for ( sal_uInt16 n=nCount; n>0; n-- )
         {
             SfxUnoControllerItem *pCtrl = (*pImp->pUnoCtrlArr)[n-1];
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef( static_cast<cppu::OWeakObject*>(pCtrl), ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::frame::XStatusListener >  xRef( static_cast<cppu::OWeakObject*>(pCtrl), css::uno::UNO_QUERY );
             pCtrl->ReleaseDispatch();
             pCtrl->GetNewDispatch();
         }
@@ -2089,31 +2089,31 @@ bool SfxBindings::IsInUpdate() const
 
 void SfxBindings::SetVisibleState( sal_uInt16 nId, bool bShow )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp;
+    css::uno::Reference< css::frame::XDispatch >  xDisp;
     SfxStateCache *pCache = GetStateCache( nId );
     if ( pCache )
         pCache->SetVisibleState( bShow );
 }
 
-void SfxBindings::SetActiveFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & rFrame )
+void SfxBindings::SetActiveFrame( const css::uno::Reference< css::frame::XFrame > & rFrame )
 {
     if ( rFrame.is() || !pDispatcher )
-        SetDispatchProvider_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > ( rFrame, ::com::sun::star::uno::UNO_QUERY ) );
+        SetDispatchProvider_Impl( css::uno::Reference< css::frame::XDispatchProvider > ( rFrame, css::uno::UNO_QUERY ) );
     else
-        SetDispatchProvider_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > (
-            pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY ) );
+        SetDispatchProvider_Impl( css::uno::Reference< css::frame::XDispatchProvider > (
+            pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY ) );
 }
 
-const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxBindings::GetActiveFrame() const
+const css::uno::Reference< css::frame::XFrame > SfxBindings::GetActiveFrame() const
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( pImp->xProv, ::com::sun::star::uno::UNO_QUERY );
+    const css::uno::Reference< css::frame::XFrame > xFrame( pImp->xProv, css::uno::UNO_QUERY );
     if ( xFrame.is() || !pDispatcher )
         return xFrame;
     else
         return pDispatcher->GetFrame()->GetFrame().GetFrameInterface();
 }
 
-void SfxBindings::SetDispatchProvider_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & rProv )
+void SfxBindings::SetDispatchProvider_Impl( const css::uno::Reference< css::frame::XDispatchProvider > & rProv )
 {
     bool bInvalidate = ( rProv != pImp->xProv );
     if ( bInvalidate )
@@ -2129,11 +2129,11 @@ void SfxBindings::SetDispatchProvider_Impl( const ::com::sun::star::uno::Referen
 
 bool SfxBindings::ExecuteCommand_Impl( const OUString& rCommand )
 {
-    ::com::sun::star::util::URL aURL;
+    css::util::URL aURL;
     aURL.Complete = rCommand;
     Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aURL );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, OUString(), 0 );
+    css::uno::Reference< css::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, OUString(), 0 );
     if ( xDisp.is() )
     {
         new SfxAsyncExec_Impl( aURL, xDisp );
@@ -2143,12 +2143,12 @@ bool SfxBindings::ExecuteCommand_Impl( const OUString& rCommand )
     return false;
 }
 
-com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxBindings::GetRecorder() const
+css::uno::Reference< css::frame::XDispatchRecorder > SfxBindings::GetRecorder() const
 {
     return pImp->xRecorder;
 }
 
-void SfxBindings::SetRecorder_Impl( com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >& rRecorder )
+void SfxBindings::SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder >& rRecorder )
 {
     pImp->xRecorder = rRecorder;
 }

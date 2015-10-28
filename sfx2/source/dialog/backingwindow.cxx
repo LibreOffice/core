@@ -481,7 +481,7 @@ void BackingWindow::GetFocus()
     Window::GetFocus();
 }
 
-void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame )
+void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     mxFrame = xFrame;
     if( ! mbInitControls )
@@ -573,7 +573,7 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
-        Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
+        Sequence< css::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
         pArg[0].Name = "Referer";
         pArg[0].Value <<= OUString("private:user");
@@ -584,7 +584,7 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
-        Sequence< com::sun::star::beans::PropertyValue > aArgs(0);
+        Sequence< css::beans::PropertyValue > aArgs(0);
 
         dispatchURL( REMOTE_URL, OUString(), xFrame, aArgs );
     }
@@ -631,7 +631,7 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
-        Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
+        Sequence< css::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
         pArg[0].Name = "Referer";
         pArg[0].Value <<= OUString("private:user");
@@ -684,11 +684,11 @@ IMPL_LINK_TYPED(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 struct ImplDelayedDispatch
 {
     Reference< XDispatch >      xDispatch;
-    com::sun::star::util::URL   aDispatchURL;
+    css::util::URL   aDispatchURL;
     Sequence< PropertyValue >   aArgs;
 
     ImplDelayedDispatch( const Reference< XDispatch >& i_xDispatch,
-                         const com::sun::star::util::URL& i_rURL,
+                         const css::util::URL& i_rURL,
                          const Sequence< PropertyValue >& i_rArgs )
     : xDispatch( i_xDispatch ),
       aDispatchURL( i_rURL ),
@@ -726,11 +726,11 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
         return;
 
     // get an URL transformer to clean up the URL
-    com::sun::star::util::URL aDispatchURL;
+    css::util::URL aDispatchURL;
     aDispatchURL.Complete = i_rURL;
 
-    Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
-        com::sun::star::util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
+    Reference < css::util::XURLTransformer > xURLTransformer(
+        css::util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
     try
     {
         // clean up the URL
@@ -747,11 +747,11 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
                 delete pDisp; // event could not be posted for unknown reason, at least don't leak
         }
     }
-    catch (const com::sun::star::uno::RuntimeException&)
+    catch (const css::uno::RuntimeException&)
     {
         throw;
     }
-    catch (const com::sun::star::uno::Exception&)
+    catch (const css::uno::Exception&)
     {
     }
 }

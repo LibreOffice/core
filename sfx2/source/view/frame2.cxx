@@ -318,8 +318,8 @@ void SfxFrame::SetPresentationMode( bool bSet )
     if ( GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WindowBorderStyle::NOBORDER : WindowBorderStyle::NORMAL );
 
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< css::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
+    Reference< css::frame::XLayoutManager > xLayoutManager;
 
     if ( xPropSet.is() )
     {
@@ -366,8 +366,8 @@ void SfxFrame::SetMenuBarOn_Impl( bool bOn )
 {
     pImp->bMenuBarOn = bOn;
 
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< css::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
+    Reference< css::frame::XLayoutManager > xLayoutManager;
 
     if ( xPropSet.is() )
     {

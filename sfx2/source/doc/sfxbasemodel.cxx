@@ -3453,7 +3453,7 @@ bool SfxBaseModel::hasValidSignatures() const
     return false;
 }
 
-void SfxBaseModel::getGrabBagItem(com::sun::star::uno::Any& rVal) const
+void SfxBaseModel::getGrabBagItem(css::uno::Any& rVal) const
 {
     if (m_pData->m_xGrabBagItem.get())
         m_pData->m_xGrabBagItem->QueryValue(rVal);
@@ -3463,7 +3463,7 @@ void SfxBaseModel::getGrabBagItem(com::sun::star::uno::Any& rVal) const
     }
 }
 
-void SfxBaseModel::setGrabBagItem(const com::sun::star::uno::Any& rVal)
+void SfxBaseModel::setGrabBagItem(const css::uno::Any& rVal)
 {
     if (!m_pData->m_xGrabBagItem.get())
         m_pData->m_xGrabBagItem.reset(new SfxGrabBagItem);

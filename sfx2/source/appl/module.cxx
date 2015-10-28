@@ -385,7 +385,7 @@ SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )
     return pSh ? pSh->GetModule() : 0;
 }
 
-FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > const & i_frame )
+FieldUnit SfxModule::GetModuleFieldUnit( css::uno::Reference< css::frame::XFrame > const & i_frame )
 {
     ENSURE_OR_RETURN( i_frame.is(), "SfxModule::GetModuleFieldUnit: invalid frame!", FUNIT_100TH_MM );
 

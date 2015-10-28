@@ -317,7 +317,7 @@ public:
                                 OUString& aSuggestedDir,
                                 sal_Int16 nDialog,
                                 const OUString& rStandardDir,
-                                const ::com::sun::star::uno::Sequence< OUString >& rBlackList
+                                const css::uno::Sequence< OUString >& rBlackList
                                 );
 
     bool ShowDocumentInfoDialog();
@@ -835,7 +835,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                             OUString& aSuggestedDir,
                                             sal_Int16 nDialog,
                                             const OUString& rStandardDir,
-                                            const ::com::sun::star::uno::Sequence< OUString >& rBlackList)
+                                            const css::uno::Sequence< OUString >& rBlackList)
 {
     if ( nStoreMode == SAVEASREMOTE_REQUESTED )
         nStoreMode = SAVEAS_REQUESTED;
@@ -865,19 +865,19 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     // get the filename by dialog ...
     // create the file dialog
     sal_Int16  aDialogMode = bAllowOptions
-        ? (com::sun::star::ui::dialogs::TemplateDescription::
+        ? (css::ui::dialogs::TemplateDescription::
            FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS)
-        : (com::sun::star::ui::dialogs::TemplateDescription::
+        : (css::ui::dialogs::TemplateDescription::
            FILESAVE_AUTOEXTENSION_PASSWORD);
     sal_Int64 aDialogFlags = 0;
 
     if( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
         if ( nStoreMode & PDFEXPORT_REQUESTED )
-            aDialogMode = com::sun::star::ui::dialogs::TemplateDescription::
+            aDialogMode = css::ui::dialogs::TemplateDescription::
                 FILESAVE_AUTOEXTENSION;
         else
-            aDialogMode = com::sun::star::ui::dialogs::TemplateDescription::
+            aDialogMode = css::ui::dialogs::TemplateDescription::
                 FILESAVE_AUTOEXTENSION_SELECTION;
         aDialogFlags = SFXWB_EXPORT;
     }
@@ -1324,7 +1324,7 @@ uno::Reference< container::XContainerQuery > SfxStoringHelper::GetFilterQuery()
 }
 
 
-uno::Reference< ::com::sun::star::frame::XModuleManager2 > SfxStoringHelper::GetModuleManager()
+uno::Reference< css::frame::XModuleManager2 > SfxStoringHelper::GetModuleManager()
 {
     if ( !m_xModuleManager.is() )
     {
@@ -1556,7 +1556,7 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
         if ( aStdDirIter != aModelData.GetMediaDescr().end() )
             aStdDirIter->second >>= sStandardDir;
 
-        ::com::sun::star::uno::Sequence< OUString >  aBlackList;
+        css::uno::Sequence< OUString >  aBlackList;
 
         ::comphelper::SequenceAsHashMap::const_iterator aBlackListIter =
             aModelData.GetMediaDescr().find( OUString("BlackList") );
@@ -1797,7 +1797,7 @@ void SfxStoringHelper::SetDocInfoState(
         for (i=0; i<c; ++i)
         {
             uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
-            if ( pProps[i].Attributes & ::com::sun::star::beans::PropertyAttribute::REMOVABLE )
+            if ( pProps[i].Attributes & css::beans::PropertyAttribute::REMOVABLE )
             {
                 try
                 {

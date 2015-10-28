@@ -863,7 +863,7 @@ namespace sfx2
     };
 
 
-    TSortedFilterList::TSortedFilterList(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >& xFilterList)
+    TSortedFilterList::TSortedFilterList(const css::uno::Reference< css::container::XEnumeration >& xFilterList)
         : m_nIterator(0)
     {
         if (!xFilterList.is())

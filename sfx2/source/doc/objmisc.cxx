@@ -803,7 +803,7 @@ OUString SfxObjectShell::GetTitle
                                 10 bis USHRT_MAX
                                 provides the 'nMaxLength' of the logical
                                 file name including the path
-                                (remote => ::com::sun::star::util::URL)
+                                (remote => css::util::URL)
                                 */
 ) const
 
@@ -1111,7 +1111,7 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
             if ( !pImp->m_bIncomplEncrWarnShown )
             {
                 // this is an encrypted document with nonencrypted streams inside, show the warning
-                ::com::sun::star::task::ErrorCodeRequest aErrorCode;
+                css::task::ErrorCodeRequest aErrorCode;
                 aErrorCode.ErrCode = ERRCODE_SFX_INCOMPLETE_ENCRYPTION;
 
                 SfxMedium::CallApproveHandler( xHandler, uno::makeAny( aErrorCode ), false );
@@ -1513,7 +1513,7 @@ namespace
 }
 
 ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const OUString& _rScriptURL,
-    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError, const ::com::sun::star::uno::Any* pCaller )
+    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError, const css::uno::Any* pCaller )
 {
     OSL_TRACE( "in CallXScript" );
     ErrCode nErr = ERRCODE_NONE;

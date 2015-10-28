@@ -213,10 +213,10 @@ void SfxURLToolBoxControl_Impl::StateChanged
             SvtURLBox* pURLBox = GetURLBox();
             pURLBox->Clear();
 
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(ePICKLIST);
+            css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(ePICKLIST);
             for (sal_Int32 i=0; i<lList.getLength(); ++i)
             {
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lProps = lList[i];
+                css::uno::Sequence< css::beans::PropertyValue > lProps = lList[i];
                 for (sal_Int32 p=0; p<lProps.getLength(); ++p)
                 {
                     if (lProps[p].Name != HISTORY_PROPERTYNAME_URL)

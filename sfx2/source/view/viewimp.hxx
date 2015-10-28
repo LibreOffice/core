@@ -58,7 +58,7 @@ struct SfxViewShell_Impl
     sal_uInt16                      m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
     std::unique_ptr< ::svt::AcceleratorExecute > m_xAccExec;
-    com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
+    css::uno::Sequence < css::beans::PropertyValue > aPrintOpts;
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
     std::shared_ptr< vcl::PrinterController > m_xPrinterController;
 

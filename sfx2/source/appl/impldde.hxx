@@ -38,7 +38,7 @@ class SvDDEObject : public SvLinkSource
     DdeConnection* pConnection;
     DdeLink* pLink;
     DdeRequest* pRequest;
-    ::com::sun::star::uno::Any * pGetData;
+    css::uno::Any * pGetData;
 
     sal_uInt8 bWaitForData : 1;  // waiting for data?
     sal_uInt8 nError       : 7;  // Error code for dialogue
@@ -54,7 +54,7 @@ protected:
 public:
     SvDDEObject();
 
-    virtual bool    GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual bool    GetData( css::uno::Any & rData /*out param*/,
                                 const OUString & aMimeType,
                                 bool bSynchron = false ) override;
 

@@ -245,11 +245,11 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, const OUString& aEventName, cons
             {
                 xEvents->replaceByName( aEventName, aEventData );
             }
-            catch( const ::com::sun::star::lang::IllegalArgumentException& )
+            catch( const css::lang::IllegalArgumentException& )
             {
                 SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught IllegalArgumentException" );
             }
-            catch( const ::com::sun::star::container::NoSuchElementException& )
+            catch( const css::container::NoSuchElementException& )
             {
                 SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught NoSuchElementException" );
             }
@@ -270,7 +270,7 @@ void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacr
 }
 
 
-SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, bool bBlowUp )
+SvxMacro* SfxEventConfiguration::ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc, bool bBlowUp )
 {
     return SfxEvents_Impl::ConvertToMacro( rElement, pDoc, bBlowUp );
 }

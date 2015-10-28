@@ -227,7 +227,7 @@ sal_uInt32 CheckPasswd_Impl
                     SfxItemSet *pSet = pFile->GetItemSet();
                     if( pSet )
                     {
-                        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = pFile->GetInteractionHandler();
+                        Reference< css::task::XInteractionHandler > xInteractionHandler = pFile->GetInteractionHandler();
                         if( xInteractionHandler.is() )
                         {
                             // use the comphelper password helper to request a password
@@ -388,13 +388,13 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
     xDoc->SetModified(false);
     xDoc->ResetError();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( xDoc->GetModel(), ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XModel >  xModel ( xDoc->GetModel(), css::uno::UNO_QUERY );
     if ( xModel.is() )
     {
         SfxItemSet* pNew = xDoc->GetMedium()->GetItemSet()->Clone();
         pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         pNew->ClearItem( SID_FILTER_NAME );
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
+        css::uno::Sequence< css::beans::PropertyValue > aArgs;
         TransformItems( SID_OPENDOC, *pNew, aArgs );
         sal_Int32 nLength = aArgs.getLength();
         aArgs.realloc( nLength + 1 );
@@ -631,7 +631,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pStandardDirItem )
             sStandardDir = pStandardDirItem->GetValue();
 
-        ::com::sun::star::uno::Sequence< OUString >  aBlackList;
+        css::uno::Sequence< OUString >  aBlackList;
 
         const SfxStringListItem* pBlackListItem = rReq.GetArg<SfxStringListItem>(SID_BLACK_LIST);
         if ( pBlackListItem )
@@ -680,7 +680,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 pHandler->setHandler(xWrappedHandler);
             else
                 pHandler->useDefaultUUIHandler();
-            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,::com::sun::star::uno::makeAny(xHandler)) );
+            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHandler)) );
 
             // define rules for this handler
             css::uno::Type                                            aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();
@@ -808,10 +808,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     // Mark without URL cannot be handled by hyperlink code
     if ( bHyperlinkUsed && !aFileName.isEmpty() && aFileName[0] != '#' )
     {
-        Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
-                                                                    ::comphelper::getProcessServiceFactory()->createInstance(
-                                                                    OUString("com.sun.star.document.TypeDetection")),
-                                                                    UNO_QUERY );
+        Reference< css::document::XTypeDetection > xTypeDetection( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                                   OUString("com.sun.star.document.TypeDetection")),
+                                                                   UNO_QUERY );
         if ( xTypeDetection.is() )
         {
             URL             aURL;
@@ -904,7 +903,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                             sfx2::openUriExternally(
                                 aURL.Complete, pFilter == 0);
                         }
-                        catch ( ::com::sun::star::system::SystemShellExecuteException& )
+                        catch ( css::system::SystemShellExecuteException& )
                         {
                             rReq.RemoveItem( SID_TARGETNAME );
                             rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
@@ -976,12 +975,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if (!pInteractionItem)
         {
             Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
-            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,::com::sun::star::uno::makeAny(xHdl)) );
+            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHdl)) );
         }
         if (!pMacroExecItem)
-            rReq.AppendItem( SfxUInt16Item(SID_MACROEXECMODE,::com::sun::star::document::MacroExecMode::USE_CONFIG) );
+            rReq.AppendItem( SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::USE_CONFIG) );
         if (!pDocTemplateItem)
-            rReq.AppendItem( SfxUInt16Item(SID_UPDATEDOCMODE,::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
+            rReq.AppendItem( SfxUInt16Item(SID_UPDATEDOCMODE,css::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
     }
 
     // extract target name
@@ -1062,7 +1061,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             {
                 throw;
             }
-            catch(const ::com::sun::star::uno::Exception&)
+            catch(const css::uno::Exception&)
             {
             }
 

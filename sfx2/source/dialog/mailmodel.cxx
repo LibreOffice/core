@@ -135,15 +135,14 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     const OUString& rType,
     bool bModified,
     sal_Int32& rNumArgs,
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs )
+    css::uno::Sequence< css::beans::PropertyValue >& rArgs )
 {
     SaveResult eRet( SAVE_ERROR );
 
     try
     {
         uno::Sequence < beans::PropertyValue > aProps;
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > xFilterCFG =
-                uno::Reference< container::XNameAccess >(
+        css::uno::Reference< css::container::XNameAccess > xFilterCFG(
                     xSMGR->createInstance(
                         OUString("com.sun.star.document.FilterFactory") ), uno::UNO_QUERY );
         css::uno::Reference< css::util::XModifiable > xModifiable( xModel, css::uno::UNO_QUERY );
@@ -226,7 +225,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                     {
                                         xModifiable->setModified( sal_False );
                                     }
-                                    catch( com::sun::star::beans::PropertyVetoException& )
+                                    catch( css::beans::PropertyVetoException& )
                                     {
                                     }
                                 }
@@ -619,12 +618,12 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         {
                             xModifiable->setModified( sal_False );
                         }
-                        catch( com::sun::star::beans::PropertyVetoException& )
+                        catch( css::beans::PropertyVetoException& )
                         {
                         }
                     }
                 }
-                catch ( com::sun::star::io::IOException& )
+                catch ( css::io::IOException& )
                 {
                     eRet = SAVE_ERROR;
                 }
@@ -642,7 +641,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     rFileNamePath = aFileURL;
                     eRet = SAVE_SUCCESSFULL;
                 }
-                catch ( com::sun::star::io::IOException& )
+                catch ( css::io::IOException& )
                 {
                     eRet = SAVE_ERROR;
                 }

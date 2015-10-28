@@ -50,11 +50,11 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
     SfxBasicManagerHolder aBasicManager;
     SfxObjectShell&     rDocShell;
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
+    css::uno::Reference< css::script::XLibraryContainer >
                         xBasicLibraries;
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
+    css::uno::Reference< css::script::XLibraryContainer >
                         xDialogLibraries;
-    com::sun::star::uno::Sequence < OUString > xEventNames;
+    css::uno::Sequence < OUString > xEventNames;
     ::sfx2::DocumentMacroMode
                         aMacroMode;
     SfxProgress*        pProgress;
@@ -64,7 +64,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     sal_uInt16          nVisualDocumentNumber;
     SignatureState      nDocumentSignatureState;
     SignatureState      nScriptingSignatureState;
-    bool            bInList:1,          // if reachable by First/Next
+    bool                bInList:1,          // if reachable by First/Next
                         bClosing:1,         // sal_True while Close(), to prevent recurrences Notification
                         bIsSaving:1,
                         bPasswd:1,
@@ -122,19 +122,19 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     MapUnit             m_nMapUnit;
 
     bool                m_bCreateTempStor;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xDocStorage;
+    css::uno::Reference< css::embed::XStorage > m_xDocStorage;
 
     bool                m_bIsInit;
 
-    OUString         m_aSharedFileURL;
+    OUString            m_aSharedFileURL;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing > m_xLogRing;
+    css::uno::Reference< css::logging::XSimpleLogRing > m_xLogRing;
 
     bool                m_bIncomplEncrWarnShown;
 
     // TODO/LATER: m_aModifyPasswordInfo should completely replace m_nModifyPasswordHash in future
-    sal_uInt32              m_nModifyPasswordHash;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aModifyPasswordInfo;
+    sal_uInt32          m_nModifyPasswordHash;
+    css::uno::Sequence< css::beans::PropertyValue > m_aModifyPasswordInfo;
     bool                m_bModifyPasswordEntered;
 
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
@@ -145,11 +145,11 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     virtual bool setCurrentMacroExecMode( sal_uInt16 nMacroMode ) override;
     virtual OUString getDocumentLocation() const override;
     virtual bool documentStorageHasMacros() const override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
+    virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
     virtual SignatureState getScriptingSignatureState() override;
 
     virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) override;
-    virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const override;
+    virtual void showBrokenSignatureWarning( const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction ) const override;
 };
 
 #endif

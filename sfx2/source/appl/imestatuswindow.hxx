@@ -35,8 +35,7 @@ namespace sfx2 { namespace appl {
 
 // The MS compiler needs this typedef work-around to accept the using
 // declarations within ImeStatusWindow:
-typedef cppu::WeakImplHelper< com::sun::star::beans::XPropertyChangeListener >
-ImeStatusWindow_Impl;
+typedef cppu::WeakImplHelper< css::beans::XPropertyChangeListener > ImeStatusWindow_Impl;
 
 /** Control the behavior of any (platform-dependent) IME status windows.
 
@@ -48,7 +47,7 @@ ImeStatusWindow_Impl;
 class ImeStatusWindow: private ImeStatusWindow_Impl
 {
 public:
-    explicit ImeStatusWindow( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const& rxContext );
+    explicit ImeStatusWindow( css::uno::Reference< css::uno::XComponentContext > const& rxContext );
 
     /** Set up VCL according to the configuration.
 
@@ -94,23 +93,23 @@ private:
     virtual ~ImeStatusWindow();
 
     virtual void SAL_CALL
-    disposing(com::sun::star::lang::EventObject const & rSource)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    disposing(css::lang::EventObject const & rSource)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-    propertyChange(com::sun::star::beans::PropertyChangeEvent const & rEvent)
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    propertyChange(css::beans::PropertyChangeEvent const & rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >
+    css::uno::Reference< css::beans::XPropertySet >
     getConfig();
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         m_xContext;
 
     osl::Mutex m_aMutex;
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >
+    css::uno::Reference< css::beans::XPropertySet >
         m_xConfig;
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >
+    css::uno::Reference< css::beans::XPropertyChangeListener >
         m_xConfigListener;
     bool m_bDisposed;
 };

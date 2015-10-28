@@ -147,10 +147,9 @@ public:
     virtual ~XmlIdRegistry();
 
     /** get the ODF element with the given metadata reference. */
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rdf::XMetadatable >
+    virtual css::uno::Reference< css::rdf::XMetadatable >
         GetElementByMetadataReference(
-            const ::com::sun::star::beans::StringPair & i_rReference) const
+            const css::beans::StringPair & i_rReference) const
         override;
 
     /** register an ODF element at a newly generated, unique metadata reference.
@@ -192,7 +191,7 @@ public:
     virtual void UnregisterMetadatable(Metadatable const&) = 0;
 
     /** get the metadata reference for the given element. */
-    ::com::sun::star::beans::StringPair
+    css::beans::StringPair
         GetXmlIdForElement(Metadatable const&) const;
 
     /** remove the metadata reference for the given element. */
@@ -272,8 +271,7 @@ public:
     virtual bool IsInClipboard() const override { return false; }
     virtual bool IsInUndo() const override { return true; }
     virtual bool IsInContent() const override { return m_isInContent; }
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() override
+    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override
     { OSL_FAIL("MetadatableUndo::MakeUnoObject"); throw; }
 };
 
@@ -297,8 +295,7 @@ public:
     virtual bool IsInClipboard() const override { return true; }
     virtual bool IsInUndo() const override { return false; }
     virtual bool IsInContent() const override { return m_isInContent; }
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() override
+    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override
     { OSL_FAIL("MetadatableClipboard::MakeUnoObject"); throw; }
     void OriginNoLongerInBusinessAnymore() { m_pReg = 0; }
 };
@@ -363,7 +360,7 @@ XmlIdRegistry::~XmlIdRegistry()
 {
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
+css::uno::Reference< css::rdf::XMetadatable >
 XmlIdRegistry::GetElementByMetadataReference(
     const beans::StringPair & i_rReference) const
 {
@@ -1309,7 +1306,7 @@ void Metadatable::RemoveMetadataReference()
     }
 }
 
-// ::com::sun::star::rdf::XMetadatable:
+// css::rdf::XMetadatable:
 beans::StringPair
 Metadatable::GetMetadataReference() const
 {
@@ -1320,9 +1317,7 @@ Metadatable::GetMetadataReference() const
     return beans::StringPair();
 }
 
-void
-Metadatable::SetMetadataReference(
-    const ::com::sun::star::beans::StringPair & i_rReference)
+void Metadatable::SetMetadataReference( const css::beans::StringPair & i_rReference)
 {
     if (i_rReference.Second.isEmpty())
     {
@@ -1568,16 +1563,16 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 
 // XMetadatable mixin
 
-// ::com::sun::star::rdf::XNode:
+// css::rdf::XNode:
 OUString SAL_CALL MetadatableMixin::getStringValue()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return getNamespace() + getLocalName();
 }
 
-// ::com::sun::star::rdf::XURI:
+// css::rdf::XURI:
 OUString SAL_CALL MetadatableMixin::getLocalName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     beans::StringPair mdref( getMetadataReference() );
@@ -1594,7 +1589,7 @@ OUString SAL_CALL MetadatableMixin::getLocalName()
 }
 
 OUString SAL_CALL MetadatableMixin::getNamespace()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const uno::Reference< frame::XModel > xModel( GetModel() );
@@ -1602,7 +1597,7 @@ OUString SAL_CALL MetadatableMixin::getNamespace()
     return xDMA->getStringValue();
 }
 
-// ::com::sun::star::rdf::XMetadatable:
+// css::rdf::XMetadatable:
 beans::StringPair SAL_CALL
 MetadatableMixin::getMetadataReference()
 throw (uno::RuntimeException, std::exception)

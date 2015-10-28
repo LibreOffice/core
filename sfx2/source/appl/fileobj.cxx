@@ -75,7 +75,7 @@ SvFileObject::~SvFileObject()
         Application::RemoveUserEvent(nPostUserEventId);
 }
 
-bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
+bool SvFileObject::GetData( css::uno::Any & rData,
                                 const OUString & rMimeType,
                                 bool bGetSynchron )
 {
@@ -345,7 +345,7 @@ OUString impl_getFilter( const OUString& _rURL )
 
     try
     {
-        css::uno::Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
+        css::uno::Reference< css::document::XTypeDetection > xTypeDetection(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 OUString("com.sun.star.document.TypeDetection") ),
                 css::uno::UNO_QUERY );

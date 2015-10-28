@@ -191,14 +191,14 @@ OUString SfxFilter::GetTypeFromStorage(
         pFilterName->clear();
     }
 
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xProps( xStorage, com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::beans::XPropertySet > xProps( xStorage, css::uno::UNO_QUERY );
     if ( xProps.is() )
     {
         OUString aMediaType;
         xProps->getPropertyValue("MediaType") >>= aMediaType;
         if ( !aMediaType.isEmpty() )
         {
-            ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+            css::datatransfer::DataFlavor aDataFlavor;
             aDataFlavor.MimeType = aMediaType;
             SotClipboardFormatId nClipId = SotExchange::GetFormat( aDataFlavor );
             if ( nClipId != SotClipboardFormatId::NONE )

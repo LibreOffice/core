@@ -24,45 +24,43 @@
 #include <comphelper/interaction.hxx>
 #include <cppuhelper/implbase.hxx>
 
-class FilterOptionsContinuation : public comphelper::OInteraction< ::com::sun::star::document::XInteractionFilterOptions >
+class FilterOptionsContinuation : public comphelper::OInteraction< css::document::XInteractionFilterOptions >
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties;
+    css::uno::Sequence< css::beans::PropertyValue > rProperties;
 
 public:
-    virtual void SAL_CALL setFilterOptions( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProp ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getFilterOptions(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFilterOptions( const css::uno::Sequence< css::beans::PropertyValue >& rProp ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getFilterOptions(  ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
-class RequestFilterOptions : public ::cppu::WeakImplHelper< ::com::sun::star::task::XInteractionRequest >
+class RequestFilterOptions : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
-    ::com::sun::star::uno::Any m_aRequest;
+    css::uno::Any m_aRequest;
 
-    ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
-                > m_lContinuations;
+    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
+                  m_lContinuations;
 
     comphelper::OInteractionAbort*  m_pAbort;
 
     FilterOptionsContinuation*  m_pOptions;
 
 public:
-    RequestFilterOptions( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > rModel,
-                              const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProperties );
+    RequestFilterOptions( css::uno::Reference< css::frame::XModel > rModel,
+                              const css::uno::Sequence< css::beans::PropertyValue >& rProperties );
 
     bool    isAbort() { return m_pAbort->wasSelected(); }
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getFilterOptions()
+    css::uno::Sequence< css::beans::PropertyValue > getFilterOptions()
     {
         return m_pOptions->getFilterOptions();
     }
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL getRequest()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
+    virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation >
             > SAL_CALL getContinuations()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 #endif

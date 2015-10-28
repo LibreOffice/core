@@ -796,8 +796,8 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         try
         {
-            ::ucbhelper::Content aContent( pMedium->GetName(), com::sun::star::uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            com::sun::star::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
+            ::ucbhelper::Content aContent( pMedium->GetName(), css::uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
                 OUString aAuthor( "Author" );
@@ -888,11 +888,11 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
     const SfxUnoAnyItem* pData = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_FILTER_DATA, false);
     if ( !pData && !pOptions )
     {
-        com::sun::star::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-        com::sun::star::uno::Reference< XNameAccess > xFilterCFG;
+        css::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< XNameAccess > xFilterCFG;
         if( xServiceManager.is() )
         {
-            xFilterCFG = com::sun::star::uno::Reference< XNameAccess >(
+            xFilterCFG = css::uno::Reference< XNameAccess >(
                 xServiceManager->createInstance("com.sun.star.document.FilterFactory"),
                 UNO_QUERY );
         }
@@ -914,7 +914,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                             aProps[nProperty].Value >>= aServiceName;
                             if( !aServiceName.isEmpty() )
                             {
-                                com::sun::star::uno::Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
+                                css::uno::Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
                                 if( rHandler.is() )
                                 {
                                     // we need some properties in the media descriptor, so we have to make sure that they are in
@@ -931,7 +931,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                     TransformItems( SID_OPENDOC, *pSet, rProperties );
                                     RequestFilterOptions* pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
 
-                                    com::sun::star::uno::Reference< XInteractionRequest > rRequest( pFORequest );
+                                    css::uno::Reference< XInteractionRequest > rRequest( pFORequest );
                                     rHandler->handle( rRequest );
 
                                     if ( !pFORequest->isAbort() )
@@ -1715,8 +1715,8 @@ bool SfxObjectShell::SaveTo_Impl
     {
         try
         {
-            ::ucbhelper::Content aContent( rMedium.GetName(), com::sun::star::uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            com::sun::star::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
+            ::ucbhelper::Content aContent( rMedium.GetName(), css::uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
                 OUString aAuthor( "Author" );
@@ -2222,9 +2222,9 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
         rMedium.GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, rMedium.GetName() ) );
         TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
 
-        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
-        com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
-        const com::sun::star::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
+        css::uno::Sequence < css::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
+        css::beans::PropertyValue * pNewValue = aArgs.getArray();
+        const css::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
         const OUString sInputStream ( "InputStream"  );
 
         bool bHasInputStream = false;
@@ -2245,7 +2245,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
         {
             aArgs.realloc ( ++nEnd );
             aArgs[nEnd-1].Name = sInputStream;
-            aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
+            aArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
         }
 
         if ( !bHasBaseURL )
@@ -2350,13 +2350,13 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY_THROW );
         xExporter->setSourceDocument( xComp );
 
-        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOldArgs;
+        css::uno::Sequence < css::beans::PropertyValue > aOldArgs;
         SfxItemSet* pItems = rMedium.GetItemSet();
         TransformItems( SID_SAVEASDOC, *pItems, aOldArgs );
 
-        const com::sun::star::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
-        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( aOldArgs.getLength() );
-        com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
+        const css::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
+        css::uno::Sequence < css::beans::PropertyValue > aArgs ( aOldArgs.getLength() );
+        css::beans::PropertyValue * pNewValue = aArgs.getArray();
 
         // put in the REAL file name, and copy all PropertyValues
         const OUString sOutputStream ( "OutputStream"  );
@@ -2387,7 +2387,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         {
             aArgs.realloc ( ++nEnd );
             aArgs[nEnd-1].Name = sOutputStream;
-            aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
+            aArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
         }
 
         // add stream as well, for OOX export and maybe others
@@ -2395,7 +2395,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         {
             aArgs.realloc ( ++nEnd );
             aArgs[nEnd-1].Name = sStream;
-            aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XStream > ( new utl::OStreamWrapper ( *rMedium.GetOutStream() ) );
+            aArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XStream > ( new utl::OStreamWrapper ( *rMedium.GetOutStream() ) );
         }
 
         if ( !bHasBaseURL )
@@ -2520,7 +2520,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
     // an interaction handler here can acquire only in case of GUI Saving
     // and should be removed after the saving is done
-    com::sun::star::uno::Reference< XInteractionHandler > xInteract;
+    css::uno::Reference< XInteractionHandler > xInteract;
     const SfxUnoAnyItem* pxInteractionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pArgs, SID_INTERACTIONHANDLER, false);
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
         pMediumTmp->GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny( xInteract ) ) );
@@ -3300,7 +3300,7 @@ bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XSto
                 if ( !aMediaType.isEmpty()
                   && aMediaType != "application/vnd.sun.star.oleobject" )
                 {
-                    ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+                    css::datatransfer::DataFlavor aDataFlavor;
                     aDataFlavor.MimeType = aMediaType;
                     SotClipboardFormatId nFormat = SotExchange::GetFormat( aDataFlavor );
 
@@ -3435,7 +3435,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                 if ( !aMediaType.isEmpty()
                   && aMediaType != "application/vnd.sun.star.oleobject" )
                 {
-                    ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+                    css::datatransfer::DataFlavor aDataFlavor;
                     aDataFlavor.MimeType = aMediaType;
                     SotClipboardFormatId nFormat = SotExchange::GetFormat( aDataFlavor );
 

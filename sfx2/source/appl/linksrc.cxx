@@ -222,7 +222,7 @@ SvLinkSource::StreamToLoadFrom SvLinkSource::getStreamToLoadFrom()
         pImpl->m_bIsReadOnly);
 }
 
-void SvLinkSource::setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, bool bIsReadOnly )
+void SvLinkSource::setStreamToLoadFrom(const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly )
 {
     pImpl->m_xInputStreamToLoadFrom = xInputStream;
     pImpl->m_bIsReadOnly = bIsReadOnly;
@@ -327,7 +327,7 @@ void SvLinkSource::NotifyDataChanged()
 // notify the sink, the mime type is not
 // a selection criterion
 void SvLinkSource::DataChanged( const OUString & rMimeType,
-                                const ::com::sun::star::uno::Any & rVal )
+                                const css::uno::Any & rVal )
 {
     if( pImpl->nTimeout && !rVal.hasValue() )
     {   // only when no data was included
@@ -430,7 +430,7 @@ bool SvLinkSource::Connect( SvBaseLink* )
     return true;
 }
 
-bool SvLinkSource::GetData( ::com::sun::star::uno::Any &, const OUString &, bool )
+bool SvLinkSource::GetData( css::uno::Any &, const OUString &, bool )
 {
     return false;
 }

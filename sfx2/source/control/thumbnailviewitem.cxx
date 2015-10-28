@@ -235,7 +235,7 @@ void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, con
     drawinglayer::primitive2d::TextLayouterDevice aTextDev;
     aTextDev.setFontAttribute(pAttrs->aFontAttr,
                               pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
-                              com::sun::star::lang::Locale() );
+                              css::lang::Locale() );
 
     Size aRectSize = maDrawArea.GetSize();
     Size aImageSize = maPreview1.GetSizePixel();
@@ -369,7 +369,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
                                                      aText, nLineStart, nLineLength,
                                                      std::vector<double>(),
                                                      pAttrs->aFontAttr,
-                                                     com::sun::star::lang::Locale(),
+                                                     css::lang::Locale(),
                                                      aTextColor));
         nLineStart += nLineLength;
         aPos.setY(aPos.getY() + aTextEngine.GetCharHeight());

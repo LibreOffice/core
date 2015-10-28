@@ -32,8 +32,8 @@
 class SfxFilterListener
 {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable >  m_xFilterCache;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >  m_xFilterCacheListener;
+        css::uno::Reference< css::util::XRefreshable >  m_xFilterCache;
+        css::uno::Reference< css::util::XRefreshListener >  m_xFilterCacheListener;
 
     public:
         SfxFilterListener();
@@ -41,9 +41,9 @@ class SfxFilterListener
 
     public:
         // XRefreshListener
-        void SAL_CALL refreshed( const ::com::sun::star::lang::EventObject& aSource ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        void SAL_CALL refreshed( const css::lang::EventObject& aSource ) throw( css::uno::RuntimeException, std::exception );
         // XEventListener
-        void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aSource ) throw( ::com::sun::star::uno::RuntimeException );
+        void SAL_CALL disposing( const css::lang::EventObject& aSource ) throw( css::uno::RuntimeException );
 
 };
 

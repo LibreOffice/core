@@ -47,11 +47,11 @@ static OUString GetLabelFromCommandURL( const OUString& rCommandURL, const uno::
     uno::Reference< container::XNameAccess > xUICommandLabels;
     uno::Reference< uno::XComponentContext > xContext;
     uno::Reference< container::XNameAccess > xUICommandDescription;
-    uno::Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager;
+    uno::Reference< css::frame::XModuleManager2 > xModuleManager;
 
     static uno::WeakReference< uno::XComponentContext > xTmpContext;
     static uno::WeakReference< container::XNameAccess > xTmpNameAccess;
-    static uno::WeakReference< ::com::sun::star::frame::XModuleManager2 > xTmpModuleMgr;
+    static uno::WeakReference< css::frame::XModuleManager2 > xTmpModuleMgr;
 
     xContext = xTmpContext;
     if ( !xContext.is() )
@@ -139,7 +139,7 @@ SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( vcl::Window* pPare
 SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
 {
     SfxBoolItem aItem( FN_PARAM_1, true );
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
+    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() )
         pBindings->GetDispatcher()->Execute( SID_STOP_RECORDING, SfxCallMode::SYNCHRON, &aItem, 0L );
 }
@@ -148,7 +148,7 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
 {
     // asking for recorded macro should be replaced if index access is available!
     bool bRet = true;
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
+    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {
         ScopedVclPtrInstance< QueryBox > aBox(GetWindow(), WB_YES_NO | WB_DEF_NO , SfxResId(STR_MACRO_LOSS).toString());

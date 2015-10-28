@@ -364,7 +364,7 @@ bool SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = true;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_SECUREURLS))
                         {
-                            ::com::sun::star::uno::Sequence< OUString > seqURLs = aSecurityOptions.GetSecureURLs();
+                            css::uno::Sequence< OUString > seqURLs = aSecurityOptions.GetSecureURLs();
                             std::vector<OUString> aList;
                             sal_uInt32 nCount = seqURLs.getLength();
                             for( sal_uInt32 nURL=0; nURL<nCount; ++nURL )
@@ -750,7 +750,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(SID_SECURE_URL, true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxStringListItem *>( pItem ) !=  nullptr, "StringListItem expected");
-        ::com::sun::star::uno::Sequence< OUString > seqURLs;
+        css::uno::Sequence< OUString > seqURLs;
         static_cast<const SfxStringListItem*>(pItem)->GetStringList(seqURLs);
         aSecurityOptions.SetSecureURLs( seqURLs );
     }

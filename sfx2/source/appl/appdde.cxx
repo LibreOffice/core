@@ -213,7 +213,7 @@ class SfxDdeDocTopic_Impl : public DdeTopic
 public:
     SfxObjectShell* pSh;
     DdeData aData;
-    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+    css::uno::Sequence< sal_Int8 > aSeq;
 
     explicit SfxDdeDocTopic_Impl( SfxObjectShell* pShell )
         : DdeTopic( pShell->GetTitle(SFX_TITLE_FULLNAME) ), pSh( pShell )
@@ -370,7 +370,7 @@ long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our B
 */
 bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be addressed
                                  const OUString&,              // in: Format
-                                 ::com::sun::star::uno::Any& )// out: requested data
+                                 css::uno::Any& )// out: requested data
 {
     return false;
 }
@@ -386,7 +386,7 @@ bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be
 */
 bool SfxObjectShell::DdeSetData( const OUString&,                    // the Item to be addressed
                                  const OUString&,                    // in: Format
-                                 const ::com::sun::star::uno::Any& )// out: requested data
+                                 const css::uno::Any& )// out: requested data
 {
     return false;
 }
@@ -530,7 +530,7 @@ DdeService* SfxApplication::GetDdeService()
 DdeData* SfxDdeDocTopic_Impl::Get(SotClipboardFormatId nFormat)
 {
     OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));
-    ::com::sun::star::uno::Any aValue;
+    css::uno::Any aValue;
     bool bRet = pSh->DdeGetData( GetCurItem(), sMimeType, aValue );
     if( bRet && aValue.hasValue() && ( aValue >>= aSeq ) )
     {
@@ -543,12 +543,12 @@ DdeData* SfxDdeDocTopic_Impl::Get(SotClipboardFormatId nFormat)
 
 bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 {
-    aSeq = ::com::sun::star::uno::Sequence< sal_Int8 >(
+    aSeq = css::uno::Sequence< sal_Int8 >(
                             (sal_Int8*)(const void*)*pData, (long)*pData );
     bool bRet;
     if( aSeq.getLength() )
     {
-        ::com::sun::star::uno::Any aValue;
+        css::uno::Any aValue;
         aValue <<= aSeq;
         OUString sMimeType( SotExchange::GetFormatMimeType( pData->GetFormat() ));
         bRet = pSh->DdeSetData( GetCurItem(), sMimeType, aValue );

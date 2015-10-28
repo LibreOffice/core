@@ -91,11 +91,11 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
 // TODO ?
     if ( m_xListener.is() )
     {
-        ::com::sun::star::frame::FeatureStateEvent aEvent;
+        css::frame::FeatureStateEvent aEvent;
         URL aURL;
         aURL.Complete = rURL;
         aEvent.FeatureURL = aURL;
-        aEvent.Source = static_cast<com::sun::star::frame::XDispatch*>(this);
+        aEvent.Source = static_cast<css::frame::XDispatch*>(this);
         m_xListener->statusChanged( aEvent );
     }
 
@@ -228,7 +228,7 @@ Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 // XDispatch
 
 void SAL_CALL HelpInterceptor_Impl::dispatch(
-    const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& ) throw( RuntimeException, std::exception )
+    const URL& aURL, const Sequence< css::beans::PropertyValue >& ) throw( RuntimeException, std::exception )
 {
     bool bBack = aURL.Complete == ".uno:Backward";
     if ( bBack || aURL.Complete == ".uno:Forward" )
@@ -286,13 +286,13 @@ void SAL_CALL HelpInterceptor_Impl::removeStatusListener(
 HelpListener_Impl::HelpListener_Impl( HelpInterceptor_Impl* pInter )
 {
     pInterceptor = pInter;
-    pInterceptor->addStatusListener( this, ::com::sun::star::util::URL() );
+    pInterceptor->addStatusListener( this, css::util::URL() );
 }
 
 
 
-void SAL_CALL HelpListener_Impl::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL HelpListener_Impl::statusChanged( const css::frame::FeatureStateEvent& Event )
+    throw( css::uno::RuntimeException, std::exception )
 {
     INetURLObject aObj( Event.FeatureURL.Complete );
     aFactory = aObj.GetHost();
@@ -301,10 +301,10 @@ void SAL_CALL HelpListener_Impl::statusChanged( const ::com::sun::star::frame::F
 
 
 
-void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventObject& )
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL HelpListener_Impl::disposing( const css::lang::EventObject& )
+    throw( css::uno::RuntimeException, std::exception )
 {
-    pInterceptor->removeStatusListener( this, ::com::sun::star::util::URL() );
+    pInterceptor->removeStatusListener( this, css::util::URL() );
     pInterceptor = NULL;
 }
 
@@ -317,7 +317,7 @@ HelpStatusListener_Impl::HelpStatusListener_Impl(
 HelpStatusListener_Impl::~HelpStatusListener_Impl()
 {
     if(xDispatch.is())
-        xDispatch->removeStatusListener(this, com::sun::star::util::URL());
+        xDispatch->removeStatusListener(this, css::util::URL());
 }
 
 void HelpStatusListener_Impl::statusChanged(
@@ -328,7 +328,7 @@ void HelpStatusListener_Impl::statusChanged(
 
 void HelpStatusListener_Impl::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
-    xDispatch->removeStatusListener(this, com::sun::star::util::URL());
+    xDispatch->removeStatusListener(this, css::util::URL());
     xDispatch = 0;
 }
 

@@ -206,10 +206,10 @@ private:
     VclPtr<SearchResultsBox_Impl>  m_pResultsLB;
     VclPtr<PushButton>             m_pOpenBtn;
 
-    OUString                aFactory;
+    OUString                       aFactory;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
-                            xBreakIterator;
+    css::uno::Reference< css::i18n::XBreakIterator >
+                                   xBreakIterator;
 
     void                ClearSearchResults();
     void                RememberSearchText( const OUString& rSearchText );
@@ -430,11 +430,11 @@ private:
     VclPtr<SfxHelpWindow_Impl>     pHelpWin;
     VclPtr<vcl::Window>            pTextWin;
     VclPtr<sfx2::SearchDialog>     pSrchDlg;
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
+    css::uno::Reference < css::frame::XFrame2 >
                             xFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
+    css::uno::Reference< css::i18n::XBreakIterator >
                             xBreakIterator;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
                             xConfiguration;
     long                    nMinPos;
     bool                    bIsDebug;
@@ -447,9 +447,9 @@ private:
     void                    InitOnStartupBox( bool bOnlyText );
     void                    SetOnStartupBoxPosition();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
+    css::uno::Reference< css::i18n::XBreakIterator >
                             GetBreakIterator();
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >
+    css::uno::Reference< css::text::XTextRange >
                             getCursor() const;
     bool                    isHandledKey( const vcl::KeyCode& _rKeyCode );
 
@@ -470,7 +470,7 @@ public:
     virtual void            GetFocus() override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
+    inline css::uno::Reference < css::frame::XFrame2 >
                             getFrame() const { return xFrame; }
 
     inline void             SetSelectHdl( const Link<ToolBox *, void>& rLink ) { aToolBox->SetSelectHdl( rLink ); }
@@ -491,11 +491,11 @@ class SfxHelpWindow_Impl : public SplitWindow
 private:
 friend class SfxHelpIndexWindow_Impl;
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow >
+    css::uno::Reference < css::awt::XWindow >
                                 xWindow;
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >
+    css::uno::Reference < css::frame::XDispatchResultListener >
                                 xOpenListener;
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
+    css::uno::Reference < css::frame::XFrame2 >
                                 xFrame;
 
     VclPtr<SfxHelpIndexWindow_Impl>    pIndexWin;
@@ -508,8 +508,8 @@ friend class SfxHelpIndexWindow_Impl;
     sal_Int32           nHeight;
     long                nIndexSize;
     long                nTextSize;
-    bool            bIndex;
-    bool            bGrabFocusToToolBox;
+    bool                bIndex;
+    bool                bGrabFocusToToolBox;
     Point               aWinPos;
     OUString            sTitle;
 
@@ -529,16 +529,15 @@ friend class SfxHelpIndexWindow_Impl;
     DECL_LINK_TYPED(    ChangeHdl, HelpListener_Impl&, void );
 
 public:
-    SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,
+    SfxHelpWindow_Impl( const css::uno::Reference < css::frame::XFrame2 >& rFrame,
                         vcl::Window* pParent, WinBits nBits );
     virtual ~SfxHelpWindow_Impl();
     virtual void dispose() override;
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
-    void                setContainerWindow(
-                            ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
-    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
+    void                setContainerWindow( css::uno::Reference < css::awt::XWindow > xWin );
+    inline css::uno::Reference < css::frame::XFrame2 >
                         getTextFrame() const { return pTextWin->getFrame(); }
 
     void                SetFactory( const OUString& rFactory );

@@ -628,24 +628,24 @@ void IndexTabPage_Impl::InitializeIndex()
         aURL.append(sFactory);
         AppendConfigToken(aURL, true);
 
-        Content aCnt( aURL.makeStringAndClear(), Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
+        Content aCnt( aURL.makeStringAndClear(), Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        css::uno::Reference< css::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_ANCHORREF ) )
         {
-            ::com::sun::star::uno::Sequence< OUString > aPropSeq( 4 );
+            css::uno::Sequence< OUString > aPropSeq( 4 );
             aPropSeq[0] = PROPERTY_KEYWORDLIST;
             aPropSeq[1] = PROPERTY_KEYWORDREF;
             aPropSeq[2] = PROPERTY_ANCHORREF;
             aPropSeq[3] = PROPERTY_TITLEREF;
 
             // abi: use one possibly remote call only
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aAnySeq =
+            css::uno::Sequence< css::uno::Any > aAnySeq =
                   aCnt.getPropertyValues( aPropSeq );
 
-            ::com::sun::star::uno::Sequence< OUString > aKeywordList;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > aKeywordRefList;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > aAnchorRefList;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > aTitleRefList;
+            css::uno::Sequence< OUString > aKeywordList;
+            css::uno::Sequence< css::uno::Sequence< OUString > > aKeywordRefList;
+            css::uno::Sequence< css::uno::Sequence< OUString > > aAnchorRefList;
+            css::uno::Sequence< css::uno::Sequence< OUString > > aTitleRefList;
 
             if ( ( aAnySeq[0] >>= aKeywordList ) && ( aAnySeq[1] >>= aKeywordRefList ) &&
                  ( aAnySeq[2] >>= aAnchorRefList ) && ( aAnySeq[3] >>= aTitleRefList ) )
@@ -661,9 +661,9 @@ void IndexTabPage_Impl::InitializeIndex()
                     // abi: Do not copy, but use references
                     const OUString& aKeywordPair = aKeywordList[i];
                     DBG_ASSERT( !aKeywordPair.isEmpty(), "invalid help index" );
-                    const ::com::sun::star::uno::Sequence< OUString >& aRefList = aKeywordRefList[i];
-                    const ::com::sun::star::uno::Sequence< OUString >& aAnchorList = aAnchorRefList[i];
-                    const ::com::sun::star::uno::Sequence< OUString >& aTitleList = aTitleRefList[i];
+                    const css::uno::Sequence< OUString >& aRefList = aKeywordRefList[i];
+                    const css::uno::Sequence< OUString >& aAnchorList = aAnchorRefList[i];
+                    const css::uno::Sequence< OUString >& aTitleList = aTitleRefList[i];
 
                     DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),"reference list and title list of different length" );
 
@@ -2516,7 +2516,7 @@ void SfxHelpTextWindow_Impl::GetFocus()
         {
             if( xFrame.is() )
             {
-                Reference< ::com::sun::star::awt::XWindow > xWindow = xFrame->getComponentWindow();
+                Reference< css::awt::XWindow > xWindow = xFrame->getComponentWindow();
                 if( xWindow.is() )
                     xWindow->setFocus();
             }
@@ -2637,11 +2637,11 @@ void SfxHelpTextWindow_Impl::CloseFrame()
     bIsInClose = true;
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > xCloseable  ( xFrame, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::util::XCloseable > xCloseable  ( xFrame, css::uno::UNO_QUERY );
         if (xCloseable.is())
             xCloseable->close(sal_True);
     }
-    catch( ::com::sun::star::util::CloseVetoException& )
+    catch( css::util::CloseVetoException& )
     {
     }
 }
@@ -2738,10 +2738,10 @@ void SfxHelpWindow_Impl::MakeLayout()
             Some VCL-patches could not solve this problem so I've established the
             workaround: resize the help window if it's visible .-)
         */
-        ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
+        css::awt::Rectangle aRect = xWindow->getPosSize();
         sal_Int32 nOldWidth = bIndex ? nCollapseWidth : nExpandWidth;
         sal_Int32 nWidth = bIndex ? nExpandWidth : nCollapseWidth;
-        xWindow->setPosSize( aRect.X, aRect.Y, nWidth, nHeight, ::com::sun::star::awt::PosSize::SIZE );
+        xWindow->setPosSize( aRect.X, aRect.Y, nWidth, nHeight, css::awt::PosSize::SIZE );
 
         if ( aRect.Width > 0 && aRect.Height > 0 )
         {
@@ -2778,7 +2778,7 @@ void SfxHelpWindow_Impl::InitSizes()
 {
     if ( xWindow.is() )
     {
-        ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
+        css::awt::Rectangle aRect = xWindow->getPosSize();
         nHeight = aRect.Height;
 
         if ( bIndex )
@@ -2841,7 +2841,7 @@ void SfxHelpWindow_Impl::SaveConfig()
 
     if ( xWindow.is() )
     {
-        ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
+        css::awt::Rectangle aRect = xWindow->getPosSize();
         nW = aRect.Width;
         nH = aRect.Height;
     }
@@ -3010,7 +3010,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
 
 
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
-    const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,
+    const css::uno::Reference < css::frame::XFrame2 >& rFrame,
     vcl::Window* pParent, WinBits ) :
 
     SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
@@ -3089,7 +3089,7 @@ bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     return bHandled || Window::PreNotify( rNEvt );
 }
 
-void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::XWindow > xWin )
+void SfxHelpWindow_Impl::setContainerWindow( Reference < css::awt::XWindow > xWin )
 {
     xWindow = xWin;
     MakeLayout();
@@ -3181,11 +3181,11 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
             {
                 try
                 {
-                    Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
+                    Content aCnt( aURL, Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+                    css::uno::Reference< css::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
                     if ( xInfo->hasPropertyByName( PROPERTY_TITLE ) )
                     {
-                        ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue( PROPERTY_TITLE );
+                        css::uno::Any aAny = aCnt.getPropertyValue( PROPERTY_TITLE );
                         OUString aValue;
                         if ( aAny >>= aValue )
                         {

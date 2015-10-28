@@ -189,11 +189,11 @@ static bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHa
             ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest(
                  new ::comphelper::DocPasswordRequest(
                  bMSType ? ::comphelper::DocPasswordRequestType_MS : ::comphelper::DocPasswordRequestType_STANDARD,
-                 bFirstTime ? ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER : ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER,
+                 bFirstTime ? css::task::PasswordRequestMode_PASSWORD_ENTER : css::task::PasswordRequestMode_PASSWORD_REENTER,
                  aPath,
                  true ) );
 
-            uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
+            uno::Reference< css::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
             xHandler->handle( rRequest );
 
             if ( pPasswordRequest->isPassword() )
@@ -502,7 +502,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                     {
-                        // ::com::sun::star::sdbcx::User offering to open it as a template
+                        // css::sdbcx::User offering to open it as a template
                         ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
                                            VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                         if ( RET_YES == aBox->Execute() )
@@ -697,13 +697,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 {
                     Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
                     if (xHdl.is())
-                        pNewSet->Put( SfxUnoAnyItem(SID_INTERACTIONHANDLER,::com::sun::star::uno::makeAny(xHdl)) );
+                        pNewSet->Put( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHdl)) );
                 }
 
                 if (!pMacroExecItem)
-                    pNewSet->Put( SfxUInt16Item(SID_MACROEXECMODE,::com::sun::star::document::MacroExecMode::USE_CONFIG) );
+                    pNewSet->Put( SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::USE_CONFIG) );
                 if (!pDocTemplateItem)
-                    pNewSet->Put( SfxUInt16Item(SID_UPDATEDOCMODE,::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
+                    pNewSet->Put( SfxUInt16Item(SID_UPDATEDOCMODE,css::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
 
                 xOldObj->SetModified( false );
                 // Do not chache the old Document! Is invalid when loading
@@ -1776,7 +1776,7 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
                 else
                 {
                     GetBindings().SetDispatcher( GetDispatcher() );
-                    GetBindings().SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
+                    GetBindings().SetActiveFrame( css::uno::Reference< css::frame::XFrame > () );
                     GetDispatcher()->Update_Impl();
                 }
             }
@@ -2127,7 +2127,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
         GetBindings().LEAVEREGISTRATIONS();
         delete pOldSh;
     }
-    catch ( const com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
         // the SfxCode is not able to cope with exceptions thrown while creating views
         // the code will crash in the stack unwinding procedure, so we shouldn't let exceptions go through here
@@ -2530,9 +2530,9 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         OUString aMacroName;
         OUString aLocation;
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        Reference< com::sun::star::uri::XUriReferenceFactory > xFactory =
-            com::sun::star::uri::UriReferenceFactory::create( xContext );
-        Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
+        Reference< css::uri::XUriReferenceFactory > xFactory =
+            css::uri::UriReferenceFactory::create( xContext );
+        Reference< css::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
         if ( xUrl.is() )
         {
             // get name
@@ -2583,7 +2583,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
 
         // open lib container and break operation if it couldn't be opened
-        com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibCont;
+        css::uno::Reference< css::script::XLibraryContainer > xLibCont;
         if ( aLocation.equalsIgnoreAsciiCase( "application" ) )
         {
             xLibCont = SfxGetpApp()->GetBasicContainer();
@@ -2600,13 +2600,13 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
 
         // get LibraryContainer
-        com::sun::star::uno::Any aTemp;
-        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xRoot(
+        css::uno::Any aTemp;
+        css::uno::Reference< css::container::XNameAccess > xRoot(
                 xLibCont,
-                com::sun::star::uno::UNO_QUERY);
+                css::uno::UNO_QUERY);
 
         OUString sLib( aLibName );
-        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xLib;
+        css::uno::Reference< css::container::XNameAccess > xLib;
         if(xRoot->hasByName(sLib))
         {
             // library must be loaded
@@ -2616,9 +2616,9 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
         else
         {
-            xLib = com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >(
+            xLib = css::uno::Reference< css::container::XNameAccess >(
                         xLibCont->createLibrary(sLib),
-                        com::sun::star::uno::UNO_QUERY);
+                        css::uno::UNO_QUERY);
         }
 
         // pack the macro as direct usable "sub" routine
@@ -2656,16 +2656,16 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         aTemp <<= sRoutine.makeStringAndClear();
         if ( bReplace )
         {
-            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xModulCont(
+            css::uno::Reference< css::container::XNameContainer > xModulCont(
                 xLib,
-                com::sun::star::uno::UNO_QUERY);
+                css::uno::UNO_QUERY);
             xModulCont->replaceByName(sModule,aTemp);
         }
         else
         {
-            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xModulCont(
+            css::uno::Reference< css::container::XNameContainer > xModulCont(
                 xLib,
-                com::sun::star::uno::UNO_QUERY);
+                css::uno::UNO_QUERY);
             xModulCont->insertByName(sModule,aTemp);
         }
 
@@ -2700,15 +2700,15 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         {
             // try to find any active recorder on this frame
             OUString sProperty("DispatchRecorderSupplier");
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+            css::uno::Reference< css::frame::XFrame > xFrame(
                     GetFrame().GetFrameInterface(),
-                    com::sun::star::uno::UNO_QUERY);
+                    css::uno::UNO_QUERY);
 
-            com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(xFrame,com::sun::star::uno::UNO_QUERY);
-            com::sun::star::uno::Any aProp = xSet->getPropertyValue(sProperty);
-            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+            css::uno::Reference< css::beans::XPropertySet > xSet(xFrame,css::uno::UNO_QUERY);
+            css::uno::Any aProp = xSet->getPropertyValue(sProperty);
+            css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
             aProp >>= xSupplier;
-            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+            css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
             if (xSupplier.is())
                 xRecorder = xSupplier->getDispatchRecorder();
 
@@ -2720,7 +2720,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             if ( xRecorder.is() )
             {
                 // disable active recording
-                aProp <<= com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier >();
+                aProp <<= css::uno::Reference< css::frame::XDispatchRecorderSupplier >();
                 xSet->setPropertyValue(sProperty,aProp);
 
                 const SfxBoolItem* pRecordItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_1);
@@ -2739,12 +2739,12 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             else if ( rReq.GetSlot() == SID_RECORDMACRO )
             {
                 // enable recording
-                com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext(
+                css::uno::Reference< css::uno::XComponentContext > xContext(
                         ::comphelper::getProcessComponentContext());
 
-                xRecorder = com::sun::star::frame::DispatchRecorder::create( xContext );
+                xRecorder = css::frame::DispatchRecorder::create( xContext );
 
-                xSupplier = com::sun::star::frame::DispatchRecorderSupplier::create( xContext );
+                xSupplier = css::frame::DispatchRecorderSupplier::create( xContext );
 
                 xSupplier->setDispatchRecorder(xRecorder);
                 xRecorder->startRecording(xFrame);
@@ -2760,12 +2760,12 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TOGGLESTATUSBAR:
         {
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+            css::uno::Reference< css::frame::XFrame > xFrame(
                     GetFrame().GetFrameInterface(),
-                    com::sun::star::uno::UNO_QUERY);
+                    css::uno::UNO_QUERY);
 
-            Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-            Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+            Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+            Reference< css::frame::XLayoutManager > xLayoutManager;
             if ( xPropSet.is() )
             {
                 try
@@ -2814,12 +2814,12 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 WorkWindow* pWork = static_cast<WorkWindow*>( pTop->GetFrame().GetTopWindow_Impl() );
                 if ( pWork )
                 {
-                    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+                    css::uno::Reference< css::frame::XFrame > xFrame(
                             GetFrame().GetFrameInterface(),
-                            com::sun::star::uno::UNO_QUERY);
+                            css::uno::UNO_QUERY);
 
-                    Reference< ::com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-                    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                    Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+                    Reference< css::frame::XLayoutManager > xLayoutManager;
                     if ( xPropSet.is() )
                     {
                         try
@@ -2835,7 +2835,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     bool bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
                     if ( bNewFullScreenMode != pWork->IsFullScreenMode() )
                     {
-                        Reference< ::com::sun::star::beans::XPropertySet > xLMPropSet( xLayoutManager, UNO_QUERY );
+                        Reference< css::beans::XPropertySet > xLMPropSet( xLayoutManager, UNO_QUERY );
                         if ( xLMPropSet.is() )
                         {
                             try
@@ -2844,7 +2844,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                                     OUString( "HideCurrentUI" ),
                                     makeAny( bNewFullScreenMode ));
                             }
-                            catch ( ::com::sun::star::beans::UnknownPropertyException& )
+                            catch ( css::beans::UnknownPropertyException& )
                             {
                             }
                         }
@@ -2901,12 +2901,12 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     }
 
                     OUString sProperty("DispatchRecorderSupplier");
-                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+                    css::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
-                            com::sun::star::uno::UNO_QUERY);
+                            css::uno::UNO_QUERY);
 
-                    com::sun::star::uno::Any aProp = xSet->getPropertyValue(sProperty);
-                    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+                    css::uno::Any aProp = xSet->getPropertyValue(sProperty);
+                    css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( aProp >>= xSupplier )
                         rSet.Put( SfxBoolItem( nWhich, xSupplier.is() ) );
                     else
@@ -2926,12 +2926,12 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     }
 
                     OUString sProperty("DispatchRecorderSupplier");
-                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+                    css::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
-                            com::sun::star::uno::UNO_QUERY);
+                            css::uno::UNO_QUERY);
 
-                    com::sun::star::uno::Any aProp = xSet->getPropertyValue(sProperty);
-                    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+                    css::uno::Any aProp = xSet->getPropertyValue(sProperty);
+                    css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( !(aProp >>= xSupplier) || !xSupplier.is() )
                         rSet.DisableItem( nWhich );
                     break;
@@ -2939,11 +2939,11 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_TOGGLESTATUSBAR:
                 {
-                    com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+                    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+                    css::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
-                            com::sun::star::uno::UNO_QUERY);
-                    com::sun::star::uno::Any aProp = xSet->getPropertyValue(
+                            css::uno::UNO_QUERY);
+                    css::uno::Any aProp = xSet->getPropertyValue(
                         OUString( "LayoutManager" ) );
 
                     if ( !( aProp >>= xLayoutManager ))
@@ -3025,21 +3025,21 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         }
         else
         {
-            ::com::sun::star::util::URL aTargetURL;
+            css::util::URL aTargetURL;
             aTargetURL.Complete = ".component:DB/DataSourceBrowser";
-            Reference < ::com::sun::star::util::XURLTransformer > xTrans(
-                    ::com::sun::star::util::URLTransformer::create(
+            Reference < css::util::XURLTransformer > xTrans(
+                    css::util::URLTransformer::create(
                          ::comphelper::getProcessComponentContext() ) );
             xTrans->parseStrict( aTargetURL );
 
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
-            Reference < ::com::sun::star::frame::XDispatch > xDisp;
+            Reference < css::frame::XDispatch > xDisp;
             if ( xProv.is() )
                 xDisp = xProv->queryDispatch( aTargetURL, OUString("_beamer"), 31 );
             if ( xDisp.is() )
             {
-                Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
-                ::com::sun::star::beans::PropertyValue* pArg = aArgs.getArray();
+                Sequence < css::beans::PropertyValue > aArgs(1);
+                css::beans::PropertyValue* pArg = aArgs.getArray();
                 pArg[0].Name = "Referer";
                 pArg[0].Value <<= OUString("private:user");
                 xDisp->dispatch( aTargetURL, aArgs );
@@ -3219,7 +3219,7 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
     SfxGetpApp()->SetViewFrame_Impl( pFrame );
 }
 
-void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL )
+void SfxViewFrame::ActivateToolPanel( const css::uno::Reference< css::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL )
 {
     SolarMutexGuard aGuard;
 

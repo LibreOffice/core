@@ -459,7 +459,7 @@ void SvBaseLink::Disconnect()
     }
 }
 
-SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const ::com::sun::star::uno::Any & )
+SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const css::uno::Any & )
 {
     switch( nObjType )
     {

@@ -74,7 +74,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 
 SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = GetFrame();
+    css::uno::Reference< css::frame::XFrame > xFrame = GetFrame();
 
     // If xFrame=NULL release pMgr! Because this window lives longer then the manager!
     // In these case we got a xFrame->dispose() call from outside ... and has release our
@@ -159,10 +159,10 @@ bool SfxPartDockWnd_Impl::QueryClose()
     SfxChildWindow* pChild = GetChildWindow_Impl();
     if( pChild )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = pChild->GetFrame();
+        css::uno::Reference< css::frame::XFrame > xFrame = pChild->GetFrame();
         if( xFrame.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >  xCtrl = xFrame->getController();
+            css::uno::Reference< css::frame::XController >  xCtrl = xFrame->getController();
             if( xCtrl.is() )
                 bClose = xCtrl->suspend( sal_True );
         }
@@ -180,7 +180,7 @@ bool SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
         SfxChildWindow* pChild = GetChildWindow_Impl();
         if( pChild )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = pChild->GetFrame();
+            css::uno::Reference< css::frame::XFrame > xFrame = pChild->GetFrame();
             if( xFrame.is() )
                 xFrame->activate();
         }

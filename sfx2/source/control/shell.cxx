@@ -70,7 +70,7 @@ struct SfxShell_Impl: public SfxBroadcaster
     svtools::AsynchronLink*     pUpdater;
     boost::ptr_vector<SfxSlot>  aSlotArr;
 
-    com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aVerbList;
+    css::uno::Sequence < css::embed::VerbDescriptor > aVerbList;
     ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
 
     SfxShell_Impl()
@@ -525,7 +525,7 @@ void SfxStubSfxShellVerbState(SfxShell *, SfxItemSet& rSet)
     SfxShell::VerbState( rSet );
 }
 
-void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs)
+void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >& aVerbs)
 {
     SfxViewShell *pViewSh = dynamic_cast<SfxViewShell*>( this );
 
@@ -595,7 +595,7 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
     }
 }
 
-const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& SfxShell::GetVerbs() const
+const css::uno::Sequence < css::embed::VerbDescriptor >& SfxShell::GetVerbs() const
 {
     return pImp->aVerbList;
 }
@@ -607,7 +607,7 @@ void SfxShell::VerbExec(SfxRequest& rReq)
     if ( pViewShell )
     {
         bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
-        com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
+        css::uno::Sequence < css::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
         for (sal_Int32 n=0, nVerb=0; n<aList.getLength(); n++)
         {
             // check for ReadOnly verbs
@@ -634,7 +634,7 @@ void SfxShell::VerbState(SfxItemSet& )
 
 const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
 {
-    com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > rList = pImp->aVerbList;
+    css::uno::Sequence < css::embed::VerbDescriptor > rList = pImp->aVerbList;
 
     DBG_ASSERT(nId >= SID_VERB_START && nId <= SID_VERB_END,"Wrong VerbId!");
     sal_uInt16 nIndex = nId - SID_VERB_START;

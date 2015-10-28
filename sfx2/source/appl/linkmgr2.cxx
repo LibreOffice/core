@@ -445,7 +445,7 @@ void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer
     ::sfx2::SvLinkSource* pSrvSrc = rServer.DdeCreateLinkSource(rPath);
     if (pSrvSrc)
     {
-        ::com::sun::star::datatransfer::DataFlavor aFl;
+        css::datatransfer::DataFlavor aFl;
         SotExchange::GetFormatDataFlavor(rLink.GetContentType(), aFl);
         rLink.SetObj(pSrvSrc);
         pSrvSrc->AddDataAdvise(
@@ -512,11 +512,11 @@ SotClipboardFormatId LinkManager::RegisterStatusInfoId()
 
 
 bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue,
+                                const css::uno::Any & rValue,
                                 Graphic& rGrf )
 {
     bool bRet = false;
-    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+    css::uno::Sequence< sal_Int8 > aSeq;
     if( rValue.hasValue() && ( rValue >>= aSeq ) )
     {
         SvMemoryStream aMemStm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),
@@ -569,7 +569,7 @@ OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 {
     SfxObjectShell* pFndShell = 0;
-    sal_uInt16 nUpdateMode = com::sun::star::document::UpdateDocMode::NO_UPDATE;
+    sal_uInt16 nUpdateMode = css::document::UpdateDocMode::NO_UPDATE;
     OUString sTopic, sItem, sReferer;
     LinkManager* pLinkMgr = pLink->GetLinkManager();
     if (pLinkMgr && sfx2::LinkManager::GetDisplayNames(pLink, 0, &sTopic, &sItem) && !sTopic.isEmpty())
@@ -634,7 +634,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         sfx2::SvLinkSource* pNewSrc = pFndShell->DdeCreateLinkSource( sItem );
         if( pNewSrc )
         {
-            ::com::sun::star::datatransfer::DataFlavor aFl;
+            css::datatransfer::DataFlavor aFl;
             SotExchange::GetFormatDataFlavor( pLink->GetContentType(), aFl );
 
             pLink->SetObj( pNewSrc );

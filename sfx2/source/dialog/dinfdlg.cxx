@@ -83,11 +83,10 @@ const sal_uInt16 FONT_PAGE_ID = 99;
 
 struct CustomProperty
 {
-    OUString             m_sName;
-    com::sun::star::uno::Any    m_aValue;
+    OUString         m_sName;
+    css::uno::Any    m_aValue;
 
-    CustomProperty( const OUString& sName,
-            const com::sun::star::uno::Any& rValue ) :
+    CustomProperty( const OUString& sName, const css::uno::Any& rValue ) :
         m_sName( sName ), m_aValue( rValue ) {}
 };
 
@@ -257,8 +256,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
                 // "fix" property? => not a custom property => ignore it!
-                if (!(pProps[i].Attributes &
-                        ::com::sun::star::beans::PropertyAttribute::REMOVABLE))
+                if (!(pProps[i].Attributes & css::beans::PropertyAttribute::REMOVABLE))
                 {
                     DBG_ASSERT(false, "non-removable user-defined property?");
                     continue;
@@ -413,8 +411,7 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
         sal_Int32 nCount = lProps.getLength();
         for ( sal_Int32 j = 0; j < nCount; ++j )
         {
-            if ((pProps[j].Attributes &
-                    ::com::sun::star::beans::PropertyAttribute::REMOVABLE))
+            if (pProps[j].Attributes & css::beans::PropertyAttribute::REMOVABLE)
             {
                 xContainer->removeProperty( pProps[j].Name );
             }
