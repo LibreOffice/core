@@ -89,7 +89,7 @@ TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::co
 
 bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                                               Reference< XMultiServiceFactory >& xServiceFactory,
-                                              UStringMap& rTransitionNameMape,
+                                              UStringMap& rTransitionNameMap,
                                               const OUString& aURL )
 {
     // import transition presets
@@ -112,8 +112,8 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                 OUString aPresetId( pPreset->getPresetId() );
                 if( !aPresetId.isEmpty() )
                 {
-                    UStringMap::const_iterator aIter( rTransitionNameMape.find( aPresetId ) );
-                    if( aIter != rTransitionNameMape.end() )
+                    UStringMap::const_iterator aIter( rTransitionNameMap.find( aPresetId ) );
+                    if( aIter != rTransitionNameMap.end() )
                         pPreset->maUIName = (*aIter).second;
 
                                 // add it
@@ -154,9 +154,9 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
         Reference< XMultiServiceFactory > xConfigProvider =
             configuration::theDefaultProvider::get( xContext );
 
-        UStringMap aTransitionNameMape;
+        UStringMap aTransitionNameMap;
         const OUString aTransitionPath("/org.openoffice.Office.UI.Effects/UserInterface/Transitions" );
-        implImportLabels( xConfigProvider, aTransitionPath, aTransitionNameMape );
+        implImportLabels( xConfigProvider, aTransitionPath, aTransitionNameMap );
 
         // read path to transition effects files from config
         Any propValue = uno::makeAny(
@@ -178,7 +178,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
             bRet |= importTransitionsFile( rList,
                                            xServiceFactory,
-                                           aTransitionNameMape,
+                                           aTransitionNameMap,
                                            aURL );
         }
 

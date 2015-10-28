@@ -68,7 +68,7 @@ private:
 
     static bool importTransitionsFile( TransitionPresetList& rList,
                                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-                                       UStringMap& rTransitionNameMape,
+                                       UStringMap& rTransitionNameMap,
                                        const OUString& aFilename );
 };
 
