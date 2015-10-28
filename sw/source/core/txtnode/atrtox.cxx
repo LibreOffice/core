@@ -30,7 +30,7 @@ SwTextTOXMark::SwTextTOXMark( SwTOXMark& rAttr,
     , m_pTextNode( 0 )
     , m_pEnd( 0 )
 {
-    rAttr.pTextAttr = this;
+    rAttr.m_pTextAttr = this;
     if ( rAttr.GetAlternativeText().isEmpty() )
     {
         m_nEnd = *pEnd;
