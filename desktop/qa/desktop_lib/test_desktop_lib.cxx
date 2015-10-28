@@ -11,7 +11,13 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 
+#ifdef WNT
+#include <prewin.h>
+#endif
 #include <boost/property_tree/json_parser.hpp>
+#ifdef WNT
+#include <postwin.h>
+#endif
 #include <comphelper/processfactory.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/lokhelper.hxx>

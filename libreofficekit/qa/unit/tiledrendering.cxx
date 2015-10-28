@@ -9,7 +9,13 @@
 
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
+#ifdef WNT
+#include <prewin.h>
+#endif
 #include <boost/property_tree/json_parser.hpp>
+#ifdef WNT
+#include <postwin.h>
+#endif
 #include <cppunit/TestFixture.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>

@@ -8,7 +8,13 @@
  */
 
 #include <string>
+#ifdef WNT
+#include <prewin.h>
+#endif
 #include <boost/property_tree/json_parser.hpp>
+#ifdef WNT
+#include <postwin.h>
+#endif
 
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

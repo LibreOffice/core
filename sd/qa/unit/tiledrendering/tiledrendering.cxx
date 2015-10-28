@@ -10,7 +10,13 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
+#ifdef WNT
+#include <prewin.h>
+#endif
 #include <boost/property_tree/json_parser.hpp>
+#ifdef WNT
+#include <postwin.h>
+#endif
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>

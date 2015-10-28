@@ -15,7 +15,13 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#ifdef WNT
+#include <prewin.h>
+#endif
 #include <boost/property_tree/json_parser.hpp>
+#ifdef WNT
+#include <postwin.h>
+#endif
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
