@@ -1021,7 +1021,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
     }
     if ( aNumInfo.nMinDecimalDigits == -1)
     {
-        if ( bVarDecimals )
+        if ( bVarDecimals || aNumInfo.bDecReplace )
             aNumInfo.nMinDecimalDigits = 0;
         else
             aNumInfo.nMinDecimalDigits = aNumInfo.nDecimals;
