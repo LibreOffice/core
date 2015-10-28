@@ -45,8 +45,10 @@ public final class XmlUtil {
         // clone the starting node
         Node clonedNode = cloneNode(docNode, newNode);
 
-        // then clone the sub-tree recursively
-        cloneTree(docNode, clonedNode, newNode);
+        if (clonedNode != null) {
+            // then clone the sub-tree recursively
+            cloneTree(docNode, clonedNode, newNode);
+        }
 
         return clonedNode;
     }
