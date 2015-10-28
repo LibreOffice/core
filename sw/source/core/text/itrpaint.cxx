@@ -37,6 +37,7 @@
 #include <tgrditem.hxx>
 
 #include <EnhancedPDFExportHelper.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
@@ -161,8 +162,24 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     SwLinePortion *pPor = bEndPor ? m_pCurr->GetFirstPortion() : CalcPaintOfst( rPaint );
 
     // Optimization!
-    const SwTwips nMaxRight = std::min( rPaint.Right(), Right() );
+    SwTwips nMaxRight = std::min( rPaint.Right(), Right() );
     const SwTwips nTmpLeft = GetInfo().X();
+    //compatibility setting: allow tabstop text to exceed right margin
+    if( GetInfo().GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN) )
+    {
+        SwLinePortion* pPorIter = pPor;
+        while( pPorIter )
+        {
+            if( pPorIter->IsTabRightPortion() )
+            {
+               const SwTabRightPortion *pRightTabPor = static_cast<SwTabRightPortion*>(pPorIter);
+               const SwTwips nTabPos = nTmpLeft + pRightTabPor->GetTabPos();
+                if( nMaxRight < nTabPos )
+                    nMaxRight = std::min( rPaint.Right(), nTabPos );
+            }
+            pPorIter = pPorIter->GetPortion();
+        }
+    }
     if( !bEndPor && nTmpLeft >= nMaxRight )
         return;
 

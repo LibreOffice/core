@@ -125,6 +125,7 @@ public:
     inline bool IsErgoSumPortion() const { return nWhichPor == POR_ERGOSUM; }
     inline bool IsQuoVadisPortion() const { return nWhichPor == POR_QUOVADIS; }
     inline bool IsTabLeftPortion() const { return nWhichPor == POR_TABLEFT; }
+    inline bool IsTabRightPortion() const { return nWhichPor == POR_TABRIGHT; }
     inline bool IsFootnoteNumPortion() const { return nWhichPor == POR_FTNNUM; }
     inline bool IsFootnotePortion() const { return nWhichPor == POR_FTN; }
     inline bool IsDropPortion() const { return nWhichPor == POR_DROP; }
