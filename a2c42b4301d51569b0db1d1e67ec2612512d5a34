@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_ae090be0",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-28T18:15:44Z",
+      "side": 1,
+      "message": "This does not solve the problem, it only cures the symptom that when saving such format in a new version semantics are forced that make the import act differently. The effective problem is in the import that isn\u0027t able anymore to correctly read what earlier versions stored, i.e. reading the bug\u0027s https://bugs.documentfoundation.org/attachment.cgi?id\u003d117935 that was created using 4.4.6 must not fail, which this change doesn\u0027t address. Actually this change should not be needed.",
+      "revId": "a2c42b4301d51569b0db1d1e67ec2612512d5a34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
