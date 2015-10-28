@@ -1510,7 +1510,7 @@ WW8ListManager::~WW8ListManager()
         }
         delete *aIter;
     }
-    for (auto aIter = m_LFOInfos.rbegin(); aIter < m_LFOInfos.rend(); ++aIter)
+    for (auto aIter = m_LFOInfos.rbegin(); aIter != m_LFOInfos.rend(); ++aIter)
     {
         if ((*aIter)->bOverride
             && (*aIter)->pNumRule
