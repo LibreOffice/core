@@ -163,8 +163,8 @@ public:
     inline TOXTypes         GetType() const;
 
 private:
-    OUString        aName;
-    TOXTypes        eType;
+    OUString        m_aName;
+    TOXTypes        m_eType;
 
     // @@@ public copy ctor, but no copy assignment?
     SwTOXType & operator= (const SwTOXType &) = delete;
@@ -668,10 +668,10 @@ inline sal_uInt16 SwForm::GetFormMax() const
 //SwTOXType
 
 inline OUString SwTOXType::GetTypeName() const
-    {   return aName;   }
+    {   return m_aName;   }
 
 inline TOXTypes SwTOXType::GetType() const
-    {   return eType;   }
+    {   return m_eType;   }
 
 // SwTOXBase
 

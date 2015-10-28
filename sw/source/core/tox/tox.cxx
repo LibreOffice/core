@@ -201,15 +201,15 @@ void SwTOXMark::InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType )
 // Manage types of TOX
 SwTOXType::SwTOXType( TOXTypes eTyp, const OUString& rName )
     : SwModify(0),
-    aName(rName),
-    eType(eTyp)
+    m_aName(rName),
+    m_eType(eTyp)
 {
 }
 
 SwTOXType::SwTOXType(const SwTOXType& rCopy)
     : SwModify( const_cast<SwModify*>(rCopy.GetRegisteredIn()) ),
-    aName(rCopy.aName),
-    eType(rCopy.eType)
+    m_aName(rCopy.m_aName),
+    m_eType(rCopy.m_eType)
 {
 }
 
