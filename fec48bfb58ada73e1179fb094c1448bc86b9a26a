@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_ce2567af",
+        "filename": "include/sal/log.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-10-28T12:43:05Z",
+      "side": 1,
+      "message": "Please, let\u0027s not introduce any new initial ::. We use std::foo all over the place without initial ::.",
+      "range": {
+        "startLine": 330,
+        "startChar": 10,
+        "endLine": 330,
+        "endChar": 13
+      },
+      "revId": "fec48bfb58ada73e1179fb094c1448bc86b9a26a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
