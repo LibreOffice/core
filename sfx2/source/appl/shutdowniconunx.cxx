@@ -30,10 +30,7 @@
 #include "tools/rc.hxx"
 #include <sfx2/app.hxx>
 #include "app.hrc"
-#ifndef __SHUTDOWNICON_HXX__
-#define USE_APP_SHORTCUTS
 #include "shutdownicon.hxx"
-#endif
 
 #ifdef ENABLE_GIO
 #include <gio/gio.h>

@@ -29,7 +29,6 @@
 #include <sfx2/app.hxx>
 #include <sal/macros.h>
 #include "app.hrc"
-#define USE_APP_SHORTCUTS
 #include "shutdownicon.hxx"
 
 #include <com/sun/star/util/XStringWidth.hpp>
