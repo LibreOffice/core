@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1531f4_8eb9af31",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5779,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-28T15:20:07Z",
+      "side": 1,
+      "message": "What is this good for? And btw, a notation of \"col:row, \" is not only unusual but also useless with col being a number string.",
+      "revId": "cba39bc25865e23edd7cf2326f1b3dccdb02bccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1531f4_eea943e1",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5875,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-10-28T15:20:07Z",
+      "side": 1,
+      "message": "But.. the OUString actually serves no purpose.",
+      "revId": "cba39bc25865e23edd7cf2326f1b3dccdb02bccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
