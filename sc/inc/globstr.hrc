@@ -614,6 +614,8 @@
 #define STR_COND_CONTAINS           460
 #define STR_COND_NOT_CONTAINS       461
 #define STR_COND_DATE               462
+/* Values from STR_COND_TODAY to STR_COND_NEXTYEAR must be in sequence for
+ * sc/source/ui/condformat/condformathelper.cxx getDateString() */
 #define STR_COND_TODAY              463
 #define STR_COND_YESTERDAY          464
 #define STR_COND_TOMORROW           465
