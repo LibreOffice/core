@@ -90,7 +90,7 @@ public:
     virtual Sequence< beans::PropertyValue > getPageParameters( int i_nPage ) const override;
     virtual void printPage( int i_nPage ) const override;
     virtual void jobStarted() override;
-    virtual void jobFinished( com::sun::star::view::PrintableState ) override;
+    virtual void jobFinished( css::view::PrintableState ) override;
 };
 
 SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
@@ -328,7 +328,7 @@ void SfxPrinterController::jobStarted()
     }
 }
 
-void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nState )
+void SfxPrinterController::jobFinished( css::view::PrintableState nState )
 {
     if ( mpObjectShell )
     {

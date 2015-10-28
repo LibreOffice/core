@@ -32,8 +32,7 @@ using namespace ::com::sun::star::util;
 // class HelpInterceptor_Impl --------------------------------------------
 
 HelpDispatch_Impl::HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
-                                      const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::frame::XDispatch >& _xDisp ) :
+                                      const css::uno::Reference< css::frame::XDispatch >& _xDisp ) :
 
     m_rInterceptor  ( _rInterceptor ),
     m_xRealDispatch ( _xDisp )

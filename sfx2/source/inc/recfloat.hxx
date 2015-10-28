@@ -40,7 +40,7 @@ public:
 class SfxRecordingFloat_Impl : public SfxFloatingWindow
 {
     VclPtr<ToolBox>                m_pTbx;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xStopRecTbxCtrl;
+    css::uno::Reference< css::frame::XToolbarController > xStopRecTbxCtrl;
 public:
                         SfxRecordingFloat_Impl( SfxBindings* pBindings ,
                             SfxChildWindow* pChildWin ,

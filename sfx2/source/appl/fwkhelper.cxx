@@ -30,7 +30,7 @@
 #include "workwin.hxx"
 #include <sfx2/frame.hxx>
 
-void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame )
+void SAL_CALL RefreshToolbars( css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     SolarMutexGuard aGuard;
     if ( xFrame.is() )

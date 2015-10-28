@@ -805,7 +805,7 @@ DocumentMetadataAccess::~DocumentMetadataAccess()
 {
 }
 
-// ::com::sun::star::rdf::XRepositorySupplier:
+// css::rdf::XRepositorySupplier:
 uno::Reference< rdf::XRepository > SAL_CALL
 DocumentMetadataAccess::getRDFRepository() throw (uno::RuntimeException, std::exception)
 {
@@ -813,14 +813,14 @@ DocumentMetadataAccess::getRDFRepository() throw (uno::RuntimeException, std::ex
     return m_pImpl->m_xRepository;
 }
 
-// ::com::sun::star::rdf::XNode:
+// css::rdf::XNode:
 OUString SAL_CALL
 DocumentMetadataAccess::getStringValue() throw (uno::RuntimeException, std::exception)
 {
     return m_pImpl->m_xBaseURI->getStringValue();
 }
 
-// ::com::sun::star::rdf::XURI:
+// css::rdf::XURI:
 OUString SAL_CALL
 DocumentMetadataAccess::getNamespace() throw (uno::RuntimeException, std::exception)
 {
@@ -833,10 +833,10 @@ DocumentMetadataAccess::getLocalName() throw (uno::RuntimeException, std::except
     return m_pImpl->m_xBaseURI->getLocalName();
 }
 
-// ::com::sun::star::rdf::XDocumentMetadataAccess:
+// css::rdf::XDocumentMetadataAccess:
 uno::Reference< rdf::XMetadatable > SAL_CALL
 DocumentMetadataAccess::getElementByMetadataReference(
-    const ::com::sun::star::beans::StringPair & i_rReference)
+    const css::beans::StringPair & i_rReference)
 throw (uno::RuntimeException, std::exception)
 {
     const IXmlIdRegistry * pReg(

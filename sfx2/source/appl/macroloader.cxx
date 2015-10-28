@@ -188,7 +188,7 @@ void SAL_CALL SfxMacroLoader::removeStatusListener(
 {
 }
 
-ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::Any& rRetval, SfxObjectShell* pSh )
+ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval, SfxObjectShell* pSh )
     throw ( ucb::ContentCreationException, uno::RuntimeException, std::exception )
 {
 #if !HAVE_FEATURE_SCRIPTING

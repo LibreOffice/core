@@ -371,7 +371,7 @@ css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
     @param  xFrame
                 reference to our new target frame
 
-    @throw  com::sun::star::uno::RuntimeException
+    @throw  css::uno::RuntimeException
                 if the given frame reference is wrong or component window couldn't be created
                 successfully.
                 We throw it too, if we already attached to a frame. Because we don't support
@@ -564,7 +564,7 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
     @param  aEvent
                 describe the broadcaster of this callback
 
-    @throw ::com::sun::star::uno::RuntimeException
+    @throw css::uno::RuntimeException
                 if the broadcaster doesn't represent the expected window reference.
 */
 
@@ -646,7 +646,7 @@ void SAL_CALL BackingComp::dispose()
     @param  xListener
                 not used.
 
-    @throw  ::com::sun::star::uno::RuntimeException
+    @throw  css::uno::RuntimeException
                 because the listener expect to be holded alive by this container.
                 We must inform it about this unsupported feature.
  */
@@ -689,7 +689,7 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
     @param  lArgs
                 currently not used
 
-    @throw  com::sun::star::uno::RuntimeException
+    @throw  css::uno::RuntimeException
                 if some resources are missing
                 Means if may be attachedFrame() wasn't called before.
  */

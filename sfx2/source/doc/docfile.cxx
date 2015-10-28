@@ -396,13 +396,13 @@ util::DateTime SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
     {
         try
         {
-            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+            uno::Reference< css::ucb::XCommandEnvironment > xDummyEnv;
             ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
 
             aContent.getPropertyValue("DateModified") >>= pImp->m_aDateTime;
             pImp->m_bGotDateTime = true;
         }
-        catch ( const ::com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -415,8 +415,8 @@ Reference < XContent > SfxMedium::GetContent() const
 {
     if ( !pImp->aContent.get().is() )
     {
-        Reference < ::com::sun::star::ucb::XContent > xContent;
-        Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+        Reference < css::ucb::XContent > xContent;
+        Reference < css::ucb::XCommandEnvironment > xEnv;
 
         const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_CONTENT, false);
         if ( pItem )
@@ -461,7 +461,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
             Any aAny = pImp->aContent.getPropertyValue("BaseURI");
             aAny >>= aBaseURL;
         }
-        catch ( const ::com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
 
@@ -734,7 +734,7 @@ bool SfxMedium::IsPreview_Impl()
 void SfxMedium::StorageBackup_Impl()
 {
     ::ucbhelper::Content aOriginalContent;
-    Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+    Reference< css::ucb::XCommandEnvironment > xDummyEnv;
 
     bool bBasedOnOriginalFile = ( !pImp->pTempFile && !( !pImp->m_aLogicName.isEmpty() && pImp->m_bSalvageMode )
         && !GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).isEmpty()
@@ -972,10 +972,9 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                 {
                     if( !bResult )
                     {
-                        Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
                         uno::Reference< task::XInteractionHandler > xCHandler = GetInteractionHandler( true );
-                        xComEnv = new ::ucbhelper::CommandEnvironment(
-                            xCHandler, Reference< ::com::sun::star::ucb::XProgressHandler >() );
+                        Reference< css::ucb::XCommandEnvironment > xComEnv = new ::ucbhelper::CommandEnvironment(
+                            xCHandler, Reference< css::ucb::XProgressHandler >() );
 
                         ucbhelper::Content aContentToLock(
                             GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
@@ -996,11 +995,11 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                             LockFileEntry aLockData;
                             aLockData[LockFileComponent::OOOUSERNAME] = "Unknown user";
 
-                            uno::Sequence< ::com::sun::star::ucb::Lock >  aLocks;
+                            uno::Sequence< css::ucb::Lock >  aLocks;
                             if( aContentToLock.getPropertyValue( "DAV:lockdiscovery" )  >>= aLocks )
                             {
                                 // got at least a lock, show the owner of the first lock returned
-                                ::com::sun::star::ucb::Lock aLock = aLocks[0];
+                                css::ucb::Lock aLock = aLocks[0];
                                 OUString aOwner;
                                 if(aLock.Owner >>= aOwner)
                                     aLockData[LockFileComponent::OOOUSERNAME] = aOwner;
@@ -1095,7 +1094,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                 try
                 {
                     // MediaDescriptor does this check also, the duplication should be avoided in future
-                    Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+                    Reference< css::ucb::XCommandEnvironment > xDummyEnv;
                     ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
                     aContent.getPropertyValue("IsReadOnly") >>= bContentReadonly;
                 }
@@ -1316,12 +1315,12 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
         CreateTempFile( false );
         GetMedium_Impl();
 
-        Reference< ::com::sun::star::ucb::XProgressHandler > xProgressHandler;
-        Reference< ::com::sun::star::task::XStatusIndicator > xStatusIndicator;
+        Reference< css::ucb::XProgressHandler > xProgressHandler;
+        Reference< css::task::XStatusIndicator > xStatusIndicator;
 
         const SfxUnoAnyItem* pxProgressItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetItemSet(), SID_PROGRESS_STATUSBAR_CONTROL, false);
         if( pxProgressItem && ( pxProgressItem->GetValue() >>= xStatusIndicator ) )
-            xProgressHandler = Reference< ::com::sun::star::ucb::XProgressHandler >(
+            xProgressHandler = Reference< css::ucb::XProgressHandler >(
                                     new utl::ProgressHandlerWrap( xStatusIndicator ) );
 
         uno::Sequence< beans::PropertyValue > aAddProps( 2 );
@@ -1560,7 +1559,7 @@ void SfxMedium::SetOpenMode( StreamMode nStorOpen,
 
 
 bool SfxMedium::UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalContent,
-                                            const Reference< ::com::sun::star::ucb::XCommandEnvironment >& xComEnv )
+                                            const Reference< css::ucb::XCommandEnvironment >& xComEnv )
 {
     try
     {
@@ -1586,7 +1585,7 @@ bool SfxMedium::UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalContent,
 bool SfxMedium::StorageCommit_Impl()
 {
     bool bResult = false;
-    Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+    Reference< css::ucb::XCommandEnvironment > xDummyEnv;
     ::ucbhelper::Content aOriginalContent;
 
     if ( pImp->xStorage.is() )
@@ -1644,10 +1643,10 @@ bool SfxMedium::StorageCommit_Impl()
 
 bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                                                  const INetURLObject& aDest,
-                                                 const Reference< ::com::sun::star::ucb::XCommandEnvironment >& xComEnv )
+                                                 const Reference< css::ucb::XCommandEnvironment >& xComEnv )
 {
     bool bResult = false;
-    Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+    Reference< css::ucb::XCommandEnvironment > xDummyEnv;
     Reference< XOutputStream > aDestStream;
     ::ucbhelper::Content aOriginalContent;
 
@@ -1655,26 +1654,26 @@ bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
     {
         aOriginalContent = ::ucbhelper::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
     }
-    catch ( const ::com::sun::star::ucb::CommandAbortedException& )
+    catch ( const css::ucb::CommandAbortedException& )
     {
         pImp->m_eError = ERRCODE_ABORT;
     }
-    catch ( const ::com::sun::star::ucb::CommandFailedException& )
+    catch ( const css::ucb::CommandFailedException& )
     {
         pImp->m_eError = ERRCODE_ABORT;
     }
-    catch (const ::com::sun::star::ucb::ContentCreationException& ex)
+    catch (const css::ucb::ContentCreationException& ex)
     {
         pImp->m_eError = ERRCODE_IO_GENERAL;
         if (
-            (ex.eError == ::com::sun::star::ucb::ContentCreationError_NO_CONTENT_PROVIDER    ) ||
-            (ex.eError == ::com::sun::star::ucb::ContentCreationError_CONTENT_CREATION_FAILED)
+            (ex.eError == css::ucb::ContentCreationError_NO_CONTENT_PROVIDER    ) ||
+            (ex.eError == css::ucb::ContentCreationError_CONTENT_CREATION_FAILED)
            )
         {
             pImp->m_eError = ERRCODE_IO_NOTEXISTSPATH;
         }
     }
-    catch (const ::com::sun::star::uno::Exception&)
+    catch (const css::uno::Exception&)
     {
        pImp->m_eError = ERRCODE_IO_GENERAL;
     }
@@ -1722,15 +1721,15 @@ bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     bResult = true;
                 }
             }
-            catch ( const ::com::sun::star::ucb::CommandAbortedException& )
+            catch ( const css::ucb::CommandAbortedException& )
             {
                 pImp->m_eError = ERRCODE_ABORT;
             }
-            catch ( const ::com::sun::star::ucb::CommandFailedException& )
+            catch ( const css::ucb::CommandFailedException& )
             {
                 pImp->m_eError = ERRCODE_ABORT;
             }
-            catch ( const ::com::sun::star::ucb::InteractiveIOException& r )
+            catch ( const css::ucb::InteractiveIOException& r )
             {
                 if ( r.Code == IOErrorCode_ACCESS_DENIED )
                     pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
@@ -1741,7 +1740,7 @@ bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                 else
                     pImp->m_eError = ERRCODE_IO_GENERAL;
             }
-            catch ( const ::com::sun::star::uno::Exception& )
+            catch ( const css::uno::Exception& )
             {
                 pImp->m_eError = ERRCODE_IO_GENERAL;
             }
@@ -1803,7 +1802,7 @@ bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet& aTargetSet 
                         xSeek->seek( 0 );
                     }
 
-                    uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+                    uno::Reference < css::ucb::XCommandEnvironment > xEnv;
                     ::ucbhelper::Content aTargetContent( aURL, xEnv, comphelper::getProcessComponentContext() );
 
                     InsertCommandArgument aInsertArg;
@@ -1854,7 +1853,7 @@ void SfxMedium::Transfer_Impl()
     {
         SAL_INFO( "sfx.doc", "SfxMedium::Transfer_Impl, copying to target" );
 
-        Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+        Reference < css::ucb::XCommandEnvironment > xEnv;
         Reference< XOutputStream > rOutStream;
 
         // in case an output stream is provided from outside and the URL is correct
@@ -1937,7 +1936,7 @@ void SfxMedium::Transfer_Impl()
 
                 // set segment size property; package will automatically be divided in pieces fitting
                 // into this size
-                ::com::sun::star::uno::Any aAny;
+                css::uno::Any aAny;
                 aAny <<= pSegmentSize->GetValue();
 
                 uno::Reference < beans::XPropertySet > xSet( pImp->xStorage, uno::UNO_QUERY );
@@ -1964,11 +1963,11 @@ void SfxMedium::Transfer_Impl()
 
         // a special case, an interaction handler should be used for
         // authentication in case it is available
-        Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
-           Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
+        Reference< css::ucb::XCommandEnvironment > xComEnv;
+        Reference< css::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
         if (xInteractionHandler.is())
             xComEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler,
-                                                      Reference< ::com::sun::star::ucb::XProgressHandler >() );
+                                                      Reference< css::ucb::XProgressHandler >() );
 
         OUString aDestURL( aDest.GetMainURL( INetURLObject::NO_DECODE ) );
 
@@ -1999,11 +1998,11 @@ void SfxMedium::Transfer_Impl()
             {
                 // Get the parent URL from the XChild if possible: why would the URL necessarily have
                 // a hierarchical path? It's not always the case for CMIS.
-                Reference< ::com::sun::star::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
+                Reference< css::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
                 OUString sParentUrl;
                 if ( xChild.is( ) )
                 {
-                    Reference< ::com::sun::star::ucb::XContent > xParent( xChild->getParent( ), uno::UNO_QUERY );
+                    Reference< css::ucb::XContent > xParent( xChild->getParent( ), uno::UNO_QUERY );
                     if ( xParent.is( ) )
                     {
                         sParentUrl = xParent->getIdentifier( )->getContentIdentifier();
@@ -2032,18 +2031,18 @@ void SfxMedium::Transfer_Impl()
             {
                 aTransferContent = ::ucbhelper::Content( aDestURL, xComEnv, comphelper::getProcessComponentContext() );
             }
-            catch (const ::com::sun::star::ucb::ContentCreationException& ex)
+            catch (const css::ucb::ContentCreationException& ex)
             {
                 pImp->m_eError = ERRCODE_IO_GENERAL;
                 if (
-                    (ex.eError == ::com::sun::star::ucb::ContentCreationError_NO_CONTENT_PROVIDER    ) ||
-                    (ex.eError == ::com::sun::star::ucb::ContentCreationError_CONTENT_CREATION_FAILED)
+                    (ex.eError == css::ucb::ContentCreationError_NO_CONTENT_PROVIDER    ) ||
+                    (ex.eError == css::ucb::ContentCreationError_CONTENT_CREATION_FAILED)
                    )
                 {
                     pImp->m_eError = ERRCODE_IO_NOTEXISTSPATH;
                 }
             }
-            catch (const ::com::sun::star::uno::Exception&)
+            catch (const css::uno::Exception&)
             {
                 pImp->m_eError = ERRCODE_IO_GENERAL;
             }
@@ -2094,15 +2093,15 @@ void SfxMedium::Transfer_Impl()
                     else if ( !sResultURL.isEmpty( ) )  // Likely to happen only for checkin
                         SwitchDocumentToFile( sResultURL );
                 }
-                catch ( const ::com::sun::star::ucb::CommandAbortedException& )
+                catch ( const css::ucb::CommandAbortedException& )
                 {
                     pImp->m_eError = ERRCODE_ABORT;
                 }
-                catch ( const ::com::sun::star::ucb::CommandFailedException& )
+                catch ( const css::ucb::CommandFailedException& )
                 {
                     pImp->m_eError = ERRCODE_ABORT;
                 }
-                catch ( const ::com::sun::star::ucb::InteractiveIOException& r )
+                catch ( const css::ucb::InteractiveIOException& r )
                 {
                     if ( r.Code == IOErrorCode_ACCESS_DENIED )
                         pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
@@ -2113,7 +2112,7 @@ void SfxMedium::Transfer_Impl()
                     else
                         pImp->m_eError = ERRCODE_IO_GENERAL;
                 }
-                catch ( const ::com::sun::star::uno::Exception& )
+                catch ( const css::uno::Exception& )
                 {
                     pImp->m_eError = ERRCODE_IO_GENERAL;
                 }
@@ -2150,7 +2149,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     INetURLObject aBackObj( aTransactTemp.GetURL() );
     OUString aBackupName = aBackObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
-    Reference < ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+    Reference < css::ucb::XCommandEnvironment > xDummyEnv;
     ::ucbhelper::Content aBackupCont;
     if( ::ucbhelper::Content::create( aDestDir, xDummyEnv, comphelper::getProcessComponentContext(), aBackupCont ) )
     {
@@ -2192,7 +2191,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 
     // create content for the parent folder ( = backup folder )
     ::ucbhelper::Content  aContent;
-    Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+    Reference < css::ucb::XCommandEnvironment > xEnv;
     if( ::utl::UCBContentHelper::ensureFolder(comphelper::getProcessComponentContext(), xEnv, aBakDir, aContent) )
         DoInternalBackup_Impl( aOriginalContent, aPrefix, aExtension, aBakDir );
 
@@ -2230,7 +2229,7 @@ void SfxMedium::DoBackup_Impl()
     {
         // create content for the parent folder ( = backup folder )
         ::ucbhelper::Content  aContent;
-        Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+        Reference < css::ucb::XCommandEnvironment > xEnv;
         if( ::utl::UCBContentHelper::ensureFolder(comphelper::getProcessComponentContext(), xEnv, aBakDir, aContent) )
         {
             // save as ".bak" file
@@ -2258,7 +2257,7 @@ void SfxMedium::DoBackup_Impl()
                         pImp->m_bRemoveBackup = false;
                     }
                 }
-                catch ( const ::com::sun::star::uno::Exception& )
+                catch ( const css::uno::Exception& )
                 {
                 }
             }
@@ -2341,7 +2340,7 @@ void SfxMedium::GetMedium_Impl()
     if ( !pImp->m_pInStream )
     {
         pImp->bDownloadDone = false;
-        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
+        Reference< css::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
 
         //TODO/MBA: need support for SID_STREAM
         const SfxUnoAnyItem* pWriteStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_STREAM, false);
@@ -2619,17 +2618,17 @@ void SfxMedium::UseInteractionHandler( bool bUse )
 
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
+css::uno::Reference< css::task::XInteractionHandler >
 SfxMedium::GetInteractionHandler( bool bGetAlways )
 {
     // if interaction isn't allowed explicitly ... return empty reference!
     if ( !bGetAlways && !pImp->bUseInteractionHandler )
-        return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
+        return css::uno::Reference< css::task::XInteractionHandler >();
 
     // search a possible existing handler inside cached item set
     if ( pImp->m_pSet )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xHandler;
+        css::uno::Reference< css::task::XInteractionHandler > xHandler;
         const SfxUnoAnyItem* pHandler = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_INTERACTIONHANDLER, false);
         if ( pHandler && (pHandler->GetValue() >>= xHandler) && xHandler.is() )
             return xHandler;
@@ -2637,7 +2636,7 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
 
     // if default interaction isn't allowed explicitly ... return empty reference!
     if ( !bGetAlways && !pImp->bAllowDefaultIntHdl )
-        return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
+        return css::uno::Reference< css::task::XInteractionHandler >();
 
     // otherwise return cached default handler ... if it exist.
     if ( pImp->xInteraction.is() )
@@ -2734,10 +2733,9 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
         {
             // an interaction handler should be used for authentication, if needed
             try {
-                uno::Reference< ::com::sun::star::task::XInteractionHandler > xHandler = GetInteractionHandler( true );
-                uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
-                xComEnv = new ::ucbhelper::CommandEnvironment( xHandler,
-                                                               Reference< ::com::sun::star::ucb::XProgressHandler >() );
+                uno::Reference< css::task::XInteractionHandler > xHandler = GetInteractionHandler( true );
+                uno::Reference< css::ucb::XCommandEnvironment > xComEnv = new ::ucbhelper::CommandEnvironment( xHandler,
+                                                               Reference< css::ucb::XProgressHandler >() );
                 ucbhelper::Content aContentToUnlock( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext());
                 pImp->m_bLocked = false;
                 //check if WebDAV unlock was explicitly disabled
@@ -3146,7 +3144,7 @@ SfxFrame* SfxMedium::GetLoadTargetFrame() const
     return pImp->wLoadTargetFrame;
 }
 
-void SfxMedium::setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, bool bIsReadOnly )
+void SfxMedium::setStreamToLoadFrom(const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly )
 {
     pImp->m_xInputStreamToLoadFrom = xInputStream;
     pImp->m_bInputStreamIsReadOnly = bIsReadOnly;
@@ -3189,7 +3187,7 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
 
                 pImp->xAttributes->Append( SvKeyValue( OUString("content-type"), aContentType ) );
             }
-            catch ( const ::com::sun::star::uno::Exception& )
+            catch ( const css::uno::Exception& )
             {
             }
         }
@@ -3198,7 +3196,7 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
     return pImp->xAttributes;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  SfxMedium::GetInputStream()
+css::uno::Reference< css::io::XInputStream >  SfxMedium::GetInputStream()
 {
     if ( !pImp->xInputStream.is() )
         GetMedium_Impl();
@@ -3418,7 +3416,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
             // if it is a file system use OS copy process
             try
             {
-                uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+                uno::Reference< css::ucb::XCommandEnvironment > xComEnv;
                 INetURLObject aTmpURLObj( aTmpURL );
                 OUString aFileName = aTmpURLObj.getName( INetURLObject::LAST_SEGMENT,
                                                                 true,
@@ -3660,7 +3658,7 @@ OUString SfxMedium::CreateTempCopyWithExt( const OUString& aURL )
             {
                 try
                 {
-                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+                    uno::Reference< css::ucb::XCommandEnvironment > xComEnv;
                     ::ucbhelper::Content aTargetContent( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
                     ::ucbhelper::Content aSourceContent( aSource.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
                     if ( aTargetContent.transferContent( aSourceContent,

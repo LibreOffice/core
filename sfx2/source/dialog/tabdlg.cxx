@@ -50,7 +50,7 @@ struct TabPageImpl
 {
     bool                        mbStandard;
     sfx::ItemConnectionArray    maItemConn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
+    css::uno::Reference< css::frame::XFrame > mxFrame;
 
     TabPageImpl() : mbStandard( false ) {}
 };
@@ -149,17 +149,17 @@ static Data_Impl* Find( const SfxTabDlgData_Impl& rArr, sal_uInt16 nId, sal_uInt
     return 0;
 }
 
-void SfxTabPage::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+void SfxTabPage::SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     if (pImpl)
         pImpl->mxFrame = xFrame;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxTabPage::GetFrame()
+css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame()
 {
     if (pImpl)
         return pImpl->mxFrame;
-    return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
+    return css::uno::Reference< css::frame::XFrame >();
 }
 
 SfxTabPage::SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet)

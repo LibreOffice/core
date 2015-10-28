@@ -35,9 +35,9 @@ class SfxBasicManagerHolder
 {
 private:
     BasicManager*   mpBasicManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer >
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
                     mxBasicContainer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer >
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
                     mxDialogContainer;
 
 public:
@@ -62,7 +62,7 @@ public:
     */
     void    reset( BasicManager* _pBasicManager );
 
-    ::com::sun::star::script::XLibraryContainer *
+    css::script::XLibraryContainer *
             getLibraryContainer( ContainerType _eType );
 
     /** calls the storeLibraries at both our script and basic library container
@@ -72,20 +72,20 @@ public:
     /** calls the setStorage at all our XStorageBasedLibraryContainer.
     */
     void    setStorage(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+                const css::uno::Reference< css::embed::XStorage >& _rxStorage
             );
 
     /** calls the storeLibrariesToStorage at all our XStorageBasedLibraryContainer.
     */
     void    storeLibrariesToStorage(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
+                const css::uno::Reference< css::embed::XStorage >& _rxStorage
             );
 
 
     /** checks if any modules in the SfxLibraryContainer exceed the binary
         limits.
     */
-    bool LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< OUString >& sModules );
+    bool LegacyPsswdBinaryLimitExceeded( css::uno::Sequence< OUString >& sModules );
 
     virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) override;
 

@@ -134,18 +134,18 @@ bool SfxFrame::DoClose()
             else if ( pImp->xFrame.is() )
             {
                 Reference < XFrame > xFrame = pImp->xFrame;
-                xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
+                xFrame->setComponent( Reference < css::awt::XWindow >(), Reference < XController >() );
                 xFrame->dispose();
             }
             else
                 bRet = DoClose_Impl();
         }
-        catch( ::com::sun::star::util::CloseVetoException& )
+        catch( css::util::CloseVetoException& )
         {
             pImp->bClosing = false;
             bRet = false;
         }
-        catch( ::com::sun::star::lang::DisposedException& )
+        catch( css::lang::DisposedException& )
         {
         }
     }
@@ -376,7 +376,7 @@ void SfxFrame::GetViewData_Impl()
         bool bGetViewData = false;
         if ( GetController().is() && pSet->GetItemState( SID_VIEW_DATA ) != SfxItemState::SET )
         {
-            ::com::sun::star::uno::Any aData = GetController()->getViewData();
+            css::uno::Any aData = GetController()->getViewData();
             pSet->Put( SfxUsrAnyItem( SID_VIEW_DATA, aData ) );
             bGetViewData = true;
         }
@@ -555,7 +555,7 @@ SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
     return pNew;
 }
 
-bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxFrameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
     if ( wFrame )
     {
@@ -566,7 +566,7 @@ bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
     return false;
 }
 
-bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
     Reference < XFrame > xFrame;
     if ( (rVal >>= xFrame) && xFrame.is() )
@@ -589,7 +589,7 @@ bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 }
 
 
-SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhichId, const ::com::sun::star::uno::Any& rAny )
+SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhichId, const css::uno::Any& rAny )
     : SfxPoolItem( nWhichId )
 {
     aValue = rAny;
@@ -605,13 +605,13 @@ SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
     return new SfxUsrAnyItem( Which(), aValue );
 }
 
-bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxUsrAnyItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal = aValue;
     return true;
 }
 
-bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxUsrAnyItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     aValue = rVal;
     return true;
@@ -623,7 +623,7 @@ SfxUnoFrameItem::SfxUnoFrameItem()
 {
 }
 
-SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame )
+SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, const css::uno::Reference< css::frame::XFrame >& i_rFrame )
     : SfxPoolItem( nWhichId )
     , m_xFrame( i_rFrame )
 {
@@ -639,13 +639,13 @@ SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
     return new SfxUnoFrameItem( Which(), m_xFrame );
 }
 
-bool SfxUnoFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxUnoFrameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= m_xFrame;
     return true;
 }
 
-bool SfxUnoFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxUnoFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     return ( rVal >>= m_xFrame );
 }
@@ -694,23 +694,23 @@ SfxFrame* SfxFrameIterator::NextSibling_Impl( SfxFrame& rPrev )
     return pRet;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SfxFrame::GetController() const
+css::uno::Reference< css::frame::XController > SfxFrame::GetController() const
 {
     if ( pImp->pCurrentViewFrame && pImp->pCurrentViewFrame->GetViewShell() )
         return pImp->pCurrentViewFrame->GetViewShell()->GetController();
     else
-        return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > ();
+        return css::uno::Reference< css::frame::XController > ();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  SfxFrame::GetFrameInterface() const
+css::uno::Reference< css::frame::XFrame >  SfxFrame::GetFrameInterface() const
 {
     return pImp->xFrame;
 }
 
-void SfxFrame::SetFrameInterface_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
+void SfxFrame::SetFrameInterface_Impl( const css::uno::Reference< css::frame::XFrame >& rFrame )
 {
     pImp->xFrame = rFrame;
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
     if ( !rFrame.is() && GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetBindings().SetRecorder_Impl( xRecorder );
 }
@@ -724,7 +724,7 @@ void SfxFrame::Appear()
         pImp->xFrame->getContainerWindow()->setVisible( sal_True );
         if ( pParentFrame )
             pParentFrame->Appear();
-        Reference < ::com::sun::star::awt::XTopWindow > xTopWindow( pImp->xFrame->getContainerWindow(), UNO_QUERY );
+        Reference < css::awt::XTopWindow > xTopWindow( pImp->xFrame->getContainerWindow(), UNO_QUERY );
         if ( xTopWindow.is() )
             xTopWindow->toFront();
     }

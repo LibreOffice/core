@@ -51,7 +51,7 @@ class SfxMacroLoader : public cppu::WeakImplHelper<
     SfxObjectShell* GetObjectShell_Impl();
 
 public:
-    SfxMacroLoader(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments)
+    SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getImplementationName()

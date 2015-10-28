@@ -71,9 +71,9 @@ SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 }
 
 
-bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxTemplateItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    ::com::sun::star::frame::status::Template aTemplate;
+    css::frame::status::Template aTemplate;
 
     aTemplate.Value = GetValue();
     aTemplate.StyleName = aStyle;
@@ -83,9 +83,9 @@ bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nM
 }
 
 
-bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxTemplateItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    ::com::sun::star::frame::status::Template aTemplate;
+    css::frame::status::Template aTemplate;
 
     if ( rVal >>= aTemplate )
     {

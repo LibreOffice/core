@@ -215,14 +215,14 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
 
 void SAL_CALL LayoutManagerListener::addEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     // do nothing, only internal class
 }
 
 void SAL_CALL LayoutManagerListener::removeEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     // do nothing, only internal class
 }
@@ -553,7 +553,7 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxBindings& rB, SfxWorkWindow*
     aChildren.insert( aChildren.begin(), SFX_OBJECTBAR_MAX, nullptr );
 
     // create and initialize layout manager listener
-    Reference< com::sun::star::frame::XFrame > xFrame = GetFrameInterface();
+    Reference< css::frame::XFrame > xFrame = GetFrameInterface();
     LayoutManagerListener* pLayoutManagerListener = new LayoutManagerListener( this );
     m_xLayoutManagerListener = css::uno::Reference< css::lang::XComponent >(
                                     static_cast< cppu::OWeakObject* >( pLayoutManagerListener ),
@@ -648,9 +648,9 @@ void SfxWorkWindow::DeleteControllers_Impl()
         // 8-bit displays (WM_QUERYPALETTECHANGED message due to focus change)!!
     }
 
-    Reference< com::sun::star::frame::XFrame > xFrame = GetFrameInterface();
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< css::frame::XFrame > xFrame = GetFrameInterface();
+    Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+    Reference< css::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
     {
         try
@@ -1179,11 +1179,11 @@ void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
     ShowChildren_Impl();
 }
 
-Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
+Reference< css::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
 {
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-    Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
+    Reference< css::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
+    Reference< css::frame::XLayoutManager > xLayoutManager;
+    Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     if ( xPropSet.is() )
     {
@@ -1194,11 +1194,11 @@ Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIn
             xLayoutManager->createElement( m_aProgressBarResName );
             xLayoutManager->showElement( m_aProgressBarResName );
 
-            Reference< ::com::sun::star::ui::XUIElement > xProgressBar =
+            Reference< css::ui::XUIElement > xProgressBar =
                 xLayoutManager->getElement( m_aProgressBarResName );
             if ( xProgressBar.is() )
             {
-                xStatusIndicator = Reference< ::com::sun::star::task::XStatusIndicator >(
+                xStatusIndicator = Reference< css::task::XStatusIndicator >(
                     xProgressBar->getRealInterface(), UNO_QUERY );
             }
         }
@@ -1223,9 +1223,9 @@ bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
 
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxWorkWindow::GetFrameInterface()
+css::uno::Reference< css::frame::XFrame > SfxWorkWindow::GetFrameInterface()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
+    css::uno::Reference< css::frame::XFrame > xFrame;
 
     SfxDispatcher* pDispatcher( GetBindings().GetDispatcher() );
     if ( pDispatcher )
@@ -1255,8 +1255,8 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     // you realize what is needed often (saves Code and execution time)
     SfxGetpApp();
 
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< css::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
+    Reference< css::frame::XLayoutManager > xLayoutManager;
 
     if ( xPropSet.is() )
     {
@@ -1551,8 +1551,8 @@ void SfxWorkWindow::SetStatusBar_Impl( sal_uInt32 nResId, SfxShell*, SfxBindings
 
 void SfxWorkWindow::UpdateStatusBar_Impl()
 {
-    Reference< ::com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< css::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
+    Reference< css::frame::XLayoutManager > xLayoutManager;
 
     Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
     aValue >>= xLayoutManager;

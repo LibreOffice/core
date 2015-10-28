@@ -141,9 +141,9 @@ namespace
     {
         try
         {
-            // if we get com::sun::star::sdbc::DriverManager, libsdbc2 is there
+            // if we get css::sdbc::DriverManager, libsdbc2 is there
             // and the bibliography is assumed to work
-            return com::sun::star::sdbc::DriverManager::create(comphelper::getProcessComponentContext()).is();
+            return css::sdbc::DriverManager::create(comphelper::getProcessComponentContext()).is();
         }
         catch (Exception & e)
         {
@@ -233,7 +233,7 @@ static void showDocument( const char* pBaseName )
              checkURL ( pBaseName, "", aURL ) ) {
             xDesktop->loadComponentFromURL( aURL, OUString("_blank"), 0, args );
         }
-    } catch (const ::com::sun::star::uno::Exception &) {
+    } catch (const css::uno::Exception &) {
     }
 }
 
@@ -442,9 +442,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
             try
             {
-                uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                    com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-                xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
             }
             catch ( uno::Exception& )
             {
@@ -639,8 +639,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
                 Reference< XFrame > xFrame = xDesktop->getActiveFrame();
 
-                Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-                Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+                Reference< css::frame::XLayoutManager > xLayoutManager;
                 if ( xPropSet.is() )
                 {
                     try
@@ -648,11 +648,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         Any aValue = xPropSet->getPropertyValue("LayoutManager");
                         aValue >>= xLayoutManager;
                     }
-                    catch ( const ::com::sun::star::uno::RuntimeException& )
+                    catch ( const css::uno::RuntimeException& )
                     {
                         throw;
                     }
-                    catch ( ::com::sun::star::uno::Exception& )
+                    catch ( css::uno::Exception& )
                     {
                     }
                 }
@@ -1022,7 +1022,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                         css::system::SystemShellExecuteFlags::URIS_ONLY );
                 }
             }
-            catch( const ::com::sun::star::uno::Exception& )
+            catch( const css::uno::Exception& )
             {
                 SAL_WARN( "sfx.appl", "SfxApplication::OfaExec_Impl(SID_MORE_DICTIONARIES): caught an exception!" );
             }
@@ -1305,7 +1305,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 xDialog = ui::dialogs::AddressBookSourcePilot::createWithParent(xORB, 0);
                 xDialog->execute();
             }
-            catch(const ::com::sun::star::uno::Exception&)
+            catch(const css::uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }

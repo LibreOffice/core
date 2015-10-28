@@ -52,7 +52,7 @@ void TemplateViewItem::calculateItemsPosition(const long nThumbnailHeight, const
         drawinglayer::primitive2d::TextLayouterDevice aTextDev;
         aTextDev.setFontAttribute(pAttrs->aFontAttr,
                                   pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
-                                  com::sun::star::lang::Locale() );
+                                  css::lang::Locale() );
 
         long nSpace = (nDisplayHeight + nPadding - 2*aTextDev.getTextHeight()) / 3;
 

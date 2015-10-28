@@ -39,29 +39,29 @@ class SfxViewShell;
 class SfxPrinter;
 
 class SfxPrintHelper : public cppu::WeakImplHelper
-        < com::sun::star::view::XPrintable
-        , com::sun::star::view::XPrintJobBroadcaster
-        , com::sun::star::lang::XInitialization >
+        < css::view::XPrintable
+        , css::view::XPrintJobBroadcaster
+        , css::lang::XInitialization >
 {
 public:
 
     SfxPrintHelper() ;
     virtual ~SfxPrintHelper() ;
 
-    void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removePrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > SAL_CALL getPrinter() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setPrinter( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& seqPrinter )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL print( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& seqOptions )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPrinter( const css::uno::Sequence< css::beans::PropertyValue >& seqPrinter )
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL print( const css::uno::Sequence< css::beans::PropertyValue >& seqOptions )
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
 private:
 
     osl::Mutex m_aMutex;
     IMPL_PrintListener_DataContainer* m_pData ;
-    void impl_setPrinter(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rPrinter,
+    void impl_setPrinter(const css::uno::Sequence< css::beans::PropertyValue >& rPrinter,
                          SfxPrinter*& pPrinter,
                          SfxPrinterChangeFlags& nChangeFlags,
                          SfxViewShell*& pViewSh);

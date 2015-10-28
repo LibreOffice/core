@@ -344,7 +344,7 @@ bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
         }
         else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
         {
-            pBindings->SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
+            pBindings->SetActiveFrame( css::uno::Reference< css::frame::XFrame > () );
             pImp->pMgr->Deactivate_Impl();
         }
         else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )

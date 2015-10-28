@@ -106,14 +106,14 @@ bool SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
              eType      == rItem.GetType()          );
 }
 
-bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxZoomItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
         case 0:
         {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( ZOOM_PARAMS );
+            css::uno::Sequence< css::beans::PropertyValue > aSeq( ZOOM_PARAMS );
             aSeq[0].Name = ZOOM_PARAM_VALUE;
             aSeq[0].Value <<= sal_Int32( GetValue() );
             aSeq[1].Name = ZOOM_PARAM_VALUESET;
@@ -135,14 +135,14 @@ bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberI
     return true;
 }
 
-bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxZoomItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
         case 0:
         {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
+            css::uno::Sequence< css::beans::PropertyValue > aSeq;
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == ZOOM_PARAMS ))
             {
                 sal_Int32 nValueTmp( 0 );

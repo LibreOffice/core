@@ -27,7 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 
 
-class DocTemplLocaleHelper : public cppu::WeakImplHelper < com::sun::star::xml::sax::XDocumentHandler >
+class DocTemplLocaleHelper : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
 {
     // Relations info related strings
     OUString m_aGroupListElement;
@@ -35,43 +35,43 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper < com::sun::star::xml::
     OUString m_aNameAttr;
     OUString m_aUINameAttr;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > m_aResultSeq;
-    ::com::sun::star::uno::Sequence< OUString > m_aElementsSeq; // stack of elements being parsed
+    css::uno::Sequence< css::beans::StringPair > m_aResultSeq;
+    css::uno::Sequence< OUString > m_aElementsSeq; // stack of elements being parsed
 
     DocTemplLocaleHelper();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > GetParsingResult();
+    css::uno::Sequence< css::beans::StringPair > GetParsingResult();
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream, const OUString& aStringID, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
-    throw( ::com::sun::star::uno::Exception );
+    static css::uno::Sequence< css::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const css::uno::Reference< css::io::XInputStream >& xInStream, const OUString& aStringID, const css::uno::Reference< css::uno::XComponentContext > xContext )
+    throw( css::uno::Exception );
 
 public:
     virtual ~DocTemplLocaleHelper();
 
     // returns sequence of pairs ( GroupName, GroupUIName )
     static
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >
+    css::uno::Sequence< css::beans::StringPair >
     ReadGroupLocalizationSequence(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
-            throw( ::com::sun::star::uno::Exception );
+        const css::uno::Reference< css::io::XInputStream >& xInStream,
+        const css::uno::Reference< css::uno::XComponentContext > xContext )
+            throw( css::uno::Exception );
 
     // writes sequence of elements ( GroupName, GroupUIName )
     static
     void SAL_CALL WriteGroupLocalizationSequence(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aSequence,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
-            throw( ::com::sun::star::uno::Exception );
+        const css::uno::Reference< css::io::XOutputStream >& xOutStream,
+        const css::uno::Sequence< css::beans::StringPair >& aSequence,
+        const css::uno::Reference< css::uno::XComponentContext > xContext )
+            throw( css::uno::Exception );
 
     // XDocumentHandler
-    virtual void SAL_CALL startDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL startElement( const OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endElement( const OUString& aName ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endElement( const OUString& aName ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

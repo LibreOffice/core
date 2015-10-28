@@ -38,7 +38,7 @@
 using namespace ::com::sun::star;
 
 
-class SfxRefreshListener : public ::cppu::WeakImplHelper<com::sun::star::util::XRefreshListener>
+class SfxRefreshListener : public ::cppu::WeakImplHelper<css::util::XRefreshListener>
 {
     private:
         SfxFilterListener *m_pOwner;
@@ -54,15 +54,15 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper<com::sun::star::util::X
         }
 
         // util.XRefreshListener
-        virtual void SAL_CALL refreshed( const ::com::sun::star::lang::EventObject& rEvent )
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL refreshed( const css::lang::EventObject& rEvent )
+            throw(css::uno::RuntimeException, std::exception) override
         {
             m_pOwner->refreshed(rEvent);
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
-            throw(com::sun::star::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
+            throw(css::uno::RuntimeException, std::exception) override
         {
             m_pOwner->disposing(rEvent);
         }

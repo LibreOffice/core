@@ -173,7 +173,7 @@ bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
     try
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
-                             Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                             Reference< css::ucb::XCommandEnvironment >(),
                              comphelper::getProcessComponentContext() );
         if ( ( aCnt.getPropertyValue("AnchorName") >>= sAnchor ) )
         {
@@ -189,7 +189,7 @@ bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
             SAL_WARN( "sfx.appl", "Property 'AnchorName' is missing" );
         }
     }
-    catch (const ::com::sun::star::uno::Exception&)
+    catch (const css::uno::Exception&)
     {
     }
 
@@ -277,7 +277,7 @@ OUString getCurrentModuleIdentifier_Impl()
         {
             sIdentifier = xModuleManager->identify( xCurrentFrame );
         }
-        catch (const ::com::sun::star::frame::UnknownModuleException&)
+        catch (const css::frame::UnknownModuleException&)
         {
             SAL_INFO( "sfx2.appl", "SfxHelp::getCurrentModuleIdentifier_Impl(): unknown module (help in help?)" );
         }
@@ -401,10 +401,10 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
         return 0;
 
     // create all internal windows and sub frames ...
-    Reference< ::com::sun::star::awt::XWindow > xParentWindow = xHelpTask->getContainerWindow();
-    vcl::Window*                                pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
-    VclPtrInstance<SfxHelpWindow_Impl>          pHelpWindow( xHelpTask, pParentWindow, WB_DOCKBORDER );
-    Reference< ::com::sun::star::awt::XWindow > xHelpWindow   = VCLUnoHelper::GetInterface( pHelpWindow );
+    Reference< css::awt::XWindow >      xParentWindow = xHelpTask->getContainerWindow();
+    vcl::Window*                        pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
+    VclPtrInstance<SfxHelpWindow_Impl>  pHelpWindow( xHelpTask, pParentWindow, WB_DOCKBORDER );
+    Reference< css::awt::XWindow >      xHelpWindow   = VCLUnoHelper::GetInterface( pHelpWindow );
 
     Reference< XFrame > xHelpContent;
     if (xHelpTask->setComponent( xHelpWindow, Reference< XController >() ))
@@ -637,7 +637,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
     if (!rKeyword.isEmpty())
         pHelpWindow->OpenKeyword( rKeyword );
 
-    Reference < ::com::sun::star::awt::XTopWindow > xTopWindow( xHelp->getContainerWindow(), UNO_QUERY );
+    Reference < css::awt::XTopWindow > xTopWindow( xHelp->getContainerWindow(), UNO_QUERY );
     if ( xTopWindow.is() )
         xTopWindow->toFront();
 

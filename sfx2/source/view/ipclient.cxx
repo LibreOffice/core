@@ -136,7 +136,7 @@ public:
     virtual void SAL_CALL activatingUI() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL deactivatedInplace() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL deactivatedUI() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
-    virtual uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL getLayoutManager() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
+    virtual uno::Reference< css::frame::XLayoutManager > SAL_CALL getLayoutManager() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual uno::Reference< frame::XDispatchProvider > SAL_CALL getInplaceDispatchProvider() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual awt::Rectangle SAL_CALL getPlacement() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual awt::Rectangle SAL_CALL getClipRectangle() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
@@ -154,9 +154,9 @@ public:
     virtual void SAL_CALL       notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException, std::exception ) override;
 
     // XStateChangeListener
-    virtual void SAL_CALL changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL changingState( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (css::embed::WrongStateException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL stateChanged( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 SfxInPlaceClient_Impl::~SfxInPlaceClient_Impl()
@@ -164,18 +164,18 @@ SfxInPlaceClient_Impl::~SfxInPlaceClient_Impl()
 }
 
 void SAL_CALL SfxInPlaceClient_Impl::changingState(
-    const ::com::sun::star::lang::EventObject& /*aEvent*/,
+    const css::lang::EventObject& /*aEvent*/,
     ::sal_Int32 /*nOldState*/,
     ::sal_Int32 /*nNewState*/ )
-throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::embed::WrongStateException, css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SfxInPlaceClient_Impl::stateChanged(
-    const ::com::sun::star::lang::EventObject& /*aEvent*/,
+    const css::lang::EventObject& /*aEvent*/,
     ::sal_Int32 nOldState,
     ::sal_Int32 nNewState )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_pClient && nOldState != embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
@@ -199,8 +199,8 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
     }
 }
 
-void SAL_CALL SfxInPlaceClient_Impl::disposing( const ::com::sun::star::lang::EventObject& /*aEvent*/ )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SfxInPlaceClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ )
+throw (css::uno::RuntimeException, std::exception)
 {
     DELETEZ( m_pClient );
 }
@@ -383,7 +383,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
 }
 
 
-uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::getLayoutManager()
+uno::Reference< css::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::getLayoutManager()
     throw ( embed::WrongStateException,
             uno::RuntimeException, std::exception )
 {
@@ -391,7 +391,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceCli
     if ( !xFrame.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
+    uno::Reference< css::frame::XLayoutManager > xMan;
     try
     {
         uno::Any aAny = xFrame->getPropertyValue( "LayoutManager" );
@@ -848,7 +848,7 @@ bool SfxInPlaceClient::IsObjectInPlaceActive() const
 }
 
 
-SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject )
+SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject )
 {
     for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDoc); pFrame; pFrame=SfxViewFrame::GetNext(*pFrame,pDoc) )
     {
@@ -1060,7 +1060,7 @@ void SfxInPlaceClient::DeactivateObject()
             pFrame->GetTopFrame().LockResize_Impl(false);
             pFrame->GetTopFrame().Resize();
         }
-        catch (com::sun::star::uno::Exception& )
+        catch (css::uno::Exception& )
         {}
     }
 }
@@ -1085,7 +1085,7 @@ void SfxInPlaceClient::ResetObject()
                     m_pImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
             }
         }
-        catch (com::sun::star::uno::Exception& )
+        catch (css::uno::Exception& )
         {}
     }
 }

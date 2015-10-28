@@ -36,7 +36,7 @@ class SfxViewFrame;
 class SfxFrame_Impl : public SfxBroadcaster
 {
 public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
+    css::uno::Reference< css::frame::XFrame > xFrame;
     sal_uInt32                nType;
     SfxViewFrame*             pCurrentViewFrame;
     SfxFrameDescriptor*       pDescr;

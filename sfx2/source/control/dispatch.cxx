@@ -223,19 +223,19 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
         if ( GetFrame() )
         {
             // Recording may start
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+            css::uno::Reference< css::frame::XFrame > xFrame(
                     GetFrame()->GetFrame().GetFrameInterface(),
-                    com::sun::star::uno::UNO_QUERY);
+                    css::uno::UNO_QUERY);
 
-            com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+            css::uno::Reference< css::beans::XPropertySet > xSet(
                     xFrame,
-                    com::sun::star::uno::UNO_QUERY);
+                    css::uno::UNO_QUERY);
 
             if ( xSet.is() )
             {
-                com::sun::star::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
-                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
-                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+                css::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
+                css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
+                css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
                 aProp >>= xSupplier;
                 if(xSupplier.is())
                     xRecorder = xSupplier->getDispatchRecorder();
@@ -739,11 +739,11 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
     bool bHidePopups = bMDI && xImp->pFrame;
     if ( pNew && xImp->pFrame )
     {
-        com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xOldFrame(
-            pNew->GetFrame().GetFrameInterface()->getCreator(), com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::frame::XFrame > xOldFrame(
+            pNew->GetFrame().GetFrameInterface()->getCreator(), css::uno::UNO_QUERY );
 
-        com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xMyFrame(
-            GetFrame()->GetFrame().GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::frame::XFrame > xMyFrame(
+            GetFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY );
 
         if ( xOldFrame == xMyFrame )
             bHidePopups = false;
@@ -1118,11 +1118,11 @@ void SfxDispatcher::SetMenu_Impl()
             SfxFrame& rFrame = pTop->GetFrame();
             if ( rFrame.IsMenuBarOn_Impl() )
             {
-                com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( rFrame.GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference < css::beans::XPropertySet > xPropSet( rFrame.GetFrameInterface(), css::uno::UNO_QUERY );
                 if ( xPropSet.is() )
                 {
-                    com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+                    css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                     {
@@ -1175,23 +1175,23 @@ void SfxDispatcher::Update_Impl( bool bForce )
         // keep own tools internally for collecting
         GetBindings()->GetDispatcher()->xImp->bUpdated = false;
 
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame;
+    css::uno::Reference< css::frame::XFrame > xFrame;
     SfxBindings* pBindings = GetBindings();
     if (pBindings)
     {
         pBindings->DENTERREGISTRATIONS();
         xFrame = pBindings->GetActiveFrame();
     }
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, com::sun::star::uno::UNO_QUERY );
-    com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
     {
         try
         {
-            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+            css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
             aValue >>= xLayoutManager;
         }
-        catch (const com::sun::star::uno::Exception&)
+        catch (const css::uno::Exception&)
         {
         }
     }
@@ -1940,11 +1940,11 @@ void SfxDispatcher::HideUI( bool bHide )
             SfxFrame& rFrame = pTop->GetFrame();
             if ( rFrame.IsMenuBarOn_Impl() )
             {
-                com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xPropSet( rFrame.GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference < css::beans::XPropertySet > xPropSet( rFrame.GetFrameInterface(), css::uno::UNO_QUERY );
                 if ( xPropSet.is() )
                 {
-                    com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
+                    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+                    css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                         xLayoutManager->setVisible( !bHide );
@@ -1994,7 +1994,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, const SfxPoolItem* &rp
     return SfxItemState::DISABLED;
 }
 
-SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::Any& rAny )
+SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
 {
     SfxShell *pShell = 0;
     const SfxSlot *pSlot = 0;
@@ -2007,7 +2007,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::
             return SfxItemState::DISABLED;
         else
         {
-            ::com::sun::star::uno::Any aState;
+            css::uno::Any aState;
             if ( dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
             {
                 sal_uInt16 nSubId( 0 );

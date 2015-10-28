@@ -182,7 +182,7 @@ namespace sfx2
 
                     // otherwise, delegate to the GraphicProvider
                     const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                    const Reference< XGraphicProvider > xGraphicProvider( com::sun::star::graphic::GraphicProvider::create(xContext) );
+                    const Reference< XGraphicProvider > xGraphicProvider( css::graphic::GraphicProvider::create(xContext) );
 
                     const Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_SET_THROW );
                     return Image( xGraphic );

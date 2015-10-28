@@ -88,7 +88,7 @@ ThumbnailViewAcc* ThumbnailViewAcc::getImplementation( const uno::Reference< uno
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
         return( xUnoTunnel.is() ? reinterpret_cast<ThumbnailViewAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ThumbnailViewAcc::getUnoTunnelId() ))) : NULL );
     }
-    catch(const ::com::sun::star::uno::Exception&)
+    catch(const css::uno::Exception&)
     {
         return NULL;
     }
@@ -99,10 +99,10 @@ void ThumbnailViewAcc::GetFocus()
     mbIsFocused = true;
 
     // Broadcast the state change.
-    ::com::sun::star::uno::Any aOldState, aNewState;
-    aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    css::uno::Any aOldState, aNewState;
+    aNewState <<= css::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
-        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
+        css::accessibility::AccessibleEventId::STATE_CHANGED,
         aOldState, aNewState);
 }
 
@@ -111,10 +111,10 @@ void ThumbnailViewAcc::LoseFocus()
     mbIsFocused = false;
 
     // Broadcast the state change.
-    ::com::sun::star::uno::Any aOldState, aNewState;
-    aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    css::uno::Any aOldState, aNewState;
+    aOldState <<= css::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
-        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
+        css::accessibility::AccessibleEventId::STATE_CHANGED,
         aOldState, aNewState);
 }
 
@@ -581,7 +581,7 @@ ThumbnailViewItem* ThumbnailViewAcc::getItem (sal_uInt16 nIndex) const
 }
 
 void ThumbnailViewAcc::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -659,7 +659,7 @@ ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Refere
                         xUnoTunnel->getSomething( ThumbnailViewItemAcc::getUnoTunnelId() ))) :
                 NULL );
     }
-    catch(const ::com::sun::star::uno::Exception&)
+    catch(const css::uno::Exception&)
     {
         return NULL;
     }

@@ -166,7 +166,7 @@ IFrameObject::~IFrameObject()
 }
 
 sal_Bool SAL_CALL IFrameObject::load(
-    const uno::Sequence < com::sun::star::beans::PropertyValue >& /*lDescriptor*/,
+    const uno::Sequence < css::beans::PropertyValue >& /*lDescriptor*/,
     const uno::Reference < frame::XFrame >& xFrame )
 throw( uno::RuntimeException, std::exception )
 {
@@ -214,7 +214,7 @@ throw( uno::RuntimeException, std::exception )
     return sal_False;
 }
 
-void SAL_CALL IFrameObject::cancel() throw( com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::cancel() throw( css::uno::RuntimeException, std::exception )
 {
     try
     {
@@ -228,24 +228,24 @@ void SAL_CALL IFrameObject::cancel() throw( com::sun::star::uno::RuntimeExceptio
     }
 }
 
-void SAL_CALL IFrameObject::close( sal_Bool /*bDeliverOwnership*/ ) throw( com::sun::star::util::CloseVetoException, com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::close( sal_Bool /*bDeliverOwnership*/ ) throw( css::util::CloseVetoException, css::uno::RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL IFrameObject::addCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& ) throw( com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::addCloseListener( const css::uno::Reference < css::util::XCloseListener >& ) throw( css::uno::RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL IFrameObject::removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& ) throw( com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& ) throw( css::uno::RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL IFrameObject::disposing( const com::sun::star::lang::EventObject& ) throw (com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL IFrameObject::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
     cancel();
 }
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL IFrameObject::getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException, std::exception )
+uno::Reference< beans::XPropertySetInfo > SAL_CALL IFrameObject::getPropertySetInfo() throw( css::uno::RuntimeException, std::exception )
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo = new SfxItemPropertySetInfo( maPropMap );
     return xInfo;
@@ -389,23 +389,23 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
     return aAny;
 }
 
-void SAL_CALL IFrameObject::addPropertyChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::addPropertyChangeListener(const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener > & ) throw( css::uno::RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL IFrameObject::removePropertyChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::removePropertyChangeListener(const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener > & ) throw( css::uno::RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL IFrameObject::addVetoableChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::addVetoableChangeListener(const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener > & ) throw( css::uno::RuntimeException, std::exception )
 {
 }
 
-void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener > & ) throw( css::uno::RuntimeException, std::exception )
 {
 }
 
-::sal_Int16 SAL_CALL IFrameObject::execute() throw (::com::sun::star::uno::RuntimeException, std::exception)
+::sal_Int16 SAL_CALL IFrameObject::execute() throw (css::uno::RuntimeException, std::exception)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, ".uno:InsertObjectFloatingFrame", mxObj );
@@ -414,7 +414,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const 
     return 0;
 }
 
-void SAL_CALL IFrameObject::setTitle( const OUString& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL IFrameObject::setTitle( const OUString& ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 

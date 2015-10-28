@@ -1812,7 +1812,7 @@ static OUString getModuleIdentifier( const Reference< XModuleManager2 >& i_xModM
     {
         sIdentifier = i_xModMgr->identify( i_pObjSh->GetModel() );
     }
-    catch ( ::com::sun::star::frame::UnknownModuleException& )
+    catch ( css::frame::UnknownModuleException& )
     {
         OSL_TRACE( "getModuleIdentifier(): unknown module" );
     }

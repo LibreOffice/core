@@ -39,13 +39,13 @@ namespace sfx2
 {
     class FileDialogHelper_Impl :
         public ::cppu::WeakImplHelper<
-            ::com::sun::star::ui::dialogs::XFilePickerListener,
-            ::com::sun::star::ui::dialogs::XDialogClosedListener >
+            css::ui::dialogs::XFilePickerListener,
+            css::ui::dialogs::XDialogClosedListener >
     {
         friend class FileDialogHelper;
 
-        ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker2 > mxFileDlg;
-        ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess >   mxFilterCFG;
+        css::uno::Reference < css::ui::dialogs::XFilePicker2 > mxFileDlg;
+        css::uno::Reference < css::container::XNameAccess >   mxFilterCFG;
 
         std::vector< css::beans::StringPair >   maFilters;
 
@@ -141,7 +141,7 @@ namespace sfx2
 
         void                    verifyPath( );
 
-        void                    implGetAndCacheFiles( const ::com::sun::star::uno::Reference< XInterface >& xPicker  ,
+        void                    implGetAndCacheFiles( const css::uno::Reference< XInterface >& xPicker  ,
                                                       std::vector<OUString>&               rpURLList,
                                                       const SfxFilter*                    pFilter  );
 
@@ -150,23 +150,23 @@ namespace sfx2
 
     public:
         // XFilePickerListener methods
-        virtual void SAL_CALL               fileSelectionChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL               directoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual OUString SAL_CALL    helpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL               controlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL               dialogSizeChanged() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL               fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL               directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL           helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL               controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL               dialogSizeChanged() throw( css::uno::RuntimeException, std::exception ) override;
 
         // XDialogClosedListener methods
-        virtual void SAL_CALL               dialogClosed( const ::com::sun::star::ui::dialogs::DialogClosedEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL               dialogClosed( const css::ui::dialogs::DialogClosedEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener methods
-        virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) override;
 
         // handle XFilePickerListener events
-        void                    handleFileSelectionChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
-        void                    handleDirectoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
-        static OUString         handleHelpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
-        void                    handleControlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
+        void                    handleFileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
+        void                    handleDirectoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
+        static OUString         handleHelpRequested( const css::ui::dialogs::FilePickerEvent& aEvent );
+        void                    handleControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
         void                    handleDialogSizeChanged();
 
         // Own methods
@@ -177,7 +177,7 @@ namespace sfx2
                                     sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
                                     vcl::Window* _pPreferredParentWindow = NULL,
                                     const OUString& sStandardDir = OUString(),
-                                    const ::com::sun::star::uno::Sequence< OUString >&   rBlackList = ::com::sun::star::uno::Sequence< OUString >()
+                                    const css::uno::Sequence< OUString >&   rBlackList = css::uno::Sequence< OUString >()
                                 );
         virtual                 ~FileDialogHelper_Impl();
 
@@ -203,16 +203,16 @@ namespace sfx2
         ErrCode                 getGraphic( Graphic& rGraphic ) const;
         void                    createMatcher( const OUString& rFactory );
 
-        bool                isShowFilterExtensionEnabled() const;
+        bool                    isShowFilterExtensionEnabled() const;
         void                    addFilterPair( const OUString& rFilter,
                                                const OUString& rFilterWithExtension );
-        OUString         getFilterName( const OUString& rFilterWithExtension ) const;
-        OUString         getFilterWithExtension( const OUString& rFilter ) const;
+        OUString                getFilterName( const OUString& rFilterWithExtension ) const;
+        OUString                getFilterWithExtension( const OUString& rFilter ) const;
 
         void                    SetContext( FileDialogHelper::Context _eNewContext );
 
-        inline bool         isSystemFilePicker() const { return mbSystemPicker; }
-        inline bool         isPasswordEnabled() const { return mbIsPwdEnabled; }
+        inline bool             isSystemFilePicker() const { return mbSystemPicker; }
+        inline bool             isPasswordEnabled() const { return mbIsPwdEnabled; }
     };
 
 }   // end of namespace sfx2

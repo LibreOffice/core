@@ -1538,7 +1538,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         {
             pValue[nActProp].Name = sBlackList;
 
-            com::sun::star::uno::Sequence< OUString > aList;
+            css::uno::Sequence< OUString > aList;
             static_cast<const SfxStringListItem*>(pItem)->GetStringList( aList );
             pValue[nActProp++].Value <<= aList ;
         }
@@ -1772,9 +1772,9 @@ bool RequestPackageReparation::isApproved()
     return pImp->isApproved();
 }
 
-com::sun::star::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest()
+css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest()
 {
-    return com::sun::star::uno::Reference < task::XInteractionRequest >(pImp);
+    return css::uno::Reference < task::XInteractionRequest >(pImp);
 }
 
 
@@ -1828,9 +1828,9 @@ NotifyBrokenPackage::~NotifyBrokenPackage()
     pImp->release();
 }
 
-com::sun::star::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
+css::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
 {
-    return com::sun::star::uno::Reference < task::XInteractionRequest >(pImp);
+    return css::uno::Reference < task::XInteractionRequest >(pImp);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

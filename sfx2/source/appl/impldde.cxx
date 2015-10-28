@@ -134,7 +134,7 @@ SvDDEObject::~SvDDEObject()
     delete pConnection;
 }
 
-bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+bool SvDDEObject::GetData( css::uno::Any & rData /*out param*/,
                             const OUString & rMimeType,
                             bool bSynchron )
 {

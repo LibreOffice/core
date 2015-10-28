@@ -94,8 +94,8 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     if ( xModel.is() )
     {
         // Get tunnel from model to retrieve the SfxObjectShell pointer from it
-        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xObj( xModel, uno::UNO_QUERY );
-        ::com::sun::star::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
+        css::uno::Reference < css::lang::XUnoTunnel > xObj( xModel, uno::UNO_QUERY );
+        css::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
         if ( xObj.is() )
         {
             sal_Int64 nHandle = xObj->getSomething( aSeq );
@@ -210,7 +210,7 @@ throw (uno::RuntimeException, std::exception)
 
 // XStatusListener
 void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent& rEvent )
-throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+throw ( css::uno::RuntimeException, std::exception )
 {
     SfxViewFrame* pViewFrame = NULL;
     uno::Reference < frame::XController > xController;
@@ -286,7 +286,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotID, sTemp );
                 }
-                else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::ItemStatus>::get() )
+                else if ( pType == cppu::UnoType< css::frame::status::ItemStatus>::get() )
                 {
                     frame::status::ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
@@ -372,8 +372,8 @@ void SAL_CALL SfxStatusBarControl::command(
     const awt::Point& rPos,
     ::sal_Int32 nCommand,
     sal_Bool /*bMouseEvent*/,
-    const ::com::sun::star::uno::Any& /*aData*/ )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Any& /*aData*/ )
+throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ::Point aPos( rPos.X, rPos.Y );
@@ -561,7 +561,7 @@ void SfxStatusBarControl::Click()
 */
 
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
+    css::uno::Sequence< css::beans::PropertyValue > aArgs;
     execute( aArgs );
 }
 
