@@ -20,13 +20,6 @@
 namespace o3tl { namespace ptr_container {
 
 template<typename C, typename T> inline std::pair<typename C::iterator, bool>
-insert(C & container, std::unique_ptr<T> && element) {
-    std::pair<typename C::iterator, bool> r(container.insert(element.get()));
-    element.release();
-    return r;
-}
-
-template<typename C, typename T> inline std::pair<typename C::iterator, bool>
 insert(
     C & container, typename C::key_type const & key,
     std::unique_ptr<T> && element)

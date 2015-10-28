@@ -71,9 +71,6 @@ public:
                     { return nCol == r.nCol && nRow == r.nRow && nTab == r.nTab; }
     bool            operator!=( const ScBigAddress& r ) const
                     { return !operator==( r ); }
-
-    friend inline SvStream& WriteScBigAddress( SvStream& rStream, const ScBigAddress& rAdr );
-    friend inline SvStream& ReadScBigAddress( SvStream& rStream, ScBigAddress& rAdr );
 };
 
 inline void ScBigAddress::PutInOrder( ScBigAddress& r )
@@ -127,18 +124,6 @@ inline ScAddress ScBigAddress::MakeAddress() const
         nTabA = (SCTAB) nTab;
 
     return ScAddress( nColA, nRowA, nTabA );
-}
-
-inline SvStream& WriteScBigAddress( SvStream& rStream, const ScBigAddress& rAdr )
-{
-    rStream.WriteInt32( rAdr.nCol ).WriteInt32( rAdr.nRow ).WriteInt32( rAdr.nTab );
-    return rStream;
-}
-
-inline SvStream& ReadScBigAddress( SvStream& rStream, ScBigAddress& rAdr )
-{
-    rStream.ReadInt32( rAdr.nCol ).ReadInt32( rAdr.nRow ).ReadInt32( rAdr.nTab );
-    return rStream;
 }
 
 class ScBigRange

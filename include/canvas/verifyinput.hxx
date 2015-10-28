@@ -558,18 +558,6 @@ namespace canvas
 
         /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
             index range is violated
-        */
-        template< typename NumType > inline void verifyIndexRange( NumType arg, NumType lowerBound, NumType upperBound )
-        {
-            if( arg < lowerBound ||
-                arg > upperBound )
-            {
-                throw css::lang::IndexOutOfBoundsException();
-            }
-        }
-
-        /** Range checker, which throws css::lang::IndexOutOfBounds exception, when
-            index range is violated
 
             @param rect
             Rect to verify

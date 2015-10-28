@@ -731,14 +731,6 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr )
     return rStrm;
 }
 
-XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArrayRef& rxTokArr )
-{
-    if( !rxTokArr )
-        rxTokArr.reset( new XclTokenArray );
-    rxTokArr->Read( rStrm );
-    return rStrm;
-}
-
 XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr )
 {
     rTokArr.Write( rStrm );

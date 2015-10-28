@@ -305,9 +305,6 @@ int cow_wrapper_client::queryUnmodified() const
         const_pointer     operator->() const { return &m_pimpl->m_value; }
         const value_type& operator*()  const { return m_pimpl->m_value; }
 
-        pointer           get()       { return &make_unique(); }
-        const_pointer     get() const { return &m_pimpl->m_value; }
-
         /// true, if both cow_wrapper internally share the same object
         bool              same_object( const cow_wrapper& rOther ) const
         {
@@ -341,12 +338,6 @@ int cow_wrapper_client::queryUnmodified() const
                                                  cow_wrapper<T,P>& b )
     {
         a.swap(b);
-    }
-
-    // to enable boost::mem_fn on cow_wrapper
-    template<class T, class P> inline T * get_pointer( const cow_wrapper<T,P>& r )
-    {
-        return r.get();
     }
 
 }
