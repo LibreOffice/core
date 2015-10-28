@@ -21,10 +21,12 @@
 
 #include <tools/solar.h>
 #include <tools/color.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
 
 #include <swdllapi.h>
+
+#include <memory>
+#include <vector>
 
 class SwTableBox;
 class SwTableLine;
@@ -89,11 +91,11 @@ public:
     bool HasPrcWidthOpt() const { return bPrcWidthOpt; }
 };
 
-typedef boost::ptr_vector<SwWriteTableCell> SwWriteTableCells;
+typedef std::vector<std::unique_ptr<SwWriteTableCell>> SwWriteTableCells;
 
 class SW_DLLPUBLIC SwWriteTableRow
 {
-    SwWriteTableCells aCells;       // Alle Zellen der Rows
+    SwWriteTableCells m_Cells; ///< All cells of the Rows
     const SvxBrushItem *pBackground;// Hintergrund
 
     long nPos;                  // End-Position (twips) der Zeile
@@ -133,7 +135,7 @@ public:
     bool HasTopBorder() const                   { return bTopBorder; }
     bool HasBottomBorder() const                { return bBottomBorder; }
 
-    const SwWriteTableCells& GetCells() const   { return aCells; }
+    const SwWriteTableCells& GetCells() const   { return m_Cells; }
 
     inline bool operator==( const SwWriteTableRow& rRow ) const;
     inline bool operator<( const SwWriteTableRow& rRow2 ) const;

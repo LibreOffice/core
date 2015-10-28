@@ -513,9 +513,9 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     sal_Int16 eRowVertOri = text::VertOrientation::NONE;
     if( rCells.size() > 1 )
     {
-        for( SwWriteTableCells::size_type nCell = 0; nCell<rCells.size(); ++nCell )
+        for (SwWriteTableCells::size_type nCell = 0; nCell < rCells.size(); ++nCell)
         {
-            sal_Int16 eCellVertOri = rCells[nCell].GetVertOri();
+            sal_Int16 eCellVertOri = rCells[nCell]->GetVertOri();
             if( 0==nCell )
             {
                 eRowVertOri = eCellVertOri;
@@ -553,8 +553,10 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
 
     rWrt.IncIndentLevel(); // Inhalt von <TR>...</TR> einruecken
 
-    for( const auto &rCell : rCells )
-        OutTableCell( rWrt, &rCell, text::VertOrientation::NONE==eRowVertOri );
+    for (const auto &rpCell : rCells)
+    {
+        OutTableCell(rWrt, rpCell.get(), text::VertOrientation::NONE == eRowVertOri);
+    }
 
     rWrt.DecIndentLevel(); // Inhalt von <TR>...</TR> einruecken
 

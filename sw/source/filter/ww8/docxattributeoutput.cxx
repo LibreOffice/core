@@ -2946,7 +2946,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     const SwWriteTableCells& rTableCells =  pRow->GetCells();
     if (nCell < rTableCells.size() )
     {
-        const SwWriteTableCell& rCell = rTableCells[nCell];
+        const SwWriteTableCell& rCell = *rTableCells[nCell];
         const sal_uInt16 nColSpan = rCell.GetColSpan();
         if ( nColSpan > 1 )
             m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
@@ -3703,7 +3703,7 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
     const SwWriteTableCells& rTableCells =  pRow->GetCells();
     if (nCell < rTableCells.size() )
     {
-        const SwWriteTableCell *pCell = &pRow->GetCells( )[ nCell ];
+        const SwWriteTableCell *const pCell = pRow->GetCells()[ nCell ].get();
         switch( pCell->GetVertOri())
         {
         case text::VertOrientation::TOP:

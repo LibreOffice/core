@@ -67,7 +67,7 @@ SwWriteTableCell *SwWriteTableRow::AddCell( const SwTableBox *pBox,
     SwWriteTableCell *pCell =
         new SwWriteTableCell( pBox, nRow, nCol, nRowSpan, nColSpan,
                                 nHeight, pBackgroundBrush );
-    aCells.push_back( pCell );
+    m_Cells.push_back(std::unique_ptr<SwWriteTableCell>(pCell));
 
     return pCell;
 }
