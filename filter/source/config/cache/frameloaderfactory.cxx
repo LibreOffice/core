@@ -83,9 +83,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
             css::uno::Sequence< OUString > lTypes(1);
             lTypes[0] = sLoader;
 
-            css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-            lQuery[0].Name    = PROPNAME_TYPES;
-            lQuery[0].Value <<= lTypes;
+            css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPES, css::uno::makeAny(lTypes) } };
 
             css::uno::Reference< css::container::XEnumeration > xSet = BaseContainer::createSubSetEnumerationByProperties(lQuery);
             while(xSet->hasMoreElements())

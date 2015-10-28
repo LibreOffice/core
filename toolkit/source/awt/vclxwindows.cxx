@@ -2672,17 +2672,11 @@ uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int3
     if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
         throw lang::IndexOutOfBoundsException();
 
-#define ADD_PROP( seq, i, name, val ) {                                \
-        beans::NamedValue value;                                                  \
-        value.Name = name; \
-        value.Value = uno::makeAny( val );                                      \
-        seq[i] = value;                                                    \
-    }
-
-    uno::Sequence< beans::NamedValue > props( 2 );
-    ADD_PROP( props, 0, "Title", OUString( pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) ) ) );
-    ADD_PROP( props, 1, "Position", pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) ) );
-#undef ADD_PROP
+    uno::Sequence< beans::NamedValue > props
+    {
+        { "Title",    css::uno::makeAny(pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) )) },
+        { "Position", css::uno::makeAny(pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) )) }
+    };
     return props;
 }
 void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )

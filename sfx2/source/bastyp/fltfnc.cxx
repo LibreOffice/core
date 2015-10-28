@@ -506,9 +506,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
                 // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
                 // The DocumentService property is only a preselection, and all preselections are considered as optional!
                 // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
-                uno::Sequence< beans::NamedValue > lQuery(1);
-                lQuery[0].Name = "Name";
-                lQuery[0].Value <<= sTypeName;
+                uno::Sequence< beans::NamedValue > lQuery { { "Name", css::uno::makeAny(sTypeName) } };
 
                 pFilter = GetFilterForProps(lQuery, nMust, nDont);
             }
@@ -699,9 +697,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const OUString& rMediaType, S
         return 0;
     }
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = "MediaType";
-    aSeq[0].Value <<= rMediaType;
+    css::uno::Sequence < css::beans::NamedValue > aSeq { { "MediaType", css::uno::makeAny(rMediaType) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -728,9 +724,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4EA( const OUString& rType, SfxFilte
         return 0;
     }
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = "Name";
-    aSeq[0].Value <<= OUString( rType );
+    css::uno::Sequence < css::beans::NamedValue > aSeq { { "Name", css::uno::makeAny(rType) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -767,11 +761,8 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const OUString& rExt, Sf
     if ( sExt.startsWith(".") )
         sExt = sExt.copy(1);
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = "Extensions";
-    uno::Sequence < OUString > aExts(1);
-    aExts[0] = sExt;
-    aSeq[0].Value <<= aExts;
+    css::uno::Sequence < css::beans::NamedValue > aSeq
+        { { "Extensions", css::uno::makeAny(uno::Sequence < OUString > { sExt } ) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -780,10 +771,8 @@ const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( SotClipboardFormatId n
     if (nId == SotClipboardFormatId::NONE)
         return 0;
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
-    OUString aName = SotExchange::GetFormatName( nId );
-    aSeq[0].Name = "ClipboardFormat";
-    aSeq[0].Value <<= aName;
+    css::uno::Sequence < css::beans::NamedValue > aSeq
+        { { "ClipboardFormat", css::uno::makeAny(SotExchange::GetFormatName( nId )) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 

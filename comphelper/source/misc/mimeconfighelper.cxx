@@ -231,9 +231,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString
         try
         {
             // make query for all types matching the properties
-            uno::Sequence < beans::NamedValue > aSeq( 1 );
-            aSeq[0].Name = "MediaType";
-            aSeq[0].Value <<= aMediaType;
+            uno::Sequence < beans::NamedValue > aSeq { { "MediaType", css::uno::makeAny(aMediaType) } };
 
             uno::Reference < container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
             while ( xEnum->hasMoreElements() )
@@ -723,11 +721,11 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
                 GetFilterFactory(),
                 uno::UNO_QUERY_THROW );
 
-            uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
-            aSearchRequest[0].Name = "DocumentService";
-            aSearchRequest[0].Value <<= aServiceName;
-            aSearchRequest[1].Name = "FileFormatVersion";
-            aSearchRequest[1].Value <<= nVersion;
+            uno::Sequence< beans::NamedValue > aSearchRequest
+            {
+                { "DocumentService", css::uno::makeAny(aServiceName) },
+                { "FileFormatVersion", css::uno::makeAny(nVersion) }
+            };
 
             uno::Reference< container::XEnumeration > xFilterEnum =
                                             xFilterQuery->createSubSetEnumerationByProperties( aSearchRequest );
@@ -805,11 +803,11 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                     OSL_ENSURE( !aDocumentServiceName.isEmpty() && !aTypeName.isEmpty(), "Incomplete filter data!" );
                     if ( !(aDocumentServiceName.isEmpty() || aTypeName.isEmpty()) )
                     {
-                        uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
-                        aSearchRequest[0].Name = "Type";
-                        aSearchRequest[0].Value <<= aTypeName;
-                        aSearchRequest[1].Name = "DocumentService";
-                        aSearchRequest[1].Value <<= aDocumentServiceName;
+                        uno::Sequence< beans::NamedValue > aSearchRequest
+                        {
+                            { "Type", css::uno::makeAny(aTypeName) },
+                            { "DocumentService", css::uno::makeAny(aDocumentServiceName) }
+                        };
 
                         uno::Sequence< beans::PropertyValue > aExportFilterProps = SearchForFilter(
                             uno::Reference< container::XContainerQuery >( xFilterFactory, uno::UNO_QUERY_THROW ),

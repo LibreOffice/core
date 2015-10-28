@@ -657,13 +657,12 @@ void ScXMLExport::_ExportMeta()
     GetAutoStylePool()->ClearEntries();
     CollectSharedData(nTableCount, nShapesCount);
 
-    uno::Sequence<beans::NamedValue> stats(3);
-    stats[0] = beans::NamedValue(OUString("TableCount"),
-                uno::makeAny((sal_Int32)nTableCount));
-    stats[1] = beans::NamedValue(OUString("CellCount"),
-                uno::makeAny(nCellCount));
-    stats[2] = beans::NamedValue(OUString("ObjectCount"),
-                uno::makeAny(nShapesCount));
+    uno::Sequence<beans::NamedValue> stats
+    {
+        { "TableCount",  uno::makeAny((sal_Int32)nTableCount) },
+        { "CellCount",   uno::makeAny(nCellCount) },
+        { "ObjectCount", uno::makeAny(nShapesCount) }
+    };
 
     // update document statistics at the model
     uno::Reference<document::XDocumentPropertiesSupplier> xPropSup(GetModel(),

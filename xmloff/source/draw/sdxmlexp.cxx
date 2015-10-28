@@ -1741,9 +1741,7 @@ void SdXMLExport::SetProgress(sal_Int32 nProg)
 
 void SdXMLExport::_ExportMeta()
 {
-    uno::Sequence<beans::NamedValue> stats(1);
-    stats[0] = beans::NamedValue(OUString( "ObjectCount" ),
-                uno::makeAny(mnObjectCount));
+    uno::Sequence<beans::NamedValue> stats { { "ObjectCount", uno::makeAny(mnObjectCount) } };
 
     // update document statistics at the model
     uno::Reference<document::XDocumentPropertiesSupplier> xPropSup(GetModel(),

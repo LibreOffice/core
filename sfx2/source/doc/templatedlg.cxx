@@ -432,19 +432,17 @@ void SfxTemplateManagerDlg::readSettings ()
 
 void SfxTemplateManagerDlg::writeSettings ()
 {
-    Sequence< NamedValue > aSettings(2);
-
     OUString aLastFolder;
 
     if (mpCurView == mpLocalView && mpLocalView->getCurRegionId())
         aLastFolder = mpLocalView->getRegionName(mpLocalView->getCurRegionId()-1);
 
     // last folder
-    aSettings[0].Name = TM_SETTING_LASTFOLDER;
-    aSettings[0].Value  <<= aLastFolder;
-
-    aSettings[1].Name = TM_SETTING_FILTER;
-    aSettings[1].Value <<= sal_uInt16(getCurrentFilter());
+    Sequence< NamedValue > aSettings
+    {
+        { TM_SETTING_LASTFOLDER, css::uno::makeAny(aLastFolder) },
+        { TM_SETTING_FILTER,     css::uno::makeAny(sal_uInt16(getCurrentFilter())) }
+    };
 
     // write
     SvtViewOptions aViewSettings(E_DIALOG, TM_SETTING_MANAGER);

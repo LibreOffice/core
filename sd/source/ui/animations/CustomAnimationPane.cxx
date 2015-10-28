@@ -2202,9 +2202,8 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
 void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimationNode )
 {
     Reference< XParallelTimeContainer > xRoot = ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() );
-    Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
-    aUserData[0].Name = "node-type";
-    aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::TIMING_ROOT;
+    Sequence< ::com::sun::star::beans::NamedValue > aUserData
+        { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::TIMING_ROOT) } };
     xRoot->setUserData( aUserData );
     xRoot->appendChild( xAnimationNode );
 

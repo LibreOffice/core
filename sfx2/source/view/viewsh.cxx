@@ -342,11 +342,10 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
     const sal_Int32 nFlags )
 {
     // Retrieve filter from type
-    css::uno::Sequence< css::beans::NamedValue > aQuery( 2 );
-    aQuery[0].Name  = "Type";
-    aQuery[0].Value = css::uno::makeAny( rType );
-    aQuery[1].Name  = "DocumentService";
-    aQuery[1].Value = css::uno::makeAny( rModuleIdentifier );
+    css::uno::Sequence< css::beans::NamedValue > aQuery {
+        { "Type", css::uno::makeAny( rType ) },
+        { "DocumentService", css::uno::makeAny( rModuleIdentifier ) }
+    };
 
     css::uno::Reference< css::container::XEnumeration > xEnumeration =
         rContainerQuery->createSubSetEnumerationByProperties( aQuery );

@@ -235,17 +235,15 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         else if ( aURL.Path == "ComboboxCmd" )
         {
             // remove the text if it's in our list
-            Sequence< NamedValue > aRemoveArgs( 1 );
-            aRemoveArgs[0].Name  = rtl::OUString( "Text" );
-            aRemoveArgs[0].Value <<= maComboBoxText;
+            Sequence< NamedValue > aRemoveArgs { { "Text", css:uno::makeAny(maComboBoxText) } };
             SendCommand( aURL, ::rtl::OUString( "RemoveEntryText" ), aRemoveArgs, sal_True );
 
             // add the new text to the start of the list
-            Sequence< NamedValue > aInsertArgs( 2 );
-            aInsertArgs[0].Name = rtl::OUString( "Pos" );
-            aInsertArgs[0].Value <<= sal_Int32( 0 );
-            aInsertArgs[1].Name = rtl::OUString( "Text" );
-            aInsertArgs[1].Value <<= maComboBoxText;
+            Sequence< NamedValue > aInsertArgs
+            {
+                { "Pos", css::uno::makeAny(sal_Int32( 0 )) },
+                { "Text", css::uno::makeAny(maComboBoxText)) },
+            };
             SendCommand( aURL, ::rtl::OUString("InsertEntry"), aInsertArgs, sal_True );
         }
         else if ( aURL.Path == "InsertEntry" )
@@ -268,9 +266,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
             aCmdURL.Complete = aCmdURL.Path + aCmdURL.Protocol;
 
             // set the selected item as text into the combobox
-            Sequence< NamedValue > aArgs( 1 );
-            aArgs[0].Name = "Text";
-            aArgs[0].Value <<= aText;
+            Sequence< NamedValue > aArgs { { "Text", css::uno::makeAny(aText) } };
             SendCommand( aCmdURL, ::rtl::OUString( "SetText" ), aArgs, sal_True );
         }
         else if ( aURL.Path == "DropdownButtonCmd" )
@@ -364,7 +360,6 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             // A toggle dropdown box is normally used for a group of commands
             // where the user can select the last issued command easily.
             // E.g. a typical command group would be "Insert shape"
-            Sequence< NamedValue > aArgs( 1 );
 
             // send command to set context menu content
             Sequence< rtl::OUString > aContextMenu( 3 );
@@ -372,8 +367,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aContextMenu[1] = "Command 2";
             aContextMenu[2] = "Command 3";
 
-            aArgs[0].Name = "List";
-            aArgs[0].Value <<= aContextMenu;
+            Sequence< NamedValue > aArgs { { "List", css::uno::makeAny(aContextMenu) } };
             SendCommandTo( xControl, aURL, rtl::OUString( "SetList" ), aArgs, sal_True );
 
             // send command to check item on pos=0
@@ -386,15 +380,13 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             // A dropdown box is normally used for a group of dependent modes, where
             // the user can only select one. The modes cannot be combined.
             // E.g. a typical group would be left,right,center,block.
-            Sequence< NamedValue > aArgs( 1 );
 
             // send command to set context menu content
             Sequence< rtl::OUString > aContextMenu( 2 );
             aContextMenu[0] = "Button Enabled";
             aContextMenu[1] = "Button Disabled";
 
-            aArgs[0].Name = "List";
-            aArgs[0].Value <<= aContextMenu;
+            Sequence< NamedValue > aArgs { { "List", css::uno::makeAny(aContextMenu) } };
             SendCommandTo( xControl, aURL, rtl::OUString( "SetList" ), aArgs, sal_True );
 
             // set position according to enable/disable state of button
@@ -408,27 +400,22 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
         else if ( aURL.Path == "SpinfieldCmd" )
         {
             // A spin button
-            Sequence< NamedValue > aArgs( 5 );
+            Sequence< NamedValue > aArgs
+            {
+                { "Value", css::uno::makeAny(double( 0.0 )) },
+                { "UpperLimit", css::uno::makeAny(double( 10.0 )) },
+                { "LowerLimit", css::uno::makeAny(double( 0.0 )) },
+                { "Step", css::uno::makeAny(double( 0.1 )) },
+                { "OutputFormat", css::uno::makeAny(OUString("%.2f cm")) }
+            };
 
             // send command to initialize spin button
-            aArgs[0].Name = "Value";
-            aArgs[0].Value <<= double( 0.0 );
-            aArgs[1].Name = "UpperLimit";
-            aArgs[1].Value <<= double( 10.0 );
-            aArgs[2].Name = "LowerLimit";
-            aArgs[2].Value <<= double( 0.0 );
-            aArgs[3].Name = "Step";
-            aArgs[3].Value <<= double( 0.1 );
-            aArgs[4].Name = "OutputFormat";
-            aArgs[4].Value <<= rtl::OUString("%.2f cm");
-
             SendCommandTo( xControl, aURL, rtl::OUString( "SetValues" ), aArgs, sal_True );
         }
         else if ( aURL.Path == "DropdownboxCmd" )
         {
             // A dropdown box is normally used for a group of commands
             // where the user can select one of a defined set.
-            Sequence< NamedValue > aArgs( 1 );
 
             // send command to set context menu content
             Sequence< rtl::OUString > aList( 10 );
@@ -443,8 +430,7 @@ void SAL_CALL BaseDispatch::addStatusListener( const Reference< XStatusListener 
             aList[8] = "Brown";
             aList[9] = "Pink";
 
-            aArgs[0].Name = "List";
-            aArgs[0].Value <<= aList;
+            Sequence< NamedValue > aArgs { { "List", css::uno::makeAny(aList) } };
             SendCommandTo( xControl, aURL, rtl::OUString( "SetList" ), aArgs, sal_True );
         }
 

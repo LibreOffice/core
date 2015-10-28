@@ -117,10 +117,7 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
 
 css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 {
-    css::uno::Sequence< css::beans::NamedValue > aAnswer(1);
-    aAnswer[0].Name  = JobConst::ANSWER_DEACTIVATE_JOB();
-    aAnswer[0].Value = css::uno::makeAny(sal_True);
-
+    css::uno::Sequence< css::beans::NamedValue > aAnswer { { JobConst::ANSWER_DEACTIVATE_JOB(), css::uno::makeAny(sal_True) } };
     return css::uno::makeAny(aAnswer);
 }
 

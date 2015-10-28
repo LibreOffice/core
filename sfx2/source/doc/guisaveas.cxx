@@ -534,9 +534,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont )
 {
-    uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
-    aSearchRequest[0].Name = "DocumentService";
-    aSearchRequest[0].Value <<= GetDocServiceName();
+    uno::Sequence< beans::NamedValue > aSearchRequest { { "DocumentService", css::uno::makeAny(GetDocServiceName()) } };
 
     return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
 }
@@ -555,11 +553,11 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
     if ( ( nStoreMode != SAVEASREMOTE_REQUESTED ) && ( nStoreMode & PDFEXPORT_REQUESTED ) )
     {
         // Preselect PDF-Filter for EXPORT
-        uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
-        aSearchRequest[0].Name = "Type";
-        aSearchRequest[0].Value <<= OUString("pdf_Portable_Document_Format");
-        aSearchRequest[1].Name = "DocumentService";
-        aSearchRequest[1].Value <<= GetDocServiceName();
+        uno::Sequence< beans::NamedValue > aSearchRequest
+        {
+            { "Type", css::uno::makeAny(OUString("pdf_Portable_Document_Format")) },
+            { "DocumentService", css::uno::makeAny(GetDocServiceName()) }
+        };
 
         aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
     }
@@ -802,9 +800,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 
 bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 {
-    uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
-    aSearchRequest[0].Name = "DocumentService";
-    aSearchRequest[0].Value <<= GetDocServiceName();
+    uno::Sequence< beans::NamedValue > aSearchRequest { { "DocumentService", css::uno::makeAny(GetDocServiceName()) } };
 
     uno::Reference< container::XEnumeration > xFilterEnum =
                                     m_pOwner->GetFilterQuery()->createSubSetEnumerationByProperties( aSearchRequest );

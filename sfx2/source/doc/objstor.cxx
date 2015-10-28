@@ -381,14 +381,13 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     bUseBlowfishInODF12 = aSaveOpt.IsUseBlowfishInODF12();
                 }
 
-                uno::Sequence< beans::NamedValue > aEncryptionAlgs( 3 );
-                aEncryptionAlgs[0].Name = "StartKeyGenerationAlgorithm";
-                aEncryptionAlgs[1].Name = "EncryptionAlgorithm";
-                aEncryptionAlgs[2].Name = "ChecksumAlgorithm";
                 // the default values, that should be used for ODF1.1 and older formats
-                aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA1;
-                aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
-                aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA1_1K;
+                uno::Sequence< beans::NamedValue > aEncryptionAlgs
+                {
+                    { "StartKeyGenerationAlgorithm", css::uno::makeAny(xml::crypto::DigestID::SHA1) },
+                    { "EncryptionAlgorithm", css::uno::makeAny(xml::crypto::CipherID::BLOWFISH_CFB_8) },
+                    { "ChecksumAlgorithm", css::uno::makeAny(xml::crypto::DigestID::SHA1_1K) }
+                };
 
                 if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
                 {

@@ -284,9 +284,7 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
                     m_pComboBox->InsertEntry( aList[j] );
 
                 // send notification
-                uno::Sequence< beans::NamedValue > aInfo( 1 );
-                aInfo[0].Name  = "List";
-                aInfo[0].Value <<= aList;
+                uno::Sequence< beans::NamedValue > aInfo { { "List", css::uno::makeAny(aList) } };
                 addNotifyInfo( OUString( "ListChanged" ),
                                getDispatchFromCommand( m_aCommandURL ),
                                aInfo );

@@ -165,9 +165,7 @@ namespace abp
         // User has one chance to accept it or not.
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
-        css::uno::Sequence< css::beans::NamedValue > lProtocol(1);
-        lProtocol[0].Name    = "Deactivate";
-        lProtocol[0].Value <<= sal_True;
+        css::uno::Sequence< css::beans::NamedValue > lProtocol { { "Deactivate", css::uno::makeAny( sal_True ) } };
         return makeAny( lProtocol );
     }
 

@@ -319,9 +319,8 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     SvtViewOptions aWinOpt(E_WINDOW, sName);
     aWinOpt.SetWindowState(OStringToOUString(rInfo.aWinState, RTL_TEXTENCODING_UTF8));
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = "Data";
-    aSeq[0].Value <<= aWinData.makeStringAndClear();
+    css::uno::Sequence < css::beans::NamedValue > aSeq
+        { { "Data", css::uno::makeAny(aWinData.makeStringAndClear()) } };
     aWinOpt.SetUserData( aSeq );
 
     // ... but save status at runtime!

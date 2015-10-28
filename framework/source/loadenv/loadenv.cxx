@@ -870,17 +870,13 @@ bool LoadEnv::impl_handleContent()
     css::uno::Sequence< OUString > lTypeReg(1);
     lTypeReg[0] = sType;
 
-    css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-    lQuery[0].Name    = PROP_TYPES;
-    lQuery[0].Value <<= lTypeReg;
-
-    OUString sPROP_NAME(PROP_NAME);
+    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::makeAny(lTypeReg) } };
 
     css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
     {
         ::comphelper::SequenceAsHashMap lProps   (xSet->nextElement());
-        OUString                 sHandler = lProps.getUnpackedValueOrDefault(sPROP_NAME, OUString());
+        OUString                 sHandler = lProps.getUnpackedValueOrDefault(OUString(PROP_NAME), OUString());
 
         css::uno::Reference< css::frame::XNotifyingDispatch > xHandler;
         try
@@ -1163,11 +1159,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     css::uno::Sequence< OUString > lTypesReg(1);
     lTypesReg[0] = sType;
 
-    css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-    lQuery[0].Name    = PROP_TYPES;
-    lQuery[0].Value <<= lTypesReg;
-
-    OUString sPROP_NAME(PROP_NAME);
+    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::makeAny(lTypesReg) } };
 
     css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
@@ -1177,7 +1169,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
             // try everyone ...
             // Ignore any loader, which makes trouble :-)
             ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
-            OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(sPROP_NAME, OUString());
+            OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(OUString(PROP_NAME), OUString());
             css::uno::Reference< css::uno::XInterface > xLoader;
 
             xLoader = xLoaderFactory->createInstance(sLoader);
