@@ -47,15 +47,15 @@ public:
 
 private:
     OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return OUString("com.sun.star.comp.ucb.ImageContentProvider"); }
 
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return cppu::supportsService(this, ServiceName); }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return css::uno::Sequence<OUString>{
             "com.sun.star.ucb.ImageContentProvider"};
@@ -66,7 +66,7 @@ private:
         throw (
             css::ucb::IllegalIdentifierException, css::uno::RuntimeException,
             std::exception)
-        override
+        SAL_OVERRIDE
     {
         css::uno::Reference<css::uno::XComponentContext> context;
         {
@@ -146,13 +146,13 @@ private:
     sal_Int32 SAL_CALL compareContentIds(
         css::uno::Reference<css::ucb::XContentIdentifier> const & Id1,
         css::uno::Reference<css::ucb::XContentIdentifier> const & Id2)
-        throw (css::uno::RuntimeException, std::exception) override
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return Id1->getContentIdentifier().compareTo(
             Id2->getContentIdentifier());
     }
 
-    void SAL_CALL disposing() override {
+    void SAL_CALL disposing() SAL_OVERRIDE {
         context_.clear();
     }
 
