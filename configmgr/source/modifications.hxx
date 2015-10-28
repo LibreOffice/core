@@ -45,8 +45,6 @@ public:
 
     void remove(Path const & path);
 
-    void clear() { root_.children.clear(); }
-
     bool empty() const { return root_.children.empty(); }
 
     Node const & getRoot() const { return root_;}

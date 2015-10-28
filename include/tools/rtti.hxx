@@ -117,16 +117,6 @@ typedef void* (*TypeId)();
 */
 #define PTR_CAST( T, pObj ) rttiCast<T>(pObj, TYPE(T))
 
-template<class T1, class T2>
-inline T1* rttiCast(T2* pObj, const TypeId& rTypeId) {
-    return (pObj && pObj->IsA( rTypeId )) ? static_cast<T1*>(pObj) : 0;
-};
-
-template<class T1, class T2>
-inline const T1* rttiCast(const T2* pObj, const TypeId& rTypeId) {
-    return (pObj && pObj->IsA( rTypeId )) ? static_cast<const T1*>(pObj) : 0;
-};
-
 /** Check whether object pObj has a Base Class T
     (or if pObj is an instance of T) */
 #define HAS_BASE( T, pObj ) \

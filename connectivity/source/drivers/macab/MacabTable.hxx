@@ -29,8 +29,6 @@ namespace connectivity
     {
         typedef connectivity::sdbcx::OTable MacabTable_TYPEDEF;
 
-        OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
-
         class MacabTable : public MacabTable_TYPEDEF
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;

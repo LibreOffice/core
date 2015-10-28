@@ -52,11 +52,6 @@ output( myValue.getOutValue() );
     public:
         LazyUpdate(Func const & func): func_(func), input_(), dirty_(true) {}
 
-        template<typename T> void setInValue(T && in) {
-            dirty_ = true;
-            input_ = std::forward(in);
-        }
-
         In const & getInValue() const { return input_; }
 
         Out const & getOutValue() const { return update(); }

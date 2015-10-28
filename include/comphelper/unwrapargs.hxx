@@ -48,14 +48,6 @@ namespace detail {
 
     inline void unwrapArgs(
         const css::uno::Sequence< css::uno::Any >&,
-        sal_Int32,
-        const css::uno::Reference< css::uno::XInterface >& )
-    {
-        return;
-    }
-
-    inline void unwrapArgs(
-        const css::uno::Sequence< css::uno::Any >&,
         sal_Int32 )
     {
         return;

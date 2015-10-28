@@ -52,26 +52,4 @@ ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
     }
 }
 
-bool operator==( const ScSelectionState& rL, const ScSelectionState& rR )
-{
-    bool bEqual = rL.GetSelectionType() == rR.GetSelectionType();
-    if( bEqual ) switch( rL.GetSelectionType() )
-    {
-        case SC_SELECTTYPE_EDITCELL:
-            bEqual &= rL.GetEditSelection().IsEqual( rR.GetEditSelection() );
-        // run through!
-        case SC_SELECTTYPE_SHEET:
-            bEqual &= rL.GetSheetSelection() == rR.GetSheetSelection();
-        // run through!
-        case SC_SELECTTYPE_NONE:
-            bEqual &= rL.GetCellCursor() == rR.GetCellCursor();
-        break;
-        default:
-        {
-            // added to avoid warnings
-        }
-    }
-    return bEqual;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

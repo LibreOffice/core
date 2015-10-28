@@ -145,12 +145,6 @@ public:
         : unique_disposing_ptr<T>(rComponent, p)
     {
     }
-
-    virtual void reset(T * p = 0)
-    {
-        SolarMutexGuard aGuard;
-        unique_disposing_ptr<T>::reset(p);
-    }
 };
 
 }

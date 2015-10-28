@@ -58,8 +58,6 @@ private:
     ESelection          maEditSel;          /// Selection in edit mode.
 };
 
-bool operator==( const ScSelectionState& rL, const ScSelectionState& rR );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
