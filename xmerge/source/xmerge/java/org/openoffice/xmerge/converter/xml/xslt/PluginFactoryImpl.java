@@ -140,7 +140,7 @@ public final class PluginFactoryImpl extends PluginFactory
         try {
             props.load(is);
 
-            String info = props.getProperty(mimeType);
+            String info = mimeType != null ? props.getProperty(mimeType) : null;
             if (info != null) {
                 ext = info;
             }
