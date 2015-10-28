@@ -72,7 +72,7 @@ void SwFont::SetBackColor( Color* pNewColor )
     delete m_pBackColor;
     m_pBackColor = pNewColor;
     m_bFontChg = true;
-    m_aSub[SW_LATIN].pMagic = m_aSub[SW_CJK].pMagic = m_aSub[SW_CTL].pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
 }
 
 void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
@@ -85,7 +85,7 @@ void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
         m_nTopBorderDist = 0;
     }
     m_bFontChg = true;
-    m_aSub[SW_LATIN].pMagic = m_aSub[SW_CJK].pMagic = m_aSub[SW_CTL].pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
 }
 
 void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
@@ -98,7 +98,7 @@ void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
         m_nBottomBorderDist = 0;
     }
     m_bFontChg = true;
-    m_aSub[SW_LATIN].pMagic = m_aSub[SW_CJK].pMagic = m_aSub[SW_CTL].pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
 }
 
 void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
@@ -111,7 +111,7 @@ void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
         m_nRightBorderDist = 0;
     }
     m_bFontChg = true;
-    m_aSub[SW_LATIN].pMagic = m_aSub[SW_CJK].pMagic = m_aSub[SW_CTL].pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
 }
 
 void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
@@ -124,7 +124,7 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
         m_nLeftBorderDist = 0;
     }
     m_bFontChg = true;
-    m_aSub[SW_LATIN].pMagic = m_aSub[SW_CJK].pMagic = m_aSub[SW_CTL].pMagic = 0;
+    m_aSub[SW_LATIN].m_pMagic = m_aSub[SW_CJK].m_pMagic = m_aSub[SW_CTL].m_pMagic = 0;
 }
 
 const boost::optional<editeng::SvxBorderLine>&
@@ -471,11 +471,11 @@ sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
         DFLT_ESC_AUTO_SUB != GetEscapement() )
     {
         const long nAscent = nOldAscent +
-                             ( (long) nOrgHeight * GetEscapement() ) / 100L;
+                             ( (long) m_nOrgHeight * GetEscapement() ) / 100L;
         if ( nAscent>0 )
-            return std::max<sal_uInt16>( nAscent, nOrgAscent );
+            return std::max<sal_uInt16>( nAscent, m_nOrgAscent );
     }
-    return nOrgAscent;
+    return m_nOrgAscent;
 }
 
 void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
@@ -502,8 +502,8 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         {
             const SvxFontHeightItem *pHeight = static_cast<const SvxFontHeightItem *>(pItem);
             m_aSub[SW_LATIN].SvxFont::SetPropr( 100 );
-            m_aSub[SW_LATIN].aSize = m_aSub[SW_LATIN].Font::GetSize();
-            Size aTmpSize = m_aSub[SW_LATIN].aSize;
+            m_aSub[SW_LATIN].m_aSize = m_aSub[SW_LATIN].Font::GetSize();
+            Size aTmpSize = m_aSub[SW_LATIN].m_aSize;
             aTmpSize.Height() = pHeight->GetHeight();
             m_aSub[SW_LATIN].SetSize( aTmpSize );
         }
@@ -532,8 +532,8 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         {
             const SvxFontHeightItem *pHeight = static_cast<const SvxFontHeightItem *>(pItem);
             m_aSub[SW_CJK].SvxFont::SetPropr( 100 );
-            m_aSub[SW_CJK].aSize = m_aSub[SW_CJK].Font::GetSize();
-            Size aTmpSize = m_aSub[SW_CJK].aSize;
+            m_aSub[SW_CJK].m_aSize = m_aSub[SW_CJK].Font::GetSize();
+            Size aTmpSize = m_aSub[SW_CJK].m_aSize;
             aTmpSize.Height() = pHeight->GetHeight();
             m_aSub[SW_CJK].SetSize( aTmpSize );
         }
@@ -568,8 +568,8 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         {
             const SvxFontHeightItem *pHeight = static_cast<const SvxFontHeightItem *>(pItem);
             m_aSub[SW_CTL].SvxFont::SetPropr( 100 );
-            m_aSub[SW_CTL].aSize = m_aSub[SW_CTL].Font::GetSize();
-            Size aTmpSize = m_aSub[SW_CTL].aSize;
+            m_aSub[SW_CTL].m_aSize = m_aSub[SW_CTL].Font::GetSize();
+            Size aTmpSize = m_aSub[SW_CTL].m_aSize;
             aTmpSize.Height() = pHeight->GetHeight();
             m_aSub[SW_CTL].SetSize( aTmpSize );
         }
@@ -763,7 +763,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SW_LATIN].SetPitch( rFont.GetPitch() );
         m_aSub[SW_LATIN].SetCharSet( rFont.GetCharSet() );
         m_aSub[SW_LATIN].SvxFont::SetPropr( 100 );   // 100% der FontSize
-        Size aTmpSize = m_aSub[SW_LATIN].aSize;
+        Size aTmpSize = m_aSub[SW_LATIN].m_aSize;
         aTmpSize.Height() = pAttrSet->GetSize().GetHeight();
         m_aSub[SW_LATIN].SetSize( aTmpSize );
         m_aSub[SW_LATIN].SetItalic( pAttrSet->GetPosture().GetPosture() );
@@ -779,7 +779,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SW_CJK].SetPitch( rFont.GetPitch() );
         m_aSub[SW_CJK].SetCharSet( rFont.GetCharSet() );
         m_aSub[SW_CJK].SvxFont::SetPropr( 100 );   // 100% der FontSize
-        Size aTmpSize = m_aSub[SW_CJK].aSize;
+        Size aTmpSize = m_aSub[SW_CJK].m_aSize;
         aTmpSize.Height() = pAttrSet->GetCJKSize().GetHeight();
         m_aSub[SW_CJK].SetSize( aTmpSize );
         m_aSub[SW_CJK].SetItalic( pAttrSet->GetCJKPosture().GetPosture() );
@@ -799,7 +799,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[SW_CTL].SetPitch( rFont.GetPitch() );
         m_aSub[SW_CTL].SetCharSet( rFont.GetCharSet() );
         m_aSub[SW_CTL].SvxFont::SetPropr( 100 );   // 100% der FontSize
-        Size aTmpSize = m_aSub[SW_CTL].aSize;
+        Size aTmpSize = m_aSub[SW_CTL].m_aSize;
         aTmpSize.Height() = pAttrSet->GetCTLSize().GetHeight();
         m_aSub[SW_CTL].SetSize( aTmpSize );
         m_aSub[SW_CTL].SetItalic( pAttrSet->GetCTLPosture().GetPosture() );
@@ -896,9 +896,9 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         SetVertical( 0 );
     if( pIDocumentSettingAccess && pIDocumentSettingAccess->get( DocumentSettingId::SMALL_CAPS_PERCENTAGE_66 ))
     {
-        m_aSub[ SW_LATIN ].smallCapsPercentage66 = true;
-        m_aSub[ SW_CJK ].smallCapsPercentage66 = true;
-        m_aSub[ SW_CTL ].smallCapsPercentage66 = true;
+        m_aSub[ SW_LATIN ].m_bSmallCapsPercentage66 = true;
+        m_aSub[ SW_CJK ].m_bSmallCapsPercentage66 = true;
+        m_aSub[ SW_CTL ].m_bSmallCapsPercentage66 = true;
     }
 }
 
@@ -910,13 +910,13 @@ SwFont::~SwFont()
 SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
 {
     SvxFont::operator=( rFont );
-    pMagic = rFont.pMagic;
-    nFntIndex = rFont.nFntIndex;
-    nOrgHeight = rFont.nOrgHeight;
-    nOrgAscent = rFont.nOrgAscent;
-    nPropWidth = rFont.nPropWidth;
-    aSize = rFont.aSize;
-    smallCapsPercentage66 = rFont.smallCapsPercentage66;
+    m_pMagic = rFont.m_pMagic;
+    m_nFontIndex = rFont.m_nFontIndex;
+    m_nOrgHeight = rFont.m_nOrgHeight;
+    m_nOrgAscent = rFont.m_nOrgAscent;
+    m_nProportionalWidth = rFont.m_nProportionalWidth;
+    m_aSize = rFont.m_aSize;
+    m_bSmallCapsPercentage66 = rFont.m_bSmallCapsPercentage66;
     return *this;
 }
 
@@ -960,13 +960,13 @@ SwFont& SwFont::operator=( const SwFont &rFont )
 
 void SwFont::GoMagic( SwViewShell *pSh, sal_uInt8 nWhich )
 {
-    SwFntAccess aFntAccess( m_aSub[nWhich].pMagic, m_aSub[nWhich].nFntIndex,
+    SwFntAccess aFntAccess( m_aSub[nWhich].m_pMagic, m_aSub[nWhich].m_nFontIndex,
                             &m_aSub[nWhich], pSh, true );
 }
 
 bool SwSubFont::IsSymbol( SwViewShell *pSh )
 {
-    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, false );
+    SwFntAccess aFntAccess( m_pMagic, m_nFontIndex, this, pSh, false );
     return aFntAccess.Get()->IsSymbol();
 }
 
@@ -974,7 +974,7 @@ bool SwSubFont::ChgFnt( SwViewShell const *pSh, OutputDevice& rOut )
 {
     if ( pLastFont )
         pLastFont->Unlock();
-    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, true );
+    SwFntAccess aFntAccess( m_pMagic, m_nFontIndex, this, pSh, true );
     SV_STAT( nChangeFont );
 
     pLastFont = aFntAccess.Get();
@@ -994,10 +994,10 @@ void SwFont::ChgPhysFnt( SwViewShell *pSh, OutputDevice& rOut )
         const sal_uInt8 nOldProp = m_aSub[m_nActual].GetPropr();
         SetProportion( 100 );
         ChgFnt( pSh, rOut );
-        SwFntAccess aFntAccess( m_aSub[m_nActual].pMagic, m_aSub[m_nActual].nFntIndex,
+        SwFntAccess aFntAccess( m_aSub[m_nActual].m_pMagic, m_aSub[m_nActual].m_nFontIndex,
                                 &m_aSub[m_nActual], pSh );
-        m_aSub[m_nActual].nOrgHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
-        m_aSub[m_nActual].nOrgAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
+        m_aSub[m_nActual].m_nOrgHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
+        m_aSub[m_nActual].m_nOrgAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
         SetProportion( nOldProp );
         m_bOrgChg = false;
     }
@@ -1024,13 +1024,13 @@ sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
         DFLT_ESC_AUTO_SUB != GetEscapement() )
     {
         long nDescent = nOldHeight - nOldAscent -
-                             ( (long) nOrgHeight * GetEscapement() ) / 100L;
+                             ( (long) m_nOrgHeight * GetEscapement() ) / 100L;
         const sal_uInt16 nDesc = nDescent>0
-                ? std::max<sal_uInt16>( nDescent, nOrgHeight - nOrgAscent)
-                : nOrgHeight - nOrgAscent;
+                ? std::max<sal_uInt16>( nDescent, m_nOrgHeight - m_nOrgAscent)
+                : m_nOrgHeight - m_nOrgAscent;
         return ( nDesc + CalcEscAscent( nOldAscent ) );
     }
-    return nOrgHeight;
+    return m_nOrgHeight;
 }
 
 short SwSubFont::_CheckKerning( )
@@ -1044,7 +1044,7 @@ short SwSubFont::_CheckKerning( )
 
 sal_uInt16 SwSubFont::GetAscent( SwViewShell *pSh, const OutputDevice& rOut )
 {
-    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );
+    SwFntAccess aFntAccess( m_pMagic, m_nFontIndex, this, pSh );
     const sal_uInt16 nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
     return GetEscapement() ? CalcEscAscent( nAscent ) : nAscent;
 }
@@ -1052,7 +1052,7 @@ sal_uInt16 SwSubFont::GetAscent( SwViewShell *pSh, const OutputDevice& rOut )
 sal_uInt16 SwSubFont::GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
 {
     SV_STAT( nGetTextSize );
-    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );
+    SwFntAccess aFntAccess( m_pMagic, m_nFontIndex, this, pSh );
     const sal_uInt16 nHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
     if ( GetEscapement() )
     {
@@ -1066,7 +1066,7 @@ Size SwSubFont::_GetTextSize( SwDrawTextInfo& rInf )
 {
     // Robust: Eigentlich sollte der Font bereits eingestellt sein, aber
     // sicher ist sicher ...
-    if ( !pLastFont || pLastFont->GetOwner()!=pMagic ||
+    if ( !pLastFont || pLastFont->GetOwner()!=m_pMagic ||
          !IsSameInstance( rInf.GetpOut()->GetFont() ) )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
@@ -1179,7 +1179,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const bool bGrey )
         pUnderFnt = rInf.GetUnderFnt();
     }
 
-    if( !pLastFont || pLastFont->GetOwner()!=pMagic )
+    if( !pLastFont || pLastFont->GetOwner()!=m_pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
@@ -1306,7 +1306,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         pUnderFnt = rInf.GetUnderFnt();
     }
 
-    if ( !pLastFont || pLastFont->GetOwner() != pMagic )
+    if ( !pLastFont || pLastFont->GetOwner() != m_pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
@@ -1375,7 +1375,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
 
 sal_Int32 SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
 {
-    if ( !pLastFont || pLastFont->GetOwner()!=pMagic )
+    if ( !pLastFont || pLastFont->GetOwner()!=m_pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
@@ -1416,7 +1416,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
     switch ( GetEscapement() )
     {
     case DFLT_ESC_AUTO_SUB :
-        nOfst = nOrgHeight - nOrgAscent -
+        nOfst = m_nOrgHeight - m_nOrgAscent -
             pLastFont->GetFontHeight( rInf.GetShell(), rInf.GetOut() ) +
             pLastFont->GetFontAscent( rInf.GetShell(), rInf.GetOut() );
 
@@ -1436,7 +1436,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
         break;
     case DFLT_ESC_AUTO_SUPER :
         nOfst = pLastFont->GetFontAscent( rInf.GetShell(), rInf.GetOut() ) -
-                nOrgAscent;
+                m_nOrgAscent;
 
         switch ( nDir )
         {
@@ -1453,7 +1453,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 
         break;
     default :
-        nOfst = ((long)nOrgHeight * GetEscapement()) / 100L;
+        nOfst = ((long)m_nOrgHeight * GetEscapement()) / 100L;
 
         switch ( nDir )
         {
