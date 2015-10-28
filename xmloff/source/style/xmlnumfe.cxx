@@ -1201,7 +1201,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     if ( bExpFound && pElemStr )
                         nExpDigits += pElemStr->getLength();
                     else if ( !bDecDashes && pElemStr && (*pElemStr)[0] == '-' )
+                    {
                         bDecDashes = true;
+                        nMinDecimals = 0;
+                    }
                     else if ( !bInInteger && pElemStr )
                     {
                         for ( sal_Int32 i = pElemStr->getLength()-1; i >= 0 && (*pElemStr)[i] == '#'; i-- )
