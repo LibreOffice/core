@@ -831,15 +831,15 @@ void ScModelObj::resetSelection()
     pDocShell->GetDocument().GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
 }
 
-vcl::Window* ScModelObj::getWindow()
+void ScModelObj::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)
 {
     SolarMutexGuard aGuard;
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
-        return 0;
+        return;
 
-    return pViewData->GetActiveWin();
+    pViewData->GetActiveWin()->SetClipboard(xClipboard);
 }
 
 bool ScModelObj::isMimeTypeSupported()
