@@ -77,7 +77,7 @@ public class SQLQueryComposer
                 int iAggregate = CurDBMetaData.getAggregateIndex(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
                 if (iAggregate > -1)
                 {
-                    sSelectClause += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasFieldName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
+                    sSelectClause += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasDisplayName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
                     if (_baddAliasFieldNames)
                     {
                         sSelectClause += getAliasFieldNameClause(CurDBMetaData.AggregateFieldNames[iAggregate][0]);
@@ -85,7 +85,7 @@ public class SQLQueryComposer
                 }
                 else
                 {
-                    sSelectClause += getComposedAliasFieldName(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
+                    sSelectClause += getComposedAliasDisplayName(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
                     if (_baddAliasFieldNames)
                     {
                         sSelectClause += getAliasFieldNameClause(CurDBMetaData.FieldColumns[i].getDisplayFieldName());
@@ -182,7 +182,7 @@ public class SQLQueryComposer
                 {
                     sOrder += ", ";
                 }
-                sOrder += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasFieldName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
+                sOrder += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasDisplayName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
                 sOrder += " " + CurDBMetaData.getSortFieldNames()[i][1];
                 m_queryComposer.setOrder(sOrder);
             }
@@ -311,9 +311,27 @@ public class SQLQueryComposer
         }
     }
 
-    private String getComposedAliasFieldName(String _fieldname)
+    private String getComposedAliasDisplayName(String _fieldname)
     {
         FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByDisplayName(_fieldname);
+        final String curCommandName = CurFieldColumn.getCommandName();
+        final String curFieldName = CurFieldColumn.getFieldName();
+        CommandName curComposedCommandName = getComposedCommandByDisplayName(curCommandName);
+        if (curComposedCommandName == null)
+        {
+            //return _fieldname;
+            if ( curCommandName.length() > 0 )
+                return quoteName(curCommandName) + "." + quoteName(curFieldName);
+            else
+                return quoteName(curFieldName);
+        }
+        String curAliasName = curComposedCommandName.getAliasName();
+        return quoteName(curAliasName) + "." + quoteName(curFieldName);
+    }
+
+    private String getComposedAliasFieldName(String _fieldname)
+    {
+        FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByFieldName(_fieldname);
         final String curCommandName = CurFieldColumn.getCommandName();
         final String curFieldName = CurFieldColumn.getFieldName();
         CommandName curComposedCommandName = getComposedCommandByDisplayName(curCommandName);
