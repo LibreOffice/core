@@ -160,7 +160,14 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     bOnlyFormatedRedlines( false ),
     bHasReadonlySel ( false ),
     bRedlnAutoFormat   (bAutoFormat),
-    bInhibitActivate( false )
+    bInhibitActivate( false ),
+    aInserted       (SW_RES(IMG_REDLINE_INSERTED)),
+    aDeleted        (SW_RES(IMG_REDLINE_DELETED)),
+    aFormated       (SW_RES(IMG_REDLINE_FORMATED)),
+    aTableChgd      (SW_RES(IMG_REDLINE_TABLECHG)),
+    aFormatCollSet  (SW_RES(IMG_REDLINE_FMTCOLLSET)),
+    aAutoFormat     (SW_RES(IMG_REDLINE_AUTOFMT))
+
 {
     aTabPagesCTRL->SetHelpId(HID_REDLINE_CTRL);
     pTPView = aTabPagesCTRL->GetViewPage();
@@ -338,13 +345,6 @@ OUString SwRedlineAcceptDlg::GetRedlineText(const SwRangeRedline& rRedln, DateTi
 
 Image SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack)
 {
-    const static Image aInserted(SW_RES(IMG_REDLINE_INSERTED));
-    const static Image aDeleted(SW_RES(IMG_REDLINE_DELETED));
-    const static Image aFormated(SW_RES(IMG_REDLINE_FORMATED));
-    const static Image aTableChgd(SW_RES(IMG_REDLINE_TABLECHG));
-    const static Image aFormatCollSet(SW_RES(IMG_REDLINE_FMTCOLLSET));
-    const static Image aAutoFormat(SW_RES(IMG_REDLINE_AUTOFMT));
-
     switch (rRedln.GetType(nStack))
     {
         case nsRedlineType_t::REDLINE_INSERT:  return aInserted;
