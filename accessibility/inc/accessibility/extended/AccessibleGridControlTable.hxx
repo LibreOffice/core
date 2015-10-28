@@ -22,7 +22,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLTABLE_HXX
 
 #include "accessibility/extended/AccessibleGridControlTableBase.hxx"
-#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <accessibility/extended/AccessibleGridControlTableCell.hxx>
 
