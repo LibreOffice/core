@@ -133,7 +133,7 @@ static Date lcl_DaysToDate( long nDays )
     while ( bCalc );
 
     sal_uInt16 nMonth = 1;
-    while ( (sal_uIntPtr)nTempDays > ImplDaysInMonth( nMonth, nYear ) )
+    while ( nTempDays > static_cast<long>(ImplDaysInMonth( nMonth, nYear )) )
     {
         nTempDays -= ImplDaysInMonth( nMonth, nYear );
         nMonth++;
@@ -191,7 +191,7 @@ void Date::SetYear( sal_uInt16 nNewYear )
 
 DayOfWeek Date::GetDayOfWeek() const
 {
-    return (DayOfWeek)((sal_uIntPtr)(GetAsNormalizedDays()-1) % 7);
+    return static_cast<DayOfWeek>((GetAsNormalizedDays()-1) % 7);
 }
 
 sal_uInt16 Date::GetDayOfYear() const
@@ -467,10 +467,7 @@ Date operator -( const Date& rDate, long nDays )
 
 long operator -( const Date& rDate1, const Date& rDate2 )
 {
-    sal_uIntPtr nTempDays1 = rDate1.GetAsNormalizedDays();
-    sal_uIntPtr nTempDays2 = rDate2.GetAsNormalizedDays();
-
-    return nTempDays1 - nTempDays2;
+    return rDate1.GetAsNormalizedDays() - rDate2.GetAsNormalizedDays();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
