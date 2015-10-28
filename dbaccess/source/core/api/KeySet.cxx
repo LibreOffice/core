@@ -696,7 +696,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         {
             if ( !(_rInsertRow->get())[aIter->second.nPosition].isModified() )
             {
-                if(aIter->second.bNullable)
+                if(aIter->second.bNullable && aIter->second.sDefaultValue.isEmpty())
                 {
                     (_rInsertRow->get())[aIter->second.nPosition].setTypeKind(aIter->second.nType);
                     (_rInsertRow->get())[aIter->second.nPosition].setNull();
