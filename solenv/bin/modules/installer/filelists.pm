@@ -118,11 +118,24 @@ sub read_filelist
     foreach my $line (@{$content})
     {
         chomp $line;
-        foreach my $file (split /\s+(?=\/)/, $line)
+        if ($installer::globals::os eq "WNT") # FIXME hack
         {
-            if ($file ne "")
+            foreach my $file (split /\s+/, $line)
             {
-                push @filelist, $file;
+                if ($file ne "")
+                {
+                    push @filelist, $file;
+                }
+            }
+        }
+        else
+        {
+            foreach my $file (split /\s+(?=\/)/, $line)
+            {
+                if ($file ne "")
+                {
+                    push @filelist, $file;
+                }
             }
         }
     }
