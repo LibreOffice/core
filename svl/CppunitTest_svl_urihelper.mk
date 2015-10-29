@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_use_api,svl_urihelper, \
 
 $(eval $(call gb_CppunitTest_use_components,svl_urihelper, \
     ucb/source/core/ucb1 \
+    ucb/source/ucp/file/ucpfile1 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_urihelper, \

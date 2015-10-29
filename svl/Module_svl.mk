@@ -36,14 +36,8 @@ $(eval $(call gb_Module_add_check_targets,svl,\
 	CppunitTest_svl_lngmisc \
 	CppunitTest_svl_notify \
 	CppunitTest_svl_qa_cppunit \
-))
-
-#FIXME: fails on MSVC
-ifneq ($(OS),WNT)
-$(eval $(call gb_Module_add_check_targets,svl,\
 	CppunitTest_svl_urihelper \
 ))
-endif
 
 ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,svl,\

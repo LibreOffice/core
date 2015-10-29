@@ -224,10 +224,14 @@ void Test::finish() {
 }
 
 void Test::testNormalizedMakeRelative() {
-    css::ucb::UniversalContentBroker::create(m_context)->
-        registerContentProvider(
-            new Provider, OUString("test"),
-            true);
+    auto ucb(css::ucb::UniversalContentBroker::create(m_context));
+    ucb->registerContentProvider(new Provider, "test", true);
+    ucb->registerContentProvider(
+        css::uno::Reference<css::ucb::XContentProvider>(
+            m_context->getServiceManager()->createInstanceWithContext(
+                "com.sun.star.comp.ucb.FileProvider", m_context),
+            css::uno::UNO_QUERY_THROW),
+        "file", true);
     struct Data {
         char const * base;
         char const * absolute;
