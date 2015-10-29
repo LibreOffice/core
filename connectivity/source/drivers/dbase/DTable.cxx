@@ -2432,7 +2432,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         pNewTable->renameImpl(m_Name);
         // release the temp file
     }
-    xHold = pNewTable = NULL;
+    xHold.clear();
 
     FileClose();
     construct();
