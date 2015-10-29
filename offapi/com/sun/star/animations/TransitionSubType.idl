@@ -128,15 +128,17 @@ constants TransitionSubType
     const short FADETOCOLOR = 102;
     const short FADEFROMCOLOR = 103;
     const short FADEOVERCOLOR = 104;
+
+    // Most of those below are non-standard, not in SMIL 2.0
     const short THREEBLADE = 105;
     const short EIGHTBLADE = 106;
     const short ONEBLADE = 107;
     const short ACROSS = 108;
-    const short TOPLEFTVERTICAL = 109;
+    const short TOPLEFTVERTICAL = 109; // Is in SMIL
     const short COMBHORIZONTAL = 110;
     const short COMBVERTICAL = 111;
-    const short IN = 112;
-    const short OUT = 113;
+    const short IN = 112; // Not actually a subtype, and apparently unused
+    const short OUT = 113; // Ditto
     const short ROTATEIN = 114;
     const short ROTATEOUT = 115;
     const short FROMTOPLEFT = 116;
