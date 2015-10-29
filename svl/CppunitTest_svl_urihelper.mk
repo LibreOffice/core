@@ -29,7 +29,6 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_urihelper, \
     cppuhelper \
     i18nlangtag \
     sal \
-	i18nlangtag \
     svl \
     tl \
     utl \
