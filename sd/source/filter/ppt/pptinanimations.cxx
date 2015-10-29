@@ -54,6 +54,7 @@
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <comphelper/processfactory.hxx>
+#include <oox/helper/addtosequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
@@ -82,21 +83,6 @@ using namespace ::com::sun::star::presentation;
 
 namespace ppt
 {
-
-const transition* transition::find( const OUString& rName )
-{
-    const transition* p = gTransitions;
-
-    while( p->mpName )
-    {
-        if( rName.equalsAscii( p->mpName ) )
-            return p;
-
-        p++;
-    }
-
-    return NULL;
-}
 
 SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
 {
@@ -159,41 +145,6 @@ Any PropertySet::getProperty( sal_Int32 nProperty ) const
         return (*aIter).second;
     else
         return Any();
-}
-
-/** this adds an any to another any.
-    if rNewValue is empty, rOldValue is returned.
-    if rOldValue is empty, rNewValue is returned.
-    if rOldValue contains a value, a sequence with rOldValue and rNewValue is returned.
-    if rOldValue contains a sequence, a new sequence with the old sequence and rNewValue is returned.
-*/
-static Any addToSequence( const Any& rOldValue, const Any& rNewValue )
-{
-    if( !rNewValue.hasValue() )
-    {
-        return rOldValue;
-    }
-    else if( !rOldValue.hasValue() )
-    {
-        return rNewValue;
-    }
-    else
-    {
-        Sequence< Any > aNewSeq;
-        if( rOldValue >>= aNewSeq )
-        {
-            sal_Int32 nSize = aNewSeq.getLength();
-            aNewSeq.realloc(nSize+1);
-            aNewSeq[nSize] = rNewValue;
-        }
-        else
-        {
-            aNewSeq.realloc(2);
-            aNewSeq[0] = rOldValue;
-            aNewSeq[1] = rNewValue;
-        }
-        return makeAny( aNewSeq );
-    }
 }
 
 AnimationImporter::AnimationImporter( ImplSdPPTImport* pPPTImport, SvStream& rStCtrl )
@@ -443,10 +394,10 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
                         switch(nPPTNodeType)
                         {
                         case DFF_ANIM_NODE_TYPE_MAIN_SEQUENCE:
-                            fixMainSequenceTiming( xNode );
+                            oox::ppt::fixMainSequenceTiming( xNode );
                             break;
                         case DFF_ANIM_NODE_TYPE_INTERACTIVE_SEQ:
-                            fixInteractiveSequenceTiming( xNode );
+                            oox::ppt::fixInteractiveSequenceTiming( xNode );
                             break;
                         }
                     }
@@ -545,93 +496,6 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
     return nNodes;
 }
 
-void AnimationImporter::fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
-{
-    try
-    {
-        bool bFirst = true;
-        Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
-        Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
-        while( xE->hasMoreElements() )
-        {
-            // click node
-            Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
-
-            Event aEvent;
-            aEvent.Trigger = EventTrigger::ON_NEXT;
-            aEvent.Repeat = 0;
-            xClickNode->setBegin( makeAny( aEvent ) );
-
-            if( bFirst )
-            {
-                bFirst = false;
-                Reference< XEnumerationAccess > xEA2( xClickNode, UNO_QUERY_THROW );
-                Reference< XEnumeration > xE2( xEA2->createEnumeration(), UNO_QUERY_THROW );
-                if( xE2->hasMoreElements() )
-                {
-                    // with node
-                    xE2->nextElement() >>= xEA2;
-                    if( xEA2.is() )
-                        xE2.set(xEA2->createEnumeration(), css::uno::UNO_QUERY);
-                    else
-                        xE2.clear();
-
-                    if( xE2.is() && xE2->hasMoreElements() )
-                    {
-                        Reference< XAnimationNode > xEffectNode( xE2->nextElement(), UNO_QUERY_THROW );
-                        const Sequence< NamedValue > aUserData( xEffectNode->getUserData() );
-                        const NamedValue* p = aUserData.getConstArray();
-                        sal_Int32 nLength = aUserData.getLength();
-                        while( nLength-- )
-                        {
-                            if ( p->Name == "node-type" )
-                            {
-                                sal_Int16 nNodeType = 0;
-                                p->Value >>= nNodeType;
-                                if( nNodeType != css::presentation::EffectNodeType::ON_CLICK )
-                                {
-                                    // first effect does not start on click, so correct
-                                    // first click nodes begin to 0s
-                                    xClickNode->setBegin( makeAny( (double)0.0 ) );
-                                    break;
-                                }
-                            }
-                            p++;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL("sd::AnimationImporter::fixMainSequenceTiming(), exception caught!" );
-    }
-}
-
-void AnimationImporter::fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
-{
-    try
-    {
-        Any aBegin( xNode->getBegin() );
-        Any aEmpty;
-        xNode->setBegin( aEmpty );
-
-        Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
-        Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
-        while( xE->hasMoreElements() )
-        {
-            // click node
-            Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
-            xClickNode->setBegin( aBegin );
-        }
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL("sd::AnimationImporter::fixInteractiveSequenceTiming(), exception caught!" );
-    }
-}
-
 bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >& xNode, const Reference< XAnimationNode >& xParent )
 {
     Reference< XAnimate > xAnimate( xNode, UNO_QUERY );
@@ -651,9 +515,9 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
     if( (nNodeType == AnimationNodeType::SET) && aAttributeName == "fill.on" )
         return false;
 
-    const ImplAttributeNameConversion* p = gImplConversionList;
+    const oox::ppt::ImplAttributeNameConversion* p = oox::ppt::getAttributeConversionList();
 
-    MS_AttributeNames eAttribute = MS_UNKNOWN;
+    oox::ppt::MS_AttributeNames eAttribute = oox::ppt::MS_UNKNOWN;
 
     if( (nNodeType == AnimationNodeType::ANIMATEMOTION) ||
         (nNodeType == AnimationNodeType::ANIMATETRANSFORM) )
@@ -683,7 +547,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
 
     xAnimate->setAttributeName( aAttributeName );
 
-    if( eAttribute != MS_UNKNOWN )
+    if( eAttribute != oox::ppt::MS_UNKNOWN )
     {
         Any aAny( xAnimate->getFrom() );
         if( aAny.hasValue() )
@@ -797,15 +661,15 @@ static int lcl_gethex( int nChar )
         return 0;
 }
 
-bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any& rValue )
+bool AnimationImporter::convertAnimationValue( oox::ppt::MS_AttributeNames eAttribute, Any& rValue )
 {
     bool bRet = false;
     switch( eAttribute )
     {
-    case MS_PPT_X:
-    case MS_PPT_Y:
-    case MS_PPT_W:
-    case MS_PPT_H:
+    case oox::ppt::MS_PPT_X:
+    case oox::ppt::MS_PPT_Y:
+    case oox::ppt::MS_PPT_W:
+    case oox::ppt::MS_PPT_H:
     {
         OUString aString;
 
@@ -846,8 +710,8 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_XSHEAR:
-    case MS_R:
+    case oox::ppt::MS_XSHEAR:
+    case oox::ppt::MS_R:
     {
         OUString aString;
         if( rValue >>= aString )
@@ -858,7 +722,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_STYLEROTATION:
+    case oox::ppt::MS_STYLEROTATION:
     {
         if( rValue.getValueType() == cppu::UnoType<OUString>::get() )
         {
@@ -877,10 +741,10 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_FILLCOLOR:
-    case MS_STROKECOLOR:
-    case MS_STYLECOLOR:
-    case MS_PPT_C:
+    case oox::ppt::MS_FILLCOLOR:
+    case oox::ppt::MS_STROKECOLOR:
+    case oox::ppt::MS_STYLECOLOR:
+    case oox::ppt::MS_PPT_C:
     {
         OUString aString;
         if( rValue >>= aString )
@@ -925,7 +789,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_FILLTYPE:
+    case oox::ppt::MS_FILLTYPE:
     {
         OUString aString;
         if( rValue >>= aString )
@@ -936,7 +800,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_STROKEON:
+    case oox::ppt::MS_STROKEON:
     {
         OUString aString;
         if( rValue >>= aString )
@@ -947,7 +811,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_FONTWEIGHT:
+    case oox::ppt::MS_FONTWEIGHT:
     {
         OUString aString;
         if( rValue >>= aString )
@@ -958,7 +822,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_STYLEFONTSTYLE:
+    case oox::ppt::MS_STYLEFONTSTYLE:
     {
         OUString aString;
         if( rValue >>= aString )
@@ -969,7 +833,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_STYLEUNDERLINE:
+    case oox::ppt::MS_STYLEUNDERLINE:
     {
         OUString aString;
         if( rValue >>= aString )
@@ -980,8 +844,8 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_STYLEOPACITY:
-    case MS_STYLEFONTSIZE:
+    case oox::ppt::MS_STYLEOPACITY:
+    case oox::ppt::MS_STYLEFONTSIZE:
     {
         OUString aString;
         if( rValue >>= aString )
@@ -992,7 +856,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
     break;
 
-    case MS_STYLEVISIBILITY:
+    case oox::ppt::MS_STYLEVISIBILITY:
     {
         OUString aString;
         if( rValue >>= aString )
@@ -1007,65 +871,6 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     }
 
     return bRet;
-}
-
-static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_Int32 nPresetSubType )
-{
-    const sal_Char* pStr = 0;
-
-    if( (nPresetClass == EffectPresetClass::ENTRANCE) || (nPresetClass == EffectPresetClass::EXIT) )
-    {
-        // skip wheel effect
-        if( nPresetId != 21 )
-        {
-            if( nPresetId == 5 )
-            {
-                // checkerboard
-                switch( nPresetSubType )
-                {
-                case  5: pStr = "downward"; break;
-                case 10: pStr = "across"; break;
-                }
-            }
-            else if( nPresetId == 17 )
-            {
-                // stretch
-                if( nPresetSubType == 10 )
-                    pStr = "across";
-            }
-            else if( nPresetId == 18 )
-            {
-                // strips
-                switch( nPresetSubType )
-                {
-                case 3: pStr = "right-to-top"; break;
-                case 6: pStr = "right-to-bottom"; break;
-                case 9: pStr = "left-to-top"; break;
-                case 12: pStr = "left-to-bottom"; break;
-                }
-            }
-
-            if( pStr == 0 )
-            {
-                const convert_subtype* p = gConvertArray;
-
-                while( p->mpStrSubType )
-                {
-                    if( p->mnID == nPresetSubType )
-                    {
-                        pStr = p->mpStrSubType;
-                        break;
-                    }
-                    p++;
-                }
-            }
-        }
-    }
-
-    if( pStr )
-        return OUString::createFromAscii( pStr );
-    else
-        return OUString::number( nPresetSubType );
 }
 
 void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const AnimationNode& rNode, const PropertySet& rSet )
@@ -1194,7 +999,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
             aUserData.realloc(nSize+1);
             aUserData[nSize].Name = "preset-id";
 
-            const preset_maping* p = gPresetMaping;
+            const oox::ppt::preset_maping* p = oox::ppt::preset_maping::getList();
             while( p->mpStrPresetId && ((p->mnPresetClass != nEffectPresetClass) || (p->mnPresetId != nPresetId )) )
                 p++;
 
@@ -1232,7 +1037,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
                 sal_Int32 nSize = aUserData.getLength();
                 aUserData.realloc(nSize+1);
                 aUserData[nSize].Name = "preset-sub-type";
-                aUserData[nSize].Value <<= getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType );
+                aUserData[nSize].Value <<= oox::ppt::getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType );
             }
         }
     }
@@ -1577,7 +1382,7 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
 
                         dump( " filter=\"%s\"", filter );
 
-                        const transition* pTransition = transition::find( filter );
+                        const oox::ppt::transition* pTransition = oox::ppt::transition::find( filter );
                         if( pTransition )
                         {
                             xFilter->setTransition( pTransition->mnType );
@@ -2851,7 +2656,7 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
                 pChildAtom = Atom::findNextChildAtom( pChildAtom );
             }
 
-            *pEvents = addToSequence( *pEvents, (aEvent.Trigger == EventTrigger::NONE) ? aEvent.Offset : makeAny( aEvent ) );
+            *pEvents = oox::addToSequence( *pEvents, (aEvent.Trigger == EventTrigger::NONE) ? aEvent.Offset : makeAny( aEvent ) );
         }
 
         pEventAtom = pAtom->findNextChildAtom( DFF_msofbtAnimEvent, pEventAtom );

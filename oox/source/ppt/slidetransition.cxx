@@ -31,7 +31,7 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/token/namespaces.hxx"
 #include "oox/token/tokens.hxx"
-#include "pptfilterhelpers.hxx"
+#include <oox/ppt/pptfilterhelpers.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

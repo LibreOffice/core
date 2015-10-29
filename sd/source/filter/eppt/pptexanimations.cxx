@@ -57,6 +57,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <vcl/vclenum.hxx>
+#include <oox/ppt/pptfilterhelpers.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
@@ -95,7 +96,7 @@ void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMo
     {
         if ( ( eTranslateMode & TRANSLATE_VALUE ) || ( eTranslateMode & TRANSLATE_ATTRIBUTE ) )
         {
-            const ImplAttributeNameConversion* p = gImplConversionList;
+            const oox::ppt::ImplAttributeNameConversion* p = oox::ppt::getAttributeConversionList();
             while( p->mpAPIName )
             {
                 if( rString.equalsAscii( p->mpAPIName ) )
@@ -207,7 +208,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
         }
         if ( !bTranslated )
         {
-            const convert_subtype* p = gConvertArray;
+            const oox::ppt::convert_subtype* p = oox::ppt::convert_subtype::getList();
             while( p->mpStrSubType )
             {
                 if ( rPresetSubType.equalsAscii( p->mpStrSubType ) )
@@ -230,7 +231,7 @@ const sal_Char* AnimationExporter::FindTransitionName( const sal_Int16 nType, co
     const sal_Char* pRet = NULL;
     int             nFit = 0;
 
-    const transition* p = gTransitions;
+    const oox::ppt::transition* p = oox::ppt::transition::getList();
     while( p->mpName )
     {
         int nF = 0;
@@ -932,7 +933,7 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
     }
     else
     {
-    const preset_maping* p = gPresetMaping;
+        const oox::ppt::preset_maping* p = oox::ppt::preset_maping::getList();
     while( p->mpStrPresetId && ((p->mnPresetClass != (sal_Int32)nAPIPresetClass) || !rPreset.equalsAscii( p->mpStrPresetId )) )
         p++;
 

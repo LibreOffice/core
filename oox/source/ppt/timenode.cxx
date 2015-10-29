@@ -39,6 +39,7 @@
 
 #include "oox/helper/helper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include <oox/ppt/pptfilterhelpers.hxx>
 #include "sal/log.hxx"
 
 using namespace ::oox::core;
@@ -104,9 +105,7 @@ namespace oox { namespace ppt {
     {
     }
 
-// BEGIN CUT&PASTE from sd/source/filter/ppt/pptinanimations.hxx
-
-    static void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+    void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
     {
         try
         {
@@ -164,14 +163,13 @@ namespace oox { namespace ppt {
                 }
             }
         }
-        catch( Exception& e )
+        catch( Exception& )
         {
-            (void)e;
             SAL_INFO("oox.ppt","fixMainSequenceTiming(), exception caught!" );
         }
     }
 
-    static void fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+    void fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
     {
         try
         {
@@ -188,14 +186,11 @@ namespace oox { namespace ppt {
                 xClickNode->setBegin( aBegin );
             }
         }
-        catch( Exception& e )
+        catch( Exception& )
         {
-            (void)e;
             SAL_INFO("oox.ppt","fixInteractiveSequenceTiming(), exception caught!" );
         }
     }
-
-// END CUT&PASTE
 
     void TimeNode::addNode( const XmlFilterBase& rFilter, const Reference< XAnimationNode >& rxNode, const SlidePersistPtr & pSlide )
     {

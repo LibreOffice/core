@@ -79,10 +79,7 @@ private:
     static css::uno::Reference< css::animations::XAnimationNode > createNode( const Atom* pAtom, const AnimationNode& rNode );
 
     bool convertAnimationNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const css::uno::Reference< css::animations::XAnimationNode >& xParent );
-    static bool convertAnimationValue( MS_AttributeNames eAttribute, css::uno::Any& rValue );
-
-    static void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    static void fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    static bool convertAnimationValue( oox::ppt::MS_AttributeNames eAttribute, css::uno::Any& rValue );
 
     void processAfterEffectNodes();
 

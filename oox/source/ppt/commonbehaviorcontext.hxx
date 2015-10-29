@@ -23,8 +23,8 @@
 #include <rtl/ustring.hxx>
 #include "oox/ppt/timenodelistcontext.hxx"
 #include "oox/ppt/animationspersist.hxx"
+#include <oox/ppt/pptfilterhelpers.hxx>
 #include "conditioncontext.hxx"
-#include "pptfilterhelpers.hxx"
 
 namespace oox { namespace ppt {
 

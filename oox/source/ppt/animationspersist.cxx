@@ -27,11 +27,46 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 #include "oox/drawingml/shape.hxx"
+#include <oox/helper/addtosequence.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
+
+namespace oox
+{
+
+Any addToSequence( const Any& rOldValue, const Any& rNewValue )
+{
+    if( !rNewValue.hasValue() )
+    {
+        return rOldValue;
+    }
+    else if( !rOldValue.hasValue() )
+    {
+        return rNewValue;
+    }
+    else
+    {
+        Sequence< Any > aNewSeq;
+        if( rOldValue >>= aNewSeq )
+        {
+            sal_Int32 nSize = aNewSeq.getLength();
+            aNewSeq.realloc(nSize+1);
+            aNewSeq[nSize] = rNewValue;
+        }
+        else
+        {
+            aNewSeq.realloc(2);
+            aNewSeq[0] = rOldValue;
+            aNewSeq[1] = rNewValue;
+        }
+        return makeAny( aNewSeq );
+    }
+}
+
+} // namespace oox
 
 namespace oox { namespace ppt {
 
@@ -123,43 +158,6 @@ namespace oox { namespace ppt {
         }
         return aTarget;
     }
-
-// BEGIN CUT&PASTE from sd/source/filter/ppt/pptinanimations.cxx
-/** this adds an any to another any.
-    if rNewValue is empty, rOldValue is returned.
-    if rOldValue is empty, rNewValue is returned.
-    if rOldValue contains a value, a sequence with rOldValue and rNewValue is returned.
-    if rOldValue contains a sequence, a new sequence with the old sequence and rNewValue is returned.
-*/
-    static Any addToSequence( const Any& rOldValue, const Any& rNewValue )
-    {
-        if( !rNewValue.hasValue() )
-        {
-            return rOldValue;
-        }
-        else if( !rOldValue.hasValue() )
-        {
-            return rNewValue;
-        }
-        else
-        {
-            Sequence< Any > aNewSeq;
-            if( rOldValue >>= aNewSeq )
-            {
-                sal_Int32 nSize = aNewSeq.getLength();
-                aNewSeq.realloc(nSize+1);
-                aNewSeq[nSize] = rNewValue;
-            }
-            else
-            {
-                aNewSeq.realloc(2);
-                aNewSeq[0] = rOldValue;
-                aNewSeq[1] = rNewValue;
-            }
-            return makeAny( aNewSeq );
-        }
-    }
-// END
 
     Any AnimationCondition::convert(const SlidePersistPtr & pSlide) const
     {
