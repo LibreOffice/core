@@ -566,7 +566,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:DecrementIndent"),
         OUString(".uno:CharFontName"),
         OUString(".uno:FontHeight"),
-        OUString(".uno:StyleApply")
+        OUString(".uno:StyleApply"),
+        OUString(".uno:FontColor"),
+        OUString(".uno:BackColor")
     };
 
     util::URL aCommandURL;
