@@ -701,7 +701,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
             pTree = 0;
             InvalidateCursor();
         }
-        Reference<com::sun::star::frame::XModel> xModel(GetModel());
+        Reference<css::frame::XModel> xModel(GetModel());
         SmXMLImportWrapper aEquation(xModel);
         bSuccess = 0 == aEquation.Import(rMedium);
     }
@@ -766,7 +766,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
            )
         {
             // is this a fabulous math package ?
-            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            Reference<css::frame::XModel> xModel(GetModel());
             SmXMLImportWrapper aEquation(xModel);
             sal_uLong nError = aEquation.Import(rMedium);
             bRet = 0 == nError;
@@ -798,7 +798,7 @@ bool SmDocShell::Save()
         if( pTree && !IsFormulaArranged() )
             ArrangeFormula();
 
-        Reference<com::sun::star::frame::XModel> xModel(GetModel());
+        Reference<css::frame::XModel> xModel(GetModel());
         SmXMLExportWrapper aEquation(xModel);
         aEquation.SetFlat(false);
         return aEquation.Export(*GetMedium());
@@ -860,7 +860,7 @@ bool SmDocShell::SaveAs( SfxMedium& rMedium )
         if( pTree && !IsFormulaArranged() )
             ArrangeFormula();
 
-        Reference<com::sun::star::frame::XModel> xModel(GetModel());
+        Reference<css::frame::XModel> xModel(GetModel());
         SmXMLExportWrapper aEquation(xModel);
         aEquation.SetFlat(false);
         bRet = aEquation.Export(rMedium);
@@ -882,14 +882,14 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
         const OUString& rFltName = pFlt->GetFilterName();
         if(rFltName == STAROFFICE_XML)
         {
-            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            Reference<css::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(false);
             bRet = aEquation.Export(rMedium);
         }
         else if(rFltName == MATHML_XML)
         {
-            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            Reference<css::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(true);
             bRet = aEquation.Export(rMedium);
@@ -926,7 +926,7 @@ void SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
     SetText( aEquation.ConvertToStarMath());
 }
 
-bool SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+bool SmDocShell::SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage )
 {
     if( SfxObjectShell::SaveCompleted( xStorage ))
         return true;

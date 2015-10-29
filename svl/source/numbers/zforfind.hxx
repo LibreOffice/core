@@ -169,7 +169,7 @@ private:
         @see IsAcceptedDatePattern()
      */
     sal_Int32   nAcceptedDatePattern;
-    com::sun::star::uno::Sequence< OUString >  sDateAcceptancePatterns;
+    css::uno::Sequence< OUString >  sDateAcceptancePatterns;
 
     /** If input matched a date acceptance pattern that starts at input
         particle sStrArray[nDatePatternStart].

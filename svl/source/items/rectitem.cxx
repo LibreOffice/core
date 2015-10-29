@@ -103,7 +103,7 @@ SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
 
 
 
-bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
                                    sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -111,7 +111,7 @@ bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
     {
         case 0:
         {
-            rVal <<= com::sun::star::awt::Rectangle( aVal.getX(),
+            rVal <<= css::awt::Rectangle( aVal.getX(),
                                              aVal.getY(),
                                              aVal.getWidth(),
                                              aVal.getHeight() );
@@ -128,12 +128,12 @@ bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
 }
 
 
-bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SfxRectangleItem::PutValue( const css::uno::Any& rVal,
                                  sal_uInt8 nMemberId )
 {
     bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
-    com::sun::star::awt::Rectangle aValue;
+    css::awt::Rectangle aValue;
     sal_Int32 nVal = 0;
     if ( !nMemberId )
         bRet = (rVal >>= aValue);

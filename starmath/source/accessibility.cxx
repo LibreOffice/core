@@ -675,7 +675,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     return aTxt.copy( nStart, nEnd - nStart );
 }
 
-::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -683,7 +683,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     if (!(nIndex <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
 
-    ::com::sun::star::accessibility::TextSegment aResult;
+    css::accessibility::TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
     if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIndex < aTxt.getLength()) )
@@ -695,7 +695,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     return aResult;
 }
 
-::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -703,7 +703,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     if (!(nIndex <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
 
-    ::com::sun::star::accessibility::TextSegment aResult;
+    css::accessibility::TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
@@ -716,7 +716,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     return aResult;
 }
 
-::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aTxt( GetAccessibleText_Impl() );
@@ -724,7 +724,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     if (!(nIndex <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
 
-    ::com::sun::star::accessibility::TextSegment aResult;
+    css::accessibility::TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
@@ -787,10 +787,10 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     return Sequence< OUString >{
-        "com::sun::star::accessibility::Accessible",
-        "com::sun::star::accessibility::AccessibleComponent",
-        "com::sun::star::accessibility::AccessibleContext",
-        "com::sun::star::accessibility::AccessibleText"
+        "css::accessibility::Accessible",
+        "css::accessibility::AccessibleComponent",
+        "css::accessibility::AccessibleContext",
+        "css::accessibility::AccessibleText"
     };
 }
 
@@ -1304,7 +1304,7 @@ bool SmTextForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
-        ESelection aRes = pEditEngine->GetWord( ESelection(nPara, nIndex, nPara, nIndex), com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        ESelection aRes = pEditEngine->GetWord( ESelection(nPara, nIndex, nPara, nIndex), css::i18n::WordType::DICTIONARY_WORD );
 
         if( aRes.nStartPara == nPara &&
             aRes.nStartPara == aRes.nEndPara )
@@ -1918,9 +1918,9 @@ Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     return Sequence< OUString >{
-        "com::sun::star::accessibility::Accessible",
-        "com::sun::star::accessibility::AccessibleComponent",
-        "com::sun::star::accessibility::AccessibleContext"
+        "css::accessibility::Accessible",
+        "css::accessibility::AccessibleComponent",
+        "css::accessibility::AccessibleContext"
     };
 }
 

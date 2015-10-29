@@ -125,12 +125,12 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
 
     virtual sal_uLong   GetMiscStatus() const override;
     virtual void        OnDocumentPrinterChanged( Printer * ) override;
-    virtual bool        InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) override;
+    virtual bool        InitNew( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
     virtual bool        Load( SfxMedium& rMedium ) override;
     virtual bool        Save() override;
     virtual bool        SaveAs( SfxMedium& rMedium ) override;
     virtual bool        ConvertTo( SfxMedium &rMedium ) override;
-    virtual bool        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) override;
+    virtual bool        SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
 
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();

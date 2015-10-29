@@ -1387,7 +1387,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
         if (xNameAccess->hasByName(OUString("content.xml")) || xNameAccess->hasByName(OUString("Content.xml")))
         {
             // is this a fabulous math package ?
-            Reference<com::sun::star::frame::XModel> xModel(pDoc->GetModel());
+            Reference<css::frame::XModel> xModel(pDoc->GetModel());
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
             bRet = 0 == aEquation.Import(rMedium);
         }

@@ -74,12 +74,12 @@ public:
         : m_head( single )
         {}
     PermissionCollection(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & permissions,
+        css::uno::Sequence< css::uno::Any > const & permissions,
         PermissionCollection const & addition = PermissionCollection() );
 #ifdef __DIAGNOSE
-    ::com::sun::star::uno::Sequence< OUString > toStrings() const;
+    css::uno::Sequence< OUString > toStrings() const;
 #endif
-    void checkPermission( ::com::sun::star::uno::Any const & perm ) const;
+    void checkPermission( css::uno::Any const & perm ) const;
 };
 
 }

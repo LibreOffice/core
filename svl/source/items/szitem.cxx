@@ -99,7 +99,7 @@ SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
 }
 
 
-bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool  SfxSizeItem::QueryValue( css::uno::Any& rVal,
                                sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -116,7 +116,7 @@ bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
     {
         case 0:
         {
-            rVal <<= com::sun::star::awt::Size( aTmp.getWidth(), aTmp.getHeight() );
+            rVal <<= css::awt::Size( aTmp.getWidth(), aTmp.getHeight() );
             break;
         }
         case MID_WIDTH:
@@ -130,14 +130,14 @@ bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
 }
 
 
-bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SfxSizeItem::PutValue( const css::uno::Any& rVal,
                             sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     bool bRet = false;
-    com::sun::star::awt::Size aValue;
+    css::awt::Size aValue;
     if ( !nMemberId )
         bRet = ( rVal >>= aValue );
     else

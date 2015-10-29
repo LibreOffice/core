@@ -337,7 +337,7 @@ namespace svgio
             }
         }
 
-        void SvgNode::parseAttributes(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs)
+        void SvgNode::parseAttributes(const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs)
         {
             // no longer need to pre-sort moving 'style' entries to the back so that
             // values get overwritten - that was the previous, not complete solution for

@@ -348,7 +348,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
 
         // added for replaceability of context menus
         Menu* pMenu = NULL;
-        ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
+        css::ui::ContextMenuExecuteEvent aEvent;
         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
         aEvent.ExecutePosition.X = aPoint.X();
         aEvent.ExecutePosition.Y = aPoint.Y();

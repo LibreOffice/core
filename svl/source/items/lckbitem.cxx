@@ -114,9 +114,9 @@ SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
 }
 
 // virtual
-bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
-    com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+    css::uno::Sequence< sal_Int8 > aSeq;
     if ( rVal >>= aSeq )
     {
         if ( aSeq.getLength() )
@@ -138,7 +138,7 @@ bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
 }
 
 // virtual
-bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxLockBytesItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
     if ( _xVal.Is() )
     {
@@ -151,14 +151,14 @@ bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) c
             return false;
 
         sal_uLong nRead = 0;
-        com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
+        css::uno::Sequence< sal_Int8 > aSeq( nLen );
 
         _xVal->ReadAt( 0, aSeq.getArray(), nLen, &nRead );
         rVal <<= aSeq;
     }
     else
     {
-        com::sun::star::uno::Sequence< sal_Int8 > aSeq( 0 );
+        css::uno::Sequence< sal_Int8 > aSeq( 0 );
         rVal <<= aSeq;
     }
 

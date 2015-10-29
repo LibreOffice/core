@@ -277,7 +277,7 @@ namespace svgio
                 double fFontHeight(fFontWidth);
 
                 // prepare locale
-                ::com::sun::star::lang::Locale aLocale;
+                css::lang::Locale aLocale;
 
                 // prepare TextLayouterDevice
                 drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;

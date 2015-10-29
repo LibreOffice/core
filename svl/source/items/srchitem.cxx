@@ -371,7 +371,7 @@ void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
     m_aSearchOpt.transliterateFlags = nFlags;
 }
 
-bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -467,7 +467,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
 
 
 
-bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = false;
@@ -614,7 +614,7 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
             {
                 if ( nInt == LANGUAGE_NONE )
                 {
-                    m_aSearchOpt.Locale = ::com::sun::star::lang::Locale();
+                    m_aSearchOpt.Locale = css::lang::Locale();
                 }
                 else
                 {

@@ -43,7 +43,7 @@ bool CntByteItem::GetPresentation(SfxItemPresentation,
 }
 
 // virtual
-bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntByteItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int8 nValue = m_nValue;
     rVal <<= nValue;
@@ -51,7 +51,7 @@ bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 }
 
 // virtual
-bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntByteItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 {
     sal_Int8 nValue = sal_Int8();
     if (rVal >>= nValue)
@@ -116,7 +116,7 @@ bool CntUInt16Item::GetPresentation(SfxItemPresentation,
 }
 
 // virtual
-bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntUInt16Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
@@ -124,7 +124,7 @@ bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 }
 
 // virtual
-bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntUInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
@@ -186,7 +186,7 @@ bool CntInt32Item::GetPresentation(SfxItemPresentation,
 }
 
 // virtual
-bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntInt32Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
@@ -194,7 +194,7 @@ bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 }
 
 // virtual
-bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
@@ -257,7 +257,7 @@ bool CntUInt32Item::GetPresentation(SfxItemPresentation,
 }
 
 // virtual
-bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntUInt32Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int32 nValue = m_nValue;
     DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
@@ -266,7 +266,7 @@ bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 }
 
 // virtual
-bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntUInt32Item::PutValue(const css::uno::Any& rVal, sal_uInt8)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)

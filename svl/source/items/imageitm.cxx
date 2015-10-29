@@ -65,21 +65,21 @@ bool SfxImageItem::operator==( const SfxPoolItem& rItem ) const
            (*pImp == *static_cast<const SfxImageItem&>(rItem).pImp);
 }
 
-bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxImageItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 4 );
-    aSeq[0] = ::com::sun::star::uno::makeAny( GetValue() );
-    aSeq[1] = ::com::sun::star::uno::makeAny( pImp->nAngle );
-    aSeq[2] = ::com::sun::star::uno::makeAny( pImp->bMirrored );
-    aSeq[3] = ::com::sun::star::uno::makeAny( OUString( pImp->aURL ));
+    css::uno::Sequence< css::uno::Any > aSeq( 4 );
+    aSeq[0] = css::uno::makeAny( GetValue() );
+    aSeq[1] = css::uno::makeAny( pImp->nAngle );
+    aSeq[2] = css::uno::makeAny( pImp->bMirrored );
+    aSeq[3] = css::uno::makeAny( OUString( pImp->aURL ));
 
-    rVal = ::com::sun::star::uno::makeAny( aSeq );
+    rVal = css::uno::makeAny( aSeq );
     return true;
 }
 
-bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxImageItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
+    css::uno::Sequence< css::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
     {
         sal_Int16     nVal = sal_Int16();

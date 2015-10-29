@@ -264,7 +264,7 @@ URIHelper::normalizedMakeRelative(
 OUString URIHelper::simpleNormalizedMakeRelative(
     OUString const & baseUriReference, OUString const & uriReference)
 {
-    com::sun::star::uno::Reference< com::sun::star::uri::XUriReference > rel(
+    css::uno::Reference< css::uri::XUriReference > rel(
         URIHelper::normalizedMakeRelative(
             comphelper::getProcessComponentContext(), baseUriReference,
             uriReference));

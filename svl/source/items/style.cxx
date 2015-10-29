@@ -771,12 +771,12 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
             // this works well under normal conditions (checked breaking and counting
             // on SfxStyleSheetBase constructors and destructors)
 
-            // com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), com::sun::star::uno::UNO_QUERY );
+            // css::uno::Reference< css::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), css::uno::UNO_QUERY );
             // if( xComp.is() ) try
             // {
             //  xComp->dispose();
             // }
-            // catch( com::sun::star::uno::Exception& )
+            // catch( css::uno::Exception& )
             // {
             // }
             Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::ERASED, *p ) );
@@ -814,13 +814,12 @@ struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
     Dispose(rtl::Reference<SfxStyleSheetBase> styleSheet) override
     {
         cppu::OWeakObject* weakObject = static_cast< ::cppu::OWeakObject* >(styleSheet.get());
-        com::sun::star::uno::Reference< com::sun::star::lang::XComponent >
-            xComp( weakObject, com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::lang::XComponent > xComp( weakObject, css::uno::UNO_QUERY );
         if( xComp.is() ) try
         {
             xComp->dispose();
         }
-        catch( com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
         }
         mPool->Broadcast( SfxStyleSheetHint( SfxStyleSheetHintId::ERASED, *styleSheet.get() ) );
@@ -938,16 +937,16 @@ SfxStyleSheetBase* SfxStyleSheetPool::Create( const OUString& rName,
 }
 
 SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske )
-: ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >( _rName, _rPool, _eFamily, _nMaske )
+: ::cppu::ImplInheritanceHelper2< SfxStyleSheet, css::style::XStyle, css::lang::XUnoTunnel >( _rName, _rPool, _eFamily, _nMaske )
 {
 }
 
-SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >& xStyle )
+SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference< css::style::XStyle >& xStyle )
 {
     SfxUnoStyleSheet* pRet = dynamic_cast< SfxUnoStyleSheet* >( xStyle.get() );
     if( !pRet )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xStyle, ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference< css::lang::XUnoTunnel > xUT( xStyle, css::uno::UNO_QUERY );
         if( xUT.is() )
             pRet = reinterpret_cast<SfxUnoStyleSheet*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SfxUnoStyleSheet::getIdentifier())));
     }
@@ -957,7 +956,7 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const ::com::sun::star::un
 /**
  * XUnoTunnel
  */
-::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const css::uno::Sequence< ::sal_Int8 >& rId ) throw (css::uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16 && 0 == memcmp( getIdentifier().getConstArray(), rId.getConstArray(), 16 ) )
     {
@@ -980,7 +979,7 @@ namespace
     class theSfxUnoStyleSheetIdentifier : public rtl::Static< UnoTunnelIdInit, theSfxUnoStyleSheetIdentifier > {};
 }
 
-const ::com::sun::star::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getIdentifier()
+const css::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getIdentifier()
 {
     return theSfxUnoStyleSheetIdentifier::get().getSeq();
 }

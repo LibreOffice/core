@@ -47,7 +47,7 @@ bool SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
 }
 
 // virtual
-bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
+bool SfxEnumItemInterface::QueryValue(css::uno::Any& rVal, sal_uInt8)
     const
 {
     rVal <<= sal_Int32(GetEnumValue());
@@ -55,7 +55,7 @@ bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
 }
 
 // virtual
-bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
+bool SfxEnumItemInterface::PutValue(const css::uno::Any& rVal,
                                     sal_uInt8)
 {
     sal_Int32 nTheValue = 0;
@@ -175,14 +175,14 @@ bool SfxBoolItem::GetPresentation(SfxItemPresentation,
 }
 
 // virtual
-bool SfxBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool SfxBoolItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_bValue;
     return true;
 }
 
 // virtual
-bool SfxBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool SfxBoolItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 {
     bool bTheValue = bool();
     if (rVal >>= bTheValue)

@@ -212,7 +212,7 @@ namespace svgio
                     if(!maMimeType.isEmpty() && !maData.isEmpty())
                     {
                         // use embedded base64 encoded data
-                        ::com::sun::star::uno::Sequence< sal_Int8 > aPass;
+                        css::uno::Sequence< sal_Int8 > aPass;
                         ::sax::Converter::decodeBase64(aPass, maData);
 
                         if(aPass.hasElements())

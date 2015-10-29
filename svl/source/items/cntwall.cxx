@@ -135,14 +135,14 @@ SfxPoolItem* CntWallpaperItem::Clone( SfxItemPool* ) const
 }
 
 // virtual
-bool CntWallpaperItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8) const
+bool CntWallpaperItem::QueryValue( css::uno::Any&, sal_uInt8) const
 {
     OSL_FAIL("Not implemented!");
     return false;
 }
 
 // virtual
-bool CntWallpaperItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8)
+bool CntWallpaperItem::PutValue( const css::uno::Any&, sal_uInt8)
 {
     OSL_FAIL("Not implemented!");
     return false;

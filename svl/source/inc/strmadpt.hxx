@@ -27,17 +27,14 @@
 
 class SvOutputStreamOpenLockBytes: public SvOpenLockBytes
 {
-    com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
-        m_xOutputStream;
-    sal_uInt64 m_nPosition;
+    css::uno::Reference< css::io::XOutputStream >  m_xOutputStream;
+    sal_uInt64                                     m_nPosition;
 
 public:
     TYPEINFO_OVERRIDE();
 
     SvOutputStreamOpenLockBytes(
-            const com::sun::star::uno::Reference<
-                      com::sun::star::io::XOutputStream > &
-                rTheOutputStream):
+            const css::uno::Reference< css::io::XOutputStream > &  rTheOutputStream):
         m_xOutputStream(rTheOutputStream), m_nPosition(0) {}
 
     virtual ErrCode ReadAt(sal_uInt64, void *, sal_uLong, sal_Size *) const override;

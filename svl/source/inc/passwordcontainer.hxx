@@ -206,7 +206,7 @@ public:
         mainCont( point ),
         hasEncoded( false )
     {
-        ::com::sun::star::uno::Sequence< OUString > aNode( 1 );
+        css::uno::Sequence< OUString > aNode( 1 );
         *aNode.getArray()  = path;
         *aNode.getArray() += "/Store";
         EnableNotification( aNode );
@@ -222,7 +222,7 @@ public:
     void setUseStorage( bool bUse );
     bool useStorage();
 
-    virtual void            Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 
@@ -233,151 +233,151 @@ enum PasswordState {
 };
 
 class PasswordContainer : public ::cppu::WeakImplHelper<
-        ::com::sun::star::task::XPasswordContainer2,
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::lang::XEventListener >
+        css::task::XPasswordContainer2,
+        css::lang::XServiceInfo,
+        css::lang::XEventListener >
 {
 private:
     PassMap      m_aContainer;
     StorageItem* m_pStorageFile;
     ::osl::Mutex mMutex;
     OUString m_aMasterPasswd; // master password is set when the string is not empty
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mComponent;
+    css::uno::Reference< css::lang::XComponent > mComponent;
     SysCredentialsConfig mUrlContainer;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > CopyToUserRecordSequence(
+    css::uno::Sequence< css::task::UserRecord > CopyToUserRecordSequence(
                                         const ::std::list< NamePassRecord >& original,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+                                        const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 
-    ::com::sun::star::task::UserRecord CopyToUserRecord(
+    css::task::UserRecord CopyToUserRecord(
                                         const NamePassRecord& aRecord,
                                         bool& io_bTryToDecode,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler );
+                                        const css::uno::Reference< css::task::XInteractionHandler >& aHandler );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > FindUsr(
+    css::uno::Sequence< css::task::UserRecord > FindUsr(
                                         const ::std::list< NamePassRecord >& userlist,
                                         const OUString& name,
-                                        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+                                        const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 bool createUrlRecord(
     const PassMap::iterator & rIter,
     bool bName,
     const OUString & aName,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler,
-    ::com::sun::star::task::UrlRecord & rRec  )
-        throw( ::com::sun::star::uno::RuntimeException );
+    const css::uno::Reference< css::task::XInteractionHandler >& aHandler,
+    css::task::UrlRecord & rRec  )
+        throw( css::uno::RuntimeException );
 
-::com::sun::star::task::UrlRecord find(
+css::task::UrlRecord find(
     const OUString& aURL,
     const OUString& aName,
     bool bName, // only needed to support empty user names
-    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    const css::uno::Reference< css::task::XInteractionHandler >& aHandler  ) throw(css::uno::RuntimeException, std::exception);
 
     static OUString GetDefaultMasterPassword();
 
     static OUString RequestPasswordFromUser(
-                    ::com::sun::star::task::PasswordRequestMode aRMode,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+                    css::task::PasswordRequestMode aRMode,
+                    const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
 
-    OUString GetMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception);
+    OUString GetMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& Handler )
+                                                        throw(css::uno::RuntimeException, std::exception);
 
     void UpdateVector( const OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, bool writeFile )
-                                                        throw(::com::sun::star::uno::RuntimeException);
+                                                        throw(css::uno::RuntimeException);
 
     void PrivateAdd( const OUString& aUrl,
                               const OUString& aUserName,
-                              const ::com::sun::star::uno::Sequence< OUString >& aPasswords,
+                              const css::uno::Sequence< OUString >& aPasswords,
                               char  aMode,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+                              const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 
     static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword )
-                                                        throw(::com::sun::star::uno::RuntimeException);
+                                                        throw(css::uno::RuntimeException);
 
     static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword )
-                                                        throw(::com::sun::star::uno::RuntimeException);
+                                                        throw(css::uno::RuntimeException);
 
 public:
-    PasswordContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+    PasswordContainer( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
     virtual ~PasswordContainer();
 
     virtual void SAL_CALL add( const OUString& aUrl,
                                const OUString& aUserName,
-                               const ::com::sun::star::uno::Sequence< OUString >& aPasswords,
-                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler  )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                               const css::uno::Sequence< OUString >& aPasswords,
+                               const css::uno::Reference< css::task::XInteractionHandler >& Handler  )
+                                                        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL addPersistent( const OUString& aUrl,
                                             const OUString& aUserName,
-                                         const ::com::sun::star::uno::Sequence< OUString >& aPasswords,
-                                          const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler  )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                         const css::uno::Sequence< OUString >& aPasswords,
+                                          const css::uno::Reference< css::task::XInteractionHandler >& Handler  )
+                                                        throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::task::UrlRecord SAL_CALL
+    virtual css::task::UrlRecord SAL_CALL
                             find( const OUString& aUrl,
-                                  const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler  )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                  const css::uno::Reference< css::task::XInteractionHandler >& Handler  )
+                                                        throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::task::UrlRecord SAL_CALL
+    virtual css::task::UrlRecord SAL_CALL
                             findForName( const OUString& aUrl,
                                          const OUString& aUserName,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler  )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler  )
+                                                        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL remove( const OUString& aUrl,
                                   const OUString& aUserName )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                                        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL removePersistent( const OUString& aUrl,
                                             const OUString& aUserName )
-                                                        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                                                        throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL removeAllPersistent() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeAllPersistent() throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::task::UrlRecord > SAL_CALL
-                            getAllPersistent( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::task::UrlRecord > SAL_CALL
+                            getAllPersistent( const css::uno::Reference< css::task::XInteractionHandler >& Handler ) throw(css::uno::RuntimeException, std::exception) override;
 
 
     // provide factory
-    static OUString SAL_CALL        impl_getStaticImplementationName( ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-                    impl_getStaticSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
-                    impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-                    impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) throw( ::com::sun::star::uno::RuntimeException );
+    static OUString SAL_CALL        impl_getStaticImplementationName( ) throw(css::uno::RuntimeException);
+    static css::uno::Sequence< OUString > SAL_CALL
+                    impl_getStaticSupportedServiceNames(  ) throw(css::uno::RuntimeException);
+    static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
+                    impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& ServiceManager ) throw(css::uno::RuntimeException);
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL
+                    impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::RuntimeException );
 
     // XServiceInfo
-    virtual OUString    SAL_CALL    getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL            supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL    getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL            supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-                                        getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
+                                        getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL        disposing( const ::com::sun::star::lang::EventObject& Source )
-                                    throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL        disposing( const css::lang::EventObject& Source )
+                                    throw(css::uno::RuntimeException, std::exception) override;
 
     // XMasterPasswordHandling
-    virtual sal_Bool SAL_CALL authorizateWithMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL changeMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeMasterPassword() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasMasterPassword(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL allowPersistentStoring( sal_Bool bAllow ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isPersistentStoringAllowed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL authorizateWithMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler )
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL changeMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeMasterPassword() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasMasterPassword(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL allowPersistentStoring( sal_Bool bAllow ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isPersistentStoringAllowed(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XMasterPasswordHandling2
-    virtual sal_Bool SAL_CALL useDefaultMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isDefaultMasterPasswordUsed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL useDefaultMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isDefaultMasterPasswordUsed(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XUrlContainer
-    virtual void SAL_CALL addUrl( const OUString& Url, sal_Bool MakePersistent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL findUrl( const OUString& Url ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeUrl( const OUString& Url ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getUrls( sal_Bool OnlyPersistent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addUrl( const OUString& Url, sal_Bool MakePersistent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL findUrl( const OUString& Url ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeUrl( const OUString& Url ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getUrls( sal_Bool OnlyPersistent ) throw (css::uno::RuntimeException, std::exception) override;
 
     void            Notify();
 };
@@ -388,7 +388,7 @@ class MasterPasswordRequest_Impl : public ucbhelper::InteractionRequest
     ::rtl::Reference< ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;
 
 public:
-    MasterPasswordRequest_Impl( ::com::sun::star::task::PasswordRequestMode Mode );
+    MasterPasswordRequest_Impl( css::task::PasswordRequestMode Mode );
 
     const ::rtl::Reference< ucbhelper::InteractionSupplyAuthentication > &
     getAuthenticationSupplier() const { return m_xAuthSupplier; }

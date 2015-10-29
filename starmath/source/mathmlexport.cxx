@@ -360,7 +360,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 }
 
 SmXMLExport::SmXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+    const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLExportFlags nExportFlags)
     : SvXMLExport(util::MeasureUnit::INCH, rContext, implementationName, XML_MATH,
                   nExportFlags)

@@ -30,7 +30,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class SvgDocHdl : public cppu::WeakImplHelper< com::sun::star::xml::sax::XDocumentHandler >
+        class SvgDocHdl : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
         {
         private:
             // the complete SVG Document
@@ -49,14 +49,14 @@ namespace svgio
             virtual ~SvgDocHdl();
 
             // Methods XDocumentHandler
-            virtual void SAL_CALL startDocument(  ) throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL endDocument(  ) throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL startElement( const OUString& aName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs ) throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL endElement( const OUString& aName ) throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL characters( const OUString& aChars ) throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setDocumentLocator( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XLocator >& xLocator ) throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL startDocument(  ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL endDocument(  ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL endElement( const OUString& aName ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL characters( const OUString& aChars ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 
             const SvgDocument& getSvgDocument() const { return maDocument; }
         };

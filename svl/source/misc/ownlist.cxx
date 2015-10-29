@@ -115,7 +115,7 @@ SvCommand & SvCommandList::Append
     return aCommandList.back();
 }
 
-bool SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
+bool SvCommandList::FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence )
 {
     const sal_Int32 nCount = aCommandSequence.getLength();
     OUString aCommand, aArg;
@@ -132,7 +132,7 @@ bool SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com:
     return true;
 }
 
-void SvCommandList::FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
+void SvCommandList::FillSequence( css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence )
 {
     const sal_Int32 nCount = aCommandList.size();
     aCommandSequence.realloc( nCount );

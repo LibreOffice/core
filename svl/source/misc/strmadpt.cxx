@@ -412,10 +412,7 @@ void SvInputStream::SetSize(sal_uInt64)
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
 
-SvInputStream::SvInputStream(
-        com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-                const &
-            rTheStream):
+SvInputStream::SvInputStream( css::uno::Reference< css::io::XInputStream > const & rTheStream):
     m_xStream(rTheStream),
     m_pPipe(0),
     m_nSeekedFrom(STREAM_SEEK_TO_END)
