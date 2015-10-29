@@ -689,9 +689,9 @@ void SAL_CALL OLESimpleStorage::removeEventListener(
 
 
 void SAL_CALL OLESimpleStorage::commit()
-        throw ( ::com::sun::star::io::IOException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception )
+        throw ( css::io::IOException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -715,9 +715,9 @@ void SAL_CALL OLESimpleStorage::commit()
 
 
 void SAL_CALL OLESimpleStorage::revert()
-        throw ( ::com::sun::star::io::IOException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception )
+        throw ( css::io::IOException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

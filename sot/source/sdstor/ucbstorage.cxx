@@ -657,13 +657,13 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
     try
     {
         // create the content
-        Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+        Reference< css::ucb::XCommandEnvironment > xComEnv;
 
         OUString aTemp( rName );
 
         if ( bRepair )
         {
-            xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(), xProgress );
+            xComEnv = new ::ucbhelper::CommandEnvironment( Reference< css::task::XInteractionHandler >(), xProgress );
             aTemp += "?repairpackage";
         }
 
@@ -679,8 +679,8 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
             if ( nErr == rtl_Digest_E_None )
             {
                 sal_uInt8* pBuffer = aBuffer;
-                ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
-                ::com::sun::star::uno::Any aAny;
+                css::uno::Sequence < sal_Int8 > aSequ( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
+                css::uno::Any aAny;
                 aAny <<= aSequ;
                 m_pContent->setPropertyValue("EncryptionKey", aAny );
             }
@@ -1405,7 +1405,7 @@ bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     return true;
 }
 
-bool UCBStorageStream::SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue )
+bool UCBStorageStream::SetProperty( const OUString& rName, const css::uno::Any& rValue )
 {
     if ( rName == "Title")
         return false;
@@ -1676,11 +1676,11 @@ void UCBStorage_Impl::Init()
                         if ( !pStream->GetError() )
                         {
                             ::utl::OInputStreamWrapper* pHelper = new ::utl::OInputStreamWrapper( *pStream );
-                            com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream( pHelper );
+                            css::uno::Reference < css::io::XInputStream > xInputStream( pHelper );
 
                             // create a manifest reader object that will read in the manifest from the stream
-                            Reference < ::com::sun::star::packages::manifest::XManifestReader > xReader =
-                                ::com::sun::star::packages::manifest::ManifestReader::create(
+                            Reference < css::packages::manifest::XManifestReader > xReader =
+                                css::packages::manifest::ManifestReader::create(
                                     ::comphelper::getProcessComponentContext() ) ;
                             Sequence < Sequence < PropertyValue > > aProps = xReader->readManifestSequence( xInputStream );
 
@@ -1715,7 +1715,7 @@ void UCBStorage_Impl::Init()
     if ( !m_aContentType.isEmpty() )
     {
         // get the clipboard format using the content type
-        ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+        css::datatransfer::DataFlavor aDataFlavor;
         aDataFlavor.MimeType = m_aContentType;
         m_nFormat = SotExchange::GetFormat( aDataFlavor );
 
@@ -1736,13 +1736,13 @@ void UCBStorage_Impl::CreateContent()
     try
     {
         // create content; where to put StreamMode ?! ( already done when opening the file of the package ? )
-        Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+        Reference< css::ucb::XCommandEnvironment > xComEnv;
 
         OUString aTemp( m_aURL );
 
         if ( m_bRepairPackage )
         {
-            xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
+            xComEnv = new ::ucbhelper::CommandEnvironment( Reference< css::task::XInteractionHandler >(),
                                                      m_xProgressHandler );
             aTemp += "?repairpackage";
         }
@@ -1821,10 +1821,10 @@ void UCBStorage_Impl::ReadContent()
                     // streams can be external OLE objects, so they are now folders, but storages!
                     OUString aName( m_aURL + "/" + xRow->getString(1));
 
-                    Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+                    Reference< css::ucb::XCommandEnvironment > xComEnv;
                     if ( m_bRepairPackage )
                     {
-                        xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
+                        xComEnv = new ::ucbhelper::CommandEnvironment( Reference< css::task::XInteractionHandler >(),
                                                                 m_xProgressHandler );
                         aName += "?repairpackage";
                     }
@@ -1968,7 +1968,7 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
     if ( !m_aContentType.isEmpty() )
     {
         // get the clipboard format using the content type
-        ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+        css::datatransfer::DataFlavor aDataFlavor;
         aDataFlavor.MimeType = m_aContentType;
         m_nFormat = SotExchange::GetFormat( aDataFlavor );
 
@@ -2120,7 +2120,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     OUString aName( m_aURL );
                     aName += "/";
                     aName += pElement->m_aOriginalName;
-                    pContent = new ::ucbhelper::Content( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+                    pContent = new ::ucbhelper::Content( aName, Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
                     xDeleteContent.reset(pContent);  // delete it later on exit scope
                 }
 
@@ -2251,11 +2251,11 @@ sal_Int16 UCBStorage_Impl::Commit()
                             // get the stream from the temp file and create an output stream wrapper
                             SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE );
                             ::utl::OOutputStreamWrapper* pHelper = new ::utl::OOutputStreamWrapper( *pStream );
-                            com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOutputStream( pHelper );
+                            css::uno::Reference < css::io::XOutputStream > xOutputStream( pHelper );
 
                             // create a manifest writer object that will fill the stream
-                            Reference < ::com::sun::star::packages::manifest::XManifestWriter > xWriter =
-                                ::com::sun::star::packages::manifest::ManifestWriter::create(
+                            Reference < css::packages::manifest::XManifestWriter > xWriter =
+                                css::packages::manifest::ManifestWriter::create(
                                     ::comphelper::getProcessComponentContext() );
                             sal_Int32 nCount = GetObjectCount() + 1;
                             Sequence < Sequence < PropertyValue > > aProps( nCount );
@@ -2422,7 +2422,7 @@ void UCBStorage::SetClass( const SvGlobalName & rClass, SotClipboardFormatId nOr
 
     // in UCB storages only the content type will be stored, all other information can be reconstructed
     // ( see the UCBStorage_Impl::Init() method )
-    ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+    css::datatransfer::DataFlavor aDataFlavor;
     SotExchange::GetFormatDataFlavor( pImp->m_nFormat, aDataFlavor );
     pImp->m_aContentType = aDataFlavor.MimeType;
 }
@@ -2441,7 +2441,7 @@ void UCBStorage::SetClassId( const ClsId& rClsId )
     pImp->m_nFormat = GetFormatId_Impl( pImp->m_aClassId );
     if ( pImp->m_nFormat != SotClipboardFormatId::NONE )
     {
-        ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+        css::datatransfer::DataFlavor aDataFlavor;
         SotExchange::GetFormatDataFlavor( pImp->m_nFormat, aDataFlavor );
         pImp->m_aUserTypeName = aDataFlavor.HumanPresentableName;
         pImp->m_aContentType = aDataFlavor.MimeType;

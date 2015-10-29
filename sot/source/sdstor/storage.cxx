@@ -273,7 +273,7 @@ bool SotStorageStream::Commit()
     return GetError() == SVSTREAM_OK;
 }
 
-bool SotStorageStream::SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue )
+bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& rValue )
 {
     UCBStorageStream* pStg =  dynamic_cast<UCBStorageStream*>( pOwnStm );
     if ( pStg )
@@ -821,7 +821,7 @@ bool SotStorage::IsOLEStorage( SvStream* pStream )
     return Storage::IsStorageFile( pStream );
 }
 
-SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
+SotStorage* SotStorage::OpenOLEStorage( const css::uno::Reference < css::embed::XStorage >& xStorage,
                                         const OUString& rEleName, StreamMode nMode )
 {
     sal_Int32 nEleMode = embed::ElementModes::SEEKABLEREAD;
@@ -858,7 +858,7 @@ SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < c
     return new SotStorage( pStream, true );
 }
 
-SotClipboardFormatId SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
+SotClipboardFormatId SotStorage::GetFormatID( const css::uno::Reference < css::embed::XStorage >& xStorage )
 {
     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
     if ( !xProps.is() )
@@ -868,7 +868,7 @@ SotClipboardFormatId SotStorage::GetFormatID( const com::sun::star::uno::Referen
     xProps->getPropertyValue("MediaType") >>= aMediaType;
     if ( !aMediaType.isEmpty() )
     {
-        ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+        css::datatransfer::DataFlavor aDataFlavor;
         aDataFlavor.MimeType = aMediaType;
         return SotExchange::GetFormat( aDataFlavor );
     }
@@ -876,7 +876,7 @@ SotClipboardFormatId SotStorage::GetFormatID( const com::sun::star::uno::Referen
     return SotClipboardFormatId::NONE;
 }
 
-sal_Int32 SotStorage::GetVersion( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
+sal_Int32 SotStorage::GetVersion( const css::uno::Reference < css::embed::XStorage >& xStorage )
 {
     SotClipboardFormatId nSotFormatID = SotStorage::GetFormatID( xStorage );
     switch( nSotFormatID )
