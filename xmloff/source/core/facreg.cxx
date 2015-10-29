@@ -127,7 +127,6 @@ XMLOFF_DLLPUBLIC void * SAL_CALL xo_component_getFactory( const sal_Char * pImpl
 
         // meta import/export
         else SINGLEFACTORY( XMLMetaExportComponent )
-        else SINGLEFACTORY( XMLMetaImportComponent )
 
         // meta import/export OOo
         else SINGLEFACTORY( XMLMetaExportOOO )
