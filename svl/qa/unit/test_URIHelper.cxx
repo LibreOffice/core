@@ -198,9 +198,12 @@ public:
 
     void testFindFirstURLInText();
 
+    void testResolveIdnaHost();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNormalizedMakeRelative);
     CPPUNIT_TEST(testFindFirstURLInText);
+    CPPUNIT_TEST(testResolveIdnaHost);
     CPPUNIT_TEST(finish);
     CPPUNIT_TEST_SUITE_END();
 
@@ -421,6 +424,66 @@ void Test::testFindFirstURLInText() {
         }
         CPPUNIT_ASSERT_MESSAGE(msg.getStr(), ok);
     }
+}
+
+void Test::testResolveIdnaHost() {
+    OUString input;
+
+    input.clear();
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("Foo.M\xC3\xBCnchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://Muenchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://-M\xC3\xBCnchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://M\xC3\xBCnchen-.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://xn--M\xC3\xBCnchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://xy--M\xC3\xBCnchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://.M\xC3\xBCnchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://-bar.M\xC3\xBCnchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://bar-.M\xC3\xBCnchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://xn--bar.M\xC3\xBCnchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    input = OUString::fromUtf8("foo://xy--bar.M\xC3\xBCnchen.de");
+    CPPUNIT_ASSERT_EQUAL(input, URIHelper::resolveIdnaHost(input));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString::fromUtf8("foo://M\xC3\xBCnchen@xn--mnchen-3ya.de"),
+        URIHelper::resolveIdnaHost(
+            OUString::fromUtf8("foo://M\xC3\xBCnchen@M\xC3\xBCnchen.de")));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString::fromUtf8("foo://xn--mnchen-3ya.de."),
+        URIHelper::resolveIdnaHost(
+            OUString::fromUtf8("foo://M\xC3\xBCnchen.de.")));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString::fromUtf8("Foo://bar@xn--mnchen-3ya.de:123/?bar#baz"),
+        URIHelper::resolveIdnaHost(
+            OUString::fromUtf8("Foo://bar@M\xC3\xBCnchen.de:123/?bar#baz")));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString::fromUtf8("foo://xn--mnchen-3ya.de"),
+        URIHelper::resolveIdnaHost(
+            OUString::fromUtf8("foo://Mu\xCC\x88nchen.de")));
 }
 
 css::uno::Reference< css::uno::XComponentContext > Test::m_context;

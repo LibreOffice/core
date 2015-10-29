@@ -44,6 +44,7 @@
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
+#include <svl/urihelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
@@ -4495,8 +4496,10 @@ we check in the following sequence:
 // are the correct one!!
 
 // extract target file type
+            auto url(URIHelper::resolveIdnaHost(rLink.m_aURL));
+
             INetURLObject aDocumentURL( m_aContext.BaseURL );
-            INetURLObject aTargetURL( rLink.m_aURL );
+            INetURLObject aTargetURL( url );
             bool bSetGoToRMode = false;
             bool    bTargetHasPDFExtension = false;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
@@ -4507,7 +4510,7 @@ we check in the following sequence:
             // getting the needed URL information from the current document path
             if( eTargetProtocol == INetProtocol::NotValid )
             {
-                if( rLink.m_aURL.getLength() > 4 && rLink.m_aURL.startsWith("\\\\\\\\"))
+                if( url.getLength() > 4 && url.startsWith("\\\\\\\\"))
                 {
                     bIsUNCPath = true;
                 }
@@ -4516,7 +4519,7 @@ we check in the following sequence:
                     INetURLObject aNewBase( aDocumentURL );//duplicate document URL
                     aNewBase.removeSegment(); //remove last segment from it, obtaining the base URL of the
                                               //target document
-                    aNewBase.insertName( rLink.m_aURL );
+                    aNewBase.insertName( url );
                     aTargetURL = aNewBase;//reassign the new target URL
                     //recompute the target protocol, with the new URL
                     //normal URL processing resumes
@@ -4564,7 +4567,7 @@ we check in the following sequence:
             {
                 aLine.append( "/Launch/Win<</F" );
                 // INetURLObject is not good with UNC paths, use original path
-                appendLiteralStringEncrypt(  rLink.m_aURL, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
+                appendLiteralStringEncrypt( url, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                 aLine.append( ">>" );
             }
             else
