@@ -11,16 +11,16 @@
       <DefaultName>Italy</DefaultName>
     </Country>
   </LC_INFO>
-  <LC_CTYPE unoid="generic">
+  <LC_CTYPE>
     <Separators>
       <DateSeparator>/</DateSeparator>
-      <ThousandSeparator>,</ThousandSeparator>
-      <DecimalSeparator>.</DecimalSeparator>
-      <TimeSeparator>:</TimeSeparator>
-      <Time100SecSeparator>.</Time100SecSeparator>
+      <ThousandSeparator>.</ThousandSeparator>
+      <DecimalSeparator>,</DecimalSeparator>
+      <TimeSeparator>.</TimeSeparator>
+      <Time100SecSeparator>,</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
-      <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator>, </LongDateDaySeparator>
+      <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator> </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
@@ -30,154 +30,153 @@
       <DoubleQuotationStart>“</DoubleQuotationStart>
       <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>AM</TimeAM>
-    <TimePM>PM</TimePM>
+    <TimeAM>m.</TimeAM>
+    <TimePM>p.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$€-695]">
-    <DateAcceptancePattern>M/D</DateAcceptancePattern>
+    <DateAcceptancePattern>D/M</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
-      <FormatCode>General</FormatCode>
+      <FormatCode>Standard</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER" formatindex="1">
       <FormatCode>0</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey3" default="false" type="medium" usage="FIXED_NUMBER" formatindex="2">
-      <FormatCode>0.00</FormatCode>
+      <FormatCode>0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER" formatindex="3">
-      <FormatCode>#,##0</FormatCode>
+      <FormatCode>#.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER" formatindex="4">
-      <FormatCode>#,##0.00</FormatCode>
+      <FormatCode>#.##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
-      <FormatCode>#,###.00</FormatCode>
+      <FormatCode>#.###,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
-      <FormatCode>0.00E+00</FormatCode>
+    <FormatElement msgid="ScientificFormatskey1" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
+      <FormatCode>0,00E+000</FormatCode>
     </FormatElement>
-    <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
-      <FormatCode>0.00E+000</FormatCode>
+    <FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
+      <FormatCode>0,00E+00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="78">
+      <FormatCode>##0,00E+00</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
       <FormatCode>0%</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
-      <FormatCode>0.00%</FormatCode>
+      <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>[CURRENCY] #,##0;-[CURRENCY] #,##0</FormatCode>
+      <FormatCode>[CURRENCY] #.##0;-[CURRENCY] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[CURRENCY] #,##0.00;-[CURRENCY] #,##0.00</FormatCode>
+      <FormatCode>[CURRENCY] #.##0;-[CURRENCY] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[CURRENCY] #,##0;[RED]-[CURRENCY] #,##0</FormatCode>
+      <FormatCode>[CURRENCY] #.##0;[RED]-[CURRENCY] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[CURRENCY] #,##0.00;[RED]-[CURRENCY] #,##0.00</FormatCode>
+      <FormatCode>[CURRENCY] #.##0;[RED]-[CURRENCY] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
-      <FormatCode>#,##0.00 CCC</FormatCode>
+      <FormatCode>#.##0 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[CURRENCY] #,##0.--;[RED]-[CURRENCY] #,##0.--</FormatCode>
+      <FormatCode>[CURRENCY] #.##0;[RED]-[CURRENCY] #.##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
-      <FormatCode>YY/MM/DD</FormatCode>
+    <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
+      <FormatCode>DD/MM/YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNNDD, MMMM YYYY</FormatCode>
+    <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
+      <FormatCode>NNNNDD MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>YY/MM/DD</FormatCode>
+    <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
+      <FormatCode>DD/MM/YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>YYYY/MM/DD</FormatCode>
+    <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
+      <FormatCode>DD/MM/YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>D, MMM YY</FormatCode>
+    <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
+      <FormatCode>D MMM YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>D, MMM YYYY</FormatCode>
+    <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
+      <FormatCode>D MMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey21" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>D, MMM YYYY</FormatCode>
+    <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
+      <FormatCode>D. MMM. YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>D, MMMM YYYY</FormatCode>
+    <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
+      <FormatCode>D MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>D, MMMM YYYY</FormatCode>
+    <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
+      <FormatCode>D. MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
-      <FormatCode>NN, DD/MMM/YY</FormatCode>
+    <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
+      <FormatCode>NN D MMM YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey18" default="false" type="long" usage="DATE" formatindex="28">
-      <FormatCode>NN, D, MMM YY</FormatCode>
+    <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
+      <FormatCode>NN DD/MMM YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey19" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN, D, MMMM YYYY</FormatCode>
+    <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
+      <FormatCode>NN D MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey20" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNND, MMMM YYYY</FormatCode>
+    <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
+      <FormatCode>NNNND MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
-      <FormatCode>MM/DD</FormatCode>
+    <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
+      <FormatCode>MM-DD</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="32">
+    <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
       <FormatCode>YY-MM-DD</FormatCode>
-      <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="33">
+    <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
       <FormatCode>YYYY-MM-DD</FormatCode>
-      <DefaultName>ISO 8601</DefaultName>
+      <DefaultName>ISO 8601 (EN 28601)</DefaultName>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="34">
-      <FormatCode>YY/MM</FormatCode>
+    <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
+      <FormatCode>MM/YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>MMM/DD</FormatCode>
+    <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
+      <FormatCode>DD/MMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="36">
+    <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
       <FormatCode>MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="37">
+    <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="37">
       <FormatCode>QQ YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="38">
+    <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey1" default="false" type="short" usage="TIME" formatindex="39">
-      <FormatCode>HH:MM</FormatCode>
+    <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
+      <FormatCode>HH.MM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey2" default="false" type="medium" usage="TIME" formatindex="40">
-      <FormatCode>HH:MM:SS</FormatCode>
+    <FormatElement msgid="TimeFormatskey2" default="true" type="medium" usage="TIME" formatindex="40">
+      <FormatCode>HH.MM.SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey3" default="true" type="short" usage="TIME" formatindex="41">
-      <FormatCode>HH:MM AM/PM</FormatCode>
+    <FormatElement msgid="TimeFormatskey3" default="false" type="short" usage="TIME" formatindex="41">
+      <FormatCode>HH.MM AM/PM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey4" default="true" type="medium" usage="TIME" formatindex="42">
-      <FormatCode>HH:MM:SS AM/PM</FormatCode>
+    <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME" formatindex="42">
+      <FormatCode>HH.MM.SS AM/PM</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
-      <FormatCode>[HH]:MM:SS</FormatCode>
+      <FormatCode>[HH].MM.SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME" formatindex="44">
-      <FormatCode>MM:SS.00</FormatCode>
+      <FormatCode>MM.SS,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
-      <FormatCode>[HH]:MM:SS.00</FormatCode>
+      <FormatCode>[HH].MM.SS,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME" formatindex="46">
-      <FormatCode>YY/MM/DD HH:MM</FormatCode>
+      <FormatCode>DD/MM/YY HH.MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-      <FormatCode>YYYY/MM/DD HH:MM:SS AM/PM</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="78">
-      <FormatCode>##0.00E+00</FormatCode>
+      <FormatCode>DD/MM/YYYY HH.MM.SS</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
@@ -347,16 +346,7 @@
       <quarter4Abbreviation>C4</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
-  <LC_NumberingLevel>
-    <NumberingLevel NumType="4" Prefix=" "  Suffix=")"/>
-    <NumberingLevel NumType="4" Prefix=" "  Suffix="."/>
-    <NumberingLevel NumType="4" Prefix="("  Suffix=")"/>
-    <NumberingLevel NumType="2" Prefix=" "  Suffix="."/>
-    <NumberingLevel NumType="0" Prefix=" "  Suffix=")"/>
-    <NumberingLevel NumType="1" Prefix=" "  Suffix=")"/>
-    <NumberingLevel NumType="1" Prefix="("  Suffix=")"/>
-    <NumberingLevel NumType="3" Prefix=" "  Suffix="."/>
-  </LC_NumberingLevel>
-  <LC_OutLineNumberingLevel ref="en_US"/>
+  <LC_NumberingLevel ref="it_IT"/>
+  <LC_OutLineNumberingLevel ref="it_IT"/>
 </Locale>
 <!--Version 1.0  -->
