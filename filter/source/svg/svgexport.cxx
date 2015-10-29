@@ -333,7 +333,7 @@ SVGExport::SVGExport(
     comphelper::SequenceAsHashMap aFilterDataHashMap = rFilterData;
 
     // TinyProfile
-    mbIsUseTinyProfile = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_TINYPROFILE, true);
+    mbIsUseTinyProfile = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_TINYPROFILE, false);
 
     // Font Embedding
     comphelper::SequenceAsHashMap::const_iterator iter = aFilterDataHashMap.find(SVG_PROP_EMBEDFONTS);
@@ -349,7 +349,7 @@ SVGExport::SVGExport(
     }
 
     // Native Decoration
-    mbIsUseNativeTextDecoration = !mbIsUseTinyProfile && aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_NATIVEDECORATION, false);
+    mbIsUseNativeTextDecoration = !mbIsUseTinyProfile && aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_NATIVEDECORATION, true);
 
     // Tiny Opacity (supported from SVG Tiny 1.2)
     mbIsUseOpacity = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_OPACITY, true);
