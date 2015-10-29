@@ -797,32 +797,44 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, OUString::number( nFontWeight ) );
         }
 
+
+        if( mrExport.IsUseNativeTextDecoration() )
+        {
+            FontUnderline eCurFontUnderline         = maCurrentFont.GetUnderline();
+            FontStrikeout eCurFontStrikeout         = maCurrentFont.GetStrikeout();
+
+            FontUnderline eParFontUnderline         = maParentFont.GetUnderline();
+            FontStrikeout eParFontStrikeout         = maParentFont.GetStrikeout();
+
+            OUString sTextDecoration;
+            bool bIsDecorationChanged = false;
+            if( eCurFontUnderline != eParFontUnderline )
+            {
+                if( eCurFontUnderline != UNDERLINE_NONE )
+                    sTextDecoration = "underline ";
+                bIsDecorationChanged = true;
+            }
+            if( eCurFontStrikeout != eParFontStrikeout )
+            {
+                if( eCurFontStrikeout != STRIKEOUT_NONE )
+                    sTextDecoration += "line-through ";
+                bIsDecorationChanged = true;
+            }
+
+            if( !sTextDecoration.isEmpty() )
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, sTextDecoration );
+            }
+            else if( bIsDecorationChanged )
+            {
+                sTextDecoration = "none";
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, sTextDecoration );
+            }
+        }
+
         if( bIsTextContainer )
             maParentFont = maCurrentFont;
-    }
 
-    if( mrExport.IsUseNativeTextDecoration() )
-    {
-        FontUnderline eCurFontUnderline         = maCurrentFont.GetUnderline();
-        FontStrikeout eCurFontStrikeout         = maCurrentFont.GetStrikeout();
-
-        FontUnderline eParFontUnderline         = maParentFont.GetUnderline();
-        FontStrikeout eParFontStrikeout         = maParentFont.GetStrikeout();
-
-        OUString sTextDecoration;
-
-        if( eCurFontUnderline != eParFontUnderline )
-        {
-            if( eCurFontUnderline != UNDERLINE_NONE )
-                sTextDecoration = "underline ";
-        }
-        if( eCurFontStrikeout != eParFontStrikeout )
-        {
-            if( eCurFontStrikeout != STRIKEOUT_NONE )
-                sTextDecoration += "line-through ";
-        }
-        if( !sTextDecoration.isEmpty() )
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, sTextDecoration );
     }
 }
 
@@ -1231,9 +1243,10 @@ void SVGTextWriter::startTextParagraph()
     maParentFont = vcl::Font();
     addFontAttributes( /* isTexTContainer: */ true );
     mpTextParagraphElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+
     if( !mbIsListLevelStyleImage )
     {
-        startTextPosition();
+        mbPositioningNeeded = true;
     }
 }
 
@@ -1458,6 +1471,13 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
     if( rText.isEmpty() )
         return;
 
+    bool bStandAloneTextPortion = false;
+    if( !this->isTextShapeStarted() )
+    {
+        bStandAloneTextPortion = true;
+        this->startTextShape();
+    }
+
     mbLineBreak = false;
 
     if( !mbIsNewListItem || mbIsListLevelStyleImage )
@@ -1522,6 +1542,10 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
     implWriteTextPortion( rPos, rText, mpVDev->GetTextColor(), bApplyMapping );
 #endif
 
+    if( bStandAloneTextPortion )
+    {
+        this->endTextShape();
+    }
 }
 
 void SVGTextWriter::implWriteTextPortion( const Point& rPos,
@@ -1544,7 +1568,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     else
         aPos = rPos;
 
-    if( mbPositioningNeeded || bApplyMapping )
+    if( mbPositioningNeeded )
     {
         mbPositioningNeeded = false;
         maTextPos.setX( aPos.X() );
@@ -3439,28 +3463,12 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
-                            bool      bTextShapeStarted=false;
-                            if( !maTextWriter.isTextShapeStarted() )
-                            {
-                                bTextShapeStarted=true;
-                                maTextWriter.startTextShape();
-                            }
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, NULL, 0 );
-                            if( bTextShapeStarted )
-                                maTextWriter.endTextShape();
                         }
                         else
                         {
-                            bool bTextShapeStarted=false;
-                            if( !maTextWriter.isTextShapeStarted() )
-                            {
-                                bTextShapeStarted=true;
-                                maTextWriter.startTextShape();
-                            }
                             maTextWriter.writeTextPortion( pA->GetPoint(), aText );
-                            if( bTextShapeStarted )
-                                maTextWriter.endTextShape();
                         }
                     }
                 }
@@ -3478,27 +3486,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
-                            bool      bTextShapeStarted=false;
-                            if( !maTextWriter.isTextShapeStarted() )
-                            {
-                                bTextShapeStarted=true;
-                                maTextWriter.startTextShape();
-                            }
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), NULL, 0 );
-                            if( bTextShapeStarted )
-                                maTextWriter.endTextShape();
-                        }
-
-                        bool bTextShapeStarted=false;
-                        if( !maTextWriter.isTextShapeStarted() )
-                        {
-                            bTextShapeStarted=true;
-                            maTextWriter.startTextShape();
                         }
                         maTextWriter.writeTextPortion( pA->GetRect().TopLeft(), pA->GetText() );
-                        if( bTextShapeStarted )
-                            maTextWriter.endTextShape();
                     }
                 }
             }
@@ -3517,28 +3508,12 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
-                            bool      bTextShapeStarted=false;
-                            if( !maTextWriter.isTextShapeStarted() )
-                            {
-                                bTextShapeStarted=true;
-                                maTextWriter.startTextShape();
-                            }
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
-                            if( bTextShapeStarted )
-                                maTextWriter.endTextShape();
                         }
                         else
                         {
-                            bool bTextShapeStarted=false;
-                            if( !maTextWriter.isTextShapeStarted() )
-                            {
-                                bTextShapeStarted=true;
-                                maTextWriter.startTextShape();
-                            }
                             maTextWriter.writeTextPortion( pA->GetPoint(), aText );
-                            if( bTextShapeStarted )
-                                maTextWriter.endTextShape();
                         }
                     }
                 }
@@ -3558,28 +3533,12 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
-                            bool      bTextShapeStarted=false;
-                            if( !maTextWriter.isTextShapeStarted() )
-                            {
-                                bTextShapeStarted=true;
-                                maTextWriter.startTextShape();
-                            }
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, NULL, pA->GetWidth() );
-                            if( bTextShapeStarted )
-                                maTextWriter.endTextShape();
                         }
                         else
                         {
-                            bool bTextShapeStarted=false;
-                            if( !maTextWriter.isTextShapeStarted() )
-                            {
-                                bTextShapeStarted=true;
-                                maTextWriter.startTextShape();
-                            }
                             maTextWriter.writeTextPortion( pA->GetPoint(), aText );
-                            if( bTextShapeStarted )
-                                maTextWriter.endTextShape();
                         }
                     }
                 }
