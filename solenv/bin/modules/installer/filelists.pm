@@ -115,27 +115,19 @@ sub read_filelist
     my $content = installer::files::read_file($path);
     my @filelist = ();
 
+    # split on space, but only if followed by / (don't split within a filename)
+    my $splitRE = qr!\s+(?=/)!;
+    # filelist on win have C:/cygwin style however
+    $splitRE    = qr!\s+(?=[A-Z]:/)! if ($installer::globals::os eq "WNT");
+
     foreach my $line (@{$content})
     {
         chomp $line;
-        if ($installer::globals::os eq "WNT") # FIXME hack
+        foreach my $file (split $splitRE, $line)
         {
-            foreach my $file (split /\s+/, $line)
+            if ($file ne "")
             {
-                if ($file ne "")
-                {
-                    push @filelist, $file;
-                }
-            }
-        }
-        else
-        {
-            foreach my $file (split /\s+(?=\/)/, $line)
-            {
-                if ($file ne "")
-                {
-                    push @filelist, $file;
-                }
+                push @filelist, $file;
             }
         }
     }
