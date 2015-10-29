@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwNodes
     friend class SwStartNode;
     friend class ::sw::DocumentContentOperationsManager;
 
-    SwNodeIndex* vIndices; ///< ring of all indices on nodes.
+    SwNodeIndex* m_vIndices; ///< ring of all indices on nodes.
     void RemoveNode( sal_uLong nDelPos, sal_uLong nLen, bool bDel );
 
     void InsertNode( const SwNodePtr pNode,
@@ -103,18 +103,18 @@ class SW_DLLPUBLIC SwNodes
     void InsertNode( const SwNodePtr pNode,
                      sal_uLong nPos );
 
-    SwDoc* pMyDoc;                      ///< This Doc contains the nodes-array.
+    SwDoc* m_pMyDoc;                      ///< This Doc contains the nodes-array.
 
-    SwNode *pEndOfPostIts, *pEndOfInserts,  ///< These are the fixed ranges.
-           *pEndOfAutotext, *pEndOfRedlines,
-           *pEndOfContent;
+    SwNode *m_pEndOfPostIts, *m_pEndOfInserts,  ///< These are the fixed ranges.
+           *m_pEndOfAutotext, *m_pEndOfRedlines,
+           *m_pEndOfContent;
 
-    mutable SwOutlineNodes* pOutlineNds;        ///< Array of all outline nodes.
+    mutable SwOutlineNodes* m_pOutlineNodes;        ///< Array of all outline nodes.
 
-    bool bInNodesDel : 1;           /**< In Case of recursive calling.
+    bool m_bInNodesDel : 1;           /**< In Case of recursive calling.
                                            Do not update Num/Outline. */
-    bool bInDelUpdOutl : 1;         ///< Flag for updating of Outline.
-    bool bInDelUpdNum : 1;          ///< Flag for updating of Outline.
+    bool m_bInDelUpdOutline : 1;         ///< Flag for updating of Outline.
+    bool m_bInDelUpdNum : 1;          ///< Flag for updating of Outline.
 
     // Actions on the nodes.
     static void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
@@ -150,18 +150,18 @@ public:
                     FnForEach_SwNodes fnForEach, void* pArgs = 0 );
 
     /// A still empty section.
-    SwNode& GetEndOfPostIts() const     { return *pEndOfPostIts; }
+    SwNode& GetEndOfPostIts() const     { return *m_pEndOfPostIts; }
     /// Section fpr all footnotes.
-    SwNode& GetEndOfInserts() const     { return *pEndOfInserts; }
+    SwNode& GetEndOfInserts() const     { return *m_pEndOfInserts; }
     /// Section for all Flys/Header/Footers.
-    SwNode& GetEndOfAutotext() const    { return *pEndOfAutotext; }
+    SwNode& GetEndOfAutotext() const    { return *m_pEndOfAutotext; }
     /// Section for all Redlines.
-    SwNode& GetEndOfRedlines() const    { return *pEndOfRedlines; }
+    SwNode& GetEndOfRedlines() const    { return *m_pEndOfRedlines; }
     /** This is the last EndNode of a special section. After it
        there is only the regular ContentSection (i.e. the BodyText). */
-    SwNode& GetEndOfExtras() const      { return *pEndOfRedlines; }
+    SwNode& GetEndOfExtras() const      { return *m_pEndOfRedlines; }
     /// Regular ContentSection (i.e. the BodyText).
-    SwNode& GetEndOfContent() const     { return *pEndOfContent; }
+    SwNode& GetEndOfContent() const     { return *m_pEndOfContent; }
 
     /** Is the NodesArray the regular one of Doc? (and not the UndoNds, ...)
        Implementation in doc.hxx (because one needs to know Doc for it) ! */
@@ -235,7 +235,7 @@ public:
                             SwAttrSet* pAutoAttr ); ///< in ndole.cxx
 
     /// Array of all OutlineNodes.
-    const SwOutlineNodes& GetOutLineNds() const { return *pOutlineNds;}
+    const SwOutlineNodes& GetOutLineNds() const { return *m_pOutlineNodes;}
 
     /// Update all Nodes - Rule/Format-Change.
     void UpdateOutlineNode(SwNode & rNd);
@@ -308,8 +308,8 @@ public:
                                 bool const bCreateFrms = true);
 
     /// Which Doc contains the nodes-array?
-            SwDoc* GetDoc()         { return pMyDoc; }
-    const   SwDoc* GetDoc() const   { return pMyDoc; }
+            SwDoc* GetDoc()         { return m_pMyDoc; }
+    const   SwDoc* GetDoc() const   { return m_pMyDoc; }
 
     /** Search previous / next content node or table node with frames.
      If no end is given begin with the FrameIndex, else start search

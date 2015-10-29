@@ -41,17 +41,17 @@ class SW_DLLPUBLIC SwNodeIndex final : public sw::Ring<SwNodeIndex>
     SwNodeIndex( SwNodes& rNds, int nIdx ) = delete;
     void RegisterIndex( SwNodes& rNodes )
     {
-        if(!rNodes.vIndices)
-            rNodes.vIndices = this;
-        MoveTo(rNodes.vIndices);
+        if(!rNodes.m_vIndices)
+            rNodes.m_vIndices = this;
+        MoveTo(rNodes.m_vIndices);
     }
     void DeRegisterIndex( SwNodes& rNodes )
     {
-        if(rNodes.vIndices == this)
-            rNodes.vIndices = GetNextInRing();
+        if(rNodes.m_vIndices == this)
+            rNodes.m_vIndices = GetNextInRing();
         MoveTo(nullptr);
-        if(rNodes.vIndices == this)
-            rNodes.vIndices = nullptr;
+        if(rNodes.m_vIndices == this)
+            rNodes.m_vIndices = nullptr;
     }
 
 public:
