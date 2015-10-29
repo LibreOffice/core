@@ -62,45 +62,6 @@
 
 using namespace ::com::sun::star;
 
-namespace com { namespace sun { namespace star { namespace rendering
-{
-    bool operator==( const RenderState& renderState1,
-                     const RenderState& renderState2 )
-    {
-        if( renderState1.Clip != renderState2.Clip )
-            return false;
-
-        if( renderState1.DeviceColor != renderState2.DeviceColor )
-            return false;
-
-        if( renderState1.CompositeOperation != renderState2.CompositeOperation )
-            return false;
-
-        ::basegfx::B2DHomMatrix mat1, mat2;
-        ::canvas::tools::getRenderStateTransform( mat1, renderState1 );
-        ::canvas::tools::getRenderStateTransform( mat2, renderState2 );
-        if( mat1 != mat2 )
-            return false;
-
-        return true;
-    }
-
-    bool operator==( const ViewState& viewState1,
-                     const ViewState& viewState2 )
-    {
-        if( viewState1.Clip != viewState2.Clip )
-            return false;
-
-        ::basegfx::B2DHomMatrix mat1, mat2;
-        ::canvas::tools::getViewStateTransform( mat1, viewState1 );
-        ::canvas::tools::getViewStateTransform( mat2, viewState2 );
-        if( mat1 != mat2 )
-            return false;
-
-        return true;
-    }
-}}}}
-
 namespace canvas
 {
     namespace tools

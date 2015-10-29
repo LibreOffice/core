@@ -29,8 +29,6 @@ namespace connectivity
     namespace mysql
     {
 
-        OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
-
         class OMySQLTable;
         typedef ::comphelper::OIdPropertyArrayUsageHelper< OMySQLTable >    OMySQLTable_PROP;
         class OMySQLTable : public OTableHelper

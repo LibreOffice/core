@@ -62,12 +62,6 @@ namespace com { namespace sun { namespace star { namespace rendering
     struct Texture;
     class  XIntegerBitmapColorSpace;
     class  XPolyPolygon2D;
-
-    bool operator==( const RenderState& rLHS,
-                     const RenderState& rRHS );
-
-    bool operator==( const ViewState& rLHS,
-                     const ViewState& rRHS );
 } } } }
 
 namespace com { namespace sun { namespace star { namespace awt
@@ -111,7 +105,6 @@ namespace canvas
         // mickey's math tricks...
         inline unsigned int pow2( unsigned int c ) { return 0x1 << c; }
         inline unsigned int mask( unsigned int c ) { return ((unsigned int)(-1)) / (pow2(pow2(c)) + 1); }
-        inline unsigned int count( unsigned int x, unsigned int c ) { return ((x) & mask(c)) + (((x) >> (pow2(c))) & mask(c)); }
 
         /** Round given floating point value down to next integer
          */

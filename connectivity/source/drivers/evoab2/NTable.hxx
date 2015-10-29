@@ -29,8 +29,6 @@ namespace connectivity
     {
         typedef connectivity::sdbcx::OTable OEvoabTable_TYPEDEF;
 
-        OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
-
         class OEvoabTable : public OEvoabTable_TYPEDEF
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;

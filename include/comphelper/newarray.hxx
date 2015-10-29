@@ -35,15 +35,6 @@ newArray_null(size_t const n) throw()
     return new (::std::nothrow) T[n];
 }
 
-template<typename T> T *
-newArray_ex(size_t const n)
-{
-    if (((::std::numeric_limits<size_t>::max)() / sizeof(T)) <= n) {
-        throw ::std::bad_alloc();
-    }
-    return new T[n];
-}
-
 } // namespace comphelper
 
 #endif // INCLUDED_COMPHELPER_NEWARRAY_HXX

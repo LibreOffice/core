@@ -124,10 +124,6 @@ public:
      */
     storeError flush();
 
-    /** size.
-     */
-    storeError size (sal_uInt32 &rnSize);
-
     /** ScanContext.
      */
     struct ScanContext
@@ -142,9 +138,6 @@ public:
          */
         inline ScanContext();
 
-        /** isValid.
-         */
-        inline bool isValid() const;
     };
 
 protected:
@@ -225,10 +218,6 @@ inline bool OStorePageBIOS::isValid() const
 inline OStorePageBIOS::ScanContext::ScanContext()
     : m_aDescr (0, 0, 0), m_nSize (0), m_nMagic (0)
 {
-}
-inline bool OStorePageBIOS::ScanContext::isValid() const
-{
-    return (m_aDescr.m_nAddr < m_nSize);
 }
 
 /*========================================================================

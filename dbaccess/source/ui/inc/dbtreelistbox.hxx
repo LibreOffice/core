@@ -63,7 +63,6 @@ namespace dbaui
 
         Link<SvTreeListEntry*,bool> m_aPreExpandHandler;    // handler to be called before a node is expanded
         Link<LinkParamNone*,void>   m_aSelChangeHdl;        // handler to be called (asynchronously) when the selection changes in any way
-        Link<LinkParamNone*,void>   m_aCutHandler;          // called when someone press CTRL+X
         Link<LinkParamNone*,void>   m_aCopyHandler;         // called when someone press CTRL+C
         Link<LinkParamNone*,void>   m_aPasteHandler;        // called when someone press CTRL+V
         Link<LinkParamNone*,void>   m_aDeleteHandler;       // called when someone press DELETE Key
@@ -90,7 +89,6 @@ namespace dbaui
 
         void    SetPreExpandHandler(const Link<SvTreeListEntry*,bool>& _rHdl)  { m_aPreExpandHandler = _rHdl; }
         void    SetSelChangeHdl( const Link<LinkParamNone*,void>& _rHdl )      { m_aSelChangeHdl = _rHdl; }
-        void    setCutHandler(const Link<LinkParamNone*,void>& _rHdl)          { m_aCutHandler = _rHdl; }
         void    setCopyHandler(const Link<LinkParamNone*,void>& _rHdl)         { m_aCopyHandler = _rHdl; }
         void    setPasteHandler(const Link<LinkParamNone*,void>& _rHdl)        { m_aPasteHandler = _rHdl; }
         void    setDeleteHandler(const Link<LinkParamNone*,void>& _rHdl)       { m_aDeleteHandler = _rHdl; }

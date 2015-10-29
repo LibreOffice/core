@@ -29,8 +29,6 @@ namespace connectivity
     namespace hsqldb
     {
 
-        OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
-
         class OHSQLTable;
         typedef ::comphelper::OIdPropertyArrayUsageHelper< OHSQLTable > OHSQLTable_PROP;
         class OHSQLTable :  public OTableHelper
