@@ -117,8 +117,9 @@ sub read_filelist
 
     # split on space, but only if followed by / (don't split within a filename)
     my $splitRE = qr!\s+(?=/)!;
-    # filelist on win have C:/cygwin style however
-    $splitRE    = qr!\s+(?=[A-Z]:/)! if ($installer::globals::os eq "WNT");
+    # filelist on win have C:/cygwin style however - also reading dos-file under
+    # cygwin retains \r\n - so chomp below still leaves \r to strip in the RE
+    $splitRE    = qr!\s+(?:$|(?=[A-Z]:/))! if ($installer::globals::os eq "WNT");
 
     foreach my $line (@{$content})
     {
