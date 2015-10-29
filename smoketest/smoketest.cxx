@@ -142,8 +142,7 @@ void Test::test() {
     css::uno::Sequence< css::beans::PropertyValue > args(2);
     args[0].Name = "MacroExecutionMode";
     args[0].Handle = -1;
-    args[0].Value <<=
-        com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+    args[0].Value <<=  css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     args[0].State = css::beans::PropertyState_DIRECT_VALUE;
     args[1].Name = "ReadOnly";
     args[1].Handle = -1;
@@ -170,7 +169,7 @@ void Test::test() {
         css::uno::UNO_QUERY_THROW);
     Result result;
     // Shifted to main thread to work around potential deadlocks (i112867):
-    com::sun::star::awt::AsyncCallback::create(
+    css::awt::AsyncCallback::create(
         connection_.getComponentContext())->addCallback(
             new Callback(
                 disp, url, css::uno::Sequence< css::beans::PropertyValue >(),

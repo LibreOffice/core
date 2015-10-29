@@ -45,9 +45,9 @@ using namespace::com::sun::star::datatransfer;
 */
 struct DataFlavorRepresentation
 {
-    const char*                         pMimeType;
-    const char*                         pName;
-    const ::com::sun::star::uno::Type*  pType;
+    const char*            pMimeType;
+    const char*            pName;
+    const css::uno::Type*  pType;
 };
 
 namespace
