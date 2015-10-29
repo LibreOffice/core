@@ -156,7 +156,6 @@ SwDLL::~SwDLL()
     {
         // fdo#86494 SwAutoCorrect must be deleted before _FinitCore
         SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-        rACfg.Commit();
         rACfg.SetAutoCorrect(0); // delete SwAutoCorrect before exit handlers
     }
 
