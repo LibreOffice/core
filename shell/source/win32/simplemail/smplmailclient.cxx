@@ -171,7 +171,7 @@ Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage(
     [in|out] a buffer for the command line arguments. The buffer
     is assumed to be empty.
 
-    @throws com::sun::star::lang::IllegalArgumentException
+    @throws css::lang::IllegalArgumentException
     if an invalid file URL has been detected in the attachment list.
 */
 void CSmplMailClient::assembleCommandLine(

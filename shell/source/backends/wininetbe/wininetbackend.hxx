@@ -126,21 +126,21 @@ class WinInetBackend : public ::cppu::WeakImplHelper <
         ~WinInetBackend() ;
 
     private:
-        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+        css::beans::Optional< css::uno::Any >
             valueProxyType_;
-        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+        css::beans::Optional< css::uno::Any >
             valueNoProxy_;
-        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+        css::beans::Optional< css::uno::Any >
             valueHttpProxyName_;
-        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+        css::beans::Optional< css::uno::Any >
             valueHttpProxyPort_;
-        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+        css::beans::Optional< css::uno::Any >
             valueHttpsProxyName_;
-        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+        css::beans::Optional< css::uno::Any >
             valueHttpsProxyPort_;
-        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+        css::beans::Optional< css::uno::Any >
             valueFtpProxyName_;
-        com::sun::star::beans::Optional< com::sun::star::uno::Any >
+        css::beans::Optional< css::uno::Any >
             valueFtpProxyPort_;
 } ;
 

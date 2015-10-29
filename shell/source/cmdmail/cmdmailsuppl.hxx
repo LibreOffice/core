@@ -36,45 +36,45 @@
 
 class CmdMailSuppl :
     public  cppu::WeakImplHelper<
-        com::sun::star::system::XSimpleMailClientSupplier,
-        com::sun::star::system::XSimpleMailClient,
-        com::sun::star::lang::XServiceInfo >
+        css::system::XSimpleMailClientSupplier,
+        css::system::XSimpleMailClient,
+        css::lang::XServiceInfo >
 {
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigurationProvider;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigurationProvider;
 
 public:
-    explicit CmdMailSuppl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+    explicit CmdMailSuppl( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
 
     // XSimpleMailClientSupplier
 
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 
     // XSimpleMailClient
 
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage > SAL_CALL createSimpleMailMessage(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::system::XSimpleMailMessage > SAL_CALL createSimpleMailMessage(  )
+        throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL sendSimpleMailMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL sendSimpleMailMessage( const css::uno::Reference< css::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag )
+        throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
 
     // XServiceInfo
 
 
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

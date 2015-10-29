@@ -158,7 +158,7 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
 }
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 

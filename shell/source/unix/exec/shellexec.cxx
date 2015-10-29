@@ -122,9 +122,8 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         // We need to re-encode file urls because osl_getFileURLFromSystemPath converts
         // to UTF-8 before encoding non ascii characters, which is not what other apps
         // expect.
-        OUString aURL(
-            com::sun::star::uri::ExternalUriReferenceTranslator::create(
-                m_xContext)->translateToExternal(aCommand));
+        OUString aURL = css::uri::ExternalUriReferenceTranslator::create(
+                            m_xContext)->translateToExternal(aCommand);
         if ( aURL.isEmpty() && !aCommand.isEmpty() )
         {
             throw RuntimeException(
@@ -160,13 +159,12 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 #else
         // The url launchers are expected to be in the $BRAND_BASE_DIR/LIBO_LIBEXEC_FOLDER
         // directory:
-        com::sun::star::uno::Reference< com::sun::star::util::XMacroExpander >
-            exp = com::sun::star::util::theMacroExpander::get(m_xContext);
+        css::uno::Reference< css::util::XMacroExpander > exp = css::util::theMacroExpander::get(m_xContext);
         OUString aProgramURL;
         try {
             aProgramURL = exp->expandMacros(
                 OUString( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/"));
-        } catch (com::sun::star::lang::IllegalArgumentException &)
+        } catch (css::lang::IllegalArgumentException &)
         {
             throw SystemShellExecuteException(
                 "Could not expand $BRAND_BASE_DIR path",
