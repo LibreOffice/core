@@ -640,13 +640,11 @@ removeLink(Metadatable* i_pObject)
 XmlIdRegistryDocument::~XmlIdRegistryDocument()
 {
     // notify all list elements that are actually in the clipboard
-    for (XmlIdMap_t::iterator iter(m_pImpl->m_XmlIdMap.begin());
-        iter != m_pImpl->m_XmlIdMap.end(); ++iter)
-    {
-        ::std::for_each(iter->second.first.begin(), iter->second.first.end(),
-            removeLink);
-        ::std::for_each(iter->second.second.begin(), iter->second.second.end(),
-            removeLink);
+    for (auto& aXmlId : m_pImpl->m_XmlIdMap) {
+        for (auto aLink : aXmlId.second.first)
+            removeLink(aLink);
+        for (auto aLink : aXmlId.second.second)
+            removeLink(aLink);
     }
 }
 

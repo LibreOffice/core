@@ -577,7 +577,7 @@ namespace
             io_rTypes.getConstArray(),
             io_rTypes.getConstArray() + io_rTypes.getLength(),
             aStrippedTypes.getArray(),
-            ::std::bind2nd( ::std::equal_to< uno::Type >(), i_rTypeToStrip )
+            [&i_rTypeToStrip](const uno::Type& aType) { return aType == i_rTypeToStrip; }
         );
         io_rTypes = aStrippedTypes;
     }

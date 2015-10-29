@@ -1197,8 +1197,8 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
     {
         // global filter arry was modified, factory specific ones might need an
         // update too
-        std::for_each(aImplArr.begin(), aImplArr.end(),
-            std::mem_fun_ref(&SfxFilterMatcher_Impl::Update));
+        for (auto& aImpl : aImplArr)
+            aImpl.Update();
     }
 }
 
