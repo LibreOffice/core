@@ -102,14 +102,11 @@ public:
     explicit     Matrix( size_type nWidth, size_type nHeight ) { this->resize( nWidth, nHeight ); }
     explicit     Matrix( size_type nWidth, size_type nHeight, const_reference rData ) { this->resize( nWidth, nHeight, rData ); }
 
-    size_type    capacity() const { return maData.capacity(); }
     bool         empty() const { return maData.empty(); }
     size_type    size() const { return maData.size(); }
     size_type    width() const { return mnWidth; }
     size_type    height() const { return this->empty() ? 0 : (this->size() / this->width()); }
-    bool         has( size_type nX, size_type nY ) const { return (nX < this->width()) && (nY < this->height()); }
 
-    void         reserve( size_type nWidth, size_type nHeight ) { maData.reserve( nWidth * nHeight ); }
     void         clear() { this->resize( 0, 0 ); }
     void         resize( size_type nWidth, size_type nHeight ) { mnWidth = nWidth; maData.resize( nWidth * nHeight ); }
     void         resize( size_type nWidth, size_type nHeight, const_reference rData ) { mnWidth = nWidth; maData.resize( nWidth * nHeight, rData ); }
@@ -125,11 +122,6 @@ public:
     iterator     end() { return maData.end(); }
     const_iterator end() const { return maData.end(); }
 
-    reference    front() { return maData.front(); }
-    const_reference front() const { return maData.front(); }
-    reference    back() { return maData.back(); }
-    const_reference back() const { return maData.back(); }
-
     iterator     row_begin( size_type nY ) { return this->at( 0, nY ); }
     const_iterator row_begin( size_type nY ) const { return this->at( 0, nY ); }
     iterator     row_end( size_type nY ) { return this->at( mnWidth, nY ); }
@@ -137,10 +129,6 @@ public:
 
     reference    row_front( size_type nY ) { return (*this)( 0, nY ); }
     const_reference row_front( size_type nY ) const { return (*this)( 0, nY ); }
-    reference    row_back( size_type nY ) { return (*this)( mnWidth - 1, nY ); }
-    const_reference row_back( size_type nY ) const { return (*this)( mnWidth - 1, nY ); }
-
-    void         swap( Matrix& rMatrix ) { maData.swap( rMatrix.maData ); }
 
 private:
     container_type      maData;

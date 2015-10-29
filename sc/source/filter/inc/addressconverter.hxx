@@ -138,16 +138,6 @@ struct BinRange
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
 };
 
-inline bool operator==( const BinRange& rL, const BinRange& rR )
-{
-    return (rL.maFirst == rR.maFirst) && (rL.maLast == rR.maLast);
-}
-
-inline bool operator<( const BinRange& rL, const BinRange& rR )
-{
-    return (rL.maFirst < rR.maFirst) || ((rL.maFirst == rR.maFirst) && (rL.maLast < rR.maLast));
-}
-
 inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRange& orRange )
 {
     orRange.read( rStrm );

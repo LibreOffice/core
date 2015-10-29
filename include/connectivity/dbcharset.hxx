@@ -79,8 +79,6 @@ namespace dbtools
         */
         CharsetIterator find(const OUString& _rIanaName, const IANA&) const;
 
-        std::size_t   size() const { ensureConstructed( ); return m_aEncodings.size(); }
-
         /// get access to the first element of the charset collection
         CharsetIterator begin() const;
         /// get access to the (last + 1st) element of the charset collection

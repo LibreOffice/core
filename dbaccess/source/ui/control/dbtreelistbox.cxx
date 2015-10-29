@@ -318,11 +318,6 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
     {
         switch(eFunc)
         {
-            case KeyFuncType::CUT:
-                bHandled = ( m_aCutHandler.IsSet() && !m_aSelectedEntries.empty() );
-                if ( bHandled )
-                    m_aCutHandler.Call( NULL );
-                break;
             case KeyFuncType::COPY:
                 bHandled = ( m_aCopyHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )

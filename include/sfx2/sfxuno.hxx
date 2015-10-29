@@ -42,11 +42,6 @@
 #include <rtl/ustring.hxx>
 
 
-inline bool operator==( const css::util::URL& aURL1, const css::util::URL& aURL2 )
-{
-    return aURL1.Complete == aURL2.Complete;
-}
-
 class SfxAllItemSet ;
 class SfxItemSet    ;
 class SfxSlot       ;

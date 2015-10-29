@@ -146,7 +146,7 @@ public:
     {
     }
 
-    virtual void reset(T * p = 0)
+    virtual void reset(T * p = 0) override
     {
         SolarMutexGuard aGuard;
         unique_disposing_ptr<T>::reset(p);

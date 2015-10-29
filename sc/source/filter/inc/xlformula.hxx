@@ -418,8 +418,6 @@ typedef std::shared_ptr< XclTokenArray > XclTokenArrayRef;
 
 /** Calls the Read() function at the passed token array. */
 XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr );
-/** Calls the Read() function at the passed token array. */
-XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArrayRef& rxTokArr );
 /** Calls the Write() function at the passed token array. */
 XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr );
 /** Calls the Write() function at the passed token array. */

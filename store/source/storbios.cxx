@@ -971,25 +971,4 @@ storeError OStorePageBIOS::flush()
     return m_xLockBytes->flush();
 }
 
-/*
- * size.
- * Precond: initialized.
- */
-storeError OStorePageBIOS::size (sal_uInt32 &rnSize)
-{
-    // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
-
-    // Initialize [out] param.
-    rnSize = 0;
-
-    // Check precond.
-    if (!m_xLockBytes.is())
-        return store_E_InvalidAccess;
-
-    // Obtain LockBytes size.
-    return m_xLockBytes->getSize (rnSize);
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

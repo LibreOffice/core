@@ -69,8 +69,6 @@ struct XclGuid
 };
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 );
-inline bool operator!=( const XclGuid& rCmp1, const XclGuid& rCmp2 ) { return !(rCmp1 == rCmp2); }
-bool operator<( const XclGuid& rCmp1, const XclGuid& rCmp2 );
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid );

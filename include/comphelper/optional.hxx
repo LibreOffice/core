@@ -32,15 +32,6 @@ inline ::boost::optional<T> make_optional( T const& v )
     return ::boost::optional<T>(v);
 }
 
-template <typename T>
-inline ::boost::optional<T> make_optional( css::beans::Optional<T> const& o )
-{
-    if (o.IsPresent)
-        return ::boost::optional<T>(o.Value);
-    else
-        return ::boost::optional<T>();
-}
-
 } // namespace comphelper
 
 #endif // ! defined(INCLUDED_COMPHELPER_OPTIONAL_HXX)
