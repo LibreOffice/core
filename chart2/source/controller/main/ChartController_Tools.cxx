@@ -512,7 +512,7 @@ void ChartController::executeDispatch_Copy()
                     }
                     if ( pSelectedObj )
                     {
-                        xTransferable = Reference< datatransfer::XTransferable >( new ChartTransferable(
+                        xTransferable.set( new ChartTransferable(
                                 &m_pDrawModelWrapper->getSdrModel(), pSelectedObj, aSelOID.isAdditionalShape() ) );
                     }
                 }

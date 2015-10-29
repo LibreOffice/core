@@ -79,7 +79,7 @@ sal_Int32 Client::run(css::uno::Sequence< OUString > const &)
     }
     css::uno::Reference< test::javauno::nativethreadpool::XRelay > relay;
     try {
-        relay = css::uno::Reference< test::javauno::nativethreadpool::XRelay >(
+        relay.set(
             factory->createInstanceWithContext(
                 OUString( "test.javauno.nativethreadpool.Relay" ),
                 context),
@@ -99,8 +99,7 @@ sal_Int32 Client::run(css::uno::Sequence< OUString > const &)
     }
     css::uno::Reference< test::javauno::nativethreadpool::XSource > source;
     try {
-        source
-            = css::uno::Reference< test::javauno::nativethreadpool::XSource >(
+        source.set(
                 css::bridge::UnoUrlResolver::create(context)->resolve(
                     OUString( "uno:socket,host=localhost,port=3830;urp;test" )),
                 css::uno::UNO_QUERY_THROW);

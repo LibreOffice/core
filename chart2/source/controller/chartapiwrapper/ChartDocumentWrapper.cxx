@@ -1088,7 +1088,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
     if( !aShapeVector.empty() )
     {
         // create a shape collection
-        xFoundShapes = uno::Reference< drawing::XShapes >( drawing::ShapeCollection::create(
+        xFoundShapes.set( drawing::ShapeCollection::create(
                     comphelper::getProcessComponentContext()), uno::UNO_QUERY );
 
         OSL_ENSURE( xFoundShapes.is(), "Couldn't create a shape collection!" );

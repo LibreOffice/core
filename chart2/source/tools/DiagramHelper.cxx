@@ -1056,7 +1056,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
             sal_Int32 nNumberFormat = -1;
             xAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
 
-            Reference< util::XNumberFormats > xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
+            Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
             if( xNumberFormats.is() )
             {
                 Reference< beans::XPropertySet > xKeyProps;

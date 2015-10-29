@@ -77,7 +77,7 @@ namespace canvas
         {
             // setup identity transform
             setIdentityAffineMatrix2D( renderState.AffineTransform );
-            renderState.Clip = uno::Reference< rendering::XPolyPolygon2D >();
+            renderState.Clip.clear();
             renderState.DeviceColor = uno::Sequence< double >();
             renderState.CompositeOperation = rendering::CompositeOperation::OVER;
 
@@ -88,7 +88,7 @@ namespace canvas
         {
             // setup identity transform
             setIdentityAffineMatrix2D( viewState.AffineTransform );
-            viewState.Clip = uno::Reference< rendering::XPolyPolygon2D >();
+            viewState.Clip.clear();
 
             return viewState;
         }

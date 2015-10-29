@@ -437,7 +437,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
         xRet = pWindow;
 
         if( !pWindow->create( aArguments ) )
-            xRet = uno::Reference< ::media::XPlayerWindow >();
+            xRet.clear();
     }
 
     return xRet;

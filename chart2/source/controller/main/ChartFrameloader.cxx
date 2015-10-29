@@ -123,7 +123,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
     uno::Reference< frame::XController >    xController = NULL;
     uno::Reference< awt::XWindow >          xComponentWindow = NULL;
     {
-        xController = uno::Reference< frame::XController >(
+        xController.set(
             m_xCC->getServiceManager()->createInstanceWithContext(
             CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME,m_xCC )
             , uno::UNO_QUERY );

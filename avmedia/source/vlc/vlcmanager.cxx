@@ -101,7 +101,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUSt
     VLCPlayer* pPlayer( new VLCPlayer( mURL,
                                        *mInstance,
                                        mEventHandler /*, mxMgr */ ) );
-    mPlayer = uno::Reference< media::XPlayer >( pPlayer );
+    mPlayer.set( pPlayer );
 
     return mPlayer;
 }

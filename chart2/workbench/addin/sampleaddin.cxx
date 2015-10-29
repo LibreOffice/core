@@ -263,7 +263,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                 // create line first time
                 if( ! mxMyRedLine.is())
                 {
-                    mxMyRedLine = uno::Reference< drawing::XShape >(
+                    mxMyRedLine.set(
                         xFactory->createInstance( "com.sun.star.drawing.LineShape" ),
                         uno::UNO_QUERY );
                     xPage->add( mxMyRedLine );
@@ -287,7 +287,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                 // create text object first time
                 if( ! mxMyText.is())
                 {
-                    mxMyText = uno::Reference< drawing::XShape >(
+                    mxMyText.set(
                         xFactory->createInstance( "com.sun.star.drawing.TextShape" ),
                         uno::UNO_QUERY );
                     xPage->add( mxMyText );

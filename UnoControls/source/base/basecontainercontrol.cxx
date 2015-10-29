@@ -179,7 +179,7 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException, std::exce
     // remove listeners
     EventObject aObject;
 
-    aObject.Source = Reference< XComponent > ( static_cast<XControlContainer*>(this), UNO_QUERY );
+    aObject.Source.set( static_cast<XControlContainer*>(this), UNO_QUERY );
     m_aListeners.disposeAndClear( aObject );
 
     // remove controls

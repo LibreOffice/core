@@ -487,7 +487,7 @@ void SAL_CALL ChartController::attachFrame(
         SolarMutexGuard aSolarGuard;
         m_pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
         m_pChartWindow->SetBackground();//no Background
-        m_xViewWindow = uno::Reference< awt::XWindow >( m_pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
+        m_xViewWindow.set( m_pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
         m_pChartWindow->Show();
         m_apDropTargetHelper.reset(
             new ChartDropTargetHelper( m_pChartWindow->GetDropTarget(),
@@ -841,7 +841,7 @@ void SAL_CALL ChartController::dispose()
             uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener;
             uno::Reference< chart2::data::XDataReceiver > xDataReceiver( getModel(), uno::UNO_QUERY );
             if( xDataReceiver.is() )
-                xSelectionChangeListener = uno::Reference< view::XSelectionChangeListener >( xDataReceiver->getRangeHighlighter(), uno::UNO_QUERY );
+                xSelectionChangeListener.set( xDataReceiver->getRangeHighlighter(), uno::UNO_QUERY );
             if( xSelectionChangeListener.is() )
             {
                 uno::Reference< frame::XController > xController( this );

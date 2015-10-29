@@ -282,10 +282,10 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
         if ( !xLocalToolkit.is() )
         {
             // but first create well known toolkit, if it not exist
-            xLocalToolkit = Reference< XToolkit > ( Toolkit::create(m_xComponentContext), UNO_QUERY_THROW );
+            xLocalToolkit.set( Toolkit::create(m_xComponentContext), UNO_QUERY_THROW );
         }
         m_xPeer         = xLocalToolkit->createWindow( *pDescriptor );
-        m_xPeerWindow   = Reference< XWindow >( m_xPeer, UNO_QUERY );
+        m_xPeerWindow.set( m_xPeer, UNO_QUERY );
 
         // don't forget to release the memory!
         delete pDescriptor;
@@ -788,7 +788,7 @@ OMRCListenerMultiplexerHelper* BaseControl::impl_getMultiplexer()
     if ( m_pMultiplexer == NULL )
     {
         m_pMultiplexer = new OMRCListenerMultiplexerHelper( static_cast<XWindow*>(this), m_xPeerWindow );
-        m_xMultiplexer = Reference< XInterface >( static_cast<OWeakObject*>(m_pMultiplexer), UNO_QUERY );
+        m_xMultiplexer.set( static_cast<OWeakObject*>(m_pMultiplexer), UNO_QUERY );
     }
 
     return m_pMultiplexer;

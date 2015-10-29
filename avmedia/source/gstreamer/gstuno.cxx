@@ -47,7 +47,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediagst_component_getFactory( 
     if( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
         const OUString aServiceName( SERVICE_NAME );
-        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+        xFactory.set( ::cppu::createSingleFactory(
                         static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                         IMPL_NAME, create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );
     }

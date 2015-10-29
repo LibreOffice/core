@@ -197,7 +197,7 @@ int main( int argc, char *argv[] )
         rComp->dispose();
 
 
-        rComp = Reference < XComponent > ( rSMgr , UNO_QUERY );
+        rComp.set( rSMgr , UNO_QUERY );
         rComp->dispose();
     }
     return 0;

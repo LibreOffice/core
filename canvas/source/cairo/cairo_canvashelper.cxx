@@ -1336,7 +1336,7 @@ namespace cairocanvas
                                                                                        bool                             bHasAlpha )
     {
         SurfaceSharedPtr pSurface=pInputSurface;
-        uno::Reference< rendering::XCachedPrimitive > rv = uno::Reference< rendering::XCachedPrimitive >(NULL);
+        uno::Reference< rendering::XCachedPrimitive > rv(NULL);
         geometry::IntegerSize2D aBitmapSize = rSize;
 
         if( mpCairo )
@@ -1381,7 +1381,7 @@ namespace cairocanvas
                 aMatrix.xx = aMatrix.yy = 1;
                 cairo_set_matrix( mpCairo.get(), &aMatrix );
 
-                rv = uno::Reference< rendering::XCachedPrimitive >(
+                rv.set(
                     new CachedBitmap( pSurface, viewState, renderState,
                                       // cast away const, need to
                                       // change refcount (as this is
@@ -1467,7 +1467,7 @@ namespace cairocanvas
                 free( data );
         }
         else
-            rv = uno::Reference< rendering::XCachedPrimitive >(NULL);
+            rv.set(NULL);
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "drawBitmap" );
@@ -1500,7 +1500,7 @@ namespace cairocanvas
                 free( data );
         }
         else
-            rv = uno::Reference< rendering::XCachedPrimitive >(NULL);
+            rv.set(NULL);
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "drawBitmap" );

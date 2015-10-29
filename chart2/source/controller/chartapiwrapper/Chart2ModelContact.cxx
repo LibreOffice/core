@@ -80,7 +80,7 @@ void Chart2ModelContact::setModel( const ::com::sun::star::uno::Reference<
 
 void Chart2ModelContact::clear()
 {
-    m_xChartModel = uno::WeakReference< frame::XModel >(0);
+    m_xChartModel.clear();
     m_xChartView.clear();
     mpModel = NULL;
 }
@@ -108,7 +108,7 @@ uno::Reference< lang::XUnoTunnel > Chart2ModelContact::getChartView() const
         Reference<frame::XModel> xModel(m_xChartModel);
         uno::Reference< lang::XMultiServiceFactory > xFact( xModel, uno::UNO_QUERY );
         if( xFact.is() )
-            m_xChartView = Reference< lang::XUnoTunnel >( xFact->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+            m_xChartView.set( xFact->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
     }
     return m_xChartView;
 }

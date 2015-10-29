@@ -248,12 +248,11 @@ SbUnoObject* createOLEObject_Impl( const OUString& aType )
     {
         bNeedsInit = false;
 
-        Reference< XComponentContext > xContext(
-            comphelper::getProcessComponentContext() );
+        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
         if( xContext.is() )
         {
             Reference<XMultiComponentFactory> xSMgr = xContext->getServiceManager();
-            xOLEFactory = Reference<XMultiServiceFactory>(
+            xOLEFactory.set(
                 xSMgr->createInstanceWithContext(
                     OUString( "com.sun.star.bridge.OleObjectFactory"),
                         xContext ), UNO_QUERY );
@@ -2347,15 +2346,15 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
 
     Reference< XTypeProvider > xTypeProvider;
     // Did the object have an invocation itself?
-    mxInvocation = Reference< XInvocation >( x, UNO_QUERY );
+    mxInvocation.set( x, UNO_QUERY );
 
-    xTypeProvider = Reference< XTypeProvider >( x, UNO_QUERY );
+    xTypeProvider.set( x, UNO_QUERY );
 
     if( mxInvocation.is() )
     {
 
         // get the ExactName
-        mxExactNameInvocation = Reference< XExactName >::query( mxInvocation );
+        mxExactNameInvocation.set( mxInvocation, UNO_QUERY );
 
         // The remainder refers only to the introspection
         if( !xTypeProvider.is() )
@@ -2462,10 +2461,10 @@ void SbUnoObject::doIntrospection()
     }
 
     // get MaterialHolder from access
-    mxMaterialHolder = Reference< XMaterialHolder >::query( mxUnoAccess );
+    mxMaterialHolder.set( mxUnoAccess, UNO_QUERY );
 
     // get ExactName from access
-    mxExactName = Reference< XExactName >::query( mxUnoAccess );
+    mxExactName.set( mxUnoAccess, UNO_QUERY );
 }
 
 

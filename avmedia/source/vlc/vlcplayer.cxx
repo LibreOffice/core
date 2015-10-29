@@ -245,7 +245,7 @@ uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabb
     if ( !mrFrameGrabber.is() )
     {
         VLCFrameGrabber *frameGrabber = new VLCFrameGrabber( mEventHandler, mUrl );
-        mrFrameGrabber = uno::Reference< css::media::XFrameGrabber >( frameGrabber );
+        mrFrameGrabber.set( frameGrabber );
     }
 
     return mrFrameGrabber;

@@ -350,7 +350,7 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
     Reference< view::XSelectionSupplier > xSelectionSupplier;
     {
         MutexGuard aGuard( GetMutex());
-        xSelectionSupplier = Reference< view::XSelectionSupplier >(m_xSelectionSupplier);
+        xSelectionSupplier.set(m_xSelectionSupplier);
     }
 
     if( xSelectionSupplier.is() )

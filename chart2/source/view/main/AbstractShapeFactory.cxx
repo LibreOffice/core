@@ -130,7 +130,7 @@ uno::Reference< drawing::XShapes > AbstractShapeFactory::getChartRootShape(
             {
                 if( AbstractShapeFactory::getShapeName( xShape ) == "com.sun.star.chart2.shapes" )
                 {
-                    xRet = uno::Reference< drawing::XShapes >( xShape, uno::UNO_QUERY );
+                    xRet.set( xShape, uno::UNO_QUERY );
                     break;
                 }
             }

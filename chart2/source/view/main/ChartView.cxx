@@ -1970,7 +1970,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
                             aShapeName = "PlotAreaIncludingAxes";
                         SdrObject* pShape = DrawModelWrapper::getNamedSdrObject( aShapeName, pRootList );
                         if( pShape )
-                            xShape = uno::Reference< drawing::XShape >( pShape->getUnoShape(), uno::UNO_QUERY);
+                            xShape.set( pShape->getUnoShape(), uno::UNO_QUERY);
                     }
                 }
             }

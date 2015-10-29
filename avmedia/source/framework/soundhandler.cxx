@@ -160,7 +160,7 @@ SoundHandler::~SoundHandler()
         css::frame::DispatchResultEvent aEvent;
         aEvent.State = css::frame::DispatchResultState::FAILURE;
         m_xListener->dispatchFinished(aEvent);
-        m_xListener = css::uno::Reference< css::frame::XDispatchResultListener >();
+        m_xListener.clear();
     }
 }
 
@@ -220,7 +220,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
         m_xPlayer.set( avmedia::MediaWindow::createPlayer( aURL.Complete, aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString()) ), css::uno::UNO_QUERY_THROW );
         // OK- we can start async playing ...
         // Count this request and initialize self-holder against dying by uno ref count ...
-        m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        m_xSelfHold.set(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         m_xPlayer->start();
         m_aUpdateIdle.SetPriority( SchedulerPriority::LOWER );
         m_aUpdateIdle.Start();
@@ -314,7 +314,7 @@ IMPL_LINK_NOARG_TYPED(SoundHandler, implts_PlayerNotify, Idle *, void)
     // We use m_xSelfHold to let us die ... but we must live till real finishing of this method too!!!
     // So we SHOULD use another "self-holder" temp. to provide that ...
     css::uno::Reference< css::uno::XInterface > xOperationHold = m_xSelfHold;
-    m_xSelfHold = css::uno::Reference< css::uno::XInterface >();
+    m_xSelfHold.clear();
 
     // notify might existing listener
     // And forget this listener!
@@ -327,7 +327,7 @@ IMPL_LINK_NOARG_TYPED(SoundHandler, implts_PlayerNotify, Idle *, void)
         else
             aEvent.State = css::frame::DispatchResultState::FAILURE;
         m_xListener->dispatchFinished(aEvent);
-        m_xListener = css::uno::Reference< css::frame::XDispatchResultListener >();
+        m_xListener.clear();
     }
 
     // } SAFE

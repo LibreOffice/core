@@ -52,11 +52,11 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
 
     // Create instances for fixedtext, button and progress ...
 
-    m_xTopic_Top    = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xText_Top     = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xTopic_Bottom = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xText_Bottom  = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xButton       = css::uno::Reference< XButton >      ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_SERVICENAME, rxContext ), UNO_QUERY );
+    m_xTopic_Top.set   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
+    m_xText_Top.set    ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
+    m_xTopic_Bottom.set( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
+    m_xText_Bottom.set ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
+    m_xButton.set      ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_SERVICENAME, rxContext ), UNO_QUERY );
     m_xProgressBar = VclPtr<ProgressBar>::Create(rxContext);
 
     // ... cast controls to Reference< XControl >  (for "setModel"!) ...

@@ -2779,7 +2779,7 @@ void SAL_CALL SfxLibraryContainer::disposing()
     EventObject aEvent( xModel.get() );
     maVBAScriptListeners.disposing( aEvent );
     stopAllComponentListening();
-    mxOwnerDocument = WeakReference< XModel >();
+    mxOwnerDocument.clear();
 }
 
 // Methods XLibraryContainerPassword

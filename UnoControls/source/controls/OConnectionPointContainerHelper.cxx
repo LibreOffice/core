@@ -112,7 +112,7 @@ Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryCon
         MutexGuard aGuard( m_aSharedMutex );
         // If this container contains elements, build a connectionpoint-instance.
         OConnectionPointHelper* pNewConnectionPoint = new OConnectionPointHelper( m_aSharedMutex, this, aType );
-        xConnectionPoint = Reference< XConnectionPoint >( static_cast<OWeakObject*>(pNewConnectionPoint), UNO_QUERY );
+        xConnectionPoint.set( static_cast<OWeakObject*>(pNewConnectionPoint), UNO_QUERY );
     }
 
     return xConnectionPoint;

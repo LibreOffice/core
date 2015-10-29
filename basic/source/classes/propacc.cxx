@@ -216,7 +216,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
                 cppu::UnoType<Sequence<PropertyValue>>::get() );
         Sequence<PropertyValue> const *pArg =
                 static_cast<Sequence<PropertyValue> const *>(aArgAsAny.getValue());
-        Reference< XPropertyAccess > xPropAcc = Reference< XPropertyAccess >::query( xInterface );
+        Reference< XPropertyAccess > xPropAcc( xInterface, UNO_QUERY );
         xPropAcc->setPropertyValues( *pArg );
 
         // Build a SbUnoObject and return it

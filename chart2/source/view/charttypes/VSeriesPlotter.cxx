@@ -2417,7 +2417,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 // set CID to symbol for selection
                 if( xShape.is() )
                 {
-                    aEntry.aSymbol = uno::Reference< drawing::XShape >( xSymbolGroup, uno::UNO_QUERY );
+                    aEntry.aSymbol.set( xSymbolGroup, uno::UNO_QUERY );
 
                     OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_DATA_POINT, nIdx ) );
                     aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
@@ -2446,7 +2446,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             // set CID to symbol for selection
             if( xShape.is())
             {
-                aEntry.aSymbol = uno::Reference< drawing::XShape >( xSymbolGroup, uno::UNO_QUERY );
+                aEntry.aSymbol.set( xSymbolGroup, uno::UNO_QUERY );
 
                 OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
                 OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
@@ -2491,7 +2491,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     // set CID to symbol for selection
                     if( xShape.is())
                     {
-                        aEntry.aSymbol = uno::Reference< drawing::XShape >( xSymbolGroup, uno::UNO_QUERY );
+                        aEntry.aSymbol.set( xSymbolGroup, uno::UNO_QUERY );
 
                         bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[i] );
                         ObjectType eObjectType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;

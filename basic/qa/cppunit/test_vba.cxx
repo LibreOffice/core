@@ -91,10 +91,8 @@ void VBATest::testMiscOLEStuff()
     if( xContext.is() )
     {
         uno::Reference<lang::XMultiComponentFactory> xSMgr = xContext->getServiceManager();
-        xOLEFactory = uno::Reference<lang::XMultiServiceFactory>(
-            xSMgr->createInstanceWithContext(
-                "com.sun.star.bridge.OleObjectFactory",
-                xContext ), uno::UNO_QUERY );
+        xOLEFactory.set( xSMgr->createInstanceWithContext( "com.sun.star.bridge.OleObjectFactory", xContext ),
+                         uno::UNO_QUERY );
     }
     bool bOk = false;
     if( xOLEFactory.is() )

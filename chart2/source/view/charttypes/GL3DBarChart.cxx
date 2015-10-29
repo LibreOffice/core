@@ -875,7 +875,7 @@ void GL3DBarChart::spawnRenderThread(RenderThread *pThread)
 
     Size aSize = mpWindow->GetSizePixel();
     mpWindow->getContext().setWinSize(aSize);
-    mpRenderThread = rtl::Reference<RenderThread>(pThread);
+    mpRenderThread.set(pThread);
     mpWindow->getContext().resetCurrent();
     mpRenderThread->launch();
 }

@@ -805,15 +805,13 @@ void LibPage::InsertLib()
         OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( xSFA->exists( aModURL ) )
         {
-            xModLibContImport = Reference< script::XLibraryContainer2 >(
-                        script::DocumentScriptLibraryContainer::createWithURL(xContext, aModURL), UNO_QUERY );
+            xModLibContImport.set( script::DocumentScriptLibraryContainer::createWithURL(xContext, aModURL), UNO_QUERY );
         }
 
         OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( xSFA->exists( aDlgURL ) )
         {
-            xDlgLibContImport = Reference< script::XLibraryContainer2 >(
-                        script::DocumentDialogLibraryContainer::createWithURL(xContext, aDlgURL), UNO_QUERY );
+            xDlgLibContImport.set( script::DocumentDialogLibraryContainer::createWithURL(xContext, aDlgURL), UNO_QUERY );
         }
 
         if ( xModLibContImport.is() || xDlgLibContImport.is() )
@@ -973,7 +971,7 @@ void LibPage::InsertLib()
                                     OUString aModStorageURL( aModStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                                     // create library link
-                                    xModLib = Reference< container::XNameContainer >( xModLibContainer->createLibraryLink( aLibName, aModStorageURL, true ), UNO_QUERY);
+                                    xModLib.set( xModLibContainer->createLibraryLink( aLibName, aModStorageURL, true ), UNO_QUERY);
                                 }
                                 else
                                 {
@@ -1042,7 +1040,7 @@ void LibPage::InsertLib()
                                     OUString aDlgStorageURL( aDlgStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                                     // create library link
-                                    xDlgLib = Reference< container::XNameContainer >( xDlgLibContainer->createLibraryLink( aLibName, aDlgStorageURL, true ), UNO_QUERY);
+                                    xDlgLib.set( xDlgLibContainer->createLibraryLink( aLibName, aDlgStorageURL, true ), UNO_QUERY);
                                 }
                                 else
                                 {

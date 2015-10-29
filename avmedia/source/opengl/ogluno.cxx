@@ -29,7 +29,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediaogl_component_getFactory( 
     {
         const OUString aServiceName( "com.sun.star.media.Manager_OpenGL" );
 
-        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+        xFactory.set( ::cppu::createSingleFactory(
                         static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                         OUString("com.sun.star.comp.avmedia.Manager_OpenGL" ),
                         create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );

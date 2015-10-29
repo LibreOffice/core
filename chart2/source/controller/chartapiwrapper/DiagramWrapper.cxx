@@ -933,7 +933,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
     if( xAxis.is() )
-        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+        xRet.set( xAxis->getAxisTitle(), uno::UNO_QUERY );
     return xRet;
 }
 
@@ -981,7 +981,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
     if( xAxis.is() )
-        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+        xRet.set( xAxis->getAxisTitle(), uno::UNO_QUERY );
     return xRet;
 }
 
@@ -1029,7 +1029,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
     if( xAxis.is() )
-        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+        xRet.set( xAxis->getAxisTitle(), uno::UNO_QUERY );
     return xRet;
 }
 
@@ -1068,7 +1068,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getSecondaryAxis(0) );
     if( xAxis.is() )
-        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+        xRet.set( xAxis->getAxisTitle(), uno::UNO_QUERY );
     return xRet;
 }
 
@@ -1078,7 +1078,7 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getSecondaryAxis(1) );
     if( xAxis.is() )
-        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+        xRet.set( xAxis->getAxisTitle(), uno::UNO_QUERY );
     return xRet;
 }
 

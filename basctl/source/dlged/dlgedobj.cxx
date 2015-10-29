@@ -1522,7 +1522,7 @@ void DlgEdForm::UpdateGroups()
         sal_uInt32 nSize = aChildList.size();
         Sequence< Reference< awt::XControl > > aSeqControls( nSize );
         for ( sal_uInt32 i = 0; i < nSize; ++i )
-            aSeqControls.getArray()[i] = Reference< awt::XControl >( aChildList[i]->GetControl(), UNO_QUERY );
+            aSeqControls.getArray()[i].set( aChildList[i]->GetControl(), UNO_QUERY );
 
         sal_Int32 nGroupCount = xTabModel->getGroupCount();
         for ( sal_Int32 nGroup = 0; nGroup < nGroupCount; ++nGroup )
@@ -1550,7 +1550,7 @@ void DlgEdForm::UpdateGroups()
                         if ( xCtrlModel.get() == pModels[nModel].get() )
                         {
                             // get the control peer and insert into the list of peers
-                            aSeqPeers.getArray()[ nModel ] = Reference< awt::XWindow >( xCtrl->getPeer(), UNO_QUERY );
+                            aSeqPeers.getArray()[ nModel ].set( xCtrl->getPeer(), UNO_QUERY );
                             break;
                         }
                     }

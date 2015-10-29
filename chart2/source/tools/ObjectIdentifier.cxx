@@ -1330,7 +1330,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID(
                         rObjectCID, xChartModel ) );
                     if( xSeries.is() )
-                        xObjectProperties = Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY );
+                        xObjectProperties.set( xSeries, uno::UNO_QUERY );
 
                     break;
                 }
@@ -1368,7 +1368,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                                 errorBar = "ErrorBarZ";
 
                             xSeriesProp->getPropertyValue( errorBar ) >>= xErrorBarProp;
-                            xObjectProperties = Reference< beans::XPropertySet >( xErrorBarProp, uno::UNO_QUERY );
+                            xObjectProperties.set( xErrorBarProp, uno::UNO_QUERY );
                         }
                     }
                     break;

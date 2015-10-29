@@ -251,7 +251,7 @@ namespace accessibility
 
             ListBoxAccessibleBase::disposing();
         }
-        m_aParent = WeakReference< XAccessible >();
+        m_aParent.clear();
     }
 
     // XServiceInfo

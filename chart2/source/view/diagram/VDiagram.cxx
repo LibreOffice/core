@@ -154,14 +154,14 @@ void VDiagram::createShapes_2d()
 
     //create group shape
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes = m_pShapeFactory->createGroup2D(m_xTarget);
-    m_xOuterGroupShape = uno::Reference<drawing::XShape>( xOuterGroup_Shapes, uno::UNO_QUERY );
+    m_xOuterGroupShape.set( xOuterGroup_Shapes, uno::UNO_QUERY );
 
     uno::Reference< drawing::XShapes > xGroupForWall( m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,"PlotAreaExcludingAxes") );
 
     //create independent group shape as container for datapoints and such things
     {
         uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID");
-        m_xCoordinateRegionShape = uno::Reference<drawing::XShape>( xShapes, uno::UNO_QUERY );
+        m_xCoordinateRegionShape.set( xShapes, uno::UNO_QUERY );
     }
 
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
@@ -473,8 +473,7 @@ void VDiagram::createShapes_3d()
         return;
 
     //create shape
-    m_xOuterGroupShape = uno::Reference< drawing::XShape >(
-            m_pShapeFactory->createGroup3D( m_xTarget, "PlotAreaExcludingAxes" ), uno::UNO_QUERY);
+    m_xOuterGroupShape.set( m_pShapeFactory->createGroup3D( m_xTarget, "PlotAreaExcludingAxes" ), uno::UNO_QUERY);
 
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );
@@ -482,7 +481,7 @@ void VDiagram::createShapes_3d()
     //create additional group to manipulate the aspect ratio of the whole diagram:
     xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, OUString() );
 
-    m_xAspectRatio3D = uno::Reference< beans::XPropertySet >( xOuterGroup_Shapes, uno::UNO_QUERY );
+    m_xAspectRatio3D.set( xOuterGroup_Shapes, uno::UNO_QUERY );
 
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
@@ -492,7 +491,7 @@ void VDiagram::createShapes_3d()
     {
         uno::Reference< beans::XPropertySet > xWallProp( NULL );
         if( m_xDiagram.is() )
-            xWallProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getWall());
+            xWallProp.set( m_xDiagram->getWall() );
 
         OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
         if( !bAddFloorAndWall )
@@ -615,7 +614,7 @@ void VDiagram::createShapes_3d()
     {
         uno::Reference< beans::XPropertySet > xFloorProp( NULL );
         if( m_xDiagram.is() )
-            xFloorProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getFloor());
+            xFloorProp.set( m_xDiagram->getFloor() );
 
         Stripe aStripe( drawing::Position3D(0,0,0)
             , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME)
@@ -643,7 +642,7 @@ void VDiagram::createShapes_3d()
     //create an additional scene for the smaller inner coordinate region:
     {
         uno::Reference< drawing::XShapes > xShapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes,"testonly;CooContainer=XXX_CID" );
-        m_xCoordinateRegionShape = uno::Reference< drawing::XShape >( xShapes, uno::UNO_QUERY );
+        m_xCoordinateRegionShape.set( xShapes, uno::UNO_QUERY );
 
         uno::Reference< beans::XPropertySet > xShapeProp( m_xCoordinateRegionShape, uno::UNO_QUERY );
         OSL_ENSURE(xShapeProp.is(), "created shape offers no XPropertySet");

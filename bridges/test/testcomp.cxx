@@ -591,7 +591,7 @@ void testAllTypes( const Reference < XCallMe > & rRCallMe )
         types.Float = (float)123.239;
         types.Double = 1279.12490012;
         types.String = OUString("abcdefghijklmnopqrstuvwxyz");
-        types.Interface = Reference< XInterface >( rRCallMe , UNO_QUERY);
+        types.Interface.set( rRCallMe , UNO_QUERY);
         types.Any <<= types.Double;
 
         TestTypes retTypes = rRCallMe->transport( types );

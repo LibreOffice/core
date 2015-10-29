@@ -363,7 +363,7 @@ void PieChart::createTextLabelShape(
     ///the current label in order to simplify later label position rearrangement;
     uno::Reference< container::XChild > xChild( aPieLabelInfo.xTextShape, uno::UNO_QUERY );
     if( xChild.is() )
-        aPieLabelInfo.xLabelGroupShape = uno::Reference<drawing::XShape>( xChild->getParent(), uno::UNO_QUERY );
+        aPieLabelInfo.xLabelGroupShape.set( xChild->getParent(), uno::UNO_QUERY );
     aPieLabelInfo.fValue = nVal;
     aPieLabelInfo.bMovementAllowed = bMovementAllowed;
     aPieLabelInfo.bMoved= false;

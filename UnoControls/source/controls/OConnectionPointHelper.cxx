@@ -191,7 +191,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
         throw RuntimeException();
     }
     // Set default return value, if method failed.
-    Sequence< Reference< XInterface > > seqReturnConnections = Sequence< Reference< XInterface > >();
+    Sequence< Reference< XInterface > > seqReturnConnections;
     // Get reference to private member of OConnectionPointHelperContainer!
     OMultiTypeInterfaceContainerHelper& aSharedContainer = m_pContainerImplementation->impl_getMultiTypeContainer();
     // Get pointer to specialized container which hold all interfaces of searched type.

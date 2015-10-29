@@ -161,15 +161,13 @@ struct lcl_internalizeSeries : public ::std::unary_function< Reference< chart2::
                         comphelper::copyProperties(
                             Reference< beans::XPropertySet >( xLabel, uno::UNO_QUERY ),
                             Reference< beans::XPropertySet >( xNewLabel, uno::UNO_QUERY ));
-                        aNewSeriesData[i] = Reference< chart2::data::XLabeledDataSequence >(
-                                new LabeledDataSequence( xNewValues, xNewLabel ));
+                        aNewSeriesData[i].set( new LabeledDataSequence( xNewValues, xNewLabel ) );
                     }
                 }
                 else
                 {
                     if( m_bConnectToModel )
-                        aNewSeriesData[i] = Reference< chart2::data::XLabeledDataSequence >(
-                            new LabeledDataSequence( xNewValues ));
+                        aNewSeriesData[i].set( new LabeledDataSequence( xNewValues ) );
                 }
             }
             if( m_bConnectToModel )

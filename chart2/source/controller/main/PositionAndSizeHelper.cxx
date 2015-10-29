@@ -138,7 +138,7 @@ bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
     ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
     if(OBJECTTYPE_DIAGRAM==eObjectType || OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType)
     {
-        xObjectProp = uno::Reference< beans::XPropertySet >( ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel ), uno::UNO_QUERY );
+        xObjectProp.set( ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel ), uno::UNO_QUERY );
         if(!xObjectProp.is())
             return false;
     }

@@ -203,7 +203,7 @@ int main( int argc, char *argv[] )
 //                          Reference < XComponent > rComp( rBridge , UNO_QUERY );
 //                          rComp->dispose();
 
-                        rInitialObject = Reference < XInterface > ();
+                        rInitialObject.clear();
                         printf( "Waiting...\n" );
                         TimeValue value={bReverse ?1000 :2,0};
                         osl_waitThread( &value );

@@ -69,8 +69,7 @@ sal_Int32 Server::get() throw (css::uno::RuntimeException) {
     css::uno::Reference< test::javauno::nativethreadpool::XSource > source;
     try {
         // Use "127.0.0.1" instead of "localhost", see #i32281#:
-        source
-            = css::uno::Reference< test::javauno::nativethreadpool::XSource >(
+        source.set(
                 css::bridge::UnoUrlResolver::create(context)->resolve(
                     OUString( "uno:socket,host=127.0.0.1,port=3831;urp;test" )),
                 css::uno::UNO_QUERY_THROW);

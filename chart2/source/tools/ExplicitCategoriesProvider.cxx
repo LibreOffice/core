@@ -174,8 +174,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     if(!nCount)
         return;
     rOutTexts.realloc(nCount);
-    Reference< util::XNumberFormats > xNumberFormats;
-    xNumberFormats = Reference< util::XNumberFormats >( rModel.getNumberFormats() );
+    Reference< util::XNumberFormats > xNumberFormats( rModel.getNumberFormats() );
 
     sal_Int32 nAxisNumberFormat = 0;
     Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
@@ -421,8 +420,7 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
         uno::Sequence< uno::Any > aValues = xDataSequence->getData();
         sal_Int32 nCount = aValues.getLength();
         rDateCategories.reserve(nCount);
-        Reference< util::XNumberFormats > xNumberFormats;
-        xNumberFormats = Reference< util::XNumberFormats >( rModel.getNumberFormats() );
+        Reference< util::XNumberFormats > xNumberFormats( rModel.getNumberFormats() );
 
         bool bOwnData = false;
         bool bOwnDataAnddAxisHasAnyFormat = false;

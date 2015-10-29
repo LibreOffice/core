@@ -336,7 +336,7 @@ void CloseableLifeTimeManager::impl_doClose()
     uno::Reference< util::XCloseable > xCloseable=NULL;
     try
     {
-        xCloseable = uno::Reference< util::XCloseable >(m_pCloseable);;
+        xCloseable.set(m_pCloseable);
         if(xCloseable.is())
         {
             //--call notifyClosing on all registered close listeners

@@ -66,7 +66,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
     DBG( "avmediagst: Manager::createPlayer" );
 
     if( !pPlayer->create( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) )  )
-        xRet = uno::Reference< media::XPlayer >();
+        xRet.clear();
 
     return xRet;
 }

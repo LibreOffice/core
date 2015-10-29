@@ -188,7 +188,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
                 Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
                 if(aSeriesSeq.getLength())
                 {
-                    xPropSet = Reference< beans::XPropertySet >(aSeriesSeq[0],uno::UNO_QUERY);
+                    xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
                     if(xPropSet.is())
                     {
                         if( rPropertyName == "LineColor" )
@@ -227,7 +227,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
                 Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
                 if(aSeriesSeq.getLength())
                 {
-                    xPropSet = Reference< beans::XPropertySet >(aSeriesSeq[0],uno::UNO_QUERY);
+                    xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
                     break;
                 }
             }

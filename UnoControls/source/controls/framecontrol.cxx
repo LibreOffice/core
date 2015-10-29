@@ -478,7 +478,7 @@ void FrameControl::impl_deleteFrame()
         // do not dispose the frame in this guarded section (deadlock?)
         MutexGuard aGuard( m_aMutex );
         xOldFrame = m_xFrame;
-        m_xFrame = Reference< XFrame2 > ();
+        m_xFrame.clear();
     }
 
     // notify the listeners

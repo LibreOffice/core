@@ -40,7 +40,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediawin_component_getFactory( 
     {
         const OUString aServiceName( "com.sun.star.media.Manager_DirectX" );
 
-        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+        xFactory.set( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                         OUString("com.sun.star.comp.avmedia.Manager_DirectX" ),
                         create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );

@@ -657,8 +657,7 @@ void DemoApp::Main()
     try
     {
         uno::Reference< uno::XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
-        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(),
-                                                                  uno::UNO_QUERY );
+        xFactory.set(  xCtx->getServiceManager(), uno::UNO_QUERY );
         if( xFactory.is() )
             ::comphelper::setProcessServiceFactory( xFactory );
     }

@@ -53,7 +53,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
     SAL_INFO( "avmedia.quicktime", "Manager::createPlayer" );
 
     if( !pPlayer->create( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) )  )
-        xRet = uno::Reference< media::XPlayer >();
+        xRet.clear();
 
     return xRet;
 }

@@ -36,7 +36,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediaMacAVF_component_getFactor
     {
         const ::rtl::OUString aServiceName( AVMEDIA_MACAVF_MANAGER_SERVICENAME );
 
-        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+        xFactory.set( ::cppu::createSingleFactory(
                         static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                         AVMEDIA_MACAVF_MANAGER_IMPLEMENTATIONNAME,
                         create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );

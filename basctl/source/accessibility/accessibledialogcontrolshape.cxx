@@ -58,7 +58,7 @@ AccessibleDialogControlShape::AccessibleDialogControlShape (DialogWindow* pDialo
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
 
     if ( m_pDlgEdObj )
-        m_xControlModel = Reference< XPropertySet >( m_pDlgEdObj->GetUnoControlModel(), UNO_QUERY );
+        m_xControlModel.set( m_pDlgEdObj->GetUnoControlModel(), UNO_QUERY );
 
     if ( m_xControlModel.is() )
         m_xControlModel->addPropertyChangeListener( OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );

@@ -79,7 +79,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     setShapeName(xShape, "com.sun.star.chart2.shapes");
     xShape->setSize(awt::Size(0,0));
 
-    xRet = uno::Reference<drawing::XShapes>(xShape, uno::UNO_QUERY);
+    xRet.set(xShape, uno::UNO_QUERY);
     return xRet;
 }
 

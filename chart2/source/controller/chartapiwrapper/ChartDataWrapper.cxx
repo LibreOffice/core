@@ -634,11 +634,11 @@ void ChartDataWrapper::initDataAccess()
     if( !xChartDoc.is() )
         return;
     if( xChartDoc->hasInternalDataProvider() )
-        m_xDataAccess = Reference< XAnyDescriptionAccess >( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
+        m_xDataAccess.set( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
     else
     {
         //create a separate "internal data provider" that is not connected to the model
-        m_xDataAccess = Reference< XAnyDescriptionAccess >( ChartModelHelper::createInternalDataProvider(
+        m_xDataAccess.set( ChartModelHelper::createInternalDataProvider(
             xChartDoc, false /*bConnectToModel*/ ), uno::UNO_QUERY_THROW );
     }
 }
