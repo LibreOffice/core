@@ -146,7 +146,8 @@
   <implementation name="XMLMetaExportOOo">
     <service name="com.sun.star.document.XMLMetaExporter"/>
   </implementation>
-  <implementation name="XMLMetaImportComponent">
+  <implementation name="XMLMetaImportComponent"
+      constructor="XMLMetaImportComponent_get_implementation">
     <service name="com.sun.star.document.XMLOasisMetaImporter"/>
   </implementation>
   <implementation name="XMLVersionListPersistence"

@@ -290,13 +290,6 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL XMLMetaExportComponent_create
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
     throw (css::uno::Exception);
 
-// meta import
-OUString SAL_CALL XMLMetaImportComponent_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLMetaImportComponent_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLMetaImportComponent_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
-
 // meta export OOo
 OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLMetaExportOOO_getSupportedServiceNames() throw();
