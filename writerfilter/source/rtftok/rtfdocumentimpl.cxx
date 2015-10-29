@@ -3369,6 +3369,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_DPELLIPSE:
     case RTF_DPTXBX:
     case RTF_DPPOLYLINE:
+    case RTF_DPPOLYGON:
     {
         sal_Int32 nType = 0;
         switch (nKeyword)
@@ -3379,6 +3380,9 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DPPOLYLINE:
             // The reason this is not a simple CustomShape is that in the old syntax we have no ViewBox info.
             m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.PolyLineShape"), uno::UNO_QUERY);
+            break;
+        case RTF_DPPOLYGON:
+            m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.PolyPolygonShape"), uno::UNO_QUERY);
             break;
         case RTF_DPRECT:
             m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
