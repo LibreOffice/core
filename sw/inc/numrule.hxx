@@ -49,9 +49,9 @@ const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.
 
 class SW_DLLPUBLIC SwNumFormat : public SvxNumberFormat, public SwClient
 {
-    SwFormatVertOrient* pVertOrient;
+    SwFormatVertOrient* m_pVertOrient;
     //For i120928,record the cp info of graphic within bullet
-    sal_Unicode     cGrfBulletCP;
+    sal_Unicode     m_cGrfBulletCP;
     SAL_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );
 
     using SvxNumberFormat::operator ==;
@@ -79,8 +79,8 @@ public:
     virtual OUString        GetCharFormatName() const override;
 
     //For i120928,access the cp info of graphic within bullet
-    void            SetGrfBulletCP(sal_Unicode cP){cGrfBulletCP = cP;}
-    sal_Unicode     GetGrfBulletCP() const {return cGrfBulletCP;}
+    void            SetGrfBulletCP(sal_Unicode cP){m_cGrfBulletCP = cP;}
+    sal_Unicode     GetGrfBulletCP() const {return m_cGrfBulletCP;}
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0) override;
 

@@ -178,16 +178,16 @@ static void lcl_SetRuleChgd( SwTextNode& rNd, sal_uInt8 nLevel )
 SwNumFormat::SwNumFormat() :
     SvxNumberFormat(SVX_NUM_ARABIC),
     SwClient( 0 ),
-    pVertOrient(new SwFormatVertOrient( 0, text::VertOrientation::NONE))
-    ,cGrfBulletCP(USHRT_MAX)//For i120928,record the cp info of graphic within bullet
+    m_pVertOrient(new SwFormatVertOrient( 0, text::VertOrientation::NONE))
+    ,m_cGrfBulletCP(USHRT_MAX)//For i120928,record the cp info of graphic within bullet
 {
 }
 
 SwNumFormat::SwNumFormat( const SwNumFormat& rFormat) :
     SvxNumberFormat(rFormat),
     SwClient( rFormat.GetRegisteredInNonConst() ),
-    pVertOrient(new SwFormatVertOrient( 0, rFormat.GetVertOrient()))
-    ,cGrfBulletCP(rFormat.cGrfBulletCP)//For i120928,record the cp info of graphic within bullet
+    m_pVertOrient(new SwFormatVertOrient( 0, rFormat.GetVertOrient()))
+    ,m_cGrfBulletCP(rFormat.m_cGrfBulletCP)//For i120928,record the cp info of graphic within bullet
 {
     sal_Int16 eMyVertOrient = rFormat.GetVertOrient();
     SetGraphicBrush( rFormat.GetBrush(), &rFormat.GetGraphicSize(),
@@ -196,8 +196,8 @@ SwNumFormat::SwNumFormat( const SwNumFormat& rFormat) :
 
 SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
     : SvxNumberFormat(rNumFormat)
-    , pVertOrient(new SwFormatVertOrient( 0, rNumFormat.GetVertOrient()))
-    , cGrfBulletCP(USHRT_MAX)
+    , m_pVertOrient(new SwFormatVertOrient( 0, rNumFormat.GetVertOrient()))
+    , m_cGrfBulletCP(USHRT_MAX)
 {
     sal_Int16 eMyVertOrient = rNumFormat.GetVertOrient();
     SetGraphicBrush( rNumFormat.GetBrush(), &rNumFormat.GetGraphicSize(),
@@ -222,7 +222,7 @@ SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
 
 SwNumFormat::~SwNumFormat()
 {
-    delete pVertOrient;
+    delete m_pVertOrient;
 }
 
 // #i22362#
@@ -262,7 +262,7 @@ SwNumFormat& SwNumFormat::operator=( const SwNumFormat& rNumFormat)
     else if( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
     //For i120928,record the cp info of graphic within bullet
-    cGrfBulletCP = rNumFormat.cGrfBulletCP;
+    m_cGrfBulletCP = rNumFormat.m_cGrfBulletCP;
     return *this;
 }
 
@@ -318,7 +318,7 @@ void    SwNumFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size
     const sal_Int16* pOrient)
 {
     if(pOrient)
-        pVertOrient->SetVertOrient( *pOrient );
+        m_pVertOrient->SetVertOrient( *pOrient );
     SvxNumberFormat::SetGraphicBrush( pBrushItem, pSize, pOrient);
 }
 
@@ -365,8 +365,8 @@ const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const
         return 0;
     else
     {
-        pVertOrient->SetVertOrient(eOrient);
-        return pVertOrient;
+        m_pVertOrient->SetVertOrient(eOrient);
+        return m_pVertOrient;
     }
 }
 
