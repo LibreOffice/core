@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_BASIDE3_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_BASIDE3_HXX
 
-#include "../basicide/layout.hxx"
+#include "layout.hxx"
 #include "bastypes.hxx"
 #include "propbrw.hxx"
 

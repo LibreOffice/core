@@ -21,7 +21,7 @@
 
 #include "doceventnotifier.hxx"
 #include "sbxitem.hxx"
-#include "../basicide/objdlg.hxx"
+#include "objdlg.hxx"
 
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <sfx2/viewsh.hxx>
