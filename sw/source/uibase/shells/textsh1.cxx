@@ -666,6 +666,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if( bSet != rACfg.IsAutoFormatByInput() )
             {
                 rACfg.SetAutoFormatByInput( bSet );
+                rACfg.Commit();
                 GetView().GetViewFrame()->GetBindings().Invalidate( nSlot );
                 if ( !pItem )
                     rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), bSet ) );
