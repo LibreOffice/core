@@ -37,26 +37,26 @@ protected:
 class CSmplMailSuppl :
     public CSmplMailSupplBase,
     public  cppu::WeakComponentImplHelper<
-            com::sun::star::system::XSimpleMailClientSupplier,
-            com::sun::star::lang::XServiceInfo >
+            css::system::XSimpleMailClientSupplier,
+            css::lang::XServiceInfo >
 {
 public:
     CSmplMailSuppl( );
     ~CSmplMailSuppl( );
 
     // XSimpleMailClientSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  )
+        throw (css::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException);
 };
 
 #endif

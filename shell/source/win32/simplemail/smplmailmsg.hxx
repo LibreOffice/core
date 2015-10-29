@@ -29,74 +29,73 @@
 // class declaration
 
 
-class CSmplMailMsg :
-    public  cppu::WeakImplHelper< com::sun::star::system::XSimpleMailMessage2 >
+class CSmplMailMsg : public cppu::WeakImplHelper< css::system::XSimpleMailMessage2 >
 {
 public:
     CSmplMailMsg( );
 
     virtual void SAL_CALL setBody( const ::rtl::OUString& aBody )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual ::rtl::OUString SAL_CALL getBody(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
 
 
     virtual void SAL_CALL setRecipient( const OUString& aRecipient )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
 
 
-    virtual void SAL_CALL setCcRecipient( const ::com::sun::star::uno::Sequence< OUString >& aCcRecipient )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCcRecipient( const css::uno::Sequence< OUString >& aCcRecipient )
+        throw (css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getCcRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getCcRecipient(  )
+        throw (css::uno::RuntimeException);
 
 
 
-    virtual void SAL_CALL setBccRecipient( const ::com::sun::star::uno::Sequence< OUString >& aBccRecipient )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setBccRecipient( const css::uno::Sequence< OUString >& aBccRecipient )
+        throw (css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getBccRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getBccRecipient(  )
+        throw (css::uno::RuntimeException);
 
 
 
     virtual void SAL_CALL setOriginator( const OUString& aOriginator )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getOriginator(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
 
 
     virtual void SAL_CALL setSubject( const OUString& aSubject )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getSubject(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
 
 
-    virtual void SAL_CALL setAttachement( const ::com::sun::star::uno::Sequence< OUString >& aAttachement )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setAttachement( const css::uno::Sequence< OUString >& aAttachement )
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAttachement(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getAttachement(  )
+        throw (css::uno::RuntimeException);
 
 private:
-    OUString                                   m_aBody;
-    OUString                                   m_aRecipient;
-    OUString                                   m_aOriginator;
-    OUString                                   m_aSubject;
-    com::sun::star::uno::Sequence< OUString >  m_CcRecipients;
-    com::sun::star::uno::Sequence< OUString >  m_BccRecipients;
-    com::sun::star::uno::Sequence< OUString >  m_Attachements;
+    OUString                        m_aBody;
+    OUString                        m_aRecipient;
+    OUString                        m_aOriginator;
+    OUString                        m_aSubject;
+    css::uno::Sequence< OUString >  m_CcRecipients;
+    css::uno::Sequence< OUString >  m_BccRecipients;
+    css::uno::Sequence< OUString >  m_Attachements;
 };
 
 #endif

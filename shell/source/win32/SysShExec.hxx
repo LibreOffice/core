@@ -40,34 +40,33 @@ protected:
 class CSysShExec :
     public CSysShExecBase,
     public  cppu::WeakComponentImplHelper<
-            com::sun::star::system::XSystemShellExecute,
-            com::sun::star::lang::XServiceInfo >
+            css::system::XSystemShellExecute,
+            css::lang::XServiceInfo >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-    m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
-    CSysShExec(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
+    CSysShExec(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
 
     // XSystemShellExecute
 
 
     virtual void SAL_CALL execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::system::SystemShellExecuteException, ::com::sun::star::uno::RuntimeException);
+        throw (css::lang::IllegalArgumentException, css::system::SystemShellExecuteException, css::uno::RuntimeException);
 
 
     // XServiceInfo
 
 
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException);
 };
 
 #endif

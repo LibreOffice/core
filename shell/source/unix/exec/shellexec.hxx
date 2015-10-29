@@ -32,34 +32,33 @@
 // class declaration
 
 
-class ShellExec : public ::cppu::WeakImplHelper< com::sun::star::system::XSystemShellExecute, com::sun::star::lang::XServiceInfo >
+class ShellExec : public ::cppu::WeakImplHelper< css::system::XSystemShellExecute, css::lang::XServiceInfo >
 {
-    OString m_aDesktopEnvironment;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-    m_xContext;
+    OString                                            m_aDesktopEnvironment;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
-    explicit ShellExec(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
+    explicit ShellExec(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
 
     // XSystemShellExecute
 
 
     virtual void SAL_CALL execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::system::SystemShellExecuteException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IllegalArgumentException, css::system::SystemShellExecuteException, css::uno::RuntimeException, std::exception) override;
 
 
     // XServiceInfo
 
 
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException, std::exception) override;
 };
 
 

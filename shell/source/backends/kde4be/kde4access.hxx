@@ -30,8 +30,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace kde4access {
 
-com::sun::star::beans::Optional< com::sun::star::uno::Any > getValue(
-    OUString const & id);
+css::beans::Optional< css::uno::Any > getValue(OUString const & id);
 
 }
 
