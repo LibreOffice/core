@@ -21,6 +21,8 @@ $(eval $(call gb_Library_Library,svl))
 
 $(eval $(call gb_Library_use_externals,svl,\
     boost_headers \
+    icu_headers \
+    icuuc \
     mdds_headers \
     libxml2 \
 ))

@@ -152,6 +152,23 @@ SVL_DLLPUBLIC OUString removePassword(OUString const & rURI,
                                       INetURLObject::EncodeMechanism eEncodeMechanism = INetURLObject::WAS_ENCODED,
                                       INetURLObject::DecodeMechanism eDecodeMechanism = INetURLObject::DECODE_TO_IURI,
                                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
+
+/** Resolve a URL's host component domain name in IDNA syntax to plain DNS
+    syntax.
+
+    For details, see RFC 5890 "Internationalized Domain Names for Applications
+    (IDNA): Definitions and Document Framework."
+
+    @param: url  An arbitrary string, should be a URI.
+
+    @return  If the input matches the syntax of a hierarchical URL, and it has
+    a host component that matches the IDNA2008 domain name syntax, and that
+    domain name contains any U-labels, return a version of the input URL with
+    the host component resolved to plain DNS syntax.  Otherwise, return the
+    input unchanged.
+*/
+SVL_DLLPUBLIC OUString resolveIdnaHost(OUString const & url);
+
 }
 
 #endif // INCLUDED_SVL_URIHELPER_HXX

@@ -8949,7 +8949,6 @@ SYSTEM_GENCMN=
 
 ICU_MAJOR=56
 ICU_MINOR=1
-ICU_RECLASSIFIED_CLOSE_PARENTHESIS="TRUE"
 ICU_RECLASSIFIED_PREPEND_SET_EMPTY="TRUE"
 ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER="TRUE"
 ICU_RECLASSIFIED_HEBREW_LETTER="TRUE"
@@ -8974,10 +8973,10 @@ if test "$with_system_icu" = "yes"; then
         ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
         ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
 
-        if test "$ICU_MAJOR" -ge "49" -o \( "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "2" \); then
+        if test "$ICU_MAJOR" -ge "49" -o \( "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "6" \); then
             AC_MSG_RESULT([OK, $ICU_VERSION])
         else
-            AC_MSG_ERROR([not suitable, only >= 4.2 supported currently])
+            AC_MSG_ERROR([not suitable, only >= 4.6 supported currently])
         fi
     fi
 
@@ -9012,11 +9011,6 @@ You can use --with-system-icu-for-build=force to use it anyway.])
         AC_PATH_PROG(SYSTEM_GENCMN, gencmn, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
         if test -z "$SYSTEM_GENCMN"; then
             AC_MSG_ERROR([\'gencmn\' not found in \$PATH, install the icu development tool \'gencmn\'])
-        fi
-        if test "$ICU_MAJOR" -ge "49" -o \( "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4" \); then
-            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="TRUE"
-        else
-            ICU_RECLASSIFIED_CLOSE_PARENTHESIS=
         fi
         if test "$ICU_MAJOR" -ge "49"; then
             ICU_RECLASSIFIED_PREPEND_SET_EMPTY="TRUE"
@@ -9055,7 +9049,6 @@ AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)
 AC_SUBST(ICU_MAJOR)
 AC_SUBST(ICU_MINOR)
-AC_SUBST(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
 AC_SUBST(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
 AC_SUBST(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER)
 AC_SUBST(ICU_RECLASSIFIED_HEBREW_LETTER)

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <unicode/idna.h>
+
 #include <svl/urihelper.hxx>
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
@@ -723,6 +727,70 @@ OUString URIHelper::removePassword(OUString const & rURI,
     return aObj.HasError() ?
                rURI :
                aObj.GetURLNoPass(eDecodeMechanism, eCharset);
+}
+
+OUString URIHelper::resolveIdnaHost(OUString const & url) {
+    css::uno::Reference<css::uri::XUriReference> uri(
+        css::uri::UriReferenceFactory::create(
+            comphelper::getProcessComponentContext())
+        ->parse(url));
+    if (!(uri.is() && uri->hasAuthority())) {
+        return url;
+    }
+    auto auth(uri->getAuthority());
+    sal_Int32 hostStart = auth.indexOf('@') + 1;
+    sal_Int32 hostEnd = auth.getLength() - 1;
+    while (hostEnd > hostStart && rtl::isAsciiDigit(auth[hostEnd])) {
+        --hostEnd;
+    }
+    if (!(hostEnd > hostStart && auth[hostEnd] == ':')) {
+        hostEnd = auth.getLength() - 1;
+    }
+    auto asciiOnly = true;
+    for (auto i = hostStart; i != hostEnd; ++i) {
+        if (!rtl::isAscii(auth[i])) {
+            asciiOnly = false;
+            break;
+        }
+    }
+    if (asciiOnly) {
+        // Avoid icu::IDNA case normalization in purely non-IDNA domain names:
+        return url;
+    }
+    UErrorCode e = U_ZERO_ERROR;
+    std::unique_ptr<icu::IDNA> idna(
+        icu::IDNA::createUTS46Instance(
+            (UIDNA_USE_STD3_RULES | UIDNA_CHECK_BIDI | UIDNA_CHECK_CONTEXTJ
+             | UIDNA_CHECK_CONTEXTO),
+            e));
+    if (U_FAILURE(e)) {
+        SAL_WARN("vcl.gdi", "icu::IDNA::createUTS46Instance " << e);
+        return url;
+    }
+    icu::UnicodeString ascii;
+    icu::IDNAInfo info;
+    idna->nameToASCII(
+        icu::UnicodeString(
+            reinterpret_cast<UChar const *>(auth.getStr() + hostStart),
+            hostEnd - hostStart),
+        ascii, info, e);
+    if (U_FAILURE(e) || info.hasErrors()) {
+        return url;
+    }
+    OUStringBuffer buf(uri->getScheme());
+    buf.append("://").append(auth.getStr(), hostStart);
+    buf.append(
+        reinterpret_cast<sal_Unicode const *>(ascii.getBuffer()),
+        ascii.length());
+    buf.append(auth.getStr() + hostEnd, auth.getLength() - hostEnd)
+        .append(uri->getPath());
+    if (uri->hasQuery()) {
+        buf.append('?').append(uri->getQuery());
+    }
+    if (uri->hasFragment()) {
+        buf.append('#').append(uri->getFragment());
+    }
+    return buf.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
