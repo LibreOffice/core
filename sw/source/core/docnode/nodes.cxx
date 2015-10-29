@@ -562,7 +562,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                 pSttNode = static_cast<SwStartNode*>(pNd);
                             else if( pNd->IsEndNode() )
                             {
-                                pSttNode->pEndOfSection = static_cast<SwEndNode*>(pNd);
+                                pSttNode->m_pEndOfSection = static_cast<SwEndNode*>(pNd);
                                 if( pSttNode->IsSectionNode() )
                                     static_cast<SwSectionNode*>(pSttNode)->NodesArrChgd();
                                 pSttNode = pSttNode->pStartOfSection;
@@ -662,7 +662,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     rNodes.InsertNode( pSttNd, aIdx  );
                     rNodes.InsertNode( pAktNode, aIdx );
                     --aIdx;
-                    pSttNd->pEndOfSection = static_cast<SwEndNode*>(pAktNode);
+                    pSttNd->m_pEndOfSection = static_cast<SwEndNode*>(pAktNode);
 
                     --aRg.aEnd;
 
@@ -1045,7 +1045,7 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
         else if( pAktNode->GetEndNode() )
         {
             SwStartNode* pSttNd = aSttNdStack[ aSttNdStack.size() - 1 ];
-            pSttNd->pEndOfSection = static_cast<SwEndNode*>(pAktNode);
+            pSttNd->m_pEndOfSection = static_cast<SwEndNode*>(pAktNode);
             aSttNdStack.pop_back();
             if( !aSttNdStack.empty() )
                 continue; // still enough EndNodes on the stack

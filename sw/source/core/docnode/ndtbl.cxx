@@ -3415,7 +3415,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
         pNewTableNd->GetTable().SetTableModel( rTable.IsNewModel() );
 
         pOldTableEndNd->pStartOfSection = pNewTableNd;
-        pNewTableNd->pEndOfSection = pOldTableEndNd;
+        pNewTableNd->m_pEndOfSection = pOldTableEndNd;
 
         SwNode* pBoxNd = aIdx.GetNode().GetStartNode();
         do {
@@ -3615,7 +3615,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
 
     // The preceding Table always remains, while the succeeding one is deleted
     SwEndNode* pTableEndNd = pDelTableNd->EndOfSectionNode();
-    pTableNd->pEndOfSection = pTableEndNd;
+    pTableNd->m_pEndOfSection = pTableEndNd;
 
     SwNodeIndex aIdx( *pDelTableNd, 1 );
 

@@ -303,8 +303,8 @@ class SwStartNode: public SwNode
     friend class SwNodes;
     friend class SwEndNode;     ///< to set the theEndOfSection !!
 
-    SwEndNode* pEndOfSection;
-    SwStartNodeType eSttNdTyp;
+    SwEndNode* m_pEndOfSection;
+    SwStartNodeType m_eStartNodeType;
 
     /// for the initial StartNode
     SwStartNode( SwNodes& rNodes, sal_uLong nPos );
@@ -316,7 +316,7 @@ protected:
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwStartNode)
 
-    SwStartNodeType GetStartNodeType() const        { return eSttNdTyp; }
+    SwStartNodeType GetStartNodeType() const        { return m_eStartNodeType; }
 
     /// Call ChkCondcoll to all ContentNodes of section.
     void CheckSectionCondColl() const;
@@ -684,17 +684,17 @@ inline sal_uLong SwNode::StartOfSectionIndex() const
 inline sal_uLong SwNode::EndOfSectionIndex() const
 {
     const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : pStartOfSection;
-    return pStNd->pEndOfSection->GetIndex();
+    return pStNd->m_pEndOfSection->GetIndex();
 }
 inline const SwEndNode* SwNode::EndOfSectionNode() const
 {
     const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : pStartOfSection;
-    return pStNd->pEndOfSection;
+    return pStNd->m_pEndOfSection;
 }
 inline SwEndNode* SwNode::EndOfSectionNode()
 {
     const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : pStartOfSection;
-    return pStNd->pEndOfSection;
+    return pStNd->m_pEndOfSection;
 }
 
 inline SwNodes& SwNode::GetNodes()

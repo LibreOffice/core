@@ -879,7 +879,7 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
                             SwStartNodeType eSttNd )
-    : SwNode( rWhere, nNdType ), eSttNdTyp( eSttNd )
+    : SwNode( rWhere, nNdType ), m_eStartNodeType( eSttNd )
 {
     if( !rWhere.GetIndex() )
     {
@@ -888,11 +888,11 @@ SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
         pStartOfSection = this;
     }
     // Just do this temporarily until the EndNode is inserted
-    pEndOfSection = reinterpret_cast<SwEndNode*>(this);
+    m_pEndOfSection = reinterpret_cast<SwEndNode*>(this);
 }
 
 SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
-    : SwNode( rNodes, nPos, ND_STARTNODE ), eSttNdTyp( SwNormalStartNode )
+    : SwNode( rNodes, nPos, ND_STARTNODE ), m_eStartNodeType( SwNormalStartNode )
 {
     if( !nPos )
     {
@@ -900,7 +900,7 @@ SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
         pStartOfSection = this;
     }
     // Just do this temporarily until the EndNode is inserted
-    pEndOfSection = reinterpret_cast<SwEndNode*>(this);
+    m_pEndOfSection = reinterpret_cast<SwEndNode*>(this);
 }
 
 void SwStartNode::CheckSectionCondColl() const
@@ -981,14 +981,14 @@ SwEndNode::SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd )
     : SwNode( rWhere, ND_ENDNODE )
 {
     pStartOfSection = &rSttNd;
-    pStartOfSection->pEndOfSection = this;
+    pStartOfSection->m_pEndOfSection = this;
 }
 
 SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
     : SwNode( rNds, nPos, ND_ENDNODE )
 {
     pStartOfSection = &rSttNd;
-    pStartOfSection->pEndOfSection = this;
+    pStartOfSection->m_pEndOfSection = this;
 }
 
 SwContentNode::SwContentNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
