@@ -21,7 +21,7 @@
 #ifdef MACOSX
 Directory gid_Dir_Bundle
     ParentID = PD_PROGDIR;
-    HostName = "%PRODUCTNAME.app";
+    HostName = "%ONEWORDPRODUCTNAME.app";
 End
 
 Directory gid_Dir_Bundle_Contents
