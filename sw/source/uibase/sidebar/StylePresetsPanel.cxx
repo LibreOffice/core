@@ -148,11 +148,11 @@ VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
                                         SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", NULL, 0);
+        throw css::lang::IllegalArgumentException("no parent Window given to StylePresetsPanel::Create", NULL, 0);
     if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", NULL, 1);
+        throw css::lang::IllegalArgumentException("no XFrame given to StylePresetsPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
+        throw css::lang::IllegalArgumentException("no SfxBindings given to StylePresetsPanel::Create", NULL, 2);
 
     return VclPtr<StylePresetsPanel>::Create(pParent, rxFrame, pBindings);
 }
