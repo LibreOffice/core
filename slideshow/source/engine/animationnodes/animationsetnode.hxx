@@ -28,8 +28,7 @@ class AnimationSetNode : public AnimationBaseNode
 {
 public:
     AnimationSetNode(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        css::uno::Reference<css::animations::XAnimationNode> const& xNode,
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext )
         : AnimationBaseNode( xNode, pParent, rContext ) {}

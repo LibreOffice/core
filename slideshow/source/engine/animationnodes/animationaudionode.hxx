@@ -37,8 +37,7 @@ class AnimationAudioNode : public BaseNode, public AnimationEventHandler
 {
 public:
     AnimationAudioNode(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        css::uno::Reference<css::animations::XAnimationNode> const& xNode,
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext );
 
@@ -54,10 +53,9 @@ private:
     virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) override;
 
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAudio >  mxAudioNode;
-    OUString                             maSoundURL;
-    mutable SoundPlayerSharedPtr                mpPlayer;
+    css::uno::Reference<css::animations::XAudio >  mxAudioNode;
+    OUString                                       maSoundURL;
+    mutable SoundPlayerSharedPtr                   mpPlayer;
 
     void createPlayer() const;
     void resetPlayer() const;

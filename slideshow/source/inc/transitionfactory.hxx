@@ -66,8 +66,7 @@ namespace slideshow
                 const AnimatableShapeSharedPtr&                         rShape,
                 const ShapeManagerSharedPtr&                            rShapeManager,
                 const ::basegfx::B2DVector&                             rSlideSize,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::animations::XTransitionFilter > const&  xTransition );
+                css::uno::Reference< css::animations::XTransitionFilter > const&  xTransition );
 
 
             /** Create a transition effect for slides.
@@ -103,8 +102,7 @@ namespace slideshow
                 const UnoViewContainer&                        rViewContainer,
                 ScreenUpdater&                                 rScreenUpdater,
                 EventMultiplexer&                              rEventMultiplexer,
-                const com::sun::star::uno::Reference<
-                      com::sun::star::presentation::XTransitionFactory>&
+                const css::uno::Reference< css::presentation::XTransitionFactory>&
                                                                xOptionalFactory,
                 sal_Int16                                      nTransitionType,
                 sal_Int16                                      nTransitionSubType,

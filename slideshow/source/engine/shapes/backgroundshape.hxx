@@ -43,10 +43,8 @@ namespace slideshow
             the Shape interface are not implemented here.
          */
         boost::shared_ptr<Shape> createBackgroundShape(
-            const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::drawing::XDrawPage >& xDrawPage,
-            const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::drawing::XDrawPage >& xMasterPage,
+            const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
+            const css::uno::Reference< css::drawing::XDrawPage >& xMasterPage,
             const SlideShowContext&                       rContext ); // throw ShapeLoadFailedException;
     }
 }

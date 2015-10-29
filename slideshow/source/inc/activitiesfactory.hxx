@@ -149,8 +149,7 @@ namespace ActivitiesFactory
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const NumberAnimationSharedPtr&                rAnimator,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimate >&   xNode );
+        const css::uno::Reference< css::animations::XAnimate >&   xNode );
 
     /** Create an activity from an XAnimate node.
 
@@ -172,8 +171,7 @@ namespace ActivitiesFactory
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const EnumAnimationSharedPtr&                  rAnimator,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimate >&      xNode );
+        const css::uno::Reference< css::animations::XAnimate >&      xNode );
 
     /** Create an activity from an XAnimate node.
 
@@ -195,8 +193,7 @@ namespace ActivitiesFactory
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const ColorAnimationSharedPtr&                 rAnimator,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimate >&      xNode );
+        const css::uno::Reference< css::animations::XAnimate >&      xNode );
 
     /** Create an activity from an XAnimate node.
 
@@ -218,8 +215,7 @@ namespace ActivitiesFactory
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                            rParms,
         const HSLColorAnimationSharedPtr&                  rAnimator,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimateColor >&     xNode );
+        const css::uno::Reference< css::animations::XAnimateColor >&     xNode );
 
     /** Create an activity from an XAnimate node.
 
@@ -241,8 +237,7 @@ namespace ActivitiesFactory
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const PairAnimationSharedPtr&                  rAnimator,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimate >&   xNode );
+        const css::uno::Reference< css::animations::XAnimate >&   xNode );
 
     /** Create an activity from an XAnimate node.
 
@@ -264,8 +259,7 @@ namespace ActivitiesFactory
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const StringAnimationSharedPtr&                rAnimator,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimate >&      xNode );
+        const css::uno::Reference< css::animations::XAnimate >&      xNode );
 
     /** Create an activity from an XAnimate node.
 
@@ -287,8 +281,7 @@ namespace ActivitiesFactory
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const BoolAnimationSharedPtr&                  rAnimator,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimate >&      xNode );
+        const css::uno::Reference< css::animations::XAnimate >&      xNode );
 
     /** Create a simple activity for the given animator
 

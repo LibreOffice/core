@@ -584,7 +584,7 @@ namespace slideshow
                     OSL_FAIL( "BitmapView::setPriority(): This method is not supposed to be called!" );
                 }
 
-                virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const override
+                virtual css::geometry::IntegerSize2D getTranslationOffset() const override
                 {
                     return geometry::IntegerSize2D(0,0);
                 }

@@ -33,14 +33,14 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
-namespace EffectCommands = com::sun::star::presentation::EffectCommands;
+namespace EffectCommands = css::presentation::EffectCommands;
 
 AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimationNode> const& xNode,
                                              ::boost::shared_ptr<BaseContainerNode> const& pParent,
                                              NodeContext const& rContext ) :
     BaseNode( xNode, pParent, rContext ),
     mpShape(),
-    mxCommandNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW )
+    mxCommandNode( xNode, css::uno::UNO_QUERY_THROW )
 {
     uno::Reference< drawing::XShape > xShape( mxCommandNode->getTarget(),
                                               uno::UNO_QUERY );

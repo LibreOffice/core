@@ -29,12 +29,11 @@ class AnimationPathMotionNode : public AnimationBaseNode
 {
 public:
     AnimationPathMotionNode(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode >& xNode,
+        const css::uno::Reference<css::animations::XAnimationNode >& xNode,
         const BaseContainerNodeSharedPtr&               rParent,
         const NodeContext&                              rContext )
         : AnimationBaseNode( xNode, rParent, rContext ),
-          mxPathMotionNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
+          mxPathMotionNode( xNode, css::uno::UNO_QUERY_THROW ) {}
 
 #if defined(DBG_UTIL)
     virtual const char* getDescription() const override
@@ -47,8 +46,7 @@ protected:
 private:
     virtual AnimationActivitySharedPtr createActivity() const override;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimateMotion >  mxPathMotionNode;
+    css::uno::Reference<css::animations::XAnimateMotion >  mxPathMotionNode;
 };
 
 } // namespace internal

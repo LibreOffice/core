@@ -30,12 +30,11 @@ class AnimationTransformNode : public AnimationBaseNode
 {
 public:
     AnimationTransformNode(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        css::uno::Reference<css::animations::XAnimationNode> const& xNode,
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext )
         : AnimationBaseNode( xNode, pParent, rContext ),
-          mxTransformNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
+          mxTransformNode( xNode, css::uno::UNO_QUERY_THROW ) {}
 
 #if defined(DBG_UTIL)
     virtual const char* getDescription() const override
@@ -48,8 +47,7 @@ protected:
 private:
     virtual AnimationActivitySharedPtr createActivity() const override;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimateTransform >   mxTransformNode;
+    css::uno::Reference<css::animations::XAnimateTransform >   mxTransformNode;
 };
 
 } // namespace internal

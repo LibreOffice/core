@@ -127,8 +127,7 @@ namespace slideshow
                 The XShape object, for which the representing Shape
                 should be looked up.
              */
-            ShapeSharedPtr lookupShape( const ::com::sun::star::uno::Reference<
-                                           ::com::sun::star::drawing::XShape >& xShape ) const;
+            ShapeSharedPtr lookupShape( const css::uno::Reference< css::drawing::XShape >& xShape ) const;
 
             /** Query a subset of the given original shape
 
@@ -231,11 +230,10 @@ namespace slideshow
                 Provides quicker lookup than ShapeSet for simple mappings
              */
             typedef std::unordered_map<
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape >,
-                ShapeSharedPtr,
-                hash< ::com::sun::star::uno::Reference<
-                      ::com::sun::star::drawing::XShape > > > XShapeHash;
+                  css::uno::Reference< css::drawing::XShape >,
+                  ShapeSharedPtr,
+                  hash< css::uno::Reference< css::drawing::XShape > >
+                > XShapeHash;
 
             class ShapeComparator
             {

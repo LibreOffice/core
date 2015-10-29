@@ -67,12 +67,9 @@ public:
         When true, then the master page is imported. Otherwise, this
         object imports the draw page.
     */
-    ShapeImporter( const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::drawing::XDrawPage >& xPage,
-                   const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::drawing::XDrawPage >& xActualPage,
-                   const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::drawing::XDrawPagesSupplier>& xPagesSupplier,
+    ShapeImporter( const css::uno::Reference< css::drawing::XDrawPage >& xPage,
+                   const css::uno::Reference< css::drawing::XDrawPage >& xActualPage,
+                   const css::uno::Reference< css::drawing::XDrawPagesSupplier>& xPagesSupplier,
                    const SlideShowContext&                       rContext,
                    sal_Int32                                     nOrdNumStart,
                    bool                                          bConvertingMasterPage );
@@ -97,45 +94,38 @@ public:
 
     double getImportedShapesCount() { return mnAscendingPrio; }
 private:
-    bool isSkip( ::com::sun::star::uno::Reference<
-                 ::com::sun::star::beans::XPropertySet> const& xPropSet,
+    bool isSkip( css::uno::Reference<css::beans::XPropertySet> const& xPropSet,
                  OUString const& shapeType,
-             ::com::sun::star::uno::Reference<
-             ::com::sun::star::drawing::XLayer> const& xLayer);
+                 css::uno::Reference<css::drawing::XLayer> const& xLayer);
 
     ShapeSharedPtr createShape(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape> const& xCurrShape,
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> const& xPropSet,
+        css::uno::Reference<css::drawing::XShape> const& xCurrShape,
+        css::uno::Reference<css::beans::XPropertySet> const& xPropSet,
         OUString const& shapeType ) const;
 
-    void importPolygons(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xPropSet) ;
+    void importPolygons(css::uno::Reference< css::beans::XPropertySet > const& xPropSet) ;
 
     struct XShapesEntry
     {
         ShapeSharedPtr const mpGroupShape;
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShapes> const mxShapes;
+        css::uno::Reference<css::drawing::XShapes> const mxShapes;
         sal_Int32 const mnCount;
         sal_Int32 mnPos;
 
         explicit XShapesEntry( ShapeSharedPtr const& pGroupShape )
             : mpGroupShape(pGroupShape),
               mxShapes( pGroupShape->getXShape(),
-                        ::com::sun::star::uno::UNO_QUERY_THROW ),
+                        css::uno::UNO_QUERY_THROW ),
               mnCount(mxShapes->getCount()), mnPos(0) {}
-        explicit XShapesEntry( ::com::sun::star::uno::Reference<
-                      ::com::sun::star::drawing::XShapes> const& xShapes )
+        explicit XShapesEntry( css::uno::Reference<
+                      css::drawing::XShapes> const& xShapes )
             : mpGroupShape(), mxShapes(xShapes),
               mnCount(xShapes->getCount()), mnPos(0) {}
     };
     typedef ::std::stack<XShapesEntry> XShapesStack;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XDrawPage> mxPage;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XDrawPagesSupplier> mxPagesSupplier;
+    css::uno::Reference<css::drawing::XDrawPage> mxPage;
+    css::uno::Reference<css::drawing::XDrawPagesSupplier> mxPagesSupplier;
     const SlideShowContext&                   mrContext;
     PolyPolygonVector                         maPolygons;
     XShapesStack                              maShapesStack;

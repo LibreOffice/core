@@ -38,14 +38,12 @@ namespace slideshow
     namespace internal
     {
         /// Maps XShape to shape listener
-        typedef ::std::map< ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShape>,
+        typedef ::std::map< css::uno::Reference< css::drawing::XShape>,
                             boost::shared_ptr< ::cppu::OInterfaceContainerHelper >
                             >                  ShapeEventListenerMap;
 
         /// Maps XShape to mouse cursor
-        typedef ::std::map< ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShape>,
+        typedef ::std::map< css::uno::Reference< css::drawing::XShape>,
                             sal_Int16>         ShapeCursorMap;
     }
 }

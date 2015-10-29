@@ -196,8 +196,7 @@ AnimationActivitySharedPtr createShapeTransitionByType(
     const AnimatableShapeSharedPtr&                         rShape,
     const ShapeManagerSharedPtr&                            rShapeManager,
     const ::basegfx::B2DVector&                             rSlideSize,
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XTransitionFilter > const& xTransition,
+    css::uno::Reference< css::animations::XTransitionFilter > const& xTransition,
     sal_Int16                                               nType,
     sal_Int16                                               nSubType )
 {

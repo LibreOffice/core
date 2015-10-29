@@ -89,8 +89,7 @@ namespace slideshow
                 should be looked up.
              */
             virtual boost::shared_ptr<Shape> lookupShape(
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape > const & xShape ) const = 0;
+                css::uno::Reference< css::drawing::XShape > const & xShape ) const = 0;
 
             /** Register given shape as a hyperlink target
 

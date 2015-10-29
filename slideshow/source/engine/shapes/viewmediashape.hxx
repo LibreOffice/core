@@ -64,11 +64,9 @@ namespace slideshow
                 @param rView
                 The associated View object.
              */
-            ViewMediaShape( const ViewLayerSharedPtr&                          rViewLayer,
-                            const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::drawing::XShape >&         rxShape,
-                             const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::uno::XComponentContext >& rxContext );
+            ViewMediaShape( const ViewLayerSharedPtr&                                  rViewLayer,
+                            const css::uno::Reference< css::drawing::XShape >&         rxShape,
+                            const css::uno::Reference< css::uno::XComponentContext >&  rxContext );
 
             /** destroy the object
              */
@@ -141,22 +139,22 @@ namespace slideshow
         private:
 
             bool implInitialize( const ::basegfx::B2DRectangle& rBounds );
-            void implSetMediaProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxProps );
+            void implSetMediaProperties( const css::uno::Reference< css::beans::XPropertySet >& rxProps );
             void implInitializeMediaPlayer( const OUString& rMediaURL, const OUString& rMimeType );
             bool implInitializePlayerWindow( const ::basegfx::B2DRectangle& rBounds,
-                                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rVCLDeviceParams,
-                                                     const OUString& rMimeType );
+                                             const css::uno::Sequence< css::uno::Any >& rVCLDeviceParams,
+                                             const OUString& rMimeType );
             ViewLayerSharedPtr                    mpViewLayer;
             VclPtr< SystemChildWindow >           mpMediaWindow;
             VclPtr< vcl::Window >                 mpEventHandlerParent;
-            mutable ::com::sun::star::awt::Point  maWindowOffset;
+            mutable css::awt::Point               maWindowOffset;
             mutable ::basegfx::B2DRectangle       maBounds;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       mxShape;
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> mxComponentContext;
-            bool mbIsSoundEnabled;
+            css::uno::Reference< css::drawing::XShape >       mxShape;
+            css::uno::Reference< css::media::XPlayer >        mxPlayer;
+            css::uno::Reference< css::media::XPlayerWindow >  mxPlayerWindow;
+            css::uno::Reference< css::uno::XComponentContext> mxComponentContext;
+            bool                                              mbIsSoundEnabled;
         };
 
         typedef ::boost::shared_ptr< ViewMediaShape > ViewMediaShapeSharedPtr;

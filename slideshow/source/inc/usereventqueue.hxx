@@ -111,8 +111,7 @@ public:
     */
     void registerAnimationStartEvent(
         const EventSharedPtr&                             rEvent,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode>&    xNode );
+        const css::uno::Reference<css::animations::XAnimationNode>&    xNode );
 
     /** Register an event that will be fired when the given
         animation node ends its active duration.
@@ -123,8 +122,7 @@ public:
     */
     void registerAnimationEndEvent(
         const EventSharedPtr&                               rEvent,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode>&      xNode );
+        const css::uno::Reference<css::animations::XAnimationNode>&      xNode );
 
     /** Register an event that will be fired when audio output
         stopped for the given animation node.
@@ -135,8 +133,7 @@ public:
     */
     void registerAudioStoppedEvent(
         const EventSharedPtr&                               rEvent,
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode>&      xNode );
+        const css::uno::Reference<css::animations::XAnimationNode>&      xNode );
 
     /** Register an event that is fired when a shape is clicked
 

@@ -71,8 +71,7 @@ namespace slideshow
                 XDrawPage's XAnimationNodeSupplier.
 
              */
-            bool importAnimations( const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::animations::XAnimationNode >&   xRootAnimationNode );
+            bool importAnimations( const css::uno::Reference< css::animations::XAnimationNode >&   xRootAnimationNode );
 
             /** Check, whether imported animations actually contain
                 any effects.

@@ -43,8 +43,7 @@ class WaitSymbol : public ViewEventHandler,
                    private ::boost::noncopyable
 {
 public:
-    static WaitSymbolSharedPtr create( const ::com::sun::star::uno::Reference<
-                                             ::com::sun::star::rendering::XBitmap>& xBitmap,
+    static WaitSymbolSharedPtr create( const css::uno::Reference<css::rendering::XBitmap>& xBitmap,
                                        ScreenUpdater&                               rScreenUpdater,
                                        EventMultiplexer&                            rEventMultiplexer,
                                        const UnoViewContainer&                      rViewContainer );
@@ -58,8 +57,7 @@ public:
     void hide() { setVisible(false); }
 
 private:
-    WaitSymbol( const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::rendering::XBitmap>& xBitmap,
+    WaitSymbol( const css::uno::Reference<css::rendering::XBitmap>& xBitmap,
                 ScreenUpdater&                               rScreenUpdater,
                 const UnoViewContainer&                      rViewContainer );
 
@@ -76,8 +74,7 @@ private:
         ::std::pair<UnoViewSharedPtr,
                     cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::rendering::XBitmap>  mxBitmap;
+    css::uno::Reference<css::rendering::XBitmap>  mxBitmap;
 
     ViewsVecT                                  maViews;
     ScreenUpdater&                             mrScreenUpdater;

@@ -89,8 +89,7 @@ namespace slideshow
                               UserEventQueue&                                   rUserEventQueue,
                               CursorManager&                                    rCursorManager,
                               const UnoViewContainer&                           rViewContainer,
-                              const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::uno::XComponentContext>&    rComponentContext );
+                              const css::uno::Reference< css::uno::XComponentContext>&    rComponentContext );
             void dispose();
 
             boost::shared_ptr<SubsettableShapeManager>&     mpSubsettableShapeManager;
@@ -101,8 +100,7 @@ namespace slideshow
             UserEventQueue&                                 mrUserEventQueue;
             CursorManager&                                  mrCursorManager;
             const UnoViewContainer&                         mrViewContainer;
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext>   mxComponentContext;
+            css::uno::Reference< css::uno::XComponentContext>   mxComponentContext;
         };
     }
 }

@@ -59,7 +59,7 @@ namespace slideshow
                 false, possibly other, less prioritized handlers can be
                 called, too.
              */
-            virtual bool handleMousePressed( const ::com::sun::star::awt::MouseEvent& e ) = 0;
+            virtual bool handleMousePressed( const css::awt::MouseEvent& e ) = 0;
 
             /** Handle a mouse button released event.
 
@@ -74,7 +74,7 @@ namespace slideshow
                 false, possibly other, less prioritized handlers are
                 called, too.
              */
-            virtual bool handleMouseReleased( const ::com::sun::star::awt::MouseEvent& e ) = 0;
+            virtual bool handleMouseReleased( const css::awt::MouseEvent& e ) = 0;
 
             /** Handle a mouse was moved with a pressed button event.
 
@@ -89,7 +89,7 @@ namespace slideshow
                 false, possibly other, less prioritized handlers are
                 called, too.
              */
-            virtual bool handleMouseDragged( const ::com::sun::star::awt::MouseEvent& e ) = 0;
+            virtual bool handleMouseDragged( const css::awt::MouseEvent& e ) = 0;
 
             /** Handle a mouse was moved event.
 
@@ -104,7 +104,7 @@ namespace slideshow
                 false, possibly other, less prioritized handlers are
                 called, too.
              */
-            virtual bool handleMouseMoved( const ::com::sun::star::awt::MouseEvent& e ) = 0;
+            virtual bool handleMouseMoved( const css::awt::MouseEvent& e ) = 0;
         };
 
         typedef ::boost::shared_ptr< MouseEventHandler > MouseEventHandlerSharedPtr;

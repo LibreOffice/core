@@ -56,14 +56,12 @@ namespace slideshow
                 Externally-determined shape priority (used e.g. for
                 paint ordering). This number _must be_ unique!
              */
-            ExternalShapeBase( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XShape >&   xShape,
+            ExternalShapeBase( const css::uno::Reference< css::drawing::XShape >&   xShape,
                                double                                       nPrio,
                                const SlideShowContext&                      rContext ); // throw ShapeLoadFailedException;
             virtual ~ExternalShapeBase();
 
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape > getXShape() const override;
+            virtual css::uno::Reference< css::drawing::XShape > getXShape() const override;
 
             // animation methods
 
@@ -93,8 +91,7 @@ namespace slideshow
             virtual bool   isBackgroundDetached() const override;
 
         protected:
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext>  mxComponentContext;
+            const css::uno::Reference<css::uno::XComponentContext>  mxComponentContext;
 
         private:
             class ExternalShapeBaseListener; friend class ExternalShapeBaseListener;
@@ -120,7 +117,7 @@ namespace slideshow
 
 
             /// The associated XShape
-            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mxShape;
+            css::uno::Reference< css::drawing::XShape >                             mxShape;
 
             boost::shared_ptr<ExternalShapeBaseListener>                            mpListener;
 

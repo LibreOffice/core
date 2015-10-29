@@ -65,8 +65,7 @@ namespace slideshow
                 direct corresponding XShape (the background comes to
                 mind here).
              */
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape > getXShape() const = 0;
+            virtual css::uno::Reference< css::drawing::XShape > getXShape() const = 0;
 
 
             // View layer methods

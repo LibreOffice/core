@@ -67,16 +67,14 @@ namespace slideshow
             void                move( const ::basegfx::B2DPoint& rNewPos );
             void                clip( const ::basegfx::B2DPolyPolygon& rClipPoly );
 
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XBitmap >    getXBitmap();
+            css::uno::Reference< css::rendering::XBitmap >    getXBitmap();
 
         private:
             ::basegfx::B2DPoint                                     maOutputPos;
             ::basegfx::B2DPolyPolygon                               maClipPoly;
 
             // TODO(Q2): Remove UNO bitmap as the transport medium
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XBitmap >      mxBitmap;
+            css::uno::Reference< css::rendering::XBitmap >          mxBitmap;
         };
 
         typedef ::boost::shared_ptr< SlideBitmap > SlideBitmapSharedPtr;

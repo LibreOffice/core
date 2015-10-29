@@ -600,7 +600,7 @@ void OGLTransitionerImpl::createTexture( GLuint* texID,
 
 namespace
 {
-    class OGLColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
+    class OGLColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
     {
     private:
         uno::Sequence< sal_Int8 >  maComponentTags;

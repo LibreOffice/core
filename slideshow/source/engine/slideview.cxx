@@ -470,7 +470,7 @@ public:
         }
     }
 
-    virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const override
+    virtual css::geometry::IntegerSize2D getTranslationOffset() const override
     {
         basegfx::B2DRectangle aTmpRect;
         canvas::tools::calcTransformedRectBounds( aTmpRect,
@@ -665,8 +665,8 @@ private:
 
 
 typedef cppu::WeakComponentImplHelper<
-    ::com::sun::star::util::XModifyListener,
-      ::com::sun::star::awt::XPaintListener> SlideViewBase;
+      css::util::XModifyListener,
+      css::awt::XPaintListener> SlideViewBase;
 
 /** SlideView class
 

@@ -42,7 +42,7 @@ namespace internal {
     Additional delay, gets added on top of timeout.
 */
 EventSharedPtr generateEvent(
-    ::com::sun::star::uno::Any const& rEventDescription,
+    css::uno::Any const& rEventDescription,
     Delay::FunctorT const& rFunctor,
     SlideShowContext const& rContext,
     double nAdditionalDelay );

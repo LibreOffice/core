@@ -92,13 +92,11 @@ namespace com { namespace sun { namespace star { namespace uno {
 
         template <typename T>
         inline ::std::size_t hash_value(
-            ::com::sun::star::uno::Reference<T> const& x )
+            css::uno::Reference<T> const& x )
         {
             // normalize to object root, because _only_ XInterface is defined
             // to be stable during object lifetime:
-            ::com::sun::star::uno::Reference<
-                  ::com::sun::star::uno::XInterface> const xRoot(
-                      x, ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::uno::XInterface> const xRoot( x, css::uno::UNO_QUERY );
             return slideshow::internal::hash<void *>()(xRoot.get());
         }
 
@@ -124,49 +122,49 @@ namespace slideshow
 
         /// extract unary double value from Any
         bool extractValue( double&                              o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
+                           const css::uno::Any&                rSourceAny,
                            const boost::shared_ptr<Shape>&      rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract int from Any
         bool extractValue( sal_Int32&                           o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
+                           const css::uno::Any&                 rSourceAny,
                            const boost::shared_ptr<Shape>&      rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract enum/constant group value from Any
         bool extractValue( sal_Int16&                           o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
+                           const css::uno::Any&                 rSourceAny,
                            const boost::shared_ptr<Shape>&      rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract color value from Any
         bool extractValue( RGBColor&                            o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
+                           const css::uno::Any&                 rSourceAny,
                            const boost::shared_ptr<Shape>&      rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract color value from Any
         bool extractValue( HSLColor&                            o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
+                           const css::uno::Any&                 rSourceAny,
                            const boost::shared_ptr<Shape>&      rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract plain string from Any
-        bool extractValue( OUString&                     o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
+        bool extractValue( OUString&                            o_rValue,
+                           const css::uno::Any&                 rSourceAny,
                            const boost::shared_ptr<Shape>&      rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract bool value from Any
         bool extractValue( bool&                                o_rValue,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
+                           const css::uno::Any&    rSourceAny,
                            const boost::shared_ptr<Shape>&      rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract double 2-tuple from Any
         bool extractValue( basegfx::B2DTuple&                   o_rPair,
-                           const ::com::sun::star::uno::Any&    rSourceAny,
+                           const css::uno::Any&                 rSourceAny,
                            const boost::shared_ptr<Shape>&      rShape,
                            const basegfx::B2DVector&            rSlideBounds );
 
@@ -175,9 +173,8 @@ namespace slideshow
             @return true, if the sequence contains the specified
             element.
          */
-        bool findNamedValue( ::com::sun::star::uno::Sequence<
-                                 ::com::sun::star::beans::NamedValue > const& rSequence,
-                             const ::com::sun::star::beans::NamedValue& rSearchKey );
+        bool findNamedValue( css::uno::Sequence< css::beans::NamedValue > const& rSequence,
+                             const css::beans::NamedValue& rSearchKey );
 
         basegfx::B2DRange calcRelativeShapeBounds( const basegfx::B2DVector& rPageSize,
                                                    const basegfx::B2DRange&  rShapeBounds );
@@ -313,12 +310,12 @@ namespace slideshow
         template <typename ValueType>
         inline bool getPropertyValue(
             ValueType & rValue,
-            com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertySet> const & xPropSet,
+            css::uno::Reference<
+            css::beans::XPropertySet> const & xPropSet,
             OUString const & propName )
         {
             try {
-                const com::sun::star::uno::Any& a(
+                const css::uno::Any& a(
                     xPropSet->getPropertyValue( propName ) );
                 bool const bRet = (a >>= rValue);
 #if OSL_DEBUG_LEVEL > 0
@@ -332,11 +329,11 @@ namespace slideshow
 #endif
                 return bRet;
             }
-            catch (com::sun::star::uno::RuntimeException &)
+            catch (css::uno::RuntimeException &)
             {
                 throw;
             }
-            catch (com::sun::star::uno::Exception &)
+            catch (css::uno::Exception &)
             {
                 return false;
             }
@@ -344,17 +341,14 @@ namespace slideshow
 
         template <typename ValueType>
         inline bool getPropertyValue(
-            com::sun::star::uno::Reference< ValueType >& rIfc,
-            com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertySet> const & xPropSet,
+            css::uno::Reference< ValueType >& rIfc,
+            css::uno::Reference< css::beans::XPropertySet> const & xPropSet,
             OUString const & propName )
         {
             try
             {
-                const com::sun::star::uno::Any& a(
-                    xPropSet->getPropertyValue( propName ));
-                rIfc.set( a,
-                          com::sun::star::uno::UNO_QUERY );
+                const css::uno::Any& a(xPropSet->getPropertyValue( propName ));
+                rIfc.set( a, css::uno::UNO_QUERY );
 
                 bool const bRet = rIfc.is();
 #if OSL_DEBUG_LEVEL > 0
@@ -368,26 +362,24 @@ namespace slideshow
 #endif
                 return bRet;
             }
-            catch (com::sun::star::uno::RuntimeException &)
+            catch (css::uno::RuntimeException &)
             {
                 throw;
             }
-            catch (com::sun::star::uno::Exception &)
+            catch (css::uno::Exception &)
             {
                 return false;
             }
         }
 
         /// Get the content of the BoundRect shape property
-        basegfx::B2DRange getAPIShapeBounds( const ::com::sun::star::uno::Reference<
-                                                ::com::sun::star::drawing::XShape >& xShape );
+        basegfx::B2DRange getAPIShapeBounds( const css::uno::Reference< css::drawing::XShape >& xShape );
 
 /*
         TODO(F1): When ZOrder someday becomes usable enable this
 
         /// Get the content of the ZOrder shape property
-        double getAPIShapePrio( const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::drawing::XShape >& xShape );
+        double getAPIShapePrio( const css::uno::Reference< css::drawing::XShape >& xShape );
 */
 
         basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector&         rSize,
@@ -406,35 +398,34 @@ namespace slideshow
 
         @param rFunctor
         Functor to apply. The functor must have an appropriate
-        operator()( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode >& ) member.
+        operator()( const css::uno::Reference< css::animations::XAnimationNode >& ) member.
 
         @return true, if the functor was successfully applied to
         all children, false otherwise.
     */
-    template< typename Functor > inline bool for_each_childNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&    xNode,
+    template< typename Functor > inline bool for_each_childNode( const css::uno::Reference< css::animations::XAnimationNode >&    xNode,
                                                                  Functor&                                                                                  rFunctor )
     {
         try
         {
             // get an XEnumerationAccess to the children
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >
+            css::uno::Reference< css::container::XEnumerationAccess >
                    xEnumerationAccess( xNode,
-                                       ::com::sun::star::uno::UNO_QUERY_THROW );
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
+                                       css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::container::XEnumeration >
                    xEnumeration( xEnumerationAccess->createEnumeration(),
-                                 ::com::sun::star::uno::UNO_QUERY_THROW );
+                                 css::uno::UNO_QUERY_THROW );
 
             while( xEnumeration->hasMoreElements() )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
+                css::uno::Reference< css::animations::XAnimationNode >
                            xChildNode( xEnumeration->nextElement(),
-                                      ::com::sun::star::uno::UNO_QUERY_THROW );
+                                      css::uno::UNO_QUERY_THROW );
                 rFunctor( xChildNode );
             }
                                                                                                                                                                                                                            return true;
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             return false;
         }

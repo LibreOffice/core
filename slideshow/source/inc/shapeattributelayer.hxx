@@ -133,13 +133,13 @@ namespace slideshow
                 layers are combined with this one (i.e. to overrule
                 lower layers, or how to combine the values). The
                 default is
-                ::com::sun::star::animations::AnimationAdditiveMode::BASE,
+                css::animations::AnimationAdditiveMode::BASE,
                 which means, take the value of the underlying layers,
                 or from the model shape itself.
 
                 @param nMode
                 Must be one of
-                ::com::sun::star::animations::AnimationAdditiveMode.
+                css::animations::AnimationAdditiveMode.
              */
             void setAdditiveMode( sal_Int16 nMode );
 
@@ -410,14 +410,14 @@ namespace slideshow
             /** Get the current char weight value for the whole shape.
 
                 @returns the value for the char weight. The value must
-                be out of the ::com::sun::star::awt::FontWeight
+                be out of the css::awt::FontWeight
                 constant group.
              */
             double getCharWeight() const;
             /** Set the char weight globally for the whole shape.
 
                 The value must be out of the
-                ::com::sun::star::awt::FontWeight constant group.
+                css::awt::FontWeight constant group.
              */
             void setCharWeight( const double& rStyle );
 
@@ -454,13 +454,13 @@ namespace slideshow
             /** Get the current text italic style for the whole shape.
 
                 @returns the italic style. The value returned is one
-                of the ::com::sun::star::awt::FontSlant enums
+                of the css::awt::FontSlant enums
              */
             sal_Int16 getCharPosture() const;
             /** Set the italic style globally for the whole shape.
 
                 The value must be one of the
-                ::com::sun::star::awt::FontSlant enums.
+                css::awt::FontSlant enums.
             */
             void setCharPosture( const sal_Int16& rStyle );
 
@@ -520,9 +520,9 @@ namespace slideshow
             double                                      mnCharScale;
             double                                      mnCharWeight;
 
-            ::com::sun::star::drawing::FillStyle        meFillStyle;
-            ::com::sun::star::drawing::LineStyle        meLineStyle;
-            ::com::sun::star::awt::FontSlant            meCharPosture;
+            css::drawing::FillStyle        meFillStyle;
+            css::drawing::LineStyle        meLineStyle;
+            css::awt::FontSlant            meCharPosture;
             sal_Int16                                   mnUnderlineMode;
 
             RGBColor                                    maDimColor;

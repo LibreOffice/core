@@ -37,8 +37,7 @@ namespace slideshow
         class  Shape;
 
         boost::shared_ptr<Shape> createMediaShape(
-            const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::drawing::XShape >& xShape,
+            const css::uno::Reference<css::drawing::XShape >& xShape,
             double                                     nPrio,
             const SlideShowContext&                    rContext);
     }

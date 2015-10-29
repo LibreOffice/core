@@ -78,8 +78,7 @@ class BaseNode : public AnimationNode,
                  private ::boost::noncopyable
 {
 public:
-    BaseNode( ::com::sun::star::uno::Reference<
-              ::com::sun::star::animations::XAnimationNode> const& xNode,
+    BaseNode( css::uno::Reference<css::animations::XAnimationNode> const& xNode,
               ::boost::shared_ptr<BaseContainerNode> const&        pParent,
               NodeContext const&                                   rContext );
 
@@ -110,8 +109,7 @@ public:
     virtual bool activate() override;
     virtual void deactivate() override;
     virtual void end() override;
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> getXAnimationNode() const override;
+    virtual css::uno::Reference<css::animations::XAnimationNode> getXAnimationNode() const override;
     virtual NodeState getState() const override;
     virtual bool registerDeactivatingListener(
         const AnimationNodeSharedPtr& rNotifee ) override;
@@ -192,8 +190,7 @@ private:
     typedef ::std::vector< AnimationNodeSharedPtr >    ListenerVector;
 
     ListenerVector                                     maDeactivatingListeners;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode > mxAnimationNode;
+    css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
     ::boost::shared_ptr< BaseContainerNode >           mpParent;
     ::boost::shared_ptr< BaseNode >                    mpSelf;
     const int*                                         mpStateTransitionTable;
