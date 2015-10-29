@@ -48,14 +48,9 @@
 
 #include <libxml/tree.h>
 
-#include <boost/bind.hpp>
-#include <boost/tuple/tuple.hpp>
-
 #include <vector>
 #include <set>
 #include <map>
-#include <functional>
-#include <algorithm>
 
 #include <unotools/ucbhelper.hxx>
 #include <com/sun/star/uri/XUriReference.hpp>
@@ -890,9 +885,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
         getAllParts(*m_pImpl) );
     ::std::remove_copy_if(parts.begin(), parts.end(),
         ::std::back_inserter(ret),
-        ::boost::bind(
-            ::std::logical_not<bool>(),
-            ::boost::bind(&isPartOfType, ::boost::ref(*m_pImpl), _1, i_xType) ));
+        [this, &i_xType](uno::Reference< rdf::XURI > aPart) {
+            return !isPartOfType(*m_pImpl, aPart, i_xType);
+        } );
     return ::comphelper::containerToSequence(ret);
 }
 
@@ -1162,12 +1157,11 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "exception", *this, uno::makeAny(e));
     }
 
-    std::for_each(StgFiles.begin(), StgFiles.end(),
-        boost::bind(addContentOrStylesFileImpl, boost::ref(*m_pImpl), _1));
+    for (const auto& aStgFile : StgFiles)
+        addContentOrStylesFileImpl(*m_pImpl, aStgFile);
 
-    std::for_each(MfstMetadataFiles.begin(), MfstMetadataFiles.end(),
-        boost::bind(importFile, boost::ref(*m_pImpl),
-            i_xStorage, baseURI, i_xHandler, _1));
+    for (const auto& aMfstMetadataFile : MfstMetadataFiles)
+        importFile(*m_pImpl, i_xStorage, baseURI, i_xHandler, aMfstMetadataFile);
 }
 
 void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
