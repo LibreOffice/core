@@ -29,16 +29,16 @@ class SwNodeIndex;
 /// For querying current flys in document.
 class SW_DLLPUBLIC SwPosFlyFrm
 {
-    const SwFrameFormat* pFrameFormat;    ///< FlyFrameFormat
-    SwNodeIndex* pNdIdx;        ///< Index for node is sufficient.
-    sal_uInt32 nOrdNum;
+    const SwFrameFormat* m_pFrameFormat;    ///< FlyFrameFormat
+    SwNodeIndex* m_pNodeIndex;        ///< Index for node is sufficient.
+    sal_uInt32 m_nOrdNum;
 public:
     SwPosFlyFrm( const SwNodeIndex& , const SwFrameFormat*, sal_uInt16 nArrPos );
     virtual ~SwPosFlyFrm(); ///< Virtual for Writer (DLL !!)
 
-    const SwFrameFormat& GetFormat() const { return *pFrameFormat; }
-    const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
-    sal_uInt32 GetOrdNum() const { return nOrdNum; }
+    const SwFrameFormat& GetFormat() const { return *m_pFrameFormat; }
+    const SwNodeIndex& GetNdIndex() const { return *m_pNodeIndex; }
+    sal_uInt32 GetOrdNum() const { return m_nOrdNum; }
 };
 
 // define needed classes to safely handle an array of allocated SwPosFlyFrm(s).
