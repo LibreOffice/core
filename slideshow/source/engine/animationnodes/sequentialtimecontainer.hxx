@@ -32,8 +32,7 @@ class SequentialTimeContainer : public BaseContainerNode
 {
 public:
     SequentialTimeContainer(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        css::uno::Reference<css::animations::XAnimationNode> const& xNode,
         BaseContainerNodeSharedPtr const& pParent,
         NodeContext const& rContext )
         : BaseContainerNode( xNode, pParent, rContext ) {}

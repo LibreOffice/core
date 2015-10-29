@@ -56,8 +56,7 @@ namespace slideshow
                 Externally-determined shape priority (used e.g. for
                 paint ordering). This number _must be_ unique!
              */
-            MediaShape( const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::drawing::XShape >& xShape,
+            MediaShape( const css::uno::Reference< css::drawing::XShape >& xShape,
                         double                                      nPrio,
                         const SlideShowContext&                     rContext ); // throw ShapeLoadFailedException;
 

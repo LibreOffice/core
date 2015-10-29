@@ -176,7 +176,7 @@ private:
    With an instance of this class, it is possible to statically
    and dynamically show a presentation, as defined by the
    constructor-provided draw model (represented by a sequence
-   of ::com::sun::star::drawing::XDrawPage objects).
+   of css::drawing::XDrawPage objects).
 
    It is possible to show the presentation on multiple views
    simultaneously (e.g. for a multi-monitor setup). Since this
@@ -205,8 +205,8 @@ typedef cppu::WeakComponentImplHelper<presentation::XSlideShow> SlideShowImplBas
 typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
 
 /// Maps XDrawPage for annotations persistence
-typedef ::std::map< ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::drawing::XDrawPage>,
+typedef ::std::map< css::uno::Reference<
+                                    css::drawing::XDrawPage>,
                                     PolyPolygonVector>  PolygonMap;
 
 class SlideShowImpl : private cppu::BaseMutex,
@@ -293,7 +293,7 @@ private:
         uno::Reference<animations::XAnimationNode> const& xRootNode,
         uno::Sequence<beans::PropertyValue> const& rProperties )
         throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL registerUserPaintPolygons( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xDocFactory ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL registerUserPaintPolygons( const css::uno::Reference< css::lang::XMultiServiceFactory >& xDocFactory ) throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL setProperty(
         beans::PropertyValue const& rProperty ) throw (uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL addView(
@@ -1445,7 +1445,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     {
         PolyPolygonVector aPolygons = rPoly.second;
         //Get shapes for the slide
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > Shapes(rPoly.first, ::com::sun::star::uno::UNO_QUERY);
+        css::uno::Reference< css::drawing::XShapes > Shapes(rPoly.first, css::uno::UNO_QUERY);
         //Retrieve polygons for one slide
         for( const auto pPolyPoly : aPolygons )
         {
@@ -1767,7 +1767,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 
     if ( rProperty.Name == "PointerPosition")
     {
-        ::com::sun::star::geometry::RealPoint2D pos;
+        css::geometry::RealPoint2D pos;
         if (! (rProperty.Value >>= pos))
             return false;
 

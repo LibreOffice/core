@@ -67,14 +67,12 @@ namespace slideshow
                 peculiarities of the draw API regarding background
                 content.
              */
-            BackgroundShape( const ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::drawing::XDrawPage >& xDrawPage,
-                             const ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::drawing::XDrawPage >& xMasterPage,
+            BackgroundShape( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
+                             const css::uno::Reference< css::drawing::XDrawPage >& xMasterPage,
                              const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
 
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape > getXShape() const override;
+            virtual css::uno::Reference<
+                css::drawing::XShape > getXShape() const override;
 
             // View layer methods
 

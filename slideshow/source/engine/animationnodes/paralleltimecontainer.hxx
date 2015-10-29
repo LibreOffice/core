@@ -32,8 +32,7 @@ class ParallelTimeContainer : public BaseContainerNode
 {
 public:
     ParallelTimeContainer(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode >& xNode,
+        const css::uno::Reference< css::animations::XAnimationNode >& xNode,
         const BaseContainerNodeSharedPtr&               rParent,
         const NodeContext&                              rContext )
         : BaseContainerNode( xNode, rParent, rContext ) {}

@@ -95,13 +95,13 @@ private:
 
 
     virtual bool handleMousePressed(
-        ::com::sun::star::awt::MouseEvent const& evt ) override;
+        css::awt::MouseEvent const& evt ) override;
     virtual bool handleMouseReleased(
-        ::com::sun::star::awt::MouseEvent const& evt ) override;
+        css::awt::MouseEvent const& evt ) override;
     virtual bool handleMouseDragged(
-        ::com::sun::star::awt::MouseEvent const& evt ) override;
+        css::awt::MouseEvent const& evt ) override;
     virtual bool handleMouseMoved(
-        ::com::sun::star::awt::MouseEvent const& evt ) override;
+        css::awt::MouseEvent const& evt ) override;
 
 
     // ViewUpdate interface
@@ -118,8 +118,7 @@ private:
     virtual void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape ) override;
     virtual void notifyShapeUpdate( const ShapeSharedPtr& rShape ) override;
     virtual ShapeSharedPtr lookupShape(
-        ::com::sun::star::uno::Reference<
-           ::com::sun::star::drawing::XShape > const & xShape ) const override;
+        css::uno::Reference< css::drawing::XShape > const & xShape ) const override;
     virtual void addHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea ) override;
 
 
@@ -144,22 +143,17 @@ private:
     // ShapeListenerEventHandler
 
 
-    virtual bool listenerAdded( const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::presentation::XShapeEventListener>& xListener,
-                                const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::drawing::XShape>&                   xShape ) override;
+    virtual bool listenerAdded( const css::uno::Reference< css::presentation::XShapeEventListener>& xListener,
+                                const css::uno::Reference< css::drawing::XShape>&                   xShape ) override;
 
-    virtual bool listenerRemoved( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::presentation::XShapeEventListener>& xListener,
-                                  const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XShape>&                   xShape ) override;
+    virtual bool listenerRemoved( const css::uno::Reference< css::presentation::XShapeEventListener>& xListener,
+                                  const css::uno::Reference< css::drawing::XShape>&                   xShape ) override;
 
     // ShapeCursorEventHandler interface
 
 
-    bool cursorChanged( const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::drawing::XShape>&   xShape,
-                                sal_Int16                                nCursor );
+    bool cursorChanged( const css::uno::Reference< css::drawing::XShape>&   xShape,
+                              sal_Int16                                     nCursor );
 
 
     OUString checkForHyperlink( ::basegfx::B2DPoint const& hitPos )const;

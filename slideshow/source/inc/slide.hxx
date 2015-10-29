@@ -100,12 +100,10 @@ namespace slideshow
             virtual basegfx::B2IVector getSlideSize() const = 0;
 
             /// Gets the underlying API page
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XDrawPage > getXDrawPage() const = 0;
+            virtual css::uno::Reference< css::drawing::XDrawPage > getXDrawPage() const = 0;
 
             /// Gets the animation node.
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimationNode > getXAnimationNode() const = 0;
+            virtual css::uno::Reference< css::animations::XAnimationNode > getXAnimationNode() const = 0;
 
             ///Gets the slide Polygons
             virtual PolyPolygonVector getPolygons() = 0;
@@ -188,12 +186,9 @@ namespace slideshow
             @param rUserEventQueue
             UserEeventQueue
         */
-        SlideSharedPtr createSlide( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::drawing::XDrawPage >&          xDrawPage,
-                                   const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::drawing::XDrawPagesSupplier >& xDrawPages,
-                                    const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::animations::XAnimationNode >&  xRootNode,
+        SlideSharedPtr createSlide( const css::uno::Reference< css::drawing::XDrawPage >&          xDrawPage,
+                                    const css::uno::Reference< css::drawing::XDrawPagesSupplier >& xDrawPages,
+                                    const css::uno::Reference< css::animations::XAnimationNode >&  xRootNode,
                                     EventQueue&                                         rEventQueue,
                                     EventMultiplexer&                                   rEventMultiplexer,
                                     ScreenUpdater&                                      rScreenUpdater,
@@ -201,8 +196,7 @@ namespace slideshow
                                     UserEventQueue&                                     rUserEventQueue,
                                     CursorManager&                                      rCursorManager,
                                     const UnoViewContainer&                             rViewContainer,
-                                    const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::uno::XComponentContext >&      xContext,
+                                    const css::uno::Reference< css::uno::XComponentContext >&      xContext,
                                     const ShapeEventListenerMap&                        rShapeListenerMap,
                                     const ShapeCursorMap&                               rShapeCursorMap,
                                     const PolyPolygonVector&                            rPolyPolygonVector,

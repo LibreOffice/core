@@ -67,10 +67,9 @@ namespace slideshow
                 @param nNumPropEntries
                 Number of property table entries (in pPropCopyTable)
              */
-            AppletShape( const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::drawing::XShape >& xShape,
+            AppletShape( const css::uno::Reference< css::drawing::XShape >& xShape,
                          double                                     nPrio,
-                         const OUString&                     rServiceName,
+                         const OUString&                            rServiceName,
                          const char**                               pPropCopyTable,
                          sal_Size                                   nNumPropEntries,
                          const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;

@@ -155,8 +155,7 @@ private:
     bool isAnimated();
 
     /// Set all Shapes to their initial attributes for slideshow
-    bool applyInitialShapeAttributes( const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::animations::XAnimationNode >& xRootAnimationNode );
+    bool applyInitialShapeAttributes( const css::uno::Reference< css::animations::XAnimationNode >& xRootAnimationNode );
 
     /// Renders current slide content to bitmap
     SlideBitmapSharedPtr createCurrentSlideBitmap(

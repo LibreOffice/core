@@ -81,10 +81,8 @@ namespace slideshow
                 pre-rendererd bitmap.
              */
             static DrawShapeSharedPtr create(
-                const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::drawing::XShape >&    xShape,
-                const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::drawing::XDrawPage >& xContainingPage,
+                const css::uno::Reference< css::drawing::XShape >&    xShape,
+                const css::uno::Reference< css::drawing::XDrawPage >& xContainingPage,
                 double                                     nPrio,
                 bool                                       bForeignSource,
                 const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
@@ -110,16 +108,13 @@ namespace slideshow
                 events.
              */
             static DrawShapeSharedPtr create(
-                const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::drawing::XShape >&    xShape,
-                const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::drawing::XDrawPage >& xContainingPage,
+                const css::uno::Reference< css::drawing::XShape >&    xShape,
+                const css::uno::Reference< css::drawing::XDrawPage >& xContainingPage,
                 double                                     nPrio,
                 const Graphic&                             rGraphic,
                 const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
 
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShape > getXShape() const override;
+            virtual css::uno::Reference< css::drawing::XShape > getXShape() const override;
 
             virtual ~DrawShape();
 
@@ -229,10 +224,10 @@ namespace slideshow
                 unsupported content, and, if necessary, returned as a
                 pre-rendererd bitmap.
              */
-            DrawShape( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XShape >&    xShape,
-                       const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XDrawPage >& xContainingPage,
+            DrawShape( const css::uno::Reference<
+                            css::drawing::XShape >&    xShape,
+                       const css::uno::Reference<
+                            css::drawing::XDrawPage >& xContainingPage,
                        double                                       nPrio,
                        bool                                         bForeignSource,
                        const SlideShowContext&                      rContext ); // throw ShapeLoadFailedException;
@@ -257,10 +252,8 @@ namespace slideshow
                 DrawShape will register itself for intrinsic animation
                 events.
              */
-            DrawShape( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XShape >&    xShape,
-                       const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XDrawPage >& xContainingPage,
+            DrawShape( const css::uno::Reference< css::drawing::XShape >&    xShape,
+                       const css::uno::Reference< css::drawing::XDrawPage >& xContainingPage,
                        double                                       nPrio,
                        const Graphic&                               rGraphic,
                        const SlideShowContext&                      rContext ); // throw ShapeLoadFailedException;
@@ -283,10 +276,8 @@ namespace slideshow
             void prepareHyperlinkIndices() const;
 
             /// The associated XShape
-            ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShape >                             mxShape;
-            ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XDrawPage >                          mxPage;
+            css::uno::Reference< css::drawing::XShape >                             mxShape;
+            css::uno::Reference< css::drawing::XDrawPage >                          mxPage;
 
             /** A vector of metafiles actually representing the Shape.
 
@@ -332,8 +323,7 @@ namespace slideshow
             typedef ::std::vector< ViewShapeSharedPtr > ViewShapeVector;
             ViewShapeVector                                                         maViewShapes;
 
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext>                           mxComponentContext;
+            css::uno::Reference< css::uno::XComponentContext>                       mxComponentContext;
 
             /// hyperlink support
             typedef ::std::pair<sal_Int32 /* mtf start */,

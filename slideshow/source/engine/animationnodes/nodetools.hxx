@@ -58,14 +58,13 @@ namespace slideshow
             it does not implement the AttributableShape interface.
          */
         AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr&                rShapeManager,
-                                                            const ::com::sun::star::uno::Reference<
-                                                                ::com::sun::star::drawing::XShape >&    xShape          );
+                                                            const css::uno::Reference< css::drawing::XShape >&    xShape );
 
         /** Predicate whether a Begin, Duration or End timing is
             indefinite, i.e. either contains no value, or the
             value Timing_INDEFINITE.
         */
-        bool isIndefiniteTiming( const ::com::sun::star::uno::Any& rAny );
+        bool isIndefiniteTiming( const css::uno::Any& rAny );
 
     }
 }

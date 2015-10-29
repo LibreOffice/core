@@ -73,13 +73,11 @@ namespace slideshow
                 Number of property table entries (in pPropCopyTable)
              */
             ViewAppletShape( const ViewLayerSharedPtr&                         rViewLayer,
-                             const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::drawing::XShape >&        rxShape,
-                             const OUString&                            rServiceName,
+                             const css::uno::Reference< css::drawing::XShape >&        rxShape,
+                             const OUString&                                   rServiceName,
                              const char**                                      pPropCopyTable,
                              sal_Size                                          nNumPropEntries,
-                             const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::uno::XComponentContext >& rxContext );
+                             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
             /** destroy the object
              */
@@ -143,14 +141,14 @@ namespace slideshow
             ViewLayerSharedPtr                                    mpViewLayer;
 
             /// the actual viewer component for this applet
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XSynchronousFrameLoader> mxViewer;
+            css::uno::Reference<
+                css::frame::XSynchronousFrameLoader> mxViewer;
 
             /// the frame containing the applet
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XFrame2>                 mxFrame;
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext>         mxComponentContext;
+            css::uno::Reference<
+                css::frame::XFrame2>                 mxFrame;
+            css::uno::Reference<
+                css::uno::XComponentContext>         mxComponentContext;
         };
 
         typedef ::boost::shared_ptr< ViewAppletShape > ViewAppletShapeSharedPtr;

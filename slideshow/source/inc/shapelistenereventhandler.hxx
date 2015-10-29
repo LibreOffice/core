@@ -48,15 +48,11 @@ namespace slideshow
         public:
             virtual ~ShapeListenerEventHandler() {}
 
-            virtual bool listenerAdded( const ::com::sun::star::uno::Reference<
-                                           ::com::sun::star::presentation::XShapeEventListener>& xListener,
-                                        const ::com::sun::star::uno::Reference<
-                                           ::com::sun::star::drawing::XShape>&                   xShape ) = 0;
+            virtual bool listenerAdded( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
+                                        const css::uno::Reference<css::drawing::XShape>&                   xShape ) = 0;
 
-            virtual bool listenerRemoved( const ::com::sun::star::uno::Reference<
-                                             ::com::sun::star::presentation::XShapeEventListener>& xListener,
-                                          const ::com::sun::star::uno::Reference<
-                                             ::com::sun::star::drawing::XShape>&                   xShape ) = 0;
+            virtual bool listenerRemoved( const css::uno::Reference<css::presentation::XShapeEventListener>& xListener,
+                                          const css::uno::Reference<css::drawing::XShape>&                   xShape ) = 0;
         };
 
         typedef ::boost::shared_ptr< ShapeListenerEventHandler > ShapeListenerEventHandlerSharedPtr;

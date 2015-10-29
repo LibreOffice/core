@@ -53,8 +53,7 @@ public:
 
     /** Query the corresponding XAnimationNode.
      */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode >
+    virtual css::uno::Reference< css::animations::XAnimationNode >
     getXAnimationNode() const = 0;
 
     /** Init this node

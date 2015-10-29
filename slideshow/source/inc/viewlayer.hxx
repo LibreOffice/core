@@ -129,7 +129,7 @@ namespace slideshow
             */
             virtual basegfx::B2DHomMatrix getTransformation() const = 0;
 
-            virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const = 0;
+            virtual css::geometry::IntegerSize2D getTranslationOffset() const = 0;
 
             /** Get the overall view transformation.
 

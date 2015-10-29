@@ -48,7 +48,7 @@ namespace slideshow
         public:
             /** Retrieve the underlying UNO slide view.
              */
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowView > getUnoView() const = 0;
+            virtual css::uno::Reference< css::presentation::XSlideShowView > getUnoView() const = 0;
 
             /** Dispose view
 

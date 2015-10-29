@@ -44,10 +44,9 @@ namespace slideshow
         {
             /** Create an AnimationNode for the given XAnimationNode
              */
-            AnimationNodeSharedPtr createAnimationNode( const ::com::sun::star::uno::Reference<
-                                                                       ::com::sun::star::animations::XAnimationNode >& xNode,
-                                                               const ::basegfx::B2DVector&                          rSlideSize,
-                                                               const SlideShowContext&                              rContext );
+            AnimationNodeSharedPtr createAnimationNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode,
+                                                        const ::basegfx::B2DVector&                          rSlideSize,
+                                                        const SlideShowContext&                              rContext );
 
 
 #if defined(DBG_UTIL)

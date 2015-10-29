@@ -62,8 +62,7 @@ namespace slideshow
                 removed, and an empty shared_ptr otherwise (e.g. if
                 this view wasn't added in the first place)
             */
-            UnoViewSharedPtr removeView( const ::com::sun::star::uno::Reference<
-                                                     ::com::sun::star::presentation::XSlideShowView >& xView );
+            UnoViewSharedPtr removeView( const css::uno::Reference<css::presentation::XSlideShowView >& xView );
 
             /// Dispose all stored views. Implies clear().
             void dispose();

@@ -126,7 +126,7 @@ public:
     virtual bool handleMouseMoved( awt::MouseEvent const & evt ) override;
 
 private:
-    bool isInArea( com::sun::star::awt::MouseEvent const & evt ) const;
+    bool isInArea( css::awt::MouseEvent const & evt ) const;
     void updatePressedState( const bool pressedState ) const;
 
     RehearseTimingsActivity& mrActivity;

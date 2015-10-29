@@ -39,8 +39,7 @@ class AnimationBaseNode : public BaseNode
 {
 public:
     AnimationBaseNode(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        css::uno::Reference<css::animations::XAnimationNode> const& xNode,
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext );
 
@@ -51,8 +50,7 @@ public:
 protected:
     virtual void dispose() override;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimate> const& getXAnimateNode() const
+    css::uno::Reference<css::animations::XAnimate> const& getXAnimateNode() const
         { return mxAnimateNode; }
 
     /// Create parameter struct for ActivitiesFactory
@@ -79,8 +77,7 @@ private:
         { return mpShapeSubset && !mbIsIndependentSubset; }
 
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimate>     mxAnimateNode;
+    css::uno::Reference<css::animations::XAnimate>  mxAnimateNode;
     ShapeAttributeLayerHolder                       maAttributeLayerHolder;
     ::basegfx::B2DVector                            maSlideSize;
     AnimationActivitySharedPtr                      mpActivity;

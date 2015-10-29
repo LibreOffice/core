@@ -37,8 +37,7 @@ class AnimationCommandNode : public BaseNode
 {
 public:
     AnimationCommandNode(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode> const& xNode,
+        css::uno::Reference<css::animations::XAnimationNode> const& xNode,
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext );
 
@@ -51,8 +50,7 @@ private:
 
 private:
     IExternalMediaShapeBaseSharedPtr mpShape;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XCommand > mxCommandNode;
+    css::uno::Reference<css::animations::XCommand > mxCommandNode;
 };
 
 } // namespace internal

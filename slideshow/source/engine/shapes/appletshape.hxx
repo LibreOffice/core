@@ -36,10 +36,9 @@ namespace slideshow
         class Shape;
 
         boost::shared_ptr<Shape> createAppletShape(
-            const ::com::sun::star::uno::Reference<
-               ::com::sun::star::drawing::XShape >& xShape,
+            const css::uno::Reference< css::drawing::XShape >& xShape,
             double                                  nPrio,
-            const OUString&                  rServiceName,
+            const OUString&                         rServiceName,
             const char**                            pPropCopyTable,
             sal_Size                                nNumPropEntries,
             const SlideShowContext&                 rContext );

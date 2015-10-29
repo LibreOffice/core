@@ -144,7 +144,7 @@ namespace internal
 
                         if( !xTargetShape.is() )
                         {
-                            ::com::sun::star::presentation::ParagraphTarget aTarget;
+                            css::presentation::ParagraphTarget aTarget;
 
                             // no shape provided. Maybe a ParagraphTarget?
                             if( !(xIterNode->getTarget() >>= aTarget) )

@@ -73,7 +73,7 @@ namespace slideshow
             /** Change the view's mouse cursor.
 
                 @param nPointerShape
-                One of the ::com::sun::star::awt::SystemPointer
+                One of the css::awt::SystemPointer
                 constant group members.
              */
             virtual void setCursorShape( sal_Int16 nPointerShape ) = 0;

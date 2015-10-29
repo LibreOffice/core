@@ -43,8 +43,7 @@ namespace slideshow
             Functor to call, when the UNO view signals a repaint.
         */
         UnoViewSharedPtr createSlideView(
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::presentation::XSlideShowView> const& xView,
+            css::uno::Reference< css::presentation::XSlideShowView> const& xView,
             EventQueue&                                                rEventQueue,
             EventMultiplexer&                                          rEventMultiplexer );
     }

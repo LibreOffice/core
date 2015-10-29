@@ -76,8 +76,7 @@ namespace slideshow
             ViewLayerSharedPtr                                  mpViewLayer;
 
             /// Generated content bitmap, already with correct output size
-            mutable ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XBitmap >  mxBitmap;
+            mutable css::uno::Reference< css::rendering::XBitmap >  mxBitmap;
 
             /// The last metafile a render object was generated for
             mutable GDIMetaFileSharedPtr                        mpLastMtf;
