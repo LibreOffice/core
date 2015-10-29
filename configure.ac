@@ -707,11 +707,12 @@ darwin*) # Mac OS X or iOS
         test_cups=no
     else
         _os=Darwin
+        ONEWORDPRODUCTNAME=`echo "${PRODUCTNAME// /}"`
         if test -n "$LODE_HOME" ; then
             mac_sanitize_path
             AC_MSG_NOTICE([sanitized the PATH to $PATH])
         fi
-        INSTROOTSUFFIX=/$PRODUCTNAME.app/Contents
+        INSTROOTSUFFIX=/$ONEWORDPRODUCTNAME.app/Contents
         SDKDIRNAME=AC_PACKAGE_NAME${PRODUCTVERSION}_SDK
     fi
     enable_systray=no
@@ -12413,7 +12414,7 @@ else
 fi
 AC_SUBST(WITH_COMPAT_OOWRAPPERS)
 
-INSTALLDIRNAME=`echo AC_PACKAGE_NAME | $AWK '{print tolower($0)}'`
+INSTALLDIRNAME=`echo AC_PACKAGE_NAME | $AWK '{gsub(" ", "", $0);print tolower($0)}'`
 AC_MSG_CHECKING([for install dirname])
 if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes"; then
     INSTALLDIRNAME="$with_install_dirname"
