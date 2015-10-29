@@ -1100,7 +1100,7 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     else if (aEvent.FeatureURL.Path == "FontColor" ||
              aEvent.FeatureURL.Path == "BackColor")
     {
-        long nColor;
+        sal_Int32 nColor = -1;
         aEvent.State >>= nColor;
         aBuffer.append(nColor);
     }
