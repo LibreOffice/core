@@ -1577,7 +1577,13 @@ DECLARE_RTFIMPORT_TEST(testCp1000018, "cp1000018.rtf")
 }
 
 #endif
-
+DECLARE_RTFIMPORT_TEST(testFdo94835, "fdo94835.rtf")
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // The picture was imported twice.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(19), xDraws->getCount());
+}
 DECLARE_RTFIMPORT_TEST(testNestedTable, "rhbz1065629.rtf")
 {
     // nested table in second cell was missing
