@@ -200,7 +200,7 @@ namespace sax_fastparser {
 class FastSaxParserImpl
 {
 public:
-    FastSaxParserImpl( FastSaxParser* pFront );
+    explicit FastSaxParserImpl(FastSaxParser* pFront);
     ~FastSaxParserImpl();
 
     // XFastParser
@@ -270,7 +270,7 @@ class ParserThread: public salhelper::Thread
 {
     FastSaxParserImpl *mpParser;
 public:
-    ParserThread(FastSaxParserImpl *pParser): Thread("Parser"), mpParser(pParser) {}
+    explicit ParserThread(FastSaxParserImpl *pParser): Thread("Parser"), mpParser(pParser) {}
 private:
     virtual void execute() override
     {
@@ -331,7 +331,7 @@ static int call_callbackExternalEntityRef( XML_Parser parser,
 class FastLocatorImpl : public WeakImplHelper< XLocator >
 {
 public:
-    FastLocatorImpl( FastSaxParserImpl *p ) : mpParser(p) {}
+    explicit FastLocatorImpl(FastSaxParserImpl *p) : mpParser(p) {}
 
     void dispose() { mpParser = 0; }
     void checkDispose() throw (RuntimeException) { if( !mpParser ) throw DisposedException(); }

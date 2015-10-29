@@ -59,7 +59,7 @@ using namespace ::com::sun::star::io;
 class OInputStream : public WeakImplHelper < XInputStream >
 {
 public:
-    OInputStream( const Sequence< sal_Int8 >&seq ) :
+    explicit OInputStream( const Sequence< sal_Int8 >&seq ) :
         m_seq( seq ),
         nPos( 0 )
         {}
@@ -433,7 +433,7 @@ class OFileWriter :
         public WeakImplHelper< XOutputStream >
 {
 public:
-    OFileWriter( char *pcFile ) { strncpy( m_pcFile , pcFile, 256 - 1 ); m_f = 0; }
+    explicit OFileWriter( char *pcFile ) { strncpy( m_pcFile , pcFile, 256 - 1 ); m_f = 0; }
 
 
 public:

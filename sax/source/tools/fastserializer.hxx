@@ -48,7 +48,7 @@ class FastSaxSerializer
     typedef css::uno::Sequence< ::sal_Int32 > Int32Sequence;
 
 public:
-    FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream );
+    explicit FastSaxSerializer(const css::uno::Reference< css::io::XOutputStream >& xOutputStream);
     ~FastSaxSerializer();
 
     css::uno::Reference< css::io::XOutputStream > getOutputStream();
@@ -176,7 +176,7 @@ private:
         std::deque<sal_Int32> m_DebugPostponedStartedElements;
 #endif
 
-        ForMerge(sal_Int32 const nTag) : m_Tag(nTag) {}
+        explicit ForMerge(sal_Int32 const nTag) : m_Tag(nTag) {}
         virtual ~ForMerge() {}
 
         virtual void setCurrentElement( ::sal_Int32 /*nToken*/ ) {}

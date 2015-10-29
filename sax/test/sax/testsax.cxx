@@ -47,7 +47,7 @@ namespace sax_test {
 class OSaxParserTest : public WeakImplHelper< XSimpleTest >
 {
 public:
-    OSaxParserTest( const Reference < XMultiServiceFactory > & rFactory ) : m_rFactory( rFactory )
+    explicit OSaxParserTest( const Reference < XMultiServiceFactory > & rFactory ) : m_rFactory( rFactory )
     {
     }
 
