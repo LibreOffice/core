@@ -38,7 +38,7 @@ SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const ::std::vector < 
         m_aList[n] = rList[n];
 }
 
-SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const ::com::sun::star::uno::Sequence < sal_Int32 >& rList )
+SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const css::uno::Sequence < sal_Int32 >& rList )
     : SfxPoolItem( which )
 {
     m_aList.realloc( rList.getLength() );
@@ -70,13 +70,13 @@ SfxPoolItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
     return new SfxIntegerListItem( *this );
 }
 
-bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxIntegerListItem::PutValue  ( const css::uno::Any& rVal, sal_uInt8 )
 {
-    ::com::sun::star::uno::Reference < ::com::sun::star::script::XTypeConverter > xConverter
-            ( ::com::sun::star::script::Converter::create(::comphelper::getProcessComponentContext()) );
-    ::com::sun::star::uno::Any aNew;
+    css::uno::Reference < css::script::XTypeConverter > xConverter
+            ( css::script::Converter::create(::comphelper::getProcessComponentContext()) );
+    css::uno::Any aNew;
     try { aNew = xConverter->convertTo( rVal, cppu::UnoType<css::uno::Sequence < sal_Int32 >>::get() ); }
-    catch (::com::sun::star::uno::Exception&)
+    catch (css::uno::Exception&)
     {
         return true;
     }
@@ -84,7 +84,7 @@ bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, sal_u
     return ( aNew >>= m_aList );
 }
 
-bool SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxIntegerListItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= m_aList;
     return true;

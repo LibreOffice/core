@@ -70,7 +70,7 @@ bool SfxInt16Item::GetPresentation(SfxItemPresentation,
 
 
 // virtual
-bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool SfxInt16Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int16 nValue = m_nValue;
     rVal <<= nValue;
@@ -78,7 +78,7 @@ bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 }
 
 // virtual
-bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxInt16Item::PutValue(const css::uno::Any& rVal, sal_uInt8 )
 {
     sal_Int16 nValue = sal_Int16();
     if (rVal >>= nValue)

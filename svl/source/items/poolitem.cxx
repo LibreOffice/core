@@ -251,7 +251,7 @@ bool SfxPoolItem::HasMetrics() const
 
 
 
-bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8 ) const
+bool SfxPoolItem::QueryValue( css::uno::Any&, sal_uInt8 ) const
 {
     OSL_FAIL("There is no implementation for QueryValue for this item!");
     return false;
@@ -259,7 +259,7 @@ bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8 ) const
 
 
 
-bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8 )
+bool SfxPoolItem::PutValue( const css::uno::Any&, sal_uInt8 )
 {
     OSL_FAIL("There is no implementation for PutValue for this item!");
     return false;

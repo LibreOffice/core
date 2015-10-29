@@ -1176,7 +1176,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
 }
 
 sal_Bool SAL_CALL PasswordContainer::hasMasterPassword(  )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( mMutex );
 
@@ -1188,7 +1188,7 @@ sal_Bool SAL_CALL PasswordContainer::hasMasterPassword(  )
 }
 
 sal_Bool SAL_CALL PasswordContainer::allowPersistentStoring( sal_Bool bAllow )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( mMutex );
 
@@ -1206,7 +1206,7 @@ sal_Bool SAL_CALL PasswordContainer::allowPersistentStoring( sal_Bool bAllow )
 }
 
 sal_Bool SAL_CALL PasswordContainer::isPersistentStoringAllowed()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( mMutex );
 

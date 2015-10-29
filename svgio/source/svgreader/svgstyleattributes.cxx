@@ -57,21 +57,21 @@ namespace svgio
             return basegfx::B2DLineJoin::Miter;
         }
 
-        com::sun::star::drawing::LineCap StrokeLinecapToDrawingLineCap(StrokeLinecap aStrokeLinecap)
+        css::drawing::LineCap StrokeLinecapToDrawingLineCap(StrokeLinecap aStrokeLinecap)
         {
             switch(aStrokeLinecap)
             {
                 default: /* StrokeLinecap_notset, StrokeLinecap_butt */
                 {
-                    return com::sun::star::drawing::LineCap_BUTT;
+                    return css::drawing::LineCap_BUTT;
                 }
                 case StrokeLinecap_round:
                 {
-                    return com::sun::star::drawing::LineCap_ROUND;
+                    return css::drawing::LineCap_ROUND;
                 }
                 case StrokeLinecap_square:
                 {
-                    return com::sun::star::drawing::LineCap_SQUARE;
+                    return css::drawing::LineCap_SQUARE;
                 }
             }
         }
@@ -671,7 +671,7 @@ namespace svgio
                     {
                         // get LineJoin, LineCap and stroke array
                         const basegfx::B2DLineJoin aB2DLineJoin(StrokeLinejoinToB2DLineJoin(getStrokeLinejoin()));
-                        const com::sun::star::drawing::LineCap aLineCap(StrokeLinecapToDrawingLineCap(getStrokeLinecap()));
+                        const css::drawing::LineCap aLineCap(StrokeLinecapToDrawingLineCap(getStrokeLinecap()));
                         ::std::vector< double > aDashArray;
 
                         if(!getStrokeDasharray().empty())

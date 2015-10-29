@@ -298,7 +298,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     xLocaleData.init( m_xContext, maLanguageTag );
     xCalendar.init( m_xContext, maLanguageTag.getLocale() );
     xTransliteration.init( m_xContext, eLang,
-                           ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
+                           css::i18n::TransliterationModules_IGNORE_CASE );
     xNatNum.init( m_xContext );
 
     // cached locale data items
@@ -1750,13 +1750,13 @@ sal_uInt32 SvNumberFormatter::TestNewString(const OUString& sFormatString,
     return nRes;
 }
 
-SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n::NumberFormatCode& rCode,
+SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberFormatCode& rCode,
                                                     sal_uInt32 nPos, bool bAfterChangingSystemCL,
                                                     sal_Int16 nOrgIndex )
 {
     OUString aCodeStr( rCode.Code );
     if ( rCode.Index < NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS &&
-            rCode.Usage == ::com::sun::star::i18n::KNumberFormatUsage::CURRENCY &&
+            rCode.Usage == css::i18n::KNumberFormatUsage::CURRENCY &&
             rCode.Index != NF_CURRENCY_1000DEC2_CCC )
     {   // strip surrounding [$...] on automatic currency
         if ( aCodeStr.indexOf( "[$" ) >= 0)
@@ -1962,7 +1962,7 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
 }
 
 sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >& rSeq,
+            css::uno::Sequence< css::i18n::NumberFormatCode >& rSeq,
             const NfIndexTableOffset nTabOff )
 {
     const sal_Int32 nLen = rSeq.getLength();
@@ -2010,7 +2010,7 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
     else
     {   // we need at least _some_ format
         rSeq.realloc(1);
-        rSeq[0] = ::com::sun::star::i18n::NumberFormatCode();
+        rSeq[0] = css::i18n::NumberFormatCode();
         rSeq[0].Code = OUStringBuffer().
             append('0').
             append(GetNumDecimalSep()).
@@ -2022,7 +2022,7 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
 
 
 sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
-        ::com::sun::star::i18n::NumberFormatCode * pFormatArr,
+        css::i18n::NumberFormatCode * pFormatArr,
         sal_Int32 nCnt, bool bCheckCorrectness )
 {
     using namespace ::com::sun::star;
@@ -3553,10 +3553,10 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
 
 void SvNumberFormatter::GetCompatibilityCurrency( OUString& rSymbol, OUString& rAbbrev ) const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >
+    css::uno::Sequence< css::i18n::Currency2 >
         xCurrencies( xLocaleData->getAllCurrencies() );
 
-    const ::com::sun::star::i18n::Currency2 *pCurrencies = xCurrencies.getConstArray();
+    const css::i18n::Currency2 *pCurrencies = xCurrencies.getConstArray();
     sal_Int32 nCurrencies = xCurrencies.getLength();
 
     sal_Int32 j;
@@ -3664,8 +3664,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             theCurrencyTable::get().begin(), std::move(pEntry));
     sal_uInt16 nCurrencyPos = 1;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
-        LocaleDataWrapper::getInstalledLocaleNames();
+    css::uno::Sequence< css::lang::Locale > xLoc = LocaleDataWrapper::getInstalledLocaleNames();
     sal_Int32 nLocaleCount = xLoc.getLength();
     SAL_INFO( "svl.numbers", "number of locales: \"" << nLocaleCount << "\"" );
     css::lang::Locale const * const pLocales = xLoc.getConstArray();
@@ -3934,7 +3933,7 @@ NfCurrencyEntry::NfCurrencyEntry( const LocaleDataWrapper& rLocaleData, Language
 }
 
 
-NfCurrencyEntry::NfCurrencyEntry( const ::com::sun::star::i18n::Currency & rCurr,
+NfCurrencyEntry::NfCurrencyEntry( const css::i18n::Currency & rCurr,
                                   const LocaleDataWrapper& rLocaleData, LanguageType eLang )
 {
     aSymbol         = rCurr.Symbol;

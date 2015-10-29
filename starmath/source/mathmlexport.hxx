@@ -40,35 +40,29 @@ namespace com { namespace sun { namespace star {
 
 class SmXMLExportWrapper
 {
-    com::sun::star::uno::Reference<com::sun::star::frame::XModel> xModel;
+    css::uno::Reference<css::frame::XModel> xModel;
     bool bFlat;     //set true for export to flat .mml, set false for
                         //export to a .sxm (or whatever) package
 public:
-    explicit SmXMLExportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
+    explicit SmXMLExportWrapper(css::uno::Reference<css::frame::XModel> &rRef)
         : xModel(rRef), bFlat(true) {}
 
     bool Export(SfxMedium &rMedium);
     void SetFlat(bool bIn) {bFlat = bIn;}
 
     static bool WriteThroughComponent(
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-            xOutputStream,
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-            xComponent,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & rxContext,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rPropSet,
+        css::uno::Reference< css::io::XOutputStream >   xOutputStream,
+        css::uno::Reference< css::lang::XComponent >    xComponent,
+        css::uno::Reference< css::uno::XComponentContext > & rxContext,
+        css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );
 
     static bool WriteThroughComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor,
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent,
+        const css::uno::Reference< css::embed::XStorage >& xStor,
+        css::uno::Reference< css::lang::XComponent > xComponent,
         const sal_Char* pStreamName,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & rxContext,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & rPropSet,
+        css::uno::Reference< css::uno::XComponentContext > & rxContext,
+        css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );
 };
 
@@ -104,21 +98,21 @@ protected:
 
 public:
     SmXMLExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLExportFlags nExportFlags);
     virtual ~SmXMLExport() {};
 
     // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception) override;
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
     void _ExportAutoStyles() override {}
     void _ExportMasterStyles() override {}
     void _ExportContent() override;
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) override;
 
-    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) override;
-    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps) override;
+    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
 
     bool GetSuccess() {return bSuccess;}
 };

@@ -146,7 +146,7 @@ public:
     virtual ~SmMathConfig();
 
     // utl::ConfigItem
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
 
     SmSymbolManager &   GetSymbolManager();
     void                GetSymbols( std::vector< SmSym > &rSymbols ) const;

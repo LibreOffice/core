@@ -3335,8 +3335,7 @@ void ImpSvNumberInputScan::InitText()
 
     delete [] pUpperMonthText;
     delete [] pUpperAbbrevMonthText;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > xElems
-        = pCal->getMonths();
+    css::uno::Sequence< css::i18n::CalendarItem2 > xElems = pCal->getMonths();
     nElems = xElems.getLength();
     pUpperMonthText = new OUString[nElems];
     pUpperAbbrevMonthText = new OUString[nElems];
@@ -3418,7 +3417,7 @@ void ImpSvNumberInputScan::InvalidateDateAcceptancePatterns()
 {
     if (sDateAcceptancePatterns.getLength())
     {
-        sDateAcceptancePatterns = ::com::sun::star::uno::Sequence< OUString >();
+        sDateAcceptancePatterns = css::uno::Sequence< OUString >();
     }
 }
 

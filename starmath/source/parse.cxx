@@ -344,8 +344,8 @@ bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
 
     sal_Int16 nTypJp = SM_MOD()->GetSysLocale().GetCharClass().getType( rTxt, nPos );
     bool bIsDelim = (*pDelim != 0 ||
-            nTypJp == com::sun::star::i18n::UnicodeType::SPACE_SEPARATOR ||
-            nTypJp == com::sun::star::i18n::UnicodeType::CONTROL);
+            nTypJp == css::i18n::UnicodeType::SPACE_SEPARATOR ||
+            nTypJp == css::i18n::UnicodeType::CONTROL);
 
     return bIsDelim;
 }

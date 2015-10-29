@@ -35,22 +35,22 @@
 #include <osl/mutex.hxx>
 
 class OFSStreamContainer : public cppu::OWeakObject,
-                     public ::com::sun::star::lang::XTypeProvider,
-                     public ::com::sun::star::embed::XExtendedStorageStream,
-                     public ::com::sun::star::io::XSeekable,
-                     public ::com::sun::star::io::XInputStream,
-                     public ::com::sun::star::io::XOutputStream,
-                     public ::com::sun::star::io::XTruncate,
-                     public ::com::sun::star::io::XAsyncOutputMonitor
+                     public css::lang::XTypeProvider,
+                     public css::embed::XExtendedStorageStream,
+                     public css::io::XSeekable,
+                     public css::io::XInputStream,
+                     public css::io::XOutputStream,
+                     public css::io::XTruncate,
+                     public css::io::XAsyncOutputMonitor
 {
     ::osl::Mutex m_aMutex;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >               m_xStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >             m_xSeekable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >          m_xInputStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >         m_xOutputStream;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTruncate >             m_xTruncate;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XAsyncOutputMonitor >   m_xAsyncOutputMonitor;
+    css::uno::Reference< css::io::XStream >               m_xStream;
+    css::uno::Reference< css::io::XSeekable >             m_xSeekable;
+    css::uno::Reference< css::io::XInputStream >          m_xInputStream;
+    css::uno::Reference< css::io::XOutputStream >         m_xOutputStream;
+    css::uno::Reference< css::io::XTruncate >             m_xTruncate;
+    css::uno::Reference< css::io::XAsyncOutputMonitor >   m_xAsyncOutputMonitor;
 
     bool m_bDisposed;
     bool m_bInputClosed;
@@ -60,56 +60,56 @@ class OFSStreamContainer : public cppu::OWeakObject,
     ::cppu::OTypeCollection* m_pTypeCollection;
 
 public:
-    explicit OFSStreamContainer( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xStream );
+    explicit OFSStreamContainer( const css::uno::Reference < css::io::XStream >& xStream );
     virtual ~OFSStreamContainer();
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
 
     //  XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XStream
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 location ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getPosition() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getLength() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL seek( sal_Int64 location ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getPosition() throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getLength() throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL available(  )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL closeInput(  )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL flush(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL closeOutput(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL flush(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL closeOutput(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     // XTruncate
-    virtual void SAL_CALL truncate() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL truncate() throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
     // XAsyncOutputMonitor
-    virtual void SAL_CALL waitForCompletion(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL waitForCompletion(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
 };
 

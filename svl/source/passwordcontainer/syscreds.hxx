@@ -35,16 +35,11 @@ class SysCredentialsConfigItem : public utl::ConfigItem
         explicit SysCredentialsConfigItem( SysCredentialsConfig * pOwner );
         //virtual ~SysCredentialsConfigItem();
 
-        virtual void Notify(
-            const com::sun::star::uno::Sequence< OUString > &
-                seqPropertyNames ) override;
+        virtual void Notify( const css::uno::Sequence< OUString > & seqPropertyNames ) override;
 
-        com::sun::star::uno::Sequence< OUString >
-        getSystemCredentialsURLs();
+        css::uno::Sequence< OUString > getSystemCredentialsURLs();
 
-        void setSystemCredentialsURLs(
-            const com::sun::star::uno::Sequence< OUString > &
-                seqURLList );
+        void setSystemCredentialsURLs( const css::uno::Sequence< OUString > & seqURLList );
 
         //bool isSystemCredentialsURL( const OUString & rURL ) const;
 
@@ -53,7 +48,7 @@ class SysCredentialsConfigItem : public utl::ConfigItem
 
         ::osl::Mutex m_aMutex;
         bool m_bInited;
-        com::sun::star::uno::Sequence< OUString > m_seqURLs;
+        css::uno::Sequence< OUString > m_seqURLs;
         SysCredentialsConfig * m_pOwner;
 };
 
@@ -67,7 +62,7 @@ class SysCredentialsConfig
         OUString find( OUString const & rURL );
         void add( OUString const & rURL, bool bPersistent );
         void remove( OUString const & rURL );
-        com::sun::star::uno::Sequence< OUString > list( bool bOnlyPersistent );
+        css::uno::Sequence< OUString > list( bool bOnlyPersistent );
 
         void persistentConfigChanged();
 

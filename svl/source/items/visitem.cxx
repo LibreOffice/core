@@ -52,14 +52,14 @@ bool SfxVisibilityItem::GetPresentation(SfxItemPresentation,
 
 
 // virtual
-bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool SfxVisibilityItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_nValue;
     return true;
 }
 
 // virtual
-bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool SfxVisibilityItem::PutValue(const css::uno::Any& rVal, sal_uInt8)
 {
     if (rVal >>= m_nValue)
         return true;

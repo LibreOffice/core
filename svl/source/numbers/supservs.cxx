@@ -40,7 +40,7 @@ using namespace ::com::sun::star::util;
 using namespace ::utl;
 
 
-SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB)
+SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const css::uno::Reference< css::uno::XComponentContext >& _rxORB)
     :m_pOwnFormatter(NULL)
     ,m_xORB(_rxORB)
 {
@@ -166,9 +166,9 @@ void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation(::com::sun::star::uno::XComponentContext* context,
-                                                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation(css::uno::XComponentContext* context,
+                                                                    css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SvNumberFormatsSupplierServiceObject(context));
 }

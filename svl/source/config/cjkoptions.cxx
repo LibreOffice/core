@@ -63,7 +63,7 @@ public:
     SvtCJKOptions_Impl();
     virtual ~SvtCJKOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) override;
+    virtual void    Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
     void            Load();
 
     bool IsLoaded()                         { return bIsLoaded;         }

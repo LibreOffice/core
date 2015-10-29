@@ -68,15 +68,15 @@ SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 }
 
 // virtual
-bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxGlobalNameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
-    com::sun::star::uno::Reference < com::sun::star::script::XTypeConverter > xConverter
-            ( com::sun::star::script::Converter::create( ::comphelper::getProcessComponentContext() ));
-    com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-    com::sun::star::uno::Any aNew;
+    css::uno::Reference < css::script::XTypeConverter > xConverter
+            ( css::script::Converter::create( ::comphelper::getProcessComponentContext() ));
+    css::uno::Sequence< sal_Int8 > aSeq;
+    css::uno::Any aNew;
 
-    try { aNew = xConverter->convertTo( rVal, cppu::UnoType<com::sun::star::uno::Sequence < sal_Int8 >>::get() ); }
-    catch (com::sun::star::uno::Exception&) {}
+    try { aNew = xConverter->convertTo( rVal, cppu::UnoType<css::uno::Sequence < sal_Int8 >>::get() ); }
+    catch (css::uno::Exception&) {}
     aNew >>= aSeq;
     if ( aSeq.getLength() == 16 )
     {
@@ -89,9 +89,9 @@ bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
 }
 
 // virtual
-bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxGlobalNameItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
-       com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
+       css::uno::Sequence< sal_Int8 > aSeq( 16 );
     void const * pData = &m_aName.GetCLSID();
     memcpy( aSeq.getArray(), pData, 16 );
     rVal <<= aSeq;

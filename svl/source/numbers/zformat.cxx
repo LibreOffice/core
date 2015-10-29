@@ -3104,7 +3104,7 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
     if ( rCal.getUniqueID() == GREGORIAN )
     {
         using namespace ::com::sun::star::i18n;
-        ::com::sun::star::uno::Sequence< OUString > xCals = rCal.getAllCalendars(
+        css::uno::Sequence< OUString > xCals = rCal.getAllCalendars(
                 rLoc().getLanguageTag().getLocale() );
         sal_Int32 nCnt = xCals.getLength();
         if ( nCnt > 1 )
@@ -4978,7 +4978,7 @@ OUString SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
 OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
                                               const SvNumberNatNum& rNum ) const
 {
-    com::sun::star::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
+    css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
     return GetFormatter().GetNatNum()->getNativeNumberString( rStr,
                                                               aLocale, rNum.GetNatNum() );
 }
@@ -4986,14 +4986,14 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
 void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
                                           const SvNumberNatNum& rNum ) const
 {
-    com::sun::star::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
+    css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
 
     OUString sTemp(rStr.makeStringAndClear());
     sTemp = GetFormatter().GetNatNum()->getNativeNumberString( sTemp, aLocale, rNum.GetNatNum() );
     rStr.append(sTemp);
 }
 
-void SvNumberformat::GetNatNumXml( com::sun::star::i18n::NativeNumberXmlAttributes& rAttr,
+void SvNumberformat::GetNatNumXml( css::i18n::NativeNumberXmlAttributes& rAttr,
                                    sal_uInt16 nNumFor ) const
 {
     if ( nNumFor <= 3 )
@@ -5001,19 +5001,19 @@ void SvNumberformat::GetNatNumXml( com::sun::star::i18n::NativeNumberXmlAttribut
         const SvNumberNatNum& rNum = NumFor[nNumFor].GetNatNum();
         if ( rNum.IsSet() )
         {
-            com::sun::star::lang::Locale aLocale(
+            css::lang::Locale aLocale(
                     LanguageTag( rNum.GetLang() ).getLocale() );
             rAttr = GetFormatter().GetNatNum()->convertToXmlAttributes(
                     aLocale, rNum.GetNatNum() );
         }
         else
         {
-            rAttr = com::sun::star::i18n::NativeNumberXmlAttributes();
+            rAttr = css::i18n::NativeNumberXmlAttributes();
         }
     }
     else
     {
-        rAttr = com::sun::star::i18n::NativeNumberXmlAttributes();
+        rAttr = css::i18n::NativeNumberXmlAttributes();
     }
 }
 

@@ -386,7 +386,7 @@ void Test::testFindFirstURLInText() {
         { "generic:path", 0, 0, 0 },
         { "wfs:", 0, 0, 0 }
     };
-    CharClass charClass( m_context, LanguageTag( com::sun::star::lang::Locale("en", "US", "")));
+    CharClass charClass( m_context, LanguageTag( css::lang::Locale("en", "US", "")));
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
         OUString input(OUString::createFromAscii(tests[i].input));
         sal_Int32 begin = 0;
