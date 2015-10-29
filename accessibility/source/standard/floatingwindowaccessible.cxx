@@ -43,8 +43,7 @@ void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelation
         vcl::Window* pParentWindow = pWindow->GetParent();
         if( pParentWindow )
         {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-            aSequence[0] = pParentWindow->GetAccessible();
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pParentWindow->GetAccessible() };
             rRelationSet.AddRelation( AccessibleRelation( AccessibleRelationType::SUB_WINDOW_OF, aSequence ) );
         }
     }

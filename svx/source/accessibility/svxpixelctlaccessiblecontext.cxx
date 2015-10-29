@@ -144,16 +144,14 @@ uno::Reference< XAccessibleRelationSet > SvxPixelCtlAccessible::getAccessibleRel
     vcl::Window *pLabeledBy = mrPixelCtl.GetAccessibleRelationLabeledBy();
     if ( pLabeledBy && pLabeledBy != &mrPixelCtl )
     {
-        uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-        aSequence[0] = pLabeledBy->GetAccessible();
+        uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pLabeledBy->GetAccessible() };
         rRelationSet->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
     }
 
     vcl::Window* pMemberOf = mrPixelCtl.GetAccessibleRelationMemberOf();
     if ( pMemberOf && pMemberOf != &mrPixelCtl )
     {
-        uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-        aSequence[0] = pMemberOf->GetAccessible();
+        uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pMemberOf->GetAccessible() };
         rRelationSet->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
     }
     return rSet;

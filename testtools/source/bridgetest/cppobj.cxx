@@ -1036,8 +1036,8 @@ void Test_Impl::testConstructorsService(
     Constructors::create2(context, args);
 
     Sequence<Type> argSeq1(1); argSeq1[0] = cppu::UnoType<sal_Int32>::get();
-    Sequence<Reference<XInterface> > argSeq2(1); argSeq2[0] = static_cast<XComponent*>(new Dummy());
-    Sequence<Reference<XComponent> > argSeq2a(1); argSeq2a[0] = static_cast<XComponent*>(new Dummy());
+    Sequence<Reference<XInterface> > argSeq2 { static_cast<XComponent*>(new Dummy()) };
+    Sequence<Reference<XComponent> > argSeq2a { static_cast<XComponent*>(new Dummy()) };
 
     Sequence<TestPolyStruct2<sal_Unicode, Sequence<Any> > > argSeq3(1);
     argSeq3[0] = TestPolyStruct2<sal_Unicode, Sequence<Any> >('X', arg27);

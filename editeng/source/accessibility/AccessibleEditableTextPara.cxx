@@ -823,9 +823,8 @@ namespace accessibility
             if ( nMyParaIndex > 0 &&
                  mpParaManager->IsReferencable( nMyParaIndex - 1 ) )
             {
-                uno::Sequence<uno::Reference<XInterface> > aSequence(1);
-                aSequence[0] =
-                    mpParaManager->GetChild( nMyParaIndex - 1 ).first.get().getRef();
+                uno::Sequence<uno::Reference<XInterface> > aSequence
+                    { mpParaManager->GetChild( nMyParaIndex - 1 ).first.get().getRef() };
                 AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_FROM,
                                             aSequence );
                 pAccRelSetHelper->AddRelation( aAccRel );
@@ -835,9 +834,8 @@ namespace accessibility
             if ( (nMyParaIndex + 1) < (sal_Int32)mpParaManager->GetNum() &&
                  mpParaManager->IsReferencable( nMyParaIndex + 1 ) )
             {
-                uno::Sequence<uno::Reference<XInterface> > aSequence(1);
-                aSequence[0] =
-                    mpParaManager->GetChild( nMyParaIndex + 1 ).first.get().getRef();
+                uno::Sequence<uno::Reference<XInterface> > aSequence
+                    { mpParaManager->GetChild( nMyParaIndex + 1 ).first.get().getRef() };
                 AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_TO,
                                             aSequence );
                 pAccRelSetHelper->AddRelation( aAccRel );

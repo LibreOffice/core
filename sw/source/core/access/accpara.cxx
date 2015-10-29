@@ -974,8 +974,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
         const SwContentFrm* pPrevCntFrm( pTextFrm->FindPrevCnt( true ) );
         if ( pPrevCntFrm )
         {
-            uno::Sequence< uno::Reference<XInterface> > aSequence(1);
-            aSequence[0] = GetMap()->GetContext( pPrevCntFrm );
+            uno::Sequence< uno::Reference<XInterface> > aSequence { GetMap()->GetContext( pPrevCntFrm ) };
             AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_FROM,
                                         aSequence );
             pHelper->AddRelation( aAccRel );
@@ -984,8 +983,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
         const SwContentFrm* pNextCntFrm( pTextFrm->FindNextCnt( true ) );
         if ( pNextCntFrm )
         {
-            uno::Sequence< uno::Reference<XInterface> > aSequence(1);
-            aSequence[0] = GetMap()->GetContext( pNextCntFrm );
+            uno::Sequence< uno::Reference<XInterface> > aSequence { GetMap()->GetContext( pNextCntFrm ) };
             AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_TO,
                                         aSequence );
             pHelper->AddRelation( aAccRel );

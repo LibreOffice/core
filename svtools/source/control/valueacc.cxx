@@ -320,16 +320,14 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
         vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-            aSequence[0] = pLabeledBy->GetAccessible();
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pLabeledBy->GetAccessible() };
             pRelationSet->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
         }
 
         vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if ( pMemberOf && pMemberOf != pWindow )
         {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-            aSequence[0] = pMemberOf->GetAccessible();
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pMemberOf->GetAccessible() };
             pRelationSet->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
         }
     }

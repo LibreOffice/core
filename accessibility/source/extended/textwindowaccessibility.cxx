@@ -1442,16 +1442,14 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 
     if ( aPara > m_aVisibleBegin && aPara < m_aVisibleEnd )
     {
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > aSequence(1);
-        aSequence[0] = getAccessibleChild( aPara - 1 );
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > aSequence { getAccessibleChild( aPara - 1 ) };
         css::accessibility::AccessibleRelation aRelation( css::accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM, aSequence );
         pRelationSetHelper->AddRelation( aRelation );
     }
 
     if ( aPara >= m_aVisibleBegin && aPara < m_aVisibleEnd -1 )
     {
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > aSequence(1);
-        aSequence[0] = getAccessibleChild( aPara + 1 );
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > aSequence { getAccessibleChild( aPara + 1 ) };
         css::accessibility::AccessibleRelation aRelation( css::accessibility::AccessibleRelationType::CONTENT_FLOWS_TO, aSequence );
         pRelationSetHelper->AddRelation( aRelation );
     }
@@ -1526,8 +1524,7 @@ void    Document::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& r
 {
     if( getAccessibleParent()->getAccessibleContext()->getAccessibleRole() == css::accessibility::AccessibleRole::SCROLL_PANE )
     {
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > aSequence(1);
-        aSequence[0] = getAccessibleParent();
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > aSequence {  getAccessibleParent() };
         rRelationSet.AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
     }
     else
