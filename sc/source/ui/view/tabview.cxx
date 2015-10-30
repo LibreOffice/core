@@ -2324,8 +2324,20 @@ OUString ScTabView::getRowColumnHeaders()
         aRows.push_back(std::make_pair("", aRow));
     }
 
+    boost::property_tree::ptree aCols;
+    for (SCCOL nCol = 0; nCol < nEndCol; ++nCol)
+    {
+        boost::property_tree::ptree aCol;
+        sal_uInt16 nSize = pColBar[SC_SPLIT_LEFT]->GetEntrySize(nCol);
+        aCol.put("size", OString::number(nSize).getStr());
+        OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
+        aCol.put("text", aText.toUtf8().getStr());
+        aCols.push_back(std::make_pair("", aCol));
+    }
+
     boost::property_tree::ptree aTree;
     aTree.add_child("rows", aRows);
+    aTree.add_child("columns", aCols);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     return OUString::fromUtf8(aStream.str().c_str());
