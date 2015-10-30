@@ -296,7 +296,7 @@ bool SalBool::VisitCXXStaticCastExpr(CXXStaticCastExpr * expr) {
     if (isSalBool(expr->getType())) {
         report(
             DiagnosticsEngine::Warning,
-            "CStyleCastExpr, suspicious cast from %0 to %1",
+            "CXXStaticCastExpr, suspicious cast from %0 to %1",
             expr->getLocStart())
             << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
             << expr->getType() << expr->getSourceRange();
@@ -311,7 +311,7 @@ bool SalBool::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr) {
     if (isSalBool(expr->getType())) {
         report(
             DiagnosticsEngine::Warning,
-            "CStyleCastExpr, suspicious cast from %0 to %1",
+            "CXXFunctionalCastExpr, suspicious cast from %0 to %1",
             expr->getLocStart())
             << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
             << expr->getType() << expr->getSourceRange();
