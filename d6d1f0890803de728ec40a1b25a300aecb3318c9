@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_721a5819",
+        "filename": "include/tools/ref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-10-30T15:28:58Z",
+      "side": 1,
+      "message": "I very much assume that special handling for AFL can go again now (as it was addressing the same problem with Clang 3.5).",
+      "revId": "d6d1f0890803de728ec40a1b25a300aecb3318c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
