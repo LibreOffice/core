@@ -460,7 +460,7 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
             impl_throwError(STR_QUERY_TOO_COMPLEX);
     }
 
-    m_xResultSet.set(pResult);
+    m_xResultSet = Reference<XResultSet>(pResult);;
     return xRS;
 }
 
