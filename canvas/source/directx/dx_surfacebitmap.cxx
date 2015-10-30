@@ -19,6 +19,8 @@
 
 #include <string.h>
 
+#include <com/sun/star/rendering/ColorComponentTag.hpp>
+
 #include "dx_surfacebitmap.hxx"
 #include "dx_impltools.hxx"
 #include "dx_surfacegraphics.hxx"
@@ -438,7 +440,7 @@ namespace dxcanvas
     // DXSurfaceBitmap::getData
 
 
-    uno::Sequence< sal_Int8 > DXSurfaceBitmap::getData( rendering::IntegerBitmapLayout&     /*bitmapLayout*/,
+    uno::Sequence< sal_Int8 > DXSurfaceBitmap::getData( rendering::IntegerBitmapLayout& rBitmapLayout,
                                                         const geometry::IntegerRectangle2D& rect )
     {
         if(hasAlpha())
@@ -483,6 +485,11 @@ namespace dxcanvas
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 return uno::Sequence< sal_Int8 >();
+            D3DSURFACE_DESC aDesc;
+            if(FAILED(mpSurface->GetDesc(&aDesc)))
+                return uno::Sequence< sal_Int8 >();
+
+            assert(aDesc.Format == D3DFMT_A8R8G8B8 || aDesc.Format == D3DFMT_X8R8G8B8);
 
             sal_uInt8 *pSrc = (sal_uInt8 *)((((BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
             sal_uInt8 *pDst = (sal_uInt8 *)aRes.getArray();
@@ -492,6 +499,24 @@ namespace dxcanvas
                 memcpy(pDst,pSrc,nSegmentSizeInBytes);
                 pDst += nSegmentSizeInBytes;
                 pSrc += aLockedRect.Pitch;
+            }
+
+            if(rBitmapLayout.ColorSpace->getComponentTags().getArray()[0] == rendering::ColorComponentTag::RGB_RED &&
+               rBitmapLayout.ColorSpace->getComponentTags().getArray()[2] == rendering::ColorComponentTag::RGB_BLUE)
+            {
+                pDst = (sal_uInt8 *)aRes.getArray();
+                for(sal_uInt32 y=0; y<nHeight; ++y)
+                {
+                    sal_uInt8* pPixel = pDst;
+                    for(sal_uInt32 n = 0; n<nWidth; n++)
+                    {
+                        sal_uInt8 nB = pPixel[0];
+                        pPixel[0] = pPixel[2];
+                        pPixel[2] = nB;
+                        pPixel += 4;
+                    }
+                    pDst += nSegmentSizeInBytes;
+                }
             }
 
             mpSurface->UnlockRect();
