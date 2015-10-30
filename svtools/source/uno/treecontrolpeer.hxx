@@ -45,9 +45,9 @@ class UnoTreeListEntry;
 class TreeControlPeer;
 class UnoTreeListBoxImpl;
 
-class TreeControlPeer : public ::cppu::ImplInheritanceHelper< VCLXWindow, ::com::sun::star::awt::tree::XTreeControl, ::com::sun::star::awt::tree::XTreeDataModelListener >
+class TreeControlPeer : public ::cppu::ImplInheritanceHelper< VCLXWindow, css::awt::tree::XTreeControl, css::awt::tree::XTreeDataModelListener >
 {
-    typedef std::map<com::sun::star::uno::Reference<com::sun::star::awt::tree::XTreeNode>, UnoTreeListEntry*> TreeNodeMap;
+    typedef std::map<css::uno::Reference<css::awt::tree::XTreeNode>, UnoTreeListEntry*> TreeNodeMap;
 
     friend class UnoTreeListBoxImpl;
     friend class UnoTreeListEntry;
@@ -60,90 +60,90 @@ public:
     // VCLXWindow
     virtual void SetWindow( const VclPtr< vcl::Window > &pWindow ) override;
 
-    // ::com::sun::star::view::XSelectionSupplier
-    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::view::XSelectionSupplier
+    virtual sal_Bool SAL_CALL select( const css::uno::Any& xSelection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getSelection(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::view::XMultiSelectionSupplier
-    virtual sal_Bool SAL_CALL addSelection( const ::com::sun::star::uno::Any& Selection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeSelection( const ::com::sun::star::uno::Any& Selection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL clearSelection(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getSelectionCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createSelectionEnumeration(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createReverseSelectionEnumeration(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::view::XMultiSelectionSupplier
+    virtual sal_Bool SAL_CALL addSelection( const css::uno::Any& Selection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeSelection( const css::uno::Any& Selection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL clearSelection(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getSelectionCount(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSelectionEnumeration(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createReverseSelectionEnumeration(  ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XTreeControl
-    virtual OUString SAL_CALL getDefaultExpandedGraphicURL() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getDefaultCollapsedGraphicURL() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isNodeExpanded( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isNodeCollapsed( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL makeNodeVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::awt::tree::ExpandVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isNodeVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL expandNode( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::awt::tree::ExpandVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL collapseNode( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::awt::tree::ExpandVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addTreeExpansionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeExpansionListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeTreeExpansionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeExpansionListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getNodeRect( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isEditing(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL stopEditing(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancelEditing(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL startEditingAtNode( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addTreeEditListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeEditListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeTreeEditListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeEditListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XTreeControl
+    virtual OUString SAL_CALL getDefaultExpandedGraphicURL() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getDefaultCollapsedGraphicURL() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL makeNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::awt::tree::ExpandVetoException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL expandNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::awt::tree::ExpandVetoException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL collapseNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::awt::tree::ExpandVetoException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Rectangle SAL_CALL getNodeRect( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isEditing(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL stopEditing(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL cancelEditing(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startEditingAtNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::tree::TreeDataModelListener
-    virtual void SAL_CALL treeNodesChanged( const ::com::sun::star::awt::tree::TreeDataModelEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL treeNodesInserted( const ::com::sun::star::awt::tree::TreeDataModelEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL treeNodesRemoved( const ::com::sun::star::awt::tree::TreeDataModelEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL treeStructureChanged( const ::com::sun::star::awt::tree::TreeDataModelEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::tree::TreeDataModelListener
+    virtual void SAL_CALL treeNodesChanged( const css::awt::tree::TreeDataModelEvent& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL treeNodesInserted( const css::awt::tree::TreeDataModelEvent& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL treeNodesRemoved( const css::awt::tree::TreeDataModelEvent& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL treeStructureChanged( const css::awt::tree::TreeDataModelEvent& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XLayoutConstrains
-    ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL getPreferredSize() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XLayoutConstrains
+    css::awt::Size SAL_CALL getMinimumSize() throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getPreferredSize() throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
 private:
-    UnoTreeListEntry* getEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, bool bThrow = true ) throw (::com::sun::star::lang::IllegalArgumentException );
+    UnoTreeListEntry* getEntry( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bThrow = true ) throw (css::lang::IllegalArgumentException );
 
     void disposeControl();
 
     bool onEditingEntry( UnoTreeListEntry* pEntry );
     bool onEditedEntry( UnoTreeListEntry* pEntry, const OUString& rNewText );
 
-    void fillTree( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModel >& xDataModel );
-    void addNode( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParentEntry );
+    void fillTree( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeDataModel >& xDataModel );
+    void addNode( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParentEntry );
 
-    UnoTreeListEntry* createEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos = TREELIST_APPEND );
+    UnoTreeListEntry* createEntry( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos = TREELIST_APPEND );
     bool updateEntry( UnoTreeListEntry* pEntry );
 
-    void updateTree( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent, bool bRecursive );
-    void updateNode( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, bool bRecursive );
-    void updateChildNodes( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry );
+    void updateTree( const css::awt::tree::TreeDataModelEvent& rEvent, bool bRecursive );
+    void updateNode( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bRecursive );
+    void updateChildNodes( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry );
 
-    static OUString getEntryString( const ::com::sun::star::uno::Any& rValue );
+    static OUString getEntryString( const css::uno::Any& rValue );
 
-    UnoTreeListBoxImpl& getTreeListBoxOrThrow() const throw (::com::sun::star::uno::RuntimeException );
-    void ChangeNodesSelection( const ::com::sun::star::uno::Any& rSelection, bool bSelect, bool bSetSelection ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+    UnoTreeListBoxImpl& getTreeListBoxOrThrow() const throw (css::uno::RuntimeException );
+    void ChangeNodesSelection( const css::uno::Any& rSelection, bool bSelect, bool bSetSelection ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    void onChangeDataModel( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModel >& xDataModel );
+    void onChangeDataModel( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeDataModel >& xDataModel );
 
     void onSelectionChanged();
-    void onRequestChildNodes( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode );
-    bool onExpanding( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, bool bExpanding );
-    void onExpanded( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, bool bExpanding );
+    void onRequestChildNodes( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode );
+    bool onExpanding( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bExpanding );
+    void onExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bExpanding );
 
     void onChangeRootDisplayed( bool bIsRootDisplayed );
 
@@ -153,7 +153,7 @@ private:
     bool loadImage( const OUString& rURL, Image& rImage );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModel >mxDataModel;
+    css::uno::Reference< css::awt::tree::XTreeDataModel >mxDataModel;
     TreeSelectionListenerMultiplexer maSelectionListeners;
     TreeExpansionListenerMultiplexer maTreeExpansionListeners;
     TreeEditListenerMultiplexer maTreeEditListeners;
@@ -165,7 +165,7 @@ private:
     Image maDefaultExpandedImage;
     Image maDefaultCollapsedImage;
     TreeNodeMap* mpTreeNodeMap;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicProvider > mxGraphicProvider;
+    css::uno::Reference< css::graphic::XGraphicProvider > mxGraphicProvider;
 };
 
 #endif // INCLUDED_SVTOOLS_SOURCE_UNO_TREECONTROLPEER_HXX

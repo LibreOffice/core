@@ -40,7 +40,7 @@ namespace svt
         CellValueConversion();
         ~CellValueConversion();
 
-        OUString convertToString( const ::com::sun::star::uno::Any& i_cellValue );
+        OUString convertToString( const css::uno::Any& i_cellValue );
 
     private:
         ::std::unique_ptr< CellValueConversion_Data > m_pData;

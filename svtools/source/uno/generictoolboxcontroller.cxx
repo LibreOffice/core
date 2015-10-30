@@ -31,22 +31,22 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::frame::status;
-using namespace ::com::sun::star::util;
+using namespace css::awt;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::frame;
+using namespace css::frame::status;
+using namespace css::util;
 
 namespace svt
 {
 
 struct ExecuteInfo
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-    ::com::sun::star::util::URL                                                aTargetURL;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
+    css::uno::Reference< css::frame::XDispatch >     xDispatch;
+    css::util::URL                                                aTargetURL;
+    css::uno::Sequence< css::beans::PropertyValue >  aArgs;
 };
 
 GenericToolboxController::GenericToolboxController( const Reference< XComponentContext >& rxContext,
@@ -108,7 +108,7 @@ throw ( RuntimeException, std::exception )
 
     if ( xDispatch.is() && xURLTransformer.is() )
     {
-        com::sun::star::util::URL aTargetURL;
+        css::util::URL aTargetURL;
         Sequence<PropertyValue>   aArgs;
 
         aTargetURL.Complete = aCommandURL;

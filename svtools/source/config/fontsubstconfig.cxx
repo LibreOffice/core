@@ -94,7 +94,7 @@ SvtFontSubstConfig::~SvtFontSubstConfig()
     delete pImpl;
 }
 
-void SvtFontSubstConfig::Notify( const com::sun::star::uno::Sequence< OUString >& )
+void SvtFontSubstConfig::Notify( const css::uno::Sequence< OUString >& )
 {
 }
 

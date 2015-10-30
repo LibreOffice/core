@@ -43,8 +43,8 @@ namespace svt { namespace uno
     public:
         WizardShell(
             vcl::Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >& i_rController,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int16 > >& i_rPaths
+            const css::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
+            const css::uno::Sequence< css::uno::Sequence< sal_Int16 > >& i_rPaths
         );
 
         // Dialog overridables
@@ -79,7 +79,7 @@ namespace svt { namespace uno
             WizardShell_Base::activatePath( PathId( i_nPathID ), i_bFinal );
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage >
+        css::uno::Reference< css::ui::dialogs::XWizardPage >
                     getCurrentWizardPage() const;
 
         sal_Int16   getCurrentPage() const
@@ -117,7 +117,7 @@ namespace svt { namespace uno
     private:
         typedef ::std::map< VclPtr<TabPage>, PWizardPageController > Page2ControllerMap;
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >  m_xController;
+        const css::uno::Reference< css::ui::dialogs::XWizardController >  m_xController;
         const sal_Int16                                                                             m_nFirstPageID;
         Page2ControllerMap                                                                          m_aPageControllers;
     };

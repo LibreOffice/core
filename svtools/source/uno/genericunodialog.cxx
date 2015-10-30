@@ -35,10 +35,10 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::comphelper;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::ucb;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::beans;
+using namespace css::ucb;
 
 
 namespace svt

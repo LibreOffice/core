@@ -33,11 +33,11 @@ namespace {
 #define UNODIALOG_PROPERTY_ID_ALIASES       100
 #define UNODIALOG_PROPERTY_ALIASES          "FieldMapping"
 
-    using namespace com::sun::star::uno;
-    using namespace com::sun::star::lang;
-    using namespace com::sun::star::util;
-    using namespace com::sun::star::beans;
-    using namespace com::sun::star::sdbc;
+    using namespace css::uno;
+    using namespace css::lang;
+    using namespace css::util;
+    using namespace css::beans;
+    using namespace css::sdbc;
 
     typedef OGenericUnoDialog OAddressBookSourceDialogUnoBase;
     class OAddressBookSourceDialogUno
@@ -73,7 +73,7 @@ namespace {
     // OGenericUnoDialog overridables
         virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
 
-        virtual void implInitialize(const com::sun::star::uno::Any& _rValue) override;
+        virtual void implInitialize(const css::uno::Any& _rValue) override;
 
         virtual void executedDialog(sal_Int16 _nExecutionResult) override;
     };
@@ -141,8 +141,8 @@ namespace {
     {
         if( rArguments.getLength() == 5 )
         {
-            Reference<com::sun::star::awt::XWindow> xParentWindow;
-            Reference<com::sun::star::beans::XPropertySet> xDataSource;
+            Reference<css::awt::XWindow> xParentWindow;
+            Reference<css::beans::XPropertySet> xDataSource;
             OUString sDataSourceName;
             OUString sCommand;
             OUString sTitle;
@@ -172,7 +172,7 @@ namespace {
         OGenericUnoDialog::initialize(rArguments);
     }
 
-    void OAddressBookSourceDialogUno::implInitialize(const com::sun::star::uno::Any& _rValue)
+    void OAddressBookSourceDialogUno::implInitialize(const css::uno::Any& _rValue)
     {
         PropertyValue aVal;
         if (_rValue >>= aVal)

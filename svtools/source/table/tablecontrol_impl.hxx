@@ -242,9 +242,9 @@ namespace svt { namespace table
         */
         bool        markAllRowsAsSelected();
 
-        void commitAccessibleEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
-        void commitCellEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
-        void commitTableEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
+        void commitAccessibleEvent( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
+        void commitCellEvent( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
+        void commitTableEvent( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
 
         // ITableControl
         virtual void                hideCursor() override;
@@ -283,7 +283,7 @@ namespace svt { namespace table
         Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol );
 
         // A11Y
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        css::uno::Reference< css::accessibility::XAccessible >
                         getAccessible( vcl::Window& i_parentWindow );
         void            disposeAccessible();
 
@@ -303,8 +303,8 @@ namespace svt { namespace table
         bool            impl_isAccessibleAlive() const;
         void            impl_commitAccessibleEvent(
                             sal_Int16 const i_eventID,
-                            ::com::sun::star::uno::Any const & i_newValue,
-                            ::com::sun::star::uno::Any const & i_oldValue
+                            css::uno::Any const & i_newValue,
+                            css::uno::Any const & i_oldValue
                         );
 
         /** toggles the cursor visibility

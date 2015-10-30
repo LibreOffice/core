@@ -61,8 +61,8 @@ class Graphic;
 namespace unographic {
 
 class GraphicDescriptor : public ::cppu::OWeakAggObject,
-                          public ::com::sun::star::lang::XServiceInfo,
-                          public ::com::sun::star::lang::XTypeProvider,
+                          public css::lang::XServiceInfo,
+                          public css::lang::XTypeProvider,
                           public ::comphelper::PropertySetHelper
 {
 public:
@@ -72,39 +72,39 @@ public:
 
     void init( const ::Graphic& rGraphic );
     void init( const OUString& rURL );
-    void init( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxIStm, const OUString& rURL );
+    void init( const css::uno::Reference< css::io::XInputStream >& rxIStm, const OUString& rURL );
 
     static OUString getImplementationName_Static() throw();
-    static ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
+    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
 
 protected:
 
     static ::comphelper::PropertySetInfo* createPropertySetInfo();
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // PropertySetHelper
-        virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) override;
-        virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
+     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
 private:
 
     const ::Graphic*        mpGraphic;
     GraphicType             meType;
-    OUString         maMimeType;
+    OUString                maMimeType;
     Size                    maSizePixel;
     Size                    maSize100thMM;
     sal_uInt16              mnBitsPerPixel;

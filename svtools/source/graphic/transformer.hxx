@@ -31,7 +31,7 @@ namespace unographic {
 
 
 typedef ::cppu::WeakAggImplHelper1<
-    ::com::sun::star::graphic::XGraphicTransformer
+    css::graphic::XGraphicTransformer
     > GraphicTransformer_UnoImplHelper1;
 class GraphicTransformer : public GraphicTransformer_UnoImplHelper1
 {
@@ -41,20 +41,20 @@ class GraphicTransformer : public GraphicTransformer_UnoImplHelper1
     virtual ~GraphicTransformer();
 
     // XGraphicTransformer
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL colorChange(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rGraphic,
-            sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo )
-                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL colorChange(
+        const css::uno::Reference< css::graphic::XGraphic >& rGraphic,
+        sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo )
+                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL applyDuotone(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rGraphic,
-            sal_Int32 nColorOne, sal_Int32 nColorTwo )
-                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL applyDuotone(
+        const css::uno::Reference< css::graphic::XGraphic >& rGraphic,
+        sal_Int32 nColorOne, sal_Int32 nColorTwo )
+                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL applyBrightnessContrast(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic,
-            sal_Int32 nBrightness, sal_Int32 nContrast, sal_Bool mso )
-                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL applyBrightnessContrast(
+        const css::uno::Reference< css::graphic::XGraphic >& rxGraphic,
+        sal_Int32 nBrightness, sal_Int32 nContrast, sal_Bool mso )
+                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
 };
 

@@ -74,7 +74,7 @@ namespace svt
         virtual void DataChanged( const DataChangedEvent& i_rEvent ) override;
         virtual void MouseButtonDown( const MouseEvent& i_rMouseEvent ) override;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+        virtual css::uno::Reference< css::awt::XWindowPeer >
                      GetComponentInterface( bool i_bCreate ) override;
 
         virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;

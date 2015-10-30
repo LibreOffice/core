@@ -46,12 +46,12 @@ class ExportDialog : public ModalDialog
 {
 private:
 
-    FltCallDialogParameter& mrFltCallPara;
+    FltCallDialogParameter&    mrFltCallPara;
 
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        mxContext;
-    const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&
-        mxSourceDocument;
+    const css::uno::Reference< css::uno::XComponentContext >
+                               mxContext;
+    const css::uno::Reference< css::lang::XComponent >&
+                               mxSourceDocument;
 
     VclPtr<NumericField>       mpMfSizeX;
     VclPtr<ListBox>            mpLbSizeX;
@@ -119,10 +119,8 @@ private:
     SvStream*           mpTempStream;
     Bitmap              maBitmap;
 
-    com::sun::star::awt::Size
-                        maOriginalSize;     // the original graphic size in 1/100mm
-    com::sun::star::awt::Size
-                        maSize;             // for vector graphics it always contains the logical size in 1/100mm
+    css::awt::Size      maOriginalSize;     // the original graphic size in 1/100mm
+    css::awt::Size      maSize;             // for vector graphics it always contains the logical size in 1/100mm
 
     bool                mbIsPixelFormat;
     bool                mbExportSelection;
@@ -131,14 +129,13 @@ private:
     sal_Int32           mnInitialResolutionUnit;
 
     // for pixel graphics it always contains the pixel count
-    com::sun::star::awt::Size
-                        maResolution;       // it always contains the number of pixels per meter
+    css::awt::Size      maResolution;       // it always contains the number of pixels per meter
 
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+    css::uno::Reference< css::drawing::XShape >
                         mxShape;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >
+    css::uno::Reference< css::drawing::XShapes >
                         mxShapes;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >
+    css::uno::Reference< css::drawing::XDrawPage >
                         mxPage;
 
 
@@ -160,22 +157,22 @@ private:
                         void GetGraphicSource();
                         bool GetGraphicStream();
                         static Bitmap GetGraphicBitmap( SvStream& rStream );
-                        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                        css::uno::Sequence< css::beans::PropertyValue >
                             GetFilterData( bool bUpdateConfig );
 
                         sal_uInt32 GetRawFileSize() const;
                         bool IsTempExportAvailable() const;
 
-                        com::sun::star::awt::Size
+                        css::awt::Size
                             GetOriginalSize();
 
                         sal_Int32 GetDefaultUnit();
 
 public:
                         ExportDialog( FltCallDialogParameter& rPara,
-                            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                                const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
-                                    bool bExportSelection, bool bIsExportVectorFormat );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                            const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
+                            bool bExportSelection, bool bIsExportVectorFormat );
                         virtual ~ExportDialog();
                         virtual void dispose() override;
 };

@@ -153,7 +153,7 @@ void FolderTree::SetTreePath( OUString const & sUrl )
     }
 }
 
-void FolderTree::SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
+void FolderTree::SetBlackList( const css::uno::Sequence< OUString >& rBlackList )
 {
     m_aBlackList = rBlackList;
 }

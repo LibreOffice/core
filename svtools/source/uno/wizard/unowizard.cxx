@@ -42,32 +42,32 @@ using namespace ::svt::uno;
 
 namespace {
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::ui::dialogs::XWizard;
-    using ::com::sun::star::lang::XInitialization;
-    using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::beans::Property;
-    using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::ucb::AlreadyInitializedException;
-    using ::com::sun::star::ui::dialogs::XWizardController;
-    using ::com::sun::star::ui::dialogs::XWizardPage;
-    using ::com::sun::star::container::NoSuchElementException;
-    using ::com::sun::star::util::InvalidStateException;
-    using ::com::sun::star::awt::XWindow;
+    using css::uno::Reference;
+    using css::uno::XInterface;
+    using css::uno::UNO_QUERY;
+    using css::uno::UNO_QUERY_THROW;
+    using css::uno::UNO_SET_THROW;
+    using css::uno::Exception;
+    using css::uno::RuntimeException;
+    using css::uno::Any;
+    using css::uno::makeAny;
+    using css::uno::Sequence;
+    using css::uno::Type;
+    using css::lang::XServiceInfo;
+    using css::ui::dialogs::XWizard;
+    using css::lang::XInitialization;
+    using css::beans::XPropertySetInfo;
+    using css::uno::XComponentContext;
+    using css::beans::Property;
+    using css::lang::IllegalArgumentException;
+    using css::ucb::AlreadyInitializedException;
+    using css::ui::dialogs::XWizardController;
+    using css::ui::dialogs::XWizardPage;
+    using css::container::NoSuchElementException;
+    using css::util::InvalidStateException;
+    using css::awt::XWindow;
 
-    namespace WizardButton = ::com::sun::star::ui::dialogs::WizardButton;
+    namespace WizardButton = css::ui::dialogs::WizardButton;
 
 
     namespace

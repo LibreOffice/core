@@ -194,9 +194,9 @@ namespace svt { namespace table
         {
             return ::boost::optional< ::std::vector< ::Color > >();
         }
-        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() const override
+        virtual css::style::VerticalAlignment getVerticalAlign() const override
         {
-            return com::sun::star::style::VerticalAlignment(0);
+            return css::style::VerticalAlignment(0);
         }
         virtual ITableDataSort* getSortAdapter() override
         {
@@ -206,13 +206,13 @@ namespace svt { namespace table
         {
             return true;
         }
-        virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent ) override
+        virtual void getCellContent( ColPos const i_col, RowPos const i_row, css::uno::Any& o_cellContent ) override
         {
             (void)i_row;
             (void)i_col;
             o_cellContent.clear();
         }
-        virtual void getCellToolTip( ColPos const, RowPos const, ::com::sun::star::uno::Any& ) override
+        virtual void getCellToolTip( ColPos const, RowPos const, css::uno::Any& ) override
         {
         }
         virtual Any getRowHeading( RowPos const i_rowPos ) const override

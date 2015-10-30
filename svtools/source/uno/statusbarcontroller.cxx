@@ -36,12 +36,12 @@
 #include <comphelper/processfactory.hxx>
 
 using namespace ::cppu;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
+using namespace css::awt;
+using namespace css::uno;
+using namespace css::util;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::frame;
 
 namespace svt
 {
@@ -86,7 +86,7 @@ Reference< XURLTransformer > StatusbarController::getURLTransformer() const
     SolarMutexGuard aSolarMutexGuard;
     if ( !m_xURLTransformer.is() && m_xContext.is() )
     {
-        m_xURLTransformer = com::sun::star::util::URLTransformer::create( m_xContext );
+        m_xURLTransformer = css::util::URLTransformer::create( m_xContext );
     }
 
     return m_xURLTransformer;
@@ -185,7 +185,7 @@ throw ( RuntimeException, std::exception )
 
 // XComponent
 void SAL_CALL StatusbarController::dispose()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -195,14 +195,14 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
             throw DisposedException();
     }
 
-    com::sun::star::lang::EventObject aEvent( xThis );
+    css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
     SolarMutexGuard aSolarMutexGuard;
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XURLTransformer > xURLTransformer = getURLTransformer();
     URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
-    com::sun::star::util::URL aTargetURL;
+    css::util::URL aTargetURL;
     while ( pIter != m_aListenerMap.end() )
     {
         try
@@ -301,49 +301,49 @@ throw ( RuntimeException, std::exception )
 
 // XStatusbarController
 sal_Bool SAL_CALL StatusbarController::mouseButtonDown(
-    const ::com::sun::star::awt::MouseEvent& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::awt::MouseEvent& )
+throw (css::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 sal_Bool SAL_CALL StatusbarController::mouseMove(
-    const ::com::sun::star::awt::MouseEvent& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::awt::MouseEvent& )
+throw (css::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 sal_Bool SAL_CALL StatusbarController::mouseButtonUp(
-    const ::com::sun::star::awt::MouseEvent& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::awt::MouseEvent& )
+throw (css::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 void SAL_CALL StatusbarController::command(
-    const ::com::sun::star::awt::Point&,
+    const css::awt::Point&,
     ::sal_Int32,
     sal_Bool,
-    const ::com::sun::star::uno::Any& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Any& )
+throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL StatusbarController::paint(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >&,
-    const ::com::sun::star::awt::Rectangle&,
+    const css::uno::Reference< css::awt::XGraphics >&,
+    const css::awt::Rectangle&,
     ::sal_Int32 )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL StatusbarController::click( const ::com::sun::star::awt::Point& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL StatusbarController::click( const css::awt::Point& )
+throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL StatusbarController::doubleClick( const ::com::sun::star::awt::Point& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL StatusbarController::doubleClick( const css::awt::Point& ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -358,7 +358,7 @@ void StatusbarController::addStatusListener( const OUString& aCommandURL )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XStatusListener > xStatusListener;
-    com::sun::star::util::URL    aTargetURL;
+    css::util::URL    aTargetURL;
 
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -440,7 +440,7 @@ void StatusbarController::bindListener()
             while ( pIter != m_aListenerMap.end() )
             {
                 Reference< XURLTransformer > xURLTransformer = getURLTransformer();
-                com::sun::star::util::URL aTargetURL;
+                css::util::URL aTargetURL;
                 aTargetURL.Complete = pIter->first;
                 xURLTransformer->parseStrict( aTargetURL );
 
@@ -526,7 +526,7 @@ void StatusbarController::bindListener()
     return aRect;
 }
 
-void StatusbarController::execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
+void StatusbarController::execute( const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
@@ -555,7 +555,7 @@ void StatusbarController::execute( const ::com::sun::star::uno::Sequence< ::com:
     {
         try
         {
-            com::sun::star::util::URL aTargetURL;
+            css::util::URL aTargetURL;
 
             aTargetURL.Complete = aCommandURL;
             xURLTransformer->parseStrict( aTargetURL );
@@ -569,10 +569,10 @@ void StatusbarController::execute( const ::com::sun::star::uno::Sequence< ::com:
 
 void StatusbarController::execute(
     const OUString& aCommandURL,
-    const Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
+    const Sequence< css::beans::PropertyValue >& aArgs )
 {
     Reference< XDispatch >      xDispatch;
-    com::sun::star::util::URL   aTargetURL;
+    css::util::URL   aTargetURL;
 
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -594,7 +594,7 @@ void StatusbarController::execute(
                 xDispatch = pIter->second;
             else
             {
-                Reference< ::com::sun::star::frame::XDispatchProvider > xDispatchProvider(
+                Reference< css::frame::XDispatchProvider > xDispatchProvider(
                     m_xFrame->getController(), UNO_QUERY );
                 if ( xDispatchProvider.is() )
                     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );

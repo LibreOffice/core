@@ -75,9 +75,9 @@ short SvColorDialog::Execute()
         const OUString sColor( "Color" );
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-        Reference< com::sun::star::awt::XWindow > xParent( VCLUnoHelper::GetInterface( mpParent ) );
+        Reference< css::awt::XWindow > xParent( VCLUnoHelper::GetInterface( mpParent ) );
 
-        Reference< XExecutableDialog > xDialog = com::sun::star::cui::ColorPicker::createWithParent(xContext, xParent);
+        Reference< XExecutableDialog > xDialog = css::cui::ColorPicker::createWithParent(xContext, xParent);
         Reference< XPropertyAccess > xPropertyAccess( xDialog, UNO_QUERY_THROW );
 
         Sequence< PropertyValue > props( 2 );

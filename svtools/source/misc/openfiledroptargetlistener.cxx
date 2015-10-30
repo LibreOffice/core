@@ -92,7 +92,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
         }
         dtde.Context->dropComplete( css::datatransfer::dnd::DNDConstants::ACTION_NONE != nAction );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }
@@ -105,7 +105,7 @@ void SAL_CALL OpenFileDropTargetListener::dragEnter( const css::datatransfer::dn
     {
         implts_BeginDrag( dtdee.SupportedDataFlavors );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 
@@ -120,7 +120,7 @@ void SAL_CALL OpenFileDropTargetListener::dragExit( const css::datatransfer::dnd
     {
         implts_EndDrag();
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }
@@ -139,7 +139,7 @@ void SAL_CALL OpenFileDropTargetListener::dragOver( const css::datatransfer::dnd
         else
             dtde.Context->acceptDrag( css::datatransfer::dnd::DNDConstants::ACTION_COPY );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }

@@ -65,8 +65,8 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 public:
                     SvtHelpOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
-    void            Load( const ::com::sun::star::uno::Sequence< OUString>& aPropertyNames);
+    virtual void    Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    void            Load( const css::uno::Sequence< OUString>& aPropertyNames);
 
     void            SetExtendedHelp( bool b )           { bExtendedHelp= b; SetModified(); }
     bool            IsExtendedHelp() const                  { return bExtendedHelp; }

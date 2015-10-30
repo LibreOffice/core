@@ -294,65 +294,65 @@ OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
     {
         switch( aKey.KeyCode )
         {
-        case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+        case css::awt::Key::DELETE_TO_BEGIN_OF_LINE:
             return OUString( ".uno:DelToStartOfLine" );
-        case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
+        case css::awt::Key::DELETE_TO_END_OF_LINE:
             return OUString( ".uno:DelToEndOfLine" );
-        case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
+        case css::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
             return OUString( ".uno:DelToStartOfPara" );
-        case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
+        case css::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
             return OUString( ".uno:DelToEndOfPara" );
-        case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+        case css::awt::Key::DELETE_WORD_BACKWARD:
             return OUString( ".uno:DelToStartOfWord" );
-        case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+        case css::awt::Key::DELETE_WORD_FORWARD:
             return OUString( ".uno:DelToEndOfWord" );
-        case com::sun::star::awt::Key::INSERT_LINEBREAK:
+        case css::awt::Key::INSERT_LINEBREAK:
             return OUString( ".uno:InsertLinebreak" );
-        case com::sun::star::awt::Key::INSERT_PARAGRAPH:
+        case css::awt::Key::INSERT_PARAGRAPH:
             return OUString( ".uno:InsertPara" );
-        case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+        case css::awt::Key::MOVE_WORD_BACKWARD:
             return OUString( ".uno:GoToPrevWord" );
-        case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+        case css::awt::Key::MOVE_WORD_FORWARD:
             return OUString( ".uno:GoToNextWord" );
-        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+        case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
             return OUString( ".uno:GoToStartOfLine" );
-        case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+        case css::awt::Key::MOVE_TO_END_OF_LINE:
             return OUString( ".uno:GoToEndOfLine" );
-        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+        case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
             return OUString( ".uno:GoToStartOfPara" );
-        case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+        case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
             return OUString( ".uno:GoToEndOfPara" );
-        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+        case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
             return OUString( ".uno:GoToStartOfDoc" );
-        case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+        case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
             return OUString( ".uno:GoToEndOfDoc" );
-        case com::sun::star::awt::Key::SELECT_BACKWARD:
+        case css::awt::Key::SELECT_BACKWARD:
             return OUString( ".uno:CharLeftSel" );
-        case com::sun::star::awt::Key::SELECT_FORWARD:
+        case css::awt::Key::SELECT_FORWARD:
             return OUString( ".uno:CharRightSel" );
-        case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+        case css::awt::Key::SELECT_WORD_BACKWARD:
             return OUString( ".uno:WordLeftSel" );
-        case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+        case css::awt::Key::SELECT_WORD_FORWARD:
             return OUString( ".uno:WordRightSel" );
-        case com::sun::star::awt::Key::SELECT_WORD:
+        case css::awt::Key::SELECT_WORD:
             return OUString( ".uno:SelectWord" );
-        case com::sun::star::awt::Key::SELECT_LINE:
+        case css::awt::Key::SELECT_LINE:
             return OUString();
-        case com::sun::star::awt::Key::SELECT_PARAGRAPH:
+        case css::awt::Key::SELECT_PARAGRAPH:
             return OUString( ".uno:SelectText" );
-        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+        case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
             return OUString( ".uno:StartOfLineSel" );
-        case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+        case css::awt::Key::SELECT_TO_END_OF_LINE:
             return OUString( ".uno:EndOfLineSel" );
-        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+        case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
             return OUString( ".uno:StartOfParaSel" );
-        case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+        case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
             return OUString( ".uno:EndOfParaSel" );
-        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+        case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
             return OUString( ".uno:StartOfDocumentSel" );
-        case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+        case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             return OUString( ".uno:EndOfDocumentSel" );
-        case com::sun::star::awt::Key::SELECT_ALL:
+        case css::awt::Key::SELECT_ALL:
             return OUString( ".uno:SelectAll" );
         default:
             break;

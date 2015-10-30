@@ -76,7 +76,7 @@ void TransferableClipboardListener::AddRemoveListener( vcl::Window* pWin, bool b
             }
         }
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }

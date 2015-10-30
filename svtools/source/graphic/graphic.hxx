@@ -30,9 +30,9 @@
 
 namespace unographic {
 
-class Graphic : public ::com::sun::star::graphic::XGraphic,
-                public ::com::sun::star::awt::XBitmap,
-                public ::com::sun::star::lang::XUnoTunnel,
+class Graphic : public css::graphic::XGraphic,
+                public css::awt::XBitmap,
+                public css::lang::XUnoTunnel,
                 public ::unographic::GraphicDescriptor,
                 public ::unographic::GraphicTransformer
 {
@@ -44,37 +44,37 @@ public:
     using ::unographic::GraphicDescriptor::init;
     void init( const ::Graphic& rGraphic ) throw();
 
-    static const ::Graphic* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+    static const ::Graphic* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace ) throw();
     static OUString getImplementationName_Static() throw();
-    static ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
+    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
 
 protected:
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XGraphic
-    virtual ::sal_Int8 SAL_CALL getType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int8 SAL_CALL getType(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XBitmap
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getDIB(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getMaskDIB(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Size SAL_CALL getSize(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getDIB(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getMaskDIB(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception) override;
 
 private:
 

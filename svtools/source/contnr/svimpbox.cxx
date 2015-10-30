@@ -132,12 +132,12 @@ SvImpLBox::~SvImpLBox()
 
 void SvImpLBox::UpdateStringSorter()
 {
-    const ::com::sun::star::lang::Locale& rNewLocale = Application::GetSettings().GetLanguageTag().getLocale();
+    const css::lang::Locale& rNewLocale = Application::GetSettings().GetLanguageTag().getLocale();
 
     if( m_pStringSorter )
     {
         // different Locale from the older one, drop it and force recreate
-        const ::com::sun::star::lang::Locale &aLocale = m_pStringSorter->getLocale();
+        const css::lang::Locale &aLocale = m_pStringSorter->getLocale();
         if( aLocale.Language != rNewLocale.Language ||
             aLocale.Country != rNewLocale.Country ||
             aLocale.Variant != rNewLocale.Variant )

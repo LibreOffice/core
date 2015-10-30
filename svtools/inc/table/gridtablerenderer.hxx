@@ -86,11 +86,11 @@ namespace svt { namespace table
         virtual void    ShowCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) override;
         virtual void    HideCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) override;
         virtual bool    FitsIntoCell(
-                            ::com::sun::star::uno::Any const & i_cellContent,
+                            css::uno::Any const & i_cellContent,
                             OutputDevice& i_targetDevice, Rectangle const & i_targetArea
                         ) const override;
         virtual bool    GetFormattedCellString(
-                            ::com::sun::star::uno::Any const & i_cellValue,
+                            css::uno::Any const & i_cellValue,
                             OUString & o_cellString
                         ) const override;
 

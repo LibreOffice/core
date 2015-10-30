@@ -1275,8 +1275,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     }
 
     TransferDataContainer* pContainer = new TransferDataContainer;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::datatransfer::XTransferable > xRef( pContainer );
+    css::uno::Reference< css::datatransfer::XTransferable > xRef( pContainer );
     nDragDropMode = NotifyStartDrag( *pContainer, pEntry );
     if( nDragDropMode == DragDropMode::NONE || 0 == GetSelectionCount() )
     {
@@ -3834,19 +3833,19 @@ void SvTreeListBox::EnableList( bool _bEnable )
     Invalidate(Rectangle(Point(), GetSizePixel()));
 }
 
-::com::sun::star::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
+css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
 {
     vcl::Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvTreeListBox::CreateAccessible - accessible parent not found" );
 
-    ::com::sun::star::uno::Reference< XAccessible > xAccessible;
+    css::uno::Reference< XAccessible > xAccessible;
     if ( pParent )
     {
-        ::com::sun::star::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
+        css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
             // need to be done here to get the vclxwindow later on in the accessible
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xTemp(GetComponentInterface());
+            css::uno::Reference< css::awt::XWindowPeer > xTemp(GetComponentInterface());
             xAccessible = pImp->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
         }
     }

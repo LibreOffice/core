@@ -252,14 +252,11 @@ public:
         StringBag       m_aStoredFields;
 
     protected:
-        ::com::sun::star::uno::Any
-                        getProperty(const OUString& _rLocalName) const;
-        ::com::sun::star::uno::Any
-                        getProperty(const sal_Char* _pLocalName) const;
+        css::uno::Any   getProperty(const OUString& _rLocalName) const;
+        css::uno::Any   getProperty(const sal_Char* _pLocalName) const;
 
-        OUString getStringProperty(const sal_Char* _pLocalName) const;
-
-        OUString getStringProperty(const OUString& _rLocalName) const;
+        OUString        getStringProperty(const sal_Char* _pLocalName) const;
+        OUString        getStringProperty(const OUString& _rLocalName) const;
 
         void            setStringProperty(const sal_Char* _pLocalName, const OUString& _rValue);
 
@@ -278,7 +275,7 @@ public:
         virtual void    setDatasourceName(const OUString& _rName) override;
         virtual void    setCommand(const OUString& _rCommand) override;
 
-        virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
+        virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
     private:
         virtual void    ImplCommit() override;
@@ -286,7 +283,7 @@ public:
     };
 
 
-void AssignmentPersistentData::Notify( const com::sun::star::uno::Sequence<OUString>& )
+void AssignmentPersistentData::Notify( const css::uno::Sequence<OUString>& )
 {
 }
 

@@ -46,7 +46,7 @@ VCLXHeaderBar::~VCLXHeaderBar()
 {
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXHeaderBar::CreateAccessibleContext()
+css::uno::Reference< css::accessibility::XAccessibleContext > VCLXHeaderBar::CreateAccessibleContext()
 {
     return new VCLXAccessibleHeaderBar(this);
 }
@@ -99,7 +99,7 @@ Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() 
 // =======XAccessibleContext=======
 
 sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -109,8 +109,8 @@ sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
 
     return nCount;
 }
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
-        VCLXAccessibleHeaderBar::getAccessibleChild( sal_Int32 i )  throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+        VCLXAccessibleHeaderBar::getAccessibleChild( sal_Int32 i )  throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -130,9 +130,9 @@ sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
     return xChild;
 }
 
-sal_Int16 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int16 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception)
 {
-    return com::sun::star::accessibility::AccessibleRole::LIST;
+    return css::accessibility::AccessibleRole::LIST;
 }
 
 void SAL_CALL VCLXAccessibleHeaderBar::disposing()
@@ -143,7 +143,7 @@ void SAL_CALL VCLXAccessibleHeaderBar::disposing()
     VCLXAccessibleComponent::disposing();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > VCLXAccessibleHeaderBar::CreateChild (sal_Int32 i)
+css::uno::Reference< css::accessibility::XAccessible > VCLXAccessibleHeaderBar::CreateChild (sal_Int32 i)
 {
     Reference<XAccessible> xChild;
 

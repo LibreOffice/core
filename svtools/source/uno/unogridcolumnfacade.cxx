@@ -40,20 +40,20 @@ namespace svt { namespace table
 {
 
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::awt::grid::XGridColumn;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::awt::grid::XGridColumnListener;
-    using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::awt::grid::GridColumnEvent;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::style::HorizontalAlignment_LEFT;
-    using ::com::sun::star::style::HorizontalAlignment;
+    using css::uno::Reference;
+    using css::uno::RuntimeException;
+    using css::uno::Sequence;
+    using css::uno::UNO_QUERY_THROW;
+    using css::uno::UNO_QUERY;
+    using css::awt::grid::XGridColumn;
+    using css::uno::XInterface;
+    using css::uno::Exception;
+    using css::awt::grid::XGridColumnListener;
+    using css::lang::EventObject;
+    using css::awt::grid::GridColumnEvent;
+    using css::uno::Any;
+    using css::style::HorizontalAlignment_LEFT;
+    using css::style::HorizontalAlignment;
 
 
     namespace
@@ -309,7 +309,7 @@ namespace svt { namespace table
     }
 
 
-    ::com::sun::star::style::HorizontalAlignment UnoGridColumnFacade::getHorizontalAlign()
+    css::style::HorizontalAlignment UnoGridColumnFacade::getHorizontalAlign()
     {
         ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", HorizontalAlignment_LEFT );
         return lcl_get( m_xGridColumn, &XGridColumn::getHorizontalAlign );

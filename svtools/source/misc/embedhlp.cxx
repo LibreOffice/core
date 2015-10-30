@@ -81,7 +81,7 @@ public:
     virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 EmbedEventListener_Impl* EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
@@ -205,7 +205,7 @@ void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& So
         throw util::CloseVetoException();
 }
 
-void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL EmbedEventListener_Impl::notifyClosing( const lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( pObject && Source.Source == pObject->GetObject() )
     {
@@ -793,7 +793,7 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
     return ::comphelper::EmbeddedObjectContainer::GetGraphicReplacementStream(nViewAspect,xObj,pMediaType);
 }
 
-bool EmbeddedObjectRef::IsChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj)
+bool EmbeddedObjectRef::IsChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj)
 {
     SvGlobalName aObjClsId(xObj->getClassID());
     if(
@@ -808,7 +808,7 @@ bool EmbeddedObjectRef::IsChart(const ::com::sun::star::uno::Reference < ::com::
     return false;
 }
 
-bool EmbeddedObjectRef::IsGLChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj)
+bool EmbeddedObjectRef::IsGLChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj)
 {
     static const char* env = getenv("CHART_DUMMY_FACTORY");
     if (IsChart(xObj))

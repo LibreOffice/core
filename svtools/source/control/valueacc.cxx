@@ -132,7 +132,7 @@ ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterfa
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
         return( xUnoTunnel.is() ? reinterpret_cast<ValueSetAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueSetAcc::getUnoTunnelId() ))) : NULL );
     }
-    catch(const ::com::sun::star::uno::Exception&)
+    catch(const css::uno::Exception&)
     {
         return NULL;
     }
@@ -146,10 +146,10 @@ void ValueSetAcc::GetFocus()
     mbIsFocused = true;
 
     // Broadcast the state change.
-    ::com::sun::star::uno::Any aOldState, aNewState;
-    aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    css::uno::Any aOldState, aNewState;
+    aNewState <<= css::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
-        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
+        css::accessibility::AccessibleEventId::STATE_CHANGED,
         aOldState, aNewState);
 }
 
@@ -160,10 +160,10 @@ void ValueSetAcc::LoseFocus()
     mbIsFocused = false;
 
     // Broadcast the state change.
-    ::com::sun::star::uno::Any aOldState, aNewState;
-    aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    css::uno::Any aOldState, aNewState;
+    aOldState <<= css::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
-        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
+        css::accessibility::AccessibleEventId::STATE_CHANGED,
         aOldState, aNewState);
 }
 
@@ -740,7 +740,7 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
 
 
 void ValueSetAcc::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -820,7 +820,7 @@ ValueItemAcc* ValueItemAcc::getImplementation( const uno::Reference< uno::XInter
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
         return( xUnoTunnel.is() ? reinterpret_cast<ValueItemAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueItemAcc::getUnoTunnelId() ))) : NULL );
     }
-    catch(const ::com::sun::star::uno::Exception&)
+    catch(const css::uno::Exception&)
     {
         return NULL;
     }

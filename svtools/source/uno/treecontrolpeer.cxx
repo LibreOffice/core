@@ -41,14 +41,14 @@
 #include <map>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::awt::tree;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::graphic;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::awt::tree;
+using namespace css::beans;
+using namespace css::view;
+using namespace css::container;
+using namespace css::util;
+using namespace css::graphic;
 
 struct LockGuard
 {
@@ -517,7 +517,7 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
 }
 
 
-// ::com::sun::star::view::XSelectionSupplier
+// css::view::XSelectionSupplier
 
 
 sal_Bool SAL_CALL TreeControlPeer::select( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
@@ -578,7 +578,7 @@ void SAL_CALL TreeControlPeer::removeSelectionChangeListener( const Reference< X
 }
 
 
-// ::com::sun::star::view::XMultiSelectionSupplier
+// css::view::XMultiSelectionSupplier
 
 
 sal_Bool SAL_CALL TreeControlPeer::addSelection( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
@@ -697,10 +697,10 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumer
 }
 
 
-// ::com::sun::star::awt::XTreeControl
+// css::awt::XTreeControl
 
 
-OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return msDefaultExpandedGraphicURL;
@@ -708,7 +708,7 @@ OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL() throw (::com::
 
 
 
-void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDefaultExpandedGraphicURL ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDefaultExpandedGraphicURL ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( msDefaultExpandedGraphicURL != sDefaultExpandedGraphicURL )
@@ -738,7 +738,7 @@ void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDe
 
 
 
-OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return msDefaultCollapsedGraphicURL;
@@ -746,7 +746,7 @@ OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL() throw (::com:
 
 
 
-void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sDefaultCollapsedGraphicURL ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sDefaultCollapsedGraphicURL ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( msDefaultCollapsedGraphicURL != sDefaultCollapsedGraphicURL )
@@ -1009,10 +1009,10 @@ bool TreeControlPeer::onEditedEntry( UnoTreeListEntry* pEntry, const OUString& r
 }
 
 
-// ::com::sun::star::awt::tree::TreeDataModelListener
+// css::awt::tree::TreeDataModelListener
 
 
-void SAL_CALL TreeControlPeer::treeNodesChanged( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL TreeControlPeer::treeNodesChanged( const css::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1022,7 +1022,7 @@ void SAL_CALL TreeControlPeer::treeNodesChanged( const ::com::sun::star::awt::tr
     updateTree( rEvent, true );
 }
 
-void SAL_CALL TreeControlPeer::treeNodesInserted( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL TreeControlPeer::treeNodesInserted( const css::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1032,7 +1032,7 @@ void SAL_CALL TreeControlPeer::treeNodesInserted( const ::com::sun::star::awt::t
     updateTree( rEvent, true );
 }
 
-void SAL_CALL TreeControlPeer::treeNodesRemoved( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL TreeControlPeer::treeNodesRemoved( const css::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1042,7 +1042,7 @@ void SAL_CALL TreeControlPeer::treeNodesRemoved( const ::com::sun::star::awt::tr
     updateTree( rEvent, true );
 }
 
-void SAL_CALL TreeControlPeer::treeStructureChanged( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL TreeControlPeer::treeStructureChanged( const css::awt::tree::TreeDataModelEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1052,7 +1052,7 @@ void SAL_CALL TreeControlPeer::treeStructureChanged( const ::com::sun::star::awt
     updateTree( rEvent, true );
 }
 
-void TreeControlPeer::updateTree( const ::com::sun::star::awt::tree::TreeDataModelEvent& rEvent, bool bRecursive )
+void TreeControlPeer::updateTree( const css::awt::tree::TreeDataModelEvent& rEvent, bool bRecursive )
 {
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
@@ -1211,7 +1211,7 @@ OUString TreeControlPeer::getEntryString( const Any& rValue )
 }
 
 // XEventListener
-void SAL_CALL TreeControlPeer::disposing( const ::com::sun::star::lang::EventObject& ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL TreeControlPeer::disposing( const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception)
 {
     // model is disposed, so we clear our tree
     SolarMutexGuard aGuard;
@@ -1239,14 +1239,14 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
 }
 
 
-// ::com::sun::star::awt::XLayoutConstrains
+// css::awt::XLayoutConstrains
 
 
-::com::sun::star::awt::Size TreeControlPeer::getMinimumSize() throw(RuntimeException, std::exception)
+css::awt::Size TreeControlPeer::getMinimumSize() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::awt::Size aSz;
+    css::awt::Size aSz;
 /* todo
     MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
     if ( pEdit )
@@ -1255,16 +1255,16 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
     return aSz;
 }
 
-::com::sun::star::awt::Size TreeControlPeer::getPreferredSize() throw(RuntimeException, std::exception)
+css::awt::Size TreeControlPeer::getPreferredSize() throw(RuntimeException, std::exception)
 {
     return getMinimumSize();
 }
 
-::com::sun::star::awt::Size TreeControlPeer::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(RuntimeException, std::exception)
+css::awt::Size TreeControlPeer::calcAdjustedSize( const css::awt::Size& rNewSize ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::awt::Size aSz = rNewSize;
+    css::awt::Size aSz = rNewSize;
 /* todo
     MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
     if ( pEdit )
@@ -1274,7 +1274,7 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
 }
 
 
-// ::com::sun::star::awt::XVclWindowPeer
+// css::awt::XVclWindowPeer
 
 
 void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aValue) throw(RuntimeException, std::exception)
@@ -1456,7 +1456,7 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
 
     try
     {
-        ::com::sun::star::beans::PropertyValues aProps( 1 );
+        css::beans::PropertyValues aProps( 1 );
         aProps[0].Name = "URL";
         aProps[0].Value <<= rURL;
 

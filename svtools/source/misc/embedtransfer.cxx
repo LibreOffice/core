@@ -133,9 +133,9 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                                 xStg->openStorageElement( aName, embed::ElementModes::READ )->copyToStorage( xStor );
                             }
 
-                            ::com::sun::star::uno::Any                  aAny;
-                            const sal_uInt32                            nLen = pStream->Seek( STREAM_SEEK_TO_END );
-                            ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
+                            css::uno::Any                  aAny;
+                            const sal_uInt32               nLen = pStream->Seek( STREAM_SEEK_TO_END );
+                            css::uno::Sequence< sal_Int8 > aSeq( nLen );
 
                             pStream->Seek( STREAM_SEEK_TO_BEGIN );
                             pStream->Read( aSeq.getArray(),  nLen );
@@ -203,12 +203,12 @@ void SvEmbedTransferHelper::ObjectReleased()
 }
 
 void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
+    const css::uno::Reference< css::embed::XEmbeddedObject >& xObj,
     const Graphic* pGraphic,
     sal_Int64 nAspect )
 {
     //TODO/LATER: need TypeName to fill it into the Descriptor (will be shown in listbox)
-    ::com::sun::star::datatransfer::DataFlavor aFlavor;
+    css::datatransfer::DataFlavor aFlavor;
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR, aFlavor );
 
     rDesc.maClassName = SvGlobalName( xObj->getClassID() );
