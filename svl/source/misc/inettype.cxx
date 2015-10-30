@@ -20,16 +20,14 @@
 #include <sal/config.h>
 
 #include <utility>
+#include <map>
 
-#include <o3tl/ptr_container.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/inetmime.hxx>
 #include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <svl/inettype.hxx>
 #include <svl/svl.hrc>
-
-#include <boost/ptr_container/ptr_map.hpp>
 
 #include "getstringresource.hxx"
 
@@ -55,22 +53,24 @@ struct TypeNameMapEntry
     OUString m_aExtension;
     INetContentType m_eTypeID;
 
-    TypeNameMapEntry():
-        m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
+    TypeNameMapEntry(INetContentType const eTypeID, OUString const*const pExtension)
+        : m_aExtension((pExtension) ? *pExtension : OUString())
+        , m_eTypeID(eTypeID)
+    {}
 };
 
 struct ExtensionMapEntry
 {
     INetContentType m_eTypeID;
 
-    ExtensionMapEntry():
-        m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
+    ExtensionMapEntry(INetContentType const eTypeID)
+        : m_eTypeID(eTypeID) {}
 };
 
 class Registration
 {
-    typedef boost::ptr_map<OUString, TypeNameMapEntry>  TypeNameMap;
-    typedef boost::ptr_map<OUString, ExtensionMapEntry> ExtensionMap;
+    typedef std::map<OUString, TypeNameMapEntry>  TypeNameMap;
+    typedef std::map<OUString, ExtensionMapEntry> ExtensionMap;
     typedef std::map<INetContentType, TypeIDMapEntry*>   TypeIDMap;
 
     TypeIDMap    m_aTypeIDMap;    // map ContentType to TypeID
@@ -443,7 +443,7 @@ TypeNameMapEntry * Registration::getExtensionEntry(OUString const & rTypeName)
     Registration &rRegistration = theRegistration::get();
     TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     if (it != rRegistration.m_aTypeNameMap.end())
-        return it->second;
+        return & it->second;
     return 0;
 }
 
@@ -468,21 +468,12 @@ INetContentType Registration::RegisterContentType(OUString const & rTypeName,
         pTypeIDMapEntry->m_aSystemFileType = *pSystemFileType;
     rRegistration.m_aTypeIDMap.insert( ::std::make_pair( eTypeID, pTypeIDMapEntry ) );
 
-    std::unique_ptr<TypeNameMapEntry> pTypeNameMapEntry(new TypeNameMapEntry());
-    if (pExtension)
-        pTypeNameMapEntry->m_aExtension = *pExtension;
-    pTypeNameMapEntry->m_eTypeID = eTypeID;
-    o3tl::ptr_container::insert(
-        rRegistration.m_aTypeNameMap, aTheTypeName,
-        std::move(pTypeNameMapEntry));
+    rRegistration.m_aTypeNameMap.insert(std::make_pair(aTheTypeName,
+                TypeNameMapEntry(eTypeID, pExtension)));
 
     if (pExtension)
     {
-        std::unique_ptr<ExtensionMapEntry> pExtensionMapEntry(new ExtensionMapEntry());
-        pExtensionMapEntry->m_eTypeID = eTypeID;
-        o3tl::ptr_container::insert(
-            rRegistration.m_aExtensionMap, *pExtension,
-            std::move(pExtensionMapEntry));
+        rRegistration.m_aExtensionMap.insert(std::make_pair(*pExtension, ExtensionMapEntry(eTypeID)));
     }
 
     return eTypeID;
@@ -496,7 +487,7 @@ INetContentType Registration::GetContentType(OUString const & rTypeName)
     OUString aTheTypeName = rTypeName.toAsciiLowerCase();
     TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     return it != rRegistration.m_aTypeNameMap.end()
-        ? it->second->m_eTypeID
+        ? it->second.m_eTypeID
         : CONTENT_TYPE_UNKNOWN;
 }
 
@@ -530,7 +521,7 @@ INetContentType Registration::GetContentType4Extension(OUString const & rExtensi
 
     ExtensionMap::iterator it = rRegistration.m_aExtensionMap.find(rExtension);
     return it != rRegistration.m_aExtensionMap.end()
-        ? it->second->m_eTypeID
+        ? it->second.m_eTypeID
         : CONTENT_TYPE_UNKNOWN;
 }
 

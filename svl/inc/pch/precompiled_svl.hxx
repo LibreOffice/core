@@ -18,7 +18,6 @@
 #include <algorithm>
 #include <boost/noncopyable.hpp>
 #include <boost/numeric/conversion/cast.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <cassert>
@@ -119,7 +118,6 @@
 #include <mdds/multi_type_vector_custom_func1.hpp>
 #include <mdds/multi_type_vector_trait.hpp>
 #include <mdds/multi_type_vector_types.hpp>
-#include <o3tl/ptr_container.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.h>
