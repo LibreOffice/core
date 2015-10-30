@@ -326,7 +326,7 @@ void OCommonEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
         {
             document::EventObject aEvent;
             aEvent.EventName = aEventName;
-            aEvent.Source = uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) );
+            aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
             // For now all the events are sent as object events
             // aEvent.Source = ( xSource.is() ? xSource
             //                       : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );

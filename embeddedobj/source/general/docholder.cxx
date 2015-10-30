@@ -235,9 +235,9 @@ void DocumentHolder::CloseFrame()
     if ( xComp.is() )
         xComp->dispose();
 
-    m_xHatchWindow = uno::Reference< awt::XWindow >();
-    m_xOwnWindow = uno::Reference< awt::XWindow >();
-    m_xFrame = uno::Reference< frame::XFrame >();
+    m_xHatchWindow.clear();
+    m_xOwnWindow.clear();
+    m_xFrame.clear();
 }
 
 
@@ -415,7 +415,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
                                                                       awt::Size( HATCH_BORDER_WIDTH, HATCH_BORDER_WIDTH ) );
 
             uno::Reference< awt::XWindowPeer > xHatchWinPeer( xHatchWindow, uno::UNO_QUERY );
-            xHWindow = uno::Reference< awt::XWindow >( xHatchWinPeer, uno::UNO_QUERY );
+            xHWindow.set( xHatchWinPeer, uno::UNO_QUERY );
             if ( !xHWindow.is() )
                 throw uno::RuntimeException(); // TODO: can not create own window
 
@@ -1107,9 +1107,9 @@ void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
 
     if( m_xFrame.is() && m_xFrame == aSource.Source )
     {
-        m_xHatchWindow = uno::Reference< awt::XWindow >();
-        m_xOwnWindow = uno::Reference< awt::XWindow >();
-        m_xFrame = uno::Reference< frame::XFrame >();
+        m_xHatchWindow.clear();
+        m_xOwnWindow.clear();
+        m_xFrame.clear();
     }
 }
 
@@ -1138,9 +1138,9 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
 
     if( m_xFrame.is() && m_xFrame == aSource.Source )
     {
-        m_xHatchWindow = uno::Reference< awt::XWindow >();
-        m_xOwnWindow = uno::Reference< awt::XWindow >();
-        m_xFrame = uno::Reference< frame::XFrame >();
+        m_xHatchWindow.clear();
+        m_xOwnWindow.clear();
+        m_xFrame.clear();
     }
 }
 

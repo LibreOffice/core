@@ -67,7 +67,7 @@ void ODummyEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
         {
             document::EventObject aEvent;
             aEvent.EventName = aEventName;
-            aEvent.Source = uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) );
+            aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
             // For now all the events are sent as object events
             // aEvent.Source = ( xSource.is() ? xSource
             //                     : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
@@ -446,7 +446,7 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         PostEvent_Impl( OUString( "OnSaveAsDone" ) );
     }
 
-    m_xNewParentStorage = uno::Reference< embed::XStorage >();
+    m_xNewParentStorage.clear();
     m_aNewEntryName.clear();
     m_bWaitSaveCompleted = false;
 }

@@ -182,7 +182,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
             xSource->setOutputStream( uno::Reference< io::XOutputStream >::query( xPipe ) );
 
             xml::sax::InputSource aParserInput;
-            aParserInput.aInputStream = uno::Reference< io::XInputStream >::query( xPipe );
+            aParserInput.aInputStream.set( xPipe, UNO_QUERY );
             aParserInput.sSystemId = aMedium.GetName();
 
 

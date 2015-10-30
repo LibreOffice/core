@@ -293,7 +293,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             }
 
             aAny <<= sal_Int32(hWndxWinParent);
-            xWin = uno::Reference<awt::XWindow>(
+            xWin.set(
                 xToolkit->createSystemChild(
                     aAny,
                     aProcessIdent,
@@ -646,9 +646,9 @@ void DocumentHolder::DisconnectFrameDocument( sal_Bool bComplete )
 
     if ( bComplete )
     {
-        m_xFrame = uno::Reference<frame::XFrame2>();
+        m_xFrame.clear();
         m_pIDispatch = NULL;
-        m_xDocument = uno::Reference< frame::XModel >();
+        m_xDocument.clear();
     }
 }
 
@@ -670,7 +670,7 @@ void DocumentHolder::CloseDocument()
     }
 
     m_pIDispatch = NULL;
-    m_xDocument = uno::Reference< frame::XModel >();
+    m_xDocument.clear();
 }
 
 
@@ -699,7 +699,7 @@ void DocumentHolder::CloseFrame()
             xComp->dispose();
     }
 
-    m_xFrame = uno::Reference< frame::XFrame2 >();
+    m_xFrame.clear();
 }
 
 void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, sal_Bool bLink )
@@ -760,7 +760,7 @@ sal_Bool DocumentHolder::ExecuteSuspendCloseFrame()
         {
         }
 
-        m_xFrame = uno::Reference< frame::XFrame2 >();
+        m_xFrame.clear();
     }
 
     return sal_True;
@@ -818,14 +818,14 @@ void DocumentHolder::ClearInterceptorInternally()
     if ( xInterceptor.is() && m_pInterceptor )
         m_pInterceptor->DisconnectDocHolder();
 
-    m_xInterceptorLocker = uno::Reference< frame::XDispatchProviderInterceptor >();
+    m_xInterceptorLocker.clear();
     m_pInterceptor = 0;
 }
 
 void DocumentHolder::ClearInterceptor()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_xInterceptorLocker = uno::Reference< frame::XDispatchProviderInterceptor >();
+    m_xInterceptorLocker.clear();
     m_pInterceptor = 0;
 }
 
@@ -1236,7 +1236,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
 
         uno::Any aAny;
         aAny <<= sal_Int32(hWnd);
-        xWin = uno::Reference<awt::XWindow>(
+        xWin.set(
             xToolkit->createSystemChild(
                 aAny,
                 aProcessIdent,
@@ -1331,11 +1331,11 @@ void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
     {
         m_pIDispatch = NULL;
-        m_xDocument = uno::Reference< frame::XModel >();
+        m_xDocument.clear();
     }
 
     if( m_xFrame.is() && m_xFrame == aSource.Source )
-        m_xFrame = uno::Reference< frame::XFrame2 >();
+        m_xFrame.clear();
 }
 
 
@@ -1372,15 +1372,15 @@ DocumentHolder::notifyClosing(
     {
         // can happen only in case of links
         m_pIDispatch = NULL;
-        m_xDocument = uno::Reference< frame::XModel >();
-        m_xFrame = uno::Reference< frame::XFrame2 >();
+        m_xDocument.clear();
+        m_xFrame.clear();
 
         LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
         if ( aDocLock.GetEmbedDocument() )
             aDocLock.GetEmbedDocument()->OLENotifyClosing();
     }
     else if( m_xFrame.is() && m_xFrame == aSource.Source )
-        m_xFrame = uno::Reference< frame::XFrame2 >();
+        m_xFrame.clear();
 }
 
 void SAL_CALL

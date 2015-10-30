@@ -294,10 +294,10 @@ void OleEmbeddedObject::Dispose()
                 xComp->dispose();
             } catch( const uno::Exception& ) {}
         }
-        m_xObjectStream = uno::Reference< io::XStream >();
+        m_xObjectStream.clear();
     }
 
-    m_xParentStorage = uno::Reference< embed::XStorage >();
+    m_xParentStorage.clear();
 
     m_bDisposed = true;
 }
