@@ -215,13 +215,13 @@ SwTOXType::SwTOXType(const SwTOXType& rCopy)
 
 // Edit forms
 SwForm::SwForm( TOXTypes eTyp ) // #i21237#
-    : eType( eTyp ), nFormMaxLevel( SwForm::GetFormMaxLevel( eTyp )),
+    : m_eType( eTyp ), m_nFormMaxLevel( SwForm::GetFormMaxLevel( eTyp )),
 //  nFirstTabPos( lNumIndent ),
-    bCommaSeparated(false)
+    m_bCommaSeparated(false)
 {
     //bHasFirstTabPos =
-    bGenerateTabPos = false;
-    bIsRelTabPos = true;
+    m_bGenerateTabPos = false;
+    m_bIsRelTabPos = true;
 
     // The table of contents has a certain number of headlines + headings
     // The user has 10 levels + headings
@@ -229,7 +229,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     // Indexes of tables, object illustrations and authorities consist of a heading and one level
 
     sal_uInt16 nPoolId;
-    switch( eType )
+    switch( m_eType )
     {
     case TOX_INDEX:         nPoolId = STR_POOLCOLL_TOX_IDXH;    break;
     case TOX_USER:          nPoolId = STR_POOLCOLL_TOX_USERH;   break;
@@ -245,14 +245,14 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     }
 
     SwFormTokens aTokens;
-    if (TOX_CONTENT == eType || TOX_ILLUSTRATIONS == eType )
+    if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType )
     {
         SwFormToken aLinkStt (TOKEN_LINK_START);
         aLinkStt.sCharStyleName = SW_RES(STR_POOLCHR_TOXJUMP);
         aTokens.push_back(aLinkStt);
     }
 
-    if (TOX_CONTENT == eType)
+    if (TOX_CONTENT == m_eType)
     {
         aTokens.push_back(SwFormToken(TOKEN_ENTRY_NO));
         aTokens.push_back(SwFormToken(TOKEN_ENTRY_TEXT));
@@ -260,7 +260,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     else
         aTokens.push_back(SwFormToken(TOKEN_ENTRY));
 
-    if (TOX_AUTHORITIES != eType)
+    if (TOX_AUTHORITIES != m_eType)
     {
         SwFormToken aToken(TOKEN_TAB_STOP);
         aToken.nTabStopPosition = 0;
@@ -273,12 +273,12 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         aTokens.push_back(SwFormToken(TOKEN_PAGE_NUMS));
     }
 
-    if (TOX_CONTENT == eType || TOX_ILLUSTRATIONS == eType)
+    if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType)
         aTokens.push_back(SwFormToken(TOKEN_LINK_END));
 
     SetTemplate( 0, SW_RESSTR( nPoolId++ ));
 
-    if(TOX_INDEX == eType)
+    if(TOX_INDEX == m_eType)
     {
         for( sal_uInt16 i = 1; i < 5; ++i  )
         {
@@ -301,7 +301,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     else
         for( sal_uInt16 i = 1; i < GetFormMax(); ++i, ++nPoolId )    // Number 0 is the title
         {
-            if(TOX_AUTHORITIES == eType)
+            if(TOX_AUTHORITIES == m_eType)
             {
                 SwFormTokens aAuthTokens;
                 lcl_FillAuthPattern(aAuthTokens, i);
@@ -310,35 +310,35 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
             else
                 SetPattern( i, aTokens );
 
-            if( TOX_CONTENT == eType && 6 == i )
+            if( TOX_CONTENT == m_eType && 6 == i )
                 nPoolId = STR_POOLCOLL_TOX_CNTNT6;
-            else if( TOX_USER == eType && 6 == i )
+            else if( TOX_USER == m_eType && 6 == i )
                 nPoolId = STR_POOLCOLL_TOX_USER6;
-            else if( TOX_AUTHORITIES == eType )
+            else if( TOX_AUTHORITIES == m_eType )
                 nPoolId = STR_POOLCOLL_TOX_AUTHORITIES1;
             SetTemplate( i, SW_RESSTR( nPoolId ) );
         }
 }
 
 SwForm::SwForm(const SwForm& rForm)
-    : eType( rForm.eType )
+    : m_eType( rForm.m_eType )
 {
     *this = rForm;
 }
 
 SwForm& SwForm::operator=(const SwForm& rForm)
 {
-    eType = rForm.eType;
-    nFormMaxLevel = rForm.nFormMaxLevel;
+    m_eType = rForm.m_eType;
+    m_nFormMaxLevel = rForm.m_nFormMaxLevel;
 //  nFirstTabPos = rForm.nFirstTabPos;
 //  bHasFirstTabPos = rForm.bHasFirstTabPos;
-    bGenerateTabPos = rForm.bGenerateTabPos;
-    bIsRelTabPos = rForm.bIsRelTabPos;
-    bCommaSeparated = rForm.bCommaSeparated;
-    for(sal_uInt16 i=0; i < nFormMaxLevel; ++i)
+    m_bGenerateTabPos = rForm.m_bGenerateTabPos;
+    m_bIsRelTabPos = rForm.m_bIsRelTabPos;
+    m_bCommaSeparated = rForm.m_bCommaSeparated;
+    for(sal_uInt16 i=0; i < m_nFormMaxLevel; ++i)
     {
-        aPattern[i] = rForm.aPattern[i];
-        aTemplate[i] = rForm.aTemplate[i];
+        m_aPattern[i] = rForm.m_aPattern[i];
+        m_aTemplate[i] = rForm.m_aTemplate[i];
     }
     return *this;
 }
@@ -841,7 +841,7 @@ SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
 void SwForm::SetPattern(sal_uInt16 nLevel, const SwFormTokens& rTokens)
 {
     OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
-    aPattern[nLevel] = rTokens;
+    m_aPattern[nLevel] = rTokens;
 }
 
 void SwForm::SetPattern(sal_uInt16 nLevel, const OUString & rStr)
@@ -849,13 +849,13 @@ void SwForm::SetPattern(sal_uInt16 nLevel, const OUString & rStr)
     OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
 
     SwFormTokensHelper aHelper(rStr);
-    aPattern[nLevel] = aHelper.GetTokens();
+    m_aPattern[nLevel] = aHelper.GetTokens();
 }
 
 const SwFormTokens& SwForm::GetPattern(sal_uInt16 nLevel) const
 {
     OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
-    return aPattern[nLevel];
+    return m_aPattern[nLevel];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

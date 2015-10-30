@@ -287,15 +287,15 @@ public:
 
 class SW_DLLPUBLIC SwForm
 {
-    SwFormTokens    aPattern[ AUTH_TYPE_END + 1 ]; // #i21237#
-    OUString  aTemplate[ AUTH_TYPE_END + 1 ];
+    SwFormTokens    m_aPattern[ AUTH_TYPE_END + 1 ]; // #i21237#
+    OUString  m_aTemplate[ AUTH_TYPE_END + 1 ];
 
-    TOXTypes    eType;
-    sal_uInt16      nFormMaxLevel;
+    TOXTypes    m_eType;
+    sal_uInt16      m_nFormMaxLevel;
 
-    bool    bGenerateTabPos : 1;
-    bool    bIsRelTabPos : 1;
-    bool    bCommaSeparated : 1;
+    bool    m_bGenerateTabPos : 1;
+    bool    m_bIsRelTabPos : 1;
+    bool    m_bCommaSeparated : 1;
 
 public:
     SwForm( TOXTypes eTOXType = TOX_CONTENT );
@@ -317,11 +317,11 @@ public:
     inline TOXTypes GetTOXType() const;
     inline sal_uInt16   GetFormMax() const;
 
-    bool IsRelTabPos() const    {   return bIsRelTabPos; }
-    void SetRelTabPos( bool b ) {   bIsRelTabPos = b;       }
+    bool IsRelTabPos() const    {   return m_bIsRelTabPos; }
+    void SetRelTabPos( bool b ) {   m_bIsRelTabPos = b;       }
 
-    bool IsCommaSeparated() const       { return bCommaSeparated;}
-    void SetCommaSeparated( bool b)     { bCommaSeparated = b;}
+    bool IsCommaSeparated() const       { return m_bCommaSeparated;}
+    void SetCommaSeparated( bool b)     { m_bCommaSeparated = b;}
 
     static sal_uInt16 GetFormMaxLevel( TOXTypes eType );
 
@@ -646,23 +646,23 @@ inline OUString SwTOXMark::GetSecondaryKeyReading() const
 inline void SwForm::SetTemplate(sal_uInt16 nLevel, const OUString& rTemplate)
 {
     SAL_WARN_IF(nLevel >= GetFormMax(), "sw", "Index >= GetFormMax()");
-    aTemplate[nLevel] = rTemplate;
+    m_aTemplate[nLevel] = rTemplate;
 }
 
 inline OUString SwForm::GetTemplate(sal_uInt16 nLevel) const
 {
     SAL_WARN_IF(nLevel >= GetFormMax(), "sw", "Index >= GetFormMax()");
-    return aTemplate[nLevel];
+    return m_aTemplate[nLevel];
 }
 
 inline TOXTypes SwForm::GetTOXType() const
 {
-    return eType;
+    return m_eType;
 }
 
 inline sal_uInt16 SwForm::GetFormMax() const
 {
-    return nFormMaxLevel;
+    return m_nFormMaxLevel;
 }
 
 //SwTOXType
