@@ -171,7 +171,7 @@ namespace pdfi
         virtual void setDefaultCTM(double *ctm);
 
         // Start a page.
-        virtual void startPage(int pageNum, GfxState *state);
+        virtual void startPage(int pageNum, GfxState *state, XRef *xref);
 
         // End a page.
         virtual void endPage();
@@ -186,7 +186,7 @@ namespace pdfi
         // virtual void cvtUserToDev(double ux, double uy, int *dx, int *dy);
 
         //----- link borders
-        virtual void processLink(AnnotLink *link, Catalog *catalog);
+        virtual void processLink(AnnotLink *link);
 
         //----- save/restore graphics state
         virtual void saveState(GfxState *state);

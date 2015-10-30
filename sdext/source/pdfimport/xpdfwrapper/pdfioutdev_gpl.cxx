@@ -463,7 +463,7 @@ PDFOutDev::PDFOutDev( PDFDoc* pDoc ) :
 {
 }
 
-void PDFOutDev::startPage(int /*pageNum*/, GfxState* state)
+void PDFOutDev::startPage(int /*pageNum*/, GfxState* state, XRef* /*xref*/)
 {
     assert(state);
     printf("startPage %f %f\n",
@@ -476,7 +476,7 @@ void PDFOutDev::endPage()
     printf("endPage\n");
 }
 
-void PDFOutDev::processLink(AnnotLink* link, Catalog*)
+void PDFOutDev::processLink(AnnotLink* link)
 {
     assert(link);
 
