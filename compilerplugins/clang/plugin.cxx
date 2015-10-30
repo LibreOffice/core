@@ -12,6 +12,7 @@
 #include "plugin.hxx"
 
 #include <cassert>
+#include <iostream>
 
 #include <clang/Basic/FileManager.h>
 #include <clang/Lex/Lexer.h>
@@ -38,6 +39,14 @@ DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef mess
 bool Plugin::ignoreLocation( SourceLocation loc )
     {
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
+    const char* expansionFile = compiler.getSourceManager().getBufferName(expansionLoc);
+    size_t const len = strlen(expansionFile);
+    if (len > 3 && strncmp(expansionFile + len - 3, ".ii", 3) == 0)
+    {
+        std::cerr << "aborting: input file has suffix .ii: \"" << expansionFile
+            << "\"\nhighly suspicious, probably ccache generated, this will break warning suppressions; export CCACHE_CPP2=1 to prevent this" << std::endl;
+        std::exit(1);
+    }
     if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
     const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
