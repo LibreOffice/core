@@ -32,6 +32,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 
+#include <rtl/character.hxx>
 #include <rtl/uri.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.h>
@@ -86,7 +87,6 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
     rtl_uString * pTmp = NULL;
 
     sal_Unicode encodedSlash[3] = { '%', '2', 'F' };
-    sal_Unicode protocolDelimiter[3] = { ':', '/', '/' };
 
     /* a valid file url may not start with '/' */
     if( ( 0 == ustrFileURL->length ) || ( '/' == ustrFileURL->buffer[0] ) )
@@ -94,12 +94,25 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         return osl_File_E_INVAL;
     }
 
-    /* Check for non file:// protocols */
-
-    nIndex = rtl_ustr_indexOfStr_WithLength( ustrFileURL->buffer, ustrFileURL->length, protocolDelimiter, 3 );
-    if ( -1 != nIndex && (4 != nIndex || 0 != rtl_ustr_ascii_shortenedCompare_WithLength( ustrFileURL->buffer, ustrFileURL->length,"file", 4 ) ) )
-    {
-        return osl_File_E_INVAL;
+    // Check for non file scheme:
+    if (rtl::isAsciiAlpha(ustrFileURL->buffer[0])) {
+        for (sal_Int32 i = 1; i != ustrFileURL->length; ++i) {
+            auto c = ustrFileURL->buffer[i];
+            if (c == ':') {
+                if (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                        ustrFileURL->buffer, i,
+                        RTL_CONSTASCII_STRINGPARAM("file"))
+                    != 0)
+                {
+                    return osl_File_E_INVAL;
+                }
+                break;
+            } else if (!rtl::isAsciiAlphanumeric(c) && c != '+' && c != '-'
+                       && c != '.')
+            {
+                break;
+            }
+        }
     }
 
     /* search for encoded slashes (%2F) and decode every single token if we find one */
