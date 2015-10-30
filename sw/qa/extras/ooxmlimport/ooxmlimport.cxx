@@ -567,7 +567,7 @@ DECLARE_OOXMLIMPORT_TEST(testN758883, "n758883.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(794), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(847), nValue);
 
     // No assert for the 3rd problem: see the comment in the test doc.
 
