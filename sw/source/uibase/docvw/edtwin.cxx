@@ -3352,7 +3352,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ( rSh.IsExtMode() || rSh.IsBlockMode() )
                             return;
 
-                        // select work, AdditionalMode if applicable
+                        // select word, AdditionalMode if applicable
                         if ( KEY_MOD1 == rMEvt.GetModifier() && !rSh.IsAddMode() )
                         {
                             rSh.EnterAddMode();
