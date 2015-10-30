@@ -487,9 +487,7 @@ void aqua_init_systray()
             if( [NSApp respondsToSelector: @selector(addDockMenuItem:)] )
             {
                 [pDockSubMenu setSubmenu: pDockMenu];
-                // insert a separator to the dock menu
-                [NSApp performSelector:@selector(addDockMenuItem:) withObject: [NSMenuItem separatorItem]];
-                // and now add the submenu
+                // add the submenu
                 [NSApp performSelector:@selector(addDockMenuItem:) withObject: pDockSubMenu];
             }
             else

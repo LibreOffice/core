@@ -114,8 +114,13 @@ AquaSalFrame::~AquaSalFrame()
     delete mpGraphics;
 
     if( mpDockMenuEntry )
+    {
+        NSMenu* pDock = AquaSalInstance::GetDynamicDockMenu();
         // life cycle comment: the menu has ownership of the item, so no release
-        [AquaSalInstance::GetDynamicDockMenu() removeItem: mpDockMenuEntry];
+        [pDock removeItem: mpDockMenuEntry];
+        if ( [[pDock itemAtIndex: 0] isSeparatorItem] )
+            [pDock removeItemAtIndex: 0];
+    }
     if ( mpNSView ) {
         [AquaA11yFactory revokeView: mpNSView];
         [mpNSView release];
@@ -298,6 +303,11 @@ void AquaSalFrame::SetTitle(const OUString& rTitle)
         if( mpDockMenuEntry == NULL )
         {
             NSMenu* pDock = AquaSalInstance::GetDynamicDockMenu();
+
+            NSMenuItem* pTopItem = [pDock itemAtIndex: 0];
+            if ( [pTopItem hasSubmenu] )
+                [pDock insertItem: [NSMenuItem separatorItem] atIndex: 0];
+
             mpDockMenuEntry = [pDock insertItemWithTitle: pTitle
                                      action: @selector(dockMenuItemTriggered:)
                                      keyEquivalent: @""
