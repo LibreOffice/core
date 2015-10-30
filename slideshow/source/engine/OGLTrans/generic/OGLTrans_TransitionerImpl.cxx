@@ -329,8 +329,8 @@ void OGLTransitionerImpl::impl_initializeFlags( bool const bValidContext )
         mnGLVersion = OpenGLHelper::getGLVersion();
         SAL_INFO("slideshow.opengl", "GL version: " << mnGLVersion << "" );
 
-        const GLubyte* vendor = glGetString( GL_VENDOR );
 #if defined( UNX ) && !defined( MACOSX )
+        const GLubyte* vendor = glGetString( GL_VENDOR );
         /* TODO: check for version once the bug in fglrx driver is fixed */
         mbBrokenTexturesATI = (vendor && strcmp( reinterpret_cast<const char *>(vendor), "ATI Technologies Inc." ) == 0 );
 #endif
