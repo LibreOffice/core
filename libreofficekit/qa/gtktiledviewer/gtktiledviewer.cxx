@@ -74,7 +74,7 @@ public:
     GtkWidget* m_pDrawingArea;
     TiledCornerButton();
     static gboolean draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData);
-    gboolean drawImpl(GtkWidget* pWidget, cairo_t* pCairo);
+    static gboolean drawImpl(GtkWidget* pWidget, cairo_t* pCairo);
 };
 
 /// Represents all the state that is specific to one GtkWindow of this app.
@@ -264,9 +264,9 @@ TiledCornerButton::TiledCornerButton()
     g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(TiledCornerButton::draw), this);
 }
 
-gboolean TiledCornerButton::draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData)
+gboolean TiledCornerButton::draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer)
 {
-    return static_cast<TiledCornerButton*>(pData)->drawImpl(pWidget, pCairo);
+    return drawImpl(pWidget, pCairo);
 }
 
 gboolean TiledCornerButton::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
