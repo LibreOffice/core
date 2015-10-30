@@ -526,7 +526,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         {
             if( ( pNd = (*this)[ n ] )->IsContentNode() )
                 static_cast<SwContentNode*>(pNd)->DelFrms();
-            pNd->pStartOfSection = pTableNd;
+            pNd->m_pStartOfSection = pTableNd;
         }
     }
 
@@ -597,13 +597,13 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         aEndIdx = pSave->m_nEndNd;
         SwStartNode* pSttNd = new SwStartNode( aSttIdx, ND_STARTNODE,
                                                 SwTableBoxStartNode );
-        pSttNd->pStartOfSection = pTableNd;
+        pSttNd->m_pStartOfSection = pTableNd;
         new SwEndNode( aEndIdx, *pSttNd );
 
         for( sal_uLong i = aSttIdx.GetIndex(); i < aEndIdx.GetIndex()-1; ++i )
         {
             pNd = (*this)[ i ];
-            pNd->pStartOfSection = pSttNd;
+            pNd->m_pStartOfSection = pSttNd;
             if( pNd->IsStartNode() )
                 i = pNd->EndOfSectionIndex();
         }

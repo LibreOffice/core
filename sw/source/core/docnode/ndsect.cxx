@@ -915,7 +915,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
         // Attach all Sections in the NodeSection underneath the new one
         if( ULONG_MAX == nSkipIdx )
-            pNd->pStartOfSection = pSectNd;
+            pNd->m_pStartOfSection = pSectNd;
         else if( n >= nSkipIdx )
             nSkipIdx = ULONG_MAX;
 
@@ -963,9 +963,9 @@ SwSectionNode* SwNode::FindSectionNode()
 {
     if( IsSectionNode() )
         return GetSectionNode();
-    SwStartNode* pTmp = pStartOfSection;
+    SwStartNode* pTmp = m_pStartOfSection;
     while( !pTmp->IsSectionNode() && pTmp->GetIndex() )
-        pTmp = pTmp->pStartOfSection;
+        pTmp = pTmp->m_pStartOfSection;
     return pTmp->GetSectionNode();
 }
 

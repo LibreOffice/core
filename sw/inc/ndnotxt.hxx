@@ -93,11 +93,11 @@ public:
 // Inline methods from Node.hxx - we know TextNode only here!!
 inline SwNoTextNode *SwNode::GetNoTextNode()
 {
-    return ND_NOTXTNODE & nNodeType ? static_cast<SwNoTextNode*>(this) : 0;
+    return ND_NOTXTNODE & m_nNodeType ? static_cast<SwNoTextNode*>(this) : 0;
 }
 inline const SwNoTextNode *SwNode::GetNoTextNode() const
 {
-    return ND_NOTXTNODE & nNodeType ? static_cast<const SwNoTextNode*>(this) : 0;
+    return ND_NOTXTNODE & m_nNodeType ? static_cast<const SwNoTextNode*>(this) : 0;
 }
 
 #endif // INCLUDED_SW_INC_NDNOTXT_HXX

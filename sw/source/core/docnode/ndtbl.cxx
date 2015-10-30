@@ -292,7 +292,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
     {
         SwStartNode* pSttNd = new SwStartNode( aEndIdx, ND_STARTNODE,
                                                 SwTableBoxStartNode );
-        pSttNd->pStartOfSection = pTableNd;
+        pSttNd->m_pStartOfSection = pTableNd;
         new SwEndNode( aEndIdx, *pSttNd );
 
         pPrvBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
@@ -586,7 +586,7 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
         {
             SwStartNode* pSttNd = new SwStartNode( aIdx, ND_STARTNODE,
                                                     SwTableBoxStartNode );
-            pSttNd->pStartOfSection = pTableNd;
+            pSttNd->m_pStartOfSection = pTableNd;
 
             SwTextNode * pTmpNd = new SwTextNode( aIdx, pTextColl );
 
@@ -1044,7 +1044,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         lcl_RemoveBreaks(*pTextNd, (0 == nLines) ? pTableFormat : 0);
 
         // Set the TableNode as StartNode for all TextNodes in the Table
-        pTextNd->pStartOfSection = pTableNd;
+        pTextNd->m_pStartOfSection = pTableNd;
 
         SwTableLine* pLine = new SwTableLine( pLineFormat, 1, 0 );
         rTable.GetTabLines().insert(rTable.GetTabLines().begin() + nLines, pLine);
@@ -1076,7 +1076,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     pSttNd = new SwStartNode( aTmpIdx, ND_STARTNODE,
                                                 SwTableBoxStartNode );
                     new SwEndNode( aCntPos.nNode, *pSttNd );
-                    pNewNd->pStartOfSection = pSttNd;
+                    pNewNd->m_pStartOfSection = pSttNd;
 
                     // Assign Section to the Box
                     pBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
@@ -1096,7 +1096,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         pSttNd = new SwStartNode( aCntPos.nNode, ND_STARTNODE, SwTableBoxStartNode );
         const SwNodeIndex aTmpIdx( aCntPos.nNode, 1 );
         new SwEndNode( aTmpIdx, *pSttNd  );
-        pTextNd->pStartOfSection = pSttNd;
+        pTextNd->m_pStartOfSection = pSttNd;
 
         pBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
         pLine->GetTabBoxes().insert( pLine->GetTabBoxes().begin() + nBoxes++, pBox );
@@ -1415,7 +1415,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                 SwNodeIndex aCellNodeIdx = aCellIter->aStart;
                 for(;aCellNodeIdx <= aCellIter->aEnd; ++aCellNodeIdx )
                 {
-                    aCellNodeIdx.GetNode().pStartOfSection = pSttNd;
+                    aCellNodeIdx.GetNode().m_pStartOfSection = pSttNd;
                     //skip start/end node pairs
                     if( aCellNodeIdx.GetNode().IsStartNode() )
                         aCellNodeIdx = SwNodeIndex( *aCellNodeIdx.GetNode().EndOfSectionNode() );
@@ -3414,13 +3414,13 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
         pNewTableNd = new SwTableNode( aIdx );
         pNewTableNd->GetTable().SetTableModel( rTable.IsNewModel() );
 
-        pOldTableEndNd->pStartOfSection = pNewTableNd;
+        pOldTableEndNd->m_pStartOfSection = pNewTableNd;
         pNewTableNd->m_pEndOfSection = pOldTableEndNd;
 
         SwNode* pBoxNd = aIdx.GetNode().GetStartNode();
         do {
             OSL_ENSURE( pBoxNd->IsStartNode(), "This needs to be a StartNode!" );
-            pBoxNd->pStartOfSection = pNewTableNd;
+            pBoxNd->m_pStartOfSection = pNewTableNd;
             pBoxNd = (*this)[ pBoxNd->EndOfSectionIndex() + 1 ];
         } while( pBoxNd != pOldTableEndNd );
     }
@@ -3622,10 +3622,10 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
     SwNode* pBoxNd = aIdx.GetNode().GetStartNode();
     do {
         OSL_ENSURE( pBoxNd->IsStartNode(), "This needs to be a StartNode!" );
-        pBoxNd->pStartOfSection = pTableNd;
+        pBoxNd->m_pStartOfSection = pTableNd;
         pBoxNd = (*this)[ pBoxNd->EndOfSectionIndex() + 1 ];
     } while( pBoxNd != pTableEndNd );
-    pBoxNd->pStartOfSection = pTableNd;
+    pBoxNd->m_pStartOfSection = pTableNd;
 
     aIdx -= 2;
     DelNodes( aIdx, 2 );

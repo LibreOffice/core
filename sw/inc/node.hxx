@@ -82,12 +82,12 @@ class SW_DLLPUBLIC SwNode
 {
     friend class SwNodes;
 
-    sal_uInt8 nNodeType;
+    sal_uInt8 m_nNodeType;
 
     /// For text nodes: level of auto format. Was put here because we had still free bits.
-    sal_uInt8 nAFormatNumLvl : 3;
-    bool bSetNumLSpace : 1;         ///< For numbering: TRUE: set indent.
-    bool bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
+    sal_uInt8 m_nAFormatNumLvl : 3;
+    bool m_bSetNumLSpace : 1;         ///< For numbering: TRUE: set indent.
+    bool m_bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
 
 #ifdef DBG_UTIL
     static long s_nSerial;
@@ -100,7 +100,7 @@ class SW_DLLPUBLIC SwNode
     std::unique_ptr<std::vector<SwFrameFormat*>> m_pAnchoredFlys;
 
 protected:
-    SwStartNode* pStartOfSection;
+    SwStartNode* m_pStartOfSection;
 
     SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNodeId );
 
@@ -119,22 +119,22 @@ public:
     sal_uInt16 GetSectionLevel() const;
 
     inline sal_uLong StartOfSectionIndex() const;
-    inline const SwStartNode* StartOfSectionNode() const { return pStartOfSection; }
-    inline       SwStartNode* StartOfSectionNode() { return pStartOfSection; }
+    inline const SwStartNode* StartOfSectionNode() const { return m_pStartOfSection; }
+    inline       SwStartNode* StartOfSectionNode() { return m_pStartOfSection; }
 
     inline sal_uLong EndOfSectionIndex() const;
     inline const SwEndNode* EndOfSectionNode() const;
     inline         SwEndNode* EndOfSectionNode();
 
-    inline sal_uInt8 GetAutoFormatLvl() const     { return nAFormatNumLvl; }
-    inline void SetAutoFormatLvl( sal_uInt8 nVal )      { nAFormatNumLvl = nVal; }
+    inline sal_uInt8 GetAutoFormatLvl() const     { return m_nAFormatNumLvl; }
+    inline void SetAutoFormatLvl( sal_uInt8 nVal )      { m_nAFormatNumLvl = nVal; }
 
-    inline void SetNumLSpace( bool bFlag )        { bSetNumLSpace = bFlag; }
+    inline void SetNumLSpace( bool bFlag )        { m_bSetNumLSpace = bFlag; }
 
-    inline bool IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }
-    inline void SetIgnoreDontExpand( bool bNew )  { bIgnoreDontExpand = bNew; }
+    inline bool IsIgnoreDontExpand() const  { return m_bIgnoreDontExpand; }
+    inline void SetIgnoreDontExpand( bool bNew )  { m_bIgnoreDontExpand = bNew; }
 
-    sal_uInt8   GetNodeType() const { return nNodeType; }
+    sal_uInt8   GetNodeType() const { return m_nNodeType; }
 
     inline       SwStartNode *GetStartNode();
     inline const SwStartNode *GetStartNode() const;
@@ -589,80 +589,80 @@ private:
 
 inline       SwEndNode   *SwNode::GetEndNode()
 {
-     return ND_ENDNODE == nNodeType ? static_cast<SwEndNode*>(this) : 0;
+     return ND_ENDNODE == m_nNodeType ? static_cast<SwEndNode*>(this) : 0;
 }
 inline const SwEndNode   *SwNode::GetEndNode() const
 {
-     return ND_ENDNODE == nNodeType ? static_cast<const SwEndNode*>(this) : 0;
+     return ND_ENDNODE == m_nNodeType ? static_cast<const SwEndNode*>(this) : 0;
 }
 inline       SwStartNode *SwNode::GetStartNode()
 {
-     return ND_STARTNODE & nNodeType ? static_cast<SwStartNode*>(this) : 0;
+     return ND_STARTNODE & m_nNodeType ? static_cast<SwStartNode*>(this) : 0;
 }
 inline const SwStartNode *SwNode::GetStartNode() const
 {
-     return ND_STARTNODE & nNodeType ? static_cast<const SwStartNode*>(this) : 0;
+     return ND_STARTNODE & m_nNodeType ? static_cast<const SwStartNode*>(this) : 0;
 }
 inline       SwTableNode *SwNode::GetTableNode()
 {
-     return ND_TABLENODE == nNodeType ? static_cast<SwTableNode*>(this) : 0;
+     return ND_TABLENODE == m_nNodeType ? static_cast<SwTableNode*>(this) : 0;
 }
 inline const SwTableNode *SwNode::GetTableNode() const
 {
-     return ND_TABLENODE == nNodeType ? static_cast<const SwTableNode*>(this) : 0;
+     return ND_TABLENODE == m_nNodeType ? static_cast<const SwTableNode*>(this) : 0;
 }
 inline       SwSectionNode *SwNode::GetSectionNode()
 {
-     return ND_SECTIONNODE == nNodeType ? static_cast<SwSectionNode*>(this) : 0;
+     return ND_SECTIONNODE == m_nNodeType ? static_cast<SwSectionNode*>(this) : 0;
 }
 inline const SwSectionNode *SwNode::GetSectionNode() const
 {
-     return ND_SECTIONNODE == nNodeType ? static_cast<const SwSectionNode*>(this) : 0;
+     return ND_SECTIONNODE == m_nNodeType ? static_cast<const SwSectionNode*>(this) : 0;
 }
 inline       SwContentNode *SwNode::GetContentNode()
 {
-     return ND_CONTENTNODE & nNodeType ? static_cast<SwContentNode*>(this) : 0;
+     return ND_CONTENTNODE & m_nNodeType ? static_cast<SwContentNode*>(this) : 0;
 }
 inline const SwContentNode *SwNode::GetContentNode() const
 {
-     return ND_CONTENTNODE & nNodeType ? static_cast<const SwContentNode*>(this) : 0;
+     return ND_CONTENTNODE & m_nNodeType ? static_cast<const SwContentNode*>(this) : 0;
 }
 
 inline bool SwNode::IsStartNode() const
 {
-    return (ND_STARTNODE & nNodeType) != 0;
+    return (ND_STARTNODE & m_nNodeType) != 0;
 }
 inline bool SwNode::IsContentNode() const
 {
-    return (ND_CONTENTNODE & nNodeType) != 0;
+    return (ND_CONTENTNODE & m_nNodeType) != 0;
 }
 inline bool SwNode::IsEndNode() const
 {
-    return ND_ENDNODE == nNodeType;
+    return ND_ENDNODE == m_nNodeType;
 }
 inline bool SwNode::IsTextNode() const
 {
-    return ND_TEXTNODE == nNodeType;
+    return ND_TEXTNODE == m_nNodeType;
 }
 inline bool SwNode::IsTableNode() const
 {
-    return ND_TABLENODE == nNodeType;
+    return ND_TABLENODE == m_nNodeType;
 }
 inline bool SwNode::IsSectionNode() const
 {
-    return ND_SECTIONNODE == nNodeType;
+    return ND_SECTIONNODE == m_nNodeType;
 }
 inline bool SwNode::IsNoTextNode() const
 {
-    return (ND_NOTXTNODE & nNodeType) != 0;
+    return (ND_NOTXTNODE & m_nNodeType) != 0;
 }
 inline bool SwNode::IsOLENode() const
 {
-    return ND_OLENODE == nNodeType;
+    return ND_OLENODE == m_nNodeType;
 }
 inline bool SwNode::IsGrfNode() const
 {
-    return ND_GRFNODE == nNodeType;
+    return ND_GRFNODE == m_nNodeType;
 }
 
 inline const SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp ) const
@@ -679,21 +679,21 @@ inline const SwSectionNode* SwNode::FindSectionNode() const
 }
 inline sal_uLong SwNode::StartOfSectionIndex() const
 {
-    return pStartOfSection->GetIndex();
+    return m_pStartOfSection->GetIndex();
 }
 inline sal_uLong SwNode::EndOfSectionIndex() const
 {
-    const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : pStartOfSection;
+    const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : m_pStartOfSection;
     return pStNd->m_pEndOfSection->GetIndex();
 }
 inline const SwEndNode* SwNode::EndOfSectionNode() const
 {
-    const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : pStartOfSection;
+    const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : m_pStartOfSection;
     return pStNd->m_pEndOfSection;
 }
 inline SwEndNode* SwNode::EndOfSectionNode()
 {
-    const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : pStartOfSection;
+    const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : m_pStartOfSection;
     return pStNd->m_pEndOfSection;
 }
 

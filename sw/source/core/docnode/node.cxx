@@ -267,13 +267,13 @@ sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
 sal_uInt16 SwNode::GetSectionLevel() const
 {
     // EndNode of a BaseSection? They are always 0!
-    if( IsEndNode() && 0 == pStartOfSection->StartOfSectionIndex() )
+    if( IsEndNode() && 0 == m_pStartOfSection->StartOfSectionIndex() )
         return 0;
 
     sal_uInt16 nLevel;
-    const SwNode* pNode = IsStartNode() ? this : pStartOfSection;
+    const SwNode* pNode = IsStartNode() ? this : m_pStartOfSection;
     for( nLevel = 1; 0 != pNode->StartOfSectionIndex(); ++nLevel )
-        pNode = pNode->pStartOfSection;
+        pNode = pNode->m_pStartOfSection;
     return IsEndNode() ? nLevel-1 : nLevel;
 }
 
@@ -282,27 +282,27 @@ long SwNode::s_nSerial = 0;
 #endif
 
 SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
-    : nNodeType( nNdType )
-    , nAFormatNumLvl( 0 )
-    , bSetNumLSpace( false )
-    , bIgnoreDontExpand( false)
+    : m_nNodeType( nNdType )
+    , m_nAFormatNumLvl( 0 )
+    , m_bSetNumLSpace( false )
+    , m_bIgnoreDontExpand( false)
 #ifdef DBG_UTIL
     , m_nSerial( s_nSerial++)
 #endif
-    , pStartOfSection( 0 )
+    , m_pStartOfSection( 0 )
 {
     if( rWhere.GetIndex() )
     {
         SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
         SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
         rNodes.InsertNode( this, rWhere );
-        if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
+        if( 0 == ( m_pStartOfSection = pNd->GetStartNode()) )
         {
-            pStartOfSection = pNd->pStartOfSection;
+            m_pStartOfSection = pNd->m_pStartOfSection;
             if( pNd->GetEndNode() )     // Skip EndNode ? Section
             {
-                pNd = pStartOfSection;
-                pStartOfSection = pNd->pStartOfSection;
+                pNd = m_pStartOfSection;
+                m_pStartOfSection = pNd->m_pStartOfSection;
             }
         }
     }
@@ -315,26 +315,26 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
  * @param nNdType the type of node to insert
  */
 SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
-    : nNodeType( nNdType )
-    , nAFormatNumLvl( 0 )
-    , bSetNumLSpace( false )
-    , bIgnoreDontExpand( false)
+    : m_nNodeType( nNdType )
+    , m_nAFormatNumLvl( 0 )
+    , m_bSetNumLSpace( false )
+    , m_bIgnoreDontExpand( false)
 #ifdef DBG_UTIL
     , m_nSerial( s_nSerial++)
 #endif
-    , pStartOfSection( 0 )
+    , m_pStartOfSection( 0 )
 {
     if( nPos )
     {
         SwNode* pNd = rNodes[ nPos - 1 ];
         rNodes.InsertNode( this, nPos );
-        if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
+        if( 0 == ( m_pStartOfSection = pNd->GetStartNode()) )
         {
-            pStartOfSection = pNd->pStartOfSection;
+            m_pStartOfSection = pNd->m_pStartOfSection;
             if( pNd->GetEndNode() )     // Skip EndNode ? Section!
             {
-                pNd = pStartOfSection;
-                pStartOfSection = pNd->pStartOfSection;
+                pNd = m_pStartOfSection;
+                m_pStartOfSection = pNd->m_pStartOfSection;
             }
         }
     }
@@ -351,9 +351,9 @@ SwTableNode* SwNode::FindTableNode()
 {
     if( IsTableNode() )
         return GetTableNode();
-    SwStartNode* pTmp = pStartOfSection;
+    SwStartNode* pTmp = m_pStartOfSection;
     while( !pTmp->IsTableNode() && pTmp->GetIndex() )
-        pTmp = pTmp->pStartOfSection;
+        pTmp = pTmp->m_pStartOfSection;
     return pTmp->GetTableNode();
 }
 
@@ -363,12 +363,12 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
     bool bRet = false;
     const SwContentNode* pNd;
 
-    if( ND_STARTNODE & nNodeType )
+    if( ND_STARTNODE & m_nNodeType )
     {
         SwNodeIndex aIdx( *this );
         pNd = GetNodes().GoNext( &aIdx );
     }
-    else if( ND_ENDNODE & nNodeType )
+    else if( ND_ENDNODE & m_nNodeType )
     {
         SwNodeIndex aIdx( *EndOfSectionNode() );
         pNd = SwNodes::GoPrevious( &aIdx );
@@ -404,7 +404,7 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
 
 bool SwNode::IsInProtectSect() const
 {
-    const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
+    const SwNode* pNd = ND_SECTIONNODE == m_nNodeType ? m_pStartOfSection : this;
     const SwSectionNode* pSectNd = pNd->FindSectionNode();
     return pSectNd && pSectNd->GetSection().IsProtectFlag();
 }
@@ -414,7 +414,7 @@ bool SwNode::IsInProtectSect() const
 /// Frames/Footnotes/...
 bool SwNode::IsProtect() const
 {
-    const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
+    const SwNode* pNd = ND_SECTIONNODE == m_nNodeType ? m_pStartOfSection : this;
     const SwStartNode* pSttNd = pNd->FindSectionNode();
     if( pSttNd && static_cast<const SwSectionNode*>(pSttNd)->GetSection().IsProtectFlag() )
         return true;
@@ -465,12 +465,12 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
     const SwPageDesc* pPgDesc = 0;
 
     const SwContentNode* pNode;
-    if( ND_STARTNODE & nNodeType )
+    if( ND_STARTNODE & m_nNodeType )
     {
         SwNodeIndex aIdx( *this );
         pNode = GetNodes().GoNext( &aIdx );
     }
-    else if( ND_ENDNODE & nNodeType )
+    else if( ND_ENDNODE & m_nNodeType )
     {
         SwNodeIndex aIdx( *EndOfSectionNode() );
         pNode = SwNodes::GoPrevious( &aIdx );
@@ -748,10 +748,10 @@ SwTableBox* SwNode::GetTableBox() const
 
 SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp )
 {
-    SwStartNode* pTmp = IsStartNode() ? static_cast<SwStartNode*>(this) : pStartOfSection;
+    SwStartNode* pTmp = IsStartNode() ? static_cast<SwStartNode*>(this) : m_pStartOfSection;
 
     while( eTyp != pTmp->GetStartNodeType() && pTmp->GetIndex() )
-        pTmp = pTmp->pStartOfSection;
+        pTmp = pTmp->m_pStartOfSection;
     return eTyp == pTmp->GetStartNodeType() ? pTmp : 0;
 }
 
@@ -885,7 +885,7 @@ SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
     {
         SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
         rNodes.InsertNode( this, rWhere );
-        pStartOfSection = this;
+        m_pStartOfSection = this;
     }
     // Just do this temporarily until the EndNode is inserted
     m_pEndOfSection = reinterpret_cast<SwEndNode*>(this);
@@ -897,7 +897,7 @@ SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
     if( !nPos )
     {
         rNodes.InsertNode( this, nPos );
-        pStartOfSection = this;
+        m_pStartOfSection = this;
     }
     // Just do this temporarily until the EndNode is inserted
     m_pEndOfSection = reinterpret_cast<SwEndNode*>(this);
@@ -980,15 +980,15 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwEndNode::SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd )
     : SwNode( rWhere, ND_ENDNODE )
 {
-    pStartOfSection = &rSttNd;
-    pStartOfSection->m_pEndOfSection = this;
+    m_pStartOfSection = &rSttNd;
+    m_pStartOfSection->m_pEndOfSection = this;
 }
 
 SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
     : SwNode( rNds, nPos, ND_ENDNODE )
 {
-    pStartOfSection = &rSttNd;
-    pStartOfSection->m_pEndOfSection = this;
+    m_pStartOfSection = &rSttNd;
+    m_pStartOfSection->m_pEndOfSection = this;
 }
 
 SwContentNode::SwContentNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
