@@ -368,7 +368,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     int eState = STATE_TOGGLE;
     bool bSet = false;
     bool bBrowseModeChanged = false;
-    bool bHideWhitespaceModeChanged = false;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -454,7 +453,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     case FN_VIEW_HIDE_WHITESPACE:
         if ( STATE_TOGGLE == eState )
             bFlag = !pOpt->IsHideWhitespaceMode();
-        bHideWhitespaceModeChanged = (bFlag != pOpt->IsHideWhitespaceMode());
+
         pOpt->SetHideWhitespaceMode(bFlag);
         break;
 
@@ -578,7 +577,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     if( !(*rSh.GetViewOptions() == *pOpt ))
     {
         rSh.ApplyViewOptions( *pOpt );
-        if( bBrowseModeChanged || bHideWhitespaceModeChanged )
+        if( bBrowseModeChanged )
         {
             GetDocShell()->ToggleLayoutMode(this);
         }

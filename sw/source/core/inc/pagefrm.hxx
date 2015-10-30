@@ -110,6 +110,9 @@ protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
+    /// Calculate the content height of a page (without columns).
+    size_t GetContentHeight();
+
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
 

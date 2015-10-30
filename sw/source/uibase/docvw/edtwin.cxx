@@ -2880,14 +2880,17 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
 
         // Toggle Hide-Whitespace if between pages.
-        if (_rMEvt.GetClicks() >= 2 &&
-            rSh.GetViewOptions()->CanHideWhitespace() &&
+        if (rSh.GetViewOptions()->CanHideWhitespace() &&
             rSh.GetLayout()->IsBetweenPages(aDocPos))
         {
-            SwViewOption aOpt(*rSh.GetViewOptions());
-            aOpt.SetHideWhitespaceMode(!aOpt.IsHideWhitespaceMode());
-            rSh.ApplyViewOptions(aOpt);
-            m_rView.GetDocShell()->ToggleLayoutMode(&m_rView);
+            if (_rMEvt.GetClicks() >= 2)
+            {
+                SwViewOption aOpt(*rSh.GetViewOptions());
+                aOpt.SetHideWhitespaceMode(!aOpt.IsHideWhitespaceMode());
+                rSh.ApplyViewOptions(aOpt);
+            }
+
+            return;
         }
     }
 
