@@ -60,7 +60,7 @@ public:
     static gboolean docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
     gboolean docConfigureEventImpl(GtkWidget* pWidget, GdkEventConfigure* pEvent);
     /// Draws rText at the center of rRectangle on pCairo.
-    void drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText);
+    static void drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText);
 };
 
 /// Represents all the state that is specific to one GtkWindow of this app.
