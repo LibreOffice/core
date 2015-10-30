@@ -46,7 +46,7 @@
 #include <xmloff/xmlexp.hxx>
 
 #include <set>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -62,16 +62,26 @@ struct LessuInt32
 
 typedef std::set< sal_uInt32, LessuInt32 >  SvXMLuInt32Set;
 
+struct SvXMLEmbeddedTextEntry
+{
+    sal_uInt16      nSourcePos;     // position in NumberFormat (to skip later)
+    sal_Int32       nFormatPos;     // resulting position in embedded-text element
+    OUString   aText;
+
+    SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, const OUString& rT ) :
+        nSourcePos(nSP), nFormatPos(nFP), aText(rT) {}
+};
+
 class SvXMLEmbeddedTextEntryArr
 {
-    typedef boost::ptr_vector<SvXMLEmbeddedTextEntry> DataType;
+    typedef std::vector<SvXMLEmbeddedTextEntry> DataType;
     DataType maData;
 
 public:
 
-    void push_back( SvXMLEmbeddedTextEntry* p )
+    void push_back( SvXMLEmbeddedTextEntry const& r )
     {
-        maData.push_back(p);
+        maData.push_back(r);
     }
 
     const SvXMLEmbeddedTextEntry& operator[] ( size_t i ) const
@@ -107,16 +117,6 @@ public:
 
     void GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed);
     void SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed);
-};
-
-struct SvXMLEmbeddedTextEntry
-{
-    sal_uInt16      nSourcePos;     // position in NumberFormat (to skip later)
-    sal_Int32       nFormatPos;     // resulting position in embedded-text element
-    OUString   aText;
-
-    SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, const OUString& rT ) :
-        nSourcePos(nSP), nFormatPos(nFP), aText(rT) {}
 };
 
 //! SvXMLNumUsedList_Impl should be optimized!
@@ -614,7 +614,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
     sal_uInt16 nEntryCount = rEmbeddedEntries.size();
     for (sal_uInt16 nEntry=0; nEntry<nEntryCount; nEntry++)
     {
-        const SvXMLEmbeddedTextEntry* pObj = &rEmbeddedEntries[nEntry];
+        const SvXMLEmbeddedTextEntry *const pObj = &rEmbeddedEntries[nEntry];
 
         //  position attribute
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_POSITION,
@@ -1289,8 +1289,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             }
                             sal_Int32 nEmbedPos = nIntegerSymbols - nDigitsPassed;
 
-                            SvXMLEmbeddedTextEntry* pObj = new SvXMLEmbeddedTextEntry( nPos, nEmbedPos, aEmbeddedStr );
-                            aEmbeddedEntries.push_back( pObj );
+                            aEmbeddedEntries.push_back(
+                                SvXMLEmbeddedTextEntry(nPos, nEmbedPos, aEmbeddedStr));
                         }
                         break;
                 }
