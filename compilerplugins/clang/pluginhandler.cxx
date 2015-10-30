@@ -168,6 +168,15 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
     {
     if( context.getDiagnostics().hasErrorOccurred())
         return;
+    char const*const mainFileName = context.getSourceManager().getFileEntryForID(context.getSourceManager().getMainFileID())->getName();
+    size_t const len = strlen(mainFileName);
+    if (len > 3 && strncmp(mainFileName + len - 3, ".ii", 3) == 0)
+    {
+        report(DiagnosticsEngine::Fatal,
+            "input file has suffix .ii: \"%0\"\nhighly suspicious, probably ccache generated, this will break warning suppressions; export CCACHE_CPP2=1 to prevent this") << mainFileName;
+        return;
+    }
+
     for( int i = 0;
          i < pluginCount;
          ++i )
