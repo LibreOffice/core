@@ -39,9 +39,9 @@
 #include <sal/log.hxx>
 
 void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
-                                    bool bIsX11, const boost::optional<guint> xid, boost::optional<Display*> pDisplay )
+                                    bool bIsX11, const boost::optional<unsigned int> xid, boost::optional<Display*> pDisplay )
 {
-    const gchar* appname = SalGenericSystem::getFrameClassName();
+    const char* appname = SalGenericSystem::getFrameClassName();
     const OString aReason = OUStringToOString( sReason, RTL_TEXTENCODING_UTF8 );
 
     inhibitFDO( bInhibit, appname, aReason.getStr() );
@@ -64,13 +64,13 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
     }
 }
 
+#ifdef ENABLE_DBUS
 void dbusInhibit( bool bInhibit,
                   const gchar* service, const gchar* path, const gchar* interface,
                   std::function<bool( DBusGProxy*, guint&, GError*& )> fInhibit,
                   std::function<bool( DBusGProxy*, const guint, GError*& )> fUnInhibit,
                   boost::optional<guint>& rCookie )
 {
-#ifdef ENABLE_DBUS
     if ( ( !bInhibit && ( rCookie == boost::none ) ) ||
          ( bInhibit && ( rCookie != boost::none ) ) )
     {
@@ -130,11 +130,12 @@ void dbusInhibit( bool bInhibit,
 
     g_object_unref( G_OBJECT( proxy ) );
 
-#endif // ENABLE_DBUS
 }
+#endif // ENABLE_DBUS
 
-void ScreenSaverInhibitor::inhibitFDO( bool bInhibit, const gchar* appname, const gchar* reason )
+void ScreenSaverInhibitor::inhibitFDO( bool bInhibit, const char* appname, const char* reason )
 {
+#ifdef ENABLE_DBUS
     dbusInhibit( bInhibit,
                  FDO_DBUS_SERVICE, FDO_DBUS_PATH, FDO_DBUS_INTERFACE,
                  [appname, reason] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
@@ -154,10 +155,17 @@ void ScreenSaverInhibitor::inhibitFDO( bool bInhibit, const gchar* appname, cons
                                                G_TYPE_INVALID );
                  },
                  mnFDOCookie );
+#else
+    (void) this;
+    (void) bInhibit;
+    (void) appname;
+    (void) reason;
+#endif // ENABLE_DBUS
 }
 
-void ScreenSaverInhibitor::inhibitFDOPM( bool bInhibit, const gchar* appname, const gchar* reason )
+void ScreenSaverInhibitor::inhibitFDOPM( bool bInhibit, const char* appname, const char* reason )
 {
+#ifdef ENABLE_DBUS
     dbusInhibit( bInhibit,
                  FDOPM_DBUS_SERVICE, FDOPM_DBUS_PATH, FDOPM_DBUS_INTERFACE,
                  [appname, reason] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
@@ -177,10 +185,17 @@ void ScreenSaverInhibitor::inhibitFDOPM( bool bInhibit, const gchar* appname, co
                                                G_TYPE_INVALID );
                  },
                  mnFDOPMCookie );
+#else
+    (void) this;
+    (void) bInhibit;
+    (void) appname;
+    (void) reason;
+#endif // ENABLE_DBUS
 }
 
-void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid )
+void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid )
 {
+#ifdef ENABLE_DBUS
     dbusInhibit( bInhibit,
                  GSM_DBUS_SERVICE, GSM_DBUS_PATH, GSM_DBUS_INTERFACE,
                  [appname, reason, xid] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
@@ -202,10 +217,18 @@ void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const gchar* appname, cons
                                                G_TYPE_INVALID );
                  },
                  mnGSMCookie );
+#else
+    (void) this;
+    (void) bInhibit;
+    (void) appname;
+    (void) reason;
+    (void) xid;
+#endif // ENABLE_DBUS
 }
 
-void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const gchar* appname, const gchar* reason, const guint xid )
+void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid )
 {
+#ifdef ENABLE_DBUS
     dbusInhibit( bInhibit,
                  MSM_DBUS_SERVICE, MSM_DBUS_PATH, MSM_DBUS_INTERFACE,
                  [appname, reason, xid] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
@@ -227,6 +250,13 @@ void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const gchar* appname, cons
                                                G_TYPE_INVALID );
                  },
                  mnMSMCookie );
+#else
+    (void) this;
+    (void) bInhibit;
+    (void) appname;
+    (void) reason;
+    (void) xid;
+#endif // ENABLE_DBUS
 }
 
 /**
