@@ -156,14 +156,8 @@ TYPEINIT1(FmFormItem, FmParentData);
 
 Image FmFormItem::GetImage() const
 {
-    static Image aImage;
-
-    if (!aImage)
-    {
-        ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        aImage = aNavigatorImages.GetImage( RID_SVXIMG_FORM );
-    }
-    return aImage;
+    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+    return aNavigatorImages.GetImage( RID_SVXIMG_FORM );
 }
 
 
@@ -187,14 +181,8 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
 
 Image FmFilterItems::GetImage() const
 {
-    static Image aImage;
-
-    if (!aImage)
-    {
-        ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        aImage = aNavigatorImages.GetImage( RID_SVXIMG_FILTER );
-    }
-    return aImage;
+    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+    return aNavigatorImages.GetImage( RID_SVXIMG_FILTER );
 }
 
 
@@ -213,14 +201,8 @@ FmFilterItem::FmFilterItem( FmFilterItems* pParent,
 
 Image FmFilterItem::GetImage() const
 {
-    static Image aImage;
-
-    if (!aImage)
-    {
-        ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        aImage = aNavigatorImages.GetImage( RID_SVXIMG_FIELD );
-    }
-    return aImage;
+    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+    return aNavigatorImages.GetImage( RID_SVXIMG_FIELD );
 }
 
 
