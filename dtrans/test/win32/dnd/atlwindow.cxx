@@ -97,7 +97,7 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 
     // create the DragSource
     Reference< XInterface> xint= MultiServiceFactory->createInstance("com.sun.star.datatransfer.dnd.OleDragSource");
-    m_xDragSource= Reference<XDragSource>( xint, UNO_QUERY);
+    m_xDragSource.set( xint, UNO_QUERY );
     Reference<XInitialization> xInit( xint, UNO_QUERY);
 
     Any ar[2];
@@ -106,7 +106,7 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 
     //create the DropTarget
     Reference< XInterface> xintTarget= MultiServiceFactory->createInstance("com.sun.star.datatransfer.dnd.OleDropTarget");
-    m_xDropTarget= Reference<XDropTarget>( xintTarget, UNO_QUERY);
+    m_xDropTarget.set( xintTarget, UNO_QUERY );
     Reference<XInitialization> xInitTarget( xintTarget, UNO_QUERY);
 
     Any any;

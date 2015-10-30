@@ -1594,7 +1594,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
             m_pUnoOleObject->StoreObjectToStream( xTempOutStream );
 
             xTempOutStream->closeOutput();
-            xTempOutStream = uno::Reference< io::XOutputStream >();
+            xTempOutStream.clear();
         }
         else
             throw io::IOException(); // TODO:

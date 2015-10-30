@@ -112,7 +112,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         catch ( const uno::Exception& )
         {
         }
-        xSubStorage = uno::Reference< embed::XStorage >();
+        xSubStorage.clear();
 
         uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByMediaType( aMediaType );
 
@@ -123,8 +123,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         if ( !aObject.getLength() )
             throw io::IOException(); // unexpected mimetype of the storage
 
-        xResult = uno::Reference< uno::XInterface >(
-                    static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
+        xResult.set(static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                                 m_xContext,
                                                 aObject ) ),
                     uno::UNO_QUERY );
@@ -184,8 +183,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             throw io::IOException(); // unexpected mimetype of the storage
 
 
-        xResult = uno::Reference< uno::XInterface >(
-                    static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
+        xResult.set(static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                             m_xContext,
                                             aObject ) ),
                     uno::UNO_QUERY );
@@ -237,11 +235,10 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     if ( !aObject.getLength() )
         throw io::IOException(); // unexpected mimetype of the storage
 
-    xResult = uno::Reference< uno::XInterface >(
-                    static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
-                                                m_xContext,
-                                                aObject ) ),
-                    uno::UNO_QUERY );
+    xResult.set( static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
+                                             m_xContext,
+                                             aObject ) ),
+                 uno::UNO_QUERY );
 
 
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
@@ -295,7 +292,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             throw io::IOException(); // TODO:
     }
 
-    uno::Reference< uno::XInterface > xResult = uno::Reference< uno::XInterface > (
+    uno::Reference< uno::XInterface > xResult(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                                 m_xContext,
                                                 aObject ) ),
@@ -351,8 +348,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             throw io::IOException(); // unexpected mimetype of the storage
 
 
-        xResult = uno::Reference< uno::XInterface >(
-                    static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
+        xResult.set(static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                             m_xContext,
                                             aObject,
                                             aTempMedDescr,
@@ -415,8 +411,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     if ( !aFilterName.isEmpty() )
     {
 
-        xResult = uno::Reference< uno::XInterface >(
-                    static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
+        xResult.set(static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                             m_xContext,
                                             aObject,
                                             aTempMedDescr,

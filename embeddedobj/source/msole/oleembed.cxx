@@ -344,7 +344,7 @@ bool OleEmbeddedObject::TryToConvertToOOo()
                 nStep = 1;
                 uno::Reference< lang::XComponent > xComp( m_xObjectStream, uno::UNO_QUERY_THROW );
                 xComp->dispose();
-                m_xObjectStream = uno::Reference< io::XStream >();
+                m_xObjectStream.clear();
                 m_nObjectState = -1;
 
                 nStep = 2;
@@ -738,7 +738,7 @@ namespace
             uno::Any aUrl = xNativeTempFile->getPropertyValue("Uri");
             aUrl >>= sUrl;
 
-            xNativeTempFile = uno::Reference<beans::XPropertySet>();
+            xNativeTempFile.clear();
 
             uno::Reference < ucb::XSimpleFileAccess3 > xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );

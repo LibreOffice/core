@@ -201,9 +201,8 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
             //TODO: retrieve ClassName
             OUString aClassName;
-            aObjectInfo.Object = uno::Reference< embed::XEmbeddedObject >(
-                            xEmbCreator->createInstanceInitNew( aClassID, aClassName, xStorage, sEntName, aObjArgs ),
-                            uno::UNO_QUERY );
+            aObjectInfo.Object.set( xEmbCreator->createInstanceInitNew( aClassID, aClassName, xStorage, sEntName, aObjArgs ),
+                                    uno::UNO_QUERY );
         }
         else
         {
@@ -228,9 +227,8 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
             if ( !xEmbCreator.is() )
                 throw uno::RuntimeException();
 
-            aObjectInfo.Object = uno::Reference< embed::XEmbeddedObject >(
-                            xEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aMediaDescr, aObjArgs ),
-                            uno::UNO_QUERY );
+            aObjectInfo.Object.set( xEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aMediaDescr, aObjArgs ),
+                                    uno::UNO_QUERY );
         }
 
         if ( ( io.dwFlags & IOF_CHECKDISPLAYASICON) && io.hMetaPict != NULL )

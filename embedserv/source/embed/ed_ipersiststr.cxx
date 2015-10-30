@@ -104,7 +104,7 @@ uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
             if ( xTempSeek.is() )
             {
                 xTempSeek->seek ( 0 );
-                xResult = uno::Reference< io::XInputStream >( xTempOut, uno::UNO_QUERY );
+                xResult.set( xTempOut, uno::UNO_QUERY );
             }
         }
     }

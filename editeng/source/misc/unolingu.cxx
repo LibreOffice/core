@@ -237,7 +237,7 @@ void SpellDummy_Impl::GetSpell_Impl()
     if (!xSpell.is())
     {
         uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        xSpell = uno::Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+        xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
     }
 }
 
@@ -640,8 +640,7 @@ uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
     uno::Reference< XSearchableDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (xTmpDicList.is())
     {
-        xIgnoreAll = uno::Reference< XDictionary > ( xTmpDicList->getDictionaryByName(
-                    "IgnoreAllList" ), UNO_QUERY );
+        xIgnoreAll.set( xTmpDicList->getDictionaryByName( "IgnoreAllList" ), UNO_QUERY );
     }
     return xIgnoreAll;
 }
@@ -657,11 +656,11 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAll()
     uno::Reference< XSearchableDictionaryList > _xDicList( GetDictionaryList() , UNO_QUERY );
     if (_xDicList.is())
     {
-        xChangeAll = uno::Reference< XDictionary > (
-                        _xDicList->createDictionary(
+        xChangeAll.set( _xDicList->createDictionary(
                             "ChangeAllList",
                             LanguageTag::convertToLocale( LANGUAGE_NONE ),
-                            DictionaryType_NEGATIVE, OUString() ), UNO_QUERY );
+                            DictionaryType_NEGATIVE, OUString() ),
+                        UNO_QUERY );
     }
     return xChangeAll;
 }
@@ -702,7 +701,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
             xTmpDicList->addDictionary( xTmp );
             xTmp->setActive( sal_True );
         }
-        xDic = uno::Reference< XDictionary > ( xTmp, UNO_QUERY );
+        xDic.set( xTmp, UNO_QUERY );
     }
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference< XStorable >      xStor( xDic, UNO_QUERY );

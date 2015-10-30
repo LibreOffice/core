@@ -137,7 +137,7 @@ void SAL_CALL ClipboardListener::changedContents( const ClipboardEvent& event )
     throw(RuntimeException)
 {
     m_nReceivedChangedContentsEvents++;
-    m_xClipboard = Reference< XClipboard > (event.Source, UNO_QUERY);
+    m_xClipboard.set(event.Source, UNO_QUERY);
     m_xTransferable = event.Contents;
 }
 

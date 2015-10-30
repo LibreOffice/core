@@ -125,7 +125,7 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
                 // copy stream contents to the file
                 ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOutStream );
                 xTempOutStream->closeOutput();
-                xTempOutStream = uno::Reference< io::XOutputStream >();
+                xTempOutStream.clear();
             }
             else
                 throw io::IOException(); // TODO:
@@ -643,7 +643,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         aArgs[1] <<= true; // do not create copy
         try
         {
-            xNameContainer = uno::Reference< container::XNameContainer >(
+            xNameContainer.set(
                 m_xFactory->createInstanceWithArguments(
                         "com.sun.star.embed.OLESimpleStorage",
                         aArgs ),
@@ -897,7 +897,7 @@ void OleEmbeddedObject::OnViewChanged_Impl()
        )
     {
         // The view is changed while the object is in running state, save the new object
-        m_xCachedVisualRepresentation = uno::Reference< io::XStream >();
+        m_xCachedVisualRepresentation.clear();
         SaveObject_Impl();
         MakeEventListenerNotification_Impl( OUString( "OnVisAreaChanged" ) );
     }
@@ -963,9 +963,8 @@ void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
         m_pOleComponent->acquire(); // TODO: needs holder?
 
         if ( !m_xClosePreventer.is() )
-            m_xClosePreventer = uno::Reference< util::XCloseListener >(
-                                    static_cast< ::cppu::OWeakObject* >( new OClosePreventer ),
-                                    uno::UNO_QUERY );
+            m_xClosePreventer.set( static_cast< ::cppu::OWeakObject* >( new OClosePreventer ),
+                                   uno::UNO_QUERY );
 
         m_pOleComponent->addCloseListener( m_xClosePreventer );
     }
@@ -1108,7 +1107,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 
     // ignore visual representation provided from outside if it should not be stored
     if ( !bStoreVis )
-        xCachedVisualRepresentation = uno::Reference< io::XStream >();
+        xCachedVisualRepresentation.clear();
 
     if ( bStoreVis && !HasVisReplInStream() && !xCachedVisualRepresentation.is() )
         throw io::IOException(); // TODO: there is no cached visual representation and nothing is provided from outside
@@ -1612,12 +1611,12 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
     bool bStoreLoaded = m_bStoreLoaded;
 
-    m_xNewObjectStream = uno::Reference< io::XStream >();
-    m_xNewParentStorage = uno::Reference< embed::XStorage >();
+    m_xNewObjectStream.clear();
+    m_xNewParentStorage.clear();
     m_aNewEntryName.clear();
     m_bWaitSaveCompleted = false;
     m_bNewVisReplInStream = false;
-    m_xNewCachedVisRepl = uno::Reference< io::XStream >();
+    m_xNewCachedVisRepl.clear();
     m_bStoreLoaded = false;
 
     if ( bUseNew && m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded
@@ -1778,7 +1777,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
         // the replacement is changed probably, and it must be in the object stream
         if ( !m_pOleComponent->IsWorkaroundActive() )
-            m_xCachedVisualRepresentation = uno::Reference< io::XStream >();
+            m_xCachedVisualRepresentation.clear();
         SetVisReplInStream( sal_True );
     }
 #endif
