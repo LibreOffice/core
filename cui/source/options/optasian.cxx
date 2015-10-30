@@ -244,8 +244,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
     Reference<XMultiServiceFactory> xFact(xModel, UNO_QUERY);
     if(xFact.is())
     {
-        pImpl->xPrSet = Reference<XPropertySet>(
-            xFact->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
+        pImpl->xPrSet.set(xFact->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
     }
     if( pImpl->xPrSet.is() )
         pImpl->xPrSetInfo = pImpl->xPrSet->getPropertySetInfo();

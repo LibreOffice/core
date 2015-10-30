@@ -53,7 +53,7 @@ void main( int argc, char * argv[] )
         if(!xFac.is())
             return;
 
-        m_xDriver = Reference<XDriver>(xFac->createInstance("com.sun.star.sdbc.driver.dbase.Driver"),UNO_QUERY);
+        m_xDriver.set(xFac->createInstance("com.sun.star.sdbc.driver.dbase.Driver"),UNO_QUERY);
         if(m_xDriver.is())
         {
 

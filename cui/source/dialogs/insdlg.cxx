@@ -569,7 +569,7 @@ short SfxInsertFloatingFrameDialog::Execute()
         {
             if ( m_xObj->getCurrentState() == embed::EmbedStates::LOADED )
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
-            xSet = uno::Reference < beans::XPropertySet >( m_xObj->getComponent(), uno::UNO_QUERY );
+            xSet.set( m_xObj->getComponent(), uno::UNO_QUERY );
             OUString aStr;
             uno::Any aAny = xSet->getPropertyValue( "FrameURL" );
             if ( aAny >>= aStr )
@@ -671,7 +671,7 @@ short SfxInsertFloatingFrameDialog::Execute()
             m_xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aName );
             if ( m_xObj->getCurrentState() == embed::EmbedStates::LOADED )
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
-            xSet = uno::Reference < beans::XPropertySet >( m_xObj->getComponent(), uno::UNO_QUERY );
+            xSet.set( m_xObj->getComponent(), uno::UNO_QUERY );
         }
 
         if ( m_xObj.is() )

@@ -461,7 +461,7 @@ namespace connectivity
         {
             if ( i->second.second.first.get() == connection.get() )
             {
-                xTab = Reference< XTablesSupplier >(i->second.second.second.get().get(),UNO_QUERY);
+                xTab.set(i->second.second.second.get().get(),UNO_QUERY);
                 if ( !xTab.is() )
                 {
                     xTab = new OHCatalog(connection);

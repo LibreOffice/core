@@ -1436,7 +1436,7 @@ static void columnMetaData2DatabaseTypeDescription(
     if( domains )
     {
         Reference< XResultSet > rsDomain = stmt->executeQuery( queryBuf.makeStringAndClear() );
-        row = Reference< XRow >( rsDomain, UNO_QUERY_THROW );
+        row.set( rsDomain, UNO_QUERY_THROW );
         while( rsDomain->next() )
         {
             oidMap[row->getInt(1)] = DatabaseTypeDescription(row->getString(3), row->getString(2) );
@@ -1815,12 +1815,12 @@ static void columnMetaData2DatabaseTypeDescription(
                 "pg_attribute AS att, pg_class AS cl WHERE "
                 "att.attrelid = ? AND att.attnum = ?" );
 
-        parameters = Reference< XParameters >( statement, UNO_QUERY_THROW );
+        parameters.set( statement, UNO_QUERY_THROW );
         parameters->setString( 1 , tableOid );
         parameters->setString( 2 , attnum );
 
         rs = statement->executeQuery();
-        xRow = Reference< XRow >( rs, UNO_QUERY_THROW );
+        xRow.set( rs, UNO_QUERY_THROW );
         if( rs->next() )
         {
             // column name

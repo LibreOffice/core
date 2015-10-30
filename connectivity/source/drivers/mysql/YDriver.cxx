@@ -410,7 +410,7 @@ namespace connectivity
                 {
                     if ( i->second.second == pConnection )
                     {
-                        xTab = Reference< XTablesSupplier >(i->second.first.get().get(),UNO_QUERY);
+                        xTab.set(i->second.first.get().get(),UNO_QUERY);
                         if ( !xTab.is() )
                         {
                             xTab = new OMySQLCatalog(connection);
@@ -429,7 +429,7 @@ namespace connectivity
                 Reference< XConnection > xTemp(i->first.get(),UNO_QUERY);
                 if ( xTemp == connection )
                 {
-                    xTab = Reference< XTablesSupplier >(i->second.first.get().get(),UNO_QUERY);
+                    xTab.set(i->second.first.get().get(),UNO_QUERY);
                     if ( !xTab.is() )
                     {
                         xTab = new OMySQLCatalog(connection);

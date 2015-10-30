@@ -103,7 +103,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
         if ( xTempSeek.is() )
         {
             xTempSeek->seek( 0 );
-            m_xCopyInput = uno::Reference< io::XInputStream >( xTempOut, uno::UNO_QUERY );
+            m_xCopyInput.set( xTempOut, uno::UNO_QUERY );
             if ( m_xCopyInput.is() )
                 m_xCopySeek = xTempSeek;
         }
@@ -193,15 +193,15 @@ void SAL_CALL OSeekableInputWrapper::closeInput()
         throw io::NotConnectedException();
 
     m_xOriginalStream->closeInput();
-    m_xOriginalStream = uno::Reference< io::XInputStream >();
+    m_xOriginalStream.clear();
 
     if ( m_xCopyInput.is() )
     {
         m_xCopyInput->closeInput();
-        m_xCopyInput = uno::Reference< io::XInputStream >();
+        m_xCopyInput.clear();
     }
 
-    m_xCopySeek = uno::Reference< io::XSeekable >();
+    m_xCopySeek.clear();
 }
 
 

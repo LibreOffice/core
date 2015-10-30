@@ -61,7 +61,7 @@ void OStatementCommonBase::disposeResultSet()
     uno::Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
-    m_xResultSet = uno::Reference< XResultSet>();
+    m_xResultSet.clear();
 }
 
 void OStatementCommonBase::freeStatementHandle()

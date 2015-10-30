@@ -106,10 +106,7 @@ namespace dbtools
             OSL_ENSURE( rxContext.is(), "OPredicateInputController::OPredicateInputController: need a service factory!" );
             if ( rxContext.is() )
             {
-                m_xFormatter = Reference< XNumberFormatter >(
-                    NumberFormatter::create(rxContext),
-                    UNO_QUERY_THROW
-                );
+                m_xFormatter.set( NumberFormatter::create(rxContext), UNO_QUERY_THROW );
             }
 
             Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats( m_xConnection, true );

@@ -171,7 +171,7 @@ void createInstance(
         throw RuntimeException( "cannot get service instance \"" + rServiceName + "\"!" );
     }
 
-    rxOut = Reference< T >::query( x );
+    rxOut.set( x, UNO_QUERY );
     if (! rxOut.is())
     {
         const Type & rType = cppu::UnoType<T>::get();

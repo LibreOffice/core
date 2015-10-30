@@ -90,7 +90,7 @@ void SAL_CALL OInstanceLocker::dispose()
             m_pLockListener->Dispose();
             m_pLockListener = NULL;
         }
-        m_xLockListener = uno::Reference< uno::XInterface >();
+        m_xLockListener.clear();
     }
 
     m_bDisposed = true;
@@ -177,7 +177,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
                                             xInstance,
                                             nModes,
                                             xApproval );
-        m_xLockListener = uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( m_pLockListener ) );
+        m_xLockListener.set( static_cast< OWeakObject* >( m_pLockListener ) );
         m_pLockListener->Init();
     }
     catch( uno::Exception& )
@@ -289,7 +289,7 @@ void OLockListener::Dispose()
         {}
     }
 
-    m_xInstance = uno::Reference< uno::XInterface >();
+    m_xInstance.clear();
     m_bDisposed = true;
 }
 

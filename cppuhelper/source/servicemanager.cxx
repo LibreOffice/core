@@ -834,8 +834,7 @@ void cppuhelper::ServiceManager::loadImplementation(
         css::uno::Reference< css::lang::XMultiComponentFactory > smgr;
         if (implementation->info->alienContext.is()) {
             ctxt = implementation->info->alienContext;
-            smgr = css::uno::Reference< css::lang::XMultiComponentFactory >(
-                ctxt->getServiceManager(), css::uno::UNO_SET_THROW);
+            smgr.set(ctxt->getServiceManager(), css::uno::UNO_SET_THROW);
         } else {
             assert(context.is());
             ctxt = context;
@@ -1620,8 +1619,7 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
         factoryInfo, css::uno::UNO_QUERY);
     css::uno::Reference< css::lang::XSingleServiceFactory > f2;
     if (!f1.is()) {
-        f2 = css::uno::Reference< css::lang::XSingleServiceFactory >(
-            factoryInfo, css::uno::UNO_QUERY);
+        f2.set(factoryInfo, css::uno::UNO_QUERY);
         if (!f2.is()) {
             throw css::lang::IllegalArgumentException(
                 ("Bad XServiceInfo argument implements neither"

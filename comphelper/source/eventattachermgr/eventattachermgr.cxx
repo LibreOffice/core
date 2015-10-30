@@ -369,7 +369,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
              "com.sun.star.script.EventAttacher", rContext)  );
         if ( xIFace.is() )
         {
-            xAttacher = Reference< XEventAttacher2 >::query( xIFace );
+            xAttacher.set( xIFace, UNO_QUERY );
         }
         xConverter = Converter::create(rContext);
     }

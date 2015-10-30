@@ -151,7 +151,7 @@ RecursiveTest::RecursiveTest(
 
 void RecursiveTest::test()
 {
-    properties_ = css::uno::Reference< css::beans::XPropertySet >(
+    properties_.set(
         test_.createUpdateAccess(
             OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
                      ".uno:WebHtml")),

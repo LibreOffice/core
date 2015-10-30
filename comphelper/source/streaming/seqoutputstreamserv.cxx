@@ -137,7 +137,7 @@ void SAL_CALL SequenceOutputStreamService::closeOutput() throw ( uno::RuntimeExc
         throw io::NotConnectedException();
 
     m_xOutputStream->closeOutput();
-    m_xOutputStream = uno::Reference< io::XOutputStream >();
+    m_xOutputStream.clear();
 }
 
 // css::io::XSequenceOutputStream:

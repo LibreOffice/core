@@ -46,7 +46,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         try
         {
             m_xTables = _rxMeta->getTables(catalog,schemaPattern,tableNamePattern,sTableTypes);
-            m_xRow = Reference< XRow>(m_xTables,UNO_QUERY);
+            m_xRow.set(m_xTables,UNO_QUERY);
 
             sUserWorkingFor = _rxMeta->getUserName();
         }

@@ -323,7 +323,7 @@ Service::Service(
 {
     assert(context.is());
     try {
-        provider_ = css::uno::Reference< css::lang::XMultiServiceFactory >(
+        provider_.set(
             context->getServiceManager()->createInstanceWithContext(
                 "com.sun.star.configuration.DefaultProvider", context),
             css::uno::UNO_QUERY_THROW);

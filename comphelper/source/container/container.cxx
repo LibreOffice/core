@@ -79,7 +79,7 @@ css::uno::Reference< css::uno::XInterface> IndexAccessIterator::Next()
                     OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no appropriate interface !");
 
                     css::uno::Reference< css::uno::XInterface> xParent( xChild->getParent());
-                    xContainerAccess = css::uno::Reference< css::container::XIndexAccess>(xParent, css::uno::UNO_QUERY);
+                    xContainerAccess.set(xParent, css::uno::UNO_QUERY);
                     OSL_ENSURE(xContainerAccess.is(), "IndexAccessIterator::Next : a content has an invalid parent !");
 
                     // Remove the index that SearchLoop had within this parent from my stack

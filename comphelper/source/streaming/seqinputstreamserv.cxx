@@ -167,8 +167,8 @@ void SAL_CALL SequenceInputStreamService::closeInput() throw ( uno::RuntimeExcep
         throw io::NotConnectedException();
 
     m_xInputStream->closeInput();
-    m_xInputStream = uno::Reference< io::XInputStream >();
-    m_xSeekable = uno::Reference< io::XSeekable >();
+    m_xInputStream.clear();
+    m_xSeekable.clear();
 }
 
 // css::io::XSeekable:

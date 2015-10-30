@@ -998,7 +998,7 @@ try
     // for formatted fields (either old or new) we have some special treatments
     Reference< XServiceInfo > xSI( xOldProps, UNO_QUERY );
     bool bOldIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
-    xSI = Reference< XServiceInfo >( xNewProps, UNO_QUERY );
+    xSI.set( xNewProps, UNO_QUERY );
     bool bNewIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
 
     if (!bOldIsFormatted && !bNewIsFormatted)
@@ -1701,7 +1701,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     OSL_ENSURE(_rxHandler.is(),"dbtools::askForParameters XInteractionHandler is null!");
 
     // we have to set this here again because getCurrentSettingsComposer can force a setpropertyvalue
-    Reference<XParametersSupplier>  xParameters = Reference<XParametersSupplier> (_xComposer, UNO_QUERY);
+    Reference<XParametersSupplier>  xParameters(_xComposer, UNO_QUERY);
 
     Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;

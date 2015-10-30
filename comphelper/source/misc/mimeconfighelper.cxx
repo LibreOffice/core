@@ -132,11 +132,10 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
         aPathProp.Value <<= aPath;
         aArgs[0] <<= aPathProp;
 
-        xConfig = uno::Reference< container::XNameAccess >(
-                            m_xConfigProvider->createInstanceWithArguments(
-                                "com.sun.star.configuration.ConfigurationAccess",
-                                aArgs ),
-                            uno::UNO_QUERY );
+        xConfig.set( m_xConfigProvider->createInstanceWithArguments(
+                        "com.sun.star.configuration.ConfigurationAccess",
+                        aArgs ),
+                     uno::UNO_QUERY );
     }
     catch( uno::Exception& )
     {}

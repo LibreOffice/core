@@ -269,7 +269,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
         Reference< XNameAccess > xNextNameAccess;
         try
         {
-            xNextNameAccess = Reference< XNameAccess >(aNode, uno::UNO_QUERY);
+            xNextNameAccess.set(aNode, uno::UNO_QUERY);
             bNotLeaf = xNextNameAccess.is();
         }
         catch (const RuntimeException& e)

@@ -296,8 +296,8 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
                     bPKey = true;
-                    xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
-                    xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
+                    xColumnSup.set(xColProp,UNO_QUERY);
+                    xColumns.set(xColumnSup->getColumns(),UNO_QUERY);
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
@@ -306,8 +306,8 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                 }
                 else if(nKeyType == KeyType::UNIQUE)
                 {
-                    xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
-                    xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
+                    xColumnSup.set(xColProp,UNO_QUERY);
+                    xColumns.set(xColumnSup->getColumns(),UNO_QUERY);
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
@@ -318,8 +318,8 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                 {
                     sal_Int32 nDeleteRule   = getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DELETERULE)));
 
-                    xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
-                    xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
+                    xColumnSup.set(xColProp,UNO_QUERY);
+                    xColumns.set(xColumnSup->getColumns(),UNO_QUERY);
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 

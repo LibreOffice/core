@@ -1260,7 +1260,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*
             lArgs[0] <<= sCfgName;
             lArgs[1] <<= css::embed::ElementModes::READ;
 
-            xRootStorage = uno::Reference<embed::XStorage>(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
+            xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
             uno::Reference<embed::XStorage> xUIConfig = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::READ);
             if (xUIConfig.is())
             {
@@ -1289,10 +1289,10 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*
         if (xRootStorage.is())
         {
             uno::Reference<lang::XComponent> xComponent;
-            xComponent = uno::Reference<css::lang::XComponent>(xCfgMgr, uno::UNO_QUERY);
+            xComponent.set(xCfgMgr, uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
-            xComponent = uno::Reference<css::lang::XComponent>(xRootStorage, uno::UNO_QUERY);
+            xComponent.set(xRootStorage, uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
         }
@@ -1343,9 +1343,8 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*
             lArgs[0] <<= sCfgName;
             lArgs[1] <<= embed::ElementModes::WRITE;
 
-            xRootStorage = uno::Reference<embed::XStorage>(
-                                xStorageFactory->createInstanceWithArguments(lArgs),
-                                uno::UNO_QUERY_THROW);
+            xRootStorage.set( xStorageFactory->createInstanceWithArguments(lArgs),
+                              uno::UNO_QUERY_THROW);
 
             uno::Reference<embed::XStorage> xUIConfig(
                                 xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::WRITE),

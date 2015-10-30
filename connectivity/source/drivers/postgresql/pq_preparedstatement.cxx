@@ -429,7 +429,7 @@ sal_Bool PreparedStatement::execute( )
     data.pLastTableInserted = &m_lastTableInserted;
     data.pLastResultset = &m_lastResultset;
     data.owner = *this;
-    data.tableSupplier = Reference< com::sun::star::sdbcx::XTablesSupplier >( m_connection, UNO_QUERY );
+    data.tableSupplier.set( m_connection, UNO_QUERY );
     data.concurrency = extractIntProperty( this, getStatics().RESULT_SET_CONCURRENCY );
 
     return executePostgresCommand( m_executedStatement , &data );   // see pq_statement.cxx

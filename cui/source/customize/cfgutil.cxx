@@ -552,7 +552,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         m_sModuleLongName = sModuleLongName;
 
         m_xGlobalCategoryInfo = css::ui::theUICategoryDescription::get( m_xContext );
-        m_xModuleCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
+        m_xModuleCategoryInfo.set(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
         m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
 
         InitModule();

@@ -872,8 +872,7 @@ SaveInData::SaveInData(
 
     if ( !m_xImgMgr.is() )
     {
-        m_xImgMgr = uno::Reference< css::ui::XImageManager >(
-            GetConfigManager()->getImageManager(), uno::UNO_QUERY );
+        m_xImgMgr.set( GetConfigManager()->getImageManager(), uno::UNO_QUERY );
     }
 
     if ( !IsDocConfig() )
@@ -889,8 +888,7 @@ SaveInData::SaveInData(
         // as default.
         if ( m_xParentCfgMgr.is() )
         {
-            m_xParentImgMgr = uno::Reference< css::ui::XImageManager >(
-                m_xParentCfgMgr->getImageManager(), uno::UNO_QUERY );
+            m_xParentImgMgr.set( m_xParentCfgMgr->getImageManager(), uno::UNO_QUERY );
             xDefaultImgMgr = &m_xParentImgMgr;
         }
     }
@@ -1170,8 +1168,7 @@ bool MenuSaveInData::Apply()
     if ( IsModified() )
     {
         // Apply new menu bar structure to our settings container
-        m_xMenuSettings = uno::Reference< container::XIndexAccess >(
-            GetConfigManager()->createSettings(), uno::UNO_QUERY );
+        m_xMenuSettings.set( GetConfigManager()->createSettings(), uno::UNO_QUERY );
 
         uno::Reference< container::XIndexContainer > xIndexContainer (
             m_xMenuSettings, uno::UNO_QUERY );
@@ -3496,7 +3493,7 @@ void ToolbarSaveInData::SetSystemStyle(
         // before. It's possible that the current element is not available.
         uno::Reference< css::awt::XWindow > xWindow;
         if ( xUIElement.is() )
-            xWindow = uno::Reference< css::awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
+            xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
 
         window = VCLUnoHelper::GetWindow( xWindow );
     }
@@ -4747,8 +4744,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     uno::Reference< uno::XComponentContext > xComponentContext =
         ::comphelper::getProcessComponentContext();
 
-    m_xGraphProvider = uno::Reference< graphic::XGraphicProvider >(
-        graphic::GraphicProvider::create( xComponentContext ) );
+    m_xGraphProvider.set( graphic::GraphicProvider::create( xComponentContext ) );
 
     uno::Reference< css::util::XPathSettings > xPathSettings =
         css::util::thePathSettings::get( xComponentContext );
@@ -4936,9 +4932,7 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
         nId = pTbSymbol->GetItemId( n );
         if ( pTbSymbol->IsItemChecked( nId ) )
         {
-            result = uno::Reference< graphic::XGraphic >(
-                static_cast< graphic::XGraphic* >(
-                    pTbSymbol->GetItemData( nId ) ) );
+            result.set( static_cast< graphic::XGraphic* >( pTbSymbol->GetItemData( nId ) ) );
         }
     }
 

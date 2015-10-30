@@ -38,7 +38,7 @@ bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::bea
 
     uno::Reference<frame::XFrame> xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())
-        xFrame = uno::Reference<frame::XFrame>(xDesktop, uno::UNO_QUERY);
+        xFrame.set(xDesktop, uno::UNO_QUERY);
 
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(xFrame, uno::UNO_QUERY);
     if (!xDispatchProvider.is())

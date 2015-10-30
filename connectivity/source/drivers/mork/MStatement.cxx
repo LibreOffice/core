@@ -182,7 +182,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
 
             m_pTable = static_cast< OTable* > (xTabs.begin()->second.get());
             m_xColNames     = m_pTable->getColumns();
-            xNames = Reference<XIndexAccess>(m_xColNames,UNO_QUERY);
+            xNames.set(m_xColNames,UNO_QUERY);
             // set the binding of the resultrow
             m_aRow          = new OValueVector(xNames->getCount());
             (m_aRow->get())[0].setBound(true);

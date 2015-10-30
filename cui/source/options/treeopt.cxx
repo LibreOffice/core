@@ -2212,15 +2212,14 @@ void ExtensionsTabPage::CreateDialogWithHandler()
         if ( bWithHandler )
         {
             Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            m_xEventHdl = Reference< awt::XContainerWindowEventHandler >(
-                xFactory->createInstance( m_sEventHdl ), UNO_QUERY );
+            m_xEventHdl.set( xFactory->createInstance( m_sEventHdl ), UNO_QUERY );
         }
 
         if ( !bWithHandler || m_xEventHdl.is() )
         {
             SetStyle( GetStyle() | WB_DIALOGCONTROL | WB_CHILDDLGCTRL );
             Reference< awt::XWindowPeer > xParent( VCLUnoHelper::GetInterface( this ), UNO_QUERY );
-            m_xPage = Reference < awt::XWindow >(
+            m_xPage.set(
                 m_xWinProvider->createContainerWindow(
                     m_sPageURL, OUString(), xParent, m_xEventHdl ), UNO_QUERY );
 

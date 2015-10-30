@@ -174,7 +174,7 @@ void EmbeddedObjectContainer::ReleaseImageSubStorage()
         try
         {
             pImpl->mxImageStorage->dispose();
-            pImpl->mxImageStorage = uno::Reference< embed::XStorage >();
+            pImpl->mxImageStorage.clear();
         }
         catch (const uno::Exception&)
         {
@@ -346,7 +346,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
         uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
         aMediaDescr[0].Name = "ReadOnly";
         aMediaDescr[0].Value <<= bReadOnlyMode;
-        xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitFromEntry(
+        xObj.set( xFactory->createInstanceInitFromEntry(
                 pImpl->mxStorage, rName,
                 aMediaDescr, aObjDescr ), uno::UNO_QUERY );
 
@@ -379,7 +379,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
         aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
         ::std::copy( rArgs.begin(), rArgs.end(), aObjDescr.getArray() + 1 );
-        xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
+        xObj.set( xFactory->createInstanceInitNew(
                     rClassId, OUString(), pImpl->mxStorage, rNewName,
                     aObjDescr ), uno::UNO_QUERY );
 
@@ -595,7 +595,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
         aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
-        xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitFromMediaDescriptor(
+        xObj.set( xFactory->createInstanceInitFromMediaDescriptor(
                 pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
@@ -627,8 +627,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
         aObjDescr[0].Name = "Parent";
         aObjDescr[0].Value <<= pImpl->m_xModel.get();
-        xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceLink(
-                pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
+        xObj.set( xFactory->createInstanceLink( pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
 
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
@@ -716,8 +715,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
                     aObjDescr[0].Name = "Parent";
                     aObjDescr[0].Value <<= pImpl->m_xModel.get();
-                    xResult = uno::Reference < embed::XEmbeddedObject >(
-                                xCreator->createInstanceLink(
+                    xResult.set(xCreator->createInstanceLink(
                                     pImpl->mxStorage,
                                     rName,
                                     aMediaDescr,
@@ -740,8 +738,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     uno::Sequence< beans::PropertyValue > aObjDescr( 1 );
                     aObjDescr[0].Name = "Parent";
                     aObjDescr[0].Value <<= pImpl->m_xModel.get();
-                    xResult = uno::Reference < embed::XEmbeddedObject >(
-                                xCreator->createInstanceInitNew(
+                    xResult.set(xCreator->createInstanceInitNew(
                                     xObj->getClassID(),
                                     xObj->getClassName(),
                                     pImpl->mxStorage,
@@ -791,7 +788,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     catch (const uno::Exception&)
                     {
                     }
-                    xResult = uno::Reference< embed::XEmbeddedObject >();
+                    xResult.clear();
                 }
             }
         }
@@ -996,7 +993,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
                 xPersist->storeAsEntry( pImpl->mxTempStorage, aTmpPersistName, aSeq, aSeq );
                 xPersist->saveCompleted( sal_True );
 
-                pImpl->maTempObjectContainer[ aTmpPersistName ] = uno::Reference < embed::XEmbeddedObject >();
+                pImpl->maTempObjectContainer[ aTmpPersistName ].clear();
                 */
 
                 if ( !pImpl->mpTempObjectContainer )

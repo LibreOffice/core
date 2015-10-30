@@ -172,8 +172,7 @@ IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
         {
             lang::Locale aLocale( LanguageTag::convertToLocale(nLang) );
             OUString aURL( linguistic::GetWritableDictionaryURL( sDict ) );
-            xNewDic = Reference< XDictionary > (
-                    xDicList->createDictionary( sDict, aLocale, eType, aURL ) , UNO_QUERY );
+            xNewDic.set( xDicList->createDictionary( sDict, aLocale, eType, aURL ) , UNO_QUERY );
             xNewDic->setActive( sal_True );
         }
         DBG_ASSERT(xNewDic.is(), "NULL pointer");
@@ -312,7 +311,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
         }
         Reference< XDictionary >  xDic;
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
-            xDic = Reference< XDictionary > ( aDics.getConstArray()[ nPos ], UNO_QUERY );
+            xDic.set( aDics.getConstArray()[ nPos ], UNO_QUERY );
         if (xDic.is())
             SetLanguage_Impl( LanguageTag( xDic->getLocale() ).getLanguageType() );
 

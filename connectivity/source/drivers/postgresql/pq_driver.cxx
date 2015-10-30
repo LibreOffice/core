@@ -270,7 +270,7 @@ void OOneInstanceComponentFactory::disposing()
     Reference< XComponent > rComp;
     {
         MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        rComp = Reference< XComponent >( m_theInstance, UNO_QUERY );
+        rComp.set( m_theInstance, UNO_QUERY );
         m_theInstance.clear();
     }
     if( rComp.is() )

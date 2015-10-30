@@ -409,8 +409,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
         try
         {
             Reference< XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
-            pImpl->xFact = Reference<XNameContainer>(
-                    xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY);
+            pImpl->xFact.set(xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY);
 
             DBG_ASSERT(pImpl->xFact.is(), "service com.sun.star.document.FilterFactory unavailable");
             Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);

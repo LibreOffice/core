@@ -438,8 +438,7 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
         }
         css::uno::Reference< css::beans::XPropertySet > propset;
         if (service.is()) {
-            propset = css::uno::Reference< css::beans::XPropertySet >(
-                service, css::uno::UNO_QUERY_THROW);
+            propset.set( service, css::uno::UNO_QUERY_THROW);
         }
         j = externalServices_.insert(
             ExternalServices::value_type(name, propset)).first;

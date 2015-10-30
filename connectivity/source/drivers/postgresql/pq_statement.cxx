@@ -368,7 +368,7 @@ static Sequence< OUString > lookupKeys(
                         }
                         break;
                     }
-                    keySupplier = Reference< XKeysSupplier > ( set, UNO_QUERY );
+                    keySupplier.set( set, UNO_QUERY );
                 }
             }
         }
@@ -854,7 +854,7 @@ sal_Bool Statement::execute( const OUString& sql )
     data.pLastTableInserted = &m_lastTableInserted;
     data.pLastResultset = &m_lastResultset;
     data.owner = *this;
-    data.tableSupplier = Reference< com::sun::star::sdbcx::XTablesSupplier >( m_connection, UNO_QUERY );
+    data.tableSupplier.set( m_connection, UNO_QUERY );
     data.concurrency =
         extractIntProperty( this, getStatics().RESULT_SET_CONCURRENCY );
     return executePostgresCommand( cmd , &data );

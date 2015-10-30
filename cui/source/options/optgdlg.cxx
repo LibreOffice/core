@@ -1055,7 +1055,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
 
         // find out which locales are currently installed and add them to the listbox
         theArgs[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(OUString(sInstalledLocalesPath))));
-    theNameAccess = Reference< XNameAccess > (
+        theNameAccess.set(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
         LanguageType aLang = LANGUAGE_DONTKNOW;
@@ -1074,7 +1074,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
         // find out whether the user has a specific locale specified
         Sequence< Any > theArgs2(1);
         theArgs2[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(OUString(sUserLocalePath))));
-        theNameAccess = Reference< XNameAccess > (
+        theNameAccess.set(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
             theNameAccess->getByName(sUserLocaleKey) >>= m_sUserLocaleValue;

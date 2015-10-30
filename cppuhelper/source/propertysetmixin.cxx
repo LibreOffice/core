@@ -435,7 +435,7 @@ PropertySetMixinImpl::Impl::Impl(
     m_idlClass = getReflection(m_type.getTypeName());
     css::uno::Reference< css::reflection::XTypeDescription > ifc;
     try {
-        ifc = css::uno::Reference< css::reflection::XTypeDescription >(
+        ifc.set(
             css::uno::Reference< css::container::XHierarchicalNameAccess >(
                 m_context->getValueByName(
                     "/singletons/com.sun.star.reflection."

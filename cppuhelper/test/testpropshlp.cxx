@@ -344,7 +344,7 @@ public:
                         {
                             disposing();
                             EventObject aEvt;
-                            aEvt.Source = Reference < XInterface > ( (static_cast< OWeakObject *  >(this)) );
+                            aEvt.Source.set( (static_cast< OWeakObject *  >(this)) );
 
                             rBHelper.aLC.disposeAndClear( aEvt );
                             rBHelper.bDisposed = sal_True;
@@ -796,7 +796,7 @@ void test_PropertySetHelper()
         Reference < XFastPropertySet > rFast( xPS , UNO_QUERY );
         OSL_ENSURE( rFast.is() , "PropertySetHelper: XFastPropertySet nor supported" );
 
-        x = Reference < XInterface > ();
+        x.clear();
 
         // Test add-remove listener
         {

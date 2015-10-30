@@ -736,7 +736,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     {
         ServiceInfo_Impl aInfo;
         aInfo.sSpellImplName = pSpellNames[nIdx];
-        aInfo.xSpell = uno::Reference<XSpellChecker>(
+        aInfo.xSpell.set(
                         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sSpellImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xSpell, UNO_QUERY);
@@ -760,7 +760,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     {
         ServiceInfo_Impl aInfo;
         aInfo.sGrammarImplName = pGrammarNames[nIdx];
-        aInfo.xGrammar = uno::Reference<XProofreader>(
+        aInfo.xGrammar.set(
                         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sGrammarImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xGrammar, UNO_QUERY);
@@ -784,8 +784,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     {
         ServiceInfo_Impl aInfo;
         aInfo.sHyphImplName = pHyphNames[nIdx];
-        aInfo.xHyph = uno::Reference<XHyphenator>(
-                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sHyphImplName, aArgs, xContext), UNO_QUERY);
+        aInfo.xHyph.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sHyphImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xHyph, UNO_QUERY);
         if(xDispName.is())
@@ -808,8 +807,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     {
         ServiceInfo_Impl aInfo;
         aInfo.sThesImplName = pThesNames[nIdx];
-        aInfo.xThes = uno::Reference<XThesaurus>(
-                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sThesImplName, aArgs, xContext), UNO_QUERY);
+        aInfo.xThes.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sThesImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xThes, UNO_QUERY);
         if(xDispName.is())
@@ -1102,7 +1100,7 @@ SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     m_pLinguOptionsEditPB->SetAccessibleName(sAccessibleNameOptionEdit);
 
     xProp = SvxGetLinguPropertySet();
-    xDicList = uno::Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
+    xDicList.set( SvxGetDictionaryList(), UNO_QUERY );
     if (xDicList.is())
     {
         // keep references to all **currently** available dictionaries,
@@ -1623,7 +1621,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             uno::Reference< XDictionary >  xNewDic;
             if ( aDlg->Execute() == RET_OK )
-                xNewDic = uno::Reference< XDictionary >( aDlg->GetNewDictionary(), UNO_QUERY );
+                xNewDic.set( aDlg->GetNewDictionary(), UNO_QUERY );
             if ( xNewDic.is() )
             {
                 // add new dics to the end

@@ -450,8 +450,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
         {
             try
             {
-                xModuleCategories = Reference< container::XNameAccess >(
-                       xAllCategories->getByName( aModuleId ), UNO_QUERY );
+                xModuleCategories.set( xAllCategories->getByName( aModuleId ), UNO_QUERY );
             }
             catch ( container::NoSuchElementException& )
             {

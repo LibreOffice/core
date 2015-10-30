@@ -47,7 +47,7 @@ namespace connectivity
             _rxAggregateDriver = NULL;
 
             // a second "real" reference
-            m_xDriver = Reference< XDriver >(m_xDriverAggregate, UNO_QUERY);
+            m_xDriver.set(m_xDriverAggregate, UNO_QUERY);
             OSL_ENSURE(m_xDriver.is(), "ODriverWrapper::ODriverWrapper: invalid aggregate (no XDriver)!");
 
             // set ourself as delegator
