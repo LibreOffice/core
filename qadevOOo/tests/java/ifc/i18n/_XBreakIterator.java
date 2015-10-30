@@ -582,15 +582,21 @@ public class _XBreakIterator extends MultiMethodTest {
         for(int i = 0; i < vCharBlockBounds.size() - 1; i++) {
             int endPos = vCharBlockBounds.get(i).endPos;
             int startPos = vCharBlockBounds.get(i + 1).startPos;
-            bCharBlockRes &= endPos == startPos;
+            if (endPos != startPos) {
+                bCharBlockRes = false;
+            }
         }
 
         log.println("Testing for no intersections : " + bCharBlockRes);
         int startPos = vCharBlockBounds.get(0).startPos;
-        bCharBlockRes &= startPos == 0;
+        if (startPos != 0) {
+            bCharBlockRes = false;
+        }
         int endPos = vCharBlockBounds.get
             (vCharBlockBounds.size() - 1).endPos;
-        bCharBlockRes &= endPos == UnicodeString.length();
+        if (endPos != UnicodeString.length()) {
+            bCharBlockRes = false;
+        }
         log.println("Regions should starts with 0 and ends with "
             + UnicodeString.length());
 
