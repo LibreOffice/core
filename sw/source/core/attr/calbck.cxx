@@ -124,7 +124,7 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
     // mba: WTF?!
     if( !pOldValue )
     {
-        bLockClientList = true;
+        m_bLockClientList = true;
     }
     else
     {
@@ -132,16 +132,16 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
         {
         case RES_OBJECTDYING:
         case RES_REMOVE_UNO_OBJECT:
-            bLockClientList = static_cast<const SwPtrMsgPoolItem*>(pOldValue)->pObject != this;
+            m_bLockClientList = static_cast<const SwPtrMsgPoolItem*>(pOldValue)->pObject != this;
             break;
 
         default:
-            bLockClientList = true;
+            m_bLockClientList = true;
         }
     }
 
     ModifyBroadcast( pOldValue, pNewValue );
-    bLockClientList = false;
+    m_bLockClientList = false;
     UnlockModify();
 }
 
@@ -158,7 +158,7 @@ bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 
 void SwModify::Add( SwClient* pDepend )
 {
-    OSL_ENSURE( !bLockClientList, "Client inserted while in Modify" );
+    OSL_ENSURE( !m_bLockClientList, "Client inserted while in Modify" );
 
     if(pDepend->pRegisteredIn != this )
     {

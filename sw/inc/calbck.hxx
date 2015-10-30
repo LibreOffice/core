@@ -148,7 +148,7 @@ class SW_DLLPUBLIC SwModify: public SwClient
     template<typename E, typename S> friend class SwIterator;
     sw::WriterListener* m_pWriterListeners;                // the start of the linked list of clients
     bool m_bModifyLocked : 1;         // don't broadcast changes now
-    bool bLockClientList : 1;       // may be set when this instance notifies its clients
+    bool m_bLockClientList : 1;       // may be set when this instance notifies its clients
     bool m_bInDocDTOR : 1;            // workaround for problems when a lot of objects are destroyed
     bool m_bInCache   : 1;
     bool m_bInSwFntCache : 1;
@@ -162,10 +162,10 @@ class SW_DLLPUBLIC SwModify: public SwClient
     SwModify &operator =(const SwModify&) = delete;
 public:
     SwModify()
-        : SwClient(nullptr), m_pWriterListeners(nullptr), m_bModifyLocked(false), bLockClientList(false), m_bInDocDTOR(false), m_bInCache(false), m_bInSwFntCache(false)
+        : SwClient(nullptr), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bLockClientList(false), m_bInDocDTOR(false), m_bInCache(false), m_bInSwFntCache(false)
     {}
     explicit SwModify( SwModify* pToRegisterIn )
-        : SwClient(pToRegisterIn), m_pWriterListeners(nullptr), m_bModifyLocked(false), bLockClientList(false), m_bInDocDTOR(false), m_bInCache(false), m_bInSwFntCache(false)
+        : SwClient(pToRegisterIn), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bLockClientList(false), m_bInDocDTOR(false), m_bInCache(false), m_bInSwFntCache(false)
     {}
 
     // broadcasting: send notifications to all clients
