@@ -650,7 +650,7 @@ public:
         // be done with a shader / gradient
         static void SimulateBorderStretch(OutputDevice &rDev, const Rectangle& r)
         {
-            static BitmapEx aPageShadowMask("sw/res/page-shadow-mask.png");
+            BitmapEx aPageShadowMask("sw/res/page-shadow-mask.png");
 
             BitmapEx aRight(aPageShadowMask);
             sal_Int32 nSlice = (aPageShadowMask.GetSizePixel().Width() - 3) / 4;
