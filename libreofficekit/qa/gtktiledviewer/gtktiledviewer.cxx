@@ -32,6 +32,37 @@ static int help()
     return 1;
 }
 
+/// Represents the row header widget for spreadsheets.
+class TiledRowBar
+{
+public:
+    /// Stores size and content of a single row header.
+    struct Header
+    {
+        int m_nSize;
+        std::string m_aText;
+        Header(int nSize, const std::string& rText)
+            : m_nSize(nSize),
+            m_aText(rText)
+        {
+        }
+    };
+
+    static const int HEADER_WIDTH = 50;
+
+    GtkWidget* m_pDrawingArea;
+    std::vector<Header> m_aHeaders;
+    int m_nHeightPixel = 0;
+
+    TiledRowBar(GtkWidget* pDocView);
+    static gboolean draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData);
+    gboolean drawImpl(GtkWidget* pWidget, cairo_t* pCairo);
+    static gboolean docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
+    gboolean docConfigureEventImpl(GtkWidget* pWidget, GdkEventConfigure* pEvent);
+    /// Draws rText at the center of rRectangle on pCairo.
+    void drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText);
+};
+
 /// Represents all the state that is specific to one GtkWindow of this app.
 class TiledWindow
 {
@@ -56,6 +87,7 @@ public:
     GtkWidget* m_pFindbarEntry;
     GtkWidget* m_pFindbarLabel;
     bool m_bFindAll;
+    std::shared_ptr<TiledRowBar> m_pRowBar;
 
     TiledWindow()
         : m_pDocView(0),
@@ -90,6 +122,92 @@ static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
     GtkWidget* pToplevel = gtk_widget_get_toplevel(pWidget);
     assert(g_aWindows.find(pToplevel) != g_aWindows.end());
     return g_aWindows[pToplevel];
+}
+
+TiledRowBar::TiledRowBar(GtkWidget* pDocView)
+    : m_pDrawingArea(gtk_drawing_area_new()),
+    m_nHeightPixel(0)
+{
+    gtk_widget_set_size_request(m_pDrawingArea, HEADER_WIDTH, -1);
+    g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(TiledRowBar::draw), this);
+    g_signal_connect(pDocView, "configure-event", G_CALLBACK(TiledRowBar::docConfigureEvent), this);
+}
+
+gboolean TiledRowBar::draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData)
+{
+    return static_cast<TiledRowBar*>(pData)->drawImpl(pWidget, pCairo);
+}
+
+void TiledRowBar::drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText)
+{
+    cairo_text_extents_t extents;
+    cairo_text_extents(pCairo, rText.c_str(), &extents);
+    // Cairo reference point for text is the bottom left corner.
+    cairo_move_to(pCairo, rRectangle.x + rRectangle.width / 2 - extents.width / 2, rRectangle.y + rRectangle.height / 2 + extents.height / 2);
+    cairo_show_text(pCairo, rText.c_str());
+}
+
+gboolean TiledRowBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
+{
+    cairo_set_source_rgb(pCairo, 0, 0, 0);
+
+    int nTotal = 0;
+    for (const Header& rHeader : m_aHeaders)
+    {
+        GdkRectangle aRectangle;
+        aRectangle.x = 0;
+        aRectangle.y = nTotal - 1;
+        aRectangle.width = HEADER_WIDTH - 1;
+        aRectangle.height = rHeader.m_nSize;
+        // Bottom line.
+        cairo_rectangle(pCairo, aRectangle.x, aRectangle.y + aRectangle.height, aRectangle.width, 1);
+        cairo_fill(pCairo);
+        // Left line.
+        cairo_rectangle(pCairo, aRectangle.width, aRectangle.y, 1, aRectangle.height);
+        cairo_fill(pCairo);
+        drawText(pCairo, aRectangle, rHeader.m_aText);
+        nTotal += rHeader.m_nSize;
+        if (nTotal > m_nHeightPixel)
+            break;
+    }
+
+    return FALSE;
+}
+
+gboolean TiledRowBar::docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData)
+{
+    return static_cast<TiledRowBar*>(pData)->docConfigureEventImpl(pWidget, pEvent);
+}
+
+gboolean TiledRowBar::docConfigureEventImpl(GtkWidget* pDocView, GdkEventConfigure* /*pEvent*/)
+{
+    if (g_aWindows.find(gtk_widget_get_toplevel(pDocView)) == g_aWindows.end())
+        return TRUE;
+
+    TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
+    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
+    m_nHeightPixel = gtk_adjustment_get_page_size(pVAdjustment);
+
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
+    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
+    {
+        m_aHeaders.clear();
+        char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
+        std::stringstream aStream(pValues);
+        free(pValues);
+        assert(!aStream.str().empty());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
+        {
+            Header aHeader(std::atoi(rValue.second.get<std::string>("size").c_str()), rValue.second.get<std::string>("text"));
+            m_aHeaders.push_back(aHeader);
+        }
+        gtk_widget_show(m_pDrawingArea);
+        gtk_widget_queue_draw(m_pDrawingArea);
+    }
+
+    return TRUE;
 }
 
 static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const std::string& rName)
@@ -798,11 +916,17 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
 
     gtk_box_pack_end(GTK_BOX(rWindow.m_pVBox), rWindow.m_pFindbar, FALSE, FALSE, 0);
 
+    // Horizontal box for the row bar + doc view.
+    GtkWidget* pHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_container_add(GTK_CONTAINER(rWindow.m_pVBox), pHBox);
+    rWindow.m_pRowBar.reset(new TiledRowBar(rWindow.m_pDocView));
+    gtk_box_pack_start(GTK_BOX(pHBox), rWindow.m_pRowBar->m_pDrawingArea, FALSE, FALSE, 0);
+
     // Scrolled window for DocView
     rWindow.m_pScrolledWindow = gtk_scrolled_window_new(0, 0);
     gtk_widget_set_hexpand(rWindow.m_pScrolledWindow, TRUE);
     gtk_widget_set_vexpand(rWindow.m_pScrolledWindow, TRUE);
-    gtk_container_add(GTK_CONTAINER(rWindow.m_pVBox), rWindow.m_pScrolledWindow);
+    gtk_container_add(GTK_CONTAINER(pHBox), rWindow.m_pScrolledWindow);
 
     gtk_container_add(GTK_CONTAINER(rWindow.m_pScrolledWindow), rWindow.m_pDocView);
 
@@ -819,6 +943,8 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_widget_show_all(pWindow);
     // Hide the findbar by default.
     gtk_widget_hide(rWindow.m_pFindbar);
+    // Same for the row bar.
+    gtk_widget_hide(rWindow.m_pRowBar->m_pDrawingArea);
 
     g_aWindows[pWindow] = rWindow;
     return pWindow;
