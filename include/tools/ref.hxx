@@ -92,21 +92,19 @@ protected:
 /** Classes that want to be referenced-counted via SvRef<T>, should extend this base class */
 class TOOLS_DLLPUBLIC SvRefBase
 {
-    // the only reason this is not bool is because MSVC cannot handle mixed type bitfields
-#if defined(__AFL_HAVE_MANUAL_INIT)
-    bool bNoDelete;
-#else
-    unsigned int bNoDelete : 1;
-#endif
+    // work around a clang 3.5 optimization bug: if the bNoDelete is *first*
+    // it mis-compiles "if (--nRefCount == 0)" and never deletes any object
     unsigned int nRefCount : 31;
+    // the only reason this is not bool is because MSVC cannot handle mixed type bitfields
+    unsigned int bNoDelete : 1;
 
 protected:
     virtual         ~SvRefBase();
 
 public:
-                    SvRefBase() : bNoDelete(1), nRefCount(0) {}
+                    SvRefBase() : nRefCount(0), bNoDelete(1) {}
 
-                    SvRefBase( const SvRefBase & /* rObj */ )  : bNoDelete(1), nRefCount(0) {}
+                    SvRefBase(const SvRefBase &) : nRefCount(0), bNoDelete(1) {}
 
     SvRefBase &     operator = ( const SvRefBase & )
                     { return *this; }
