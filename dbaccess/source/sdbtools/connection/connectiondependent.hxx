@@ -90,7 +90,7 @@ namespace sdbtools
 
         inline bool acquireConnection( GuardAccess )
         {
-            m_xConnection = css::uno::Reference< css::sdbc::XConnection >(m_aConnection);
+            m_xConnection.set(m_aConnection);
             return m_xConnection.is();
         }
         inline void releaseConnection( GuardAccess )

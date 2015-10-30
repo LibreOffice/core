@@ -1437,7 +1437,7 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
     Reference< XChild >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
     Reference< XPropertySet >  xDataSource;
     if (xColumns.is())
-        xReturn = Reference< XPropertySet > (xColumns->getParent(), UNO_QUERY);
+        xReturn.set(xColumns->getParent(), UNO_QUERY);
 
     return xReturn;
 }

@@ -222,7 +222,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
         {
             if ( (pArguments->Name == "MasterForm") && (pArguments->Value.getValueTypeClass() == TypeClass_INTERFACE) )
             {
-                xMasterForm = Reference< XRowSet > (*static_cast<Reference< XInterface > const *>(pArguments->Value.getValue()), UNO_QUERY);
+                xMasterForm.set(*static_cast<Reference< XInterface > const *>(pArguments->Value.getValue()), UNO_QUERY);
                 break;
             }
         }

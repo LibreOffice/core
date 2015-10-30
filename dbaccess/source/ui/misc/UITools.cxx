@@ -1501,8 +1501,7 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
         if ( xSupplier.is() )
         {
             // create a new formatter
-            xFormatter = Reference< util::XNumberFormatter > (
-                util::NumberFormatter::create( _rxContext ), UNO_QUERY_THROW);
+            xFormatter.set(util::NumberFormatter::create( _rxContext ), UNO_QUERY_THROW);
             xFormatter->attachNumberFormatsSupplier(xSupplier);
         }
     }

@@ -455,7 +455,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
             try
             {
-                xDoc = Reference < XPrintable >( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, 0, aArgs ), UNO_QUERY );
+                xDoc.set( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, 0, aArgs ), UNO_QUERY );
             }
             catch (const css::lang::IllegalArgumentException& iae)
             {

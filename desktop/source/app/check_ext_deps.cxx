@@ -331,7 +331,7 @@ static void impl_setNeedsCompatCheck()
         beans::NamedValue v( OUString("nodepath"),
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
-        Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
+        Reference< beans::XPropertySet > pset(
             theConfigProvider->createInstanceWithArguments( aAccessSrvc, theArgs ), UNO_QUERY_THROW );
 
         Any value = makeAny( OUString("never") );
@@ -362,7 +362,7 @@ static bool impl_needsCompatCheck()
         beans::NamedValue v( OUString("nodepath"),
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
-        Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
+        Reference< beans::XPropertySet > pset(
             theConfigProvider->createInstanceWithArguments( OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
 
         Any result = pset->getPropertyValue("LastCompatibilityCheckID");

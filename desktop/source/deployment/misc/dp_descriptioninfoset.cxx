@@ -227,8 +227,7 @@ ExtensionDescription::ExtensionDescription(
                 sDescriptionUri + " does not contain the root element <description>.", 0);
         }
 
-        m_xRoot = Reference<css::xml::dom::XNode>(
-            xRoot, css::uno::UNO_QUERY_THROW);
+        m_xRoot.set(xRoot, css::uno::UNO_QUERY_THROW);
         OUString nsDescription = xRoot->getNamespaceURI();
 
         //check if this namespace is supported

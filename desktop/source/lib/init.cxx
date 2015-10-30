@@ -1285,13 +1285,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
         return false;
     }
 
-    xSFactory = uno::Reference<lang::XMultiServiceFactory>(xFactory, uno::UNO_QUERY_THROW);
-    if (!xSFactory.is())
-    {
-        gImpl->maLastExceptionMsg = "XMultiServiceFactory could not be created";
-        SAL_INFO("lok", "XMultiServiceFactory could not be created");
-        return false;
-    }
+    xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
     comphelper::setProcessServiceFactory(xSFactory);
 
     SAL_INFO("lok", "Uno initialized  - " <<  xContext.is());

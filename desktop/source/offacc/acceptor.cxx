@@ -236,7 +236,7 @@ Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
 
     if ( aName == "StarOffice.ServiceManager" )
     {
-        rInstance = Reference< XInterface >( m_rContext->getServiceManager() );
+        rInstance.set( m_rContext->getServiceManager() );
     }
     else if ( aName == "StarOffice.ComponentContext" )
     {
@@ -279,7 +279,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(char const *pIm
 
         if (desktop::Acceptor::impl_getImplementationName().equalsAscii( pImplementationName ) )
         {
-            xFactory = Reference< XSingleServiceFactory >( cppu::createSingleFactory(
+            xFactory.set( cppu::createSingleFactory(
                 xServiceManager, desktop::Acceptor::impl_getImplementationName(),
                 desktop::Acceptor::impl_getInstance, desktop::Acceptor::impl_getSupportedServiceNames()) );
         }

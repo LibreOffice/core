@@ -258,7 +258,7 @@ namespace dbaui
                 Reference< XChild > xConnAsChild( m_pImpl->m_xConnection, UNO_QUERY );
                 Reference< XDataSource > xDS;
                 if ( xConnAsChild.is() )
-                    xDS = Reference< XDataSource >( xConnAsChild->getParent(), UNO_QUERY );
+                    xDS.set( xConnAsChild->getParent(), UNO_QUERY );
 
                 // (take the indirection through XDataSource to ensure we have a correct object ....)
                 m_pImpl->m_aDataSource = DataSourceHolder(xDS);
@@ -284,8 +284,7 @@ namespace dbaui
             Reference< XNumberFormatsSupplier> xSupplier = ::dbtools::getNumberFormats(m_pImpl->m_xConnection);
             if(xSupplier.is())
             {
-                m_pImpl->m_xFormatter = Reference< XNumberFormatter >(
-                    NumberFormatter::create(getORB()), UNO_QUERY_THROW);
+                m_pImpl->m_xFormatter.set(NumberFormatter::create(getORB()), UNO_QUERY_THROW);
                 m_pImpl->m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
             OSL_ENSURE(m_pImpl->m_xFormatter.is(),"No NumberFormatter!");

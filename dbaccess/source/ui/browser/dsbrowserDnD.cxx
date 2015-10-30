@@ -106,7 +106,8 @@ namespace dbaui
             {
                 Reference<XChild> xChild(xConnection,UNO_QUERY);
                 Reference<XStorable> xStore;
-                xStore = Reference<XStorable>( xChild.is() ? getDataSourceOrModel(xChild->getParent()) : Reference<XInterface>(),UNO_QUERY );
+                if ( xChild.is() )
+                    xStore.set( getDataSourceOrModel(xChild->getParent()), UNO_QUERY );
                 // check for the concrete type
                 if ( xStore.is() && !xStore->isReadonly() && ::std::any_of(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE,true)) )
                     return DND_ACTION_COPY;

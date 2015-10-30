@@ -691,8 +691,7 @@ void SbaXDataBrowserController::initFormatter()
     if(xSupplier.is())
     {
         // create a new formatter
-        m_xFormatter = Reference< util::XNumberFormatter > (
-            util::NumberFormatter::create(getORB()), UNO_QUERY_THROW);
+        m_xFormatter.set(util::NumberFormatter::create(getORB()), UNO_QUERY_THROW);
         m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
     else // clear the formatter
@@ -2229,7 +2228,7 @@ bool SbaXDataBrowserController::CommitCurrent()
         // zunaechst das Control fragen ob es das IFace unterstuetzt
         Reference< css::form::XBoundComponent >  xBoundControl(xActiveControl, UNO_QUERY);
         if (!xBoundControl.is())
-            xBoundControl  = Reference< css::form::XBoundComponent > (xActiveControl->getModel(), UNO_QUERY);
+            xBoundControl.set(xActiveControl->getModel(), UNO_QUERY);
         if (xBoundControl.is() && !xBoundControl->commit())
             return false;
     }

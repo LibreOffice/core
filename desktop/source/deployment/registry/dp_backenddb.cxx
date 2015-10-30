@@ -170,7 +170,7 @@ void BackendDb::revokeEntry(OUString const & url)
 {
     try
     {
-        Reference<css::xml::dom::XElement> entry = Reference<css::xml::dom::XElement>(getKeyElement(url), UNO_QUERY);
+        Reference<css::xml::dom::XElement> entry(getKeyElement(url), UNO_QUERY);
         if (entry.is())
         {
             entry->setAttribute("revoked", "true");
@@ -191,7 +191,7 @@ bool BackendDb::activateEntry(OUString const & url)
     try
     {
         bool ret = false;
-        Reference<css::xml::dom::XElement> entry = Reference<css::xml::dom::XElement>(getKeyElement(url), UNO_QUERY);
+        Reference<css::xml::dom::XElement> entry(getKeyElement(url), UNO_QUERY);
         if (entry.is())
         {
             //no attribute "active" means it is active, that is, registered.
@@ -215,7 +215,7 @@ bool BackendDb::hasActiveEntry(OUString const & url)
     try
     {
         bool ret = false;
-        Reference<css::xml::dom::XElement> entry = Reference<css::xml::dom::XElement>(getKeyElement(url), UNO_QUERY);
+        Reference<css::xml::dom::XElement> entry(getKeyElement(url), UNO_QUERY);
         if (entry.is())
         {
             OUString sActive = entry->getAttribute("revoked");

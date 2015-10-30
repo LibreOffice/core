@@ -66,18 +66,20 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
     beans::PropertyValue aValue( OUString("nodepath"), 0, uno::Any( OUString("/org.openoffice.Office.OptionsDialog/Nodes") ),
                                  beans::PropertyState_DIRECT_VALUE );
     args[0] <<= aValue;
-    m_xNameAccessNodes = uno::Reference< container::XNameAccess >(
+    m_xNameAccessNodes.set(
         xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
-                                              uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
+                                              uno::Sequence< uno::Any >( args, 1 )),
+        uno::UNO_QUERY_THROW);
 
     // get the 'get more extensions here' url
     uno::Reference< container::XNameAccess > xNameAccessRepositories;
     beans::PropertyValue aValue2( OUString("nodepath"), 0, uno::Any( OUString("/org.openoffice.Office.ExtensionManager/ExtensionRepositories") ),
                                   beans::PropertyState_DIRECT_VALUE );
     args[0] <<= aValue2;
-    xNameAccessRepositories = uno::Reference< container::XNameAccess > (
+    xNameAccessRepositories.set(
         xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
-                                              uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
+                                              uno::Sequence< uno::Any >( args, 1 )),
+        uno::UNO_QUERY_THROW);
     try
     {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
         uno::Any value = xNameAccessRepositories->getByName("WebsiteLink");

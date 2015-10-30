@@ -53,7 +53,7 @@ OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
 {
     OSL_ENSURE(_xStatement.is() ,"Statement is NULL!");
     m_xAggregateAsSet.set(_xStatement,UNO_QUERY);
-    m_xAggregateAsCancellable = Reference< css::util::XCancellable > (m_xAggregateAsSet, UNO_QUERY);
+    m_xAggregateAsCancellable.set(m_xAggregateAsSet, UNO_QUERY);
 }
 
 OStatementBase::~OStatementBase()

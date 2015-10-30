@@ -279,7 +279,7 @@ bool MigrationImpl::doMigration()
 
             if (vModulesInfo[i].bHasMenubar)
             {
-                uno::Reference< container::XIndexContainer > xOldVersionMenuSettings = uno::Reference< container::XIndexContainer >(xOldCfgManager->getSettings(sMenubarResourceURL, sal_True), uno::UNO_QUERY);
+                uno::Reference< container::XIndexContainer > xOldVersionMenuSettings(xOldCfgManager->getSettings(sMenubarResourceURL, sal_True), uno::UNO_QUERY);
                 uno::Reference< container::XIndexContainer > xNewVersionMenuSettings = aNewVersionUIInfo.getNewMenubarSettings(vModulesInfo[i].sModuleShortName);
                 OUString sParent;
                 compareOldAndNewConfig(sParent, xOldVersionMenuSettings, xNewVersionMenuSettings, sMenubarResourceURL);
@@ -294,7 +294,7 @@ bool MigrationImpl::doMigration()
                     OUString sToolbarName = vModulesInfo[i].m_vToolbars[j];
                     OUString sToolbarResourceURL = sToolbarResourcePre + sToolbarName;
 
-                    uno::Reference< container::XIndexContainer > xOldVersionToolbarSettings = uno::Reference< container::XIndexContainer >(xOldCfgManager->getSettings(sToolbarResourceURL, sal_True), uno::UNO_QUERY);
+                    uno::Reference< container::XIndexContainer > xOldVersionToolbarSettings(xOldCfgManager->getSettings(sToolbarResourceURL, sal_True), uno::UNO_QUERY);
                     uno::Reference< container::XIndexContainer > xNewVersionToolbarSettings = aNewVersionUIInfo.getNewToolbarSettings(vModulesInfo[i].sModuleShortName, sToolbarName);
                     OUString sParent;
                     compareOldAndNewConfig(sParent, xOldVersionToolbarSettings, xNewVersionToolbarSettings, sToolbarResourceURL);
@@ -878,7 +878,7 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
         // access the provider
         uno::Sequence< uno::Any > theArgs(1);
         theArgs[ 0 ] <<= sConfigURL;
-        xNameAccess = uno::Reference< XNameAccess > (
+        xNameAccess.set(
                 theConfigProvider->createInstanceWithArguments(
                 sAccessSrvc, theArgs ), uno::UNO_QUERY_THROW );
     }
@@ -966,7 +966,7 @@ void MigrationImpl::runServices()
                 seqArguments[2] = uno::makeAny(NamedValue("ExtensionBlackList",
                     uno::makeAny( seqExtBlackList )));
 
-                xMigrationJob = uno::Reference< XJob >(
+                xMigrationJob.set(
                     xContext->getServiceManager()->createInstanceWithArgumentsAndContext(i_mig->service, seqArguments, xContext),
                     uno::UNO_QUERY_THROW);
 
@@ -1008,11 +1008,11 @@ void MigrationImpl::runServices()
                      embed::FileSystemStorageFactory::create(comphelper::getProcessComponentContext()));
     uno::Reference< embed::XStorage >             xModules;
 
-    xModules = uno::Reference< embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
+    xModules.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
     if (!xModules.is())
         return vModulesInfo;
 
-    uno::Reference< container::XNameAccess > xAccess = uno::Reference< container::XNameAccess >(xModules, uno::UNO_QUERY);
+    uno::Reference< container::XNameAccess > xAccess(xModules, uno::UNO_QUERY);
     uno::Sequence< OUString > lNames = xAccess->getElementNames();
     sal_Int32 nLength = lNames.getLength();
     for (sal_Int32 i=0; i<nLength; ++i)
@@ -1026,7 +1026,7 @@ void MigrationImpl::runServices()
             uno::Reference< embed::XStorage > xMenubar = xModule->openStorageElement(MENUBAR, embed::ElementModes::READ);
             if (xMenubar.is())
             {
-                uno::Reference< container::XNameAccess > xNameAccess = uno::Reference< container::XNameAccess >(xMenubar, uno::UNO_QUERY);
+                uno::Reference< container::XNameAccess > xNameAccess(xMenubar, uno::UNO_QUERY);
                 if (xNameAccess->getElementNames().getLength() > 0)
                 {
                     aModuleInfo.sModuleShortName = sModuleShortName;
@@ -1040,7 +1040,7 @@ void MigrationImpl::runServices()
                 const OUString RESOURCEURL_CUSTOM_ELEMENT("custom_");
                 sal_Int32 nCustomLen = 7;
 
-                uno::Reference< container::XNameAccess > xNameAccess = uno::Reference< container::XNameAccess >(xToolbar, uno::UNO_QUERY);
+                uno::Reference< container::XNameAccess > xNameAccess(xToolbar, uno::UNO_QUERY);
                 ::uno::Sequence< OUString > lToolbars = xNameAccess->getElementNames();
                 for (sal_Int32 j=0; j<lToolbars.getLength(); ++j)
                 {

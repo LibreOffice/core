@@ -115,8 +115,7 @@ void getOwnUpdateInfos(
                 if (*id2 == id)
                 {
                     i->second.version = infoset.getVersion();
-                    i->second.info = Reference< xml::dom::XNode >(
-                        infos[j], UNO_QUERY_THROW);
+                    i->second.info.set(infos[j], UNO_QUERY_THROW);
                 }
                 break;
             }

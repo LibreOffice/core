@@ -596,8 +596,7 @@ bool ExtensionManager::doChecksForAddExtension(
 
         if (licenseAttributes && licenseAttributes->suppressIfRequired
             && props.isSuppressedLicense())
-            _xCmdEnv = Reference<ucb::XCommandEnvironment>(
-                new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler()));
+            _xCmdEnv.set(new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler()));
 
         bCanInstall = xTmpExtension->checkPrerequisites(
             xAbortChannel, _xCmdEnv, xOldExtension.is() || props.isExtensionUpdate()) == 0;

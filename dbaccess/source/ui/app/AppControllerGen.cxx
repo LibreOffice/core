@@ -209,7 +209,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
 
         // create the dialog
         Reference< XExecutableDialog > xAdminDialog;
-        xAdminDialog = Reference< XExecutableDialog >(
+        xAdminDialog.set(
             getORB()->getServiceManager()->createInstanceWithArgumentsAndContext(_sServiceName, aArgs, getORB()),
             UNO_QUERY);
 

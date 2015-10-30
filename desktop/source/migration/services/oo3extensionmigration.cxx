@@ -209,7 +209,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
 {
     if ( !m_xDocBuilder.is() )
     {
-        m_xDocBuilder = uno::Reference< xml::dom::XDocumentBuilder >( xml::dom::DocumentBuilder::create(m_ctx) );
+        m_xDocBuilder.set( xml::dom::DocumentBuilder::create(m_ctx) );
     }
 
     if ( !m_xSimpleFileAccess.is() )

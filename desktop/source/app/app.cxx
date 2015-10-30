@@ -2143,8 +2143,7 @@ void Desktop::PreloadConfigurationData()
     }
 
     // preload filter configuration
-    xNameAccess = Reference< XNameAccess >(
-                    xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
+    xNameAccess.set(xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
                     UNO_QUERY );
     if ( xNameAccess.is() )
     {
@@ -2158,8 +2157,7 @@ void Desktop::PreloadConfigurationData()
     }
 
     // preload type detection configuration
-    xNameAccess = Reference< XNameAccess >(
-                    xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
+    xNameAccess.set(xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
                     UNO_QUERY );
     if ( xNameAccess.is() )
     {
@@ -2728,7 +2726,7 @@ void Desktop::OpenSplashScreen()
         aSeq[0] <<= bVisible;
         aSeq[1] <<= aAppName;
         css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        m_rSplashScreen = Reference<XStatusIndicator>(
+        m_rSplashScreen.set(
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aSplashService, aSeq, xContext),
             UNO_QUERY);
 

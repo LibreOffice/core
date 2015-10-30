@@ -196,7 +196,9 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _r
             Sequence< OUString> aTypeFilter;
             getAllTableTypeFilter( aTypeFilter );
 
-            Reference< XResultSet > xRes =  m_xMetaData.is() ? m_xMetaData->getTables(aCatalog,sSchema,sTable,aTypeFilter) : Reference< XResultSet >();
+            Reference< XResultSet > xRes;
+            if ( m_xMetaData.is() )
+                xRes = m_xMetaData->getTables(aCatalog,sSchema,sTable,aTypeFilter);
             if(xRes.is() && xRes->next())
             {
                 Reference< XRow > xRow(xRes,UNO_QUERY);
@@ -242,7 +244,7 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
     Reference<XDataDescriptorFactory> xDataFactory(m_xMasterContainer,UNO_QUERY);
     if ( xDataFactory.is() && m_xMetaData.is() )
     {
-        xMasterColumnsSup = Reference< XColumnsSupplier >( xDataFactory->createDataDescriptor(), UNO_QUERY );
+        xMasterColumnsSup.set( xDataFactory->createDataDescriptor(), UNO_QUERY );
         ODBTableDecorator* pTable = new ODBTableDecorator( m_xConnection, xMasterColumnsSup, ::dbtools::getNumberFormats( m_xConnection ) ,NULL);
         xRet = pTable;
         pTable->construct();

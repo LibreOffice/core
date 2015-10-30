@@ -68,7 +68,7 @@ namespace dbaui
         set_height_request(200);
 
         if (rxContext.is())
-            m_xFormatter = Reference< XNumberFormatter>( NumberFormatter::create( rxContext ), UNO_QUERY_THROW);
+            m_xFormatter.set( NumberFormatter::create( rxContext ), UNO_QUERY_THROW);
         else {
             OSL_FAIL("OParameterDialog::OParameterDialog: need a service factory!");
         }
