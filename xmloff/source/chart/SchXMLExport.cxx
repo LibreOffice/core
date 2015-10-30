@@ -713,18 +713,6 @@ struct lcl_TableData
     ::std::vector< sal_Int32 > aHiddenColumns;
 };
 
-// ::std::bind2nd( ::std::mem_fun_ref( &T::resize ), nSize ) does not work
-template< class T >
-    struct lcl_resize
-    {
-        lcl_resize( typename T::size_type nSize, typename T::value_type fDefaultValue ) : m_nSize( nSize ), m_fDefaultValue( fDefaultValue ) {}
-        void operator()( T & t )
-        { t.resize( m_nSize, m_fDefaultValue ); }
-    private:
-        typename T::size_type m_nSize;
-        typename T::value_type m_fDefaultValue;
-    };
-
 typedef ::std::map< sal_Int32, SchXMLExportHelper_Impl::tLabelValuesDataPair >
     lcl_DataSequenceMap;
 
@@ -818,8 +806,9 @@ lcl_TableData lcl_getDataForLocalTable(
         aResult.aDataInRows.resize( nNumRows );
         double fNan = 0.0;
         ::rtl::math::setNan( &fNan );
-        ::std::for_each( aResult.aDataInRows.begin(), aResult.aDataInRows.end(),
-                         lcl_resize< t2DNumberContainer::value_type >( nNumColumns, fNan ));
+
+        for (auto& aData: aResult.aDataInRows)
+            aData.resize(nNumColumns, fNan);
         aResult.aColumnDescriptions.resize( nNumColumns );
         aResult.aComplexColumnDescriptions.realloc( nNumColumns );
         aResult.aRowDescriptions.resize( nNumRows );
