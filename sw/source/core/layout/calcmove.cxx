@@ -608,7 +608,7 @@ void SwFrm::MakePos()
 }
 
 // #i28701# - new type <SwSortedObjs>
-static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
+static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, const SwFrm* pFrm, long& rBot )
 {
     // And then there can be paragraph anchored frames that sit below their paragraph.
     long nMax = 0;
@@ -636,6 +636,64 @@ static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot
     }
     ++nMax; // Lower edge vs. height!
     rBot = std::max( rBot, nMax );
+}
+
+//TODO: This should really be const, but Undersize modifies the flag.
+size_t SwPageFrm::GetContentHeight()
+{
+    // In pages without columns, the content defines the size.
+    long nBot = Frm().Top();
+    SwFrm *pFrm = Lower();
+    while (pFrm)
+    {
+        long nTmp = 0;
+        SwFrm *pCnt = static_cast<SwLayoutFrm*>(pFrm)->ContainsAny();
+        while (pCnt && (pCnt->GetUpper() == pFrm ||
+            static_cast<SwLayoutFrm*>(pFrm)->IsAnLower(pCnt)))
+        {
+            nTmp += pCnt->Frm().Height();
+            if (pCnt->IsTextFrm() &&
+                static_cast<SwTextFrm*>(pCnt)->IsUndersized())
+                nTmp += static_cast<SwTextFrm*>(pCnt)->GetParHeight()
+                - pCnt->Prt().Height();
+            else if (pCnt->IsSctFrm() &&
+                static_cast<SwSectionFrm*>(pCnt)->IsUndersized())
+                nTmp += static_cast<SwSectionFrm*>(pCnt)->Undersize();
+            pCnt = pCnt->FindNext();
+        }
+        // OD 29.10.2002 #97265# - consider invalid body frame properties
+        if (pFrm->IsBodyFrm() &&
+            (!pFrm->GetValidSizeFlag() ||
+            !pFrm->GetValidPrtAreaFlag()) &&
+            (pFrm->Frm().Height() < pFrm->Prt().Height())
+            )
+        {
+            nTmp = std::min(nTmp, pFrm->Frm().Height());
+        }
+        else
+        {
+            // OD 30.10.2002 #97265# - assert invalid lower property
+            OSL_ENSURE(!(pFrm->Frm().Height() < pFrm->Prt().Height()),
+                "SwPageFrm::GetContentHeight(): Lower with frame height < printing height");
+            nTmp += pFrm->Frm().Height() - pFrm->Prt().Height();
+        }
+        if (!pFrm->IsBodyFrm())
+            nTmp = std::min(nTmp, pFrm->Frm().Height());
+        nBot += nTmp;
+        // Here we check whether paragraph anchored objects
+        // protrude outside the Body/FootnoteCont.
+        if (m_pSortedObjs && !pFrm->IsHeaderFrm() &&
+            !pFrm->IsFooterFrm())
+            lcl_CheckObjects(m_pSortedObjs, pFrm, nBot);
+        pFrm = pFrm->GetNext();
+    }
+
+    // And the page anchored ones
+    if (m_pSortedObjs)
+        lcl_CheckObjects(m_pSortedObjs, this, nBot);
+    nBot -= Frm().Top();
+
+    return nBot;
 }
 
 void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
@@ -763,6 +821,38 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
                         + pAttrs->CalcRightLine() + aBorder.Width() ) );
                     Prt().Height( Frm().Height() - (nTop + nBottom) );
                     mbValidSize = mbValidPrtArea = true;
+                }
+                else if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden())
+                {
+                    auto height = Frm().Height();
+                    SwLayoutFrm *pBody = FindBodyCont();
+                    if ( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm() )
+                    {
+                        // Columns have a fixed height
+                        height = pAttrs->GetSize().Height();
+                    }
+                    else
+                    {
+                        height = GetContentHeight();
+                    }
+
+                    if (height > 0)
+                    {
+                        ChgSize(Size(Frm().Width(), height));
+                        Prt().Top(0);
+                        Prt().Height(height);
+
+                        mbValidSize = mbValidPrtArea = true;
+                    }
+                    else
+                    {
+                        // Fallback to default formatting.
+                        // This is especially relevant when
+                        // loading a doc with Hide Whitespace
+                        // is enabled--frame heights are zero.
+                        Frm().SSize(pAttrs->GetSize());
+                        Format(pRenderContext, pAttrs);
+                    }
                 }
                 else
                 {   // Set FixSize. For pages, this is not done from Upper, but from

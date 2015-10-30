@@ -2933,14 +2933,11 @@ void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
     if ( mbValidPrtArea && mbValidSize )
         return;
 
-    SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    const bool hideWS = (pSh && pSh->GetViewOptions()->IsWhitespaceHidden());
-    const long hideWSBorderSize = (pSh ? pSh->GetViewOptions()->GetDocumentBorder() : 0);
     const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft(this);
-    const sal_uInt16 nUpper = hideWS ? hideWSBorderSize : pAttrs->CalcTop();
+    const sal_uInt16 nUpper = pAttrs->CalcTop();
 
     const sal_uInt16 nRight = (sal_uInt16)pAttrs->CalcRight(this);
-    const sal_uInt16 nLower = hideWS ? hideWSBorderSize : pAttrs->CalcBottom();
+    const sal_uInt16 nLower = pAttrs->CalcBottom();
 
     bool bVert = IsVertical() && !IsPageFrm();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
@@ -3008,12 +3005,6 @@ void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 mbValidSize = true;
                 MakePos();
             } while ( !mbValidSize );
-        }
-        else if (hideWS)
-        {
-            const auto newHeight = InnerHeight() + nUpper + nLower;
-            ChgSize(Size(Frm().Width(), newHeight));
-            mbValidSize = true;
         }
         else
             mbValidSize = true;
