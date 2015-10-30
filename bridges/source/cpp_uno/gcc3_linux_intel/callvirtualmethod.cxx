@@ -106,26 +106,26 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
             break;
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
-            ((long*)pRegisterReturn)[1] = edx;
+            static_cast<long*>(pRegisterReturn)[1] = edx;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_CHAR:
         case typelib_TypeClass_ENUM:
-            ((long*)pRegisterReturn)[0] = eax;
+            static_cast<long*>(pRegisterReturn)[0] = eax;
             break;
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
-            *(unsigned short*)pRegisterReturn = eax;
+            *static_cast<unsigned short*>(pRegisterReturn) = eax;
             break;
         case typelib_TypeClass_BOOLEAN:
         case typelib_TypeClass_BYTE:
-            *(unsigned char*)pRegisterReturn = eax;
+            *static_cast<unsigned char*>(pRegisterReturn) = eax;
             break;
         case typelib_TypeClass_FLOAT:
-            asm ( "fstps %0" : : "m"(*(char *)pRegisterReturn) );
+            asm ( "fstps %0" : : "m"(*static_cast<char *>(pRegisterReturn)) );
             break;
         case typelib_TypeClass_DOUBLE:
-            asm ( "fstpl %0\n\t" : : "m"(*(char *)pRegisterReturn) );
+            asm ( "fstpl %0\n\t" : : "m"(*static_cast<char *>(pRegisterReturn)) );
             break;
         default:
         {
