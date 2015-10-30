@@ -70,13 +70,15 @@ public class _XMimeContentTypeFactory extends MultiMethodTest {
             result = false ;
         }
 
-        try {
-            oObj.createMimeContentType("nosuchtype") ;
+        if (result == true) {
+            try {
+                oObj.createMimeContentType("nosuchtype") ;
 
-            log.println("!!! No exception was thrown on wrong MIME type !!!") ;
-            result = false ;
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Right exception was thrown." ) ;
+                log.println("!!! No exception was thrown on wrong MIME type !!!") ;
+                result = false ;
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                log.println("Right exception was thrown." ) ;
+            }
         }
 
         tRes.tested("createMimeContentType()", result) ;
