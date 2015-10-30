@@ -31,8 +31,8 @@
 #include "calbck.hxx"
 #include "htmlvsh.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
+#include <memory>
+#include <vector>
 #include <deque>
 
 class SfxMedium;
@@ -333,7 +333,7 @@ class HTMLTable;
 class SwCSS1Parser;
 class SwHTMLNumRuleInfo;
 
-typedef boost::ptr_vector<ImageMap> ImageMaps;
+typedef ::std::vector<std::unique_ptr<ImageMap>> ImageMaps;
 
 #define HTML_CNTXT_PROTECT_STACK    0x0001
 #define HTML_CNTXT_STRIP_PARA       0x0002
@@ -402,7 +402,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SdrObject       *pMarquee;  // aktuelles Marquee
     SwField         *pField;    // aktuelles Feld
     ImageMap        *pImageMap; // aktuelle Image-Map
-    ImageMaps       *pImageMaps;// alle gelesenen Image-Maps
+    ImageMaps       *m_pImageMaps; ///< all Image-Maps that have been read
     SwHTMLFootEndNote_Impl *pFootEndNoteImpl;
 
     Size    aHTMLPageSize;      // die Seitengroesse der HTML-Vorlage

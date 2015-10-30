@@ -255,7 +255,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
     pMarquee( 0 ),
     pField( 0 ),
     pImageMap( 0 ),
-    pImageMaps( 0 ),
+    m_pImageMaps(nullptr),
     pFootEndNoteImpl( 0 ),
     nScriptStartLineNr( 0 ),
     nBaseFontStMin( 0 ),
@@ -459,7 +459,7 @@ SwHTMLParser::~SwHTMLParser()
     DeleteFootEndNoteImpl();
 
     OSL_ENSURE( !pTable, "Es existiert noch eine offene Tabelle" );
-    delete pImageMaps;
+    delete m_pImageMaps;
 
     OSL_ENSURE( !pPendStack,
             "SwHTMLParser::~SwHTMLParser: Hier sollte es keinen Pending-Stack mehr geben" );
@@ -1967,9 +1967,9 @@ void SwHTMLParser::NextToken( int nToken )
         pImageMap = new ImageMap;
         if( ParseMapOptions( pImageMap) )
         {
-            if( !pImageMaps )
-                pImageMaps = new ImageMaps;
-            pImageMaps->push_back( pImageMap );
+            if (!m_pImageMaps)
+                m_pImageMaps = new ImageMaps;
+            m_pImageMaps->push_back(std::unique_ptr<ImageMap>(pImageMap));
         }
         else
         {

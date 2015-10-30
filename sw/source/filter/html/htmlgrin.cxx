@@ -95,13 +95,13 @@ ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
 {
     OSL_ENSURE( rName[0] != '#', "FindImageMap: name begins with '#'!" );
 
-    if( pImageMaps )
+    if (m_pImageMaps)
     {
-        for( auto &rIMap : *pImageMaps )
+        for (auto &rpIMap : *m_pImageMaps)
         {
-            if( rName.equalsIgnoreAsciiCase( rIMap.GetName() ) )
+            if (rName.equalsIgnoreAsciiCase(rpIMap->GetName()))
             {
-                return &rIMap;
+                return rpIMap.get();
             }
         }
     }

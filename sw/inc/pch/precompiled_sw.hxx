@@ -620,7 +620,6 @@
 #include <memory>
 #include <numeric>
 #include <o3tl/numeric.hxx>
-#include <o3tl/ptr_container.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Writer.hxx>

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <vector>
 #include <set>
