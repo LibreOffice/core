@@ -18,7 +18,6 @@
 #include <algorithm>
 #include <boost/noncopyable.hpp>
 #include <boost/numeric/conversion/cast.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <cassert>
 #include <cmath>

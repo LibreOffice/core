@@ -20,7 +20,8 @@
 #include <rtl/ustring.hxx>
 #include <svl/aeitem.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <vector>
 
 TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
 
@@ -36,27 +37,27 @@ class SfxAllEnumValueArr : boost::noncopyable
 {
 public:
     const SfxAllEnumValue_Impl &operator[](size_t i) const {
-        return mValues[i];
+        return m_Values[i];
     }
 
     bool empty() const {
-        return mValues.empty();
+        return m_Values.empty();
     }
 
-    void Insert(sal_uInt16 n, SfxAllEnumValue_Impl *value) {
-        mValues.insert(mValues.begin() + n, value);
+    void Insert(sal_uInt16 n, SfxAllEnumValue_Impl const& value) {
+        m_Values.insert(m_Values.begin() + n, value);
     }
 
     void Erase(sal_uInt16 n) {
-        mValues.erase(mValues.begin() + n);
+        m_Values.erase(m_Values.begin() + n);
     }
 
     size_t size() const {
-        return mValues.size();
+        return m_Values.size();
     }
 
 private:
-    boost::ptr_vector<SfxAllEnumValue_Impl> mValues;
+    std::vector<SfxAllEnumValue_Impl> m_Values;
 };
 
 
@@ -113,10 +114,10 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
 
     for ( size_t nPos = 0; nPos < rCopy.pValues->size(); ++nPos )
     {
-        SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
-        pVal->nValue = (*rCopy.pValues)[nPos].nValue;
-        pVal->aText = (*rCopy.pValues)[nPos].aText;
-        pValues->Insert( nPos, pVal );
+        SfxAllEnumValue_Impl aVal;
+        aVal.nValue = (*rCopy.pValues)[nPos].nValue;
+        aVal.aText = (*rCopy.pValues)[nPos].aText;
+        pValues->Insert( nPos, aVal );
     }
 
     if( rCopy.pDisabledValues )
@@ -208,29 +209,29 @@ sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 
 void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
 {
-    SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
-    pVal->nValue = nValue;
-    pVal->aText = rValue;
+    SfxAllEnumValue_Impl aVal;
+    aVal.nValue = nValue;
+    aVal.aText = rValue;
     if ( !pValues )
         pValues = new SfxAllEnumValueArr;
     else if ( GetPosByValue( nValue ) != USHRT_MAX )
         // remove when exists
         RemoveValue( nValue );
     // then insert
-    pValues->Insert( _GetPosByValue(nValue), pVal ); // FIXME: Duplicates?
+    pValues->Insert( _GetPosByValue(nValue), aVal ); // FIXME: Duplicates?
 }
 
 
 
 void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
 {
-    SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;
-    pVal->nValue = nValue;
-    pVal->aText = OUString::number(nValue);
+    SfxAllEnumValue_Impl aVal;
+    aVal.nValue = nValue;
+    aVal.aText = OUString::number(nValue);
     if ( !pValues )
         pValues = new SfxAllEnumValueArr;
 
-    pValues->Insert( _GetPosByValue(nValue), pVal ); // FIXME: Duplicates?
+    pValues->Insert( _GetPosByValue(nValue), aVal ); // FIXME: Duplicates?
 }
 
 void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )
