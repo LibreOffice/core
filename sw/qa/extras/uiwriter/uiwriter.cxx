@@ -1523,13 +1523,13 @@ void SwUiWriterTest::testTdf69282WithMirror()
     SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
     //Setting horizontal spaces on master
     SvxLRSpaceItem horizontalSpace(RES_LR_SPACE);
-    horizontalSpace.SetLeft(11);
-    horizontalSpace.SetRight(12);
+    horizontalSpace.SetLeft(110);
+    horizontalSpace.SetRight(120);
     rSourceMasterFormat.SetFormatAttr(horizontalSpace);
     //Setting vertical spaces on master
     SvxULSpaceItem verticalSpace(RES_UL_SPACE);
-    verticalSpace.SetUpper(13);
-    verticalSpace.SetLower(14);
+    verticalSpace.SetUpper(130);
+    verticalSpace.SetLower(140);
     rSourceMasterFormat.SetFormatAttr(verticalSpace);
     //Changing the style and copying it to target
     source->ChgPageDesc(OUString("SourceStyle"), *sPageDesc);
