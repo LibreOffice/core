@@ -418,7 +418,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     //ATTENTION: _not_ SetAutoCalc( true ) because this might call CalcFormulaTree( true )
     //ATTENTION: if it was disabled before and bHasForcedFormulas is set
     bAutoCalc = true;
-    if (eHardRecalcState != HARDRECALCSTATE_OFF)
+    if (eHardRecalcState == HARDRECALCSTATE_ETERNAL)
         CalcAll();
     else
     {
