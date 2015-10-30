@@ -29,10 +29,10 @@
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 
-#include "../source/bridge.hxx"
-#include "../source/cache.hxx"
-#include "../source/readerstate.hxx"
-#include "../source/unmarshal.hxx"
+#include "bridge.hxx"
+#include "cache.hxx"
+#include "readerstate.hxx"
+#include "unmarshal.hxx"
 
 namespace {
 

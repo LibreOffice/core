@@ -23,7 +23,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 
-#include "../source/cache.hxx"
+#include "cache.hxx"
 
 namespace {
 
