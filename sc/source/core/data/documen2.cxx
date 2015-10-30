@@ -710,15 +710,14 @@ bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) 
 
 bool ScDocument::GetTiledRenderingArea(SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow) const
 {
-    if (!GetPrintArea(nTab, rEndCol, rEndRow, false))
-        return false;
+    bool bHasPrintArea = GetPrintArea(nTab, rEndCol, rEndRow, false);
 
     // we need some reasonable minimal document size
-    if (rEndCol < 12)
-        rEndCol = 12;
+    if (!bHasPrintArea || rEndCol < 20)
+        rEndCol = 20;
 
-    if (rEndRow < 36)
-        rEndRow = 36;
+    if (!bHasPrintArea || rEndRow < 50)
+        rEndRow = 50;
 
     return true;
 }
