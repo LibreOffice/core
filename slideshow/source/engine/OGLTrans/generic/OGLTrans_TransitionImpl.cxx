@@ -1650,9 +1650,17 @@ class VortexTransition : public ShaderTransition
 {
 public:
     VortexTransition(const TransitionScene& rScene, const TransitionSettings& rSettings, int nNX, int nNY)
-        : ShaderTransition(rScene, rSettings),
-          mnNX(nNX),
-          mnNY(nNY)
+        : ShaderTransition(rScene, rSettings)
+        , mnCenterLocation(0)
+        , mnTileXIndexLocation(0)
+        , mnTileYIndexLocation(0)
+        , mnVertexIndexInTileLocation(0)
+        , mnCenterBuffer(0)
+        , mnTileXIndexBuffer(0)
+        , mnTileYIndexBuffer(0)
+        , mnVertexIndexInTileBuffer(0)
+        , mnNX(nNX)
+        , mnNY(nNY)
     {
         mvCenters.resize(6*mnNX*mnNY);
         mvTileXIndexes.resize(6*mnNX*mnNY);
