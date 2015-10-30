@@ -104,7 +104,6 @@ namespace canvas
 
         // mickey's math tricks...
         inline unsigned int pow2( unsigned int c ) { return 0x1 << c; }
-        inline unsigned int mask( unsigned int c ) { return ((unsigned int)(-1)) / (pow2(pow2(c)) + 1); }
 
         /** Round given floating point value down to next integer
          */

@@ -97,11 +97,6 @@ struct BinAddress
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
 };
 
-inline bool operator==( const BinAddress& rL, const BinAddress& rR )
-{
-    return (rL.mnCol == rR.mnCol) && (rL.mnRow == rR.mnRow);
-}
-
 inline bool operator<( const BinAddress& rL, const BinAddress& rR )
 {
     return (rL.mnCol < rR.mnCol) || ((rL.mnCol == rR.mnCol) && (rL.mnRow < rR.mnRow));
