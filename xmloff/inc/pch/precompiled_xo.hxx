@@ -33,7 +33,6 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <boost/iterator_adaptors.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <cassert>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>

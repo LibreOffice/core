@@ -44,7 +44,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/languagetagodf.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -69,7 +69,7 @@ class SvXMLNumImpData
     SvXMLTokenMap*      pStyleAttrTokenMap;
     SvXMLTokenMap*      pStyleElemAttrTokenMap;
     LocaleDataWrapper*  pLocaleData;
-    boost::ptr_vector<SvXMLNumFmtEntry>      aNameEntries;
+    std::vector<SvXMLNumFmtEntry> m_NameEntries;
 
     uno::Reference< uno::XComponentContext > m_xContext;
 
@@ -382,10 +382,10 @@ SvXMLNumImpData::~SvXMLNumImpData()
 
 sal_uInt32 SvXMLNumImpData::GetKeyForName( const OUString& rName )
 {
-    sal_uInt16 nCount = aNameEntries.size();
+    sal_uInt16 nCount = m_NameEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        const SvXMLNumFmtEntry* pObj = &aNameEntries[i];
+        const SvXMLNumFmtEntry *const pObj = &m_NameEntries[i];
         if ( pObj->aName == rName )
             return pObj->nKey;              // found
     }
@@ -399,10 +399,10 @@ void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const OUString& rName, bool bRemo
         //  if there is already an entry for this key without the bRemoveAfterUse flag,
         //  clear the flag for this entry, too
 
-        sal_uInt16 nCount = aNameEntries.size();
+        sal_uInt16 nCount = m_NameEntries.size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
-            SvXMLNumFmtEntry* pObj = &aNameEntries[i];
+            SvXMLNumFmtEntry *const pObj = &m_NameEntries[i];
             if ( pObj->nKey == nKey && !pObj->bRemoveAfterUse )
             {
                 bRemoveAfterUse = false;        // clear flag for new entry
@@ -416,16 +416,15 @@ void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const OUString& rName, bool bRemo
         SetUsed( nKey );
     }
 
-    SvXMLNumFmtEntry* pObj = new SvXMLNumFmtEntry( rName, nKey, bRemoveAfterUse );
-    aNameEntries.push_back( pObj );
+    m_NameEntries.push_back(SvXMLNumFmtEntry(rName, nKey, bRemoveAfterUse));
 }
 
 void SvXMLNumImpData::SetUsed( sal_uInt32 nKey )
 {
-    sal_uInt16 nCount = aNameEntries.size();
+    sal_uInt16 nCount = m_NameEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        SvXMLNumFmtEntry* pObj = &aNameEntries[i];
+        SvXMLNumFmtEntry *const pObj = &m_NameEntries[i];
         if ( pObj->nKey == nKey )
         {
             pObj->bRemoveAfterUse = false;      // used -> don't remove
@@ -446,10 +445,10 @@ void SvXMLNumImpData::RemoveVolatileFormats()
     if ( !pFormatter )
         return;
 
-    sal_uInt16 nCount = aNameEntries.size();
+    sal_uInt16 nCount = m_NameEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        const SvXMLNumFmtEntry* pObj = &aNameEntries[i];
+        const SvXMLNumFmtEntry *const pObj = &m_NameEntries[i];
         if ( pObj->bRemoveAfterUse )
         {
             const SvNumberformat* pFormat = pFormatter->GetEntry(pObj->nKey);
