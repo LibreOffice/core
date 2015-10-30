@@ -51,13 +51,12 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
         requiredMethod("getLocaleList()");
 
         boolean result = true;
-        boolean locResult = false;
 
         for (int i = 0; i < locales.length; i++) {
             String[] algNames = oObj.getAlgorithmList(locales[i]);
             algorithms.put(Integer.valueOf(i), algNames);
 
-            locResult = algNames != null && algNames.length > 0;
+            boolean locResult = algNames.length > 0;
             System.out.println("Locale " + i + ": " + locales[i].Country+","+locales[i].Language);
 
             for (int j=0; j<algNames.length; j++) {
