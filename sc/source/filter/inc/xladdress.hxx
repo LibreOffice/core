@@ -42,16 +42,6 @@ struct XclAddress
     void                Write( XclExpStream& rStrm, bool bCol16Bit = true ) const;
 };
 
-inline bool operator==( const XclAddress& rL, const XclAddress& rR )
-{
-    return (rL.mnCol == rR.mnCol) && (rL.mnRow == rR.mnRow);
-}
-
-inline bool operator<( const XclAddress& rL, const XclAddress& rR )
-{
-    return (rL.mnCol < rR.mnCol) || ((rL.mnCol == rR.mnCol) && (rL.mnRow < rR.mnRow));
-}
-
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclAddress& rXclPos )
 {
     rXclPos.Read( rStrm );

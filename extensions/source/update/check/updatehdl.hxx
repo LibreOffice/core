@@ -146,9 +146,6 @@ private:
     static OUString         loadString( const css::uno::Reference< css::resource::XResourceBundle >& xBundle,
                                         sal_Int32 nResourceId );
     OUString                substVariables( const OUString &rSource ) const;
-    static void             setProperty( css::uno::Sequence< css::beans::NamedValue > &rProps,
-                                         const int nIndex, const OUString &rPropName, const css::uno::Any &rPropValue )
-                                         { rProps[ nIndex ].Name = rPropName; rProps[ nIndex ].Value = rPropValue; }
     static void             insertControlModel( css::uno::Reference< css::awt::XControlModel > const & rxDialogModel,
                                                 OUString const & rServiceName,
                                                 OUString const & rControlName,
