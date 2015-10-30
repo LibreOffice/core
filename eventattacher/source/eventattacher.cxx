@@ -648,7 +648,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
 
         if( !xAdapter.is() )
             throw CannotCreateAdapterException();
-        xRet = Reference< XEventListener >( xAdapter, UNO_QUERY );
+        xRet.set( xAdapter, UNO_QUERY );
 
         // Just the Listener as parameter?
         if( nParamCount == 1 )

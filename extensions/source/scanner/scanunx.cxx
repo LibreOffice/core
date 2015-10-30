@@ -188,7 +188,7 @@ void ScannerThread::run()
     BitmapTransporter*  pTransporter = new BitmapTransporter;
     Reference< XInterface >   aIf( static_cast< OWeakObject* >( pTransporter ) );
 
-    m_pHolder->m_xBitmap = Reference< css::awt::XBitmap >( aIf, UNO_QUERY );
+    m_pHolder->m_xBitmap.set( aIf, UNO_QUERY );
 
     m_pHolder->m_bBusy = true;
     if( m_pHolder->m_aSane.IsOpen() )
@@ -378,7 +378,7 @@ Reference< css::awt::XBitmap > ScannerManager::getBitmap( const ScannerContext& 
     osl::MutexGuard aProtGuard( pHolder->m_aProtector );
 
     Reference< css::awt::XBitmap > xRet( pHolder->m_xBitmap );
-    pHolder->m_xBitmap = Reference< css::awt::XBitmap >();
+    pHolder->m_xBitmap.clear();
 
     return xRet;
 }

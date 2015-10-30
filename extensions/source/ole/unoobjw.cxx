@@ -146,7 +146,7 @@ STDMETHODIMP_(ULONG) InterfaceOleWrapper_Impl::Release()
 // IUnoObjectWrapper --------------------------------------------------------
 STDMETHODIMP InterfaceOleWrapper_Impl::getWrapperXInterface( Reference<XInterface>* pXInt)
 {
-    *pXInt= Reference<XInterface>( static_cast<XWeak*>( this), UNO_QUERY);
+    pXInt->set( static_cast<XWeak*>( this), UNO_QUERY);
     return pXInt->is() ? S_OK : E_FAIL;
 }
 STDMETHODIMP InterfaceOleWrapper_Impl::getOriginalUnoObject( Reference<XInterface>* pXInt)
@@ -514,7 +514,7 @@ void SAL_CALL InterfaceOleWrapper_Impl::initialize( const Sequence< Any >& aArgu
         break;
     }
 
-    m_xExactName= Reference<XExactName>( m_xInvocation, UNO_QUERY);
+    m_xExactName.set( m_xInvocation, UNO_QUERY);
 }
 
 Reference< XInterface > InterfaceOleWrapper_Impl::createUnoWrapperInstance()

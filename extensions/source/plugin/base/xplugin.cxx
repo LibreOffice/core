@@ -823,9 +823,9 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
                 pStream->setSource( stream );
                 uno::Reference< css::io::XActiveDataControl > xController;
                 if( xConnectable.is() )
-                    xController = uno::Reference< css::io::XActiveDataControl >( xConnectable, UNO_QUERY );
+                    xController.set( xConnectable, UNO_QUERY );
                 else
-                    xController = uno::Reference< css::io::XActiveDataControl >( stream, UNO_QUERY );
+                    xController.set( stream, UNO_QUERY );
 
                 if( xController.is() )
                     xController->start();
@@ -1151,7 +1151,7 @@ void PluginInputStream::closeOutput() throw(std::exception)
     Guard< Mutex > aGuard( pPlugin->getMutex() );
 
     flush();
-    m_xSource = uno::Reference< css::io::XActiveDataSource >();
+    m_xSource.clear();
 }
 
 sal_uInt32 PluginInputStream::read( sal_uInt32 offset, sal_Int8* buffer, sal_uInt32 size )

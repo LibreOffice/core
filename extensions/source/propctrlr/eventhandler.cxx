@@ -508,7 +508,7 @@ namespace pcr
         if ( !_rxIntrospectee.is() )
             throw NullPointerException();
 
-        m_xComponent = Reference< XPropertySet >( _rxIntrospectee, UNO_QUERY_THROW );
+        m_xComponent.set( _rxIntrospectee, UNO_QUERY_THROW );
 
         m_bEventsMapInitialized = false;
         EventMap aEmpty;

@@ -282,15 +282,13 @@ Reference< XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFacto
         m_smgrRemote.is() )
     {
         if(  ! m_xInvocationFactoryRemote.is() )
-            m_xInvocationFactoryRemote= Reference<XSingleServiceFactory>(
-            m_smgrRemote->createInstance( INVOCATION_SERVICE), UNO_QUERY);
+            m_xInvocationFactoryRemote.set(m_smgrRemote->createInstance( INVOCATION_SERVICE), UNO_QUERY);
         retVal= m_xInvocationFactoryRemote;
     }
     else
     {
         if( ! m_xInvocationFactoryLocal.is() )
-            m_xInvocationFactoryLocal= Reference<XSingleServiceFactory>(
-            m_smgr->createInstance(INVOCATION_SERVICE ), UNO_QUERY);
+            m_xInvocationFactoryLocal.set(m_smgr->createInstance(INVOCATION_SERVICE ), UNO_QUERY);
         retVal= m_xInvocationFactoryLocal;
     }
     return retVal;
@@ -1371,7 +1369,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const Any & rObj, VARIANT
             return;
         }
         //make sure we have the main XInterface which is used with a map
-        xInt = Reference<XInterface>(xInt, UNO_QUERY);
+        xInt.set(xInt, UNO_QUERY);
         //If there is already a wrapper for the UNO object then use it
 
         Reference<XInterface> xIntWrapper;
@@ -1414,7 +1412,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const Any & rObj, VARIANT
             Sequence<Any> params(1);
             params.getArray()[0] = rObj;
             Reference<XInterface> xInt = xInvFactory->createInstanceWithArguments(params);
-            xInv= Reference<XInvocation>(xInt, UNO_QUERY);
+            xInv.set(xInt, UNO_QUERY);
         }
     }
 
@@ -2364,7 +2362,7 @@ Reference<XTypeConverter> UnoConversionUtilities<T>::getTypeConverter()
             Reference<XInterface> xIntConverter =
                 m_smgr->createInstance("com.sun.star.script.Converter");
             if (xIntConverter.is())
-                m_typeConverter = Reference<XTypeConverter>(xIntConverter, UNO_QUERY);
+                m_typeConverter.set(xIntConverter, UNO_QUERY);
         }
     }
     return m_typeConverter;

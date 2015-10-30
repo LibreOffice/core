@@ -167,7 +167,7 @@ void MRCListenerMultiplexerHelper::disposing(const css::lang::EventObject& ) thr
 {
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
     // peer is disposed, clear the reference
-    xPeer = Reference< css::awt::XWindow > ();
+    xPeer.clear();
 }
 
 #define MULTIPLEX( InterfaceName, MethodName, EventName )                   \

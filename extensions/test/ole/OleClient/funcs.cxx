@@ -55,7 +55,7 @@ Reference<XMultiServiceFactory> getMultiServiceFactory()
     if( ! objectFactory.is() )
     {
         Reference<XComponentContext> context = defaultBootstrap_InitialComponentContext();
-        factory = Reference<XMultiServiceFactory>( context->getServiceManager(), UNO_QUERY);
+        factory.set(context->getServiceManager(), UNO_QUERY);
 
     }
     return factory;
@@ -65,12 +65,11 @@ Reference<XInvocation> getComObject( OUString progId)
 {
     HRESULT hr= S_OK;
     Reference< XInvocation > ret;
-//  Reference<XMultiServiceFactory> fac;
     if(  ! objectFactory.is())
     {   Reference<XMultiServiceFactory> mgr= getMultiServiceFactory();
         Reference<XInterface> xInt= mgr->createInstance(
             "com.sun.star.bridge.oleautomation.Factory");
-        objectFactory= Reference<XMultiServiceFactory>::query(  xInt);
+        objectFactory.set(xInt, UNO_QUERY);
     }
 
     if( objectFactory.is())

@@ -34,7 +34,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL scn_component_getFactory( const s
 
     if( OUString::createFromAscii( pImplName ) == ScannerManager::getImplementationName_Static() )
     {
-        xFactory = Reference< css::lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+        xFactory.set( ::cppu::createSingleFactory(
                         static_cast< css::lang::XMultiServiceFactory* >( pServiceManager ),
                         ScannerManager::getImplementationName_Static(),
                         ScannerManager_CreateInstance,

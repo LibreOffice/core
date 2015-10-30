@@ -96,7 +96,7 @@ Reference< XConnection > getConnection(const OUString& _rURL)
         DBG_ASSERT(xNamingContext.is(), "::getDataSource : no NamingService interface on the sdb::DatabaseAccessContext !");
         try
         {
-            xDataSource = Reference< XDataSource > (xNamingContext->getRegisteredObject(_rURL), UNO_QUERY);
+            xDataSource.set(xNamingContext->getRegisteredObject(_rURL), UNO_QUERY);
         }
         catch (const Exception&)
         {
@@ -135,7 +135,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
         if (!xFormProps.is())
             return xConn;
 
-        xConn = Reference< XConnection > (*static_cast<Reference< XInterface > const *>(xFormProps->getPropertyValue("ActiveConnection").getValue()), UNO_QUERY);
+        xConn.set(*static_cast<Reference< XInterface > const *>(xFormProps->getPropertyValue("ActiveConnection").getValue()), UNO_QUERY);
         if (!xConn.is())
         {
             SAL_INFO("extensions", "no active connection");
@@ -173,7 +173,7 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
                 xFormProps->getPropertyValue("Command") >>= sTable;
                 Reference< XNameAccess >  xTables = xSupplyTables->getTables();
                 if (xTables.is() && xTables->hasByName(sTable))
-                    xSupplyCols = Reference< XColumnsSupplier > (
+                    xSupplyCols.set(
                         *static_cast<Reference< XInterface > const *>(xTables->getByName(sTable).getValue()), UNO_QUERY);
                 if (xSupplyCols.is())
                     xReturn = xSupplyCols->getColumns();
@@ -778,7 +778,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
     try
     {
         Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        m_xForm = Reference< XForm > ( xMgr->createInstance( "com.sun.star.form.component.Form" ), UNO_QUERY );
+        m_xForm.set( xMgr->createInstance( "com.sun.star.form.component.Form" ), UNO_QUERY );
 
         Reference< XPropertySet >  aPropertySet( m_xForm, UNO_QUERY );
 
@@ -1210,7 +1210,7 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& 
         // create the control model
         Reference< XMultiServiceFactory >  xMgr = ::comphelper::getProcessServiceFactory();
         Reference< XInterface >  xObject = xMgr->createInstance("com.sun.star.form.component.GridControl");
-        xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
+        xModel.set( xObject, UNO_QUERY );
 
         // set the
         Reference< XPropertySet > xPropSet( xModel, UNO_QUERY );
@@ -1312,7 +1312,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
             Reference< XComponentContext >  xContext = comphelper::getProcessComponentContext();
             Reference< XInterface >  xObject = xContext->getServiceManager()->createInstanceWithContext(aInstanceName, xContext);
-            xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
+            xModel.set( xObject, UNO_QUERY );
             Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
             Any aFieldName; aFieldName <<= aName;
 
@@ -1607,7 +1607,7 @@ uno::Reference< form::runtime::XFormController > BibDataManager::GetFormControll
         Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         m_xFormCtrl = form::runtime::FormController::create(xContext);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
-        m_xFormDispatch = uno::Reference< frame::XDispatch > ( m_xFormCtrl, UNO_QUERY);
+        m_xFormDispatch.set( m_xFormCtrl, UNO_QUERY);
     }
     return m_xFormCtrl;
 }

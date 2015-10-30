@@ -87,9 +87,9 @@ namespace pcr
         Reference< XResultSet >  xParentAsResultSet(xSearch, UNO_QUERY);
         while (xParentAsResultSet.is())
         {
-            xCont = Reference< XChild > (xSearch, UNO_QUERY);
+            xCont.set(xSearch, UNO_QUERY);
             xSearch = xCont.is() ? xCont->getParent() : Reference< XInterface > ();
-            xParentAsResultSet = Reference< XResultSet > (xSearch, UNO_QUERY);
+            xParentAsResultSet.set(xSearch, UNO_QUERY);
         }
 
         // and insert all entries below this root into the listbox
@@ -248,7 +248,7 @@ namespace pcr
         void* pData = pSelected ? pSelected->GetUserData() : NULL;
 
         if (pData)
-            m_xSelectedControl = Reference< XPropertySet > (*static_cast<Reference< XPropertySet > *>(pData));
+            m_xSelectedControl.set(*static_cast<Reference< XPropertySet > *>(pData));
 
         m_pNoAssignment->SetClickHdl(Link<Button*,void>());
         m_pNoAssignment->Check(pData == NULL);

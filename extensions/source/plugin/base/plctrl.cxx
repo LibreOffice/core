@@ -87,7 +87,7 @@ void PluginControl_Impl::dispose()
         getMultiplexer()->disposeAndClear();
 
     // release context
-    _xContext = Reference< XInterface > ();
+    _xContext.clear();
     releasePeer();
 }
 
@@ -147,8 +147,8 @@ void PluginControl_Impl::releasePeer()
         _xParentWindow->removeFocusListener( this );
         _xPeerWindow->dispose();
         _pSysChild      = NULL;
-        _xPeerWindow    = Reference< css::awt::XWindow > ();
-        _xPeer          = Reference< css::awt::XWindowPeer > ();
+        _xPeerWindow.clear();
+        _xPeer.clear();
         getMultiplexer()->setPeer( Reference< css::awt::XWindow > () );
     }
 }
@@ -164,7 +164,7 @@ void PluginControl_Impl::createPeer( const Reference< css::awt::XToolkit > & /*x
     }
 
     _xParentPeer = xParentPeer;
-    _xParentWindow = Reference< css::awt::XWindow > ( xParentPeer, UNO_QUERY );
+    _xParentWindow.set( xParentPeer, UNO_QUERY );
     DBG_ASSERT( _xParentWindow.is(), "### no parent peer window!" );
 
     vcl::Window* pImpl = VCLUnoHelper::GetWindow( xParentPeer );
@@ -175,8 +175,8 @@ void PluginControl_Impl::createPeer( const Reference< css::awt::XToolkit > & /*x
             _pSysChild->GrabFocus();
 
         // get peer
-        _xPeer          = Reference< css::awt::XWindowPeer > ( _pSysChild->GetComponentInterface() );
-        _xPeerWindow    = Reference< css::awt::XWindow > ( _xPeer, UNO_QUERY );
+        _xPeer.set( _pSysChild->GetComponentInterface() );
+        _xPeerWindow.set( _xPeer, UNO_QUERY );
         // !_BOTH_ MUST BE VALID!
         DBG_ASSERT( (_xPeer.is() && _xPeerWindow.is()), "### no peer!" );
 
