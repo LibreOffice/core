@@ -185,7 +185,7 @@ void SmartTagMgr::GetActionSequences( Sequence < OUString >& rSmartTagTypes,
 
 /** Returns the caption for a smart tag type.
 */
-OUString SmartTagMgr::GetSmartTagCaption( const OUString& rSmartTagType, const com::sun::star::lang::Locale& rLocale ) const
+OUString SmartTagMgr::GetSmartTagCaption( const OUString& rSmartTagType, const css::lang::Locale& rLocale ) const
 {
     OUString aRet;
 
@@ -232,7 +232,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
                 mxConfigurationSettings->setPropertyValue( "RecognizeSmartTags", aEnabled );
                 bCommit = true;
             }
-            catch ( ::com::sun::star::uno::Exception& )
+            catch ( css::uno::Exception& )
             {
             }
         }
@@ -254,7 +254,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
                 mxConfigurationSettings->setPropertyValue( "ExcludedSmartTagTypes", aNewTypes );
                 bCommit = true;
             }
-            catch ( ::com::sun::star::uno::Exception& )
+            catch ( css::uno::Exception& )
             {
             }
         }
@@ -265,14 +265,14 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
             {
                 Reference< util::XChangesBatch >( mxConfigurationSettings, UNO_QUERY_THROW )->commitChanges();
             }
-            catch ( ::com::sun::star::uno::Exception& )
+            catch ( css::uno::Exception& )
             {
             }
         }
     }
 }
 
-// ::com::sun::star::util::XModifyListener
+// css::util::XModifyListener
 void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -284,7 +284,7 @@ void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException,
     LoadLibraries();
 }
 
-// ::com::sun::star::lang::XEventListener
+// css::lang::XEventListener
 void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -311,7 +311,7 @@ void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeExc
     }
 }
 
-// ::com::sun::star::util::XChangesListener
+// css::util::XChangesListener
 void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;

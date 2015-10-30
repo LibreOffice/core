@@ -434,7 +434,7 @@ SdrObject* FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
 }
 
 
-void FmFormView::InsertControlContainer(const Reference< ::com::sun::star::awt::XControlContainer > & xCC)
+void FmFormView::InsertControlContainer(const Reference< css::awt::XControlContainer > & xCC)
 {
     if( !IsDesignMode() )
     {
@@ -456,7 +456,7 @@ void FmFormView::InsertControlContainer(const Reference< ::com::sun::star::awt::
 }
 
 
-void FmFormView::RemoveControlContainer(const Reference< ::com::sun::star::awt::XControlContainer > & xCC)
+void FmFormView::RemoveControlContainer(const Reference< css::awt::XControlContainer > & xCC)
 {
     if( !IsDesignMode() )
     {
@@ -532,7 +532,7 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 
 bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 {
-    Reference< ::com::sun::star::awt::XControl> xControl(pImpl->m_xWindow,UNO_QUERY);
+    Reference< css::awt::XControl> xControl(pImpl->m_xWindow,UNO_QUERY);
     bool bRet = !xControl.is() || !_xSource.is() || _xSource != xControl->getModel();
     if ( bRet )
         UnmarkAll();

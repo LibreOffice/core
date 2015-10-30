@@ -200,7 +200,7 @@ void GalApp::Init()
 
         // For backwards compatibility, in case some code still uses plain
         // createInstance w/o args directly to obtain an instance:
-        com::sun::star::ucb::UniversalContentBroker::create(xComponentContext);
+        css::ucb::UniversalContentBroker::create(xComponentContext);
     } catch (const uno::Exception &e) {
         fprintf( stderr, "Bootstrap exception '%s'\n",
                  rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );

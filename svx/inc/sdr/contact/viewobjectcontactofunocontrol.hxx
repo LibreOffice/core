@@ -55,16 +55,16 @@ namespace sdr { namespace contact {
         ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
 
         /// returns the ->XControl instance belonging to the instance, creates it if necessary
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
+        css::uno::Reference< css::awt::XControl >
                 getControl();
 
         /** retrieves a temporary XControl instance, whose parent is the given device
             @seealso SdrUnoObj::GetTemporaryControlForWindow
         */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
+        static css::uno::Reference< css::awt::XControl >
             getTemporaryControlForWindow(
                 const vcl::Window& _rWindow,
-                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer,
+                css::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer,
                 const SdrUnoObj& _rUnoObject
             );
 

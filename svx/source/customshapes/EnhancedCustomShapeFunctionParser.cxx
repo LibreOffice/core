@@ -60,7 +60,7 @@ void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParame
 
     switch( rSource.Type )
     {
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
+        case css::drawing::EnhancedCustomShapeParameterType::EQUATION :
         {
             if ( nValue & 0x40000000 )
             {
@@ -70,13 +70,13 @@ void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParame
             nValue |= 0x400;
         }
         break;
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT : nValue += DFF_Prop_adjustValue; break;
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM : nValue = DFF_Prop_geoBottom; break;
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT : nValue = DFF_Prop_geoRight; break;
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP : nValue = DFF_Prop_geoTop; break;
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT : nValue = DFF_Prop_geoLeft; break;
+        case css::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT : nValue += DFF_Prop_adjustValue; break;
+        case css::drawing::EnhancedCustomShapeParameterType::BOTTOM : nValue = DFF_Prop_geoBottom; break;
+        case css::drawing::EnhancedCustomShapeParameterType::RIGHT : nValue = DFF_Prop_geoRight; break;
+        case css::drawing::EnhancedCustomShapeParameterType::TOP : nValue = DFF_Prop_geoTop; break;
+        case css::drawing::EnhancedCustomShapeParameterType::LEFT : nValue = DFF_Prop_geoLeft; break;
     }
-    if ( rSource.Type != com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL )
+    if ( rSource.Type != css::drawing::EnhancedCustomShapeParameterType::NORMAL )
         rDest.nOperation |= ( 0x2000 << nDestPara );
     rDest.nPara[ nDestPara ] = nValue;
 }

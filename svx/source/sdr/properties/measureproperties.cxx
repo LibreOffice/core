@@ -120,7 +120,7 @@ namespace sdr
             mpItemSet->Put(XLineStartWidthItem(200));
             mpItemSet->Put(XLineEndItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
             mpItemSet->Put(XLineEndWidthItem(200));
-            mpItemSet->Put(XLineStyleItem(com::sun::star::drawing::LineStyle_SOLID));
+            mpItemSet->Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
         }
     } // end of namespace properties
 } // end of namespace sdr

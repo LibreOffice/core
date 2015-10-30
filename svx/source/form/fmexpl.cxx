@@ -191,7 +191,7 @@ FmEntryData::~FmEntryData()
 }
 
 
-void FmEntryData::newObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace )
+void FmEntryData::newObject( const css::uno::Reference< css::uno::XInterface >& _rxIFace )
 {
     // do not just copy, normalize it
     m_xNormalizedIFace = Reference< XInterface >( _rxIFace, UNO_QUERY );

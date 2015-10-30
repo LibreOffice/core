@@ -25,7 +25,7 @@
 
 class SdrObject;
 
-class SvxUnoShapeModifyListener : public ::cppu::WeakAggImplHelper1< ::com::sun::star::util::XModifyListener >
+class SvxUnoShapeModifyListener : public ::cppu::WeakAggImplHelper1< css::util::XModifyListener >
 {
     SdrObject*  mpObj;
 
@@ -33,11 +33,11 @@ public:
     SvxUnoShapeModifyListener( SdrObject* pObj ) throw();
     virtual ~SvxUnoShapeModifyListener() throw();
 
-    // ::com::sun::star::util::XModifyListener
-    virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& aEvent) throw(  ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::util::XModifyListener
+    virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) throw(  css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(  ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XEventListener
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(  css::uno::RuntimeException, std::exception) override;
 
     // internal
     void invalidate() throw();

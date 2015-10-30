@@ -18,7 +18,7 @@
 
 using namespace sfx2::sidebar;
 
-PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame)
+PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Control(pParent)
     , m_bInClose(false)
 {

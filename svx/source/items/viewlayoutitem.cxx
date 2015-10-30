@@ -92,14 +92,14 @@ bool SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
              mbBookMode == rItem.IsBookMode() );
 }
 
-bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxViewLayoutItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case 0 :
         {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( VIEWLAYOUT_PARAMS );
+            css::uno::Sequence< css::beans::PropertyValue > aSeq( VIEWLAYOUT_PARAMS );
             aSeq[0].Name = VIEWLAYOUT_PARAM_COLUMNS;
             aSeq[0].Value <<= sal_Int32( GetValue() );
             aSeq[1].Name = VIEWLAYOUT_PARAM_BOOKMODE;
@@ -118,14 +118,14 @@ bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
     return true;
 }
 
-bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxViewLayoutItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case 0 :
         {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
+            css::uno::Sequence< css::beans::PropertyValue > aSeq;
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == VIEWLAYOUT_PARAMS ))
             {
                 sal_Int32 nColumns( 0 );

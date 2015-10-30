@@ -34,23 +34,23 @@ class SvxXMLXTableImport : public SvXMLImport
 {
 public:
     SvxXMLXTableImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & rTable,
-        com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& rGrfResolver);
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::container::XNameContainer > & rTable,
+        css::uno::Reference< css::document::XGraphicObjectResolver >& rGrfResolver);
 
     virtual ~SvxXMLXTableImport() throw ();
 
     static bool load( const OUString &rPath, const OUString &rReferer,
-                      const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > &xStorage,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xTable,
+                      const css::uno::Reference < css::embed::XStorage > &xStorage,
+                      const css::uno::Reference< css::container::XNameContainer >& xTable,
                       bool *bOptLoadedFromStorage ) throw();
 protected:
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
-                                      const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) override;
+                                      const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & mrTable;
+    const css::uno::Reference< css::container::XNameContainer > & mrTable;
 };
 
 #endif

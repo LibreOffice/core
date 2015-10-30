@@ -23,7 +23,7 @@
 
 
 
-EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xCustomShape, sal_uInt32 nIndex ) :
+EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( css::uno::Reference< css::drawing::XShape >& xCustomShape, sal_uInt32 nIndex ) :
     mnIndex     ( nIndex ),
     mxCustomShape ( xCustomShape )
 {
@@ -50,35 +50,35 @@ void SAL_CALL EnhancedCustomShapeHandle::release() throw()
 }
 
 // XCustomShapeHandle
-com::sun::star::awt::Point SAL_CALL EnhancedCustomShapeHandle::getPosition()
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+css::awt::Point SAL_CALL EnhancedCustomShapeHandle::getPosition()
+    throw ( css::uno::RuntimeException, std::exception )
 {
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxCustomShape ) );
     if ( !pSdrObjCustomShape )
-        throw com::sun::star::uno::RuntimeException();
+        throw css::uno::RuntimeException();
 
     Point aPosition;
     EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
     if ( !aCustomShape2d.GetHandlePosition( mnIndex, aPosition ) )
-        throw com::sun::star::uno::RuntimeException();
-    return com::sun::star::awt::Point( aPosition.X(), aPosition.Y() );
+        throw css::uno::RuntimeException();
+    return css::awt::Point( aPosition.X(), aPosition.Y() );
 }
 
-void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const com::sun::star::awt::Point& aPnt )
-    throw ( com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const css::awt::Point& aPnt )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxCustomShape ) );
     if ( !pSdrObjCustomShape )
-        throw com::sun::star::uno::RuntimeException();
+        throw css::uno::RuntimeException();
 
     EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
     if ( !aCustomShape2d.SetHandleControllerPosition( mnIndex, aPnt ) )
-        throw com::sun::star::uno::RuntimeException();
+        throw css::uno::RuntimeException();
 }
 
 // XInitialization
-void SAL_CALL EnhancedCustomShapeHandle::initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& /* aArguments */ )
-    throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL EnhancedCustomShapeHandle::initialize( const css::uno::Sequence< css::uno::Any >& /* aArguments */ )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
 }
 

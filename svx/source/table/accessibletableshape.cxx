@@ -108,8 +108,8 @@ void AccessibleTableShapeImpl::init( const Reference< XAccessible>& xAccessible,
         Reference< XModifyListener > xListener( this );
         mxTable->addModifyListener( xListener );
         //register the listener with table model
-        Reference< ::com::sun::star::view::XSelectionSupplier > xSelSupplier(xTable, UNO_QUERY);
-        Reference< ::com::sun::star::view::XSelectionChangeListener > xSelListener( xAccessible, UNO_QUERY );
+        Reference< css::view::XSelectionSupplier > xSelSupplier(xTable, UNO_QUERY);
+        Reference< css::view::XSelectionChangeListener > xSelListener( xAccessible, UNO_QUERY );
         if (xSelSupplier.is())
             xSelSupplier->addSelectionChangeListener(xSelListener);
         mRowCount = mxTable->getRowCount();
@@ -1101,32 +1101,32 @@ Locale SAL_CALL AccessibleTableHeaderShape::getLocale() throw (IllegalAccessible
 }
 
 //XAccessibleComponent
-sal_Bool SAL_CALL AccessibleTableHeaderShape::containsPoint ( const ::com::sun::star::awt::Point& aPoint ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL AccessibleTableHeaderShape::containsPoint ( const css::awt::Point& aPoint ) throw (RuntimeException, std::exception)
 {
     return mpTable->containsPoint( aPoint );
 }
 
-Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleAtPoint ( const ::com::sun::star::awt::Point& aPoint) throw (RuntimeException, std::exception)
+Reference< XAccessible > SAL_CALL AccessibleTableHeaderShape::getAccessibleAtPoint ( const css::awt::Point& aPoint) throw (RuntimeException, std::exception)
 {
     return mpTable->getAccessibleAtPoint( aPoint );
 }
 
-::com::sun::star::awt::Rectangle SAL_CALL AccessibleTableHeaderShape::getBounds() throw (RuntimeException, std::exception)
+css::awt::Rectangle SAL_CALL AccessibleTableHeaderShape::getBounds() throw (RuntimeException, std::exception)
 {
     return mpTable->getBounds();
 }
 
-::com::sun::star::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocation() throw (RuntimeException, std::exception)
+css::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocation() throw (RuntimeException, std::exception)
 {
     return mpTable->getLocation();
 }
 
-::com::sun::star::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocationOnScreen() throw (RuntimeException, std::exception)
+css::awt::Point SAL_CALL AccessibleTableHeaderShape::getLocationOnScreen() throw (RuntimeException, std::exception)
 {
     return mpTable->getLocationOnScreen();
 }
 
-::com::sun::star::awt::Size SAL_CALL AccessibleTableHeaderShape::getSize() throw (RuntimeException, std::exception)
+css::awt::Size SAL_CALL AccessibleTableHeaderShape::getSize() throw (RuntimeException, std::exception)
 {
     return mpTable->getSize();
 }

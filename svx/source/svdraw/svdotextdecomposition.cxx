@@ -343,7 +343,7 @@ namespace
                     rInfo.mnTextLen,
                     aDXArray,
                     aFontAttribute,
-                    rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
+                    rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
                     aBFontColor,
                     aTextFillColor,
 
@@ -371,7 +371,7 @@ namespace
                     rInfo.mnTextLen,
                     aDXArray,
                     aFontAttribute,
-                    rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
+                    rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
                     aBFontColor,
                     rInfo.mbFilled,
                     rInfo.mnWidthToFill,

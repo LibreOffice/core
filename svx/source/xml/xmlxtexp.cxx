@@ -144,7 +144,7 @@ private:
 
 
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+    const css::uno::Reference< css::uno::XComponentContext >& rContext,
     const OUString& rFileName,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,

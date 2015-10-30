@@ -81,7 +81,7 @@ bool XLineTransparenceItem::GetPresentation
 
 TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
 
-XLineJointItem::XLineJointItem( com::sun::star::drawing::LineJoint eLineJoint ) :
+XLineJointItem::XLineJointItem( css::drawing::LineJoint eLineJoint ) :
     SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< sal_uInt16 >(eLineJoint))
 {
 }
@@ -101,7 +101,7 @@ SfxPoolItem* XLineJointItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
     XLineJointItem* pRet = new XLineJointItem( rIn );
 
     if(nVer < 1)
-        pRet->SetValue(com::sun::star::drawing::LineJoint_ROUND);
+        pRet->SetValue(css::drawing::LineJoint_ROUND);
 
     return pRet;
 }
@@ -120,27 +120,27 @@ bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, SfxMapUnit 
 
     switch( GetValue() )
     {
-        case( com::sun::star::drawing::LineJoint_MAKE_FIXED_SIZE ):
-        case( com::sun::star::drawing::LineJoint_NONE ):
+        case( css::drawing::LineJoint_MAKE_FIXED_SIZE ):
+        case( css::drawing::LineJoint_NONE ):
             nId = RID_SVXSTR_LINEJOINT_NONE;
         break;
 
-        case( com::sun::star::drawing::LineJoint_MIDDLE ):
+        case( css::drawing::LineJoint_MIDDLE ):
             nId = RID_SVXSTR_LINEJOINT_MIDDLE;
         break;
 
 
-        case( com::sun::star::drawing::LineJoint_BEVEL ):
+        case( css::drawing::LineJoint_BEVEL ):
             nId = RID_SVXSTR_LINEJOINT_BEVEL;
         break;
 
 
-        case( com::sun::star::drawing::LineJoint_MITER ):
+        case( css::drawing::LineJoint_MITER ):
             nId = RID_SVXSTR_LINEJOINT_MITER;
         break;
 
 
-        case( com::sun::star::drawing::LineJoint_ROUND ):
+        case( css::drawing::LineJoint_ROUND ):
             nId = RID_SVXSTR_LINEJOINT_ROUND;
         break;
     }
@@ -151,16 +151,16 @@ bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, SfxMapUnit 
     return true;
 }
 
-bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineJointItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    const ::com::sun::star::drawing::LineJoint eJoint = GetValue();
+    const css::drawing::LineJoint eJoint = GetValue();
     rVal <<= eJoint;
     return true;
 }
 
-bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineJointItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    ::com::sun::star::drawing::LineJoint eUnoJoint;
+    css::drawing::LineJoint eUnoJoint;
 
     if(!(rVal >>= eUnoJoint))
     {
@@ -168,7 +168,7 @@ bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
         sal_Int32 nLJ = 0;
         if(!(rVal >>= nLJ))
             return false;
-        eUnoJoint = (::com::sun::star::drawing::LineJoint)nLJ;
+        eUnoJoint = (css::drawing::LineJoint)nLJ;
     }
 
     SetValue( sal::static_int_cast< sal_uInt16 >( eUnoJoint ) );
@@ -184,7 +184,7 @@ sal_uInt16 XLineJointItem::GetValueCount() const
 
 TYPEINIT1_AUTOFACTORY(AffineMatrixItem, SfxPoolItem);
 
-AffineMatrixItem::AffineMatrixItem(const com::sun::star::geometry::AffineMatrix2D* pMatrix)
+AffineMatrixItem::AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix)
 :   SfxPoolItem(SID_ATTR_TRANSFORM_MATRIX)
 {
     if(pMatrix)
@@ -266,13 +266,13 @@ SvStream& AffineMatrixItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/
     return rStream;
 }
 
-bool AffineMatrixItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool AffineMatrixItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= maMatrix;
     return true;
 }
 
-bool AffineMatrixItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool AffineMatrixItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     if (rVal >>= maMatrix)
     {
@@ -285,7 +285,7 @@ bool AffineMatrixItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
 
 TYPEINIT1_AUTOFACTORY(XLineCapItem, SfxEnumItem);
 
-XLineCapItem::XLineCapItem(com::sun::star::drawing::LineCap eLineCap)
+XLineCapItem::XLineCapItem(css::drawing::LineCap eLineCap)
 :   SfxEnumItem(XATTR_LINECAP, sal::static_int_cast< sal_uInt16 >(eLineCap))
 {
 }
@@ -305,7 +305,7 @@ SfxPoolItem* XLineCapItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
     XLineCapItem* pRet = new XLineCapItem( rIn );
 
     if(nVer < 1)
-        pRet->SetValue(com::sun::star::drawing::LineCap_BUTT);
+        pRet->SetValue(css::drawing::LineCap_BUTT);
 
     return pRet;
 }
@@ -324,15 +324,15 @@ bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, SfxMapUnit /*
 
     switch( GetValue() )
     {
-        default: /*com::sun::star::drawing::LineCap_BUTT*/
+        default: /*css::drawing::LineCap_BUTT*/
             nId = RID_SVXSTR_LINECAP_BUTT;
         break;
 
-        case(com::sun::star::drawing::LineCap_ROUND):
+        case(css::drawing::LineCap_ROUND):
             nId = RID_SVXSTR_LINECAP_ROUND;
         break;
 
-        case(com::sun::star::drawing::LineCap_SQUARE):
+        case(css::drawing::LineCap_SQUARE):
             nId = RID_SVXSTR_LINECAP_SQUARE;
         break;
     }
@@ -343,16 +343,16 @@ bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, SfxMapUnit /*
     return true;
 }
 
-bool XLineCapItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineCapItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    const com::sun::star::drawing::LineCap eCap(GetValue());
+    const css::drawing::LineCap eCap(GetValue());
     rVal <<= eCap;
     return true;
 }
 
-bool XLineCapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineCapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    com::sun::star::drawing::LineCap eUnoCap;
+    css::drawing::LineCap eUnoCap;
 
     if(!(rVal >>= eUnoCap))
     {
@@ -364,12 +364,12 @@ bool XLineCapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /
             return false;
         }
 
-        eUnoCap = (com::sun::star::drawing::LineCap)nLJ;
+        eUnoCap = (css::drawing::LineCap)nLJ;
     }
 
-    OSL_ENSURE(com::sun::star::drawing::LineCap_BUTT == eUnoCap
-        || com::sun::star::drawing::LineCap_ROUND == eUnoCap
-        || com::sun::star::drawing::LineCap_SQUARE == eUnoCap, "Unknown enum value in XATTR_LINECAP (!)");
+    OSL_ENSURE(css::drawing::LineCap_BUTT == eUnoCap
+        || css::drawing::LineCap_ROUND == eUnoCap
+        || css::drawing::LineCap_SQUARE == eUnoCap, "Unknown enum value in XATTR_LINECAP (!)");
 
     SetValue(sal::static_int_cast< sal_uInt16 >(eUnoCap));
 
@@ -382,12 +382,12 @@ sal_uInt16 XLineCapItem::GetValueCount() const
     return 3;
 }
 
-com::sun::star::drawing::LineCap XLineCapItem::GetValue() const
+css::drawing::LineCap XLineCapItem::GetValue() const
 {
-    const com::sun::star::drawing::LineCap eRetval((com::sun::star::drawing::LineCap)SfxEnumItem::GetValue());
-    OSL_ENSURE(com::sun::star::drawing::LineCap_BUTT == eRetval
-        || com::sun::star::drawing::LineCap_ROUND == eRetval
-        || com::sun::star::drawing::LineCap_SQUARE == eRetval, "Unknown enum value in XATTR_LINECAP (!)");
+    const css::drawing::LineCap eRetval((css::drawing::LineCap)SfxEnumItem::GetValue());
+    OSL_ENSURE(css::drawing::LineCap_BUTT == eRetval
+        || css::drawing::LineCap_ROUND == eRetval
+        || css::drawing::LineCap_SQUARE == eRetval, "Unknown enum value in XATTR_LINECAP (!)");
 
     return eRetval;
 }

@@ -396,7 +396,7 @@ bool XFillBitmapItem::GetPresentation(
     return true;
 }
 
-bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId) const
+bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -406,7 +406,7 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     OUString aInternalName;
 
     OUString aURL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;
+    css::uno::Reference< css::awt::XBitmap > xBmp;
 
     if( nMemberId == MID_NAME )
     {
@@ -456,14 +456,14 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     return true;
 }
 
-bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
     OUString aName;
     OUString aURL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic;
+    css::uno::Reference< css::awt::XBitmap > xBmp;
+    css::uno::Reference< css::graphic::XGraphic > xGraphic;
 
     bool bSetName   = false;
     bool bSetURL    = false;

@@ -448,7 +448,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::grabFocus() throw( RuntimeException, 
 }
 
 sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -457,7 +457,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
     return mpRepr->GetControlForeground().GetColor();
 }
 sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -790,7 +790,7 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::grabFocus() throw( RuntimeExcept
 }
 
 sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( maMutex );
@@ -798,7 +798,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
     return mrParentWindow.GetControlForeground().GetColor();
 }
 sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( maMutex );

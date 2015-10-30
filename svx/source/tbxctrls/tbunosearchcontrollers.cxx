@@ -118,9 +118,9 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     lArgs[3].Name = SEARCHITEM_TRANSLITERATEFLAGS;
     SvtCTLOptions aCTLOptions;
     sal_Int32 nFlags = 0;
-    nFlags |= (!aMatchCase ? static_cast<int>(com::sun::star::i18n::TransliterationModules_IGNORE_CASE) : 0);
-    nFlags |= (aCTLOptions.IsCTLFontEnabled() ? com::sun::star::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL:0 );
-    nFlags |= (aCTLOptions.IsCTLFontEnabled() ? com::sun::star::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL:0 );
+    nFlags |= (!aMatchCase ? static_cast<int>(css::i18n::TransliterationModules_IGNORE_CASE) : 0);
+    nFlags |= (aCTLOptions.IsCTLFontEnabled() ? css::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL:0 );
+    nFlags |= (aCTLOptions.IsCTLFontEnabled() ? css::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL:0 );
     lArgs[3].Value <<= nFlags;
     lArgs[4].Name = SEARCHITEM_COMMAND;
     lArgs[4].Value <<= (sal_Int16)(aFindAll ?
@@ -436,7 +436,7 @@ void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeExce
 }
 
 // XInitialization
-void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
+void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     svt::ToolboxController::initialize(aArguments);
 
@@ -678,7 +678,7 @@ void SAL_CALL MatchCaseToolboxController::dispose() throw ( css::uno::RuntimeExc
 }
 
 // XInitialization
-void SAL_CALL MatchCaseToolboxController::initialize( const css::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
+void SAL_CALL MatchCaseToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     svt::ToolboxController::initialize(aArguments);
 
@@ -772,7 +772,7 @@ void SAL_CALL SearchFormattedToolboxController::dispose() throw ( css::uno::Runt
 }
 
 // XInitialization
-void SAL_CALL SearchFormattedToolboxController::initialize( const css::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
+void SAL_CALL SearchFormattedToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     svt::ToolboxController::initialize(aArguments);
 

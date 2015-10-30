@@ -79,9 +79,9 @@ using ::com::sun::star::awt::XVclWindowPeer;
 
 
 
-::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
+css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
 {
-    ::com::sun::star::awt::FontDescriptor aFD;
+    css::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetName();
     aFD.StyleName = rFont.GetStyleName();
     aFD.Height = (sal_Int16)rFont.GetSize().Height();
@@ -102,7 +102,7 @@ using ::com::sun::star::awt::XVclWindowPeer;
 }
 
 
-vcl::Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
+vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
 {
     vcl::Font aFont;
     aFont.SetName( rDescr.Name );
@@ -133,7 +133,7 @@ Any SAL_CALL FmXModifyMultiplexer::queryInterface(const Type& _rType) throw (Run
 {
     Any aReturn;
     aReturn = ::cppu::queryInterface(_rType,
-        static_cast< ::com::sun::star::util::XModifyListener*>(this),
+        static_cast< css::util::XModifyListener*>(this),
         static_cast< XEventListener*>(this)
     );
 
@@ -416,7 +416,7 @@ OUString FmXGridControl::GetComponentServiceName()
 }
 
 
-sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< ::com::sun::star::awt::XControlModel >& rModel) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< css::awt::XControlModel >& rModel) throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -458,7 +458,7 @@ FmXGridPeer* FmXGridControl::imp_CreatePeer(vcl::Window* pParent)
 }
 
 
-void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt::XToolkit >& /*rToolkit*/, const Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer) throw( RuntimeException, std::exception )
+void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& /*rToolkit*/, const Reference< css::awt::XWindowPeer >& rParentPeer) throw( RuntimeException, std::exception )
 {
     if ( !mxModel.is() )
         throw DisposedException( OUString(), *this );
@@ -506,7 +506,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
             DBG_ASSERT(getPeer().is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
             pPeer = FmXGridPeer::getImplementation(getPeer());
 
-            setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, ::com::sun::star::awt::PosSize::POSSIZE );
+            setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, css::awt::PosSize::POSSIZE );
 
             Reference< XIndexContainer >  xColumns(getModel(), UNO_QUERY);
             if (xColumns.is())
@@ -559,7 +559,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
                     Reference< XRowSet >  xForm(xComp->getParent(), UNO_QUERY);
                     // is the form alive?
                     // we can see that if the form contains columns
-                    Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xColumnsSupplier(xForm, UNO_QUERY);
+                    Reference< css::sdbcx::XColumnsSupplier >  xColumnsSupplier(xForm, UNO_QUERY);
                     if (xColumnsSupplier.is())
                     {
                         if (Reference< XIndexAccess > (xColumnsSupplier->getColumns(),UNO_QUERY)->getCount())
@@ -575,7 +575,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
                                 {
                                     try
                                     {
-                                        aOldCursorBookmark = Reference< ::com::sun::star::sdbcx::XRowLocate > (xForm, UNO_QUERY)->getBookmark();
+                                        aOldCursorBookmark = Reference< css::sdbcx::XRowLocate > (xForm, UNO_QUERY)->getBookmark();
                                     }
                                     catch( const Exception& e )
                                     {
@@ -596,7 +596,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
                 if (aOldCursorBookmark.hasValue())
                 {   // we have a valid bookmark, so we have to restore the cursor's position
                     Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
-                    Reference< ::com::sun::star::sdbcx::XRowLocate >  xLocate(xComp->getParent(), UNO_QUERY);
+                    Reference< css::sdbcx::XRowLocate >  xLocate(xComp->getParent(), UNO_QUERY);
                     xLocate->moveToBookmark(aOldCursorBookmark);
                 }
             }
@@ -606,7 +606,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
                 (void)e;
             }
 
-            Reference< ::com::sun::star::awt::XView >  xPeerView(getPeer(), UNO_QUERY);
+            Reference< css::awt::XView >  xPeerView(getPeer(), UNO_QUERY);
             xPeerView->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
             xPeerView->setGraphics( mxGraphics );
         }
@@ -615,12 +615,12 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
 }
 
 
-void FmXGridControl::addModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException, std::exception )
+void FmXGridControl::addModifyListener(const Reference< css::util::XModifyListener >& l) throw( RuntimeException, std::exception )
 {
     m_aModifyListeners.addInterface( l );
     if( getPeer().is() && m_aModifyListeners.getLength() == 1 )
     {
-        Reference< ::com::sun::star::util::XModifyBroadcaster >  xGrid(getPeer(), UNO_QUERY);
+        Reference< css::util::XModifyBroadcaster >  xGrid(getPeer(), UNO_QUERY);
         xGrid->addModifyListener( &m_aModifyListeners);
     }
 }
@@ -690,11 +690,11 @@ Sequence< Any > SAL_CALL FmXGridControl::queryFieldData( sal_Int32 nRow, const T
 }
 
 
-void SAL_CALL FmXGridControl::removeModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException, std::exception )
+void SAL_CALL FmXGridControl::removeModifyListener(const Reference< css::util::XModifyListener >& l) throw( RuntimeException, std::exception )
 {
     if( getPeer().is() && m_aModifyListeners.getLength() == 1 )
     {
-        Reference< ::com::sun::star::util::XModifyBroadcaster >  xGrid(getPeer(), UNO_QUERY);
+        Reference< css::util::XModifyBroadcaster >  xGrid(getPeer(), UNO_QUERY);
         xGrid->removeModifyListener( &m_aModifyListeners);
     }
     m_aModifyListeners.removeInterface( l );
@@ -712,7 +712,7 @@ void SAL_CALL FmXGridControl::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeExc
 
 void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeException, std::exception )
 {
-    ::com::sun::star::util::ModeChangeEvent aModeChangeEvent;
+    css::util::ModeChangeEvent aModeChangeEvent;
 
     // --- <mutex_lock> ---
     {
@@ -817,37 +817,37 @@ void SAL_CALL FmXGridControl::removeContainerListener(const Reference< XContaine
 }
 
 
-Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL FmXGridControl::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException, std::exception )
+Reference< css::frame::XDispatch >  SAL_CALL FmXGridControl::queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::frame::XDispatchProvider >  xPeerProvider(getPeer(), UNO_QUERY);
+    Reference< css::frame::XDispatchProvider >  xPeerProvider(getPeer(), UNO_QUERY);
     if (xPeerProvider.is())
         return xPeerProvider->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
     else
-        return Reference< ::com::sun::star::frame::XDispatch > ();
+        return Reference< css::frame::XDispatch > ();
 }
 
 
-Sequence< Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL FmXGridControl::queryDispatches(const Sequence< ::com::sun::star::frame::DispatchDescriptor>& aDescripts) throw( RuntimeException, std::exception )
+Sequence< Reference< css::frame::XDispatch > > SAL_CALL FmXGridControl::queryDispatches(const Sequence< css::frame::DispatchDescriptor>& aDescripts) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::frame::XDispatchProvider >  xPeerProvider(getPeer(), UNO_QUERY);
+    Reference< css::frame::XDispatchProvider >  xPeerProvider(getPeer(), UNO_QUERY);
     if (xPeerProvider.is())
         return xPeerProvider->queryDispatches(aDescripts);
     else
-        return Sequence< Reference< ::com::sun::star::frame::XDispatch > >();
+        return Sequence< Reference< css::frame::XDispatch > >();
 }
 
 
-void SAL_CALL FmXGridControl::registerDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException, std::exception )
+void SAL_CALL FmXGridControl::registerDispatchProviderInterceptor(const Reference< css::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xPeerInterception(getPeer(), UNO_QUERY);
+    Reference< css::frame::XDispatchProviderInterception >  xPeerInterception(getPeer(), UNO_QUERY);
     if (xPeerInterception.is())
         xPeerInterception->registerDispatchProviderInterceptor(_xInterceptor);
 }
 
 
-void SAL_CALL FmXGridControl::releaseDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException, std::exception )
+void SAL_CALL FmXGridControl::releaseDispatchProviderInterceptor(const Reference< css::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xPeerInterception(getPeer(), UNO_QUERY);
+    Reference< css::frame::XDispatchProviderInterception >  xPeerInterception(getPeer(), UNO_QUERY);
     if (xPeerInterception.is())
         xPeerInterception->releaseDispatchProviderInterceptor(_xInterceptor);
 }
@@ -910,7 +910,7 @@ sal_Bool SAL_CALL FmXGridControl::hasElements() throw( RuntimeException, std::ex
 
 Type SAL_CALL FmXGridControl::getElementType(  ) throw(RuntimeException, std::exception)
 {
-    return cppu::UnoType<com::sun::star::awt::XTextComponent>::get();
+    return cppu::UnoType<css::awt::XTextComponent>::get();
 }
 
 // XEnumerationAccess
@@ -942,11 +942,11 @@ Any SAL_CALL FmXGridControl::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoun
     return xPeer->getByIndex(_nIndex);
 }
 
-// ::com::sun::star::util::XModeSelector
+// css::util::XModeSelector
 
 void SAL_CALL FmXGridControl::setMode(const OUString& Mode) throw( NoSupportException, RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
+    Reference< css::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     if (!xPeer.is())
         throw NoSupportException();
 
@@ -956,21 +956,21 @@ void SAL_CALL FmXGridControl::setMode(const OUString& Mode) throw( NoSupportExce
 
 OUString SAL_CALL FmXGridControl::getMode() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
+    Reference< css::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->getMode() : OUString();
 }
 
 
 css::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedModes() throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
+    Reference< css::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->getSupportedModes() : css::uno::Sequence<OUString>();
 }
 
 
 sal_Bool SAL_CALL FmXGridControl::supportsMode(const OUString& Mode) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
+    Reference< css::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() && xPeer->supportsMode(Mode);
 }
 
@@ -1158,7 +1158,7 @@ using namespace ::com::sun::star::util;
         {
             if ( m_pDispatchers[i] == e.Source )
             {
-                m_pDispatchers[i]->removeStatusListener( static_cast< ::com::sun::star::frame::XStatusListener* >( this ), *pSupportedURLs );
+                m_pDispatchers[i]->removeStatusListener( static_cast< css::frame::XStatusListener* >( this ), *pSupportedURLs );
                 m_pDispatchers[i] = NULL;
                 m_pStateCache[i] = false;
                 bKnownSender = true;
@@ -1171,13 +1171,13 @@ using namespace ::com::sun::star::util;
 }
 
 
-void FmXGridPeer::addModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException, std::exception )
+void FmXGridPeer::addModifyListener(const Reference< css::util::XModifyListener >& l) throw( RuntimeException, std::exception )
 {
     m_aModifyListeners.addInterface( l );
 }
 
 
-void FmXGridPeer::removeModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException, std::exception )
+void FmXGridPeer::removeModifyListener(const Reference< css::util::XModifyListener >& l) throw( RuntimeException, std::exception )
 {
     m_aModifyListeners.removeInterface( l );
 }
@@ -1239,7 +1239,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
     bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
 
     DbGridColumn* pCol;
-    Reference< ::com::sun::star::sdb::XColumn >  xFieldContent;
+    Reference< css::sdb::XColumn >  xFieldContent;
     Reference< XPropertySet >  xCurrentColumn;
     for (sal_Int32 i=0; i<nColumns; ++i)
     {
@@ -1256,7 +1256,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
         pCol = aColumns[ nModelPos ];
         const DbGridRowRef xRow = pGrid->GetSeekRow();
-        xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< ::com::sun::star::sdb::XColumn > ();
+        xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< css::sdb::XColumn > ();
         if (!xFieldContent.is())
             // can't supply anything without a field content
             // FS - 07.12.99 - 54391
@@ -1308,7 +1308,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     Any* pReturnArray = aReturnSequence.getArray();
 
     bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
-    Reference< ::com::sun::star::sdb::XColumn >  xFieldContent;
+    Reference< css::sdb::XColumn >  xFieldContent;
     for (sal_Int32 i=0; i < nColumnCount; ++i)
     {
         sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos((sal_uInt16)i));
@@ -1903,7 +1903,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
             pGrid->SetControlFont( vcl::Font() );
         else
         {
-            ::com::sun::star::awt::FontDescriptor aFont;
+            css::awt::FontDescriptor aFont;
             if (Value >>= aFont)
             {
                 vcl::Font aNewVclFont;
@@ -2119,7 +2119,7 @@ void FmXGridPeer::removeContainerListener(const Reference< XContainerListener >&
     m_aContainerListeners.removeInterface( l );
 }
 
-// ::com::sun::star::data::XDatabaseCursorSupplier
+// css::data::XDatabaseCursorSupplier
 
 void FmXGridPeer::startCursorListening()
 {
@@ -2252,7 +2252,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeExcepti
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     if (pGrid)
     {
-        Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(evt.Source, UNO_QUERY);
+        Reference< css::view::XSelectionSupplier >  xSelSupplier(evt.Source, UNO_QUERY);
         Any aSelection = xSelSupplier->getSelection();
         DBG_ASSERT(aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE, "FmXGridPeer::selectionChanged : invalid selection !");
         Reference< XPropertySet >  xSelection;
@@ -2303,7 +2303,7 @@ sal_Bool FmXGridPeer::hasElements() throw( RuntimeException, std::exception )
 
 Type SAL_CALL FmXGridPeer::getElementType(  ) throw(RuntimeException, std::exception)
 {
-    return cppu::UnoType<com::sun::star::awt::XControl>::get();
+    return cppu::UnoType<css::awt::XControl>::get();
 }
 
 // XEnumerationAccess
@@ -2342,13 +2342,13 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException,
         return aElement;
 
     DbGridColumn* pCol = pGrid->GetColumns().at( nPos );
-    Reference< ::com::sun::star::awt::XControl >  xControl(pCol->GetCell());
+    Reference< css::awt::XControl >  xControl(pCol->GetCell());
     aElement <<= xControl;
 
     return aElement;
 }
 
-// ::com::sun::star::util::XModeSelector
+// css::util::XModeSelector
 
 void FmXGridPeer::setMode(const OUString& Mode) throw( NoSupportException, RuntimeException, std::exception )
 {
@@ -2409,7 +2409,7 @@ void FmXGridPeer::columnVisible(DbGridColumn* pColumn)
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
 
     sal_Int32 _nIndex = pGrid->GetModelColumnPos(pColumn->GetId());
-    Reference< ::com::sun::star::awt::XControl >  xControl(pColumn->GetCell());
+    Reference< css::awt::XControl >  xControl(pColumn->GetCell());
     ContainerEvent aEvt;
     aEvt.Source   = static_cast<XContainer*>(this);
     aEvt.Accessor <<= _nIndex;
@@ -2424,7 +2424,7 @@ void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
 
     sal_Int32 _nIndex = pGrid->GetModelColumnPos(pColumn->GetId());
-    Reference< ::com::sun::star::awt::XControl >  xControl(pColumn->GetCell());
+    Reference< css::awt::XControl >  xControl(pColumn->GetCell());
     ContainerEvent aEvt;
     aEvt.Source   = static_cast<XContainer*>(this);
     aEvt.Accessor <<= _nIndex;
@@ -2446,9 +2446,9 @@ void FmXGridPeer::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException, std:
 }
 
 
-Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException, std::exception )
+Reference< css::frame::XDispatch >  FmXGridPeer::queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::frame::XDispatch >  xResult;
+    Reference< css::frame::XDispatch >  xResult;
 
     // first ask our interceptor chain
     if (m_xFirstDispatchInterceptor.is() && !m_bInterceptingDispatch)
@@ -2465,23 +2465,23 @@ Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(cons
 }
 
 
-Sequence< Reference< ::com::sun::star::frame::XDispatch > > FmXGridPeer::queryDispatches(const Sequence< ::com::sun::star::frame::DispatchDescriptor>& aDescripts) throw( RuntimeException, std::exception )
+Sequence< Reference< css::frame::XDispatch > > FmXGridPeer::queryDispatches(const Sequence< css::frame::DispatchDescriptor>& aDescripts) throw( RuntimeException, std::exception )
 {
     if (m_xFirstDispatchInterceptor.is())
         return m_xFirstDispatchInterceptor->queryDispatches(aDescripts);
 
     // then ask ourself : we don't have any dispatches
-    return Sequence< Reference< ::com::sun::star::frame::XDispatch > >();
+    return Sequence< Reference< css::frame::XDispatch > >();
 }
 
 
-void FmXGridPeer::registerDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException, std::exception )
+void FmXGridPeer::registerDispatchProviderInterceptor(const Reference< css::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException, std::exception )
 {
     if (_xInterceptor.is())
     {
         if (m_xFirstDispatchInterceptor.is())
         {
-            Reference< ::com::sun::star::frame::XDispatchProvider > xFirstProvider(m_xFirstDispatchInterceptor, UNO_QUERY);
+            Reference< css::frame::XDispatchProvider > xFirstProvider(m_xFirstDispatchInterceptor, UNO_QUERY);
             // there is already an interceptor; the new one will become its master
             _xInterceptor->setSlaveDispatchProvider(xFirstProvider);
             m_xFirstDispatchInterceptor->setMasterDispatchProvider(xFirstProvider);
@@ -2489,12 +2489,12 @@ void FmXGridPeer::registerDispatchProviderInterceptor(const Reference< ::com::su
         else
         {
             // it is the first interceptor; set ourself as slave
-            _xInterceptor->setSlaveDispatchProvider(static_cast<com::sun::star::frame::XDispatchProvider*>(this));
+            _xInterceptor->setSlaveDispatchProvider(static_cast<css::frame::XDispatchProvider*>(this));
         }
 
         // we are the master of the chain's first interceptor
         m_xFirstDispatchInterceptor = _xInterceptor;
-        m_xFirstDispatchInterceptor->setMasterDispatchProvider(static_cast<com::sun::star::frame::XDispatchProvider*>(this));
+        m_xFirstDispatchInterceptor->setMasterDispatchProvider(static_cast<css::frame::XDispatchProvider*>(this));
 
         // we have a new interceptor and we're alive ?
         if (!isDesignMode())
@@ -2504,16 +2504,16 @@ void FmXGridPeer::registerDispatchProviderInterceptor(const Reference< ::com::su
 }
 
 
-void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException, std::exception )
+void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< css::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException, std::exception )
 {
     if (!_xInterceptor.is())
         return;
 
-    Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  xChainWalk(m_xFirstDispatchInterceptor);
+    Reference< css::frame::XDispatchProviderInterceptor >  xChainWalk(m_xFirstDispatchInterceptor);
 
     if (m_xFirstDispatchInterceptor == _xInterceptor)
     {   // our chain will have a new first element
-        Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  xSlave(m_xFirstDispatchInterceptor->getSlaveDispatchProvider(), UNO_QUERY);
+        Reference< css::frame::XDispatchProviderInterceptor >  xSlave(m_xFirstDispatchInterceptor->getSlaveDispatchProvider(), UNO_QUERY);
         m_xFirstDispatchInterceptor = xSlave;
     }
     // do this before removing the interceptor from the chain as we won't know it's slave afterwards)
@@ -2521,31 +2521,31 @@ void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< ::com::sun
     while (xChainWalk.is())
     {
         // walk along the chain of interceptors and look for the interceptor that has to be removed
-        Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  xSlave(xChainWalk->getSlaveDispatchProvider(), UNO_QUERY);
+        Reference< css::frame::XDispatchProviderInterceptor >  xSlave(xChainWalk->getSlaveDispatchProvider(), UNO_QUERY);
 
         if (xChainWalk == _xInterceptor)
         {
             // old master may be an interceptor too
-            Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  xMaster(xChainWalk->getMasterDispatchProvider(), UNO_QUERY);
+            Reference< css::frame::XDispatchProviderInterceptor >  xMaster(xChainWalk->getMasterDispatchProvider(), UNO_QUERY);
 
             // unchain the interceptor that has to be removed
-            xChainWalk->setSlaveDispatchProvider(Reference< ::com::sun::star::frame::XDispatchProvider > ());
-            xChainWalk->setMasterDispatchProvider(Reference< ::com::sun::star::frame::XDispatchProvider > ());
+            xChainWalk->setSlaveDispatchProvider(Reference< css::frame::XDispatchProvider > ());
+            xChainWalk->setMasterDispatchProvider(Reference< css::frame::XDispatchProvider > ());
 
             // reconnect the chain
             if (xMaster.is())
             {
                 if (xSlave.is())
-                    xMaster->setSlaveDispatchProvider(Reference< ::com::sun::star::frame::XDispatchProvider >::query(xSlave));
+                    xMaster->setSlaveDispatchProvider(Reference< css::frame::XDispatchProvider >::query(xSlave));
                 else
                     // it's the first interceptor of the chain, set ourself as slave
-                    xMaster->setSlaveDispatchProvider(static_cast<com::sun::star::frame::XDispatchProvider*>(this));
+                    xMaster->setSlaveDispatchProvider(static_cast<css::frame::XDispatchProvider*>(this));
             }
             else
             {
                 // the chain's first element was removed, set ourself as new master of the second one
                 if (xSlave.is())
-                    xSlave->setMasterDispatchProvider(static_cast<com::sun::star::frame::XDispatchProvider*>(this));
+                    xSlave->setMasterDispatchProvider(static_cast<css::frame::XDispatchProvider*>(this));
             }
         }
 
@@ -2558,13 +2558,13 @@ void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< ::com::sun
 }
 
 
-void FmXGridPeer::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( RuntimeException, std::exception )
+void FmXGridPeer::statusChanged(const css::frame::FeatureStateEvent& Event) throw( RuntimeException, std::exception )
 {
     DBG_ASSERT(m_pStateCache, "FmXGridPeer::statusChanged : invalid call !");
     DBG_ASSERT(m_pDispatchers, "FmXGridPeer::statusChanged : invalid call !");
 
-    Sequence< ::com::sun::star::util::URL>& aUrls = getSupportedURLs();
-    const ::com::sun::star::util::URL* pUrls = aUrls.getConstArray();
+    Sequence< css::util::URL>& aUrls = getSupportedURLs();
+    const css::util::URL* pUrls = aUrls.getConstArray();
 
     Sequence<sal_uInt16> aSlots = getSupportedGridSlots();
     const sal_uInt16* pSlots = aSlots.getConstArray();
@@ -2672,9 +2672,9 @@ Sequence<sal_uInt16>& FmXGridPeer::getSupportedGridSlots()
 }
 
 
-Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
+Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
 {
-    static Sequence< ::com::sun::star::util::URL> aSupported;
+    static Sequence< css::util::URL> aSupported;
     if (aSupported.getLength() == 0)
     {
         static const char* sSupported[] = {
@@ -2686,14 +2686,14 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
             FMURL_RECORD_UNDO
         };
         aSupported.realloc(sizeof(sSupported)/sizeof(sSupported[0]));
-        ::com::sun::star::util::URL* pSupported = aSupported.getArray();
+        css::util::URL* pSupported = aSupported.getArray();
         sal_uInt16 i;
 
         for ( i = 0; i < aSupported.getLength(); ++i, ++pSupported)
             pSupported->Complete = OUString::createFromAscii(sSupported[i]);
 
-        // let an ::com::sun::star::util::URL-transformer normalize the URLs
-        Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(
+        // let an css::util::URL-transformer normalize the URLs
+        Reference< css::util::XURLTransformer >  xTransformer(
             util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
         pSupported = aSupported.getArray();
         for (i=0; i<aSupported.getLength(); ++i)
@@ -2713,19 +2713,19 @@ void FmXGridPeer::UpdateDispatches()
     }
 
     sal_uInt16 nDispatchersGot = 0;
-    const Sequence< ::com::sun::star::util::URL>& aSupportedURLs = getSupportedURLs();
-    const ::com::sun::star::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
-    Reference< ::com::sun::star::frame::XDispatch >  xNewDispatch;
+    const Sequence< css::util::URL>& aSupportedURLs = getSupportedURLs();
+    const css::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
+    Reference< css::frame::XDispatch >  xNewDispatch;
     for (sal_Int32 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
         xNewDispatch = queryDispatch(*pSupportedURLs, OUString(), 0);
         if (xNewDispatch != m_pDispatchers[i])
         {
             if (m_pDispatchers[i].is())
-                m_pDispatchers[i]->removeStatusListener(static_cast<com::sun::star::frame::XStatusListener*>(this), *pSupportedURLs);
+                m_pDispatchers[i]->removeStatusListener(static_cast<css::frame::XStatusListener*>(this), *pSupportedURLs);
             m_pDispatchers[i] = xNewDispatch;
             if (m_pDispatchers[i].is())
-                m_pDispatchers[i]->addStatusListener(static_cast<com::sun::star::frame::XStatusListener*>(this), *pSupportedURLs);
+                m_pDispatchers[i]->addStatusListener(static_cast<css::frame::XStatusListener*>(this), *pSupportedURLs);
         }
         if (m_pDispatchers[i].is())
             ++nDispatchersGot;
@@ -2750,21 +2750,21 @@ void FmXGridPeer::ConnectToDispatcher()
         return;
     }
 
-    const Sequence< ::com::sun::star::util::URL>& aSupportedURLs = getSupportedURLs();
+    const Sequence< css::util::URL>& aSupportedURLs = getSupportedURLs();
 
     // _before_ adding the status listeners (as the add should result in a statusChanged-call) !
     m_pStateCache = new bool[aSupportedURLs.getLength()];
-    m_pDispatchers = new Reference< ::com::sun::star::frame::XDispatch > [aSupportedURLs.getLength()];
+    m_pDispatchers = new Reference< css::frame::XDispatch > [aSupportedURLs.getLength()];
 
     sal_uInt16 nDispatchersGot = 0;
-    const ::com::sun::star::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
+    const css::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
     for (sal_Int32 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
         m_pStateCache[i] = false;
         m_pDispatchers[i] = queryDispatch(*pSupportedURLs, OUString(), 0);
         if (m_pDispatchers[i].is())
         {
-            m_pDispatchers[i]->addStatusListener(static_cast<com::sun::star::frame::XStatusListener*>(this), *pSupportedURLs);
+            m_pDispatchers[i]->addStatusListener(static_cast<css::frame::XStatusListener*>(this), *pSupportedURLs);
             ++nDispatchersGot;
         }
     }
@@ -2785,12 +2785,12 @@ void FmXGridPeer::DisConnectFromDispatcher()
         return;
     // we're not connected
 
-    const Sequence< ::com::sun::star::util::URL>& aSupportedURLs = getSupportedURLs();
-    const ::com::sun::star::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
+    const Sequence< css::util::URL>& aSupportedURLs = getSupportedURLs();
+    const css::util::URL* pSupportedURLs = aSupportedURLs.getConstArray();
     for (sal_Int32 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
         if (m_pDispatchers[i].is())
-            m_pDispatchers[i]->removeStatusListener(static_cast<com::sun::star::frame::XStatusListener*>(this), *pSupportedURLs);
+            m_pDispatchers[i]->removeStatusListener(static_cast<css::frame::XStatusListener*>(this), *pSupportedURLs);
     }
 
     delete[] m_pStateCache;
@@ -2828,8 +2828,8 @@ IMPL_LINK_TYPED(FmXGridPeer, OnExecuteGridSlot, sal_uInt16, nSlot, bool)
     if (!m_pDispatchers)
         return false;   // not handled
 
-    Sequence< ::com::sun::star::util::URL>& aUrls = getSupportedURLs();
-    const ::com::sun::star::util::URL* pUrls = aUrls.getConstArray();
+    Sequence< css::util::URL>& aUrls = getSupportedURLs();
+    const css::util::URL* pUrls = aUrls.getConstArray();
 
     Sequence<sal_uInt16> aSlots = getSupportedGridSlots();
     const sal_uInt16* pSlots = aSlots.getConstArray();

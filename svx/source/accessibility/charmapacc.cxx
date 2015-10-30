@@ -66,8 +66,8 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetVirtualAcc, OAccessibleComponent
 
 void SAL_CALL SvxShowCharSetVirtualAcc::fireEvent(
                     const sal_Int16 _nEventId,
-                    const ::com::sun::star::uno::Any& _rOldValue,
-                    const ::com::sun::star::uno::Any& _rNewValue
+                    const css::uno::Any& _rOldValue,
+                    const css::uno::Any& _rNewValue
                 )
 {
     if ( m_pTable )
@@ -148,9 +148,9 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
     return xRet;
 }
 
-::com::sun::star::awt::Rectangle SvxShowCharSetVirtualAcc::implGetBounds(  ) throw (RuntimeException)
+css::awt::Rectangle SvxShowCharSetVirtualAcc::implGetBounds(  ) throw (RuntimeException)
 {
-    ::com::sun::star::awt::Rectangle aBounds ( 0, 0, 0, 0 );
+    css::awt::Rectangle aBounds ( 0, 0, 0, 0 );
     vcl::Window* pWindow = mpParent;
     if ( pWindow )
     {
@@ -160,7 +160,7 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
         if ( pParent )
         {
             Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );
-            ::com::sun::star::awt::Point aParentScreenLoc = AWTPoint( aParentRect.TopLeft() );
+            css::awt::Point aParentScreenLoc = AWTPoint( aParentRect.TopLeft() );
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
         }
@@ -328,7 +328,7 @@ void SvxShowCharSetAcc::implSelect(sal_Int32 nAccessibleChildIndex, bool bSelect
     }
 }
 
-::com::sun::star::awt::Rectangle SvxShowCharSetAcc::implGetBounds(  ) throw (RuntimeException)
+css::awt::Rectangle SvxShowCharSetAcc::implGetBounds(  ) throw (RuntimeException)
 {
     const Point   aOutPos;//( m_pParent->getCharSetControl()->GetPosPixel() );
     Size          aOutSize( m_pParent->getCharSetControl()->GetOutputSizePixel());

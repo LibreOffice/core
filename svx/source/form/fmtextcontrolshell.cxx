@@ -311,7 +311,7 @@ namespace svx
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mousePressed( const awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL FmMouseListenerAdapter::mousePressed( const awt::MouseEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
         // is this a request for a context menu?
@@ -323,19 +323,19 @@ namespace svx
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mouseReleased( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL FmMouseListenerAdapter::mouseReleased( const awt::MouseEvent& /*e*/ ) throw (css::uno::RuntimeException, std::exception)
     {
         // not interested in
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mouseEntered( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL FmMouseListenerAdapter::mouseEntered( const awt::MouseEvent& /*e*/ ) throw (css::uno::RuntimeException, std::exception)
     {
         // not interested in
     }
 
 
-    void SAL_CALL FmMouseListenerAdapter::mouseExited( const awt::MouseEvent& /*e*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL FmMouseListenerAdapter::mouseExited( const awt::MouseEvent& /*e*/ ) throw (css::uno::RuntimeException, std::exception)
     {
         // not interested in
     }
@@ -1323,7 +1323,7 @@ namespace svx
     }
 
 
-    void FmTextControlShell::focusGained( const ::com::sun::star::awt::FocusEvent& _rEvent )
+    void FmTextControlShell::focusGained( const css::awt::FocusEvent& _rEvent )
     {
         Reference< XControl > xControl( _rEvent.Source, UNO_QUERY );
 
@@ -1339,7 +1339,7 @@ namespace svx
     }
 
 
-    void FmTextControlShell::focusLost( const ::com::sun::star::awt::FocusEvent& _rEvent )
+    void FmTextControlShell::focusLost( const css::awt::FocusEvent& _rEvent )
     {
         Reference< XControl > xControl( _rEvent.Source, UNO_QUERY );
 

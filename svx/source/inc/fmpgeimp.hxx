@@ -48,10 +48,10 @@ class SdrObject;
 
 class SVX_DLLPRIVATE FmFormPageImpl
 {
-    ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >,SdrObject* > m_aComponentMap;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >               xCurrentForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >              m_xForms;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XMap >       m_aControlShapeMap;
+    ::std::map< css::uno::Reference< css::form::XFormComponent >,SdrObject* > m_aComponentMap;
+    css::uno::Reference< css::form::XForm >               xCurrentForm;
+    css::uno::Reference< css::form::XForms >              m_xForms;
+    css::uno::WeakReference< css::container::XMap >       m_aControlShapeMap;
 
     FmFormPage&     m_rPage;
     Link<FmFormPageImpl&,void>  m_aFormsCreationHdl;
@@ -66,8 +66,8 @@ public:
     void initFrom( FmFormPageImpl& i_foreignImpl );
 
     //  nur wichtig fuer den DesignMode
-    void setCurForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm);
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> getDefaultForm();
+    void setCurForm(css::uno::Reference< css::form::XForm> xForm);
+    css::uno::Reference< css::form::XForm> getDefaultForm();
 
     /** finds a place in the form component hierarchy where to insert the given component
 
@@ -75,9 +75,9 @@ public:
         the caller might decide on a suitable place where in the returned container the insertion
         should happen).
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> findPlaceInFormComponentHierarchy(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& rContent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(),
+    css::uno::Reference< css::form::XForm> findPlaceInFormComponentHierarchy(
+        const css::uno::Reference< css::form::XFormComponent>& rContent,
+        const css::uno::Reference< css::sdbc::XDataSource>& rDatabase = css::uno::Reference< css::sdbc::XDataSource>(),
         const OUString& rDBTitle = OUString(),
         const OUString& rCursorSource = OUString(),
         sal_Int32 nCommandType = 0
@@ -87,7 +87,7 @@ public:
     inline  bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
     inline  void        setHasBeenActivated( ) { m_bFirstActivation = false; }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& getForms( bool _bForceCreate = true );
+    const css::uno::Reference< css::form::XForms>& getForms( bool _bForceCreate = true );
 
     void        SetFormsCreationHdl( const Link<FmFormPageImpl&,void>& _rFormsCreationHdl ) { m_aFormsCreationHdl = _rFormsCreationHdl; }
 
@@ -103,15 +103,15 @@ protected:
         @param nCommandType
             the desired CommandType property value of the sought-after form
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> findFormForDataSource(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& rForm,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase,
+    css::uno::Reference< css::form::XForm> findFormForDataSource(
+        const css::uno::Reference< css::form::XForm>& rForm,
+        const css::uno::Reference< css::sdbc::XDataSource>& rDatabase,
         const OUString& rCommand,
         sal_Int32 nCommandType
     );
 
 public:
-    static OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
+    static OUString setUniqueName(const css::uno::Reference< css::form::XFormComponent>& xFormComponent, const css::uno::Reference< css::form::XForm>& xControls);
 
     void formObjectInserted( const FmFormObj& _object );
     void formObjectRemoved( const FmFormObj& _object );
@@ -119,7 +119,7 @@ public:
 
     /** returns an object mapping from control models to drawing shapes.
     */
-    SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XMap > getControlToShapeMap();
+    SVX_DLLPUBLIC css::uno::Reference< css::container::XMap > getControlToShapeMap();
 
 private:
     /** validates whether <member>xCurrentForm</member> is still valid and to be used
@@ -137,7 +137,7 @@ private:
     */
     bool    validateCurForm();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XMap >
+    css::uno::Reference< css::container::XMap >
         impl_createControlShapeMap_nothrow();
 
 private:

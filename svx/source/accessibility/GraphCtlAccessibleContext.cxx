@@ -482,7 +482,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus() throw( RuntimeException
 }
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     svtools::ColorConfig aColorConfig;
     sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
@@ -490,7 +490,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground()
 }
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);

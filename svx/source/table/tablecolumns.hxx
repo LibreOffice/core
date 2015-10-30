@@ -29,26 +29,26 @@
 
 namespace sdr { namespace table {
 
-class TableColumns : public ::cppu::WeakAggImplHelper1< ::com::sun::star::table::XTableColumns >
+class TableColumns : public ::cppu::WeakAggImplHelper1< css::table::XTableColumns >
 {
 public:
     explicit TableColumns( const TableModelRef& xTableModel );
     virtual ~TableColumns();
 
     void dispose();
-    void throwIfDisposed() const throw (::com::sun::star::uno::RuntimeException);
+    void throwIfDisposed() const throw (css::uno::RuntimeException);
 
     // XTableColumns
-    virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // Methods
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     TableModelRef   mxTableModel;

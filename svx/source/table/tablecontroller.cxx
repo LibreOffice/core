@@ -84,17 +84,17 @@ using namespace ::com::sun::star::style;
 
 namespace sdr { namespace table {
 
-class SvxTableControllerModifyListener : public ::cppu::WeakImplHelper< ::com::sun::star::util::XModifyListener >
+class SvxTableControllerModifyListener : public ::cppu::WeakImplHelper< css::util::XModifyListener >
 {
 public:
     explicit SvxTableControllerModifyListener( SvxTableController* pController )
         : mpController( pController ) {}
 
     // XModifyListener
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     SvxTableController* mpController;
 };
@@ -103,7 +103,7 @@ public:
 // XModifyListener
 
 
-void SAL_CALL SvxTableControllerModifyListener::modified( const ::com::sun::star::lang::EventObject&  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxTableControllerModifyListener::modified( const css::lang::EventObject&  ) throw (css::uno::RuntimeException, std::exception)
 {
     if( mpController )
         mpController->onTableModified();
@@ -113,7 +113,7 @@ void SAL_CALL SvxTableControllerModifyListener::modified( const ::com::sun::star
 // XEventListener
 
 
-void SAL_CALL SvxTableControllerModifyListener::disposing( const ::com::sun::star::lang::EventObject&  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxTableControllerModifyListener::disposing( const css::lang::EventObject&  ) throw (css::uno::RuntimeException, std::exception)
 {
     mpController = 0;
 }
@@ -246,7 +246,7 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow 
 }
 
 
-// ::com::sun::star::awt::XMouseClickHandler:
+// css::awt::XMouseClickHandler:
 
 
 bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWindow )

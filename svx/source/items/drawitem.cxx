@@ -74,13 +74,13 @@ SfxPoolItem* SvxColorListItem::Clone( SfxItemPool * ) const
 
 // Should be a template class but ...
 #define QUERY_PUT_IMPL(svtype, xtype) \
-bool svtype::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const \
+bool svtype::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const \
 { \
     rVal = uno::makeAny( uno::Reference< uno::XWeak >( p##xtype.get() ) ); \
     return true; \
 } \
 \
-bool svtype::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 ) \
+bool svtype::PutValue( const css::uno::Any& rVal, sal_uInt8 ) \
 { \
     uno::Reference< uno::XWeak > xRef; \
     if( rVal >>= xRef ) { \

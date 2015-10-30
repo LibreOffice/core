@@ -53,9 +53,9 @@ void SetOfByte::operator|=(const SetOfByte& r2ndSet)
 
 /** initialize this set with a uno sequence of sal_Int8
 */
-void SetOfByte::PutValue( const com::sun::star::uno::Any & rAny )
+void SetOfByte::PutValue( const css::uno::Any & rAny )
 {
-    com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+    css::uno::Sequence< sal_Int8 > aSeq;
     if( rAny >>= aSeq )
     {
         sal_Int16 nCount = (sal_Int16)aSeq.getLength();
@@ -77,7 +77,7 @@ void SetOfByte::PutValue( const com::sun::star::uno::Any & rAny )
 
 /** returns a uno sequence of sal_Int8
 */
-void SetOfByte::QueryValue( com::sun::star::uno::Any & rAny ) const
+void SetOfByte::QueryValue( css::uno::Any & rAny ) const
 {
     sal_Int16 nNumBytesSet = 0;
     sal_Int16 nIndex;
@@ -90,7 +90,7 @@ void SetOfByte::QueryValue( com::sun::star::uno::Any & rAny ) const
         }
     }
 
-    com::sun::star::uno::Sequence< sal_Int8 > aSeq( nNumBytesSet );
+    css::uno::Sequence< sal_Int8 > aSeq( nNumBytesSet );
 
     for( nIndex = 0; nIndex < nNumBytesSet; nIndex++ )
     {

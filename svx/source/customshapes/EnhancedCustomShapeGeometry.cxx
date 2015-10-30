@@ -6204,10 +6204,10 @@ bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
 }
 sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
 {
-    sal_Int16 nGluePointType = com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS;
+    sal_Int16 nGluePointType = css::drawing::EnhancedCustomShapeGluePointType::SEGMENTS;
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
     if ( pDefCustomShape && pDefCustomShape->nGluePoints )
-        nGluePointType = com::sun::star::drawing::EnhancedCustomShapeGluePointType::CUSTOM;
+        nGluePointType = css::drawing::EnhancedCustomShapeGluePointType::CUSTOM;
     else
     {
         switch( eSpType )
@@ -6222,7 +6222,7 @@ sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
             case mso_sptTextBox :
             case mso_sptVerticalScroll :
             case mso_sptHorizontalScroll :
-                nGluePointType = com::sun::star::drawing::EnhancedCustomShapeGluePointType::RECT;
+                nGluePointType = css::drawing::EnhancedCustomShapeGluePointType::RECT;
             default: break;
         }
     }

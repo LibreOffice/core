@@ -85,7 +85,7 @@ void TableRow::dispose()
 
 
 
-void TableRow::throwIfDisposed() const throw (::com::sun::star::uno::RuntimeException)
+void TableRow::throwIfDisposed() const throw (css::uno::RuntimeException)
 {
     if( !mxTableModel.is() )
         throw DisposedException();
@@ -210,7 +210,7 @@ void SAL_CALL TableRow::setName( const OUString& aName ) throw (RuntimeException
 // XFastPropertySet
 
 
-void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception)
 {
     bool bOk = false;
     bool bChange = false;

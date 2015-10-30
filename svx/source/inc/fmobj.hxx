@@ -31,15 +31,15 @@ class SVX_DLLPUBLIC FmFormObj: public SdrUnoObj
 {
     FmFormObj( const FmFormObj& ) = delete;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >  aEvts;  // events des Objects
-    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>   m_aEventsHistory;
+    css::uno::Sequence< css::script::ScriptEventDescriptor >  aEvts;  // events des Objects
+    css::uno::Sequence< css::script::ScriptEventDescriptor>   m_aEventsHistory;
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
                 // m_pEnvironmentHistory was created
 
     // Informationen fuer die Controlumgebung
     // werden nur vorgehalten, wenn ein Object sich nicht in einer Objectliste befindet
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>     m_xParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >                  m_xEnvironmentHistory;
+    css::uno::Reference< css::container::XIndexContainer>     m_xParent;
+    css::uno::Reference< css::form::XForms >                  m_xEnvironmentHistory;
     sal_Int32           m_nPos;
 
     VclPtr<OutputDevice>   m_pLastKnownRefDevice;
@@ -52,17 +52,17 @@ public:
 
     TYPEINFO_VISIBILITY_OVERRIDE(SAL_DLLPRIVATE);
 
-    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>&
+    SAL_DLLPRIVATE const css::uno::Reference< css::container::XIndexContainer>&
         GetOriginalParent() const { return m_xParent; }
-    SAL_DLLPRIVATE const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >&
+    SAL_DLLPRIVATE const css::uno::Sequence< css::script::ScriptEventDescriptor >&
         GetOriginalEvents() const { return aEvts; }
     SAL_DLLPRIVATE sal_Int32
         GetOriginalIndex() const { return m_nPos; }
 
     SAL_DLLPRIVATE void SetObjEnv(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xForm,
+            const css::uno::Reference< css::container::XIndexContainer>& xForm,
             const sal_Int32 nIdx,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& rEvts );
+            const css::uno::Sequence< css::script::ScriptEventDescriptor >& rEvts );
     SAL_DLLPRIVATE void ClearObjEnv();
 
 public:
@@ -81,9 +81,9 @@ public:
 
     SAL_DLLPRIVATE virtual void clonedFrom(const FmFormObj* _pSource);
 
-    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ensureModelEnv(
-                  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rSourceContainer,
-                  const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& _rTopLevelDestContainer);
+    SAL_DLLPRIVATE static css::uno::Reference< css::uno::XInterface> ensureModelEnv(
+                  const css::uno::Reference< css::uno::XInterface>& _rSourceContainer,
+                  const css::uno::Reference< css::form::XForms>& _rTopLevelDestContainer);
 
     /** returns the FmFormObj behind the given SdrObject
 
@@ -94,7 +94,7 @@ public:
     SAL_DLLPRIVATE static       FmFormObj* GetFormObject( SdrObject* _pSdrObject );
     SAL_DLLPRIVATE static const FmFormObj* GetFormObject( const SdrObject* _pSdrObject );
 
-    SAL_DLLPRIVATE virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel ) override;
+    SAL_DLLPRIVATE virtual void SetUnoControlModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
 
 protected:
     SAL_DLLPRIVATE virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) override;

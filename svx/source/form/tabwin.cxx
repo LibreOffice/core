@@ -278,9 +278,9 @@ bool FmFieldWin::Close()
 }
 
 
-void FmFieldWin::_propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+void FmFieldWin::_propertyChanged(const css::beans::PropertyChangeEvent& evt) throw( css::uno::RuntimeException, std::exception )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm(evt.Source, ::com::sun::star::uno::UNO_QUERY);
+    css::uno::Reference< css::form::XForm >  xForm(evt.Source, css::uno::UNO_QUERY);
     UpdateContent(xForm);
 }
 
@@ -315,7 +315,7 @@ void FmFieldWin::UpdateContent(FmFormShell* pShell)
 }
 
 
-void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xForm)
+void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & xForm)
 {
     try
     {
@@ -401,7 +401,7 @@ void FmFieldWin::Resize()
 
 
 
-    // adapt size of ::com::sun::star::form::ListBox
+    // adapt size of css::form::ListBox
     Point aLBPos( LISTBOX_BORDER, LISTBOX_BORDER );
     Size aLBSize( aOutputSize );
     aLBSize.Width() -= (2*LISTBOX_BORDER);

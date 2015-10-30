@@ -162,7 +162,7 @@ namespace svxform
     }
 
 
-    void OFormComponentObserver::Remove( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement )
+    void OFormComponentObserver::Remove( const css::uno::Reference< css::uno::XInterface >& _rxElement )
     {
         if (IsLocked() || !m_pNavModel)
             return;

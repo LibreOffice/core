@@ -47,13 +47,13 @@ class SdrObject;
 
 class FmUndoPropertyAction: public SdrUndoAction
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xObj;
-    OUString         aPropertyName;
-    ::com::sun::star::uno::Any          aNewValue;
-    ::com::sun::star::uno::Any          aOldValue;
+    css::uno::Reference< css::beans::XPropertySet> xObj;
+    OUString               aPropertyName;
+    css::uno::Any          aNewValue;
+    css::uno::Any          aOldValue;
 
 public:
-    FmUndoPropertyAction(FmFormModel& rMod, const ::com::sun::star::beans::PropertyChangeEvent& evt);
+    FmUndoPropertyAction(FmFormModel& rMod, const css::beans::PropertyChangeEvent& evt);
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -64,14 +64,14 @@ public:
 
 class FmUndoContainerAction: public SdrUndoAction
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
+    css::uno::Reference< css::container::XIndexContainer >
                     m_xContainer;   // container which the action applies to
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
                     m_xElement;     // object not owned by the action
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
                     m_xOwnElement;  // object owned by the action
     sal_Int32       m_nIndex;       // index of the object within it's container
-    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >
+    css::uno::Sequence< css::script::ScriptEventDescriptor >
                     m_aEvents;      // events of the object
 
 public:
@@ -87,15 +87,15 @@ private:
 public:
     FmUndoContainerAction(FmFormModel& rMod,
                           Action _eAction,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& xCont,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElem,
+                          const css::uno::Reference< css::container::XIndexContainer >& xCont,
+                          const css::uno::Reference< css::uno::XInterface >& xElem,
                           sal_Int32 nIdx = -1);
     virtual ~FmUndoContainerAction();
 
     virtual void Undo() override;
     virtual void Redo() override;
 
-    static void DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElem );
+    static void DisposeElement( const css::uno::Reference< css::uno::XInterface >& xElem );
 
 protected:
     void    implReInsert( );
@@ -104,11 +104,11 @@ protected:
 
 class FmUndoModelReplaceAction : public SdrUndoAction
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> m_xReplaced;
+    css::uno::Reference< css::awt::XControlModel> m_xReplaced;
     SdrUnoObj*          m_pObject;
 
 public:
-    FmUndoModelReplaceAction(FmFormModel& rMod, SdrUnoObj* pObject, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced);
+    FmUndoModelReplaceAction(FmFormModel& rMod, SdrUnoObj* pObject, const css::uno::Reference< css::awt::XControlModel>& xReplaced);
     virtual ~FmUndoModelReplaceAction();
 
     virtual void Undo() override;
@@ -116,14 +116,14 @@ public:
 
     virtual OUString GetComment() const override;
 
-    static void DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced );
+    static void DisposeElement( const css::uno::Reference< css::awt::XControlModel>& xReplaced );
 };
 
 
 class SVX_DLLPRIVATE FmXUndoEnvironment
-    : public ::cppu::WeakImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
-                                    ,   ::com::sun::star::container::XContainerListener
-                                    ,   ::com::sun::star::util::XModifyListener
+    : public ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
+                                    ,   css::container::XContainerListener
+                                    ,   css::util::XModifyListener
                                     >
     , public SfxListener
                            //   public ::cppu::OWeakObject
@@ -143,8 +143,8 @@ public:
 
     // UNO Anbindung
     //  SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);
-    //  virtual sal_Bool queryInterface(UsrUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>&);
-    //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass>>    getIdlClasses();
+    //  virtual sal_Bool queryInterface(UsrUik, css::uno::Reference< css::uno::XInterface>&);
+    //  virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass>>    getIdlClasses();
 
     void Lock() { osl_atomic_increment( &m_Locks ); }
     void UnLock() { osl_atomic_decrement( &m_Locks ); }
@@ -154,8 +154,8 @@ public:
     struct Accessor { friend class FmFormModel; private: Accessor() { } };
 
     // addition and removal of form collections
-    void AddForms( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& rForms );
-    void RemoveForms( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& rForms );
+    void AddForms( const css::uno::Reference< css::container::XNameContainer>& rForms );
+    void RemoveForms( const css::uno::Reference< css::container::XNameContainer>& rForms );
 
     // readonly-ness
     void SetReadOnly( bool bRead, const Accessor& ) { bReadOnly = bRead; }
@@ -163,18 +163,18 @@ public:
 
 protected:
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception) override;
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
 
     // XModifyListener
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
     void ModeChanged();
     void dispose();
@@ -182,15 +182,15 @@ protected:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 private:
-    void AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
-    void RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
-    void TogglePropertyListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+    void AddElement(const css::uno::Reference< css::uno::XInterface>& Element);
+    void RemoveElement(const css::uno::Reference< css::uno::XInterface>& Element);
+    void TogglePropertyListening(const css::uno::Reference< css::uno::XInterface>& Element);
 
     void    implSetModified();
 
-    void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& _rxContainer, bool _bStartListening );
-    void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, bool _bStartListening );
-    ::com::sun::star::uno::Reference< com::sun::star::script::XScriptListener > m_vbaListener;
+    void    switchListening( const css::uno::Reference< css::container::XIndexContainer >& _rxContainer, bool _bStartListening );
+    void    switchListening( const css::uno::Reference< css::uno::XInterface >& _rxObject, bool _bStartListening );
+    css::uno::Reference< css::script::XScriptListener > m_vbaListener;
 public:
     // Methoden zur Zuordnung von Controls zu Forms,
     // werden von der Seite und der UndoUmgebung genutzt

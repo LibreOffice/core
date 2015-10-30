@@ -1709,7 +1709,7 @@ uno::Reference< uno::XInterface > SdrPage::getUnoPage()
 
 uno::Reference< uno::XInterface > SdrPage::createUnoPage()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt =
+    css::uno::Reference< css::uno::XInterface > xInt =
         static_cast<cppu::OWeakObject*>( new SvxFmDrawPage( this ) );
     return xInt;
 }

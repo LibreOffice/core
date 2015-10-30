@@ -44,30 +44,30 @@ namespace svxform
             @param _rxManager
                 the XEventAttacherManager to monitor. Must not be <NULL/>.
 
-            @throws ::com::sun::star::lang::IllegalArgumentException
+            @throws css::lang::IllegalArgumentException
                 if <arg>_rxManager</arg> is <NULL/>
-            @throws ::com::sun::star::lang::DisposedException
+            @throws css::lang::DisposedException
                 if the instance is already disposed
-            @throws ::com::sun::star::uno::RuntimeException
+            @throws css::uno::RuntimeException
                 if attaching as script listener to the manager fails with a RuntimeException itself
         */
         virtual void registerEventAttacherManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >& _rxManager ) = 0;
+            const css::uno::Reference< css::script::XEventAttacherManager >& _rxManager ) = 0;
 
         /** registers an XEventAttacherManager whose events should not be monitored and handled anymore
 
             @param _rxManager
                 the XEventAttacherManager which was previously registered. Must not ne <NULL/>.
 
-            @throws ::com::sun::star::lang::IllegalArgumentException
+            @throws css::lang::IllegalArgumentException
                 if <arg>_rxManager</arg> is <NULL/>
-            @throws ::com::sun::star::lang::DisposedException
+            @throws css::lang::DisposedException
                 if the instance is already disposed
-            @throws ::com::sun::star::uno::RuntimeException
+            @throws css::uno::RuntimeException
                 if removing as script listener from the manager fails with a RuntimeException itself
         */
         virtual void revokeEventAttacherManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >& _rxManager ) = 0;
+            const css::uno::Reference< css::script::XEventAttacherManager >& _rxManager ) = 0;
 
         /** disposes the scripting environment instance
         */

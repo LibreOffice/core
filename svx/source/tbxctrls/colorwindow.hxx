@@ -68,7 +68,7 @@ public:
                          PaletteManager& rPaletteManager,
                          BorderColorStatus& rBorderColorStatus,
                          sal_uInt16 nSlotId,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                         const css::uno::Reference< css::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,
                          vcl::Window* pParentWindow,
                          std::function<void(const OUString&, const Color&)> maColorSelectFunction);

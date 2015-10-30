@@ -23,10 +23,8 @@
 namespace accessibility {
 
 AccessibleShapeInfo::AccessibleShapeInfo (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference<css::drawing::XShape>& rxShape,
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         IAccessibleParent* pChildrenManager,
         sal_Int32 nIndex)
     : mxShape (rxShape),
@@ -41,10 +39,8 @@ AccessibleShapeInfo::AccessibleShapeInfo (
 
 
 AccessibleShapeInfo::AccessibleShapeInfo (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference<css::drawing::XShape>& rxShape,
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         sal_Int32 nIndex)
     : mxShape (rxShape),
       mxParent (rxParent),

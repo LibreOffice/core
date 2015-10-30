@@ -86,7 +86,7 @@ namespace svx
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
-        /** constructs the instance from a <type scope="com::sun::star::form::runtime">XFormController<type> instance
+        /** constructs the instance from a <type scope="css::form::runtime">XFormController<type> instance
 
             @param _rxController
                 The form controller which the helper should be responsible for. Must not
@@ -96,7 +96,7 @@ namespace svx
                 the callback for invalidating feature states
         */
         ControllerFeatures(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController,
+            const css::uno::Reference< css::form::runtime::XFormController >& _rxController,
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
@@ -109,7 +109,7 @@ namespace svx
         /** assign to a controller
         */
         void assign(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController
+            const css::uno::Reference< css::form::runtime::XFormController >& _rxController
         );
 
         /// clears the instance so that it cannot be used afterwards
@@ -125,8 +125,8 @@ namespace svx
 
     //= FormControllerHelper
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::form::runtime::XFeatureInvalidation
-                                    ,   ::com::sun::star::sdb::XSQLErrorListener
+    typedef ::cppu::WeakImplHelper <   css::form::runtime::XFeatureInvalidation
+                                    ,   css::sdb::XSQLErrorListener
                                     >   FormControllerHelper_Base;
     /** is a helper class which manages form controller functionality (such as moveNext etc.).
 
@@ -139,13 +139,13 @@ namespace svx
     {
     protected:
         IControllerFeatureInvalidation* m_pInvalidationCallback;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >
+        css::uno::Reference< css::form::runtime::XFormOperations >
                                         m_xFormOperations;
 
-        ::com::sun::star::uno::Any      m_aOperationError;
+        css::uno::Any      m_aOperationError;
 
     public:
-        /** constructs the helper from a <type scope="com::sun::star::form::runtime">XFormController<type> instance
+        /** constructs the helper from a <type scope="css::form::runtime">XFormController<type> instance
 
             @param _rxController
                 The form controller which the helper should be responsible for. Must not
@@ -154,20 +154,20 @@ namespace svx
                 the callback for invalidating feature states
         */
         FormControllerHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController,
+            const css::uno::Reference< css::form::runtime::XFormController >& _rxController,
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
         // forwards to the XFormOperations implementation
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
+        css::uno::Reference< css::sdbc::XRowSet >
                     getCursor() const;
         void        getState(
                         sal_Int32 _nSlotId,
-                        ::com::sun::star::form::runtime::FeatureState& _out_rState
+                        css::form::runtime::FeatureState& _out_rState
                     ) const;
         bool        isEnabled( sal_Int32 _nSlotId ) const;
         void        execute( sal_Int32 _nSlotId ) const;
-        void        execute( sal_Int32 _nSlotId, const OUString& _rParamName, const ::com::sun::star::uno::Any& _rParamValue ) const;
+        void        execute( sal_Int32 _nSlotId, const OUString& _rParamName, const css::uno::Any& _rParamValue ) const;
         bool        commitCurrentRecord() const;
         bool        commitCurrentControl( ) const;
         bool        isInsertionRow() const;
@@ -186,14 +186,14 @@ namespace svx
         virtual ~FormControllerHelper();
 
         // XFeatureInvalidation
-        virtual void SAL_CALL invalidateFeatures( const ::com::sun::star::uno::Sequence< ::sal_Int16 >& Features ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL invalidateAllFeatures() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL invalidateFeatures( const css::uno::Sequence< ::sal_Int16 >& Features ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL invalidateAllFeatures() throw (css::uno::RuntimeException, std::exception) override;
 
         // XSQLErrorListener
-        virtual void SAL_CALL errorOccured( const ::com::sun::star::sdb::SQLErrorEvent& _Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL errorOccured( const css::sdb::SQLErrorEvent& _Event ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
         enum FormOperation { EXECUTE, EXECUTE_ARGS, COMMIT_CONTROL, COMMIT_RECORD };
@@ -201,11 +201,11 @@ namespace svx
         bool    impl_operateForm_nothrow(
                     const FormOperation _eWhat,
                     const sal_Int16 _nFeature,  /* ignore for COMMIT_* */
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments /* ignore except for EXECUTE_ARGS */
+                    const css::uno::Sequence< css::beans::NamedValue >& _rArguments /* ignore except for EXECUTE_ARGS */
                 ) const;
         bool    impl_operateForm_nothrow( const FormOperation _eWhat ) const
         {
-            return impl_operateForm_nothrow( _eWhat, 0, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >() );
+            return impl_operateForm_nothrow( _eWhat, 0, css::uno::Sequence< css::beans::NamedValue >() );
         }
 
     private:

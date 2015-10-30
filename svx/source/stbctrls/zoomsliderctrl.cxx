@@ -210,7 +210,7 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
                     mxImpl->mnMaxZoom > mxImpl->mnSliderCenter,
                     "Looks like the zoom slider item is corrupted" );
 
-        const com::sun::star::uno::Sequence < sal_Int32 > rSnappingPoints = static_cast<const SvxZoomSliderItem*>( pState )->GetSnappingPoints();
+        const css::uno::Sequence < sal_Int32 > rSnappingPoints = static_cast<const SvxZoomSliderItem*>( pState )->GetSnappingPoints();
         mxImpl->maSnappingPointOffsets.clear();
         mxImpl->maSnappingPointZooms.clear();
 

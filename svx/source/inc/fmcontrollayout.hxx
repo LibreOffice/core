@@ -34,7 +34,7 @@ namespace svxform
         /** initializes the layout of a newly created form control (model)
         */
         void initializeControlLayout(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+                        const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
                         DocumentType _eDocType
                     );
 
@@ -55,8 +55,8 @@ namespace svxform
             @param _rxModel
                 a form component.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    getDefaultDocumentTextStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+        css::uno::Reference< css::beans::XPropertySet >
+                    getDefaultDocumentTextStyle( const css::uno::Reference< css::beans::XPropertySet >& _rxModel );
     }
 
 

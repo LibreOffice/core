@@ -55,7 +55,7 @@ void TableColumns::dispose()
 
 
 
-void TableColumns::throwIfDisposed() const throw (::com::sun::star::uno::RuntimeException)
+void TableColumns::throwIfDisposed() const throw (css::uno::RuntimeException)
 {
     if( !mxTableModel.is() )
         throw DisposedException();

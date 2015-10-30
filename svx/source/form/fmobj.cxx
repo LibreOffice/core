@@ -407,10 +407,10 @@ namespace
 {
     OUString lcl_getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
     {
-        Reference< ::com::sun::star::form::XFormComponent> xChild(_xElement, UNO_QUERY);
-        Reference< ::com::sun::star::container::XIndexAccess> xParent;
+        Reference< css::form::XFormComponent> xChild(_xElement, UNO_QUERY);
+        Reference< css::container::XIndexAccess> xParent;
         if (xChild.is())
-            xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
+            xParent = Reference< css::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
 
         // while the current content is a form
         OUString sReturn;
@@ -433,7 +433,7 @@ namespace
             // travel up
             xChild.set(xParent, css::uno::UNO_QUERY);
             if (xChild.is())
-                xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
+                xParent = Reference< css::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
         }
 
         _rTopLevelElement = xParent;
@@ -619,7 +619,7 @@ const FmFormObj* FmFormObj::GetFormObject( const SdrObject* _pSdrObject )
 }
 
 
-void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XControlModel >& _rxModel )
+void FmFormObj::SetUnoControlModel( const Reference< css::awt::XControlModel >& _rxModel )
 {
     SdrUnoObj::SetUnoControlModel( _rxModel );
 

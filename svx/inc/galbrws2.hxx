@@ -120,8 +120,8 @@ private:
     GalleryBrowserMode  meMode;
     GalleryBrowserMode  meLastMode;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
-    com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > m_xTransformer;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::util::XURLTransformer > m_xTransformer;
 
     void                InitSettings();
 
@@ -175,13 +175,13 @@ public:
     void                ShowContextMenu( vcl::Window* pWindow, const Point* pContextPoint = NULL );
     bool                KeyInput( const KeyEvent& rEvt, vcl::Window* pWindow );
 
-    static com::sun::star::uno::Reference< com::sun::star::frame::XFrame > GetFrame();
-    com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > GetURLTransformer() const { return m_xTransformer; }
+    static css::uno::Reference< css::frame::XFrame > GetFrame();
+    css::uno::Reference< css::util::XURLTransformer > GetURLTransformer() const { return m_xTransformer; }
 
     void Execute( sal_uInt16 nId );
     void Dispatch( sal_uInt16 nId,
-                   const com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > &rxDispatch = com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >(),
-                   const com::sun::star::util::URL &rURL = com::sun::star::util::URL() );
+                   const css::uno::Reference< css::frame::XDispatch > &rxDispatch = css::uno::Reference< css::frame::XDispatch >(),
+                   const css::util::URL &rURL = css::util::URL() );
 
     DECL_STATIC_LINK_TYPED( GalleryBrowser2, AsyncDispatch_Impl, void*, void );
 };

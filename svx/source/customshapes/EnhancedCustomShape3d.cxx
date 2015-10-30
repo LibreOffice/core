@@ -65,7 +65,7 @@ namespace {
 
 void GetOrigin( const SdrCustomShapeGeometryItem& rItem, double& rOriginX, double& rOriginY )
 {
-    ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
+    css::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
     const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "Origin" );
     if ( ! ( pAny && ( *pAny >>= aOriginParaPair ) && ( aOriginParaPair.First.Value >>= rOriginX ) && ( aOriginParaPair.Second.Value >>= rOriginY ) ) )
     {
@@ -76,7 +76,7 @@ void GetOrigin( const SdrCustomShapeGeometryItem& rItem, double& rOriginX, doubl
 
 void GetRotateAngle( const SdrCustomShapeGeometryItem& rItem, double& rAngleX, double& rAngleY )
 {
-    ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
+    css::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
     const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "RotateAngle" );
     if ( ! ( pAny && ( *pAny >>= aRotateAngleParaPair ) && ( aRotateAngleParaPair.First.Value >>= rAngleX ) && ( aRotateAngleParaPair.Second.Value >>= rAngleY ) ) )
     {
@@ -89,7 +89,7 @@ void GetRotateAngle( const SdrCustomShapeGeometryItem& rItem, double& rAngleX, d
 
 void GetSkew( const SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rSkewAngle )
 {
-    ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
+    css::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
     const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "Skew" );
     if ( ! ( pAny && ( *pAny >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= rSkewAmount ) && ( aSkewParaPair.Second.Value >>= rSkewAngle ) ) )
     {
@@ -101,7 +101,7 @@ void GetSkew( const SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, doub
 
 void GetExtrusionDepth( const SdrCustomShapeGeometryItem& rItem, const double* pMap, double& rBackwardDepth, double& rForwardDepth )
 {
-    ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
+    css::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
     double fDepth = 0, fFraction = 0;
     const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "Depth" );
     if ( pAny && ( *pAny >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
@@ -249,7 +249,7 @@ Point EnhancedCustomShape3d::Transformation2D::Transform2D( const basegfx::B3DPo
 
 bool EnhancedCustomShape3d::Transformation2D::IsParallel() const
 {
-    return eProjectionMode == com::sun::star::drawing::ProjectionMode_PARALLEL;
+    return eProjectionMode == css::drawing::ProjectionMode_PARALLEL;
 }
 
 SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape )

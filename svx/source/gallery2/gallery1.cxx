@@ -344,10 +344,10 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     {
                                         aSdgCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                                     }
-                                    catch( const ::com::sun::star::uno::RuntimeException& )
+                                    catch( const css::uno::RuntimeException& )
                                     {
                                     }
-                                    catch( const ::com::sun::star::uno::Exception& )
+                                    catch( const css::uno::Exception& )
                                     {
                                     }
 
@@ -372,10 +372,10 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                     {
                                         aSdvCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                                     }
-                                    catch( const ::com::sun::star::uno::RuntimeException& )
+                                    catch( const css::uno::RuntimeException& )
                                     {
                                     }
-                                    catch( const ::com::sun::star::uno::Exception& )
+                                    catch( const css::uno::Exception& )
                                     {
                                     }
 

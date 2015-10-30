@@ -255,7 +255,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     {
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         {
-            com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sSameLetterHeights );
+            css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sSameLetterHeights );
             if( pAny )
             {
                 bool bOn = false;
@@ -324,7 +324,7 @@ void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const
 {
     const OUString sType( "Type" );
 
-    com::sun::star::beans::PropertyValue aPropVal;
+    css::beans::PropertyValue aPropVal;
     aPropVal.Name = sType;
     aPropVal.Value <<= rCustomShape;
     rGeometryItem.SetPropertyValue( aPropVal );
@@ -365,7 +365,7 @@ void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const
                         {
                             PropertyValue aPropVal_;
                             const SdrCustomShapeGeometryItem& rSourceGeometry = static_cast<const SdrCustomShapeGeometryItem&>(pSourceObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-                            const com::sun::star::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
+                            const css::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
                             if ( pAny )
                             {
                                 aPropVal_.Name = sType;

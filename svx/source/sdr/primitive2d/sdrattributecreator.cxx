@@ -132,27 +132,27 @@ namespace drawinglayer
             }
         }
 
-        basegfx::B2DLineJoin LineJointToB2DLineJoin(com::sun::star::drawing::LineJoint eLineJoint)
+        basegfx::B2DLineJoin LineJointToB2DLineJoin(css::drawing::LineJoint eLineJoint)
         {
             switch(eLineJoint)
             {
-                case com::sun::star::drawing::LineJoint_MIDDLE :
+                case css::drawing::LineJoint_MIDDLE :
                 {
                     return basegfx::B2DLineJoin::Middle;
                 }
-                case com::sun::star::drawing::LineJoint_BEVEL :
+                case css::drawing::LineJoint_BEVEL :
                 {
                     return basegfx::B2DLineJoin::Bevel;
                 }
-                case com::sun::star::drawing::LineJoint_MITER :
+                case css::drawing::LineJoint_MITER :
                 {
                     return basegfx::B2DLineJoin::Miter;
                 }
-                case com::sun::star::drawing::LineJoint_ROUND :
+                case css::drawing::LineJoint_ROUND :
                 {
                     return basegfx::B2DLineJoin::Round;
                 }
-                default : // com::sun::star::drawing::LineJoint_NONE
+                default : // css::drawing::LineJoint_NONE
                 {
                     return basegfx::B2DLineJoin::NONE;
                 }
@@ -218,7 +218,7 @@ namespace drawinglayer
     {
         attribute::SdrLineAttribute createNewSdrLineAttribute(const SfxItemSet& rSet)
         {
-            const com::sun::star::drawing::LineStyle eStyle(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
+            const css::drawing::LineStyle eStyle(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
 
             if(drawing::LineStyle_NONE != eStyle)
             {
@@ -233,8 +233,8 @@ namespace drawinglayer
                 {
                     const sal_uInt32 nWidth(static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue());
                     const Color aColor(static_cast<const XLineColorItem&>(rSet.Get(XATTR_LINECOLOR)).GetColorValue());
-                    const com::sun::star::drawing::LineJoint eJoint(static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT)).GetValue());
-                    const com::sun::star::drawing::LineCap eCap(static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP)).GetValue());
+                    const css::drawing::LineJoint eJoint(static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT)).GetValue());
+                    const css::drawing::LineCap eCap(static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP)).GetValue());
                     ::std::vector< double > aDotDashArray;
                     double fFullDotDashLen(0.0);
 
@@ -885,12 +885,12 @@ namespace drawinglayer
         attribute::SdrSceneAttribute createNewSdrSceneAttribute(const SfxItemSet& rSet)
         {
             // get perspective
-            ::com::sun::star::drawing::ProjectionMode aProjectionMode(::com::sun::star::drawing::ProjectionMode_PARALLEL);
+            css::drawing::ProjectionMode aProjectionMode(css::drawing::ProjectionMode_PARALLEL);
             const sal_uInt16 nProjectionValue(static_cast<const Svx3DPerspectiveItem&>(rSet.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue());
 
             if(1L == nProjectionValue)
             {
-                aProjectionMode = ::com::sun::star::drawing::ProjectionMode_PERSPECTIVE;
+                aProjectionMode = css::drawing::ProjectionMode_PERSPECTIVE;
             }
 
             // get distance
@@ -900,20 +900,20 @@ namespace drawinglayer
             const double fShadowSlant(F_PI180 * static_cast<const SfxUInt16Item&>(rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue());
 
             // get shade mode
-            ::com::sun::star::drawing::ShadeMode aShadeMode(::com::sun::star::drawing::ShadeMode_FLAT);
+            css::drawing::ShadeMode aShadeMode(css::drawing::ShadeMode_FLAT);
             const sal_uInt16 nShadeValue(static_cast<const Svx3DShadeModeItem&>(rSet.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue());
 
             if(1L == nShadeValue)
             {
-                aShadeMode = ::com::sun::star::drawing::ShadeMode_PHONG;
+                aShadeMode = css::drawing::ShadeMode_PHONG;
             }
             else if(2L == nShadeValue)
             {
-                aShadeMode = ::com::sun::star::drawing::ShadeMode_SMOOTH;
+                aShadeMode = css::drawing::ShadeMode_SMOOTH;
             }
             else if(3L == nShadeValue)
             {
-                aShadeMode = ::com::sun::star::drawing::ShadeMode_DRAFT;
+                aShadeMode = css::drawing::ShadeMode_DRAFT;
             }
 
             // get two sided lighting

@@ -95,10 +95,10 @@ namespace {
         OUString maFilterName;
         OUString maMediaType;
         URL maURL;
-        com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > mxOutputStream;
-        com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicRenderer > mxGraphicRenderer;
-        com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >    mxStatusIndicator;
-        com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > mxInteractionHandler;
+        css::uno::Reference< css::io::XOutputStream >         mxOutputStream;
+        css::uno::Reference< css::graphic::XGraphicRenderer > mxGraphicRenderer;
+        css::uno::Reference< css::task::XStatusIndicator >    mxStatusIndicator;
+        css::uno::Reference< css::task::XInteractionHandler > mxInteractionHandler;
 
         sal_Int32 mnWidth;
         sal_Int32 mnHeight;
@@ -1065,7 +1065,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     if ( aSettings.mxInteractionHandler.is() && ( nStatus != GRFILTER_OK ) )
     {
         Any aInteraction;
-        Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
+        Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(1);
         ::comphelper::OInteractionApprove* pApprove = new ::comphelper::OInteractionApprove();
         lContinuations[0] = Reference< XInteractionContinuation >(static_cast< XInteractionContinuation* >(pApprove), UNO_QUERY);
 

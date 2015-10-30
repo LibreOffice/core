@@ -137,7 +137,7 @@ namespace
 CellControllerRef DbGridColumn::s_xEmptyController;
 
 
-void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::sun::star::beans::XPropertySet >& xField, sal_Int32 nTypeId)
+void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< css::beans::XPropertySet >& xField, sal_Int32 nTypeId)
 {
     Clear();
 
@@ -170,11 +170,11 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
             case DataType::DOUBLE:
             case DataType::NUMERIC:
             case DataType::DECIMAL:
-                m_nAlign = ::com::sun::star::awt::TextAlign::RIGHT;
+                m_nAlign = css::awt::TextAlign::RIGHT;
                 m_bNumeric = true;
                 break;
             default:
-                m_nAlign = ::com::sun::star::awt::TextAlign::LEFT;
+                m_nAlign = css::awt::TextAlign::LEFT;
                 break;
         }
     }
@@ -282,7 +282,7 @@ bool DbGridColumn::Commit()
         FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell );
         if (bResult && pDataCell)
         {
-            Reference< ::com::sun::star::form::XBoundComponent >  xComp(m_xModel, UNO_QUERY);
+            Reference< css::form::XBoundComponent >  xComp(m_xModel, UNO_QUERY);
             if (xComp.is())
                 bResult = xComp->commit();
         }
@@ -298,7 +298,7 @@ DbGridColumn::~DbGridColumn()
 }
 
 
-void DbGridColumn::setModel(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xModel)
+void DbGridColumn::setModel(css::uno::Reference< css::beans::XPropertySet >  _xModel)
 {
     if ( m_pCell )
         impl_toggleScriptManager_nothrow( false );
@@ -354,19 +354,19 @@ sal_Int16 DbGridColumn::SetAlignment(sal_Int16 _nAlign)
                 case DataType::DATE:
                 case DataType::TIME:
                 case DataType::TIMESTAMP:
-                    _nAlign = ::com::sun::star::awt::TextAlign::RIGHT;
+                    _nAlign = css::awt::TextAlign::RIGHT;
                     break;
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    _nAlign = ::com::sun::star::awt::TextAlign::CENTER;
+                    _nAlign = css::awt::TextAlign::CENTER;
                     break;
                 default:
-                    _nAlign = ::com::sun::star::awt::TextAlign::LEFT;
+                    _nAlign = css::awt::TextAlign::LEFT;
                     break;
             }
         }
         else
-            _nAlign = ::com::sun::star::awt::TextAlign::LEFT;
+            _nAlign = css::awt::TextAlign::LEFT;
     }
 
     m_nAlign = _nAlign;
@@ -424,7 +424,7 @@ OUString DbGridColumn::GetCellText(const DbGridRow* pRow, const Reference< XNumb
 }
 
 
-OUString DbGridColumn::GetCellText(const Reference< ::com::sun::star::sdb::XColumn >& xField, const Reference< XNumberFormatter >& xFormatter) const
+OUString DbGridColumn::GetCellText(const Reference< css::sdb::XColumn >& xField, const Reference< XNumberFormatter >& xFormatter) const
 {
     OUString aText;
     if (xField.is())
@@ -439,9 +439,9 @@ OUString DbGridColumn::GetCellText(const Reference< ::com::sun::star::sdb::XColu
 }
 
 
-Reference< ::com::sun::star::sdb::XColumn >  DbGridColumn::GetCurrentFieldValue() const
+Reference< css::sdb::XColumn >  DbGridColumn::GetCurrentFieldValue() const
 {
-    Reference< ::com::sun::star::sdb::XColumn >  xField;
+    Reference< css::sdb::XColumn >  xField;
     const DbGridRowRef xRow = m_rParent.GetCurrentRow();
     if (xRow.Is() && xRow->HasField(m_nFieldPos))
     {
@@ -478,10 +478,10 @@ void DbGridColumn::Paint(OutputDevice& rDev,
 
             switch (GetAlignment())
             {
-                case ::com::sun::star::awt::TextAlign::RIGHT:
+                case css::awt::TextAlign::RIGHT:
                     nStyle |= DrawTextFlags::Right;
                     break;
-                case ::com::sun::star::awt::TextAlign::CENTER:
+                case css::awt::TextAlign::CENTER:
                     nStyle |= DrawTextFlags::Center;
                     break;
                 default:
@@ -558,7 +558,7 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, bool /*_bText*/ )
     if ( xColModelProps.is() )
     {
         // if our model's format key changes we want to propagate the new value to our windows
-        m_pModelChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, Reference< ::com::sun::star::beans::XPropertySet > (_rColumn.getModel(), UNO_QUERY));
+        m_pModelChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, Reference< css::beans::XPropertySet > (_rColumn.getModel(), UNO_QUERY));
         m_pModelChangeBroadcaster->acquire();
 
         // be listener for some common properties
@@ -957,10 +957,10 @@ void DbCellControl::AlignControl(sal_Int16 nAlignment)
     WinBits nAlignmentBit = 0;
     switch (nAlignment)
     {
-        case ::com::sun::star::awt::TextAlign::RIGHT:
+        case css::awt::TextAlign::RIGHT:
             nAlignmentBit = WB_RIGHT;
             break;
-        case ::com::sun::star::awt::TextAlign::CENTER:
+        case css::awt::TextAlign::CENTER:
             nAlignmentBit = WB_CENTER;
             break;
         default:
@@ -1007,7 +1007,7 @@ void DbCellControl::PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRe
 }
 
 
-double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
+double DbCellControl::GetValue(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
 {
     double fValue = 0;
     if (m_rColumn.IsNumeric())
@@ -1174,14 +1174,14 @@ void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRect
 
 OUString DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
 {
-    const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
+    const css::uno::Reference<css::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
     FormattedColumnValue fmter( xFormatter, xPS );
 
     return fmter.getFormattedValue();
 }
 
 
-void DbTextField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter)
+void DbTextField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter)
 {
     m_pEdit->SetText( GetFormatText( _rxField, xFormatter ) );
     m_pEdit->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
@@ -1236,7 +1236,7 @@ void DbTextField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
 
 DbFormattedField::DbFormattedField(DbGridColumn& _rColumn)
     :DbLimitedLengthField(_rColumn)
-    ,m_nKeyType(::com::sun::star::util::NumberFormat::UNDEFINED)
+    ,m_nKeyType(css::util::NumberFormat::UNDEFINED)
 {
 
     // if our model's format key changes we want to propagate the new value to our windows
@@ -1253,16 +1253,16 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
 {
     sal_Int16 nAlignment = m_rColumn.SetAlignmentFromModel(-1);
 
-    Reference< ::com::sun::star::beans::XPropertySet >  xUnoModel = m_rColumn.getModel();
+    Reference< css::beans::XPropertySet >  xUnoModel = m_rColumn.getModel();
 
     switch (nAlignment)
     {
-        case ::com::sun::star::awt::TextAlign::RIGHT:
+        case css::awt::TextAlign::RIGHT:
             m_pWindow  = VclPtr<FormattedField>::Create( &rParent, WB_RIGHT );
             m_pPainter = VclPtr<FormattedField>::Create( &rParent, WB_RIGHT );
             break;
 
-        case ::com::sun::star::awt::TextAlign::CENTER:
+        case css::awt::TextAlign::CENTER:
             m_pWindow  = VclPtr<FormattedField>::Create( &rParent, WB_CENTER );
             m_pPainter  = VclPtr<FormattedField>::Create( &rParent, WB_CENTER );
             break;
@@ -1287,7 +1287,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         // machen (das FormattedField unterstuetzt das sowieso nicht, nur abgeleitete Klassen)
 
     // von dem Uno-Model den Formatter besorgen
-    // (Ich koennte theoretisch auch ueber den ::com::sun::star::util::NumberFormatter gehen, den mir der Cursor bestimmt
+    // (Ich koennte theoretisch auch ueber den css::util::NumberFormatter gehen, den mir der Cursor bestimmt
     // liefern wuerde. Das Problem dabei ist, dass ich mich eigentlich nicht darauf verlassen
     // kann, dass die beiden Formatter die selben sind, sauber ist das Ganze, wenn ich ueber das
     // UNO-Model gehe.)
@@ -1322,7 +1322,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
         }
     }
 
-    // nein ? vielleicht die ::com::sun::star::form::component::Form hinter dem Cursor ?
+    // nein ? vielleicht die css::form::component::Form hinter dem Cursor ?
     if (!m_xSupplier.is())
     {
         Reference< XRowSet >  xCursorForm(xCursor, UNO_QUERY);
@@ -1485,7 +1485,7 @@ void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent ) th
 }
 
 
-OUString DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** ppColor)
+OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** ppColor)
 {
     // defaultmaessig keine Farb-Angabe
     if (ppColor != NULL)
@@ -1513,7 +1513,7 @@ OUString DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb:
         else
         {
             // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
-            // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
+            // Also einfach den Text vom css::util::NumberFormatter in die richtige css::form::component::Form brinden lassen.
             aText = _rxField->getString();
             if (_rxField->wasNull())
                 return aText;
@@ -1533,7 +1533,7 @@ OUString DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb:
 }
 
 
-void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
+void DbFormattedField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     try
     {
@@ -1558,7 +1558,7 @@ void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::X
         else
         {
             // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
-            // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
+            // Also einfach den Text vom css::util::NumberFormatter in die richtige css::form::component::Form brinden lassen.
             OUString sText( _rxField->getString());
 
             pFormattedWindow->SetTextFormatted( sText );
@@ -1675,7 +1675,7 @@ CellControllerRef DbCheckBox::CreateController() const
     return new CheckBoxCellController(static_cast<CheckBoxControl*>(m_pWindow.get()));
 }
 
-static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
+static void lcl_setCheckBoxState(   const Reference< css::sdb::XColumn >& _rxField,
                         CheckBoxControl* _pCheckBoxControl )
 {
     TriState eState = TRISTATE_INDET;
@@ -1696,14 +1696,14 @@ static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XCol
 }
 
 
-void DbCheckBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
+void DbCheckBox::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     lcl_setCheckBoxState( _rxField, static_cast<CheckBoxControl*>(m_pWindow.get()) );
 }
 
 
 void DbCheckBox::PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
-                          const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
+                          const Reference< css::sdb::XColumn >& _rxField,
                           const Reference< XNumberFormatter >& xFormatter)
 {
     lcl_setCheckBoxState( _rxField, static_cast<CheckBoxControl*>(m_pPainter.get()) );
@@ -1796,7 +1796,7 @@ OUString DbPatternField::impl_formatText( const OUString& _rText )
 }
 
 
-OUString DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbPatternField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
     bool bIsForPaint = _rxField != m_rColumn.GetField();
     ::std::unique_ptr< FormattedColumnValue >& rpFormatter = bIsForPaint ? m_pPaintFormatter : m_pValueFormatter;
@@ -1916,7 +1916,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 
         // dem Field und dem Painter einen Formatter spendieren
         // zuerst testen, ob ich von dem Service hinter einer Connection bekommen kann
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier;
+        Reference< css::util::XNumberFormatsSupplier >  xSupplier;
         Reference< XRowSet > xForm;
         if ( m_rColumn.GetParent().getDataSource() )
             xForm = Reference< XRowSet >( Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY );
@@ -1979,13 +1979,13 @@ namespace
 }
 
 
-OUString DbNumericField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
+OUString DbNumericField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
 {
     return lcl_setFormattedNumeric_nothrow(dynamic_cast<DoubleNumericField&>(*m_pPainter), *this, _rxField, _rxFormatter);
 }
 
 
-void DbNumericField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
+void DbNumericField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter)
 {
     lcl_setFormattedNumeric_nothrow(dynamic_cast<DoubleNumericField&>(*m_pWindow), *this, _rxField, _rxFormatter);
 }
@@ -2080,7 +2080,7 @@ VclPtr<SpinField> DbCurrencyField::createField( vcl::Window* _pParent, WinBits _
 }
 
 
-double DbCurrencyField::GetCurrency(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
+double DbCurrencyField::GetCurrency(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
 {
     double fValue = GetValue(_rxField, xFormatter);
     if (m_nScale)
@@ -2120,13 +2120,13 @@ namespace
 }
 
 
-OUString DbCurrencyField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
+OUString DbCurrencyField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
 {
     return lcl_setFormattedCurrency_nothrow( dynamic_cast< LongCurrencyField& >( *m_pPainter ), *this, _rxField, _rxFormatter );
 }
 
 
-void DbCurrencyField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
+void DbCurrencyField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter)
 {
     lcl_setFormattedCurrency_nothrow( dynamic_cast< LongCurrencyField& >( *m_pWindow ), *this, _rxField, _rxFormatter );
 }
@@ -2243,7 +2243,7 @@ namespace
         {
             try
             {
-                ::com::sun::star::util::Date aValue = _rxField->getDate();
+                css::util::Date aValue = _rxField->getDate();
                 if ( _rxField->wasNull() )
                     _rField.SetText( sDate );
                 else
@@ -2261,13 +2261,13 @@ namespace
     }
 }
 
-OUString DbDateField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbDateField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
      return lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pPainter.get()), _rxField);
 }
 
 
-void DbDateField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
+void DbDateField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pWindow.get()), _rxField);
 }
@@ -2299,7 +2299,7 @@ bool DbDateField::commitControl()
 }
 
 DbTimeField::DbTimeField( DbGridColumn& _rColumn )
-    :DbSpinField( _rColumn, ::com::sun::star::awt::TextAlign::LEFT )
+    :DbSpinField( _rColumn, css::awt::TextAlign::LEFT )
 {
     doPropertyListening( FM_PROP_TIMEFORMAT );
     doPropertyListening( FM_PROP_TIMEMIN );
@@ -2351,7 +2351,7 @@ namespace
         {
             try
             {
-                ::com::sun::star::util::Time aValue = _rxField->getTime();
+                css::util::Time aValue = _rxField->getTime();
                 if ( _rxField->wasNull() )
                     _rField.SetText( sTime );
                 else
@@ -2369,13 +2369,13 @@ namespace
     }
 }
 
-OUString DbTimeField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbTimeField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
     return lcl_setFormattedTime_nothrow( *static_cast< TimeField* >( m_pPainter.get() ), _rxField );
 }
 
 
-void DbTimeField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
+void DbTimeField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
     lcl_setFormattedTime_nothrow( *static_cast< TimeField* >( m_pWindow.get() ), _rxField );
 }
@@ -2462,7 +2462,7 @@ void DbComboBox::implAdjustGenericFieldSetting( const Reference< XPropertySet >&
 
 void DbComboBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
 {
-    m_rColumn.SetAlignmentFromModel(::com::sun::star::awt::TextAlign::LEFT);
+    m_rColumn.SetAlignmentFromModel(css::awt::TextAlign::LEFT);
 
     m_pWindow = VclPtr<ComboBoxControl>::Create( &rParent );
 
@@ -2489,16 +2489,16 @@ CellControllerRef DbComboBox::CreateController() const
 }
 
 
-OUString DbComboBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
+OUString DbComboBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
 {
-    const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
+    const css::uno::Reference<css::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
     ::dbtools::FormattedColumnValue fmter( xFormatter, xPS );
 
     return fmter.getFormattedValue();
 }
 
 
-void DbComboBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter)
+void DbComboBox::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter)
 {
     m_pWindow->SetText(GetFormatText(_rxField, xFormatter));
 }
@@ -2535,7 +2535,7 @@ DbListBox::DbListBox(DbGridColumn& _rColumn)
 }
 
 
-void DbListBox::_propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) throw( RuntimeException )
+void DbListBox::_propertyChanged( const css::beans::PropertyChangeEvent& _rEvent ) throw( RuntimeException )
 {
     if ( _rEvent.PropertyName == FM_PROP_STRINGITEMLIST )
     {
@@ -2577,7 +2577,7 @@ void DbListBox::SetList(const Any& rItems)
 
 void DbListBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor)
 {
-    m_rColumn.SetAlignment(::com::sun::star::awt::TextAlign::LEFT);
+    m_rColumn.SetAlignment(css::awt::TextAlign::LEFT);
 
     m_pWindow = VclPtr<ListBoxControl>::Create( &rParent );
 
@@ -2608,7 +2608,7 @@ CellControllerRef DbListBox::CreateController() const
 }
 
 
-OUString DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbListBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
     OUString sText;
     if ( _rxField.is() )
@@ -2634,7 +2634,7 @@ OUString DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColum
 }
 
 
-void DbListBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter)
+void DbListBox::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter)
 {
     OUString sFormattedText( GetFormatText( _rxField, xFormatter ) );
     if (!sFormattedText.isEmpty())
@@ -2681,7 +2681,7 @@ bool DbListBox::commitControl()
 DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbGridColumn& _rColumn)
               :DbCellControl(_rColumn)
               ,OSQLParserClient(rxContext)
-              ,m_nControlClass(::com::sun::star::form::FormComponentType::TEXTFIELD)
+              ,m_nControlClass(css::form::FormComponentType::TEXTFIELD)
               ,m_bFilterList(false)
               ,m_bFilterListFilled(false)
               ,m_bBound(false)
@@ -2693,7 +2693,7 @@ DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbG
 
 DbFilterField::~DbFilterField()
 {
-    if (m_nControlClass == ::com::sun::star::form::FormComponentType::CHECKBOX)
+    if (m_nControlClass == css::form::FormComponentType::CHECKBOX)
         static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( Link<VclPtr<CheckBox>,void>() );
 
 }
@@ -2743,11 +2743,11 @@ void DbFilterField::SetList(const Any& rItems, bool bComboBox)
 }
 
 
-void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::sun::star::beans::XPropertySet >& xModel)
+void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::beans::XPropertySet >& xModel)
 {
     switch (m_nControlClass)
     {
-        case ::com::sun::star::form::FormComponentType::CHECKBOX:
+        case css::form::FormComponentType::CHECKBOX:
             m_pWindow = VclPtr<CheckBoxControl>::Create(pParent);
             m_pWindow->SetPaintTransparent( true );
             static_cast<CheckBoxControl*>(m_pWindow.get())->SetClickHdl( LINK( this, DbFilterField, OnClick ) );
@@ -2756,15 +2756,15 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
             m_pPainter->SetPaintTransparent( true );
             m_pPainter->SetBackground();
             break;
-        case ::com::sun::star::form::FormComponentType::LISTBOX:
+        case css::form::FormComponentType::LISTBOX:
         {
             m_pWindow = VclPtr<ListBoxControl>::Create(pParent);
             sal_Int16  nLines       = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_LINECOUNT));
             Any  aItems      = xModel->getPropertyValue(FM_PROP_STRINGITEMLIST);
-            SetList(aItems, m_nControlClass == ::com::sun::star::form::FormComponentType::COMBOBOX);
+            SetList(aItems, m_nControlClass == css::form::FormComponentType::COMBOBOX);
             static_cast<ListBox*>(m_pWindow.get())->SetDropDownLineCount(nLines);
         }   break;
-        case ::com::sun::star::form::FormComponentType::COMBOBOX:
+        case css::form::FormComponentType::COMBOBOX:
         {
             m_pWindow = VclPtr<ComboBoxControl>::Create(pParent);
 
@@ -2779,7 +2779,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
             {
                 sal_Int16  nLines       = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_LINECOUNT));
                 Any  aItems      = xModel->getPropertyValue(FM_PROP_STRINGITEMLIST);
-                SetList(aItems, m_nControlClass == ::com::sun::star::form::FormComponentType::COMBOBOX);
+                SetList(aItems, m_nControlClass == css::form::FormComponentType::COMBOBOX);
                 static_cast<ComboBox*>(m_pWindow.get())->SetDropDownLineCount(nLines);
             }
             else
@@ -2802,14 +2802,14 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
 
 void DbFilterField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
 {
-    Reference< ::com::sun::star::beans::XPropertySet >  xModel(m_rColumn.getModel());
-    m_rColumn.SetAlignment(::com::sun::star::awt::TextAlign::LEFT);
+    Reference< css::beans::XPropertySet >  xModel(m_rColumn.getModel());
+    m_rColumn.SetAlignment(css::awt::TextAlign::LEFT);
 
     if (xModel.is())
     {
         m_bFilterList = ::comphelper::hasProperty(FM_PROP_FILTERPROPOSAL, xModel) && ::comphelper::getBOOL(xModel->getPropertyValue(FM_PROP_FILTERPROPOSAL));
         if (m_bFilterList)
-            m_nControlClass = ::com::sun::star::form::FormComponentType::COMBOBOX;
+            m_nControlClass = css::form::FormComponentType::COMBOBOX;
         else
         {
             sal_Int16 nClassId = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_CLASSID));
@@ -2844,13 +2844,13 @@ CellControllerRef DbFilterField::CreateController() const
     CellControllerRef xController;
     switch (m_nControlClass)
     {
-        case ::com::sun::star::form::FormComponentType::CHECKBOX:
+        case css::form::FormComponentType::CHECKBOX:
             xController = new CheckBoxCellController(static_cast<CheckBoxControl*>(m_pWindow.get()));
             break;
-        case ::com::sun::star::form::FormComponentType::LISTBOX:
+        case css::form::FormComponentType::LISTBOX:
             xController = new ListBoxCellController(static_cast<ListBoxControl*>(m_pWindow.get()));
             break;
-        case ::com::sun::star::form::FormComponentType::COMBOBOX:
+        case css::form::FormComponentType::COMBOBOX:
             xController = new ComboBoxCellController(static_cast<ComboBoxControl*>(m_pWindow.get()));
             break;
         default:
@@ -2879,9 +2879,9 @@ bool DbFilterField::commitControl()
     OUString aText(m_aText);
     switch (m_nControlClass)
     {
-        case ::com::sun::star::form::FormComponentType::CHECKBOX:
+        case css::form::FormComponentType::CHECKBOX:
             return true;
-        case ::com::sun::star::form::FormComponentType::LISTBOX:
+        case css::form::FormComponentType::LISTBOX:
             aText.clear();
             if (static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryCount())
             {
@@ -2914,7 +2914,7 @@ bool DbFilterField::commitControl()
             {
                 OUString aPreparedText;
 
-                ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+                css::lang::Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
                 Reference< XRowSet > xDataSourceRowSet(
                     Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY);
@@ -2956,7 +2956,7 @@ void DbFilterField::SetText(const OUString& rText)
     m_aText = rText;
     switch (m_nControlClass)
     {
-        case ::com::sun::star::form::FormComponentType::CHECKBOX:
+        case css::form::FormComponentType::CHECKBOX:
         {
             TriState eState;
             if (rText == "1")
@@ -2969,7 +2969,7 @@ void DbFilterField::SetText(const OUString& rText)
             static_cast<CheckBoxControl*>(m_pWindow.get())->GetBox().SetState(eState);
             static_cast<CheckBoxControl*>(m_pPainter.get())->GetBox().SetState(eState);
         }   break;
-        case ::com::sun::star::form::FormComponentType::LISTBOX:
+        case css::form::FormComponentType::LISTBOX:
         {
             Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, m_aText, true);
             if (aPosSeq.getLength())
@@ -2992,7 +2992,7 @@ void DbFilterField::Update()
     if (m_bFilterList && !m_bFilterListFilled)
     {
         m_bFilterListFilled = true;
-        Reference< ::com::sun::star::beans::XPropertySet >  xField = m_rColumn.GetField();
+        Reference< css::beans::XPropertySet >  xField = m_rColumn.GetField();
         if (!xField.is())
             return;
 
@@ -3000,9 +3000,9 @@ void DbFilterField::Update()
         xField->getPropertyValue(FM_PROP_NAME) >>= aName;
 
         // the columnmodel
-        Reference< ::com::sun::star::container::XChild >  xModelAsChild(m_rColumn.getModel(), UNO_QUERY);
+        Reference< css::container::XChild >  xModelAsChild(m_rColumn.getModel(), UNO_QUERY);
         // the grid model
-        xModelAsChild = Reference< ::com::sun::star::container::XChild > (xModelAsChild->getParent(),UNO_QUERY);
+        xModelAsChild = Reference< css::container::XChild > (xModelAsChild->getParent(),UNO_QUERY);
         Reference< XRowSet >  xForm(xModelAsChild->getParent(), UNO_QUERY);
         if (!xForm.is())
             return;
@@ -3017,12 +3017,12 @@ void DbFilterField::Update()
 
         // search the field
         Reference< XColumnsSupplier > xSupCol(xSupTab,UNO_QUERY);
-        Reference< ::com::sun::star::container::XNameAccess >    xFieldNames = xSupCol->getColumns();
+        Reference< css::container::XNameAccess >    xFieldNames = xSupCol->getColumns();
         if (!xFieldNames->hasByName(aName))
             return;
 
-        Reference< ::com::sun::star::container::XNameAccess >    xTablesNames = xSupTab->getTables();
-        Reference< ::com::sun::star::beans::XPropertySet >       xComposerFieldAsSet(xFieldNames->getByName(aName),UNO_QUERY);
+        Reference< css::container::XNameAccess >    xTablesNames = xSupTab->getTables();
+        Reference< css::beans::XPropertySet >       xComposerFieldAsSet(xFieldNames->getByName(aName),UNO_QUERY);
 
         if (xComposerFieldAsSet.is() && ::comphelper::hasProperty(FM_PROP_TABLENAME, xComposerFieldAsSet) &&
             ::comphelper::hasProperty(FM_PROP_FIELDSOURCE, xComposerFieldAsSet))
@@ -3041,7 +3041,7 @@ void DbFilterField::Update()
             // Access to the connection
             Reference< XStatement >  xStatement;
             Reference< XResultSet >  xListCursor;
-            Reference< ::com::sun::star::sdb::XColumn >  xDataField;
+            Reference< css::sdb::XColumn >  xDataField;
 
             try
             {
@@ -3062,13 +3062,13 @@ void DbFilterField::Update()
                 aStatement.append(composeTableNameForSelect(xConnection, xTableNameAccess));
 
                 xStatement = xConnection->createStatement();
-                Reference< ::com::sun::star::beans::XPropertySet >  xStatementProps(xStatement, UNO_QUERY);
+                Reference< css::beans::XPropertySet >  xStatementProps(xStatement, UNO_QUERY);
                 xStatementProps->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, makeAny(true));
 
                 xListCursor = xStatement->executeQuery(aStatement.makeStringAndClear());
 
-                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(xListCursor, UNO_QUERY);
-                Reference< ::com::sun::star::container::XIndexAccess >  xFields(xSupplyCols->getColumns(), UNO_QUERY);
+                Reference< css::sdbcx::XColumnsSupplier >  xSupplyCols(xListCursor, UNO_QUERY);
+                Reference< css::container::XIndexAccess >  xFields(xSupplyCols->getColumns(), UNO_QUERY);
                 xDataField.set(xFields->getByIndex(0), css::uno::UNO_QUERY);
                 if (!xDataField.is())
                     return;
@@ -3083,7 +3083,7 @@ void DbFilterField::Update()
             ::std::vector< OUString >   aStringList;
             aStringList.reserve(16);
             OUString aStr;
-            com::sun::star::util::Date aNullDate = m_rColumn.GetParent().getNullDate();
+            css::util::Date aNullDate = m_rColumn.GetParent().getNullDate();
             sal_Int32 nFormatKey = m_rColumn.GetKey();
             Reference< XNumberFormatter >  xFormatter = m_rColumn.GetParent().getNumberFormatter();
             sal_Int16 nKeyType = ::comphelper::getNumberFormatType(xFormatter->getNumberFormatsSupplier()->getNumberFormats(), nFormatKey);
@@ -3233,7 +3233,7 @@ void FmXGridCell::disposing()
 }
 
 
-Any SAL_CALL FmXGridCell::queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL FmXGridCell::queryAggregation( const css::uno::Type& _rType ) throw(RuntimeException, std::exception)
 {
     Any aReturn = OComponentHelper::queryAggregation( _rType );
 
@@ -3246,7 +3246,7 @@ Any SAL_CALL FmXGridCell::queryAggregation( const ::com::sun::star::uno::Type& _
     return aReturn;
 }
 
-// ::com::sun::star::awt::XControl
+// css::awt::XControl
 
 Reference< XInterface >  FmXGridCell::getContext() throw( RuntimeException, std::exception )
 {
@@ -3254,13 +3254,13 @@ Reference< XInterface >  FmXGridCell::getContext() throw( RuntimeException, std:
 }
 
 
-Reference< ::com::sun::star::awt::XControlModel >  FmXGridCell::getModel() throw( ::com::sun::star::uno::RuntimeException, std::exception )
+Reference< css::awt::XControlModel >  FmXGridCell::getModel() throw( css::uno::RuntimeException, std::exception )
 {
     checkDisposed(OComponentHelper::rBHelper.bDisposed);
-    return Reference< ::com::sun::star::awt::XControlModel > (m_pColumn->getModel(), UNO_QUERY);
+    return Reference< css::awt::XControlModel > (m_pColumn->getModel(), UNO_QUERY);
 }
 
-// ::com::sun::star::form::XBoundControl
+// css::form::XBoundControl
 
 sal_Bool FmXGridCell::getLock() throw( RuntimeException, std::exception )
 {
@@ -3519,7 +3519,7 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
 TYPEINIT1(FmXDataCell, FmXGridCell);
 
 void FmXDataCell::PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
-                        const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
+                        const Reference< css::sdb::XColumn >& _rxField,
                         const Reference< XNumberFormatter >& xFormatter)
 {
     m_pCellControl->PaintFieldToCell( rDev, rRect, _rxField, xFormatter );
@@ -3528,7 +3528,7 @@ void FmXDataCell::PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
 
 void FmXDataCell::UpdateFromColumn()
 {
-    Reference< ::com::sun::star::sdb::XColumn >  xField(m_pColumn->GetCurrentFieldValue());
+    Reference< css::sdb::XColumn >  xField(m_pColumn->GetCurrentFieldValue());
     if (xField.is())
         m_pCellControl->UpdateFromField(xField, m_pColumn->GetParent().getNumberFormatter());
 }
@@ -3544,7 +3544,7 @@ FmXTextCell::FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl )
 
 void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
                         const Rectangle& rRect,
-                        const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
+                        const Reference< css::sdb::XColumn >& _rxField,
                         const Reference< XNumberFormatter >& xFormatter)
 {
     if ( !m_bFastPaint )
@@ -3559,10 +3559,10 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
 
     switch (m_pColumn->GetAlignment())
     {
-        case ::com::sun::star::awt::TextAlign::RIGHT:
+        case css::awt::TextAlign::RIGHT:
             nStyle |= DrawTextFlags::Right;
             break;
-        case ::com::sun::star::awt::TextAlign::CENTER:
+        case css::awt::TextAlign::CENTER:
             nStyle |= DrawTextFlags::Center;
             break;
         default:
@@ -3621,7 +3621,7 @@ FmXEditCell::~FmXEditCell()
 
 void FmXEditCell::disposing()
 {
-    ::com::sun::star::lang::EventObject aEvt(*this);
+    css::lang::EventObject aEvt(*this);
     m_aTextListeners.disposeAndClear(aEvt);
     m_aChangeListeners.disposeAndClear(aEvt);
 
@@ -3634,7 +3634,7 @@ void FmXEditCell::disposing()
 }
 
 
-Any SAL_CALL FmXEditCell::queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL FmXEditCell::queryAggregation( const css::uno::Type& _rType ) throw(RuntimeException, std::exception)
 {
     Any aReturn = FmXTextCell::queryAggregation( _rType );
 
@@ -3645,7 +3645,7 @@ Any SAL_CALL FmXEditCell::queryAggregation( const ::com::sun::star::uno::Type& _
 }
 
 
-Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXEditCell::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< css::uno::Type > SAL_CALL FmXEditCell::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         FmXTextCell::getTypes(),
@@ -3656,15 +3656,15 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXEditCell::getTypes(  ) throw
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXEditCell )
 
-// ::com::sun::star::awt::XTextComponent
+// css::awt::XTextComponent
 
-void SAL_CALL FmXEditCell::addTextListener(const Reference< ::com::sun::star::awt::XTextListener >& l) throw( RuntimeException, std::exception )
+void SAL_CALL FmXEditCell::addTextListener(const Reference< css::awt::XTextListener >& l) throw( RuntimeException, std::exception )
 {
     m_aTextListeners.addInterface( l );
 }
 
 
-void SAL_CALL FmXEditCell::removeTextListener(const Reference< ::com::sun::star::awt::XTextListener >& l) throw( RuntimeException, std::exception )
+void SAL_CALL FmXEditCell::removeTextListener(const Reference< css::awt::XTextListener >& l) throw( RuntimeException, std::exception )
 {
     m_aTextListeners.removeInterface( l );
 }
@@ -3679,13 +3679,13 @@ void SAL_CALL FmXEditCell::setText( const OUString& aText ) throw( RuntimeExcept
         m_pEditImplementation->SetText( aText );
 
         // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
-        // ::com::sun::star::awt::Toolkit soll JAVA-komform sein...
+        // css::awt::Toolkit soll JAVA-komform sein...
         onTextChanged();
     }
 }
 
 
-void SAL_CALL FmXEditCell::insertText(const ::com::sun::star::awt::Selection& rSel, const OUString& aText) throw(RuntimeException, std::exception)
+void SAL_CALL FmXEditCell::insertText(const css::awt::Selection& rSel, const OUString& aText) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3712,7 +3712,7 @@ OUString SAL_CALL FmXEditCell::getText() throw( RuntimeException, std::exception
         }
         else
         {
-            Reference< ::com::sun::star::sdb::XColumn >  xField(m_pColumn->GetCurrentFieldValue());
+            Reference< css::sdb::XColumn >  xField(m_pColumn->GetCurrentFieldValue());
             if (xField.is())
                 aText = GetText(xField, m_pColumn->GetParent().getNumberFormatter());
         }
@@ -3735,7 +3735,7 @@ OUString SAL_CALL FmXEditCell::getSelectedText() throw( RuntimeException, std::e
 }
 
 
-void SAL_CALL FmXEditCell::setSelection( const ::com::sun::star::awt::Selection& aSelection ) throw( RuntimeException, std::exception )
+void SAL_CALL FmXEditCell::setSelection( const css::awt::Selection& aSelection ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3744,7 +3744,7 @@ void SAL_CALL FmXEditCell::setSelection( const ::com::sun::star::awt::Selection&
 }
 
 
-::com::sun::star::awt::Selection SAL_CALL FmXEditCell::getSelection() throw( RuntimeException, std::exception )
+css::awt::Selection SAL_CALL FmXEditCell::getSelection() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -3752,7 +3752,7 @@ void SAL_CALL FmXEditCell::setSelection( const ::com::sun::star::awt::Selection&
     if ( m_pEditImplementation )
         aSel = m_pEditImplementation->GetSelection();
 
-    return ::com::sun::star::awt::Selection(aSel.Min(), aSel.Max());
+    return css::awt::Selection(aSel.Min(), aSel.Max());
 }
 
 
@@ -3804,7 +3804,7 @@ void SAL_CALL FmXEditCell::removeChangeListener( const Reference< form::XChangeL
 
 void FmXEditCell::onTextChanged()
 {
-    ::com::sun::star::awt::TextEvent aEvent;
+    css::awt::TextEvent aEvent;
     aEvent.Source = *this;
     m_aTextListeners.notifyEach( &awt::XTextListener::textChanged, aEvent );
 }
@@ -3867,7 +3867,7 @@ FmXCheckBoxCell::~FmXCheckBoxCell()
 
 void FmXCheckBoxCell::disposing()
 {
-    ::com::sun::star::lang::EventObject aEvt(*this);
+    css::lang::EventObject aEvt(*this);
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
@@ -3878,7 +3878,7 @@ void FmXCheckBoxCell::disposing()
 }
 
 
-Any SAL_CALL FmXCheckBoxCell::queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL FmXCheckBoxCell::queryAggregation( const css::uno::Type& _rType ) throw(RuntimeException, std::exception)
 {
     Any aReturn = FmXDataCell::queryAggregation( _rType );
 
@@ -3889,7 +3889,7 @@ Any SAL_CALL FmXCheckBoxCell::queryAggregation( const ::com::sun::star::uno::Typ
 }
 
 
-Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXCheckBoxCell::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< css::uno::Type > SAL_CALL FmXCheckBoxCell::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         FmXDataCell::getTypes(),
@@ -3901,13 +3901,13 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXCheckBoxCell::getTypes(  ) t
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXCheckBoxCell )
 
 
-void SAL_CALL FmXCheckBoxCell::addItemListener( const Reference< ::com::sun::star::awt::XItemListener >& l ) throw( RuntimeException, std::exception )
+void SAL_CALL FmXCheckBoxCell::addItemListener( const Reference< css::awt::XItemListener >& l ) throw( RuntimeException, std::exception )
 {
     m_aItemListeners.addInterface( l );
 }
 
 
-void SAL_CALL FmXCheckBoxCell::removeItemListener( const Reference< ::com::sun::star::awt::XItemListener >& l ) throw( RuntimeException, std::exception )
+void SAL_CALL FmXCheckBoxCell::removeItemListener( const Reference< css::awt::XItemListener >& l ) throw( RuntimeException, std::exception )
 {
     m_aItemListeners.removeInterface( l );
 }
@@ -4043,7 +4043,7 @@ FmXListBoxCell::~FmXListBoxCell()
 
 void FmXListBoxCell::disposing()
 {
-    ::com::sun::star::lang::EventObject aEvt(*this);
+    css::lang::EventObject aEvt(*this);
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
@@ -4055,7 +4055,7 @@ void FmXListBoxCell::disposing()
 }
 
 
-Any SAL_CALL FmXListBoxCell::queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL FmXListBoxCell::queryAggregation( const css::uno::Type& _rType ) throw(RuntimeException, std::exception)
 {
     Any aReturn = FmXTextCell::queryAggregation(_rType);
 
@@ -4066,7 +4066,7 @@ Any SAL_CALL FmXListBoxCell::queryAggregation( const ::com::sun::star::uno::Type
 }
 
 
-Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXListBoxCell::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< css::uno::Type > SAL_CALL FmXListBoxCell::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         FmXTextCell::getTypes(),
@@ -4078,25 +4078,25 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXListBoxCell::getTypes(  ) th
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXListBoxCell )
 
 
-void SAL_CALL FmXListBoxCell::addItemListener(const Reference< ::com::sun::star::awt::XItemListener >& l) throw( RuntimeException, std::exception )
+void SAL_CALL FmXListBoxCell::addItemListener(const Reference< css::awt::XItemListener >& l) throw( RuntimeException, std::exception )
 {
     m_aItemListeners.addInterface( l );
 }
 
 
-void SAL_CALL FmXListBoxCell::removeItemListener(const Reference< ::com::sun::star::awt::XItemListener >& l) throw( RuntimeException, std::exception )
+void SAL_CALL FmXListBoxCell::removeItemListener(const Reference< css::awt::XItemListener >& l) throw( RuntimeException, std::exception )
 {
     m_aItemListeners.removeInterface( l );
 }
 
 
-void SAL_CALL FmXListBoxCell::addActionListener(const Reference< ::com::sun::star::awt::XActionListener >& l) throw( RuntimeException, std::exception )
+void SAL_CALL FmXListBoxCell::addActionListener(const Reference< css::awt::XActionListener >& l) throw( RuntimeException, std::exception )
 {
     m_aActionListeners.addInterface( l );
 }
 
 
-void SAL_CALL FmXListBoxCell::removeActionListener(const Reference< ::com::sun::star::awt::XActionListener >& l) throw( RuntimeException, std::exception )
+void SAL_CALL FmXListBoxCell::removeActionListener(const Reference< css::awt::XActionListener >& l) throw( RuntimeException, std::exception )
 {
     m_aActionListeners.removeInterface( l );
 }
@@ -4322,7 +4322,7 @@ void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Wind
     {
         OnDoubleClick( *m_pBox );
 
-        ::com::sun::star::awt::ItemEvent aEvent;
+        css::awt::ItemEvent aEvent;
         aEvent.Source = *this;
         aEvent.Highlighted = 0;
 
@@ -4345,12 +4345,12 @@ IMPL_LINK_NOARG_TYPED(FmXListBoxCell, OnDoubleClick, ListBox&, void)
     {
         ::cppu::OInterfaceIteratorHelper aIt( m_aActionListeners );
 
-        ::com::sun::star::awt::ActionEvent aEvent;
+        css::awt::ActionEvent aEvent;
         aEvent.Source = *this;
         aEvent.ActionCommand = m_pBox->GetSelectEntry();
 
         while( aIt.hasMoreElements() )
-            static_cast< ::com::sun::star::awt::XActionListener *>(aIt.next())->actionPerformed( aEvent );
+            static_cast< css::awt::XActionListener *>(aIt.next())->actionPerformed( aEvent );
     }
 }
 
@@ -4376,7 +4376,7 @@ FmXComboBoxCell::~FmXComboBoxCell()
 
 void FmXComboBoxCell::disposing()
 {
-    ::com::sun::star::lang::EventObject aEvt(*this);
+    css::lang::EventObject aEvt(*this);
     m_aItemListeners.disposeAndClear(aEvt);
     m_aActionListeners.disposeAndClear(aEvt);
 
@@ -4384,7 +4384,7 @@ void FmXComboBoxCell::disposing()
 }
 
 
-Any SAL_CALL FmXComboBoxCell::queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL FmXComboBoxCell::queryAggregation( const css::uno::Type& _rType ) throw(RuntimeException, std::exception)
 {
     Any aReturn = FmXTextCell::queryAggregation(_rType);
 
@@ -4599,7 +4599,7 @@ void FmXFilterCell::PaintCell( OutputDevice& rDev, const Rectangle& rRect )
 
 void FmXFilterCell::disposing()
 {
-    ::com::sun::star::lang::EventObject aEvt(*this);
+    css::lang::EventObject aEvt(*this);
     m_aTextListeners.disposeAndClear(aEvt);
 
     static_cast<DbFilterField*>(m_pCellControl)->SetCommitHdl(Link<DbFilterField&,void>());
@@ -4608,7 +4608,7 @@ void FmXFilterCell::disposing()
 }
 
 
-Any SAL_CALL FmXFilterCell::queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL FmXFilterCell::queryAggregation( const css::uno::Type& _rType ) throw(RuntimeException, std::exception)
 {
     Any aReturn = FmXGridCell::queryAggregation(_rType);
 
@@ -4619,7 +4619,7 @@ Any SAL_CALL FmXFilterCell::queryAggregation( const ::com::sun::star::uno::Type&
 }
 
 
-Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXFilterCell::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< css::uno::Type > SAL_CALL FmXFilterCell::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         FmXGridCell::getTypes(),
@@ -4630,15 +4630,15 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXFilterCell::getTypes(  ) thr
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( FmXFilterCell )
 
-// ::com::sun::star::awt::XTextComponent
+// css::awt::XTextComponent
 
-void SAL_CALL FmXFilterCell::addTextListener(const Reference< ::com::sun::star::awt::XTextListener >& l) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFilterCell::addTextListener(const Reference< css::awt::XTextListener >& l) throw( RuntimeException, std::exception )
 {
     m_aTextListeners.addInterface( l );
 }
 
 
-void SAL_CALL FmXFilterCell::removeTextListener(const Reference< ::com::sun::star::awt::XTextListener >& l) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFilterCell::removeTextListener(const Reference< css::awt::XTextListener >& l) throw( RuntimeException, std::exception )
 {
     m_aTextListeners.removeInterface( l );
 }
@@ -4651,7 +4651,7 @@ void SAL_CALL FmXFilterCell::setText( const OUString& aText ) throw( RuntimeExce
 }
 
 
-void SAL_CALL FmXFilterCell::insertText( const ::com::sun::star::awt::Selection& /*rSel*/, const OUString& /*aText*/ ) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFilterCell::insertText( const css::awt::Selection& /*rSel*/, const OUString& /*aText*/ ) throw( RuntimeException, std::exception )
 {
 }
 
@@ -4669,14 +4669,14 @@ OUString SAL_CALL FmXFilterCell::getSelectedText() throw( RuntimeException, std:
 }
 
 
-void SAL_CALL FmXFilterCell::setSelection( const ::com::sun::star::awt::Selection& /*aSelection*/ ) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFilterCell::setSelection( const css::awt::Selection& /*aSelection*/ ) throw( RuntimeException, std::exception )
 {
 }
 
 
-::com::sun::star::awt::Selection SAL_CALL FmXFilterCell::getSelection() throw( RuntimeException, std::exception )
+css::awt::Selection SAL_CALL FmXFilterCell::getSelection() throw( RuntimeException, std::exception )
 {
-    return ::com::sun::star::awt::Selection();
+    return css::awt::Selection();
 }
 
 
@@ -4705,10 +4705,10 @@ void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ ) throw( RuntimeE
 IMPL_LINK_NOARG_TYPED(FmXFilterCell, OnCommit, DbFilterField&, void)
 {
     ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
-    ::com::sun::star::awt::TextEvent aEvt;
+    css::awt::TextEvent aEvt;
     aEvt.Source = *this;
     while( aIt.hasMoreElements() )
-        static_cast< ::com::sun::star::awt::XTextListener *>(aIt.next())->textChanged( aEvt );
+        static_cast< css::awt::XTextListener *>(aIt.next())->textChanged( aEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

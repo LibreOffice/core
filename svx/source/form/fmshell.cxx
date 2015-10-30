@@ -902,7 +902,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     bool bLayerLocked = false;
                     if (m_pFormView)
                     {
-                        // Ist der ::com::sun::star::drawing::Layer gelocked, so m???ssen die Slots disabled werden. #36897
+                        // Ist der css::drawing::Layer gelocked, so m???ssen die Slots disabled werden. #36897
                         SdrPageView* pPV = m_pFormView->GetSdrPageView();
                         if (pPV != NULL)
                             bLayerLocked = pPV->IsLayerLocked(m_pFormView->GetActiveLayer());
@@ -1111,7 +1111,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
 
             case SID_FM_SEARCH:
             {
-                Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getActiveForm(), UNO_QUERY);
+                Reference< css::beans::XPropertySet >  xNavSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 sal_Int32 nCount = ::comphelper::getINT32(xNavSet->getPropertyValue(FM_PROP_ROWCOUNT));
                 bEnable = nCount != 0;
             }   break;

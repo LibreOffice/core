@@ -113,7 +113,7 @@ void SvxDrawPage::disposing() throw()
 
 // XComponent
 void SvxDrawPage::dispose()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -142,7 +142,7 @@ void SvxDrawPage::dispose()
         try
         {
             uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) ) );
-            ::com::sun::star::document::EventObject aEvt;
+            css::document::EventObject aEvt;
             aEvt.Source = xSource;
             // inform all listeners to release this object
             // The listener container are automatically cleared
@@ -150,7 +150,7 @@ void SvxDrawPage::dispose()
             // notify subclasses to do their dispose
             disposing();
         }
-        catch(const ::com::sun::star::uno::Exception&)
+        catch(const css::uno::Exception&)
         {
             // catch exception and throw again but signal that
             // the object was disposed. Dispose should be called
@@ -168,7 +168,7 @@ void SvxDrawPage::dispose()
 
 }
 
-void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxDrawPage::addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -178,7 +178,7 @@ void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Refere
     mrBHelper.addListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
 }
 
-void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxDrawPage::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -324,7 +324,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     mpModel->SetChanged();
 }
 
-// ::com::sun::star::container::XIndexAccess
+// css::container::XIndexAccess
 sal_Int32 SAL_CALL SvxDrawPage::getCount()
     throw( uno::RuntimeException, std::exception )
 {
@@ -355,7 +355,7 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     return makeAny(Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY ));
 }
 
-// ::com::sun::star::container::XElementAccess
+// css::container::XElementAccess
 uno::Type SAL_CALL SvxDrawPage::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
@@ -389,7 +389,7 @@ namespace
     }
 }
 
-// ATTENTION: _SelectObjectsInView selects the ::com::sun::star::drawing::Shapes
+// ATTENTION: _SelectObjectsInView selects the css::drawing::Shapes
 // only in the given SdrPageView. It hasn't to be the visible SdrPageView.
 void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aShapes, SdrPageView* pPageView ) throw ()
 {
@@ -436,7 +436,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     SAL_WARN_IF(!mpPage , "svx", "SdrPage is NULL!");
     SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
 
-    Reference< ::com::sun::star::drawing::XShapeGroup >  xShapeGroup;
+    Reference< css::drawing::XShapeGroup >  xShapeGroup;
     if(mpPage==NULL||mpView==NULL||!xShapes.is())
         return xShapeGroup;
 
@@ -851,14 +851,14 @@ SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xS
     return pObj;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 OUString SAL_CALL SvxDrawPage::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SvxDrawPage");
 }
 
 sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }

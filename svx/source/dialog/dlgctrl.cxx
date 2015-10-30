@@ -734,7 +734,7 @@ Reference< XAccessible > SvxRectCtl::CreateAccessible()
         return Reference< XAccessible >();
 }
 
-RECT_POINT SvxRectCtl::GetApproxRPFromPixPt( const ::com::sun::star::awt::Point& r ) const
+RECT_POINT SvxRectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
 {
     return GetRPFromPoint( GetApproxLogPtFromPixPt( Point( r.X, r.Y ) ) );
 }
@@ -753,7 +753,7 @@ void SvxRectCtl::SetCS(CTL_STYLE eNew)
 
 // Control for editing bitmaps
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SvxPixelCtl::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > SvxPixelCtl::CreateAccessible()
 {
     if(!m_xAccess.is())
     {

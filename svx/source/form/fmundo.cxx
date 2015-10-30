@@ -97,7 +97,7 @@ public:
         }
     }
 
-    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw( com::sun::star::reflection::InvocationTargetException, RuntimeException, std::exception) override
+    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw( css::reflection::InvocationTargetException, RuntimeException, std::exception) override
     {
         attemptListenerCreation();
         if ( m_vbaListener.is() )
@@ -530,7 +530,7 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( Runtime
 
 // XPropertyChangeListener
 
-void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -725,7 +725,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 
 // XContainerListener
 
-void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -749,7 +749,7 @@ void FmXUndoEnvironment::implSetModified()
 }
 
 
-void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -766,7 +766,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thr
 }
 
 
-void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1217,7 +1217,7 @@ FmUndoModelReplaceAction::~FmUndoModelReplaceAction()
 
 
 
-void FmUndoModelReplaceAction::DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced )
+void FmUndoModelReplaceAction::DisposeElement( const css::uno::Reference< css::awt::XControlModel>& xReplaced )
 {
     Reference< XComponent >  xComp(xReplaced, UNO_QUERY);
     if (xComp.is())

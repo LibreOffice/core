@@ -26,12 +26,12 @@
 
 class FmInterfaceItem : public SfxPoolItem
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface;
+    css::uno::Reference< css::uno::XInterface >  xInterface;
 
 public:
     TYPEINFO_OVERRIDE();
 
-    FmInterfaceItem( const sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxInterface )
+    FmInterfaceItem( const sal_uInt16 nId, const css::uno::Reference< css::uno::XInterface >& rxInterface )
         :SfxPoolItem( nId )
         ,xInterface( rxInterface )
     {}
@@ -45,7 +45,7 @@ public:
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const override;
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >         GetInterface() const { return xInterface; }
+    const css::uno::Reference< css::uno::XInterface >         GetInterface() const { return xInterface; }
 };
 
 inline FmInterfaceItem& FmInterfaceItem::operator=( const FmInterfaceItem &rCpy )

@@ -65,35 +65,35 @@ namespace svxform
         */
         sal_Int16 initializeControlModel(
                     const DocumentType _eDocType,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
                     const Rectangle& _rControlBoundRect
                 );
 
         sal_Int16 initializeControlModel( const DocumentType _eDocType, const SdrUnoObj& _rObject );
-        sal_Int16 initializeControlModel( const DocumentType _eDocType, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel );
+        sal_Int16 initializeControlModel( const DocumentType _eDocType, const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel );
 
         void initializeTextFieldLineEnds(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxModel
                 );
 
         static void initializeFieldDependentProperties(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatabaseField,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxDatabaseField,
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
+                    const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats
                 );
 
         static OUString getDefaultName(
                     const sal_Int16 nClassId,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
+                    const css::uno::Reference< css::lang::XServiceInfo >& _rxObject
                 );
 
         static OUString getDefaultUniqueName_ByComponentType(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject
+                    const css::uno::Reference< css::container::XNameAccess >& _rxContainer,
+                    const css::uno::Reference< css::beans::XPropertySet >& _rxObject
                 );
 
         static OUString getUniqueName(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
+                    const css::uno::Reference< css::container::XNameAccess >& _rxContainer,
                     const OUString& _rBaseName
                 );
 

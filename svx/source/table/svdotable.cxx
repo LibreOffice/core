@@ -195,7 +195,7 @@ bool TableStyleSettings::operator==( const TableStyleSettings& rStyle ) const
 
 
 
-class SdrTableObjImpl : public TableDesignUser, public ::cppu::WeakImplHelper< ::com::sun::star::util::XModifyListener >
+class SdrTableObjImpl : public TableDesignUser, public ::cppu::WeakImplHelper< css::util::XModifyListener >
 {
 public:
     CellRef mxActiveCell;
@@ -229,10 +229,10 @@ public:
     SdrTableObjImpl& operator=( const SdrTableObjImpl& rSource );
 
     // XModifyListener
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     void update();
 
@@ -281,7 +281,7 @@ void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 n
     mpTableObj = pTable;
     mxTable = new TableModel( pTable );
     mxTable->init( nColumns, nRows );
-    Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
+    Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
     mxTable->addModifyListener( xListener );
     mpLayouter = new TableLayouter( mxTable );
     LayoutTable( mpTableObj->maRect, true, true );
@@ -304,7 +304,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
 
         if( mxTable.is() )
         {
-            Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
+            Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
             mxTable->removeModifyListener( xListener );
             mxTable->dispose();
             mxTable.clear();
@@ -314,7 +314,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
 
         mxTable = new TableModel( mpTableObj, rSource.mxTable );
         mpLayouter = new TableLayouter( mxTable );
-        Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
+        Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
         mxTable->addModifyListener( xListener );
         mxTableStyle = rSource.mxTableStyle;
         ApplyCellStyles();
@@ -479,7 +479,7 @@ void SdrTableObjImpl::dispose()
 
     if( mxTable.is() )
     {
-        Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
+        Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
         mxTable->removeModifyListener( xListener );
         mxTable->dispose();
         mxTable.clear();
@@ -570,7 +570,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
 // XModifyListener
 
 
-void SAL_CALL SdrTableObjImpl::modified( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SdrTableObjImpl::modified( const css::lang::EventObject& /*aEvent*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     update();
 }
@@ -612,7 +612,7 @@ void SdrTableObjImpl::connectTableStyle()
         Reference< XModifyBroadcaster > xBroadcaster( mxTableStyle, UNO_QUERY );
         if( xBroadcaster.is() )
         {
-            Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
+            Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
             xBroadcaster->addModifyListener( xListener );
         }
     }
@@ -627,7 +627,7 @@ void SdrTableObjImpl::disconnectTableStyle()
         Reference< XModifyBroadcaster > xBroadcaster( mxTableStyle, UNO_QUERY );
         if( xBroadcaster.is() )
         {
-            Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
+            Reference< XModifyListener > xListener( static_cast< css::util::XModifyListener* >(this) );
             xBroadcaster->removeModifyListener( xListener );
         }
     }
@@ -644,7 +644,7 @@ bool SdrTableObjImpl::isInUse()
 // XEventListener
 
 
-void SAL_CALL SdrTableObjImpl::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     mxActiveCell.clear();
     mxTable.clear();
@@ -2047,7 +2047,7 @@ void SdrTableObj::ReformatText()
 bool SdrTableObj::IsVerticalWriting() const
 {
     const SvxWritingModeItem* pModeItem = dynamic_cast< const SvxWritingModeItem* >( &GetObjectItem( SDRATTR_TEXTDIRECTION ) );
-    return pModeItem && pModeItem->GetValue() == com::sun::star::text::WritingMode_TB_RL;
+    return pModeItem && pModeItem->GetValue() == css::text::WritingMode_TB_RL;
 }
 
 
@@ -2056,7 +2056,7 @@ void SdrTableObj::SetVerticalWriting(bool bVertical )
 {
     if( bVertical != IsVerticalWriting() )
     {
-        SvxWritingModeItem aModeItem( com::sun::star::text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION );
+        SvxWritingModeItem aModeItem( css::text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION );
         SetObjectItem( aModeItem );
     }
 }

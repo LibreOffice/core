@@ -77,11 +77,11 @@ namespace svx
                 {
                     xManager->createElement( m_sToolboxResName );
                     xManager->showElement( m_sToolboxResName );
-                    ::com::sun::star::awt::Point aPos;
+                    css::awt::Point aPos;
 
                     if ( m_bDocking )
                         xManager->dockWindow( m_sToolboxResName,
-                            ::com::sun::star::ui::DockingArea_DOCKINGAREA_BOTTOM, aPos );
+                            css::ui::DockingArea_DOCKINGAREA_BOTTOM, aPos );
                 }
             }
         }

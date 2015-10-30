@@ -444,11 +444,11 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 
         SetText( sTitle );
 
-        Reference< ::com::sun::star::awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
+        Reference< css::awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
         if( xLayoutConstrains.is() )
         {
             ::Size aConstrainedSize;
-            ::com::sun::star::awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
+            css::awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
 
             sal_Int32 nLeft(0), nTop(0), nRight(0), nBottom(0);
             GetBorder( nLeft, nTop, nRight, nBottom );

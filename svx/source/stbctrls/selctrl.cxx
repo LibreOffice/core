@@ -118,11 +118,11 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
         {
             mnState = nNewState;
 
-            ::com::sun::star::uno::Any a;
+            css::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), mnState );
             INetURLObject aObj( m_aCommandURL );
 
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+            css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name  = aObj.GetURLPath();
             aState.QueryValue( a );
             aArgs[0].Value = a;

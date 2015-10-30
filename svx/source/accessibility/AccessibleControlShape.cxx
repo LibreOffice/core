@@ -842,7 +842,7 @@ void AccessibleControlShape::initializeComposedState()
     }
 }
 
-void SAL_CALL AccessibleControlShape::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::elementInserted( const css::container::ContainerEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XContainer > xContainer( _rEvent.Source, UNO_QUERY );
     Reference< XControl > xControl( _rEvent.Element, UNO_QUERY );
@@ -875,12 +875,12 @@ void SAL_CALL AccessibleControlShape::elementInserted( const ::com::sun::star::c
     }
 }
 
-void SAL_CALL AccessibleControlShape::elementRemoved( const ::com::sun::star::container::ContainerEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::elementRemoved( const css::container::ContainerEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     // not interested in
 }
 
-void SAL_CALL AccessibleControlShape::elementReplaced( const ::com::sun::star::container::ContainerEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::elementReplaced( const css::container::ContainerEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     // not interested in
 }

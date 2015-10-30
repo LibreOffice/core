@@ -750,7 +750,7 @@ IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Idle*, pTimer, void )
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GraphCtrl::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessible()
 {
     if( mpAccContext == NULL )
     {
@@ -760,7 +760,7 @@ IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Idle*, pTimer, void )
 
         if( pParent )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccParent( pParent->GetAccessible() );
+            css::uno::Reference< css::accessibility::XAccessible > xAccParent( pParent->GetAccessible() );
 
             // Disable accessibility if no model/view data available
             if( pView &&

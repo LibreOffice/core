@@ -73,15 +73,15 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
     static const SfxItemPropertyMapEntry aSvxCellPropertyMap[] =
     {
         FILL_PROPERTIES
-//      { "HasLevels",                    OWN_ATTR_HASLEVELS,             cppu::UnoType<bool>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
-        { OUString("Style"),                        OWN_ATTR_STYLE,                 cppu::UnoType< ::com::sun::star::style::XStyle >::get(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          cppu::UnoType<com::sun::star::text::WritingMode>::get(),                         0,      0},
-        { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        cppu::UnoType<com::sun::star::drawing::TextHorizontalAdjust>::get(),  0,      0}, \
-        { OUString(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
-        { OUString(UNO_NAME_TEXT_LOWERDIST),        SDRATTR_TEXT_LOWERDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
-        { OUString(UNO_NAME_TEXT_RIGHTDIST),        SDRATTR_TEXT_RIGHTDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
-        { OUString(UNO_NAME_TEXT_UPPERDIST),        SDRATTR_TEXT_UPPERDIST,         ::cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
-        { OUString(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<com::sun::star::drawing::TextVerticalAdjust>::get(),    0,      0},\
+//      { "HasLevels",                    OWN_ATTR_HASLEVELS,             cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY,      0},
+        { OUString("Style"),                        OWN_ATTR_STYLE,                 cppu::UnoType< css::style::XStyle >::get(),                                    css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          cppu::UnoType<css::text::WritingMode>::get(),                         0,      0},
+        { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        cppu::UnoType<css::drawing::TextHorizontalAdjust>::get(),  0,      0}, \
+        { OUString(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
+        { OUString(UNO_NAME_TEXT_LOWERDIST),        SDRATTR_TEXT_LOWERDIST,         cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
+        { OUString(UNO_NAME_TEXT_RIGHTDIST),        SDRATTR_TEXT_RIGHTDIST,         cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
+        { OUString(UNO_NAME_TEXT_UPPERDIST),        SDRATTR_TEXT_UPPERDIST,         cppu::UnoType<sal_Int32>::get(),        0,      SFX_METRIC_ITEM}, \
+        { OUString(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<css::drawing::TextVerticalAdjust>::get(),    0,      0},\
         { OUString(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0}, \
 
         { OUString("TableBorder"),                  OWN_ATTR_TABLEBORDER,           cppu::UnoType<TableBorder>::get(), 0, 0 }, \
@@ -313,7 +313,7 @@ namespace sdr
         {
             if(pNewItem && (SDRATTR_TEXTDIRECTION == nWhich))
             {
-                bool bVertical(com::sun::star::text::WritingMode_TB_RL == static_cast<const SvxWritingModeItem*>(pNewItem)->GetValue());
+                bool bVertical(css::text::WritingMode_TB_RL == static_cast<const SvxWritingModeItem*>(pNewItem)->GetValue());
 
                 sdr::table::SdrTableObj& rObj = static_cast<sdr::table::SdrTableObj&>(GetSdrObject());
                 if( rObj.IsVerticalWriting() != bVertical )
@@ -882,16 +882,16 @@ Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeExcept
 }
 
 // XLayoutConstrains
-::com::sun::star::awt::Size SAL_CALL Cell::getMinimumSize()
+css::awt::Size SAL_CALL Cell::getMinimumSize()
     throw (RuntimeException,
            std::exception)
 {
-    return ::com::sun::star::awt::Size( getMinimumWidth(),  getMinimumHeight() );
+    return css::awt::Size( getMinimumWidth(),  getMinimumHeight() );
 }
 
 
 
-::com::sun::star::awt::Size SAL_CALL Cell::getPreferredSize()
+css::awt::Size SAL_CALL Cell::getPreferredSize()
     throw (RuntimeException,
            std::exception)
 {
@@ -900,7 +900,7 @@ Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeExcept
 
 
 
-::com::sun::star::awt::Size SAL_CALL Cell::calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (RuntimeException, std::exception)
+css::awt::Size SAL_CALL Cell::calcAdjustedSize( const css::awt::Size& aNewSize ) throw (RuntimeException, std::exception)
 {
     return aNewSize;
 }

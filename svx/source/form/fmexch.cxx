@@ -205,7 +205,7 @@ namespace svxform
     }
 
 
-    void OControlTransferData::addHiddenControlsFormat(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& seqInterfaces)
+    void OControlTransferData::addHiddenControlsFormat(const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces)
     {
         m_aHiddenControlModels = seqInterfaces;
     }
@@ -220,7 +220,7 @@ namespace svxform
             return;
 
         m_aControlPaths.realloc(nEntryCount);
-        ::com::sun::star::uno::Sequence<sal_uInt32>* pAllPaths = m_aControlPaths.getArray();
+        css::uno::Sequence<sal_uInt32>* pAllPaths = m_aControlPaths.getArray();
         for (   ListBoxEntrySet::const_iterator loop = m_aSelectedEntries.begin();
                 loop != m_aSelectedEntries.end();
                 ++loop, ++pAllPaths
@@ -239,7 +239,7 @@ namespace svxform
                     // pLoop == NULL heisst, dass ich am oberen Ende angelangt bin, dann sollte das Ganze abbrechen, was nur bei pRoot == NULL der Fall sein wird
             }
 
-            // dann koennen wir ihn in die ::com::sun::star::uno::Sequence uebertragen
+            // dann koennen wir ihn in die css::uno::Sequence uebertragen
             Sequence<sal_uInt32>& rCurrentPath = *pAllPaths;
             sal_Int32 nDepth = aCurrentPath.size();
 
@@ -258,7 +258,7 @@ namespace svxform
         m_aSelectedEntries.swap( aEmpty );
 
         sal_Int32 nControls = m_aControlPaths.getLength();
-        const ::com::sun::star::uno::Sequence<sal_uInt32>* pPaths = m_aControlPaths.getConstArray();
+        const css::uno::Sequence<sal_uInt32>* pPaths = m_aControlPaths.getConstArray();
         for (sal_Int32 i=0; i<nControls; ++i)
         {
             sal_Int32 nThisPatLength = pPaths[i].getLength();

@@ -96,7 +96,7 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
     Link<IMapWindow&,void> aInfoLink;
     SfxItemPool*        pIMapPool;
     SfxItemInfo*        pItemInfo;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+    css::uno::Reference< css::frame::XFrame >
                         mxDocumentFrame;
 
                         DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
@@ -127,7 +127,7 @@ protected:
 
 public:
 
-                        IMapWindow( vcl::Window* pParent, WinBits nBits, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
+                        IMapWindow( vcl::Window* pParent, WinBits nBits, const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame );
                         virtual ~IMapWindow();
     virtual void        dispose() override;
 

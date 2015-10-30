@@ -407,7 +407,7 @@ uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
 
     drawing::LineDash aLineDash;
 
-    aLineDash.Style = (::com::sun::star::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
+    aLineDash.Style = (css::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
     aLineDash.Dots = rXD.GetDots();
     aLineDash.DotLen = rXD.GetDotLen();
     aLineDash.Dashes = rXD.GetDashes();

@@ -1422,8 +1422,8 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
     if (pText && pText->GetOutlinerParaObject())
     {
         SvxWritingModeItem aWritingMode(pText->GetOutlinerParaObject()->IsVertical()
-            ? com::sun::star::text::WritingMode_TB_RL
-            : com::sun::star::text::WritingMode_LR_TB,
+            ? css::text::WritingMode_TB_RL
+            : css::text::WritingMode_LR_TB,
             SDRATTR_TEXTDIRECTION);
         GetProperties().SetObjectItemDirect(aWritingMode);
     }

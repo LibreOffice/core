@@ -142,25 +142,25 @@ void displayException(const Any& _rExcept, vcl::Window* _pParent)
 }
 
 
-void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, vcl::Window* _pParent)
+void displayException(const css::sdbc::SQLException& _rExcept, vcl::Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
 
-void displayException(const ::com::sun::star::sdb::SQLContext& _rExcept, vcl::Window* _pParent)
+void displayException(const css::sdb::SQLContext& _rExcept, vcl::Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
 
-void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, vcl::Window* _pParent)
+void displayException(const css::sdb::SQLErrorEvent& _rEvent, vcl::Window* _pParent)
 {
     displayException(_rEvent.Reason, _pParent);
 }
 
 
-sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAccess>& xCont, const Reference< XInterface >& xElement)
+sal_Int32 getElementPos(const Reference< css::container::XIndexAccess>& xCont, const Reference< XInterface >& xElement)
 {
     sal_Int32 nIndex = -1;
     if (!xCont.is())
@@ -194,14 +194,14 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
 }
 
 
-OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& xControlModel)
+OUString getLabelName(const Reference< css::beans::XPropertySet>& xControlModel)
 {
     if (!xControlModel.is())
         return OUString();
 
     if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xControlModel))
     {
-        Reference< ::com::sun::star::beans::XPropertySet> xLabelSet;
+        Reference< css::beans::XPropertySet> xLabelSet;
         xControlModel->getPropertyValue(FM_PROP_CONTROLLABEL) >>= xLabelSet;
         if (xLabelSet.is() && ::comphelper::hasProperty(FM_PROP_LABEL, xLabelSet))
         {
@@ -217,26 +217,26 @@ OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& x
 
 // = CursorWrapper
 
-CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, bool bUseCloned)
+CursorWrapper::CursorWrapper(const Reference< css::sdbc::XRowSet>& _rxCursor, bool bUseCloned)
 {
-    ImplConstruct(Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, UNO_QUERY), bUseCloned);
+    ImplConstruct(Reference< css::sdbc::XResultSet>(_rxCursor, UNO_QUERY), bUseCloned);
 }
 
 
-CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, bool bUseCloned)
+CursorWrapper::CursorWrapper(const Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned)
 {
     ImplConstruct(_rxCursor, bUseCloned);
 }
 
 
-void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, bool bUseCloned)
+void CursorWrapper::ImplConstruct(const Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned)
 {
     if (bUseCloned)
     {
-        Reference< ::com::sun::star::sdb::XResultSetAccess> xAccess(_rxCursor, UNO_QUERY);
+        Reference< css::sdb::XResultSetAccess> xAccess(_rxCursor, UNO_QUERY);
         try
         {
-            m_xMoveOperations = xAccess.is() ? xAccess->createResultSet() : Reference< ::com::sun::star::sdbc::XResultSet>();
+            m_xMoveOperations = xAccess.is() ? xAccess->createResultSet() : Reference< css::sdbc::XResultSet>();
         }
         catch(Exception&)
         {
@@ -260,11 +260,11 @@ void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResu
 }
 
 
-const CursorWrapper& CursorWrapper::operator=(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor)
+const CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSet>& _rxCursor)
 {
-    m_xMoveOperations = Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, UNO_QUERY);
-    m_xBookmarkOperations = Reference< ::com::sun::star::sdbcx::XRowLocate>(_rxCursor, UNO_QUERY);
-    m_xColumnsSupplier = Reference< ::com::sun::star::sdbcx::XColumnsSupplier>(_rxCursor, UNO_QUERY);
+    m_xMoveOperations = Reference< css::sdbc::XResultSet>(_rxCursor, UNO_QUERY);
+    m_xBookmarkOperations = Reference< css::sdbcx::XRowLocate>(_rxCursor, UNO_QUERY);
+    m_xColumnsSupplier = Reference< css::sdbcx::XColumnsSupplier>(_rxCursor, UNO_QUERY);
     if (!m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is())
     {   // all or nothing !!
         m_xMoveOperations = NULL;
@@ -300,7 +300,7 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 
 
 
-FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId)
+FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< css::lang::XComponent>& _rxObject, sal_Int16 _nId)
     :m_xObject(_rxObject)
     ,m_pListener(_pListener)
     ,m_nId(_nId)
@@ -316,11 +316,11 @@ FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
 {
 }
 
-// ::com::sun::star::lang::XEventListener
+// css::lang::XEventListener
 
-void FmXDisposeMultiplexer::disposing(const ::com::sun::star::lang::EventObject& _Source) throw( RuntimeException, std::exception )
+void FmXDisposeMultiplexer::disposing(const css::lang::EventObject& _Source) throw( RuntimeException, std::exception )
 {
-    Reference< ::com::sun::star::lang::XEventListener> xPreventDelete(this);
+    Reference< css::lang::XEventListener> xPreventDelete(this);
 
     if (m_pListener)
     {
@@ -336,7 +336,7 @@ void FmXDisposeMultiplexer::dispose()
 {
     if (m_xObject.is())
     {
-        Reference< ::com::sun::star::lang::XEventListener> xPreventDelete(this);
+        Reference< css::lang::XEventListener> xPreventDelete(this);
 
         m_xObject->removeEventListener(this);
         m_xObject = NULL;
@@ -348,11 +348,11 @@ void FmXDisposeMultiplexer::dispose()
 
 
 
-sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject)
+sal_Int16 getControlTypeByObject(const Reference< css::lang::XServiceInfo>& _rxObject)
 {
     // ask for the persistent service name
-    Reference< ::com::sun::star::io::XPersistObject> xPersistence(_rxObject, UNO_QUERY);
-    DBG_ASSERT(xPersistence.is(), "::getControlTypeByObject : argument shold be an ::com::sun::star::io::XPersistObject !");
+    Reference< css::io::XPersistObject> xPersistence(_rxObject, UNO_QUERY);
+    DBG_ASSERT(xPersistence.is(), "::getControlTypeByObject : argument shold be an css::io::XPersistObject !");
     if (!xPersistence.is())
         return OBJ_FM_CONTROL;
 
@@ -425,10 +425,10 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
 bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
 {
     bool bIsAlive = false;
-    Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSupplyCols(_rxRowSet, UNO_QUERY);
-    Reference< ::com::sun::star::container::XIndexAccess> xCols;
+    Reference< css::sdbcx::XColumnsSupplier> xSupplyCols(_rxRowSet, UNO_QUERY);
+    Reference< css::container::XIndexAccess> xCols;
     if (xSupplyCols.is())
-        xCols = Reference< ::com::sun::star::container::XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
+        xCols = Reference< css::container::XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
     if (xCols.is() && (xCols->getCount() > 0))
         bIsAlive = true;
 

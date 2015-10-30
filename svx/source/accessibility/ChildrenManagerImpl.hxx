@@ -74,8 +74,8 @@ typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
 class ChildrenManagerImpl
     :   public MutexOwner,
         public cppu::WeakComponentImplHelper<
-            ::com::sun::star::document::XEventListener,
-            ::com::sun::star::view::XSelectionChangeListener>,
+            css::document::XEventListener,
+            css::view::XSelectionChangeListener>,
         public IAccessibleViewForwarderListener,
         public IAccessibleParent
 {
@@ -97,10 +97,8 @@ public:
             for new and deleted children, i.e. that holds a list of
             listeners to be informed.
     */
-    ChildrenManagerImpl (const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShapes>& rxShapeList,
+    ChildrenManagerImpl (const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const css::uno::Reference<css::drawing::XShapes>& rxShapeList,
         const AccessibleShapeTreeInfo& rShapeTreeInfo,
         AccessibleContextBase& rContext);
 
@@ -120,10 +118,9 @@ public:
     */
     long GetChildCount() const throw ();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape> GetChildShape(long nIndex)
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::IndexOutOfBoundsException);
+    css::uno::Reference<css::drawing::XShape> GetChildShape(long nIndex)
+        throw (css::uno::RuntimeException,
+               css::lang::IndexOutOfBoundsException);
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex
@@ -137,11 +134,10 @@ public:
         @raises
             Throws an IndexOutOfBoundsException if the index is not valid.
     */
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>
+    css::uno::Reference<css::accessibility::XAccessible>
         GetChild (long nIndex)
-        throw (::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::lang::IndexOutOfBoundsException);
+        throw (css::uno::RuntimeException,
+               css::lang::IndexOutOfBoundsException);
 
     /** Return the requested accessible child.
         @param aChildDescriptor
@@ -154,10 +150,9 @@ public:
             reference is empty if it has not been possible to create the
             accessible object of the corresponding shape.
     */
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>
+    css::uno::Reference<css::accessibility::XAccessible>
         GetChild (ChildDescriptor& aChildDescriptor,sal_Int32 _nIndex)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     /** Return the requested accessible child given a shape.  This method
         searches the list of descriptors for the one that holds the
@@ -171,11 +166,9 @@ public:
             reference is empty if there is no shape descriptor that
             associates the shape with an accessible object.
     */
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>
-        GetChild (const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& xShape)
-        throw (::com::sun::star::uno::RuntimeException);
+    css::uno::Reference<css::accessibility::XAccessible>
+        GetChild (const css::uno::Reference<css::drawing::XShape>& xShape)
+        throw (css::uno::RuntimeException);
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update
@@ -198,8 +191,7 @@ public:
         @param xShapeList
             The list of UNO shapes that replaces the old list.
     */
-    void SetShapeList (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShapes>& xShapeList);
+    void SetShapeList (const css::uno::Reference<css::drawing::XShapes>& xShapeList);
 
     /** Add a accessible shape.  This does not modify the list of UNO shapes
         or the list of visible shapes.  Accessible shapes are, at the
@@ -245,18 +237,18 @@ public:
 
     // lang::XEventListener
     virtual void SAL_CALL
-        disposing (const ::com::sun::star::lang::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // document::XEventListener
     virtual void SAL_CALL
-        notifyEvent (const ::com::sun::star::document::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        notifyEvent (const css::document::EventObject& rEventObject)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // view::XSelectionChangeListener
     virtual void  SAL_CALL
-        selectionChanged (const ::com::sun::star::lang::EventObject& rEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        selectionChanged (const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // IAccessibleViewForwarderListener
     /** Informs this children manager and its children about a change of one
@@ -285,20 +277,18 @@ public:
     */
     virtual bool ReplaceChild (
         AccessibleShape* pCurrentChild,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const css::uno::Reference< css::drawing::XShape >& _rxShape,
         const long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException) override;
+    )   throw (css::uno::RuntimeException) override;
 
     // Add the impl method for IAccessibleParent interface
     virtual AccessibleControlShape* GetAccControlShapeFromModel
-        (::com::sun::star::beans::XPropertySet* pSet)
-        throw (::com::sun::star::uno::RuntimeException) override;
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>
-        GetAccessibleCaption (const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& xShape)
-        throw (::com::sun::star::uno::RuntimeException) override;
+        (css::beans::XPropertySet* pSet)
+        throw (css::uno::RuntimeException) override;
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        GetAccessibleCaption (const css::uno::Reference<css::drawing::XShape>& xShape)
+        throw (css::uno::RuntimeException) override;
 protected:
     /** This list holds the descriptors of all currently visible shapes and
         associated accessible object.
@@ -318,14 +308,12 @@ protected:
         into the list of visible children
         <member>maVisibleChildren</member>.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShapes> mxShapeList;
+    css::uno::Reference<css::drawing::XShapes> mxShapeList;
 
     /** This list of additional accessible shapes that can or shall not be
         created by the shape factory.
     */
-    typedef std::vector< ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> > AccessibleShapeList;
+    typedef std::vector< css::uno::Reference< css::accessibility::XAccessible> > AccessibleShapeList;
     AccessibleShapeList maAccessibleShapes;
 
     /** Rectangle that describes the visible area in which a shape has to lie
@@ -337,8 +325,7 @@ protected:
     /** The parent of the shapes.  It is used for creating accessible
         objects for given shapes.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> mxParent;
+    css::uno::Reference<css::accessibility::XAccessible> mxParent;
 
     /** Bundel of information passed down the shape tree.
     */
@@ -425,15 +412,13 @@ private:
         accordingly.  Use this method instead of <member>Update()</member>
         when only a single shape has been added.
     */
-    void AddShape (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& xShape);
+    void AddShape (const css::uno::Reference<css::drawing::XShape>& xShape);
 
     /** Remove a single shape.  Update all relevant data structures
         accordingly.  Use this method instead of <member>Update()</member>
         when only a single shape has been removed.
     */
-    void RemoveShape (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& xShape);
+    void RemoveShape (const css::uno::Reference<css::drawing::XShape>& xShape);
 
     /** Add the children manager as dispose listener at the given shape so
         that the associated accessible object can be disposed when the shape
@@ -441,15 +426,13 @@ private:
         @param xShape
             Register at this shape as dispose listener.
     */
-    void RegisterAsDisposeListener (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& xShape);
+    void RegisterAsDisposeListener (const css::uno::Reference<css::drawing::XShape>& xShape);
 
     /** Remove the children manager as dispose listener at the given shape
         @param xShape
             Unregister at this shape as dispose listener.
     */
-    void UnregisterAsDisposeListener (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& xShape);
+    void UnregisterAsDisposeListener (const css::uno::Reference<css::drawing::XShape>& xShape);
 };
 
 
@@ -470,15 +453,13 @@ class ChildDescriptor
 public:
     /** Reference to a (partially) visible shape.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape> mxShape;
+    css::uno::Reference<css::drawing::XShape> mxShape;
 
     /** The corresponding accessible object.  This reference is initially
         empty and only replaced by a reference to a new object when that is
         requested from the outside.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> mxAccessibleShape;
+    css::uno::Reference<css::accessibility::XAccessible> mxAccessibleShape;
 
     /** Return a pointer to the implementation object of the accessible
         shape of this descriptor.
@@ -506,14 +487,12 @@ public:
     /** Create a new descriptor for the specified shape with empty reference
         to accessible object.
     */
-    explicit ChildDescriptor (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& xShape);
+    explicit ChildDescriptor (const css::uno::Reference<css::drawing::XShape>& xShape);
 
     /** Create a new descriptor for the specified shape with empty reference
         to the original shape.
     */
-    explicit ChildDescriptor (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxAccessibleShape);
+    explicit ChildDescriptor (const css::uno::Reference<css::accessibility::XAccessible>& rxAccessibleShape);
 
     ~ChildDescriptor();
 

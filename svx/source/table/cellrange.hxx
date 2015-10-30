@@ -29,7 +29,7 @@
 
 namespace sdr { namespace table {
 
-class CellRange : public ::cppu::WeakAggImplHelper1< ::com::sun::star::table::XCellRange >, public ICellRange
+class CellRange : public ::cppu::WeakAggImplHelper1< css::table::XCellRange >, public ICellRange
 {
 public:
     CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom );
@@ -40,12 +40,12 @@ public:
     virtual sal_Int32 getTop() override;
     virtual sal_Int32 getRight() override;
     virtual sal_Int32 getBottom() override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XTable > getTable() override;
+    virtual css::uno::Reference< css::table::XTable > getTable() override;
 
     // XCellRange
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
     TableModelRef mxTable;

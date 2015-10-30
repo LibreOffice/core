@@ -225,7 +225,7 @@ uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
 }
 
 
-// ::com::sun::star::container::XElementAccess
+// css::container::XElementAccess
 
 uno::Type SAL_CALL Svx3DSceneObject::getElementType()
     throw( uno::RuntimeException, std::exception )
@@ -304,7 +304,7 @@ struct ImpRememberTransAndRect
     Rectangle                   maRect;
 };
 
-bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     switch( pProperty->nWID )
     {
@@ -464,7 +464,7 @@ bool Svx3DSceneObject::getPropertyValueImpl(const OUString& rName, const SfxItem
     return true;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
@@ -483,7 +483,7 @@ Svx3DCubeObject::~Svx3DCubeObject() throw()
 }
 
 
-bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -540,7 +540,7 @@ bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItem
 
 
 
-bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     switch( pProperty->nWID )
     {
@@ -588,7 +588,7 @@ bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItem
     return true;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
@@ -609,7 +609,7 @@ Svx3DSphereObject::~Svx3DSphereObject() throw()
 
 
 
-bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -655,7 +655,7 @@ bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxIt
 
 
 
-bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     switch( pProperty->nWID )
     {
@@ -698,7 +698,7 @@ bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxIt
     return true;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
@@ -807,7 +807,7 @@ static void B3dPolyPolygon_to_PolyPolygonShape3D( const basegfx::B3DPolyPolygon&
 
 
 
-bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -854,7 +854,7 @@ bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 }
 
 
-bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     switch( pProperty->nWID )
     {
@@ -900,7 +900,7 @@ bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     return true;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
@@ -921,7 +921,7 @@ Svx3DExtrudeObject::~Svx3DExtrudeObject() throw()
 
 
 
-bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -958,7 +958,7 @@ bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxI
 
 
 
-bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     switch( pProperty->nWID )
     {
@@ -1006,7 +1006,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
     return true;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
@@ -1026,7 +1026,7 @@ Svx3DPolygonObject::~Svx3DPolygonObject() throw()
 }
 
 
-bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1100,7 +1100,7 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxI
 }
 
 
-bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     switch( pProperty->nWID )
     {
@@ -1145,7 +1145,7 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxI
     return true;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {

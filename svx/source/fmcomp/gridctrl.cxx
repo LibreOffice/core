@@ -97,10 +97,10 @@ public:
 
 private:
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*i_aEvt*/) throw ( RuntimeException, std::exception ) override
+    virtual void SAL_CALL disposing(const css::lang::EventObject& /*i_aEvt*/) throw ( RuntimeException, std::exception ) override
     {
     }
-    virtual void SAL_CALL rowsChanged(const ::com::sun::star::sdb::RowsChangeEvent& i_aEvt) throw ( RuntimeException, std::exception ) override
+    virtual void SAL_CALL rowsChanged(const css::sdb::RowsChangeEvent& i_aEvt) throw ( RuntimeException, std::exception ) override
     {
         if ( i_aEvt.Action == RowChangeAction::UPDATE )
         {
@@ -1412,11 +1412,11 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
     // get a new formatter and data cursor
     m_xFormatter = NULL;
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = getNumberFormats(getConnection(_xCursor), true);
+    Reference< css::util::XNumberFormatsSupplier >  xSupplier = getNumberFormats(getConnection(_xCursor), true);
     if (xSupplier.is())
     {
-        m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(
-            ::com::sun::star::util::NumberFormatter::create(m_xContext),
+        m_xFormatter = Reference< css::util::XNumberFormatter >(
+            css::util::NumberFormatter::create(m_xContext),
             UNO_QUERY);
         m_xFormatter->attachNumberFormatsSupplier(xSupplier);
 
@@ -3643,8 +3643,8 @@ Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, s
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : NULL;
     if ( pColumn )
     {
-        Reference< ::com::sun::star::awt::XControl> xInt(pColumn->GetCell());
-        Reference< ::com::sun::star::awt::XCheckBox> xBox(xInt,UNO_QUERY);
+        Reference< css::awt::XControl> xInt(pColumn->GetCell());
+        Reference< css::awt::XCheckBox> xBox(xInt,UNO_QUERY);
         if ( xBox.is() )
         {
             TriState eValue = TRISTATE_FALSE;

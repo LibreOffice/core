@@ -340,13 +340,13 @@ const Color& XColorItem::GetColorValue(const XColorList* pTable) const
 
 }
 
-bool XColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
     return true;
 }
 
-bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -359,7 +359,7 @@ bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*n
 
 TYPEINIT1_AUTOFACTORY(XLineStyleItem, SfxEnumItem);
 
-XLineStyleItem::XLineStyleItem(com::sun::star::drawing::LineStyle eTheLineStyle) :
+XLineStyleItem::XLineStyleItem(css::drawing::LineStyle eTheLineStyle) :
     SfxEnumItem(XATTR_LINESTYLE, sal::static_int_cast< sal_uInt16 >(eTheLineStyle))
 {
 }
@@ -393,10 +393,10 @@ bool XLineStyleItem::GetPresentation
 
     switch( (sal_uInt16)GetValue() )
     {
-        case com::sun::star::drawing::LineStyle_NONE:
+        case css::drawing::LineStyle_NONE:
             nId = RID_SVXSTR_INVISIBLE;
             break;
-        case com::sun::star::drawing::LineStyle_SOLID:
+        case css::drawing::LineStyle_SOLID:
             nId = RID_SVXSTR_SOLID;
             break;
     }
@@ -406,23 +406,23 @@ bool XLineStyleItem::GetPresentation
     return true;
 }
 
-bool XLineStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineStyleItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    ::com::sun::star::drawing::LineStyle eLS = (::com::sun::star::drawing::LineStyle)GetValue();
+    css::drawing::LineStyle eLS = (css::drawing::LineStyle)GetValue();
     rVal <<= eLS;
     return true;
 }
 
-bool XLineStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    ::com::sun::star::drawing::LineStyle eLS;
+    css::drawing::LineStyle eLS;
     if(!(rVal >>= eLS ))
     {
         // also try an int (for Basic)
         sal_Int32 nLS = 0;
         if(!(rVal >>= nLS))
             return false;
-        eLS = (::com::sun::star::drawing::LineStyle)nLS;
+        eLS = (css::drawing::LineStyle)nLS;
     }
 
     SetValue( sal::static_int_cast< sal_uInt16 >( eLS ) );
@@ -745,7 +745,7 @@ bool XLineDashItem::ScaleMetrics(long nMul, long nDiv)
     return true;
 }
 
-bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -755,10 +755,10 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
         {
             uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
 
-            ::com::sun::star::drawing::LineDash aLineDash;
+            css::drawing::LineDash aLineDash;
 
             const XDash& rXD = GetDashValue();
-            aLineDash.Style = (::com::sun::star::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
+            aLineDash.Style = (css::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
             aLineDash.Dots = rXD.GetDots();
             aLineDash.DotLen = rXD.GetDotLen();
             aLineDash.Dashes = rXD.GetDashes();
@@ -785,9 +785,9 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
         {
             const XDash& rXD = GetDashValue();
 
-            ::com::sun::star::drawing::LineDash aLineDash;
+            css::drawing::LineDash aLineDash;
 
-            aLineDash.Style = (::com::sun::star::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
+            aLineDash.Style = (css::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
             aLineDash.Dots = rXD.GetDots();
             aLineDash.DotLen = rXD.GetDotLen();
             aLineDash.Dashes = rXD.GetDashes();
@@ -801,7 +801,7 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
         case MID_LINEDASH_STYLE:
         {
             const XDash& rXD = GetDashValue();
-            rVal <<= (::com::sun::star::drawing::DashStyle)((sal_Int16)rXD.GetDashStyle());
+            rVal <<= (css::drawing::DashStyle)((sal_Int16)rXD.GetDashStyle());
             break;
         }
 
@@ -846,7 +846,7 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
     return true;
 }
 
-bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -907,7 +907,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
         case MID_LINEDASH:
         {
-            ::com::sun::star::drawing::LineDash aLineDash;
+            css::drawing::LineDash aLineDash;
             if(!(rVal >>= aLineDash))
                 return false;
 
@@ -1050,7 +1050,7 @@ bool XLineWidthItem::GetPresentation
     return true;
 }
 
-bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineWidthItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Int32 nValue = GetValue();
     if( 0 != (nMemberId&CONVERT_TWIPS) )
@@ -1060,7 +1060,7 @@ bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     return true;
 }
 
-bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -1110,13 +1110,13 @@ bool XLineColorItem::GetPresentation
     return true;
 }
 
-bool XLineColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
     return true;
 }
 
-bool XLineColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue))
@@ -1296,7 +1296,7 @@ bool XLineStartItem::GetPresentation
     return true;
 }
 
-bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineStartItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
@@ -1306,7 +1306,7 @@ bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     }
     else
     {
-        com::sun::star::drawing::PolyPolygonBezierCoords aBezier;
+        css::drawing::PolyPolygonBezierCoords aBezier;
         basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
         rVal <<= aBezier;
     }
@@ -1314,7 +1314,7 @@ bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     return true;
 }
 
-bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineStartItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
@@ -1327,10 +1327,10 @@ bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
 
         if( rVal.hasValue() && rVal.getValue() )
         {
-            if( rVal.getValueType() != cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get())
+            if( rVal.getValueType() != cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get())
                 return false;
 
-            com::sun::star::drawing::PolyPolygonBezierCoords const * pCoords = static_cast<com::sun::star::drawing::PolyPolygonBezierCoords const *>(rVal.getValue());
+            css::drawing::PolyPolygonBezierCoords const * pCoords = static_cast<css::drawing::PolyPolygonBezierCoords const *>(rVal.getValue());
             if( pCoords->Coordinates.getLength() > 0 )
             {
                 maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
@@ -1859,7 +1859,7 @@ bool XLineEndItem::GetPresentation
     return true;
 }
 
-bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XLineEndItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
@@ -1869,14 +1869,14 @@ bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemb
     }
     else
     {
-        com::sun::star::drawing::PolyPolygonBezierCoords aBezier;
+        css::drawing::PolyPolygonBezierCoords aBezier;
         basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( maPolyPolygon, aBezier );
         rVal <<= aBezier;
     }
     return true;
 }
 
-bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XLineEndItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
@@ -1889,10 +1889,10 @@ bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 n
 
         if( rVal.hasValue() && rVal.getValue() )
         {
-            if( rVal.getValueType() != cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get())
+            if( rVal.getValueType() != cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get())
                 return false;
 
-            com::sun::star::drawing::PolyPolygonBezierCoords const * pCoords = static_cast<com::sun::star::drawing::PolyPolygonBezierCoords const *>(rVal.getValue());
+            css::drawing::PolyPolygonBezierCoords const * pCoords = static_cast<css::drawing::PolyPolygonBezierCoords const *>(rVal.getValue());
             if( pCoords->Coordinates.getLength() > 0 )
             {
                 maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
@@ -1941,13 +1941,13 @@ bool XLineStartWidthItem::GetPresentation
     return true;
 }
 
-bool XLineStartWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineStartWidthItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
 
-bool XLineStartWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineStartWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -1991,13 +1991,13 @@ bool XLineEndWidthItem::GetPresentation
     return true;
 }
 
-bool XLineEndWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineEndWidthItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
 
-bool XLineEndWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineEndWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
@@ -2040,14 +2040,14 @@ bool XLineStartCenterItem::GetPresentation
     return true;
 }
 
-bool XLineStartCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineStartCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     sal_Bool bValue = GetValue();
     rVal.setValue( &bValue, cppu::UnoType<bool>::get() );
     return true;
 }
 
-bool XLineStartCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineStartCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     if( !rVal.hasValue() || rVal.getValueType() != cppu::UnoType<bool>::get() )
         return false;
@@ -2091,14 +2091,14 @@ bool XLineEndCenterItem::GetPresentation
     return true;
 }
 
-bool XLineEndCenterItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XLineEndCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     sal_Bool bValue = GetValue();
     rVal.setValue( &bValue, cppu::UnoType<bool>::get() );
     return true;
 }
 
-bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XLineEndCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     if( !rVal.hasValue() || rVal.getValueType() != cppu::UnoType<bool>::get() )
         return false;
@@ -2172,25 +2172,25 @@ sal_uInt16 XFillStyleItem::GetValueCount() const
     return 5;
 }
 
-bool XFillStyleItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFillStyleItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    ::com::sun::star::drawing::FillStyle eFS = (::com::sun::star::drawing::FillStyle)GetValue();
+    css::drawing::FillStyle eFS = (css::drawing::FillStyle)GetValue();
 
     rVal <<= eFS;
 
     return true;
 }
 
-bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFillStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    ::com::sun::star::drawing::FillStyle eFS;
+    css::drawing::FillStyle eFS;
     if(!(rVal >>= eFS))
     {
         // also try an int (for Basic)
         sal_Int32 nFS = 0;
         if(!(rVal >>= nFS))
             return false;
-        eFS = (::com::sun::star::drawing::FillStyle)nFS;
+        eFS = (css::drawing::FillStyle)nFS;
     }
 
     SetValue( sal::static_int_cast< sal_uInt16 >( eFS ) );
@@ -2250,14 +2250,14 @@ bool XFillColorItem::GetPresentation
     return true;
 }
 
-bool XFillColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetColorValue().GetRGBColor();
 
     return true;
 }
 
-bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     if(!(rVal >>= nValue ))
@@ -2506,7 +2506,7 @@ bool XFillGradientItem::GetPresentation
     return true;
 }
 
-bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -2515,10 +2515,10 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
         {
             uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
 
-            ::com::sun::star::awt::Gradient aGradient2;
+            css::awt::Gradient aGradient2;
 
             const XGradient& aXGradient = GetGradientValue();
-            aGradient2.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
+            aGradient2.Style = (css::awt::GradientStyle) aXGradient.GetGradientStyle();
             aGradient2.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
             aGradient2.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
             aGradient2.Angle = (short)aXGradient.GetAngle();
@@ -2541,9 +2541,9 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
         case MID_FILLGRADIENT:
         {
             const XGradient& aXGradient = GetGradientValue();
-            ::com::sun::star::awt::Gradient aGradient2;
+            css::awt::Gradient aGradient2;
 
-            aGradient2.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
+            aGradient2.Style = (css::awt::GradientStyle) aXGradient.GetGradientStyle();
             aGradient2.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
             aGradient2.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
             aGradient2.Angle = (short)aXGradient.GetAngle();
@@ -2582,7 +2582,7 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
     return true;
 }
 
-bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -2644,7 +2644,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
 
         case MID_FILLGRADIENT:
         {
-            ::com::sun::star::awt::Gradient aGradient2;
+            css::awt::Gradient aGradient2;
             if(!(rVal >>= aGradient2))
                 return false;
 
@@ -2796,12 +2796,12 @@ sal_uInt16 XFillFloatTransparenceItem::GetVersion( sal_uInt16 nFileFormatVersion
     return XFillGradientItem::GetVersion( nFileFormatVersion );
 }
 
-bool XFillFloatTransparenceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillFloatTransparenceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     return XFillGradientItem::QueryValue( rVal, nMemberId );
 }
 
-bool XFillFloatTransparenceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillFloatTransparenceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     return XFillGradientItem::PutValue( rVal, nMemberId );
 }
@@ -2977,7 +2977,7 @@ bool XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
     return true;
 }
 
-bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -2987,9 +2987,9 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
         {
             uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
 
-            ::com::sun::star::drawing::Hatch aUnoHatch;
+            css::drawing::Hatch aUnoHatch;
 
-            aUnoHatch.Style = (::com::sun::star::drawing::HatchStyle)aHatch.GetHatchStyle();
+            aUnoHatch.Style = (css::drawing::HatchStyle)aHatch.GetHatchStyle();
             aUnoHatch.Color = aHatch.GetColor().GetColor();
             aUnoHatch.Distance = aHatch.GetDistance();
             aUnoHatch.Angle = aHatch.GetAngle();
@@ -3005,9 +3005,9 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
 
         case MID_FILLHATCH:
         {
-            ::com::sun::star::drawing::Hatch aUnoHatch;
+            css::drawing::Hatch aUnoHatch;
 
-            aUnoHatch.Style = (::com::sun::star::drawing::HatchStyle)aHatch.GetHatchStyle();
+            aUnoHatch.Style = (css::drawing::HatchStyle)aHatch.GetHatchStyle();
             aUnoHatch.Color = aHatch.GetColor().GetColor();
             aUnoHatch.Distance = aHatch.GetDistance();
             aUnoHatch.Angle = aHatch.GetAngle();
@@ -3023,7 +3023,7 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
         }
 
         case MID_HATCH_STYLE:
-            rVal <<= (::com::sun::star::drawing::HatchStyle)aHatch.GetHatchStyle(); break;
+            rVal <<= (css::drawing::HatchStyle)aHatch.GetHatchStyle(); break;
         case MID_HATCH_COLOR:
             rVal <<= (sal_Int32)aHatch.GetColor().GetColor(); break;
         case MID_HATCH_DISTANCE:
@@ -3037,7 +3037,7 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     return true;
 }
 
-bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -3079,7 +3079,7 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
 
         case MID_FILLHATCH:
         {
-            ::com::sun::star::drawing::Hatch aUnoHatch;
+            css::drawing::Hatch aUnoHatch;
             if(!(rVal >>= aUnoHatch))
                 return false;
 

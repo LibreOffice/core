@@ -369,7 +369,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
 
 sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const sal_uInt16 nFormat,
-                                  const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
+                                  const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
     DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::ExportGraphic(...): invalid URL" );
 

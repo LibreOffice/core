@@ -219,7 +219,7 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    Notify( NotifyEvent& rNEvt ) override;
-    virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual Reference< css::accessibility::XAccessible > CreateAccessible() override;
     void     SetOwnFontList(::std::unique_ptr<FontList> && _aOwnFontList) { m_aOwnFontList = std::move(_aOwnFontList); }
 };
 
@@ -2919,7 +2919,7 @@ static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const 
     rWin.SetOutputSizePixel( aSize );
 }
 
-Reference< ::com::sun::star::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
+Reference< css::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
 {
     FillList();
     return FontNameBox::CreateAccessible();

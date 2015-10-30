@@ -1820,7 +1820,7 @@ uno::Reference< uno::XInterface > SdrModel::getUnoModel()
     return mxUnoModel;
 }
 
-void SdrModel::setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel )
+void SdrModel::setUnoModel( css::uno::Reference< css::uno::XInterface > xModel )
 {
     mxUnoModel = xModel;
 }
@@ -1828,7 +1828,7 @@ void SdrModel::setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::
 uno::Reference< uno::XInterface > SdrModel::createUnoModel()
 {
     OSL_FAIL( "SdrModel::createUnoModel() - base implementation should not be called!" );
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt;
+    css::uno::Reference< css::uno::XInterface > xInt;
     return xInt;
 }
 
@@ -2084,7 +2084,7 @@ namespace
     class theSdrModelUnoTunnelImplementationId : public rtl::Static< UnoTunnelIdInit, theSdrModelUnoTunnelImplementationId > {};
 }
 
-const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
+const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
 {
     return theSdrModelUnoTunnelImplementationId::get().getSeq();
 }

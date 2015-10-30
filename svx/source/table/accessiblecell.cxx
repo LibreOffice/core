@@ -46,7 +46,7 @@ using namespace ::com::sun::star::container;
 
 namespace accessibility {
 
-AccessibleCell::AccessibleCell( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo )
+AccessibleCell::AccessibleCell( const css::uno::Reference< css::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo )
 : AccessibleCellBase( rxParent, AccessibleRole::TABLE_CELL )
 , maShapeTreeInfo( rShapeTreeInfo )
 , mnIndexInParent( nIndex )
@@ -169,7 +169,7 @@ void SAL_CALL AccessibleCell::release(  ) throw ()
 
 /** The children of this cell come from the paragraphs of text.
 */
-sal_Int32 SAL_CALL AccessibleCell::getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL AccessibleCell::getAccessibleChildCount() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ThrowIfDisposed ();
@@ -231,17 +231,17 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet() 
 
 
             //Just when the parent table is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
-            ::com::sun::star::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
+            css::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
             if( xTempAcc.is() )
             {
-                ::com::sun::star::uno::Reference<XAccessibleContext>
+                css::uno::Reference<XAccessibleContext>
                                         xTempAccContext = xTempAcc->getAccessibleContext();
                 if( xTempAccContext.is() )
                 {
-                    ::com::sun::star::uno::Reference<XAccessibleStateSet> rState =
+                    css::uno::Reference<XAccessibleStateSet> rState =
                         xTempAccContext->getAccessibleStateSet();
                     if( rState.is() )           {
-                        com::sun::star::uno::Sequence<short> pStates = rState->getStates();
+                        css::uno::Sequence<short> pStates = rState->getStates();
                         int count = pStates.getLength();
                         for( int iIndex = 0;iIndex < count;iIndex++ )
                         {
@@ -269,7 +269,7 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet() 
 // XAccessibleComponent
 
 
-sal_Bool SAL_CALL AccessibleCell::containsPoint( const ::com::sun::star::awt::Point& aPoint) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL AccessibleCell::containsPoint( const css::awt::Point& aPoint) throw (css::uno::RuntimeException, std::exception)
 {
     return AccessibleComponentBase::containsPoint( aPoint );
 }
@@ -282,7 +282,7 @@ sal_Bool SAL_CALL AccessibleCell::containsPoint( const ::com::sun::star::awt::Po
     the already instantiated children and only if no match is found
     instantiate the remaining ones.
 */
-Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const ::com::sun::star::awt::Point& aPoint) throw(RuntimeException, std::exception)
+Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const css::awt::Point& aPoint) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
@@ -313,13 +313,13 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
 
 
 
-::com::sun::star::awt::Rectangle SAL_CALL AccessibleCell::getBounds() throw(RuntimeException, std::exception)
+css::awt::Rectangle SAL_CALL AccessibleCell::getBounds() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     ThrowIfDisposed ();
-    ::com::sun::star::awt::Rectangle aBoundingBox;
+    css::awt::Rectangle aBoundingBox;
     if( mxCell.is() )
     {
         // Get the cell's bounding box in internal coordinates (in 100th of mm)
@@ -360,27 +360,27 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
 
 
 
-::com::sun::star::awt::Point SAL_CALL AccessibleCell::getLocation() throw (RuntimeException, std::exception)
+css::awt::Point SAL_CALL AccessibleCell::getLocation() throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
-    ::com::sun::star::awt::Rectangle aBoundingBox(getBounds());
-    return ::com::sun::star::awt::Point(aBoundingBox.X, aBoundingBox.Y);
+    css::awt::Rectangle aBoundingBox(getBounds());
+    return css::awt::Point(aBoundingBox.X, aBoundingBox.Y);
 }
 
 
 
-::com::sun::star::awt::Point SAL_CALL AccessibleCell::getLocationOnScreen() throw(RuntimeException, std::exception)
+css::awt::Point SAL_CALL AccessibleCell::getLocationOnScreen() throw(RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
     // Get relative position...
-    ::com::sun::star::awt::Point aLocation(getLocation ());
+    css::awt::Point aLocation(getLocation ());
 
     // ... and add absolute position of the parent.
     Reference<XAccessibleComponent> xParentComponent( getAccessibleParent(), uno::UNO_QUERY);
     if(xParentComponent.is())
     {
-        ::com::sun::star::awt::Point aParentLocation(xParentComponent->getLocationOnScreen());
+        css::awt::Point aParentLocation(xParentComponent->getLocationOnScreen());
         aLocation.X += aParentLocation.X;
         aLocation.Y += aParentLocation.Y;
     }
@@ -403,21 +403,21 @@ awt::Size SAL_CALL AccessibleCell::getSize() throw (RuntimeException, std::excep
 
 
 
-void SAL_CALL AccessibleCell::addFocusListener ( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL AccessibleCell::addFocusListener ( const css::uno::Reference< css::awt::XFocusListener >& xListener) throw (css::uno::RuntimeException)
 {
     AccessibleComponentBase::addFocusListener( xListener );
 }
 
 
 
-void SAL_CALL AccessibleCell::removeFocusListener (const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL AccessibleCell::removeFocusListener (const css::uno::Reference< css::awt::XFocusListener >& xListener ) throw (css::uno::RuntimeException)
 {
     AccessibleComponentBase::removeFocusListener( xListener );
 }
 
 
 
-void SAL_CALL AccessibleCell::grabFocus() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleCell::grabFocus() throw (css::uno::RuntimeException, std::exception)
 {
     AccessibleComponentBase::grabFocus();
 }
@@ -448,7 +448,7 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground() throw (RuntimeException, std:
 // XAccessibleExtendedComponent
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL AccessibleCell::getFont() throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XFont > SAL_CALL AccessibleCell::getFont() throw (css::uno::RuntimeException, std::exception)
 {
 //todo
     return AccessibleComponentBase::getFont();
@@ -456,14 +456,14 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground() throw (RuntimeException, std:
 
 
 
-OUString SAL_CALL AccessibleCell::getTitledBorderText() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL AccessibleCell::getTitledBorderText() throw (css::uno::RuntimeException, std::exception)
 {
     return AccessibleComponentBase::getTitledBorderText();
 }
 
 
 
-OUString SAL_CALL AccessibleCell::getToolTipText() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL AccessibleCell::getToolTipText() throw (css::uno::RuntimeException, std::exception)
 {
     return AccessibleComponentBase::getToolTipText();
 }
@@ -615,7 +615,7 @@ OUString AccessibleCell::getCellName( sal_Int32 nCol, sal_Int32 nRow )
     return aBuf.makeStringAndClear();
 }
 
-OUString SAL_CALL AccessibleCell::getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL AccessibleCell::getAccessibleName() throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     SolarMutexGuard aSolarGuard;
@@ -646,7 +646,7 @@ void AccessibleCell::UpdateChildren()
 +If this is correct, we also don't need  sdr::table::CellRef getCellRef(), UpdateChildren(), getCellName( sal_Int32 nCol, sal_Int32 nRow ) above
 +
 
-OUString SAL_CALL AccessibleCell::getAccessibleName() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL AccessibleCell::getAccessibleName() throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed ();
     SolarMutexGuard aSolarGuard;

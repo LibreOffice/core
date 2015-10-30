@@ -137,24 +137,24 @@ class FmEntryDataList;
 class FmEntryData
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       m_xNormalizedIFace;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xProperties;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >     m_xChild;
+    css::uno::Reference< css::uno::XInterface >       m_xNormalizedIFace;
+    css::uno::Reference< css::beans::XPropertySet >   m_xProperties;
+    css::uno::Reference< css::container::XChild >     m_xChild;
 
 protected:
     Image               m_aNormalImage;
-    OUString     aText;
+    OUString            aText;
 
     FmEntryDataList*    pChildList;
     FmEntryData*        pParent;
 
 protected:
-    void    newObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace );
+    void    newObject( const css::uno::Reference< css::uno::XInterface >& _rxIFace );
 
 public:
     TYPEINFO();
 
-    FmEntryData( FmEntryData* pParentData, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rIFace );
+    FmEntryData( FmEntryData* pParentData, const css::uno::Reference< css::uno::XInterface >& _rIFace );
     FmEntryData( const FmEntryData& rEntryData );
     virtual ~FmEntryData();
 
@@ -173,17 +173,17 @@ public:
 
     // note that the interface returned is normalized, i.e. querying the given XInterface of the object
     // for XInterface must return the interface itself.
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& GetElement() const
+    const css::uno::Reference< css::uno::XInterface >& GetElement() const
     {
         return m_xNormalizedIFace;
     }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& GetPropertySet() const
+    const css::uno::Reference< css::beans::XPropertySet >& GetPropertySet() const
     {
         return m_xProperties;
     }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >& GetChildIFace() const
+    const css::uno::Reference< css::container::XChild >& GetChildIFace() const
     {
         return m_xChild;
     }
@@ -236,14 +236,14 @@ public:
 
 class FmFormData : public FmEntryData
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >           m_xForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > m_xContainer;
+    css::uno::Reference< css::form::XForm >           m_xForm;
+    css::uno::Reference< css::container::XContainer > m_xContainer;
 
 public:
     TYPEINFO_OVERRIDE();
 
     FmFormData(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
+        const css::uno::Reference< css::form::XForm >& _rxForm,
         const ImageList& _rNormalImages,
         FmFormData* _pParent = NULL
     );
@@ -251,8 +251,8 @@ public:
     FmFormData( const FmFormData& rFormData );
     virtual ~FmFormData();
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& GetFormIface() const { return m_xForm; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& GetContainer() const { return m_xContainer; }
+    const css::uno::Reference< css::form::XForm >& GetFormIface() const { return m_xForm; }
+    const css::uno::Reference< css::container::XContainer >& GetContainer() const { return m_xContainer; }
 
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) override;
     virtual FmEntryData* Clone() override;
@@ -262,7 +262,7 @@ public:
 
 class FmControlData : public FmEntryData
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  m_xFormComponent;
+    css::uno::Reference< css::form::XFormComponent >  m_xFormComponent;
 
     Image GetImage(const ImageList& ilNavigatorImages) const;
 
@@ -270,19 +270,19 @@ public:
     TYPEINFO_OVERRIDE();
 
     FmControlData(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxComponent,
+        const css::uno::Reference< css::form::XFormComponent >& _rxComponent,
         const ImageList& _rNormalImages,
         FmFormData* _pParent
     );
     FmControlData( const FmControlData& rControlData );
     virtual ~FmControlData();
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
+    const css::uno::Reference< css::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) override;
     virtual FmEntryData* Clone() override;
 
     void ModelReplaced(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxNew,
+        const css::uno::Reference< css::form::XFormComponent >& _rxNew,
         const ImageList& _rNormalImages
     );
 };
@@ -297,8 +297,8 @@ namespace svxform
     class NavigatorTreeModel;
 
     class OFormComponentObserver
-        :public ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertyChangeListener
-                                        ,   ::com::sun::star::container::XContainerListener
+        :public ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener
+                                        ,   css::container::XContainerListener
                                         >
     {
         ::svxform::NavigatorTreeModel*  m_pNavModel;
@@ -309,16 +309,16 @@ namespace svxform
         OFormComponentObserver( ::svxform::NavigatorTreeModel* pModel );
 
     // XEventListenerListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::beans::XPropertyChangeListener
-        virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::beans::XPropertyChangeListener
+        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::container::XContainerListener
+    // css::container::XContainerListener
 
-        virtual void SAL_CALL elementInserted(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementReplaced(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementRemoved(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementInserted(const  css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementReplaced(const  css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementRemoved(const  css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
 
         void Lock() { m_nLocks++; }
         void UnLock() { m_nLocks--; }
@@ -326,8 +326,8 @@ namespace svxform
         bool CanUndo() const { return m_bCanUndo; }
         void ReleaseModel() { m_pNavModel = NULL; }
     protected:
-        void Insert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xIface, sal_Int32 nIndex);
-        void Remove( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement );
+        void Insert(const css::uno::Reference< css::uno::XInterface >& xIface, sal_Int32 nIndex);
+        void Remove( const css::uno::Reference< css::uno::XInterface >& _rxElement );
     };
 
     class NavigatorTreeModel : public SfxBroadcaster
@@ -344,17 +344,17 @@ namespace svxform
 
         ImageList                   m_aNormalImages;
 
-        void UpdateContent( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >& xForms );
+        void UpdateContent( const css::uno::Reference< css::form::XForms >& xForms );
 
-        void InsertForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm, sal_uInt32 nRelPos);
+        void InsertForm(const css::uno::Reference< css::form::XForm >& xForm, sal_uInt32 nRelPos);
         void RemoveForm(FmFormData* pFormData);
 
-        void InsertFormComponent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp, sal_uInt32 nRelPos);
+        void InsertFormComponent(const css::uno::Reference< css::form::XFormComponent >& xComp, sal_uInt32 nRelPos);
         void RemoveFormComponent(FmControlData* pControlData);
         void InsertSdrObj(const SdrObject* pSdrObj);
         void RemoveSdrObj(const SdrObject* pSdrObj);
 
-        void ReplaceFormComponent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xOld, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xNew);
+        void ReplaceFormComponent(const css::uno::Reference< css::form::XFormComponent >& xOld, const css::uno::Reference< css::form::XFormComponent >& xNew);
 
         void BroadcastMarkedObjects(const SdrMarkList& mlMarked);
             // einen RequestSelectHint mit den aktuell markierten Objekten broadcasten
@@ -379,14 +379,14 @@ namespace svxform
         void Clear();
         void SetModified( bool bMod=true );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >    GetForms() const;
+        css::uno::Reference< css::form::XForms >    GetForms() const;
         FmFormShell*        GetFormShell() const { return m_pFormShell; }
         FmFormPage*         GetFormPage() const { return m_pFormPage; }
-        FmEntryData*        FindData( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
+        FmEntryData*        FindData( const css::uno::Reference< css::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
         FmEntryData*        FindData( const OUString& rText, FmFormData* pParentData, bool bRecurs=true );
         FmEntryDataList*    GetRootList() const { return m_pRootList; }
-        static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
-        SdrObject*          Search(SdrObjListIter& rIter, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp);
+        static css::uno::Reference< css::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
+        SdrObject*          Search(SdrObjListIter& rIter, const css::uno::Reference< css::form::XFormComponent >& xComp);
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     };
@@ -464,7 +464,7 @@ namespace svxform
         void SynchronizeMarkList();
             // umgekehrte Richtung von SynchronizeMarkList : markiert in der View alle der aktuellen Selektion entsprechenden Controls
 
-        void CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >& _rObjects);
+        void CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< css::uno::Reference< css::form::XFormComponent > >& _rObjects);
 
         // im Select aktualisiere ich normalerweise die Marklist der zugehoerigen View, mit folgenden Funktionen
         // kann ich das Locking dieses Verhaltens steuern

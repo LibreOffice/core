@@ -62,7 +62,7 @@ static const sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45
 
 ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     svt::ToolboxController& rController,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const css::uno::Reference< css::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow
 )
     : ToolbarMenu(rFrame, pParentWindow,
@@ -169,8 +169,8 @@ void ExtrusionDirectionWindow::implSetProjection( sal_Int32 nProjection, bool bE
 
 
 void ExtrusionDirectionWindow::statusChanged(
-    const ::com::sun::star::frame::FeatureStateEvent& Event
-)   throw ( ::com::sun::star::uno::RuntimeException )
+    const css::frame::FeatureStateEvent& Event
+)   throw ( css::uno::RuntimeException )
 {
     if( Event.FeatureURL.Main.equals( msExtrusionDirection ) )
     {
@@ -336,7 +336,7 @@ double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 
 ExtrusionDepthWindow::ExtrusionDepthWindow(
     svt::ToolboxController& rController,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const css::uno::Reference< css::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow
 )   : ToolbarMenu( rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
     , mrController( rController )
@@ -401,8 +401,8 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 
 
 void ExtrusionDepthWindow::statusChanged(
-    const ::com::sun::star::frame::FeatureStateEvent& Event
-)   throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+    const css::frame::FeatureStateEvent& Event
+)   throw ( css::uno::RuntimeException, std::exception )
 {
     if( Event.FeatureURL.Main.equals( msExtrusionDepth ) )
     {
@@ -656,8 +656,8 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
 
 
 void ExtrusionLightingWindow::statusChanged(
-    const ::com::sun::star::frame::FeatureStateEvent& Event
-)   throw ( ::com::sun::star::uno::RuntimeException )
+    const css::frame::FeatureStateEvent& Event
+)   throw ( css::uno::RuntimeException )
 {
     if( Event.FeatureURL.Main.equals( msExtrusionLightingIntensity ) )
     {
@@ -826,7 +826,7 @@ Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames
 
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     svt::ToolboxController& rController,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const css::uno::Reference< css::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow)
     : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
     , mrController(rController)
@@ -858,8 +858,8 @@ void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
 }
 
 void ExtrusionSurfaceWindow::statusChanged(
-    const ::com::sun::star::frame::FeatureStateEvent& Event
-)   throw ( ::com::sun::star::uno::RuntimeException )
+    const css::frame::FeatureStateEvent& Event
+)   throw ( css::uno::RuntimeException )
 {
     if( Event.FeatureURL.Main.equals( msExtrusionSurface ) )
     {

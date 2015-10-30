@@ -59,12 +59,12 @@ private:
         sdr::properties::TextProperties* mpProperties;
         OutlinerParaObject* mpOutlinerParaObject;
 
-        ::com::sun::star::table::CellContentType mnCellContentType;
+        css::table::CellContentType mnCellContentType;
 
-        OUString msFormula;
+        OUString        msFormula;
         double          mfValue;
         ::sal_Int32     mnError;
-        bool      mbMerged;
+        bool            mbMerged;
         ::sal_Int32     mnRowSpan;
         ::sal_Int32     mnColSpan;
 
@@ -253,7 +253,7 @@ private:
     struct Data
     {
         TableStyleSettings maSettings;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > mxTableStyle;
+        css::uno::Reference< css::container::XIndexAccess > mxTableStyle;
     };
 
     void setData( const Data& rData );

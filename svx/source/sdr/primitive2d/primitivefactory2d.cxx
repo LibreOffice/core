@@ -33,9 +33,9 @@ using namespace com::sun::star;
 
 namespace {
 
-typedef cppu::WeakComponentImplHelper< ::com::sun::star::graphic::XPrimitiveFactory2D, css::lang::XServiceInfo > PrimitiveFactory2DImplBase;
+typedef cppu::WeakComponentImplHelper< css::graphic::XPrimitiveFactory2D, css::lang::XServiceInfo > PrimitiveFactory2DImplBase;
 
-// base class for C++ implementation of com::sun::star::graphic::XPrimitiveFactory2D
+// base class for C++ implementation of css::graphic::XPrimitiveFactory2D
 class PrimitiveFactory2D
     :   protected comphelper::OBaseMutex,
         public PrimitiveFactory2DImplBase
@@ -44,8 +44,8 @@ public:
     PrimitiveFactory2D(): PrimitiveFactory2DImplBase(m_aMutex) {}
 
             // Methods from XPrimitiveFactory2D
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXShape( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Sequence< css::beans::PropertyValue >& aParms ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, const css::uno::Sequence< css::beans::PropertyValue >& aParms ) throw (css::uno::RuntimeException, std::exception) override;
 
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
