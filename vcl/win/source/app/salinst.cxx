@@ -1099,7 +1099,7 @@ int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POIN
     // Problem behind: user32.dll sometime consumes exceptions/process violations .-)
     // see also #112221#
 
-    static DWORD EXCEPTION_MSC_CPP_EXCEPTION = 0xE06D7363;
+    static const DWORD EXCEPTION_MSC_CPP_EXCEPTION = 0xE06D7363;
 
     if (pExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_MSC_CPP_EXCEPTION)
         return EXCEPTION_CONTINUE_SEARCH;
