@@ -107,64 +107,50 @@ public:
 
     void flip()
     {
-        std::for_each( maPolygons.begin(),
-                       maPolygons.end(),
-                       std::mem_fun_ref( &::basegfx::B3DPolygon::flip ));
+        for (auto& aPolygon : maPolygons)
+            aPolygon.flip();
     }
 
     void removeDoublePoints()
     {
-        std::for_each( maPolygons.begin(),
-                       maPolygons.end(),
-                       std::mem_fun_ref( &::basegfx::B3DPolygon::removeDoublePoints ));
+        for (auto& aPolygon : maPolygons)
+            aPolygon.removeDoublePoints();
     }
 
     void transform(const ::basegfx::B3DHomMatrix& rMatrix)
     {
-        for(size_t a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].transform(rMatrix);
-        }
+        for (auto& aPolygon : maPolygons)
+            aPolygon.transform(rMatrix);
     }
 
     void clearBColors()
     {
-        for(size_t a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].clearBColors();
-        }
+        for (auto& aPolygon : maPolygons)
+            aPolygon.clearBColors();
     }
 
     void transformNormals(const ::basegfx::B3DHomMatrix& rMatrix)
     {
-        for(size_t a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].transformNormals(rMatrix);
-        }
+        for (auto& aPolygon : maPolygons)
+            aPolygon.transformNormals(rMatrix);
     }
 
     void clearNormals()
     {
-        for(size_t a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].clearNormals();
-        }
+        for (auto& aPolygon : maPolygons)
+            aPolygon.clearNormals();
     }
 
     void transformTextureCoordinates(const ::basegfx::B2DHomMatrix& rMatrix)
     {
-        for(size_t a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].transformTextureCoordinates(rMatrix);
-        }
+        for (auto& aPolygon : maPolygons)
+            aPolygon.transformTextureCoordinates(rMatrix);
     }
 
     void clearTextureCoordinates()
     {
-        for(size_t a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].clearTextureCoordinates();
-        }
+        for (auto& aPolygon : maPolygons)
+            aPolygon.clearTextureCoordinates();
     }
 
     const basegfx::B3DPolygon* begin() const

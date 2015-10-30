@@ -113,31 +113,26 @@ public:
 
     void flip()
     {
-        std::for_each( maPolygons.begin(),
-                       maPolygons.end(),
-                       std::mem_fun_ref( &basegfx::B2DPolygon::flip ));
+        for (auto& aPolygon : maPolygons)
+            aPolygon.flip();
     }
 
     void removeDoublePoints()
     {
-        std::for_each( maPolygons.begin(),
-                       maPolygons.end(),
-                       std::mem_fun_ref( &basegfx::B2DPolygon::removeDoublePoints ));
+        for (auto& aPolygon : maPolygons)
+            aPolygon.removeDoublePoints();
     }
 
     void transform(const basegfx::B2DHomMatrix& rMatrix)
     {
-        for(size_t a(0L); a < maPolygons.size(); a++)
-        {
-            maPolygons[a].transform(rMatrix);
-        }
+        for (auto& aPolygon : maPolygons)
+            aPolygon.transform(rMatrix);
     }
 
     void makeUnique()
     {
-        std::for_each( maPolygons.begin(),
-                       maPolygons.end(),
-                       std::mem_fun_ref( &basegfx::B2DPolygon::makeUnique ));
+        for (auto& aPolygon : maPolygons)
+            aPolygon.makeUnique();
     }
 
     const basegfx::B2DPolygon* begin() const

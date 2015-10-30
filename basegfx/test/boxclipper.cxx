@@ -164,10 +164,8 @@ public:
         tools::importFromSvgD(
             randomPoly,
             OUString::createFromAscii(randomSvg), false, 0);
-        std::for_each(randomPoly.begin(),
-                      randomPoly.end(),
-                      [this](const B2DPolygon& aPolygon) mutable {
-                          this->aRandomIntersections.appendElement(aPolygon.getB2DRange(), B2VectorOrientation::Negative); } );
+        for (auto const& aPolygon : randomPoly)
+            aRandomIntersections.appendElement(aPolygon.getB2DRange(), B2VectorOrientation::Negative);
 #endif
     }
 

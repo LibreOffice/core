@@ -493,9 +493,8 @@ namespace basegfx
             B2DPolygon getPolygon() const
             {
                 B2DPolygon aRes;
-                std::for_each( maPoints.begin(),
-                               maPoints.end(),
-                               [&aRes](const B2DPoint& aPoint) mutable { aRes.append(aPoint, 1); });
+                for (auto const& aPoint : maPoints)
+                    aRes.append(aPoint, 1);
                 aRes.setClosed( true );
                 return aRes;
             }
@@ -897,13 +896,8 @@ namespace basegfx
             // sometimes not enough, but a usable compromise
             aPolygonPool.reserve( rRanges.size() );
 
-            std::for_each( aSweepLineEvents.begin(),
-                           aSweepLineEvents.end(),
-                           [&](SweepLineEvent& aSweepLineEvent) mutable { handleSweepLineEvent(
-                               aSweepLineEvent,
-                               aActiveEdgeList,
-                               aPolygonPool,
-                               aRes); } );
+            for (auto& aSweepLineEvent : aSweepLineEvents)
+                handleSweepLineEvent(aSweepLineEvent, aActiveEdgeList, aPolygonPool, aRes);
 
             return aRes;
         }
