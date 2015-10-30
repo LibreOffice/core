@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_12378ce4",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-10-30T07:38:39Z",
+      "side": 1,
+      "message": "If this reset() call is needed, it means that the C++ dtor for priv is not called. I\u0027ve fixed that with bd0ec1e68dcbc344cbaa50e35608bab95925fcaf, can you please rebase on top of that commit, so that you don\u0027t have to introduce this hack? :-)",
+      "revId": "191a74b8ec1984bd40b0faa3934edff30798f43b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
