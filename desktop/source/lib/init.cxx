@@ -1135,7 +1135,23 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         return getStyles(pThis, pCommand);
     }
-    else {
+    else if (OString(pCommand) == ".uno:ViewRowColumnHeaders")
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            return 0;
+        }
+
+        OUString aHeaders = pDoc->getRowColumnHeaders();
+        OString aString = OUStringToOString(aHeaders, RTL_TEXTENCODING_UTF8);
+        char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+        strcpy(pMemory, aString.getStr());
+        return pMemory;
+    }
+    else
+    {
         gImpl->maLastExceptionMsg = "Unknown command, no values returned";
         return NULL;
     }

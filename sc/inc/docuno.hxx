@@ -404,6 +404,9 @@ public:
 
     /// @see vcl::ITiledRenderable::isMimeTypeSupported().
     virtual bool isMimeTypeSupported() override;
+
+    /// @see vcl::ITiledRenderable::getRowColumnHeaders().
+    virtual OUString getRowColumnHeaders() override;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper<

@@ -148,6 +148,14 @@ public:
         return OUString();
     }
 
+    /**
+     * Get position and content of row/column headers of Calc documents.
+     */
+    virtual OUString getRowColumnHeaders()
+    {
+        return OUString();
+    }
+
     /// Sets the clipboard of the component.
     virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) = 0;
 
