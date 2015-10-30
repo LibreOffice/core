@@ -737,8 +737,6 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                     // must be set in mpViewOption as this will overwrite settings in _post!
                     if(mpViewOption)
                         mpViewOption->SetHideWhitespaceMode(bVal);
-
-                    pView->GetDocShell()->ToggleLayoutMode(pView);
                 }
             }
         }
