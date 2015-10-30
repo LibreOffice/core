@@ -32,8 +32,8 @@ static int help()
     return 1;
 }
 
-/// Represents the row header widget for spreadsheets.
-class TiledRowBar
+/// Represents the row or column header widget for spreadsheets.
+class TiledRowColumnBar
 {
 public:
     /// Stores size and content of a single row header.
@@ -48,17 +48,21 @@ public:
         }
     };
 
-    static const int HEADER_WIDTH = 50;
+    enum TiledBarType { ROW, COLUMN };
+
+    static const int ROW_HEADER_WIDTH = 50;
+    static const int COLUMN_HEADER_HEIGHT = 20;
 
     GtkWidget* m_pDrawingArea;
     std::vector<Header> m_aHeaders;
-    int m_nHeightPixel = 0;
+    /// Height for row bar, width for column bar.
+    int m_nSizePixel;
+    TiledBarType m_eType;
 
-    TiledRowBar(GtkWidget* pDocView);
+    TiledRowColumnBar(TiledBarType eType);
     static gboolean draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData);
     gboolean drawImpl(GtkWidget* pWidget, cairo_t* pCairo);
     static gboolean docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
-    gboolean docConfigureEventImpl(GtkWidget* pWidget, GdkEventConfigure* pEvent);
     /// Draws rText at the center of rRectangle on pCairo.
     static void drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText);
 };
@@ -87,7 +91,8 @@ public:
     GtkWidget* m_pFindbarEntry;
     GtkWidget* m_pFindbarLabel;
     bool m_bFindAll;
-    std::shared_ptr<TiledRowBar> m_pRowBar;
+    std::shared_ptr<TiledRowColumnBar> m_pRowBar;
+    std::shared_ptr<TiledRowColumnBar> m_pColumnBar;
 
     TiledWindow()
         : m_pDocView(0),
@@ -124,21 +129,24 @@ static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
     return g_aWindows[pToplevel];
 }
 
-TiledRowBar::TiledRowBar(GtkWidget* pDocView)
+TiledRowColumnBar::TiledRowColumnBar(TiledBarType eType)
     : m_pDrawingArea(gtk_drawing_area_new()),
-    m_nHeightPixel(0)
+    m_nSizePixel(0),
+    m_eType(eType)
 {
-    gtk_widget_set_size_request(m_pDrawingArea, HEADER_WIDTH, -1);
-    g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(TiledRowBar::draw), this);
-    g_signal_connect(pDocView, "configure-event", G_CALLBACK(TiledRowBar::docConfigureEvent), this);
+    if (m_eType == ROW)
+        gtk_widget_set_size_request(m_pDrawingArea, ROW_HEADER_WIDTH, -1);
+    else
+        gtk_widget_set_size_request(m_pDrawingArea, -1, COLUMN_HEADER_HEIGHT);
+    g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(TiledRowColumnBar::draw), this);
 }
 
-gboolean TiledRowBar::draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData)
+gboolean TiledRowColumnBar::draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData)
 {
-    return static_cast<TiledRowBar*>(pData)->drawImpl(pWidget, pCairo);
+    return static_cast<TiledRowColumnBar*>(pData)->drawImpl(pWidget, pCairo);
 }
 
-void TiledRowBar::drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText)
+void TiledRowColumnBar::drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText)
 {
     cairo_text_extents_t extents;
     cairo_text_extents(pCairo, rText.c_str(), &extents);
@@ -147,7 +155,7 @@ void TiledRowBar::drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, cons
     cairo_show_text(pCairo, rText.c_str());
 }
 
-gboolean TiledRowBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
+gboolean TiledRowColumnBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
 {
     cairo_set_source_rgb(pCairo, 0, 0, 0);
 
@@ -155,56 +163,76 @@ gboolean TiledRowBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
     for (const Header& rHeader : m_aHeaders)
     {
         GdkRectangle aRectangle;
-        aRectangle.x = 0;
-        aRectangle.y = nTotal - 1;
-        aRectangle.width = HEADER_WIDTH - 1;
-        aRectangle.height = rHeader.m_nSize;
-        // Bottom line.
-        cairo_rectangle(pCairo, aRectangle.x, aRectangle.y + aRectangle.height, aRectangle.width, 1);
-        cairo_fill(pCairo);
-        // Left line.
-        cairo_rectangle(pCairo, aRectangle.width, aRectangle.y, 1, aRectangle.height);
-        cairo_fill(pCairo);
+        if (m_eType == ROW)
+        {
+            aRectangle.x = 0;
+            aRectangle.y = nTotal - 1;
+            aRectangle.width = ROW_HEADER_WIDTH - 1;
+            aRectangle.height = rHeader.m_nSize;
+            // Bottom line.
+            cairo_rectangle(pCairo, aRectangle.x, aRectangle.y + aRectangle.height, aRectangle.width, 1);
+            cairo_fill(pCairo);
+            // Right line.
+            cairo_rectangle(pCairo, aRectangle.width, aRectangle.y, 1, aRectangle.height);
+            cairo_fill(pCairo);
+        }
+        else
+        {
+            aRectangle.x = nTotal -1;
+            aRectangle.y = 0;
+            aRectangle.width = rHeader.m_nSize;
+            aRectangle.height = COLUMN_HEADER_HEIGHT - 1;
+            // Right line.
+            cairo_rectangle(pCairo, aRectangle.x + aRectangle.width , aRectangle.y, 1, aRectangle.height);
+            cairo_fill(pCairo);
+            // Bottom line.
+            cairo_rectangle(pCairo, aRectangle.x, aRectangle.height, aRectangle.width, 1);
+            cairo_fill(pCairo);
+        }
         drawText(pCairo, aRectangle, rHeader.m_aText);
         nTotal += rHeader.m_nSize;
-        if (nTotal > m_nHeightPixel)
+        if (nTotal > m_nSizePixel)
             break;
     }
 
     return FALSE;
 }
 
-gboolean TiledRowBar::docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData)
+gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
 {
-    return static_cast<TiledRowBar*>(pData)->docConfigureEventImpl(pWidget, pEvent);
-}
-
-gboolean TiledRowBar::docConfigureEventImpl(GtkWidget* pDocView, GdkEventConfigure* /*pEvent*/)
-{
-    if (g_aWindows.find(gtk_widget_get_toplevel(pDocView)) == g_aWindows.end())
-        return TRUE;
-
     TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
-    m_nHeightPixel = gtk_adjustment_get_page_size(pVAdjustment);
+    rWindow.m_pRowBar->m_nSizePixel = gtk_adjustment_get_page_size(pVAdjustment);
+    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
+    rWindow.m_pColumnBar->m_nSizePixel = gtk_adjustment_get_page_size(pHAdjustment);
 
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
     if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
     {
-        m_aHeaders.clear();
         char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
         std::stringstream aStream(pValues);
         free(pValues);
         assert(!aStream.str().empty());
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
+
+        rWindow.m_pRowBar->m_aHeaders.clear();
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
         {
             Header aHeader(std::atoi(rValue.second.get<std::string>("size").c_str()), rValue.second.get<std::string>("text"));
-            m_aHeaders.push_back(aHeader);
+            rWindow.m_pRowBar->m_aHeaders.push_back(aHeader);
         }
-        gtk_widget_show(m_pDrawingArea);
-        gtk_widget_queue_draw(m_pDrawingArea);
+        gtk_widget_show(rWindow.m_pRowBar->m_pDrawingArea);
+        gtk_widget_queue_draw(rWindow.m_pRowBar->m_pDrawingArea);
+
+        rWindow.m_pColumnBar->m_aHeaders.clear();
+        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
+        {
+            Header aHeader(std::atoi(rValue.second.get<std::string>("size").c_str()), rValue.second.get<std::string>("text"));
+            rWindow.m_pColumnBar->m_aHeaders.push_back(aHeader);
+        }
+        gtk_widget_show(rWindow.m_pColumnBar->m_pDrawingArea);
+        gtk_widget_queue_draw(rWindow.m_pColumnBar->m_pDrawingArea);
     }
 
     return TRUE;
@@ -916,17 +944,22 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
 
     gtk_box_pack_end(GTK_BOX(rWindow.m_pVBox), rWindow.m_pFindbar, FALSE, FALSE, 0);
 
-    // Horizontal box for the row bar + doc view.
-    GtkWidget* pHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_container_add(GTK_CONTAINER(rWindow.m_pVBox), pHBox);
-    rWindow.m_pRowBar.reset(new TiledRowBar(rWindow.m_pDocView));
-    gtk_box_pack_start(GTK_BOX(pHBox), rWindow.m_pRowBar->m_pDrawingArea, FALSE, FALSE, 0);
+    // Grid for the row/column bar + doc view.
+    GtkWidget* pGrid = gtk_grid_new();
+    gtk_container_add(GTK_CONTAINER(rWindow.m_pVBox), pGrid);
+    rWindow.m_pRowBar.reset(new TiledRowColumnBar(TiledRowColumnBar::ROW));
+    // "A2" cell of the grid.
+    gtk_grid_attach(GTK_GRID(pGrid), rWindow.m_pRowBar->m_pDrawingArea, 0, 1, 1, 1);
+    rWindow.m_pColumnBar.reset(new TiledRowColumnBar(TiledRowColumnBar::COLUMN));
+    // "B1" cell of the grid.
+    gtk_grid_attach(GTK_GRID(pGrid), rWindow.m_pColumnBar->m_pDrawingArea, 1, 0, 1, 1);
 
     // Scrolled window for DocView
     rWindow.m_pScrolledWindow = gtk_scrolled_window_new(0, 0);
     gtk_widget_set_hexpand(rWindow.m_pScrolledWindow, TRUE);
     gtk_widget_set_vexpand(rWindow.m_pScrolledWindow, TRUE);
-    gtk_container_add(GTK_CONTAINER(pHBox), rWindow.m_pScrolledWindow);
+    // "B2" cell of the grid
+    gtk_grid_attach(GTK_GRID(pGrid), rWindow.m_pScrolledWindow, 1, 1, 1, 1);
 
     gtk_container_add(GTK_CONTAINER(rWindow.m_pScrolledWindow), rWindow.m_pDocView);
 
@@ -943,10 +976,12 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_widget_show_all(pWindow);
     // Hide the findbar by default.
     gtk_widget_hide(rWindow.m_pFindbar);
-    // Same for the row bar.
+    // Same for the row/column bar.
     gtk_widget_hide(rWindow.m_pRowBar->m_pDrawingArea);
+    gtk_widget_hide(rWindow.m_pColumnBar->m_pDrawingArea);
 
     g_aWindows[pWindow] = rWindow;
+    g_signal_connect(rWindow.m_pDocView, "configure-event", G_CALLBACK(TiledRowColumnBar::docConfigureEvent), 0);
     return pWindow;
 }
 
