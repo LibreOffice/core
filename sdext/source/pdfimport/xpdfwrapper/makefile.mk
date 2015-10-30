@@ -42,7 +42,7 @@ CFLAGS+=-DSYSTEM_ZLIB
     @echo "PDF Import extension disabled."
 .ENDIF
 
-CFLAGS += $(POPPLER_CFLAGS) -DSYSTEM_POPPLER
+CFLAGS += $(POPPLER_CFLAGS)
 
 # --- Files --------------------------------------------------------
 UWINAPILIB:=

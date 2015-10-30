@@ -37,9 +37,6 @@
 #include "Object.h"
 #include "OutputDev.h"
 #include "Stream.h"
-#ifndef SYSTEM_POPPLER
-#  include "parseargs.h"
-#endif
 #include "GlobalParams.h"
 #include "PDFDoc.h"
 
@@ -55,9 +52,6 @@
 class GfxPath;
 class GfxFont;
 class PDFDoc;
-#ifndef SYSTEM_POPPLER
-typedef GString GooString;
-#endif
 
 namespace pdfi
 {
