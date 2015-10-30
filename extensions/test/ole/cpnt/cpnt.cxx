@@ -1711,7 +1711,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         for( int i= 0; i < LISTENERS; i++)
         {
             Reference<XInterface> aList= static_cast<XWeak*>( new EventListener());
-            arListeners[i]= Reference<XEventListener>( aList, UNO_QUERY);
+            arListeners[i].set( aList, UNO_QUERY);
         }
 
         xCallback->inSeqXEventListener(Sequence<Reference<XEventListener> > (arListeners, LISTENERS),

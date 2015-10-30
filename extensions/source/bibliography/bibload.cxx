@@ -402,7 +402,7 @@ Reference< sdb::XColumn >  BibliographyLoader::GetIdentifierColumn() const
     Reference< sdb::XColumn >  xReturn;
     if (xColumns.is() && xColumns->hasByName(sIdentifierColumnName))
     {
-        xReturn = Reference< XColumn > (*static_cast<Reference< XInterface > const *>(
+        xReturn.set(*static_cast<Reference< XInterface > const *>(
                 xColumns->getByName(sIdentifierColumnName).getValue()), UNO_QUERY);
     }
     return xReturn;
@@ -436,7 +436,7 @@ static OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
     OUString uRet;
     Reference< sdb::XColumn >  xCol;
     if (xColumns->hasByName(uColumnName))
-        xCol = Reference< sdb::XColumn > (*static_cast<Reference< XInterface > const *>(xColumns->getByName(uColumnName).getValue()), UNO_QUERY);
+        xCol.set(*static_cast<Reference< XInterface > const *>(xColumns->getByName(uColumnName).getValue()), UNO_QUERY);
     if (xCol.is())
         uRet = xCol->getString();
     return uRet;
@@ -463,7 +463,7 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
         OUString sId = sIdentifierMapping;
         Reference< sdb::XColumn >  xColumn;
         if (xColumns->hasByName(sId))
-            xColumn = Reference< sdb::XColumn > (*static_cast<Reference< XInterface > const *>(xColumns->getByName(sId).getValue()), UNO_QUERY);
+            xColumn.set(*static_cast<Reference< XInterface > const *>(xColumns->getByName(sId).getValue()), UNO_QUERY);
         if (xColumn.is())
         {
             do

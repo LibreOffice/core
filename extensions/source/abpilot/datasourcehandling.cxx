@@ -115,7 +115,7 @@ namespace abp
         // create a new data source
         Reference< XPropertySet > xNewDataSource;
         if (xContext.is())
-            xNewDataSource = Reference< XPropertySet >( xContext->createInstance(), UNO_QUERY );
+            xNewDataSource.set( xContext->createInstance(), UNO_QUERY );
         DBG_ASSERT( xNewDataSource.is(), "lcl_implCreateAndInsert: could not create a new data source!" );
 
 
@@ -199,9 +199,7 @@ namespace abp
         try
         {
             // create the UNO context
-            m_pImpl->xContext = Reference<XNameAccess>(
-                      lcl_getDataSourceContext( _rxORB ),
-                      UNO_QUERY_THROW);
+            m_pImpl->xContext.set( lcl_getDataSourceContext( _rxORB ), UNO_QUERY_THROW );
 
             if (m_pImpl->xContext.is())
             {

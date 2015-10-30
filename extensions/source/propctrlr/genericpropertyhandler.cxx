@@ -94,7 +94,7 @@ namespace pcr
                     _rxContext->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
                     UNO_QUERY_THROW );
 
-                m_xTypeDescription = Reference< XEnumTypeDescription >( xTypeDescProv->getByHierarchicalName( m_aEnumType.getTypeName() ), UNO_QUERY_THROW );
+                m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( m_aEnumType.getTypeName() ), UNO_QUERY_THROW );
             }
         }
         catch( const Exception& )
@@ -322,7 +322,7 @@ namespace pcr
         if ( !xIntrospectionAccess.is() )
             throw RuntimeException("The introspection service could not handle the given component.", *this );
 
-        m_xComponent = Reference< XPropertySet >( xIntrospectionAccess->queryAdapter( cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
+        m_xComponent.set( xIntrospectionAccess->queryAdapter( cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
         // now that we survived so far, remember m_xComponentIntrospectionAccess
         m_xComponentIntrospectionAccess = xIntrospectionAccess;
         m_xPropertyState.set(m_xComponent, css::uno::UNO_QUERY);

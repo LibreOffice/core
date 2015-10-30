@@ -605,12 +605,12 @@ UpdateCheckConfig::commitChanges()
         }
     }
 
-    xChangesBatch = uno::Reference< util::XChangesBatch > ( m_xAvailableUpdates, uno::UNO_QUERY );
+    xChangesBatch.set( m_xAvailableUpdates, uno::UNO_QUERY );
     if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
     {
         xChangesBatch->commitChanges();
     }
-    xChangesBatch = uno::Reference< util::XChangesBatch > ( m_xIgnoredUpdates, uno::UNO_QUERY );
+    xChangesBatch.set( m_xIgnoredUpdates, uno::UNO_QUERY );
     if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
     {
         xChangesBatch->commitChanges();

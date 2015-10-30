@@ -670,8 +670,8 @@ bool Twain::SelectSource( ScannerManager& rMgr )
     if( !mpImpTwain )
     {
         // hold reference to ScannerManager, to prevent premature death
-        mxMgr = uno::Reference< scanner::XScannerManager >( static_cast< OWeakObject* >( const_cast< ScannerManager* >( mpCurMgr = &rMgr ) ),
-                                                            uno::UNO_QUERY ),
+        mxMgr.set( static_cast< OWeakObject* >( const_cast< ScannerManager* >( mpCurMgr = &rMgr ) ),
+                   uno::UNO_QUERY ),
 
         meState = TWAIN_STATE_NONE;
         mpImpTwain = new ImpTwain( rMgr, LINK( this, Twain, ImpNotifyHdl ) );
@@ -690,8 +690,8 @@ bool Twain::PerformTransfer( ScannerManager& rMgr, const uno::Reference< lang::X
     if( !mpImpTwain )
     {
         // hold reference to ScannerManager, to prevent premature death
-        mxMgr = uno::Reference< scanner::XScannerManager >( static_cast< OWeakObject* >( const_cast< ScannerManager* >( mpCurMgr = &rMgr ) ),
-                                                            uno::UNO_QUERY ),
+        mxMgr.set( static_cast< OWeakObject* >( const_cast< ScannerManager* >( mpCurMgr = &rMgr ) ),
+                   uno::UNO_QUERY ),
 
         mxListener = rxListener;
         meState = TWAIN_STATE_NONE;

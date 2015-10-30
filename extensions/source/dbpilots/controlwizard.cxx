@@ -325,8 +325,8 @@ namespace dbp
         if (xModelAsChild.is())
             xControlParent = xModelAsChild->getParent();
 
-        m_aContext.xForm = Reference< XPropertySet >(xControlParent, UNO_QUERY);
-        m_aContext.xRowSet = Reference< XRowSet >(xControlParent, UNO_QUERY);
+        m_aContext.xForm.set(xControlParent, UNO_QUERY);
+        m_aContext.xRowSet.set(xControlParent, UNO_QUERY);
         DBG_ASSERT(m_aContext.xForm.is() && m_aContext.xRowSet.is(),
             "OControlWizard::implDetermineForm: missing some interfaces of the control parent!");
 
@@ -344,8 +344,8 @@ namespace dbp
             Reference< XModel > xModel(xModelSearch, UNO_QUERY);
             while (xModelSearch.is() && !xModel.is())
             {
-                xModelSearch = Reference< XChild >(xModelSearch->getParent(), UNO_QUERY);
-                xModel = Reference< XModel >(xModelSearch, UNO_QUERY);
+                xModelSearch.set(xModelSearch->getParent(), UNO_QUERY);
+                xModel.set(xModelSearch, UNO_QUERY);
             }
 
             Reference< XDrawPage > xPage;
@@ -369,7 +369,7 @@ namespace dbp
                     if (xView.is())
                     {   // okay, it is one
                         Reference< XSpreadsheet > xSheet = xView->getActiveSheet();
-                        xPageSupp = Reference< XDrawPageSupplier >(xSheet, UNO_QUERY);
+                        xPageSupp.set(xSheet, UNO_QUERY);
                         DBG_ASSERT(xPageSupp.is(), "OControlWizard::implDeterminePage: a spreadsheet which is no page supplier!");
                         if (xPageSupp.is())
                             xPage = xPageSupp->getDrawPage();
@@ -472,7 +472,7 @@ namespace dbp
         Reference< XInteractionHandler > xHandler;
         try
         {
-            xHandler = Reference< XInteractionHandler >( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY_THROW );
+            xHandler.set( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY_THROW );
         }
         catch(const Exception&) { }
         if (!xHandler.is())

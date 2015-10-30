@@ -145,7 +145,7 @@ namespace bib
                     OUString aControlName;
                     aAny >>= aControlName;
 
-                    m_xControl = Reference< awt::XControl > ( xContext->getServiceManager()->createInstanceWithContext(aControlName, xContext), UNO_QUERY_THROW );
+                    m_xControl.set( xContext->getServiceManager()->createInstanceWithContext(aControlName, xContext), UNO_QUERY_THROW );
                     m_xControl->setModel( m_xGridModel );
                 }
 
@@ -153,8 +153,8 @@ namespace bib
                 {
                     // Peer as Child to the FrameWindow
                     m_xControlContainer->addControl("GridControl", m_xControl);
-                    m_xGridWin=uno::Reference< awt::XWindow > (m_xControl, UNO_QUERY );
-                    m_xDispatchProviderInterception=uno::Reference< frame::XDispatchProviderInterception > (m_xControl, UNO_QUERY );
+                    m_xGridWin.set(m_xControl, UNO_QUERY );
+                    m_xDispatchProviderInterception.set(m_xControl, UNO_QUERY );
                     m_xGridWin->setVisible( sal_True );
                     m_xControl->setDesignMode( sal_True );
                     // initially switch on the design mode - switch it off _after_ loading the form

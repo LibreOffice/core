@@ -463,7 +463,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                 if (bTypeListBox)
                 {
                     aControlName = "com.sun.star.form.control.ListBox";
-                    xLBModel = Reference< form::XBoundComponent >(xCtrModel, UNO_QUERY);
+                    xLBModel.set(xCtrModel, UNO_QUERY);
                 }
                 else
                 {

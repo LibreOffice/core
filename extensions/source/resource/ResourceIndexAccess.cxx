@@ -95,10 +95,10 @@ Any SAL_CALL ResourceIndexAccess::getByName(const OUString& aName)
     switch(::std::find(aNames.begin(), aNames.end(), aName) - aNames.begin())
     {
         case 0:
-            xResult = Reference<XIndexAccess>(new ResourceStringIndexAccess(m_pResMgr));
+            xResult.set(new ResourceStringIndexAccess(m_pResMgr));
             break;
         case 1:
-            xResult = Reference<XIndexAccess>(new ResourceStringListIndexAccess(m_pResMgr));
+            xResult.set(new ResourceStringListIndexAccess(m_pResMgr));
             break;
         default:
             throw NoSuchElementException();

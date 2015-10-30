@@ -2300,7 +2300,7 @@ namespace pcr
             xRowSet.set( m_xComponent, UNO_QUERY );
             if ( !xRowSet.is() )
             {
-                xRowSet = Reference< XRowSet >( m_xObjectParent, UNO_QUERY );
+                xRowSet.set( m_xObjectParent, UNO_QUERY );
                 if ( !xRowSet.is() )
                 {
                     // are we inspecting a grid column?
@@ -2308,7 +2308,7 @@ namespace pcr
                     {   // yes
                         Reference< XChild > xParentAsChild( m_xObjectParent, UNO_QUERY );
                         if ( xParentAsChild.is() )
-                            xRowSet = Reference< XRowSet >( xParentAsChild->getParent(), UNO_QUERY );
+                            xRowSet.set( xParentAsChild->getParent(), UNO_QUERY );
                     }
                 }
                 if ( !xRowSet.is() )
