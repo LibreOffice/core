@@ -63,17 +63,13 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 # these were added when gbuild'izing
 $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_osl_mutex \
+	CppunitTest_sal_osl_pipe \
 	CppunitTest_sal_osl_profile \
 	CppunitTest_sal_osl_setthreadname \
 	CppunitTest_sal_rtl_math \
 ))
 
 endif
-
-# CppunitTest_sal_osl_pipe has circular dependency on unotest
-# $(eval $(call gb_Module_add_subsequentcheck_targets,sal,\
-	CppunitTest_sal_osl_pipe \
-))
 
 # error when building test-getsystempathfromfileurl.cxx \
 	CppunitTest_sal_osl_getsystempathfromfileurl \
