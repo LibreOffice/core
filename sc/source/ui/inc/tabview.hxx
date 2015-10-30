@@ -520,6 +520,8 @@ public:
     void EnableAutoSpell( bool bEnable );
     void ResetAutoSpell();
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
+    /// @see ScModelObj::getRowColumnHeaders().
+    OUString getRowColumnHeaders();
 };
 
 #endif

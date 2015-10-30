@@ -50,6 +50,7 @@
 
 #include <string>
 #include <algorithm>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <basegfx/tools/zoomtools.hxx>
 
@@ -2300,6 +2301,34 @@ void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<ed
 
         pGridWin[i]->SetAutoSpellData(nPosX, nPosY, pRanges);
     }
+}
+
+OUString ScTabView::getRowColumnHeaders()
+{
+    ScDocument* pDoc = aViewData.GetDocument();
+    if (!pDoc)
+        return OUString();
+
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
+    pDoc->GetTiledRenderingArea(aViewData.GetTabNo(), nEndCol, nEndRow);
+
+    boost::property_tree::ptree aRows;
+    for (SCROW nRow = 0; nRow < nEndRow; ++nRow)
+    {
+        boost::property_tree::ptree aRow;
+        sal_uInt16 nSize = pRowBar[SC_SPLIT_BOTTOM]->GetEntrySize(nRow);
+        aRow.put("size", OString::number(nSize).getStr());
+        OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
+        aRow.put("text", aText.toUtf8().getStr());
+        aRows.push_back(std::make_pair("", aRow));
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("rows", aRows);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

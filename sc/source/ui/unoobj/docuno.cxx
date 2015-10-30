@@ -855,6 +855,19 @@ bool ScModelObj::isMimeTypeSupported()
     return EditEngine::HasValidData(aDataHelper.GetTransferable());
 }
 
+OUString ScModelObj::getRowColumnHeaders()
+{
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return OUString();
+
+    ScTabView* pTabView = pViewData->GetView();
+    if (!pTabView)
+        return OUString();
+
+    return pTabView->getRowColumnHeaders();
+}
+
 void ScModelObj::initializeForTiledRendering()
 {
     SolarMutexGuard aGuard;
