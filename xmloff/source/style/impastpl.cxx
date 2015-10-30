@@ -282,9 +282,9 @@ bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector<
     XMLAutoStylePoolProperties *pProperties = 0;
     sal_Int32 nProperties = rProperties.size();
     size_t i = 0;
-    for (size_t n = maPropertiesList.size(); i < n; ++i)
+    for (size_t n = m_PropertiesList.size(); i < n; ++i)
     {
-        XMLAutoStylePoolProperties* pIS = &maPropertiesList[i];
+        XMLAutoStylePoolProperties *const pIS = m_PropertiesList[i].get();
         if( nProperties > (sal_Int32)pIS->GetProperties().size() )
         {
             continue;
@@ -303,9 +303,9 @@ bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector<
     if( !pProperties )
     {
         pProperties = new XMLAutoStylePoolProperties( rFamilyData, rProperties, msParent );
-        PropertiesListType::iterator it = maPropertiesList.begin();
+        PropertiesListType::iterator it = m_PropertiesList.begin();
         ::std::advance( it, i );
-        maPropertiesList.insert( it, pProperties );
+        m_PropertiesList.insert(it, std::unique_ptr<XMLAutoStylePoolProperties>(pProperties));
         bAdded = true;
     }
 
@@ -325,9 +325,9 @@ bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const ve
     bool bAdded = false;
     sal_Int32 nProperties = rProperties.size();
     size_t i = 0;
-    for (size_t n = maPropertiesList.size(); i < n; ++i)
+    for (size_t n = m_PropertiesList.size(); i < n; ++i)
     {
-        XMLAutoStylePoolProperties* pIS = &maPropertiesList[i];
+        XMLAutoStylePoolProperties *const pIS = m_PropertiesList[i].get();
         if( nProperties > (sal_Int32)pIS->GetProperties().size() )
         {
             continue;
@@ -340,13 +340,13 @@ bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const ve
 
     if (rFamilyData.maNameSet.find(rName) == rFamilyData.maNameSet.end())
     {
-        XMLAutoStylePoolProperties* pProperties =
-                new XMLAutoStylePoolProperties( rFamilyData, rProperties, msParent );
+        std::unique_ptr<XMLAutoStylePoolProperties> pProperties(
+            new XMLAutoStylePoolProperties(rFamilyData, rProperties, msParent));
         // ignore the generated name
         pProperties->SetName( rName );
-        PropertiesListType::iterator it = maPropertiesList.begin();
+        PropertiesListType::iterator it = m_PropertiesList.begin();
         ::std::advance( it, i );
-        maPropertiesList.insert( it, pProperties );
+        m_PropertiesList.insert(it, std::move(pProperties));
         bAdded = true;
     }
 
@@ -361,9 +361,9 @@ OUString XMLAutoStylePoolParent::Find( const XMLAutoStyleFamily& rFamilyData, co
 {
     OUString sName;
     vector< XMLPropertyState>::size_type nItems = rProperties.size();
-    for (size_t i = 0, n = maPropertiesList.size(); i < n; ++i)
+    for (size_t i = 0, n = m_PropertiesList.size(); i < n; ++i)
     {
-        const XMLAutoStylePoolProperties* pIS = &maPropertiesList[i];
+        const XMLAutoStylePoolProperties *const pIS = m_PropertiesList[i].get();
         if( nItems > pIS->GetProperties().size() )
         {
             continue;
@@ -636,8 +636,8 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         size_t nProperties = rParent.GetPropertiesList().size();
         for( size_t j = 0; j < nProperties; j++ )
         {
-            XMLAutoStylePoolProperties* pProperties =
-                &rParent.GetPropertiesList()[j];
+            XMLAutoStylePoolProperties *const pProperties =
+                rParent.GetPropertiesList()[j].get();
             sal_uLong nPos = pProperties->GetPos();
             assert(nPos < nCount);
             assert(!aExpStyles[nPos].mpProperties);
