@@ -334,7 +334,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
             DropTargetDragEnterEvent e;
             e.SupportedDataFlavors= m_currentData->getTransferDataFlavors();
             e.DropAction= m_nCurrentDropAction;
-            e.Source= Reference<XInterface>( static_cast<XDropTarget*>(this),UNO_QUERY);
+            e.Source.set( static_cast<XDropTarget*>(this),UNO_QUERY);
             e.Context= m_currentDragContext;
             POINT point={ pt.x, pt.y};
             ScreenToClient( m_hWnd, &point);
@@ -373,7 +373,7 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
         {
             DropTargetDragEvent e;
             e.DropAction= m_nCurrentDropAction;
-            e.Source= Reference<XInterface>(static_cast<XDropTarget*>(this),UNO_QUERY);
+            e.Source.set(static_cast<XDropTarget*>(this),UNO_QUERY);
             e.Context= m_currentDragContext;
             POINT point={ pt.x, pt.y};
             ScreenToClient( m_hWnd, &point);
@@ -456,7 +456,7 @@ HRESULT DropTarget::Drop( IDataObject  * /*pDataObj*/,
         {
             DropTargetDropEvent e;
             e.DropAction= m_nCurrentDropAction;
-            e.Source= Reference<XInterface>( static_cast<XDropTarget*>(this), UNO_QUERY);
+            e.Source.set( static_cast<XDropTarget*>(this), UNO_QUERY);
             e.Context= m_currentDropContext;
             POINT point={ pt.x, pt.y};
             ScreenToClient( m_hWnd, &point);

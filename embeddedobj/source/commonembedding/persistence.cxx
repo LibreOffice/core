@@ -582,7 +582,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( m_pDocHolder )
-            xStorable = uno::Reference< frame::XStorable > ( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+            xStorable.set( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
     }
 
     if( !xStorable.is() )
@@ -763,7 +763,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( m_pDocHolder )
-            xDoc = uno::Reference< document::XStorageBasedDocument >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+            xDoc.set( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
     }
 
     OUString aBaseURL = GetBaseURLFrom_Impl(rMediaArgs, rObjArgs);
@@ -1493,8 +1493,8 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         }
     }
 
-    m_xNewObjectStorage = uno::Reference< embed::XStorage >();
-    m_xNewParentStorage = uno::Reference< embed::XStorage >();
+    m_xNewObjectStorage.clear();
+    m_xNewParentStorage.clear();
     m_aNewEntryName.clear();
     m_aNewDocMediaDescriptor.realloc( 0 );
     m_bWaitSaveCompleted = false;

@@ -541,7 +541,7 @@ void OwnView_Impl::Close()
         if ( !m_xModel.is() )
             return;
         xModel = m_xModel;
-        m_xModel = uno::Reference< frame::XModel >();
+        m_xModel.clear();
 
         if ( m_bBusy )
             return;
@@ -584,7 +584,7 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
         {
             // SaveAs operation took place, so just forget the model and deregister listeners
             xModel = m_xModel;
-            m_xModel = uno::Reference< frame::XModel >();
+            m_xModel.clear();
         }
     }
 
@@ -621,7 +621,7 @@ void SAL_CALL OwnView_Impl::notifyClosing( const lang::EventObject& Source )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( Source.Source == m_xModel )
-        m_xModel = uno::Reference< frame::XModel >();
+        m_xModel.clear();
 }
 
 
@@ -630,7 +630,7 @@ void SAL_CALL OwnView_Impl::disposing( const lang::EventObject& Source )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( Source.Source == m_xModel )
-        m_xModel = uno::Reference< frame::XModel >();
+        m_xModel.clear();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
