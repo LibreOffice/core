@@ -24,6 +24,8 @@
 #include <editeng/editdata.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -66,9 +68,32 @@ void FuChar::DoExecute( SfxRequest& rReq )
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
 
+        static const sal_uInt16 aRanges[] =
+        {
+            EE_ITEMS_START, EE_ITEMS_END,
+            SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
+            0
+        };
+
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
-                                EE_ITEMS_START, EE_ITEMS_END );
+                                aRanges );
         aNewAttr.Put( aEditAttr, false );
+
+        // EE_CHAR_BKGCOLOR is SvxBackgroundColorItem, but char background tabpage
+        // can only work with SvxBrushItems (it requires major undertaking to have
+        // it support anything else). Do the following then:
+        const SfxPoolItem* pItem;
+        if ( aNewAttr.GetItemState( EE_CHAR_BKGCOLOR, true, &pItem ) == SfxItemState::SET )
+        {
+            // extract Color outta SvxBackColorItem
+            Color aBackColor = static_cast<const SvxBackgroundColorItem*>(pItem)->GetValue();
+            // make new SvxBrushItem with this Color
+            SvxBrushItem aBrushItem( aBackColor, SID_ATTR_BRUSH_CHAR );
+
+            aNewAttr.ClearItem( EE_CHAR_BKGCOLOR );
+            // and stick it into the set
+            aNewAttr.Put( aBrushItem );
+        }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0);
@@ -84,7 +109,20 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
             if( nResult == RET_OK )
             {
-                rReq.Done( *( pDlg->GetOutputItemSet() ) );
+                const SfxItemSet* pOutputSet = pDlg->GetOutputItemSet();
+                SfxItemSet pOtherSet( *pOutputSet );
+
+                // and now the reverse process
+                const SvxBrushItem* pBrushItem= static_cast<const SvxBrushItem*>(pOtherSet.GetItem( SID_ATTR_BRUSH_CHAR ));
+
+                if ( pBrushItem )
+                {
+                    SvxBackgroundColorItem aBackColorItem( pBrushItem->GetColor(), EE_CHAR_BKGCOLOR );
+                    pOtherSet.ClearItem( SID_ATTR_BRUSH_CHAR );
+                    pOtherSet.Put( aBackColorItem );
+                }
+
+                rReq.Done( pOtherSet );
                 pArgs = rReq.GetArgs();
             }
         }
@@ -105,6 +143,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
                     SID_ATTR_CHAR_UNDERLINE,
                     SID_ATTR_CHAR_FONTHEIGHT,
                     SID_ATTR_CHAR_COLOR,
+                    SID_ATTR_CHAR_BACK_COLOR,
                     SID_ATTR_CHAR_KERNING,
                     SID_ATTR_CHAR_CASEMAP,
                     SID_SET_SUPER_SCRIPT,

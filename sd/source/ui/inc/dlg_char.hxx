@@ -34,6 +34,7 @@ private:
     sal_uInt16 mnCharName;
     sal_uInt16 mnCharEffects;
     sal_uInt16 mnCharPosition;
+    sal_uInt16 mnCharBackground;
 
     const SfxObjectShell&   rDocShell;
 
