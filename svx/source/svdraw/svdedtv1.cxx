@@ -1423,7 +1423,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
         else
         {
-            com::sun::star::geometry::AffineMatrix2D aAffineMatrix2D;
+            css::geometry::AffineMatrix2D aAffineMatrix2D;
             Point aPageOffset(0, 0);
 
             if(GetSdrPageView())

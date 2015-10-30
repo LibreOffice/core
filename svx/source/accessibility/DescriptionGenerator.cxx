@@ -115,7 +115,7 @@ void DescriptionGenerator::Initialize (const OUString& sPrefix)
             else
                 msDescription.append ("<no style>");
         }
-        catch (const ::com::sun::star::beans::UnknownPropertyException &)
+        catch (const css::beans::UnknownPropertyException &)
         {
             msDescription.append ("<unknown>");
         }
@@ -265,7 +265,7 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
 
         msDescription.append (lookUpColorName(nValue));
     }
-    catch (const ::com::sun::star::beans::UnknownPropertyException &)
+    catch (const css::beans::UnknownPropertyException &)
     {
         msDescription.append ("<unknown>");
     }
@@ -290,7 +290,7 @@ void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
             msDescription.append (nValue);
         }
     }
-    catch (const ::com::sun::star::beans::UnknownPropertyException &)
+    catch (const css::beans::UnknownPropertyException &)
     {
         msDescription.append ("<unknown>");
     }
@@ -325,7 +325,7 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
                 msDescription.append (sValue);
         }
     }
-    catch (const ::com::sun::star::beans::UnknownPropertyException &)
+    catch (const css::beans::UnknownPropertyException &)
     {
         msDescription.append ("<unknown>");
     }
@@ -401,7 +401,7 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
             }
         }
     }
-    catch (const ::com::sun::star::beans::UnknownPropertyException &)
+    catch (const css::beans::UnknownPropertyException &)
     {
         msDescription.append ("<unknown>");
     }

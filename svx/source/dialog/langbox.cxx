@@ -237,7 +237,7 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
             }
         }
 
-        ::com::sun::star::uno::Sequence< sal_uInt16 > xKnown;
+        css::uno::Sequence< sal_uInt16 > xKnown;
         const sal_uInt16* pKnown;
         sal_uInt32 nCount;
         if ( nLangList & SvxLanguageListFlags::ONLY_KNOWN )
@@ -299,7 +299,7 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
 
 sal_Int32 SvxLanguageBoxBase::InsertLanguage( const LanguageType nLangType, sal_Int32 nPos )
 {
-    return ImplInsertLanguage( nLangType, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
+    return ImplInsertLanguage( nLangType, nPos, css::i18n::ScriptType::WEAK );
 }
 
 
@@ -366,7 +366,7 @@ sal_Int32 SvxLanguageBoxBase::InsertDefaultLanguage( sal_Int16 nType, sal_Int32 
 
 sal_Int32 SvxLanguageBoxBase::InsertSystemLanguage( sal_Int32 nPos )
 {
-    return ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
+    return ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, nPos, css::i18n::ScriptType::WEAK );
 }
 
 

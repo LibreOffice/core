@@ -356,7 +356,7 @@ bool FmFormPageImpl::validateCurForm()
 }
 
 
-void FmFormPageImpl::setCurForm(Reference< ::com::sun::star::form::XForm >  xForm)
+void FmFormPageImpl::setCurForm(Reference< css::form::XForm >  xForm)
 {
     xCurrentForm = xForm;
 }
@@ -446,7 +446,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
 }
 
 
-Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy(
+Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy(
     const Reference< XFormComponent > & rContent, const Reference< XDataSource > & rDatabase,
     const OUString& rDBTitle, const OUString& rCursorSource, sal_Int32 nCommandType )
 {
@@ -466,17 +466,17 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
         // erst in der aktuellen form suchen
         xForm = findFormForDataSource( xCurrentForm, rDatabase, rCursorSource, nCommandType );
 
-        Reference< ::com::sun::star::container::XIndexAccess >  xFormsByIndex( getForms(), UNO_QUERY );
+        Reference< css::container::XIndexAccess >  xFormsByIndex( getForms(), UNO_QUERY );
         DBG_ASSERT(xFormsByIndex.is(), "FmFormPageImpl::findPlaceInFormComponentHierarchy : no index access for my forms collection !");
         sal_Int32 nCount = xFormsByIndex->getCount();
         for (sal_Int32 i = 0; !xForm.is() && i < nCount; i++)
         {
-            Reference< ::com::sun::star::form::XForm >  xToSearch;
+            Reference< css::form::XForm >  xToSearch;
             xFormsByIndex->getByIndex(i) >>= xToSearch;
             xForm = findFormForDataSource( xToSearch, rDatabase, rCursorSource, nCommandType );
         }
 
-        // wenn keine ::com::sun::star::form gefunden, dann eine neue erzeugen
+        // wenn keine css::form gefunden, dann eine neue erzeugen
         if (!xForm.is())
         {
             SdrModel* pModel = m_rPage.GetModel();
@@ -491,9 +491,9 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
                 pModel->BegUndo(aUndoStr);
             }
 
-            xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
+            xForm = Reference< css::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
             // a form should always have the command type table as default
-            Reference< ::com::sun::star::beans::XPropertySet > xFormProps(xForm, UNO_QUERY);
+            Reference< css::beans::XPropertySet > xFormProps(xForm, UNO_QUERY);
             try { xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE))); }
             catch(Exception&) { }
 
@@ -501,7 +501,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
                 xFormProps->setPropertyValue(FM_PROP_DATASOURCE,makeAny(rDBTitle));
             else
             {
-                Reference< ::com::sun::star::beans::XPropertySet >  xDatabaseProps(rDatabase, UNO_QUERY);
+                Reference< css::beans::XPropertySet >  xDatabaseProps(rDatabase, UNO_QUERY);
                 Any aDatabaseUrl = xDatabaseProps->getPropertyValue(FM_PROP_URL);
                 xFormProps->setPropertyValue(FM_PROP_URL, aDatabaseUrl);
             }
@@ -509,7 +509,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             xFormProps->setPropertyValue(FM_PROP_COMMAND,makeAny(rCursorSource));
             xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
 
-            Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( getForms(), UNO_QUERY );
+            Reference< css::container::XNameAccess >  xNamedSet( getForms(), UNO_QUERY );
 
             const bool bTableOrQuery = ( CommandType::TABLE == nCommandType ) || ( CommandType::QUERY == nCommandType );
             OUString sName = FormControlFactory::getUniqueName( xNamedSet,
@@ -519,7 +519,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
 
             if( bUndo )
             {
-                Reference< ::com::sun::star::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
+                Reference< css::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
                 pModel->AddUndo(new FmUndoContainerAction(*static_cast<FmFormModel*>(pModel),
                                                          FmUndoContainerAction::Inserted,
                                                          xContainer,
@@ -612,7 +612,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     sal_Int32 nCount = xComponents->getCount();
     for (sal_Int32 i = 0; !xResultForm.is() && i < nCount; ++i)
     {
-        Reference< ::com::sun::star::form::XForm >  xSearchForm;
+        Reference< css::form::XForm >  xSearchForm;
         xComponents->getByIndex(i) >>= xSearchForm;
         // continue searching in the sub form
         if (xSearchForm.is())
@@ -635,11 +635,11 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
     }
 #endif
     OUString sName;
-    Reference< ::com::sun::star::beans::XPropertySet >  xSet(xFormComponent, UNO_QUERY);
+    Reference< css::beans::XPropertySet >  xSet(xFormComponent, UNO_QUERY);
     if (xSet.is())
     {
         sName = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_NAME ) );
-        Reference< ::com::sun::star::container::XNameAccess >  xNameAcc(xControls, UNO_QUERY);
+        Reference< css::container::XNameAccess >  xNameAcc(xControls, UNO_QUERY);
 
         if (sName.isEmpty() || xNameAcc->hasByName(sName))
         {
@@ -651,7 +651,7 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
                 Reference< XNameAccess >( xControls, UNO_QUERY ), xSet );
 
             // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!
-            if (sName.isEmpty() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
+            if (sName.isEmpty() || nClassId != css::form::FormComponentType::RADIOBUTTON)
             {
                 xSet->setPropertyValue(FM_PROP_NAME, makeAny(sDefaultName));
             }

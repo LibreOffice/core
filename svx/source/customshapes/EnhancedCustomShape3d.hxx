@@ -34,7 +34,7 @@ class EnhancedCustomShape3d
     class Transformation2D
     {
         Point                                   aCenter;
-        com::sun::star::drawing::ProjectionMode eProjectionMode;
+        css::drawing::ProjectionMode eProjectionMode;
 
         // parallel projection
         double      fSkewAngle;

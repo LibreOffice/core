@@ -96,25 +96,25 @@ public:
 // Item representing the forms and subforms
 class FmFormItem : public FmParentData
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterController >  m_xFilterController;
+    css::uno::Reference< css::form::runtime::XFormController >    m_xController;
+    css::uno::Reference< css::form::runtime::XFilterController >  m_xFilterController;
 
 public:
     TYPEINFO_OVERRIDE();
 
     FmFormItem(  FmParentData* _pParent,
-                 const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & _xController,
+                 const css::uno::Reference< css::form::runtime::XFormController > & _xController,
                  const OUString& _rText)
         :FmParentData( _pParent, _rText )
         ,m_xController( _xController )
-        ,m_xFilterController( _xController, ::com::sun::star::uno::UNO_QUERY_THROW )
+        ,m_xFilterController( _xController, css::uno::UNO_QUERY_THROW )
     {
     }
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >&
+    inline const css::uno::Reference< css::form::runtime::XFormController >&
         GetController() { return m_xController; }
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterController >&
+    inline const css::uno::Reference< css::form::runtime::XFilterController >&
         GetFilterController() { return m_xFilterController; }
 
     virtual Image GetImage() const override;
@@ -160,8 +160,8 @@ class FmFilterModel : public FmParentData
 {
     friend class FmFilterAdapter;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >           m_xControllers;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xController;
+    css::uno::Reference< css::container::XIndexAccess >           m_xControllers;
+    css::uno::Reference< css::form::runtime::XFormController >    m_xController;
     FmFilterAdapter*        m_pAdapter;
     FmFilterItems*          m_pCurrentItems;
 
@@ -170,7 +170,7 @@ public:
     FmFilterModel();
     virtual ~FmFilterModel();
 
-    void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xCurrent);
+    void Update(const css::uno::Reference< css::container::XIndexAccess > & xControllers, const css::uno::Reference< css::form::runtime::XFormController > & xCurrent);
     void Clear();
     bool ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const;
     void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
@@ -180,8 +180,8 @@ public:
     FmFilterItems* GetCurrentItems() const {return m_pCurrentItems;}
     void SetCurrentItems(FmFilterItems* pCurrent);
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & GetCurrentController() const {return m_xController;}
-    void SetCurrentController(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xController);
+    const css::uno::Reference< css::form::runtime::XFormController > & GetCurrentController() const {return m_xController;}
+    void SetCurrentController(const css::uno::Reference< css::form::runtime::XFormController > & xController);
 
     void Remove(FmFilterData* pFilterItem);
     static void AppendFilterItems( FmFormItem& _rItem );
@@ -190,9 +190,9 @@ public:
 protected:
     void Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
     void Remove( const ::std::vector<FmFilterData*>::iterator& rPos );
-    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xController) const;
-    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm) const;
-    void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, FmParentData* pParent);
+    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const css::uno::Reference< css::form::runtime::XFormController > & xController) const;
+    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const css::uno::Reference< css::form::XForm >& xForm) const;
+    void Update(const css::uno::Reference< css::container::XIndexAccess > & xControllers, FmParentData* pParent);
 };
 
 
@@ -255,8 +255,8 @@ public:
     virtual void dispose() override;
 
     void UpdateContent(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xCurrent
+            const css::uno::Reference< css::container::XIndexAccess > & xControllers,
+            const css::uno::Reference< css::form::runtime::XFormController > & xCurrent
         );
     const FmFilterModel* GetFilterModel() const {return m_pModel;}
 

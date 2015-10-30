@@ -42,24 +42,24 @@ class FmFormShell;
 
 class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
-    bool        m_bInitialStateChange;
+    bool            m_bInitialStateChange;
     bool            m_bInStateChange;
-    OUString m_sLastActivePage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                        m_xInspectorContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    OUString        m_sLastActivePage;
+    css::uno::Reference< css::uno::XComponentContext >
+                    m_xInspectorContext;
+    css::uno::Reference< css::uno::XComponentContext >
                     m_xORB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >
+    css::uno::Reference< css::frame::XFrame2 >
                     m_xMeAsFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
                     m_xLastKnownDocument;
-    ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorModel >
+    css::uno::Reference< css::inspection::XObjectInspectorModel >
                     m_xInspectorModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+    css::uno::Reference< css::frame::XController >
                     m_xBrowserController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+    css::uno::Reference< css::awt::XWindow >
                     m_xBrowserComponentWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+    css::uno::Reference< css::awt::XWindow >
                     m_xFrameContainerWindow;
 
 protected:
@@ -76,7 +76,7 @@ protected:
 
 public:
     FmPropBrw(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB,
+        const css::uno::Reference< css::uno::XComponentContext >& _xORB,
         SfxBindings* pBindings,
         SfxChildWindow* pMgr,
         vcl::Window* pParent,

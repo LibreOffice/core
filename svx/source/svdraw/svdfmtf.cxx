@@ -89,7 +89,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     maOldLineColor(),
     mnLineWidth(0),
     maLineJoin(basegfx::B2DLineJoin::NONE),
-    maLineCap(com::sun::star::drawing::LineCap_BUTT),
+    maLineCap(css::drawing::LineCap_BUTT),
     maDash(css::drawing::DashStyle_RECT, 0, 0, 0, 0, 0),
     mbMov(false),
     mbSize(false),
@@ -356,19 +356,19 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         switch(maLineJoin)
         {
             default : // basegfx::B2DLineJoin::NONE
-                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_NONE));
+                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_NONE));
                 break;
             case basegfx::B2DLineJoin::Middle:
-                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_MIDDLE));
+                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_MIDDLE));
                 break;
             case basegfx::B2DLineJoin::Bevel:
-                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL));
+                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_BEVEL));
                 break;
             case basegfx::B2DLineJoin::Miter:
-                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_MITER));
+                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_MITER));
                 break;
             case basegfx::B2DLineJoin::Round:
-                mpLineAttr->Put(XLineJointItem(com::sun::star::drawing::LineJoint_ROUND));
+                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_ROUND));
                 break;
         }
 

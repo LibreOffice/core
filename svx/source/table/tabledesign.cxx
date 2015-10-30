@@ -94,7 +94,7 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() throw(RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements() throw(RuntimeException, std::exception) override;
 
     // XIndexAccess
@@ -109,8 +109,8 @@ public:
     virtual void SAL_CALL removeModifyListener( const Reference< XModifyListener >& aListener ) throw (RuntimeException, std::exception) override;
 
     // XModifyListener
-    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     void notifyModifyListener();
 
@@ -456,14 +456,14 @@ void TableDesignStyle::notifyModifyListener()
 
 
 // if we get a modify hint from a style, notify all registered XModifyListener
-void SAL_CALL TableDesignStyle::modified( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL TableDesignStyle::modified( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
     notifyModifyListener();
 }
 
 
 
-void SAL_CALL TableDesignStyle::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL TableDesignStyle::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 

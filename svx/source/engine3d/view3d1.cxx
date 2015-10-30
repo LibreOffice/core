@@ -140,7 +140,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) co
         aSet.Put(aDefaultSet);
 
         // ... but no lines for 3D
-        aSet.Put(XLineStyleItem (com::sun::star::drawing::LineStyle_NONE));
+        aSet.Put(XLineStyleItem (css::drawing::LineStyle_NONE));
 
         // new defaults for distance and focal length
         aSet.Put(makeSvx3DDistanceItem(100));

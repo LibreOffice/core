@@ -702,7 +702,7 @@ IMPL_LINK_NOARG_TYPED(SvxShowCharSet, VscrollHdl, ScrollBar*, void)
     {
         if( m_pAccessible )
         {
-            ::com::sun::star::uno::Any aOldAny, aNewAny;
+            css::uno::Any aOldAny, aNewAny;
             int nLast = LastInView();
             for ( ; nLast != nSelectedIndex; ++nLast)
             {
@@ -738,7 +738,7 @@ void SvxShowCharSet::ReleaseAccessible()
     m_xAccessible = NULL;
 }
 
-::com::sun::star::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
+css::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
 {
     OSL_ENSURE(!m_pAccessible,"Accessible already created!");
     m_pAccessible = new svx::SvxShowCharSetVirtualAcc(this);

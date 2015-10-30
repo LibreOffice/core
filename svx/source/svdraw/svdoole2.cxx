@@ -135,9 +135,9 @@ public:
 private:
     Rectangle impl_getScaledRect_nothrow() const;
     // XStateChangeListener
-    virtual void SAL_CALL changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL changingState( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (css::embed::WrongStateException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL stateChanged( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
     // document::XEventListener
     virtual void SAL_CALL       notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException, std::exception ) override;
@@ -155,7 +155,7 @@ private:
     virtual void SAL_CALL activatingUI() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL deactivatedInplace() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL deactivatedUI() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
-    virtual uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL getLayoutManager() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
+    virtual uno::Reference< css::frame::XLayoutManager > SAL_CALL getLayoutManager() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual uno::Reference< frame::XDispatchProvider > SAL_CALL getInplaceDispatchProvider() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual awt::Rectangle SAL_CALL getPlacement() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
     virtual awt::Rectangle SAL_CALL getClipRectangle() throw ( embed::WrongStateException, uno::RuntimeException, std::exception ) override;
@@ -181,7 +181,7 @@ Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
     return aLogicRect;
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::changingState( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SdrLightEmbeddedClient_Impl::changingState( const css::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ ) throw (css::embed::WrongStateException, css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -197,7 +197,7 @@ void SdrLightEmbeddedClient_Impl::Release()
 }
 
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const css::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -213,7 +213,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star:
 }
 
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -410,7 +410,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
                             xObject->changeState( embed::EmbedStates::RUNNING );
                     }
                 }
-                catch (com::sun::star::uno::Exception& )
+                catch (css::uno::Exception& )
                 {}
             }
         }
@@ -430,7 +430,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
             uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager(getLayoutManager());
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager(getLayoutManager());
     if ( xLayoutManager.is() )
     {
         static const char aMenuBarURL[] = "private:resource/menubar/menubar";
@@ -440,11 +440,11 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
 }
 
 
-uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbeddedClient_Impl::getLayoutManager()
+uno::Reference< css::frame::XLayoutManager > SAL_CALL SdrLightEmbeddedClient_Impl::getLayoutManager()
     throw ( embed::WrongStateException,
             uno::RuntimeException, std::exception )
 {
-    uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
+    uno::Reference< css::frame::XLayoutManager > xMan;
     SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     try
@@ -600,7 +600,7 @@ public:
 
     virtual void        Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) override;
+        const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
     bool                Connect() { return GetRealObject() != NULL; }
 };
@@ -623,7 +623,7 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
 
 
 ::sfx2::SvBaseLink::UpdateResult SdrEmbedObjectLink::DataChanged(
-    const OUString& /*rMimeType*/, const ::com::sun::star::uno::Any & /*rValue*/ )
+    const OUString& /*rMimeType*/, const css::uno::Any & /*rValue*/ )
 {
     if ( !pObj->UpdateLinkURL_Impl() )
     {
@@ -956,7 +956,7 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
                         if ( nCurState != embed::EmbedStates::LOADED )
                             mpImpl->mxObjRef->changeState(nCurState);
                     }
-                    catch( ::com::sun::star::uno::Exception& )
+                    catch( css::uno::Exception& )
                     {
                         OSL_FAIL(
                             OString(OString("SdrOle2Obj::UpdateLinkURL_Impl(), "
@@ -998,7 +998,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
                 DisconnectFileLink_Impl();
                 mpImpl->maLinkURL.clear();
             }
-            catch( ::com::sun::star::uno::Exception& )
+            catch( css::uno::Exception& )
             {
                 OSL_FAIL(
                     OString(OString("SdrOle2Obj::BreakFileLink_Impl(), "
@@ -1049,7 +1049,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::CheckFileLink_Impl(), "
@@ -1133,7 +1133,7 @@ void SdrOle2Obj::Connect_Impl()
 
             }
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::Connect_Impl(), "
@@ -1220,7 +1220,7 @@ void SdrOle2Obj::RemoveListeners_Impl()
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::RemoveListeners_Impl(), "
@@ -1302,7 +1302,7 @@ void SdrOle2Obj::Disconnect_Impl()
             GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         OSL_FAIL(
             OString(OString("SdrOle2Obj::Disconnect_Impl(), "
@@ -1359,7 +1359,7 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHC
         pClone->SetModel(GetModel());
 
         // gray outline
-        pClone->SetMergedItem(XLineStyleItem(com::sun::star::drawing::LineStyle_SOLID));
+        pClone->SetMergedItem(XLineStyleItem(css::drawing::LineStyle_SOLID));
         const svtools::ColorConfig aColorConfig;
         const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
         pClone->SetMergedItem(XLineColorItem(OUString(), aColor.nColor));
@@ -1437,7 +1437,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
             }
             DBG_ASSERT( !aTmp.isEmpty(), "Copying embedded object failed!" );
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::SetModel(), "
@@ -1507,7 +1507,7 @@ void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 
 
 
-void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rNewObjRef )
+void SdrOle2Obj::SetObjRef( const css::uno::Reference < css::embed::XEmbeddedObject >& rNewObjRef )
 {
     DBG_ASSERT( !rNewObjRef.is() || !mpImpl->mxObjRef.GetObject().is(), "SetObjRef called on already initialized object!");
     if( rNewObjRef == mpImpl->mxObjRef.GetObject() )
@@ -2008,7 +2008,7 @@ bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, s
             xObj->changeState( embed::EmbedStates::LOADED );
             bResult = true;
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::Unload=(), "
@@ -2271,7 +2271,7 @@ Graphic SdrOle2Obj::GetEmptyOLEReplacementGraphic()
 
 
 
-void SdrOle2Obj::SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow)
+void SdrOle2Obj::SetWindow(const css::uno::Reference < css::awt::XWindow >& _xWindow)
 {
     if ( mpImpl->mxObjRef.is() && mpImpl->pLightClient )
     {

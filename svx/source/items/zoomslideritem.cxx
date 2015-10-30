@@ -90,14 +90,14 @@ bool SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
              mnMinZoom == rItem.mnMinZoom && mnMaxZoom == rItem.mnMaxZoom );
 }
 
-bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxZoomSliderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case 0 :
             {
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( ZOOMSLIDER_PARAMS );
+                css::uno::Sequence< css::beans::PropertyValue > aSeq( ZOOMSLIDER_PARAMS );
                 aSeq[0].Name = ZOOMSLIDER_PARAM_CURRENTZOOM;
                 aSeq[0].Value <<= sal_Int32( GetValue() );
                 aSeq[1].Name = ZOOMSLIDER_PARAM_SNAPPINGPOINTS;
@@ -138,18 +138,18 @@ bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
     return true;
 }
 
-bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case 0 :
             {
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
+                css::uno::Sequence< css::beans::PropertyValue > aSeq;
                 if (( rVal >>= aSeq ) && ( aSeq.getLength() == ZOOMSLIDER_PARAMS ))
                 {
                     sal_Int32 nCurrentZoom( 0 );
-                    com::sun::star::uno::Sequence < sal_Int32 > aValues;
+                    css::uno::Sequence < sal_Int32 > aValues;
 
                     bool bAllConverted( true );
                     sal_Int16 nConvertedCount( 0 );
@@ -207,7 +207,7 @@ bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
 
         case MID_ZOOMSLIDER_SNAPPINGPOINTS:
             {
-                com::sun::star::uno::Sequence < sal_Int32 > aValues;
+                css::uno::Sequence < sal_Int32 > aValues;
                 if ( rVal >>= aValues )
                 {
                     maValues = aValues;

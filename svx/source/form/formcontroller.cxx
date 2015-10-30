@@ -97,8 +97,8 @@ using namespace ::connectivity;
 using namespace ::dbtools;
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-    FormController_NewInstance_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB )
+css::uno::Reference< css::uno::XInterface > SAL_CALL
+    FormController_NewInstance_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxORB )
     throw (css::uno::Exception)
 {
     return *( new ::svxform::FormController( comphelper::getComponentContext(_rxORB) ) );
@@ -903,7 +903,7 @@ void SAL_CALL FormController::removeFilterControllerListener( const Reference< X
 }
 
 
-::sal_Int32 SAL_CALL FormController::getFilterComponents() throw( ::com::sun::star::uno::RuntimeException, std::exception )
+::sal_Int32 SAL_CALL FormController::getFilterComponents() throw( css::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -912,7 +912,7 @@ void SAL_CALL FormController::removeFilterControllerListener( const Reference< X
 }
 
 
-::sal_Int32 SAL_CALL FormController::getDisjunctiveTerms() throw( ::com::sun::star::uno::RuntimeException, std::exception )
+::sal_Int32 SAL_CALL FormController::getDisjunctiveTerms() throw( css::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -2770,7 +2770,7 @@ void FormController::stopFormListening( const Reference< XPropertySet >& _rxForm
     }
 }
 
-// com::sun::star::sdbc::XRowSetListener
+// css::sdbc::XRowSetListener
 
 void FormController::cursorMoved(const EventObject& /*event*/) throw( RuntimeException, std::exception )
 {

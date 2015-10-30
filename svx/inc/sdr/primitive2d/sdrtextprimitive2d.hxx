@@ -56,7 +56,7 @@ namespace drawinglayer
             // is not given or different, the decomposition needs to be potentially removed
             // for supporting e.g. page number change on MasterPage objects or the different
             // field renderings in SubGeometry and MasterPage node
-            com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > mxLastVisualizingPage;
+            css::uno::Reference< css::drawing::XDrawPage > mxLastVisualizingPage;
 
             // remember last PageNumber for which a decomposition was made. This is only used
             // when mbContainsPageField is true, else it is 0

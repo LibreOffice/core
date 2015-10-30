@@ -195,7 +195,7 @@ void ViewContactOfE3dScene::createViewInformation3D(const basegfx::B3DRange& rCo
         basegfx::B3DHomMatrix aWorldToDevice(aWorldToCamera);
         const drawinglayer::attribute::SdrSceneAttribute& rSdrSceneAttribute = getSdrSceneAttribute();
 
-        if(::com::sun::star::drawing::ProjectionMode_PERSPECTIVE == rSdrSceneAttribute.getProjectionMode())
+        if(css::drawing::ProjectionMode_PERSPECTIVE == rSdrSceneAttribute.getProjectionMode())
         {
             aWorldToDevice.frustum(-1.0, 1.0, -1.0, 1.0, fMinZ, fMaxZ);
         }
@@ -210,7 +210,7 @@ void ViewContactOfE3dScene::createViewInformation3D(const basegfx::B3DRange& rCo
         aDeviceRange.transform(aWorldToDevice);
 
         // set projection
-        if(::com::sun::star::drawing::ProjectionMode_PERSPECTIVE == rSdrSceneAttribute.getProjectionMode())
+        if(css::drawing::ProjectionMode_PERSPECTIVE == rSdrSceneAttribute.getProjectionMode())
         {
             aProjection.frustum(
                 aDeviceRange.getMinX(), aDeviceRange.getMaxX(),

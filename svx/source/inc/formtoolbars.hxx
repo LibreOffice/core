@@ -29,8 +29,7 @@ namespace svxform
     class FormToolboxes
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >
-                        m_xLayouter;
+        css::uno::Reference< css::frame::XLayoutManager >  m_xLayouter;
 
     public:
         /** constructs an instance
@@ -38,7 +37,7 @@ namespace svxform
                 the frame to analyze
         */
         SVX_DLLPUBLIC FormToolboxes(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
+            const css::uno::Reference< css::frame::XFrame >& _rxFrame
         );
 
     public:

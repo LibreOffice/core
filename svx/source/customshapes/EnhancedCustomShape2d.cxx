@@ -430,7 +430,7 @@ void EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( EnhancedCusto
 }
 
 bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
-    const com::sun::star::beans::PropertyValues& rHandleProperties,
+    const css::beans::PropertyValues& rHandleProperties,
         EnhancedCustomShape2d::Handle& rDestinationHandle )
 {
     bool bRetValue = false;
@@ -440,7 +440,7 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
         rDestinationHandle.nFlags = HandleFlags::NONE;
         for ( i = 0; i < nProperties; i++ )
         {
-            const com::sun::star::beans::PropertyValue& rPropVal = rHandleProperties[ i ];
+            const css::beans::PropertyValue& rPropVal = rHandleProperties[ i ];
 
             if ( rPropVal.Name == "Position" )
             {
@@ -550,7 +550,7 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
 
     // Coordsize
     const Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( "ViewBox" );
-    com::sun::star::awt::Rectangle aViewBox;
+    css::awt::Rectangle aViewBox;
     if ( pViewBox && (*pViewBox >>= aViewBox ) )
     {
         nCoordLeft    = aViewBox.X;
@@ -912,13 +912,13 @@ bool EnhancedCustomShape2d::SetAdjustValueAsDouble( const double& rValue, const 
     {
         // updating our local adjustment sequence
         seqAdjustmentValues[ nIndex ].Value <<= rValue;
-        seqAdjustmentValues[ nIndex ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+        seqAdjustmentValues[ nIndex ].State = css::beans::PropertyState_DIRECT_VALUE;
         bRetValue = true;
     }
     return bRetValue;
 }
 
-Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPair,
+Point EnhancedCustomShape2d::GetPoint( const css::drawing::EnhancedCustomShapeParameterPair& rPair,
                                         const bool bScale, const bool bReplaceGeoSize ) const
 {
     Point       aRetValue;
@@ -1152,8 +1152,8 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                 {
                     if ( aLogicRect.GetHeight() > aLogicRect.GetWidth() )
                     {
-                        com::sun::star::drawing::EnhancedCustomShapeParameter aFirst = aHandle.aPosition.First;
-                        com::sun::star::drawing::EnhancedCustomShapeParameter aSecond = aHandle.aPosition.Second;
+                        css::drawing::EnhancedCustomShapeParameter aFirst = aHandle.aPosition.First;
+                        css::drawing::EnhancedCustomShapeParameter aSecond = aHandle.aPosition.Second;
                         aHandle.aPosition.First = aSecond;
                         aHandle.aPosition.Second = aFirst;
                     }
@@ -1184,7 +1184,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
     return bRetValue;
 }
 
-bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex, const com::sun::star::awt::Point& rPosition )
+bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex, const css::awt::Point& rPosition )
 {
     bool bRetValue = false;
     if ( nIndex < GetHdlCount() )
@@ -1320,7 +1320,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             // and writing them back into the GeometryItem
             SdrCustomShapeGeometryItem aGeometryItem(
                 static_cast<const SdrCustomShapeGeometryItem&>(pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
-            com::sun::star::beans::PropertyValue aPropVal;
+            css::beans::PropertyValue aPropVal;
             aPropVal.Name = "AdjustmentValues";
             aPropVal.Value <<= seqAdjustmentValues;
             aGeometryItem.SetPropertyValue( aPropVal );
@@ -1534,7 +1534,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             && ( nCoordHeight == pDefCustomShape->nCoordHeight ) )
                             bIsDefaultViewBox = true;
                         sal_Int32 j, nCount = pDefCustomShape->nVertices;//==3
-                        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1, seqCoordinates2;
+                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1, seqCoordinates2;
 
                         seqCoordinates1.realloc( nCount );
                         for ( j = 0; j < nCount; j++ )
@@ -1574,13 +1574,13 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             fWidth = nCoordWidth/2;
                             fHeight = nCoordHeight/2;
                             const Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( "ViewBox" );
-                            com::sun::star::awt::Rectangle aViewBox;
+                            css::awt::Rectangle aViewBox;
                             if ( pViewBox && (*pViewBox >>= aViewBox ) )
                             {
                                 aViewBox.Width = pDefCustomShape->nCoordWidth;
                                 aViewBox.Height = pDefCustomShape->nCoordHeight;
                             }
-                            com::sun::star::beans::PropertyValue aPropVal;
+                            css::beans::PropertyValue aPropVal;
                             aPropVal.Name = "ViewBox";
                             aPropVal.Value <<= aViewBox;
                             rGeometryItem.SetPropertyValue( aPropVal );

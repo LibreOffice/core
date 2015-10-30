@@ -324,10 +324,10 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 if (nSelect == PSZ_FUNC_NONE)
                     nSelect = 0;
 
-                ::com::sun::star::uno::Any a;
+                css::uno::Any a;
                 SfxUInt16Item aItem( SID_PSZ_FUNCTION, nSelect );
 
-                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+                css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
                 aArgs[0].Name  = "StatusBarFunc";
                 aItem.QueryValue( a );
                 aArgs[0].Value = a;

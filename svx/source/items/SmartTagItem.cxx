@@ -28,12 +28,12 @@ using namespace ::com::sun::star;
 TYPEINIT1(SvxSmartTagItem, SfxPoolItem);
 
 SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
-                                  const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
-                                  const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
-                                  const com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
-                                  const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> rRange,
-                                  const com::sun::star::uno::Reference<com::sun::star::frame::XController> rController,
-                                  const com::sun::star::lang::Locale rLocale,
+                                  const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
+                                  const css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
+                                  const css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
+                                  const css::uno::Reference<css::text::XTextRange> rRange,
+                                  const css::uno::Reference<css::frame::XController> rController,
+                                  const css::lang::Locale rLocale,
                                   const OUString& rApplicationName,
                                   const OUString& rRangeText ) :
     SfxPoolItem( nId ),

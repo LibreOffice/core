@@ -65,7 +65,7 @@ using namespace sdr::contact;
 #include <cppuhelper/implbase.hxx>
 
 
-class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XEventListener >
+class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper< css::lang::XEventListener >
 {
 protected:
     SdrUnoObj*                  pObj;
@@ -76,15 +76,15 @@ public:
     {}
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
     void StopListening(const uno::Reference< lang::XComponent >& xComp);
     void StartListening(const uno::Reference< lang::XComponent >& xComp);
 };
 
 // XEventListener
-void SAL_CALL SdrControlEventListenerImpl::disposing( const ::com::sun::star::lang::EventObject& /*Source*/)
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SdrControlEventListenerImpl::disposing( const css::lang::EventObject& /*Source*/)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (pObj)
     {

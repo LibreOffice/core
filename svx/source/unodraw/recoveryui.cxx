@@ -99,7 +99,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
             throw(css::uno::RuntimeException, std::exception) override;
 
 
-        virtual com::sun::star::uno::Any SAL_CALL dispatchWithReturnValue(const css::util::URL& aURL,
+        virtual css::uno::Any SAL_CALL dispatchWithReturnValue(const css::util::URL& aURL,
                                             const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
             throw(css::uno::RuntimeException, std::exception) override;
 

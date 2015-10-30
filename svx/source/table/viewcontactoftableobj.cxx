@@ -522,7 +522,7 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfTableObj::createViewIndependentPrimitive2DSequence() const
         {
             const sdr::table::SdrTableObj& rTableObj = GetTableObj();
-            const uno::Reference< com::sun::star::table::XTable > xTable = rTableObj.getTable();
+            const uno::Reference< css::table::XTable > xTable = rTableObj.getTable();
 
             if(xTable.is())
             {
@@ -535,7 +535,7 @@ namespace sdr
                 if(nAllCount)
                 {
                     const sdr::table::TableLayouter& rTableLayouter = rTableObj.getTableLayouter();
-                    const bool bIsRTL(com::sun::star::text::WritingMode_RL_TB == rTableObj.GetWritingMode());
+                    const bool bIsRTL(css::text::WritingMode_RL_TB == rTableObj.GetWritingMode());
                     sdr::table::CellPos aCellPos;
                     sdr::table::CellRef xCurrentCell;
                     basegfx::B2IRectangle aCellArea;

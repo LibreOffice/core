@@ -36,23 +36,23 @@ namespace svxform
     class DataColumn
     {
         // interfaces needed for sddb::Column
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xPropertySet;
+        css::uno::Reference< css::beans::XPropertySet>    m_xPropertySet;
         // interfaces needed for sdb::DataColumn
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>           m_xColumn;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>     m_xColumnUpdate;
+        css::uno::Reference< css::sdb::XColumn>           m_xColumn;
+        css::uno::Reference< css::sdb::XColumnUpdate>     m_xColumnUpdate;
 
     public:
         DataColumn() { };
-        DataColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxIFace);
+        DataColumn(const css::uno::Reference< css::beans::XPropertySet>& _rxIFace);
         // if the object behind _rxIFace doesn't fully support the DataColumn service,
         // (which is checked via the supported interfaces) _all_ members will be set to
         // void !, even if the object has some of the needed interfaces.
 
         DataColumn* operator ->() { return this; }
-        operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> () const{ return m_xColumn.get(); }
+        operator css::uno::Reference< css::uno::XInterface> () const{ return m_xColumn.get(); }
 
         // 'conversions'
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& getColumn() const
+        inline const css::uno::Reference< css::sdb::XColumn>& getColumn() const
         {
             return m_xColumn;
         }

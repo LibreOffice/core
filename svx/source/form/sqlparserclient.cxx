@@ -40,8 +40,8 @@ namespace svxform
     std::shared_ptr< ::connectivity::OSQLParseNode > OSQLParserClient::predicateTree(
             OUString& _rErrorMessage,
             const OUString& _rStatement,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
+            const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
+            const css::uno::Reference< css::beans::XPropertySet >& _rxField
         ) const
     {
         return std::shared_ptr< OSQLParseNode >(m_pParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField));

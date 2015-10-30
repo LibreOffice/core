@@ -478,7 +478,7 @@ namespace
 
 // check if the control has one of the interfaces we can use for searching
 // *_pCurrentText will be filled with the current text of the control (as used when searching this control)
-bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxControl,
+bool IsSearchableControl( const css::uno::Reference< css::uno::XInterface>& _rxControl,
     OUString* _pCurrentText )
 {
     if ( !_rxControl.is() )
@@ -770,7 +770,7 @@ void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e) throw( Runtime
         if (xFormController.is())
             xFormController->removeActivateListener(static_cast<XFormControllerListener*>(this));
 
-        Reference< ::com::sun::star::lang::XComponent> xComp(m_xExternalViewController, UNO_QUERY);
+        Reference< css::lang::XComponent> xComp(m_xExternalViewController, UNO_QUERY);
         if (xComp.is())
             xComp->removeEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
 
@@ -783,7 +783,7 @@ void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e) throw( Runtime
 }
 
 
-void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -1139,14 +1139,14 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
             lang::Locale aNewLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
             TransferFormComponentProperties(xOldSet, xNewSet, aNewLanguage);
 
-            Sequence< ::com::sun::star::script::ScriptEventDescriptor> aOldScripts;
+            Sequence< css::script::ScriptEventDescriptor> aOldScripts;
             Reference< XChild> xChild(xOldModel, UNO_QUERY);
             if (xChild.is())
             {
                 Reference< XIndexAccess> xParent(xChild->getParent(), UNO_QUERY);
 
                 // remember old script events
-                Reference< ::com::sun::star::script::XEventAttacherManager> xEvManager(xChild->getParent(), UNO_QUERY);
+                Reference< css::script::XEventAttacherManager> xEvManager(xChild->getParent(), UNO_QUERY);
                 if (xParent.is() && xEvManager.is())
                 {
                     sal_Int32 nIndex = getElementPos(xParent, xOldModel);
@@ -1171,7 +1171,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                         else
                         {
                             OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
-                            Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
+                            Reference< css::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                             if (xNewComponent.is())
                                 xNewComponent->dispose();
                             return false;
@@ -1180,7 +1180,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                     catch(Exception&)
                     {
                         OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
-                        Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
+                        Reference< css::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                         if (xNewComponent.is())
                             xNewComponent->dispose();
                         return false;
@@ -1710,8 +1710,8 @@ void FmXFormShell::CloseExternalFormViewer()
     if (!m_xExternalViewController.is())
         return;
 
-    Reference< ::com::sun::star::frame::XFrame> xExternalViewFrame( m_xExternalViewController->getFrame());
-    Reference< ::com::sun::star::frame::XDispatchProvider> xCommLink(xExternalViewFrame, UNO_QUERY);
+    Reference< css::frame::XFrame> xExternalViewFrame( m_xExternalViewController->getFrame());
+    Reference< css::frame::XDispatchProvider> xCommLink(xExternalViewFrame, UNO_QUERY);
     if (!xCommLink.is())
         return;
 
@@ -2514,7 +2514,7 @@ IMPL_LINK_TYPED(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscCon
 
   // XContainerListener
 
-void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2529,7 +2529,7 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::
 }
 
 
-void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2542,7 +2542,7 @@ void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::
 }
 
 
-void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2608,7 +2608,7 @@ void FmXFormShell::impl_AddElement_nothrow(const Reference< XInterface>& Element
             xCont->addContainerListener(this);
     }
 
-    const Reference< ::com::sun::star::view::XSelectionSupplier> xSelSupplier(Element, UNO_QUERY);
+    const Reference< css::view::XSelectionSupplier> xSelSupplier(Element, UNO_QUERY);
     if (xSelSupplier.is())
         xSelSupplier->addSelectionChangeListener(this);
 }
@@ -2623,7 +2623,7 @@ void FmXFormShell::RemoveElement(const Reference< XInterface>& Element)
 
 void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Element)
 {
-    const Reference< ::com::sun::star::view::XSelectionSupplier> xSelSupplier(Element, UNO_QUERY);
+    const Reference< css::view::XSelectionSupplier> xSelSupplier(Element, UNO_QUERY);
     if (xSelSupplier.is())
         xSelSupplier->removeSelectionChangeListener(this);
 
@@ -2650,7 +2650,7 @@ void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Elem
 }
 
 
-void FmXFormShell::selectionChanged(const lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void FmXFormShell::selectionChanged(const lang::EventObject& rEvent) throw(css::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -3128,9 +3128,9 @@ void FmXFormShell::CreateExternalView()
 
     // the frame the external view is displayed in
     bool bAlreadyExistent = m_xExternalViewController.is();
-    Reference< ::com::sun::star::frame::XFrame> xExternalViewFrame;
+    Reference< css::frame::XFrame> xExternalViewFrame;
     OUString sFrameName("_beamer");
-    sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::CHILDREN | ::com::sun::star::frame::FrameSearchFlag::CREATE;
+    sal_Int32 nSearchFlags = css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::CREATE;
 
     Reference< runtime::XFormController > xCurrentNavController( getNavController());
         // the creation of the "partwindow" may cause a deactivate of the document which will result in our nav controller to be set to NULL
@@ -3169,8 +3169,8 @@ void FmXFormShell::CreateExternalView()
         URL aWantToDispatch;
         aWantToDispatch.Complete = FMURL_COMPONENT_FORMGRIDVIEW;
 
-        Reference< ::com::sun::star::frame::XDispatchProvider> xProv(m_xAttachedFrame, UNO_QUERY);
-        Reference< ::com::sun::star::frame::XDispatch> xDisp;
+        Reference< css::frame::XDispatchProvider> xProv(m_xAttachedFrame, UNO_QUERY);
+        Reference< css::frame::XDispatch> xDisp;
         if (xProv.is())
             xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, nSearchFlags);
         if (xDisp.is())
@@ -3179,11 +3179,11 @@ void FmXFormShell::CreateExternalView()
         }
 
         // with this the component should be loaded, now search the frame where it resides in
-        xExternalViewFrame = m_xAttachedFrame->findFrame(sFrameName, ::com::sun::star::frame::FrameSearchFlag::CHILDREN);
+        xExternalViewFrame = m_xAttachedFrame->findFrame(sFrameName, css::frame::FrameSearchFlag::CHILDREN);
         if (xExternalViewFrame.is())
         {
             m_xExternalViewController = xExternalViewFrame->getController();
-            Reference< ::com::sun::star::lang::XComponent> xComp(m_xExternalViewController, UNO_QUERY);
+            Reference< css::lang::XComponent> xComp(m_xExternalViewController, UNO_QUERY);
             if (xComp.is())
                 xComp->addEventListener(static_cast<XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
         }
@@ -3191,7 +3191,7 @@ void FmXFormShell::CreateExternalView()
     else
     {
         xExternalViewFrame = m_xExternalViewController->getFrame();
-        Reference< ::com::sun::star::frame::XDispatchProvider> xCommLink(xExternalViewFrame, UNO_QUERY);
+        Reference< css::frame::XDispatchProvider> xCommLink(xExternalViewFrame, UNO_QUERY);
 
         // if we display the active form we interpret the slot as "remove it"
         Reference< XForm> xCurrentModel(xCurrentNavController->getModel(), UNO_QUERY);
@@ -3213,7 +3213,7 @@ void FmXFormShell::CreateExternalView()
         URL aClearURL;
         aClearURL.Complete = FMURL_GRIDVIEW_CLEARVIEW;
 
-        Reference< ::com::sun::star::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, OUString(), 0));
+        Reference< css::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, OUString(), 0));
         if (xClear.is())
             xClear->dispatch(aClearURL, Sequence< PropertyValue>());
     }
@@ -3222,7 +3222,7 @@ void FmXFormShell::CreateExternalView()
     // instance for which this "external view" was triggered
 
     // get the dispatch interface of the frame so we can communicate (interceptable) with the controller
-    Reference< ::com::sun::star::frame::XDispatchProvider> xCommLink(xExternalViewFrame, UNO_QUERY);
+    Reference< css::frame::XDispatchProvider> xCommLink(xExternalViewFrame, UNO_QUERY);
 
     if (m_xExternalViewController.is())
     {
@@ -3230,10 +3230,10 @@ void FmXFormShell::CreateExternalView()
         // collect the dispatchers we will need
         URL aAddColumnURL;
         aAddColumnURL.Complete = FMURL_GRIDVIEW_ADDCOLUMN;
-        Reference< ::com::sun::star::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, OUString(), 0));
+        Reference< css::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, OUString(), 0));
         URL aAttachURL;
         aAttachURL.Complete = FMURL_GRIDVIEW_ATTACHTOFORM;
-        Reference< ::com::sun::star::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, OUString(), 0));
+        Reference< css::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, OUString(), 0));
 
         if (xAddColumnDispatch.is() && xAttachDispatch.is())
         {
@@ -3539,7 +3539,7 @@ void FmXFormShell::implAdjustConfigCache()
 }
 
 
-void FmXFormShell::Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames)
+void FmXFormShell::Notify( const css::uno::Sequence< OUString >& _rPropertyNames)
 {
     if ( impl_checkDisposed() )
         return;

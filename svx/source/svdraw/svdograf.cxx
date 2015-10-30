@@ -117,7 +117,7 @@ public:
     virtual void        Closed() override;
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) override;
+        const OUString& rMimeType, const css::uno::Any & rValue ) override;
     void                DataChanged( const Graphic& rGraphic );
 
     bool                Connect() { return 0 != GetRealObject(); }
@@ -219,7 +219,7 @@ void SdrGraphicLink::RemoveGraphicUpdater()
 }
 
 ::sfx2::SvBaseLink::UpdateResult SdrGraphicLink::DataChanged(
-    const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue )
+    const OUString& rMimeType, const css::uno::Any & rValue )
 {
     SdrModel*       pModel      = rGrafObj.GetModel();
     sfx2::LinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;
@@ -1323,13 +1323,13 @@ IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
                 {
                     Graphic aGraphic;
 
-                    std::unique_ptr<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > pFilterData;
+                    std::unique_ptr<css::uno::Sequence< css::beans::PropertyValue > > pFilterData;
 
                     if(mbInsidePaint && !GetViewContact().HasViewObjectContacts(true))
                     {
-                        pFilterData.reset(new com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >( 3 ));
+                        pFilterData.reset(new css::uno::Sequence< css::beans::PropertyValue >( 3 ));
 
-                        const com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
+                        const css::awt::Size aPreviewSizeHint( 64, 64 );
                         const bool bAllowPartialStreamRead = true;
                         // create <GfxLink> instance also for previews in order to avoid that its corresponding
                         // data is cleared in the graphic cache entry in case that the preview data equals the complete graphic data

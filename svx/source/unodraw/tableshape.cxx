@@ -53,8 +53,8 @@ SvxTableShape::~SvxTableShape() throw()
 bool SvxTableShape::setPropertyValueImpl(
     const OUString& rName,
     const SfxItemPropertySimpleEntry* pProperty,
-    const ::com::sun::star::uno::Any& rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    const css::uno::Any& rValue )
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -106,8 +106,8 @@ bool SvxTableShape::setPropertyValueImpl(
 bool SvxTableShape::getPropertyValueImpl(
     const OUString& rName,
     const SfxItemPropertySimpleEntry* pProperty,
-    ::com::sun::star::uno::Any& rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Any& rValue )
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     switch( pProperty->nWID )
     {

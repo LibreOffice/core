@@ -373,7 +373,7 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
     Reference< XDispatchProvider > xDispatchProvider( mxFrame, UNO_QUERY );
     if ( xDispatchProvider.is() )
     {
-        com::sun::star::util::URL aTargetURL;
+        css::util::URL aTargetURL;
         Reference < XURLTransformer > xTrans( URLTransformer::create(::comphelper::getProcessComponentContext()) );
         aTargetURL.Complete = maCommand;
         xTrans->parseStrict( aTargetURL );

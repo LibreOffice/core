@@ -76,7 +76,7 @@ namespace svxform
 
     protected:
         // XClipboardOwner
-        virtual void SAL_CALL lostOwnership( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& _rxClipboard, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxTrans ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& _rxClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& _rxTrans ) throw(css::uno::RuntimeException, std::exception) override;
 
         // TransferableHelper
         virtual void        DragFinished( sal_Int8 nDropAction ) override;
@@ -131,10 +131,10 @@ namespace svxform
         ListBoxEntrySet     m_aSelectedEntries;
         css::uno::Sequence< css::uno::Sequence< sal_uInt32 > >
                             m_aControlPaths;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
                             m_aHiddenControlModels;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >
+        css::uno::Reference< css::form::XForms >
                             m_xFormsRoot;       // the root of the forms collection where the entries we represent reside
                                                 // this uniquely identifies the page and the document
 
@@ -149,7 +149,7 @@ namespace svxform
 
         // ctor to construct the data from an arbitrary Transferable (usually clipboard data)
         OControlTransferData(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxTransferable
+            const css::uno::Reference< css::datatransfer::XTransferable >& _rxTransferable
         );
 
         inline const DataFlavorExVector&    GetDataFlavorExVector() const;
@@ -168,7 +168,7 @@ namespace svxform
         size_t  onEntryRemoved( SvTreeListEntry* _pEntry );
 
         void setFormsRoot(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >& _rxFormsRoot
+            const css::uno::Reference< css::form::XForms >& _rxFormsRoot
             ) { m_xFormsRoot = _rxFormsRoot; }
 
         void buildPathFormat(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot);
@@ -179,16 +179,16 @@ namespace svxform
         void buildListFromPath(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot);
             // der umgekehrte Weg : wirft alles aus m_aSelectedEntries weg und baut es mittels m_aControlPaths neu auf
 
-        void addHiddenControlsFormat(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& seqInterfaces);
+        void addHiddenControlsFormat(const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces);
             // fuegt ein SVX_FML_HIDDEN_CONTROLS-Format hinzu und merk sich dafuer die uebergebenen Interfaces
             // (es erfolgt KEINE Ueberpruefung, ob dadurch auch tatsaechlich nur hidden Controls bezeichnet werden, dass muss der
             // Aufrufer sicherstellen)
 
         const ListBoxEntrySet&      selected() const { return m_aSelectedEntries; }
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
                                     hiddenControls() const { return m_aHiddenControlModels; }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >
+        css::uno::Reference< css::form::XForms >
                                 getFormsRoot() const { return m_xFormsRoot; }
     };
 

@@ -132,7 +132,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-// ::com::sun::star::drawing::XShape
+// css::drawing::XShape
 
 
 OUString SAL_CALL SvxShapeGroup::getShapeType()
@@ -343,7 +343,7 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
     return uno::makeAny( xShape );
 }
 
-// ::com::sun::star::container::XElementAccess
+// css::container::XElementAccess
 
 
 uno::Type SAL_CALL SvxShapeGroup::getElementType() throw( uno::RuntimeException, std::exception )
@@ -360,7 +360,7 @@ sal_Bool SAL_CALL SvxShapeGroup::hasElements() throw( uno::RuntimeException, std
 }
 
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 
 uno::Sequence< OUString > SAL_CALL SvxShapeGroup::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
@@ -420,7 +420,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShapeConnector::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-// ::com::sun::star::drawing::XShape
+// css::drawing::XShape
 
 
 OUString SAL_CALL SvxShapeConnector::getShapeType()
@@ -515,7 +515,7 @@ void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::X
 }
 
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 
 uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
@@ -574,7 +574,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShapeControl::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-// ::com::sun::star::drawing::XShape
+// css::drawing::XShape
 
 
 OUString SAL_CALL SvxShapeControl::getShapeType()
@@ -656,7 +656,7 @@ static struct
 SvxShapeControlPropertyMapping[] =
 {
     // Warning: The first entry must be FontSlant because the any needs to be converted
-    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_POSTURE), RTL_CONSTASCII_STRINGPARAM("FontSlant")  }, //  const sal_Int16 => ::com::sun::star::awt::FontSlant
+    { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_POSTURE), RTL_CONSTASCII_STRINGPARAM("FontSlant")  }, //  const sal_Int16 => css::awt::FontSlant
     { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_FONTNAME), RTL_CONSTASCII_STRINGPARAM("FontName") },
     { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_FONTSTYLENAME), RTL_CONSTASCII_STRINGPARAM("FontStyleName") },
     { RTL_CONSTASCII_STRINGPARAM(UNO_NAME_EDIT_CHAR_FONTFAMILY), RTL_CONSTASCII_STRINGPARAM("FontFamily") },
@@ -805,7 +805,7 @@ namespace
 }
 
 void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException, std::exception)
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, std::exception)
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( aPropertyName, aFormsName ) )
@@ -987,7 +987,7 @@ SvxShapeDimensioning::~SvxShapeDimensioning() throw()
 {
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL SvxShapeDimensioning::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getSupportedServiceNames();
@@ -1002,7 +1002,7 @@ SvxShapeCircle::~SvxShapeCircle() throw()
 {
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 // XServiceInfo
 uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
@@ -1012,7 +1012,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() th
 
 
 SvxShapePolyPolygon::SvxShapePolyPolygon( SdrObject* pObj , drawing::PolygonKind eNew )
- throw( com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
+ throw( css::beans::PropertyVetoException, css::lang::IllegalArgumentException)
 : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_POLYPOLYGON), getSvxMapProvider().GetPropertySet(SVXMAP_POLYPOLYGON, SdrObject::GetGlobalDrawObjectItemPool()) )
 , mePolygonKind( eNew )
 {
@@ -1057,7 +1057,7 @@ basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( c
 
 
 
-bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1167,10 +1167,10 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
 
 
 bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty,
-                                                ::com::sun::star::uno::Any& rValue )
-    throw(::com::sun::star::beans::UnknownPropertyException,
-          ::com::sun::star::lang::WrappedTargetException,
-          ::com::sun::star::uno::RuntimeException)
+                                                css::uno::Any& rValue )
+    throw(css::beans::UnknownPropertyException,
+          css::lang::WrappedTargetException,
+          css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1266,7 +1266,7 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const throw()
     }
 }
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygon::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getSupportedServiceNames();
@@ -1288,7 +1288,7 @@ SvxShapePolyPolygonBezier::~SvxShapePolyPolygonBezier() throw()
 
 
 
-bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1331,7 +1331,7 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
 
 
 
-bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1395,7 +1395,7 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygonBezier::GetPolygon() const throw()
 }
 
 
-// ::com::sun::star::lang::XServiceInfo
+// css::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     return SvxShapeText::getSupportedServiceNames();
@@ -1420,7 +1420,7 @@ SvxGraphicObject::~SvxGraphicObject() throw()
 {
 }
 
-bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception)
+bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     bool bOk = false;
     switch( pProperty->nWID )
@@ -1574,7 +1574,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 
 
 
-bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1585,7 +1585,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         if(rGraphic.GetType() != GRAPHIC_GDIMETAFILE)
         {
             // pack object in a bitmap
-            Reference< ::com::sun::star::awt::XBitmap >  xBitmap( VCLUnoHelper::CreateBitmap(static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic().GetBitmapEx()) );
+            Reference< css::awt::XBitmap >  xBitmap( VCLUnoHelper::CreateBitmap(static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic().GetBitmapEx()) );
             rValue <<= xBitmap;
         }
         else
@@ -1697,7 +1697,7 @@ uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
 uno::Any SAL_CALL SvxCustomShape::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aReturn = SvxShapeText::queryAggregation( rType );
+    css::uno::Any aReturn = SvxShapeText::queryAggregation( rType );
     if ( !aReturn.hasValue() )
         aReturn = ::cppu::queryInterface(rType, static_cast<drawing::XEnhancedCustomShapeDefaulter*>(this) );
     return aReturn;
@@ -1727,7 +1727,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-// ::com::sun::star::drawing::XShape
+// css::drawing::XShape
 
 
 OUString SAL_CALL SvxCustomShape::getShapeType()
@@ -1811,7 +1811,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
             aPt -= mpObj->GetAnchorPos();
 
         ForceMetricTo100th_mm(aPt);
-        return ::com::sun::star::awt::Point( aPt.X(), aPt.Y() );
+        return css::awt::Point( aPt.X(), aPt.Y() );
     }
     else
         return SvxShape::getPosition();
@@ -1841,7 +1841,7 @@ void SAL_CALL SvxCustomShape::setSize( const awt::Size& rSize )
 
 
 void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException, std::exception)
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     SdrObject* pObject = mpObj.get();
@@ -1904,7 +1904,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     }
 }
 
-bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     switch( pProperty->nWID )
     {
@@ -1921,7 +1921,7 @@ bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
 }
 
 
-void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType ) throw (css::uno::RuntimeException, std::exception)
 {
     static_cast<SdrObjCustomShape*>(mpObj.get())->MergeDefaultAttributes( &rValueType );
 }

@@ -58,11 +58,11 @@ SvxClipboardFormatItem::~SvxClipboardFormatItem()
     delete pImpl;
 }
 
-bool SvxClipboardFormatItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxClipboardFormatItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_uInt16 nCount = Count();
 
-    ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
+    css::frame::status::ClipboardFormats aClipFormats;
 
     aClipFormats.Identifiers.realloc( nCount );
     aClipFormats.Names.realloc( nCount );
@@ -76,9 +76,9 @@ bool SvxClipboardFormatItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
     return true;
 }
 
-bool SvxClipboardFormatItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxClipboardFormatItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
+    css::frame::status::ClipboardFormats aClipFormats;
     if ( rVal >>= aClipFormats )
     {
         sal_uInt16 nCount = sal_uInt16( aClipFormats.Identifiers.getLength() );

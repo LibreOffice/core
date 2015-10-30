@@ -66,8 +66,8 @@ namespace sdr { namespace contact {
         /** retrieves a temporary XControl instance, whose parent is the given window
             @seealso SdrUnoObj::GetTemporaryControlForWindow
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
-            getTemporaryControlForWindow( const vcl::Window& _rWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer ) const;
+        css::uno::Reference< css::awt::XControl >
+            getTemporaryControlForWindow( const vcl::Window& _rWindow, css::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer ) const;
 
     protected:
         virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact ) override;

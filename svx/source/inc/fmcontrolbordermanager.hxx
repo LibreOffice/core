@@ -50,7 +50,7 @@ namespace svxform
         sal_Int32   nBorderColor;
 
         BorderDescriptor()
-            :nBorderType( ::com::sun::star::awt::VisualEffect::FLAT )
+            :nBorderType( css::awt::VisualEffect::FLAT )
             ,nBorderColor( 0x00000000 )
         {
         }
@@ -62,7 +62,7 @@ namespace svxform
         sal_Int32 nUnderlineColor;
 
         UnderlineDescriptor()
-            :nUnderlineType( ::com::sun::star::awt::FontUnderline::NONE )
+            :nUnderlineType( css::awt::FontUnderline::NONE )
             ,nUnderlineColor( 0x00000000 )
         {
         }
@@ -76,11 +76,11 @@ namespace svxform
 
     struct ControlData : public BorderDescriptor, UnderlineDescriptor
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl;
+        css::uno::Reference< css::awt::XControl > xControl;
         OUString                                                     sOriginalHelpText;
 
         ControlData() : BorderDescriptor() { }
-        ControlData( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl )
+        ControlData( const css::uno::Reference< css::awt::XControl >& _rxControl )
             :xControl( _rxControl )
         {
         }
@@ -130,14 +130,14 @@ namespace svxform
         ~ControlBorderManager();
 
     public:
-        void    focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
-        void    focusLost( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
-        void    mouseEntered( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
-        void    mouseExited( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
+        void    focusGained( const css::uno::Reference< css::uno::XInterface >& _rxControl );
+        void    focusLost( const css::uno::Reference< css::uno::XInterface >& _rxControl );
+        void    mouseEntered( const css::uno::Reference< css::uno::XInterface >& _rxControl );
+        void    mouseExited( const css::uno::Reference< css::uno::XInterface >& _rxControl );
 
         void    validityChanged(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidatableFormComponent >& _rxValidatable
+                    const css::uno::Reference< css::awt::XControl >& _rxControl,
+                    const css::uno::Reference< css::form::validation::XValidatableFormComponent >& _rxValidatable
                 );
 
         /// enables dynamic border color for the controls
@@ -165,7 +165,7 @@ namespace svxform
                 the control's status data, as a reference to our respective member
         */
         void    controlStatusGained(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl,
+                    const css::uno::Reference< css::uno::XInterface >& _rxControl,
                     ControlData& _rControlData
                 );
 
@@ -175,17 +175,17 @@ namespace svxform
             @param _rControlData
                 the control's status data, as a reference to our respective member
         */
-        void    controlStatusLost( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl, ControlData& _rControlData );
+        void    controlStatusLost( const css::uno::Reference< css::uno::XInterface >& _rxControl, ControlData& _rControlData );
 
         /** determines whether the border of a given peer can be colored
             @param _rxPeer
                 the peer to examine. Must not be <NULL/>
         */
-        bool    canColorBorder( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >& _rxPeer );
+        bool    canColorBorder( const css::uno::Reference< css::awt::XVclWindowPeer >& _rxPeer );
 
         /** determines the status of the given control
         */
-        ControlStatus   getControlStatus( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
+        ControlStatus   getControlStatus( const css::uno::Reference< css::awt::XControl >& _rxControl );
 
         /** retrieves the color associated with a given ControlStatus
             @param _eStatus
@@ -203,8 +203,8 @@ namespace svxform
                 the color/type to use when the control has the status CONTROL_STATUS_NONE
         */
         void            updateBorderStyle(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >& _rxPeer,
+                            const css::uno::Reference< css::awt::XControl >& _rxControl,
+                            const css::uno::Reference< css::awt::XVclWindowPeer >& _rxPeer,
                             const BorderDescriptor& _rFallback
                         );
 
@@ -217,7 +217,7 @@ namespace svxform
                 the control to examine. Must not be <NULL/>, and have a non-<NULL/> peer
         */
         void determineOriginalBorderStyle(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
+                    const css::uno::Reference< css::awt::XControl >& _rxControl,
                     BorderDescriptor& _rData
                 ) const;
     };

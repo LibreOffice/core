@@ -802,7 +802,7 @@ void SdrObject::SetOrdNum(sal_uInt32 nNum)
     nOrdNum = nNum;
 }
 
-void SdrObject::GetGrabBagItem(com::sun::star::uno::Any& rVal) const
+void SdrObject::GetGrabBagItem(css::uno::Any& rVal) const
 {
     if (pGrabBagItem != NULL)
         pGrabBagItem->QueryValue(rVal);
@@ -812,7 +812,7 @@ void SdrObject::GetGrabBagItem(com::sun::star::uno::Any& rVal) const
     }
 }
 
-void SdrObject::SetGrabBagItem(const com::sun::star::uno::Any& rVal)
+void SdrObject::SetGrabBagItem(const css::uno::Any& rVal)
 {
     if (pGrabBagItem == NULL)
         pGrabBagItem = new SfxGrabBagItem;
@@ -2925,7 +2925,7 @@ SvxShape* SdrObject::getSvxShape()
     return mpSvxShape;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SdrObject::getUnoShape()
+css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
 {
     // try weak reference first
     uno::Reference< uno::XInterface > xShape( getWeakUnoShape() );

@@ -59,8 +59,8 @@ ChildrenManagerImpl::ChildrenManagerImpl (
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
     : ::cppu::WeakComponentImplHelper<
-          ::com::sun::star::document::XEventListener,
-          ::com::sun::star::view::XSelectionChangeListener>(maMutex),
+          css::document::XEventListener,
+          css::view::XSelectionChangeListener>(maMutex),
       mxShapeList (rxShapeList),
       mxParent (rxParent),
       maShapeTreeInfo (rShapeTreeInfo),
@@ -112,10 +112,9 @@ long ChildrenManagerImpl::GetChildCount() const throw ()
 }
 
 
-::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape> ChildrenManagerImpl::GetChildShape(long nIndex)
-    throw (::com::sun::star::uno::RuntimeException,
-           ::com::sun::star::lang::IndexOutOfBoundsException)
+css::uno::Reference<css::drawing::XShape> ChildrenManagerImpl::GetChildShape(long nIndex)
+    throw (css::uno::RuntimeException,
+           css::lang::IndexOutOfBoundsException)
 {
     uno::Reference<XAccessible> xAcc = GetChild(nIndex);
     ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
@@ -132,8 +131,8 @@ long ChildrenManagerImpl::GetChildCount() const throw ()
 */
 uno::Reference<XAccessible>
     ChildrenManagerImpl::GetChild (long nIndex)
-    throw (::com::sun::star::uno::RuntimeException,
-           ::com::sun::star::lang::IndexOutOfBoundsException)
+    throw (css::uno::RuntimeException,
+           css::lang::IndexOutOfBoundsException)
 {
     // Check whether the given index is valid.
     if (nIndex < 0 || (unsigned long)nIndex >= maVisibleChildren.size())
@@ -152,7 +151,7 @@ uno::Reference<XAccessible>
 */
 uno::Reference<XAccessible>
     ChildrenManagerImpl::GetChild (ChildDescriptor& rChildDescriptor,sal_Int32 _nIndex)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     if ( ! rChildDescriptor.mxAccessibleShape.is())
     {
@@ -538,8 +537,7 @@ void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape
 
 
 
-void ChildrenManagerImpl::SetShapeList (const ::com::sun::star::uno::Reference<
-    ::com::sun::star::drawing::XShapes>& xShapeList)
+void ChildrenManagerImpl::SetShapeList (const css::uno::Reference<css::drawing::XShapes>& xShapeList)
 {
     mxShapeList = xShapeList;
 }
@@ -793,7 +791,7 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
 // IAccessibleParent
 bool ChildrenManagerImpl::ReplaceChild (
     AccessibleShape* pCurrentChild,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+    const css::uno::Reference< css::drawing::XShape >& _rxShape,
     const long _nIndex,
     const AccessibleShapeTreeInfo& _rShapeTreeInfo)
     throw (uno::RuntimeException)
@@ -845,7 +843,7 @@ bool ChildrenManagerImpl::ReplaceChild (
 }
 
 // Add the impl method for IAccessibleParent interface
-AccessibleControlShape * ChildrenManagerImpl::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException)
+AccessibleControlShape * ChildrenManagerImpl::GetAccControlShapeFromModel(css::beans::XPropertySet* pSet) throw (css::uno::RuntimeException)
 {
     sal_Int32 count = GetChildCount();
     for (sal_Int32 index=0;index<count;index++)

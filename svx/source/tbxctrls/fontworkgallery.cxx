@@ -343,7 +343,7 @@ IMPL_LINK_NOARG_TYPED(FontworkAlignmentWindow, SelectHdl, ToolbarMenu*, void)
 class FontworkAlignmentControl : public svt::PopupWindowController
 {
 public:
-    explicit FontworkAlignmentControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    explicit FontworkAlignmentControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
@@ -352,8 +352,8 @@ public:
         throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
     using  svt::PopupWindowController::createPopupWindow;
 };
@@ -428,7 +428,7 @@ class FontworkCharacterSpacingWindow : public ToolbarMenu
 public:
     FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
 
-    virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException ) override;
 private:
     svt::ToolboxController& mrController;
 
@@ -500,7 +500,7 @@ void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( bool, bool bEnab
 
 
 
-void FontworkCharacterSpacingWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
+void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException )
 {
     if( Event.FeatureURL.Main.equals( msFontworkCharacterSpacing ) )
     {
@@ -581,7 +581,7 @@ IMPL_LINK_NOARG_TYPED(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, vo
 class FontworkCharacterSpacingControl : public svt::PopupWindowController
 {
 public:
-    explicit FontworkCharacterSpacingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    explicit FontworkCharacterSpacingControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
@@ -590,8 +590,8 @@ public:
         throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
     using svt::PopupWindowController::createPopupWindow;
 };

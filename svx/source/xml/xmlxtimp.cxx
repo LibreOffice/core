@@ -324,7 +324,7 @@ void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& r
 
 
 SvxXMLXTableImport::SvxXMLXTableImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+    const css::uno::Reference< css::uno::XComponentContext >& rContext,
     const uno::Reference< XNameContainer > & rTable,
     uno::Reference< XGraphicObjectResolver >& xGrfResolver )
 :   SvXMLImport(rContext, "", SvXMLImportFlags::NONE),
@@ -413,7 +413,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                 openStorageStream( &aParserInput, &pGraphicHelper, xSubStorage );
             else
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream;
+                css::uno::Reference< css::io::XStream > xStream;
                 xStream = comphelper::OStorageHelper::GetStreamAtPath(
                         xStorage, rPath, embed::ElementModes::READ, aNasty );
                 if( !xStream.is() )

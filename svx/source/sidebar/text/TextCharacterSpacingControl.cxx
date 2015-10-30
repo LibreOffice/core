@@ -156,7 +156,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
     SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE );
     if ( aWinOpt.Exists() )
     {
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt.GetUserData();
+        css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt.GetUserData();
         ::rtl::OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;

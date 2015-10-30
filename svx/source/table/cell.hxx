@@ -50,9 +50,9 @@ namespace sdr { namespace table {
 
 class SVX_DLLPUBLIC Cell :  public SdrText,
                 public SvxUnoTextBase,
-                public ::com::sun::star::table::XMergeableCell,
-                public ::com::sun::star::awt::XLayoutConstrains,
-                public ::com::sun::star::lang::XEventListener,
+                public css::table::XMergeableCell,
+                public css::awt::XLayoutConstrains,
+                public css::lang::XEventListener,
                 public ::cppu::OWeakObject
 {
     friend class CellUndo;
@@ -104,84 +104,84 @@ public:
     SVX_DLLPRIVATE void copyFormatFrom( const CellRef& xSourceCell );
 
     // XInterface
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& Type ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& Type ) throw (css::uno::RuntimeException, std::exception) override;
     SVX_DLLPRIVATE virtual void SAL_CALL acquire() throw () override;
     SVX_DLLPRIVATE virtual void SAL_CALL release() throw () override;
 
     // XTypeProvider
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XLayoutConstrains
-    SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize()
-        throw (::com::sun::star::uno::RuntimeException,
+    SVX_DLLPRIVATE virtual css::awt::Size SAL_CALL getMinimumSize()
+        throw (css::uno::RuntimeException,
                std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize()
-        throw (::com::sun::star::uno::RuntimeException,
+    SVX_DLLPRIVATE virtual css::awt::Size SAL_CALL getPreferredSize()
+        throw (css::uno::RuntimeException,
                std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XMergeableCell
-    SVX_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getRowSpan() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getColumnSpan() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual sal_Bool SAL_CALL isMerged() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getRowSpan() throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getColumnSpan() throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual sal_Bool SAL_CALL isMerged() throw (css::uno::RuntimeException, std::exception) override;
 
     // XCell
-    SVX_DLLPRIVATE virtual OUString SAL_CALL getFormula() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setFormula( const OUString& aFormula ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual double SAL_CALL getValue() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setValue( double nValue ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::table::CellContentType SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual sal_Int32 SAL_CALL getError() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual OUString SAL_CALL getFormula() throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL setFormula( const OUString& aFormula ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual double SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL setValue( double nValue ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::table::CellContentType SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual sal_Int32 SAL_CALL getError() throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::beans::XPropertySet
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::beans::XPropertySet
+    SVX_DLLPRIVATE virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XMultiPropertySet
-    SVX_DLLPRIVATE virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues ) throw (css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL firePropertiesChangeEvent( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::beans::XPropertyState
-    SVX_DLLPRIVATE virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::beans::XPropertyState
+    SVX_DLLPRIVATE virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XMultiPropertyStates
     SVX_DLLPRIVATE virtual void SAL_CALL setAllPropertiesToDefault()
-        throw (::com::sun::star::uno::RuntimeException,
+        throw (css::uno::RuntimeException,
                std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setPropertiesToDefault( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyDefaults( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL setPropertiesToDefault( const css::uno::Sequence< OUString >& aPropertyNames ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XText
-    SVX_DLLPRIVATE virtual void SAL_CALL insertTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >& xContent, sal_Bool bAbsorb ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL removeTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >& xContent ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange, const css::uno::Reference< css::text::XTextContent >& xContent, sal_Bool bAbsorb ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL removeTextContent( const css::uno::Reference< css::text::XTextContent >& xContent ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
 
     // XSimpleText
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL createTextCursor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL createTextCursorByRange( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& aTextPosition ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL insertString( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL insertControlCharacter( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, sal_Bool bAbsorb ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursor(  ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursorByRange( const css::uno::Reference< css::text::XTextRange >& aTextPosition ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL insertString( const css::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, sal_Bool bAbsorb ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // XTextRange
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL getText(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL getStart(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL getEnd(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual OUString SAL_CALL getString(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual void SAL_CALL setString( const OUString& aString ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XText > SAL_CALL getText(  ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart(  ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd(  ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual OUString SAL_CALL getString(  ) throw (css::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL setString( const OUString& aString ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    SVX_DLLPRIVATE virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    SVX_DLLPRIVATE virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     SVX_DLLPRIVATE virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject ) override;
 
@@ -200,7 +200,7 @@ protected:
     SVX_DLLPRIVATE virtual const SfxItemSet& GetObjectItemSet() override;
     SVX_DLLPRIVATE virtual void SetObjectItem(const SfxPoolItem& rItem) override;
 
-    SVX_DLLPRIVATE ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap );
+    SVX_DLLPRIVATE css::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap );
 
 private:
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw(css::uno::RuntimeException);
@@ -210,7 +210,7 @@ private:
 
     sdr::properties::TextProperties*    mpProperties;
 
-    ::com::sun::star::table::CellContentType mnCellContentType;
+    css::table::CellContentType mnCellContentType;
 
     OUString msFormula;
     double          mfValue;
@@ -221,7 +221,7 @@ private:
 
     Rectangle maCellRect;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XTable > mxTable;
+    css::uno::Reference< css::table::XTable > mxTable;
 };
 
 

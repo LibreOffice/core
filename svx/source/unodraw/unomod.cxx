@@ -69,7 +69,7 @@ using namespace ::com::sun::star;
 
 //-
 
-class SvxUnoDrawPagesAccess : public ::cppu::WeakImplHelper< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
+class SvxUnoDrawPagesAccess : public ::cppu::WeakImplHelper< css::drawing::XDrawPages, css::lang::XServiceInfo >
 {
 private:
     SvxUnoDrawingModel& mrModel;
@@ -79,21 +79,21 @@ public:
     virtual ~SvxUnoDrawPagesAccess() throw();
 
     // XDrawPages
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL remove( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XDrawPage >& xPage ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception) override ;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override ;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 };
 //-
 
@@ -116,7 +116,7 @@ static const SvEventDescription* ImplGetSupportedMacroItems()
         true    if the SdrHint could be translated to an EventObject<br>
         false   if not
 */
-bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent )
+bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, css::document::EventObject& aEvent )
 {
     const SdrObject* pObj = NULL;
     const SdrPage* pPage = NULL;
@@ -202,7 +202,7 @@ css::uno::Reference<css::uno::XInterface> create(
 uno::Reference< uno::XInterface >  SAL_CALL SvxUnoDrawMSFactory::createInstance(const OUString& rServiceSpecifier)
     throw( uno::Exception, uno::RuntimeException, std::exception )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
+    css::uno::Reference< css::uno::XInterface >  xRet;
     if ( rServiceSpecifier.startsWith( "com.sun.star.form.component." ) )
     {
         css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
@@ -218,12 +218,12 @@ uno::Reference< uno::XInterface >  SAL_CALL SvxUnoDrawMSFactory::createInstance(
     return xRet;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField( const OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField( const OUString& ServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException)
 {
     return SvxUnoTextCreateTextField( ServiceSpecifier );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< ::com::sun::star::uno::Any >& Arguments )
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< css::uno::Any >& Arguments )
     throw( uno::Exception, uno::RuntimeException, std::exception )
 {
     OUString arg;
@@ -314,7 +314,7 @@ uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rType ) 
     QUERYINT(lang::XServiceInfo);
     else QUERYINT(lang::XMultiServiceFactory);
     else QUERYINT(drawing::XDrawPagesSupplier);
-    else QUERYINT(com::sun::star::ucb::XAnyCompareFactory);
+    else QUERYINT(css::ucb::XAnyCompareFactory);
     else
         return SfxBaseModel::queryInterface( rType );
 
@@ -348,7 +348,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  ) throw(uno::
         *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
         *pTypes++ = cppu::UnoType<lang::XMultiServiceFactory>::get();
         *pTypes++ = cppu::UnoType<drawing::XDrawPagesSupplier>::get();
-        *pTypes++ = cppu::UnoType<com::sun::star::ucb::XAnyCompareFactory>::get();
+        *pTypes++ = cppu::UnoType<css::ucb::XAnyCompareFactory>::get();
 
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
             *pTypes++ = *pBaseTypes++;
@@ -616,7 +616,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames(
 }
 
 // XAnyCompareFactory
-uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::createAnyCompareByName( const OUString& )
+uno::Reference< css::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::createAnyCompareByName( const OUString& )
     throw(uno::RuntimeException, std::exception)
 {
     return SvxCreateNumRuleCompare();
@@ -760,7 +760,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNam
     return aSeq;
 }
 
-com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
+css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
 {
     const SvxNumRule* pDefaultRule = NULL;
     if( pModel )

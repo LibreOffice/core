@@ -37,45 +37,45 @@ namespace drawinglayer
         attribute::Sdr3DObjectAttribute* createNewSdr3DObjectAttribute(const SfxItemSet& rSet)
         {
             // get NormalsKind
-            ::com::sun::star::drawing::NormalsKind aNormalsKind(::com::sun::star::drawing::NormalsKind_SPECIFIC);
+            css::drawing::NormalsKind aNormalsKind(css::drawing::NormalsKind_SPECIFIC);
             const sal_uInt16 nNormalsValue(static_cast<const Svx3DNormalsKindItem&>(rSet.Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue());
 
             if(1L == nNormalsValue)
             {
-                aNormalsKind = ::com::sun::star::drawing::NormalsKind_FLAT;
+                aNormalsKind = css::drawing::NormalsKind_FLAT;
             }
             else if(2L == nNormalsValue)
             {
-                aNormalsKind = ::com::sun::star::drawing::NormalsKind_SPHERE;
+                aNormalsKind = css::drawing::NormalsKind_SPHERE;
             }
 
             // get NoermalsInvert flag
             const bool bInvertNormals(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue());
 
             // get TextureProjectionX
-            ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC);
+            css::drawing::TextureProjectionMode aTextureProjectionX(css::drawing::TextureProjectionMode_OBJECTSPECIFIC);
             const sal_uInt16 nTextureValueX(static_cast<const Svx3DTextureProjectionXItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue());
 
             if(1L == nTextureValueX)
             {
-                aTextureProjectionX = ::com::sun::star::drawing::TextureProjectionMode_PARALLEL;
+                aTextureProjectionX = css::drawing::TextureProjectionMode_PARALLEL;
             }
             else if(2L == nTextureValueX)
             {
-                aTextureProjectionX = ::com::sun::star::drawing::TextureProjectionMode_SPHERE;
+                aTextureProjectionX = css::drawing::TextureProjectionMode_SPHERE;
             }
 
             // get TextureProjectionY
-            ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC);
+            css::drawing::TextureProjectionMode aTextureProjectionY(css::drawing::TextureProjectionMode_OBJECTSPECIFIC);
             const sal_uInt16 nTextureValueY(static_cast<const Svx3DTextureProjectionYItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue());
 
             if(1L == nTextureValueY)
             {
-                aTextureProjectionY = ::com::sun::star::drawing::TextureProjectionMode_PARALLEL;
+                aTextureProjectionY = css::drawing::TextureProjectionMode_PARALLEL;
             }
             else if(2L == nTextureValueY)
             {
-                aTextureProjectionY = ::com::sun::star::drawing::TextureProjectionMode_SPHERE;
+                aTextureProjectionY = css::drawing::TextureProjectionMode_SPHERE;
             }
 
             // get DoubleSided flag
@@ -89,30 +89,30 @@ namespace drawinglayer
 
             // get texture kind
             // TextureKind: 1 == Base3DTextureLuminance, 2 == Base3DTextureIntensity, 3 == Base3DTextureColor
-            ::com::sun::star::drawing::TextureKind2 aTextureKind(::com::sun::star::drawing::TextureKind2_LUMINANCE);
+            css::drawing::TextureKind2 aTextureKind(css::drawing::TextureKind2_LUMINANCE);
             const sal_uInt16 nTextureKind(static_cast<const Svx3DTextureKindItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_KIND)).GetValue());
 
             if(2 == nTextureKind)
             {
-                aTextureKind = ::com::sun::star::drawing::TextureKind2_INTENSITY;
+                aTextureKind = css::drawing::TextureKind2_INTENSITY;
             }
             else if(3 == nTextureKind)
             {
-                aTextureKind = ::com::sun::star::drawing::TextureKind2_COLOR;
+                aTextureKind = css::drawing::TextureKind2_COLOR;
             }
 
             // get texture mode
             // TextureMode: 1 == Base3DTextureReplace, 2 == Base3DTextureModulate, 3 == Base3DTextureBlend
-            ::com::sun::star::drawing::TextureMode aTextureMode(::com::sun::star::drawing::TextureMode_REPLACE);
+            css::drawing::TextureMode aTextureMode(css::drawing::TextureMode_REPLACE);
             const sal_uInt16 nTextureMode(static_cast<const Svx3DTextureModeItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_MODE)).GetValue());
 
             if(2 == nTextureMode)
             {
-                aTextureMode = ::com::sun::star::drawing::TextureMode_MODULATE;
+                aTextureMode = css::drawing::TextureMode_MODULATE;
             }
             else if(3 == nTextureMode)
             {
-                aTextureMode = ::com::sun::star::drawing::TextureMode_BLEND;
+                aTextureMode = css::drawing::TextureMode_BLEND;
             }
 
             // get object color

@@ -81,17 +81,17 @@ namespace svx {
 
 // FormViewPageWindowAdapter
 
-typedef ::cppu::WeakImplHelper <   ::com::sun::star::container::XIndexAccess
-                                ,   ::com::sun::star::form::runtime::XFormControllerContext
+typedef ::cppu::WeakImplHelper <   css::container::XIndexAccess
+                                ,   css::form::runtime::XFormControllerContext
                                 >   FormViewPageWindowAdapter_Base;
 
 class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
 {
     friend class FmXFormView;
 
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > >   m_aControllerList;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >                            m_xControlContainer;
-    css::uno::Reference<css::uno::XComponentContext>                                                        m_xContext;
+    ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >   m_aControllerList;
+    css::uno::Reference< css::awt::XControlContainer >                            m_xControlContainer;
+    css::uno::Reference<css::uno::XComponentContext>                              m_xContext;
     FmXFormView*                m_pViewImpl;
     VclPtr<vcl::Window>         m_pWindow;
 
@@ -104,44 +104,44 @@ public:
         //const SdrPageViewWinRec*, FmXFormView* pView);
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 _Index) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _Index) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     // XFormControllerContext
-    virtual void SAL_CALL makeVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _Control ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL makeVisible( const css::uno::Reference< css::awt::XControl >& _Control ) throw (css::uno::RuntimeException, std::exception) override;
 
-    const ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
+    const ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >  getController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm ) const;
+    css::uno::Reference< css::form::runtime::XFormController >  getController( const css::uno::Reference< css::form::XForm >& xForm ) const;
     void setController(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxParentController );
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
-    void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm );
+            const css::uno::Reference< css::form::XForm >& xForm,
+            const css::uno::Reference< css::form::runtime::XFormController >& _rxParentController );
+    css::uno::Reference< css::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
+    void updateTabOrder( const css::uno::Reference< css::form::XForm >& _rxForm );
     void dispose();
     vcl::Window* getWindow() const {return m_pWindow;}
 };
 
 typedef ::rtl::Reference< FormViewPageWindowAdapter >   PFormViewPageWindowAdapter;
 typedef ::std::vector< PFormViewPageWindowAdapter >     PageWindowAdapterList;
-typedef ::std::set  <   ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
-                    ,   ::comphelper::OInterfaceCompare< ::com::sun::star::form::XForm >
+typedef ::std::set  <   css::uno::Reference< css::form::XForm >
+                    ,   ::comphelper::OInterfaceCompare< css::form::XForm >
                     >   SetOfForms;
-typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+typedef ::std::map  <   css::uno::Reference< css::awt::XControlContainer >
                     ,   SetOfForms
-                    ,   ::comphelper::OInterfaceCompare< ::com::sun::star::awt::XControlContainer >
+                    ,   ::comphelper::OInterfaceCompare< css::awt::XControlContainer >
                     >   MapControlContainerToSetOfForms;
 class SdrModel;
 
 class FmXFormView : public ::cppu::WeakImplHelper<
-                            ::com::sun::star::form::XFormControllerListener,
-                            ::com::sun::star::awt::XFocusListener,
-                            ::com::sun::star::container::XContainerListener>
+                            css::form::XFormControllerListener,
+                            css::awt::XFocusListener,
+                            css::container::XContainerListener>
 {
     friend class FmFormView;
     friend class FmFormShell;
@@ -150,8 +150,8 @@ class FmXFormView : public ::cppu::WeakImplHelper<
     class ObjectRemoveListener;
     friend class ObjectRemoveListener;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>                   m_xWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xLastCreatedControlModel;
+    css::uno::Reference< css::awt::XWindow>                   m_xWindow;
+    css::uno::Reference< css::beans::XPropertySet >           m_xLastCreatedControlModel;
 
     FmFormObj*      m_pMarkedGrid;
     FmFormView*     m_pView;
@@ -160,7 +160,7 @@ class FmXFormView : public ::cppu::WeakImplHelper<
     ImplSVEvent *   m_nAutoFocusEvent;      // event for asynchronously setting the focus to a control
     ImplSVEvent *   m_nControlWizardEvent;  // event for asynchronously setting the focus to a control
 
-    ::com::sun::star::sdb::SQLErrorEvent
+    css::sdb::SQLErrorEvent
                     m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.
 
     PageWindowAdapterList
@@ -194,27 +194,27 @@ protected:
 public:
     // UNO Anbindung
 
-// ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+// css::lang::XEventListener
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) override;
 
-// ::com::sun::star::container::XContainerListener
-    virtual void SAL_CALL elementInserted(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+// css::container::XContainerListener
+    virtual void SAL_CALL elementInserted(const  css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementReplaced(const  css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementRemoved(const  css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
 
-// ::com::sun::star::form::XFormControllerListener
-    virtual void SAL_CALL formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+// css::form::XFormControllerListener
+    virtual void SAL_CALL formActivated(const css::lang::EventObject& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL formDeactivated(const css::lang::EventObject& rEvent) throw(css::uno::RuntimeException, std::exception) override;
 
     // XFocusListener
-    virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
 
     FmFormView* getView() const {return m_pView;}
-    PFormViewPageWindowAdapter  findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC ) const;
+    PFormViewPageWindowAdapter  findWindow( const css::uno::Reference< css::awt::XControlContainer >& _rxCC ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >
-            getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
+    css::uno::Reference< css::form::runtime::XFormController >
+            getFormController( const css::uno::Reference< css::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // activation handling
     inline  bool        hasEverBeenActivated( ) const { return !m_bFirstActivation; }
@@ -238,14 +238,12 @@ public:
     void    breakCreateFormObject();
 
     static bool
-            isFocusable(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& i_rControl
-            );
+            isFocusable( const css::uno::Reference< css::awt::XControl >& i_rControl );
 
 private:
     //void addWindow(const SdrPageViewWinRec*);
     void addWindow(const SdrPageWindow&);
-    void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
+    void removeWindow( const css::uno::Reference< css::awt::XControlContainer >& _rxCC );
     void Activate(bool bSync = false);
     void Deactivate(bool bDeactivateController = true);
 
@@ -256,8 +254,8 @@ private:
         OutputDevice& _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
+        const css::uno::Reference< css::beans::XPropertySet >& _rxField,
+        const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
         const OUString& _rFieldPostfix,
         sal_uInt32 _nInventor,
@@ -273,13 +271,13 @@ private:
         OutputDevice& _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
+        const css::uno::Reference< css::beans::XPropertySet >& _rxField,
+        const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
         const OUString& _rFieldPostfix,
         SdrUnoObj*& _rpLabel,
         SdrUnoObj*& _rpControl,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _rxDataSource = NULL,
+        const css::uno::Reference< css::sdbc::XDataSource >& _rxDataSource = NULL,
         const OUString& _rDataSourceName = OUString(),
         const OUString& _rCommand = OUString(),
         const sal_Int32 _nCommandType = -1
@@ -288,7 +286,7 @@ private:
     void ObjectRemovedInAliveMode(const SdrObject* pObject);
 
     // asynchronously displays an error message. See also OnDelayedErrorMessage.
-    void    displayAsyncErrorMessage( const ::com::sun::star::sdb::SQLErrorEvent& _rEvent );
+    void    displayAsyncErrorMessage( const css::sdb::SQLErrorEvent& _rEvent );
 
     // cancels all pending async events
     void cancelEvents();

@@ -42,19 +42,19 @@ namespace svxform
     class SVX_DLLPUBLIC OSQLParserClient : public ::svxform::OParseContextClient
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     protected:
         mutable std::shared_ptr< ::connectivity::OSQLParser > m_pParser;
 
         OSQLParserClient(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
         std::shared_ptr< ::connectivity::OSQLParseNode > predicateTree(
                 OUString& _rErrorMessage,
                 const OUString& _rStatement,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
+                const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
+                const css::uno::Reference< css::beans::XPropertySet >& _rxField
             ) const;
     };
 

@@ -203,9 +203,9 @@ void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > SdrPageView::GetControlContainer( const OutputDevice& _rDevice ) const
+css::uno::Reference< css::awt::XControlContainer > SdrPageView::GetControlContainer( const OutputDevice& _rDevice ) const
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xReturn;
+    css::uno::Reference< css::awt::XControlContainer > xReturn;
     const SdrPageWindow* pCandidate = FindPatchedPageWindow( _rDevice );
 
     if ( pCandidate )

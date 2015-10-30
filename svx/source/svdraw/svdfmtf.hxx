@@ -54,7 +54,7 @@ protected:
     Color                       maOldLineColor;
     sal_Int32                   mnLineWidth;
     basegfx::B2DLineJoin        maLineJoin;
-    com::sun::star::drawing::LineCap    maLineCap;
+    css::drawing::LineCap       maLineCap;
     XDash                       maDash;
 
     bool                        mbMov;

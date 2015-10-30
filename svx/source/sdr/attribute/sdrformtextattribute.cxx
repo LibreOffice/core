@@ -52,27 +52,27 @@
 
 namespace
 {
-    basegfx::B2DLineJoin impGetB2DLineJoin(com::sun::star::drawing::LineJoint eLineJoint)
+    basegfx::B2DLineJoin impGetB2DLineJoin(css::drawing::LineJoint eLineJoint)
     {
         switch(eLineJoint)
         {
-            case com::sun::star::drawing::LineJoint_MIDDLE :
+            case css::drawing::LineJoint_MIDDLE :
             {
                 return basegfx::B2DLineJoin::Middle;
             }
-            case com::sun::star::drawing::LineJoint_BEVEL :
+            case css::drawing::LineJoint_BEVEL :
             {
                 return basegfx::B2DLineJoin::Bevel;
             }
-            case com::sun::star::drawing::LineJoint_MITER :
+            case css::drawing::LineJoint_MITER :
             {
                 return basegfx::B2DLineJoin::Miter;
             }
-            case com::sun::star::drawing::LineJoint_ROUND :
+            case css::drawing::LineJoint_ROUND :
             {
                 return basegfx::B2DLineJoin::Round;
             }
-            default : // com::sun::star::drawing::LineJoint_NONE
+            default : // css::drawing::LineJoint_NONE
             {
                 return basegfx::B2DLineJoin::NONE; // XLINEJOINT_NONE
             }
@@ -111,8 +111,8 @@ namespace
         }
 
         const sal_uInt32 nLineWidth = (static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH))).GetValue();
-        const com::sun::star::drawing::LineJoint eLineJoint = (static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT))).GetValue();
-        const com::sun::star::drawing::LineCap eLineCap = (static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP))).GetValue();
+        const css::drawing::LineJoint eLineJoint = (static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT))).GetValue();
+        const css::drawing::LineCap eLineCap = (static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP))).GetValue();
 
         return drawinglayer::attribute::LineAttribute(
             aColorAttribute,
@@ -123,11 +123,11 @@ namespace
 
     drawinglayer::attribute::StrokeAttribute impGetStrokeAttribute(const SfxItemSet& rSet)
     {
-        const com::sun::star::drawing::LineStyle eLineStyle = (static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE))).GetValue();
+        const css::drawing::LineStyle eLineStyle = (static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE))).GetValue();
         double fFullDotDashLen(0.0);
         ::std::vector< double > aDotDashArray;
 
-        if(com::sun::star::drawing::LineStyle_DASH == eLineStyle)
+        if(css::drawing::LineStyle_DASH == eLineStyle)
         {
             const XDash& rDash = (static_cast<const XLineDashItem&>(rSet.Get(XATTR_LINEDASH))).GetDashValue();
 

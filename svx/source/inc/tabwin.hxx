@@ -97,7 +97,7 @@ public:
                               const SfxPoolItem* pState) override;
 
     void UpdateContent(FmFormShell*);
-    void UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > &);
+    void UpdateContent(const css::uno::Reference< css::form::XForm > &);
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
 
     const OUString&      GetDatabaseName() const { return m_aDatabaseName; }
@@ -109,7 +109,7 @@ public:
 
 protected:
     // FmXChangeListener
-    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
     inline          SfxBindings&    GetBindings()       { return SfxControllerItem::GetBindings(); }

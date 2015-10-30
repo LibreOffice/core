@@ -190,7 +190,7 @@ uno::Reference< XAccessibleStateSet > SvxPixelCtlAccessible::getAccessibleStateS
 }
 
 
-com::sun::star::lang::Locale SvxPixelCtlAccessible::getLocale(  )
+css::lang::Locale SvxPixelCtlAccessible::getLocale(  )
     throw (IllegalAccessibleComponentStateException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -276,14 +276,14 @@ void SvxPixelCtlAccessible::grabFocus(  ) throw (uno::RuntimeException, std::exc
 }
 
 sal_Int32 SvxPixelCtlAccessible::getForeground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return mrPixelCtl.GetControlForeground().GetColor();
 }
 
 sal_Int32 SvxPixelCtlAccessible::getBackground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return mrPixelCtl.GetControlBackground().GetColor();
@@ -406,7 +406,7 @@ void SvxPixelCtlAccessible::CommitChange( const AccessibleEventObject& rEvent )
 }
 
 //Solution:Add the event handling method
-void SvxPixelCtlAccessible::FireAccessibleEvent (short nEventId, const ::com::sun::star::uno::Any& rOld, const ::com::sun::star::uno::Any& rNew)
+void SvxPixelCtlAccessible::FireAccessibleEvent (short nEventId, const css::uno::Any& rOld, const css::uno::Any& rNew)
 {
     const uno::Reference< XInterface >  xSource( *this );
     CommitChange( AccessibleEventObject( xSource, nEventId, rNew,rOld ) );
@@ -539,8 +539,8 @@ void SvxPixelCtlAccessibleChild::SelectChild( bool bSelect)
 }
 void SvxPixelCtlAccessibleChild::FireAccessibleEvent (
     short nEventId,
-    const ::com::sun::star::uno::Any& rOld,
-    const ::com::sun::star::uno::Any& rNew)
+    const css::uno::Any& rOld,
+    const css::uno::Any& rNew)
 {
     const uno::Reference< XInterface >  xSource( *this );
     CommitChange( AccessibleEventObject( xSource, nEventId, rNew,rOld ) );
@@ -626,14 +626,14 @@ void SAL_CALL SvxPixelCtlAccessibleChild::grabFocus() throw( RuntimeException, s
 }
 
 sal_Int32 SvxPixelCtlAccessibleChild::getForeground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
     return mrParentWindow.GetControlForeground().GetColor();
 }
 sal_Int32 SvxPixelCtlAccessibleChild::getBackground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 

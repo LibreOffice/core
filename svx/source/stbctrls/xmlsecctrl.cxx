@@ -124,11 +124,11 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
         PopupMenu aPopupMenu( ResId( RID_SVXMNU_XMLSECSTATBAR, DIALOG_MGR() ) );
         if( aPopupMenu.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )
         {
-            ::com::sun::star::uno::Any a;
+            css::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), 0 );
             INetURLObject aObj( m_aCommandURL );
 
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+            css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name  = aObj.GetURLPath();
             aState.QueryValue( a );
             aArgs[0].Value = a;

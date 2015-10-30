@@ -40,7 +40,7 @@ bool SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
         mlRight == static_cast<const SvxLongLRSpaceItem &>(rCmp).mlRight;
 }
 
-bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxLongLRSpaceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -50,7 +50,7 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     {
         case 0:
         {
-            ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
+            css::frame::status::LeftRightMargin aLeftRightMargin;
             aLeftRightMargin.Left = bConvert ? convertTwipToMm100( mlLeft ) : mlLeft;
             aLeftRightMargin.Right = bConvert ? convertTwipToMm100( mlRight ) : mlRight;
             rVal <<= aLeftRightMargin;
@@ -75,7 +75,7 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxLongLRSpaceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -83,7 +83,7 @@ bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
     sal_Int32 nVal = 0;
     if ( nMemberId == 0 )
     {
-        ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
+        css::frame::status::LeftRightMargin aLeftRightMargin;
         if ( rVal >>= aLeftRightMargin )
         {
             mlLeft  = bConvert ? convertMm100ToTwip(aLeftRightMargin.Left) : aLeftRightMargin.Left;
@@ -169,7 +169,7 @@ bool SvxLongULSpaceItem::operator==( const SfxPoolItem& rCmp) const
         mlRight == static_cast<const SvxLongULSpaceItem&>(rCmp).mlRight;
 }
 
-bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxLongULSpaceItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -179,7 +179,7 @@ bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     {
         case 0:
         {
-            ::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
+            css::frame::status::UpperLowerMargin aUpperLowerMargin;
             aUpperLowerMargin.Upper = bConvert ? convertTwipToMm100( mlLeft )  : mlLeft;
             aUpperLowerMargin.Lower = bConvert ? convertTwipToMm100( mlRight ) : mlRight;
             rVal <<= aUpperLowerMargin;
@@ -202,7 +202,7 @@ bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxLongULSpaceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -210,7 +210,7 @@ bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
     sal_Int32 nVal = 0;
     if ( nMemberId == 0 )
     {
-        ::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
+        css::frame::status::UpperLowerMargin aUpperLowerMargin;
         if ( rVal >>= aUpperLowerMargin )
         {
             mlLeft    = bConvert ? convertMm100ToTwip( aUpperLowerMargin.Upper ) : aUpperLowerMargin.Upper;
@@ -297,7 +297,7 @@ bool SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
             lHeight == static_cast<const SvxPagePosSizeItem &>(rCmp).lHeight;
 }
 
-bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxPagePosSizeItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -306,7 +306,7 @@ bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     {
         case 0 :
         {
-            com::sun::star::awt::Rectangle aPagePosSize;
+            css::awt::Rectangle aPagePosSize;
             aPagePosSize.X = aPos.X();
             aPagePosSize.Y = aPos.Y();
             aPagePosSize.Width = lWidth;
@@ -327,14 +327,14 @@ bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxPagePosSizeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
     sal_Int32 nVal = 0;
     if ( nMemberId == 0 )
     {
-        com::sun::star::awt::Rectangle aPagePosSize;
+        css::awt::Rectangle aPagePosSize;
         if ( rVal >>= aPagePosSize )
         {
             aPos.X() = aPagePosSize.X;
@@ -499,7 +499,7 @@ bool SvxColumnItem::CalcOrtho() const
     return true;
 }
 
-bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxColumnItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -529,7 +529,7 @@ bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
     return true;
 }
 
-bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxColumnItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
@@ -728,7 +728,7 @@ SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :
     bLimits     (rCopy.bLimits)
 {}
 
-bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxObjectItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
@@ -756,7 +756,7 @@ bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
     return true;
 }
 
-bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxObjectItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = false;

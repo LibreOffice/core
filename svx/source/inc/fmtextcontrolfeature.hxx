@@ -31,16 +31,16 @@
 namespace svx
 {
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::frame::XStatusListener
+    typedef ::cppu::WeakImplHelper <   css::frame::XStatusListener
                                     >   FmTextControlFeature_Base;
 
     class FmTextControlFeature : public FmTextControlFeature_Base
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
+        css::uno::Reference< css::frame::XDispatch >
                                         m_xDispatcher;
-        ::com::sun::star::util::URL     m_aFeatureURL;
-        ::com::sun::star::uno::Any      m_aFeatureState;
+        css::util::URL                  m_aFeatureURL;
+        css::uno::Any                   m_aFeatureState;
         SfxSlotId                       m_nSlotId;
         ISlotInvalidator*               m_pInvalidator;
         bool                            m_bFeatureEnabled;
@@ -53,15 +53,15 @@ namespace svx
             the URL which the instance should be responsible for
         */
         FmTextControlFeature(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _rxDispatcher,
-            const ::com::sun::star::util::URL& _rFeatureURL,
+            const css::uno::Reference< css::frame::XDispatch >& _rxDispatcher,
+            const css::util::URL& _rFeatureURL,
             SfxSlotId _nId,
             ISlotInvalidator* _pInvalidator
         );
 
         /// determines whether the feature we're responsible for is currently enabled
         inline  bool                                isFeatureEnabled( ) const { return m_bFeatureEnabled; }
-        inline  const ::com::sun::star::uno::Any&   getFeatureState( ) const { return m_aFeatureState; }
+        inline  const css::uno::Any&   getFeatureState( ) const { return m_aFeatureState; }
 
         /** dispatches the feature URL to the dispatcher
         */
@@ -69,7 +69,7 @@ namespace svx
 
         /** dispatches the feature URL to the dispatcher, with passing the given arguments
         */
-        void    dispatch( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs ) const;
+        void    dispatch( const css::uno::Sequence< css::beans::PropertyValue >& _rArgs ) const;
 
         /// releases any resources associated with this instance
         void    dispose();
@@ -79,8 +79,8 @@ namespace svx
 
     protected:
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& State ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& State ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
     };
 
 

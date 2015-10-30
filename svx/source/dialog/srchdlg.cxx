@@ -2247,14 +2247,13 @@ void SvxSearchDialog::SaveToModule_Impl()
     rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SfxCallMode::SLOT, ppArgs );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+css::uno::Reference< css::awt::XWindowPeer >
         SvxSearchDialog::GetComponentInterface( bool bCreate )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer
-        (Window::GetComponentInterface(false));
+    css::uno::Reference< css::awt::XWindowPeer > xPeer( Window::GetComponentInterface(false) );
     if ( !xPeer.is() && bCreate )
     {
-        ::com::sun::star::awt::XWindowPeer* mxPeer = new VCLXSvxFindReplaceDialog(this);
+        css::awt::XWindowPeer* mxPeer = new VCLXSvxFindReplaceDialog(this);
         SetComponentInterface(mxPeer);
         return mxPeer;
     }

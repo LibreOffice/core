@@ -77,7 +77,7 @@ namespace
         sal_Int32                                   mnParagraph;
         SvxFont                                     maFont;
         ::std::vector< double >                     maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
-        ::com::sun::star::lang::Locale              maLocale;
+        css::lang::Locale                           maLocale;
 
         // bitfield
         bool                                        mbRTL : 1;
@@ -91,7 +91,7 @@ namespace
             mnParagraph(rInfo.mnPara),
             maFont(rInfo.mrFont),
             maDblDXArray(),
-            maLocale(rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale()),
+            maLocale(rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale()),
             mbRTL(!rInfo.mrFont.IsVertical() && rInfo.IsRTL())
         {
             if(mnTextLength && rInfo.mpDXArray)
@@ -128,7 +128,7 @@ namespace
         const SvxFont& getFont() const { return maFont; }
         bool isRTL() const { return mbRTL; }
         const ::std::vector< double >& getDoubleDXArray() const { return maDblDXArray; }
-        const ::com::sun::star::lang::Locale& getLocale() const { return maLocale; }
+        const css::lang::Locale& getLocale() const { return maLocale; }
 
         sal_Int32 getPortionIndex(sal_Int32 nIndex, sal_Int32 nLength) const
         {
@@ -211,7 +211,7 @@ namespace
         const drawinglayer::attribute::SdrFormTextAttribute         maSdrFormTextAttribute; // FormText parameters
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& mrDecomposition;        // destination primitive list
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& mrShadowDecomposition;  // destination primitive list for shadow
-        Reference < com::sun::star::i18n::XBreakIterator >          mxBreak;                // break iterator
+        Reference < css::i18n::XBreakIterator >                     mxBreak;                // break iterator
 
         static double getParagraphTextLength(const ::std::vector< const impPathTextPortion* >& rTextPortions)
         {
@@ -232,7 +232,7 @@ namespace
             return fRetval;
         }
 
-        sal_Int32 getNextGlyphLen(const impPathTextPortion* pCandidate, sal_Int32 nPosition, const ::com::sun::star::lang::Locale& rFontLocale)
+        sal_Int32 getNextGlyphLen(const impPathTextPortion* pCandidate, sal_Int32 nPosition, const css::lang::Locale& rFontLocale)
         {
             sal_Int32 nNextGlyphLen(1);
 
@@ -257,7 +257,7 @@ namespace
         {
             // prepare BreakIterator
             Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            mxBreak = com::sun::star::i18n::BreakIterator::create(xContext);
+            mxBreak = css::i18n::BreakIterator::create(xContext);
         }
 
         void HandlePair(const basegfx::B2DPolygon& rPolygonCandidate, const ::std::vector< const impPathTextPortion* >& rTextPortions)

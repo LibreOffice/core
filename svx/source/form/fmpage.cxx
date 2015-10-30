@@ -109,7 +109,7 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
                     xForms->setParent( pObjShell->GetModel() );
             }
         }
-        catch( ::com::sun::star::uno::Exception const& )
+        catch( css::uno::Exception const& )
         {
             OSL_FAIL( "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
         }
@@ -177,7 +177,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
         return false;
 
     OUString aHelpText;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet( pFormObject->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::beans::XPropertySet >  xSet( pFormObject->GetUnoControlModel(), css::uno::UNO_QUERY );
     if (xSet.is())
     {
         if (::comphelper::hasProperty(FM_PROP_HELPTEXT, xSet))

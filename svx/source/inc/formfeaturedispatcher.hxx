@@ -31,7 +31,7 @@
 namespace svx
 {
 
-    typedef ::cppu::WeakImplHelper <   ::com::sun::star::frame::XDispatch
+    typedef ::cppu::WeakImplHelper <   css::frame::XDispatch
                                     >   OSingleFeatureDispatcher_Base;
 
     class OSingleFeatureDispatcher : public OSingleFeatureDispatcher_Base
@@ -39,13 +39,13 @@ namespace svx
     private:
         ::osl::Mutex&                       m_rMutex;
         ::cppu::OInterfaceContainerHelper   m_aStatusListeners;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >
+        css::uno::Reference< css::form::runtime::XFormOperations >
                                             m_xFormOperations;
-        const ::com::sun::star::util::URL   m_aFeatureURL;
-        ::com::sun::star::uno::Any          m_aLastKnownState;
+        const css::util::URL                m_aFeatureURL;
+        css::uno::Any                       m_aLastKnownState;
         const sal_Int16                     m_nFormFeature;
-        bool                            m_bLastKnownEnabled;
-        bool                            m_bDisposed;
+        bool                                m_bLastKnownEnabled;
+        bool                                m_bDisposed;
 
     public:
         /** constructs the dispatcher
@@ -64,9 +64,9 @@ namespace svx
             @see dispose
         */
         OSingleFeatureDispatcher(
-            const ::com::sun::star::util::URL& _rFeatureURL,
+            const css::util::URL& _rFeatureURL,
             const sal_Int16 _nFormFeature,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >& _rxFormOperations,
+            const css::uno::Reference< css::form::runtime::XFormOperations >& _rxFormOperations,
             ::osl::Mutex& _rMutex
         );
 
@@ -76,9 +76,9 @@ namespace svx
 
     protected:
         // XDispatch
-        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& _rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxControl, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxControl, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispatch( const css::util::URL& _rURL, const css::uno::Sequence< css::beans::PropertyValue >& _rArguments ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
         /** notifies our current state to one or all listeners
@@ -92,7 +92,7 @@ namespace svx
                 for actually doing the notification(s)
         */
         void    notifyStatus(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener,
+                    const css::uno::Reference< css::frame::XStatusListener >& _rxListener,
                     ::osl::ClearableMutexGuard& _rFreeForNotification
                 );
 
@@ -100,7 +100,7 @@ namespace svx
         /** checks whether our instance is alive
 
             If the instance already received a <member>dispose</member> call, then a
-            <type scope="com::sun::star::lang">DisposedException</type> is thrown.
+            <type scope="css::lang">DisposedException</type> is thrown.
 
             @precond
                 our Mutex is locked - else calling the method would not make sense, since
@@ -114,7 +114,7 @@ namespace svx
             @precond
                 our mutex is locked
         */
-        void    getUnoState( ::com::sun::star::frame::FeatureStateEvent& /* [out] */ _rState ) const;
+        void    getUnoState( css::frame::FeatureStateEvent& /* [out] */ _rState ) const;
     };
 
 

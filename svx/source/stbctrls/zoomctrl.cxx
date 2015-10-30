@@ -159,10 +159,10 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
             case ZOOM_WHOLE_PAGE:   aZoom.SetType( SvxZoomType::WHOLEPAGE ); break;
             }
 
-            ::com::sun::star::uno::Any a;
+            css::uno::Any a;
             INetURLObject aObj( m_aCommandURL );
 
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+            css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name  = aObj.GetURLPath();
             aZoom.QueryValue( a );
             aArgs[0].Value = a;
@@ -196,10 +196,10 @@ bool SvxZoomPageStatusBarControl::MouseButtonDown(const MouseEvent&)
 {
     SvxZoomItem aZoom( SvxZoomType::WHOLEPAGE, 0, GetId() );
 
-    ::com::sun::star::uno::Any a;
+    css::uno::Any a;
     INetURLObject aObj( m_aCommandURL );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name  = aObj.GetURLPath();
     aZoom.QueryValue( a );
     aArgs[0].Value = a;

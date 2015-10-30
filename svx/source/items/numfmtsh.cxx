@@ -1152,7 +1152,7 @@ bool SvxNumberFormatShell::IsAdded_Impl( size_t nKey )
 // Konvertierungs-Routinen:
 void SvxNumberFormatShell::PosToCategory_Impl(sal_uInt16 nPos, short& rCategory) const
 {
-    // Kategorie ::com::sun::star::form-Positionen abbilden (->Resource)
+    // Kategorie css::form-Positionen abbilden (->Resource)
     switch ( nPos )
     {
         case CAT_USERDEFINED:   rCategory = css::util::NumberFormat::DEFINED;       break;
@@ -1172,7 +1172,7 @@ void SvxNumberFormatShell::PosToCategory_Impl(sal_uInt16 nPos, short& rCategory)
 
 void SvxNumberFormatShell::CategoryToPos_Impl(short nCategory, sal_uInt16& rPos) const
 {
-    // Kategorie auf ::com::sun::star::form-Positionen abbilden (->Resource)
+    // Kategorie auf css::form-Positionen abbilden (->Resource)
     switch ( nCategory )
     {
         case css::util::NumberFormat::DEFINED:      rPos = CAT_USERDEFINED; break;

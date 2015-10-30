@@ -54,8 +54,8 @@ namespace svx
     class IFocusObserver
     {
     public:
-        virtual void    focusGained( const ::com::sun::star::awt::FocusEvent& _rEvent ) = 0;
-        virtual void    focusLost( const ::com::sun::star::awt::FocusEvent& _rEvent ) = 0;
+        virtual void    focusGained( const css::awt::FocusEvent& _rEvent ) = 0;
+        virtual void    focusLost( const css::awt::FocusEvent& _rEvent ) = 0;
 
     protected:
         ~IFocusObserver() {}
@@ -67,7 +67,7 @@ namespace svx
     class IContextRequestObserver
     {
     public:
-        virtual void    contextMenuRequested( const ::com::sun::star::awt::MouseEvent& _rEvent ) = 0;
+        virtual void    contextMenuRequested( const css::awt::MouseEvent& _rEvent ) = 0;
 
     protected:
         ~IContextRequestObserver() {}
@@ -78,39 +78,39 @@ namespace svx
                              ,public IContextRequestObserver
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >             m_xURLTransformer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                     m_xActiveControl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >               m_xActiveTextComponent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xActiveController;
+        css::uno::Reference< css::util::XURLTransformer >             m_xURLTransformer;
+        css::uno::Reference< css::awt::XControl >                     m_xActiveControl;
+        css::uno::Reference< css::awt::XTextComponent >               m_xActiveTextComponent;
+        css::uno::Reference< css::form::runtime::XFormController >    m_xActiveController;
 #ifndef DONT_REMEMBER_LAST_CONTROL
         // without this define, m_xActiveControl remembers the *last* active control, even
         // if it, in the meantime, already lost the focus
-        bool                                                                        m_bActiveControl;
+        bool                                                          m_bActiveControl;
             // so we need an additional boolean flag telling whether the active control
             // is really focused
 #endif
-        bool                                                                        m_bActiveControlIsReadOnly;
-        bool                                                                        m_bActiveControlIsRichText;
+        bool                                                          m_bActiveControlIsReadOnly;
+        bool                                                          m_bActiveControlIsRichText;
 
         // listening at all controls of the active controller for focus changes
         typedef rtl::Reference<FmFocusListenerAdapter> FocusListenerAdapter;
-        typedef ::std::vector< FocusListenerAdapter >                               FocusListenerAdapters;
-        FocusListenerAdapters                                                       m_aControlObservers;
+        typedef ::std::vector< FocusListenerAdapter >  FocusListenerAdapters;
+        FocusListenerAdapters                                         m_aControlObservers;
 
         typedef rtl::Reference<FmMouseListenerAdapter> MouseListenerAdapter;
-        MouseListenerAdapter                                                        m_aContextMenuObserver;
+        MouseListenerAdapter                                         m_aContextMenuObserver;
 
         // translating between "slots" of the framework and "features" of the active control
         typedef rtl::Reference<FmTextControlFeature> ControlFeature;
         typedef ::std::map< SfxSlotId, ControlFeature, ::std::less< SfxSlotId > >   ControlFeatures;
-        ControlFeatures                                                             m_aControlFeatures;
+        ControlFeatures                                             m_aControlFeatures;
 
-        SfxViewFrame*                                                               m_pViewFrame;
+        SfxViewFrame*                                               m_pViewFrame;
         // invalidating slots
-        SfxBindings&                                                                m_rBindings;
-        Link<LinkParamNone*,void>                                                   m_aControlActivationHandler;
-        AutoTimer                                                                   m_aClipboardInvalidation;
-        bool                                                                        m_bNeedClipboardInvalidation;
+        SfxBindings&                                                m_rBindings;
+        Link<LinkParamNone*,void>                                   m_aControlActivationHandler;
+        AutoTimer                                                   m_aClipboardInvalidation;
+        bool                                                        m_bNeedClipboardInvalidation;
 
     public:
         FmTextControlShell( SfxViewFrame* _pFrame );
@@ -127,10 +127,10 @@ namespace svx
 
         /** to be called when a form in our document has been activated
         */
-        void    formActivated( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController );
+        void    formActivated( const css::uno::Reference< css::form::runtime::XFormController >& _rxController );
         /** to be called when a form in our document has been deactivated
         */
-        void    formDeactivated( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController );
+        void    formDeactivated( const css::uno::Reference< css::form::runtime::XFormController >& _rxController );
 
         /** notifies the instance that the design mode has changed
         */
@@ -138,11 +138,11 @@ namespace svx
 
     protected:
         // IFocusObserver
-        virtual void    focusGained( const ::com::sun::star::awt::FocusEvent& _rEvent ) override;
-        virtual void    focusLost( const ::com::sun::star::awt::FocusEvent& _rEvent ) override;
+        virtual void    focusGained( const css::awt::FocusEvent& _rEvent ) override;
+        virtual void    focusLost( const css::awt::FocusEvent& _rEvent ) override;
 
         // IContextRequestObserver
-        virtual void    contextMenuRequested( const ::com::sun::star::awt::MouseEvent& _rEvent ) override;
+        virtual void    contextMenuRequested( const css::awt::MouseEvent& _rEvent ) override;
 
         // ISlotInvalidator
         virtual void    Invalidate( SfxSlotId _nSlot ) override;
@@ -158,14 +158,14 @@ namespace svx
 
         FmTextControlFeature*
                         implGetFeatureDispatcher(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& _rxProvider,
+                            const css::uno::Reference< css::frame::XDispatchProvider >& _rxProvider,
                             SfxApplication* _pApplication,
                             SfxSlotId _nSlot
                         );
 
         // fills the given structure with dispatchers for the given slots, for the given control
         void            fillFeatureDispatchers(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
+                            const css::uno::Reference< css::awt::XControl >& _rxControl,
                             SfxSlotId* _pZeroTerminatedSlots,
                             ControlFeatures& _rDispatchers
                         );
@@ -178,7 +178,7 @@ namespace svx
                         );
 
         /// to be called when a control has been activated
-        void    controlActivated( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
+        void    controlActivated( const css::uno::Reference< css::awt::XControl >& _rxControl );
         /// to be called when the currently active control has been deactivated
         void    controlDeactivated( );
 
@@ -188,7 +188,7 @@ namespace svx
         @precond
             we don't have an active controller currently
         */
-        void    startControllerListening( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController );
+        void    startControllerListening( const css::uno::Reference< css::form::runtime::XFormController >& _rxController );
         /** stops listening at the active controller
         @precond
             we have an active controller currently
@@ -197,7 +197,7 @@ namespace svx
 
         /** parses the given URL's Complete member, by calling XURLTransformer::parseString
         */
-        void    impl_parseURL_nothrow( ::com::sun::star::util::URL& _rURL );
+        void    impl_parseURL_nothrow( css::util::URL& _rURL );
 
         DECL_LINK_TYPED( OnInvalidateClipboard, Timer*, void );
     };

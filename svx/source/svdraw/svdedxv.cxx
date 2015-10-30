@@ -1932,7 +1932,7 @@ bool SdrObjEditView::EndMacroObj()
 
 /** fills the given any with a XTextCursor for the current text selection.
     Leaves the any untouched if there currently is no text selected */
-void SdrObjEditView::getTextSelection( ::com::sun::star::uno::Any& rSelection )
+void SdrObjEditView::getTextSelection( css::uno::Any& rSelection )
 {
     if( IsTextEdit() )
     {
@@ -1943,7 +1943,7 @@ void SdrObjEditView::getTextSelection( ::com::sun::star::uno::Any& rSelection )
 
             if( pObj )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > xText( pObj->getUnoShape(), ::com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference< css::text::XText > xText( pObj->getUnoShape(), css::uno::UNO_QUERY );
                 if( xText.is() )
                 {
                     SvxUnoTextBase* pRange = SvxUnoTextBase::getImplementation( xText );
@@ -2254,7 +2254,7 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
 
                 ESelection aSel( pOLV->GetSelection() );
                 if( !aSel.HasRange() )
-                    pOLV->SetSelection( rEditEngine.GetWord( aSel, com::sun::star::i18n::WordType::DICTIONARY_WORD ) );
+                    pOLV->SetSelection( rEditEngine.GetWord( aSel, css::i18n::WordType::DICTIONARY_WORD ) );
 
                 const bool bRemoveParaAttribs = !bNoParagraphFormats;
                 pOLV->RemoveAttribsKeepLanguages( bRemoveParaAttribs );

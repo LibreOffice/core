@@ -114,22 +114,22 @@ SfxPoolItem* SvxChartTextOrderItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 
 
 
-bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxChartTextOrderItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     // the order of the two enums is not equal, so a mapping is required
-    ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
+    css::chart::ChartAxisArrangeOrderType eAO;
     SvxChartTextOrder eOrder( GetValue());
 
     switch( eOrder )
     {
         case CHTXTORDER_SIDEBYSIDE:
-            eAO = ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE; break;
+            eAO = css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE; break;
         case CHTXTORDER_UPDOWN:
-            eAO = ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_ODD; break;
+            eAO = css::chart::ChartAxisArrangeOrderType_STAGGER_ODD; break;
         case CHTXTORDER_DOWNUP:
-            eAO = ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_EVEN; break;
+            eAO = css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN; break;
         case CHTXTORDER_AUTO:
-            eAO = ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO; break;
+            eAO = css::chart::ChartAxisArrangeOrderType_AUTO; break;
     }
 
     rVal <<= eAO;
@@ -139,10 +139,10 @@ bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uI
 
 
 
-bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxChartTextOrderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // the order of the two enums is not equal, so a mapping is required
-    ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
+    css::chart::ChartAxisArrangeOrderType eAO;
     SvxChartTextOrder eOrder;
 
     if(!(rVal >>= eAO))
@@ -151,18 +151,18 @@ bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, sa
         sal_Int32 nAO = 0;
         if(!(rVal >>= nAO))
             return false;
-        eAO = static_cast< ::com::sun::star::chart::ChartAxisArrangeOrderType >( nAO );
+        eAO = static_cast< css::chart::ChartAxisArrangeOrderType >( nAO );
     }
 
     switch( eAO )
     {
-        case ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
+        case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
             eOrder = CHTXTORDER_SIDEBYSIDE; break;
-        case ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
+        case css::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
             eOrder = CHTXTORDER_UPDOWN; break;
-        case ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
+        case css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
             eOrder = CHTXTORDER_DOWNUP; break;
-        case ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO:
+        case css::chart::ChartAxisArrangeOrderType_AUTO:
             eOrder = CHTXTORDER_AUTO; break;
         default:
             return false;
