@@ -2290,7 +2290,7 @@ OUString ScTabView::getRowColumnHeaders()
     pDoc->GetTiledRenderingArea(aViewData.GetTabNo(), nEndCol, nEndRow);
 
     boost::property_tree::ptree aRows;
-    for (SCROW nRow = 0; nRow < nEndRow; ++nRow)
+    for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
         boost::property_tree::ptree aRow;
         sal_uInt16 nSize = pRowBar[SC_SPLIT_BOTTOM]->GetEntrySize(nRow);
@@ -2301,7 +2301,7 @@ OUString ScTabView::getRowColumnHeaders()
     }
 
     boost::property_tree::ptree aCols;
-    for (SCCOL nCol = 0; nCol < nEndCol; ++nCol)
+    for (SCCOL nCol = 0; nCol <= nEndCol; ++nCol)
     {
         boost::property_tree::ptree aCol;
         sal_uInt16 nSize = pColBar[SC_SPLIT_LEFT]->GetEntrySize(nCol);
