@@ -675,18 +675,18 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
         PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom, sal_uInt32 nLineWidth )
 {
     sal_Int32 nDist = nDistance;
-    if( nOffsetFrom == 1 )
+    if( nOffsetFrom == 1 ) // From page
     {
         const OUString sMarginName = getPropertyName( eMarginId );
         uno::Any aMargin = xStyle->getPropertyValue( sMarginName );
         sal_Int32 nMargin = 0;
         aMargin >>= nMargin;
 
-        // Change the margins with the ( border distance - line width )
-        xStyle->setPropertyValue( sMarginName, uno::makeAny( nDistance - nLineWidth ) );
+        // Change the margins with the border distance
+        xStyle->setPropertyValue( sMarginName, uno::makeAny( nDistance ) );
 
-        // Set the distance to ( Margin - distance )
-        nDist = nMargin - nDistance;
+        // Set the distance to ( Margin - distance - nLineWidth )
+        nDist = nMargin - nDistance - nLineWidth;
     }
     const OUString sBorderDistanceName = getPropertyName( eDistId );
     if (xStyle.is())
