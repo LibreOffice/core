@@ -40,28 +40,28 @@ namespace svt { namespace table
 {
 
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::awt::grid::XGridColumn;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::awt::grid::XGridColumnListener;
-    using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::awt::grid::GridColumnEvent;
-    using ::com::sun::star::awt::grid::XGridDataModel;
-    using ::com::sun::star::awt::grid::XGridColumnModel;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::style::HorizontalAlignment_LEFT;
-    using ::com::sun::star::style::HorizontalAlignment;
-    using ::com::sun::star::style::VerticalAlignment_TOP;
-    using ::com::sun::star::style::VerticalAlignment;
-    using ::com::sun::star::uno::WeakReference;
-    using ::com::sun::star::awt::grid::GridDataEvent;
-    using ::com::sun::star::awt::grid::XSortableGridData;
-    using ::com::sun::star::beans::Pair;
+    using css::uno::Reference;
+    using css::uno::RuntimeException;
+    using css::uno::Sequence;
+    using css::uno::UNO_QUERY_THROW;
+    using css::uno::UNO_QUERY;
+    using css::awt::grid::XGridColumn;
+    using css::uno::XInterface;
+    using css::uno::Exception;
+    using css::awt::grid::XGridColumnListener;
+    using css::lang::EventObject;
+    using css::awt::grid::GridColumnEvent;
+    using css::awt::grid::XGridDataModel;
+    using css::awt::grid::XGridColumnModel;
+    using css::uno::Any;
+    using css::style::HorizontalAlignment_LEFT;
+    using css::style::HorizontalAlignment;
+    using css::style::VerticalAlignment_TOP;
+    using css::style::VerticalAlignment;
+    using css::uno::WeakReference;
+    using css::awt::grid::GridDataEvent;
+    using css::awt::grid::XSortableGridData;
+    using css::beans::Pair;
 
 
     //= UnoControlTableModel_Impl
@@ -718,10 +718,10 @@ namespace svt { namespace table
     }
 
 
-    void UnoControlTableModel::setRowBackgroundColors( ::com::sun::star::uno::Any const & i_APIValue )
+    void UnoControlTableModel::setRowBackgroundColors( css::uno::Any const & i_APIValue )
     {
         DBG_CHECK_ME();
-        Sequence< ::com::sun::star::util::Color > aAPIColors;
+        Sequence< css::util::Color > aAPIColors;
         if ( !( i_APIValue >>= aAPIColors ) )
             m_pImpl->m_aRowColors.reset();
         else
@@ -894,7 +894,7 @@ namespace svt { namespace table
     }
 
 
-    void UnoControlTableModel::notifyDataChanged( ::com::sun::star::awt::grid::GridDataEvent const & i_event ) const
+    void UnoControlTableModel::notifyDataChanged( css::awt::grid::GridDataEvent const & i_event ) const
     {
         RowPos const firstRow = i_event.FirstRow == -1 ? 0 : i_event.FirstRow;
         RowPos const lastRow = i_event.FirstRow == -1 ? getRowCount() - 1 : i_event.LastRow;

@@ -165,12 +165,12 @@ uno::Sequence< sal_Int8 > SAL_CALL VCLXHatchWindow::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-::com::sun::star::awt::Size SAL_CALL VCLXHatchWindow::getHatchBorderSize() throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Size SAL_CALL VCLXHatchWindow::getHatchBorderSize() throw (css::uno::RuntimeException, std::exception)
 {
     return aHatchBorderSize;
 }
 
-void SAL_CALL VCLXHatchWindow::setHatchBorderSize( const ::com::sun::star::awt::Size& _hatchbordersize ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXHatchWindow::setHatchBorderSize( const css::awt::Size& _hatchbordersize ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( pHatchWindow )
     {

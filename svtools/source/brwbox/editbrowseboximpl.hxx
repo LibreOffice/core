@@ -27,7 +27,7 @@ namespace svt
     class EditBrowseBoxImpl
     {
     public:
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    m_xActiveCell;
+        css::uno::Reference< css::accessibility::XAccessible >    m_xActiveCell;
 
         void clearActiveCell();
     };

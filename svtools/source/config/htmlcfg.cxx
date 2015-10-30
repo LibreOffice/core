@@ -241,7 +241,7 @@ void    SvxHtmlOptions::ImplCommit()
     PutProperties(aNames, aValues);
 }
 
-void SvxHtmlOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
+void SvxHtmlOptions::Notify( const css::uno::Sequence< OUString >& )
 {
     Load( GetPropertyNames() );
 }

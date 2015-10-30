@@ -188,7 +188,7 @@ Reference< XAccessible > ToolbarMenuEntry::getAccessibleChild( sal_Int32 index )
 
 
 
-ToolbarMenu_Impl::ToolbarMenu_Impl( ToolbarMenu& rMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame )
+ToolbarMenu_Impl::ToolbarMenu_Impl( ToolbarMenu& rMenu, const css::uno::Reference< css::frame::XFrame >& xFrame )
 : mrMenu( rMenu )
 , mxFrame( xFrame )
 , mnCheckPos(0)
@@ -222,7 +222,7 @@ void ToolbarMenu_Impl::setAccessible( ToolbarMenuAcc* pAccessible )
 
 
 
-void ToolbarMenu_Impl::fireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue )
+void ToolbarMenu_Impl::fireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue )
 {
     if( mxAccessible.is() )
         mxAccessible->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
@@ -1520,7 +1520,7 @@ void ToolbarMenu::Command( const CommandEvent& rCEvt )
 
 
 
-Reference< ::com::sun::star::accessibility::XAccessible > ToolbarMenu::CreateAccessible()
+Reference< css::accessibility::XAccessible > ToolbarMenu::CreateAccessible()
 {
     mpImpl->setAccessible( new ToolbarMenuAcc( *mpImpl ) );
     return Reference< XAccessible >( mpImpl->mxAccessible.get() );
@@ -1537,7 +1537,7 @@ void ToolbarMenu::AddStatusListener( const OUString& rCommandURL )
 
 
 
-void ToolbarMenu::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& /*Event*/ ) throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+void ToolbarMenu::statusChanged( const css::frame::FeatureStateEvent& /*Event*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
@@ -1546,11 +1546,11 @@ void ToolbarMenu::statusChanged( const ::com::sun::star::frame::FeatureStateEven
 class ToolbarMenuStatusListener : public svt::FrameStatusListener
 {
 public:
-    ToolbarMenuStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+    ToolbarMenuStatusListener( const css::uno::Reference< css::frame::XFrame >& xFrame,
                                ToolbarMenu& rToolbarMenu );
 
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
     VclPtr<ToolbarMenu> mpMenu;
 };
@@ -1558,7 +1558,7 @@ public:
 
 
 ToolbarMenuStatusListener::ToolbarMenuStatusListener(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+    const css::uno::Reference< css::frame::XFrame >& xFrame,
     ToolbarMenu& rToolbarMenu )
 : svt::FrameStatusListener( ::comphelper::getProcessComponentContext(), xFrame )
 , mpMenu( &rToolbarMenu )
@@ -1567,7 +1567,7 @@ ToolbarMenuStatusListener::ToolbarMenuStatusListener(
 
 
 
-void SAL_CALL ToolbarMenuStatusListener::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ToolbarMenuStatusListener::dispose() throw (css::uno::RuntimeException, std::exception)
 {
     mpMenu.clear();
     svt::FrameStatusListener::dispose();
@@ -1575,7 +1575,7 @@ void SAL_CALL ToolbarMenuStatusListener::dispose() throw (::com::sun::star::uno:
 
 
 
-void SAL_CALL ToolbarMenuStatusListener::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL ToolbarMenuStatusListener::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception )
 {
     if( mpMenu )
         mpMenu->statusChanged( Event );

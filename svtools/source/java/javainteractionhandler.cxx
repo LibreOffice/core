@@ -106,11 +106,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             break;
     }
 
-    com::sun::star::java::JavaNotFoundException e1;
-    com::sun::star::java::InvalidJavaSettingsException e2;
-     com::sun::star::java::JavaDisabledException                e3;
-    com::sun::star::java::JavaVMCreationFailureException    e4;
-    com::sun::star::java::RestartRequiredException e5;
+    css::java::JavaNotFoundException           e1;
+    css::java::InvalidJavaSettingsException    e2;
+    css::java::JavaDisabledException           e3;
+    css::java::JavaVMCreationFailureException  e4;
+    css::java::RestartRequiredException        e5;
     // Try to recover the Exception type in the any and
     // react accordingly.
     sal_uInt16      nResult = RET_CANCEL;

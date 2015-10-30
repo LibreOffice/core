@@ -386,7 +386,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                 xResultSet = xDynamicResultSet->getStaticResultSet();
             }
         }
-        catch( ::com::sun::star::uno::Exception& ) {}
+        catch( css::uno::Exception& ) {}
 
         if ( xResultSet.is() )
         {
@@ -448,12 +448,12 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                     }
                 }
             }
-            catch( ::com::sun::star::uno::Exception& )
+            catch( css::uno::Exception& )
             {
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
     }
 }

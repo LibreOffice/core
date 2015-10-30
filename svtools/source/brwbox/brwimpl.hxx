@@ -37,15 +37,14 @@ namespace svt
         {
             inline void operator()(const THeaderCellMap::value_type& _aType)
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp(
-                    _aType.second, ::com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference< css::lang::XComponent > xComp( _aType.second, css::uno::UNO_QUERY );
                 OSL_ENSURE( xComp.is() || !_aType.second.is(), "THeaderCellMapFunctorDispose: invalid accessible cell (no XComponent)!" );
                 if ( xComp.is() )
                     try
                     {
                         xComp->dispose();
                     }
-                    catch( const ::com::sun::star::uno::Exception& )
+                    catch( const css::uno::Exception& )
                     {
                         OSL_FAIL( "THeaderCellMapFunctorDispose: caught an exception!" );
                     }
@@ -65,11 +64,11 @@ namespace svt
 
 
         /// @see AccessibleBrowseBox::getHeaderBar
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        css::uno::Reference< css::accessibility::XAccessible >
             getAccessibleHeaderBar( AccessibleBrowseBoxObjType _eObjType );
 
         /// @see AccessibleBrowseBox::getTable
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        css::uno::Reference< css::accessibility::XAccessible >
             getAccessibleTable( );
 
     };

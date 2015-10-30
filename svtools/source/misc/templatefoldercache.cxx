@@ -607,7 +607,7 @@ namespace svt
                 SAL_WARN( "svtools.misc", "TemplateFolderCacheImpl::implReadFolder: caught a CommandAbortedException!" );
                 return false;
             }
-            catch( ::com::sun::star::uno::Exception& )
+            catch( css::uno::Exception& )
             {
             }
 

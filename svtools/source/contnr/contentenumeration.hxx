@@ -189,17 +189,16 @@ namespace svt
         mutable ::osl::Mutex            m_aMutex;
 
         FolderDescriptor                m_aFolder;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >
+        css::uno::Reference< css::ucb::XCommandEnvironment >
                                         m_xCommandEnv;
         const IContentTitleTranslation* m_pTranslator;
         IEnumerationResultHandler*      m_pResultHandler;
         bool                            m_bCancelled;
 
-        mutable ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XDocumentProperties>
+        mutable css::uno::Reference< css::document::XDocumentProperties>
                                         m_xDocProps;
 
-        ::com::sun::star::uno::Sequence< OUString > m_rBlackList;
+        css::uno::Sequence< OUString > m_rBlackList;
 
         bool URLOnBlackList ( const OUString& sRealURL );
 
@@ -214,7 +213,7 @@ namespace svt
                 an instance which should be used to translate content titles. May be <NULL/>
         */
         FileViewContentEnumerator(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxCommandEnv,
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& _rxCommandEnv,
             ContentData& _rContentToFill,
             ::osl::Mutex& _rContentMutex,
             const IContentTitleTranslation* _pTranslator
@@ -238,7 +237,7 @@ namespace svt
         */
         EnumerationResult   enumerateFolderContentSync(
                     const FolderDescriptor& _rFolder,
-                    const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >()
+                    const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >()
                 );
 
         /** cancels the running operation.

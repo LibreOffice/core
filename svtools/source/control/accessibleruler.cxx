@@ -289,7 +289,7 @@ void SAL_CALL SvtRulerAccessible::grabFocus() throw( RuntimeException, std::exce
 }
 
 sal_Int32 SvtRulerAccessible::getForeground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard     aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -298,7 +298,7 @@ sal_Int32 SvtRulerAccessible::getForeground(  )
     return mpRepr->GetControlForeground().GetColor();
 }
 sal_Int32 SvtRulerAccessible::getBackground(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard     aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );

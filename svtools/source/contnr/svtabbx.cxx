@@ -620,7 +620,7 @@ IMPL_LINK_NOARG_TYPED(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, 
     DBG_ASSERT( pParent, "SvHeaderTabListBox..CreateAccessibleHdl_Impl - accessible parent not found" );
     if ( pParent )
     {
-        ::com::sun::star::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
+        css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
             Reference< XAccessible > xAccessible = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxHeaderBar(
@@ -777,11 +777,11 @@ bool SvHeaderTabListBox::IsColumnSelected( long ) const
     return false;
 }
 
-void SvHeaderTabListBox::GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& ) const
+void SvHeaderTabListBox::GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& ) const
 {
 }
 
-void SvHeaderTabListBox::GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& ) const
+void SvHeaderTabListBox::GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& ) const
 {
 }
 

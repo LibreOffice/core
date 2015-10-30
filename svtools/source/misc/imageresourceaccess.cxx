@@ -66,9 +66,9 @@ namespace svt
         virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) throw (RuntimeException, std::exception) override;
 
         // XSeekable
-        virtual void SAL_CALL seek( ::sal_Int64 location ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int64 SAL_CALL getPosition(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL seek( ::sal_Int64 location ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int64 SAL_CALL getPosition(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int64 SAL_CALL getLength(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
     };
 
 
@@ -145,7 +145,7 @@ namespace svt
         try
         {
             // get a GraphicProvider
-            Reference< XGraphicProvider > xProvider = ::com::sun::star::graphic::GraphicProvider::create(_rxContext);
+            Reference< XGraphicProvider > xProvider = css::graphic::GraphicProvider::create(_rxContext);
 
             // let it create a graphic from the given URL
             Sequence< PropertyValue > aMediaProperties( 1 );

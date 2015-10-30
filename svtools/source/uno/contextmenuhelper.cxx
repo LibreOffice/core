@@ -55,7 +55,7 @@ namespace svt
 {
 
 // internal helper class to retrieve status updates
-class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
+class StateEventHelper : public css::frame::XStatusListener,
                          public ::cppu::OWeakObject,
                          private boost::noncopyable
 {
@@ -492,7 +492,7 @@ ContextMenuHelper::getImageFromCommandURL( const OUString& aCmdURL ) const
         try
         {
             aGraphicSeq = m_xModuleImageMgr->getImages( nImageType, aImageCmdSeq );
-            uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic = aGraphicSeq[0];
+            uno::Reference< css::graphic::XGraphic > xGraphic = aGraphicSeq[0];
             aImage = Image( xGraphic );
 
             if ( !!aImage )

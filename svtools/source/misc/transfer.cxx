@@ -105,7 +105,7 @@ SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const Transferable
 }
 
 
-// the reading of the parameter is done using the special service ::com::sun::star::datatransfer::MimeContentType,
+// the reading of the parameter is done using the special service css::datatransfer::MimeContentType,
 // a similar approach should be implemented for creation of the mimetype string;
 // for now the set of acceptable characters has to be hardcoded, in future it should be part of the service that creates the mimetype
 
@@ -224,7 +224,7 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
             }
         }
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }
@@ -391,11 +391,11 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                 GetData(rFlavor, rDestDoc);
 
 #ifdef DEBUG
-            if( maAny.hasValue() && ::com::sun::star::uno::TypeClass_STRING != maAny.getValueType().getTypeClass() )
+            if( maAny.hasValue() && css::uno::TypeClass_STRING != maAny.getValueType().getTypeClass() )
                 fprintf( stderr, "TransferableHelper delivers sequence of data [ %s ]\n", OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_ASCII_US).getStr() );
 #endif
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
         }
 
@@ -417,7 +417,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
         if( mpFormats->empty() )
             AddSupportedFormats();
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 
@@ -445,7 +445,7 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
         if( mpFormats->empty() )
             AddSupportedFormats();
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 
@@ -479,7 +479,7 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&,
 
         ObjectReleased();
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }
@@ -501,7 +501,7 @@ void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE 
         DragFinished( rDSDE.DropSuccess ? ( rDSDE.DropAction & ~DNDConstants::ACTION_DEFAULT ) : DNDConstants::ACTION_NONE );
         ObjectReleased();
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }
@@ -561,7 +561,7 @@ void TransferableHelper::ImplFlush()
             if( xFlushableClipboard.is() )
                  xFlushableClipboard->flushClipboard();
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
             OSL_FAIL( "Could not flush clipboard" );
         }
@@ -781,7 +781,7 @@ bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& 
 
 
 
-bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& )
+bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const css::datatransfer::DataFlavor& )
 {
     SvMemoryStream aMemStm( 8192, 8192 );
 
@@ -795,7 +795,7 @@ bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::sun::s
 
 
 bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc,
-                                                              const ::com::sun::star::datatransfer::DataFlavor& )
+                                                          const css::datatransfer::DataFlavor& )
 {
     PrepareOLE( rDesc );
 
@@ -810,7 +810,7 @@ bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObje
 
 
 bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
-                                              const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+                                          const css::datatransfer::DataFlavor& rFlavor )
 {
     rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
 
@@ -900,7 +900,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
 
 bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
-                                           const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+                                       const css::datatransfer::DataFlavor& rFlavor )
 {
     SvMemoryStream aMemStm( 1024, 1024 );
 
@@ -999,7 +999,7 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
 
             mxClipboard->setContents( pThis, pThis );
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
         }
     }
@@ -1027,7 +1027,7 @@ void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
 
             xSelection->setContents( pThis, pThis );
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
         }
     }
@@ -1071,7 +1071,7 @@ void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceAct
 
             xDragSource->startDrag( aEvt, nDnDSourceActions, nDnDPointer, nDnDImage, this, this );
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
         }
     }
@@ -1224,7 +1224,7 @@ TransferableDataHelper::TransferableDataHelper() :
 
 
 
-TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable ) :
+TransferableDataHelper::TransferableDataHelper( const Reference< css::datatransfer::XTransferable >& rxTransferable ) :
     mxTransfer( rxTransferable ),
     mpFormats( new DataFlavorExVector ),
     mpObjDesc( new TransferableObjectDescriptor ),
@@ -1305,9 +1305,8 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                 if( !rFlavor.MimeType.isEmpty() )
                     xMimeType = xMimeFact->createMimeContentType( rFlavor.MimeType );
             }
-            catch( const ::com::sun::star::uno::Exception& )
+            catch( const css::uno::Exception& )
             {
-
             }
 
             aFlavorEx.MimeType = rFlavor.MimeType;
@@ -1372,7 +1371,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             }
         }
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }
@@ -1493,7 +1492,7 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
             xRet->getTransferDataFlavors();
 
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
             xRet.clear();
         }
@@ -1558,7 +1557,7 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
             }
         }
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 
@@ -1797,7 +1796,7 @@ bool TransferableDataHelper::GetGraphic( SotClipboardFormatId nFormat, Graphic& 
 
 
 
-bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic )
+bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic )
 {
     DataFlavor  aFlavor;
     bool        bRet = false;
@@ -1851,7 +1850,7 @@ bool TransferableDataHelper::GetImageMap( SotClipboardFormatId nFormat, ImageMap
 
 
 
-bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap )
+bool TransferableDataHelper::GetImageMap( const css::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap )
 {
     tools::SvRef<SotStorageStream> xStm;
     bool                bRet = GetSotStorageStream( rFlavor, xStm );
@@ -1875,7 +1874,7 @@ bool TransferableDataHelper::GetTransferableObjectDescriptor( SotClipboardFormat
 
 
 
-bool TransferableDataHelper::GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor&, TransferableObjectDescriptor& rDesc )
+bool TransferableDataHelper::GetTransferableObjectDescriptor( const css::datatransfer::DataFlavor&, TransferableObjectDescriptor& rDesc )
 {
     rDesc = *mpObjDesc;
     return true;
@@ -1891,7 +1890,7 @@ bool TransferableDataHelper::GetINetBookmark( SotClipboardFormatId nFormat, INet
 
 
 
-bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk )
+bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk )
 {
     bool bRet = false;
     if( HasFormat( rFlavor ))
@@ -2037,7 +2036,7 @@ bool TransferableDataHelper::GetINetImage( SotClipboardFormatId nFormat,
 
 
 bool TransferableDataHelper::GetINetImage(
-        const ::com::sun::star::datatransfer::DataFlavor& rFlavor,
+        const css::datatransfer::DataFlavor& rFlavor,
         INetImage& rINtImg )
 {
     tools::SvRef<SotStorageStream> xStm;
@@ -2060,7 +2059,7 @@ bool TransferableDataHelper::GetFileList( SotClipboardFormatId nFormat,
 
 
 bool TransferableDataHelper::GetFileList(
-            const ::com::sun::star::datatransfer::DataFlavor&,
+            const css::datatransfer::DataFlavor&,
             FileList& rFileList )
 {
     tools::SvRef<SotStorageStream> xStm;
@@ -2221,7 +2220,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( vcl::W
                 aRet.mxClipboard = xClipboard;
             }
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
         }
     }
@@ -2256,7 +2255,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( vcl::Window*
                            aRet.mxClipboard = xSelection;
                        }
                }
-           catch( const ::com::sun::star::uno::Exception& )
+           catch( const css::uno::Exception& )
                {
                }
        }
@@ -2265,8 +2264,8 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( vcl::Window*
 }
 
 
-bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
-                                      const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
+bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInternalFlavor,
+                                      const css::datatransfer::DataFlavor& rRequestFlavor,
                                       bool )
 {
     Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
@@ -2312,7 +2311,7 @@ bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::Data
             }
         }
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
         bRet = rInternalFlavor.MimeType.equalsIgnoreAsciiCase( rRequestFlavor.MimeType );
     }

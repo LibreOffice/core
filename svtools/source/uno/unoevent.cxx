@@ -26,14 +26,14 @@
 #include <svl/macitem.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
-using ::com::sun::star::container::NoSuchElementException;
-using ::com::sun::star::container::XNameReplace;
-using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::lang::WrappedTargetException;
-using ::com::sun::star::lang::XServiceInfo;
-using ::com::sun::star::beans::PropertyValue;
+using css::container::NoSuchElementException;
+using css::container::XNameReplace;
+using css::lang::IllegalArgumentException;
+using css::lang::WrappedTargetException;
+using css::lang::XServiceInfo;
+using css::beans::PropertyValue;
 
 
 const sal_Char sAPI_ServiceName[] = "com.sun.star.container.XNameReplace";
@@ -455,7 +455,7 @@ sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const
 }
 
 OUString SvDetachedEventDescriptor::getImplementationName()
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     return sImplName;
 }

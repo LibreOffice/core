@@ -47,9 +47,9 @@ namespace svt
         virtual void SetSizePixel( const Size& i_rPanelWindowSize ) override;
         virtual void GrabFocus() override;
         virtual void Dispose() override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        virtual css::uno::Reference< css::accessibility::XAccessible >
                     CreatePanelAccessible(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rParentAccessible
+                        const css::uno::Reference< css::accessibility::XAccessible >& i_rParentAccessible
                     ) override;
     };
 

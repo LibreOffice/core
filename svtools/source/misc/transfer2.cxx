@@ -171,7 +171,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
             mpLastDragOverEvent = NULL;
         }
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }
@@ -186,7 +186,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetD
     {
         mrParent.ImplBeginDrag( rDTDEE.SupportedDataFlavors );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 
@@ -213,7 +213,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDr
         else
             rDTDE.Context->acceptDrag( nRet );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }
@@ -236,7 +236,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEv
 
         mrParent.ImplEndDrag();
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
     }
 }
@@ -345,7 +345,7 @@ bool DropTargetHelper::IsDropFormatSupported( SotClipboardFormatId nFormat )
 
 struct TDataCntnrEntry_Impl
 {
-    ::com::sun::star::uno::Any aAny;
+    css::uno::Any aAny;
     SotClipboardFormatId nId;
 };
 
@@ -558,7 +558,7 @@ void TransferDataContainer::CopyString( const OUString& rStr )
 
 
 void TransferDataContainer::CopyAny( SotClipboardFormatId nFmt,
-                                    const ::com::sun::star::uno::Any& rAny )
+                                    const css::uno::Any& rAny )
 {
     TDataCntnrEntry_Impl aEntry;
     aEntry.nId = nFmt;

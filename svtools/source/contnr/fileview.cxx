@@ -357,12 +357,12 @@ public:
     FileViewResult          GetFolderContent_Impl(
         const OUString& rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
-        const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >() );
+        const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >() );
 
     FileViewResult          GetFolderContent_Impl(
         const FolderDescriptor& _rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
-        const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >());
+        const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >());
     void                    FilterFolderContent_Impl( const OUString &rFilter );
     void                    CancelRunningAsyncAction();
 
@@ -954,7 +954,7 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
         ::ucbhelper::Content aCnt( rContent, mxCmdEnv, comphelper::getProcessComponentContext() );
         aCnt.executeCommand( OUString( "delete" ), makeAny( true ) );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException const & )
+    catch( css::ucb::CommandAbortedException const & )
     {
         SAL_INFO( "svtools", "CommandAbortedException" );
         bRet = false;
@@ -1077,7 +1077,7 @@ bool SvtFileView::GetParentURL( OUString& rParentURL ) const
     {
         ::ucbhelper::Content aCnt( mpImp->maViewURL, mpImp->mxCmdEnv, comphelper::getProcessComponentContext() );
         Reference< XContent > xContent( aCnt.get() );
-        Reference< com::sun::star::container::XChild > xChild( xContent, UNO_QUERY );
+        Reference< css::container::XChild > xChild( xContent, UNO_QUERY );
         if ( xChild.is() )
         {
             Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
@@ -1127,7 +1127,7 @@ void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 }
 
 
-bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, const OUString& rFilter  )
+bool SvtFileView::Initialize( const css::uno::Reference< css::ucb::XContent>& _xContent, const OUString& rFilter  )
 {
     WaitObject aWaitCursor( this );
 
@@ -1153,7 +1153,7 @@ FileViewResult SvtFileView::Initialize(
     const OUString& rURL,
     const OUString& rFilter,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const ::com::sun::star::uno::Sequence< OUString >& rBlackList  )
+    const css::uno::Sequence< OUString >& rBlackList  )
 {
     WaitObject aWaitCursor( this );
     mpBlackList = rBlackList;
@@ -1514,7 +1514,7 @@ void SvtFileView_Impl::Clear()
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const OUString& rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
+    const css::uno::Sequence< OUString >& rBlackList )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
     INetURLObject aFolderObj( rFolder );
@@ -1533,7 +1533,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const FolderDescriptor& _rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
+    const css::uno::Sequence< OUString >& rBlackList )
 {
     DBG_TESTSOLARMUTEX();
     ::osl::ClearableMutexGuard aGuard( maMutex );

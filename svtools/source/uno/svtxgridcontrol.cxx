@@ -40,36 +40,36 @@
 
 #include <vcl/svapp.hxx>
 
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::makeAny;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::awt::grid::XGridSelectionListener;
-using ::com::sun::star::style::VerticalAlignment;
-using ::com::sun::star::style::VerticalAlignment_TOP;
-using ::com::sun::star::view::SelectionType;
-using ::com::sun::star::view::SelectionType_NONE;
-using ::com::sun::star::view::SelectionType_RANGE;
-using ::com::sun::star::view::SelectionType_SINGLE;
-using ::com::sun::star::view::SelectionType_MULTI;
-using ::com::sun::star::awt::grid::XGridDataModel;
-using ::com::sun::star::awt::grid::GridInvalidDataException;
-using ::com::sun::star::lang::EventObject;
-using ::com::sun::star::lang::IndexOutOfBoundsException;
-using ::com::sun::star::awt::grid::XGridColumnModel;
-using ::com::sun::star::awt::grid::GridSelectionEvent;
-using ::com::sun::star::awt::grid::XGridColumn;
-using ::com::sun::star::container::ContainerEvent;
-using ::com::sun::star::awt::grid::GridDataEvent;
-using ::com::sun::star::awt::grid::GridInvalidModelException;
-using ::com::sun::star::util::VetoException;
+using css::uno::RuntimeException;
+using css::uno::Reference;
+using css::uno::Exception;
+using css::uno::UNO_QUERY;
+using css::uno::UNO_QUERY_THROW;
+using css::uno::Any;
+using css::uno::makeAny;
+using css::uno::Sequence;
+using css::awt::grid::XGridSelectionListener;
+using css::style::VerticalAlignment;
+using css::style::VerticalAlignment_TOP;
+using css::view::SelectionType;
+using css::view::SelectionType_NONE;
+using css::view::SelectionType_RANGE;
+using css::view::SelectionType_SINGLE;
+using css::view::SelectionType_MULTI;
+using css::awt::grid::XGridDataModel;
+using css::awt::grid::GridInvalidDataException;
+using css::lang::EventObject;
+using css::lang::IndexOutOfBoundsException;
+using css::awt::grid::XGridColumnModel;
+using css::awt::grid::GridSelectionEvent;
+using css::awt::grid::XGridColumn;
+using css::container::ContainerEvent;
+using css::awt::grid::GridDataEvent;
+using css::awt::grid::GridInvalidModelException;
+using css::util::VetoException;
 
-namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
-namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
+namespace AccessibleEventId = css::accessibility::AccessibleEventId;
+namespace AccessibleStateType = css::accessibility::AccessibleStateType;
 
 using namespace ::svt::table;
 
@@ -849,7 +849,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
 }
 
 
-void SVTXGridControl::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SVTXGridControl::setEnable( sal_Bool bEnable ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

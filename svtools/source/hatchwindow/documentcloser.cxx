@@ -44,11 +44,11 @@ namespace {
 
 // the service is implemented as a wrapper to be able to die by refcount
 // the disposing mechanics is required for java related scenarios
-class ODocumentCloser : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XComponent,
-                                                        ::com::sun::star::lang::XServiceInfo >
+class ODocumentCloser : public ::cppu::WeakImplHelper< css::lang::XComponent,
+                                                        css::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
 
     bool m_bDisposed;
@@ -58,14 +58,14 @@ public:
     virtual ~ODocumentCloser();
 
 // XComponent
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 class MainThreadFrameCloserRequest

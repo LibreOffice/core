@@ -29,7 +29,7 @@ class HeaderBar;
 //  class VCLXAccessibleHeaderBar
 
 
-typedef std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > >
+typedef std::vector< css::uno::WeakReference< css::accessibility::XAccessible > >
     ListItems;
 
 class VCLXAccessibleHeaderBar : public VCLXAccessibleComponent
@@ -45,18 +45,18 @@ public:
     VCLXAccessibleHeaderBar( VCLXWindow* pVCLXindow );
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
 public:
     virtual void SAL_CALL disposing() override;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateChild(sal_Int32 i);
+    css::uno::Reference< css::accessibility::XAccessible > CreateChild(sal_Int32 i);
 
 private:
     ListItems m_aAccessibleChildren;
@@ -70,7 +70,7 @@ public:
     VCLXHeaderBar(vcl::Window* pHeaderBar);
     virtual ~VCLXHeaderBar();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 
 };
 

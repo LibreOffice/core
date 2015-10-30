@@ -45,12 +45,12 @@
 using namespace comphelper;
 using namespace cppu;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::document;
-using namespace com::sun::star::drawing;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::container;
+using namespace css::beans;
+using namespace css::document;
+using namespace css::drawing;
 
 const sal_Int32 HANDLE_URL = 1;
 const sal_Int32 HANDLE_DESCRIPTION = 2;
@@ -96,7 +96,7 @@ public:
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(RuntimeException, std::exception) override;
 
     // XEventsSupplier
-    virtual Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(RuntimeException, std::exception) override;
+    virtual Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) throw(RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( RuntimeException, std::exception ) override;

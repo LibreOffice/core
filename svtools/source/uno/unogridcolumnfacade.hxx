@@ -47,7 +47,7 @@ namespace svt { namespace table
     public:
         UnoGridColumnFacade(
             UnoControlTableModel const & i_owner,
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > const & i_gridColumn
+            css::uno::Reference< css::awt::grid::XGridColumn > const & i_gridColumn
         );
         virtual ~UnoGridColumnFacade();
 
@@ -60,7 +60,7 @@ namespace svt { namespace table
         virtual void            setWidth( TableMetrics _nWidth ) override;
         virtual TableMetrics    getMinWidth() const override;
         virtual TableMetrics    getMaxWidth() const override;
-        virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() override;
+        virtual css::style::HorizontalAlignment getHorizontalAlign() override;
 
         /** disposes the column wrapper
 
@@ -82,7 +82,7 @@ namespace svt { namespace table
     private:
         UnoControlTableModel const *                                                    m_pOwner;
         sal_Int32                                                                       m_nDataColumnIndex;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >    m_xGridColumn;
+        css::uno::Reference< css::awt::grid::XGridColumn >    m_xGridColumn;
         ::rtl::Reference< ColumnChangeMultiplexer >                                     m_pChangeMultiplexer;
     };
 

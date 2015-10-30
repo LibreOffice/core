@@ -343,7 +343,7 @@ awt::Size ExportDialog::GetOriginalSize()
         {
             sal_Int32 nWidth = 0;
             sal_Int32 nHeight= 0;
-            com::sun::star::uno::Any aAny;
+            css::uno::Any aAny;
             aAny = xPagePropSet->getPropertyValue("Width");
             aAny >>= nWidth;
             aAny = xPagePropSet->getPropertyValue("Height");
@@ -356,7 +356,7 @@ awt::Size ExportDialog::GetOriginalSize()
         uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory = graphic::PrimitiveFactory2D::create( mxContext );
 
         basegfx::B2DHomMatrix aViewTransformation( Application::GetDefaultDevice()->GetViewTransformation() );
-        com::sun::star::geometry::AffineMatrix2D aTransformation;
+        css::geometry::AffineMatrix2D aTransformation;
         aTransformation.m00 = aViewTransformation.get(0,0);
         aTransformation.m01 = aViewTransformation.get(0,1);
         aTransformation.m02 = aViewTransformation.get(0,2);
@@ -502,7 +502,7 @@ Bitmap ExportDialog::GetGraphicBitmap( SvStream& rInputStream )
     Bitmap aRet;
     Graphic aGraphic;
     GraphicFilter aFilter( false );
-    if ( aFilter.ImportGraphic( aGraphic, "", rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, GraphicFilterImportFlags::NONE, static_cast<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >*>(NULL) ) == GRFILTER_OK )
+    if ( aFilter.ImportGraphic( aGraphic, "", rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, GraphicFilterImportFlags::NONE, static_cast<css::uno::Sequence< css::beans::PropertyValue >*>(NULL) ) == GRFILTER_OK )
     {
         aRet = aGraphic.GetBitmap();
     }
@@ -551,8 +551,8 @@ bool ExportDialog::IsTempExportAvailable() const
 }
 
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-    const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
+    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
     bool bExportSelection, bool bIsPixelFormat)
     : ModalDialog(rPara.pWindow, "GraphicExportDialog", "svt/ui/graphicexport.ui")
     , mrFltCallPara(rPara)

@@ -32,22 +32,22 @@ namespace svt { namespace uno
 {
 
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::ui::dialogs::XWizardController;
-    using ::com::sun::star::ui::dialogs::XWizard;
-    using ::com::sun::star::ui::dialogs::XWizardPage;
+    using css::uno::Reference;
+    using css::uno::XInterface;
+    using css::uno::UNO_QUERY;
+    using css::uno::UNO_QUERY_THROW;
+    using css::uno::UNO_SET_THROW;
+    using css::uno::Exception;
+    using css::uno::RuntimeException;
+    using css::uno::Any;
+    using css::uno::makeAny;
+    using css::uno::Sequence;
+    using css::uno::Type;
+    using css::ui::dialogs::XWizardController;
+    using css::ui::dialogs::XWizard;
+    using css::ui::dialogs::XWizardPage;
 
-    namespace WizardTravelType = ::com::sun::star::ui::dialogs::WizardTravelType;
+    namespace WizardTravelType = css::ui::dialogs::WizardTravelType;
 
 
     namespace

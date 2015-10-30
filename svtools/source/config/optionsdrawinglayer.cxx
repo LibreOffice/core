@@ -168,7 +168,7 @@ public:
 
 //  override methods of baseclass
 
-    virtual void Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
 
 //  public interface
@@ -673,7 +673,7 @@ void SvtOptionsDrawinglayer_Impl::ImplCommit()
     PutProperties( aSeqNames, aSeqValues );
 }
 
-void SvtOptionsDrawinglayer_Impl::Notify( const com::sun::star::uno::Sequence<OUString>& )
+void SvtOptionsDrawinglayer_Impl::Notify( const css::uno::Sequence<OUString>& )
 {
 }
 

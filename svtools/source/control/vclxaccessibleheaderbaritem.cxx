@@ -83,7 +83,7 @@ awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds() throw (RuntimeExcept
     awt::Rectangle aBounds;
     OExternalLockGuard aGuard( this );
 
-    ::com::sun::star::awt::Size aSize;
+    css::awt::Size aSize;
 
     if ( m_pHeadBar )
         aBounds = AWTRectangle( m_pHeadBar->GetItemRect( sal_uInt16( m_nIndexInParent ) ) );
@@ -248,7 +248,7 @@ Reference< XAccessibleStateSet > VCLXAccessibleHeaderBarItem::getAccessibleState
 
 
 
-com::sun::star::lang::Locale VCLXAccessibleHeaderBarItem::getLocale() throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
+css::lang::Locale VCLXAccessibleHeaderBarItem::getLocale() throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
 

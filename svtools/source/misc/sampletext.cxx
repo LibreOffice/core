@@ -1098,28 +1098,28 @@ namespace
     //false for all bits considered "Latin" by LibreOffice
     boost::dynamic_bitset<sal_uInt32> getLatinMask()
     {
-        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::LATIN));
+        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(css::i18n::ScriptType::LATIN));
         return aMask;
     }
 
     //false for all bits considered "Asian" by LibreOffice
     boost::dynamic_bitset<sal_uInt32> getCJKMask()
     {
-        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::ASIAN));
+        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(css::i18n::ScriptType::ASIAN));
         return aMask;
     }
 
     //false for all bits considered "Complex" by LibreOffice
     boost::dynamic_bitset<sal_uInt32> getCTLMask()
     {
-        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::COMPLEX));
+        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(css::i18n::ScriptType::COMPLEX));
         return aMask;
     }
 
     //false for all bits considered "WEAK" by LibreOffice
     boost::dynamic_bitset<sal_uInt32> getWeakMask()
     {
-        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::WEAK));
+        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(css::i18n::ScriptType::WEAK));
         return aMask;
     }
 
@@ -1636,14 +1636,14 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
 
             aFontCapabilities.maUnicodeRange &= getWeakMask();
 
-            if (nScriptType != com::sun::star::i18n::ScriptType::ASIAN)
+            if (nScriptType != css::i18n::ScriptType::ASIAN)
             {
                 aFontCapabilities.maUnicodeRange &= getCJKMask();
                 aFontCapabilities.maCodePageRange.clear();
             }
-            if (nScriptType != com::sun::star::i18n::ScriptType::LATIN)
+            if (nScriptType != css::i18n::ScriptType::LATIN)
                 aFontCapabilities.maUnicodeRange &= getLatinMask();
-            if (nScriptType != com::sun::star::i18n::ScriptType::COMPLEX)
+            if (nScriptType != css::i18n::ScriptType::COMPLEX)
                 aFontCapabilities.maUnicodeRange &= getCTLMask();
 
 #if OSL_DEBUG_LEVEL > 2
@@ -1654,7 +1654,7 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
 
             UScriptCode eScript = getScript(aFontCapabilities);
 
-            if (nScriptType == com::sun::star::i18n::ScriptType::ASIAN)
+            if (nScriptType == css::i18n::ScriptType::ASIAN)
                 eScript = attemptToDisambiguateHan(eScript, *aDevice.get());
 
             sRet = makeRepresentativeTextForScript(eScript);
@@ -1662,7 +1662,7 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
 
         if (sRet.isEmpty())
         {
-            if (nScriptType == com::sun::star::i18n::ScriptType::COMPLEX)
+            if (nScriptType == css::i18n::ScriptType::COMPLEX)
             {
                 sRet = makeRepresentativeTextForScript(USCRIPT_HEBREW);
                 if (-1 != aDevice->HasGlyphs(rFont, sRet))
@@ -1672,7 +1672,7 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
                         sRet = makeRepresentativeTextForScript(USCRIPT_ARABIC);
                 }
             }
-            else if (nScriptType == com::sun::star::i18n::ScriptType::LATIN)
+            else if (nScriptType == css::i18n::ScriptType::LATIN)
                 sRet = makeRepresentativeTextForScript(USCRIPT_LATIN);
         }
     }

@@ -441,18 +441,18 @@ void SvtIconChoiceCtrl::CallImplEventListeners(sal_uLong nEvent, void* pData)
 {
     CallEventListeners(nEvent, pData);
 }
-::com::sun::star::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
+css::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
 {
     vcl::Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvTreeListBox::CreateAccessible - accessible parent not found" );
 
-    ::com::sun::star::uno::Reference< XAccessible > xAccessible;
+    css::uno::Reference< XAccessible > xAccessible;
     if ( pParent )
     {
-        ::com::sun::star::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
+        css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xTemp(GetComponentInterface());
+            css::uno::Reference< css::awt::XWindowPeer > xTemp(GetComponentInterface());
             xAccessible = _pImp->GetAccessibleFactory().createAccessibleIconChoiceCtrl( *this, xAccParent );
         }
     }

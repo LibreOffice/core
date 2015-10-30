@@ -83,7 +83,7 @@ namespace svt
         ,m_pTranslator           ( _pTranslator    )
         ,m_pResultHandler        ( NULL            )
         ,m_bCancelled            ( false           )
-        ,m_rBlackList            ( ::com::sun::star::uno::Sequence< OUString >() )
+        ,m_rBlackList            ( css::uno::Sequence< OUString >() )
     {
     }
 
@@ -106,7 +106,7 @@ namespace svt
 
     EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
         const FolderDescriptor& _rFolder,
-        const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
+        const css::uno::Sequence< OUString >& rBlackList )
     {
         {
             ::osl::MutexGuard aGuard( m_aMutex );
