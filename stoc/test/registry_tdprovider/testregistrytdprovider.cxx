@@ -127,7 +127,7 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const &)
             OUString("Registry"));
     css::uno::Reference< css::container::XHierarchicalNameAccess > provider(
         factory->createInstanceWithArgumentsAndContext(
-            OUString( "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
+            "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider",
             args, m_context),
         css::uno::UNO_QUERY_THROW);
 

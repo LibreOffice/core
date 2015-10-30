@@ -366,7 +366,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
     if ( rContext.is() )
     {
         Reference< XInterface > xIFace( rContext->getServiceManager()->createInstanceWithContext(
-             OUString( "com.sun.star.script.EventAttacher" ), rContext)  );
+             "com.sun.star.script.EventAttacher", rContext)  );
         if ( xIFace.is() )
         {
             xAttacher = Reference< XEventAttacher2 >::query( xIFace );

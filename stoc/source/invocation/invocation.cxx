@@ -1115,9 +1115,7 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
     , xCoreReflection( css::reflection::theCoreReflection::get(mxCtx) )
 {
     xTypeConverter = Reference<XTypeConverter>(
-        mxSMgr->createInstanceWithContext(
-            OUString("com.sun.star.script.Converter"),
-            xCtx ),
+        mxSMgr->createInstanceWithContext( "com.sun.star.script.Converter", xCtx ),
         UNO_QUERY );
     xIntrospection = theIntrospection::get(xCtx);
 }

@@ -481,7 +481,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 
         uno::Reference< container::XNameContainer > xResultNameContainer(
             m_xFactory->createInstanceWithArguments(
-                    OUString("com.sun.star.embed.OLESimpleStorage"),
+                    "com.sun.star.embed.OLESimpleStorage",
                     aArgs ),
             uno::UNO_QUERY_THROW );
 

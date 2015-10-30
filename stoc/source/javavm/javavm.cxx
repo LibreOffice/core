@@ -272,7 +272,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
                             const css::uno::Reference<css::uno::XComponentContext> &xCtx ) throw (css::uno::Exception)
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
-            OUString("com.sun.star.configuration.ConfigurationRegistry"),
+            "com.sun.star.configuration.ConfigurationRegistry",
             xCtx );
     if(!xConfRegistry.is()) throw css::uno::RuntimeException("javavm.cxx: couldn't get ConfigurationRegistry", 0);
 
@@ -362,8 +362,7 @@ void getDefaultLocaleFromConfig(
     const css::uno::Reference<css::uno::XComponentContext> &xCtx ) throw(css::uno::Exception)
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
-        xSMgr->createInstanceWithContext(
-        OUString("com.sun.star.configuration.ConfigurationRegistry"), xCtx );
+        xSMgr->createInstanceWithContext( "com.sun.star.configuration.ConfigurationRegistry", xCtx );
     if(!xConfRegistry.is())
         throw css::uno::RuntimeException(
             OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
@@ -417,7 +416,7 @@ void getJavaPropsFromSafetySettings(
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext(
-            OUString("com.sun.star.configuration.ConfigurationRegistry"),
+            "com.sun.star.configuration.ConfigurationRegistry",
             xCtx);
     if(!xConfRegistry.is())
         throw css::uno::RuntimeException(
@@ -1353,7 +1352,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
             m_xInetConfiguration
                 = css::uno::Reference< css::container::XContainer >(
                     xConfigProvider->createInstanceWithArguments(
-                        OUString("com.sun.star.configuration.ConfigurationAccess"),
+                        "com.sun.star.configuration.ConfigurationAccess",
                         aArguments),
                     css::uno::UNO_QUERY);
 
@@ -1377,7 +1376,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
             m_xJavaConfiguration
                 = css::uno::Reference< css::container::XContainer >(
                     xConfigProvider->createInstanceWithArguments(
-                        OUString("com.sun.star.configuration.ConfigurationAccess"),
+                        "com.sun.star.configuration.ConfigurationAccess",
                         aArguments2),
                     css::uno::UNO_QUERY);
 

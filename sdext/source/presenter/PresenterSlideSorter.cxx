@@ -330,7 +330,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         // Create the preview cache.
         mxPreviewCache = Reference<drawing::XSlidePreviewCache>(
             xFactory->createInstanceWithContext(
-                OUString("com.sun.star.drawing.PresenterPreviewCache"),
+                "com.sun.star.drawing.PresenterPreviewCache",
                 mxComponentContext),
             UNO_QUERY_THROW);
         Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY);

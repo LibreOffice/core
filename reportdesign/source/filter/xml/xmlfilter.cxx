@@ -504,7 +504,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         uno::Reference< lang::XMultiServiceFactory > xReportServiceFactory( m_xReportDefinition, uno::UNO_QUERY);
         aArgs[0] <<= beans::NamedValue(OUString("Storage"),uno::makeAny(xStorage));
-        xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(OUString("com.sun.star.document.ImportEmbeddedObjectResolver"),aArgs) , uno::UNO_QUERY);
+        xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments("com.sun.star.document.ImportEmbeddedObjectResolver",aArgs) , uno::UNO_QUERY);
 
         static const char s_sOld[] = "OldFormat";
         static comphelper::PropertyMapEntry const pMap[] =

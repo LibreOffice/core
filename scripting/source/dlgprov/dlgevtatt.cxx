@@ -111,7 +111,7 @@ namespace dlgprov
         if ( xSMgr.is() )
         {
             args[0] <<= xModel;
-            mxListener = Reference< XScriptListener >( xSMgr->createInstanceWithArgumentsAndContext( OUString( "ooo.vba.EventListener"  ), args, m_xContext ), UNO_QUERY );
+            mxListener = Reference< XScriptListener >( xSMgr->createInstanceWithArgumentsAndContext( "ooo.vba.EventListener", args, m_xContext ), UNO_QUERY );
         }
         if ( rxControl.is() )
         {
@@ -342,7 +342,7 @@ namespace dlgprov
                 if ( xSMgr.is() )
                 {
                     m_xEventAttacher = Reference< XEventAttacher >( xSMgr->createInstanceWithContext(
-                        OUString( "com.sun.star.script.EventAttacher"  ), m_xContext ), UNO_QUERY );
+                        "com.sun.star.script.EventAttacher", m_xContext ), UNO_QUERY );
 
                     if ( !m_xEventAttacher.is() )
                         throw ServiceNotRegisteredException();

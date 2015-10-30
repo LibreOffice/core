@@ -1272,7 +1272,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
     rptui::OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
     {
         uno::Reference< document::XFilter > xFilter(
-            m_aProps->m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(OUString("com.sun.star.comp.report.OReportFilter"),aDelegatorArguments,m_aProps->m_xContext),
+            m_aProps->m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.report.OReportFilter",aDelegatorArguments,m_aProps->m_xContext),
             uno::UNO_QUERY_THROW );
 
         uno::Reference< document::XImporter> xImporter(xFilter,uno::UNO_QUERY_THROW);

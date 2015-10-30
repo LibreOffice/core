@@ -199,7 +199,7 @@ struct BasicTest : public test::BootstrapFixture
         test::BootstrapFixture::setUp();
 
         mxErrHandler.set( new ErrorHandler() );
-        uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance(OUString("com.sun.star.xml.dom.DocumentBuilder")), uno::UNO_QUERY_THROW );
+        uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance("com.sun.star.xml.dom.DocumentBuilder"), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
         mxValidInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
         mxWarningInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(warningTestFile), SAL_N_ELEMENTS(warningTestFile))) );
@@ -273,7 +273,7 @@ struct SerializerTest : public test::BootstrapFixture
         test::BootstrapFixture::setUp();
 
         mxErrHandler.set( new ErrorHandler() );
-        uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance(OUString("com.sun.star.xml.dom.DocumentBuilder")), uno::UNO_QUERY_THROW );
+        uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance("com.sun.star.xml.dom.DocumentBuilder"), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
         mxInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
         mxDomBuilder->setErrorHandler(mxErrHandler.get());

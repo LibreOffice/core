@@ -615,7 +615,7 @@ SlideShowImpl::SlideShowImpl(
             // #i82460# try to retrieve special transition factory
             mxOptionalTransitionFactory.set(
                 xFactory->createInstanceWithContext(
-                    OUString("com.sun.star.presentation.TransitionFactory" ),
+                    "com.sun.star.presentation.TransitionFactory",
                     mxComponentContext ),
                 uno::UNO_QUERY );
         }
@@ -1461,7 +1461,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                 {
                     //create the PolyLineShape
                     uno::Reference< uno::XInterface > polyshape(xDocFactory->createInstance(
-                                                                    OUString("com.sun.star.drawing.PolyLineShape") ) );
+                                                                    "com.sun.star.drawing.PolyLineShape" ) );
                     uno::Reference< drawing::XShape > rPolyShape(polyshape, uno::UNO_QUERY);
 
                     //Add the shape to the slide

@@ -244,7 +244,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
     if ( xMultiServiceFactory.is() )
     {
         xPropSet = Reference< XPropertySet >(   xMultiServiceFactory->createInstance(
-                                                    OUString( "com.sun.star.ui.ActionTrigger" ) ),
+                                                    "com.sun.star.ui.ActionTrigger" ),
                                                 UNO_QUERY );
 
         Any a;
@@ -289,7 +289,7 @@ Reference< XPropertySet > CreateActionTriggerSeparator( const Reference< XIndexC
     if ( xMultiServiceFactory.is() )
     {
         return Reference< XPropertySet >(   xMultiServiceFactory->createInstance(
-                                                OUString( "com.sun.star.ui.ActionTriggerSeparator" ) ),
+                                                "com.sun.star.ui.ActionTriggerSeparator" ),
                                             UNO_QUERY );
     }
 
@@ -302,7 +302,7 @@ Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XInd
     if ( xMultiServiceFactory.is() )
     {
         return Reference< XIndexContainer >( xMultiServiceFactory->createInstance(
-                                                OUString( "com.sun.star.ui.ActionTriggerContainer" ) ),
+                                                "com.sun.star.ui.ActionTriggerContainer" ),
                                              UNO_QUERY );
     }
 

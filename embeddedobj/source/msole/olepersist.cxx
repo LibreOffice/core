@@ -382,7 +382,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xFactory->createInstanceWithArguments(
-                    OUString( "com.sun.star.embed.OLESimpleStorage" ),
+                    "com.sun.star.embed.OLESimpleStorage",
                     aArgs ),
             uno::UNO_QUERY );
 
@@ -531,7 +531,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
     aArgs[1] <<= true; // do not create copy
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xFactory->createInstanceWithArguments(
-                    OUString( "com.sun.star.embed.OLESimpleStorage" ),
+                    "com.sun.star.embed.OLESimpleStorage",
                     aArgs ),
             uno::UNO_QUERY );
 
@@ -599,7 +599,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
                 aArgs[1] <<= true; // do not create copy
                 uno::Reference< container::XNameContainer > xNameContainer(
                         m_xFactory->createInstanceWithArguments(
-                                OUString( "com.sun.star.embed.OLESimpleStorage" ),
+                                "com.sun.star.embed.OLESimpleStorage",
                                 aArgs ),
                         uno::UNO_QUERY );
 
@@ -645,7 +645,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         {
             xNameContainer = uno::Reference< container::XNameContainer >(
                 m_xFactory->createInstanceWithArguments(
-                        OUString( "com.sun.star.embed.OLESimpleStorage" ),
+                        "com.sun.star.embed.OLESimpleStorage",
                         aArgs ),
                 uno::UNO_QUERY );
         }

@@ -88,7 +88,7 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
     {
         // Always fall back to OfficeFilePicker.
         xResult = xFactory->createInstanceWithContext (
-                OUString( "com.sun.star.ui.dialogs.OfficeFilePicker"),
+                "com.sun.star.ui.dialogs.OfficeFilePicker",
                 context);
     }
     if (xResult.is())
@@ -158,7 +158,7 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
     {
         // Always fall back to OfficeFolderPicker.
         xResult = xFactory->createInstanceWithContext (
-                OUString( "com.sun.star.ui.dialogs.OfficeFolderPicker"),
+                 "com.sun.star.ui.dialogs.OfficeFolderPicker",
                 context);
     }
     if (xResult.is())

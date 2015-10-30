@@ -100,7 +100,7 @@ sal_Bool test2()
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
-      OUString sService2("com.sun.star.bridge.OleBridgeSupplierVar1");
+    OUString sService2("com.sun.star.bridge.OleBridgeSupplierVar1");
     Reference<XInterface> xint= fac->createInstanceWithContext( sService2, context);
 
     OUString sModule("oleautobridge.uno" SAL_DLLEXTENSION);

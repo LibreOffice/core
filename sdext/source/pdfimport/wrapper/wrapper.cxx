@@ -623,9 +623,7 @@ void Parser::readFont()
         {
             uno::Reference< beans::XMaterialHolder > xMat(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    OUString( "com.sun.star.awt.FontIdentificator"  ),
-                    aArgs,
-                    m_xContext ),
+                    "com.sun.star.awt.FontIdentificator", aArgs, m_xContext ),
                 uno::UNO_QUERY );
             if( xMat.is() )
             {
@@ -708,9 +706,9 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
 
     uno::Reference< uno::XComponentContext > xContext( m_xContext, uno::UNO_SET_THROW );
     uno::Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), uno::UNO_SET_THROW );
-    uno::Reference< io::XInputStream > xDataStream( xFactory->createInstanceWithArgumentsAndContext(
-        OUString( "com.sun.star.io.SequenceInputStream"  ),
-        aStreamCreationArgs, m_xContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< io::XInputStream > xDataStream(
+        xFactory->createInstanceWithArgumentsAndContext( "com.sun.star.io.SequenceInputStream", aStreamCreationArgs, m_xContext ),
+        uno::UNO_QUERY_THROW );
 
     uno::Sequence<beans::PropertyValue> aSequence(3);
     aSequence[0] = beans::PropertyValue( OUString("URL"),

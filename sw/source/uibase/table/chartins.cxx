@@ -176,8 +176,8 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
         {
             uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
                 xMCF->createInstanceWithContext(
-                    OUString("com.sun.star.comp.chart2.WizardDialog")
-                    , xContext), uno::UNO_QUERY);
+                    "com.sun.star.comp.chart2.WizardDialog", xContext),
+                uno::UNO_QUERY);
             uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
             if( xInit.is() )
             {

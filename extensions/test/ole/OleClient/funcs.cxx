@@ -69,7 +69,7 @@ Reference<XInvocation> getComObject( OUString progId)
     if(  ! objectFactory.is())
     {   Reference<XMultiServiceFactory> mgr= getMultiServiceFactory();
         Reference<XInterface> xInt= mgr->createInstance(
-            OUString(L"com.sun.star.bridge.oleautomation.Factory"));
+            "com.sun.star.bridge.oleautomation.Factory");
         objectFactory= Reference<XMultiServiceFactory>::query(  xInt);
     }
 
@@ -88,7 +88,7 @@ Reference<XInvocation> getComObject( OUString progId)
 Reference<XInvocation> convertComObject( IUnknown* pUnk)
 {
     Reference< XMultiServiceFactory > mgr= getMultiServiceFactory();
-    Reference< XInterface > xIntSupplier= mgr->createInstance(OUString(L"com.sun.star.bridge.OleBridgeSupplier2"));
+    Reference< XInterface > xIntSupplier= mgr->createInstance("com.sun.star.bridge.OleBridgeSupplier2");
     Reference< XBridgeSupplier2 > xSuppl( xIntSupplier, UNO_QUERY);
 
     Any any;

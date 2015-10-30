@@ -81,7 +81,7 @@ sal_Int32 Client::run(css::uno::Sequence< OUString > const &)
     try {
         relay.set(
             factory->createInstanceWithContext(
-                OUString( "test.javauno.nativethreadpool.Relay" ),
+                "test.javauno.nativethreadpool.Relay",
                 context),
             css::uno::UNO_QUERY_THROW);
     } catch (css::uno::RuntimeException &) {

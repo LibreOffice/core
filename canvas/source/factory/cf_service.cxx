@@ -139,7 +139,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
 
         m_xCanvasConfigNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
-                OUString("com.sun.star.configuration.ConfigurationAccess"),
+                "com.sun.star.configuration.ConfigurationAccess",
                 Sequence<Any>( &propValue, 1 ) ),
             UNO_QUERY_THROW );
 
@@ -151,7 +151,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
 
         Reference<container::XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                OUString("com.sun.star.configuration.ConfigurationAccess"),
+                "com.sun.star.configuration.ConfigurationAccess",
                 Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
         Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
             xNameAccess, UNO_QUERY_THROW);

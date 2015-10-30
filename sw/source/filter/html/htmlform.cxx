@@ -891,9 +891,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         if( !rServiceFactory.is() )
             return xShape;
 
-        uno::Reference< XInterface > xCreate =
-            rServiceFactory ->createInstance(
-        OUString("com.sun.star.drawing.ControlShape"));
+        uno::Reference< XInterface > xCreate = rServiceFactory->createInstance( "com.sun.star.drawing.ControlShape" );
         if( !xCreate.is() )
             return xShape;
 
@@ -1326,7 +1324,7 @@ void SwHTMLParser::NewForm( bool bAppend )
         return;
 
     uno::Reference< XInterface > xInt = rSrvcMgr->createInstance(
-        OUString("com.sun.star.form.component.Form") );
+        "com.sun.star.form.component.Form" );
     if( !xInt.is() )
         return;
 
@@ -2014,7 +2012,7 @@ void SwHTMLParser::NewTextArea()
         return;
     }
     uno::Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
-        OUString("com.sun.star.form.component.TextField") );
+        "com.sun.star.form.component.TextField" );
     if( !xInt.is() )
     {
         FinishTextArea();
@@ -2282,7 +2280,7 @@ void SwHTMLParser::NewSelect()
         return;
     }
     uno::Reference< uno::XInterface >  xInt = rSrvcMgr->createInstance(
-        OUString("com.sun.star.form.component.ListBox") );
+        "com.sun.star.form.component.ListBox" );
     if( !xInt.is() )
     {
         FinishTextArea();

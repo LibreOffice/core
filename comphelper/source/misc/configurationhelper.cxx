@@ -65,11 +65,11 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     bool bReadOnly = ((eMode & ConfigurationHelper::E_READONLY)==ConfigurationHelper::E_READONLY);
     if (bReadOnly)
         xCFG = xConfigProvider->createInstanceWithArguments(
-                OUString("com.sun.star.configuration.ConfigurationAccess"),
+                "com.sun.star.configuration.ConfigurationAccess",
                 comphelper::containerToSequence(lParams));
     else
         xCFG = xConfigProvider->createInstanceWithArguments(
-                OUString("com.sun.star.configuration.ConfigurationUpdateAccess"),
+                "com.sun.star.configuration.ConfigurationUpdateAccess",
                 comphelper::containerToSequence(lParams));
 
     return xCFG;

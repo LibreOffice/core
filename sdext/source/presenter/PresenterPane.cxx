@@ -44,7 +44,7 @@ PresenterPane::PresenterPane (
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
     mxPresenterHelper = Reference<drawing::XPresenterHelper>(
         xFactory->createInstanceWithContext(
-            OUString("com.sun.star.comp.Draw.PresenterHelper"),
+            "com.sun.star.comp.Draw.PresenterHelper",
             mxComponentContext),
         UNO_QUERY_THROW);
 }

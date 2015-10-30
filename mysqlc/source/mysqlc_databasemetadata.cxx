@@ -1295,7 +1295,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     Reference< XResultSet > xResultSet(getOwnConnection().
         getDriver().getFactory()->createInstance(
-                rtl::OUString("org.openoffice.comp.helper.DatabaseMetaDataResultSet")),UNO_QUERY);
+                "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
     std::string cat(catalog.hasValue()? rtl::OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),

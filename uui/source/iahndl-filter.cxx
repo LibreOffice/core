@@ -98,7 +98,7 @@ handleNoSuchFilterRequest_(
     try
     {
         xFilterContainer.set( xContext->getServiceManager()->createInstanceWithContext(
-                                  OUString( "com.sun.star.document.FilterFactory"), xContext ),
+                                  "com.sun.star.document.FilterFactory", xContext ),
                               uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -199,7 +199,7 @@ handleFilterOptionsRequest_(
     try
     {
         xFilterCFG.set( xContext->getServiceManager()->createInstanceWithContext(
-                            OUString( "com.sun.star.document.FilterFactory" ), xContext ),
+                            "com.sun.star.document.FilterFactory", xContext ),
                         uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )

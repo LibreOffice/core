@@ -105,7 +105,7 @@ void Service::connect(OUString const & rConnection,
         css::connection::Connector::create(m_xContext)->connect(rConnection));
     css::uno::Reference< css::bridge::XBridgeFactory > xBridgeFactory(
         m_xContext->getServiceManager()->createInstanceWithContext(
-            OUString( "com.sun.star.bridge.BridgeFactory" ),
+            "com.sun.star.bridge.BridgeFactory",
             m_xContext),
         css::uno::UNO_QUERY);
     m_xBridge = xBridgeFactory->createBridge(OUString(), rProtocol,

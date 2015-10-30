@@ -190,7 +190,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         Reference< XNameAccess > xNameAccess =
             Reference< XNameAccess > (
                 m_xConfigurationProvider->createInstanceWithArguments(
-                    OUString("com.sun.star.configuration.ConfigurationAccess"),
+                    "com.sun.star.configuration.ConfigurationAccess",
                     aArgumentList ),
                 UNO_QUERY );
 

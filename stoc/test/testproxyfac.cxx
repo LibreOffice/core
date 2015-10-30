@@ -252,9 +252,7 @@ SAL_IMPLEMENT_MAIN()
         try
         {
             Reference< registry::XImplementationRegistration > xImplReg(
-                xMgr->createInstance(
-                    OUString( "com.sun.star.registry.ImplementationRegistration"
-                        ) ),
+                xMgr->createInstance( "com.sun.star.registry.ImplementationRegistration" ),
                 UNO_QUERY );
             OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 

@@ -512,7 +512,7 @@ void SvxSearchDialog::Construct_Impl()
             aArgs[0] <<= sPath;
 
             uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
-                        OUString( "com.sun.star.configuration.ConfigurationUpdateAccess"),
+                        "com.sun.star.configuration.ConfigurationUpdateAccess",
                         aArgs);
             uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);
             if(xDirectAccess.is())

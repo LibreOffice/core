@@ -77,7 +77,7 @@ OUString getConfigurationString(OUString const & module, OUString const & path)
     return
         css::uno::Reference< css::container::XHierarchicalNameAccess >(
             getConfigurationProvider()->createInstanceWithArguments(
-                OUString("com.sun.star.configuration.ConfigurationAccess"),
+                "com.sun.star.configuration.ConfigurationAccess",
                 args),
             css::uno::UNO_QUERY_THROW)->
         getByHierarchicalName(path).get< OUString >();
@@ -157,7 +157,7 @@ utl::ConfigManager::acquireTree(utl::ConfigItem & item) {
     }
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
         getConfigurationProvider()->createInstanceWithArguments(
-            OUString("com.sun.star.configuration.ConfigurationUpdateAccess"),
+            "com.sun.star.configuration.ConfigurationUpdateAccess",
             args),
         css::uno::UNO_QUERY_THROW);
 }

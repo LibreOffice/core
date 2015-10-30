@@ -496,7 +496,7 @@ HierarchyDataSource::createInstanceWithArguments(
         {
             // Create configuration read-only access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                OUString( "com.sun.star.configuration.ConfigurationAccess"  ),
+                                "com.sun.star.configuration.ConfigurationAccess",
                                 aNewArgs );
         }
         else
@@ -515,7 +515,7 @@ HierarchyDataSource::createInstanceWithArguments(
 
             // Create configuration read-write access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                OUString( "com.sun.star.configuration.ConfigurationUpdateAccess"  ),
+                                "com.sun.star.configuration.ConfigurationUpdateAccess",
                                 aNewArgs );
         }
     }

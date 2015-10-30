@@ -69,7 +69,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
         try
         {
             xReadAccess = rXCfgProv->createInstanceWithArguments(
-                OUString( "com.sun.star.configuration.ConfigurationAccess" ),
+                    "com.sun.star.configuration.ConfigurationAccess",
                     aArguments );
         }
         catch (const ::com::sun::star::uno::Exception&)
@@ -134,7 +134,7 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
         try
         {
             xUpdatableView = xCfgProv->createInstanceWithArguments(
-                OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                    "com.sun.star.configuration.ConfigurationUpdateAccess",
                     aArguments );
             if ( xUpdatableView.is() )
                 xPropSet = Reference< XPropertySet >( xUpdatableView, UNO_QUERY );

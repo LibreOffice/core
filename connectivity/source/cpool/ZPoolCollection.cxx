@@ -335,7 +335,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
             makeAny(_rPath)));
     Reference< XInterface > xInterface(
         _rxConfProvider->createInstanceWithArguments(
-            OUString( "com.sun.star.configuration.ConfigurationAccess"),
+            "com.sun.star.configuration.ConfigurationAccess",
             args));
     OSL_ENSURE(
         xInterface.is(),

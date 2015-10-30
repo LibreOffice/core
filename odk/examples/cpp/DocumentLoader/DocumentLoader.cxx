@@ -95,7 +95,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     */
     Reference< XInterface > xInterface =
         xMultiComponentFactoryClient->createInstanceWithContext(
-            OUString("com.sun.star.bridge.UnoUrlResolver"),
+            "com.sun.star.bridge.UnoUrlResolver",
             xComponentContext );
 
     Reference< XUnoUrlResolver > resolver( xInterface, UNO_QUERY );

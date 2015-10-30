@@ -46,7 +46,7 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
     Reference < XInterface > xI;
 
     xI = xContext->getServiceManager()->createInstanceWithContext(
-        OUString("com.sun.star.i18n.ConversionDictionary_ko"), xContext);
+        "com.sun.star.i18n.ConversionDictionary_ko", xContext);
 
     if ( xI.is() )
         xCD.set( xI, UNO_QUERY );

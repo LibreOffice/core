@@ -900,7 +900,7 @@ bool UniversalContentBroker::getContentProviderData(
 
         uno::Reference< uno::XInterface > xInterface(
                 xConfigProv->createInstanceWithArguments(
-                    OUString( "com.sun.star.configuration.ConfigurationAccess"  ),
+                    "com.sun.star.configuration.ConfigurationAccess",
                     aArguments ) );
 
         if ( !m_xNotifier.is() )

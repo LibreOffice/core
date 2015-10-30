@@ -71,8 +71,7 @@ SAL_IMPLEMENT_MAIN()
         Reference< XMultiComponentFactory > xMgr = xContext->getServiceManager();
         OSL_ENSURE( xMgr.is(), "### cannot get initial service manager!" );
 
-        Reference< XInterface > xx = xMgr->createInstanceWithContext(
-            OUString("foo.Counter"), xContext);
+        Reference< XInterface > xx = xMgr->createInstanceWithContext( "foo.Counter", xContext);
 
         OSL_ENSURE( xx.is(), "### cannot get service instance of \"foo.Counter\"!" );
 

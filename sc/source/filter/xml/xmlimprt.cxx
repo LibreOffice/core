@@ -2873,8 +2873,7 @@ void ScXMLImport::SetStyleToRanges()
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
             xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(
-            xMultiServiceFactory->createInstance(
-            OUString("com.sun.star.sheet.SheetCellRanges")),
+            xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"),
             uno::UNO_QUERY));
     }
     OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");

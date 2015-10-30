@@ -360,8 +360,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
-    uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance(
-                                                      OUString("com.sun.star.awt.XProgressMonitor") ),
+    uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance( "com.sun.star.awt.XProgressMonitor" ),
                                                       uno::UNO_QUERY );
 
     if ( xMonitor.is() )

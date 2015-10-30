@@ -94,7 +94,7 @@ PresenterSlidePreview::PresenterSlidePreview (
     if (xFactory.is())
         mxPreviewRenderer = Reference<drawing::XSlideRenderer>(
             xFactory->createInstanceWithContext(
-                OUString("com.sun.star.drawing.SlideRenderer"),
+                "com.sun.star.drawing.SlideRenderer",
                 rxContext),
             UNO_QUERY);
     mpBitmaps.reset(new PresenterBitmapContainer(

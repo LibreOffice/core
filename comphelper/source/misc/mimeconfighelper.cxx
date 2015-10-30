@@ -134,7 +134,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
 
         xConfig = uno::Reference< container::XNameAccess >(
                             m_xConfigProvider->createInstanceWithArguments(
-                                OUString( "com.sun.star.configuration.ConfigurationAccess" ),
+                                "com.sun.star.configuration.ConfigurationAccess",
                                 aArgs ),
                             uno::UNO_QUERY );
     }

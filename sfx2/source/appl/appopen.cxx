@@ -809,7 +809,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( bHyperlinkUsed && !aFileName.isEmpty() && aFileName[0] != '#' )
     {
         Reference< css::document::XTypeDetection > xTypeDetection( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                                   OUString("com.sun.star.document.TypeDetection")),
+                                                                       "com.sun.star.document.TypeDetection"),
                                                                    UNO_QUERY );
         if ( xTypeDetection.is() )
         {

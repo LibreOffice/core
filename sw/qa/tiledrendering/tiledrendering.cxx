@@ -179,7 +179,7 @@ void TiledRenderingApp::Init()
     // plain createInstance w/o args directly to obtain an instance):
     ::ucb::UniversalContentBroker::create(comphelper::getProcessComponentContext() );
 
-    xDesktop.set(xFactory->createInstanceWithContext(OUString("com.sun.star.frame.Desktop"), xContext));
+    xDesktop.set(xFactory->createInstanceWithContext("com.sun.star.frame.Desktop", xContext));
     xLoader.set(frame::Desktop::create(xContext));
 }
 

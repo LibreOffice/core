@@ -67,7 +67,7 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
                                  beans::PropertyState_DIRECT_VALUE );
     args[0] <<= aValue;
     m_xNameAccessNodes = uno::Reference< container::XNameAccess >(
-        xConfig->createInstanceWithArguments( OUString("com.sun.star.configuration.ConfigurationAccess"),
+        xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
                                               uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
 
     // get the 'get more extensions here' url
@@ -76,7 +76,7 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
                                   beans::PropertyState_DIRECT_VALUE );
     args[0] <<= aValue2;
     xNameAccessRepositories = uno::Reference< container::XNameAccess > (
-        xConfig->createInstanceWithArguments( OUString("com.sun.star.configuration.ConfigurationAccess"),
+        xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
                                               uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
     try
     {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException

@@ -709,7 +709,7 @@ namespace
         aArgs[1] <<= true; // do not create copy
         uno::Reference< container::XNameContainer > xNameContainer(
             xFactory->createInstanceWithArguments(
-                OUString("com.sun.star.embed.OLESimpleStorage"),
+                "com.sun.star.embed.OLESimpleStorage",
                 aArgs ), uno::UNO_QUERY_THROW );
 
         uno::Reference< io::XStream > xCONTENTS;

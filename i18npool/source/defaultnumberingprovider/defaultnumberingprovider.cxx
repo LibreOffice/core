@@ -983,7 +983,7 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
         aArgs[0] <<= aPath;
 
         Reference<XInterface> xInterface = xConfigProvider->createInstanceWithArguments(
-            OUString("com.sun.star.configuration.ConfigurationAccess"), aArgs);
+            "com.sun.star.configuration.ConfigurationAccess", aArgs);
 
         xHierarchicalNameAccess.set(xInterface, UNO_QUERY);
 

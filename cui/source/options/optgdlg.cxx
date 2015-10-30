@@ -480,7 +480,7 @@ CanvasSettings::CanvasSettings() :
 
         mxForceFlagNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
-                OUString("com.sun.star.configuration.ConfigurationUpdateAccess"),
+                "com.sun.star.configuration.ConfigurationUpdateAccess",
                 Sequence<Any>( &propValue, 1 ) ),
             UNO_QUERY_THROW );
 
@@ -491,7 +491,7 @@ CanvasSettings::CanvasSettings() :
 
         Reference<XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                OUString("com.sun.star.configuration.ConfigurationAccess"),
+                "com.sun.star.configuration.ConfigurationAccess",
                 Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
         Reference<XHierarchicalNameAccess> xHierarchicalNameAccess(
             xNameAccess, UNO_QUERY_THROW);

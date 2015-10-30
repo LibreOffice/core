@@ -277,8 +277,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             const Reference<frame::
                 XTransientDocumentsDocumentContentFactory> xTDDCF(
                     xMsf->createInstanceWithContext(
-                        OUString("com.sun.star.frame."
-                            "TransientDocumentsDocumentContentFactory"),
+                        "com.sun.star.frame.TransientDocumentsDocumentContentFactory",
                     xContext),
                 UNO_QUERY_THROW);
             const Reference<ucb::XContent> xContent(

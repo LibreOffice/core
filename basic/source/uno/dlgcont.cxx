@@ -131,7 +131,7 @@ bool writeOasis2OOoLibraryElement(
 
     Reference< xml::sax::XDocumentHandler > xHandler(
         xSMgr->createInstanceWithArgumentsAndContext(
-            OUString("com.sun.star.comp.Oasis2OOoTransformer" ) ,
+            "com.sun.star.comp.Oasis2OOoTransformer",
             aArgs, xContext ),
         UNO_QUERY );
 

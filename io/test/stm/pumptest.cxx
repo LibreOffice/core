@@ -311,7 +311,7 @@ private:
     Reference< XOutputStream > createPipe()
     {
         Reference< XOutputStream > rOut( m_rSmgr->createInstance(
-             OUString("com.sun.star.io.Pipe")),UNO_QUERY);
+             "com.sun.star.io.Pipe"),UNO_QUERY);
         return rOut;
     }
 };
@@ -403,9 +403,9 @@ void OPumpTest::testWrongUsage( const Reference< XInterface > &r )
     Reference< XActiveDataControl > rControl( r, UNO_QUERY );
 
     Reference< XInputStream > rIn( m_rSmgr->createInstance(
-        OUString("com.sun.star.io.DataInputStream")),UNO_QUERY);
+        "com.sun.star.io.DataInputStream"),UNO_QUERY);
     Reference< XOutputStream > rOut( m_rSmgr->createInstance(
-        OUString("com.sun.star.io.DataOutputStream")),UNO_QUERY);
+        "com.sun.star.io.DataOutputStream"),UNO_QUERY);
 
     rSink->setInputStream( rIn );
     rSource->setOutputStream( rOut );

@@ -252,7 +252,7 @@ namespace logging
                 makeAny( OUString( "/org.openoffice.Office.Logging/Settings" ) )
             );
             Reference< XNameContainer > xAllSettings( xConfigProvider->createInstanceWithArguments(
-                OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                "com.sun.star.configuration.ConfigurationUpdateAccess",
                 aArguments
             ), UNO_QUERY_THROW );
 

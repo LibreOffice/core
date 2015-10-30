@@ -249,7 +249,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
                     (*it).second.xRootReadAccess
                         = uno::Reference< container::XHierarchicalNameAccess >(
                             xConfigProv->createInstanceWithArguments(
-                                OUString( "com.sun.star.ucb.HierarchyDataReadAccess"  ),
+                                "com.sun.star.ucb.HierarchyDataReadAccess",
                                 aArguments ),
                             uno::UNO_QUERY );
                 }

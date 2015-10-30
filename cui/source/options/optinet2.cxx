@@ -204,7 +204,7 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     aArgumentList[0] = makeAny( aProperty );
 
     m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
-        OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+        "com.sun.star.configuration.ConfigurationUpdateAccess",
         aArgumentList );
 }
 
