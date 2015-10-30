@@ -67,6 +67,16 @@ public:
     static void drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText);
 };
 
+/// Represents the button at the top left corner for spreadsheets.
+class TiledCornerButton
+{
+public:
+    GtkWidget* m_pDrawingArea;
+    TiledCornerButton();
+    static gboolean draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData);
+    gboolean drawImpl(GtkWidget* pWidget, cairo_t* pCairo);
+};
+
 /// Represents all the state that is specific to one GtkWindow of this app.
 class TiledWindow
 {
@@ -93,6 +103,7 @@ public:
     bool m_bFindAll;
     std::shared_ptr<TiledRowColumnBar> m_pRowBar;
     std::shared_ptr<TiledRowColumnBar> m_pColumnBar;
+    std::shared_ptr<TiledCornerButton> m_pCornerButton;
 
     TiledWindow()
         : m_pDocView(0),
@@ -169,6 +180,9 @@ gboolean TiledRowColumnBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
             aRectangle.y = nTotal - 1;
             aRectangle.width = ROW_HEADER_WIDTH - 1;
             aRectangle.height = rHeader.m_nSize;
+            // Left line.
+            cairo_rectangle(pCairo, aRectangle.x, aRectangle.y, 1, aRectangle.height);
+            cairo_fill(pCairo);
             // Bottom line.
             cairo_rectangle(pCairo, aRectangle.x, aRectangle.y + aRectangle.height, aRectangle.width, 1);
             cairo_fill(pCairo);
@@ -178,10 +192,13 @@ gboolean TiledRowColumnBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
         }
         else
         {
-            aRectangle.x = nTotal -1;
+            aRectangle.x = nTotal - 1;
             aRectangle.y = 0;
             aRectangle.width = rHeader.m_nSize;
             aRectangle.height = COLUMN_HEADER_HEIGHT - 1;
+            // Top line.
+            cairo_rectangle(pCairo, aRectangle.x, aRectangle.y, aRectangle.width, 1);
+            cairo_fill(pCairo);
             // Right line.
             cairo_rectangle(pCairo, aRectangle.x + aRectangle.width , aRectangle.y, 1, aRectangle.height);
             cairo_fill(pCairo);
@@ -216,6 +233,8 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
 
+        gtk_widget_show(rWindow.m_pCornerButton->m_pDrawingArea);
+
         rWindow.m_pRowBar->m_aHeaders.clear();
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
         {
@@ -236,6 +255,33 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
     }
 
     return TRUE;
+}
+
+TiledCornerButton::TiledCornerButton()
+    : m_pDrawingArea(gtk_drawing_area_new())
+{
+    gtk_widget_set_size_request(m_pDrawingArea, TiledRowColumnBar::ROW_HEADER_WIDTH, TiledRowColumnBar::COLUMN_HEADER_HEIGHT);
+    g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(TiledCornerButton::draw), this);
+}
+
+gboolean TiledCornerButton::draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData)
+{
+    return static_cast<TiledCornerButton*>(pData)->drawImpl(pWidget, pCairo);
+}
+
+gboolean TiledCornerButton::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
+{
+    cairo_set_source_rgb(pCairo, 0, 0, 0);
+
+    GdkRectangle aRectangle;
+    aRectangle.x = 0;
+    aRectangle.y = 0;
+    aRectangle.width = TiledRowColumnBar::ROW_HEADER_WIDTH;
+    aRectangle.height = TiledRowColumnBar::COLUMN_HEADER_HEIGHT;
+    cairo_rectangle(pCairo, aRectangle.x, aRectangle.y, aRectangle.width, aRectangle.height);
+    cairo_stroke(pCairo);
+
+    return FALSE;
 }
 
 static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const std::string& rName)
@@ -947,6 +993,9 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     // Grid for the row/column bar + doc view.
     GtkWidget* pGrid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(rWindow.m_pVBox), pGrid);
+    rWindow.m_pCornerButton.reset(new TiledCornerButton());
+    // "A1" cell of the grid.
+    gtk_grid_attach(GTK_GRID(pGrid), rWindow.m_pCornerButton->m_pDrawingArea, 0, 0, 1, 1);
     rWindow.m_pRowBar.reset(new TiledRowColumnBar(TiledRowColumnBar::ROW));
     // "A2" cell of the grid.
     gtk_grid_attach(GTK_GRID(pGrid), rWindow.m_pRowBar->m_pDrawingArea, 0, 1, 1, 1);
@@ -977,6 +1026,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     // Hide the findbar by default.
     gtk_widget_hide(rWindow.m_pFindbar);
     // Same for the row/column bar.
+    gtk_widget_hide(rWindow.m_pCornerButton->m_pDrawingArea);
     gtk_widget_hide(rWindow.m_pRowBar->m_pDrawingArea);
     gtk_widget_hide(rWindow.m_pColumnBar->m_pDrawingArea);
 
