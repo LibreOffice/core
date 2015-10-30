@@ -22,8 +22,8 @@
 
 #include <sal/config.h>
 
+#include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
-
 
 namespace test {
 
