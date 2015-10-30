@@ -49,15 +49,6 @@ public class _XCharacterClassification extends MultiMethodTest {
     public String[] languages = new String[]{"de","en","es","fr","ja","ko","zh"};
     public String[] countries = new String[]{"DE","US","ES","FR","JP","KR","CN"};
 
-    public String[] charstyles_java = new String[] {"UNASSIGNED","UPPERCASE_LETTER",
-        "LOWERCASE_LETTER","TITLECASE_LETTER","MODIFIER_LETTER","OTHER_LETTER",
-        "NON_SPACING_MARK","ENCLOSING_MARK","COMBINING_SPACING_MARK",
-        "DECIMAL_DIGIT_NUMBER","LETTER_NUMBER","OTHER_NUMBER","SPACE_SEPARATOR",
-        "LINE_SEPARATOR","PARAGRAPH_SEPARATOR","CONTROL","FORMAT","none17",
-        "PRIVATE_USE","none19","DASH_PUNCTUATION","START_PUNCTUATION","END_PUNCTUATION",
-        "CONNECTOR_PUNCTUATION","OTHER_PUNCTUATION","MATH_SYMBOL","CURRENCY_SYMBOL",
-        "MODIFIER_SYMBOL","OTHER_SYMBOL"};
-
     public String[] charstyles_office = new String[] {"UNASSIGNED","UPPERCASE_LETTER",
         "LOWERCASE_LETTER","TITLECASE_LETTER","MODIFIER_LETTER","OTHER_LETTER",
         "NON_SPACING_MARK","ENCLOSING_MARK","COMBINING_SPACING_MARK",
