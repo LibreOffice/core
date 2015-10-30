@@ -24,8 +24,9 @@
 
 #include <boost/unordered_map.hpp>
 
-#include "path.hxx"
+#include <config_dconf.h>
 
+#include "path.hxx"
 
 namespace configmgr {
 
@@ -44,6 +45,10 @@ public:
     void add(Path const & path);
 
     void remove(Path const & path);
+
+#if ENABLE_DCONF
+    void clear() { root_.children.clear(); }
+#endif
 
     bool empty() const { return root_.children.empty(); }
 
