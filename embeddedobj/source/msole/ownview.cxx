@@ -412,7 +412,7 @@ void OwnView_Impl::CreateNative()
         aArgs[0] <<= xInStream;
         uno::Reference< container::XNameAccess > xNameAccess(
                 m_xFactory->createInstanceWithArguments(
-                        OUString( "com.sun.star.embed.OLESimpleStorage" ),
+                        "com.sun.star.embed.OLESimpleStorage",
                         aArgs ),
                 uno::UNO_QUERY_THROW );
 

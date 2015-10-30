@@ -95,7 +95,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 
         uno::Reference< awt::XRequestCallback > xRequestCallback(
             xFactory->createInstanceWithContext(
-                 OUString( "com.sun.star.awt.AsyncCallback" ),
+                 "com.sun.star.awt.AsyncCallback",
                  m_xContext ),
              uno::UNO_QUERY_THROW );
 

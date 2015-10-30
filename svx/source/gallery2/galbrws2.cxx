@@ -430,8 +430,8 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
 
     m_xTransformer.set(
         m_xContext->getServiceManager()->createInstanceWithContext(
-            OUString( "com.sun.star.util.URLTransformer" ), m_xContext ),
-                    css::uno::UNO_QUERY );
+            "com.sun.star.util.URLTransformer", m_xContext ),
+        css::uno::UNO_QUERY );
 
     Image      aDummyImage;
     vcl::Font  aInfoFont( maInfoBar->GetControlFont() );

@@ -1396,8 +1396,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
     if ( xLockObject.is() )
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
-            m_xFactory->createInstance(
-             OUString("com.sun.star.awt.AsyncCallback")),
+            m_xFactory->createInstance("com.sun.star.awt.AsyncCallback"),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect ), uno::Any() );
     }
@@ -1417,8 +1416,7 @@ void OleComponent::OnClose_Impl()
     if ( xLockObject.is() )
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
-            m_xFactory->createInstance(
-             OUString("com.sun.star.awt.AsyncCallback")),
+            m_xFactory->createInstance("com.sun.star.awt.AsyncCallback"),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE ), uno::Any() );
     }

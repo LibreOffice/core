@@ -71,7 +71,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
 
     // collecting a list of impress filters
     Reference< XNameAccess > xFilters( rxContext->getServiceManager()->createInstanceWithContext(
-        OUString( "com.sun.star.document.FilterFactory" ), rxContext ), UNO_QUERY_THROW );
+        "com.sun.star.document.FilterFactory", rxContext ), UNO_QUERY_THROW );
     Sequence< OUString > aFilterList( xFilters->getElementNames() );
     for ( int i = 0; i < aFilterList.getLength(); i++ )
     {
@@ -116,7 +116,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
     }
 
     Reference< XNameAccess > xTypes( rxContext->getServiceManager()->createInstanceWithContext(
-        OUString( "com.sun.star.document.TypeDetection" ), rxContext ), UNO_QUERY_THROW );
+        "com.sun.star.document.TypeDetection", rxContext ), UNO_QUERY_THROW );
 
     for( std::vector< FilterEntry >::const_iterator aIter(aFilterEntryList.begin()), aEnd(aFilterEntryList.end()); aIter != aEnd; ++aIter )
     {

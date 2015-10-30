@@ -207,8 +207,7 @@ public:
         {
             uno::Reference< lang::XMultiServiceFactory > xDocSettingsSupplier( xModel, uno::UNO_QUERY_THROW );
             m_xDocumentSettings.set(
-                xDocSettingsSupplier->createInstance(
-                    OUString( "com.sun.star.document.Settings" ) ),
+                xDocSettingsSupplier->createInstance( "com.sun.star.document.Settings" ),
                 uno::UNO_QUERY_THROW );
 
             OUString aLoadReadonlyString( "LoadReadonly" );

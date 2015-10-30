@@ -658,7 +658,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
             {
                 uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
                     xMCF->createInstanceWithContext(
-                        OUString("com.sun.star.comp.chart2.WizardDialog")
+                        "com.sun.star.comp.chart2.WizardDialog"
                         , xContext), uno::UNO_QUERY);
                 uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
                 if( xChartModel.is() && xInit.is() )

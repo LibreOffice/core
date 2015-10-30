@@ -121,10 +121,10 @@ HRESULT doTest()
 
     Reference< XMultiComponentFactory > mgr = xContext->getServiceManager();//createRegistryServiceFactory( OUString(L"services.rdb"));
     Reference< XInterface > xIntSupplier= mgr->createInstanceWithContext(
-        OUString(L"com.sun.star.bridge.OleBridgeSupplierVar1"), xContext);
+        "com.sun.star.bridge.OleBridgeSupplierVar1", xContext);
     Reference< XBridgeSupplier2 > xSuppl( xIntSupplier, UNO_QUERY);
     Reference <XInterface> xOletest= mgr->createInstanceWithContext(
-        OUString(L"oletest.OleTest"), xContext);
+        "oletest.OleTest", xContext);
     Any any;
     any <<= xOletest;
     sal_uInt8 arId[16];

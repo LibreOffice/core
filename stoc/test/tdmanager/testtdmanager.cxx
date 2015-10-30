@@ -141,15 +141,14 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const & arguments)
 
         css::uno::Reference<css::registry::XSimpleRegistry> xReg(
             m_context->getServiceManager()->createInstanceWithContext(
-                OUString( "com.sun.star.registry.SimpleRegistry" ),
+                "com.sun.star.registry.SimpleRegistry",
                 m_context ), css::uno::UNO_QUERY_THROW );
         xReg->open( url, true /* read-only */, false /* ! create */ );
         css::uno::Any arg( css::uno::makeAny(xReg) );
         css::uno::Reference<css::container::XHierarchicalNameAccess> xTDprov(
             m_context->getServiceManager()->
             createInstanceWithArgumentsAndContext(
-                OUString( "com.sun.star.comp.stoc."
-                                   "RegistryTypeDescriptionProvider" ),
+                "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider",
                 css::uno::Sequence<css::uno::Any>( &arg, 1 ), m_context ),
             css::uno::UNO_QUERY_THROW );
         try {

@@ -109,7 +109,7 @@ PresenterScrollBar::PresenterScrollBar (
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString("com.sun.star.comp.Draw.PresenterHelper"),
+                "com.sun.star.comp.Draw.PresenterHelper",
                 rxComponentContext),
             UNO_QUERY_THROW);
 

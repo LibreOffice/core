@@ -317,8 +317,7 @@ void PageStyleContext::SetDefaults( )
     Reference < XMultiServiceFactory > xFactory ( GetImport().GetModel(), UNO_QUERY);
     if (xFactory.is())
     {
-        Reference < XInterface > xInt = xFactory->createInstance (
-        OUString ( "com.sun.star.text.Defaults" ) );
+        Reference < XInterface > xInt = xFactory->createInstance( "com.sun.star.text.Defaults" );
         Reference < beans::XPropertySet > xProperties ( xInt, UNO_QUERY );
         if ( xProperties.is() )
             FillPropertySet ( xProperties );

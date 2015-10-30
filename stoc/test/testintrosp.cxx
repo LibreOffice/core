@@ -71,7 +71,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
         if( !xRefl.is() )
         {
             xRefl = Reference< XIdlReflection >( xMgr->createInstance(
-                OUString("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
+                "com.sun.star.reflection.CoreReflection" ), UNO_QUERY );
             OSL_ENSURE( xRefl.is(), "### no corereflection!" );
         }
         xRetClass = xRefl->forName( sOWName );

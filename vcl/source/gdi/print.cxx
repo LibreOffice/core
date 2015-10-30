@@ -159,7 +159,7 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
             aArgs.getArray()[0] <<= aVal;
             xConfigAccess = Reference< XNameAccess >(
                     xConfigProvider->createInstanceWithArguments(
-                        OUString( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ),
+                        "com.sun.star.configuration.ConfigurationAccess", aArgs ),
                         UNO_QUERY );
             if( xConfigAccess.is() )
             {

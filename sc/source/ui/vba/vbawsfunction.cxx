@@ -179,7 +179,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     {
         uno::Reference< lang::XMultiComponentFactory > xSMgr( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XFunctionAccess > xFunctionAccess( xSMgr->createInstanceWithContext(
-            OUString( "com.sun.star.sheet.FunctionAccess" ), mxContext ),
+            "com.sun.star.sheet.FunctionAccess", mxContext ),
             uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xPropSet( xFunctionAccess, uno::UNO_QUERY_THROW );
         xPropSet->setPropertyValue("IsArrayFunction", uno::Any( bAsArray ) );

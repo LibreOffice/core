@@ -499,8 +499,7 @@ int main (int argc, char **argv)
     try
     {
         // Create registration service
-        Reference < XInterface > x = xSMgr->createInstance(
-            OUString("com.sun.star.registry.ImplementationRegistration") );
+        Reference < XInterface > x = xSMgr->createInstance( "com.sun.star.registry.ImplementationRegistration" );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -530,8 +529,7 @@ int main (int argc, char **argv)
     // parser demo
     // read xml from a file and count elements
 
-    Reference< XInterface > x = xSMgr->createInstance(
-        OUString("com.sun.star.xml.sax.Parser") );
+    Reference< XInterface > x = xSMgr->createInstance( "com.sun.star.xml.sax.Parser" );
     if( x.is() )
     {
         Reference< XParser > rParser( x , UNO_QUERY );

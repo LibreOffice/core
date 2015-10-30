@@ -143,8 +143,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     {
         uno::Sequence < beans::PropertyValue > aProps;
         css::uno::Reference< css::container::XNameAccess > xFilterCFG(
-                    xSMGR->createInstance(
-                        OUString("com.sun.star.document.FilterFactory") ), uno::UNO_QUERY );
+                    xSMGR->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
         css::uno::Reference< css::util::XModifiable > xModifiable( xModel, css::uno::UNO_QUERY );
 
         if ( !xFilterCFG.is() )

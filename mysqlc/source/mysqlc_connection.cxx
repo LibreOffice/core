@@ -644,7 +644,7 @@ rtl::OUString OConnection::transFormPreparedStatement(const rtl::OUString& _sSQL
             Reference< XConnection> xCon = this;
             aArgs[0] <<= NamedValue(rtl::OUString("ActiveConnection"), makeAny(xCon));
 
-            m_xParameterSubstitution.set(m_rDriver.getFactory()->createInstanceWithArguments(rtl::OUString("org.openoffice.comp.helper.ParameterSubstitution"),aArgs),UNO_QUERY);
+            m_xParameterSubstitution.set(m_rDriver.getFactory()->createInstanceWithArguments("org.openoffice.comp.helper.ParameterSubstitution",aArgs),UNO_QUERY);
         } catch(const Exception&) {}
     }
     if ( m_xParameterSubstitution.is() ) {

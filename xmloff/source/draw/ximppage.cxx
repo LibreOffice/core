@@ -383,8 +383,7 @@ void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
                                     if(xServiceFact.is())
                                     {
                                         xBackgroundSet = Reference< beans::XPropertySet >::query(
-                                            xServiceFact->createInstance(
-                                            OUString("com.sun.star.drawing.Background")));
+                                            xServiceFact->createInstance("com.sun.star.drawing.Background"));
                                     }
                                 }
 

@@ -409,7 +409,7 @@ PresenterPaneBorderPainter::Renderer::Renderer (
     {
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString("com.sun.star.comp.Draw.PresenterHelper"),
+                "com.sun.star.comp.Draw.PresenterHelper",
                 rxContext),
             UNO_QUERY_THROW);
     }

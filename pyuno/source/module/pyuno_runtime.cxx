@@ -266,7 +266,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
     c->xContext = ctx;
     c->xInvocation = Reference< XSingleServiceFactory > (
         ctx->getServiceManager()->createInstanceWithContext(
-            OUString(  "com.sun.star.script.Invocation"  ),
+            "com.sun.star.script.Invocation",
             ctx ),
         UNO_QUERY );
     if( ! c->xInvocation.is() )

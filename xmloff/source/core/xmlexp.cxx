@@ -1337,16 +1337,14 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 if( !mxGraphicResolver.is() )
                 {
                     mxGraphicResolver = Reference< XGraphicObjectResolver >::query(
-                        xFactory->createInstance(
-                            OUString( "com.sun.star.document.ExportGraphicObjectResolver")));
+                        xFactory->createInstance( "com.sun.star.document.ExportGraphicObjectResolver" ));
                     bOwnGraphicResolver = mxGraphicResolver.is();
                 }
 
                 if( !mxEmbeddedResolver.is() )
                 {
                     mxEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
-                        xFactory->createInstance(
-                            OUString( "com.sun.star.document.ExportEmbeddedObjectResolver")));
+                        xFactory->createInstance( "com.sun.star.document.ExportEmbeddedObjectResolver" ));
                     bOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }

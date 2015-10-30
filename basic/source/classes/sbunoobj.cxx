@@ -253,9 +253,8 @@ SbUnoObject* createOLEObject_Impl( const OUString& aType )
         {
             Reference<XMultiComponentFactory> xSMgr = xContext->getServiceManager();
             xOLEFactory.set(
-                xSMgr->createInstanceWithContext(
-                    OUString( "com.sun.star.bridge.OleObjectFactory"),
-                        xContext ), UNO_QUERY );
+                xSMgr->createInstanceWithContext( "com.sun.star.bridge.OleObjectFactory", xContext ),
+                UNO_QUERY );
         }
     }
 
@@ -4548,7 +4547,7 @@ Reference< XInterface > createComListener( const Any& aControlAny, const OUStrin
     try
     {
         xRet = xServiceMgr->createInstanceWithArgumentsAndContext(
-            OUString( "com.sun.star.custom.UnoComListener"),
+            "com.sun.star.custom.UnoComListener",
             args, xContext );
     }
     catch( const Exception& )
@@ -4661,8 +4660,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
     Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
     Reference< XSingleServiceFactory > xComImplementsFactory
     (
-        xServiceMgr->createInstanceWithContext(
-            OUString( "com.sun.star.custom.ComImplementsFactory"), xContext ),
+        xServiceMgr->createInstanceWithContext( "com.sun.star.custom.ComImplementsFactory", xContext ),
         UNO_QUERY
     );
     if( !xComImplementsFactory.is() )

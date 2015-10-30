@@ -3514,10 +3514,10 @@ void ServiceType::dumpHxxFile(
                   << indent() << "the_instance = ::css::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
-                      "createInstanceWithContext(::rtl::OUString("
+                      "createInstanceWithContext("
                       " \"")
                   << name_
-                  << "\" ), the_context), ::css::uno::UNO_QUERY);\n#endif\n";
+                  << "\", the_context), ::css::uno::UNO_QUERY);\n#endif\n";
                 dec();
                 o << indent()
                   << "} catch (const ::css::uno::RuntimeException &) {\n";
@@ -3663,9 +3663,9 @@ void ServiceType::dumpHxxFile(
                   << indent() << "the_instance = ::css::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
-                      "createInstanceWithArgumentsAndContext(::rtl::OUString("
+                      "createInstanceWithArgumentsAndContext("
                       " \"")
-                  << name_ << "\" ), ";
+                  << name_ << "\", ";
                 if (rest) {
                     o << codemaker::cpp::translateUnoToCppIdentifier(
                         u2b(i->parameters.back().name), "param",

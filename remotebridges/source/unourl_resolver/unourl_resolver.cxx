@@ -124,9 +124,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
     }
 
     Reference< XConnector > xConnector(
-        _xSMgr->createInstanceWithContext(
-            OUString("com.sun.star.connection.Connector"),
-            _xCtx ),
+        _xSMgr->createInstanceWithContext( "com.sun.star.connection.Connector", _xCtx ),
         UNO_QUERY );
 
     if (! xConnector.is())

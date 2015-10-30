@@ -280,7 +280,7 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
                                 makeAny( KabDriver::impl_getConfigurationSettingsPath() ),
                                 PropertyState_DIRECT_VALUE );
         Reference< XPropertySet > xSettings( xConfigProvider->createInstanceWithArguments(
-                OUString(  "com.sun.star.configuration.ConfigurationAccess"  ),
+                "com.sun.star.configuration.ConfigurationAccess",
                 aCreationArgs ),
             UNO_QUERY_THROW );
 

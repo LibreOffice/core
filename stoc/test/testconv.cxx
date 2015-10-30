@@ -606,8 +606,7 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
 {
     printf( "test_Conversion(): start...\n" );
 
-    Reference< XTypeConverter > xConverter( xMgr->createInstance(
-        OUString("com.sun.star.script.Converter") ), UNO_QUERY );
+    Reference< XTypeConverter > xConverter( xMgr->createInstance( "com.sun.star.script.Converter" ), UNO_QUERY );
 
     ConvBlock * pTestBlocks = new ConvBlock[256];
     sal_Int32 nPos = initBlocks( pTestBlocks );

@@ -700,7 +700,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
     // type converter
     Reference< script::XTypeConverter > xConverter(
         xContext->getServiceManager()->createInstanceWithContext(
-            OUString("com.sun.star.script.Converter"),
+            "com.sun.star.script.Converter",
             xContext ),
         UNO_QUERY_THROW );
     m_pConverter = static_cast<uno_Interface *>(m_aCpp2Uno.mapInterface(

@@ -848,7 +848,7 @@ namespace connectivity
                 // create the access
                 Reference< XPropertySet > xNode(
                     xConfigProvider->createInstanceWithArguments(
-                        OUString("com.sun.star.configuration.ConfigurationAccess"),
+                        "com.sun.star.configuration.ConfigurationAccess",
                         aArguments ),
                     UNO_QUERY );
                 OSL_ENSURE( xNode.is(), "lcl_getSystemLocale: invalid access returned (should throw an exception instead)!" );

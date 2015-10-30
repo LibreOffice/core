@@ -115,7 +115,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
             aArgs.getArray()[0] <<= aVal;
             m_xConfigAccess =
                 Reference< XNameAccess >(
-                    m_xConfigProvider->createInstanceWithArguments( OUString( "com.sun.star.configuration.ConfigurationAccess" ),
+                    m_xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
                                                                     aArgs ),
                     UNO_QUERY );
             if( m_xConfigAccess.is() )
@@ -376,7 +376,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
         aArgs.getArray()[0] <<= aVal;
         m_xConfigAccess =
             Reference< XNameAccess >(
-                m_xConfigProvider->createInstanceWithArguments( OUString( "com.sun.star.configuration.ConfigurationAccess" ),
+                m_xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
                                                                 aArgs ),
                 UNO_QUERY );
         if( m_xConfigAccess.is() )

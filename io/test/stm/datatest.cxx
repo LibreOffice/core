@@ -164,21 +164,21 @@ sal_Int32 ODataStreamTest::test(
 
 
                 Reference < XInterface > x = m_rFactory->createInstance(
-                    OUString( "com.sun.star.io.Pipe" ));
+                    "com.sun.star.io.Pipe" );
 
                 Reference < XInputStream >   rPipeInput( x , UNO_QUERY );
                 Reference < XOutputStream >  rPipeOutput( x , UNO_QUERY );
 
                 if( ! rSink.is() ) {
                     x = m_rFactory->createInstance(
-                        OUString( "com.sun.star.io.DataInputStream") );
+                        "com.sun.star.io.DataInputStream" );
                     rInput = Reference < XDataInputStream > ( x , UNO_QUERY);
                     rSink = Reference<  XActiveDataSink > ( x , UNO_QUERY );
                 }
                 else if ( !rSource.is() )
                 {
                     x = m_rFactory->createInstance(
-                        OUString( "com.sun.star.io.DataOutputStream" ) );
+                        "com.sun.star.io.DataOutputStream" );
                     rOutput = Reference< XDataOutputStream > ( x , UNO_QUERY );
                     rSource = Reference< XActiveDataSource > ( x, UNO_QUERY );
                 }
@@ -724,13 +724,13 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
 
 
                 Reference < XInterface > x = m_rFactory->createInstance(
-                    OUString( "com.sun.star.io.Pipe" ) );
+                    "com.sun.star.io.Pipe" );
 
                 Reference <XInputStream > rPipeInput( x , UNO_QUERY );
                 Reference <XOutputStream >  rPipeOutput( x , UNO_QUERY );
 
                 x = m_rFactory->createInstance(
-                    OUString( "com.sun.star.io.MarkableInputStream" ) );
+                    "com.sun.star.io.MarkableInputStream" );
 
                 Reference <XInputStream > markableInput( x , UNO_QUERY );
                 Reference <XActiveDataSink> markableSink( x , UNO_QUERY );
@@ -750,13 +750,13 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
 
                 if( ! rSink.is() ) {
                     x = m_rFactory->createInstance(
-                        OUString( "com.sun.star.io.ObjectInputStream" ));
+                        "com.sun.star.io.ObjectInputStream" );
                     rInput = Reference < XObjectInputStream > ( x , UNO_QUERY );
                     rSink = Reference < XActiveDataSink > ( x , UNO_QUERY );
                 }
                 else if ( !rSource.is() ) {
                     x = m_rFactory->createInstance(
-                        OUString( "com.sun.star.io.ObjectOutputStream" ));
+                        "com.sun.star.io.ObjectOutputStream" );
                     rOutput = Reference <XObjectOutputStream > ( x , UNO_QUERY );
                     rSource = Reference <XActiveDataSource>( x, UNO_QUERY );
                 }
@@ -924,7 +924,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
 
     {
         Reference < XInterface > x = m_rFactory->createInstance(
-            OUString( "test.com.sun.star.io.PersistTest"));
+            "test.com.sun.star.io.PersistTest");
         Reference< XPersistObject > persistRef( x , UNO_QUERY );
 
         ERROR_ASSERT( persistRef.is() , "couldn't instantiate PersistTest object" );

@@ -140,8 +140,7 @@ Reference< XInterface > openConfig(const char* sPackage)
         lParams[0] = makeAny(aParam);
 
         // get access to file
-        xCfg = xConfigProvider->createInstanceWithArguments(
-            OUString( "com.sun.star.configuration.ConfigurationAccess" ), lParams);
+        xCfg = xConfigProvider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", lParams);
     }
     catch(const RuntimeException&)
         { throw; }

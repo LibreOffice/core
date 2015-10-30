@@ -77,7 +77,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
                 OUString( "UnoVirtualMachine" ),
                 css::uno::makeAny( handle ) ) ) );
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        OUString("com.sun.star.java.JavaVirtualMachine"),
+        "com.sun.star.java.JavaVirtualMachine",
         css::uno::Sequence< css::uno::Any >( &arg, 1 ), xContext );
 }
 
@@ -86,7 +86,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
     throw (css::uno::Exception, std::exception)
 {
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        OUString("com.sun.star.java.JavaVirtualMachine"),
+        "com.sun.star.java.JavaVirtualMachine",
         args, xContext );
 }
 

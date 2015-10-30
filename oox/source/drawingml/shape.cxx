@@ -1201,7 +1201,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
 
         Reference < graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
         Reference < lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
-        xShape = Reference < XShape > ( xServiceFact->createInstance( OUString( "com.sun.star.drawing.GraphicObjectShape" ) ), UNO_QUERY_THROW );
+        xShape = Reference < XShape > ( xServiceFact->createInstance( "com.sun.star.drawing.GraphicObjectShape" ), UNO_QUERY_THROW );
         Reference < XPropertySet > xPropSet( xShape, UNO_QUERY_THROW );
         xPropSet->setPropertyValue( OUString( "Graphic" ), Any( xGraphic ) );
         xPropSet->setPropertyValue( OUString( "MoveProtect" ), Any( sal_True ) );

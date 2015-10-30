@@ -1809,7 +1809,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         uno::Reference< container::XNameAccess > xSOFConfig(
             xConfigProvider->createInstanceWithArguments(
-                                    OUString("com.sun.star.configuration.ConfigurationAccess"),
+                                    "com.sun.star.configuration.ConfigurationAccess",
                                     aArgs ),
             uno::UNO_QUERY_THROW );
 

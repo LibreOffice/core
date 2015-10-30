@@ -511,8 +511,8 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        OUString("org.openoffice.comp.form.ui.MasterDetailLinkDialog"),aSeq
-            , m_xContext), uno::UNO_QUERY);
+            "org.openoffice.comp.form.ui.MasterDetailLinkDialog", aSeq, m_xContext),
+        uno::UNO_QUERY);
 
     _rClearBeforeDialog.clear();
     return ( xDialog->execute() != 0 );
@@ -531,8 +531,8 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        OUString("com.sun.star.comp.chart2.ChartTypeDialog"),aSeq
-            , m_xContext), uno::UNO_QUERY);
+            "com.sun.star.comp.chart2.ChartTypeDialog", aSeq, m_xContext),
+        uno::UNO_QUERY);
 
     _rClearBeforeDialog.clear();
     return ( xDialog->execute() != 0 );

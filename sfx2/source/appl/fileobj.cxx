@@ -346,9 +346,8 @@ OUString impl_getFilter( const OUString& _rURL )
     try
     {
         css::uno::Reference< css::document::XTypeDetection > xTypeDetection(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString("com.sun.star.document.TypeDetection") ),
-                css::uno::UNO_QUERY );
+            ::comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.document.TypeDetection" ),
+            css::uno::UNO_QUERY );
         if ( xTypeDetection.is() )
         {
             utl::MediaDescriptor aDescr;

@@ -148,7 +148,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             try {
                 xSubFilter = uno::Reference<document::XFilter>(
                     m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        OUString( "com.sun.star.document.OwnSubFilter" ),
+                        "com.sun.star.document.OwnSubFilter",
                         aArgs,
                         m_xContext ),
                     uno::UNO_QUERY );

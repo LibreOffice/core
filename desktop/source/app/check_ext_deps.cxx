@@ -332,7 +332,7 @@ static void impl_setNeedsCompatCheck()
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
-            theConfigProvider->createInstanceWithArguments( OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
+            theConfigProvider->createInstanceWithArguments( aAccessSrvc, theArgs ), UNO_QUERY_THROW );
 
         Any value = makeAny( OUString("never") );
 

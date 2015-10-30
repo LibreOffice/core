@@ -987,7 +987,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 
                 m_pImpl->m_xRootReadAccess =
                     m_pImpl->m_xConfigProvider->createInstanceWithArguments(
-                        OUString( "com.sun.star.configuration.ConfigurationAccess" ),
+                        "com.sun.star.configuration.ConfigurationAccess",
                         aArguments );
 
                 if ( m_pImpl->m_xRootReadAccess.is() )
@@ -1049,7 +1049,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
                 m_pImpl->m_xRootWriteAccess =
                     m_pImpl->m_xConfigProvider->createInstanceWithArguments(
-                        OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                        "com.sun.star.configuration.ConfigurationUpdateAccess",
                         aArguments );
 
                 OSL_ENSURE( m_pImpl->m_xRootWriteAccess.is(),

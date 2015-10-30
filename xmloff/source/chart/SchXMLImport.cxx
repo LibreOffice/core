@@ -487,7 +487,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
                 {
                     xResult.set(
                         xContext->getServiceManager()->createInstanceWithContext(
-                            OUString( "com.sun.star.chart2.DataSeries" ),
+                            "com.sun.star.chart2.DataSeries",
                             xContext ), uno::UNO_QUERY_THROW );
                 }
                 if( xResult.is() )

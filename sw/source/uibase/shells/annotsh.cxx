@@ -1253,8 +1253,8 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
-                                    , xContext), UNO_QUERY);
+                                    "com.sun.star.linguistic2.ChineseTranslationDialog", xContext),
+                                UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
                         {

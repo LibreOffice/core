@@ -198,7 +198,7 @@ namespace dbaui
         Sequence< Sequence< PropertyValue> > aHistory = SvtHistoryOptions().GetList( ePICKLIST );
         Reference< XNameAccess > xFilterFactory;
         xFilterFactory.set(::comphelper::getProcessServiceFactory()->createInstance(
-            OUString( "com.sun.star.document.FilterFactory" ) ), css::uno::UNO_QUERY);
+            "com.sun.star.document.FilterFactory" ), css::uno::UNO_QUERY);
 
         sal_uInt32 nCount = aHistory.getLength();
         for ( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )

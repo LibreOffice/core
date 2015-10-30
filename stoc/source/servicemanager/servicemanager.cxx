@@ -1410,7 +1410,7 @@ Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
 
             m_xRegistry.set(
                 createInstanceWithContext(
-                    OUString("com.sun.star.registry.DefaultRegistry"),
+                    "com.sun.star.registry.DefaultRegistry",
                     m_xContext ),
                 UNO_QUERY );
         }
