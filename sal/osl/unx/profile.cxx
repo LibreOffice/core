@@ -721,7 +721,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
 
     if ( pTmpProfile == 0 )
     {
-        return sal_False;
+        return 0;
 
     }
 
@@ -733,7 +733,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
 
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
-        return sal_False;
+        return 0;
     }
 
     pProfile = acquireProfile(Profile, false);
@@ -805,7 +805,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
 
     if ( pTmpProfile == 0 )
     {
-        return sal_False;
+        return 0;
     }
 
     pthread_mutex_lock(&(pTmpProfile->m_AccessLock));
@@ -815,7 +815,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
         SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid"); 
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
-        return sal_False;
+        return 0;
     }
 
     pProfile = acquireProfile(Profile, false);
