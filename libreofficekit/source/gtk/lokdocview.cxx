@@ -39,7 +39,7 @@
 #define GRAPHIC_HANDLE_COUNT 8
 
 /// Private struct used by this GObject type
-struct _LOKDocViewPrivate
+struct LOKDocViewPrivateImpl
 {
     const gchar* m_aLOPath;
     const gchar* m_aDocPath;
@@ -115,6 +115,58 @@ struct _LOKDocViewPrivate
 
     /// View ID, returned by createView() or 0 by default.
     int m_nViewId;
+
+    LOKDocViewPrivateImpl()
+        : m_aLOPath(0),
+        m_aDocPath(0),
+        m_nLoadProgress(0),
+        m_bIsLoading(false),
+        m_bCanZoomIn(false),
+        m_bCanZoomOut(false),
+        m_pOffice(0),
+        m_pDocument(0),
+        lokThreadPool(0),
+        m_fZoom(0),
+        m_nDocumentWidthTwips(0),
+        m_nDocumentHeightTwips(0),
+        m_bEdit(FALSE),
+        m_aVisibleCursor({0, 0, 0, 0}),
+        m_bCursorOverlayVisible(false),
+        m_bCursorVisible(true),
+        m_nLastButtonPressTime(0),
+        m_nLastButtonReleaseTime(0),
+        m_nLastButtonPressed(0),
+        m_nKeyModifier(0),
+        m_aTextSelectionStart({0, 0, 0, 0}),
+        m_aTextSelectionEnd({0, 0, 0, 0}),
+        m_aGraphicSelection({0, 0, 0, 0}),
+        m_bInDragGraphicSelection(false),
+        m_pHandleStart(0),
+        m_aHandleStartRect({0, 0, 0, 0}),
+        m_bInDragStartHandle(0),
+        m_pHandleMiddle(0),
+        m_aHandleMiddleRect({0, 0, 0, 0}),
+        m_bInDragMiddleHandle(false),
+        m_pHandleEnd(0),
+        m_aHandleEndRect({0, 0, 0, 0}),
+        m_bInDragEndHandle(false),
+        m_pGraphicHandle(0),
+        m_nViewId(0)
+    {
+        memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
+        memset(&m_bInDragGraphicHandles, 0, sizeof(m_bInDragGraphicHandles));
+    }
+};
+
+/// Wrapper around LOKDocViewPrivateImpl, managed by malloc/memset/free.
+struct _LOKDocViewPrivate
+{
+    LOKDocViewPrivateImpl* m_pImpl;
+
+    LOKDocViewPrivateImpl* operator->()
+    {
+        return m_pImpl;
+    }
 };
 
 enum
@@ -166,6 +218,12 @@ G_DEFINE_TYPE_WITH_CODE (LOKDocView, lok_doc_view, GTK_TYPE_DRAWING_AREA,
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
+
+static LOKDocViewPrivate& getPrivate(LOKDocView* pDocView)
+{
+    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(pDocView));
+    return *priv;
+}
 
 /// Helper struct used to pass the data from soffice thread -> main thread.
 struct CallbackData
@@ -249,7 +307,7 @@ postKeyEventInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
@@ -263,7 +321,7 @@ static gboolean
 signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW(pWidget);
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     int nCharCode = 0;
     int nKeyCode = 0;
     GError* error = NULL;
@@ -372,7 +430,7 @@ static gboolean
 handleTimeout (gpointer pData)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (pData);
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     if (priv->m_bEdit)
     {
@@ -429,7 +487,7 @@ static gboolean queueDraw(gpointer pData)
 static gboolean postDocumentLoad(gpointer pData)
 {
     LOKDocView* pLOKDocView = static_cast<LOKDocView*>(pData);
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(pLOKDocView));
+    LOKDocViewPrivate& priv = getPrivate(pLOKDocView);
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument);
@@ -462,7 +520,7 @@ static gboolean
 globalCallback (gpointer pData)
 {
     CallbackData* pCallback = static_cast<CallbackData*>(pData);
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pCallback->m_pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pCallback->m_pDocView);
 
     switch (pCallback->m_nType)
     {
@@ -506,7 +564,7 @@ globalCallbackWorker(int nType, const char* pPayload, void* pData)
 static GdkRectangle
 payloadToRectangle (LOKDocView* pDocView, const char* pPayload)
 {
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GdkRectangle aRet;
     gchar** ppCoordinates = g_strsplit(pPayload, ", ", 4);
     gchar** ppCoordinate = ppCoordinates;
@@ -558,7 +616,7 @@ payloadToRectangles(LOKDocView* pDocView, const char* pPayload)
 static void
 setTilesInvalid (LOKDocView* pDocView, const GdkRectangle& rRectangle)
 {
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GdkRectangle aRectanglePixels;
     GdkPoint aStart, aEnd;
 
@@ -587,7 +645,7 @@ callback (gpointer pData)
 {
     CallbackData* pCallback = static_cast<CallbackData*>(pData);
     LOKDocView* pDocView = LOK_DOC_VIEW (pCallback->m_pDocView);
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     switch (pCallback->m_nType)
     {
@@ -720,7 +778,7 @@ renderHandle(LOKDocView* pDocView,
              cairo_surface_t* pHandle,
              GdkRectangle& rRectangle)
 {
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GdkPoint aCursorBottom;
     int nHandleWidth, nHandleHeight;
     double fHandleScale;
@@ -753,7 +811,7 @@ renderGraphicHandle(LOKDocView* pDocView,
                     const GdkRectangle& rSelection,
                     cairo_surface_t* pHandle)
 {
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     int nHandleWidth, nHandleHeight;
     GdkRectangle aSelection;
 
@@ -819,7 +877,7 @@ renderGraphicHandle(LOKDocView* pDocView,
 static gboolean
 renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GdkRectangle aVisibleArea;
     long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, priv->m_fZoom);
     long nDocumentHeightPixels = twipToPixel(priv->m_nDocumentHeightTwips, priv->m_fZoom);
@@ -882,7 +940,7 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
 static gboolean
 renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     if (priv->m_bEdit && priv->m_bCursorVisible && priv->m_bCursorOverlayVisible && !isEmptyRectangle(priv->m_aVisibleCursor))
     {
@@ -960,7 +1018,7 @@ static gboolean
 lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (pWidget);
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GError* error = NULL;
 
     g_info("LOKDocView_Impl::signalButton: %d, %d (in twips: %d, %d)",
@@ -1203,7 +1261,7 @@ static gboolean
 lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (pWidget);
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GdkPoint aPoint;
     GError* error = NULL;
 
@@ -1300,7 +1358,7 @@ setGraphicSelectionInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
@@ -1315,7 +1373,7 @@ postMouseEventInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
@@ -1333,7 +1391,7 @@ openDocumentInThread (gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     if ( priv->m_pDocument )
     {
@@ -1360,7 +1418,7 @@ setPartInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPart = pLOEvent->m_nPart;
 
@@ -1373,7 +1431,7 @@ setPartmodeInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPartMode = pLOEvent->m_nPartMode;
 
@@ -1386,7 +1444,7 @@ setEditInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     gboolean bWasEdit = priv->m_bEdit;
     gboolean bEdit = pLOEvent->m_bEdit;
@@ -1410,7 +1468,7 @@ postCommandInThread (gpointer data)
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
@@ -1424,7 +1482,7 @@ paintTileInThread (gpointer data)
 {
     GTask* task = G_TASK(data);
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     TileBuffer& buffer = priv->m_aTileBuffer;
     int index = pLOEvent->m_nPaintTileX * buffer.m_nWidth + pLOEvent->m_nPaintTileY;
@@ -1508,8 +1566,8 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
 
 static void lok_doc_view_init (LOKDocView* pDocView)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
-    priv->m_bCursorVisible = true;
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    priv.m_pImpl = new LOKDocViewPrivateImpl();
 
     gtk_widget_add_events(GTK_WIDGET(pDocView),
                           GDK_BUTTON_PRESS_MASK
@@ -1528,7 +1586,7 @@ static void lok_doc_view_init (LOKDocView* pDocView)
 static void lok_doc_view_set_property (GObject* object, guint propId, const GValue *value, GParamSpec *pspec)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (object);
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     switch (propId)
     {
@@ -1564,7 +1622,7 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
 static void lok_doc_view_get_property (GObject* object, guint propId, GValue *value, GParamSpec *pspec)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (object);
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     switch (propId)
     {
@@ -1622,12 +1680,14 @@ static gboolean lok_doc_view_draw (GtkWidget* pWidget, cairo_t* pCairo)
 static void lok_doc_view_finalize (GObject* object)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (object);
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     if (priv->m_pDocument)
         priv->m_pDocument->pClass->destroy (priv->m_pDocument);
     if (priv->m_pOffice)
         priv->m_pOffice->pClass->destroy (priv->m_pOffice);
+    delete priv.m_pImpl;
+    priv.m_pImpl = 0;
 
     G_OBJECT_CLASS (lok_doc_view_parent_class)->finalize (object);
 }
@@ -1635,7 +1695,7 @@ static void lok_doc_view_finalize (GObject* object)
 static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /*cancellable*/, GError **error)
 {
     LOKDocView *pDocView = LOK_DOC_VIEW (initable);
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     if (priv->m_pOffice != NULL)
         return TRUE;
@@ -1999,13 +2059,13 @@ lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOKDocView)
 {
-    LOKDocViewPrivate* pOldPriv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(pOldLOKDocView));
+    LOKDocViewPrivate& pOldPriv = getPrivate(pOldLOKDocView);
     GtkWidget* pNewDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/0, /*error=*/0,
                                                        "lopath", pOldPriv->m_aLOPath, "lopointer", pOldPriv->m_pOffice, "docpointer", pOldPriv->m_pDocument, NULL));
 
     // No documentLoad(), just a createView().
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pNewDocView));
-    LOKDocViewPrivate* pNewPriv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(LOK_DOC_VIEW(pNewDocView)));
+    LOKDocViewPrivate& pNewPriv = getPrivate(LOK_DOC_VIEW(pNewDocView));
     pNewPriv->m_nViewId = pDocument->pClass->createView(pDocument);
 
     postDocumentLoad(pNewDocView);
@@ -2033,7 +2093,7 @@ lok_doc_view_open_document (LOKDocView* pDocView,
                             gpointer userdata)
 {
     GTask* task = g_task_new(pDocView, cancellable, callback, userdata);
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GError* error = NULL;
 
     LOEvent* pLOEvent = new LOEvent(LOK_LOAD_DOC);
@@ -2054,14 +2114,14 @@ lok_doc_view_open_document (LOKDocView* pDocView,
 SAL_DLLPUBLIC_EXPORT LibreOfficeKitDocument*
 lok_doc_view_get_document (LOKDocView* pDocView)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     return priv->m_pDocument;
 }
 
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     priv->m_fZoom = fZoom;
     long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, fZoom);
@@ -2079,14 +2139,14 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 SAL_DLLPUBLIC_EXPORT float
 lok_doc_view_get_zoom (LOKDocView* pDocView)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     return priv->m_fZoom;
 }
 
 SAL_DLLPUBLIC_EXPORT int
 lok_doc_view_get_parts (LOKDocView* pDocView)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getParts( priv->m_pDocument );
 }
@@ -2094,7 +2154,7 @@ lok_doc_view_get_parts (LOKDocView* pDocView)
 SAL_DLLPUBLIC_EXPORT int
 lok_doc_view_get_part (LOKDocView* pDocView)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPart( priv->m_pDocument );
 }
@@ -2102,7 +2162,7 @@ lok_doc_view_get_part (LOKDocView* pDocView)
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
 {
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PART);
     GError* error = NULL;
@@ -2122,7 +2182,7 @@ lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
 SAL_DLLPUBLIC_EXPORT char*
 lok_doc_view_get_part_name (LOKDocView* pDocView, int nPart)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPartName( priv->m_pDocument, nPart );
 }
@@ -2131,7 +2191,7 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_partmode(LOKDocView* pDocView,
                           int nPartMode)
 {
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_PARTMODE);
     GError* error = NULL;
@@ -2150,7 +2210,7 @@ lok_doc_view_set_partmode(LOKDocView* pDocView,
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_reset_view(LOKDocView* pDocView)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     priv->m_aTileBuffer.resetAllTiles();
     priv->m_nLoadProgress = 0.0;
 
@@ -2196,7 +2256,7 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_edit(LOKDocView* pDocView,
                       gboolean bEdit)
 {
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
     LOEvent* pLOEvent = new LOEvent(LOK_SET_EDIT);
     GError* error = NULL;
@@ -2215,7 +2275,7 @@ lok_doc_view_set_edit(LOKDocView* pDocView,
 SAL_DLLPUBLIC_EXPORT gboolean
 lok_doc_view_get_edit (LOKDocView* pDocView)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     return priv->m_bEdit;
 }
 
@@ -2225,7 +2285,7 @@ lok_doc_view_post_command (LOKDocView* pDocView,
                            const gchar* pCommand,
                            const gchar* pArguments)
 {
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
     LOEvent* pLOEvent = new LOEvent(LOK_POST_COMMAND);
     GError* error = NULL;
@@ -2245,14 +2305,14 @@ lok_doc_view_post_command (LOKDocView* pDocView,
 SAL_DLLPUBLIC_EXPORT float
 lok_doc_view_pixel_to_twip (LOKDocView* pDocView, float fInput)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     return pixelToTwip(fInput, priv->m_fZoom);
 }
 
 SAL_DLLPUBLIC_EXPORT float
 lok_doc_view_twip_to_pixel (LOKDocView* pDocView, float fInput)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
     return twipToPixel(fInput, priv->m_fZoom);
 }
 

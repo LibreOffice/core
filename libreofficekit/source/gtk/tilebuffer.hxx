@@ -80,8 +80,8 @@ private:
 class TileBuffer
 {
  public:
- TileBuffer(LibreOfficeKitDocument *document,
-            int columns)
+ TileBuffer(LibreOfficeKitDocument *document = 0,
+            int columns = 0)
      : m_pLOKDocument(document)
         , m_nWidth(columns)
     {
