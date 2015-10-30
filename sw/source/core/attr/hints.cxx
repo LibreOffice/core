@@ -150,19 +150,19 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
 }
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
-    : SwMsgPoolItem( RES_FINDNEARESTNODE ), pNd( &rNd ), pFnd( 0 )
+    : SwMsgPoolItem( RES_FINDNEARESTNODE ), m_pNode( &rNd ), m_pFound( 0 )
 {
 }
 
 void SwFindNearestNode::CheckNode( const SwNode& rNd )
 {
-    if( &pNd->GetNodes() == &rNd.GetNodes() )
+    if( &m_pNode->GetNodes() == &rNd.GetNodes() )
     {
         sal_uLong nIdx = rNd.GetIndex();
-        if( nIdx < pNd->GetIndex() &&
-            ( !pFnd || nIdx > pFnd->GetIndex() ) &&
+        if( nIdx < m_pNode->GetIndex() &&
+            ( !m_pFound || nIdx > m_pFound->GetIndex() ) &&
             nIdx > rNd.GetNodes().GetEndOfExtras().GetIndex() )
-            pFnd = &rNd;
+            m_pFound = &rNd;
     }
 }
 

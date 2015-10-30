@@ -242,12 +242,12 @@ public:
 
 class SwFindNearestNode : public SwMsgPoolItem
 {
-    const SwNode *pNd, *pFnd;
+    const SwNode *m_pNode, *m_pFound;
 public:
     SwFindNearestNode( const SwNode& rNd );
     void CheckNode( const SwNode& rNd );
 
-    const SwNode* GetFoundNode() const { return pFnd; }
+    const SwNode* GetFoundNode() const { return m_pFound; }
 };
 
 class SwStringMsgPoolItem : public SwMsgPoolItem
