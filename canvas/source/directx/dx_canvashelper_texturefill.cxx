@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/bind.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -576,10 +575,7 @@ namespace dxcanvas
                     std::transform(&rValues.maColors[0],
                                    &rValues.maColors[0]+rValues.maColors.getLength(),
                                    aColors.begin(),
-                                   boost::bind(
-                                       (Gdiplus::ARGB (*)( const uno::Sequence< double >& ))(
-                                           &tools::sequenceToArgb),
-                                       _1));
+                                   [](const uno::Sequence< double >& aDoubleSequence) { return tools::sequenceToArgb(aDoubleSequence); } );
                     std::vector< Gdiplus::REAL > aStops;
                     comphelper::sequenceToContainer(aStops,rValues.maStops);
 
