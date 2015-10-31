@@ -21,7 +21,6 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <boost/bind.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/PanoseLetterForm.hpp>
@@ -96,9 +95,7 @@ namespace
         explicit SimpleRenderState( uno::Reference<rendering::XGraphicDevice> const& xDevice ) :
             m_aPenColor( &color2Sequence),
             m_aFillColor( &color2Sequence ),
-            m_aRectClip( boost::bind( &rect2Poly,
-                                      xDevice,
-                                      _1 )),
+            m_aRectClip( [&xDevice](geometry::RealRectangle2D const& rRect) { return rect2Poly(xDevice, rRect); } ),
             m_aTransformation()
         {
             tools::setIdentityAffineMatrix2D( m_aTransformation );
@@ -161,17 +158,15 @@ namespace
                           const uno::Reference< uno::XComponentContext >&  ) :
             SimpleCanvasBase( m_aMutex ),
             mxCanvas( grabCanvas(aArguments) ),
-            maFont(boost::bind( &rendering::XCanvas::createFont,
-                                boost::cref(mxCanvas),
-                                _1,
-                                uno::Sequence< beans::PropertyValue >(),
-                                geometry::Matrix2D() )),
+            maFont([this](rendering::FontRequest const& rFontRequest) {
+                   return mxCanvas->createFont(rFontRequest,
+                                               uno::Sequence< beans::PropertyValue >(),
+                                               geometry::Matrix2D()); } ),
             maViewState(),
             maRenderState( mxCanvas->getDevice() )
         {
             tools::initViewState(maViewState);
         }
-
 
 
     private:
