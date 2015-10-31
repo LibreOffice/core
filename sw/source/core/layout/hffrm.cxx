@@ -31,6 +31,7 @@
 #include "hfspacingitem.hxx"
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
+#include <o3tl/make_unique.hxx>
 
 extern bool bObjsDirect;    //frmtool.cxx
 
@@ -434,8 +435,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
     {
         nResult = 0;
 
-        SwBorderAttrAccess * pAccess =
-            new SwBorderAttrAccess( SwFrm::GetCache(), this );
+        auto pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
         OSL_ENSURE(pAccess, "no border attributes");
 
         SwBorderAttrs * pAttrs = pAccess->Get();
@@ -450,8 +450,6 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
             nMaxEat = maFrm.Height() - maPrt.Top() - maPrt.Height() - pAttrs->CalcBottomLine();
         else
             nMaxEat = maPrt.Top() - pAttrs->CalcTopLine();
-
-        delete pAccess;
 
         if (nMaxEat < 0)
             nMaxEat = 0;
@@ -497,7 +495,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
 
         if (nDist - nEat > 0)
         {
-            SwTwips nFrmGrow =
+            const SwTwips nFrmGrow =
                 SwLayoutFrm::GrowFrm( nDist - nEat, bTst, bInfo );
 
             nResult += nFrmGrow;
@@ -566,9 +564,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
         bool bNotifyFlys = false;
         if (nRest > 0)
         {
-
-            SwBorderAttrAccess * pAccess =
-                new SwBorderAttrAccess( SwFrm::GetCache(), this );
+            auto pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
             OSL_ENSURE(pAccess, "no border attributes");
 
             SwBorderAttrs * pAttrs = pAccess->Get();
@@ -580,8 +576,6 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
 
             if (nMinPrtHeight < 0)
                 nMinPrtHeight = 0;
-
-            delete pAccess;
 
             /* assume all shrinking can be provided */
             SwTwips nShrink = nRest;
