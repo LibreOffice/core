@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <boost/bind.hpp>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -80,9 +79,7 @@ namespace dxcanvas
 
         // issue an ReleaseHDC() when leaving the scope
         const ::comphelper::ScopeGuard aGuard(
-            boost::bind( &Gdiplus::Graphics::ReleaseHDC,
-                         rGraphics.get(),
-                         hdc ));
+            [&rGraphics, &hdc]() mutable { rGraphics->ReleaseHDC(hdc); } );
 
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
