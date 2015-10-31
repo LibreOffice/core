@@ -37,12 +37,13 @@ namespace accessibility
 {
     class AccessibleListBoxEntry;
 
+    typedef ::cppu::ImplHelper< css::accessibility::XAccessible
+                              , css::accessibility::XAccessibleSelection > AccessibleListBox_Base;
+
     /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
     */
     class AccessibleListBox:
-        public cppu::ImplHelper<
-            css::accessibility::XAccessible,
-            css::accessibility::XAccessibleSelection>,
+        public AccessibleListBox_Base,
         public VCLXAccessibleComponent
     {
     protected:
