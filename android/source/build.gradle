@@ -25,6 +25,7 @@ dependencies {
     compile files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
     compile files("${liboWorkdir}/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar")
     compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.1.0'
 }
 
 android {
