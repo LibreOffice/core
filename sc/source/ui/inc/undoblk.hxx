@@ -331,7 +331,8 @@ public:
                                          ScDocument* pNewUndoDoc, bool bNewMulti,
                                          const ScPatternAttr* pNewApply,
                                          const SvxBoxItem* pNewOuter = nullptr,
-                                         const SvxBoxInfoItem* pNewInner = nullptr );
+                                         const SvxBoxInfoItem* pNewInner = nullptr,
+                                         const ScRange* pRangeCover = nullptr );
     virtual         ~ScUndoSelectionAttr();
 
     virtual void    Undo() override;
@@ -345,6 +346,7 @@ public:
 private:
     ScMarkData      aMarkData;
     ScRange         aRange;
+    ScRange         aRangeCover;
     std::unique_ptr<ScEditDataArray> mpDataArray;
     ScDocument*     pUndoDoc;
     bool            bMulti;

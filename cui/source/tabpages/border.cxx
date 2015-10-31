@@ -44,10 +44,13 @@
 #include <svl/int64item.hxx>
 #include <sfx2/itemconnect.hxx>
 #include <sal/macros.h>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include "borderconn.hxx"
 
 using namespace ::editeng;
-
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::lang::XServiceInfo;
+using ::com::sun::star::uno::UNO_QUERY;
 
 
 /*
@@ -99,7 +102,9 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         mbTLBREnabled( false ),
         mbBLTREnabled( false ),
         mbUseMarginItem( false ),
-        mbSync(true)
+        mbSync(true),
+        mbRemoveAdjacentCellBorders( false ),
+        bIsCalcDoc( false )
 
 {
     get(m_pWndPresets, "presets");
@@ -130,6 +135,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     get(m_pPropertiesFrame, "properties");
     get(m_pMergeWithNextCB, "mergewithnext");
     get(m_pMergeAdjacentBordersCB, "mergeadjacent");
+    get(m_pRemoveAdjcentCellBordersCB, "rmadjcellborders");
 
     if ( GetDPIScaleFactor() > 1 )
     {
@@ -332,6 +338,21 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     // checkbox "Merge adjacent line styles" only visible for Writer dialog format.table
     AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, *m_pMergeAdjacentBordersCB, sfx::ITEMCONN_DEFAULT ) );
     m_pMergeAdjacentBordersCB->Hide();
+
+    if( pDocSh )
+    {
+        Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
+        if ( xSI.is() )
+            bIsCalcDoc = xSI->supportsService("com.sun.star.sheet.SpreadsheetDocument");
+    }
+    if( bIsCalcDoc )
+    {
+        m_pRemoveAdjcentCellBordersCB->SetClickHdl(LINK(this, SvxBorderTabPage, RemoveAdjacentCellBorderHdl_Impl));
+        m_pRemoveAdjcentCellBordersCB->Show();
+        m_pRemoveAdjcentCellBordersCB->Enable( false );
+    }
+    else
+        m_pRemoveAdjcentCellBordersCB->Hide();
 }
 
 SvxBorderTabPage::~SvxBorderTabPage()
@@ -366,6 +387,7 @@ void SvxBorderTabPage::dispose()
     m_pPropertiesFrame.clear();
     m_pMergeWithNextCB.clear();
     m_pMergeAdjacentBordersCB.clear();
+    m_pRemoveAdjcentCellBordersCB.clear();
     SfxTabPage::dispose();
 }
 
@@ -597,6 +619,10 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     else
         mbSync = false;
     m_pSynchronizeCB->Check(mbSync);
+
+    mbRemoveAdjacentCellBorders = false;
+    m_pRemoveAdjcentCellBordersCB->Check( false );
+    m_pRemoveAdjcentCellBordersCB->Enable( false );
 }
 
 void SvxBorderTabPage::ChangesApplied()
@@ -646,6 +672,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         aBoxItem.SetLine( m_pFrameSel->GetFrameBorderStyle( eTypes1[i].first ), eTypes1[i].second );
 
 
+    aBoxItem.SetRemoveAdjacentCellBorder( mbRemoveAdjacentCellBorders );
     // border hor/ver and TableFlag
 
     ::std::pair<svx::FrameBorderType,SvxBoxInfoItemLine> eTypes2[] = {
@@ -844,6 +871,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
     m_pWndPresets->SetNoSelection();
 
     LinesChanged_Impl( nullptr );
+    UpdateRemoveAdjCellBorderCB();
 }
 
 
@@ -1173,6 +1201,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
         m_pSynchronizeCB->Enable( m_pRightMF->IsEnabled() || m_pTopMF->IsEnabled() ||
                                m_pBottomMF->IsEnabled() || m_pLeftMF->IsEnabled() );
     }
+    UpdateRemoveAdjCellBorderCB();
 }
 
 
@@ -1196,6 +1225,55 @@ IMPL_LINK_TYPED( SvxBorderTabPage, ModifyDistanceHdl_Impl, Edit&, rField, void)
 IMPL_LINK_TYPED( SvxBorderTabPage, SyncHdl_Impl, Button*, pBox, void)
 {
     mbSync = static_cast<CheckBox*>(pBox)->IsChecked();
+}
+
+IMPL_LINK_TYPED( SvxBorderTabPage, RemoveAdjacentCellBorderHdl_Impl, Button*, pBox, void)
+{
+    mbRemoveAdjacentCellBorders = static_cast<CheckBox*>(pBox)->IsChecked();
+}
+
+void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB()
+{
+    if( !bIsCalcDoc )
+        return;
+    const SfxItemSet&     rOldSet         = GetItemSet();
+    const SvxBoxInfoItem* pOldBoxInfoItem = static_cast<const SvxBoxInfoItem*>(GetOldItem( rOldSet, SID_ATTR_BORDER_INNER ));
+    const SvxBoxItem*     pOldBoxItem     = static_cast<const SvxBoxItem*>(GetOldItem( rOldSet, SID_ATTR_BORDER_OUTER ));
+    if( !pOldBoxInfoItem || !pOldBoxItem )
+        return;
+    ::std::pair<svx::FrameBorderType, SvxBoxInfoItemValidFlags> eTypes1[] = {
+        { svx::FRAMEBORDER_TOP,SvxBoxInfoItemValidFlags::TOP },
+        { svx::FRAMEBORDER_BOTTOM,SvxBoxInfoItemValidFlags::BOTTOM },
+        { svx::FRAMEBORDER_LEFT,SvxBoxInfoItemValidFlags::LEFT },
+        { svx::FRAMEBORDER_RIGHT,SvxBoxInfoItemValidFlags::RIGHT },
+    };
+    SvxBoxItemLine eTypes2[] = {
+        SvxBoxItemLine::TOP,
+        SvxBoxItemLine::BOTTOM,
+        SvxBoxItemLine::LEFT,
+        SvxBoxItemLine::RIGHT,
+    };
+
+    // Check if current selection involves deletion of at least one border
+    bool bBorderDeletionReq = false;
+    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(eTypes1); ++i)
+    {
+        if( pOldBoxItem->GetLine( eTypes2[i] ) || !(pOldBoxInfoItem->IsValid( eTypes1[i].second )) )
+        {
+            if( m_pFrameSel->GetFrameBorderState( eTypes1[i].first ) == svx::FRAMESTATE_HIDE )
+            {
+                bBorderDeletionReq = true;
+                break;
+            }
+        }
+    }
+
+    m_pRemoveAdjcentCellBordersCB->Enable( bBorderDeletionReq );
+    if( !bBorderDeletionReq )
+    {
+        mbRemoveAdjacentCellBorders = false;
+        m_pRemoveAdjcentCellBordersCB->Check( false );
+    }
 }
 
 void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )

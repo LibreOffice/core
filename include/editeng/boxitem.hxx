@@ -60,6 +60,7 @@ class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
                     nBottomDist,
                     nLeftDist,
                     nRightDist;
+    bool            bRemoveAdjCellBorder;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -100,8 +101,12 @@ public:
     sal_uInt16  GetDistance( SvxBoxItemLine nLine ) const;
     sal_uInt16  GetDistance() const;
 
+    bool IsRemoveAdjacentCellBorder() const { return bRemoveAdjCellBorder; }
+
     void    SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine );
     inline void SetDistance( sal_uInt16 nNew );
+
+    void SetRemoveAdjacentCellBorder( bool bSet = true ) { bRemoveAdjCellBorder = bSet; }
 
     // Line width plus Space plus inward distance
     // bIgnoreLine = TRUE -> Also return distance, when no Line is set

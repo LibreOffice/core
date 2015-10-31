@@ -363,7 +363,8 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                 ScDocument* pNewUndoDoc, bool bNewMulti,
                 const ScPatternAttr* pNewApply,
-                const SvxBoxItem* pNewOuter, const SvxBoxInfoItem* pNewInner )
+                const SvxBoxItem* pNewOuter, const SvxBoxInfoItem* pNewInner,
+                const ScRange* pRangeCover )
     :   ScSimpleUndo( pNewDocShell ),
         aMarkData   ( rMark ),
         aRange      ( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
@@ -375,6 +376,7 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
     pApplyPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pNewApply ) ));
     pLineOuter = pNewOuter ? const_cast<SvxBoxItem*>(static_cast<const SvxBoxItem*>( &pPool->Put( *pNewOuter ) )) : nullptr;
     pLineInner = pNewInner ? const_cast<SvxBoxInfoItem*>(static_cast<const SvxBoxInfoItem*>( &pPool->Put( *pNewInner ) )) : nullptr;
+    aRangeCover = pRangeCover ? *pRangeCover : aRange;
 }
 
 ScUndoSelectionAttr::~ScUndoSelectionAttr()
@@ -406,7 +408,7 @@ void ScUndoSelectionAttr::DoChange( const bool bUndo )
 
     SetViewMarkData( aMarkData );
 
-    ScRange aEffRange( aRange );
+    ScRange aEffRange( aRangeCover );
     if ( rDoc.HasAttrib( aEffRange, HASATTR_MERGED ) )         // merged cells?
         rDoc.ExtendMerge( aEffRange );
 
@@ -417,7 +419,7 @@ void ScUndoSelectionAttr::DoChange( const bool bUndo )
 
     if (bUndo)  // only for Undo
     {
-        ScRange aCopyRange = aRange;
+        ScRange aCopyRange = aRangeCover;
         SCTAB nTabCount = rDoc.GetTableCount();
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);

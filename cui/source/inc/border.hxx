@@ -98,6 +98,7 @@ private:
     VclPtr<CheckBox>           m_pMergeWithNextCB;
     // #i29550#
     VclPtr<CheckBox>           m_pMergeAdjacentBordersCB;
+    VclPtr<CheckBox>           m_pRemoveAdjcentCellBordersCB;
 
     ImageList           aShadowImgLstH;
     ImageList           aShadowImgLst;
@@ -113,6 +114,8 @@ private:
     bool                mbBLTREnabled;      ///< true = Bottom-left to top-right border enabled.
     bool                mbUseMarginItem;
     bool                mbSync;
+    bool                mbRemoveAdjacentCellBorders;
+    bool                bIsCalcDoc;
 
     std::set<sal_Int16> maUsedBorderStyles;
 
@@ -125,6 +128,7 @@ private:
     DECL_LINK_TYPED( ModifyDistanceHdl_Impl, Edit&, void);
     DECL_LINK_TYPED( ModifyWidthHdl_Impl, Edit&, void);
     DECL_LINK_TYPED( SyncHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( RemoveAdjacentCellBorderHdl_Impl, Button*, void);
 
     sal_uInt16              GetPresetImageId( sal_uInt16 nValueSetIdx ) const;
     sal_uInt16              GetPresetStringId( sal_uInt16 nValueSetIdx ) const;
@@ -142,6 +146,7 @@ private:
                                              bool bValid );
 
     bool IsBorderLineStyleAllowed( sal_Int16 nStyle ) const;
+    void UpdateRemoveAdjCellBorderCB();
 };
 
 

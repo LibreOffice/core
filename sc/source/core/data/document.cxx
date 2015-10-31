@@ -5591,6 +5591,94 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
             }
         }
     }
+    if( pLineOuter && pLineOuter->IsRemoveAdjacentCellBorder() )
+    {
+        SvxBoxItem aTmp0 = SvxBoxItem( *pLineOuter );
+        aTmp0.SetLine( NULL, SvxBoxItemLine::TOP );
+        aTmp0.SetLine( NULL, SvxBoxItemLine::BOTTOM );
+        aTmp0.SetLine( NULL, SvxBoxItemLine::LEFT );
+        aTmp0.SetLine( NULL, SvxBoxItemLine::RIGHT );
+        SvxBoxItem aLeft = SvxBoxItem( aTmp0 );
+        SvxBoxItem aRight = SvxBoxItem( aTmp0 );
+        SvxBoxItem aTop = SvxBoxItem( aTmp0 );
+        SvxBoxItem aBottom = SvxBoxItem( aTmp0 );
+
+        SvxBoxInfoItem aTmp1 = SvxBoxInfoItem( *pLineInner );
+        aTmp1.SetTable( false );
+        aTmp1.SetLine( NULL, SvxBoxInfoItemLine::HORI );
+        aTmp1.SetLine( NULL, SvxBoxInfoItemLine::VERT );
+        aTmp1.SetValid( SvxBoxInfoItemValidFlags::ALL, false );
+        aTmp1.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
+        SvxBoxInfoItem aLeftInfo = SvxBoxInfoItem( aTmp1 );
+        SvxBoxInfoItem aRightInfo = SvxBoxInfoItem( aTmp1 );
+        SvxBoxInfoItem aTopInfo = SvxBoxInfoItem( aTmp1 );
+        SvxBoxInfoItem aBottomInfo = SvxBoxInfoItem( aTmp1 );
+
+        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::TOP ) && !pLineOuter->GetTop() )
+        {
+            aTop.SetLine( NULL, SvxBoxItemLine::BOTTOM ); // Clear the bottom border of top envelope
+            aTopInfo.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, true );
+        }
+        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) && !pLineOuter->GetBottom() )
+        {
+            aBottom.SetLine( NULL, SvxBoxItemLine::TOP ); // Clear the top border of bottom envelope
+            aBottomInfo.SetValid( SvxBoxInfoItemValidFlags::TOP, true );
+        }
+        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::LEFT ) && !pLineOuter->GetLeft() )
+        {
+            aLeft.SetLine( NULL, SvxBoxItemLine::RIGHT ); // Clear the right border of left envelope
+            aLeftInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT, true );
+        }
+        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::RIGHT ) &&  !pLineOuter->GetRight() )
+        {
+            aRight.SetLine( NULL, SvxBoxItemLine::LEFT ); // Clear the left border of right envelope
+            aRightInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT, true );
+        }
+        const ScRangeList& rRangeListTopEnvelope = rMark.GetTopEnvelope();
+        const ScRangeList& rRangeListBottomEnvelope = rMark.GetBottomEnvelope();
+        const ScRangeList& rRangeListLeftEnvelope = rMark.GetLeftEnvelope();
+        const ScRangeList& rRangeListRightEnvelope = rMark.GetRightEnvelope();
+
+        ScMarkData::const_iterator itr1 = rMark.begin(), itrEnd1 = rMark.end();
+        for (; itr1 != itrEnd1 && *itr1 < nMax; ++itr1)
+        {
+            if (maTabs[*itr1])
+            {
+                size_t nEnvelopeRangeCount = rRangeListTopEnvelope.size();
+                for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
+                {
+                    ScRange aRange = *rRangeListTopEnvelope[ j ];
+                    maTabs[*itr1]->ApplyBlockFrame( &aTop, &aTopInfo,
+                                                   aRange.aStart.Col(), aRange.aStart.Row(),
+                                                   aRange.aEnd.Col(),   aRange.aEnd.Row() );
+                }
+                nEnvelopeRangeCount = rRangeListBottomEnvelope.size();
+                for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
+                {
+                    ScRange aRange = *rRangeListBottomEnvelope[ j ];
+                    maTabs[*itr1]->ApplyBlockFrame( &aBottom, &aBottomInfo,
+                                                   aRange.aStart.Col(), aRange.aStart.Row(),
+                                                   aRange.aEnd.Col(),   aRange.aEnd.Row() );
+                }
+                nEnvelopeRangeCount = rRangeListLeftEnvelope.size();
+                for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
+                {
+                    ScRange aRange = *rRangeListLeftEnvelope[ j ];
+                    maTabs[*itr1]->ApplyBlockFrame( &aLeft, &aLeftInfo,
+                                                   aRange.aStart.Col(), aRange.aStart.Row(),
+                                                   aRange.aEnd.Col(),   aRange.aEnd.Row() );
+                }
+                nEnvelopeRangeCount = rRangeListRightEnvelope.size();
+                for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
+                {
+                    ScRange aRange = *rRangeListRightEnvelope[ j ];
+                    maTabs[*itr1]->ApplyBlockFrame( &aRight, &aRightInfo,
+                                                   aRange.aStart.Col(), aRange.aStart.Row(),
+                                                   aRange.aEnd.Col(),   aRange.aEnd.Row() );
+                }
+            }
+        }
+    }
 }
 
 void ScDocument::ApplyFrameAreaTab( const ScRange& rRange,

@@ -20,8 +20,10 @@
 #include "markdata.hxx"
 #include "markarr.hxx"
 #include "rangelst.hxx"
+#include "segmenttree.hxx"
 #include <columnspanset.hxx>
 #include <fstalgorithm.hxx>
+#include <unordered_map>
 
 #include <osl/diagnose.h>
 
@@ -40,7 +42,11 @@ ScMarkData::ScMarkData(const ScMarkData& rData) :
     maTabMarked( rData.maTabMarked ),
     aMarkRange( rData.aMarkRange ),
     aMultiRange( rData.aMultiRange ),
-    pMultiSel( nullptr )
+    pMultiSel( nullptr ),
+    aTopEnvelope( rData.aTopEnvelope ),
+    aBottomEnvelope( rData.aBottomEnvelope ),
+    aLeftEnvelope( rData.aLeftEnvelope ),
+    aRightEnvelope( rData.aRightEnvelope )
 {
     bMarked      = rData.bMarked;
     bMultiMarked = rData.bMultiMarked;
@@ -69,6 +75,10 @@ ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
     bMultiMarked = rData.bMultiMarked;
     bMarking     = rData.bMarking;
     bMarkIsNeg   = rData.bMarkIsNeg;
+    aTopEnvelope = rData.aTopEnvelope;
+    aBottomEnvelope = rData.aBottomEnvelope;
+    aLeftEnvelope   = rData.aLeftEnvelope;
+    aRightEnvelope  = rData.aRightEnvelope;
 
     maTabMarked = rData.maTabMarked;
 
@@ -94,6 +104,10 @@ void ScMarkData::ResetMark()
 
     bMarked = bMultiMarked = false;
     bMarking = bMarkIsNeg = false;
+    aTopEnvelope.RemoveAll();
+    aBottomEnvelope.RemoveAll();
+    aLeftEnvelope.RemoveAll();
+    aRightEnvelope.RemoveAll();
 }
 
 void ScMarkData::SetMarkArea( const ScRange& rRange )
@@ -551,6 +565,248 @@ void ScMarkData::DeleteTab( SCTAB nTab )
     for (; it != maTabMarked.end(); ++it)
         tabMarked.insert(*it + 1);
     maTabMarked.swap(tabMarked);
+}
+
+static void lcl_AddRanges(ScRange& rRangeDest, ScRange aNewRange )
+{
+    SCCOL nStartCol = aNewRange.aStart.Col();
+    SCROW nStartRow = aNewRange.aStart.Row();
+    SCCOL nEndCol = aNewRange.aEnd.Col();
+    SCROW nEndRow = aNewRange.aEnd.Row();
+    PutInOrder( nStartRow, nEndRow );
+    PutInOrder( nStartCol, nEndCol );
+    if ( nStartCol < rRangeDest.aStart.Col() )
+        rRangeDest.aStart.SetCol( nStartCol );
+    if ( nStartRow < rRangeDest.aStart.Row() )
+        rRangeDest.aStart.SetRow( nStartRow );
+    if ( nEndCol > rRangeDest.aEnd.Col() )
+        rRangeDest.aEnd.SetCol( nEndCol );
+    if ( nEndRow > rRangeDest.aEnd.Row() )
+        rRangeDest.aEnd.SetRow( nEndRow );
+    return;
+}
+
+void ScMarkData::GetSelectionCover( ScRange& rRange )
+{
+    if( bMultiMarked )
+    {
+        rRange = aMultiRange;
+        std::unique_ptr<ScFlatBoolRowSegments> pPrevColMarkedRows;
+        std::unique_ptr<ScFlatBoolRowSegments> pCurColMarkedRows;
+        std::unordered_map<SCROW,ScFlatBoolColSegments> aRowToColSegmentsInTopEnvelope;
+        std::unordered_map<SCROW,ScFlatBoolColSegments> aRowToColSegmentsInBottomEnvelope;
+
+        const ScMarkArray* pArray = pMultiSel;
+        bool bPrevColUnMarked = false;
+
+        for ( SCCOL nCol=0; nCol <= MAXCOL; nCol++ )
+        {
+            SCROW nTop, nBottom;
+            pCurColMarkedRows.reset( new ScFlatBoolRowSegments() );
+            pCurColMarkedRows->setFalse( 0, MAXROW );
+            if ( pArray[nCol].HasMarks() )
+            {
+                ScMarkArrayIter aMarkIter( pArray + nCol );
+                ScFlatBoolRowSegments::ForwardIterator aPrevItr( *pPrevColMarkedRows ); // For finding left envelope
+                ScFlatBoolRowSegments::ForwardIterator aPrevItr1( *pPrevColMarkedRows ); // For finding right envelope
+                SCROW nTopPrev = 0, nBottomPrev = 0; // For right envelope
+                while ( aMarkIter.Next( nTop, nBottom ) )
+                {
+                    pCurColMarkedRows->setTrue( nTop, nBottom );
+                    if( bPrevColUnMarked && nCol)
+                    {
+                        ScRange aAddRange(nCol - 1, nTop, aMultiRange.aStart.Tab(),
+                                          nCol - 1, nBottom, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Left envelope
+                        aLeftEnvelope.Append( aAddRange );
+                    }
+                    else if( nCol )
+                    {
+                        SCROW nTop1 = nTop, nBottom1 = nTop;
+                        while( nTop1 <= nBottom && nBottom1 <= nBottom )
+                        {
+                            bool bRangeMarked = false;
+                            aPrevItr.getValue( nTop1, bRangeMarked );
+                            if( bRangeMarked )
+                            {
+                                nTop1 = aPrevItr.getLastPos() + 1;
+                                nBottom1 = nTop1;
+                            }
+                            else
+                            {
+                                nBottom1 = aPrevItr.getLastPos();
+                                if( nBottom1 > nBottom )
+                                    nBottom1 = nBottom;
+                                ScRange aAddRange( nCol - 1, nTop1, aMultiRange.aStart.Tab(),
+                                                   nCol - 1, nBottom1, aMultiRange.aStart.Tab() );
+                                lcl_AddRanges( rRange, aAddRange ); // Left envelope
+                                aLeftEnvelope.Append( aAddRange );
+                                nTop1 = ++nBottom1;
+                            }
+                        }
+                        while( nTopPrev <= nBottom && nBottomPrev <= nBottom )
+                        {
+                            bool bRangeMarked;
+                            aPrevItr1.getValue( nTopPrev, bRangeMarked );
+                            if( bRangeMarked )
+                            {
+                                nBottomPrev = aPrevItr1.getLastPos();
+                                if( nTopPrev < nTop )
+                                {
+                                    if( nBottomPrev >= nTop )
+                                    {
+                                        nBottomPrev = nTop - 1;
+                                        ScRange aAddRange( nCol, nTopPrev, aMultiRange.aStart.Tab(),
+                                                           nCol, nBottomPrev, aMultiRange.aStart.Tab());
+                                        lcl_AddRanges( rRange, aAddRange ); // Right envelope
+                                        aRightEnvelope.Append( aAddRange );
+                                        nTopPrev = nBottomPrev = (nBottom + 1);
+                                    }
+                                    else
+                                    {
+                                        ScRange aAddRange( nCol, nTopPrev, aMultiRange.aStart.Tab(),
+                                                           nCol, nBottomPrev, aMultiRange.aStart.Tab());
+                                        lcl_AddRanges( rRange, aAddRange ); // Right envelope
+                                        aRightEnvelope.Append( aAddRange );
+                                        nTopPrev = ++nBottomPrev;
+                                    }
+                                }
+                                else
+                                    nTopPrev = nBottomPrev = ( nBottom + 1 );
+                            }
+                            else
+                            {
+                                nBottomPrev = aPrevItr1.getLastPos();
+                                nTopPrev = ++nBottomPrev;
+                            }
+                        }
+                    }
+                    if( nTop )
+                    {
+                        ScRange aAddRange( nCol, nTop - 1, aMultiRange.aStart.Tab(),
+                                           nCol, nTop - 1, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Top envelope
+                        aRowToColSegmentsInTopEnvelope[nTop - 1].setTrue( nCol, nCol );
+                    }
+                    if( nBottom < MAXROW )
+                    {
+                        ScRange aAddRange(nCol, nBottom + 1, aMultiRange.aStart.Tab(),
+                                          nCol, nBottom + 1, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Bottom envelope
+                        aRowToColSegmentsInBottomEnvelope[nBottom + 1].setTrue( nCol, nCol );
+                    }
+                }
+
+                while( nTopPrev <= MAXROW && nBottomPrev <= MAXROW && nCol )
+                {
+                    bool bRangeMarked;
+                    aPrevItr1.getValue( nTopPrev, bRangeMarked );
+                    if( bRangeMarked )
+                    {
+                        nBottomPrev = aPrevItr1.getLastPos();
+                        ScRange aAddRange(nCol, nTopPrev, aMultiRange.aStart.Tab(),
+                                          nCol, nBottomPrev, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Right envelope
+                        aRightEnvelope.Append( aAddRange );
+                        nTopPrev = ++nBottomPrev;
+                    }
+                    else
+                    {
+                        nBottomPrev = aPrevItr1.getLastPos();
+                        nTopPrev = ++nBottomPrev;
+                    }
+                }
+            }
+            else if( nCol )
+            {
+                bPrevColUnMarked = true;
+                SCROW nTopPrev = 0, nBottomPrev = 0;
+                bool bRangeMarked = false;
+                ScFlatBoolRowSegments::ForwardIterator aPrevItr( *pPrevColMarkedRows );
+                while( nTopPrev <= MAXROW && nBottomPrev <= MAXROW )
+                {
+                    aPrevItr.getValue(nTopPrev, bRangeMarked);
+                    if( bRangeMarked )
+                    {
+                        nBottomPrev = aPrevItr.getLastPos();
+                        ScRange aAddRange(nCol, nTopPrev, aMultiRange.aStart.Tab(),
+                                          nCol, nBottomPrev, aMultiRange.aStart.Tab());
+                        lcl_AddRanges( rRange, aAddRange ); // Right envelope
+                        aRightEnvelope.Append( aAddRange );
+                        nTopPrev = ++nBottomPrev;
+                    }
+                    else
+                    {
+                        nBottomPrev = aPrevItr.getLastPos();
+                        nTopPrev = ++nBottomPrev;
+                    }
+                }
+            }
+            pPrevColMarkedRows.reset( pCurColMarkedRows.release() );
+        }
+        for(auto& rKV : aRowToColSegmentsInTopEnvelope)
+        {
+            SCCOL nStart = 0;
+            ScFlatBoolColSegments::RangeData aRange;
+            while( nStart <= MAXCOL )
+            {
+                if( !rKV.second.getRangeData( nStart, aRange ) )
+                    break;
+                if( aRange.mbValue ) // is marked
+                    aTopEnvelope.Append( ScRange( aRange.mnCol1, rKV.first, aMultiRange.aStart.Tab(),
+                                                  aRange.mnCol2, rKV.first, aMultiRange.aStart.Tab() ) );
+                nStart = aRange.mnCol2 + 1;
+            }
+        }
+        for(auto& rKV : aRowToColSegmentsInBottomEnvelope)
+        {
+            SCCOL nStart = 0;
+            ScFlatBoolColSegments::RangeData aRange;
+            while( nStart <= MAXCOL )
+            {
+                if( !rKV.second.getRangeData( nStart, aRange ) )
+                    break;
+                if( aRange.mbValue ) // is marked
+                    aBottomEnvelope.Append( ScRange( aRange.mnCol1, rKV.first, aMultiRange.aStart.Tab(),
+                                                     aRange.mnCol2, rKV.first, aMultiRange.aStart.Tab() ) );
+                nStart = aRange.mnCol2 + 1;
+            }
+        }
+    }
+    else if( bMarked )
+    {
+        aMarkRange.PutInOrder();
+        SCROW nRow1, nRow2, nRow1New, nRow2New;
+        SCCOL nCol1, nCol2, nCol1New, nCol2New;
+        SCTAB nTab1, nTab2;
+        aMarkRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+        nCol1New = nCol1;
+        nCol2New = nCol2;
+        nRow1New = nRow1;
+        nRow2New = nRow2;
+        // Each envelope will have zero or more ranges for single rectangle selection.
+        if( nCol1 > 0 )
+        {
+            aLeftEnvelope.Append( ScRange( nCol1 - 1, nRow1, nTab1, nCol1 - 1, nRow2, nTab2 ) );
+            --nCol1New;
+        }
+        if( nRow1 > 0 )
+        {
+            aTopEnvelope.Append( ScRange( nCol1, nRow1 - 1, nTab1, nCol2, nRow1 - 1, nTab2 ) );
+            --nRow1New;
+        }
+        if( nCol2 < MAXCOL )
+        {
+            aRightEnvelope.Append( ScRange( nCol2 + 1, nRow1, nTab1, nCol2 + 1, nRow2, nTab2 ) );
+            ++nCol2New;
+        }
+        if( nRow2 < MAXROW )
+        {
+            aBottomEnvelope.Append( ScRange( nCol1, nRow2 + 1, nTab1, nCol2, nRow2 + 1, nTab2 ) );
+            ++nRow2New;
+        }
+        rRange = ScRange( nCol1New, nRow1New, nTab1, nCol2New, nRow2New, nTab2 );
+    }
 }
 
 //iterators
