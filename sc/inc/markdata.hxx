@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_MARKDATA_HXX
 
 #include "address.hxx"
+#include "rangelst.hxx"
 #include "scdllapi.h"
 
 #include <set>
@@ -55,6 +56,11 @@ private:
 
     bool            bMarking:1;               // area is being marked -> no MarkToMulti
     bool            bMarkIsNeg:1;             // cancel if multi selection
+    ScRangeList     aTopEnvelope;             // list of ranges in the top envelope of the multi selection
+    ScRangeList     aBottomEnvelope;          // list of ranges in the bottom envelope of the multi selection
+    ScRangeList     aLeftEnvelope;            // list of ranges in the left envelope of the multi selection
+    ScRangeList     aRightEnvelope;           // list of ranges in the right envelope of the multi selection
+
 
 public:
                 ScMarkData();
@@ -121,6 +127,15 @@ public:
     //  adjust table marking:
     void        InsertTab( SCTAB nTab );
     void        DeleteTab( SCTAB nTab );
+
+    // Generate envelopes if mutimarked and fills the passed ScRange object with
+    // the smallest range that includes the marked area plus its envelopes.
+    void        GetSelectionCover( ScRange& rRange );
+    // Get top, bottom, left and right envelopes
+    const ScRangeList& GetTopEnvelope() const    { return aTopEnvelope;    }
+    const ScRangeList& GetBottomEnvelope() const { return aBottomEnvelope; }
+    const ScRangeList& GetLeftEnvelope() const   { return aLeftEnvelope;   }
+    const ScRangeList& GetRightEnvelope() const  { return aRightEnvelope;  }
 
     // iterators for table access
     typedef std::set<SCTAB>::iterator iterator;
