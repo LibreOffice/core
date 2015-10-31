@@ -10,7 +10,6 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <boost/bind.hpp>
 #include <GL/glew.h>
 
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
@@ -404,13 +403,15 @@ namespace oglcanvas
                                   const rendering::ViewState&   viewState,
                                   const rendering::RenderState& renderState )
     {
+        using namespace ::std::placeholders;
+
         if( mpDevice )
         {
             mpRecordedActions->push_back( Action() );
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = ::boost::bind(&lcl_drawPoint,
+            rAct.maFunction = ::std::bind(&lcl_drawPoint,
                                             _1,_2,_3,_4,_5,
                                             aPoint);
         }
@@ -422,15 +423,16 @@ namespace oglcanvas
                                  const rendering::ViewState&    viewState,
                                  const rendering::RenderState&  renderState )
     {
+        using namespace ::std::placeholders;
         if( mpDevice )
         {
             mpRecordedActions->push_back( Action() );
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = ::boost::bind(&lcl_drawLine,
-                                            _1,_2,_3,_4,_5,
-                                            aStartPoint,aEndPoint);
+            rAct.maFunction = ::std::bind(&lcl_drawLine,
+                                          _1, _2, _3, _4, _5,
+                                          aStartPoint, aEndPoint);
         }
     }
 
@@ -440,6 +442,8 @@ namespace oglcanvas
                                    const rendering::ViewState&          viewState,
                                    const rendering::RenderState&        renderState )
     {
+        using namespace ::std::placeholders;
+
         if( mpDevice )
         {
             mpRecordedActions->push_back( Action() );
@@ -448,7 +452,7 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
 
             // TODO(F2): subdivide&render whole curve
-            rAct.maFunction = ::boost::bind(&lcl_drawLine,
+            rAct.maFunction = ::std::bind(&lcl_drawLine,
                                             _1,_2,_3,_4,_5,
                                             geometry::RealPoint2D(
                                                 aBezierSegment.Px,
@@ -575,6 +579,7 @@ namespace oglcanvas
     {
         ENSURE_OR_THROW( xPolyPolygon.is(),
                           "CanvasHelper::fillPolyPolygon: polygon is NULL");
+        using namespace ::std::placeholders;
 
         if( mpDevice )
         {
@@ -601,7 +606,7 @@ namespace oglcanvas
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
-                    rAct.maFunction = ::boost::bind(&lcl_fillGradientPolyPolygon,
+                    rAct.maFunction = ::std::bind(&lcl_fillGradientPolyPolygon,
                                                     _1,_2,_3,_4,
                                                     rValues,
                                                     textures[0],
@@ -644,7 +649,7 @@ namespace oglcanvas
                                 aPixelData,
                                 canvas::tools::getStdColorSpace()));
 
-                        rAct.maFunction = ::boost::bind(&lcl_fillTexturedPolyPolygon,
+                        rAct.maFunction = ::std::bind(&lcl_fillTexturedPolyPolygon,
                                                         _1,_2,_3,_4,
                                                         textures[0],
                                                         aSize,
@@ -808,6 +813,7 @@ namespace oglcanvas
     {
         ENSURE_OR_THROW( xBitmap.is(),
                           "CanvasHelper::drawBitmap: bitmap is NULL");
+        using namespace ::std::placeholders;
 
         if( mpDevice )
         {
@@ -822,7 +828,7 @@ namespace oglcanvas
                 Action& rAct=mpRecordedActions->back();
 
                 setupGraphicsState( rAct, viewState, renderState );
-                rAct.maFunction = ::boost::bind(&lcl_drawOwnBitmap,
+                rAct.maFunction = ::std::bind(&lcl_drawOwnBitmap,
                                                 _1,_2,_3,_4,_5,
                                                 *pOwnBitmap);
             }
@@ -851,7 +857,7 @@ namespace oglcanvas
                     Action& rAct=mpRecordedActions->back();
 
                     setupGraphicsState( rAct, viewState, renderState );
-                    rAct.maFunction = ::boost::bind(&lcl_drawGenericBitmap,
+                    rAct.maFunction = ::std::bind(&lcl_drawGenericBitmap,
                                                     _1,_2,_3,_4,_5,
                                                     aSize, aARGBBytes,
                                                     rtl_crc32(0,
