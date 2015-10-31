@@ -5591,6 +5591,86 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
             }
         }
     }
+    if( pLineOuter && pLineOuter->IsRemoveAdjacentCellBorder() )
+    {
+        SvxBoxItem aTmp0( *pLineOuter );
+        aTmp0.SetLine( NULL, SvxBoxItemLine::TOP );
+        aTmp0.SetLine( NULL, SvxBoxItemLine::BOTTOM );
+        aTmp0.SetLine( NULL, SvxBoxItemLine::LEFT );
+        aTmp0.SetLine( NULL, SvxBoxItemLine::RIGHT );
+        SvxBoxItem aLeft( aTmp0 );
+        SvxBoxItem aRight( aTmp0 );
+        SvxBoxItem aTop( aTmp0 );
+        SvxBoxItem aBottom( aTmp0 );
+
+        SvxBoxInfoItem aTmp1( *pLineInner );
+        aTmp1.SetTable( false );
+        aTmp1.SetLine( NULL, SvxBoxInfoItemLine::HORI );
+        aTmp1.SetLine( NULL, SvxBoxInfoItemLine::VERT );
+        aTmp1.SetValid( SvxBoxInfoItemValidFlags::ALL, false );
+        aTmp1.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
+        SvxBoxInfoItem aLeftInfo( aTmp1 );
+        SvxBoxInfoItem aRightInfo( aTmp1 );
+        SvxBoxInfoItem aTopInfo( aTmp1 );
+        SvxBoxInfoItem aBottomInfo( aTmp1 );
+
+        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::TOP ) && !pLineOuter->GetTop() )
+            aTopInfo.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, true );
+
+        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) && !pLineOuter->GetBottom() )
+            aBottomInfo.SetValid( SvxBoxInfoItemValidFlags::TOP, true );
+
+        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::LEFT ) && !pLineOuter->GetLeft() )
+            aLeftInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT, true );
+
+        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::RIGHT ) &&  !pLineOuter->GetRight() )
+            aRightInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT, true );
+
+        const ScRangeList& rRangeListTopEnvelope = rMark.GetTopEnvelope();
+        const ScRangeList& rRangeListBottomEnvelope = rMark.GetBottomEnvelope();
+        const ScRangeList& rRangeListLeftEnvelope = rMark.GetLeftEnvelope();
+        const ScRangeList& rRangeListRightEnvelope = rMark.GetRightEnvelope();
+
+        ScMarkData::const_iterator itr1 = rMark.begin(), itrEnd1 = rMark.end();
+        for ( ; itr1 != itrEnd1 && *itr1 < nMax; ++itr1 )
+        {
+            if ( maTabs[*itr1] )
+            {
+                size_t nEnvelopeRangeCount = rRangeListTopEnvelope.size();
+                for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
+                {
+                    const ScRange* pRange = rRangeListTopEnvelope[ j ];
+                    maTabs[*itr1]->ApplyBlockFrame( &aTop, &aTopInfo,
+                                                    pRange->aStart.Col(), pRange->aStart.Row(),
+                                                    pRange->aEnd.Col(),   pRange->aEnd.Row() );
+                }
+                nEnvelopeRangeCount = rRangeListBottomEnvelope.size();
+                for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
+                {
+                    const ScRange* pRange = rRangeListBottomEnvelope[ j ];
+                    maTabs[*itr1]->ApplyBlockFrame( &aBottom, &aBottomInfo,
+                                                    pRange->aStart.Col(), pRange->aStart.Row(),
+                                                    pRange->aEnd.Col(),   pRange->aEnd.Row() );
+                }
+                nEnvelopeRangeCount = rRangeListLeftEnvelope.size();
+                for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
+                {
+                    const ScRange* pRange = rRangeListLeftEnvelope[ j ];
+                    maTabs[*itr1]->ApplyBlockFrame( &aLeft, &aLeftInfo,
+                                                    pRange->aStart.Col(), pRange->aStart.Row(),
+                                                    pRange->aEnd.Col(),   pRange->aEnd.Row() );
+                }
+                nEnvelopeRangeCount = rRangeListRightEnvelope.size();
+                for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
+                {
+                    const ScRange* pRange = rRangeListRightEnvelope[ j ];
+                    maTabs[*itr1]->ApplyBlockFrame( &aRight, &aRightInfo,
+                                                    pRange->aStart.Col(), pRange->aStart.Row(),
+                                                    pRange->aEnd.Col(),   pRange->aEnd.Row() );
+                }
+            }
+        }
+    }
 }
 
 void ScDocument::ApplyFrameAreaTab( const ScRange& rRange,
