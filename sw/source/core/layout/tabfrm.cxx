@@ -55,6 +55,7 @@
 #include <calbck.hxx>
 #include <DocumentSettingManager.hxx>
 #include <docary.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1760,7 +1761,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
     const bool bFootnotesInDoc = !GetFormat()->GetDoc()->GetFootnoteIdxs().empty();
     const bool bFly     = IsInFly();
 
-    SwBorderAttrAccess  *pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
+    auto pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
     const SwBorderAttrs *pAttrs = pAccess->Get();
 
     // The beloved keep attribute
@@ -1866,10 +1867,10 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                 SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
                 if( pLayout )
                 {
-                    delete pAccess;
+                    pAccess.reset();
                     m_bCalcLowers |= pLayout->Resize(
                         pLayout->GetBrowseWidthByTabFrm( *this ) );
-                    pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), this );
+                    pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
                     pAttrs = pAccess->Get();
                 }
 
@@ -1910,10 +1911,10 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                 ((Prt().*fnRect->fnGetWidth)() != nOldPrtWidth ||
                 (Frm().*fnRect->fnGetWidth)() != nOldFrmWidth) )
             {
-                delete pAccess;
+                pAccess.reset();
                 m_bCalcLowers |= pLayout->Resize(
                     pLayout->GetBrowseWidthByTabFrm( *this ) );
-                pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
+                pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
                 pAttrs = pAccess->Get();
             }
             if ( aOldPrtPos != (Prt().*fnRect->fnGetPos)() )
@@ -1959,11 +1960,11 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                             GetTable()->GetHTMLTableLayout();
                         if( pHTMLLayout )
                         {
-                            delete pAccess;
+                            pAccess.reset();
                             m_bCalcLowers |= pHTMLLayout->Resize(
                                 pHTMLLayout->GetBrowseWidthByTabFrm( *this ) );
 
-                            pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
+                            pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
                             pAttrs = pAccess->Get();
                         }
 
@@ -2135,7 +2136,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
 
                 if ( bFormat )
                 {
-                    delete pAccess;
+                    pAccess.reset();
 
                     // Consider case that table is inside another table, because
                     // it has to be avoided, that superior table is formatted.
@@ -2143,7 +2144,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                     // is found, get its first content.
                     const SwFrm* pTmpNxt = sw_FormatNextContentForKeep( this );
 
-                    pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
+                    pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
                     pAttrs = pAccess->Get();
 
                     // The last row wants to keep with the frame behind the table.
@@ -2374,11 +2375,11 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                         {
                             ++nStack;
                             StackHack aHack;
-                            delete pAccess;
+                            pAccess.reset();
 
                             GetFollow()->MakeAll(pRenderContext);
 
-                            pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
+                            pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
                             pAttrs = pAccess->Get();
 
                             GetFollow()->SetLowersFormatted(false);
@@ -2518,7 +2519,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
     }
 
     m_bCalcLowers = m_bONECalcLowers = false;
-    delete pAccess;
+    pAccess.reset();
     UnlockJoin();
     if ( bMovedFwd || bMovedBwd || !bOldValidPos )
         aNotify.SetInvaKeep();

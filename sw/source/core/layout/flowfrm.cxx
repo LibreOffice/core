@@ -55,6 +55,7 @@
 #include <calbck.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <o3tl/make_unique.hxx>
 
 bool SwFlowFrm::m_bMoveBwdJump = false;
 
@@ -1329,12 +1330,11 @@ static bool lcl_IdenticalStyles(const SwFrm* pPrevFrm, const SwFrm* pFrm)
 static bool lcl_getContextualSpacing(const SwFrm* pPrevFrm)
 {
     bool bRet;
-    SwBorderAttrAccess *pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), pPrevFrm );
+    auto pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), pPrevFrm);
     const SwBorderAttrs *pAttrs = pAccess->Get();
 
     bRet = pAttrs->GetULSpace().GetContext();
 
-    delete pAccess;
     return bRet;
 }
 
@@ -1346,7 +1346,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     // OD 2004-03-10 #i11860# - use new method <GetPrevFrmForUpperSpaceCalc(..)>
     const SwFrm* pPrevFrm = _GetPrevFrmForUpperSpaceCalc( pPr );
 
-    SwBorderAttrAccess *pAccess;
+    std::unique_ptr<SwBorderAttrAccess> pAccess;
     SwFrm* pOwn;
     if( !pAttrs )
     {
@@ -1361,12 +1361,11 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         }
         else
             pOwn = &m_rThis;
-        pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), pOwn );
+        pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), pOwn);
         pAttrs = pAccess->Get();
     }
     else
     {
-        pAccess = NULL;
         pOwn = &m_rThis;
     }
     SwTwips nUpper = 0;
@@ -1496,8 +1495,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         nUpper += _GetUpperSpaceAmountConsideredForPageGrid( nUpper );
     }
 
-    bool bContextualSpacing = pAttrs->GetULSpace().GetContext();
-    delete pAccess;
+    const bool bContextualSpacing = pAttrs->GetULSpace().GetContext();
 
     if (bContextualSpacing && pPrevFrm && lcl_getContextualSpacing(pPrevFrm)
             && lcl_IdenticalStyles(pPrevFrm, &m_rThis))
@@ -1628,10 +1626,10 @@ SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
 {
     SwTwips nLowerSpace = 0;
 
-    SwBorderAttrAccess* pAttrAccess = 0L;
+    std::unique_ptr<SwBorderAttrAccess> pAttrAccess;
     if ( !_pAttrs )
     {
-        pAttrAccess = new SwBorderAttrAccess( SwFrm::GetCache(), &m_rThis );
+        pAttrAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), &m_rThis);
         _pAttrs = pAttrAccess->Get();
     }
 
@@ -1655,8 +1653,6 @@ SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
     {
         nLowerSpace += CalcAddLowerSpaceAsLastInTableCell( _pAttrs );
     }
-
-    delete pAttrAccess;
 
     return nLowerSpace;
 }
@@ -1688,17 +1684,15 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
             }
         }
 
-        SwBorderAttrAccess* pAttrAccess = NULL;
+        std::unique_ptr<SwBorderAttrAccess> pAttrAccess;
         if (pFrm && (!_pAttrs || pFrm != &m_rThis))
         {
-            pAttrAccess = new SwBorderAttrAccess( SwFrm::GetCache(), pFrm );
+            pAttrAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), pFrm);
             _pAttrs = pAttrAccess->Get();
         }
 
         if (_pAttrs)
             nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower();
-
-        delete pAttrAccess;
     }
 
     return nAdditionalLowerSpace;
