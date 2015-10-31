@@ -269,7 +269,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
                 aArgs[2].Name = "URL";
                 aArgs[2].Value <<= OUString( rTemplateName );
 
-                uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( OUString( rServiceName ) ), uno::UNO_QUERY );
+                uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( rServiceName ), uno::UNO_QUERY );
                 xLoadable->load( aArgs );
 
                 aArgs.realloc( 2 );

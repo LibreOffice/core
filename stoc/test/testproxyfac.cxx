@@ -263,9 +263,7 @@ SAL_IMPLEMENT_MAIN()
                 aLibName, Reference< registry::XSimpleRegistry >() );
 
             Reference< reflection::XProxyFactory > xProxyFac(
-                xMgr->createInstance(
-                    OUString(
-                        "com.sun.star.reflection.ProxyFactory") ),
+                xMgr->createInstance("com.sun.star.reflection.ProxyFactory"),
                 UNO_QUERY_THROW );
 
             Reference< XAggregation > x(

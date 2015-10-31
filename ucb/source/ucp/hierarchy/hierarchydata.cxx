@@ -298,7 +298,7 @@ bool HierarchyEntry::setData(
 
             uno::Reference< util::XChangesBatch > xBatch(
                     m_xConfigProvider->createInstanceWithArguments(
-                        OUString( READWRITE_SERVICE_NAME  ),
+                        READWRITE_SERVICE_NAME,
                         aArguments ),
                     uno::UNO_QUERY );
 
@@ -562,7 +562,7 @@ bool HierarchyEntry::move(
 
         xOldParentBatch = uno::Reference< util::XChangesBatch >(
             m_xConfigProvider->createInstanceWithArguments(
-                OUString( READWRITE_SERVICE_NAME  ),
+                READWRITE_SERVICE_NAME,
                 aArguments ),
             uno::UNO_QUERY );
 
@@ -586,7 +586,7 @@ bool HierarchyEntry::move(
 
             xNewParentBatch = uno::Reference< util::XChangesBatch >(
                 m_xConfigProvider->createInstanceWithArguments(
-                    OUString( READWRITE_SERVICE_NAME  ),
+                    READWRITE_SERVICE_NAME,
                     aArguments ),
                 uno::UNO_QUERY );
 
@@ -823,7 +823,7 @@ bool HierarchyEntry::remove()
 
             uno::Reference< util::XChangesBatch > xBatch(
                 m_xConfigProvider->createInstanceWithArguments(
-                    OUString( READWRITE_SERVICE_NAME  ),
+                    READWRITE_SERVICE_NAME,
                     aArguments ),
                 uno::UNO_QUERY );
 
@@ -1065,7 +1065,7 @@ HierarchyEntry::getRootReadAccess()
                     m_xRootReadAccess
                         = uno::Reference< container::XHierarchicalNameAccess >(
                             m_xConfigProvider->createInstanceWithArguments(
-                                OUString( READ_SERVICE_NAME  ),
+                                READ_SERVICE_NAME,
                                 aArguments ),
                             uno::UNO_QUERY );
                 }

@@ -201,10 +201,9 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         if ( !xRowSet.is() )
         {
             bDispose = true;
-            xRowSet = uno::Reference<sdbc::XRowSet>(
-                    comphelper::getProcessServiceFactory()->createInstance(
-                        OUString( SC_SERVICE_ROWSET ) ),
-                    uno::UNO_QUERY);
+            xRowSet.set(comphelper::getProcessServiceFactory()->createInstance(
+                            SC_SERVICE_ROWSET ),
+                        uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
             OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
             if ( xRowProp.is() )

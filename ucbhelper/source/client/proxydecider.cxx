@@ -313,9 +313,8 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
 
         uno::Reference< uno::XInterface > xInterface(
                     xConfigProv->createInstanceWithArguments(
-                        OUString(
-                            "com.sun.star.configuration.ConfigurationAccess" ),
-                    aArguments ) );
+                        "com.sun.star.configuration.ConfigurationAccess",
+                        aArguments ) );
 
         OSL_ENSURE( xInterface.is(),
                     "InternetProxyDecider - No config access!" );
