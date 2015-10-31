@@ -18,15 +18,7 @@
 
 #include "macros.inc"
 
-#ifdef MACOSX
-ScpAction scp_Copy_Thirdpartylicense_Readme_Html
-    Copy = "LICENSE.html";
-    Name= "LICENSE.html";
-    Subdir = "LICENSEs";
-End
-#endif
-
-#ifndef WNT
+#if !defined(WNT) && !defined(MACOSX)
 ScpAction scp_Copy_Readme_Txt
   #ifdef UNX
     README_ALL_LANG(Copy, README);
