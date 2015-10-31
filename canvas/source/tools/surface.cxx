@@ -21,7 +21,6 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <boost/bind.hpp>
 #include <comphelper/scopeguard.hxx>
 
 #include "surface.hxx"
@@ -163,8 +162,7 @@ namespace canvas
 
             // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(
-                boost::bind( &::canvas::IRenderModule::endPrimitive,
-                             ::boost::ref(pRenderModule) ) );
+                [&pRenderModule]() mutable { pRenderModule->endPrimitive(); } );
 
             vertex.u=static_cast<float>(u2); vertex.v=static_cast<float>(v2);
             vertex.x=static_cast<float>(p0.getX()); vertex.y=static_cast<float>(p0.getY());
@@ -285,8 +283,7 @@ namespace canvas
 
             // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(
-                boost::bind( &::canvas::IRenderModule::endPrimitive,
-                             ::boost::ref(pRenderModule) ) );
+                [&pRenderModule]() mutable { pRenderModule->endPrimitive(); } );
 
             vertex.u=static_cast<float>(u2); vertex.v=static_cast<float>(v2);
             vertex.x=static_cast<float>(p0.getX()); vertex.y=static_cast<float>(p0.getY());
@@ -392,8 +389,7 @@ namespace canvas
 
             // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(
-                boost::bind( &::canvas::IRenderModule::endPrimitive,
-                                ::boost::ref(pRenderModule) ) );
+                [&pRenderModule]() mutable { pRenderModule->endPrimitive(); } );
 
             for(sal_uInt32 nIndex=0; nIndex<nVertexCount; ++nIndex)
             {
