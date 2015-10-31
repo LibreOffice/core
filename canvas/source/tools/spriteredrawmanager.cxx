@@ -197,10 +197,10 @@ namespace canvas
              */
             void operator()( const Sprite::Reference& rSprite )
             {
-                const SpriteTracer aSpriteTracer(
-                    ::std::for_each( mrChangeContainer.begin(),
-                                     mrChangeContainer.end(),
-                                     SpriteTracer( rSprite ) ) );
+                SpriteTracer aSpriteTracer( rSprite );
+
+                for (auto const& aChange : mrChangeContainer)
+                    aSpriteTracer( aChange );
 
                 aSpriteTracer.commit( mrUpdater );
             }
@@ -265,10 +265,9 @@ namespace canvas
         // for each unique sprite, check the change event vector,
         // calculate the update operation from that, and add the
         // result to the aUpdateArea.
-        ::std::for_each( aUpdatableSprites.begin(),
-                         aEnd,
-                         SpriteUpdater( rUpdateAreas,
-                                        maChangeRecords) );
+        SpriteUpdater aSpriteUpdater( rUpdateAreas, maChangeRecords);
+        for (auto const& aUpdatableSprite : aUpdatableSprites)
+            aSpriteUpdater( aUpdatableSprite);
 
         // TODO(P2): Implement your own output iterator adapter, to
         // avoid that totally superfluous temp aUnchangedSprites
