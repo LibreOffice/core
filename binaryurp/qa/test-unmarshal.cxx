@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "com/sun/star/io/IOException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "cppu/unotype.hxx"
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
-#include "rtl/ref.hxx"
-#include "rtl/string.h"
-#include "sal/types.h"
-#include "typelib/typedescription.hxx"
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <cppu/unotype.hxx>
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include <rtl/ref.hxx>
+#include <rtl/string.h>
+#include <sal/types.h>
+#include <typelib/typedescription.hxx>
 
 #include "../source/bridge.hxx"
 #include "../source/cache.hxx"
