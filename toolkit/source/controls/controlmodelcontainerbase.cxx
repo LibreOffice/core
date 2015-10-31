@@ -53,8 +53,6 @@
 #include "grid/gridcontrol.hxx"
 #include <toolkit/controls/tabpagecontainer.hxx>
 
-#include <boost/bind.hpp>
-
 #include <map>
 #include <algorithm>
 #include <functional>
@@ -287,7 +285,8 @@ void SAL_CALL ControlModelContainerBase::dispose(  ) throw(RuntimeException, std
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aChildModels.begin(),                           // target location
-        ::boost::bind( &UnoControlModelHolder::first, _1 ) // operation to apply -> select the XControlModel part
+        []( const UnoControlModelHolder& aUnoControlModelHolder )
+        { return aUnoControlModelHolder.first; }        // operation to apply -> select the XControlModel part
     );
 
     // now dispose
@@ -541,7 +540,8 @@ Sequence< OUString > ControlModelContainerBase::getElementNames() throw(RuntimeE
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aNames.getArray(),                              // target range
-        ::boost::bind( &UnoControlModelHolder::second, _1 ) // operator to apply: select the second element (the name)
+        []( const UnoControlModelHolder& aUnoControlModelHolder )
+        { return aUnoControlModelHolder.second; }        // operator to apply: select the second element (the name)
     );
 
     return aNames;
@@ -751,7 +751,8 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
     ::std::transform(
             aSortedModels.begin(), aSortedModels.end(),
             ::std::copy( aUnindexedModels.begin(), aUnindexedModels.end(), aReturn.getArray() ),
-            ::boost::bind( &MapIndexToModel::value_type::second, _1 )
+            [] ( const MapIndexToModel::value_type& entryIndexToModel )
+            { return entryIndexToModel.second; }
         );
 
     return aReturn;

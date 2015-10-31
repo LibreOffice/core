@@ -32,7 +32,6 @@
 #include <algorithm>
 #include <functional>
 #include <vector>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -235,7 +234,8 @@ private:
         RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
 
         ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(),
-                          boost::bind(&CellData::first,_1));
+                          [] ( const CellData& rCellData )
+                          { return rCellData.first; });
         return resultData;
     }
 

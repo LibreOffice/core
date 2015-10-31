@@ -54,8 +54,6 @@
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/bind.hpp>
-
 #include <vcl/group.hxx>
 
 #include "helper/accessibilityclient.hxx"
@@ -587,11 +585,9 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 aEvent.ActionCommand = maActionCommand;
 
-                Callback aCallback = ::boost::bind(
-                    &ActionListenerMultiplexer::actionPerformed,
-                    &maActionListeners,
-                    aEvent
-                );
+                Callback aCallback = [ this, &aEvent ]()
+                                     { this->maActionListeners.actionPerformed( aEvent ); };
+
                 ImplExecuteAsyncWithoutSolarLock( aCallback );
             }
         }
