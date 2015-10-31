@@ -774,7 +774,30 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
 
-#ifndef IOS
+#if defined(IOS)
+    SystemGraphicsData aData;
+    aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
+    // the Size argument is irrelevant, I hope
+    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), (sal_uInt16)0);
+
+    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
+                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+#elif defined(ANDROID)
+    InitSvpForLibreOfficeKit();
+
+    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)32) ;
+
+    boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
+
+    boost::shared_array<sal_uInt8> aAlphaBuffer;
+
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
+                Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
+                aBuffer, aAlphaBuffer, true);
+
+    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
+                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+#else
     InitSvpForLibreOfficeKit();
 
     ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), (sal_uInt16)32) ;
@@ -807,15 +830,6 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
             pBuffer[nOffset * 4 +3] = 0xff - aAlpha[nOffset];
         }
     }
-
-#else
-    SystemGraphicsData aData;
-    aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
-    // the Size argument is irrelevant, I hope
-    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), (sal_uInt16)0);
-
-    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
-                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #endif
 
     static bool bDebug = getenv("LOK_DEBUG") != 0;
