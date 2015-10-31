@@ -94,7 +94,7 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
     Reference< XFolderPicker2 > xFolderPicker;
 
     xFolderPicker = Reference< XFolderPicker2 >(
-        g_xFactory->createInstance( OUString( FOLDER_PICKER_SERVICE_NAME ) ), UNO_QUERY );
+        g_xFactory->createInstance( FOLDER_PICKER_SERVICE_NAME), UNO_QUERY );
 
     if ( xFolderPicker.is() == sal_False )
     {

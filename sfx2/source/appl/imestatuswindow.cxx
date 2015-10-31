@@ -197,8 +197,7 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
                 throw css::lang::DisposedException();
             if (!m_xContext.is())
                 throw css::uno::RuntimeException(
-                    OUString(
-                            "null comphelper::getProcessServiceFactory"),
+                    OUString("null comphelper::getProcessServiceFactory"),
                     0);
             css::uno::Reference< css::lang::XMultiServiceFactory > xProvider =
                 css::configuration::theDefaultProvider::get( m_xContext );
@@ -213,8 +212,7 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
             m_xConfig
                 = css::uno::Reference< css::beans::XPropertySet >(
                     xProvider->createInstanceWithArguments(
-                        OUString(
-                       "com.sun.star.configuration.ConfigurationUpdateAccess"),
+                        "com.sun.star.configuration.ConfigurationUpdateAccess",
                         aArgs),
                     css::uno::UNO_QUERY);
             if (!m_xConfig.is())

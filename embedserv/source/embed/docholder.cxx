@@ -955,9 +955,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
             if(aFilterName.getLength())
             {
                 uno::Reference<container::XNameAccess> xNameAccess(
-                    m_xFactory->createInstance(
-                        OUString(
-                            "com.sun.star.document.FilterFactory")),
+                    m_xFactory->createInstance("com.sun.star.document.FilterFactory"),
                     uno::UNO_QUERY);
                 try {
                     if(xNameAccess.is() &&

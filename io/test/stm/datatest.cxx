@@ -735,8 +735,7 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
                 Reference <XInputStream > markableInput( x , UNO_QUERY );
                 Reference <XActiveDataSink> markableSink( x , UNO_QUERY );
 
-                x = m_rFactory->createInstance( OUString(
-                    "com.sun.star.io.MarkableOutputStream"  ) );
+                x = m_rFactory->createInstance( "com.sun.star.io.MarkableOutputStream" );
                 Reference <XOutputStream >  markableOutput( x , UNO_QUERY );
                 Reference <XActiveDataSource >  markableSource( x , UNO_QUERY );
 

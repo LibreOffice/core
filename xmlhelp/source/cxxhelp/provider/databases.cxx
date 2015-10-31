@@ -875,8 +875,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
 
             Reference< XInterface > xIfc
                 = m_xSMgr->createInstanceWithArgumentsAndContext(
-                    OUString(
-                        "com.sun.star.packages.comp.ZipPackage" ),
+                    "com.sun.star.packages.comp.ZipPackage",
                     aArguments, m_xContext );
 
             if ( xIfc.is() )
@@ -1675,8 +1674,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
         Reference< XMultiComponentFactory >xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
         Reference< XInterface > xIfc
             = xSMgr->createInstanceWithArgumentsAndContext(
-                OUString(
-                    "com.sun.star.packages.comp.ZipPackage" ),
+                "com.sun.star.packages.comp.ZipPackage",
                 aArguments, m_xContext );
 
         if ( xIfc.is() )

@@ -262,7 +262,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
     Reference< XFilePicker > xFilePicker = Reference< XFilePicker >(
         g_xFactory->createInstanceWithArguments(
-            OUString( FILE_PICKER_SERVICE_NAME ), arguments ), UNO_QUERY );
+            FILE_PICKER_SERVICE_NAME, arguments ), UNO_QUERY );
 
         // install a FilePicker notifier
         Reference< XFilePickerListener > xFPListener(

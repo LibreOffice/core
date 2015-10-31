@@ -324,9 +324,8 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             OUString aExtension;
 
             css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
-                xSMGR->createInstance( OUString(
-                    "com.sun.star.document.FilterFactory" )),
-                    css::uno::UNO_QUERY );
+                xSMGR->createInstance( "com.sun.star.document.FilterFactory" ),
+                css::uno::UNO_QUERY );
 
             if ( bStoreTo )
             {
@@ -428,8 +427,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             else
             {
                 css::uno::Reference< container::XNameAccess > xTypeDetection(
-                    xSMGR->createInstance( OUString(
-                        "com.sun.star.document.TypeDetection" )),
+                    xSMGR->createInstance( "com.sun.star.document.TypeDetection" ),
                     css::uno::UNO_QUERY );
 
 
