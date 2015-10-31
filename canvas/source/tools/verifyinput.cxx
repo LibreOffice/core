@@ -461,13 +461,12 @@ namespace canvas
 #endif
             }
 
-            ::std::for_each( strokeAttributes.DashArray.getConstArray(),
-                             strokeAttributes.DashArray.getConstArray() + strokeAttributes.DashArray.getLength(),
-                             VerifyDashValue( pStr, xIf, nArgPos ) );
+            VerifyDashValue aVerifyDashValue( pStr, xIf, nArgPos );
+            for (auto const& aStrokeAttribute : strokeAttributes.DashArray)
+                aVerifyDashValue( aStrokeAttribute );
 
-            ::std::for_each( strokeAttributes.LineArray.getConstArray(),
-                             strokeAttributes.LineArray.getConstArray() + strokeAttributes.LineArray.getLength(),
-                             VerifyDashValue( pStr, xIf, nArgPos ) );
+            for (auto const& aStrokeAttribute : strokeAttributes.LineArray)
+                aVerifyDashValue( aStrokeAttribute );
 
             if( strokeAttributes.StartCapType < rendering::PathCapType::BUTT ||
                 strokeAttributes.StartCapType > rendering::PathCapType::SQUARE )
