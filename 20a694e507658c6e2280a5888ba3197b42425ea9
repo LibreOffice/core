@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_123cac2e",
+        "filename": "sd/source/ui/animations/SlideTransitionPane.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-10-31T02:51:39Z",
+      "side": 1,
+      "message": "Why not return sorted list from getTransitionPresetList() instead of sorting the return value? Is the unsorted return value used elsewhere?",
+      "range": {
+        "startLine": 278,
+        "startChar": 49,
+        "endLine": 278,
+        "endChar": 98
+      },
+      "revId": "20a694e507658c6e2280a5888ba3197b42425ea9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
