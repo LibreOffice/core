@@ -21,8 +21,6 @@
 
 #include <algorithm>
 
-#include <boost/bind.hpp>
-
 #include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -64,17 +62,11 @@ namespace vclcanvas
         maPropHelper.addProperties(
             ::canvas::PropertySetHelper::MakeMap
             ("UnsafeScrolling",
-             boost::bind(&SpriteCanvasHelper::isUnsafeScrolling,
-                         boost::ref(maCanvasHelper)),
-             boost::bind(&SpriteCanvasHelper::enableUnsafeScrolling,
-                         boost::ref(maCanvasHelper),
-                         _1))
+             [this]() { return this->maCanvasHelper.isUnsafeScrolling(); },
+             [this](css::uno::Any const& aAny) mutable { this->maCanvasHelper.enableUnsafeScrolling(aAny); } )
             ("SpriteBounds",
-             boost::bind(&SpriteCanvasHelper::isSpriteBounds,
-                         boost::ref(maCanvasHelper)),
-             boost::bind(&SpriteCanvasHelper::enableSpriteBounds,
-                         boost::ref(maCanvasHelper),
-                         _1)));
+             [this]() { return this->maCanvasHelper.isSpriteBounds(); },
+             [this](css::uno::Any const& aAny) mutable { this->maCanvasHelper.enableSpriteBounds(aAny); } ));
 
         SAL_INFO("canvas.vcl", "VCLSpriteCanvas::initialize called" );
 

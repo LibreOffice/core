@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/bind.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -701,9 +700,9 @@ namespace vclcanvas
                         std::transform(&rValues.maColors[0],
                                        &rValues.maColors[0]+rValues.maColors.getLength(),
                                        aColors.begin(),
-                                       boost::bind(
-                                           &vcl::unotools::stdColorSpaceSequenceToColor,
-                                           _1));
+                                       [](const uno::Sequence< double >& aColor) {
+                                           return vcl::unotools::stdColorSpaceSequenceToColor( aColor );
+                                       } );
 
                         // TODO(E1): Return value
                         // TODO(F1): FillRule
