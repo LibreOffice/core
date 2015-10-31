@@ -92,7 +92,7 @@ TEST_F(BasicTest, testConstruction)
     ASSERT_TRUE( pDevice->isTopDown() == true ) << "Top down format";
     ASSERT_TRUE( pDevice->getScanlineFormat() == Format::ONE_BIT_MSB_PAL ) << "Scanline format";
     ASSERT_TRUE( pDevice->getScanlineStride() == (aSize2.getY() + 7)/8 ) << "Scanline len";
-    ASSERT_TRUE( pDevice->getPalette() ) << "Palette existence";
+    ASSERT_TRUE( pDevice->getPalette() != NULL ) << "Palette existence";
     ASSERT_TRUE( (*pDevice->getPalette())[0] == Color(0) ) << "Palette entry 0 is black";
     ASSERT_TRUE( (*pDevice->getPalette())[1] == Color(0xFFFFFFFF) ) << "Palette entry 1 is white";
 }
