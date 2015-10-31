@@ -1611,7 +1611,8 @@ SvxBoxItem::SvxBoxItem( const SvxBoxItem& rCpy ) :
     nTopDist    ( rCpy.nTopDist ),
     nBottomDist ( rCpy.nBottomDist ),
     nLeftDist   ( rCpy.nLeftDist ),
-    nRightDist  ( rCpy.nRightDist )
+    nRightDist  ( rCpy.nRightDist ),
+    bRemoveAdjCellBorder ( rCpy.bRemoveAdjCellBorder )
 
 {
     pTop    = rCpy.GetTop()     ? new SvxBorderLine( *rCpy.GetTop() )    : nullptr;
@@ -1632,8 +1633,8 @@ SvxBoxItem::SvxBoxItem( const sal_uInt16 nId ) :
     nTopDist    ( 0 ),
     nBottomDist ( 0 ),
     nLeftDist   ( 0 ),
-    nRightDist  ( 0 )
-
+    nRightDist  ( 0 ),
+    bRemoveAdjCellBorder ( false )
 {
 }
 
@@ -1655,6 +1656,7 @@ SvxBoxItem& SvxBoxItem::operator=( const SvxBoxItem& rBox )
     nBottomDist = rBox.nBottomDist;
     nLeftDist = rBox.nLeftDist;
     nRightDist = rBox.nRightDist;
+    bRemoveAdjCellBorder = rBox.bRemoveAdjCellBorder;
     SetLine( rBox.GetTop(), SvxBoxItemLine::TOP );
     SetLine( rBox.GetBottom(), SvxBoxItemLine::BOTTOM );
     SetLine( rBox.GetLeft(), SvxBoxItemLine::LEFT );
@@ -1685,6 +1687,7 @@ bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
         ( nBottomDist == rBoxItem.nBottomDist )   &&
         ( nLeftDist == rBoxItem.nLeftDist )   &&
         ( nRightDist == rBoxItem.nRightDist ) &&
+        ( bRemoveAdjCellBorder == rBoxItem.bRemoveAdjCellBorder ) &&
         CmpBrdLn( pTop, rBoxItem.GetTop() )           &&
         CmpBrdLn( pBottom, rBoxItem.GetBottom() )     &&
         CmpBrdLn( pLeft, rBoxItem.GetLeft() )         &&
