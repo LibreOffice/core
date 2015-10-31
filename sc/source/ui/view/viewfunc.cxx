@@ -1019,7 +1019,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
 
-    ScRange aMarkRange;
+    ScRange aMarkRange, aMarkRangeWithEnvelope;
     aFuncMark.MarkToSimple();
     bool bMulti = aFuncMark.IsMultiMarked();
     if (bMulti)
@@ -1035,6 +1035,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
         aFuncMark.SetMarkArea(aMarkRange);
         MarkDataChanged();
     }
+    aFuncMark.GetSelectionCover( aMarkRangeWithEnvelope );
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
 
@@ -1051,17 +1052,17 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
             if (*itr != nStartTab)
                 pUndoDoc->AddUndoTab( *itr, *itr );
 
-        ScRange aCopyRange = aMarkRange;
+        ScRange aCopyRange = aMarkRangeWithEnvelope;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bMulti, pUndoDoc, &aFuncMark );
+        pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, false, pUndoDoc, &aFuncMark );
 
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoSelectionAttr(
             pDocSh, aFuncMark,
             aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), aMarkRange.aStart.Tab(),
             aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), aMarkRange.aEnd.Tab(),
-            pUndoDoc, bMulti, &rAttr, pNewOuter, pNewInner ) );
+            pUndoDoc, false, &rAttr, pNewOuter, pNewInner, &aMarkRangeWithEnvelope ) );
     }
 
     sal_uInt16 nExt = SC_PF_TESTMERGE;
@@ -1069,7 +1070,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
 
     pDoc->ApplySelectionFrame( aFuncMark, pNewOuter, pNewInner );
 
-    pDocSh->UpdatePaintExt( nExt, aMarkRange ); // content after the change
+    pDocSh->UpdatePaintExt( nExt, aMarkRangeWithEnvelope ); // content after the change
 
     aFuncMark.MarkToMulti();
     pDoc->ApplySelectionPattern( rAttr, aFuncMark );
