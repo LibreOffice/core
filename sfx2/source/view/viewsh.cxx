@@ -673,9 +673,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 bool bHasLocation = !aLocation.isEmpty() && !bPrivateProtocol;
 
                 css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
-                    xSMGR->createInstance( OUString(
-                        "com.sun.star.document.FilterFactory" )),
-                        css::uno::UNO_QUERY_THROW );
+                    xSMGR->createInstance( "com.sun.star.document.FilterFactory" ),
+                    css::uno::UNO_QUERY_THROW );
 
                 // Retrieve filter from type
                 sal_Int32 nFilterFlags = FILTERFLAG_EXPORT;

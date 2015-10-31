@@ -3162,10 +3162,9 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
     uno::Reference<sdbc::XRowSet> xRowSet;
     try
     {
-        xRowSet = uno::Reference<sdbc::XRowSet>(
-            comphelper::getProcessServiceFactory()->createInstance(
-                OUString(SC_SERVICE_ROWSET)),
-            UNO_QUERY);
+        xRowSet.set(comphelper::getProcessServiceFactory()->createInstance(
+                       SC_SERVICE_ROWSET),
+                    UNO_QUERY);
 
         uno::Reference<beans::XPropertySet> xRowProp(xRowSet, UNO_QUERY);
         OSL_ENSURE( xRowProp.is(), "can't get RowSet" );

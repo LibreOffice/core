@@ -43,10 +43,8 @@ namespace
     {
         test::BootstrapFixture::setUp();
 
-        m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance(
-            OUString(
-                "com.sun.comp.hwpimport.HwpImportFilter")),
-            uno::UNO_QUERY_THROW);
+        m_xFilter.set(m_xSFactory->createInstance("com.sun.comp.hwpimport.HwpImportFilter"),
+                      uno::UNO_QUERY_THROW);
     }
 
     bool HwpFilterTest::load(const OUString &,

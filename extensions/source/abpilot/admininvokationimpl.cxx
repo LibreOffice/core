@@ -87,7 +87,7 @@ namespace abp
                 // creating the dialog service is potentially expensive (if all the libraries invoked need to be loaded)
                 // so we display a wait cursor
                 WaitObject aWaitCursor(m_pMessageParent);
-                Reference<XInterface> x = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(OUString(s_sDataSourceTypeChangeDialog), aArguments, m_xContext);
+                Reference<XInterface> x = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(s_sDataSourceTypeChangeDialog, aArguments, m_xContext);
                 xDialog = Reference< XExecutableDialog >( x, UNO_QUERY );
 
                 // just for a smoother UI: What the dialog does upon execution, is (amongst other things) creating

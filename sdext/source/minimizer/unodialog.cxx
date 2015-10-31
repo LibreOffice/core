@@ -46,8 +46,8 @@ using namespace ::com::sun::star::script;
 UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame ) :
     mxContext( rxContext ),
     mxController( rxFrame->getController() ),
-    mxDialogModel( mxContext->getServiceManager()->createInstanceWithContext( OUString(
-        "com.sun.star.awt.UnoControlDialogModel" ), mxContext ), UNO_QUERY_THROW ),
+    mxDialogModel( mxContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.awt.UnoControlDialogModel", mxContext ), UNO_QUERY_THROW ),
     mxDialogModelMultiPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelMSF( mxDialogModel, UNO_QUERY_THROW ),

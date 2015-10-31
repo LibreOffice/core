@@ -363,7 +363,7 @@ static bool impl_needsCompatCheck()
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset(
-            theConfigProvider->createInstanceWithArguments( OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
+            theConfigProvider->createInstanceWithArguments( aAccessSrvc, theArgs ), UNO_QUERY_THROW );
 
         Any result = pset->getPropertyValue("LastCompatibilityCheckID");
 
