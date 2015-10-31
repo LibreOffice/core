@@ -43,6 +43,7 @@
 
 #include <DocumentSettingManager.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <o3tl/make_unique.hxx>
 
 // Move methods
 
@@ -643,7 +644,7 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
 
     const SwRect aOldRect( Frm() );     // Adjust root size
     const SwLayNotify aNotify( this );  // takes care of the notification in the dtor
-    SwBorderAttrAccess *pAccess = 0;
+    std::unique_ptr<SwBorderAttrAccess> pAccess;
     const SwBorderAttrs*pAttrs = 0;
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
@@ -666,7 +667,7 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
             {
                 if ( !pAccess )
                 {
-                    pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), this );
+                    pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
                     pAttrs = pAccess->Get();
                 }
                 // In BrowseView, we use fixed settings
@@ -772,7 +773,6 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
             }
         }
     } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
-    delete pAccess;
 
     if ( Frm() != aOldRect && GetUpper() )
         static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
@@ -791,7 +791,7 @@ void SwLayoutFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : ( IsVertLR() ? fnRectVertL2R : fnRectVert );
 
-    SwBorderAttrAccess *pAccess = 0;
+    std::unique_ptr<SwBorderAttrAccess> pAccess;
     const SwBorderAttrs*pAttrs = 0;
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
@@ -845,17 +845,17 @@ void SwLayoutFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 }
             }
         }
+
         if ( !mbValidSize || !mbValidPrtArea )
         {
             if ( !pAccess )
             {
-                pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), this );
+                pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
                 pAttrs  = pAccess->Get();
             }
             Format( getRootFrm()->GetCurrShell()->GetOut(), pAttrs );
         }
     } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
-    delete pAccess;
 }
 
 bool SwTextNode::IsCollapse() const
