@@ -76,8 +76,6 @@
 #include "gio_outputstream.hxx"
 #include "gio_mount.hxx"
 
-#include <stdio.h>
-
 using namespace com::sun::star;
 
 namespace gio
