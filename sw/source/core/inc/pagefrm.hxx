@@ -111,7 +111,7 @@ protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     /// Calculate the content height of a page (without columns).
-    size_t GetContentHeight();
+    size_t GetContentHeight(const long nTop, const long nBottom) const;
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
