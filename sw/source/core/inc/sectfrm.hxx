@@ -116,15 +116,20 @@ public:
     bool CalcMinDiff( SwTwips& rMinDiff ) const;
 
     /**
-     * If we don't pass a @param bOverSize or false, the return value is > 0 for
-     * undersized Frames, or 0
+     * Returns the size delta that the section would like to be
+     * greater if it has undersized TextFrms in it.
      *
+     * If we don't pass a @param bOverSize or false, the return value
+     * is > 0 for undersized Frames, or 0 otherwise.
      * If @param bOverSize == true, we can also get a negative return value,
      * if the SectionFrm is not completely filled, which happens often for
      * e.g. SectionFrms with Follows.
+     *
+     * If necessary the undersized-flag is corrected.
      * We need this in the FormatWidthCols to "deflate" columns there.
      */
-    long Undersize( bool bOverSize = false );
+    SwTwips Undersize(bool bOverSize = false);
+    SwTwips Undersize() const;
 
     /// Adapt size to surroundings
     void _CheckClipping( bool bGrow, bool bMaximize );

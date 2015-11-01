@@ -2938,7 +2938,7 @@ void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
     const sal_uInt16 nRight = (sal_uInt16)pAttrs->CalcRight(this);
     const sal_uInt16 nLower = pAttrs->CalcBottom();
 
-    bool bVert = IsVertical() && !IsPageFrm();
+    const bool bVert = IsVertical() && !IsPageFrm();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     if ( !mbValidPrtArea )
     {
