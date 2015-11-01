@@ -6411,7 +6411,7 @@ SwRect SwPageFrm::GetBoundRect(OutputDevice* pOutputDevice) const
 
 /*static*/ SwTwips SwPageFrm::GetSidebarBorderWidth( const SwViewShell* _pViewShell )
 {
-    const SwPostItMgr* pPostItMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
+    const SwPostItMgr* pPostItMgr = _pViewShell ? _pViewShell->GetPostItMgr() : nullptr;
     const SwTwips nRet = pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() ? pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() : 0;
     return nRet;
 }
