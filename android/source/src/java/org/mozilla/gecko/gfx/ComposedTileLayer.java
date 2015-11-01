@@ -149,6 +149,11 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         RectF newViewPort = getViewPort(viewportMetrics);
         float newZoom = getZoom(viewportMetrics);
 
+        // When
+        if (newZoom <= 0.0 || Float.isNaN(newZoom)) {
+            return;
+        }
+
         if (currentViewport.equals(newViewPort) && FloatUtils.fuzzyEquals(currentZoom, newZoom)) {
             return;
         }
