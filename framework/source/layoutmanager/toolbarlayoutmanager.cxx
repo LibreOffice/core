@@ -1015,10 +1015,10 @@ void ToolbarLayoutManager::setParentWindow(
 {
     static const char DOCKINGAREASTRING[] = "dockingarea";
 
-    uno::Reference< awt::XWindow > xTopDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
-    uno::Reference< awt::XWindow > xLeftDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
-    uno::Reference< awt::XWindow > xRightDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
-    uno::Reference< awt::XWindow > xBottomDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xTopDockWindow( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xLeftDockWindow( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xRightDockWindow( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xBottomDockWindow( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
 
     SolarMutexClearableGuard aWriteLock;
     m_xContainerWindow = uno::Reference< awt::XWindow2 >( xParentWindow, uno::UNO_QUERY );

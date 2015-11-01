@@ -636,9 +636,9 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                                    const OUStringList&                                       lItems)
     throw(css::uno::Exception)
 {
-    css::uno::Reference< css::container::XNameContainer >   xAddRemoveSet = css::uno::Reference< css::container::XNameContainer >  (xSet, css::uno::UNO_QUERY);
-    css::uno::Reference< css::container::XNameReplace >     xReplaceeSet  = css::uno::Reference< css::container::XNameReplace >    (xSet, css::uno::UNO_QUERY);
-    css::uno::Reference< css::lang::XSingleServiceFactory > xFactory      = css::uno::Reference< css::lang::XSingleServiceFactory >(xSet, css::uno::UNO_QUERY);
+    css::uno::Reference< css::container::XNameContainer >   xAddRemoveSet(xSet, css::uno::UNO_QUERY);
+    css::uno::Reference< css::container::XNameReplace >     xReplaceeSet(xSet, css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XSingleServiceFactory > xFactory(xSet, css::uno::UNO_QUERY);
 
     for (OUStringList::const_iterator pIt  = lItems.begin();
                                       pIt != lItems.end()  ;

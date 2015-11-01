@@ -357,12 +357,12 @@ bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XForm
     if (!xController.is())
         return false;
 
-    Reference< XResultSetUpdate> _xCursor = Reference< XResultSetUpdate>(xController->getModel(), UNO_QUERY);
+    Reference< XResultSetUpdate> _xCursor(xController->getModel(), UNO_QUERY);
 
     if (!_xCursor.is())
         return false;
 
-    Reference< beans::XPropertySet> _xSet = Reference< beans::XPropertySet>(_xCursor, UNO_QUERY);
+    Reference< beans::XPropertySet> _xSet(_xCursor, UNO_QUERY);
     if (!_xSet.is())
         return false;
 

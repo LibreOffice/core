@@ -632,7 +632,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         {
             try
             {
-                Reference< XFlushable > xFlushable = Reference< XFlushable >::query( mxTypeDetection );
+                Reference< XFlushable > xFlushable( mxTypeDetection, UNO_QUERY );
                 if( xFlushable.is() )
                     xFlushable->flush();
             }

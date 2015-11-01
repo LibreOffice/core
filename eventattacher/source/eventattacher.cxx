@@ -297,7 +297,7 @@ Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Referen
 {
     XEventAttacher *pEventAttacher = static_cast<XEventAttacher*>(new EventAttacherImpl( comphelper::getComponentContext(rSMgr) ));
 
-    Reference< XInterface > xRet = Reference<XInterface>::query(pEventAttacher);
+    Reference< XInterface > xRet(pEventAttacher, UNO_QUERY);
 
     return xRet;
 }

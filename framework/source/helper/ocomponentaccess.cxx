@@ -55,7 +55,7 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
 
     // Set default return value, if method failed.
     // If no desktop exist and there is no task container - return an empty enumeration!
-    css::uno::Reference< XEnumeration > xReturn = css::uno::Reference< XEnumeration >();
+    css::uno::Reference< XEnumeration > xReturn;
 
     // Try to "lock" the desktop for access to task container.
     css::uno::Reference< XInterface > xLock = m_xOwner.get();
@@ -138,7 +138,7 @@ void OComponentAccess::impl_collectAllChildComponents(  const   css::uno::Refere
 css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame ) const
 {
     // Set default return value, if method failed.
-    css::uno::Reference< XComponent > xComponent = css::uno::Reference< XComponent >();
+    css::uno::Reference< XComponent > xComponent;
     // Does no controller exists?
     css::uno::Reference< XController > xController = xFrame->getController();
     if ( !xController.is() )

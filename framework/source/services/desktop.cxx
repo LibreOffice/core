@@ -525,10 +525,10 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() th
     // Start search with our direct active frame (if it exist!).
     // Search on his children for other active frames too.
     // Stop if no one could be found and return last of found ones.
-    css::uno::Reference< css::frame::XFramesSupplier > xLast = css::uno::Reference< css::frame::XFramesSupplier >( getActiveFrame(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFramesSupplier > xLast( getActiveFrame(), css::uno::UNO_QUERY );
     if( xLast.is() )
     {
-        css::uno::Reference< css::frame::XFramesSupplier > xNext = css::uno::Reference< css::frame::XFramesSupplier >( xLast->getActiveFrame(), css::uno::UNO_QUERY );
+        css::uno::Reference< css::frame::XFramesSupplier > xNext( xLast->getActiveFrame(), css::uno::UNO_QUERY );
         while( xNext.is() )
         {
             xLast = xNext;
