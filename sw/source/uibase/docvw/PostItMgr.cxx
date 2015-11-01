@@ -468,8 +468,8 @@ bool SwPostItMgr::CalcRects()
                 const SwTextAnnotationField* pTextAnnotationField =
                     dynamic_cast< const SwTextAnnotationField* >( pItem->GetFormatField().GetTextField() );
                 const ::sw::mark::IMark* pAnnotationMark =
-                    pTextAnnotationField != NULL ? pTextAnnotationField->GetAnnotationMark() : NULL;
-                if ( pAnnotationMark != NULL )
+                    pTextAnnotationField != nullptr ? pTextAnnotationField->GetAnnotationMark() : nullptr;
+                if ( pAnnotationMark != nullptr )
                 {
                     pItem->mLayoutStatus =
                         SwPostItHelper::getLayoutInfos(
@@ -1265,7 +1265,7 @@ class FieldDocWatchingStack : public SfxListener
             if (pHint->Which() == SwFormatFieldHintWhich::REMOVED)
             {
                 const SwFormatField* pField = pHint->GetField();
-                bAllInvalidated = pField == NULL;
+                bAllInvalidated = pField == nullptr;
                 if (!bAllInvalidated && m_rFilter(pField))
                 {
                     EndListening(const_cast<SwFormatField&>(*pField));
@@ -1275,7 +1275,7 @@ class FieldDocWatchingStack : public SfxListener
             else if (pHint->Which() == SwFormatFieldHintWhich::INSERTED)
             {
                 const SwFormatField* pField = pHint->GetField();
-                bAllInvalidated = pField == NULL;
+                bAllInvalidated = pField == nullptr;
                 if (!bAllInvalidated && m_rFilter(pField))
                 {
                     StartListening(const_cast<SwFormatField&>(*pField));
@@ -1330,7 +1330,7 @@ public:
     const SwFormatField* pop()
     {
         if (v.empty())
-            return NULL;
+            return nullptr;
         const SwFormatField* p = v.back();
         EndListening(const_cast<SwFormatField&>(*p));
         v.pop_back();
@@ -1510,7 +1510,7 @@ SwSidebarWin* SwPostItMgr::GetSidebarWin( const SfxBroadcaster* pBroadcaster) co
         if ( (*i)->GetBroadCaster() == pBroadcaster)
             return (*i)->pPostIt;
     }
-    return NULL;
+    return nullptr;
 }
 
 sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItField* pField) const
@@ -1520,7 +1520,7 @@ sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItFie
         if ( (*i)->GetFormatField().GetField() == pField )
             return dynamic_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt.get());
     }
-    return NULL;
+    return nullptr;
 }
 
 SwSidebarWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
@@ -1537,7 +1537,7 @@ SwSidebarWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
                 {
                     if ( iNextPostIt == mvPostItFields.begin() )
                     {
-                        return NULL;
+                        return nullptr;
                     }
                     --iNextPostIt;
                 }
@@ -1546,19 +1546,19 @@ SwSidebarWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
                     ++iNextPostIt;
                     if ( iNextPostIt == mvPostItFields.end() )
                     {
-                        return NULL;
+                        return nullptr;
                     }
                 }
                 // lets quit, we are back at the beginning
                 if ( (*iNextPostIt)->pPostIt == aPostIt)
-                    return NULL;
+                    return nullptr;
                 return (*iNextPostIt)->pPostIt;
             }
         }
-        return NULL;
+        return nullptr;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 long SwPostItMgr::GetNextBorder()

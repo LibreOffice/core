@@ -314,6 +314,8 @@ class SW_DLLPUBLIC SwFrm: public SwClient, public SfxBroadcaster
 
     const SwLayoutFrm* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
+    SwPageFrm* ImplFindPageFrm();
+
 protected:
     SwSortedObjs* mpDrawObjs;    // draw objects, can be 0
 
@@ -582,12 +584,12 @@ public:
     SwFrm               *GetPrev()  { return mpPrev; }
     SwLayoutFrm         *GetUpper() { return mpUpper; }
     SwRootFrm           *getRootFrm(){ return mpRoot; }
-    SwPageFrm           *FindPageFrm();
+    SwPageFrm           *FindPageFrm() { return (this != nullptr && IsPageFrm()) ? reinterpret_cast<SwPageFrm*>(this) : ImplFindPageFrm(); }
     SwFrm               *FindColFrm();
     SwRowFrm            *FindRowFrm();
-    SwFootnoteBossFrm        *FindFootnoteBossFrm( bool bFootnotes = false );
+    SwFootnoteBossFrm   *FindFootnoteBossFrm( bool bFootnotes = false );
     SwTabFrm            *ImplFindTabFrm();
-    SwFootnoteFrm            *ImplFindFootnoteFrm();
+    SwFootnoteFrm       *ImplFindFootnoteFrm();
     SwFlyFrm            *ImplFindFlyFrm();
     SwSectionFrm        *ImplFindSctFrm();
     SwFrm               *FindFooterOrHeader();

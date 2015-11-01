@@ -1754,44 +1754,41 @@ static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset );
 
 static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
 {
-    SwSortedObjs* pSortedObj = 0;
     const bool bPage = pFrm->IsPageFrm();
+    const SwSortedObjs* pSortedObj = bPage
+                        ? static_cast<SwPageFrm*>(pFrm)->GetSortedObjs()
+                        : pFrm->GetDrawObjs();
+    if (pSortedObj == nullptr)
+        return;
 
-    if ( bPage )
-        pSortedObj = static_cast<SwPageFrm*>(pFrm)->GetSortedObjs();
-    else
-        pSortedObj = pFrm->GetDrawObjs();
-
-    for ( size_t i = 0; pSortedObj && i < pSortedObj->size(); ++i)
+    for (SwAnchoredObject* pAnchoredObj : *pSortedObj)
     {
-        SwAnchoredObject* pAnchoredObj = (*pSortedObj)[i];
-
         const SwFrameFormat& rObjFormat = pAnchoredObj->GetFrameFormat();
         const SwFormatAnchor& rAnchor = rObjFormat.GetAnchor();
 
         // all except from the as character anchored objects are moved
         // when processing the page frame:
-        const bool bAsChar = (rAnchor.GetAnchorId() == FLY_AS_CHAR);
-        if ( !bPage && !bAsChar )
+        if ( !bPage && (rAnchor.GetAnchorId() != FLY_AS_CHAR) )
             continue;
 
         SwObjPositioningInProgress aPosInProgress( *pAnchoredObj );
 
-        if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) !=  nullptr )
+        if ( dynamic_cast< const SwFlyFrm *>( pAnchoredObj ) != nullptr )
         {
             SwFlyFrm* pFlyFrm( static_cast<SwFlyFrm*>(pAnchoredObj) );
             lcl_MoveAllLowers( pFlyFrm, rOffset );
             pFlyFrm->NotifyDrawObj();
             // --> let the active embedded object be moved
-            if ( pFlyFrm->Lower() )
+            SwFrm* pLower = pFlyFrm->Lower();
+            if ( pLower )
             {
-                if ( pFlyFrm->Lower()->IsNoTextFrm() )
+                if ( pLower->IsNoTextFrm() )
                 {
-                    SwContentFrm* pContentFrm = static_cast<SwContentFrm*>(pFlyFrm->Lower());
-                    SwRootFrm* pRoot = pFlyFrm->Lower()->getRootFrm();
-                    SwViewShell *pSh = pRoot ? pRoot->GetCurrShell() : 0;
+                    SwRootFrm* pRoot = pLower->getRootFrm();
+                    SwViewShell *pSh = pRoot ? pRoot->GetCurrShell() : nullptr;
                     if ( pSh )
                     {
+                        SwContentFrm* pContentFrm = static_cast<SwContentFrm*>(pLower);
                         SwOLENode* pNode = pContentFrm->GetNode()->GetOLENode();
                         if ( pNode )
                         {
@@ -1815,11 +1812,10 @@ static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
             SwAnchoredDrawObject* pAnchoredDrawObj( static_cast<SwAnchoredDrawObject*>(pAnchoredObj) );
 
             // don't touch objects that are not yet positioned:
-            const bool bNotYetPositioned = pAnchoredDrawObj->NotYetPositioned();
-            if ( bNotYetPositioned )
+            if ( pAnchoredDrawObj->NotYetPositioned() )
                 continue;
 
-            const Point aCurrAnchorPos = pAnchoredDrawObj->GetDrawObj()->GetAnchorPos();
+            const Point& aCurrAnchorPos = pAnchoredDrawObj->GetDrawObj()->GetAnchorPos();
             const Point aNewAnchorPos( ( aCurrAnchorPos + rOffset ) );
             pAnchoredDrawObj->DrawObj()->SetAnchorPos( aNewAnchorPos );
             pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
@@ -1874,12 +1870,13 @@ static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
 // Calculate how the pages have to be positioned
 void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
 {
-    vcl::RenderContext* pRenderContext = GetCurrShell() ? GetCurrShell()->GetOut() : 0;
+    SwViewShell* pSh = GetCurrShell();
+    vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : nullptr;
     // #i91432#
     // No calculation of page positions, if only an empty page is present.
     // This situation occurs when <SwRootFrm> instance is in construction
     // and the document contains only left pages.
-    if ( Lower()->GetNext() == 0 &&
+    if ( Lower()->GetNext() == nullptr &&
          static_cast<SwPageFrm*>(Lower())->IsEmptyPage() )
     {
         return;
@@ -1922,7 +1919,6 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
     const long nBorder = Frm().Pos().getX();
     const long nVisWidth = mnViewWidth - 2 * nBorder;
-    SwViewShell* pSh = GetCurrShell();
     const long nGapBetweenPages = pViewOpt ? pViewOpt->GetGapBetweenPages()
                                            : (pSh ? pSh->GetViewOptions()->GetGapBetweenPages()
                                                   : SwViewOption::GetDefGapBetweenPages());
@@ -1950,7 +1946,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
     bool bPageChanged = false;
     const bool bRTL = !IsLeftToRightViewLayout();
-    const SwTwips nSidebarWidth = SwPageFrm::GetSidebarBorderWidth( GetCurrShell() );
+    const SwTwips nSidebarWidth = SwPageFrm::GetSidebarBorderWidth( pSh );
 
     while ( pPageFrm )
     {

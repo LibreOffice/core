@@ -234,7 +234,7 @@ public:
     bool GetCurAttr( SfxItemSet& ,
                      const bool bMergeIndentValuesOfNumRule = false ) const;
     void SetAttrItem( const SfxPoolItem&, SetAttrMode nFlags = SetAttrMode::DEFAULT );
-    void SetAttrSet( const SfxItemSet&, SetAttrMode nFlags = SetAttrMode::DEFAULT, SwPaM* pCrsr = NULL );
+    void SetAttrSet( const SfxItemSet&, SetAttrMode nFlags = SetAttrMode::DEFAULT, SwPaM* pCrsr = nullptr );
 
     /** Get RES_CHRATR_* items of one type in the current selection.
      * @param nWhich WhichId of the collected items.
@@ -276,7 +276,7 @@ public:
     /// Query default attribute of document.
     const SfxPoolItem& GetDefault( sal_uInt16 nFormatHint ) const;
 
-    void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>(), SwPaM* pCrsr = NULL );
+    void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>(), SwPaM* pCrsr = nullptr );
     void GCAttr();
 
     /// @return the scripttpye of the selection.
@@ -525,11 +525,11 @@ public:
     void ChgNumRuleFormats( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
-    void SetNumRuleStart( bool bFlag = true, SwPaM* pCrsr = NULL );
-    bool IsNumRuleStart( SwPaM* pPaM = NULL ) const;
-    void SetNodeNumStart( sal_uInt16 nStt, SwPaM* = NULL );
+    void SetNumRuleStart( bool bFlag = true, SwPaM* pCrsr = nullptr );
+    bool IsNumRuleStart( SwPaM* pPaM = nullptr ) const;
+    void SetNodeNumStart( sal_uInt16 nStt, SwPaM* = nullptr );
 
-    sal_uInt16 GetNodeNumStart( SwPaM* pPaM = NULL ) const;
+    sal_uInt16 GetNodeNumStart( SwPaM* pPaM = nullptr ) const;
 
     bool ReplaceNumRule( const OUString& rOldRule, const OUString& rNewRule );
 
@@ -793,7 +793,7 @@ public:
     void GetINetAttrs( SwGetINetAttrs& rArr );
 
     OUString GetDropText( const sal_Int32 nChars ) const;
-    void   ReplaceDropText( const OUString &rStr, SwPaM* pPaM = NULL );
+    void   ReplaceDropText( const OUString &rStr, SwPaM* pPaM = nullptr );
 
     /** May an outline be moved or copied?
      Check whether it's in text body, not in table, and not read-only (move). */

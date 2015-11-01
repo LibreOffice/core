@@ -109,7 +109,7 @@ public:
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     static bool FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString, sal_uInt32 nFormat,
-                             double &aNumber, sal_Int32 nColumnType, SwDBField *pField = NULL );
+                             double &aNumber, sal_Int32 nColumnType, SwDBField *pField = nullptr );
 };
 
 inline  void SwDBField::SetExpansion(const OUString& rStr)

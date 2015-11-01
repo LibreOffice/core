@@ -54,12 +54,12 @@ class SwPageFrm: public SwFootnoteBossFrm
 
     sal_uInt16  m_nPhyPageNum; // Physical page number
 
-    bool m_bInvalidContent        :1;
+    bool m_bInvalidContent      :1;
     bool m_bInvalidLayout       :1;
-    bool m_bInvalidFlyContent     :1;
+    bool m_bInvalidFlyContent   :1;
     bool m_bInvalidFlyLayout    :1;
     bool m_bInvalidFlyInCnt     :1;
-    bool m_bFootnotePage             :1; // This Page is for document end footnotes
+    bool m_bFootnotePage        :1; // This Page is for document end footnotes
     bool m_bEmptyPage           :1; // This Page is an explicitly empty page
     bool m_bEndNotePage         :1; // 'Footnote page' for end notes
     bool m_bInvalidSpelling     :1; // We need online spelling

@@ -161,9 +161,9 @@ struct SwCrsrMoveState
     int m_nInNumPostionOffset;        ///< distance from number portion's start
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
-        m_pFill( NULL ),
-        m_p2Lines( NULL ),
-        m_pSpecialPos( NULL ),
+        m_pFill( nullptr ),
+        m_p2Lines( nullptr ),
+        m_pSpecialPos( nullptr ),
         m_eState( eSt ),
         m_nCursorBidiLevel( 0 ),
         m_bStop( false ),
@@ -185,8 +185,8 @@ struct SwCrsrMoveState
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
         m_pFill( pInitFill ),
-        m_p2Lines( NULL ),
-        m_pSpecialPos( NULL ),
+        m_p2Lines( nullptr ),
+        m_pSpecialPos( nullptr ),
         m_eState( MV_SETONLYTEXT ),
         m_nCursorBidiLevel( 0 ),
         m_bStop( false ),

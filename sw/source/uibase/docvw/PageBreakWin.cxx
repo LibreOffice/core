@@ -93,13 +93,13 @@ namespace
 
 SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrm *pFrm ) :
     SwFrameMenuButtonBase( pEditWin, pFrm ),
-    m_pPopupMenu( NULL ),
-    m_pLine( NULL ),
+    m_pPopupMenu( nullptr ),
+    m_pLine( nullptr ),
     m_bIsAppearing( false ),
     m_nFadeRate( 100 ),
     m_nDelayAppearing( 0 ),
     m_bDestroyed( false ),
-    m_pMousePt( NULL )
+    m_pMousePt( nullptr )
 {
     // Use pixels for the rest of the drawing
     SetMapMode( MapMode ( MAP_PIXEL ) );
@@ -128,9 +128,9 @@ void SwPageBreakWin::dispose()
 
     m_pLine.disposeAndClear();
     delete m_pPopupMenu;
-    m_pPopupMenu = NULL;
+    m_pPopupMenu = nullptr;
     delete m_pMousePt;
-    m_pMousePt = NULL;
+    m_pMousePt = nullptr;
 
     SwFrameMenuButtonBase::dispose();
 }
@@ -246,7 +246,7 @@ void SwPageBreakWin::Select( )
 
                         SfxStringItem aItem(pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
                         pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
-                                FN_FORMAT_TABLE_DLG, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aItem, NULL );
+                                FN_FORMAT_TABLE_DLG, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aItem, nullptr );
 
                         rSh.Pop( false );
                     }
@@ -259,7 +259,7 @@ void SwPageBreakWin::Select( )
                         SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
                         SfxStringItem aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), "textflow" );
                         pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
-                                SID_PARA_DLG, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aItem, &aPaMItem, NULL );
+                                SID_PARA_DLG, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aItem, &aPaMItem, nullptr );
                     }
                     rSh.LockView( bOldLock );
                     pEditWin->GrabFocus( );
@@ -277,19 +277,19 @@ void SwPageBreakWin::Select( )
                     SwContentFrm *pCnt = const_cast< SwContentFrm* >( pBodyFrm->ContainsContent() );
                     SwContentNode* pNd = pCnt->GetNode();
 
-                    pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( UNDO_UI_DELETE_PAGE_BREAK, NULL );
+                    pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( UNDO_UI_DELETE_PAGE_BREAK, nullptr );
 
                     SfxItemSet aSet( GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
                             RES_PAGEDESC, RES_PAGEDESC,
                             RES_BREAK, RES_BREAK,
-                            NULL );
+                            nullptr );
                     aSet.Put( SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
-                    aSet.Put( SwFormatPageDesc( NULL ) );
+                    aSet.Put( SwFormatPageDesc( nullptr ) );
 
                     SwPaM aPaM( *pNd );
                     pNd->GetDoc()->getIDocumentContentOperations().InsertItemSet( aPaM, aSet );
 
-                    pNd->GetDoc()->GetIDocumentUndoRedo( ).EndUndo( UNDO_UI_DELETE_PAGE_BREAK, NULL );
+                    pNd->GetDoc()->GetIDocumentUndoRedo( ).EndUndo( UNDO_UI_DELETE_PAGE_BREAK, nullptr );
                 }
             }
             break;
@@ -322,7 +322,7 @@ void SwPageBreakWin::Activate( )
 
 void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
 {
-    if ( pEvtPt != NULL )
+    if ( pEvtPt != nullptr )
     {
         if ( pEvtPt == m_pMousePt )
             return;
