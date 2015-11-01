@@ -273,9 +273,9 @@ void RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNo
 void RtfAttributeOutput::EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner)
 {
     bool bLastPara = false;
-    if (m_rExport.m_nTextTyp == TXT_FTN || m_rExport.m_nTextTyp == TXT_EDN)
+    if (m_rExport.m_nTextTyp == TXT_FTN || m_rExport.m_nTextTyp == TXT_EDN || m_rExport.m_pDoc->IsClipBoard())
     {
-        // We're ending a paragraph that is the last paragraph of a footnote or endnote.
+        // We're ending a paragraph that is the last paragraph of a footnote or endnote, or of clipboard.
         bLastPara = m_rExport.m_nCurrentNodeIndex && m_rExport.m_nCurrentNodeIndex == m_rExport.m_pCurPam->End()->nNode.GetIndex();
     }
 
@@ -290,7 +290,7 @@ void RtfAttributeOutput::EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTex
     else
     {
         aParagraph->append(SAL_NEWLINE_STRING);
-        // RTF_PAR at the end of the footnote would cause an additional empty paragraph.
+        // RTF_PAR at the end of the footnote or clipboard, would cause an additional empty paragraph.
         if (!bLastPara)
         {
             aParagraph->append(OOO_STRING_SVTOOLS_RTF_PAR);

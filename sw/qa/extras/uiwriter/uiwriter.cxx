@@ -527,6 +527,8 @@ void SwUiWriterTest::testExportRTF()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aData.indexOf("aaa"));
     CPPUNIT_ASSERT(aData.indexOf("bbb") != -1);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aData.indexOf("ccc"));
+    // Ensure there's no extra newline
+    CPPUNIT_ASSERT(aData.endsWith(OString("bbb}") + OString(SAL_NEWLINE_STRING) + OString("}")));
 }
 
 void SwUiWriterTest::testFdo74981()
