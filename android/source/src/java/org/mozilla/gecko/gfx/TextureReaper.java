@@ -6,6 +6,7 @@
 package org.mozilla.gecko.gfx;
 
 import android.opengl.GLES20;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -14,28 +15,30 @@ import java.util.ArrayList;
  */
 public class TextureReaper {
     private static TextureReaper sSharedInstance;
-    private ArrayList<Integer> mDeadTextureIDs;
+    private ArrayList<Integer> mDeadTextureIDs = new ArrayList<Integer>();
+    private static final String LOGTAG = TextureReaper.class.getSimpleName();
 
     private TextureReaper() {
-        mDeadTextureIDs = new ArrayList<Integer>();
     }
 
     public static TextureReaper get() {
-        if (sSharedInstance == null)
+        if (sSharedInstance == null) {
             sSharedInstance = new TextureReaper();
+        }
         return sSharedInstance;
     }
 
     public void add(int[] textureIDs) {
-        for (int textureID : textureIDs)
+        for (int textureID : textureIDs) {
             add(textureID);
+        }
     }
 
-    public void add(int textureID) {
+    public synchronized void add(int textureID) {
         mDeadTextureIDs.add(textureID);
     }
 
-    public void reap() {
+    public synchronized void  reap() {
         int numTextures = mDeadTextureIDs.size();
         // Adreno 200 will generate INVALID_VALUE if len == 0 is passed to glDeleteTextures,
         // even though it's not supposed to.
@@ -44,7 +47,13 @@ public class TextureReaper {
 
         int[] deadTextureIDs = new int[numTextures];
         for (int i = 0; i < numTextures; i++) {
-            deadTextureIDs[i] = mDeadTextureIDs.get(i);
+            Integer id = mDeadTextureIDs.get(i);
+            if (id == null) {
+                deadTextureIDs[i] = 0;
+                Log.e(LOGTAG, "Dead texture id is null");
+            } else {
+                deadTextureIDs[i] = mDeadTextureIDs.get(i);
+            }
         }
         mDeadTextureIDs.clear();
 
