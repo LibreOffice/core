@@ -873,6 +873,47 @@ renderGraphicHandle(LOKDocView* pDocView,
     }
 }
 
+/// Finishes the paint tile operation and returns the result, if any
+static gpointer
+paintTileFinish(LOKDocView* pDocView, GAsyncResult* res, GError **error)
+{
+    GTask* task = G_TASK(res);
+
+    g_return_val_if_fail(LOK_IS_DOC_VIEW(pDocView), NULL);
+    g_return_val_if_fail(g_task_is_valid(res, pDocView), NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+
+    return g_task_propagate_pointer(task, error);
+}
+
+/// Callback called in the main UI thread when paintTileInThread in LOK thread has finished
+static void
+paintTileCallback(GObject* sourceObject, GAsyncResult* res, gpointer userData)
+{
+    LOKDocView* pDocView = LOK_DOC_VIEW(sourceObject);
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    LOEvent* pLOEvent = static_cast<LOEvent*>(userData);
+    std::unique_ptr<TileBuffer>& buffer = priv->m_pTileBuffer;
+    int index = pLOEvent->m_nPaintTileX * buffer->m_nWidth + pLOEvent->m_nPaintTileY;
+    GError* error;
+
+    error = NULL;
+    GdkPixbuf* pPixBuf = static_cast<GdkPixbuf*>(paintTileFinish(pDocView, res, &error));
+    if (error != NULL)
+    {
+        g_warning("Unable to get painted GdkPixbuf: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+
+    buffer->m_mTiles[index].setPixbuf(pPixBuf);
+    buffer->m_mTiles[index].valid = true;
+    gdk_threads_add_idle(queueDraw, GTK_WIDGET(pDocView));
+
+    g_object_unref(pPixBuf);
+}
+
+
 static gboolean
 renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
 {
@@ -921,7 +962,13 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
 
             if (bPaint)
             {
-                GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+                LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE);
+                pLOEvent->m_nPaintTileX = nRow;
+                pLOEvent->m_nPaintTileY = nColumn;
+                pLOEvent->m_fPaintTileZoom = priv->m_fZoom;
+                GTask* task = g_task_new(pDocView, NULL, paintTileCallback, pLOEvent);
+                g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+
                 Tile& currentTile = priv->m_pTileBuffer->getTile(nRow, nColumn, priv->m_fZoom, task, priv->lokThreadPool);
                 GdkPixbuf* pPixBuf = currentTile.getBuffer();
                 gdk_cairo_set_source_pixbuf (pCairo, pPixBuf,
@@ -1516,12 +1563,7 @@ paintTileInThread (gpointer data)
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom),
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom));
 
-    //create a mapping for it
-    buffer->m_mTiles[index].setPixbuf(pPixBuf);
-    buffer->m_mTiles[index].valid = true;
-    gdk_threads_add_idle(queueDraw, GTK_WIDGET(pDocView));
-
-    g_object_unref(pPixBuf);
+    g_task_return_pointer(task, pPixBuf, g_object_unref);
 }
 
 
