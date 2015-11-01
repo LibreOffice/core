@@ -68,6 +68,13 @@ ScpAction scp_Copy_Dmg_Background_Image
     Subdir = ".background";
 End
 
+ScpAction scp_Copy_Dmg_Volume_Icon
+    Copy = "VolumeIcon.icns";
+    Name = ".VolumeIcon.icns";
+    UnixRights = 444;
+    Styles = ();
+End
+
 ScpAction scp_Copy_Ds_Store
     Copy = "DS_Store";
     DevVersionCopy = "DS_Store_Dev";
