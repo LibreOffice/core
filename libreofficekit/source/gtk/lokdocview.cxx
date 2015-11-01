@@ -2155,8 +2155,7 @@ lok_doc_view_open_document_finish (LOKDocView* pDocView, GAsyncResult* res, GErr
     GTask* task = G_TASK(res);
 
     g_return_val_if_fail(g_task_is_valid(res, pDocView), false);
-    //FIXME: make source_tag work
-    //g_return_val_if_fail(g_task_get_source_tag(task) == lok_doc_view_open_document, NULL);
+    g_return_val_if_fail(g_task_get_source_tag(task) == lok_doc_view_open_document, NULL);
     g_return_val_if_fail(error == NULL || *error == NULL, false);
 
     return g_task_propagate_boolean(task, error);
@@ -2178,6 +2177,7 @@ lok_doc_view_open_document (LOKDocView* pDocView,
 
     priv->m_aDocPath = pPath;
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+    g_task_set_source_tag(task, reinterpret_cast<gpointer>(lok_doc_view_open_document));
 
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
     if (error != NULL)
