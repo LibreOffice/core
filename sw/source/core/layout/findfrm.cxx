@@ -393,7 +393,7 @@ const SwContentFrm* SwContentFrm::ImplGetNextContentFrm( bool bFwd ) const
     return pContentFrm;
 }
 
-SwPageFrm* SwFrm::FindPageFrm()
+SwPageFrm* SwFrm::ImplFindPageFrm()
 {
     SwFrm *pRet = this;
     while ( pRet && !pRet->IsPageFrm() )
