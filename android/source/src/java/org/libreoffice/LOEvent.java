@@ -47,6 +47,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public KeyEvent mKeyEvent;
     public RectF mInvalidationRect;
     public SelectionHandle.HandleType mHandleType;
+    public String mValue;
 
     public LOEvent(int type) {
         mType = type;
@@ -58,10 +59,18 @@ public class LOEvent implements Comparable<LOEvent> {
         mComposedTileLayer = composedTileLayer;
     }
 
-    public LOEvent(int type, String filename) {
+    public LOEvent(int type, String someString) {
         mType = type;
         mTypeString = "String";
-        mString = filename;
+        mString = someString;
+        mValue = null;
+    }
+
+    public LOEvent(int type, String key, String value) {
+        mType = type;
+        mTypeString = "key / value";
+        mString = key;
+        mValue = value;
     }
 
     public LOEvent(int type, int partIndex) {

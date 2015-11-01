@@ -208,7 +208,7 @@ public class InvalidationHandler implements Document.MessageCallback {
         float newTop = moveToRect.top;
 
         if (cursorRectangle.right < moveToRect.left || cursorRectangle.left < moveToRect.left) {
-            newLeft = cursorRectangle.left -  (moveToRect.width() * 0.1f);
+            newLeft = cursorRectangle.left - (moveToRect.width() * 0.1f);
         } else if (cursorRectangle.right > moveToRect.right || cursorRectangle.left > moveToRect.right) {
             newLeft = cursorRectangle.right - (moveToRect.width() * 0.9f);
         }
@@ -306,6 +306,7 @@ public class InvalidationHandler implements Document.MessageCallback {
 
     /**
      * Trigger a transition to a new overlay state.
+     *
      * @param next - new state to transition to
      */
     public synchronized void changeStateTo(OverlayState next) {
@@ -314,6 +315,7 @@ public class InvalidationHandler implements Document.MessageCallback {
 
     /**
      * Executes a transition from old overlay state to a new overlay state.
+     *
      * @param previous - old state
      * @param next - new state
      */

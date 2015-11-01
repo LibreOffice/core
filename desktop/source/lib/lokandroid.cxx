@@ -183,6 +183,14 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getPart
     return (jint) pDocument->pClass->getPart(pDocument);
 }
 
+extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getPartPageRectangles
+    (JNIEnv* pEnv, jobject aObject)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    char* pRectangles = pDocument->pClass->getPartPageRectangles(pDocument);
+    return pEnv->NewStringUTF(pRectangles);
+}
+
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getParts
     (JNIEnv* pEnv, jobject aObject)
 {
@@ -277,22 +285,27 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postKey
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postMouseEvent
-    (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y, jint count)
+    (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y, jint count, jint button, jint modifier)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
-    pDocument->pClass->postMouseEvent(pDocument, type, x, y, count, MOUSE_LEFT, 0);
+    pDocument->pClass->postMouseEvent(pDocument, type, x, y, count, button, modifier);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUnoCommand
-    (JNIEnv* pEnv, jobject aObject, jstring command)
+    (JNIEnv* pEnv, jobject aObject, jstring command, jstring arguments)
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
     const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
+    const char* pArguments = nullptr;
+    if (arguments != NULL)
+        pArguments = pEnv->GetStringUTFChars(arguments, NULL);
 
-    pDocument->pClass->postUnoCommand(pDocument, pCommand, 0);
+    pDocument->pClass->postUnoCommand(pDocument, pCommand, pArguments);
 
     pEnv->ReleaseStringUTFChars(command, pCommand);
+    if (arguments != NULL)
+        pEnv->ReleaseStringUTFChars(arguments, pArguments);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setTextSelection
@@ -300,6 +313,22 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setText
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
     pDocument->pClass->setTextSelection(pDocument, type, x, y);
+}
+
+extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getTextSelection
+    (JNIEnv* pEnv, jobject aObject, jstring mimeType)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+
+    const char* pMimeType = pEnv->GetStringUTFChars(mimeType, NULL);
+
+    char* pUsedMimeType = 0;
+    char* pSelection = pDocument->pClass->getTextSelection(pDocument, pMimeType, &pUsedMimeType);
+    free(pUsedMimeType);
+
+    pEnv->ReleaseStringUTFChars(mimeType, pMimeType);
+
+    return pEnv->NewStringUTF(pSelection);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setGraphicSelection
@@ -316,4 +345,17 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_resetSe
     pDocument->pClass->resetSelection(pDocument);
 }
 
+extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getCommandValues
+    (JNIEnv* pEnv, jobject aObject, jstring command)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+
+    const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
+
+    char* pValue = pDocument->pClass->getCommandValues(pDocument, pCommand);
+
+    pEnv->ReleaseStringUTFChars(command, pCommand);
+
+    return pEnv->NewStringUTF(pValue);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

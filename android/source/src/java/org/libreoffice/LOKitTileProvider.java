@@ -388,12 +388,12 @@ public class LOKitTileProvider implements TileProvider {
             String keyString = keyEvent.getCharacters();
             for (int i = 0; i < keyString.length(); i++) {
                 int codePoint = keyString.codePointAt(i);
-                mDocument.postKeyEvent(Office.KEY_PRESS, codePoint, getKeyCode(keyEvent));
+                mDocument.postKeyEvent(Document.KEY_EVENT_PRESS, codePoint, getKeyCode(keyEvent));
             }
         } else if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-            mDocument.postKeyEvent(Office.KEY_PRESS, getCharCode(keyEvent), getKeyCode(keyEvent));
+            mDocument.postKeyEvent(Document.KEY_EVENT_PRESS, getCharCode(keyEvent), getKeyCode(keyEvent));
         } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-            mDocument.postKeyEvent(Office.KEY_RELEASE, getCharCode(keyEvent), getKeyCode(keyEvent));
+            mDocument.postKeyEvent(Document.KEY_EVENT_RELEASE, getCharCode(keyEvent), getKeyCode(keyEvent));
         }
     }
 
@@ -401,7 +401,7 @@ public class LOKitTileProvider implements TileProvider {
         int x = (int) pixelToTwip(inDocument.x, mDPI);
         int y = (int) pixelToTwip(inDocument.y, mDPI);
 
-        mDocument.postMouseEvent(type, x, y, numberOfClicks);
+        mDocument.postMouseEvent(type, x, y, numberOfClicks, Document.MOUSE_BUTTON_LEFT, Document.KEYBOARD_MODIFIER_NONE);
     }
 
     /**
@@ -409,7 +409,7 @@ public class LOKitTileProvider implements TileProvider {
      */
     @Override
     public void mouseButtonDown(PointF documentCoordinate, int numberOfClicks) {
-        mouseButton(Document.MOUSE_BUTTON_DOWN, documentCoordinate, numberOfClicks);
+        mouseButton(Document.MOUSE_EVENT_BUTTON_DOWN, documentCoordinate, numberOfClicks);
     }
 
     /**
@@ -417,12 +417,12 @@ public class LOKitTileProvider implements TileProvider {
      */
     @Override
     public void mouseButtonUp(PointF documentCoordinate, int numberOfClicks) {
-        mouseButton(Document.MOUSE_BUTTON_UP, documentCoordinate, numberOfClicks);
+        mouseButton(Document.MOUSE_EVENT_BUTTON_UP, documentCoordinate, numberOfClicks);
     }
 
     @Override
-    public void postUnoCommand(String command) {
-        mDocument.postUnoCommand(command);
+    public void postUnoCommand(String command, String arguments) {
+        mDocument.postUnoCommand(command, arguments);
     }
 
     private void setTextSelection(int type, PointF documentCoordinate) {

@@ -114,7 +114,7 @@ public interface TileProvider {
      *
      * @param command - the .uno: command, like ".uno:Bold"
      */
-    void postUnoCommand(String command);
+    void postUnoCommand(String command, String arguments);
 
     /**
      * Send text selection start coordinate.

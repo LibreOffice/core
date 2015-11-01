@@ -12,12 +12,12 @@ package org.libreoffice.kit;
 import java.nio.ByteBuffer;
 
 public class Document {
-    public static final int PART_MODE_DEFAULT = 0;
-    public static final int PART_MODE_SLIDE = 1;
-    public static final int PART_MODE_NOTES = 2;
-    public static final int PART_MODE_SLIDENOTES = 3;
-    public static final int PART_MODE_EMBEDDEDOBJ = 4;
+    public static final int PART_MODE_SLIDE = 0;
+    public static final int PART_MODE_NOTES = 1;
 
+    /**
+     * Document types
+     */
     public static final int DOCTYPE_TEXT = 0;
     public static final int DOCTYPE_SPREADSHEET = 1;
     public static final int DOCTYPE_PRESENTATION = 2;
@@ -27,10 +27,15 @@ public class Document {
     /**
      * Mouse event types
      */
-    public static final int MOUSE_BUTTON_DOWN = 0;
-    public static final int MOUSE_BUTTON_UP = 1;
-    public static final int MOUSE_MOVE = 2;
+    public static final int MOUSE_EVENT_BUTTON_DOWN = 0;
+    public static final int MOUSE_EVENT_BUTTON_UP = 1;
+    public static final int MOUSE_EVENT_MOVE = 2;
 
+    /**
+     * Key event types
+     */
+    public static final int KEY_EVENT_PRESS = 0;
+    public static final int KEY_EVENT_RELEASE = 1;
 
     /**
      * State change types
@@ -39,6 +44,11 @@ public class Document {
     public static final int ITALIC = 1;
     public static final int UNDERLINE = 2;
     public static final int STRIKEOUT = 3;
+
+    public static final int ALIGN_LEFT= 4;
+    public static final int ALIGN_CENTER = 5;
+    public static final int ALIGN_RIGHT= 6;
+    public static final int ALIGN_JUSTIFY= 7;
 
     /**
      * Callback message types
@@ -52,6 +62,13 @@ public class Document {
     public static final int CALLBACK_GRAPHIC_SELECTION = 6;
     public static final int CALLBACK_HYPERLINK_CLICKED = 7;
     public static final int CALLBACK_STATE_CHANGED = 8;
+    public static final int CALLBACK_STATUS_INTICATOR_START = 9;
+    public static final int CALLBACK_STATUS_INTICATOR_SET_VALUE = 10;
+    public static final int CALLBACK_STATUS_INTICATOR_FINISH = 11;
+    public static final int CALLBACK_SEARCH_NOT_FOUND = 12;
+    public static final int CALLBACK_DOCUMENT_SIZE_CHANGED = 13;
+    public static final int CALLBACK_SET_PART = 14;
+    public static final int CALLBACK_SEARCH_RESULT_SELECTION = 15;
 
     /**
      * Set text selection types
@@ -65,6 +82,19 @@ public class Document {
      */
     public static final int SET_GRAPHIC_SELECTION_START = 0;
     public static final int SET_GRAPHIC_SELECTION_END = 1;
+
+    /**
+     * Mouse button type
+     */
+    public static final int MOUSE_BUTTON_LEFT = 1;
+    public static final int MOUSE_BUTTON_MIDDLE = 2;
+    public static final int MOUSE_BUTTON_RIGHT = 4;
+
+    public static final int KEYBOARD_MODIFIER_NONE = 0x0000;
+    public static final int KEYBOARD_MODIFIER_SHIFT = 0x1000;
+    public static final int KEYBOARD_MODIFIER_MOD1 = 0x2000;
+    public static final int KEYBOARD_MODIFIER_MOD2 = 0x4000;
+    public static final int KEYBOARD_MODIFIER_MOD3 = 0x8000;
 
     private final ByteBuffer handle;
     private MessageCallback messageCallback = null;
@@ -105,6 +135,8 @@ public class Document {
 
     public native void setPartMode(int partMode);
 
+    public native String getPartPageRectangles();
+
     public native long getDocumentHeight();
 
     public native long getDocumentWidth();
@@ -140,13 +172,14 @@ public class Document {
      * @param y - y coordinate
      * @param count - number of events
      */
-    public native void postMouseEvent(int type, int x, int y, int count);
+    public native void postMouseEvent(int type, int x, int y, int count, int button, int modifier);
 
     /**
      * Post a .uno: command to LOK
      * @param command - the command, like ".uno:Bold"
+     * @param arguments
      */
-    public native void postUnoCommand(String command);
+    public native void postUnoCommand(String command, String arguments);
 
     /**
      * Change text selection.
@@ -168,6 +201,8 @@ public class Document {
      * Reset current (any kind of) selection.
      */
     public native void resetSelection();
+
+    public native String getCommandValues(String command);
 
     /**
      * Callback to retrieve messages from LOK

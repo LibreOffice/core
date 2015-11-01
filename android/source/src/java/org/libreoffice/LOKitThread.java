@@ -243,7 +243,7 @@ public class LOKitThread extends Thread {
                 mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.NONE);
                 break;
             case LOEvent.UNO_COMMAND:
-                mTileProvider.postUnoCommand(event.mString);
+                mTileProvider.postUnoCommand(event.mString, event.mValue);
                 break;
         }
     }
