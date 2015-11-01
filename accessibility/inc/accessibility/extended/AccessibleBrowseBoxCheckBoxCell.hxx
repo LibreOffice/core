@@ -22,7 +22,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include "accessibility/extended/accessiblebrowseboxcell.hxx"
+#include <accessibility/extended/accessiblebrowseboxcell.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <tools/wintypes.hxx>
 

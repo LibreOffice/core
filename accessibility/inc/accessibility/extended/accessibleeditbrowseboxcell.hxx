@@ -19,7 +19,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEEDITBROWSEBOXCELL_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEEDITBROWSEBOXCELL_HXX
 
-#include "accessiblebrowseboxcell.hxx"
+#include <accessiblebrowseboxcell.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
