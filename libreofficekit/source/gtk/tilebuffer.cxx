@@ -79,7 +79,7 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
     }
 }
 
-Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task,
+Tile& TileBuffer::getTile(int x, int y, GTask* task,
                           GThreadPool* lokThreadPool)
 {
     int index = x * m_nWidth + y;
@@ -113,6 +113,12 @@ void LOEvent::destroy(void* pMemory)
 {
     LOEvent* pLOEvent = static_cast<LOEvent*>(pMemory);
     delete pLOEvent;
+}
+
+GQuark
+LOKTileBufferErrorQuark(void)
+{
+    return g_quark_from_static_string("lok-tilebuffer-error");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
