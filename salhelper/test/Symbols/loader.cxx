@@ -19,7 +19,6 @@
 
 #include <salhelper/dynload.hxx>
 #include <rtl/ustring>
-#include <stdio.h>
 #include "samplelib.hxx"
 
 using namespace salhelper;
