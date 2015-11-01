@@ -9,7 +9,7 @@ import org.libreoffice.R;
  */
 public class SelectionHandleEnd extends SelectionHandle {
     public SelectionHandleEnd(Context context) {
-        super(getBitmapForDrawable(context, R.drawable.handle_end));
+        super(getBitmapForDrawable(context, R.drawable.handle_alias_end));
     }
 
     /**
