@@ -2492,21 +2492,18 @@ void SwSectionFrm::InvalidateFootnotePos()
     }
 }
 
-/** Returns the value that the section would like to be
- * greater if it has undersized TextFrms in it,
- * otherwise Null.
- * If necessary the undersized-flag is corrected.
- */
-long SwSectionFrm::Undersize( bool bOverSize )
+SwTwips SwSectionFrm::Undersize() const
 {
-    m_bUndersized = false;
-    SWRECTFN( this )
-    long nRet = InnerHeight() - (Prt().*fnRect->fnGetHeight)();
-    if( nRet > 0 )
-        m_bUndersized = true;
-    else if( !bOverSize )
-        nRet = 0;
-    return nRet;
+    SWRECTFN(this);
+    return InnerHeight() - (Prt().*fnRect->fnGetHeight)();
+}
+
+SwTwips SwSectionFrm::Undersize(bool bOverSize)
+{
+    SWRECTFN(this);
+    const auto nRet = InnerHeight() - (Prt().*fnRect->fnGetHeight)();
+    m_bUndersized = (nRet > 0);
+    return (nRet <= 0 && !bOverSize) ? 0 : nRet;
 }
 
 void SwSectionFrm::CalcFootnoteContent()
