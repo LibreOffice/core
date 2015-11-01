@@ -201,15 +201,14 @@ HwpImportFilter::HwpImportFilter(const Reference< XMultiServiceFactory >& rFact)
 {
     OUString sService( WRITER_IMPORTER_NAME );
     try {
-        Reference< XDocumentHandler >
-            xHandler( rFact->createInstance( sService ), UNO_QUERY );
+        Reference< XDocumentHandler > xHandler( rFact->createInstance( sService ), UNO_QUERY );
 
         HwpReader *p = new HwpReader;
         p->setDocumentHandler( xHandler );
 
-        Reference< XImporter > xImporter = Reference< XImporter >( xHandler, UNO_QUERY );
+        Reference< XImporter > xImporter( xHandler, UNO_QUERY );
         rImporter = xImporter;
-        Reference< XFilter > xFilter = Reference< XFilter >( p );
+        Reference< XFilter > xFilter( p );
         rFilter = xFilter;
     }
     catch( Exception & )

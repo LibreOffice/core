@@ -258,9 +258,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
 
     Sequence< Any > arguments(1);
-        arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
+    arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
 
-    Reference< XFilePicker > xFilePicker = Reference< XFilePicker >(
+    Reference< XFilePicker > xFilePicker(
         g_xFactory->createInstanceWithArguments(
             FILE_PICKER_SERVICE_NAME, arguments ), UNO_QUERY );
 
