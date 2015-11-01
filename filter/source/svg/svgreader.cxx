@@ -816,6 +816,21 @@ struct AnnotatingVisitor
             case XML_ID:
                 maStopIdMap.insert(std::make_pair(sValue,nStopNumber));
                 break;
+            case XML_STOP_COLOR:
+                if( maGradientVector.empty() ||
+                    maGradientVector.back().maStops.empty() )
+                    break;
+                parseColor( sValue.toUtf8().getStr(), maGradientStopVector[
+                                  maGradientVector.back().maStops.back()].maStopColor );
+                break;
+            case XML_STOP_OPACITY:
+                if( maGradientVector.empty() ||
+                    maGradientVector.back().maStops.empty() )
+                    break;
+                parseOpacity( sValue.toUtf8().getStr(),
+                              maGradientStopVector[
+                                  maGradientVector.back().maStops.back()].maStopColor );
+                break;
             case XML_OFFSET:
                 io_rGradientStop.mnStopPosition = sValue.toDouble();
                 break;
@@ -1021,22 +1036,6 @@ struct AnnotatingVisitor
                 break;
             case XML_TEXT_ANCHOR:
                 parseTextAlign(maCurrState,aValueUtf8.getStr());
-                break;
-            case XML_STOP_COLOR:
-                if( maGradientVector.empty() ||
-                    maGradientVector.back().maStops.empty() )
-                    break;
-                parseColor( aValueUtf8.getStr(),
-                            maGradientStopVector[
-                                maGradientVector.back().maStops.back()].maStopColor );
-                break;
-            case XML_STOP_OPACITY:
-                if( maGradientVector.empty() ||
-                    maGradientVector.back().maStops.empty() )
-                    break;
-                parseOpacity( aValueUtf8.getStr(),
-                              maGradientStopVector[
-                                  maGradientVector.back().maStops.back()].maStopColor );
                 break;
             case XML_TOKEN_INVALID:
                 SAL_INFO("svg", "unhandled token");
