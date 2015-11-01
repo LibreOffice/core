@@ -504,17 +504,17 @@ void SwTableShell::Execute(SfxRequest &rReq)
 // The attributes of all lines will be read and the strongest wins.
             const SvxBorderLine* pBorderLine;
             SvxBorderLine aBorderLine;
-            if ((pBorderLine = rCoreBox.GetTop()) != NULL)
+            if ((pBorderLine = rCoreBox.GetTop()) != nullptr)
                 lcl_TabGetMaxLineWidth(pBorderLine, aBorderLine);
-            if ((pBorderLine = rCoreBox.GetBottom()) != NULL)
+            if ((pBorderLine = rCoreBox.GetBottom()) != nullptr)
                 lcl_TabGetMaxLineWidth(pBorderLine, aBorderLine);
-            if ((pBorderLine = rCoreBox.GetLeft()) != NULL)
+            if ((pBorderLine = rCoreBox.GetLeft()) != nullptr)
                 lcl_TabGetMaxLineWidth(pBorderLine, aBorderLine);
-            if ((pBorderLine = rCoreBox.GetRight()) != NULL)
+            if ((pBorderLine = rCoreBox.GetRight()) != nullptr)
                 lcl_TabGetMaxLineWidth(pBorderLine, aBorderLine);
-            if ((pBorderLine = aCoreInfo.GetHori()) != NULL)
+            if ((pBorderLine = aCoreInfo.GetHori()) != nullptr)
                 lcl_TabGetMaxLineWidth(pBorderLine, aBorderLine);
-            if ((pBorderLine = aCoreInfo.GetVert()) != NULL)
+            if ((pBorderLine = aCoreInfo.GetVert()) != nullptr)
                 lcl_TabGetMaxLineWidth(pBorderLine, aBorderLine);
 
             if(aBorderLine.GetOutWidth() == 0)
@@ -524,17 +524,17 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
 
             bool bLine = false;
-            if( aBox.GetTop() != NULL )
+            if( aBox.GetTop() != nullptr )
                 aBox.SetLine(&aBorderLine, SvxBoxItemLine::TOP), bLine |= true;
-            if( aBox.GetBottom() != NULL )
+            if( aBox.GetBottom() != nullptr )
                 aBox.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM), bLine |= true;
-            if( aBox.GetLeft() != NULL )
+            if( aBox.GetLeft() != nullptr )
                 aBox.SetLine(&aBorderLine, SvxBoxItemLine::LEFT), bLine |= true;
-            if( aBox.GetRight() != NULL )
+            if( aBox.GetRight() != nullptr )
                 aBox.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT), bLine |= true;
-            if( aInfo.GetHori() != NULL )
+            if( aInfo.GetHori() != nullptr )
                 aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::HORI), bLine |= true;
-            if( aInfo.GetVert() != NULL )
+            if( aInfo.GetVert() != nullptr )
                 aInfo.SetLine(&aBorderLine, SvxBoxInfoItemLine::VERT), bLine |= true;
 
             aCoreSet.Put( aBox  );

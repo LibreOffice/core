@@ -24,7 +24,7 @@
  * These objects are created (using new) in cache access classes; they are
  * destroyed by the cache.
  *
- * One can access these objects by array index or by searching in the array
+ * One can access these objects by array index or by searching in the array.
  * If you access it by index, managing the index is the responsibility of
  * the cache user.
  *

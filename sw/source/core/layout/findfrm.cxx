@@ -393,7 +393,7 @@ const SwContentFrm* SwContentFrm::ImplGetNextContentFrm( bool bFwd ) const
     return pContentFrm;
 }
 
-SwPageFrm* SwFrm::FindPageFrm()
+SwPageFrm* SwFrm::ImplFindPageFrm()
 {
     SwFrm *pRet = this;
     while ( pRet && !pRet->IsPageFrm() )
@@ -403,13 +403,13 @@ SwPageFrm* SwFrm::FindPageFrm()
         else if ( pRet->IsFlyFrm() )
         {
             // #i28701# - use new method <GetPageFrm()>
-            if ( static_cast<SwFlyFrm*>(pRet)->GetPageFrm() )
-                pRet = static_cast<SwFlyFrm*>(pRet)->GetPageFrm();
-            else
-                pRet = static_cast<SwFlyFrm*>(pRet)->AnchorFrm();
+            const auto pFly(static_cast<SwFlyFrm*>(pRet));
+            pRet = pFly->GetPageFrm();
+            if (pRet == nullptr)
+                pRet = pFly->AnchorFrm();
         }
         else
-            return 0;
+            return nullptr;
     }
     return static_cast<SwPageFrm*>(pRet);
 }

@@ -330,11 +330,11 @@ public:
                         const RndStdIds _nAnchorId,
                         const sal_Int16 _eHoriRelOrient = css::text::RelOrientation::FRAME,
                         const sal_Int16 _eVertRelOrient = css::text::RelOrientation::FRAME,
-                        const SwPosition* _pToCharContentPos = NULL,
+                        const SwPosition* _pToCharContentPos = nullptr,
                         const bool _bFollowTextFlow = false,
                         bool _bMirror = false,
-                        Point* _opRef = NULL,
-                        Size* _opPercent = NULL,
+                        Point* _opRef = nullptr,
+                        Size* _opPercent = nullptr,
                         const SwFormatFrmSize* pFormatFrmSize = 0 ) const;
 
     /// Set size of draw objects.
@@ -492,7 +492,7 @@ public:
     bool GetObjAttr( SfxItemSet &rSet ) const;
     bool SetObjAttr( const SfxItemSet &rSet );
 
-    const SdrObject* GetBestObject( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny, bool bFlat = true, const svx::ISdrObjectFilter* pFilter = NULL );
+    const SdrObject* GetBestObject( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny, bool bFlat = true, const svx::ISdrObjectFilter* pFilter = nullptr );
     bool GotoObj( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny);
 
     /// Set DragMode (e.g. Rotate), but do nothing when frame is selected.
@@ -664,7 +664,7 @@ public:
 
     void SetTabBorders( const SfxItemSet& rSet );
     void GetTabBorders(       SfxItemSet& rSet) const;
-    void SetTabLineStyle(const Color* pColor, bool bSetLine = false, const editeng::SvxBorderLine* pBorderLine = NULL);
+    void SetTabLineStyle(const Color* pColor, bool bSetLine = false, const editeng::SvxBorderLine* pBorderLine = nullptr);
 
     void SetTabBackground( const SvxBrushItem &rNew );
     void GetTabBackground( SvxBrushItem &rToFill ) const;

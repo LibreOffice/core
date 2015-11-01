@@ -920,9 +920,9 @@ public:
     size_t GetPageDescCnt() const { return m_PageDescs.size(); }
     const SwPageDesc& GetPageDesc(const size_t i) const { return *m_PageDescs[i]; }
     SwPageDesc& GetPageDesc(size_t const i) { return *m_PageDescs[i]; }
-    SwPageDesc* FindPageDesc(const OUString& rName, size_t* pPos = NULL) const;
+    SwPageDesc* FindPageDesc(const OUString& rName, size_t* pPos = nullptr) const;
     // Just searches the pointer in the m_PageDescs vector!
-    bool        ContainsPageDesc(const SwPageDesc *pDesc, size_t* pPos = NULL);
+    bool        ContainsPageDesc(const SwPageDesc *pDesc, size_t* pPos = nullptr);
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFormatId, -HlpId can be prevented. */

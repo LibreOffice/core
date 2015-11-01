@@ -254,7 +254,7 @@ void SwFrm::PrepareMake(vcl::RenderContext* pRenderContext)
         const bool bTab = IsTabFrm();
         bool bNoSect = IsInSct();
         bool bOldTabLock = false, bFoll = false;
-        SwFlowFrm* pThis = bCnt ? static_cast<SwContentFrm*>(this) : NULL;
+        SwFlowFrm* pThis = bCnt ? static_cast<SwContentFrm*>(this) : nullptr;
 
         if ( bTab )
         {
