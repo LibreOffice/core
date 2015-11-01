@@ -107,9 +107,9 @@ SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
     , mpMetadataAuthor(0)
     , mpMetadataDate(0)
     , mpMenuButton(0)
-    , mpAnchor(NULL)
-    , mpShadow(NULL)
-    , mpTextRangeOverlay(NULL)
+    , mpAnchor(nullptr)
+    , mpShadow(nullptr)
+    , mpTextRangeOverlay(nullptr)
     , mColorAnchor()
     , mColorDark()
     , mColorLight()
@@ -193,13 +193,13 @@ void SwSidebarWin::dispose()
     RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
     AnchorOverlayObject::DestroyAnchorOverlayObject( mpAnchor );
-    mpAnchor = NULL;
+    mpAnchor = nullptr;
 
     ShadowOverlayObject::DestroyShadowOverlayObject( mpShadow );
-    mpShadow = NULL;
+    mpShadow = nullptr;
 
     delete mpTextRangeOverlay;
-    mpTextRangeOverlay = NULL;
+    mpTextRangeOverlay = nullptr;
 
     mpMenuButton.disposeAndClear();
 
@@ -694,14 +694,14 @@ void SwSidebarWin::SetPosAndSize()
         {
             const SwTextAnnotationField* pTextAnnotationField =
                 dynamic_cast< const SwTextAnnotationField* >( mrSidebarItem.GetFormatField().GetTextField() );
-            if ( pTextAnnotationField != NULL
-                 && pTextAnnotationField->GetpTextNode() != NULL )
+            if ( pTextAnnotationField != nullptr
+                 && pTextAnnotationField->GetpTextNode() != nullptr )
             {
                 SwTextNode* pTextNode = pTextAnnotationField->GetpTextNode();
                 SwNodes& rNds = pTextNode->GetDoc()->GetNodes();
                 SwContentNode* const pContentNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetContentNode();
                 SwPosition aStartPos( *pContentNd, mrSidebarItem.maLayoutInfo.mnStartContent );
-                SwShellCrsr* pTmpCrsr = NULL;
+                SwShellCrsr* pTmpCrsr = nullptr;
                 const bool bTableCrsrNeeded = pTextNode->FindTableBoxStartNode() != pContentNd->FindTableBoxStartNode();
                 if ( bTableCrsrNeeded )
                 {
@@ -736,10 +736,10 @@ void SwSidebarWin::SetPosAndSize()
             }
         }
 
-        if ( mpTextRangeOverlay != NULL )
+        if ( mpTextRangeOverlay != nullptr )
         {
             mpTextRangeOverlay->setRanges( aAnnotationTextRanges );
-            if ( mpAnchor != NULL && mpAnchor->getLineSolid() )
+            if ( mpAnchor != nullptr && mpAnchor->getLineSolid() )
             {
                 mpTextRangeOverlay->ShowSolidBorder();
             }
@@ -762,7 +762,7 @@ void SwSidebarWin::SetPosAndSize()
     else
     {
         delete mpTextRangeOverlay;
-        mpTextRangeOverlay = NULL;
+        mpTextRangeOverlay = nullptr;
     }
 }
 
@@ -1301,7 +1301,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     pWin->Anchor()->SetAnchorState(AS_END);
                 }
                 mpAnchor->setLineSolid(true);
-                if ( mpTextRangeOverlay != NULL )
+                if ( mpTextRangeOverlay != nullptr )
                 {
                     mpTextRangeOverlay->ShowSolidBorder();
                 }
@@ -1315,7 +1315,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
             if (mpAnchor)
             {
                 mpAnchor->setLineSolid(true);
-                if ( mpTextRangeOverlay != NULL )
+                if ( mpTextRangeOverlay != nullptr )
                 {
                     mpTextRangeOverlay->ShowSolidBorder();
                 }
@@ -1344,7 +1344,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                         if ( pTopWinSelf != mrMgr.GetActiveSidebarWin() )
                         {
                             pTopWinSelf->Anchor()->setLineSolid(false);
-                            if ( pTopWinSelf->TextRange() != NULL )
+                            if ( pTopWinSelf->TextRange() != nullptr )
                             {
                                 pTopWinSelf->TextRange()->HideSolidBorder();
                             }
@@ -1353,7 +1353,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     }
                 }
                 mpAnchor->setLineSolid(false);
-                if ( mpTextRangeOverlay != NULL )
+                if ( mpTextRangeOverlay != nullptr )
                 {
                     mpTextRangeOverlay->HideSolidBorder();
                 }

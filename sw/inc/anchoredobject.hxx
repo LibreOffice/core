@@ -214,12 +214,12 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to member <mpDrawObj>
         void SetDrawObj( SdrObject& _rDrawObj );
-        const SdrObject* GetDrawObj() const { return mpDrawObj;}
-        SdrObject* DrawObj() { return mpDrawObj;}
+        const SdrObject* GetDrawObj() const { return mpDrawObj; }
+        SdrObject* DrawObj() { return mpDrawObj; }
 
         // accessors to member <mpAnchorFrm>
-        const SwFrm* GetAnchorFrm() const { return mpAnchorFrm;}
-        SwFrm* AnchorFrm() { return mpAnchorFrm;}
+        const SwFrm* GetAnchorFrm() const { return mpAnchorFrm; }
+        SwFrm* AnchorFrm() { return mpAnchorFrm; }
         void ChgAnchorFrm( SwFrm* _pNewAnchorFrm );
         /** determine anchor frame containing the anchor position
 
@@ -232,8 +232,8 @@ class SW_DLLPUBLIC SwAnchoredObject
         */
         SwFrm* GetAnchorFrmContainingAnchPos();
 
-        SwPageFrm* GetPageFrm() { return mpPageFrm;}
-        const SwPageFrm* GetPageFrm() const { return mpPageFrm;}
+        SwPageFrm* GetPageFrm() { return mpPageFrm; }
+        const SwPageFrm* GetPageFrm() const { return mpPageFrm; }
         void SetPageFrm( SwPageFrm* _pNewPageFrm );
 
         /** method to determine the page frame, on which the 'anchor' of

@@ -250,7 +250,7 @@ public:
     inline void     SetMergeSilent( bool bVal )     { bMergeSilent = bVal; }
 
     /// Merging of data records into fields.
-    bool            MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent = NULL );
+    bool            MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent = nullptr );
     static bool     Merge(SwWrtShell* pSh);
     void            MergeCancel();
 
@@ -335,7 +335,7 @@ public:
     static OUString GetDBField(
                     css::uno::Reference< css::beans::XPropertySet > xColumnProp,
                     const SwDBFormatData& rDBFormatData,
-                    double *pNumber = NULL);
+                    double *pNumber = nullptr);
 
     static css::uno::Reference< css::sdbc::XConnection>
             GetConnection(const OUString& rDataSource,

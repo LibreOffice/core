@@ -58,11 +58,11 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     mbIfAccTableShouldDisposing( false ), //A member to identify if the acc table should dispose
     mbInDtor(false),
     mnFrmId( SwFrm::mnLastFrmId++ ),
-    mpRoot( pSib ? pSib->getRootFrm() : 0 ),
-    mpUpper( 0 ),
-    mpNext( 0 ),
-    mpPrev( 0 ),
-    mpDrawObjs( 0 ),
+    mpRoot( pSib ? pSib->getRootFrm() : nullptr ),
+    mpUpper(nullptr),
+    mpNext(nullptr),
+    mpPrev(nullptr),
+    mpDrawObjs(nullptr),
     mnFrmType(0),
     mbInfBody( false ),
     mbInfTab ( false ),
@@ -2157,11 +2157,12 @@ TYPEINIT1(SwLayoutFrm,SwFrm);
 
 SwTwips SwLayoutFrm::InnerHeight() const
 {
-    if( !Lower() )
-        return 0;
-    SwTwips nRet = 0;
     const SwFrm* pCnt = Lower();
+    if (!pCnt)
+        return 0;
+
     SWRECTFN( this )
+    SwTwips nRet = 0;
     if( pCnt->IsColumnFrm() || pCnt->IsCellFrm() )
     {
         do
