@@ -129,8 +129,7 @@ public:
      * @param nTileWidth logical width of the rendered rectangle, in TWIPs.
      * @param nTileHeight logical height of the rendered rectangle, in TWIPs.
      */
-    inline void paintTile(
-                          unsigned char* pBuffer,
+    inline void paintTile(unsigned char* pBuffer,
                           const int nCanvasWidth,
                           const int nCanvasHeight,
                           const int nTilePosX,
@@ -192,6 +191,8 @@ public:
      * @param nX horizontal position in document coordinates
      * @param nY vertical position in document coordinates
      * @param nCount number of clicks: 1 for single click, 2 for double click
+     * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
+     * @param nModifier: which keyboard modifier: (see include/rsc/rsc-vcl-shared-types.hxx for possible values)
      */
     inline void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
     {
