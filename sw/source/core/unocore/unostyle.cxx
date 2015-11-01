@@ -1610,10 +1610,10 @@ public:
         return *mpItemSet;
     }
 
-    const SwPageDesc& GetOldPageDesc();
+    const SwPageDesc* GetOldPageDesc();
 };
 
-const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
+const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 {
     if(!mpOldPageDesc)
     {
@@ -1633,8 +1633,7 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
             }
         }
     }
-    assert(mpOldPageDesc != 0);
-    return *mpOldPageDesc;
+    return mpOldPageDesc;
 }
 
 static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
@@ -1988,8 +1987,9 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         {
             if( pDoc )
             {
-                SwPageDesc* pPageDesc = pDoc->FindPageDesc( rBase.GetOldPageDesc().GetName() );
-                if( pPageDesc )
+                const SwPageDesc* pOldPageDesc = rBase.GetOldPageDesc();
+                SwPageDesc* pPageDesc = pOldPageDesc ? pDoc->FindPageDesc(pOldPageDesc->GetName()) : nullptr;
+                if (pPageDesc)
                 {
                     drawing::TextVerticalAdjust nVA;
                     rValue >>= nVA;
@@ -3874,27 +3874,28 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         default: break;
                     }
 
-                    const SwPageDesc& rDesc = aBase.GetOldPageDesc();
+                    const SwPageDesc* pDesc = aBase.GetOldPageDesc();
+                    assert(pDesc);
                     const SwFrameFormat* pFrameFormat = 0;
-                    bool bShare = (bHeader && rDesc.IsHeaderShared()) || (!bHeader && rDesc.IsFooterShared());
-                    bool bShareFirst = rDesc.IsFirstShared();
+                    bool bShare = (bHeader && pDesc->IsHeaderShared()) || (!bHeader && pDesc->IsFooterShared());
+                    bool bShareFirst = pDesc->IsFirstShared();
                     // TextLeft returns the left content if there is one,
                     // Text and TextRight return the master content.
                     // TextRight does the same as Text and is for
                     // comptability only.
                     if( bLeft && !bShare )
                     {
-                        pFrameFormat = &rDesc.GetLeft();
+                        pFrameFormat = &pDesc->GetLeft();
                     }
                     else if (bFirst && !bShareFirst)
                     {
-                        pFrameFormat = &rDesc.GetFirstMaster();
+                        pFrameFormat = &pDesc->GetFirstMaster();
                         // no need to make GetFirstLeft() accessible
                         // since it is always shared
                     }
                     else
                     {
-                        pFrameFormat = &rDesc.GetMaster();
+                        pFrameFormat = &pDesc->GetMaster();
                     }
                     const uno::Reference< text::XText > xRet =
                         lcl_makeHeaderFooter(nRes, bHeader, pFrameFormat);
