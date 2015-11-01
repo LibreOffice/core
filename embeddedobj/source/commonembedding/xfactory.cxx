@@ -295,7 +295,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             throw io::IOException(); // TODO:
     }
 
-    uno::Reference< uno::XInterface > xResult = uno::Reference< uno::XInterface > (
+    uno::Reference< uno::XInterface > xResult(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                                 m_xContext,
                                                 aObject ) ),

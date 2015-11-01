@@ -135,7 +135,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
     const OUString providerKey("com.sun.star.script.provider.ScriptProviderFor");
     const OUString languageProviderName("com.sun.star.script.provider.LanguageScriptProvider");
     sal_uInt16 itemId = startItemId;
-    Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xContext->getServiceManager(), UNO_QUERY_THROW );
+    Reference< XContentEnumerationAccess > xEnumAccess( m_xContext->getServiceManager(), UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
 
     while ( xEnum->hasMoreElements() )
