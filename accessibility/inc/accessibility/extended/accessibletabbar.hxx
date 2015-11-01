@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include "accessibility/extended/accessibletabbarbase.hxx"
+#include <accessibility/extended/accessibletabbarbase.hxx>
 
 #include <vector>
 
