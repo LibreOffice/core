@@ -12,9 +12,6 @@ package org.libreoffice.kit;
 import java.nio.ByteBuffer;
 
 public class Office {
-    public static final int KEY_PRESS = 0;
-    public static final int KEY_RELEASE = 1;
-
     private ByteBuffer handle;
 
     public Office(ByteBuffer handle) {

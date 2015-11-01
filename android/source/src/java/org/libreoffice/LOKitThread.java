@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
-/*
+/**
  * Thread that communicates with LibreOffice through LibreOfficeKit JNI interface. The thread
  * consumes events from other threads (mainly the UI thread) and acts accordingly.
  */
@@ -243,7 +243,7 @@ public class LOKitThread extends Thread {
                 mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.NONE);
                 break;
             case LOEvent.UNO_COMMAND:
-                mTileProvider.postUnoCommand(event.mString);
+                mTileProvider.postUnoCommand(event.mString, event.mValue);
                 break;
         }
     }
