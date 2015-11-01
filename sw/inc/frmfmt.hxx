@@ -75,7 +75,7 @@ public:
     /// Creates the views.
     virtual void MakeFrms();
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
+    virtual Graphic MakeGraphic( ImageMap* pMap = nullptr );
 
     /**  @return the IMapObject defined at format (Fly)
         in the ImageMap at position Point.
@@ -184,7 +184,7 @@ public:
     SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = 0,
                                       const bool bCalcFrm = false ) const;
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) override;
+    virtual Graphic MakeGraphic( ImageMap* pMap = nullptr ) override;
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
@@ -247,7 +247,7 @@ protected:
     SwDrawFrameFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
                     SwFrameFormat *pDrvdFrm )
         : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_DRAWFRMFMT ),
-          pSdrObjCached(NULL),
+          pSdrObjCached(nullptr),
 
           meLayoutDir( SwFrameFormat::HORI_L2R ),
 
@@ -259,7 +259,7 @@ protected:
     SwDrawFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrm )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_DRAWFRMFMT ),
-          pSdrObjCached(NULL),
+          pSdrObjCached(nullptr),
           meLayoutDir( SwFrameFormat::HORI_L2R ),
 
           mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
@@ -279,7 +279,7 @@ public:
      Reset delete marks. */
     virtual void MakeFrms() override;
 
-    virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) override;
+    virtual Graphic MakeGraphic( ImageMap* pMap = nullptr ) override;
 
     virtual SwFrameFormat::tLayoutDir GetLayoutDir() const override;
     virtual void SetLayoutDir( const SwFrameFormat::tLayoutDir _eLayoutDir ) override;
