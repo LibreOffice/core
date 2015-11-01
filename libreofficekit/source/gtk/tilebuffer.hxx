@@ -19,6 +19,8 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 
+#define LOK_TILEBUFFER_ERROR (LOKTileBufferErrorQuark())
+
 // We know that VirtualDevices use a DPI of 96.
 const int DPI = 96;
 // Lets use a square of side 256 pixels for each tile.
@@ -43,6 +45,11 @@ float pixelToTwip(float fInput, float zoom);
    @return the twip value corresponding to given pixel value
 */
 float twipToPixel(float fInput, float zoom);
+
+/**
+   Gets GQuark identifying this tile buffer errors
+*/
+GQuark LOKTileBufferErrorQuark(void);
 
 /**
    This class represents a single tile in the tile buffer.
@@ -113,7 +120,7 @@ class TileBuffer
 
        @return the tile at the mentioned position (x, y)
      */
-    Tile& getTile(int x, int y, float aZoom, GTask* task, GThreadPool* pool);
+    Tile& getTile(int x, int y, GTask* task, GThreadPool* pool);
     /// Destroys all the tiles in the tile buffer; also frees the memory allocated
     /// for all the Tile objects.
     void resetAllTiles();
@@ -152,6 +159,12 @@ enum
     LOK_PAINT_TILE,
     LOK_POST_MOUSE_EVENT,
     LOK_SET_GRAPHIC_SELECTION
+};
+
+enum
+{
+    LOK_TILEBUFFER_CHANGED,
+    LOK_TILEBUFFER_MEMORY
 };
 
 /**
@@ -198,6 +211,7 @@ struct LOEvent
     int m_nPaintTileX;
     int m_nPaintTileY;
     float m_fPaintTileZoom;
+    TileBuffer* m_pTileBuffer;
     ///@}
 
     /// @name postMouseEvent parameters
@@ -232,6 +246,7 @@ struct LOEvent
         , m_nPaintTileX(0)
         , m_nPaintTileY(0)
         , m_fPaintTileZoom(0)
+        , m_pTileBuffer(nullptr)
         , m_nPostMouseEventType(0)
         , m_nPostMouseEventX(0)
         , m_nPostMouseEventY(0)
