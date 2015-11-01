@@ -483,7 +483,8 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             ::SetProgressState( nPercentPageNum, pImp->GetShell()->GetDoc()->GetDocShell());
         }
         pOptTab = 0;
-             // No Shortcut for Idle or CalcLayout
+
+        // No Shortcut for Idle or CalcLayout
         if ( !IsIdle() && !IsComplete() && IsShortCut( pPage ) )
         {
             pRoot->DeleteEmptySct();
