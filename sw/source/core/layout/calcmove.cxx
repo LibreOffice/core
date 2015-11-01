@@ -638,27 +638,37 @@ static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, const SwFrm* pFrm, long
     rBot = std::max( rBot, nMax );
 }
 
-//TODO: This should really be const, but Undersize modifies the flag.
-size_t SwPageFrm::GetContentHeight()
+size_t SwPageFrm::GetContentHeight(const long nTop, const long nBottom) const
 {
+    OSL_ENSURE(!(FindBodyCont() && FindBodyCont()->Lower() && FindBodyCont()->Lower()->IsColumnFrm()),
+               "SwPageFrm::GetContentHeight(): No support for columns.");
+
     // In pages without columns, the content defines the size.
-    long nBot = Frm().Top();
-    SwFrm *pFrm = Lower();
+    long nBot = Frm().Top() + nTop;
+    const SwFrm *pFrm = Lower();
     while (pFrm)
     {
         long nTmp = 0;
-        SwFrm *pCnt = static_cast<SwLayoutFrm*>(pFrm)->ContainsAny();
+        const SwFrm *pCnt = static_cast<const SwLayoutFrm*>(pFrm)->ContainsAny();
         while (pCnt && (pCnt->GetUpper() == pFrm ||
-            static_cast<SwLayoutFrm*>(pFrm)->IsAnLower(pCnt)))
+               static_cast<const SwLayoutFrm*>(pFrm)->IsAnLower(pCnt)))
         {
             nTmp += pCnt->Frm().Height();
             if (pCnt->IsTextFrm() &&
-                static_cast<SwTextFrm*>(pCnt)->IsUndersized())
-                nTmp += static_cast<SwTextFrm*>(pCnt)->GetParHeight()
-                - pCnt->Prt().Height();
-            else if (pCnt->IsSctFrm() &&
-                static_cast<SwSectionFrm*>(pCnt)->IsUndersized())
-                nTmp += static_cast<SwSectionFrm*>(pCnt)->Undersize();
+                static_cast<const SwTextFrm*>(pCnt)->IsUndersized())
+            {
+                // This TextFrm would like to be a bit bigger.
+                nTmp += static_cast<const SwTextFrm*>(pCnt)->GetParHeight()
+                      - pCnt->Prt().Height();
+            }
+            else if (pCnt->IsSctFrm())
+            {
+                // Grow if undersized, but don't shrink if oversized.
+                const auto delta = static_cast<const SwSectionFrm*>(pCnt)->Undersize();
+                if (delta > 0)
+                    nTmp += delta;
+            }
+
             pCnt = pCnt->FindNext();
         }
         // OD 29.10.2002 #97265# - consider invalid body frame properties
@@ -687,7 +697,7 @@ size_t SwPageFrm::GetContentHeight()
             lcl_CheckObjects(m_pSortedObjs, pFrm, nBot);
         pFrm = pFrm->GetNext();
     }
-
+    nBot += nBottom;
     // And the page anchored ones
     if (m_pSortedObjs)
         lcl_CheckObjects(m_pSortedObjs, this, nBot);
@@ -723,23 +733,25 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
             }
             else
             {
-                if ( !pAccess )
+                if (!pAccess)
                 {
                     pAccess = o3tl::make_unique<SwBorderAttrAccess>(SwFrm::GetCache(), this);
                     pAttrs = pAccess->Get();
                 }
                 assert(pAttrs);
-                // In BrowseView, we use fixed settings
+
                 SwViewShell *pSh = getRootFrm()->GetCurrShell();
-                if ( pSh && pSh->GetViewOptions()->getBrowseMode() )
+                if (pSh && pSh->GetViewOptions()->getBrowseMode())
                 {
+                    // In BrowseView, we use fixed settings
                     const Size aBorder = pRenderContext->PixelToLogic( pSh->GetBrowseBorder() );
                     const long nTop    = pAttrs->CalcTopLine()   + aBorder.Height();
                     const long nBottom = pAttrs->CalcBottomLine()+ aBorder.Height();
 
                     long nWidth = GetUpper() ? static_cast<SwRootFrm*>(GetUpper())->GetBrowseWidth() : 0;
-                    if ( nWidth < pSh->GetBrowseWidth() )
-                        nWidth = pSh->GetBrowseWidth();
+                    const auto nDefWidth = pSh->GetBrowseWidth();
+                    if (nWidth < nDefWidth)
+                        nWidth = nDefWidth;
                     nWidth += + 2 * aBorder.Width();
 
                     nWidth = std::max( nWidth, 2L * aBorder.Width() + 4L*MM50 );
@@ -754,56 +766,8 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
                     else
                     {
                         // In pages without columns, the content defines the size.
-                        long nBot = Frm().Top() + nTop;
-                        SwFrm *pFrm = Lower();
-                        while ( pFrm )
-                        {
-                            long nTmp = 0;
-                            SwFrm *pCnt = static_cast<SwLayoutFrm*>(pFrm)->ContainsAny();
-                            while ( pCnt && (pCnt->GetUpper() == pFrm ||
-                                             static_cast<SwLayoutFrm*>(pFrm)->IsAnLower( pCnt )))
-                            {
-                                nTmp += pCnt->Frm().Height();
-                                if( pCnt->IsTextFrm() &&
-                                    static_cast<SwTextFrm*>(pCnt)->IsUndersized() )
-                                    nTmp += static_cast<SwTextFrm*>(pCnt)->GetParHeight()
-                                            - pCnt->Prt().Height();
-                                else if( pCnt->IsSctFrm() &&
-                                         static_cast<SwSectionFrm*>(pCnt)->IsUndersized() )
-                                    nTmp += static_cast<SwSectionFrm*>(pCnt)->Undersize();
-                                pCnt = pCnt->FindNext();
-                            }
-                            // OD 29.10.2002 #97265# - consider invalid body frame properties
-                            if ( pFrm->IsBodyFrm() &&
-                                 ( !pFrm->GetValidSizeFlag() ||
-                                   !pFrm->GetValidPrtAreaFlag() ) &&
-                                 ( pFrm->Frm().Height() < pFrm->Prt().Height() )
-                               )
-                            {
-                                nTmp = std::min( nTmp, pFrm->Frm().Height() );
-                            }
-                            else
-                            {
-                                // OD 30.10.2002 #97265# - assert invalid lower property
-                                OSL_ENSURE( !(pFrm->Frm().Height() < pFrm->Prt().Height()),
-                                        "SwPageFrm::MakeAll(): Lower with frame height < printing height" );
-                                nTmp += pFrm->Frm().Height() - pFrm->Prt().Height();
-                            }
-                            if ( !pFrm->IsBodyFrm() )
-                                nTmp = std::min( nTmp, pFrm->Frm().Height() );
-                            nBot += nTmp;
-                            // Here we check whether paragraph anchored objects
-                            // protrude outside the Body/FootnoteCont.
-                            if( m_pSortedObjs && !pFrm->IsHeaderFrm() &&
-                                !pFrm->IsFooterFrm() )
-                                lcl_CheckObjects( m_pSortedObjs, pFrm, nBot );
-                            pFrm = pFrm->GetNext();
-                        }
-                        nBot += nBottom;
-                        // And the page anchored ones
-                        if ( m_pSortedObjs )
-                            lcl_CheckObjects( m_pSortedObjs, this, nBot );
-                        nBot -= Frm().Top();
+                        long nBot = GetContentHeight(nTop, nBottom);
+
                         // #i35143# - If second page frame
                         // exists, the first page doesn't have to fulfill the
                         // visible area.
@@ -821,10 +785,11 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
                         + pAttrs->CalcRightLine() + aBorder.Width() ) );
                     Prt().Height( Frm().Height() - (nTop + nBottom) );
                     mbValidSize = mbValidPrtArea = true;
+                    continue;
                 }
                 else if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden())
                 {
-                    auto height = Frm().Height();
+                    long height = 0;
                     SwLayoutFrm *pBody = FindBodyCont();
                     if ( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm() )
                     {
@@ -833,7 +798,8 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
                     }
                     else
                     {
-                        height = GetContentHeight();
+                        // No need for borders.
+                        height = GetContentHeight(0, 0);
                     }
 
                     if (height > 0)
@@ -843,24 +809,19 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
                         Prt().Height(height);
 
                         mbValidSize = mbValidPrtArea = true;
+                        continue;
                     }
-                    else
-                    {
-                        // Fallback to default formatting.
-                        // This is especially relevant when
-                        // loading a doc with Hide Whitespace
-                        // is enabled--frame heights are zero.
-                        Frm().SSize(pAttrs->GetSize());
-                        Format(pRenderContext, pAttrs);
-                    }
+
+                    // Fallback to default formatting. Especially relevant
+                    // when loading a doc when Hide Whitespace is enabled.
+                    // Heights are zero initially.
                 }
-                else
-                {   // Set FixSize. For pages, this is not done from Upper, but from
-                    // the attribute.
-                    //FIXME: This resets the size when (mbValidSize && !mbValidPrtArea).
-                    Frm().SSize( pAttrs->GetSize() );
-                    Format( pRenderContext, pAttrs );
-                }
+
+                // Set FixSize. For pages, this is not done from Upper, but from
+                // the attribute.
+                //FIXME: This resets the size when (mbValidSize && !mbValidPrtArea).
+                Frm().SSize( pAttrs->GetSize() );
+                Format( pRenderContext, pAttrs );
             }
         }
     } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
@@ -1172,8 +1133,8 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     bool bMovedBwd = false;
     // as long as bMovedFwd is false, the Frm may flow backwards (until
     // it has been moved forward once)
-    bool bMovedFwd  = false;
-    sal_Bool    bFormatted  = sal_False;    // For the widow/orphan rules, we encourage the
+    bool bMovedFwd = false;
+    sal_Bool bFormatted = sal_False;        // For the widow/orphan rules, we encourage the
                                             // last ContentFrm of a chain to format. This only
                                             // needs to happen once. Every time the Frm is
                                             // moved, the flag will have to be reset.
