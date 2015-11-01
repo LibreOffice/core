@@ -19,7 +19,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXHEADERCELL_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXHEADERCELL_HXX
 
-#include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
+#include <accessibility/extended/AccessibleBrowseBoxBase.hxx>
 
 namespace accessibility
 {

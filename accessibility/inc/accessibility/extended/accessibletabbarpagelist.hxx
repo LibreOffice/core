@@ -24,7 +24,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase3.hxx>
-#include "accessibility/extended/accessibletabbarbase.hxx"
+#include <accessibility/extended/accessibletabbarbase.hxx>
 
 #include <vector>
 
