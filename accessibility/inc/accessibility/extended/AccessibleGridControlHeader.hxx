@@ -22,8 +22,8 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLHEADER_HXX
 
 
-#include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"
-#include "accessibility/extended/AccessibleGridControlTableBase.hxx"
+#include <accessibility/extended/AccessibleGridControlHeaderCell.hxx>
+#include <accessibility/extended/AccessibleGridControlTableBase.hxx>
 
 
 

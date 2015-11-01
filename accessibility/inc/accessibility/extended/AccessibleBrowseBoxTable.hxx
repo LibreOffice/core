@@ -21,7 +21,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXTABLE_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXTABLE_HXX
 
-#include "accessibility/extended/AccessibleBrowseBoxTableBase.hxx"
+#include <accessibility/extended/AccessibleBrowseBoxTableBase.hxx>
 
 
 
