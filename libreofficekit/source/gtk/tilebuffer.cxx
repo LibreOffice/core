@@ -115,4 +115,10 @@ void LOEvent::destroy(void* pMemory)
     delete pLOEvent;
 }
 
+GQuark
+LOKTileBufferErrorQuark(void)
+{
+    return g_quark_from_static_string("lok-tilebuffer-error");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -912,7 +912,12 @@ paintTileCallback(GObject* sourceObject, GAsyncResult* res, gpointer userData)
     GdkPixbuf* pPixBuf = static_cast<GdkPixbuf*>(paintTileFinish(pDocView, res, &error));
     if (error != NULL)
     {
-        g_warning("Unable to get painted GdkPixbuf: %s", error->message);
+        if (error->domain == LOK_TILEBUFFER_ERROR &&
+            error->code == LOK_TILEBUFFER_CHANGED)
+            g_info("Skipping paint tile request because corresponding"
+                   "tile buffer has been destroyed");
+        else
+            g_warning("Unable to get painted GdkPixbuf: %s", error->message);
         g_error_free(error);
         return;
     }
@@ -977,6 +982,7 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
                 pLOEvent->m_nPaintTileX = nRow;
                 pLOEvent->m_nPaintTileY = nColumn;
                 pLOEvent->m_fPaintTileZoom = priv->m_fZoom;
+                pLOEvent->m_pTileBuffer = &*priv->m_pTileBuffer;
                 GTask* task = g_task_new(pDocView, NULL, paintTileCallback, pLOEvent);
                 g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
@@ -1541,6 +1547,17 @@ paintTileInThread (gpointer data)
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+
+    // check if "source" tile buffer is different from "current" tile buffer
+    if (pLOEvent->m_pTileBuffer != &*priv->m_pTileBuffer)
+    {
+        pLOEvent->m_pTileBuffer = nullptr;
+        g_task_return_new_error(task,
+                                LOK_TILEBUFFER_ERROR,
+                                LOK_TILEBUFFER_CHANGED,
+                                "TileBuffer has changed");
+        return;
+    }
     std::unique_ptr<TileBuffer>& buffer = priv->m_pTileBuffer;
     int index = pLOEvent->m_nPaintTileX * buffer->m_nWidth + pLOEvent->m_nPaintTileY;
     if (buffer->m_mTiles.find(index) != buffer->m_mTiles.end() &&
@@ -1550,7 +1567,10 @@ paintTileInThread (gpointer data)
     GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileSizePixels, nTileSizePixels);
     if (!pPixBuf)
     {
-        g_info ("Error allocating memory to pixbuf");
+        g_task_return_new_error(task,
+                                LOK_TILEBUFFER_ERROR,
+                                LOK_TILEBUFFER_MEMORY,
+                                "Error allocating memory to GdkPixbuf");
         return;
     }
 
@@ -1573,6 +1593,20 @@ paintTileInThread (gpointer data)
                                          aTileRectangle.x, aTileRectangle.y,
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom),
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom));
+
+    // Its likely that while the tilebuffer has changed, one of the paint tile
+    // requests has passed the previous check at start of this function, and has
+    // rendered the tile already. We want to stop such rendered tiles from being
+    // stored in new tile buffer.
+    if (pLOEvent->m_pTileBuffer != &*priv->m_pTileBuffer)
+    {
+        pLOEvent->m_pTileBuffer = nullptr;
+        g_task_return_new_error(task,
+                                LOK_TILEBUFFER_ERROR,
+                                LOK_TILEBUFFER_CHANGED,
+                                "TileBuffer has changed");
+        return;
+    }
 
     g_task_return_pointer(task, pPixBuf, g_object_unref);
 }
