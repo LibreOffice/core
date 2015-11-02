@@ -711,7 +711,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	graphic_HTML \
 	graphic_SWF \
 	jpg_JPEG \
-	met_OS2_Metafile \
         mov_MOV \
 	pbm_Portable_Bitmap \
 	pcd_Photo_CD_Base \
@@ -742,7 +741,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	EPS___Encapsulated_PostScript \
 	GIF___Graphics_Interchange \
 	JPG___JPEG \
-	MET___OS_2_Metafile \
 	mov__MOV \
 	PBM___Portable_Bitmap \
 	PCT___Mac_Pict \
@@ -771,7 +769,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_gif_Export \
 	draw_html_Export \
 	draw_jpg_Export \
-	draw_met_Export \
 	draw_pbm_Export \
 	draw_pct_Export \
 	draw_pgm_Export \
@@ -795,7 +792,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_
 	graphic_SWF \
 	impress_CGM_Computer_Graphics_Metafile \
 	jpg_JPEG \
-	met_OS2_Metafile \
 	pbm_Portable_Bitmap \
 	pct_Mac_Pict \
 	pgm_Portable_Graymap \
@@ -818,7 +814,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 	impress_gif_Export \
 	impress_html_Export \
 	impress_jpg_Export \
-	impress_met_Export \
 	impress_pbm_Export \
 	impress_pct_Export \
 	impress_pgm_Export \
@@ -860,7 +855,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics
 	eps_Encapsulated_PostScript \
 	gif_Graphics_Interchange \
 	jpg_JPEG \
-	met_OS2_Metafile \
         mov_MOV \
 	pbm_Portable_Bitmap \
 	pcd_Photo_CD_Base \
@@ -896,8 +890,6 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	gif_Import \
 	jpg_Export \
 	jpg_Import \
-	met_Export \
-	met_Import \
 	pbm_Export \
 	pbm_Import \
 	pcd_Import_Base \

@@ -23,7 +23,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	CustomTarget_svg \
 	$(if $(filter EXPORT,$(BUILD_TYPE)), \
 	    Library_egi \
-	    Library_eme \
 	    Library_epb \
 	    Library_epg \
 	    Library_epp \
