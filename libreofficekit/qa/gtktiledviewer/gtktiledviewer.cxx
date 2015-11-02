@@ -57,12 +57,16 @@ public:
     std::vector<Header> m_aHeaders;
     /// Height for row bar, width for column bar.
     int m_nSizePixel;
+    /// Left/top position for the column/row bar -- initially 0, then may grow due to scrolling.
+    int m_nPositionPixel;
     TiledBarType m_eType;
 
     TiledRowColumnBar(TiledBarType eType);
     static gboolean draw(GtkWidget* pWidget, cairo_t* pCairo, gpointer pData);
     gboolean drawImpl(GtkWidget* pWidget, cairo_t* pCairo);
     static gboolean docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
+    /// Adjustments of the doc widget changed -- horizontal or vertical scroll.
+    static void docAdjustmentChanged(GtkAdjustment* pAdjustment, gpointer pData);
     /// Draws rText at the center of rRectangle on pCairo.
     static void drawText(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText);
 };
@@ -233,17 +237,26 @@ gboolean TiledRowColumnBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
     return FALSE;
 }
 
+void TiledRowColumnBar::docAdjustmentChanged(GtkAdjustment* /*pAdjustment*/, gpointer pData)
+{
+    GtkWidget* pDocView = static_cast<GtkWidget*>(pData);
+    docConfigureEvent(pDocView, 0, 0);
+}
+
 gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
     rWindow.m_pRowBar->m_nSizePixel = gtk_adjustment_get_page_size(pVAdjustment);
+    rWindow.m_pRowBar->m_nPositionPixel = gtk_adjustment_get_value(pVAdjustment);
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
     rWindow.m_pColumnBar->m_nSizePixel = gtk_adjustment_get_page_size(pHAdjustment);
+    rWindow.m_pColumnBar->m_nPositionPixel = gtk_adjustment_get_value(pHAdjustment);
 
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
     if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
     {
+        g_info("lok::Document::getCommandValues(.uno:ViewRowColumnHeaders)");
         char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
         std::stringstream aStream(pValues);
         free(pValues);
@@ -254,21 +267,39 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         gtk_widget_show(rWindow.m_pCornerButton->m_pDrawingArea);
 
         rWindow.m_pRowBar->m_aHeaders.clear();
+        int nTotal = 0;
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
         {
             int nSize = lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str()));
-            Header aHeader(nSize, rValue.second.get<std::string>("text"));
-            rWindow.m_pRowBar->m_aHeaders.push_back(aHeader);
+            int nScrolledSize = nSize;
+            if (nTotal + nSize >= rWindow.m_pRowBar->m_nPositionPixel)
+            {
+                if (nTotal < rWindow.m_pRowBar->m_nPositionPixel)
+                    // First visible row: reduce height because the row is only partially visible.
+                    nScrolledSize = nTotal + nSize - rWindow.m_pRowBar->m_nPositionPixel;
+                Header aHeader(nScrolledSize, rValue.second.get<std::string>("text"));
+                rWindow.m_pRowBar->m_aHeaders.push_back(aHeader);
+            }
+            nTotal += nSize;
         }
         gtk_widget_show(rWindow.m_pRowBar->m_pDrawingArea);
         gtk_widget_queue_draw(rWindow.m_pRowBar->m_pDrawingArea);
 
         rWindow.m_pColumnBar->m_aHeaders.clear();
+        nTotal = 0;
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
         {
             int nSize = lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str()));
-            Header aHeader(nSize, rValue.second.get<std::string>("text"));
-            rWindow.m_pColumnBar->m_aHeaders.push_back(aHeader);
+            int nScrolledSize = nSize;
+            if (nTotal + nSize >= rWindow.m_pColumnBar->m_nPositionPixel)
+            {
+                if (nTotal < rWindow.m_pColumnBar->m_nPositionPixel)
+                    // First visible column: reduce width because the column is only partially visible.
+                    nScrolledSize = nTotal + nSize - rWindow.m_pColumnBar->m_nPositionPixel;
+                Header aHeader(nScrolledSize, rValue.second.get<std::string>("text"));
+                rWindow.m_pColumnBar->m_aHeaders.push_back(aHeader);
+            }
+            nTotal += nSize;
         }
         gtk_widget_show(rWindow.m_pColumnBar->m_pDrawingArea);
         gtk_widget_queue_draw(rWindow.m_pColumnBar->m_pDrawingArea);
@@ -1095,6 +1126,10 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_grid_attach(GTK_GRID(pGrid), rWindow.m_pScrolledWindow, 1, 1, 1, 1);
 
     gtk_container_add(GTK_CONTAINER(rWindow.m_pScrolledWindow), rWindow.m_pDocView);
+    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
+    g_signal_connect(pHAdjustment, "value-changed", G_CALLBACK(TiledRowColumnBar::docAdjustmentChanged), rWindow.m_pDocView);
+    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
+    g_signal_connect(pVAdjustment, "value-changed", G_CALLBACK(TiledRowColumnBar::docAdjustmentChanged), rWindow.m_pDocView);
 
     rWindow.m_pProgressBar = gtk_progress_bar_new ();
     g_signal_connect(rWindow.m_pDocView, "load-changed", G_CALLBACK(loadChanged), rWindow.m_pProgressBar);
