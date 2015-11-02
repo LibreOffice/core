@@ -52,6 +52,24 @@
       "revId": "ac50e08652880421f212b1395c16d4c1d9c527b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_35b0ba8b",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2015-11-02T15:25:50Z",
+      "side": 1,
+      "message": "The idea comes from lcl_IsMonoSpaceFont(), where it use GetTextWidth() everytime to compare the width of 0x3008 and 0x307c. But I think I can work out someway to cache the value.",
+      "parentUuid": "faac7902_95c086e2",
+      "revId": "ac50e08652880421f212b1395c16d4c1d9c527b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
