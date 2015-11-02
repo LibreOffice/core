@@ -16,6 +16,24 @@
       "revId": "ac50e08652880421f212b1395c16d4c1d9c527b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_f59e3206",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2015-11-02T14:50:47Z",
+      "side": 1,
+      "message": "Do you mean it is expensive to invoke OutputDevice::GetTextBoundRect() everytime?",
+      "parentUuid": "faac7902_75f2429c",
+      "revId": "ac50e08652880421f212b1395c16d4c1d9c527b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
