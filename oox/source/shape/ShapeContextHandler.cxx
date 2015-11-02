@@ -356,7 +356,7 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
         {
             uno::Reference<beans::XPropertySet> xPropertySet(mxSavedShape, uno::UNO_QUERY);
             if (xPropertySet.is())
-                bTextBox = xPropertySet->getPropertyValue("TextBox").get<bool>();
+                xPropertySet->getPropertyValue("TextBox") >>= bTextBox;
         }
         if (bTextFrame || bTextBox)
             mxWpsContext.clear();
