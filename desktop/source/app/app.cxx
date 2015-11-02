@@ -668,7 +668,7 @@ bool Desktop::QueryExit()
     {
         xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), Any(false) );
     }
-    else
+    else if (!Application::IsEventTestingModeEnabled())
     {
         FlushConfiguration();
         try
