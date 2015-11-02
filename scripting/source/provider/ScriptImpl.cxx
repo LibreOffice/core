@@ -92,13 +92,6 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
         OUString temp = "ScriptImpl::invoke RuntimeException : ";
         throw RuntimeException( temp.concat( re.Message ) );
     }
-#ifdef _DEBUG
-    catch ( ... )
-    {
-        throw RuntimeException(
-            "ScriptImpl::invoke Unknown Exception caught - RuntimeException rethrown" );
-    }
-#endif
     return result;
 }
 } // namespace func_provider
