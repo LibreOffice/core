@@ -945,9 +945,15 @@ struct AnnotatingVisitor
                     maCurrState.maDashArray = maParentStates.back().maDashArray;
                 else
                 {
-                    parseDashArray(aValueUtf8.getStr(),
-                                   maCurrState.maDashArray);
-                    maCurrState.meStrokeType = DASH;
+                    if( parseDashArray(aValueUtf8.getStr(),
+                                      maCurrState.maDashArray) )
+                    {
+                        maCurrState.meStrokeType = DASH;
+                    }
+                    else
+                    {
+                        maCurrState.meStrokeType = SOLID;
+                    }
                 }
                 break;
             }
