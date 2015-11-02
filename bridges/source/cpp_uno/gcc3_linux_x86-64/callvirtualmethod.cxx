@@ -83,7 +83,6 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         "leaq (%%rax, %%rcx, 8), %%rax\n\t"
         "subq %%rax, %%rsp\n\t"
         "andq $-9, %%rsp\n\t" // 16-bytes aligned
-
         "movq 8%0, %%rsi\n\t"
         "\n.Lpush:\n\t"
         "decq %%rcx\n\t"
