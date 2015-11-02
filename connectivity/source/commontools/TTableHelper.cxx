@@ -271,7 +271,7 @@ void OTableHelper::refreshColumns()
             aCatalog,
             m_SchemaName,
             m_Name,
-            OUString("%")
+            "%"
         ) );
 
         // collect the column names, together with their ordinal position

@@ -80,7 +80,7 @@ void OFileTable::refreshColumns()
 {
     TStringVector aVector;
     Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                                               m_SchemaName,m_Name, OUString("%"));
+                                                                               m_SchemaName,m_Name, "%");
 
     if(xResult.is())
     {

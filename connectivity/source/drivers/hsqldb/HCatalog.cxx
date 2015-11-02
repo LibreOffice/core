@@ -44,8 +44,8 @@ OHCatalog::OHCatalog(const Reference< XConnection >& _xConnection) : sdbcx::OCat
 void OHCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStringVector& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-                                                            OUString("%"),
-                                                            OUString("%"),
+                                                            "%",
+                                                            "%",
                                                             _sKindOfObject);
     fillNames(xResult,_rNames);
 }
@@ -108,7 +108,7 @@ void OHCatalog::refreshUsers()
 {
     TStringVector aVector;
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-    Reference< XResultSet >  xResult = xStmt->executeQuery(OUString("select User from hsqldb.user group by User"));
+    Reference< XResultSet >  xResult = xStmt->executeQuery("select User from hsqldb.user group by User");
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

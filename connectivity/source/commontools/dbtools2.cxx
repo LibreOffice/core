@@ -751,7 +751,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         // Some drivers put a table privilege as soon as any column has the privilege,
         // some drivers only if all columns have the privilege.
         // To unify the situation, collect column privileges here, too.
-        Reference< XResultSet > xColumnPrivileges = _xMetaData->getColumnPrivileges(aVal, _sSchema, _sTable, OUString("%"));
+        Reference< XResultSet > xColumnPrivileges = _xMetaData->getColumnPrivileges(aVal, _sSchema, _sTable, "%");
         Reference< XRow > xColumnCurrentRow(xColumnPrivileges, UNO_QUERY);
         if ( xColumnCurrentRow.is() )
         {

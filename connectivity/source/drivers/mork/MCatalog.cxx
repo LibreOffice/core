@@ -53,7 +53,7 @@ void OCatalog::refreshTables()
     Sequence< OUString > aTypes(1);
     aTypes[0] = "%";
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        OUString("%"),OUString("%"),aTypes);
+        "%", "%", aTypes);
 
     if(xResult.is())
     {

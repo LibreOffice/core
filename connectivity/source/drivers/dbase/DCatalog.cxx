@@ -41,7 +41,7 @@ void ODbaseCatalog::refreshTables()
     TStringVector aVector;
     Sequence< OUString > aTypes;
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        OUString("%"),OUString("%"),aTypes);
+        "%", "%", aTypes);
 
     if(xResult.is())
     {

@@ -112,7 +112,7 @@ void OHSQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_In
                 Any aCatalog;
                 if ( !sCatalog.isEmpty() )
                     aCatalog <<= sCatalog;
-                xRes = xMeta->getColumnPrivileges(aCatalog,sSchema,sTable,OUString("%"));
+                xRes = xMeta->getColumnPrivileges(aCatalog,sSchema,sTable,"%");
             }
             break;
     }

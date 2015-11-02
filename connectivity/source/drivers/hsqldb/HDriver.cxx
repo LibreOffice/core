@@ -536,12 +536,12 @@ namespace connectivity
                 Reference<XStatement> xStmt = _xConnection->createStatement();
                 if ( xStmt.is() )
                 {
-                    Reference<XResultSet> xRes(xStmt->executeQuery(OUString("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_SESSIONS WHERE USER_NAME ='SA'")),UNO_QUERY);
+                    Reference<XResultSet> xRes(xStmt->executeQuery("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_SESSIONS WHERE USER_NAME ='SA'"), UNO_QUERY);
                     Reference<XRow> xRow(xRes,UNO_QUERY);
                     if ( xRow.is() && xRes->next() )
                         bLastOne = xRow->getInt(1) == 1;
                     if ( bLastOne )
-                        xStmt->execute(OUString("SHUTDOWN"));
+                        xStmt->execute("SHUTDOWN");
                 }
             }
         }
@@ -652,7 +652,7 @@ namespace connectivity
                         Reference< XStatement> xStmt = xConnection->createStatement();
                         OSL_ENSURE( xStmt.is(), "ODriverDelegator::preCommit: no statement!" );
                         if ( xStmt.is() )
-                            xStmt->execute( OUString(  "SET WRITE_DELAY 0"  ) );
+                            xStmt->execute( "SET WRITE_DELAY 0" );
 
                         bool bPreviousAutoCommit = xConnection->getAutoCommit();
                         xConnection->setAutoCommit( sal_False );
@@ -660,7 +660,7 @@ namespace connectivity
                         xConnection->setAutoCommit( bPreviousAutoCommit );
 
                         if ( xStmt.is() )
-                            xStmt->execute( OUString(  "SET WRITE_DELAY 60"  ) );
+                            xStmt->execute( "SET WRITE_DELAY 60" );
                     }
                 }
                 catch(Exception&)

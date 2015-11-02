@@ -155,7 +155,7 @@ namespace connectivity { namespace hsqldb
                     if ( !m_bReadOnly )
                     {
                         Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
-                        xStmt->execute( OUString( "CHECKPOINT DEFRAG" ) );
+                        xStmt->execute( "CHECKPOINT DEFRAG" );
                     }
                 }
                 catch(const Exception& )

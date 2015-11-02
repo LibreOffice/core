@@ -131,7 +131,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     try
     {
         xComponent = xDesktop->loadComponentFromURL(
-            m_aFileName, OUString("_blank"), 0, aArgs );
+            m_aFileName, "_blank", 0, aArgs );
     }
     catch( const Exception& )
     {

@@ -42,7 +42,7 @@ void OCalcCatalog::refreshTables()
     Sequence< OUString > aTypes;
     OCalcConnection::ODocHolder aDocHolder(static_cast<OCalcConnection*>(m_pConnection));
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        OUString("%"),OUString("%"),aTypes);
+        "%", "%", aTypes);
 
     if(xResult.is())
     {

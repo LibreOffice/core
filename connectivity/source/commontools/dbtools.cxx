@@ -439,7 +439,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
                 }
                 else
                     xRowSetProps->setPropertyValue(
-                        OUString( "ActiveConnection" ),
+                        "ActiveConnection",
                         makeAny( xConnection.getTyped() )
                     );
             }
@@ -655,7 +655,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
 
                                 // Now set the filter to a dummy restriction which will result in an empty
                                 // result set.
-                                xComposer->setFilter( OUString( "0=1" ) );
+                                xComposer->setFilter( "0=1" );
                                 sStatementToExecute = xComposer->getQuery( );
                             }
                         }
@@ -678,10 +678,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
                     try
                     {
                         if ( xStatementProps.is() )
-                            xStatementProps->setPropertyValue(
-                                OUString( "MaxRows" ),
-                                makeAny( sal_Int32( 0 ) )
-                            );
+                            xStatementProps->setPropertyValue( "MaxRows",  makeAny( sal_Int32( 0 ) ) );
                     }
                     catch( const Exception& )
                     {
