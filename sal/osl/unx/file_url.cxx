@@ -693,7 +693,7 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
     rtl::OUString file_path;
 
     // try to interpret search path as file url else assume it's a system path list
-    rc = FileBase::getSystemPathFromFileURL(rtl::OUString(ustrFilePath), file_path);
+    rc = FileBase::getSystemPathFromFileURL(ustrFilePath, file_path);
     if (FileBase::E_INVAL == rc)
         file_path = ustrFilePath;
     else if (FileBase::E_None != rc)

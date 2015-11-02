@@ -4918,7 +4918,7 @@ namespace osl_Directory
 
         void with_relative_path()
         {
-            FileBase::RC rc = Directory::createPath( OUString(TEST_PATH_POSTFIX));
+            FileBase::RC rc = Directory::createPath(TEST_PATH_POSTFIX);
 
             CPPUNIT_ASSERT_MESSAGE
             (
