@@ -449,6 +449,14 @@ static inline void typelib_typedescription_initTables(
 
 namespace {
 
+template<typename T> T * allocTypeDescription() {
+    return reinterpret_cast<T *>(new char[sizeof (T)]);
+}
+
+void freeTypeDescription(typelib_TypeDescription const * desc) {
+    delete[] reinterpret_cast<char const *>(desc);
+}
+
 // In some situations (notably typelib_typedescription_newInterfaceMethod and
 // typelib_typedescription_newInterfaceAttribute), only the members nMembers,
 // ppMembers, nAllMembers, and ppAllMembers of an incomplete interface type
@@ -568,7 +576,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
     {
         case typelib_TypeClass_SEQUENCE:
         {
-            typelib_IndirectTypeDescription * pTmp = new typelib_IndirectTypeDescription();
+            auto pTmp = allocTypeDescription<typelib_IndirectTypeDescription>();
             pRet = &pTmp->aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nIndirectTypeDescriptionCount );
@@ -580,8 +588,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         case typelib_TypeClass_STRUCT:
         {
             // FEATURE_EMPTYCLASS
-            typelib_StructTypeDescription * pTmp;
-            pTmp = new typelib_StructTypeDescription();
+            auto pTmp = allocTypeDescription<typelib_StructTypeDescription>();
             pRet = &pTmp->aBase.aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nCompoundTypeDescriptionCount );
@@ -598,8 +605,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         case typelib_TypeClass_EXCEPTION:
         {
             // FEATURE_EMPTYCLASS
-            typelib_CompoundTypeDescription * pTmp;
-            pTmp = new typelib_CompoundTypeDescription();
+            auto pTmp = allocTypeDescription<typelib_CompoundTypeDescription>();
             pRet = &pTmp->aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nCompoundTypeDescriptionCount );
@@ -614,7 +620,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
 
         case typelib_TypeClass_ENUM:
         {
-            typelib_EnumTypeDescription * pTmp = new typelib_EnumTypeDescription();
+            auto pTmp = allocTypeDescription<typelib_EnumTypeDescription>();
             pRet = &pTmp->aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nEnumTypeDescriptionCount );
@@ -628,7 +634,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
 
         case typelib_TypeClass_INTERFACE:
         {
-            typelib_InterfaceTypeDescription * pTmp = new typelib_InterfaceTypeDescription();
+            auto pTmp = allocTypeDescription<
+                typelib_InterfaceTypeDescription>();
             pRet = &pTmp->aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nInterfaceTypeDescriptionCount );
@@ -648,7 +655,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
 
         case typelib_TypeClass_INTERFACE_METHOD:
         {
-            typelib_InterfaceMethodTypeDescription * pTmp = new typelib_InterfaceMethodTypeDescription();
+            auto pTmp = allocTypeDescription<
+                typelib_InterfaceMethodTypeDescription>();
             pRet = &pTmp->aBase.aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nInterfaceMethodTypeDescriptionCount );
@@ -667,7 +675,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
 
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         {
-            typelib_InterfaceAttributeTypeDescription * pTmp = new typelib_InterfaceAttributeTypeDescription();
+            auto * pTmp = allocTypeDescription<
+                typelib_InterfaceAttributeTypeDescription>();
             pRet = &pTmp->aBase.aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nInterfaceAttributeTypeDescriptionCount );
@@ -686,7 +695,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
 
         default:
         {
-            pRet = new typelib_TypeDescription();
+            pRet = allocTypeDescription<typelib_TypeDescription>();
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nTypeDescriptionCount );
 #endif
@@ -1462,7 +1471,7 @@ extern "C" void SAL_CALL typelib_typedescription_release(
         }
 #endif
 
-        delete pTD;
+        freeTypeDescription(pTD);
     }
 }
 
