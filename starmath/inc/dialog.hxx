@@ -61,6 +61,7 @@ class SmPrintOptionsTabPage : public SfxTabPage
     VclPtr<MetricField>    m_pZoom;
     VclPtr<CheckBox>       m_pNoRightSpaces;
     VclPtr<CheckBox>       m_pSaveOnlyUsedSymbols;
+    VclPtr<CheckBox>       m_pAutoCloseBrackets;
 
     DECL_LINK_TYPED(SizeButtonClickHdl, Button *, void);
 

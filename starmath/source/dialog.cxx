@@ -176,6 +176,7 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(vcl::Window* pParent, const SfxItem
     get( m_pZoom,                "zoom");
     get( m_pNoRightSpaces,       "norightspaces");
     get( m_pSaveOnlyUsedSymbols, "saveonlyusedsymbols");
+    get( m_pAutoCloseBrackets,   "autoclosebrackets");
 
     m_pSizeNormal->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
     m_pSizeScaled->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
@@ -200,6 +201,7 @@ void SmPrintOptionsTabPage::dispose()
     m_pZoom.clear();
     m_pNoRightSpaces.clear();
     m_pSaveOnlyUsedSymbols.clear();
+    m_pAutoCloseBrackets.clear();
     SfxTabPage::dispose();
 }
 
@@ -221,6 +223,7 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
     rSet->Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), m_pFrame->IsChecked()));
     rSet->Put(SfxBoolItem(GetWhich(SID_NO_RIGHT_SPACES), m_pNoRightSpaces->IsChecked()));
     rSet->Put(SfxBoolItem(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), m_pSaveOnlyUsedSymbols->IsChecked()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_AUTO_CLOSE_BRACKETS), m_pAutoCloseBrackets->IsChecked()));
 
     return true;
 }
@@ -243,6 +246,7 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
     m_pFrame->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTFRAME))).GetValue());
     m_pNoRightSpaces->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
     m_pSaveOnlyUsedSymbols->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
+    m_pAutoCloseBrackets->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_AUTO_CLOSE_BRACKETS))).GetValue());
 }
 
 VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const SfxItemSet& rSet)

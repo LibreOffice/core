@@ -435,7 +435,11 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         aSelection.Adjust();
         OUString selected = pEditView->GetEditEngine()->GetText(aSelection);
 
-        if (selected.trim() == "<?>")
+        // Check is auto close brackets/braces is disabled
+        SmModule *pMod = SM_MOD();
+        if (pMod && !pMod->GetConfig()->IsAutoCloseBrackets())
+            autoClose = false;
+        else if (selected.trim() == "<?>")
             autoClose = true;
         else if (selected.isEmpty() && !aSelection.HasRange())
         {

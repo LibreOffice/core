@@ -329,6 +329,16 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="AutoCloseBrackets" oor:type="xs:boolean" oor:nillable="false">
+        <!-- OldPath: Math/Misc -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
+        <info>
+          <desc>Auto close brackets, parentheses and braces when editing a formula.</desc>
+          <label>Auto close brackets, parentheses and braces when editing a formula</label>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="View">
       <info>
