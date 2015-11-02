@@ -587,6 +587,7 @@ Printer* SmDocShell::GetPrt()
                                               SID_PRINTFRAME,      SID_PRINTFRAME,
                                               SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                                               SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
+                                              SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
                                               0);
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);

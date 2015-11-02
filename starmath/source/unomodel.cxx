@@ -634,6 +634,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         SID_PRINTFRAME,      SID_PRINTFRAME,
                         SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                         SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
+                        SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
                         0
                     };
                     SfxItemSet *pItemSet = new SfxItemSet( SmDocShell::GetPool(), nRange );

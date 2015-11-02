@@ -168,6 +168,8 @@ public:
 
     bool            IsSaveOnlyUsedSymbols() const;
     void            SetSaveOnlyUsedSymbols( bool bVal );
+    bool            IsAutoCloseBrackets() const;
+    void            SetAutoCloseBrackets( bool bVal );
     bool            IsIgnoreSpacesRight() const;
     void            SetIgnoreSpacesRight( bool bVal );
     bool            IsAutoRedraw() const;

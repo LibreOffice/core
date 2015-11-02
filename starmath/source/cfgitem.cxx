@@ -123,6 +123,7 @@ struct SmCfgOther
     bool            bPrintFormulaText;
     bool            bPrintFrame;
     bool            bIsSaveOnlyUsedSymbols;
+    bool            bIsAutoCloseBrackets;
     bool            bIgnoreSpacesRight;
     bool            bToolboxVisible;
     bool            bAutoRedraw;
@@ -139,7 +140,8 @@ SmCfgOther::SmCfgOther()
     bPrintTitle         = bPrintFormulaText   =
     bPrintFrame         = bIgnoreSpacesRight  =
     bToolboxVisible     = bAutoRedraw         =
-    bFormulaCursor      = bIsSaveOnlyUsedSymbols = true;
+    bIsAutoCloseBrackets = bFormulaCursor
+    = bIsSaveOnlyUsedSymbols = true;
 }
 
 
@@ -780,6 +782,7 @@ void SmMathConfig::LoadOther()
     pOther->ePrintSize = static_cast<SmPrintSize>(officecfg::Office::Math::Print::Size::get());
     pOther->nPrintZoomFactor = officecfg::Office::Math::Print::ZoomFactor::get();
     pOther->bIsSaveOnlyUsedSymbols = officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::get();
+    pOther->bIsAutoCloseBrackets = officecfg::Office::Math::Misc::AutoCloseBrackets::get();
     pOther->bIgnoreSpacesRight = officecfg::Office::Math::Misc::IgnoreSpacesRight::get();
     pOther->bToolboxVisible = officecfg::Office::Math::View::ToolboxVisible::get();
     pOther->bAutoRedraw = officecfg::Office::Math::View::AutoRedraw::get();
@@ -801,6 +804,7 @@ void SmMathConfig::SaveOther()
     officecfg::Office::Math::Print::Size::set(pOther->ePrintSize, batch);
     officecfg::Office::Math::Print::ZoomFactor::set(pOther->nPrintZoomFactor, batch);
     officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::set(pOther->bIsSaveOnlyUsedSymbols, batch);
+    officecfg::Office::Math::Misc::AutoCloseBrackets::set(pOther->bIsAutoCloseBrackets, batch);
     officecfg::Office::Math::Misc::IgnoreSpacesRight::set(pOther->bIgnoreSpacesRight, batch);
     officecfg::Office::Math::View::ToolboxVisible::set(pOther->bToolboxVisible, batch);
     officecfg::Office::Math::View::AutoRedraw::set(pOther->bAutoRedraw, batch);
@@ -1067,6 +1071,13 @@ bool SmMathConfig::IsSaveOnlyUsedSymbols() const
     return pOther->bIsSaveOnlyUsedSymbols;
 }
 
+bool SmMathConfig::IsAutoCloseBrackets() const
+{
+    if (!pOther)
+        const_cast<SmMathConfig*>(this)->LoadOther();
+    return pOther->bIsAutoCloseBrackets;
+}
+
 bool SmMathConfig::IsPrintFrame() const
 {
     if (!pOther)
@@ -1088,6 +1099,14 @@ void SmMathConfig::SetSaveOnlyUsedSymbols( bool bVal )
     if (!pOther)
         LoadOther();
     SetOtherIfNotEqual( pOther->bIsSaveOnlyUsedSymbols, bVal );
+}
+
+
+void SmMathConfig::SetAutoCloseBrackets( bool bVal )
+{
+    if (!pOther)
+        LoadOther();
+    SetOtherIfNotEqual( pOther->bIsAutoCloseBrackets, bVal );
 }
 
 
@@ -1187,6 +1206,12 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
         SetSaveOnlyUsedSymbols( bVal );
     }
 
+    if (rSet.GetItemState(SID_AUTO_CLOSE_BRACKETS, true, &pItem) == SfxItemState::SET)
+    {
+        bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
+        SetAutoCloseBrackets( bVal );
+    }
+
     SaveOther();
 }
 
@@ -1206,6 +1231,7 @@ void SmMathConfig::ConfigToItemSet(SfxItemSet &rSet) const
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTOREDRAW), IsAutoRedraw()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_NO_RIGHT_SPACES), IsIgnoreSpacesRight()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), IsSaveOnlyUsedSymbols()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTO_CLOSE_BRACKETS), IsAutoCloseBrackets()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
