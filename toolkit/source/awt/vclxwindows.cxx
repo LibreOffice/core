@@ -585,7 +585,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 aEvent.ActionCommand = maActionCommand;
 
-                Callback aCallback = [ this, &aEvent ]()
+                Callback aCallback = [ this, aEvent ]()
                                      { this->maActionListeners.actionPerformed( aEvent ); };
 
                 ImplExecuteAsyncWithoutSolarLock( aCallback );
