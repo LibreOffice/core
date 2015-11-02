@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_75f2429c",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-11-02T11:12:26Z",
+      "side": 1,
+      "message": "humm.. that is expensive",
+      "revId": "ac50e08652880421f212b1395c16d4c1d9c527b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
