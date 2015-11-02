@@ -286,7 +286,13 @@ $(if $(filter $(1),$(BUILD_TYPE_FOR_HOST)),$(2))
 endef
 
 define gb_Helper_print_on_error
-$(if $(gb_QUIET_EXTERNAL),( $(1) ) > $(2) 2>&1 || ( cat $(2) && false ),$(1) )
+$(if $(gb_QUIET_EXTERNAL), \
+    $(if $(2), \
+        ( ( $(1) ) > $(2) 2>&1 || ( cat $(2) && false ) ), \
+        ( TEMPFILE=$(shell $(gb_MKTEMP)) && ( $(1) ) > $$TEMPFILE 2>&1 \
+            && rm $$TEMPFILE \
+            || ( cat $$TEMPFILE && rm $$TEMPFILE && false ) )), \
+    ( $(1) ))
 endef
 
 # vim: set noet sw=4 ts=4:

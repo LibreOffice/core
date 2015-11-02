@@ -21,10 +21,10 @@ $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_$(1).cxx : \
 		$(call gb_Executable_get_runtime_dependencies,saxparser)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),SAX,1)
 	$$(call gb_Helper_abbreviate_dirs, \
-		$$(call gb_Helper_execute,saxparser) $(1) $$< $$@.tmp \
-			-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER)) \
-			-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target_for_build,saxparser)) \
-			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null 2>&1) && \
+		$$(call gb_Helper_print_on_error, \
+			$$(call gb_Helper_execute,saxparser) $(1) $$< $$@.tmp \
+				-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER)) \
+				-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target_for_build,saxparser))) && \
 		sed 's/\(^.*get[^;]*$$$$\)/SAL_DLLPUBLIC_EXPORT \1/' $$@.tmp > $$@ && \
 		rm $$@.tmp)
 
