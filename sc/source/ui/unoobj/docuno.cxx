@@ -624,6 +624,9 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
             pGridWindow->EndTracking(TrackingEventFlags::DontCallHdl);
 
         break;
+    case LOK_MOUSEEVENT_MOUSEMOVE:
+        pGridWindow->MouseMove(aEvent);
+        break;
     default:
         assert(false);
         break;
