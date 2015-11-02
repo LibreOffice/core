@@ -212,7 +212,6 @@ int getFlatTypeRank(const OUString& rType)
         // Binary (raster and vector image files)
         "emf_MS_Windows_Metafile",
         "wmf_MS_Windows_Metafile",
-        "met_OS2_Metafile",
         "svm_StarView_Metafile",
         "sgv_StarDraw_20",
         "tif_Tag_Image_File",

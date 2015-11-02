@@ -102,7 +102,6 @@ emf;Graphics/pic.emf;emf_MS_Windows_Metafile;emf_MS_Windows_Metafile:generic_Tex
 eps;Graphics/pic.eps;eps_Encapsulated_PostScript;eps_Encapsulated_PostScript
 gif;Graphics/pic.gif;gif_Graphics_Interchange;gif_Graphics_Interchange
 jpg;Graphics/pic.jpg;jpg_JPEG;jpg_JPEG
-met;Graphics/pic.met;met_OS2_Metafile;met_OS2_Metafile:generic_Text
 pbm;Graphics/pic.pbm;pbm_Portable_Bitmap;pbm_Portable_Bitmap
 pct;Graphics/pic.pct;pct_Mac_Pict;pct_Mac_Pict
 pgm;Graphics/pic.pgm;pgm_Portable_Graymap;pgm_Portable_Graymap

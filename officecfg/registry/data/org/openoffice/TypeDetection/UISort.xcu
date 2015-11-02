@@ -26,7 +26,7 @@
     </node>
     <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace" install:module="draw">
       <prop oor:name="SortedFilterList">
-        <value oor:separator=";">draw8;draw8_template;StarOffice XML (Draw);draw_StarOffice_XML_Draw_Template;OpenDocument Drawing Flat XML;draw_html_Export;draw_pdf_Export;draw_flash_Export;WordPerfect Graphics;DXF - AutoCAD Interchange;EMF - MS Windows Metafile;EPS - Encapsulated PostScript;MET - OS/2 Metafile;PCT - Mac Pict;SGF - StarOffice Writer SGF;SGV - StarDraw 2.0;SVM - StarView Metafile;WMF - MS Windows Metafile</value>
+        <value oor:separator=";">draw8;draw8_template;StarOffice XML (Draw);draw_StarOffice_XML_Draw_Template;OpenDocument Drawing Flat XML;draw_html_Export;draw_pdf_Export;draw_flash_Export;WordPerfect Graphics;DXF - AutoCAD Interchange;EMF - MS Windows Metafile;EPS - Encapsulated PostScript;PCT - Mac Pict;SGF - StarOffice Writer SGF;SGV - StarDraw 2.0;SVM - StarView Metafile;WMF - MS Windows Metafile</value>
       </prop>
     </node>
     <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace" install:module="impress">

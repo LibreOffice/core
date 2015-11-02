@@ -1338,11 +1338,6 @@
                 <desc>JPEG</desc>
               </info>
             </enumeration>
-            <enumeration oor:value="MET - OS/2 Metafile">
-              <info>
-                <desc>OS/2 Metafile</desc>
-              </info>
-            </enumeration>
             <enumeration oor:value="PCT - Mac Pict">
               <info>
                 <desc>Mac Pict</desc>
