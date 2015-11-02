@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_b87301b4",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2073,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-02T22:41:21Z",
+      "side": 1,
+      "message": "i\u0027d say \"has\" is a nice prefix for bools",
+      "revId": "4a77a165eaecb651897bc27982249afc23bb019a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
