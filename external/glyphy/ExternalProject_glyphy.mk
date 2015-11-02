@@ -21,6 +21,7 @@ $(eval $(call gb_ExternalProject_use_externals,glyphy, \
 
 $(call gb_ExternalProject_get_state_target,glyphy,build) :
 	$(call gb_ExternalProject_run,build,\
+	    $(if $(filter MSC,$(COM)),CPPFLAGS=-D_USE_MATH_DEFINES) \
 		MAKE=$(MAKE) ./configure \
 			--with-pic \
 			$(if $(DISABLE_DYNLOADING), \
