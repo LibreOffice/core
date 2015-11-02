@@ -484,34 +484,34 @@ void SwTextFormatColls::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SwCollCondition::SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
                                 sal_uLong nSubCond )
-    : SwClient( pColl ), nCondition( nMasterCond )
+    : SwClient( pColl ), m_nCondition( nMasterCond )
 {
-    aSubCondition.nSubCondition = nSubCond;
+    m_aSubCondition.nSubCondition = nSubCond;
 }
 
 SwCollCondition::SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
                                     const OUString& rSubExp )
-    : SwClient( pColl ), nCondition( nMasterCond )
+    : SwClient( pColl ), m_nCondition( nMasterCond )
 {
-    if( USRFLD_EXPRESSION & nCondition )
-        aSubCondition.pFieldExpression = new OUString( rSubExp );
+    if( USRFLD_EXPRESSION & m_nCondition )
+        m_aSubCondition.pFieldExpression = new OUString( rSubExp );
     else
-        aSubCondition.nSubCondition = 0;
+        m_aSubCondition.nSubCondition = 0;
 }
 
 SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
-    : SwClient( const_cast<SwModify*>(rCopy.GetRegisteredIn()) ), nCondition( rCopy.nCondition )
+    : SwClient( const_cast<SwModify*>(rCopy.GetRegisteredIn()) ), m_nCondition( rCopy.m_nCondition )
 {
-    if( USRFLD_EXPRESSION & rCopy.nCondition )
-        aSubCondition.pFieldExpression = new OUString( *rCopy.GetFieldExpression() );
+    if( USRFLD_EXPRESSION & rCopy.m_nCondition )
+        m_aSubCondition.pFieldExpression = new OUString( *rCopy.GetFieldExpression() );
     else
-        aSubCondition.nSubCondition = rCopy.aSubCondition.nSubCondition;
+        m_aSubCondition.nSubCondition = rCopy.m_aSubCondition.nSubCondition;
 }
 
 SwCollCondition::~SwCollCondition()
 {
-    if( USRFLD_EXPRESSION & nCondition )
-        delete aSubCondition.pFieldExpression;
+    if( USRFLD_EXPRESSION & m_nCondition )
+        delete m_aSubCondition.pFieldExpression;
 }
 
 void SwCollCondition::RegisterToFormat( SwFormat& rFormat )
@@ -522,14 +522,14 @@ void SwCollCondition::RegisterToFormat( SwFormat& rFormat )
 bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
 {
     bool bRet = false;
-    if( nCondition == rCmp.nCondition )
+    if( m_nCondition == rCmp.m_nCondition )
     {
-        if( USRFLD_EXPRESSION & nCondition )
+        if( USRFLD_EXPRESSION & m_nCondition )
         {
             // The SubCondition contains the expression for the UserField
-            const OUString* pTmp = aSubCondition.pFieldExpression;
+            const OUString* pTmp = m_aSubCondition.pFieldExpression;
             if( !pTmp )
-                pTmp = rCmp.aSubCondition.pFieldExpression;
+                pTmp = rCmp.m_aSubCondition.pFieldExpression;
             if( pTmp )
             {
                 SwTextFormatColl* pColl = GetTextFormatColl();
@@ -543,8 +543,8 @@ bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
                 }
             }
         }
-        else if( aSubCondition.nSubCondition ==
-                    rCmp.aSubCondition.nSubCondition )
+        else if( m_aSubCondition.nSubCondition ==
+                    rCmp.m_aSubCondition.nSubCondition )
             bRet = true;
     }
     return bRet;
@@ -552,10 +552,10 @@ bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
 
 void SwCollCondition::SetCondition( sal_uLong nCond, sal_uLong nSubCond )
 {
-    if( USRFLD_EXPRESSION & nCondition )
-        delete aSubCondition.pFieldExpression;
-    nCondition = nCond;
-    aSubCondition.nSubCondition = nSubCond;
+    if( USRFLD_EXPRESSION & m_nCondition )
+        delete m_aSubCondition.pFieldExpression;
+    m_nCondition = nCond;
+    m_aSubCondition.nSubCondition = nSubCond;
 }
 
 SwConditionTextFormatColl::~SwConditionTextFormatColl()

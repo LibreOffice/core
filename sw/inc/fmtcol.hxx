@@ -176,12 +176,12 @@ enum Master_CollConditions
 
 class SW_DLLPUBLIC SwCollCondition : public SwClient
 {
-    sal_uLong nCondition;
+    sal_uLong m_nCondition;
     union
     {
         sal_uLong nSubCondition;
         OUString* pFieldExpression;
-    } aSubCondition;
+    } m_aSubCondition;
 
 public:
     TYPEINFO_OVERRIDE(); ///< Already in base class Client.
@@ -203,10 +203,10 @@ public:
     bool operator!=( const SwCollCondition& rCmp ) const
                             { return ! (*this == rCmp); }
 
-    sal_uLong GetCondition() const      { return nCondition; }
-    sal_uLong GetSubCondition() const   { return aSubCondition.nSubCondition; }
+    sal_uLong GetCondition() const      { return m_nCondition; }
+    sal_uLong GetSubCondition() const   { return m_aSubCondition.nSubCondition; }
     const OUString* GetFieldExpression() const
-                                    { return aSubCondition.pFieldExpression; }
+                                    { return m_aSubCondition.pFieldExpression; }
 
     void SetCondition( sal_uLong nCond, sal_uLong nSubCond );
     SwTextFormatColl* GetTextFormatColl() const     { return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn())); }
