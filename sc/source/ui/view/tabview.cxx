@@ -2313,15 +2313,12 @@ OUString ScTabView::getRowColumnHeaders()
     SCROW nEndRow = 0;
     pDoc->GetTiledRenderingArea(aViewData.GetTabNo(), nEndCol, nEndRow);
 
-    double nPPTX = aViewData.GetPPTX();
-    double nPPTY = aViewData.GetPPTY();
-
     boost::property_tree::ptree aRows;
     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
         boost::property_tree::ptree aRow;
-        sal_uInt16 nSize = pRowBar[SC_SPLIT_BOTTOM]->GetEntrySize(nRow);
-        aRow.put("size", OString::number(nSize / nPPTY).getStr());
+        sal_uInt16 nSize = pDoc->GetOriginalHeight(nRow, aViewData.GetTabNo());
+        aRow.put("size", OString::number(nSize).getStr());
         OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
         aRow.put("text", aText.toUtf8().getStr());
         aRows.push_back(std::make_pair("", aRow));
@@ -2331,8 +2328,8 @@ OUString ScTabView::getRowColumnHeaders()
     for (SCCOL nCol = 0; nCol <= nEndCol; ++nCol)
     {
         boost::property_tree::ptree aCol;
-        sal_uInt16 nSize = pColBar[SC_SPLIT_LEFT]->GetEntrySize(nCol);
-        aCol.put("size", OString::number(nSize / nPPTX).getStr());
+        sal_uInt16 nSize = pDoc->GetColWidth(nCol, aViewData.GetTabNo());
+        aCol.put("size", OString::number(nSize).getStr());
         OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
         aCol.put("text", aText.toUtf8().getStr());
         aCols.push_back(std::make_pair("", aCol));
