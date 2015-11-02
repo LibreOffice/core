@@ -29,7 +29,6 @@ $(call gb_ExternalProject_get_state_target,glyphy,build) :
 			, \
 				--enable-shared --disable-static \
 			) \
-			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(if $(verbose),V=1) \
