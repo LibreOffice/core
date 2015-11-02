@@ -503,7 +503,7 @@ class InsertChartListener : public std::unary_function<ScChartListener*, void>
 {
     ScChartListenerCollection::ListenersType& mrListeners;
 public:
-    InsertChartListener(ScChartListenerCollection::ListenersType& rListeners) :
+    explicit InsertChartListener(ScChartListenerCollection::ListenersType& rListeners) :
         mrListeners(rListeners) {}
 
     void operator() (ScChartListener* p)

@@ -645,7 +645,7 @@ class FindCaseInsensitive : std::unary_function<ScDPItemData, bool>
 {
     ScDPItemData maValue;
 public:
-    FindCaseInsensitive(const ScDPItemData& rVal) : maValue(rVal) {}
+    explicit FindCaseInsensitive(const ScDPItemData& rVal) : maValue(rVal) {}
 
     bool operator() (const ScDPItemData& rItem) const
     {

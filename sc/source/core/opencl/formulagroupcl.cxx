@@ -1683,7 +1683,7 @@ class Reduction : public SlidingFunctionBase
 {
     int mnResultSize;
 public:
-    Reduction( int nResultSize ) : mnResultSize(nResultSize) {}
+    explicit Reduction(int nResultSize) : mnResultSize(nResultSize) {}
 
     typedef DynamicKernelSlidingArgument<VectorRef> NumericRange;
     typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
@@ -2037,7 +2037,7 @@ public:
 class OpNop : public Reduction
 {
 public:
-    OpNop( int nResultSize ) : Reduction(nResultSize) {}
+    explicit OpNop(int nResultSize) : Reduction(nResultSize) {}
 
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& ) const override
@@ -2050,7 +2050,7 @@ public:
 class OpCount : public Reduction
 {
 public:
-    OpCount( int nResultSize ) : Reduction(nResultSize) {}
+    explicit OpCount(int nResultSize) : Reduction(nResultSize) {}
 
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
@@ -2117,7 +2117,7 @@ public:
 class OpSum : public Reduction
 {
 public:
-    OpSum( int nResultSize ) : Reduction(nResultSize) {}
+    explicit OpSum(int nResultSize) : Reduction(nResultSize) {}
 
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
@@ -2132,7 +2132,7 @@ public:
 class OpAverage : public Reduction
 {
 public:
-    OpAverage( int nResultSize ) : Reduction(nResultSize) {}
+    explicit OpAverage(int nResultSize) : Reduction(nResultSize) {}
 
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
@@ -2148,7 +2148,7 @@ public:
 class OpSub : public Reduction
 {
 public:
-    OpSub( int nResultSize ) : Reduction(nResultSize) {}
+    explicit OpSub(int nResultSize) : Reduction(nResultSize) {}
 
     virtual std::string GetBottom() override { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
@@ -2161,7 +2161,7 @@ public:
 class OpMul : public Reduction
 {
 public:
-    OpMul( int nResultSize ) : Reduction(nResultSize) {}
+    explicit OpMul(int nResultSize) : Reduction(nResultSize) {}
 
     virtual std::string GetBottom() override { return "1"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
@@ -2176,7 +2176,7 @@ public:
 class OpDiv : public Reduction
 {
 public:
-    OpDiv( int nResultSize ) : Reduction(nResultSize) {}
+    explicit OpDiv(int nResultSize) : Reduction(nResultSize) {}
 
     virtual std::string GetBottom() override { return "1.0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
@@ -2211,7 +2211,7 @@ public:
 class OpMin : public Reduction
 {
 public:
-    OpMin( int nResultSize ) : Reduction(nResultSize) {}
+    explicit OpMin(int nResultSize) : Reduction(nResultSize) {}
 
     virtual std::string GetBottom() override { return "NAN"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
@@ -2225,7 +2225,7 @@ public:
 class OpMax : public Reduction
 {
 public:
-    OpMax( int nResultSize ) : Reduction(nResultSize) {}
+    explicit OpMax(int nResultSize) : Reduction(nResultSize) {}
 
     virtual std::string GetBottom() override { return "NAN"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
@@ -2249,8 +2249,8 @@ public:
 namespace {
 struct SumIfsArgs
 {
-    SumIfsArgs( cl_mem x ) : mCLMem(x), mConst(0.0) { }
-    SumIfsArgs( double x ) : mCLMem(NULL), mConst(x) { }
+    explicit SumIfsArgs(cl_mem x) : mCLMem(x), mConst(0.0) { }
+    explicit SumIfsArgs(double x) : mCLMem(NULL), mConst(x) { }
     cl_mem mCLMem;
     double mConst;
 };
@@ -4173,8 +4173,9 @@ class CLInterpreterContext
     SCROW mnGroupLength;
 
 public:
-    CLInterpreterContext( SCROW nGroupLength ) :
-        mpKernel(NULL), mnGroupLength(nGroupLength) {}
+    explicit CLInterpreterContext(SCROW nGroupLength)
+        : mpKernel(NULL)
+        , mnGroupLength(nGroupLength) {}
 
     bool isValid() const
     {

@@ -245,7 +245,7 @@ public:
         bool mbHidden:1;
         bool mbFiltered:1;
 
-        Row( size_t nColSize ) : maCells(nColSize, Cell()), mbHidden(false), mbFiltered(false) {}
+        explicit Row( size_t nColSize ) : maCells(nColSize, Cell()), mbHidden(false), mbFiltered(false) {}
     };
 
     typedef std::vector<Row*> RowsType;
@@ -557,7 +557,7 @@ struct SortedColumn : boost::noncopyable
     PatRangeType maPatterns;
     PatRangeType::const_iterator miPatternPos;
 
-    SortedColumn( size_t nTopEmptyRows ) :
+    explicit SortedColumn( size_t nTopEmptyRows ) :
         maCells(nTopEmptyRows),
         maCellTextAttrs(nTopEmptyRows),
         maBroadcasters(nTopEmptyRows),
@@ -697,7 +697,7 @@ class FormulaGroupPosCollector : std::unary_function<SvtListener*, void>
     sc::RefQueryFormulaGroup& mrQuery;
 
 public:
-    FormulaGroupPosCollector( sc::RefQueryFormulaGroup& rQuery ) : mrQuery(rQuery) {}
+    explicit FormulaGroupPosCollector( sc::RefQueryFormulaGroup& rQuery ) : mrQuery(rQuery) {}
 
     void operator() ( SvtListener* p )
     {
@@ -845,7 +845,7 @@ class FormulaCellCollectAction : public sc::ColumnSpanSet::ColumnAction
     ScColumn* mpCol;
 
 public:
-    FormulaCellCollectAction( std::vector<ScFormulaCell*>& rCells ) :
+    explicit FormulaCellCollectAction( std::vector<ScFormulaCell*>& rCells ) :
         mrCells(rCells), mpCol(NULL) {}
 
     virtual void startColumn( ScColumn* pCol ) override
@@ -873,7 +873,7 @@ class ListenerStartAction : public sc::ColumnSpanSet::ColumnAction
     sc::EndListeningContext maEndCxt;
 
 public:
-    ListenerStartAction( ScDocument& rDoc ) :
+    explicit ListenerStartAction( ScDocument& rDoc ) :
         mpCol(0),
         mpPosSet(new sc::ColumnBlockPositionSet(rDoc)),
         maStartCxt(rDoc, mpPosSet),
@@ -2830,7 +2830,7 @@ class PrepareQueryItem : public std::unary_function<ScQueryEntry::Item, void>
 {
     const ScDocument& mrDoc;
 public:
-    PrepareQueryItem(const ScDocument& rDoc) : mrDoc(rDoc) {}
+    explicit PrepareQueryItem(const ScDocument& rDoc) : mrDoc(rDoc) {}
 
     void operator() (ScQueryEntry::Item& rItem)
     {

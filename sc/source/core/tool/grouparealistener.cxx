@@ -26,7 +26,7 @@ class Notifier : std::unary_function<ScFormulaCell*, void>
 {
     const SfxHint& mrHint;
 public:
-    Notifier( const SfxHint& rHint ) : mrHint(rHint) {}
+    explicit Notifier( const SfxHint& rHint ) : mrHint(rHint) {}
 
     void operator() ( ScFormulaCell* pCell )
     {
@@ -41,7 +41,7 @@ class CollectCellAction : public sc::ColumnSpanSet::ColumnAction
     std::vector<ScFormulaCell*> maCells;
 
 public:
-    CollectCellAction( const FormulaGroupAreaListener& rAreaListener ) :
+    explicit CollectCellAction( const FormulaGroupAreaListener& rAreaListener ) :
         mrAreaListener(rAreaListener) {}
 
     virtual void startColumn( ScColumn* pCol ) override

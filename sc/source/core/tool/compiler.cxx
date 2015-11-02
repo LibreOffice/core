@@ -705,7 +705,7 @@ static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
 
 struct Convention_A1 : public ScCompiler::Convention
 {
-    Convention_A1( FormulaGrammar::AddressConvention eConv ) : ScCompiler::Convention( eConv ) { }
+    explicit Convention_A1( FormulaGrammar::AddressConvention eConv ) : ScCompiler::Convention( eConv ) { }
     static void MakeColStr( OUStringBuffer& rBuffer, SCCOL nCol );
     static void MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow );
 
@@ -751,7 +751,7 @@ void Convention_A1::MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow )
 struct ConventionOOO_A1 : public Convention_A1
 {
     ConventionOOO_A1() : Convention_A1 (FormulaGrammar::CONV_OOO) { }
-    ConventionOOO_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1 (eConv) { }
+    explicit ConventionOOO_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1 (eConv) { }
 
     static void MakeTabStr( OUStringBuffer &rBuf, const std::vector<OUString>& rTabNames, SCTAB nTab )
     {
@@ -1230,7 +1230,7 @@ struct ConventionXL
 struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 {
     ConventionXL_A1() : Convention_A1( FormulaGrammar::CONV_XL_A1 ) { }
-    ConventionXL_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1( eConv ) { }
+    explicit ConventionXL_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1( eConv ) { }
 
     static void makeSingleCellStr( OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs )
     {

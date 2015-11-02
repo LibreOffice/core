@@ -96,7 +96,7 @@ private:
     sal_uInt16  nMaxLevel;
 
 public:
-                ScDetectiveData( SdrModel* pModel );
+    explicit ScDetectiveData( SdrModel* pModel );
 
     SfxItemSet& GetBoxSet()     { return aBoxSet; }
     SfxItemSet& GetArrowSet()   { return aArrowSet; }

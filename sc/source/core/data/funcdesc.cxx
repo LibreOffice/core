@@ -51,7 +51,7 @@ class ScResourcePublisher : public Resource
 private:
     void FreeResource() { Resource::FreeResource(); }
 public:
-    ScResourcePublisher( const ScResId& rId ) : Resource( rId ) {}
+    explicit ScResourcePublisher( const ScResId& rId ) : Resource( rId ) {}
     ~ScResourcePublisher() { FreeResource(); }
     bool IsAvailableRes( const ResId& rId ) const
                         { return Resource::IsAvailableRes( rId ); }

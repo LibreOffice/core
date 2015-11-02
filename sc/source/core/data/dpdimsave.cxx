@@ -662,7 +662,7 @@ class AddGroupDimToCache : std::unary_function<ScDPSaveGroupDimension, void>
 {
     ScDPCache& mrCache;
 public:
-    AddGroupDimToCache(ScDPCache& rCache) : mrCache(rCache) {}
+    explicit AddGroupDimToCache(ScDPCache& rCache) : mrCache(rCache) {}
     void operator() (const ScDPSaveGroupDimension& rDim)
     {
         rDim.AddToCache(mrCache);

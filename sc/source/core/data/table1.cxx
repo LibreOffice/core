@@ -130,7 +130,7 @@ struct OptimalHeightsFuncObjBase
 struct SetRowHeightOnlyFunc : public OptimalHeightsFuncObjBase
 {
     ScTable* mpTab;
-    SetRowHeightOnlyFunc(ScTable* pTab) :
+    explicit SetRowHeightOnlyFunc(ScTable* pTab) :
         mpTab(pTab)
     {}
 
@@ -1862,7 +1862,7 @@ class SetTableIndex : public ::std::unary_function<ScRange, void>
 {
     SCTAB mnTab;
 public:
-    SetTableIndex(SCTAB nTab) : mnTab(nTab) {}
+    explicit SetTableIndex(SCTAB nTab) : mnTab(nTab) {}
 
     void operator() (ScRange& rRange) const
     {

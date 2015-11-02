@@ -920,7 +920,7 @@ class FindByTable : public unary_function<std::unique_ptr<ScDBData>, bool>
 {
     SCTAB mnTab;
 public:
-    FindByTable(SCTAB nTab) : mnTab(nTab) {}
+    explicit FindByTable(SCTAB nTab) : mnTab(nTab) {}
 
     bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
@@ -992,7 +992,7 @@ class FindByRange : public unary_function<std::unique_ptr<ScDBData>, bool>
 {
     const ScRange& mrRange;
 public:
-    FindByRange(const ScRange& rRange) : mrRange(rRange) {}
+    explicit FindByRange(const ScRange& rRange) : mrRange(rRange) {}
 
     bool operator() (std::unique_ptr<ScDBData> const& p)
     {
@@ -1005,7 +1005,7 @@ class FindByIndex : public unary_function<std::unique_ptr<ScDBData>, bool>
 {
     sal_uInt16 mnIndex;
 public:
-    FindByIndex(sal_uInt16 nIndex) : mnIndex(nIndex) {}
+    explicit FindByIndex(sal_uInt16 nIndex) : mnIndex(nIndex) {}
     bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
         return p->GetIndex() == mnIndex;
@@ -1016,7 +1016,7 @@ class FindByUpperName : public unary_function<std::unique_ptr<ScDBData>, bool>
 {
     const OUString& mrName;
 public:
-    FindByUpperName(const OUString& rName) : mrName(rName) {}
+    explicit FindByUpperName(const OUString& rName) : mrName(rName) {}
     bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
         return p->GetUpperName() == mrName;
@@ -1027,7 +1027,7 @@ class FindByPointer : public unary_function<std::unique_ptr<ScDBData>, bool>
 {
     const ScDBData* mpDBData;
 public:
-    FindByPointer(const ScDBData* pDBData) : mpDBData(pDBData) {}
+    explicit FindByPointer(const ScDBData* pDBData) : mpDBData(pDBData) {}
     bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
         return p.get() == mpDBData;

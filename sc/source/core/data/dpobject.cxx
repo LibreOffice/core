@@ -589,7 +589,7 @@ class FindIntersectingTable : std::unary_function<ScDPObject, bool>
 {
     ScRange maRange;
 public:
-    FindIntersectingTable(const ScRange& rRange) : maRange(rRange) {}
+    explicit FindIntersectingTable(const ScRange& rRange) : maRange(rRange) {}
 
     bool operator() (const ScDPObject& rObj) const
     {
@@ -670,7 +670,7 @@ class AccumulateOutputRanges : std::unary_function<ScDPObject, void>
     ScRangeList maRanges;
     SCTAB mnTab;
 public:
-    AccumulateOutputRanges(SCTAB nTab) : mnTab(nTab) {}
+    explicit AccumulateOutputRanges(SCTAB nTab) : mnTab(nTab) {}
     AccumulateOutputRanges(const AccumulateOutputRanges& r) : maRanges(r.maRanges), mnTab(r.mnTab) {}
 
     void operator() (const ScDPObject& rObj)
@@ -1332,7 +1332,7 @@ class FindByName : std::unary_function<const ScDPSaveDimension*, bool>
 {
     OUString maName; // must be all uppercase.
 public:
-    FindByName(const OUString& rName) : maName(rName) {}
+    explicit FindByName(const OUString& rName) : maName(rName) {}
     bool operator() (const ScDPSaveDimension* pDim) const
     {
         // Layout name takes precedence.
@@ -1356,7 +1356,7 @@ class LessByDimOrder : std::binary_function<sheet::DataPilotFieldFilter, sheet::
     const ScDPSaveData::DimOrderType& mrDimOrder;
 
 public:
-    LessByDimOrder(const ScDPSaveData::DimOrderType& rDimOrder) : mrDimOrder(rDimOrder) {}
+    explicit LessByDimOrder(const ScDPSaveData::DimOrderType& rDimOrder) : mrDimOrder(rDimOrder) {}
 
     bool operator() (const sheet::DataPilotFieldFilter& r1, const sheet::DataPilotFieldFilter& r2) const
     {
@@ -2528,7 +2528,7 @@ class FindByOriginalDim : public std::unary_function<ScPivotField, bool>
 {
     long mnDim;
 public:
-    FindByOriginalDim(long nDim) : mnDim(nDim) {}
+    explicit FindByOriginalDim(long nDim) : mnDim(nDim) {}
     bool operator() (const ScPivotField& r) const
     {
         return mnDim == r.getOriginalDim();
@@ -3304,7 +3304,7 @@ class MatchByTable : public unary_function<ScDPObject, bool>
 {
     SCTAB mnTab;
 public:
-    MatchByTable(SCTAB nTab) : mnTab(nTab) {}
+    explicit MatchByTable(SCTAB nTab) : mnTab(nTab) {}
 
     bool operator() (const ScDPObject& rObj) const
     {

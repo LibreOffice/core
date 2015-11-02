@@ -103,7 +103,7 @@ class FilterStack
 {
     std::vector<ScDPResultFilter>& mrFilters;
 public:
-    FilterStack(std::vector<ScDPResultFilter>& rFilters) : mrFilters(rFilters) {}
+    explicit FilterStack(std::vector<ScDPResultFilter>& rFilters) : mrFilters(rFilters) {}
 
     void pushDimName(const OUString& rName, bool bDataLayout)
     {

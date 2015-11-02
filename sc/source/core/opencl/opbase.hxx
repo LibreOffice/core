@@ -67,7 +67,7 @@ typedef std::shared_ptr<FormulaTreeNode> FormulaTreeNodeRef;
 class FormulaTreeNode
 {
 public:
-    FormulaTreeNode( const formula::FormulaToken* ft ) : mpCurrentFormula(ft)
+    explicit FormulaTreeNode( const formula::FormulaToken* ft ) : mpCurrentFormula(ft)
     {
         Children.reserve(8);
     }

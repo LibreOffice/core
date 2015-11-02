@@ -896,7 +896,7 @@ class DimOrderInserter : std::unary_function<const ScDPSaveDimension*, void>
 {
     ScDPSaveData::DimOrderType& mrNames;
 public:
-    DimOrderInserter(ScDPSaveData::DimOrderType& rNames) : mrNames(rNames) {}
+    explicit DimOrderInserter(ScDPSaveData::DimOrderType& rNames) : mrNames(rNames) {}
 
     void operator() (const ScDPSaveDimension* pDim)
     {
