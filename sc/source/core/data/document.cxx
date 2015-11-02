@@ -3755,9 +3755,9 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
 
 void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 {
-    if ( !aTableOpList.empty() )
+    if (!m_TableOpList.empty())
     {
-        ScInterpreterTableOpParams* p = &aTableOpList.back();
+        ScInterpreterTableOpParams *const p = m_TableOpList.back().get();
         if ( p->bCollectNotifications )
         {
             if ( p->bRefresh )

@@ -87,10 +87,10 @@ using ::std::unique_ptr;
 
 void ScInterpreter::ReplaceCell( ScAddress& rPos )
 {
-    size_t ListSize = pDok->aTableOpList.size();
+    size_t ListSize = pDok->m_TableOpList.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        ScInterpreterTableOpParams* pTOp = &pDok->aTableOpList[ i ];
+        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ].get();
         if ( rPos == pTOp->aOld1 )
         {
             rPos = pTOp->aNew1;
@@ -107,10 +107,10 @@ void ScInterpreter::ReplaceCell( ScAddress& rPos )
 void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 {
     ScAddress aCellPos( rCol, rRow, rTab );
-    size_t ListSize = pDok->aTableOpList.size();
+    size_t ListSize = pDok->m_TableOpList.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        ScInterpreterTableOpParams* pTOp = &pDok->aTableOpList[ i ];
+        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ].get();
         if ( aCellPos == pTOp->aOld1 )
         {
             rCol = pTOp->aNew1.Col();
@@ -134,10 +134,10 @@ bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
         return false;   // not considered to be a range in TableOp sense
 
     // we can't replace a single cell in a range
-    size_t ListSize = pDok->aTableOpList.size();
+    size_t ListSize = pDok->m_TableOpList.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        ScInterpreterTableOpParams* pTOp = &pDok->aTableOpList[ i ];
+        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ].get();
         if ( rRange.In( pTOp->aOld1 ) )
             return true;
         if ( rRange.In( pTOp->aOld2 ) )
@@ -911,7 +911,7 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
                 break;
             case svSingleRef:
                 SingleRefToVars( *p->GetSingleRef(), rCol, rRow, rTab);
-                if ( !pDok->aTableOpList.empty() )
+                if (!pDok->m_TableOpList.empty())
                     ReplaceCell( rCol, rRow, rTab );
                 break;
             default:
@@ -940,7 +940,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                     SCTAB nTab;
                     SingleRefToVars( *p->GetSingleRef(), nCol, nRow, nTab);
                     rAdr.Set( nCol, nRow, nTab );
-                    if ( !pDok->aTableOpList.empty() )
+                    if (!pDok->m_TableOpList.empty())
                         ReplaceCell( rAdr );
                 }
                 break;
@@ -960,7 +960,7 @@ void ScInterpreter::DoubleRefToVars( const formula::FormulaToken* p,
     const ScComplexRefData& rCRef = *p->GetDoubleRef();
     SingleRefToVars( rCRef.Ref1, rCol1, rRow1, rTab1);
     SingleRefToVars( rCRef.Ref2, rCol2, rRow2, rTab2);
-    if ( !pDok->aTableOpList.empty() && !bDontCheckForTableOp )
+    if (!pDok->m_TableOpList.empty() && !bDontCheckForTableOp)
     {
         ScRange aRange( rCol1, rRow1, rTab1, rCol2, rRow2, rTab2 );
         if ( IsTableOpInRange( aRange ) )
@@ -1045,7 +1045,7 @@ void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
     SingleRefToVars( rCRef.Ref2, nCol, nRow, nTab);
     rRange.aEnd.Set( nCol, nRow, nTab );
     rRange.PutInOrder();
-    if (! pDok->aTableOpList.empty() && !bDontCheckForTableOp )
+    if (!pDok->m_TableOpList.empty() && !bDontCheckForTableOp)
     {
         if ( IsTableOpInRange( rRange ) )
             SetError( errIllegalParameter );
@@ -3219,9 +3219,9 @@ class FindByPointer : ::std::unary_function<ScInterpreterTableOpParams, bool>
     const ScInterpreterTableOpParams* mpTableOp;
 public:
     explicit FindByPointer(const ScInterpreterTableOpParams* p) : mpTableOp(p) {}
-    bool operator() (const ScInterpreterTableOpParams& val) const
+    bool operator() (const auto& val) const
     {
-        return &val == mpTableOp;
+        return val.get() == mpTableOp;
     }
 };
 
@@ -3246,7 +3246,8 @@ void ScInterpreter::ScTableOp()
     PopSingleRef( pTableOp->aFormulaPos );
 
     pTableOp->bValid = true;
-    pDok->aTableOpList.push_back( pTableOp );
+    pDok->m_TableOpList.push_back(
+            std::unique_ptr<ScInterpreterTableOpParams>(pTableOp));
     pDok->IncInterpreterTableOpLevel();
 
     bool bReuseLastParams = (pDok->aLastTableOpParams == *pTableOp);
@@ -3286,10 +3287,13 @@ void ScInterpreter::ScTableOp()
         PushString( aCellString );
     }
 
-    boost::ptr_vector< ScInterpreterTableOpParams >::iterator itr =
-        ::std::find_if(pDok->aTableOpList.begin(), pDok->aTableOpList.end(), FindByPointer(pTableOp));
-    if (itr != pDok->aTableOpList.end())
-        pTableOp = pDok->aTableOpList.release(itr).release();
+    auto const itr =
+        ::std::find_if(pDok->m_TableOpList.begin(), pDok->m_TableOpList.end(), FindByPointer(pTableOp));
+    if (itr != pDok->m_TableOpList.end())
+    {
+        pTableOp = itr->release();
+        pDok->m_TableOpList.erase(itr);
+    }
 
     // set dirty again once more to be able to recalculate original
     for ( ::std::vector< ScFormulaCell* >::const_iterator iBroadcast(

@@ -44,7 +44,6 @@
 #include <map>
 #include <set>
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "markdata.hxx"
 
@@ -374,7 +373,8 @@ private:
     css::uno::Reference< css::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
 public:
-    boost::ptr_vector< ScInterpreterTableOpParams > aTableOpList; // list of ScInterpreterTableOpParams currently in use
+    /// list of ScInterpreterTableOpParams currently in use
+    std::vector<std::unique_ptr<ScInterpreterTableOpParams>> m_TableOpList;
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
 private:
 
