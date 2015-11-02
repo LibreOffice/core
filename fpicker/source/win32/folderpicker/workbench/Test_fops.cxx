@@ -91,10 +91,7 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
     // try to get an Interface to a XFilePicker Service
 
 
-    Reference< XFolderPicker2 > xFolderPicker;
-
-    xFolderPicker = Reference< XFolderPicker2 >(
-        g_xFactory->createInstance( FOLDER_PICKER_SERVICE_NAME), UNO_QUERY );
+    Reference< XFolderPicker2 > xFolderPicker( g_xFactory->createInstance( FOLDER_PICKER_SERVICE_NAME ), UNO_QUERY );
 
     if ( xFolderPicker.is() == sal_False )
     {

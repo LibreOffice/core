@@ -55,8 +55,8 @@ bool SVGFilter::implImport(const Sequence< PropertyValue >& rDescriptor)
     uno::Reference<io::XInputStream> xInputStream;
     uno::Reference<task::XStatusIndicator> xStatus;
 
-    xInputStream = uno::Reference<io::XInputStream>(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
-    xStatus = uno::Reference<task::XStatusIndicator>(aMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()], UNO_QUERY);
+    xInputStream.set(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);
+    xStatus.set(aMediaDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()], UNO_QUERY);
 
     if (isStreamGZip(xInputStream))
     {

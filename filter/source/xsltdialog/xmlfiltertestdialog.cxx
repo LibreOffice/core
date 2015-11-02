@@ -494,8 +494,8 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                     {
                         try
                         {
-                            xGrfResolver = Reference< XGraphicObjectResolver >::query( xDocFac->createInstance("com.sun.star.document.ExportGraphicObjectResolver") );
-                            xObjectResolver = Reference< XEmbeddedObjectResolver >::query( xDocFac->createInstance("com.sun.star.document.ExportEmbeddedObjectResolver") );
+                            xGrfResolver.set( xDocFac->createInstance("com.sun.star.document.ExportGraphicObjectResolver"), UNO_QUERY );
+                            xObjectResolver.set( xDocFac->createInstance("com.sun.star.document.ExportEmbeddedObjectResolver"), UNO_QUERY );
                         }
                         catch( const Exception& )
                         {

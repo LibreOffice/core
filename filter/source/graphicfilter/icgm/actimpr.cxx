@@ -95,8 +95,8 @@ bool CGMImpressOutAct::ImplInitPage()
 bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 {
     uno::Reference< uno::XInterface > xNewShape( maXMultiServiceFactory->createInstance( rType ) );
-    maXShape = uno::Reference< drawing::XShape >( xNewShape, uno::UNO_QUERY );
-    maXPropSet = uno::Reference< beans::XPropertySet >( xNewShape, uno::UNO_QUERY );
+    maXShape.set( xNewShape, uno::UNO_QUERY );
+    maXPropSet.set( xNewShape, uno::UNO_QUERY );
     if ( maXShape.is() && maXPropSet.is() )
     {
         maXShapes->add( maXShape );

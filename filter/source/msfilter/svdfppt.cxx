@@ -1704,7 +1704,7 @@ bool PPTConvertOCXControls::InsertControl(
                 ->createInstance( "com.sun.star.drawing.ControlShape" );
             if( xCreate.is() )
             {
-                xShape = css::uno::Reference< css::drawing::XShape >(xCreate, css::uno::UNO_QUERY);
+                xShape.set(xCreate, css::uno::UNO_QUERY);
                 if ( xShape.is() )
                 {
                     xShape->setSize(rSize);

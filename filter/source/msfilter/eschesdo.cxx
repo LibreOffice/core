@@ -882,7 +882,7 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
 
             mpSdrPage = NULL;
             mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( const_cast<SdrPage*>(&rPage) );
-            mXShapes = Reference< XShapes >::query( mXDrawPage );
+            mXShapes.set( mXDrawPage, UNO_QUERY );
             if ( !mXShapes.is() )
                 break;
             if ( !ImplInitPageValues() )    // ImplEESdrWriter
@@ -1035,7 +1035,7 @@ ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
     {
         // why not declare a const parameter if the object will
         // not be modified?
-        mXShape = uno::Reference< drawing::XShape >::query( const_cast<SdrObject*>(&rObj)->getUnoShape() );
+        mXShape.set( const_cast<SdrObject*>(&rObj)->getUnoShape(), UNO_QUERY );
         Init( rEx );
     }
 }
@@ -1164,7 +1164,7 @@ basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& rxShape
 
 void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
 {
-    mXPropSet = Reference< XPropertySet >::query( mXShape );
+    mXPropSet.set( mXShape, UNO_QUERY );
     if( mXPropSet.is() )
     {
         // detect name first to make below test (is group) work

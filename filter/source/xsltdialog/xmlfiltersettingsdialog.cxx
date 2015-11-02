@@ -92,9 +92,9 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
 
     try
     {
-        mxFilterContainer = Reference< XNameContainer >::query( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", rxContext ) );
-        mxTypeDetection = Reference< XNameContainer >::query( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", rxContext ) );
-        mxExtendedTypeDetection = Reference< XNameContainer >::query( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.ExtendedTypeDetectionFactory", rxContext ) );
+        mxFilterContainer.set( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", rxContext ), UNO_QUERY );
+        mxTypeDetection.set( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", rxContext ), UNO_QUERY );
+        mxExtendedTypeDetection.set( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.ExtendedTypeDetectionFactory", rxContext ), UNO_QUERY );
 
         SvtPathOptions aOptions;
         m_sTemplatePath = aOptions.SubstituteVariable( m_sTemplatePath );
@@ -837,7 +837,7 @@ void XMLFilterSettingsDialog::onDelete()
                     if( xFlushable.is() )
                         xFlushable->flush();
 
-                    xFlushable = Reference< XFlushable >::query( mxTypeDetection );
+                    xFlushable.set( mxTypeDetection, UNO_QUERY );
                     if( xFlushable.is() )
                         xFlushable->flush();
 

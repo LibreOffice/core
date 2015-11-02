@@ -518,7 +518,7 @@ OControlModel::OControlModel(
     {
         osl_atomic_increment(&m_refCount);
         {
-            m_xAggregate = Reference<XAggregation>(m_xContext->getServiceManager()->createInstanceWithContext(_rUnoControlModelTypeName, m_xContext), UNO_QUERY);
+            m_xAggregate.set(m_xContext->getServiceManager()->createInstanceWithContext(_rUnoControlModelTypeName, m_xContext), UNO_QUERY);
             setAggregation(m_xAggregate);
 
             if ( m_xAggregateSet.is() )
@@ -1971,8 +1971,8 @@ bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                     m_nFieldType = nFieldType;
                     // listen to changing values
                     m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
-                    m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
-                    m_xColumn = Reference< XColumn >( m_xField, UNO_QUERY );
+                    m_xColumnUpdate.set( m_xField, UNO_QUERY );
+                    m_xColumn.set( m_xField, UNO_QUERY );
                     sal_Int32 nNullableFlag = ColumnValue::NO_NULLS;
                     m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
                     m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);

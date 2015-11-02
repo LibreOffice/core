@@ -157,9 +157,7 @@ EvaluationContext Model::getEvaluationContext()
     // no element found? Then insert default element 'instanceData'
     if( ! xElement.is() )
     {
-        xElement = Reference<XNode>(
-                       xInstance->createElement( "instanceData" ),
-                       UNO_QUERY_THROW );
+        xElement.set( xInstance->createElement( "instanceData" ), UNO_QUERY_THROW );
         xInstance->appendChild( xElement );
     }
 
@@ -327,7 +325,7 @@ bool Model::setSimpleContent( const XNode_t& xConstNode,
             // create text node, if none is found
             if( ! xChild.is() )
             {
-                xChild = Reference<XNode>(
+                xChild.set(
                     xNode->getOwnerDocument()->createTextNode( OUString() ),
                     UNO_QUERY_THROW );
                 xNode->appendChild( xChild );

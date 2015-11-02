@@ -78,8 +78,7 @@ const uno::Reference< drawing::XShapes >& SvxMSConvertOCXControls::GetShapes()
         if( xDrawPage.is() )
         {
 
-            xShapes = uno::Reference< drawing::XShapes >(xDrawPage,
-                uno::UNO_QUERY);
+            xShapes.set(xDrawPage, uno::UNO_QUERY);
             OSL_ENSURE( xShapes.is(), "UNO_QUERY failed for XShapes from XDrawPage" );
         }
     }
