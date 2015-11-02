@@ -1,8 +1,9 @@
-#!/bin/bash -x
+#!/bin/bash
 
-# Script to sign executables, dylibs and frameworks in an app bundle
-# plus the bundle itself. Called from
-# the test-install target in Makefile.in
+# Script to sign dylibs and frameworks in an app bundle plus the
+# bundle itself. Called from
+# installer::simplepackage::create_package() in
+# solenv/bin/modules/installer/simplepackage.pm
 
 test `uname` = Darwin || { echo This is for OS X only; exit 1; }
 
@@ -18,27 +19,16 @@ for V in \
     fi
 done
 
+echo "codesigning using MACSOX_CODESIGNING_IDENTITY=[${MACOSX_CODESIGNING_IDENTITY?}]"
+
 APP_BUNDLE="$1"
 
-if test -n "$ENABLE_MACOSX_SANDBOX"; then
-    # In a sandboxed build executables need the entitlements
-    entitlements="--entitlements $BUILDDIR/lo.xcent"
-    # We use --enable-canonical-installation-tree-structure so all
-    # data files in Resources are included in the app bundle signature
-    # through that. I think.
-    other_files=''
-else
-    # In a non-sandboxed build (distributed outside the App Store)
-    # we traditionally have use --resource-rules. Let's not touch that?
-    resource_rules="--resource-rules $SRCDIR/setup_native/source/mac/CodesignRules.plist"
-    # And there we then want to sign data files, too, hmm.
-    other_files="\
- -or -name '*.fodt' -or -name 'schema.strings' -or -name 'schema.xml' \
- -or -name '*.jar' -or -name '*.jnilib' -or -name 'LICENSE' -or -name 'LICENSE.html' \
- -or -name '*.applescript' -or -name '*.odt'"
-fi
-
 # Sign dylibs
+#
+# Executables get signed right after linking, see
+# solenv/gbuild/platform/macosx.mk. But many of our dylibs are built
+# by ad-hoc or 3rd-party mechanisms, so we can't easily sign them
+# right after linking. So do it here.
 #
 # The dylibs in the Python framework are called *.so. Go figure
 #
@@ -46,69 +36,74 @@ fi
 # add some where it makes sense. Make a depth-first search to sign the contents
 # of e.g. the spotlight plugin before attempting to sign the plugin itself
 
-find "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.dylib.*' -or -name '*.so' \
-        $other_files \) ! -type l |
+find -d "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.so' -or -name '*.fodt' -or -name '*.odt' \
+        -or -name 'schema.strings' -or -name 'schema.xml' -or -name '*.mdimporter' \
+        -or -name '*.jar' -or -name '*.jnilib' -or -name 'LICENSE' -or -name 'LICENSE.html' \
+        -or -name '*.applescript' \) ! -type l | grep -v "LibreOfficePython\.framework" | \
 while read file; do
     id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file"
+    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" || exit 1
 done
 
-# Sign executables
-
-find "$APP_BUNDLE/Contents/MacOS" -type f |
-while read file; do
-    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-    codesign --force --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file"
+find "$APP_BUNDLE" -name '*.dylib.*' ! -type l | \
+while read dylib; do \
+    id=`basename "$dylib"`; \
+    id=`echo $id | sed -e 's/dylib.*/dylib/'`; \
+    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$dylib" || exit 1
 done
 
-# Sign included bundles. First .app ones (i.e. the Python.app inside
-# the LibreOfficePython.framework. Be generic for kicks...)
+# The executables have already been signed by
+# gb_LinkTarget__command_dynamiclink in
+# solenv/gbuild/platform/macosx.mk, but sign the handful of scripts remaining
+# in MacOS
+# (<https://developer.apple.com/library/mac/technotes/tn2206/_index.html> "OS X
+# Code Signing In Depth" suggests we should get rid of them rather sooner than
+# later, but they appear to be OK for now):
 
-find "$APP_BUNDLE" -name '*.app' -type d |
-while read app; do
-    fn=`basename "$app"`
+for i in gengal python senddoc unoinfo
+do
+    if [ -f "$APP_BUNDLE/Contents/MacOS/$i" ]
+    then
+        codesign --verbose --identifier="$MACOSX_BUNDLE_IDENTIFIER.$i" \
+            --sign "$MACOSX_CODESIGNING_IDENTITY" "$APP_BUNDLE/Contents/MacOS/$i" \
+        || exit 1
+    fi
+done
+
+# Sign frameworks.
+#
+# Yeah, we don't bundle any other framework than our Python one, and
+# it has just one version, so this generic search is mostly for
+# completeness.
+
+find "$APP_BUNDLE" -name '*.framework' -type d -print0 | \
+while IFS= read -r -d '' framework; do \
+    fn=$(basename "$framework")
     fn=${fn%.*}
-    # Assume the app has a XML (and not binary) Info.plist
-    id=`grep -A 1 '<key>CFBundleIdentifier</key>' "$app/Contents/Info.plist" | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-    codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app"
-done
-
-# Then .framework ones. Again, be generic just for kicks.
-
-find "$APP_BUNDLE" -name '*.framework' -type d |
-while read framework; do
-    fn=`basename "$framework"`
-    fn=${fn%.*}
-    for version in "$framework"/Versions/*; do
+    for version in "$framework"/Versions/*; do \
         if test ! -L "$version" -a -d "$version"; then
-	    # Assume the framework has a XML (and not binary) Info.plist
-	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' "$version/Resources/Info.plist" | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
-            codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version"
-        fi
-    done
+            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$version/$fn" || exit 1
+            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" || exit 1
+        fi; \
+    done; \
 done
 
-# Then mdimporters
-
-find "$APP_BUNDLE" -name '*.mdimporter' -type d |
-while read bundle; do
-    codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$bundle"
-done
-
-# Sign the app bundle as a whole which means (re-)signing the
-# CFBundleExecutable from Info.plist, i.e. soffice, plus the contents
+# Sign the app bundle as a whole which means finally signing the
+# CFBundleExecutable from Info.plist, i.e. soffice (which is exempted from the
+# on-the-go executable signing in gb_LinkTarget__command_dynamiclink in
+# solenv/gbuild/platform/macosx.mk), plus the contents
 # of the Resources tree (which unless you used
 # --enable-canonical-installation-tree-structure is not much, far from
 # all of our non-code "resources").
 #
 # At this stage we also attach the entitlements in the sandboxing case
-#
-# Also omit some files from the Bundle's seal via the resource-rules
-# (bootstraprc and similar that the user might adjust and image files)
-# See also https://developer.apple.com/library/mac/technotes/tn2206/
 
 id=`echo ${MACOSX_APP_NAME} | tr ' ' '-'`
 
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}" $resource_rules --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE"
+if test -n "$ENABLE_MACOSX_SANDBOX"; then
+    entitlements="--entitlements $BUILDDIR/lo.xcent"
+fi
+
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE" || exit 1
 
 exit 0
