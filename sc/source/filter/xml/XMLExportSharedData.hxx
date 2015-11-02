@@ -54,7 +54,7 @@ class ScMySharedData
     ScMyNoteShapesContainer*    pNoteShapes;
     sal_Int32                   nTableCount;
 public:
-    ScMySharedData(const sal_Int32 nTableCount);
+    explicit ScMySharedData(const sal_Int32 nTableCount);
     ~ScMySharedData();
 
     void SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol);

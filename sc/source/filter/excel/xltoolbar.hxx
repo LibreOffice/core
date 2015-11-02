@@ -54,7 +54,7 @@ class ScCTB : public TBBase
     sal_uInt32 ectbid;
     std::vector< ScTBC > rTBC;
 public:
-    ScCTB(sal_uInt16);
+    explicit ScCTB(sal_uInt16);
     virtual ~ScCTB(){}
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;

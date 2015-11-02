@@ -3112,7 +3112,7 @@ class CSSHandler
 
     ScHTMLStyles& mrStyles;
 public:
-    CSSHandler(ScHTMLStyles& rStyles) : mrStyles(rStyles) {}
+    explicit CSSHandler(ScHTMLStyles& rStyles) : mrStyles(rStyles) {}
 
     static void at_rule_name(const char* /*p*/, size_t /*n*/)
     {

@@ -82,7 +82,7 @@ class FindSheetByIndex : std::unary_function<ScOrcusSheet, bool>
 {
     SCTAB mnTab;
 public:
-    FindSheetByIndex(SCTAB nTab) : mnTab(nTab) {}
+    explicit FindSheetByIndex(SCTAB nTab) : mnTab(nTab) {}
     bool operator() (const ScOrcusSheet& rSheet) const
     {
         return rSheet.getIndex() == mnTab;

@@ -187,7 +187,7 @@ public:
 
 struct ScMyCellRangeAddress : css::table::CellRangeAddress
 {
-    ScMyCellRangeAddress(const css::table::CellRangeAddress& rRange);
+    explicit ScMyCellRangeAddress(const css::table::CellRangeAddress& rRange);
     bool                        operator<(const ScMyCellRangeAddress& rCellRangeAddress ) const;
 };
 
@@ -341,7 +341,7 @@ class ScMyNotEmptyCellsIterator : boost::noncopyable
 
     void                        HasAnnotation( ScMyCell& aCell );
 public:
-                                ScMyNotEmptyCellsIterator(ScXMLExport& rExport);
+    explicit                    ScMyNotEmptyCellsIterator(ScXMLExport& rExport);
                                 ~ScMyNotEmptyCellsIterator();
 
     void                        Clear();

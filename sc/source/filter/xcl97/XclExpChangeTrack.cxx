@@ -1398,7 +1398,7 @@ class EndXmlElement : public ExcXmlRecord
 {
     sal_Int32           mnElement;
 public:
-                        EndXmlElement( sal_Int32 nElement ) : mnElement( nElement) {}
+    explicit            EndXmlElement( sal_Int32 nElement ) : mnElement( nElement) {}
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
 

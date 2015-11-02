@@ -37,7 +37,7 @@ struct ScMyStyleNumberFormat
     sal_Int32           nNumberFormat;
 
     ScMyStyleNumberFormat() : nNumberFormat(-1) {}
-    ScMyStyleNumberFormat(const OUString& rStyleName) :
+    explicit ScMyStyleNumberFormat(const OUString& rStyleName) :
         sStyleName(rStyleName), nNumberFormat(-1) {}
     ScMyStyleNumberFormat(const OUString& rStyleName, const sal_Int32 nFormat) :
         sStyleName(rStyleName), nNumberFormat(nFormat) {}
@@ -153,7 +153,7 @@ class ScMyStylesImportHelper
                 (!pSecond && pFirst && pFirst->isEmpty()));
     }
 public:
-    ScMyStylesImportHelper(ScXMLImport& rImport);
+    explicit ScMyStylesImportHelper(ScXMLImport& rImport);
     ~ScMyStylesImportHelper();
     void AddColumnStyle(const OUString& rStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat);
     void SetRowStyle(const OUString& rStyleName);

@@ -325,7 +325,7 @@ struct RevisionLogFragment::Impl
 
     bool mbEndOfList;
 
-    Impl( ScChangeTrack& rChangeTrack ) :
+    explicit Impl( ScChangeTrack& rChangeTrack ) :
         mrChangeTrack(rChangeTrack),
         mnRevIndex(-1),
         mnSheetIndex(-1),

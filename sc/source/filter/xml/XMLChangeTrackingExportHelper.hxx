@@ -78,7 +78,7 @@ class ScChangeTrackingExportHelper
     void CollectActionAutoStyles(ScChangeAction* pAction);
     void WorkWithChangeAction(ScChangeAction* pAction);
 public:
-    ScChangeTrackingExportHelper(ScXMLExport& rExport);
+    explicit ScChangeTrackingExportHelper(ScXMLExport& rExport);
     ~ScChangeTrackingExportHelper();
 
     void CollectAutoStyles();

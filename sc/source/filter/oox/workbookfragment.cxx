@@ -262,7 +262,7 @@ class ProgressBarTimer : Timer
         double mfPosition;
         ISegmentProgressBarRef mxWrapped;
     public:
-        ProgressWrapper(const ISegmentProgressBarRef &xRef)
+        explicit ProgressWrapper(const ISegmentProgressBarRef &xRef)
             : mfPosition(0.0)
             , mxWrapped(xRef)
         {

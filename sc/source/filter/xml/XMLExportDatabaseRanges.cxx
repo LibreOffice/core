@@ -427,7 +427,7 @@ private:
     {
         ScXMLExport& mrExport;
     public:
-        WriteSetItem(ScXMLExport& r) : mrExport(r) {}
+        explicit WriteSetItem(ScXMLExport& r) : mrExport(r) {}
         void operator() (const ScQueryEntry::Item& rItem) const
         {
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());

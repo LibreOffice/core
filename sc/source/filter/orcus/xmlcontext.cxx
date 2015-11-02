@@ -129,7 +129,7 @@ class TreeUpdateSwitch
 {
     SvTreeListBox& mrTreeCtrl;
 public:
-    TreeUpdateSwitch(SvTreeListBox& rTreeCtrl) : mrTreeCtrl(rTreeCtrl)
+    explicit TreeUpdateSwitch(SvTreeListBox& rTreeCtrl) : mrTreeCtrl(rTreeCtrl)
     {
         mrTreeCtrl.SetUpdateMode(false);
     }
@@ -144,7 +144,7 @@ class InsertFieldPath : std::unary_function<OString, void>
 {
     orcus::orcus_xml& mrFilter;
 public:
-    InsertFieldPath(orcus::orcus_xml& rFilter) : mrFilter(rFilter) {}
+    explicit InsertFieldPath(orcus::orcus_xml& rFilter) : mrFilter(rFilter) {}
     void operator() (const OString& rPath)
     {
         mrFilter.append_field_link(rPath.getStr());

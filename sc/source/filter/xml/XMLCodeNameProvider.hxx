@@ -35,7 +35,7 @@ class XMLCodeNameProvider : public ::cppu::WeakImplHelper< css::container::XName
                            OUString& rCodeName );
 
 public:
-    XMLCodeNameProvider( ScDocument* pDoc );
+    explicit XMLCodeNameProvider(ScDocument* pDoc);
     virtual ~XMLCodeNameProvider();
 
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )

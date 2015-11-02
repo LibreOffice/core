@@ -152,7 +152,7 @@ class ScRowFormatRanges
 
 public:
     ScRowFormatRanges();
-    ScRowFormatRanges(const ScRowFormatRanges* pRanges);
+    explicit ScRowFormatRanges(const ScRowFormatRanges* pRanges);
     ~ScRowFormatRanges();
 
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }

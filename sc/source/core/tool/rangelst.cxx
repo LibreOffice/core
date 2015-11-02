@@ -41,7 +41,7 @@ template<typename T>
 class FindEnclosingRange : public ::std::unary_function<ScRange*, bool>
 {
 public:
-    FindEnclosingRange(const T& rTest) : mrTest(rTest) {}
+    explicit FindEnclosingRange(const T& rTest) : mrTest(rTest) {}
     FindEnclosingRange(const FindEnclosingRange& r) : mrTest(r.mrTest) {}
     bool operator() (const ScRange* pRange) const
     {
@@ -69,7 +69,7 @@ template<typename T>
 class FindIntersectingRange : public ::std::unary_function<ScRange*, bool>
 {
 public:
-    FindIntersectingRange(const T& rTest) : mrTest(rTest) {}
+    explicit FindIntersectingRange(const T& rTest) : mrTest(rTest) {}
     FindIntersectingRange(const FindIntersectingRange& r) : mrTest(r.mrTest) {}
     bool operator() (const ScRange* pRange) const
     {
@@ -82,7 +82,7 @@ private:
 class AppendToList : public ::std::unary_function<const ScRange*, void>
 {
 public:
-    AppendToList(vector<ScRange*>& rRanges) : mrRanges(rRanges) {}
+    explicit AppendToList(vector<ScRange*>& rRanges) : mrRanges(rRanges) {}
     AppendToList(const AppendToList& r) : mrRanges(r.mrRanges) {}
     void operator() (const ScRange* p)
     {

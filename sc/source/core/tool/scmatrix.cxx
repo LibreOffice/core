@@ -1166,7 +1166,7 @@ class CountElements : std::unary_function<MatrixImplType::element_block_node_typ
     size_t mnCount;
     bool mbCountString;
 public:
-    CountElements(bool bCountString) : mnCount(0), mbCountString(bCountString) {}
+    explicit CountElements(bool bCountString) : mnCount(0), mbCountString(bCountString) {}
 
     size_t getCount() const { return mnCount; }
 

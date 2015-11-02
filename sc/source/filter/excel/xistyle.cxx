@@ -74,7 +74,7 @@ typedef ::std::vector< ColorData > ColorDataVec;
 class PaletteIndex : public XIndexAccess_BASE
 {
 public:
-    PaletteIndex( const ColorDataVec& rColorDataTable ) : maColorData( rColorDataTable ) {}
+    explicit PaletteIndex( const ColorDataVec& rColorDataTable ) : maColorData( rColorDataTable ) {}
 
     // Methods XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) override

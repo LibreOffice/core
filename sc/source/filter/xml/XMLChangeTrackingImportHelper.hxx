@@ -124,13 +124,13 @@ struct ScMyBaseAction
     ScChangeActionType nActionType;
     ScChangeActionState nActionState;
 
-    ScMyBaseAction(const ScChangeActionType nActionType);
+    explicit ScMyBaseAction(const ScChangeActionType nActionType);
     virtual ~ScMyBaseAction();
 };
 
 struct ScMyInsAction : public ScMyBaseAction
 {
-    ScMyInsAction(const ScChangeActionType nActionType);
+    explicit ScMyInsAction(const ScChangeActionType nActionType);
     virtual ~ScMyInsAction();
 };
 
@@ -141,7 +141,7 @@ struct ScMyDelAction : public ScMyBaseAction
     ScMyMoveCutOffs aMoveCutOffs;
     sal_Int32 nD;
 
-    ScMyDelAction(const ScChangeActionType nActionType);
+    explicit ScMyDelAction(const ScChangeActionType nActionType);
     virtual ~ScMyDelAction();
 };
 

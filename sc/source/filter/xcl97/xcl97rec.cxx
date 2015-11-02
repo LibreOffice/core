@@ -1131,8 +1131,8 @@ bool transformURL(const OUString& rOldURL, OUString& rNewURL, ScDocument* pDoc)
 class ScURLTransformer : public oox::drawingml::URLTransformer
 {
 public:
-    ScURLTransformer(ScDocument& rDoc):
-        mrDoc(rDoc)
+    explicit ScURLTransformer(ScDocument& rDoc)
+        : mrDoc(rDoc)
     {
     }
 

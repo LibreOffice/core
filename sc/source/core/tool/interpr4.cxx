@@ -3229,7 +3229,7 @@ class FindByPointer : ::std::unary_function<ScInterpreterTableOpParams, bool>
 {
     const ScInterpreterTableOpParams* mpTableOp;
 public:
-    FindByPointer(const ScInterpreterTableOpParams* p) : mpTableOp(p) {}
+    explicit FindByPointer(const ScInterpreterTableOpParams* p) : mpTableOp(p) {}
     bool operator() (const ScInterpreterTableOpParams& val) const
     {
         return &val == mpTableOp;

@@ -63,7 +63,7 @@ class ScXMLExportDataPilot
     void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const OUString* pGrandTotal);
 
 public:
-    ScXMLExportDataPilot(ScXMLExport& rExport);
+    explicit ScXMLExportDataPilot(ScXMLExport& rExport);
     ~ScXMLExportDataPilot();
     void WriteDataPilots(const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreaDoc);
 };

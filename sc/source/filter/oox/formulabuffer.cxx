@@ -59,7 +59,7 @@ public:
         Item() : mnRow(-1), mpCell(NULL) {}
     };
 
-    CachedTokenArray( ScDocument& rDoc ) :
+    explicit CachedTokenArray( ScDocument& rDoc ) :
         maCxt(&rDoc, formula::FormulaGrammar::GRAM_OOXML) {}
 
     ~CachedTokenArray()

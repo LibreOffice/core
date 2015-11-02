@@ -33,7 +33,7 @@ class FindByField : public std::unary_function<ScQueryEntry, bool>
 {
     SCCOLROW mnField;
 public:
-    FindByField(SCCOLROW nField) : mnField(nField) {}
+    explicit FindByField(SCCOLROW nField) : mnField(nField) {}
     bool operator() (const ScQueryEntry& rEntry) const
     {
         return rEntry.bDoQuery && rEntry.nField == mnField;

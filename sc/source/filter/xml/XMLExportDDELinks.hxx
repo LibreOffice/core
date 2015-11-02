@@ -32,7 +32,7 @@ class ScXMLExportDDELinks
     void                WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat);
     void                WriteTable(const sal_Int32 nPos);
 public:
-    ScXMLExportDDELinks(ScXMLExport& rExport);
+    explicit ScXMLExportDDELinks(ScXMLExport& rExport);
     ~ScXMLExportDDELinks();
     void WriteDDELinks(css::uno::Reference < css::sheet::XSpreadsheetDocument >& xSpreadDoc);
 };
