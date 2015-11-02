@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,glyphy))
 
-$(eval $(call gb_Module_add_targets,liborcus,\
+$(eval $(call gb_Module_add_targets,glyphy,\
 	UnpackedTarball_glyphy \
 ))
 

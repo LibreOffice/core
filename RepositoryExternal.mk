@@ -272,13 +272,13 @@ endef
 
 endif # SYSTEM_GLEW
 
-$(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	liborcus \
-))
-
-ifneq ($(SYSTEM_GLEW),)
+ifneq ($(SYSTEM_GLYPHY),)
 
 else # !SYSTEM_GLYPHY
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	glyphy \
+))
 
 define gb_LinkTarget__use_glyphy
 $(call gb_LinkTarget_use_package,$(1),glyphy)
@@ -294,7 +294,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-endif GLYPHY
+endif # SYSTEM_GLYPHY
 
 define gb_LinkTarget__use_iconv
 $(call gb_LinkTarget_add_libs,$(1),-liconv)
