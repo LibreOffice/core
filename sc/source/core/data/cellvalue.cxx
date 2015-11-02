@@ -594,8 +594,8 @@ bool ScRefCellValue::equalsWithoutFormat( const ScRefCellValue& r ) const
 
 ScRefCellValue& ScRefCellValue::operator= ( const ScRefCellValue& r )
 {
-    ScRefCellValue aTmp(r);
-    swap(aTmp);
+    meType = r.meType;
+    mfValue = r.mfValue;    // largest member of union
     return *this;
 }
 
