@@ -71,21 +71,21 @@ static const char aPostItStr[] = "  ";
 
 bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 {
-    return  nCoreOptions == rOpt.nCoreOptions
-            && nCore2Options == rOpt.nCore2Options
-            && aSnapSize    == rOpt.aSnapSize
+    return  m_nCoreOptions == rOpt.m_nCoreOptions
+            && m_nCore2Options == rOpt.m_nCore2Options
+            && m_aSnapSize    == rOpt.m_aSnapSize
             && mnViewLayoutColumns == rOpt.mnViewLayoutColumns
-            && nDivisionX   == rOpt.GetDivisionX()
-            && nDivisionY   == rOpt.GetDivisionY()
-            && nPagePrevRow == rOpt.GetPagePrevRow()
-            && nPagePrevCol == rOpt.GetPagePrevCol()
-            && aRetoucheColor == rOpt.GetRetoucheColor()
+            && m_nDivisionX   == rOpt.GetDivisionX()
+            && m_nDivisionY   == rOpt.GetDivisionY()
+            && m_nPagePreviewRow == rOpt.GetPagePrevRow()
+            && m_nPagePreviewCol == rOpt.GetPagePrevCol()
+            && m_aRetouchColor == rOpt.GetRetoucheColor()
             && mbFormView == rOpt.IsFormView()
             && mbBrowseMode == rOpt.getBrowseMode()
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
             && mbHideWhitespaceMode == rOpt.mbHideWhitespaceMode
-            && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
-            && bIdle == rOpt.bIdle
+            && m_bShowPlaceHolderFields == rOpt.m_bShowPlaceHolderFields
+            && m_bIdle == rOpt.m_bIdle
 #ifdef DBG_UTIL
             // correspond to the statements in ui/config/cfgvw.src
             && m_bTest1 == rOpt.IsTest1()
@@ -153,29 +153,29 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
 }
 
 SwViewOption::SwViewOption() :
-    sSymbolFont( "symbol" ),
-    aRetoucheColor( COL_TRANSPARENT ),
+    m_sSymbolFont( "symbol" ),
+    m_aRetouchColor( COL_TRANSPARENT ),
     mnViewLayoutColumns( 0 ),
-    nPagePrevRow( 1 ),
-    nPagePrevCol( 2 ),
-    nShdwCrsrFillMode( FILL_TAB ),
-    bReadonly(false),
-    bStarOneSetting(false),
-    bIsPagePreview(false),
-    bSelectionInReadonly(false),
+    m_nPagePreviewRow( 1 ),
+    m_nPagePreviewCol( 2 ),
+    m_nShadowCrsrFillMode( FILL_TAB ),
+    m_bReadonly(false),
+    m_bStarOneSetting(false),
+    m_bIsPagePreview(false),
+    m_bSelectionInReadonly(false),
     mbFormView(false),
     mbBrowseMode(false),
     mbBookView(false),
     mbViewLayoutBookMode(false),
     mbHideWhitespaceMode(false),
-    bShowPlaceHolderFields( true ),
-    nZoom( 100 ),
-    eZoom( SvxZoomType::PERCENT ),
-    nTableDest(TBL_DEST_CELL)
+    m_bShowPlaceHolderFields( true ),
+    m_nZoom( 100 ),
+    m_eZoom( SvxZoomType::PERCENT ),
+    m_nTableDestination(TBL_DEST_CELL)
 {
     // Initialisation is a little simpler now
     // all Bits to 0
-    nCoreOptions =
+    m_nCoreOptions =
         VIEWOPT_1_HARDBLANK |
         VIEWOPT_1_SOFTHYPH |
         VIEWOPT_1_REF |
@@ -186,24 +186,24 @@ SwViewOption::SwViewOption() :
         VIEWOPT_1_PAGEBACK |
         VIEWOPT_1_POSTITS;
 
-    nCore2Options =
+    m_nCore2Options =
         VIEWOPT_CORE2_BLACKFONT |
         VIEWOPT_CORE2_HIDDENPARA;
 
-    nUIOptions =
+    m_nUIOptions =
         VIEWOPT_2_MODIFIED |
         VIEWOPT_2_GRFKEEPZOOM |
         VIEWOPT_2_ANY_RULER;
 
     if (!utl::ConfigManager::IsAvoidConfig() && MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
-        aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
+        m_aSnapSize.Width() = m_aSnapSize.Height() = 720;   // 1/2"
     else
-        aSnapSize.Width() = aSnapSize.Height() = 567;   // 1 cm
-    nDivisionX = nDivisionY = 1;
+        m_aSnapSize.Width() = m_aSnapSize.Height() = 567;   // 1 cm
+    m_nDivisionX = m_nDivisionY = 1;
 
-    bSelectionInReadonly = !utl::ConfigManager::IsAvoidConfig() && SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
+    m_bSelectionInReadonly = !utl::ConfigManager::IsAvoidConfig() && SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
 
-    bIdle = true;
+    m_bIdle = true;
 
 #ifdef DBG_UTIL
     // correspond to the statements in ui/config/cfgvw.src
@@ -216,33 +216,33 @@ SwViewOption::SwViewOption() :
 
 SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
-    bReadonly = false;
-    bSelectionInReadonly = false;
+    m_bReadonly = false;
+    m_bSelectionInReadonly = false;
     // #114856# Formular view
     mbFormView       = rVOpt.mbFormView;
-    nZoom           = rVOpt.nZoom       ;
-    aSnapSize       = rVOpt.aSnapSize   ;
+    m_nZoom           = rVOpt.m_nZoom       ;
+    m_aSnapSize       = rVOpt.m_aSnapSize   ;
     mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
-    nDivisionX      = rVOpt.nDivisionX  ;
-    nDivisionY      = rVOpt.nDivisionY  ;
-    nPagePrevRow    = rVOpt.nPagePrevRow;
-    nPagePrevCol    = rVOpt.nPagePrevCol;
-    bIsPagePreview  = rVOpt.bIsPagePreview;
-    eZoom           = rVOpt.eZoom       ;
-    nTableDest        = rVOpt.nTableDest    ;
-    nUIOptions      = rVOpt.nUIOptions  ;
-    nCoreOptions    = rVOpt.nCoreOptions  ;
-    nCore2Options   = rVOpt.nCore2Options  ;
-    aRetoucheColor  = rVOpt.GetRetoucheColor();
-    sSymbolFont     = rVOpt.sSymbolFont;
-    nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
-    bStarOneSetting = rVOpt.bStarOneSetting;
+    m_nDivisionX      = rVOpt.m_nDivisionX  ;
+    m_nDivisionY      = rVOpt.m_nDivisionY  ;
+    m_nPagePreviewRow    = rVOpt.m_nPagePreviewRow;
+    m_nPagePreviewCol    = rVOpt.m_nPagePreviewCol;
+    m_bIsPagePreview  = rVOpt.m_bIsPagePreview;
+    m_eZoom           = rVOpt.m_eZoom       ;
+    m_nTableDestination        = rVOpt.m_nTableDestination    ;
+    m_nUIOptions      = rVOpt.m_nUIOptions  ;
+    m_nCoreOptions    = rVOpt.m_nCoreOptions  ;
+    m_nCore2Options   = rVOpt.m_nCore2Options  ;
+    m_aRetouchColor  = rVOpt.GetRetoucheColor();
+    m_sSymbolFont     = rVOpt.m_sSymbolFont;
+    m_nShadowCrsrFillMode = rVOpt.m_nShadowCrsrFillMode;
+    m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     mbHideWhitespaceMode = rVOpt.mbHideWhitespaceMode;
-    bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
-    bIdle           = rVOpt.bIdle;
+    m_bShowPlaceHolderFields = rVOpt.m_bShowPlaceHolderFields;
+    m_bIdle           = rVOpt.m_bIdle;
 
 #ifdef DBG_UTIL
     m_bTest1  = rVOpt.m_bTest1;
@@ -261,29 +261,29 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 {
     // #114856# Formular view
     mbFormView       = rVOpt.mbFormView   ;
-    nZoom           = rVOpt.nZoom       ;
-    aSnapSize       = rVOpt.aSnapSize   ;
+    m_nZoom           = rVOpt.m_nZoom       ;
+    m_aSnapSize       = rVOpt.m_aSnapSize   ;
     mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
-    nDivisionX      = rVOpt.nDivisionX  ;
-    nDivisionY      = rVOpt.nDivisionY  ;
-    nPagePrevRow    = rVOpt.nPagePrevRow;
-    nPagePrevCol    = rVOpt.nPagePrevCol;
-    bIsPagePreview  = rVOpt.bIsPagePreview;
-    eZoom           = rVOpt.eZoom       ;
-    nTableDest        = rVOpt.nTableDest    ;
-    nUIOptions      = rVOpt.nUIOptions  ;
-    nCoreOptions    = rVOpt.nCoreOptions;
-    nCore2Options   = rVOpt.nCore2Options;
-    aRetoucheColor  = rVOpt.GetRetoucheColor();
-    sSymbolFont     = rVOpt.sSymbolFont;
-    nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
-    bStarOneSetting = rVOpt.bStarOneSetting;
+    m_nDivisionX      = rVOpt.m_nDivisionX  ;
+    m_nDivisionY      = rVOpt.m_nDivisionY  ;
+    m_nPagePreviewRow    = rVOpt.m_nPagePreviewRow;
+    m_nPagePreviewCol    = rVOpt.m_nPagePreviewCol;
+    m_bIsPagePreview  = rVOpt.m_bIsPagePreview;
+    m_eZoom           = rVOpt.m_eZoom       ;
+    m_nTableDestination        = rVOpt.m_nTableDestination    ;
+    m_nUIOptions      = rVOpt.m_nUIOptions  ;
+    m_nCoreOptions    = rVOpt.m_nCoreOptions;
+    m_nCore2Options   = rVOpt.m_nCore2Options;
+    m_aRetouchColor  = rVOpt.GetRetoucheColor();
+    m_sSymbolFont     = rVOpt.m_sSymbolFont;
+    m_nShadowCrsrFillMode = rVOpt.m_nShadowCrsrFillMode;
+    m_bStarOneSetting = rVOpt.m_bStarOneSetting;
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     mbHideWhitespaceMode = rVOpt.mbHideWhitespaceMode;
-    bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
-    bIdle           = rVOpt.bIdle;
+    m_bShowPlaceHolderFields = rVOpt.m_bShowPlaceHolderFields;
+    m_bIdle           = rVOpt.m_bIdle;
 
 #ifdef DBG_UTIL
     m_bTest1  = rVOpt.m_bTest1;
@@ -322,7 +322,7 @@ void SwViewOption::SetOnlineSpell(bool b)
     if (comphelper::LibreOfficeKit::isActive())
         return;
 
-    b ? (nCoreOptions |= VIEWOPT_1_ONLINESPELL ) : ( nCoreOptions &= ~VIEWOPT_1_ONLINESPELL);
+    b ? (m_nCoreOptions |= VIEWOPT_1_ONLINESPELL ) : ( m_nCoreOptions &= ~VIEWOPT_1_ONLINESPELL);
 }
 
 AuthorCharAttr::AuthorCharAttr() :
