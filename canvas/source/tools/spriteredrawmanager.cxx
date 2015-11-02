@@ -265,9 +265,10 @@ namespace canvas
         // for each unique sprite, check the change event vector,
         // calculate the update operation from that, and add the
         // result to the aUpdateArea.
-        SpriteUpdater aSpriteUpdater( rUpdateAreas, maChangeRecords);
-        for (auto const& aUpdatableSprite : aUpdatableSprites)
-            aSpriteUpdater( aUpdatableSprite);
+        ::std::for_each( aUpdatableSprites.begin(),
+                         aEnd,
+                         SpriteUpdater( rUpdateAreas,
+                                        maChangeRecords) );
 
         // TODO(P2): Implement your own output iterator adapter, to
         // avoid that totally superfluous temp aUnchangedSprites
