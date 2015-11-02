@@ -122,7 +122,7 @@ Menu RID_SVX_STYLE_MENU
 
 String RID_SVXSTR_EXTRAS_CHARBACKGROUND
 {
-    Text [ en-US ] = "Highlighting" ;
+    Text [ en-US ] = "Highlight Color" ;
 };
 
 String RID_SVXSTR_CHAR_BACK_COLOR
