@@ -222,6 +222,8 @@ bridges_NON_CALL_EXCEPTIONS_FLAGS := -fnon-call-exceptions
 endif
 endif
 
+bridges_DEBUGINFO_FLAGS := $(if $(filter-out 0,$(gb_DEBUGLEVEL))$(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))
+
 $(eval $(call gb_Library_use_libraries,$(gb_CPPU_ENV)_uno,\
 	cppu \
 	sal \
@@ -234,17 +236,17 @@ $(foreach obj,$(bridge_exception_objects),\
 $(foreach obj,$(bridge_noncallexception_objects),\
 	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
-    , $(bridges_NON_CALL_EXCEPTIONS_FLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
+	, $(bridges_NON_CALL_EXCEPTIONS_FLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) $(bridges_DEBUGINFO_FLAGS))) \
 )
 $(foreach obj,$(bridge_noopt_objects),\
 	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
-	, $(gb_COMPILERNOOPTFLAGS) $(if $(filter MSC,$(COM)),$(gb_DEBUG_CFLAGS)) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
+	, $(gb_COMPILERNOOPTFLAGS) $(if $(filter MSC,$(COM)),$(gb_DEBUG_CFLAGS),$(bridges_DEBUGINFO_FLAGS)) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
 )
 $(foreach obj,$(bridge_noncallexception_noopt_objects),\
 	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
-	, $(gb_COMPILERNOOPTFLAGS) $(bridges_NON_CALL_EXCEPTIONS_FLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
+	, $(gb_COMPILERNOOPTFLAGS) $(bridges_NON_CALL_EXCEPTIONS_FLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) $(bridges_DEBUGINFO_FLAGS))) \
 )
 $(foreach obj,$(bridge_cxx_objects),\
 	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\

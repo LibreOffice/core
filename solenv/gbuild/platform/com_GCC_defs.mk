@@ -154,9 +154,9 @@ gb_COMPILERNOOPTFLAGS := -O0 -fstrict-aliasing -fstrict-overflow
 
 # Clang does not know -ggdb2 or some other options
 ifeq ($(HAVE_GCC_GGDB2),TRUE)
-GGDB2=-ggdb2
+gb_DEBUGINFO_FLAGS=-ggdb2
 else
-GGDB2=-g2
+gb_DEBUGINFO_FLAGS=-g2
 endif
 
 ifeq ($(HAVE_GCC_FINLINE_LIMIT),TRUE)
@@ -171,7 +171,7 @@ ifeq ($(HAVE_GCC_FNO_DEFAULT_INLINE),TRUE)
 FNO_DEFAULT_INLINE=-fno-default-inline
 endif
 
-gb_DEBUG_CFLAGS := $(GGDB2) $(FINLINE_LIMIT0) $(FNO_INLINE)
+gb_DEBUG_CFLAGS := $(gb_DEBUGINFO_FLAGS) $(FINLINE_LIMIT0) $(FNO_INLINE)
 gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
 
 

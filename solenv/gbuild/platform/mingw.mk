@@ -75,8 +75,8 @@ gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CXXFLAGS += $(GGDB2)
-gb_LinkTarget_CFLAGS += $(GGDB2)
+gb_LinkTarget_CXXFLAGS += $(gb_DEBUGINFO_FLAGS)
+gb_LinkTarget_CFLAGS += $(gb_DEBUGINFO_FLAGS)
 endif
 
 gb_LinkTarget_INCLUDE +=\
