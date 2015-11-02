@@ -497,14 +497,14 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
     {
         case E_TYPE :
             {
-                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
+                xPackage.set(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_TYPES) >>= xSet;
             }
             break;
 
         case E_FILTER :
             {
-                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
+                xPackage.set(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_FILTERS) >>= xSet;
             }
             break;
@@ -532,14 +532,14 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
                 }
                 /* <-- HACK */
 
-                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
+                xPackage.set(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_FRAMELOADERS) >>= xSet;
             }
             break;
 
         case E_CONTENTHANDLER :
             {
-                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
+                xPackage.set(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_CONTENTHANDLERS) >>= xSet;
             }
             break;

@@ -868,7 +868,7 @@ namespace frm
                     Reference<XIndexAccess> xColumns;
                     if (xSupplyCols.is())
                     {
-                        xColumns = Reference<XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
+                        xColumns.set(xSupplyCols->getColumns(), UNO_QUERY);
                         DBG_ASSERT(xColumns.is(), "OListBoxModel::loadData : no columns supplied by the row set !");
                     }
 

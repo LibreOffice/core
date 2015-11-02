@@ -392,7 +392,7 @@ void ODatabaseForm::impl_construct()
     // aggregate a row set
     osl_atomic_increment(&m_refCount);
     {
-        m_xAggregate = Reference< XAggregation >( m_xContext->getServiceManager()->createInstanceWithContext(SRV_SDB_ROWSET, m_xContext), UNO_QUERY_THROW );
+        m_xAggregate.set( m_xContext->getServiceManager()->createInstanceWithContext(SRV_SDB_ROWSET, m_xContext), UNO_QUERY_THROW );
         m_xAggregateAsRowSet.set( m_xAggregate, UNO_QUERY_THROW );
         setAggregation( m_xAggregate );
     }

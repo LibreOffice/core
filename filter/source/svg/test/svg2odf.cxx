@@ -94,8 +94,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     try
     {
         xCtx = ::cppu::defaultBootstrap_InitialComponentContext(aIniUrl);
-        xFactory = uno::Reference< lang::XMultiServiceFactory >(xCtx->getServiceManager(),
-                                                                uno::UNO_QUERY);
+        xFactory.set(xCtx->getServiceManager(), uno::UNO_QUERY);
         if (!xFactory.is())
         {
             OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting." );

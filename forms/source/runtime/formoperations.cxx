@@ -662,7 +662,7 @@ namespace frm
                     if ( xConfirmDelete.is() )
                     {
                         RowChangeEvent aEvent;
-                        aEvent.Source = Reference< XInterface >( m_xCursor, UNO_QUERY );
+                        aEvent.Source.set( m_xCursor, UNO_QUERY );
                         aEvent.Action = RowChangeAction::DELETE;
                         aEvent.Rows = 1;
                         bSuccess = xConfirmDelete->confirmDelete( aEvent );

@@ -331,7 +331,7 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
     Reference< XDrawPage > xDrawPage;
 
     Reference< XFrame > rFrame = rDesktop->getCurrentFrame();
-    Reference< XDrawView > rDrawView = Reference< XDrawView >( rFrame->getController(), UNO_QUERY );
+    Reference< XDrawView > rDrawView( rFrame->getController(), UNO_QUERY );
 
     Reference< XDrawPage > rCurrentPage = rDrawView->getCurrentPage();
 

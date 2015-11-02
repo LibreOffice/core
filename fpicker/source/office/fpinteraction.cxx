@@ -66,13 +66,13 @@ namespace svt
         for (sal_Int32 i=0; i<lConts.getLength(); ++i)
         {
             if (!xAbort.is())
-                xAbort = Reference< XInteractionAbort >(pConts[i], UNO_QUERY);
+                xAbort.set(pConts[i], UNO_QUERY);
             if (!xApprove.is())
-                xApprove = Reference< XInteractionApprove >(pConts[i], UNO_QUERY);
+                xApprove.set(pConts[i], UNO_QUERY);
             if (!xDisapprove.is())
-                xDisapprove = Reference< XInteractionDisapprove >(pConts[i], UNO_QUERY);
+                xDisapprove.set(pConts[i], UNO_QUERY);
             if (!xRetry.is())
-                xRetry = Reference< XInteractionRetry >(pConts[i], UNO_QUERY);
+                xRetry.set(pConts[i], UNO_QUERY);
         }
 
         // safe the original request for later analyzing!

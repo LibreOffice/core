@@ -270,7 +270,7 @@ bool SAL_CALL T602ImportFilter::importImpl( const Sequence< css::beans::Property
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService (  "com.sun.star.comp.Writer.XMLImporter"  );
 
-    mxHandler = Reference< XDocumentHandler >( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
+    mxHandler.set( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
     Reference < XImporter > xImporter(mxHandler, UNO_QUERY);

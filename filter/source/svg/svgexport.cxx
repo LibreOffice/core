@@ -550,7 +550,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pOStm.reset(::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC ));
 
             if( pOStm )
-                xOStm = Reference< XOutputStream >( new ::utl::OOutputStreamWrapper ( *pOStm ) );
+                xOStm.set( new ::utl::OOutputStreamWrapper ( *pOStm ) );
         }
         else if ( pValue[ i ].Name == "FilterData" )
         {
@@ -1507,7 +1507,7 @@ bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rxPage
         }
         else
         {
-            xShapes = Reference< XShapes >( rxPages[i], UNO_QUERY );
+            xShapes.set( rxPages[i], UNO_QUERY );
         }
 
         if( xShapes.is() )

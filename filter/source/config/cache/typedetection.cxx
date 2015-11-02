@@ -1013,7 +1013,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
         // third party components here, which can make trouble anyway.  So we
         // should handle errors during creation of such services more
         // gracefully .-)
-        xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
+        xDetector.set(
                 xContext->getServiceManager()->createInstanceWithContext(sDetectService, xContext),
                 css::uno::UNO_QUERY_THROW);
     }

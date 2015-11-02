@@ -127,7 +127,7 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
             aChild = aChildList->item(i);
             if (aChild->getNodeType() == NodeType_TEXT_NODE)
             {
-                aText = Reference< XText >(aChild, UNO_QUERY);
+                aText.set(aChild, UNO_QUERY);
                 aValue.append(aText->getData());
             }
         }

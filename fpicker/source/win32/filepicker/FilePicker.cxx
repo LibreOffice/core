@@ -135,7 +135,7 @@ void SAL_CALL CFilePicker::disposing(const lang::EventObject& aEvent) throw(uno:
 
 void SAL_CALL CFilePicker::fileSelectionChanged(FilePickerEvent aEvent)
 {
-    aEvent.Source = uno::Reference<uno::XInterface>(static_cast<XFilePickerNotifier*>(this));
+    aEvent.Source.set(static_cast<XFilePickerNotifier*>(this));
     m_aAsyncEventNotifier.notifyEvent(
         new CFilePickerParamEventNotification(&XFilePickerListener::fileSelectionChanged,aEvent));
 }
@@ -146,7 +146,7 @@ void SAL_CALL CFilePicker::fileSelectionChanged(FilePickerEvent aEvent)
 
 void SAL_CALL CFilePicker::directoryChanged(FilePickerEvent aEvent)
 {
-    aEvent.Source = uno::Reference<uno::XInterface>(static_cast<XFilePickerNotifier*>(this));
+    aEvent.Source.set(static_cast<XFilePickerNotifier*>(this));
     m_aAsyncEventNotifier.notifyEvent(
         new CFilePickerParamEventNotification(&XFilePickerListener::directoryChanged,aEvent));
 }
@@ -157,7 +157,7 @@ void SAL_CALL CFilePicker::directoryChanged(FilePickerEvent aEvent)
 
 void SAL_CALL CFilePicker::controlStateChanged(FilePickerEvent aEvent)
 {
-    aEvent.Source = uno::Reference<uno::XInterface>(static_cast<XFilePickerNotifier*>(this));
+    aEvent.Source.set(static_cast<XFilePickerNotifier*>(this));
     m_aAsyncEventNotifier.notifyEvent(
         new CFilePickerParamEventNotification(&XFilePickerListener::controlStateChanged,aEvent));
 }
