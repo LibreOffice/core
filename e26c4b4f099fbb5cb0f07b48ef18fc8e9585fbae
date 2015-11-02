@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_f8562905",
+        "filename": "lotuswordpro/source/filter/LotusWordProImportFilter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-02T21:34:49Z",
+      "side": 0,
+      "message": "please don\u0027t remove these virtual functions, they are not the same as the static functions needed for the factories, and this breaks the build, see\n\nhttp://ci.libreoffice.org/job/lo_gerrit_master/7555/Gerrit\u003dGerrit,Platform\u003dLinux/console",
+      "revId": "e26c4b4f099fbb5cb0f07b48ef18fc8e9585fbae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
