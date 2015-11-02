@@ -5917,10 +5917,17 @@ void ScGridWindow::UpdateCopySourceOverlay()
  *
  * @param pLogicRects - if not 0, then don't invoke the callback, just collect the rectangles in the pointed vector.
  */
-static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pDrawLayer, const std::vector<Rectangle>& rRectangles, std::vector<Rectangle>* pLogicRects = 0)
+void ScGridWindow::updateLibreOfficeKitSelection(const std::vector<Rectangle>& rRectangles, std::vector<Rectangle>* pLogicRects)
 {
+    ScDocument* pDoc = pViewData->GetDocument();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+
     if (!pDrawLayer->isTiledRendering())
         return;
+
+    Fraction defaultZoomX = pViewData->GetZoomX();
+    Fraction defaultZoomY = pViewData->GetZoomX();
+    pViewData->SetZoom(mTiledZoomX, mTiledZoomY, true);
 
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();
@@ -5958,6 +5965,8 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
 
     // the selection itself
     pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, comphelper::string::join("; ", aRectangles).getStr());
+
+    pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
 }
 
 void ScGridWindow::UpdateCursorOverlay()
@@ -6120,7 +6129,7 @@ void ScGridWindow::UpdateCursorOverlay()
             mpOOCursors->append(*pOverlay);
 
             // notify the LibreOfficeKit too
-            updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
+            updateLibreOfficeKitSelection(aPixelRects);
         }
     }
 
@@ -6132,7 +6141,7 @@ void ScGridWindow::GetCellSelection(std::vector<Rectangle>& rLogicRects)
 {
     std::vector<Rectangle> aPixelRects;
     GetSelectionRects(aPixelRects);
-    updateLibreOfficeKitSelection(pViewData, pViewData->GetDocument()->GetDrawLayer(), aPixelRects, &rLogicRects);
+    updateLibreOfficeKitSelection(aPixelRects, &rLogicRects);
 }
 
 void ScGridWindow::DeleteSelectionOverlay()
@@ -6196,7 +6205,7 @@ void ScGridWindow::UpdateSelectionOverlay()
             mpOOSelection->append(*pOverlay);
 
             // notify the LibreOfficeKit too
-            updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
+            updateLibreOfficeKitSelection(aPixelRects);
         }
     }
 

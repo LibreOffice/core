@@ -301,6 +301,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
 
     void            updateLibreOfficeKitCellCursor();
+    void            updateLibreOfficeKitSelection(const std::vector<Rectangle>& rRectangles, std::vector<Rectangle>* pLogicRects = 0);
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
