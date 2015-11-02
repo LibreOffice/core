@@ -54,6 +54,8 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     // registers than available" error:
     struct Data {
         sal_uInt64 pMethod;
+        sal_uInt64 * pStack;
+        sal_uInt32 nStack;
         sal_uInt64 * pGPR;
         double * pFPR;
         // Return values:
@@ -62,6 +64,8 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         double xmm0;
         double xmm1;
     } data;
+    data.pStack = pStack;
+    data.nStack = nStack;
     data.pGPR = pGPR;
     data.pFPR = pFPR;
 
@@ -70,20 +74,26 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     pMethod += 8 * nVtableIndex;
     data.pMethod = *reinterpret_cast<sal_uInt64 *>(pMethod);
 
-    // Load parameters to stack, if necessary
-    sal_uInt64* pCallStack = NULL;
-    if ( nStack )
-    {
-        // 16-bytes aligned
-        sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 16;
-        pCallStack = static_cast<sal_uInt64 *>(__builtin_alloca( nStackBytes ));
-        std::memcpy( pCallStack, pStack, nStackBytes );
-    }
-
     asm volatile (
+        // Push arguments to stack
+        "movq %%rsp, %%r12\n\t"
+        "movl 16%0, %%ecx\n\t"
+        "jrcxz .Lpushed\n\t"
+        "xor %%rax, %%rax\n\t"
+        "leaq (%%rax, %%rcx, 8), %%rax\n\t"
+        "subq %%rax, %%rsp\n\t"
+        "andq $-9, %%rsp\n\t" // 16-bytes aligned
+
+        "movq 8%0, %%rsi\n\t"
+        "\n.Lpush:\n\t"
+        "decq %%rcx\n\t"
+        "movq (%%rsi, %%rcx, 8), %%rax\n\t"
+        "movq %%rax, (%%rsp, %%rcx, 8)\n\t"
+        "jnz .Lpush\n\t"
+        "\n.Lpushed:\n\t"
 
         // Fill the xmm registers
-        "movq 16%0, %%rax\n\t"
+        "movq 32%0, %%rax\n\t"
 
         "movsd   (%%rax), %%xmm0\n\t"
         "movsd  8(%%rax), %%xmm1\n\t"
@@ -95,7 +105,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         "movsd 56(%%rax), %%xmm7\n\t"
 
         // Fill the general purpose registers
-        "movq 8%0, %%rax\n\t"
+        "movq 24%0, %%rax\n\t"
 
         "movq    (%%rax), %%rdi\n\t"
         "movq   8(%%rax), %%rsi\n\t"
@@ -109,13 +119,15 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         "call *%%r11\n\t"
 
         // Fill the return values
-        "movq   %%rax, 24%0\n\t"
-        "movq   %%rdx, 32%0\n\t"
-        "movsd %%xmm0, 40%0\n\t"
-        "movsd %%xmm1, 48%0\n\t"
-        :: "o" (data),
-          "m" ( pCallStack ) // dummy input to prevent the compiler from optimizing the alloca out
-        : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r10", "r11",
+        "movq   %%rax, 40%0\n\t"
+        "movq   %%rdx, 48%0\n\t"
+        "movsd %%xmm0, 56%0\n\t"
+        "movsd %%xmm1, 64%0\n\t"
+
+        // Reset %rsp
+        "movq %%r12, %%rsp\n\t"
+        :: "o" (data)
+        : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r10", "r11", "r12",
           "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "xmm6", "xmm7",
           "xmm8", "xmm9", "xmm10", "xmm11", "xmm12", "xmm13", "xmm14", "xmm15",
           "memory"
