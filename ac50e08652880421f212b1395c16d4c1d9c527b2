@@ -34,6 +34,24 @@
       "revId": "ac50e08652880421f212b1395c16d4c1d9c527b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_95c086e2",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-11-02T15:19:47Z",
+      "side": 1,
+      "message": "yes. There is no caching (at least in the app), and for mac at least (which is the code path in vcl I know)... that involve, actually laying out from stach a String.. ie creating a attributed string, laying that out with CoreText, extrating the runs and finnaly calculating teh bounding rect.. the latter is not the biggest concern, but the layou setup and run is not negligiable... I\u0027m not sure how much that _is_ actually and how much overhead that would add. but it is not just an accessor or some trivial math.\nThen again I do not know how often this patch of yours is invoked.. maybe it does not matter enough to care",
+      "parentUuid": "faac7902_f59e3206",
+      "revId": "ac50e08652880421f212b1395c16d4c1d9c527b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
