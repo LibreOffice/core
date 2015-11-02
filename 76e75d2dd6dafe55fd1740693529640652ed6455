@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_15f5b682",
+        "filename": "toolkit/source/awt/vclxwindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-02T11:36:37Z",
+      "side": 1,
+      "message": "using \"\u0026aEvent\" here appears to be incorrect: the instance must be copied by value into the lambda, as the lambda has a longer lifetime than the current scope.",
+      "revId": "76e75d2dd6dafe55fd1740693529640652ed6455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_f534724b",
+        "filename": "toolkit/source/awt/vclxwindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-02T11:36:37Z",
+      "side": 1,
+      "message": "same problem with aEvent and pMouseEvent here.\n\nin addition i think that pMouseEvent can\u0027t even\nbe passed by value as its lifetime ends by the time\nthe call stack reaches the VCL event code again,\nand the async handler will be called only on the\nnext iteration of the event loop, which is later.",
+      "revId": "76e75d2dd6dafe55fd1740693529640652ed6455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_153c962e",
+        "filename": "toolkit/source/controls/controlmodelcontainerbase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-02T11:36:37Z",
+      "side": 1,
+      "message": "minor stylistic nit: please use \"r\" prefix for variable names of C++ references and \"a\" prefix for variable names of C++ values (i.e. it\u0027s no reference or pointer)",
+      "revId": "76e75d2dd6dafe55fd1740693529640652ed6455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
