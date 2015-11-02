@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_15c77646",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-11-02T10:02:04Z",
+      "side": 1,
+      "message": "Could you please add a one-liner doxygen comment for the new functions? A summary on what it does and -- perhaps more importatnly -- documention that on what thread (LOK thread, UI thread, soffice thread) is it supposed to run.",
+      "revId": "b17a6f07a511c625118e703a8b5fab71e1aa1a39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_55c1fe2d",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-11-02T10:02:04Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "b17a6f07a511c625118e703a8b5fab71e1aa1a39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
