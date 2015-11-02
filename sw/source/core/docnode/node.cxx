@@ -995,7 +995,7 @@ SwContentNode::SwContentNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType
                             SwFormatColl *pColl )
     : SwModify( pColl ),     // CrsrsShell, FrameFormat,
     SwNode( rWhere, nNdType ),
-    pCondColl( 0 ),
+    m_pCondColl( 0 ),
     mbSetModifyAtAttr( false )
 {
 }
@@ -1006,7 +1006,7 @@ SwContentNode::~SwContentNode()
     // Thus, we need to delete all Frames in the dependency list.
     DelFrms(false);
 
-    delete pCondColl;
+    delete m_pCondColl;
 
     if ( mpAttrSet.get() && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(mpAttrSet.get()))->SetModifyAtAttr( 0 );
@@ -1698,7 +1698,7 @@ const SfxPoolItem* SwContentNode::GetNoCondAttr( sal_uInt16 nWhich,
                                                bool bInParents ) const
 {
     const SfxPoolItem* pFnd = 0;
-    if( pCondColl && pCondColl->GetRegisteredIn() )
+    if( m_pCondColl && m_pCondColl->GetRegisteredIn() )
     {
         if( !GetpSwAttrSet() || ( SfxItemState::SET != GetpSwAttrSet()->GetItemState(
                     nWhich, false, &pFnd ) && bInParents ))
@@ -1782,15 +1782,15 @@ bool SwContentNode::CanJoinPrev( SwNodeIndex* pIdx ) const
 //FEATURE::CONDCOLL
 void SwContentNode::SetCondFormatColl( SwFormatColl* pColl )
 {
-    if( (!pColl && pCondColl) || ( pColl && !pCondColl ) ||
-        ( pColl && pColl != pCondColl->GetRegisteredIn() ) )
+    if( (!pColl && m_pCondColl) || ( pColl && !m_pCondColl ) ||
+        ( pColl && pColl != m_pCondColl->GetRegisteredIn() ) )
     {
         SwFormatColl* pOldColl = GetCondFormatColl();
-        delete pCondColl;
+        delete m_pCondColl;
         if( pColl )
-            pCondColl = new SwDepend( this, pColl );
+            m_pCondColl = new SwDepend( this, pColl );
         else
-            pCondColl = 0;
+            m_pCondColl = 0;
 
         if( GetpSwAttrSet() )
         {
@@ -1934,7 +1934,7 @@ void SwContentNode::ChkCondColl()
 
             if( pCColl )
                 SetCondFormatColl( pCColl->GetTextFormatColl() );
-            else if( pCondColl )
+            else if( m_pCondColl )
                 SetCondFormatColl( 0 );
         }
     }

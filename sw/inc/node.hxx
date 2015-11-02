@@ -354,7 +354,7 @@ class SW_DLLPUBLIC SwContentNode: public SwModify, public SwNode, public SwIndex
 {
 
 //FEATURE::CONDCOLL
-    SwDepend* pCondColl;
+    SwDepend* m_pCondColl;
 //FEATURE::CONDCOLL
     mutable bool mbSetModifyAtAttr;
 
@@ -717,13 +717,13 @@ inline const SwDoc* SwNode::GetDoc() const
 
 inline SwFormatColl* SwContentNode::GetCondFormatColl() const
 {
-    return pCondColl ? static_cast<SwFormatColl*>(pCondColl->GetRegisteredIn()) : 0;
+    return m_pCondColl ? static_cast<SwFormatColl*>(m_pCondColl->GetRegisteredIn()) : 0;
 }
 
 inline SwFormatColl& SwContentNode::GetAnyFormatColl() const
 {
-    return pCondColl && pCondColl->GetRegisteredIn()
-                ? *static_cast<SwFormatColl*>(pCondColl->GetRegisteredIn())
+    return m_pCondColl && m_pCondColl->GetRegisteredIn()
+                ? *static_cast<SwFormatColl*>(m_pCondColl->GetRegisteredIn())
                 : *const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn()));
 }
 
