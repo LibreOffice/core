@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_f81f4959",
+        "filename": "accessibility/inc/accessibility/extended/accessibleeditbrowseboxcell.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-02T21:11:43Z",
+      "side": 1,
+      "message": "apparently this fails because there is no -I include path for the directory here, only for -I$(SRCDIR)/accessibility/inc\n\ni think this could work if you insert the path beyond inc/ i.e. accessibility/extended/ between the \u003c \u003e here",
+      "revId": "2f5a20a281f7caa6a4d2807448d64b5a8fcb3406",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
