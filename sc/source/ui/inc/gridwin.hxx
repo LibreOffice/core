@@ -202,6 +202,14 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     DECL_LINK( PopupModeEndHdl, void* );
     DECL_LINK( PopupSpellingHdl, SpellCallbackInfo* );
+    // We cache the tiled rendering zoom level in order to be able to
+    // calculate the correct cell cursor position (which is dependent
+    // on the zoom level). The caching is necessary since
+    // ScModelObj::postMouseEvent resets the zoom level to the default,
+    // which means we have the default zoom level set during the
+    // cell cursor position calculations in updateLibreOfficeKitCellCursor().
+    Fraction                mTiledZoomX;
+    Fraction                mTiledZoomY;
 
     bool            TestMouse( const MouseEvent& rMEvt, bool bAction );
 
@@ -292,6 +300,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
 
+    void            updateLibreOfficeKitCellCursor();
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;

@@ -5782,7 +5782,7 @@ bool ScGridWindow::InsideVisibleRange( SCCOL nPosX, SCROW nPosY )
     return maVisibleRange.isInside(nPosX, nPosY);
 }
 
-static void updateLibreOfficeKitCellCursor(ScViewData* pViewData, ScSplitPos eWhich) {
+void ScGridWindow::updateLibreOfficeKitCellCursor() {
     ScDocument* pDoc = pViewData->GetDocument();
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
 
@@ -5791,8 +5791,12 @@ static void updateLibreOfficeKitCellCursor(ScViewData* pViewData, ScSplitPos eWh
 
     SCCOL nX = pViewData->GetCurX();
     SCROW nY = pViewData->GetCurY();
-    Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, true );
 
+    Fraction defaultZoomX = pViewData->GetZoomX();
+    Fraction defaultZoomY = pViewData->GetZoomX();
+    pViewData->SetZoom(mTiledZoomX, mTiledZoomY, true);
+
+    Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, true );
     long nSizeXPix;
     long nSizeYPix;
     pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
@@ -5801,6 +5805,8 @@ static void updateLibreOfficeKitCellCursor(ScViewData* pViewData, ScSplitPos eWh
     double fPPTY = pViewData->GetPPTY();
     Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
                     Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
+
+    pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
 
     pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, aRect.toString().getStr());
 
@@ -5814,7 +5820,7 @@ void ScGridWindow::CursorChanged()
 
     UpdateCursorOverlay();
 
-    updateLibreOfficeKitCellCursor(pViewData, eWhich);
+    updateLibreOfficeKitCellCursor();
 }
 
 // #114409#
