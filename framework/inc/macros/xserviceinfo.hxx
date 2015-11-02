@@ -76,7 +76,7 @@ namespace framework{
                                                                                                                                                     \
     OUString CLASS::impl_getStaticImplementationName()                                                                                              \
     {                                                                                                                                               \
-        return IMPLEMENTATIONNAME;                                                                                                                 \
+        return OUString(IMPLEMENTATIONNAME);                                                                                                                 \
     }
 
 #define PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                              \
