@@ -2625,12 +2625,9 @@ bool ScTable::ValidQuery(
         const ScQueryEntry& rEntry = *it;
         SCCOL nCol = static_cast<SCCOL>(rEntry.nField);
 
-        // we can only handle one single direct query
-        ScRefCellValue aCell;
-        if (pCell && it == itBeg)
-            aCell = *pCell;
-        else
-            aCell = GetCellValue(nCol, nRow);
+        // We can only handle one single direct query passed as a known pCell,
+        // subsequent queries have to obtain the cell.
+        ScRefCellValue aCell( (pCell && it == itBeg) ? *pCell : GetCellValue(nCol, nRow));
 
         std::pair<bool,bool> aRes(false, false);
 
