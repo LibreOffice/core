@@ -24,10 +24,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <sal/types.h>
-#include <rtl/textenc.h>
 
 #include <rtl/ustring.hxx>
-#include <rtl/uri.hxx>
 
 #ifdef __cplusplus
 extern "C"
@@ -97,101 +95,90 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define PATH_SEPARATOR       "/"
 #endif
 
-// macro definition for the ASCII array/OUString declarations,
-// we use p### for the ASCII array,
-//        a### for the OUString,
-//        n###Len for its length
-
-#define OSLTEST_DECLARE( str_name, str_value ) \
-    ::rtl::OUString a##str_name( ( str_value ) )
-
-#define OSLTEST_DECLARE_UTF8(str_name, str_value ) \
-    ::rtl::OUString a##str_name = ::rtl::Uri::decode( ::rtl::OUString( str_value ), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8)
-
 // OS independent file definition
 
-OSLTEST_DECLARE( NullURL,  "" );
-OSLTEST_DECLARE( SlashURL, PATH_SEPARATOR );
-OSLTEST_DECLARE( PreURL, FILE_PREFIX );
-OSLTEST_DECLARE( RootURL,  FILE_PREFIX TEST_PLATFORM );
+OUString aNullURL( "" );
+OUString aSlashURL( PATH_SEPARATOR );
+OUString aPreURL( FILE_PREFIX );
+OUString aRootURL( FILE_PREFIX TEST_PLATFORM );
 
-OSLTEST_DECLARE( TempDirectoryURL,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP );
-OSLTEST_DECLARE( TempDirectorySys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP );
-OSLTEST_DECLARE( UserDirectoryURL,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "" );
-OSLTEST_DECLARE( UserDirectorySys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "" );
+OUString aTempDirectoryURL( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP );
+OUString aTempDirectorySys( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP );
+OUString aUserDirectoryURL( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "" );
+OUString aUserDirectorySys( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "" );
 
 // common used URL:temp, canonical, root, relative, link,etc
 
-OSLTEST_DECLARE( CanURL1,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/canonical.name" );
+OUString aCanURL1( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/canonical.name" );
 rtl::OUString aCanURL2(
     RTL_CONSTASCII_USTRINGPARAM("ca@#;+.,$///78no\0ni..name"));
-OSLTEST_DECLARE( CanURL3,  "ca@#;+.,$//tmp/678nonical//name" );
-OSLTEST_DECLARE( CanURL4,  "canonical.name" );
-OSLTEST_DECLARE( TmpName1, "tmpdir" );
-OSLTEST_DECLARE( TmpName2, "tmpname" );
-OSLTEST_DECLARE( TmpName3, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir" );
-OSLTEST_DECLARE( TmpName4, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/tmpname" );
-OSLTEST_DECLARE( TmpName5, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/../tmpdir/./tmpname" );
-OSLTEST_DECLARE( TmpName6, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpname" );
-OSLTEST_DECLARE( TmpName7, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/noaccess" );
-OSLTEST_DECLARE( TmpName8, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpname/tmpdir" );
-OSLTEST_DECLARE( TmpName9, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/../tmpdir/./" );
-OSLTEST_DECLARE_UTF8( TmpName10, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/%E6%9C%AA%E5%91%BD%E5%90%8Dzhgb18030" );
+OUString aCanURL3( "ca@#;+.,$//tmp/678nonical//name" );
+OUString aCanURL4( "canonical.name" );
+OUString aTmpName1( "tmpdir" );
+OUString aTmpName2( "tmpname" );
+OUString aTmpName3( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir" );
+OUString aTmpName4( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/tmpname" );
+OUString aTmpName5( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/../tmpdir/./tmpname" );
+OUString aTmpName6( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpname" );
+OUString aTmpName7( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/noaccess" );
+OUString aTmpName8( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpname/tmpdir" );
+OUString aTmpName9( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/../tmpdir/./" );
+OUString aTmpName10(RTL_CONSTASCII_USTRINGPARAM( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/\xE6\x9C\xAA\xE5\x91\xBD\xE5\x90\x8Dzhgb18030" ));
 
-OSLTEST_DECLARE( RelURL1,  "relative/file1" );
-OSLTEST_DECLARE( RelURL2,  "relative/./file2" );
-OSLTEST_DECLARE( RelURL3,  "relative/../file3" );
-OSLTEST_DECLARE( RelURL4,  "././relative/../file4" );
-OSLTEST_DECLARE( RelURL5,  TEST_PLATFORM_TEMP "/./../" TEST_PLATFORM_TEMP );
-OSLTEST_DECLARE( LnkURL1,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/link.file" );
-OSLTEST_DECLARE( HidURL1,  ".hiddenfile" );
+OUString aRelURL1( "relative/file1" );
+OUString aRelURL2( "relative/./file2" );
+OUString aRelURL3( "relative/../file3" );
+OUString aRelURL4( "././relative/../file4" );
+OUString aRelURL5( TEST_PLATFORM_TEMP "/./../" TEST_PLATFORM_TEMP );
+OUString aLnkURL1( FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/link.file" );
+OUString aHidURL1( ".hiddenfile" );
 
 // common used System Path:temp, root,etc
 
-OSLTEST_DECLARE( RootSys,  TEST_PLATFORM_ROOT );
-OSLTEST_DECLARE( SysPath1, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system.path" );
-OSLTEST_DECLARE( SysPath2, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system/path" );
-OSLTEST_DECLARE( SysPath3, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir" );
-OSLTEST_DECLARE( SysPath4, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpname" );
-OSLTEST_DECLARE_UTF8( SysPath5, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/%E6%9C%AA%E5%91%BD%E5%90%8Dzhgb18030" );
-OSLTEST_DECLARE( SysPathLnk, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/link.file" );
-OSLTEST_DECLARE( FifoSys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir/fifo" );
+OUString aRootSys( TEST_PLATFORM_ROOT );
+OUString aSysPath1( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system.path" );
+OUString aSysPath2( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system/path" );
+OUString aSysPath3( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir" );
+OUString aSysPath4( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpname" );
+OUString aSysPath5(RTL_CONSTASCII_USTRINGPARAM( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/\xE6\x9C\xAA\xE5\x91\xBD\xE5\x90\x8Dzhgb18030" ));
+OUString aSysPathLnk( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/link.file" );
+OUString aFifoSys( TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir/fifo" );
 
 // FileType URL, we pick some canonical file in corresponding system for test:
 // socket, link, etc.
 // Note that this may be changed in the different platform, so be careful to use.
 
 #if ( defined UNX )                                                    //          Unix
-OSLTEST_DECLARE( TypeURL1,  FILE_PREFIX "dev/ccv");                    //socket    Solaris/Linux
-OSLTEST_DECLARE( TypeURL2,  FILE_PREFIX "devices/pseudo/tcp@0:tcp");   //special   Solaris/Linux
-OSLTEST_DECLARE( TypeURL3,  FILE_PREFIX "lib" );                       //link      Solaris
+OUString aTypeURL1( FILE_PREFIX "dev/ccv");                    //socket    Solaris/Linux
+OUString aTypeURL2( FILE_PREFIX "devices/pseudo/tcp@0:tcp");   //special   Solaris/Linux
+OUString aTypeURL3( FILE_PREFIX "lib" );                       //link      Solaris
 #else                                                                  //          Windows
-OSLTEST_DECLARE( TypeURL1,  FILE_PREFIX "" );
-OSLTEST_DECLARE( TypeURL2,  FILE_PREFIX "" );
-OSLTEST_DECLARE( TypeURL3,  FILE_PREFIX "" );
+OUString aTypeURL1( FILE_PREFIX "" );
+OUString aTypeURL2( FILE_PREFIX "" );
+OUString aTypeURL3( FILE_PREFIX "" );
 #endif
 
 // Volume device URL, we pick some canonical volume device for test:
 // UNIX file system, Floppy Disk, Proc file system, Temp file system, Compact Disk.
 
 #if ( defined UNX )                                     //          Unix
-OSLTEST_DECLARE( VolURL1,  FILE_PREFIX  "");            //ufs       Solaris/Linux
+OUString aVolURL1( FILE_PREFIX  "");            //ufs       Solaris/Linux
 #ifdef SOLARIS
-OSLTEST_DECLARE( VolURL2,  FILE_PREFIX  "dev/fd" );     //fd        Solaris
+OUString aVolURL2( FILE_PREFIX  "dev/fd" );     //fd        Solaris
 #else
-OSLTEST_DECLARE( VolURL2,  FILE_PREFIX  "dev/floppy/0u1440" );  //fd0       Linux
+OUString aVolURL2( FILE_PREFIX  "dev/floppy/0u1440" );  //fd0       Linux
 #endif
-OSLTEST_DECLARE( VolURL3,  FILE_PREFIX  "proc" );       //proc      Solaris/Linux
-OSLTEST_DECLARE( VolURL4,  FILE_PREFIX  "staroffice" ); //nfs       Solaris/Linux
-OSLTEST_DECLARE( VolURL5,  FILE_PREFIX  "tmp" );        //tmpfs     Solaris
-OSLTEST_DECLARE( VolURL6,  FILE_PREFIX  "cdrom" );      //cd        Solaris
+OUString aVolURL3( FILE_PREFIX  "proc" );       //proc      Solaris/Linux
+OUString aVolURL4( FILE_PREFIX  "staroffice" ); //nfs       Solaris/Linux
+OUString aVolURL5( FILE_PREFIX  "tmp" );        //tmpfs     Solaris
+OUString aVolURL6( FILE_PREFIX  "cdrom" );      //cd        Solaris
 #else                                                   //          Windows
-OSLTEST_DECLARE( VolURL1,  FILE_PREFIX  "c:/" );
-OSLTEST_DECLARE( VolURL2,  FILE_PREFIX  "a:/" );
-OSLTEST_DECLARE( VolURL3,  FILE_PREFIX  "" );
-OSLTEST_DECLARE( VolURL4,  FILE_PREFIX  "" );
-OSLTEST_DECLARE( VolURL5,  FILE_PREFIX  "c:/temp" );
-OSLTEST_DECLARE( VolURL6,  FILE_PREFIX  "e:/" );
+OUString aVolURL1( FILE_PREFIX  "c:/" );
+OUString aVolURL2( FILE_PREFIX  "a:/" );
+OUString aVolURL3( FILE_PREFIX  "" );
+OUString aVolURL4( FILE_PREFIX  "" );
+OUString aVolURL5( FILE_PREFIX  "c:/temp" );
+OUString aVolURL6( FILE_PREFIX  "e:/" );
 #endif
 
 #ifdef __cplusplus

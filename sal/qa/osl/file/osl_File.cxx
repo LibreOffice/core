@@ -1033,7 +1033,7 @@ namespace osl_FileBase
 
         void searchFileURL_003()
         {
-            OSLTEST_DECLARE( SystemPathList,  TEST_PLATFORM_ROOT ":" TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP ":" TEST_PLATFORM_ROOT "system/path" );
+            OUString aSystemPathList( TEST_PLATFORM_ROOT ":" TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP ":" TEST_PLATFORM_ROOT "system/path" );
             nError1 = ::osl::FileBase::searchFileURL( aUserDirectoryURL, aSystemPathList, aUStr );
             bool bOk = compareFileName( aUStr, aUserDirectoryURL );
             CPPUNIT_ASSERT_MESSAGE( "test for searchFileURL function: search directory is a list of system paths",
@@ -1043,7 +1043,7 @@ namespace osl_FileBase
 
         void searchFileURL_004()
         {
-            OSLTEST_DECLARE( SystemPathList,  TEST_PLATFORM_ROOT PATH_LIST_DELIMITER TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP PATH_LIST_DELIMITER TEST_PLATFORM_ROOT "system/path/../name" );
+            OUString aSystemPathList( TEST_PLATFORM_ROOT PATH_LIST_DELIMITER TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP PATH_LIST_DELIMITER TEST_PLATFORM_ROOT "system/path/../name" );
             nError1 = ::osl::FileBase::searchFileURL( aUserDirectoryURL, aSystemPathList, aUStr );
             bool bOk = compareFileName( aUStr, aUserDirectoryURL );
             CPPUNIT_ASSERT_MESSAGE( "test for searchFileURL function: search directory is a list of system paths",
