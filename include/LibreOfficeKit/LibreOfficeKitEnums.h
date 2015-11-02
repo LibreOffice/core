@@ -180,7 +180,14 @@ typedef enum
      * - searchResultSelection is an array of part-number and rectangle list
      *   pairs, in LOK_CALLBACK_SET_PART / LOK_CALLBACK_TEXT_SELECTION format.
      */
-    LOK_CALLBACK_SEARCH_RESULT_SELECTION
+    LOK_CALLBACK_SEARCH_RESULT_SELECTION,
+
+    /**
+     * The size and/or the position of the cell cursor changed.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_CELL_CURSOR
 }
 LibreOfficeKitCallbackType;
 
