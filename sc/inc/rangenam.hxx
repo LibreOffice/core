@@ -175,8 +175,6 @@ private:
     IndexDataType maIndexToData;
 
 public:
-    /// Map that manages stored ScRangeName instances.
-    typedef ::boost::ptr_map<SCTAB, ScRangeName>  TabNameMap;
     /// Map that stores non-managed pointers to ScRangeName instances.
     typedef ::std::map<SCTAB, const ScRangeName*> TabNameCopyMap;
 
