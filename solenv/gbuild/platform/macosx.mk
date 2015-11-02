@@ -89,10 +89,10 @@ gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS)
 gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CFLAGS += $(gb_DEBUG_CFLAGS)
-gb_LinkTarget_CXXFLAGS += $(gb_DEBUG_CFLAGS)
-gb_LinkTarget_OBJCFLAGS += $(gb_DEBUG_CFLAGS)
-gb_LinkTarget_OBJCXXFLAGS += $(gb_DEBUG_CFLAGS)
+gb_LinkTarget_CFLAGS += $(gb_DEBUGINFO_FLAGS)
+gb_LinkTarget_CXXFLAGS += $(gb_DEBUGINFO_FLAGS)
+gb_LinkTarget_OBJCFLAGS += $(gb_DEBUGINFO_FLAGS)
+gb_LinkTarget_OBJCXXFLAGS += $(gb_DEBUGINFO_FLAGS)
 endif
 
 define gb_LinkTarget__get_layer
