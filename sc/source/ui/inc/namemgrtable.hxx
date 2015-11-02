@@ -16,8 +16,9 @@
 #include "scresid.hxx"
 #include "address.hxx"
 
+#include <memory>
 #include <vector>
-#include <boost/ptr_container/ptr_map.hpp>
+#include <map>
 
 class ScRangeName;
 class ScRangeData;
@@ -47,7 +48,7 @@ private:
     OUString maGlobalString;
 
     // should be const because we should not modify it here
-    const boost::ptr_map<OUString, ScRangeName>& mrRangeMap;
+    const std::map<OUString, std::unique_ptr<ScRangeName>>& m_RangeMap;
     // for performance, save which entries already have the formula entry
     // otherwise opening the dialog with a lot of range names is extremelly slow because
     // we would calculate all formula strings during opening
@@ -64,7 +65,9 @@ private:
     void setColWidths();
 
 public:
-    ScRangeManagerTable( SvSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
+    ScRangeManagerTable(SvSimpleTableContainer& rParent,
+        std::map<OUString, std::unique_ptr<ScRangeName>>& rTabRangeNames,
+        const ScAddress& rPos);
     virtual ~ScRangeManagerTable();
     virtual void dispose() override;
 

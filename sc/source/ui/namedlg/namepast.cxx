@@ -26,6 +26,8 @@
 #include "rangenam.hxx"
 #include "viewdata.hxx"
 
+#include <o3tl/make_unique.hxx>
+
 ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool )
     : ModalDialog( pParent, "InsertNameDialog", "modules/scalc/ui/insertname.ui" )
 {
@@ -40,7 +42,7 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool 
     for (; itr != itrEnd; ++itr)
     {
         OUString aTemp(itr->first);
-        maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
+        m_RangeMap.insert(std::make_pair(aTemp, o3tl::make_unique<ScRangeName>(*itr->second)));
     }
 
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -50,7 +52,7 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool 
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(10 * GetTextHeight());
-    mpTable = VclPtr<ScRangeManagerTable>::Create(*pContainer, maRangeMap, aPos);
+    mpTable = VclPtr<ScRangeManagerTable>::Create(*pContainer, m_RangeMap, aPos);
 
     m_pBtnPaste->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl) );
     m_pBtnPasteAll->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));

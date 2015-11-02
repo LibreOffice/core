@@ -119,16 +119,16 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
     rNames.swap(aNames);
 }
 
-void ScDocument::SetAllRangeNames( const boost::ptr_map<OUString, ScRangeName>& rRangeMap)
+void ScDocument::SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap)
 {
     OUString aGlobalStr(STR_GLOBAL_RANGE_NAME);
-    boost::ptr_map<OUString,ScRangeName>::const_iterator itr = rRangeMap.begin(), itrEnd = rRangeMap.end();
+    auto itr = rRangeMap.begin(), itrEnd = rRangeMap.end();
     for (; itr!=itrEnd; ++itr)
     {
         if (itr->first == aGlobalStr)
         {
             delete pRangeName;
-            const ScRangeName* pName = itr->second;
+            const ScRangeName *const pName = itr->second.get();
             if (pName->empty())
                 pRangeName = NULL;
             else
@@ -136,7 +136,7 @@ void ScDocument::SetAllRangeNames( const boost::ptr_map<OUString, ScRangeName>& 
         }
         else
         {
-            const ScRangeName* pName = itr->second;
+            const ScRangeName *const pName = itr->second.get();
             SCTAB nTab;
             bool bFound = GetTable(itr->first, nTab);
             assert(bFound); (void)bFound;   // fouled up?

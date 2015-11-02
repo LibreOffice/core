@@ -35,6 +35,8 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 #include <map>
 
 // defines -------------------------------------------------------------------
@@ -49,7 +51,8 @@
 
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
         ScViewData*       ptrViewData,
-        const ScAddress&  aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap  )
+        const ScAddress&  aCursorPos,
+        std::map<OUString, std::unique_ptr<ScRangeName>> *const pRangeMap)
     : ScAnyRefDlg(pB, pCW, pParent, "ManageNamesDialog", "modules/scalc/ui/managenamesdialog.ui")
 
     , maGlobalNameStr(ScGlobal::GetRscString(STR_GLOBAL_SCOPE))
@@ -90,12 +93,13 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent
         for (; itr != itrEnd; ++itr)
         {
             OUString aTemp(itr->first);
-            maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
+            m_RangeMap.insert(std::make_pair(aTemp,
+                    o3tl::make_unique<ScRangeName>(*itr->second)));
         }
     }
     else
     {
-        maRangeMap.swap(*pRangeMap);
+        m_RangeMap.swap(*pRangeMap);
     }
     Init();
 }
@@ -136,7 +140,7 @@ void ScNameDlg::Init()
     SvSimpleTableContainer *pCtrl = get<SvSimpleTableContainer>("names");
     pCtrl->set_height_request(pCtrl->GetTextHeight()*12);
 
-    m_pRangeManagerTable = VclPtr<ScRangeManagerTable>::Create(*pCtrl, maRangeMap, maCursorPos);
+    m_pRangeManagerTable = VclPtr<ScRangeManagerTable>::Create(*pCtrl, m_RangeMap, maCursorPos);
     m_pRangeManagerTable->setInitListener(this);
     m_pRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
     m_pRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
@@ -194,7 +198,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 bool ScNameDlg::Close()
 {
     if (mbDataChanged && !mbCloseWithoutUndo)
-        mpViewData->GetDocFunc().ModifyAllRangeNames(maRangeMap);
+        mpViewData->GetDocFunc().ModifyAllRangeNames(m_RangeMap);
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
 
@@ -319,9 +323,9 @@ bool ScNameDlg::IsFormulaValid()
 ScRangeName* ScNameDlg::GetRangeName(const OUString& rScope)
 {
     if (rScope == maGlobalNameStr)
-        return maRangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
+        return m_RangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second.get();
     else
-        return maRangeMap.find(rScope)->second;
+        return m_RangeMap.find(rScope)->second.get();
 }
 
 void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
@@ -478,9 +482,9 @@ void ScNameDlg::ScopeChanged()
     NameModified();
 }
 
-void ScNameDlg::GetRangeNames(boost::ptr_map<OUString, ScRangeName>& rRangeMap)
+void ScNameDlg::GetRangeNames(std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap)
 {
-    maRangeMap.swap(rRangeMap);
+    m_RangeMap.swap(rRangeMap);
 }
 
 IMPL_LINK_NOARG_TYPED(ScNameDlg, OkBtnHdl, Button*, void)

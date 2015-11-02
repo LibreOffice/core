@@ -13,7 +13,6 @@
 #include "docfunc.hxx"
 #include "sc.hrc"
 
-#include <o3tl/ptr_container.hxx>
 #include <sfx2/app.hxx>
 
 #include <memory>
@@ -24,21 +23,20 @@ using ::std::unique_ptr;
 ScUndoAllRangeNames::ScUndoAllRangeNames(
     ScDocShell* pDocSh,
     const std::map<OUString, ScRangeName*>& rOldNames,
-    const boost::ptr_map<OUString, ScRangeName>& rNewNames) :
-    ScSimpleUndo(pDocSh)
+    const std::map<OUString, std::unique_ptr<ScRangeName>>& rNewNames)
+        : ScSimpleUndo(pDocSh)
 {
     std::map<OUString, ScRangeName*>::const_iterator itr, itrEnd;
     for (itr = rOldNames.begin(), itrEnd = rOldNames.end(); itr != itrEnd; ++itr)
     {
         unique_ptr<ScRangeName> p(new ScRangeName(*itr->second));
-        o3tl::ptr_container::insert(maOldNames, itr->first, std::move(p));
+        m_OldNames.insert(std::make_pair(itr->first, std::move(p)));
     }
 
-    boost::ptr_map<OUString, ScRangeName>::const_iterator it, itEnd;
-    for (it = rNewNames.begin(), itEnd = rNewNames.end(); it != itEnd; ++it)
+    for (auto const& it : rNewNames)
     {
-        unique_ptr<ScRangeName> p(new ScRangeName(*it->second));
-        o3tl::ptr_container::insert(maNewNames, it->first, std::move(p));
+        unique_ptr<ScRangeName> p(new ScRangeName(*it.second));
+        m_NewNames.insert(std::make_pair(it.first, std::move(p)));
     }
 }
 
@@ -48,12 +46,12 @@ ScUndoAllRangeNames::~ScUndoAllRangeNames()
 
 void ScUndoAllRangeNames::Undo()
 {
-    DoChange(maOldNames);
+    DoChange(m_OldNames);
 }
 
 void ScUndoAllRangeNames::Redo()
 {
-    DoChange(maNewNames);
+    DoChange(m_NewNames);
 }
 
 void ScUndoAllRangeNames::Repeat(SfxRepeatTarget& /*rTarget*/)
@@ -70,7 +68,7 @@ OUString ScUndoAllRangeNames::GetComment() const
     return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
 }
 
-void ScUndoAllRangeNames::DoChange(const boost::ptr_map<OUString, ScRangeName>& rNames)
+void ScUndoAllRangeNames::DoChange(const std::map<OUString, std::unique_ptr<ScRangeName>>& rNames)
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 

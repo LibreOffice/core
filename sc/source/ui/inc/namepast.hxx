@@ -26,7 +26,9 @@
 #include <vcl/lstbox.hxx>
 #include "namemgrtable.hxx"
 
+#include <memory>
 #include <vector>
+#include <map>
 
 #include "scui_def.hxx"
 class ScRangeName;
@@ -44,7 +46,8 @@ private:
     VclPtr<ScRangeManagerTable> mpTable;
 
     std::vector<OUString> maSelectedNames;
-    boost::ptr_map<OUString, ScRangeName> maRangeMap;
+    std::map<OUString, std::unique_ptr<ScRangeName>> m_RangeMap;
+
 public:
     ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true );
 

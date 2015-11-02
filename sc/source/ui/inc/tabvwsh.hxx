@@ -32,7 +32,8 @@
 #include "shellids.hxx"
 #include "tabprotection.hxx"
 
-#include <boost/ptr_container/ptr_map.hpp>
+#include <memory>
+#include <map>
 
 class SbxObject;
 class SdrOle2Obj;
@@ -168,7 +169,7 @@ private:
     SfxBroadcaster*         pAccessibilityBroadcaster;
 
     // ugly hack for Add button in ScNameDlg
-    boost::ptr_map<OUString, ScRangeName> maRangeMap;
+    std::map<OUString, std::unique_ptr<ScRangeName>> m_RangeMap;
     bool    mbInSwitch;
     OUString   maName;
     OUString   maScope;

@@ -30,8 +30,7 @@
 #include "anyrefdg.hxx"
 #include "namemgrtable.hxx"
 
-#include <boost/ptr_container/ptr_map.hpp>
-
+#include <memory>
 #include <stack>
 #include <map>
 
@@ -76,9 +75,9 @@ private:
     //ugly hack to call DefineNames from ManageNames
     bool mbCloseWithoutUndo;
 
-    typedef boost::ptr_map<OUString, ScRangeName> RangeNameContainer;
+    typedef std::map<OUString, std::unique_ptr<ScRangeName>> RangeNameContainer;
 
-    RangeNameContainer maRangeMap;
+    RangeNameContainer m_RangeMap;
 
 private:
     void Init();
@@ -116,7 +115,8 @@ protected:
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                ScViewData*      ptrViewData,
-                               const ScAddress& aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap = NULL );
+                               const ScAddress& aCursorPos,
+                               std::map<OUString, std::unique_ptr<ScRangeName>>* pRangeMap = nullptr);
     virtual         ~ScNameDlg();
     virtual void    dispose() override;
 
@@ -128,7 +128,7 @@ public:
 
     virtual void tableInitialized() override;
 
-    void GetRangeNames(boost::ptr_map<OUString, ScRangeName>& rRangeMap);
+    void GetRangeNames(std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
     void SetEntry(const OUString& rName, const OUString& rScope);
 };
 

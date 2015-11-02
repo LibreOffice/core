@@ -200,7 +200,7 @@ public:
      * passed as arguments (it creates copies); the caller is responsible for
      * destroying them.
      */
-    void            ModifyAllRangeNames( const boost::ptr_map<OUString, ScRangeName>& rRangeMap );
+    void            ModifyAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
 
     bool            CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi, SCTAB nTab = -1 ); // -1 for global range names
     bool            InsertNameList( const ScAddress& rStartPos, bool bApi );

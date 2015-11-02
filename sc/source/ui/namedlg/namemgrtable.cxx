@@ -34,12 +34,14 @@ static OUString createEntryString(const ScRangeNameLine& rLine)
 
 ScRangeManagerTable::InitListener::~InitListener() {}
 
-ScRangeManagerTable::ScRangeManagerTable( SvSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& rRangeMap, const ScAddress& rPos ):
-    SvSimpleTable( rParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
-    maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE)),
-    mrRangeMap( rRangeMap ),
-    maPos( rPos ),
-    mpInitListener(NULL)
+ScRangeManagerTable::ScRangeManagerTable(SvSimpleTableContainer& rParent,
+        std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap,
+        const ScAddress& rPos)
+    : SvSimpleTable( rParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP )
+    , maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE))
+    , m_RangeMap(rRangeMap)
+    , maPos( rPos )
+    , mpInitListener(nullptr)
 {
     static long aStaticTabs[] = {3, 0, 0, 0 };
     SetTabs( &aStaticTabs[0], MAP_PIXEL );
@@ -141,15 +143,14 @@ void ScRangeManagerTable::Init()
 {
     SetUpdateMode(false);
     Clear();
-    for (boost::ptr_map<OUString, ScRangeName>::const_iterator itr = mrRangeMap.begin();
-            itr != mrRangeMap.end(); ++itr)
+    for (auto const& itr : m_RangeMap)
     {
-        const ScRangeName* pLocalRangeName = itr->second;
+        const ScRangeName *const pLocalRangeName = itr.second.get();
         ScRangeNameLine aLine;
-        if ( itr->first == STR_GLOBAL_RANGE_NAME )
+        if (itr.first == STR_GLOBAL_RANGE_NAME)
             aLine.aScope = maGlobalString;
         else
-            aLine.aScope = itr->first;
+            aLine.aScope = itr.first;
         for (ScRangeName::const_iterator it = pLocalRangeName->begin();
                 it != pLocalRangeName->end(); ++it)
         {
@@ -167,9 +168,9 @@ const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLi
 {
     const ScRangeName* pRangeName;
     if (rLine.aScope == maGlobalString)
-        pRangeName = mrRangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
+        pRangeName = m_RangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second.get();
     else
-        pRangeName = mrRangeMap.find(rLine.aScope)->second;
+        pRangeName = m_RangeMap.find(rLine.aScope)->second.get();
 
     return pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(rLine.aName));
 }

@@ -89,7 +89,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
    if (nSlotId == FID_DEFINE_NAME)
    {
         mbInSwitch = true;
-        static_cast<ScNameDlg*>(pDialog)->GetRangeNames(maRangeMap);
+        static_cast<ScNameDlg*>(pDialog)->GetRangeNames(m_RangeMap);
         static_cast<ScNameDlg*>(pDialog)->Close();
         sal_uInt16 nId  = ScNameDefDlgWrapper::GetChildWindowId();
         SfxViewFrame* pViewFrm = GetViewFrame();
@@ -156,7 +156,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
                 pResult = VclPtr<ScNameDlg>::Create( pB, pCW, pParent, &GetViewData(),
                                      ScAddress( GetViewData().GetCurX(),
                                                 GetViewData().GetCurY(),
-                                                GetViewData().GetTabNo() ), &maRangeMap);
+                                                GetViewData().GetTabNo() ), &m_RangeMap);
                 static_cast<ScNameDlg*>(pResult.get())->SetEntry( maName, maScope);
                 mbInSwitch = false;
             }
@@ -177,10 +177,9 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
             else
             {
                 std::map<OUString, ScRangeName*> aRangeMap;
-                for (boost::ptr_map<OUString, ScRangeName>::iterator itr = maRangeMap.begin();
-                        itr != maRangeMap.end(); ++itr)
+                for (auto const& itr : m_RangeMap)
                 {
-                    aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr->first, itr->second));
+                    aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr.first, itr.second.get()));
                 }
                 pResult = VclPtr<ScNameDefDlg>::Create( pB, pCW, pParent, &GetViewData(), aRangeMap,
                                 ScAddress( GetViewData().GetCurX(),

@@ -528,7 +528,7 @@ public:
      * non-empty range name set.
      */
     SC_DLLPUBLIC void GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
-    SC_DLLPUBLIC void SetAllRangeNames( const boost::ptr_map<OUString, ScRangeName>& rRangeMap);
+    SC_DLLPUBLIC void SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap);
     SC_DLLPUBLIC void GetTabRangeNameMap(std::map<OUString, ScRangeName*>& rRangeName);
     SC_DLLPUBLIC void GetRangeNameMap(std::map<OUString, ScRangeName*>& rRangeName);
     SC_DLLPUBLIC ScRangeName* GetRangeName(SCTAB nTab) const;
