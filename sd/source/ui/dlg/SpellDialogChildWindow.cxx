@@ -48,11 +48,7 @@ SpellDialogChildWindow::SpellDialogChildWindow (
 
 SpellDialogChildWindow::~SpellDialogChildWindow()
 {
-    if (mpSdOutliner != NULL)
-        mpSdOutliner->EndSpelling();
-
-    if (mbOwnOutliner)
-        delete mpSdOutliner;
+    EndSpellingAndClearOutliner();
 }
 
 SfxChildWinInfo SpellDialogChildWindow::GetInfo() const
@@ -103,6 +99,29 @@ void SpellDialogChildWindow::LoseFocus()
 {
 }
 
+void SpellDialogChildWindow::EndSpellingAndClearOutliner()
+{
+    if (!mpSdOutliner)
+        return;
+    EndListening(*mpSdOutliner->GetDoc());
+    mpSdOutliner->EndSpelling();
+    if (mbOwnOutliner)
+        delete mpSdOutliner;
+    mpSdOutliner = NULL;
+    mbOwnOutliner = false;
+}
+
+void SpellDialogChildWindow::Notify(SfxBroadcaster&, const SfxHint& rHint)
+{
+    if (const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint))
+    {
+        if (HINT_MODELCLEARED == pSdrHint->GetKind())
+        {
+            EndSpellingAndClearOutliner();
+        }
+    }
+}
+
 void SpellDialogChildWindow::ProvideOutliner()
 {
     ViewShellBase* pViewShellBase = dynamic_cast<ViewShellBase*>( SfxViewShell::Current() );
@@ -116,10 +135,7 @@ void SpellDialogChildWindow::ProvideOutliner()
             if(( dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr && ! mbOwnOutliner)
                 || (dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr && mbOwnOutliner))
             {
-                mpSdOutliner->EndSpelling();
-                if (mbOwnOutliner)
-                    delete mpSdOutliner;
-                mpSdOutliner = NULL;
+                EndSpellingAndClearOutliner();
             }
 
         // Now create/get an outliner if none is present.
@@ -130,16 +146,18 @@ void SpellDialogChildWindow::ProvideOutliner()
                 // We need an outliner for the spell check so we have
                 // to create one.
                 mbOwnOutliner = true;
-                mpSdOutliner = new Outliner (
-                    pViewShell->GetDoc(),
-                    OUTLINERMODE_TEXTOBJECT);
+                SdDrawDocument *pDoc = pViewShell->GetDoc();
+                mpSdOutliner = new Outliner(pDoc, OUTLINERMODE_TEXTOBJECT);
+                StartListening(*pDoc);
             }
             else if( dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr)
             {
                 // An outline view is already visible. The SdOutliner
                 // will use it instead of creating its own.
                 mbOwnOutliner = false;
-                mpSdOutliner = pViewShell->GetDoc()->GetOutliner();
+                SdDrawDocument *pDoc = pViewShell->GetDoc();
+                mpSdOutliner = pDoc->GetOutliner();
+                StartListening(*pDoc);
             }
 
             // Initialize spelling.

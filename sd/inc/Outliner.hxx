@@ -180,6 +180,7 @@ public:
     int         GetIgnoreCurrentPageChangesLevel() const     { return mnIgnoreCurrentPageChangesLevel; };
     void        IncreIgnoreCurrentPageChangesLevel()     { mnIgnoreCurrentPageChangesLevel++; };
     void        DecreIgnoreCurrentPageChangesLevel()     { mnIgnoreCurrentPageChangesLevel--; };
+    SdDrawDocument* GetDoc() const { return mpDrawDocument; }
 
 private:
     class Implementation;

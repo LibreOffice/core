@@ -32,6 +32,7 @@ class Outliner;
 */
 class SpellDialogChildWindow
     : public svx::SpellDialogChildWindow
+    , public SfxListener
 {
 public:
     SpellDialogChildWindow (
@@ -45,6 +46,9 @@ public:
         it can be called from the view shell when one is created.
     */
     void InvalidateSpellDialog();
+
+    // SfxListener
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     SFX_DECL_CHILDWINDOW_WITHID(SpellDialogChildWindow);
 
@@ -79,6 +83,8 @@ private:
         construction/obtaining of a new one.
     */
     void ProvideOutliner();
+
+    void EndSpellingAndClearOutliner();
 };
 
 } // end of namespace ::sd
