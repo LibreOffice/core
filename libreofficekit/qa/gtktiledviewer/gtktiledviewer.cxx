@@ -83,6 +83,9 @@ class TiledWindow
 public:
     GtkWidget* m_pDocView;
     GtkWidget* m_pStatusBar;
+    GtkWidget* m_pProgressBar;
+    GtkWidget* m_pStatusbarLabel;
+    GtkWidget* m_pZoomLabel;
     GtkToolItem* m_pEnableEditing;
     GtkToolItem* m_pBold;
     GtkToolItem* m_pItalic;
@@ -114,6 +117,9 @@ public:
     TiledWindow()
         : m_pDocView(0),
         m_pStatusBar(0),
+        m_pProgressBar(0),
+        m_pStatusbarLabel(0),
+        m_pZoomLabel(0),
         m_pEnableEditing(0),
         m_pBold(0),
         m_pItalic(0),
@@ -373,6 +379,8 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
             lok_doc_view_set_zoom( LOK_DOC_VIEW(pDocView), fZoom );
         }
     }
+    std::string aZoom = std::to_string(int(fZoom * 100)) + std::string("%");
+    gtk_label_set_text(GTK_LABEL(rWindow.m_pZoomLabel), aZoom.c_str());
 }
 
 /// User clicked on the button -> inform LOKDocView.
@@ -425,8 +433,9 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
     GtkWidget* pDocView = lok_doc_view_new_from_widget(LOK_DOC_VIEW(rWindow.m_pDocView));
 
     TiledWindow& rNewWindow = setupWidgetAndCreateWindow(pDocView);
-    // Hide status bar that contains the unused progress bar.
-    gtk_widget_hide(rNewWindow.m_pStatusBar);
+    // Hide the unused progress bar.
+    gtk_widget_show_all(rNewWindow.m_pStatusBar);
+    gtk_widget_hide(rNewWindow.m_pProgressBar);
 }
 
 /// Creates a new model, i.e. LOK init and document load, one view implicitly.
@@ -846,7 +855,8 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
     focusChain = g_list_append( focusChain, pDocView );
     gtk_container_set_focus_chain ( GTK_CONTAINER (rWindow.m_pVBox), focusChain );
 
-    gtk_widget_hide(rWindow.m_pStatusBar);
+    gtk_widget_show_all(rWindow.m_pStatusBar);
+    gtk_widget_hide(rWindow.m_pProgressBar);
 }
 
 /// Creates the GtkWindow that has main widget as children and registers it in the window map.
@@ -1086,15 +1096,22 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
 
     gtk_container_add(GTK_CONTAINER(rWindow.m_pScrolledWindow), rWindow.m_pDocView);
 
-    GtkWidget* pProgressBar = gtk_progress_bar_new ();
-    g_signal_connect(rWindow.m_pDocView, "load-changed", G_CALLBACK(loadChanged), pProgressBar);
+    rWindow.m_pProgressBar = gtk_progress_bar_new ();
+    g_signal_connect(rWindow.m_pDocView, "load-changed", G_CALLBACK(loadChanged), rWindow.m_pProgressBar);
 
     GtkWidget* pStatusBar = gtk_statusbar_new();
     rWindow.m_pStatusBar = pStatusBar;
     gtk_container_forall(GTK_CONTAINER(pStatusBar), removeChildrenFromStatusbar, pStatusBar);
     gtk_container_add (GTK_CONTAINER(rWindow.m_pVBox), pStatusBar);
-    gtk_container_add (GTK_CONTAINER(pStatusBar), pProgressBar);
-    gtk_widget_set_hexpand(pProgressBar, true);
+    gtk_container_add (GTK_CONTAINER(pStatusBar), rWindow.m_pProgressBar);
+    gtk_widget_set_hexpand(rWindow.m_pProgressBar, true);
+
+    rWindow.m_pStatusbarLabel = gtk_label_new("");
+    gtk_widget_set_hexpand(rWindow.m_pStatusbarLabel, TRUE);
+    gtk_container_add(GTK_CONTAINER(pStatusBar), rWindow.m_pStatusbarLabel);
+
+    rWindow.m_pZoomLabel = gtk_label_new("100%");
+    gtk_container_add(GTK_CONTAINER(pStatusBar), rWindow.m_pZoomLabel);
 
     gtk_widget_show_all(pWindow);
     // Hide the findbar by default.
@@ -1103,6 +1120,9 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_widget_hide(rWindow.m_pCornerButton->m_pDrawingArea);
     gtk_widget_hide(rWindow.m_pRowBar->m_pDrawingArea);
     gtk_widget_hide(rWindow.m_pColumnBar->m_pDrawingArea);
+    // Hide the non-progressbar children of the status bar by default.
+    gtk_widget_hide(rWindow.m_pStatusbarLabel);
+    gtk_widget_hide(rWindow.m_pZoomLabel);
 
     g_aWindows[pWindow] = rWindow;
     g_signal_connect(rWindow.m_pDocView, "configure-event", G_CALLBACK(TiledRowColumnBar::docConfigureEvent), 0);
