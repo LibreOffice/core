@@ -79,6 +79,7 @@ struct LOKDocViewPrivateImpl
     /// Position and size of the selection end.
     GdkRectangle m_aTextSelectionEnd;
     GdkRectangle m_aGraphicSelection;
+    GdkRectangle m_aCellCursor;
     gboolean m_bInDragGraphicSelection;
 
     /// @name Start/middle/end handle.
@@ -140,6 +141,7 @@ struct LOKDocViewPrivateImpl
         m_aTextSelectionStart({0, 0, 0, 0}),
         m_aTextSelectionEnd({0, 0, 0, 0}),
         m_aGraphicSelection({0, 0, 0, 0}),
+        m_aCellCursor({0, 0, 0, 0}),
         m_bInDragGraphicSelection(false),
         m_pHandleStart(0),
         m_aHandleStartRect({0, 0, 0, 0}),
@@ -275,6 +277,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_CURSOR_VISIBLE";
     case LOK_CALLBACK_GRAPHIC_SELECTION:
         return "LOK_CALLBACK_GRAPHIC_SELECTION";
+    case LOK_CALLBACK_CELL_CURSOR:
+        return "LOK_CALLBACK_CELL_CURSOR";
     case LOK_CALLBACK_HYPERLINK_CLICKED:
         return "LOK_CALLBACK_HYPERLINK_CLICKED";
     case LOK_CALLBACK_STATE_CHANGED:
@@ -719,6 +723,15 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
+    case LOK_CALLBACK_CELL_CURSOR:
+    {
+        if (pCallback->m_aPayload != "EMPTY")
+            priv->m_aCellCursor = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
+        else
+            memset(&priv->m_aCellCursor, 0, sizeof(priv->m_aCellCursor));
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+    }
+    break;
     case LOK_CALLBACK_HYPERLINK_CLICKED:
     {
         hyperlinkClicked(pDocView, pCallback->m_aPayload);
@@ -1072,6 +1085,22 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
             priv->m_pGraphicHandle = cairo_image_surface_create_from_png(handleGraphicPath);
         renderGraphicHandle(pDocView, pCairo, priv->m_aGraphicSelection, priv->m_pGraphicHandle);
         g_free (handleGraphicPath);
+    }
+
+    if (!isEmptyRectangle(priv->m_aCellCursor))
+    {
+        cairo_set_source_rgb(pCairo, 0, 0, 0);
+        cairo_rectangle(pCairo,
+                        twipToPixel(priv->m_aCellCursor.x, priv->m_fZoom),
+                        twipToPixel(priv->m_aCellCursor.y, priv->m_fZoom),
+                        twipToPixel(priv->m_aCellCursor.width, priv->m_fZoom),
+                        twipToPixel(priv->m_aCellCursor.height, priv->m_fZoom));
+                        // priv->m_aCellCursor.x - 1,
+                        // priv->m_aCellCursor.y - 1,
+                        // priv->m_aCellCursor.width + 2,
+                        // priv->m_aCellCursor.height + 2);
+        cairo_set_line_width(pCairo, 2.0);
+        cairo_stroke(pCairo);
     }
 
     return FALSE;
@@ -2331,6 +2360,7 @@ lok_doc_view_reset_view(LOKDocView* pDocView)
     memset(&priv->m_aTextSelectionEnd, 0, sizeof(priv->m_aTextSelectionEnd));
     memset(&priv->m_aGraphicSelection, 0, sizeof(priv->m_aGraphicSelection));
     priv->m_bInDragGraphicSelection = false;
+    memset(&priv->m_aCellCursor, 0, sizeof(priv->m_aCellCursor));
 
     cairo_surface_destroy(priv->m_pHandleStart);
     priv->m_pHandleStart = 0;

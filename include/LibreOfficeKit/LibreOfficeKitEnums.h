@@ -195,7 +195,14 @@ typedef enum
      *     // TODO "result": "..."  // UNO Any converted to JSON (not implemented yet)
      * }
      */
-    LOK_CALLBACK_UNO_COMMAND_RESULT
+    LOK_CALLBACK_UNO_COMMAND_RESULT,
+
+    /**
+     * The size and/or the position of the cell cursor changed.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_CELL_CURSOR
 }
 LibreOfficeKitCallbackType;
 
