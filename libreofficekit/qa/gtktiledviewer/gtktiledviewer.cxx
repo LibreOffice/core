@@ -250,7 +250,8 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         rWindow.m_pRowBar->m_aHeaders.clear();
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
         {
-            Header aHeader(std::atoi(rValue.second.get<std::string>("size").c_str()), rValue.second.get<std::string>("text"));
+            int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str())));
+            Header aHeader(nSize, rValue.second.get<std::string>("text"));
             rWindow.m_pRowBar->m_aHeaders.push_back(aHeader);
         }
         gtk_widget_show(rWindow.m_pRowBar->m_pDrawingArea);
@@ -259,7 +260,8 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         rWindow.m_pColumnBar->m_aHeaders.clear();
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
         {
-            Header aHeader(std::atoi(rValue.second.get<std::string>("size").c_str()), rValue.second.get<std::string>("text"));
+            int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str())));
+            Header aHeader(nSize, rValue.second.get<std::string>("text"));
             rWindow.m_pColumnBar->m_aHeaders.push_back(aHeader);
         }
         gtk_widget_show(rWindow.m_pColumnBar->m_pDrawingArea);
