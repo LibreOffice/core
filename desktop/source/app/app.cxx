@@ -1277,45 +1277,10 @@ static ExecuteGlobals* pExecGlobals = NULL;
 #define PERSIST_MAX 100
 unsigned int persist_cnt;
 
-//This closes the current frame and reopens the initial frame, useful for
-//pseudo-restarting, i.e. attempt to effectively reset to the initial state of
-//the application post start-up for ui-testing
-void Desktop::CloseFrameAndReopen(Reference<XDesktop2> xDesktop)
-{
-    css::uno::Reference<css::container::XIndexAccess> xTaskContainer(
-        xDesktop->getFrames(), css::uno::UNO_QUERY_THROW);
-    sal_Int32 c = xTaskContainer->getCount();
-    for (sal_Int32 i = 0; i < c; ++i)
-    {
-        css::uno::Reference< css::frame::XFrame > xFrame;
-        xTaskContainer->getByIndex(i) >>= xFrame;
-        if (!xFrame.is())
-            continue;
-        Reference<css::frame::XDispatchProvider> xProvider(xFrame, css::uno::UNO_QUERY);
-
-        css::uno::Reference<css::frame::XController > xController = xFrame->getController();
-        css::uno::Reference<css::frame::XModel> xModel = xController->getModel();
-        css::uno::Reference< css::util::XModifiable > xModifiable(xModel, css::uno::UNO_QUERY);
-        xModifiable->setModified(false);
-
-        css::util::URL aCommand;
-        aCommand.Complete = ".uno:CloseDoc";
-
-        css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-        Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
-        xParser->parseStrict(aCommand);
-
-        css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aCommand, OUString(), 0);
-        xDispatch->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
-    }
-
-    OpenDefault();
-}
-
 //This just calls Execute() for all normal uses of LibreOffice, but for
 //ui-testing if AFL_PERSISTENT is set then on exit it will pseudo-restart (up
 //to PERSIST_MAX times)
-void Desktop::DoExecute(Reference<XDesktop2> xDesktop)
+void Desktop::DoExecute()
 {
 try_again:
     {
@@ -1327,7 +1292,7 @@ try_again:
            program is executed directly; and take note of PERSIST_MAX. */
         if (getenv("AFL_PERSISTENT") && persist_cnt++ < PERSIST_MAX)
         {
-            CloseFrameAndReopen(xDesktop);
+            OpenDefault();
 #if defined UNX
             raise(SIGSTOP);
 #endif
@@ -1651,7 +1616,7 @@ int Desktop::Main()
                 // if this run of the office is triggered by restart, some additional actions should be done
                 DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
 
-                DoExecute(xDesktop);
+                DoExecute();
             }
         }
         catch(const css::document::CorruptedFilterConfigurationException& exFilterCfg)
