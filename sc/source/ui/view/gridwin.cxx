@@ -5782,6 +5782,30 @@ bool ScGridWindow::InsideVisibleRange( SCCOL nPosX, SCROW nPosY )
     return maVisibleRange.isInside(nPosX, nPosY);
 }
 
+static void updateLibreOfficeKitCellCursor(ScViewData* pViewData, ScSplitPos eWhich) {
+    ScDocument* pDoc = pViewData->GetDocument();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+
+    if (!pDrawLayer->isTiledRendering())
+        return;
+
+    SCCOL nX = pViewData->GetCurX();
+    SCROW nY = pViewData->GetCurY();
+    Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, true );
+
+    long nSizeXPix;
+    long nSizeYPix;
+    pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
+
+    double fPPTX = pViewData->GetPPTX();
+    double fPPTY = pViewData->GetPPTY();
+    Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
+                    Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
+
+    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, aRect.toString().getStr());
+
+}
+
 // #114409#
 void ScGridWindow::CursorChanged()
 {
@@ -5789,6 +5813,8 @@ void ScGridWindow::CursorChanged()
     // now, just re-create them
 
     UpdateCursorOverlay();
+
+    updateLibreOfficeKitCellCursor(pViewData, eWhich);
 }
 
 // #114409#
@@ -5942,9 +5968,8 @@ void ScGridWindow::UpdateCursorOverlay()
 {
     ScDocument* pDoc = pViewData->GetDocument();
 
-    // never show the cell cursor when the tiled rendering is going on; either
-    // we want to show the editeng selection, or the cell selection, but not
-    // the cell cursor by itself
+    // The cursor is rendered client-side in tiled rendering -
+    // see updateLibreOfficeKitCellCursor.
     if (pDoc->GetDrawLayer()->isTiledRendering())
         return;
 
