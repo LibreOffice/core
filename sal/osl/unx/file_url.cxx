@@ -88,8 +88,13 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
 
     sal_Unicode encodedSlash[3] = { '%', '2', 'F' };
 
-    /* a valid file url may not start with '/' */
-    if( ( 0 == ustrFileURL->length ) || ( '/' == ustrFileURL->buffer[0] ) )
+    // For compatibility with assumptions in other parts of the code base,
+    // assume that anything starting with a slash is a system path instead of a
+    // (relative) file URL (except if it starts with two slashes, in which case
+    // it is a relative URL with an authority component):
+    if (ustrFileURL->length == 0
+        || (ustrFileURL->buffer[0] == '/'
+            && (ustrFileURL->length == 1 || ustrFileURL->buffer[1] != '/')))
     {
         return osl_File_E_INVAL;
     }
