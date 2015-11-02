@@ -70,6 +70,24 @@
       "revId": "ac50e08652880421f212b1395c16d4c1d9c527b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_9567e624",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-11-02T15:46:45Z",
+      "side": 1,
+      "message": "well maybe it is a case of premature optimization on my part...\nI\u0027m tempted to just commit that and see if there is some yielling about perf...",
+      "parentUuid": "faac7902_35b0ba8b",
+      "revId": "ac50e08652880421f212b1395c16d4c1d9c527b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
