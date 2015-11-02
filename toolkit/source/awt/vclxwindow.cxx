@@ -692,10 +692,12 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
-
-                Callback aCallback = [ this, pMouseEvt, aEvent ]()
-                                     { MouseListenerMultiplexer& maMouseListeners = this->mpImpl->getMouseListeners();
-                                       pMouseEvt->IsEnterWindow() ? maMouseListeners.mouseEntered( aEvent ) : maMouseListeners.mouseExited( aEvent ); };
+                bool const isEnter(pMouseEvt->IsEnterWindow());
+                Callback aCallback = [ this, isEnter, aEvent ]()
+                     { MouseListenerMultiplexer& rMouseListeners = this->mpImpl->getMouseListeners();
+                       (isEnter)
+                           ? rMouseListeners.mouseEntered(aEvent)
+                           : rMouseListeners.mouseExited(aEvent); };
 
                 ImplExecuteAsyncWithoutSolarLock( aCallback );
             }

@@ -285,8 +285,8 @@ void SAL_CALL ControlModelContainerBase::dispose(  ) throw(RuntimeException, std
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aChildModels.begin(),                           // target location
-        []( const UnoControlModelHolder& aUnoControlModelHolder )
-        { return aUnoControlModelHolder.first; }        // operation to apply -> select the XControlModel part
+        []( const UnoControlModelHolder& rUnoControlModelHolder )
+        { return rUnoControlModelHolder.first; }        // operation to apply -> select the XControlModel part
     );
 
     // now dispose
@@ -540,8 +540,8 @@ Sequence< OUString > ControlModelContainerBase::getElementNames() throw(RuntimeE
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aNames.getArray(),                              // target range
-        []( const UnoControlModelHolder& aUnoControlModelHolder )
-        { return aUnoControlModelHolder.second; }        // operator to apply: select the second element (the name)
+        []( const UnoControlModelHolder& rUnoControlModelHolder )
+        { return rUnoControlModelHolder.second; }        // operator to apply: select the second element (the name)
     );
 
     return aNames;
