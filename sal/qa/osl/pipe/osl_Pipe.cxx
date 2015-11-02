@@ -190,6 +190,7 @@ namespace osl_Pipe
             {
                 /// create a pipe.
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
+                osl_acquirePipe(aPipe.getHandle());
                 /// constructs a pipe reference without acquiring the handle.
                 ::osl::Pipe aNoAcquirePipe( aPipe.getHandle( ), SAL_NO_ACQUIRE );
 
@@ -697,6 +698,7 @@ namespace osl_StreamPipe
             {
                 // create a pipe.
                 ::osl::StreamPipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
+                osl_acquirePipe(aPipe.getHandle());
                 // constructs a pipe reference without acquiring the handle.
                 ::osl::StreamPipe aNoAcquirePipe( aPipe.getHandle( ), SAL_NO_ACQUIRE );
 
