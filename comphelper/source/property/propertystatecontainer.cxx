@@ -89,7 +89,7 @@ namespace comphelper
         if ( !nProperties )
             return aStates;
 
-#ifdef _DEBUG
+#ifdef DBG_UTIL
         // precondition: property sequence is sorted (the algorithm below relies on this)
         {
             const OUString* pNames = _rPropertyNames.getConstArray();
@@ -114,7 +114,7 @@ namespace comphelper
         osl::MutexGuard aGuard( rBHelper.rMutex );
         for ( ; ( pAllProperties != pAllPropertiesEnd ) && ( pLookup != pLookupEnd ); ++pAllProperties )
         {
-#ifdef _DEBUG
+#ifdef DBG_UTIL
             if ( pAllProperties < pAllPropertiesEnd - 1 )
                 OSL_ENSURE( pAllProperties->Name.compareTo( (pAllProperties + 1)->Name ) < 0,
                     "OPropertyStateContainer::getPropertyStates: all-properties not sorted!" );
