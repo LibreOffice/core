@@ -2866,10 +2866,9 @@ void ScCellShell::ExecuteFillSingleEdit()
         // Get the initial text value from the above cell.
 
         ScDocument* pDoc = GetViewData()->GetDocument();
-        ScRefCellValue aCell;
         ScAddress aPrevPos = aCurPos;
         aPrevPos.IncRow(-1);
-        aCell.assign(*pDoc, aPrevPos);
+        ScRefCellValue aCell(*pDoc, aPrevPos);
 
         if (aCell.meType == CELLTYPE_FORMULA)
         {

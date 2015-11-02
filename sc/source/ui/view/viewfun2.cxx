@@ -207,8 +207,7 @@ enum ScAutoSum
 static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
         SCTAB nTab, ScDirection eDir, SCCOLROW& nExtend )
 {
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
+    ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, nTab));
     if (aCell.hasNumeric())
     {
         if (aCell.meType == CELLTYPE_FORMULA)

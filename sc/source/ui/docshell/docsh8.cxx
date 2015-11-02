@@ -610,8 +610,7 @@ void lcl_GetColumnTypes(
 
         if ( !bTypeDefined )
         {   // Field type.
-            ScRefCellValue aCell;
-            aCell.assign(rDoc, ScAddress(nCol, nFirstDataRow, nTab));
+            ScRefCellValue aCell(rDoc, ScAddress(nCol, nFirstDataRow, nTab));
             if (aCell.isEmpty() || aCell.hasString())
                 nDbType = sdbc::DataType::VARCHAR;
             else
@@ -966,8 +965,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                 {
                     case sdbc::DataType::LONGVARCHAR:
                     {
-                        ScRefCellValue aCell;
-                        aCell.assign(aDocument, ScAddress(nDocCol, nDocRow, nTab));
+                        ScRefCellValue aCell(aDocument, ScAddress(nDocCol, nDocRow, nTab));
                         if (!aCell.isEmpty())
                         {
                             if (aCell.meType == CELLTYPE_EDIT)

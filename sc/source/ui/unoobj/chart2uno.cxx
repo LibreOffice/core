@@ -3265,8 +3265,7 @@ sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
         // TODO: use nicer heuristic
         for (const Item& rItem : m_aDataArray)
         {
-            ScRefCellValue aCell;
-            aCell.assign(*m_pDocument, rItem.mAddress);
+            ScRefCellValue aCell(*m_pDocument, rItem.mAddress);
             if (!aCell.isEmpty())
             {
                 return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, rItem.mAddress));

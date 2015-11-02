@@ -112,8 +112,7 @@ OUString ScTabViewShell::GetFormula(ScAddress& rAddress)
 {
     OUString sFormula;
     ScDocument* pDoc = GetViewData().GetDocument();
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, rAddress);
+    ScRefCellValue aCell(*pDoc, rAddress);
     if (!aCell.isEmpty() && aCell.meType == CELLTYPE_FORMULA)
     {
         sFormula = aCell.mpString->getString();

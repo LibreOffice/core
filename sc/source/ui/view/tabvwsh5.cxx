@@ -313,8 +313,7 @@ SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewD
     double              nCellValue      = 0;
     OUString aCellString;
 
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, pViewData->GetCurPos());
+    ScRefCellValue aCell(*pDoc, pViewData->GetCurPos());
 
     switch (aCell.meType)
     {

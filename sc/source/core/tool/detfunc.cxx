@@ -801,8 +801,7 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevelArea( const ScRange& rRef,
 sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData,
                                             sal_uInt16 nLevel )
 {
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
+    ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, nTab));
     if (aCell.meType != CELLTYPE_FORMULA)
         return DET_INS_EMPTY;
 
@@ -890,8 +889,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
 {
     OSL_ENSURE( nLevel<1000, "Level" );
 
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
+    ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, nTab));
     if (aCell.meType != CELLTYPE_FORMULA)
         return nLevel;
 
@@ -948,8 +946,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
 sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData,
                                             sal_uInt16 nLevel )
 {
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
+    ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, nTab));
     if (aCell.meType != CELLTYPE_FORMULA)
         return DET_INS_EMPTY;
 

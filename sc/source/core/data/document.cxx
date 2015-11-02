@@ -3425,8 +3425,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
     // ScInterpreter::GetCellString: always format values as numbers.
     // The return value is the error code.
 
-    ScRefCellValue aCell;
-    aCell.assign(*this, rPos);
+    ScRefCellValue aCell(*this, rPos);
     if (aCell.isEmpty())
     {
         rString = EMPTY_OUSTRING;

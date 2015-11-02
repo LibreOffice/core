@@ -1330,8 +1330,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 //  used in ScCellRangeObj::getFormulaArray and ScCellObj::GetInputString_Impl
 static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, bool bEnglish )
 {
-    ScRefCellValue aCell;
-    aCell.assign(rDoc, rPos);
+    ScRefCellValue aCell(rDoc, rPos);
     if (aCell.isEmpty())
         return EMPTY_OUSTRING;
 
@@ -2313,8 +2312,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             /* TODO: Iterate through the range */
                             ScAddress aAddr = aRange.aStart;
                             ScDocument& rDoc = pDocShell->GetDocument();
-                            ScRefCellValue aCell;
-                            aCell.assign(rDoc, aAddr);
+                            ScRefCellValue aCell(rDoc, aAddr);
 
                             OUString aStr = aCell.getString(&rDoc);
                             EditEngine aEngine( rDoc.GetEnginePool() );
@@ -5077,10 +5075,8 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeException,
     OUString aFormula;
 
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScRefCellValue aCell1;
-    ScRefCellValue aCell2;
-    aCell1.assign(rDoc, aRange.aStart);
-    aCell2.assign(rDoc, aRange.aEnd);
+    ScRefCellValue aCell1(rDoc, aRange.aStart);
+    ScRefCellValue aCell2(rDoc, aRange.aEnd);
     if (aCell1.meType == CELLTYPE_FORMULA && aCell2.meType == CELLTYPE_FORMULA)
     {
         const ScFormulaCell* pFCell1 = aCell1.mpFormula;
@@ -5146,10 +5142,8 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
         return aSequence;
 
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScRefCellValue aCell1;
-    ScRefCellValue aCell2;
-    aCell1.assign(rDoc, aRange.aStart);
-    aCell2.assign(rDoc, aRange.aEnd);
+    ScRefCellValue aCell1(rDoc, aRange.aStart);
+    ScRefCellValue aCell2(rDoc, aRange.aEnd);
     if (aCell1.meType == CELLTYPE_FORMULA && aCell2.meType == CELLTYPE_FORMULA)
     {
         const ScFormulaCell* pFCell1 = aCell1.mpFormula;
@@ -6177,8 +6171,7 @@ OUString ScCellObj::GetOutputString_Impl() const
     if ( pDocSh )
     {
         ScDocument& rDoc = pDocSh->GetDocument();
-        ScRefCellValue aCell;
-        aCell.assign(rDoc, aCellPos);
+        ScRefCellValue aCell(rDoc, aCellPos);
 
         aVal = ScCellFormat::GetOutputString(rDoc, aCellPos, aCell);
     }
@@ -6539,8 +6532,7 @@ table::CellContentType ScCellObj::GetResultType_Impl()
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        ScRefCellValue aCell;
-        aCell.assign(pDocSh->GetDocument(), aCellPos);
+        ScRefCellValue aCell(pDocSh->GetDocument(), aCellPos);
         if (aCell.meType == CELLTYPE_FORMULA)
         {
             bool bValue = aCell.mpFormula->IsValue();
@@ -6561,8 +6553,7 @@ sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException, std::excep
     }
 
     sal_uInt16 nError = 0;
-    ScRefCellValue aCell;
-    aCell.assign(pDocSh->GetDocument(), aCellPos);
+    ScRefCellValue aCell(pDocSh->GetDocument(), aCellPos);
     if (aCell.meType == CELLTYPE_FORMULA)
         nError = aCell.mpFormula->GetErrCode();
 
@@ -6581,8 +6572,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens()
         return aSequence;
 
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScRefCellValue aCell;
-    aCell.assign(rDoc, aCellPos);
+    ScRefCellValue aCell(rDoc, aCellPos);
     if (aCell.meType == CELLTYPE_FORMULA)
     {
         ScTokenArray* pTokenArray = aCell.mpFormula->GetCode();
@@ -9124,8 +9114,7 @@ void ScCellsEnumeration::CheckPos_Impl()
 
     bool bFound = false;
     ScDocument& rDoc = pDocShell->GetDocument();
-    ScRefCellValue aCell;
-    aCell.assign(rDoc, aPos);
+    ScRefCellValue aCell(rDoc, aPos);
     if (!aCell.isEmpty())
     {
         if (!pMark)

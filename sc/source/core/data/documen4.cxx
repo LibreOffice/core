@@ -756,8 +756,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
                     if ( pForm )
                     {
                         ScAddress aPos(nCol, nRow, nTab);
-                        ScRefCellValue aCell;
-                        aCell.assign(const_cast<ScDocument&>(*this), aPos);
+                        ScRefCellValue aCell(const_cast<ScDocument&>(*this), aPos);
                         OUString aStyle = pForm->GetCellStyle(aCell, aPos);
                         if (!aStyle.isEmpty())
                         {
@@ -784,8 +783,7 @@ const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab 
         return NULL;
 
     ScAddress aPos(nCol, nRow, nTab);
-    ScRefCellValue aCell;
-    aCell.assign(const_cast<ScDocument&>(*this), aPos);
+    ScRefCellValue aCell(const_cast<ScDocument&>(*this), aPos);
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
     const std::vector<sal_uInt32>& rIndex =
         static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
@@ -920,9 +918,8 @@ sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
 
         if (ValidCol(nOtherCol))    // only compare columns that are common to both docs
         {
-            ScRefCellValue aThisCell, aOtherCell;
-            aThisCell.assign(*this, ScAddress(nThisCol, nThisRow, nThisTab));
-            aOtherCell.assign(rOtherDoc, ScAddress(nOtherCol, nOtherRow, nOtherTab));
+            ScRefCellValue aThisCell(*this, ScAddress(nThisCol, nThisRow, nThisTab));
+            ScRefCellValue aOtherCell(rOtherDoc, ScAddress(nOtherCol, nOtherRow, nOtherTab));
             if (!aThisCell.equalsWithoutFormat(aOtherCell))
             {
                 if (!aThisCell.isEmpty() && !aOtherCell.isEmpty())
@@ -962,9 +959,8 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
 
         if (ValidRow(nOtherRow))    // only compare rows that are common to both docs
         {
-            ScRefCellValue aThisCell, aOtherCell;
-            aThisCell.assign(*this, ScAddress(nThisCol, nThisRow, nThisTab));
-            aOtherCell.assign(rOtherDoc, ScAddress(nOtherCol, nOtherRow, nOtherTab));
+            ScRefCellValue aThisCell(*this, ScAddress(nThisCol, nThisRow, nThisTab));
+            ScRefCellValue aOtherCell(rOtherDoc, ScAddress(nOtherCol, nOtherRow, nOtherTab));
             if (!aThisCell.equalsWithoutFormat(aOtherCell))
             {
                 if (!aThisCell.isEmpty() && !aOtherCell.isEmpty())

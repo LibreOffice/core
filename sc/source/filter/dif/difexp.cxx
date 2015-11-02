@@ -143,8 +143,6 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     SCCOL               nColCnt;
     SCROW               nRowCnt;
 
-    ScRefCellValue aCell;
-
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
     {
         OSL_ASSERT(aOS.getLength() == 0);
@@ -156,7 +154,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
         {
             OSL_ASSERT(aOS.getLength() == 0);
             bool bWriteStringData = false;
-            aCell.assign(*pDoc, ScAddress(nColCnt, nRowCnt, nTab));
+            ScRefCellValue aCell(*pDoc, ScAddress(nColCnt, nRowCnt, nTab));
 
             switch (aCell.meType)
             {

@@ -257,8 +257,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
             uno::Any& rElement = pColAry[nCol];
 
             ScAddress aPos( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab );
-            ScRefCellValue aCell;
-            aCell.assign(*pDoc, aPos);
+            ScRefCellValue aCell(*pDoc, aPos);
 
             if (aCell.isEmpty())
             {

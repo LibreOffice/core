@@ -285,8 +285,7 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
 {
     clear();
 
-    ScRefCellValue aRefVal;
-    aRefVal.assign(const_cast<ScDocument&>(rDoc), rPos);
+    ScRefCellValue aRefVal(const_cast<ScDocument&>(rDoc), rPos);
 
     meType = aRefVal.meType;
     switch (meType)
@@ -493,6 +492,13 @@ ScRefCellValue::ScRefCellValue( ScFormulaCell* pFormula ) : meType(CELLTYPE_FORM
 // It should be enough to copy the double value, which is at least as large
 // as the pointer values.
 ScRefCellValue::ScRefCellValue( const ScRefCellValue& r ) : meType(r.meType), mfValue(r.mfValue) {}
+
+ScRefCellValue::ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos )
+{
+    const ScRefCellValue& rCell = rDoc.GetRefCellValue(rPos);
+    meType = rCell.meType;
+    mfValue = rCell.mfValue;
+}
 
 ScRefCellValue::~ScRefCellValue()
 {

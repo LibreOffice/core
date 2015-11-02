@@ -343,8 +343,7 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
     for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
     {
         ScAddress aPos(nCol, nRow, nTab);
-        ScRefCellValue aCell;
-        aCell.assign(*pDocument, aPos);
+        ScRefCellValue aCell(*pDocument, aPos);
         if (aCell.meType != CELLTYPE_EDIT || !aCell.mpEditText)
             continue;
 

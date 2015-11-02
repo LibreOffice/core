@@ -2518,8 +2518,7 @@ void ScInterpreter::ScZTest()
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
-            ScRefCellValue aCell;
-            aCell.assign(*pDok, aAdr);
+            ScRefCellValue aCell(*pDok, aAdr);
             if (aCell.hasNumeric())
             {
                 fVal = GetCellValue(aAdr, aCell);
@@ -2933,8 +2932,7 @@ void ScInterpreter::ScHarMean()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (aCell.hasNumeric())
                 {
                     double x = GetCellValue(aAdr, aCell);
@@ -3056,8 +3054,7 @@ void ScInterpreter::ScGeoMean()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (aCell.hasNumeric())
                 {
                     double x = GetCellValue(aAdr, aCell);
@@ -3194,8 +3191,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (aCell.hasNumeric())
                 {
                     fVal = GetCellValue(aAdr, aCell);
@@ -3669,8 +3665,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (aCell.hasNumeric())
                     rArray.push_back(GetCellValue(aAdr, aCell));
             }
@@ -3954,8 +3949,7 @@ void ScInterpreter::ScAveDev()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (aCell.hasNumeric())
                 {
                     rVal += GetCellValue(aAdr, aCell);
@@ -4037,8 +4031,7 @@ void ScInterpreter::ScAveDev()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (aCell.hasNumeric())
                     rVal += fabs(GetCellValue(aAdr, aCell) - nMiddle);
             }

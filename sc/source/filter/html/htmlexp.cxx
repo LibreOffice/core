@@ -899,8 +899,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         }
     }
 
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, aPos);
+    ScRefCellValue aCell(*pDoc, aPos);
 
     sal_uLong nFormat = pAttr->GetNumberFormat( pFormatter );
     bool bValueData = aCell.hasNumeric();

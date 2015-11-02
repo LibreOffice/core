@@ -140,15 +140,13 @@ OUString ScCellFormat::GetString(
     {
         case CELLTYPE_STRING:
         {
-            ScRefCellValue aCell;
-            aCell.assign(rDoc, rPos);
+            ScRefCellValue aCell(rDoc, rPos);
             rFormatter.GetOutputString(aCell.mpString->getString(), nFormat, aString, ppColor, bUseStarFormat);
         }
         break;
         case CELLTYPE_EDIT:
         {
-            ScRefCellValue aCell;
-            aCell.assign(rDoc, rPos);
+            ScRefCellValue aCell(rDoc, rPos);
             rFormatter.GetOutputString(aCell.getString(&rDoc), nFormat, aString, ppColor);
         }
         break;

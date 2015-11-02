@@ -1075,8 +1075,7 @@ bool ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY )
         bEmpty = pThisRowInfo->pCellInfo[nX+1].bEmptyCellText;
     else
     {
-        ScRefCellValue aCell;
-        aCell.assign(*mpDoc, ScAddress(nX, nY, nTab));
+        ScRefCellValue aCell(*mpDoc, ScAddress(nX, nY, nTab));
         bEmpty = aCell.isEmpty();
     }
 
@@ -1121,8 +1120,7 @@ bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
     //  Stop at non-empty or merged or overlapped cell,
     //  where a note is empty as well as a cell that's hidden by protection settings
 
-    ScRefCellValue aCell;
-    aCell.assign(*mpDoc, ScAddress(nX, nY, nTab));
+    ScRefCellValue aCell(*mpDoc, ScAddress(nX, nY, nTab));
     if (!aCell.isEmpty() && !IsEmptyCellText(NULL, nX, nY))
         return false;
 

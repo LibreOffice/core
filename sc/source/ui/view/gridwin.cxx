@@ -382,8 +382,7 @@ static bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
                                     rRange.aEnd.Col(),rRange.aEnd.Row() ) )
         return false;
 
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, rRange.aEnd);
+    ScRefCellValue aCell(*pDoc, rRange.aEnd);
     ScAddress aPos;
     return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(aPos) && aPos == rRange.aStart);
 }
@@ -1689,11 +1688,10 @@ bool ScGridWindow::IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, S
     ScDocument* pDoc = pViewData->GetDocument();
 
     // find the first non-empty cell (this, or to the left)
-    ScRefCellValue aCell;
     SCsCOL nNonEmptyX = nPosX;
     for (; nNonEmptyX >= 0; --nNonEmptyX)
     {
-        aCell.assign(*pDoc, ScAddress(nNonEmptyX, nPosY, nTab));
+        ScRefCellValue aCell(*pDoc, ScAddress(nNonEmptyX, nPosY, nTab));
         if (!aCell.isEmpty())
             break;
     }
@@ -1807,8 +1805,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         SCTAB nTab = pViewData->GetTabNo();
         pViewData->GetPosFromPixel(aPos.X(), aPos.Y(), eWhich, nPosX, nPosY);
 
-        ScRefCellValue aCell;
-        aCell.assign(*pDoc, ScAddress(nPosX, nPosY, nTab));
+        ScRefCellValue aCell(*pDoc, ScAddress(nPosX, nPosY, nTab));
         bool bIsEmpty = aCell.isEmpty();
         bool bIsCoveredByText = bIsEmpty && IsCellCoveredByText(nPosX, nPosY, nTab, nNonEmptyX);
 
@@ -2413,8 +2410,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             // case we used the double-click to select the empty cell
             if (bIsTiledRendering && bDouble)
             {
-                ScRefCellValue aCell;
-                aCell.assign(*pViewData->GetDocument(), ScAddress(nPosX, nPosY, nTab));
+                ScRefCellValue aCell(*pViewData->GetDocument(), ScAddress(nPosX, nPosY, nTab));
                 if (aCell.isEmpty())
                     return;
             }
@@ -3077,7 +3073,6 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
         bool bSpellError = false;
         SCCOL nColSpellError = nCellX;
-        ScRefCellValue aSpellCheckCell;
 
         if ( bMouse )
         {
@@ -3105,7 +3100,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             {
                 // Find the first string to the left for spell checking in case the current cell is empty.
                 ScAddress aPos(nCellX, nCellY, nTab);
-                aSpellCheckCell.assign(*pDoc, aPos);
+                ScRefCellValue aSpellCheckCell(*pDoc, aPos);
                 while (aSpellCheckCell.meType == CELLTYPE_NONE)
                 {
                     // Loop until we get the first non-empty cell in the row.
@@ -5467,8 +5462,7 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow
     ScDocument& rDoc = pDocSh->GetDocument();
 
     ScAddress aCellPos(nCol1, nRow, nTab);
-    ScRefCellValue aCell;
-    aCell.assign(rDoc, aCellPos);
+    ScRefCellValue aCell(rDoc, aCellPos);
     if (aCell.meType != CELLTYPE_STRING && aCell.meType != CELLTYPE_EDIT)
         return false;
 

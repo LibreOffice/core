@@ -389,8 +389,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             pMat = GetNewMat(1, 1);
             if (pMat)
             {
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (aCell.hasEmptyValue())
                     pMat->PutEmpty(0, 0);
                 else if (aCell.hasNumeric())
@@ -516,8 +515,7 @@ void ScInterpreter::ScMatValue()
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (aCell.meType == CELLTYPE_FORMULA)
                 {
                     sal_uInt16 nErrCode = aCell.mpFormula->GetErrCode();
@@ -548,8 +546,7 @@ void ScInterpreter::ScMatValue()
                 {
                     ScAddress aAdr( sal::static_int_cast<SCCOL>( nCol1 + nR ),
                                     sal::static_int_cast<SCROW>( nRow1 + nC ), nTab1 );
-                    ScRefCellValue aCell;
-                    aCell.assign(*pDok, aAdr);
+                    ScRefCellValue aCell(*pDok, aAdr);
                     if (aCell.hasNumeric())
                         PushDouble(GetCellValue(aAdr, aCell));
                     else
@@ -3173,8 +3170,7 @@ void ScInterpreter::ScMatRef()
     ScAddress aAdr;
     PopSingleRef( aAdr );
 
-    ScRefCellValue aCell;
-    aCell.assign(*pDok, aAdr);
+    ScRefCellValue aCell(*pDok, aAdr);
 
     if (aCell.meType != CELLTYPE_FORMULA)
     {

@@ -348,8 +348,7 @@ bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             {
                 aAdr.SetCol( nCol );
 
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (!aCell.isEmpty())
                 {
                     sal_uInt16  nErr = 0;
@@ -429,8 +428,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             SCCOL nCol = nCol1;
             while (nCol <= nCol2)
             {
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, ScAddress(nCol, nRow, nTab));
+                ScRefCellValue aCell(*pDok, ScAddress(nCol, nRow, nTab));
                 if (!aCell.isEmpty())
                 {
                     OUString  aStr;
@@ -530,8 +528,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             while (nCol <= nCol2)
             {
                 aAdr.SetCol( nCol );
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (!aCell.isEmpty())
                 {
                     sal_uInt16  nErr = 0;
@@ -714,8 +711,7 @@ void ScInterpreter::PushTempToken( const FormulaToken& r )
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         const ScAddress & rAddress, short * pRetTypeExpr, sal_uLong * pRetIndexExpr )
 {
-    ScRefCellValue aCell;
-    aCell.assign(*pDok, rAddress);
+    ScRefCellValue aCell(*pDok, rAddress);
     if (aCell.hasEmptyValue())
     {
         bool bInherited = (aCell.meType == CELLTYPE_FORMULA);
@@ -1962,8 +1958,7 @@ double ScInterpreter::GetDouble()
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
-            ScRefCellValue aCell;
-            aCell.assign(*pDok, aAdr);
+            ScRefCellValue aCell(*pDok, aAdr);
             nVal = GetCellValue(aAdr, aCell);
         }
         break;
@@ -1974,8 +1969,7 @@ double ScInterpreter::GetDouble()
             ScAddress aAdr;
             if ( !nGlobalError && DoubleRefToPosSingleRef( aRange, aAdr ) )
             {
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 nVal = GetCellValue(aAdr, aCell);
             }
             else
@@ -2063,8 +2057,7 @@ svl::SharedString ScInterpreter::GetString()
             PopSingleRef( aAdr );
             if (nGlobalError == 0)
             {
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 svl::SharedString aSS;
                 GetCellString(aSS, aCell);
                 return aSS;
@@ -2079,8 +2072,7 @@ svl::SharedString ScInterpreter::GetString()
             ScAddress aAdr;
             if ( !nGlobalError && DoubleRefToPosSingleRef( aRange, aAdr ) )
             {
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 svl::SharedString aSS;
                 GetCellString(aSS, aCell);
                 return aSS;
@@ -2607,8 +2599,7 @@ void ScInterpreter::ScExternal()
                                     ScAddress aAdr;
                                     if ( PopDoubleRefOrSingleRef( aAdr ) )
                                     {
-                                        ScRefCellValue aCell;
-                                        aCell.assign(*pDok, aAdr);
+                                        ScRefCellValue aCell(*pDok, aAdr);
                                         if (aCell.hasString())
                                         {
                                             svl::SharedString aStr;
@@ -2658,8 +2649,7 @@ void ScInterpreter::ScExternal()
                                 ScAddress aAdr;
                                 if ( PopDoubleRefOrSingleRef( aAdr ) )
                                 {
-                                    ScRefCellValue aCell;
-                                    aCell.assign(*pDok, aAdr);
+                                    ScRefCellValue aCell(*pDok, aAdr);
                                     if (aCell.hasString())
                                     {
                                         svl::SharedString aStr;
@@ -3181,8 +3171,7 @@ void ScInterpreter::ScMacro()
 bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 {
     bool bOk = true;
-    ScRefCellValue aCell;
-    aCell.assign(*pDok, rPos);
+    ScRefCellValue aCell(*pDok, rPos);
     if (!aCell.isEmpty())
     {
         sal_uInt16 nErr;
@@ -3270,8 +3259,7 @@ void ScInterpreter::ScTableOp()
                 iBroadcast != pTableOp->aNotifiedFormulaPos.end();
                 ++iBroadcast )
         {   // emulate broadcast and indirectly collect cell pointers
-            ScRefCellValue aCell;
-            aCell.assign(*pDok, *iBroadcast);
+            ScRefCellValue aCell(*pDok, *iBroadcast);
             if (aCell.meType == CELLTYPE_FORMULA)
                 aCell.mpFormula->SetTableOpDirty();
         }
@@ -3284,8 +3272,7 @@ void ScInterpreter::ScTableOp()
     }
     pTableOp->bCollectNotifications = false;
 
-    ScRefCellValue aCell;
-    aCell.assign(*pDok, pTableOp->aFormulaPos);
+    ScRefCellValue aCell(*pDok, pTableOp->aFormulaPos);
     if (aCell.meType == CELLTYPE_FORMULA)
         aCell.mpFormula->SetDirtyVar();
     if (aCell.hasNumeric())

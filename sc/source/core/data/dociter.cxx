@@ -1036,8 +1036,7 @@ bool ScCellIterator::isEmpty() const
 
 bool ScCellIterator::equalsWithoutFormat( const ScAddress& rPos ) const
 {
-    ScRefCellValue aOther;
-    aOther.assign(*mpDoc, rPos);
+    ScRefCellValue aOther(*mpDoc, rPos);
     return maCurCell.equalsWithoutFormat(aOther);
 }
 

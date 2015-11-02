@@ -1163,8 +1163,7 @@ void ScInterpreter::ScNPV()
                     {
                         ScAddress aAdr;
                         PopSingleRef( aAdr );
-                        ScRefCellValue aCell;
-                        aCell.assign(*pDok, aAdr);
+                        ScRefCellValue aCell(*pDok, aAdr);
                         if (!aCell.hasEmptyValue() && aCell.hasNumeric())
                         {
                             double nCellVal = GetCellValue(aAdr, aCell);
@@ -2875,8 +2874,7 @@ void ScInterpreter::ScHyperLink()
                     if ( !PopDoubleRefOrSingleRef( aAdr ) )
                         break;
 
-                    ScRefCellValue aCell;
-                    aCell.assign(*pDok, aAdr);
+                    ScRefCellValue aCell(*pDok, aAdr);
                     if (aCell.hasEmptyValue())
                         nResultType = SC_MATVAL_EMPTY;
                     else

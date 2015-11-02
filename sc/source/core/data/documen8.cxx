@@ -1219,8 +1219,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
             while (bFound)
             {
-                ScRefCellValue aCell;
-                aCell.assign(*this, ScAddress(nCol, nRow, nTab));
+                ScRefCellValue aCell(*this, ScAddress(nCol, nRow, nTab));
 
                 // fdo#32786 TITLE_CASE/SENTENCE_CASE need the extra handling in EditEngine (loop over words/sentences).
                 // Still use TransliterationWrapper directly for text cells with other transliteration types,

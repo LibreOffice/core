@@ -1969,8 +1969,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
             bool bForm = false;
             SCROW r = nRow - nStartRow + 1;
             SCCOL c = nCol - nStartCol + 1;
-            ScRefCellValue aCell;
-            aCell.assign(*pDoc, ScAddress(nCol, nRow, aRange.aStart.Tab()));
+            ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, aRange.aStart.Tab()));
             CellType eType = aCell.meType;
             switch( eType )
             {

@@ -111,12 +111,22 @@ struct SC_DLLPUBLIC ScRefCellValue
     ScRefCellValue( const EditTextObject* pEditText );
     ScRefCellValue( ScFormulaCell* pFormula );
     ScRefCellValue( const ScRefCellValue& r );
+
+    /**
+     * Take cell value from specified position in specified document.
+     */
+    ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos );
+
     ~ScRefCellValue();
 
     void clear();
 
     /**
      * Take cell value from specified position in specified document.
+     *
+     * Avoid the sequence of ScRefCellValue() default ctor followed by assign()
+     * as it results in performance penalty, use the
+     * ScRefCellValue(ScDocument&,const ScAddress&) ctor instead.
      */
     void assign( ScDocument& rDoc, const ScAddress& rPos );
 

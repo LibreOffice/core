@@ -623,8 +623,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 {
                     break;
                 }
-                ScRefCellValue aCell;
-                aCell.assign(*pDok, aAdr);
+                ScRefCellValue aCell(*pDok, aAdr);
                 if (!aCell.isEmpty())
                 {
                     if( eFunc == ifCOUNT2 )

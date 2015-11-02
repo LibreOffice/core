@@ -788,8 +788,7 @@ void ScConditionEntry::FillCache() const
             for( SCROW r = nRowStart; r <= nRow; r++ )
                 for( SCCOL c = nColStart; c <= nCol; c++ )
                 {
-                    ScRefCellValue aCell;
-                    aCell.assign(*mpDoc, ScAddress(c, r, nTab));
+                    ScRefCellValue aCell(*mpDoc, ScAddress(c, r, nTab));
                     if (aCell.isEmpty())
                         continue;
 

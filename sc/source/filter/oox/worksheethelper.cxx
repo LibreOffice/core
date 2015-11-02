@@ -1023,8 +1023,7 @@ void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUStr
 {
     ScDocumentImport& rDoc = getDocImport();
     ScAddress aPos(rAddress.Column, rAddress.Row, rAddress.Sheet);
-    ScRefCellValue aCell;
-    aCell.assign(rDoc.getDoc(), aPos);
+    ScRefCellValue aCell(rDoc.getDoc(), aPos);
 
     if (aCell.meType == CELLTYPE_STRING || aCell.meType == CELLTYPE_EDIT)
     {

@@ -1505,7 +1505,6 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         ScMatrixRef xMat = new ScMatrix(
             static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
 
-        ScRefCellValue aCell;
         ColumnBatch<svl::SharedString> aStringBatch(pHostDoc, pSrcDoc, CELLTYPE_STRING, CELLTYPE_EDIT);
         ColumnBatch<double> aDoubleBatch(pHostDoc, pSrcDoc, CELLTYPE_VALUE, CELLTYPE_VALUE);
 
@@ -1516,7 +1515,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
             {
                 const SCSIZE nR = nRow - nRow1;
 
-                aCell.assign(*pSrcDoc, ScAddress(nCol, nRow, nTab));
+                ScRefCellValue aCell(*pSrcDoc, ScAddress(nCol, nRow, nTab));
 
                 aStringBatch.update(aCell, nC, nR, xMat);
                 aDoubleBatch.update(aCell, nC, nR, xMat);
@@ -2158,8 +2157,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
     ScExternalRefCache::CellFormat* pFmt)
 {
     // Get the cell from src doc, and convert it into a token.
-    ScRefCellValue aCell;
-    aCell.assign(*pSrcDoc, rPos);
+    ScRefCellValue aCell(*pSrcDoc, rPos);
     ScExternalRefCache::TokenRef pToken(convertToToken(mpDoc, pSrcDoc, aCell));
 
     if (!pToken.get())
