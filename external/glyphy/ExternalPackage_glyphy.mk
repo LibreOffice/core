@@ -13,6 +13,8 @@ $(eval $(call gb_ExternalPackage_use_external_project,glyphy,glyphy))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,glyphy,$(LIBO_LIB_FOLDER)/libglyphy.dylib,src/.libs/libglyphy.dylib))
+else ifeq ($(OS),WNT)
+# We build a static archive with MSVC, so nothing to add
 else ifeq ($(DISABLE_DYNLOADING),)
 $(eval $(call gb_ExternalPackage_add_file,glyphy,$(LIBO_LIB_FOLDER)/libglyphy.so.0,src/.libs/libglyphy.so.0.0.0))
 endif
