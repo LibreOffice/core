@@ -111,7 +111,7 @@ protected:
             ::std::vector< XMLPropertyState >& rProperties,
             css::uno::Reference<css::beans::XPropertySet > rPropSet ) const override;
 public:
-    ScXMLCellExportPropertyMapper(
+    explicit ScXMLCellExportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLCellExportPropertyMapper();
     virtual void handleElementItem(
@@ -140,7 +140,7 @@ protected:
             ::std::vector< XMLPropertyState >& rProperties,
             css::uno::Reference<css::beans::XPropertySet > rPropSet ) const override;
 public:
-    ScXMLRowExportPropertyMapper(
+    explicit ScXMLRowExportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLRowExportPropertyMapper();
 };
@@ -148,7 +148,7 @@ public:
 class ScXMLColumnExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 public:
-    ScXMLColumnExportPropertyMapper(
+    explicit ScXMLColumnExportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLColumnExportPropertyMapper();
 
@@ -166,7 +166,7 @@ class ScXMLTableExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 protected:
 public:
-    ScXMLTableExportPropertyMapper(
+    explicit ScXMLTableExportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLTableExportPropertyMapper();
 
@@ -203,7 +203,7 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
             ) const override;
 
 public:
-            ScXMLAutoStylePoolP(ScXMLExport& rScXMLExport);
+    explicit ScXMLAutoStylePoolP(ScXMLExport& rScXMLExport);
     virtual ~ScXMLAutoStylePoolP();
 };
 

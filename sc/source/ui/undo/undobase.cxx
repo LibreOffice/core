@@ -159,7 +159,7 @@ class SpanBroadcaster : public sc::ColumnSpanSet::ColumnAction
     SCCOL mnCurCol;
 
 public:
-    SpanBroadcaster( ScDocument& rDoc ) : mrDoc(rDoc), mnCurTab(-1), mnCurCol(-1) {}
+    explicit SpanBroadcaster( ScDocument& rDoc ) : mrDoc(rDoc), mnCurTab(-1), mnCurCol(-1) {}
 
     virtual void startColumn( ScColumn* pCol ) override
     {

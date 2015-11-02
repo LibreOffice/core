@@ -83,7 +83,7 @@ class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container:
     uno::Any maCachedObject;
     ScDocShell* mpDocShell;
 public:
-    ScVbaObjectForCodeNameProvider( ScDocShell* pDocShell ) : mpDocShell( pDocShell )
+    explicit ScVbaObjectForCodeNameProvider( ScDocShell* pDocShell ) : mpDocShell( pDocShell )
     {
         uno::Sequence< uno::Any > aArgs(2);
         // access the application object ( parent for workbook )
@@ -170,7 +170,7 @@ class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeName
 {
     ScDocShell& mrDocShell;
 public:
-    ScVbaCodeNameProvider( ScDocShell& rDocShell ) : mrDocShell(rDocShell) {}
+    explicit ScVbaCodeNameProvider( ScDocShell& rDocShell ) : mrDocShell(rDocShell) {}
     // XCodeNameQuery
     OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException, std::exception ) override
     {

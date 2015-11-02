@@ -43,7 +43,7 @@ private:
     void                    NewValue();
 
 public:
-                            ScAddInResult(const String& rStr);
+    explicit                ScAddInResult(const String& rStr);
     virtual                 ~ScAddInResult();
 
                             // XVolatileResult

@@ -357,7 +357,7 @@ class RangeBorderEnumWrapper : public EnumerationHelper_BASE
     uno::Reference<container::XIndexAccess > m_xIndexAccess;
     sal_Int32 nIndex;
 public:
-    RangeBorderEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+    explicit RangeBorderEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override
     {
         return ( nIndex < m_xIndexAccess->getCount() );

@@ -38,7 +38,7 @@ class ScShareTable : public SvSimpleTable
 private:
     OUString m_sWidestAccessString;
 public:
-    ScShareTable(SvSimpleTableContainer& rParent)
+    explicit ScShareTable(SvSimpleTableContainer& rParent)
         : SvSimpleTable(rParent)
     {
         m_sWidestAccessString = getWidestTime(*ScGlobal::pLocaleData);

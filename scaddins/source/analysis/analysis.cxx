@@ -86,7 +86,7 @@ OUString AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( uno::Runti
 class AnalysisResourcePublisher : public Resource
 {
 public:
-                    AnalysisResourcePublisher( const AnalysisResId& rId ) : Resource( rId ) {}
+    explicit        AnalysisResourcePublisher( const AnalysisResId& rId ) : Resource( rId ) {}
     bool            IsAvailableRes( const ResId& rId ) const { return Resource::IsAvailableRes( rId ); }
     void            FreeResource() { Resource::FreeResource(); }
 };

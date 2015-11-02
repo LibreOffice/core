@@ -128,7 +128,7 @@ namespace dlgprov
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
         virtual void firing_impl( const css::script::ScriptEvent& aScriptEvent, css::uno::Any* pRet ) = 0;
     public:
-        DialogScriptListenerImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) : m_xContext( rxContext ) {}
+        explicit DialogScriptListenerImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) : m_xContext( rxContext ) {}
         virtual ~DialogScriptListenerImpl();
 
         // XEventListener

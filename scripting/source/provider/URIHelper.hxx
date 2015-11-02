@@ -57,7 +57,7 @@ private:
 
 public:
 
-    ScriptingFrameworkURIHelper(
+    explicit ScriptingFrameworkURIHelper(
         const css::uno::Reference< css::uno::XComponentContext >& xContext )
             throw( css::uno::RuntimeException );
 

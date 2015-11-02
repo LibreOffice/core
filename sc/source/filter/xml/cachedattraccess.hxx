@@ -32,7 +32,7 @@ class ScXMLCachedRowAttrAccess
     };
 
 public:
-    ScXMLCachedRowAttrAccess(ScDocument* pDoc);
+    explicit ScXMLCachedRowAttrAccess(ScDocument* pDoc);
 
     bool rowHidden(sal_Int32 nTab, sal_Int32 nRow);
     bool rowFiltered(sal_Int32 nTab, sal_Int32 nRow);

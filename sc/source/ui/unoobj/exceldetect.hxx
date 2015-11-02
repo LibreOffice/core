@@ -22,7 +22,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 class ScExcelBiffDetect : public cppu::WeakImplHelper<css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
 {
 public:
-    ScExcelBiffDetect( const css::uno::Reference<css::uno::XComponentContext>& xContext );
+    explicit ScExcelBiffDetect( const css::uno::Reference<css::uno::XComponentContext>& xContext );
     virtual ~ScExcelBiffDetect();
 
     // XServiceInfo

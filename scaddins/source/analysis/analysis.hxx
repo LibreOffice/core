@@ -75,7 +75,7 @@ private:
                                 throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 public:
-                                AnalysisAddIn(
+    explicit                    AnalysisAddIn(
                                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual                     ~AnalysisAddIn();
 

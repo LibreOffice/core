@@ -50,7 +50,7 @@ public:
     class GlobalInserter : public Inserter
     {
     public:
-        GlobalInserter(ScXMLImport& rImport);
+        explicit GlobalInserter(ScXMLImport& rImport);
         virtual void insert(ScMyNamedExpression* pExp) override;
     private:
         ScXMLImport& mrImport;

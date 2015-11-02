@@ -246,7 +246,7 @@ protected:
     ScPreviewShell*     mpViewShell;
     mutable ScPreviewTableInfo* mpTableInfo;
 public:
-                        ScPreviewViewForwarder(ScPreviewShell* pViewShell);
+    explicit            ScPreviewViewForwarder(ScPreviewShell* pViewShell);
     virtual             ~ScPreviewViewForwarder();
 
     virtual bool        IsValid() const override;

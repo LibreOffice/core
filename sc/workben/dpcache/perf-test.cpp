@@ -283,7 +283,7 @@ class push_back_value : std::unary_function<bucket, void>
 {
     values_type& items;
 public:
-    push_back_value(values_type& _items) : items(_items) {}
+    explicit push_back_value(values_type& _items) : items(_items) {}
     void operator() (const bucket& v)
     {
         items.push_back(v.value);
@@ -294,7 +294,7 @@ class push_back_order_index : std::unary_function<bucket, void>
 {
     indices_type& data_indices;
 public:
-    push_back_order_index(indices_type& _items) : data_indices(_items) {}
+    explicit push_back_order_index(indices_type& _items) : data_indices(_items) {}
     void operator() (const bucket& v)
     {
         data_indices.push_back(v.order_index);

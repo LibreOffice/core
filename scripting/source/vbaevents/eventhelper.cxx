@@ -1039,7 +1039,7 @@ typedef ::cppu::WeakImplHelper< XVBAToOOEventDescGen, css::lang::XServiceInfo > 
 class VBAToOOEventDescGen : public VBAToOOEventDescGen_BASE
 {
 public:
-    VBAToOOEventDescGen( const Reference< XComponentContext >& rxContext );
+    explicit VBAToOOEventDescGen(const Reference< XComponentContext >& rxContext);
 
     // XVBAToOOEventDescGen
     virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) throw (RuntimeException, std::exception) override;

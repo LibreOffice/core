@@ -241,7 +241,7 @@ class UnhighlightEntry : std::unary_function<SvTreeListEntry*, void>
 {
     SvTreeListBox& mrTree;
 public:
-    UnhighlightEntry(SvTreeListBox& rTree) : mrTree(rTree) {}
+    explicit UnhighlightEntry(SvTreeListBox& rTree) : mrTree(rTree) {}
 
     void operator() (SvTreeListEntry* p)
     {

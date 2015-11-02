@@ -32,7 +32,7 @@
 class ScDelimiterTable
 {
 public:
-        ScDelimiterTable( const OUString& rDelTab )
+    explicit ScDelimiterTable( const OUString& rDelTab )
             :   theDelTab ( rDelTab ),
                 cSep      ( '\t' ),
                 nCount    ( comphelper::string::getTokenCount(rDelTab, '\t') ),

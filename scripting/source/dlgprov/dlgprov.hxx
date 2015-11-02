@@ -111,7 +111,7 @@ namespace dlgprov
                 throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     public:
-        DialogProviderImpl(
+        explicit DialogProviderImpl(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         virtual ~DialogProviderImpl();
 

@@ -68,7 +68,7 @@ private:
 
     void                                SetTableStyle(const OUString& sStyleName);
 public:
-                                        ScMyTables(ScXMLImport& rImport);
+    explicit                            ScMyTables(ScXMLImport& rImport);
                                         ~ScMyTables();
     void                                NewSheet(const OUString& sTableName, const OUString& sStyleName,
                                                  const ScXMLTabProtectionData& rProtectData);

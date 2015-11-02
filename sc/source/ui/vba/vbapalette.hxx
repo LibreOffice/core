@@ -34,8 +34,8 @@ class ScVbaPalette
 private:
     SfxObjectShell* m_pShell;
 public:
-    ScVbaPalette( SfxObjectShell* pShell = 0 ) : m_pShell( pShell ) {}
-    ScVbaPalette( const css::uno::Reference< css::frame::XModel >& rxModel );
+    explicit ScVbaPalette( SfxObjectShell* pShell = 0 ) : m_pShell( pShell ) {}
+    explicit ScVbaPalette( const css::uno::Reference< css::frame::XModel >& rxModel );
     // if no palette available e.g. because the document doesn't have a
     // palette defined then a default palette will be returned.
     css::uno::Reference< css::container::XIndexAccess > getPalette() const;

@@ -63,7 +63,7 @@ struct ExtensionMapEntry
 {
     INetContentType m_eTypeID;
 
-    ExtensionMapEntry(INetContentType const eTypeID)
+    explicit ExtensionMapEntry(INetContentType const eTypeID)
         : m_eTypeID(eTypeID) {}
 };
 

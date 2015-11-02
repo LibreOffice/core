@@ -54,7 +54,7 @@ class MyFixedText : public FixedText
 protected:
     void        RequestHelp( const HelpEvent& rHEvt );
 public:
-                MyFixedText(vcl::Window* pParent) : FixedText(pParent) {}
+    explicit    MyFixedText(vcl::Window* pParent) : FixedText(pParent) {}
 };
 
 class MyWindow : public vcl::Window
@@ -74,7 +74,7 @@ private:
     PushButton      aViewButton;
 
 public:
-            MyWindow( vcl::Window *pParent );
+    explicit MyWindow( vcl::Window *pParent );
 
         DECL_LINK_TYPED(CountHdl, PushButton*, void);
         DECL_LINK_TYPED(TextHdl, PushButton*, void);
@@ -89,7 +89,7 @@ private:
     FixedText*  pFixedText;
 
 public:
-                            ScTestListener(FixedText* pF);
+    expliciti               ScTestListener(FixedText* pF);
     virtual                 ~ScTestListener();
 
                             SMART_UNO_DECLARATION( ScTestListener, UsrObject );

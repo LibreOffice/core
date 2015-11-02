@@ -307,7 +307,7 @@ Calc_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* co
 class ScXMLShapeExport : public XMLShapeExport
 {
 public:
-    ScXMLShapeExport(SvXMLExport& rExp) : XMLShapeExport(rExp) {}
+    explicit ScXMLShapeExport(SvXMLExport& rExp) : XMLShapeExport(rExp) {}
     virtual ~ScXMLShapeExport();
 
     /** is called before a shape element for the given XShape is exported */

@@ -103,7 +103,7 @@ struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
     bool                     mbValuesSet;
     bool                     mbOmitPaint;
 
-    ScZoomSliderWnd_Impl( sal_uInt16 nCurrentZoom ) :
+    explicit ScZoomSliderWnd_Impl( sal_uInt16 nCurrentZoom ) :
         mnCurrentZoom( nCurrentZoom ),
         mnMinZoom( 10 ),
         mnMaxZoom( 400 ),

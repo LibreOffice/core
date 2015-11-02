@@ -56,7 +56,7 @@ class FindByRange : public ::std::unary_function<ScAutoStyleData, bool>
 {
     ScRange maRange;
 public:
-    FindByRange(const ScRange& r) : maRange(r) {}
+    explicit FindByRange(const ScRange& r) : maRange(r) {}
     bool operator() (const ScAutoStyleData& rData) const { return rData.aRange == maRange; }
 };
 
@@ -64,7 +64,7 @@ class FindByTimeout : public ::std::unary_function<ScAutoStyleData, bool>
 {
     sal_uLong mnTimeout;
 public:
-    FindByTimeout(sal_uLong n) : mnTimeout(n) {}
+    explicit FindByTimeout(sal_uLong n) : mnTimeout(n) {}
     bool operator() (const ScAutoStyleData& rData) const { return rData.nTimeout >= mnTimeout; }
 };
 

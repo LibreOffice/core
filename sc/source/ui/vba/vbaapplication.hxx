@@ -43,7 +43,7 @@ protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException) override;
 
 public:
-    ScVbaApplication( const css::uno::Reference< css::uno::XComponentContext >& m_xContext );
+    explicit ScVbaApplication( const css::uno::Reference< css::uno::XComponentContext >& m_xContext );
     virtual ~ScVbaApplication();
 
     /** Returns true, if VBA document events are enabled. */

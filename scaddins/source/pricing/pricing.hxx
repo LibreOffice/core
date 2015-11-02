@@ -98,11 +98,11 @@ inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt
 class ScaResPublisher : public Resource
 {
 public:
-    inline                      ScaResPublisher( const ScaResId& rResId ) : Resource( rResId ) {}
+    explicit ScaResPublisher( const ScaResId& rResId ) : Resource( rResId ) {}
 
-    inline bool             IsAvailableRes( const ResId& rResId ) const
+    bool             IsAvailableRes( const ResId& rResId ) const
                                     { return Resource::IsAvailableRes( rResId ); }
-    inline void                 FreeResource()
+    void                 FreeResource()
                                     { Resource::FreeResource(); }
 };
 

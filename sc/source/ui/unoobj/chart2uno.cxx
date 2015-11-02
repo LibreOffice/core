@@ -114,7 +114,7 @@ css::uno::Sequence< T > lcl_VectorToSequence( const ::std::vector< T > & rCont )
 
 struct lcl_appendTableNumber : public ::std::unary_function< SCTAB, void >
 {
-    lcl_appendTableNumber( OUStringBuffer & rBuffer ) :
+    explicit lcl_appendTableNumber( OUStringBuffer & rBuffer ) :
             m_rBuffer( rBuffer )
     {}
     void operator() ( SCTAB nTab )
@@ -885,7 +885,7 @@ private:
 class Tokens2RangeStringXML : public unary_function<ScTokenRef, void>
 {
 public:
-    Tokens2RangeStringXML(ScDocument* pDoc) :
+    explicit Tokens2RangeStringXML(ScDocument* pDoc) :
         mpRangeStr(new OUStringBuffer),
         mpDoc(pDoc),
         mcRangeSep(' '),
@@ -1368,7 +1368,7 @@ class ShrinkRefTokenToDataRange : std::unary_function<ScTokenRef, void>
 {
     ScDocument* mpDoc;
 public:
-    ShrinkRefTokenToDataRange(ScDocument* pDoc) : mpDoc(pDoc) {}
+    explicit ShrinkRefTokenToDataRange(ScDocument* pDoc) : mpDoc(pDoc) {}
     void operator() (ScTokenRef& rRef)
     {
         if (ScRefTokenHelper::isExternalRef(rRef))

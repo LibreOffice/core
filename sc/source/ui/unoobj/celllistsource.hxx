@@ -67,7 +67,7 @@ namespace calc
         bool        m_bInitialized;         /// has XInitialization::initialize been called?
 
     public:
-        OCellListSource(
+        explicit OCellListSource(
             const css::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument
         );
 

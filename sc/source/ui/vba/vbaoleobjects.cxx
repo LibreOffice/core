@@ -38,7 +38,7 @@ class IndexAccessWrapper : public XIndexAccess_BASE
 typedef std::vector< uno::Reference< drawing::XControlShape > > OLEObjects;
     OLEObjects vObjects;
 public:
-        IndexAccessWrapper(  const uno::Reference< container::XIndexAccess >& xIndexAccess )
+    explicit IndexAccessWrapper(  const uno::Reference< container::XIndexAccess >& xIndexAccess )
     {
         sal_Int32 nLen = xIndexAccess->getCount();
         for ( sal_Int32 index = 0; index < nLen; ++index )

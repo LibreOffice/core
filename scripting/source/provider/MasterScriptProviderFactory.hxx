@@ -54,7 +54,7 @@ protected:
     virtual ~MasterScriptProviderFactory();
 
 public:
-    MasterScriptProviderFactory(
+    explicit MasterScriptProviderFactory(
         css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
 
     // XServiceInfo

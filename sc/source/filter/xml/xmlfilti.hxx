@@ -44,7 +44,7 @@ class ScXMLFilterContext : public SvXMLImportContext
     {
         bool mbOr;
         int  mnCondCount;
-        ConnStackItem(bool bOr);
+        explicit ConnStackItem(bool bOr);
     };
     ScQueryParam& mrQueryParam;
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;

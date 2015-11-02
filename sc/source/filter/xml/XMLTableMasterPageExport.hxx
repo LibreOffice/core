@@ -47,7 +47,7 @@ protected:
                  bool bAutoStyles ) override;
 
 public:
-    XMLTableMasterPageExport( ScXMLExport& rExp );
+    explicit XMLTableMasterPageExport( ScXMLExport& rExp );
     virtual ~XMLTableMasterPageExport();
 };
 

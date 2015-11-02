@@ -67,7 +67,7 @@ namespace basprov
             const OUString& rLibName );
 
     public:
-        BasicProviderImpl(
+        explicit BasicProviderImpl(
             const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~BasicProviderImpl();
 

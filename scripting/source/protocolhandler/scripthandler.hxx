@@ -75,7 +75,7 @@ private:
     bool getScriptInvocation();
 
 public:
-    ScriptProtocolHandler( const css::uno::Reference < css::uno::XComponentContext >& xContext );
+    explicit ScriptProtocolHandler( const css::uno::Reference < css::uno::XComponentContext >& xContext );
     virtual ~ScriptProtocolHandler();
 
     /* XServiceInfo */

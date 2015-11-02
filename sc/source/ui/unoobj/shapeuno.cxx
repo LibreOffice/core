@@ -1372,7 +1372,7 @@ private:
     }
 
 public:
-    ShapeUnoEventAccessImpl( ScShapeObj* pShape ): mpShape( pShape )
+    explicit ShapeUnoEventAccessImpl( ScShapeObj* pShape ): mpShape( pShape )
     {
     }
 

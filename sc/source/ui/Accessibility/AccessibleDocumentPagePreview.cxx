@@ -207,7 +207,7 @@ void ScNotesChildren::Init(const Rectangle& rVisRect, sal_Int32 nOffset)
 struct ScParaFound
 {
     sal_Int32 mnIndex;
-    ScParaFound(sal_Int32 nIndex) : mnIndex(nIndex) {}
+    explicit ScParaFound(sal_Int32 nIndex) : mnIndex(nIndex) {}
     bool operator() (const ScAccNote& rNote)
     {
         bool bResult(false);
@@ -264,7 +264,7 @@ struct ScPointFound
 {
     Rectangle maPoint;
     sal_Int32 mnParagraphs;
-    ScPointFound(const Point& rPoint) : maPoint(rPoint, Size(0, 0)), mnParagraphs(0) {}
+    explicit ScPointFound(const Point& rPoint) : maPoint(rPoint, Size(0, 0)), mnParagraphs(0) {}
     bool operator() (const ScAccNote& rNote)
     {
         bool bResult(false);
@@ -421,7 +421,7 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
 struct ScChildGone
 {
     ScAccessibleDocumentPagePreview* mpAccDoc;
-    ScChildGone(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
+    explicit ScChildGone(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
     void operator() (const uno::Reference<XAccessible>& xAccessible) const
     {
         if (mpAccDoc)
@@ -439,7 +439,7 @@ struct ScChildGone
 struct ScChildNew
 {
     ScAccessibleDocumentPagePreview* mpAccDoc;
-    ScChildNew(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
+    explicit ScChildNew(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
     void operator() (const uno::Reference<XAccessible>& xAccessible) const
     {
         if (mpAccDoc)
@@ -808,7 +808,7 @@ namespace
     struct ScVisAreaChanged
     {
         const ScIAccessibleViewForwarder* mpViewForwarder;
-        ScVisAreaChanged(const ScIAccessibleViewForwarder* pViewForwarder) : mpViewForwarder(pViewForwarder) {}
+        explicit ScVisAreaChanged(const ScIAccessibleViewForwarder* pViewForwarder) : mpViewForwarder(pViewForwarder) {}
         void operator() (const ScShapeChild& rAccShapeData) const
         {
             if (rAccShapeData.mpAccShape.is())
@@ -956,7 +956,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetControl(sal_Int32 nIndex) const
 struct ScShapePointFound
 {
     Point maPoint;
-    ScShapePointFound(const awt::Point& rPoint) : maPoint(VCLPoint(rPoint)) {}
+    explicit ScShapePointFound(const awt::Point& rPoint) : maPoint(VCLPoint(rPoint)) {}
     bool operator() (const ScShapeChild& rShape)
     {
         bool bResult(false);

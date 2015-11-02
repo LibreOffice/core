@@ -293,7 +293,7 @@ class InsertTabIndex : std::unary_function<ScRange, void>
 {
     std::vector<SCTAB>& mrTabs;
 public:
-    InsertTabIndex(std::vector<SCTAB>& rTabs) : mrTabs(rTabs) {}
+    explicit InsertTabIndex(std::vector<SCTAB>& rTabs) : mrTabs(rTabs) {}
     void operator() (const ScRange& rRange)
     {
         mrTabs.push_back(rRange.aStart.Tab());

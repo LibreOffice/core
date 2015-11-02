@@ -105,7 +105,7 @@ class VBAProjectListener : public ContainerListenerHelper
 {
     ScMacroManager* mpMacroMgr;
 public:
-    VBAProjectListener( ScMacroManager* pMacroMgr ) : mpMacroMgr( pMacroMgr ) {}
+    explicit VBAProjectListener( ScMacroManager* pMacroMgr ) : mpMacroMgr( pMacroMgr ) {}
     // XEventListener
     virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) throw(RuntimeException, std::exception) override {}
 

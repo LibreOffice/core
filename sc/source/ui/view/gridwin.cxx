@@ -687,7 +687,7 @@ class AddSelectedItemString : public std::unary_function<ScQueryEntry::Item, voi
 {
     std::unordered_set<OUString, OUStringHash>& mrSet;
 public:
-    AddSelectedItemString(std::unordered_set<OUString, OUStringHash>& r) :
+    explicit AddSelectedItemString(std::unordered_set<OUString, OUStringHash>& r) :
         mrSet(r) {}
 
     void operator() (const ScQueryEntry::Item& rItem)

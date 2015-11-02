@@ -505,7 +505,7 @@ class FindByName : public ::std::unary_function<std::unique_ptr<ScDBData>, bool>
 {
     const OUString& mrName;
 public:
-    FindByName(const OUString& rName) : mrName(rName) {}
+    explicit FindByName(const OUString& rName) : mrName(rName) {}
     bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
         return p->GetName().equals(mrName);

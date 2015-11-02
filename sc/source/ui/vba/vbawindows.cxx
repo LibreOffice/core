@@ -64,7 +64,7 @@ public:
         m_it = m_components.begin();
     }
 
-    WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
+    explicit WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
@@ -114,7 +114,7 @@ class WindowsAccessImpl : public WindowsAccessImpl_BASE
     Components m_windows;
     NameIndexHash namesToIndices;
 public:
-    WindowsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext ):m_xContext( xContext )
+    explicit WindowsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext ):m_xContext( xContext )
     {
         uno::Reference< container::XEnumeration > xEnum = new WindowComponentEnumImpl( m_xContext );
         sal_Int32 nIndex=0;

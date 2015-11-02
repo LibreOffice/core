@@ -53,7 +53,7 @@ class ScChangeOpReader {
     std::vector< OUString > maArgs;
 
 public:
-    ScChangeOpReader( const OUString &rString)
+    explicit ScChangeOpReader(const OUString &rString)
     {
         // will need to handle escaping etc.
         // Surely someone else wrote this before ! [!?]
@@ -174,7 +174,7 @@ class ScChangeOpWriter
     }
 
 public:
-    ScChangeOpWriter( const char *pName )
+    explicit ScChangeOpWriter( const char *pName )
     {
         aMessage.appendAscii( pName );
         appendSeparator();

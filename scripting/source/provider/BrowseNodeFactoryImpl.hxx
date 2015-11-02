@@ -48,7 +48,7 @@ protected:
     virtual ~BrowseNodeFactoryImpl();
 
 public:
-    BrowseNodeFactoryImpl(
+    explicit BrowseNodeFactoryImpl(
         css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
 
     // XServiceInfo

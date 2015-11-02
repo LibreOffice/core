@@ -65,8 +65,8 @@ private:
     static ScDocument*  CreateDocument();       // create and initialize doc
 
 public:
-                ScTempDocSource( ScTempDocCache& rDocCache );
-                ~ScTempDocSource();
+    explicit ScTempDocSource( ScTempDocCache& rDocCache );
+    ~ScTempDocSource();
 
     ScDocument*     GetDocument();
 };
@@ -340,7 +340,7 @@ protected:
     bool mbArgError;
     ScDocument* mpDoc;
 public:
-    SimpleVisitor( ScDocument* pDoc ) : mbArgError( false ), mpDoc( pDoc ) {}
+    explicit SimpleVisitor( ScDocument* pDoc ) : mbArgError( false ), mpDoc( pDoc ) {}
     // could possibly just get away with JUST the following overload
     // 1) virtual void visitElem( long& nCol, long& nRow, const double& elem )
     // 2) virtual void visitElem( long& nCol, long& nRow, const OUString& elem )

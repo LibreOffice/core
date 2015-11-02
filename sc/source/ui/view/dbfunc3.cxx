@@ -1603,7 +1603,7 @@ struct ScOUStringCollate
 {
     CollatorWrapper* mpCollator;
 
-    ScOUStringCollate(CollatorWrapper* pColl) : mpCollator(pColl) {}
+    explicit ScOUStringCollate(CollatorWrapper* pColl) : mpCollator(pColl) {}
 
     bool operator()(const OUString& rStr1, const OUString& rStr2) const
     {

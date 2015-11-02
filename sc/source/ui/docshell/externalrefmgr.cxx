@@ -97,7 +97,7 @@ private:
 class FindSrcFileByName : public unary_function<ScExternalRefManager::SrcFileData, bool>
 {
 public:
-    FindSrcFileByName(const OUString& rMatchName) :
+    explicit FindSrcFileByName(const OUString& rMatchName) :
         mrMatchName(rMatchName)
     {
     }
@@ -219,7 +219,7 @@ class EraseRangeByIterator : unary_function<ScRangeName::iterator, void>
 {
     ScRangeName& mrRanges;
 public:
-    EraseRangeByIterator(ScRangeName& rRanges) : mrRanges(rRanges) {}
+    explicit EraseRangeByIterator(ScRangeName& rRanges) : mrRanges(rRanges) {}
     void operator() (const ScRangeName::iterator& itr)
     {
         mrRanges.erase(itr);

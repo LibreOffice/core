@@ -47,7 +47,7 @@ class ScMyOLEFixer
         const OUString& rName,
         const OUString& rRangeList);
 public:
-    ScMyOLEFixer(ScXMLImport& rImport);
+    explicit ScMyOLEFixer(ScXMLImport& rImport);
     ~ScMyOLEFixer();
 
     static bool IsOLE(css::uno::Reference< css::drawing::XShape >& rShape);

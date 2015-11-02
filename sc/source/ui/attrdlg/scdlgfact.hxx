@@ -60,7 +60,7 @@ class ScCondFormatManagerDlg;
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     ScopedVclPtr<DialogClass> pDlg;                 \
 public:                                             \
-                    Class( DialogClass* p)          \
+    explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \
@@ -69,7 +69,7 @@ public:                                             \
 #define DECL_ABSTDLG2_BASE(Class,DialogClass)       \
     ScopedVclPtr<DialogClass> pDlg;                 \
 public:                                             \
-                    Class( DialogClass* p)          \
+    explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \

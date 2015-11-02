@@ -173,8 +173,8 @@ class ScUnoEditEngine : public ScEditEngineDefaulter
     sal_uInt16              nFieldIndex;
 
 public:
-                ScUnoEditEngine(ScEditEngineDefaulter* pSource);
-                virtual ~ScUnoEditEngine();
+    explicit ScUnoEditEngine(ScEditEngineDefaulter* pSource);
+    virtual ~ScUnoEditEngine();
 
     virtual OUString  CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
                                     Color*& rTxtColor, Color*& rFldColor ) override;

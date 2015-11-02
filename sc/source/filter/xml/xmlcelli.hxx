@@ -44,7 +44,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
         SfxItemSet maItemSet;
         ESelection maSelection;
 
-        ParaFormat(ScEditEngineDefaulter& rEditEngine);
+        explicit ParaFormat(ScEditEngineDefaulter& rEditEngine);
     };
 
     struct Field : boost::noncopyable
@@ -52,7 +52,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
         SvxFieldData* mpData;
         ESelection maSelection;
 
-        Field(SvxFieldData* pData);
+        explicit Field(SvxFieldData* pData);
         ~Field();
     };
 

@@ -367,7 +367,7 @@ class Complex
 
 public:
     inline                  Complex( double fReal, double fImag = 0.0, sal_Unicode cC = '\0' );
-                            Complex( const OUString& rComplexAsString ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    explicit                Complex( const OUString& rComplexAsString ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
     inline static bool      IsImagUnit( sal_Unicode c );
     static bool             ParseString( const OUString& rComplexAsString, Complex& rReturn );
@@ -787,7 +787,7 @@ private:
                                 throw( css::lang::IllegalArgumentException );
 
 public:
-                                ScaAnyConverter(
+    explicit                    ScaAnyConverter(
                                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
                                 ~ScaAnyConverter();
 

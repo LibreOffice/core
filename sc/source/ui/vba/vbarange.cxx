@@ -498,7 +498,7 @@ class NumFormatHelper
     uno::Reference< beans::XPropertySet > mxRangeProps;
     uno::Reference< util::XNumberFormats > mxFormats;
 public:
-    NumFormatHelper( const uno::Reference< table::XCellRange >& xRange )
+    explicit NumFormatHelper( const uno::Reference< table::XCellRange >& xRange )
     {
         mxSupplier.set( getModelFromRange( xRange ), uno::UNO_QUERY_THROW );
         mxRangeProps.set( xRange, uno::UNO_QUERY_THROW);
@@ -709,7 +709,7 @@ class CellValueSetter : public ValueSetter
 protected:
     uno::Any maValue;
 public:
-    CellValueSetter( const uno::Any& aValue );
+    explicit CellValueSetter( const uno::Any& aValue );
     virtual bool processValue( const uno::Any& aValue,  const uno::Reference< table::XCell >& xCell ) override;
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override;
 
@@ -1040,7 +1040,7 @@ class RangeValueProcessor : public RangeProcessor
 {
     const uno::Any& m_aVal;
 public:
-    RangeValueProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
+    explicit RangeValueProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
     virtual ~RangeValueProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange ) override
     {
@@ -1052,7 +1052,7 @@ class RangeFormulaProcessor : public RangeProcessor
 {
     const uno::Any& m_aVal;
 public:
-    RangeFormulaProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
+    explicit RangeFormulaProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
     virtual ~RangeFormulaProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange ) override
     {
@@ -1077,7 +1077,7 @@ class AreasVisitor
 private:
     uno::Reference< XCollection > m_Areas;
 public:
-    AreasVisitor( const uno::Reference< XCollection >& rAreas ):m_Areas( rAreas ){}
+    explicit AreasVisitor( const uno::Reference< XCollection >& rAreas ):m_Areas( rAreas ){}
 
     void visit( RangeProcessor& processor )
     {
@@ -1098,12 +1098,12 @@ class RangeHelper
     uno::Reference< table::XCellRange > m_xCellRange;
 
 public:
-    RangeHelper( const uno::Reference< table::XCellRange >& xCellRange ) throw (uno::RuntimeException) : m_xCellRange( xCellRange )
+    explicit RangeHelper( const uno::Reference< table::XCellRange >& xCellRange ) throw (uno::RuntimeException) : m_xCellRange( xCellRange )
     {
         if ( !m_xCellRange.is() )
             throw uno::RuntimeException();
     }
-    RangeHelper( const uno::Any& rCellRange ) throw (uno::RuntimeException)
+    explicit RangeHelper( const uno::Any& rCellRange ) throw (uno::RuntimeException)
     {
         m_xCellRange.set(rCellRange, uno::UNO_QUERY_THROW);
     }

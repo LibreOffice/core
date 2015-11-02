@@ -159,7 +159,7 @@ protected:
     virtual void implLoadAllLocales();
 
 public:
-    StringResourceImpl(
+    explicit StringResourceImpl(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~StringResourceImpl();
 
@@ -311,7 +311,7 @@ protected:
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
 public:
-    StringResourcePersistenceImpl(
+    explicit StringResourcePersistenceImpl(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~StringResourcePersistenceImpl();
 
@@ -421,7 +421,7 @@ class StringResourceWithStorageImpl : public StringResourceWithStorageImpl_BASE
     virtual bool implLoadLocale( LocaleItem* pLocaleItem ) override;
 
 public:
-    StringResourceWithStorageImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit StringResourceWithStorageImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~StringResourceWithStorageImpl();
 
     // XServiceInfo
@@ -546,7 +546,7 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
     virtual bool implLoadLocale( LocaleItem* pLocaleItem ) override;
 
 public:
-    StringResourceWithLocationImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit StringResourceWithLocationImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~StringResourceWithLocationImpl();
 
     // XServiceInfo

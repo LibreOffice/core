@@ -47,7 +47,7 @@
 struct Func_SetType
 {
     sal_Int32                   mnType;
-    inline                      Func_SetType( sal_Int32 nType ) : mnType( nType ) {}
+    explicit                    Func_SetType( sal_Int32 nType ) : mnType( nType ) {}
     inline void                 operator()( ScCsvColState& rState ) const
         { rState.mnType = mnType; }
 };
@@ -55,7 +55,7 @@ struct Func_SetType
 struct Func_Select
 {
     bool                        mbSelect;
-    inline                      Func_Select( bool bSelect ) : mbSelect( bSelect ) {}
+    explicit                    Func_Select( bool bSelect ) : mbSelect( bSelect ) {}
     inline void                 operator()( ScCsvColState& rState ) const
         { rState.Select( mbSelect ); }
 };

@@ -67,7 +67,7 @@ ActiveMSPList::createNewMSP( const uno::Any& context )
 class NonDocMSPCreator
 {
 public:
-    NonDocMSPCreator(ActiveMSPList *pList)
+    explicit NonDocMSPCreator(ActiveMSPList *pList)
     {
         pList->createNonDocMSPs();
     }

@@ -225,7 +225,7 @@ struct DeselectShape
 struct SelectShape
 {
     uno::Reference < drawing::XShapes > xShapes;
-    SelectShape(uno::Reference<drawing::XShapes>& xTemp) : xShapes(xTemp) {}
+    explicit SelectShape(uno::Reference<drawing::XShapes>& xTemp) : xShapes(xTemp) {}
     void operator() (const ScAccessibleShapeData* pAccShapeData) const
     {
         if (pAccShapeData && pAccShapeData->bSelectable)
@@ -1378,7 +1378,7 @@ namespace
     struct ScVisAreaChanged
     {
         ScAccessibleDocument* mpAccDoc;
-        ScVisAreaChanged(ScAccessibleDocument* pAccDoc) : mpAccDoc(pAccDoc) {}
+        explicit ScVisAreaChanged(ScAccessibleDocument* pAccDoc) : mpAccDoc(pAccDoc) {}
         void operator() (const ScAccessibleShapeData* pAccShapeData) const
         {
             if (pAccShapeData && pAccShapeData->pAccShape.is())

@@ -56,7 +56,7 @@ class ActiveMSPList : public ::cppu::WeakImplHelper< css::lang::XEventListener  
 
 public:
 
-    ActiveMSPList(  const css::uno::Reference<
+    explicit ActiveMSPList(  const css::uno::Reference<
         css::uno::XComponentContext > & xContext  );
     virtual ~ActiveMSPList();
 

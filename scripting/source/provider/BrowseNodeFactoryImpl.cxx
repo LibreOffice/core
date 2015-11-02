@@ -59,7 +59,7 @@ private:
 
 public:
 
-    BrowseNodeAggregator( const Reference< browse::XBrowseNode >& node )
+    explicit BrowseNodeAggregator( const Reference< browse::XBrowseNode >& node )
     {
         m_Name = node->getName();
         m_Nodes.realloc( 1 );
@@ -182,7 +182,7 @@ private:
 
 public:
 
-    LocationBrowseNode( const Reference< browse::XBrowseNode >& node )
+    explicit LocationBrowseNode( const Reference< browse::XBrowseNode >& node )
     {
         m_sNodeName = node->getName();
         m_hBNA = NULL;
@@ -537,7 +537,7 @@ private:
     OUString m_Name;
 
 public:
-    DefaultRootBrowseNode( const Reference< XComponentContext >& xCtx )
+    explicit DefaultRootBrowseNode( const Reference< XComponentContext >& xCtx )
     {
         Sequence < Reference< browse::XBrowseNode > > nodes =
             getAllBrowseNodes( xCtx );
@@ -602,7 +602,7 @@ private:
     Reference< XComponentContext > m_xComponentContext;
 
 public:
-    SelectorBrowseNode( const Reference< XComponentContext >& xContext )
+    explicit SelectorBrowseNode( const Reference< XComponentContext >& xContext )
       : m_xComponentContext( xContext )
     {
     }

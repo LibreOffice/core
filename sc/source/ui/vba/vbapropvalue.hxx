@@ -36,7 +36,7 @@ class ScVbaPropValue : public PropValueImpl_BASE
 {
     PropListener* m_pListener;
 public:
-    ScVbaPropValue( PropListener* pListener );
+    explicit ScVbaPropValue( PropListener* pListener );
 
     // Attributes
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
