@@ -3358,18 +3358,18 @@ OUString SwDrawFrameFormat::GetDescription() const
 
     if (pSdrObj)
     {
-        if (pSdrObj != pSdrObjCached)
+        if (pSdrObj != m_pSdrObjectCached)
         {
             SdrObject * pSdrObjCopy = pSdrObj->Clone();
             SdrUndoNewObj * pSdrUndo = new SdrUndoNewObj(*pSdrObjCopy);
-            sSdrObjCachedComment = pSdrUndo->GetComment();
+            m_sSdrObjectCachedComment = pSdrUndo->GetComment();
 
             delete pSdrUndo;
 
-            pSdrObjCached = pSdrObj;
+            m_pSdrObjectCached = pSdrObj;
         }
 
-        aResult = sSdrObjCachedComment;
+        aResult = m_sSdrObjectCachedComment;
     }
     else
         aResult = SW_RESSTR(STR_GRAPHIC);

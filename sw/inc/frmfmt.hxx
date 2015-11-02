@@ -231,8 +231,8 @@ class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
 {
     friend class SwDoc;
 
-    mutable const SdrObject * pSdrObjCached;
-    mutable OUString sSdrObjCachedComment;
+    mutable const SdrObject * m_pSdrObjectCached;
+    mutable OUString m_sSdrObjectCachedComment;
 
     SwDrawFrameFormat( const SwDrawFrameFormat &rCpy ) = delete;
     SwDrawFrameFormat &operator=( const SwDrawFrameFormat &rCpy ) = delete;
@@ -247,7 +247,7 @@ protected:
     SwDrawFrameFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
                     SwFrameFormat *pDrvdFrm )
         : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_DRAWFRMFMT ),
-          pSdrObjCached(NULL),
+          m_pSdrObjectCached(NULL),
 
           meLayoutDir( SwFrameFormat::HORI_L2R ),
 
@@ -259,7 +259,7 @@ protected:
     SwDrawFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrm )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_DRAWFRMFMT ),
-          pSdrObjCached(NULL),
+          m_pSdrObjectCached(NULL),
           meLayoutDir( SwFrameFormat::HORI_L2R ),
 
           mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
