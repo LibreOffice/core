@@ -23,8 +23,6 @@
 
 #include <threadhelp/transactionmanager.hxx>
 
-#include <macros/generic.hxx>
-
 #include <com/sun/star/lang/DisposedException.hpp>
 
 namespace framework{

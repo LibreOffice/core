@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
 
-#include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <general.h>

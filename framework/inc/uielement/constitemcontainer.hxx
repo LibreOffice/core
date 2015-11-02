@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 
-#include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 

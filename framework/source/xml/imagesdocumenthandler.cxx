@@ -624,7 +624,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( OUString( IMAGES_DOCTYPE ) );
+        xExtendedDocHandler->unknown( IMAGES_DOCTYPE );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
@@ -639,7 +639,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
                          m_aAttributeType,
                          OUString( XMLNS_XLINK ) );
 
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_IMAGESCONTAINER ), pList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGESCONTAINER, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     if ( m_aImageListsItems.pImageList )
@@ -659,7 +659,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_IMAGESCONTAINER ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_IMAGESCONTAINER );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
@@ -722,7 +722,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
                              pImageList->aHighContrastURL );
     }
 
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_IMAGES ), xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGES, xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     ImageItemListDescriptor* pImageItemList = pImageList->pImageItemList;
@@ -732,7 +732,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
             WriteImage( &(*pImageItemList)[i] );
     }
 
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_IMAGES ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_IMAGES );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 
@@ -750,17 +750,17 @@ void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage 
                          m_aAttributeType,
                          pImage->aCommandURL );
 
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_ENTRY ), xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_ENTRY, xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_ENTRY ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_ENTRY );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 
 void OWriteImagesDocumentHandler::WriteExternalImageList( const ExternalImageItemListDescriptor* pExternalImageList ) throw
 ( SAXException, RuntimeException )
 {
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_EXTERNALIMAGES ), m_xEmptyList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_EXTERNALIMAGES, m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     for ( size_t i = 0; i < pExternalImageList->size(); i++ )
@@ -770,7 +770,7 @@ void OWriteImagesDocumentHandler::WriteExternalImageList( const ExternalImageIte
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_EXTERNALIMAGES ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_EXTERNALIMAGES );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 
@@ -799,10 +799,10 @@ void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDes
                              pExternalImage->aCommandURL );
     }
 
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_EXTERNALENTRY ), xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_EXTERNALENTRY, xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_EXTERNALENTRY ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_EXTERNALENTRY );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 

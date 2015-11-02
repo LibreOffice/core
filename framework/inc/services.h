@@ -20,15 +20,13 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_H
 #define INCLUDED_FRAMEWORK_INC_SERVICES_H
 
-#include <macros/generic.hxx>
-
 namespace framework{
 
 //  used servicenames by framework
 
-#define SERVICENAME_FILTERFACTORY                               DECLARE_ASCII("com.sun.star.document.FilterFactory"                 )
-#define SERVICENAME_CFGUPDATEACCESS                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")   // provides read/write access to the configuration
-#define SERVICENAME_CFGREADACCESS                               DECLARE_ASCII("com.sun.star.configuration.ConfigurationAccess"      )   // provides readonly access to the configuration
+#define SERVICENAME_FILTERFACTORY                               "com.sun.star.document.FilterFactory"
+#define SERVICENAME_CFGUPDATEACCESS                             "com.sun.star.configuration.ConfigurationUpdateAccess"   // provides read/write access to the configuration
+#define SERVICENAME_CFGREADACCESS                               "com.sun.star.configuration.ConfigurationAccess"         // provides readonly access to the configuration
 #define SERVICENAME_CONTENTHANDLER                              "com.sun.star.frame.ContentHandler"
 #define SERVICENAME_JOB                                         "com.sun.star.task.Job"
 #define SERVICENAME_PROTOCOLHANDLER                             "com.sun.star.frame.ProtocolHandler"
@@ -39,29 +37,29 @@ namespace framework{
 
 //  used implementationnames by framework
 
-#define IMPLEMENTATIONNAME_MEDIATYPEDETECTIONHELPER             DECLARE_ASCII("com.sun.star.comp.framework.MediaTypeDetectionHelper")
-#define IMPLEMENTATIONNAME_OXT_HANDLER                          DECLARE_ASCII("com.sun.star.comp.framework.OXTFileHandler"          )
-#define IMPLEMENTATIONNAME_QUICKLAUNCHER                        DECLARE_ASCII("com.sun.star.comp.desktop.QuickstartWrapper"         )
-#define IMPLEMENTATIONNAME_DISPATCHRECORDERSUPPLIER             DECLARE_ASCII("com.sun.star.comp.framework.DispatchRecorderSupplier")
-#define IMPLEMENTATIONNAME_MAILTODISPATCHER                     DECLARE_ASCII("com.sun.star.comp.framework.MailToDispatcher"        )
-#define IMPLEMENTATIONNAME_SERVICEHANDLER                       DECLARE_ASCII("com.sun.star.comp.framework.ServiceHandler"          )
-#define IMPLEMENTATIONNAME_DISPATCHHELPER                       DECLARE_ASCII("com.sun.star.comp.framework.services.DispatchHelper" )
-#define IMPLEMENTATIONNAME_MACROSMENUCONTROLLER                 DECLARE_ASCII("com.sun.star.comp.framework.MacrosMenuController"      )
-#define IMPLEMENTATIONNAME_FONTMENUCONTROLLER                   DECLARE_ASCII("com.sun.star.comp.framework.FontMenuController"      )
-#define IMPLEMENTATIONNAME_FONTSIZEMENUCONTROLLER               DECLARE_ASCII("com.sun.star.comp.framework.FontSizeMenuController"  )
-#define IMPLEMENTATIONNAME_HEADERMENUCONTROLLER                 DECLARE_ASCII("com.sun.star.comp.framework.HeaderMenuController"    )
-#define IMPLEMENTATIONNAME_FOOTERMENUCONTROLLER                 DECLARE_ASCII("com.sun.star.comp.framework.FooterMenuController"    )
-#define IMPLEMENTATIONNAME_NEWMENUCONTROLLER                    DECLARE_ASCII("com.sun.star.comp.framework.NewMenuController"       )
-#define IMPLEMENTATIONNAME_TOOLBARSMENUCONTROLLER               DECLARE_ASCII("com.sun.star.comp.framework.ToolBarsMenuController"  )
-#define IMPLEMENTATIONNAME_HELPONSTARTUP                        DECLARE_ASCII("com.sun.star.comp.framework.HelpOnStartup"           )
-#define IMPLEMENTATIONNAME_SHELLJOB                             DECLARE_ASCII("com.sun.star.comp.framework.ShellJob"                )
-#define IMPLEMENTATIONNAME_FWK_TASKCREATOR                      DECLARE_ASCII("com.sun.star.comp.framework.TaskCreator"                 )
-#define IMPLEMENTATIONNAME_TABWINFACTORY                        DECLARE_ASCII("com.sun.star.comp.framework.TabWindowFactory"        )
-#define IMPLEMENTATIONNAME_TABWINDOW                            DECLARE_ASCII("com.sun.star.comp.framework.TabWindow"               )
-#define IMPLEMENTATIONNAME_SYSTEMEXEC                           DECLARE_ASCII("com.sun.star.comp.framework.SystemExecute"           )
-#define IMPLEMENTATIONNAME_URIABBREVIATION                      DECLARE_ASCII("com.sun.star.comp.framework.UriAbbreviation"         )
-#define IMPLEMENTATIONNAME_POPUPMENUDISPATCHER                  DECLARE_ASCII("com.sun.star.comp.framework.PopupMenuControllerDispatcher" )
-#define IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER      DECLARE_ASCII("com.sun.star.comp.framework.LanguageSelectionMenuController" )
+#define IMPLEMENTATIONNAME_MEDIATYPEDETECTIONHELPER             "com.sun.star.comp.framework.MediaTypeDetectionHelper"
+#define IMPLEMENTATIONNAME_OXT_HANDLER                          "com.sun.star.comp.framework.OXTFileHandler"
+#define IMPLEMENTATIONNAME_QUICKLAUNCHER                        "com.sun.star.comp.desktop.QuickstartWrapper"
+#define IMPLEMENTATIONNAME_DISPATCHRECORDERSUPPLIER             "com.sun.star.comp.framework.DispatchRecorderSupplier"
+#define IMPLEMENTATIONNAME_MAILTODISPATCHER                     "com.sun.star.comp.framework.MailToDispatcher"
+#define IMPLEMENTATIONNAME_SERVICEHANDLER                       "com.sun.star.comp.framework.ServiceHandler"
+#define IMPLEMENTATIONNAME_DISPATCHHELPER                       "com.sun.star.comp.framework.services.DispatchHelper"
+#define IMPLEMENTATIONNAME_MACROSMENUCONTROLLER                 "com.sun.star.comp.framework.MacrosMenuController"
+#define IMPLEMENTATIONNAME_FONTMENUCONTROLLER                   "com.sun.star.comp.framework.FontMenuController"
+#define IMPLEMENTATIONNAME_FONTSIZEMENUCONTROLLER               "com.sun.star.comp.framework.FontSizeMenuController"
+#define IMPLEMENTATIONNAME_HEADERMENUCONTROLLER                 "com.sun.star.comp.framework.HeaderMenuController"
+#define IMPLEMENTATIONNAME_FOOTERMENUCONTROLLER                 "com.sun.star.comp.framework.FooterMenuController"
+#define IMPLEMENTATIONNAME_NEWMENUCONTROLLER                    "com.sun.star.comp.framework.NewMenuController"
+#define IMPLEMENTATIONNAME_TOOLBARSMENUCONTROLLER               "com.sun.star.comp.framework.ToolBarsMenuController"
+#define IMPLEMENTATIONNAME_HELPONSTARTUP                        "com.sun.star.comp.framework.HelpOnStartup"
+#define IMPLEMENTATIONNAME_SHELLJOB                             "com.sun.star.comp.framework.ShellJob"
+#define IMPLEMENTATIONNAME_FWK_TASKCREATOR                      "com.sun.star.comp.framework.TaskCreator"
+#define IMPLEMENTATIONNAME_TABWINFACTORY                        "com.sun.star.comp.framework.TabWindowFactory"
+#define IMPLEMENTATIONNAME_TABWINDOW                            "com.sun.star.comp.framework.TabWindow"
+#define IMPLEMENTATIONNAME_SYSTEMEXEC                           "com.sun.star.comp.framework.SystemExecute"
+#define IMPLEMENTATIONNAME_URIABBREVIATION                      "com.sun.star.comp.framework.UriAbbreviation"
+#define IMPLEMENTATIONNAME_POPUPMENUDISPATCHER                  "com.sun.star.comp.framework.PopupMenuControllerDispatcher"
+#define IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER      "com.sun.star.comp.framework.LanguageSelectionMenuController"
 
 }       //  namespace framework
 

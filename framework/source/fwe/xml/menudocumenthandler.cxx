@@ -753,7 +753,7 @@ throw ( SAXException, RuntimeException )
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( OUString( MENUBAR_DOCTYPE ) );
+        xExtendedDocHandler->unknown( MENUBAR_DOCTYPE );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
@@ -765,13 +765,13 @@ throw ( SAXException, RuntimeException )
                          m_aAttributeType,
                          OUString( "menubar" ) );
 
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENUBAR ), pList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENUBAR, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     WriteMenu( m_xMenuBarContainer );
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUBAR ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_MENUBAR );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
@@ -820,17 +820,17 @@ throw ( SAXException, RuntimeException )
                                                  aLabel );
 
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENU ), xListMenu );
+                    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENU, xListMenu );
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENUPOPUP ), m_xEmptyList );
+                    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENUPOPUP, m_xEmptyList );
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
                     WriteMenu( xSubMenu );
 
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUPOPUP ) );
+                    m_xWriteDocumentHandler->endElement( ELEMENT_NS_MENUPOPUP );
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENU ) );
+                    m_xWriteDocumentHandler->endElement( ELEMENT_NS_MENU );
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                     bSeparator = false;
                 }
@@ -898,17 +898,17 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENUITEM ), xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENUITEM, xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUITEM ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_MENUITEM );
 }
 
 void OWriteMenuDocumentHandler::WriteMenuSeparator()
 {
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENUSEPARATOR ), m_xEmptyList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENUSEPARATOR, m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUSEPARATOR ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_MENUSEPARATOR );
 }
 
 } // namespace framework

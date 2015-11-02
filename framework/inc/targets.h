@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_TARGETS_H
 #define INCLUDED_FRAMEWORK_INC_TARGETS_H
 
-#include <macros/generic.hxx>
-
 namespace framework{
 
 //  Values for special frame search ... sTargetFrameName of findFrame() or queryDispatch() or loadComponentFromURL()

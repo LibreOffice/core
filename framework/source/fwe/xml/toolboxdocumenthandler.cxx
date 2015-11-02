@@ -679,7 +679,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( OUString( TOOLBAR_DOCTYPE ) );
+        xExtendedDocHandler->unknown( TOOLBAR_DOCTYPE );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
@@ -712,7 +712,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
                              m_aAttributeType,
                              aUIName );
 
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_TOOLBAR ), pList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBAR, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     sal_Int32  nItemCount = m_rItemAccess->getCount();
@@ -746,7 +746,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_TOOLBAR ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_TOOLBAR );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
@@ -829,36 +829,36 @@ throw ( SAXException, RuntimeException )
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_TOOLBARITEM ), xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBARITEM, xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_TOOLBARITEM ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_TOOLBARITEM );
 }
 
 void OWriteToolBoxDocumentHandler::WriteToolBoxSpace() throw
 ( SAXException, RuntimeException )
 {
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_TOOLBARSPACE ), m_xEmptyList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBARSPACE, m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_TOOLBARSPACE ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_TOOLBARSPACE );
 }
 
 void OWriteToolBoxDocumentHandler::WriteToolBoxBreak() throw
 ( SAXException, RuntimeException )
 {
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_TOOLBARBREAK ), m_xEmptyList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBARBREAK, m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_TOOLBARBREAK ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_TOOLBARBREAK );
 }
 
 void OWriteToolBoxDocumentHandler::WriteToolBoxSeparator() throw
 ( SAXException, RuntimeException )
 {
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_TOOLBARSEPARATOR ), m_xEmptyList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBARSEPARATOR, m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_TOOLBARSEPARATOR ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_TOOLBARSEPARATOR );
 }
 
 } // namespace framework

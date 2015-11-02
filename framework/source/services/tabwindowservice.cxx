@@ -36,7 +36,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <classes/propertysethelper.hxx>
-#include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>

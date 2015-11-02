@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_INTERCEPTIONHELPER_HXX
 
 #include <macros/xinterface.hxx>
-#include <macros/generic.hxx>
 #include <general.h>
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>

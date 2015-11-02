@@ -19,8 +19,6 @@
 
 #include <accelerators/keymapping.hxx>
 
-#include <macros/generic.hxx>
-
 #include <com/sun/star/awt/Key.hpp>
 
 namespace framework

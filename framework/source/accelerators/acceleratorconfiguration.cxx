@@ -872,11 +872,11 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
         return;
 
     long nOpenModes = css::embed::ElementModes::READWRITE;
-    css::uno::Reference< css::embed::XStorage > xAcceleratorTypeStorage = xStorage->openStorageElement(OUString("accelerator"), nOpenModes);
+    css::uno::Reference< css::embed::XStorage > xAcceleratorTypeStorage = xStorage->openStorageElement("accelerator", nOpenModes);
     if (!xAcceleratorTypeStorage.is())
         return;
 
-    css::uno::Reference< css::io::XStream > xStream = xAcceleratorTypeStorage->openStreamElement(OUString("current"), nOpenModes);
+    css::uno::Reference< css::io::XStream > xStream = xAcceleratorTypeStorage->openStreamElement("current", nOpenModes);
     css::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();

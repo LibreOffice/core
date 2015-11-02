@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_LAYOUTMANAGER_HELPERS_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_LAYOUTMANAGER_HELPERS_HXX
 
-#include <macros/generic.hxx>
 #include <stdtypes.h>
 #include <properties.h>
 

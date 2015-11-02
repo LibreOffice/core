@@ -19,7 +19,7 @@
 
 #ifndef INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
 #define INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
-#include <macros/generic.hxx>
+
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>

@@ -25,7 +25,6 @@
 #include <threadhelp/transactionbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
-#include <macros/generic.hxx>
 #include <stdtypes.h>
 
 #include <com/sun/star/lang/XTypeProvider.hpp>

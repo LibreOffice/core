@@ -509,7 +509,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( OUString( STATUSBAR_DOCTYPE ) );
+        xExtendedDocHandler->unknown( STATUSBAR_DOCTYPE );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
@@ -524,7 +524,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
                          m_aAttributeType,
                          OUString( XMLNS_XLINK ) );
 
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_STATUSBAR ), pList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBAR, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     sal_Int32  nItemCount = m_aStatusBarItems->getCount();
@@ -556,7 +556,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_STATUSBAR ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_STATUSBAR );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
@@ -649,9 +649,9 @@ throw ( SAXException, RuntimeException )
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_STATUSBARITEM ), xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBARITEM, xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_STATUSBARITEM ) );
+    m_xWriteDocumentHandler->endElement( ELEMENT_NS_STATUSBARITEM );
 }
 
 } // namespace framework

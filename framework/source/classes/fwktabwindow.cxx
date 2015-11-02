@@ -134,7 +134,7 @@ bool FwkTabPage::CallMethod( const OUString& rMethod )
     {
         try
         {
-            bRet = m_xEventHdl->callHandlerMethod( m_xPage, uno::makeAny( rMethod ), OUString(EXTERNAL_EVENT) );
+            bRet = m_xEventHdl->callHandlerMethod( m_xPage, uno::makeAny( rMethod ), EXTERNAL_EVENT );
         }
         catch ( const uno::Exception& )
         {

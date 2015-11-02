@@ -50,7 +50,7 @@ bool IsSeparator( Reference< XPropertySet > xPropertySet )
     Reference< XServiceInfo > xServiceInfo( xPropertySet, UNO_QUERY );
     try
     {
-        return xServiceInfo->supportsService( OUString( SERVICENAME_ACTIONTRIGGERSEPARATOR ) );
+        return xServiceInfo->supportsService( SERVICENAME_ACTIONTRIGGERSEPARATOR );
     }
     catch (const Exception&)
     {

@@ -22,7 +22,6 @@
 
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
-#include <macros/generic.hxx>
 #include <stdtypes.h>
 #include <general.h>
 

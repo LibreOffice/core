@@ -2608,8 +2608,8 @@ IMPL_LINK_NOARG_TYPED(LayoutManager, MenuBarClose, void*, void)
 
     xDispatcher->executeDispatch(
         xProvider,
-        OUString(".uno:CloseWin"),
-        OUString("_self"),
+        ".uno:CloseWin",
+        "_self",
         0,
         uno::Sequence< beans::PropertyValue >());
 }

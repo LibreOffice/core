@@ -19,7 +19,6 @@
 
 #include <pattern/window.hxx>
 #include <helper/persistentwindowstate.hxx>
-#include <macros/generic.hxx>
 #include <services.h>
 
 #include <com/sun/star/awt/XWindow.hpp>

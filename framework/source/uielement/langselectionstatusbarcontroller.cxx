@@ -55,7 +55,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 
-#include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>

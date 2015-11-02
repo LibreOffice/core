@@ -386,7 +386,7 @@ bool ConfigurationAccess_UICommand::addGenericInfoToCache()
         try
         {
             if ( m_xGenericUICommands->getByName(
-                    OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST )) >>= aCommandNameSeq )
+                    UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ) >>= aCommandNameSeq )
                 m_aCommandRotateImageList = comphelper::concatSequences< OUString >( m_aCommandRotateImageList, aCommandNameSeq );
         }
         catch (const RuntimeException&)
@@ -400,7 +400,7 @@ bool ConfigurationAccess_UICommand::addGenericInfoToCache()
         try
         {
             if ( m_xGenericUICommands->getByName(
-                    OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST )) >>= aCommandNameSeq )
+                    UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ) >>= aCommandNameSeq )
                 m_aCommandMirrorImageList = comphelper::concatSequences< OUString >( m_aCommandMirrorImageList, aCommandNameSeq );
         }
         catch (const RuntimeException&)

@@ -20,7 +20,6 @@
 #include <helper/titlebarupdate.hxx>
 
 #include <pattern/window.hxx>
-#include <macros/generic.hxx>
 #include <services.h>
 #include <properties.h>
 

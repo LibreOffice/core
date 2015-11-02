@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_COMMANDINFO_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_COMMANDINFO_HXX
 
-#include <macros/generic.hxx>
 #include <stdtypes.h>
 
 namespace framework

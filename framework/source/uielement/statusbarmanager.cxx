@@ -24,7 +24,6 @@
 #include <framework/addonsoptions.hxx>
 #include <uielement/statusbarmerger.hxx>
 #include <uielement/statusbaritem.hxx>
-#include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <stdtypes.h>

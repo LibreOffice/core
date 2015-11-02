@@ -1809,11 +1809,11 @@ void AutoRecovery::implts_readAutoSaveConfig()
 
     // AutoSave [bool]
     bool bEnabled = false;
-    xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_AUTOSAVE_ENABLED)) >>= bEnabled;
+    xCommonRegistry->getByHierarchicalName(CFG_ENTRY_AUTOSAVE_ENABLED) >>= bEnabled;
 
     // UserAutoSave [bool]
     bool bUserEnabled = false;
-    xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_USERAUTOSAVE_ENABLED)) >>= bUserEnabled;
+    xCommonRegistry->getByHierarchicalName(CFG_ENTRY_USERAUTOSAVE_ENABLED) >>= bUserEnabled;
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1840,7 +1840,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
 
     // AutoSaveTimeIntervall [int] in min
     sal_Int32 nTimeIntervall = 10;
-    xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL)) >>= nTimeIntervall;
+    xCommonRegistry->getByHierarchicalName(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL) >>= nTimeIntervall;
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1870,7 +1870,7 @@ void AutoRecovery::implts_readConfig()
     css::uno::Any aValue;
 
     // RecoveryList [set]
-    aValue = xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_RECOVERYLIST));
+    aValue = xCommonRegistry->getByHierarchicalName(CFG_ENTRY_RECOVERYLIST);
     css::uno::Reference< css::container::XNameAccess > xList;
     aValue >>= xList;
     if (xList.is())
@@ -1894,14 +1894,14 @@ void AutoRecovery::implts_readConfig()
             AutoRecovery::TDocumentInfo aInfo;
             aInfo.NewTempURL.clear();
             aInfo.Document.clear();
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_ORIGINALURL)) >>= aInfo.OrgURL;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPURL)) >>= aInfo.OldTempURL;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPLATEURL)) >>= aInfo.TemplateURL;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_FILTER)) >>= aInfo.RealFilter;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_DOCUMENTSTATE)) >>= aInfo.DocumentState;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_MODULE)) >>= aInfo.AppModule;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TITLE)) >>= aInfo.Title;
-            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_VIEWNAMES)) >>= aInfo.ViewNames;
+            xItem->getPropertyValue(CFG_ENTRY_PROP_ORIGINALURL) >>= aInfo.OrgURL;
+            xItem->getPropertyValue(CFG_ENTRY_PROP_TEMPURL) >>= aInfo.OldTempURL;
+            xItem->getPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL) >>= aInfo.TemplateURL;
+            xItem->getPropertyValue(CFG_ENTRY_PROP_FILTER) >>= aInfo.RealFilter;
+            xItem->getPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE) >>= aInfo.DocumentState;
+            xItem->getPropertyValue(CFG_ENTRY_PROP_MODULE) >>= aInfo.AppModule;
+            xItem->getPropertyValue(CFG_ENTRY_PROP_TITLE) >>= aInfo.Title;
+            xItem->getPropertyValue(CFG_ENTRY_PROP_VIEWNAMES) >>= aInfo.ViewNames;
             implts_specifyAppModuleAndFactory(aInfo);
             implts_specifyDefaultFilterAndExtension(aInfo);
 
@@ -1968,7 +1968,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
             xCFG->getByName(rInfo.AppModule),
             css::uno::UNO_QUERY_THROW);
 
-        xModuleProps->getByName(OUString(CFG_ENTRY_REALDEFAULTFILTER)) >>= rInfo.DefaultFilter;
+        xModuleProps->getByName(CFG_ENTRY_REALDEFAULTFILTER) >>= rInfo.DefaultFilter;
 
         css::uno::Reference< css::container::XNameAccess > xFilterCFG(
                 m_xContext->getServiceManager()->createInstanceWithContext(
@@ -2076,7 +2076,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         xCFG.set(implts_openConfig(), css::uno::UNO_QUERY_THROW);
 
         css::uno::Reference< css::container::XNameAccess > xCheck;
-        xCFG->getByHierarchicalName(OUString(CFG_ENTRY_RECOVERYLIST)) >>= xCheck;
+        xCFG->getByHierarchicalName(CFG_ENTRY_RECOVERYLIST) >>= xCheck;
 
         css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY_THROW);
@@ -2111,14 +2111,14 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             else
                 xCheck->getByName(sID) >>= xSet;
 
-            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_ORIGINALURL), css::uno::makeAny(rInfo.OrgURL       ));
-            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_TEMPURL), css::uno::makeAny(rInfo.OldTempURL   ));
-            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_TEMPLATEURL), css::uno::makeAny(rInfo.TemplateURL  ));
-            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_FILTER), css::uno::makeAny(rInfo.RealFilter));
-            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), css::uno::makeAny(rInfo.DocumentState));
-            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_MODULE), css::uno::makeAny(rInfo.AppModule));
-            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_TITLE), css::uno::makeAny(rInfo.Title));
-            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_VIEWNAMES), css::uno::makeAny(rInfo.ViewNames));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_ORIGINALURL, css::uno::makeAny(rInfo.OrgURL       ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPURL, css::uno::makeAny(rInfo.OldTempURL   ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL, css::uno::makeAny(rInfo.TemplateURL  ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_FILTER, css::uno::makeAny(rInfo.RealFilter));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::makeAny(rInfo.DocumentState));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE, css::uno::makeAny(rInfo.AppModule));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE, css::uno::makeAny(rInfo.Title));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_VIEWNAMES, css::uno::makeAny(rInfo.ViewNames));
 
             if (bNew)
                 xModify->insertByName(sID, css::uno::makeAny(xSet));
@@ -4265,7 +4265,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     {
         css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
         if (xFrameProps.is())
-            xFrameProps->setPropertyValue(FRAME_PROPNAME_INDICATORINTERCEPTION, css::uno::makeAny(xExternalProgress));
+            xFrameProps->setPropertyValue(FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION, css::uno::makeAny(xExternalProgress));
     }
 
     // But inside the MediaDescriptor we must set our own create progress ...
@@ -4296,7 +4296,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
     // stop progress interception on corresponding frame.
     css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
     if (xFrameProps.is())
-        xFrameProps->setPropertyValue(FRAME_PROPNAME_INDICATORINTERCEPTION, css::uno::makeAny(css::uno::Reference< css::task::XStatusIndicator >()));
+        xFrameProps->setPropertyValue(FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION, css::uno::makeAny(css::uno::Reference< css::task::XStatusIndicator >()));
 
     // forget progress inside list of arguments.
     utl::MediaDescriptor::iterator pArg = rArgs.find(utl::MediaDescriptor::PROP_STATUSINDICATOR());

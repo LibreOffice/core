@@ -392,11 +392,11 @@ void ImageManagerImpl::implts_initialize()
 
         try
         {
-            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( OUString(IMAGE_FOLDER ),
+            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( IMAGE_FOLDER,
                                                                             nModes );
             if ( m_xUserImageStorage.is() )
             {
-                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( OUString(BITMAPS_FOLDER ),
+                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( BITMAPS_FOLDER,
                                                                                  nModes );
             }
         }
@@ -1291,11 +1291,11 @@ void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage
     {
         long nModes = ElementModes::READWRITE;
 
-        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( OUString(IMAGE_FOLDER ),
+        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( IMAGE_FOLDER,
                                                                                     nModes );
         if ( xUserImageStorage.is() )
         {
-            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( OUString(BITMAPS_FOLDER ),
+            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( BITMAPS_FOLDER,
                                                                                                     nModes );
             for ( sal_Int32 i = 0; i < ImageType_COUNT; i++ )
             {

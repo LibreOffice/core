@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_GENERAL_H
 #define INCLUDED_FRAMEWORK_INC_GENERAL_H
 
-#include <macros/generic.hxx>
-
 /* Normally XInterface isn't used here ...
    But we need it to be able to define namespace alias css to anything related to ::com::sun::star
    :-) */

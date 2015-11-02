@@ -12,7 +12,7 @@
  *   contributor license agreements. See the NOTICE file distributed
  *   with this work for additional information regarding copyright
  *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
+ *   License, Version 2.0 (the "License"; you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
@@ -24,29 +24,29 @@
 
 namespace framework{
 
-#define DOCTYPE_ACCELERATORS            DECLARE_ASCII("<!DOCTYPE accel:acceleratorlist PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"accelerator.dtd\">")
+#define DOCTYPE_ACCELERATORS            "<!DOCTYPE accel:acceleratorlist PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"accelerator.dtd\">"
 
-#define ATTRIBUTE_TYPE_CDATA            DECLARE_ASCII("CDATA")
+#define ATTRIBUTE_TYPE_CDATA            "CDATA"
 
-#define XMLNS_XLINK                     DECLARE_ASCII("xlink")
+#define XMLNS_XLINK                     "xlink"
 
 // same items with a name space alias
-#define AL_ELEMENT_ACCELERATORLIST      DECLARE_ASCII("accel:acceleratorlist")
-#define AL_ELEMENT_ITEM                 DECLARE_ASCII("accel:item"           )
+#define AL_ELEMENT_ACCELERATORLIST      "accel:acceleratorlist"
+#define AL_ELEMENT_ITEM                 "accel:item"
 
-#define AL_XMLNS_ACCEL                  DECLARE_ASCII("xmlns:accel")
-#define AL_XMLNS_XLINK                  DECLARE_ASCII("xmlns:xlink")
+#define AL_XMLNS_ACCEL                  "xmlns:accel"
+#define AL_XMLNS_XLINK                  "xmlns:xlink"
 
-#define AL_ATTRIBUTE_URL                DECLARE_ASCII("xlink:href" )
-#define AL_ATTRIBUTE_KEYCODE            DECLARE_ASCII("accel:code" )
-#define AL_ATTRIBUTE_MOD_SHIFT          DECLARE_ASCII("accel:shift")
-#define AL_ATTRIBUTE_MOD_MOD1           DECLARE_ASCII("accel:mod1" )
-#define AL_ATTRIBUTE_MOD_MOD2           DECLARE_ASCII("accel:mod2" )
-#define AL_ATTRIBUTE_MOD_MOD3           DECLARE_ASCII("accel:mod3" )
+#define AL_ATTRIBUTE_URL                "xlink:href"
+#define AL_ATTRIBUTE_KEYCODE            "accel:code"
+#define AL_ATTRIBUTE_MOD_SHIFT          "accel:shift"
+#define AL_ATTRIBUTE_MOD_MOD1           "accel:mod1"
+#define AL_ATTRIBUTE_MOD_MOD2           "accel:mod2"
+#define AL_ATTRIBUTE_MOD_MOD3           "accel:mod3"
 
 // same items with full qualified name space
-#define NS_XMLNS_ACCEL                  DECLARE_ASCII("http://openoffice.org/2001/accel")
-#define NS_XMLNS_XLINK                  DECLARE_ASCII("http://www.w3.org/1999/xlink"    )
+#define NS_XMLNS_ACCEL                  "http://openoffice.org/2001/accel"
+#define NS_XMLNS_XLINK                  "http://www.w3.org/1999/xlink"
 
 } // namespace framework
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCHCOMMANDS_H
 #define INCLUDED_FRAMEWORK_INC_DISPATCHCOMMANDS_H
 
-#include <macros/generic.hxx>
 
 namespace framework{
 

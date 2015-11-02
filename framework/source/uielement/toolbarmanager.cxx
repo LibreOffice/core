@@ -362,9 +362,9 @@ void ToolBarManager::UpdateImageOrientation()
         Sequence< OUString > aSeqMirrorCmd;
         Sequence< OUString > aSeqRotateCmd;
         m_xUICommandLabels->getByName(
-            OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST )) >>= aSeqMirrorCmd;
+            UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ) >>= aSeqMirrorCmd;
         m_xUICommandLabels->getByName(
-            OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST )) >>= aSeqRotateCmd;
+            UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ) >>= aSeqRotateCmd;
 
         CommandToInfoMap::iterator pIter;
         for ( i = 0; i < aSeqMirrorCmd.getLength(); i++ )

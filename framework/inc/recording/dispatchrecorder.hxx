@@ -28,7 +28,6 @@
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
-#include <macros/generic.hxx>
 #include <general.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

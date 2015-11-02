@@ -19,7 +19,6 @@
 
 #include <helper/tagwindowasmodified.hxx>
 #include <pattern/window.hxx>
-#include <macros/generic.hxx>
 #include <services.h>
 
 #include <com/sun/star/awt/XWindow.hpp>

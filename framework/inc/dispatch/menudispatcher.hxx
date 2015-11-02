@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_MENUDISPATCHER_HXX
 
 #include <classes/taskcreator.hxx>
-#include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <classes/menumanager.hxx>

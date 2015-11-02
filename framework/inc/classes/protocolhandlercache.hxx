@@ -31,11 +31,11 @@
 
 namespace framework{
 
-#define PACKAGENAME_PROTOCOLHANDLER                 DECLARE_ASCII("Office.ProtocolHandler"                          )   /// name of our configuration package
+#define PACKAGENAME_PROTOCOLHANDLER                 "Office.ProtocolHandler"                          /// name of our configuration package
 
-#define CFG_PATH_SEPARATOR                          DECLARE_ASCII("/"                                               )   /// separator for configuration paths
+#define CFG_PATH_SEPARATOR                          "/"                                               /// separator for configuration paths
 
-#define PROPERTY_PROTOCOLS                          DECLARE_ASCII("Protocols"                                       )   /// properties of a protocol handler
+#define PROPERTY_PROTOCOLS                          "Protocols"                                       /// properties of a protocol handler
 
 /**
     Programmer can register his own services to handle different protocols.

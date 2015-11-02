@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
 
-#include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <general.h>
 
