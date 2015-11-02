@@ -120,7 +120,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         css::uno::Reference< css::frame::XDispatchResultListener > xListener(xTHIS, css::uno::UNO_QUERY);
         /* SAFE { */
         osl::ClearableMutexGuard aWriteLock(m_mutex);
-        m_xBroadcaster = css::uno::Reference< css::uno::XInterface >(xNotifyDispatch, css::uno::UNO_QUERY);
+        m_xBroadcaster.set(xNotifyDispatch, css::uno::UNO_QUERY);
         m_aResult      = css::uno::Any();
         m_aBlock.reset();
         aWriteLock.clear();

@@ -1893,7 +1893,7 @@ void AutoRecovery::implts_readConfig()
 
             AutoRecovery::TDocumentInfo aInfo;
             aInfo.NewTempURL.clear();
-            aInfo.Document   = css::uno::Reference< css::frame::XModel >();
+            aInfo.Document.clear();
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_ORIGINALURL)) >>= aInfo.OrgURL;
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPURL)) >>= aInfo.OldTempURL;
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPLATEURL)) >>= aInfo.TemplateURL;
@@ -1954,10 +1954,9 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         if (! xCFG.is())
         {
             // open module config on demand and cache the update access
-            xCFG = css::uno::Reference< css::container::XNameAccess >(
-                ::comphelper::ConfigurationHelper::openConfig(m_xContext, OUString(CFG_PACKAGE_MODULES),
-                ::comphelper::ConfigurationHelper::E_STANDARD),
-                css::uno::UNO_QUERY_THROW);
+            xCFG.set( ::comphelper::ConfigurationHelper::openConfig(m_xContext, OUString(CFG_PACKAGE_MODULES),
+                           ::comphelper::ConfigurationHelper::E_STANDARD),
+                      css::uno::UNO_QUERY_THROW);
 
             /* SAFE */ {
             osl::MutexGuard g2(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -2074,7 +2073,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
 
     try
     {
-        xCFG = css::uno::Reference< css::container::XHierarchicalNameAccess >(implts_openConfig(), css::uno::UNO_QUERY_THROW);
+        xCFG.set(implts_openConfig(), css::uno::UNO_QUERY_THROW);
 
         css::uno::Reference< css::container::XNameAccess > xCheck;
         xCFG->getByHierarchicalName(OUString(CFG_ENTRY_RECOVERYLIST)) >>= xCheck;
@@ -2108,7 +2107,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             css::uno::Reference< css::beans::XPropertySet > xSet;
             bool                                        bNew = (!xCheck->hasByName(sID));
             if (bNew)
-                xSet = css::uno::Reference< css::beans::XPropertySet >(xCreate->createInstance(), css::uno::UNO_QUERY_THROW);
+                xSet.set(xCreate->createInstance(), css::uno::UNO_QUERY_THROW);
             else
                 xCheck->getByName(sID) >>= xSet;
 

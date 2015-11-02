@@ -100,9 +100,8 @@ void FwkTabPage::CreateDialog()
       xHandler = m_xEventHdl;
 
         uno::Reference< awt::XWindowPeer > xParent( VCLUnoHelper::GetInterface( this ), uno::UNO_QUERY );
-        m_xPage = uno::Reference < awt::XWindow >(
-            m_xWinProvider->createContainerWindow(
-                m_sPageURL, OUString(), xParent, xHandler ), uno::UNO_QUERY );
+        m_xPage.set( m_xWinProvider->createContainerWindow( m_sPageURL, OUString(), xParent, xHandler ),
+                     uno::UNO_QUERY );
 
         uno::Reference< awt::XControl > xPageControl( m_xPage, uno::UNO_QUERY );
         if ( xPageControl.is() )

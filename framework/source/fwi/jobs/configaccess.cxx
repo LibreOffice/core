@@ -152,7 +152,7 @@ void ConfigAccess::close()
         css::uno::Reference< css::util::XChangesBatch > xFlush(m_xConfig, css::uno::UNO_QUERY);
         if (xFlush.is())
             xFlush->commitChanges();
-        m_xConfig = css::uno::Reference< css::uno::XInterface >();
+        m_xConfig.clear();
         m_eMode   = E_CLOSED;
     }
 }

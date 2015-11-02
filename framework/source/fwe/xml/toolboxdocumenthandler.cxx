@@ -658,7 +658,7 @@ OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     m_rItemAccess( rItemAccess )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList        = Reference< XAttributeList >( static_cast<XAttributeList *>(pList), UNO_QUERY );
+    m_xEmptyList.set( static_cast<XAttributeList *>(pList), UNO_QUERY );
     m_aAttributeType    = ATTRIBUTE_TYPE_CDATA;
     m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
     m_aXMLToolbarNS     = XMLNS_TOOLBAR_PREFIX;

@@ -256,7 +256,7 @@ throw( SAXException, RuntimeException, std::exception )
     {
         ++m_nElementDepth;
         m_bMenuBarMode = true;
-        m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
+        m_xReader.set( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
 
         m_xReader->startDocument();
     }
@@ -339,7 +339,7 @@ throw( SAXException, RuntimeException, std::exception )
 
         Reference< XIndexContainer > xSubItemContainer;
         if ( m_xContainerFactory.is() )
-            xSubItemContainer = Reference< XIndexContainer >( m_xContainerFactory->createInstanceWithContext( xComponentContext ), UNO_QUERY );
+            xSubItemContainer.set( m_xContainerFactory->createInstanceWithContext( xComponentContext ), UNO_QUERY );
 
         if ( xSubItemContainer.is() )
         {
@@ -390,7 +390,7 @@ throw( SAXException, RuntimeException, std::exception )
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
 
-            m_xReader = Reference< XDocumentHandler >( new OReadMenuHandler( xSubItemContainer, m_xContainerFactory ));
+            m_xReader.set( new OReadMenuHandler( xSubItemContainer, m_xContainerFactory ));
             m_xReader->startDocument();
         }
     }
@@ -467,7 +467,7 @@ throw( SAXException, RuntimeException, std::exception )
     {
         ++m_nElementDepth;
         m_bMenuPopupMode = true;
-        m_xReader = Reference< XDocumentHandler >( new OReadMenuPopupHandler( m_xMenuContainer, m_xContainerFactory ));
+        m_xReader.set( new OReadMenuPopupHandler( m_xMenuContainer, m_xContainerFactory ));
         m_xReader->startDocument();
     }
     else
@@ -552,7 +552,7 @@ throw( SAXException, RuntimeException, std::exception )
         // Container must be factory to create sub container
         Reference< XIndexContainer > xSubItemContainer;
         if ( m_xContainerFactory.is() )
-            xSubItemContainer = Reference< XIndexContainer >( m_xContainerFactory->createInstanceWithContext( m_xComponentContext ), UNO_QUERY );
+            xSubItemContainer.set( m_xContainerFactory->createInstanceWithContext( m_xComponentContext ), UNO_QUERY );
 
         // read attributes for menu
         for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
@@ -602,7 +602,7 @@ throw( SAXException, RuntimeException, std::exception )
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
 
-        m_xReader = Reference< XDocumentHandler >( new OReadMenuHandler( xSubItemContainer, m_xContainerFactory ));
+        m_xReader.set( new OReadMenuHandler( xSubItemContainer, m_xContainerFactory ));
         m_xReader->startDocument();
     }
     else if ( rName == ELEMENT_MENUITEM )
@@ -733,7 +733,7 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
     m_xWriteDocumentHandler( rDocumentHandler )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList = Reference< XAttributeList >( static_cast<XAttributeList *>(pList), UNO_QUERY );
+    m_xEmptyList.set( static_cast<XAttributeList *>(pList), UNO_QUERY );
     m_aAttributeType = ATTRIBUTE_TYPE_CDATA;
 }
 

@@ -231,8 +231,7 @@ bool GlobalSettings_Access::impl_initConfigAccess()
             aPropValue.Value = css::uno::makeAny( sal_True );
             aArgs[1] = css::uno::makeAny( aPropValue );
 
-            m_xConfigAccess = css::uno::Reference< css::container::XNameAccess >(
-                                xConfigProvider->createInstanceWithArguments(
+            m_xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
                                     SERVICENAME_CFGREADACCESS, aArgs ),
                                 css::uno::UNO_QUERY );
 

@@ -295,9 +295,9 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                     try
                     {
-                        xController = Reference< XStatusListener >( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                        aURL, aArgs, m_xContext ),
-                                                                    UNO_QUERY );
+                        xController.set( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
+                                            aURL, aArgs, m_xContext ),
+                                         UNO_QUERY );
                     }
                     catch ( uno::Exception& )
                     {
@@ -309,7 +309,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     ::cppu::OWeakObject* pController = 0;
 
                     pController = ToolBarMerger::CreateController( m_xContext, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
-                    xController = Reference< XStatusListener >( pController, UNO_QUERY );
+                    xController.set( pController, UNO_QUERY );
                 }
 
                 // insert controller to the map

@@ -276,7 +276,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
     Sequence< PropertyValue >         aArgsList;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
-    xDispatchProvider = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
+    xDispatchProvider.set( m_xFrame, UNO_QUERY );
     aLock.clear();
 
     if (( nIndex >= 0 ) &&

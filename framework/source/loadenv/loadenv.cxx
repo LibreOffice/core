@@ -881,7 +881,7 @@ bool LoadEnv::impl_handleContent()
         css::uno::Reference< css::frame::XNotifyingDispatch > xHandler;
         try
         {
-            xHandler = css::uno::Reference< css::frame::XNotifyingDispatch >(xLoaderFactory->createInstance(sHandler), css::uno::UNO_QUERY);
+            xHandler.set(xLoaderFactory->createInstance(sHandler), css::uno::UNO_QUERY);
             if (!xHandler.is())
                 continue;
         }
@@ -969,12 +969,10 @@ bool LoadEnv::impl_furtherDocsAllowed()
             comphelper::OInteractionAbort*   pAbort   = new comphelper::OInteractionAbort();
             comphelper::OInteractionApprove* pApprove = new comphelper::OInteractionApprove();
 
-            lContinuations[0] = css::uno::Reference< css::task::XInteractionContinuation >(
-                                    static_cast< css::task::XInteractionContinuation* >(pAbort),
-                                    css::uno::UNO_QUERY_THROW);
-            lContinuations[1] = css::uno::Reference< css::task::XInteractionContinuation >(
-                                    static_cast< css::task::XInteractionContinuation* >(pApprove),
-                                    css::uno::UNO_QUERY_THROW);
+            lContinuations[0].set( static_cast< css::task::XInteractionContinuation* >(pAbort),
+                                   css::uno::UNO_QUERY_THROW);
+            lContinuations[1].set( static_cast< css::task::XInteractionContinuation* >(pApprove),
+                                   css::uno::UNO_QUERY_THROW);
 
             css::task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = ERRCODE_SFX_NOMOREDOCUMENTSALLOWED;

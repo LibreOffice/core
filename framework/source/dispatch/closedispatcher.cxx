@@ -201,7 +201,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // They call us back by using our c++ interface.
 
     m_xResultListener = xListener;
-    m_xSelfHold       = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    m_xSelfHold.set(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
     aWriteLock.clear();
     // <- SAFE ----------------------------------
@@ -492,7 +492,7 @@ bool CloseDispatcher::implts_closeFrame()
 
     {
         SolarMutexGuard g;
-        m_xCloseFrame = css::uno::WeakReference< css::frame::XFrame >();
+        m_xCloseFrame.clear();
     }
 
     return true;

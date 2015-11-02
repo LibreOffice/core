@@ -214,7 +214,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL JobDispatch::queryDispatch
 
     JobURL aAnalyzedURL(aURL.Complete);
     if (aAnalyzedURL.isValid())
-        xDispatch = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+        xDispatch.set( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
     return xDispatch;
 }

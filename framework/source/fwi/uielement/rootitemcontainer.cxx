@@ -133,7 +133,7 @@ Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference<
             pSubContainer = new ItemContainer( *pSource, m_aShareMutex );
         else
             pSubContainer = new ItemContainer( rSubContainer, m_aShareMutex );
-        xReturn = Reference< XIndexAccess >( static_cast< OWeakObject* >( pSubContainer ), UNO_QUERY );
+        xReturn.set( static_cast< OWeakObject* >( pSubContainer ), UNO_QUERY );
     }
 
     return xReturn;

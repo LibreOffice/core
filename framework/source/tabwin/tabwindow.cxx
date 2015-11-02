@@ -318,13 +318,13 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
                 // describe top window properties.
                 aDescriptor.Type                =   css::awt::WindowClass_TOP;
                 aDescriptor.ParentIndex         =   -1;
-                aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >();
+                aDescriptor.Parent.clear();
                 aDescriptor.Bounds              =   css::awt::Rectangle( 0, 0, aSize.Width, aSize.Height );
                 aDescriptor.WindowAttributes    =   0;
 
                 try
                 {
-                    xTopWindow = css::uno::Reference< css::awt::XTopWindow >( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
+                    xTopWindow.set( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
                 }
                 catch ( const css::uno::RuntimeException& )
                 {
@@ -356,21 +356,21 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
                 // describe container window properties.
                 aDescriptor.Type                =   css::awt::WindowClass_SIMPLE;
                 aDescriptor.ParentIndex         =   -1;
-                aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >( xTopWindow, css::uno::UNO_QUERY );
+                aDescriptor.Parent.set( xTopWindow, css::uno::UNO_QUERY );
                 aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0);
                 aDescriptor.WindowAttributes    =   0;
 
-                xContainerWindow = css::uno::Reference< css::awt::XWindow >( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
+                xContainerWindow.set( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
 
                 // create a tab control window properties
                 aDescriptor.Type                = css::awt::WindowClass_SIMPLE;
                 aDescriptor.WindowServiceName   = "tabcontrol";
                 aDescriptor.ParentIndex         = -1;
-                aDescriptor.Parent              = css::uno::Reference< css::awt::XWindowPeer >( xTopWindow, css::uno::UNO_QUERY );
+                aDescriptor.Parent.set( xTopWindow, css::uno::UNO_QUERY );
                 aDescriptor.Bounds              = css::awt::Rectangle( 0,0,0,0 );
                 aDescriptor.WindowAttributes    = 0;
 
-                xTabControl = css::uno::Reference< css::awt::XWindow >( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
+                xTabControl.set( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
 
                 if ( xContainerWindow.is() && xTabControl.is() )
                 {
@@ -435,11 +435,11 @@ void SAL_CALL TabWindow::dispose() throw (css::uno::RuntimeException, std::excep
     if ( xComponent.is() )
         xComponent->dispose();
 
-    xComponent = css::uno::Reference< css::lang::XComponent >( xContainerWindow, css::uno::UNO_QUERY );
+    xComponent.set( xContainerWindow, css::uno::UNO_QUERY );
     if ( xComponent.is() )
         xComponent->dispose();
 
-    xComponent = css::uno::Reference< css::lang::XComponent >( xTopWindow, css::uno::UNO_QUERY );
+    xComponent.set( xTopWindow, css::uno::UNO_QUERY );
     if ( xComponent.is() )
         xComponent->dispose();
 

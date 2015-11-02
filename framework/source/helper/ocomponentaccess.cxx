@@ -68,7 +68,7 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
         Sequence< css::uno::Reference< XComponent > > seqComponents;
         impl_collectAllChildComponents( css::uno::Reference< XFramesSupplier >( xLock, UNO_QUERY ), seqComponents );
         OComponentEnumeration* pEnumeration = new OComponentEnumeration( seqComponents );
-        xReturn = css::uno::Reference< XEnumeration >( static_cast<OWeakObject*>(pEnumeration), UNO_QUERY );
+        xReturn.set( static_cast<OWeakObject*>(pEnumeration), UNO_QUERY );
     }
 
     // Return result of this operation.
@@ -144,7 +144,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
     if ( !xController.is() )
     {
         // Controller not exist - use the VCL-component.
-        xComponent = css::uno::Reference< XComponent >( xFrame->getComponentWindow(), UNO_QUERY );
+        xComponent.set( xFrame->getComponentWindow(), UNO_QUERY );
     }
     else
     {
@@ -153,12 +153,12 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
         if ( xModel.is() )
         {
             // Model exist - use the model as component.
-            xComponent = css::uno::Reference< XComponent >( xModel, UNO_QUERY );
+            xComponent.set( xModel, UNO_QUERY );
         }
         else
         {
             // Model not exist - use the controller as component.
-            xComponent = css::uno::Reference< XComponent >( xController, UNO_QUERY );
+            xComponent.set( xController, UNO_QUERY );
         }
     }
 

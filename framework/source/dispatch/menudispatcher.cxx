@@ -184,7 +184,7 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
         }
 
         // Forget our factory.
-        m_xContext = uno::Reference< XComponentContext >();
+        m_xContext.clear();
 
         // Remove our menu from system window if it is still there!
         if ( m_pMenuManager )
@@ -251,7 +251,7 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
                     uno::Reference< XController >   xController( xFrame->getController(), UNO_QUERY );
 
                     if ( xController.is() )
-                        xModel = uno::Reference< XModel >( xController->getModel(), UNO_QUERY );
+                        xModel.set( xController->getModel(), UNO_QUERY );
 
                     // retrieve addon popup menus and add them to our menu bar
                     AddonMenuManager::MergeAddonPopupMenus( xFrame, nPos, pMenuBar, m_xContext );

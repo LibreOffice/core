@@ -116,7 +116,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 
                     pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
                     pToolBarManager = new AddonsToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
-                    m_xToolBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
+                    m_xToolBarManager.set( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
                 }
             }
 

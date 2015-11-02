@@ -93,7 +93,7 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
 
         // If removed frame was the current active frame - reset state variable.
         if (m_xActiveFrame==xFrame)
-            m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
+            m_xActiveFrame.clear();
     }
 }
 
@@ -125,7 +125,7 @@ void FrameContainer::clear()
     // ... and don't forget to reset the active frame.
     // Its an reference to a valid container-item.
     // But no container item => no active frame!
-    m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
+    m_xActiveFrame.clear();
 }
 
 /**-***************************************************************************************************************

@@ -827,7 +827,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
         if ( m_xDispatchProvider.is() )
             xDispatchProvider = m_xDispatchProvider;
         else
-            xDispatchProvider = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
+            xDispatchProvider.set( m_xFrame, UNO_QUERY );
 
         if ( xDispatchProvider.is() )
         {
@@ -1223,7 +1223,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pNewPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( nItemId, pNewPopupMenu );
-                pItemHandler->xPopupMenu = Reference< css::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                pItemHandler->xPopupMenu.set( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
                 pItemHandler->aMenuItemURL = aItemCommand;
                 m_aMenuItemHandlerVector.push_back( pItemHandler );
                 delete pPopup;
@@ -1353,7 +1353,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( pItemHandler->nItemId, pPopupMenu );
-                pItemHandler->xPopupMenu = Reference< css::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                pItemHandler->xPopupMenu.set( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
 
                 if ( bAccessibilityEnabled && CreatePopupMenuController( pItemHandler ) )
                 {
@@ -1529,7 +1529,7 @@ void MenuBarManager::RetrieveImageManagers()
                 if ( xSupplier.is() )
                 {
                     Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
-                    m_xDocImageManager = Reference< XImageManager >( xDocUICfgMgr->getImageManager(), UNO_QUERY );
+                    m_xDocImageManager.set( xDocUICfgMgr->getImageManager(), UNO_QUERY );
                     m_xDocImageManager->addConfigurationListener(
                                             Reference< XUIConfigurationListener >(
                                                 static_cast< OWeakObject* >( this ), UNO_QUERY ));
@@ -1957,7 +1957,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
                         VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
                         PopupMenu* pCtlPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                         pAddonMenu->SetPopupMenu( pMenuItemHandler->nItemId, pCtlPopupMenu );
-                        pMenuItemHandler->xPopupMenu = Reference< css::awt::XPopupMenu >( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                        pMenuItemHandler->xPopupMenu.set( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
 
                     }
                 }

@@ -297,7 +297,7 @@ void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( Runtim
         }
 
         // Forget our factory.
-        m_xContext = uno::Reference< XComponentContext >();
+        m_xContext.clear();
     }
 }
 
@@ -323,8 +323,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
                         OUString aMenuBar( "private:resource/menubar/menubar" );
                         xMenuBar = xLayoutManager->getElement( aMenuBar );
 
-                        m_xPopupCtrlQuery = css::uno::Reference< css::container::XNameAccess >(
-                                                xMenuBar, css::uno::UNO_QUERY );
+                        m_xPopupCtrlQuery.set( xMenuBar, css::uno::UNO_QUERY );
                     }
                 }
                 catch ( const css::uno::RuntimeException& )

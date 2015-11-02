@@ -363,8 +363,7 @@ void StatusBarManager::CreateControllers()
         if ( m_xStatusbarControllerFactory.is() &&
              m_xStatusbarControllerFactory->hasController( aCommandURL, m_aModuleIdentifier ))
         {
-            xController = uno::Reference< frame::XStatusbarController >(
-                            m_xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(
+            xController.set(m_xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(
                                 aCommandURL, aArgs, m_xContext ),
                             uno::UNO_QUERY );
             bInit = false; // Initialization is done through the factory service
@@ -394,8 +393,7 @@ void StatusBarManager::CreateControllers()
             }
 
             if ( pController )
-                xController = uno::Reference< frame::XStatusbarController >(
-                                static_cast< ::cppu::OWeakObject *>( pController ),
+                xController.set(static_cast< ::cppu::OWeakObject *>( pController ),
                                 uno::UNO_QUERY );
         }
 

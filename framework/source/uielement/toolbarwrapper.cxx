@@ -152,7 +152,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 
                     pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
                     pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
-                    m_xToolBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
+                    m_xToolBarManager.set( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
                     pToolBar->WillUsePopupMode( bPopupMode );
                 }
             }

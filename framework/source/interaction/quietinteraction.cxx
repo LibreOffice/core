@@ -65,16 +65,16 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     for (sal_Int32 i=0; i<nCount; ++i)
     {
         if ( ! xAbort.is() )
-            xAbort = css::uno::Reference< css::task::XInteractionAbort >( lContinuations[i], css::uno::UNO_QUERY );
+            xAbort.set( lContinuations[i], css::uno::UNO_QUERY );
 
         if( ! xApprove.is() )
-            xApprove  = css::uno::Reference< css::task::XInteractionApprove >( lContinuations[i], css::uno::UNO_QUERY );
+            xApprove.set( lContinuations[i], css::uno::UNO_QUERY );
 
         if ( ! xFilter.is() )
-            xFilter = css::uno::Reference< css::document::XInteractionFilterSelect >( lContinuations[i], css::uno::UNO_QUERY );
+            xFilter.set( lContinuations[i], css::uno::UNO_QUERY );
 
         if ( ! xFOptions.is() )
-            xFOptions = css::uno::Reference< css::document::XInteractionFilterOptions >( lContinuations[i], css::uno::UNO_QUERY );
+            xFOptions.set( lContinuations[i], css::uno::UNO_QUERY );
     }
 
     // differ between abortable interactions (error, unknown filter ...)

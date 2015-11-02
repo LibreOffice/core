@@ -181,9 +181,9 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         // We must check for the supported interface on demand!
         // But we preferr the synchronous one ...
         m_xJob = m_xContext->getServiceManager()->createInstanceWithContext(m_aJobCfg.getService(), m_xContext);
-        xSJob  = css::uno::Reference< css::task::XJob >(m_xJob, css::uno::UNO_QUERY);
+        xSJob.set(m_xJob, css::uno::UNO_QUERY);
         if (!xSJob.is())
-            xAJob = css::uno::Reference< css::task::XAsyncJob >(m_xJob, css::uno::UNO_QUERY);
+            xAJob.set(m_xJob, css::uno::UNO_QUERY);
 
         // execute it asynchron
         if (xAJob.is())
@@ -297,12 +297,12 @@ void Job::die()
         }
     }
 
-    m_xJob               = css::uno::Reference< css::uno::XInterface >();
-    m_xFrame             = css::uno::Reference< css::frame::XFrame >();
-    m_xModel             = css::uno::Reference< css::frame::XModel >();
-    m_xDesktop           = css::uno::Reference< css::frame::XDesktop2 >();
-    m_xResultListener    = css::uno::Reference< css::frame::XDispatchResultListener >();
-    m_xResultSourceFake  = css::uno::Reference< css::uno::XInterface >();
+    m_xJob.clear();
+    m_xFrame.clear();
+    m_xModel.clear();
+    m_xDesktop.clear();
+    m_xResultListener.clear();
+    m_xResultSourceFake.clear();
     m_bPendingCloseFrame = false;
     m_bPendingCloseModel = false;
 }
@@ -633,7 +633,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
         impl_reactForJobResult(aResult);
 
         // Let the job die!
-        m_xJob = css::uno::Reference< css::uno::XInterface >();
+        m_xJob.clear();
     }
 
     // And let the start method "execute()" finishing it's job.
@@ -813,12 +813,12 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::
     }
     else if (m_xFrame.is() && aEvent.Source == m_xFrame)
     {
-        m_xFrame = css::uno::Reference< css::frame::XFrame >();
+        m_xFrame.clear();
         m_bListenOnFrame = false;
     }
     else if (m_xModel.is() && aEvent.Source == m_xModel)
     {
-        m_xModel = css::uno::Reference< css::frame::XModel >();
+        m_xModel.clear();
         m_bListenOnModel = false;
     }
 

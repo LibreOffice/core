@@ -210,7 +210,7 @@ void StorageHolder::commitPath(const OUString& sPath)
            pIt != lStorages.rend();
          ++pIt                      )
     {
-        xCommit = css::uno::Reference< css::embed::XTransactedObject >(*pIt, css::uno::UNO_QUERY);
+        xCommit.set(*pIt, css::uno::UNO_QUERY);
         if (!xCommit.is())
             continue;
         xCommit->commit();
@@ -218,7 +218,7 @@ void StorageHolder::commitPath(const OUString& sPath)
 
     // SAFE -> ------------------------------
     osl::ClearableMutexGuard aReadLock(m_mutex);
-    xCommit = css::uno::Reference< css::embed::XTransactedObject >(m_xRoot, css::uno::UNO_QUERY);
+    xCommit.set(m_xRoot, css::uno::UNO_QUERY);
     aReadLock.clear();
     // <- SAFE ------------------------------
 

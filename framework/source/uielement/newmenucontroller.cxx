@@ -391,7 +391,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
 
     osl::ClearableMutexGuard aLock( m_aMutex );
     xPopupMenu          = m_xPopupMenu;
-    xDispatchProvider   = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
+    xDispatchProvider.set( m_xFrame, UNO_QUERY );
     xContext     = m_xContext;
     xURLTransformer     = m_xURLTransformer;
     aLock.clear();

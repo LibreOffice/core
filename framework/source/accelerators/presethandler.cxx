@@ -196,7 +196,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
 
     try
     {
-        xStorage = css::uno::Reference< css::embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
+        xStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::Exception&)
     {
@@ -243,7 +243,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
 
     try
     {
-        xStorage = css::uno::Reference< css::embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
+        xStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::Exception&)
     {
@@ -434,7 +434,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
           OUStringList                                       lTargets;
 
     // read preset names of share layer
-    xAccess = css::uno::Reference< css::container::XNameAccess >(xShare, css::uno::UNO_QUERY);
+    xAccess.set(xShare, css::uno::UNO_QUERY);
     if (xAccess.is())
     {
         lNames  = xAccess->getElementNames();
@@ -452,7 +452,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     }
 
     // read preset names of user layer
-    xAccess = css::uno::Reference< css::container::XNameAccess >(xUser, css::uno::UNO_QUERY);
+    xAccess.set(xUser, css::uno::UNO_QUERY);
     if (xAccess.is())
     {
         lNames  = xAccess->getElementNames();

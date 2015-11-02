@@ -243,9 +243,8 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
     Reference< XMultiServiceFactory > xMultiServiceFactory( rActionTriggerContainer, UNO_QUERY );
     if ( xMultiServiceFactory.is() )
     {
-        xPropSet = Reference< XPropertySet >(   xMultiServiceFactory->createInstance(
-                                                    "com.sun.star.ui.ActionTrigger" ),
-                                                UNO_QUERY );
+        xPropSet.set( xMultiServiceFactory->createInstance( "com.sun.star.ui.ActionTrigger" ),
+                      UNO_QUERY );
 
         Any a;
 
