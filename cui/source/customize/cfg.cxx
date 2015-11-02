@@ -2298,9 +2298,9 @@ void SvxMenuConfigPage::UpdateButtonStates()
         m_pMoveUpButton->Enable( false );
         m_pMoveDownButton->Enable( false );
 
-        pPopup->EnableItem( ID_BEGIN_GROUP, true );
-        pPopup->EnableItem( ID_RENAME, false );
-        pPopup->EnableItem( ID_DELETE, false );
+        pPopup->EnableItem( "addseparator", true );
+        pPopup->EnableItem( "modrename", false );
+        pPopup->EnableItem( "moddelete", false );
 
         m_pDescriptionField->SetText("");
 
@@ -2318,17 +2318,17 @@ void SvxMenuConfigPage::UpdateButtonStates()
 
     if ( pEntryData->IsSeparator() )
     {
-        pPopup->EnableItem( ID_DELETE, true );
-        pPopup->EnableItem( ID_BEGIN_GROUP, false );
-        pPopup->EnableItem( ID_RENAME, false );
+        pPopup->EnableItem( "moddelete", true );
+        pPopup->EnableItem( "addseparator", false );
+        pPopup->EnableItem( "modrename", false );
 
         m_pDescriptionField->SetText("");
     }
     else
     {
-        pPopup->EnableItem( ID_BEGIN_GROUP, true );
-        pPopup->EnableItem( ID_DELETE, true );
-        pPopup->EnableItem( ID_RENAME, true );
+        pPopup->EnableItem( "addseparator", true );
+        pPopup->EnableItem( "moddelete", true );
+        pPopup->EnableItem( "modrename", true );
 
         m_pDescriptionField->SetText(pEntryData->GetHelpText());
     }
@@ -2409,9 +2409,9 @@ IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
     PopupMenu* pPopup = m_pModifyTopLevelButton->GetPopupMenu();
     if ( pMenuData )
     {
-        pPopup->EnableItem( ID_DELETE, pMenuData->IsDeletable() );
-        pPopup->EnableItem( ID_RENAME, pMenuData->IsRenamable() );
-        pPopup->EnableItem( ID_MOVE, pMenuData->IsMovable() );
+        pPopup->EnableItem( "delete", pMenuData->IsDeletable() );
+        pPopup->EnableItem( "rename", pMenuData->IsRenamable() );
+        pPopup->EnableItem( "move", pMenuData->IsMovable() );
 
         SvxEntries* pEntries = pMenuData->GetEntries();
         SvxEntries::const_iterator iter = pEntries->begin();
