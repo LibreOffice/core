@@ -52,9 +52,6 @@ en-US = "Microsoft Enhanced Metafile"
 [STR_REG_VAL_ENCAPSULATED_POSTSCRIPT]
 en-US = "Encapsulated PostScript File"
 
-[STR_REG_VAL_OS2_METAFILE]
-en-US = "OS/2 Metafile"
-
 [STR_REG_VAL_MACINTOSH_PICTURE_METAFILE]
 en-US = "Macintosh Picture Metafile"
 

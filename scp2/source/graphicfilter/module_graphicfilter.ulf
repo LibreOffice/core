@@ -76,12 +76,6 @@ en-US = "Mac-Pict Import/Export"
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_MACPICT]
 en-US = "Mac-Pict Import/Export Filters"
 
-[STR_NAME_MODULE_OPTIONAL_GRFFLT_OS2META]
-en-US = "OS/2 Metafile Import/Export"
-
-[STR_DESC_MODULE_OPTIONAL_GRFFLT_OS2META]
-en-US = "OS/2 Metafile Import/Export Filters"
-
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_PCX]
 en-US = "PCX Import"
 
