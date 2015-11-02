@@ -205,7 +205,7 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigListener);
-    xContainer = Reference< XContainer >( m_xConfigAccessPopups, UNO_QUERY );
+    xContainer.set( m_xConfigAccessPopups, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigAccessListener);
 }
@@ -511,7 +511,7 @@ bool ConfigurationAccess_UICommand::initializeConfigAccess()
         aPropValue.Value <<= m_aConfigCmdAccess;
         aArgs[0] <<= aPropValue;
 
-        m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(
+        m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
         if ( m_xConfigAccess.is() )
         {
@@ -526,7 +526,7 @@ bool ConfigurationAccess_UICommand::initializeConfigAccess()
 
         aPropValue.Value <<= m_aConfigPopupAccess;
         aArgs[0] <<= aPropValue;
-        m_xConfigAccessPopups = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(
+        m_xConfigAccessPopups.set( m_xConfigProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
         if ( m_xConfigAccessPopups.is() )
         {
@@ -586,7 +586,7 @@ void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEven
         m_xConfigAccess.clear();
     else
     {
-        xIfac2 = Reference< XInterface >( m_xConfigAccessPopups, UNO_QUERY );
+        xIfac1.set( m_xConfigAccessPopups, UNO_QUERY );
         if ( xIfac1 == xIfac2 )
             m_xConfigAccessPopups.clear();
     }
@@ -679,7 +679,7 @@ throw (css::container::NoSuchElementException, css::lang::WrappedTargetException
                 ConfigurationAccess_UICommand* pUICommands = new ConfigurationAccess_UICommand( aCommandFile,
                                                                                                m_xGenericUICommands,
                                                                                                m_xContext );
-                xUICommands = Reference< XNameAccess >( static_cast< cppu::OWeakObject* >( pUICommands ),UNO_QUERY );
+                xUICommands.set( static_cast< cppu::OWeakObject* >( pUICommands ),UNO_QUERY );
                 pIter->second = xUICommands;
                 a <<= xUICommands;
             }

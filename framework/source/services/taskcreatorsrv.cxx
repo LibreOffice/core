@@ -238,7 +238,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
         if ( ! xParentWindow.is())
             bTopWindow = false;
         else
-            xParentWindowPeer = css::uno::Reference< css::awt::XWindowPeer >(xParentWindow, css::uno::UNO_QUERY_THROW);
+            xParentWindowPeer.set(xParentWindow, css::uno::UNO_QUERY_THROW);
     }
 
     // describe window properties.
@@ -248,7 +248,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
         aDescriptor.Type                =   css::awt::WindowClass_TOP;
         aDescriptor.WindowServiceName   =   "window";
         aDescriptor.ParentIndex         =   -1;
-        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >();
+        aDescriptor.Parent.clear();
         aDescriptor.Bounds              =   aPosSize;
         aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER               |
                                             css::awt::WindowAttribute::MOVEABLE             |

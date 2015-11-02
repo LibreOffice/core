@@ -117,8 +117,8 @@ RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
     m_pFilter = new ContinuationFilterSelect;
 
     m_lContinuations.realloc( 2 );
-    m_lContinuations[0] = css::uno::Reference< css::task::XInteractionContinuation >( m_pAbort  );
-    m_lContinuations[1] = css::uno::Reference< css::task::XInteractionContinuation >( m_pFilter );
+    m_lContinuations[0].set( m_pAbort  );
+    m_lContinuations[1].set( m_pFilter );
 }
 
 // return abort state of interaction

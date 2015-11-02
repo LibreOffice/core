@@ -106,7 +106,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     // If no list exist register these interceptor for all dispatch events with "*"!
     InterceptorInfo aInfo;
 
-    aInfo.xInterceptor = css::uno::Reference< css::frame::XDispatchProvider >(xInterceptor, css::uno::UNO_QUERY);
+    aInfo.xInterceptor.set(xInterceptor, css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XInterceptorInfo > xInfo(xInterceptor, css::uno::UNO_QUERY);
     if (xInfo.is())
         aInfo.lURLPattern = xInfo->getInterceptedURLs();

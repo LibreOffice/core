@@ -1462,8 +1462,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 
     if (! xCfg.is())
     {
-        xCfg = css::uno::Reference< css::container::XNameAccess >(
-                   ::comphelper::ConfigurationHelper::openConfig(
+        xCfg.set(  ::comphelper::ConfigurationHelper::openConfig(
                         m_xContext,
                         CFG_NODE_OLD,
                         ::comphelper::ConfigurationHelper::E_STANDARD), // not readonly! Sometimes we need write access there !!!
@@ -1490,8 +1489,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
 
     if (! xCfg.is())
     {
-        xCfg = css::uno::Reference< css::container::XNameAccess >(
-                   ::comphelper::ConfigurationHelper::openConfig(
+        xCfg.set(  ::comphelper::ConfigurationHelper::openConfig(
                         m_xContext,
                         CFG_NODE_NEW,
                         ::comphelper::ConfigurationHelper::E_STANDARD),

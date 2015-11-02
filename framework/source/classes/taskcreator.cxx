@@ -75,8 +75,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
             if (x) sCreator = x.get();
         }
 
-        xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
-                    m_xContext->getServiceManager()->createInstanceWithContext(sCreator, m_xContext), css::uno::UNO_QUERY_THROW);
+        xCreator.set( m_xContext->getServiceManager()->createInstanceWithContext(sCreator, m_xContext), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::Exception&)
     {}

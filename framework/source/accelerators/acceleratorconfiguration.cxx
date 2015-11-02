@@ -521,7 +521,7 @@ XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::un
                                 , m_pSecondaryWriteCache(0                      )
 {
     const OUString CFG_ENTRY_ACCELERATORS("org.openoffice.Office.Accelerators");
-    m_xCfg = css::uno::Reference< css::container::XNameAccess > (
+    m_xCfg.set(
              ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
              css::uno::UNO_QUERY );
 }
@@ -971,14 +971,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
     OUString sConfig = xNamed->getName();
     if ( sConfig == "Global" )
     {
-        m_xCfg = css::uno::Reference< css::container::XNameAccess > (
+        m_xCfg.set(
             ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_GLOBAL, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
     else if ( sConfig == "Modules" )
     {
-        m_xCfg = css::uno::Reference< css::container::XNameAccess > (
+        m_xCfg.set(
             ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_MODULES, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
@@ -1282,7 +1282,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
         if ( !xModules->hasByName(m_sModuleCFG) )
         {
-            xFac = css::uno::Reference< css::lang::XSingleServiceFactory >(xModules, css::uno::UNO_QUERY);
+            xFac.set(xModules, css::uno::UNO_QUERY);
             xInst = xFac->createInstance();
             xModules->insertByName(m_sModuleCFG, css::uno::makeAny(xInst));
         }
@@ -1294,7 +1294,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
     css::uno::Reference< css::container::XNameContainer > xCommand;
     if ( !xContainer->hasByName(sKey) )
     {
-        xFac = css::uno::Reference< css::lang::XSingleServiceFactory >(xContainer, css::uno::UNO_QUERY);
+        xFac.set(xContainer, css::uno::UNO_QUERY);
         xInst = xFac->createInstance();
         xContainer->insertByName(sKey, css::uno::makeAny(xInst));
     }

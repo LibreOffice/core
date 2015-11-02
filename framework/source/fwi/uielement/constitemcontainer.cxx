@@ -156,7 +156,7 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
             pSubContainer = new ConstItemContainer( *pSource );
         else
             pSubContainer = new ConstItemContainer( rSubContainer );
-        xReturn = Reference< XIndexAccess >( static_cast< OWeakObject* >( pSubContainer ), UNO_QUERY );
+        xReturn.set( static_cast< OWeakObject* >( pSubContainer ), UNO_QUERY );
     }
 
     return xReturn;

@@ -399,7 +399,7 @@ void StatusIndicatorFactory::impl_createProgress()
     {
         // use vcl based progress implementation in plugged mode
         VCLStatusIndicator* pVCLProgress = new VCLStatusIndicator(xWindow);
-        xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pVCLProgress), css::uno::UNO_QUERY);
+        xProgress.set(static_cast< css::task::XStatusIndicator* >(pVCLProgress), css::uno::UNO_QUERY);
     }
     else if (xFrame.is())
     {
@@ -418,7 +418,7 @@ void StatusIndicatorFactory::impl_createProgress()
 
                 css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
                 if (xProgressBar.is())
-                    xProgress = css::uno::Reference< css::task::XStatusIndicator >(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
+                    xProgress.set(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
                 xLayoutManager->unlock();
             }
         }
@@ -460,7 +460,7 @@ void StatusIndicatorFactory::impl_showProgress()
 
                 css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
                 if (xProgressBar.is())
-                    xProgress = css::uno::Reference< css::task::XStatusIndicator >(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
+                    xProgress.set(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
             }
         }
 

@@ -436,9 +436,9 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                             Reference< XIndexAccess > xContainer( aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream ));
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xContainer );
                             if ( pRootItemContainer )
-                                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
+                                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
                             else
-                                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xContainer, true ) ), UNO_QUERY );
+                                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( xContainer, true ) ), UNO_QUERY );
                             return;
                         }
                         catch ( const css::lang::WrappedTargetException& )
@@ -459,7 +459,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
                             ToolBoxConfiguration::LoadToolBox( m_xContext, xInputStream, xIndexContainer );
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
-                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
+                            aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
                             return;
                         }
                         catch ( const css::lang::WrappedTargetException& )
@@ -476,7 +476,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
                             StatusBarConfiguration::LoadStatusBar( m_xContext, xInputStream, xIndexContainer );
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
-                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
+                            aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
                             return;
                         }
                         catch ( const css::lang::WrappedTargetException& )
@@ -508,7 +508,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
     }
 
     // At least we provide an empty settings container!
-    aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer() ), UNO_QUERY );
+    aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer() ), UNO_QUERY );
 }
 
 ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad )
@@ -903,8 +903,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     }
 
     // initialize root storages for all resource types
-    m_xUserRootCommit       = css::uno::Reference< css::embed::XTransactedObject >(
-                                m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY); // can be empty
+    m_xUserRootCommit.set( m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY); // can be empty
     m_xDefaultConfigStorage = m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getParentStorageShare(
                                 m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getWorkingStorageShare());
     m_xUserConfigStorage    = m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getParentStorageUser(
@@ -1226,7 +1225,7 @@ throw (css::container::NoSuchElementException, css::lang::IllegalArgumentExcepti
                 // Create a copy of the data if the container is not const
                 Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
                 if ( xReplace.is() )
-                    pDataSettings->xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+                    pDataSettings->xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
                 else
                     pDataSettings->xSettings = aNewData;
                 pDataSettings->bDefault  = false;
@@ -1264,7 +1263,7 @@ throw (css::container::NoSuchElementException, css::lang::IllegalArgumentExcepti
                 // Create a copy of the data if the container is not const
                 Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
                 if ( xReplace.is() )
-                    aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+                    aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
                 else
                     aUIElementData.xSettings = aNewData;
                 aUIElementData.aName        = RetrieveNameFromResourceURL( ResourceURL ) + m_aXMLPostfix;
@@ -1415,7 +1414,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
             // Create a copy of the data if the container is not const
             Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
             if ( xReplace.is() )
-                aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
             else
                 aUIElementData.xSettings = aNewData;
             aUIElementData.aName        = RetrieveNameFromResourceURL( NewResourceURL ) + m_aXMLPostfix;
@@ -1457,8 +1456,8 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
 
     if ( !m_xModuleImageManager.is() )
     {
-        m_xModuleImageManager = Reference< XComponent >( static_cast< cppu::OWeakObject *>( new ModuleImageManager( m_xContext )),
-                                                         UNO_QUERY );
+        m_xModuleImageManager.set( static_cast< cppu::OWeakObject *>( new ModuleImageManager( m_xContext )),
+                                   UNO_QUERY );
         Reference< XInitialization > xInit( m_xModuleImageManager, UNO_QUERY );
 
         Sequence< Any > aPropSeq( 3 );

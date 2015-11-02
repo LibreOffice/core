@@ -468,9 +468,9 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
             // create it
             try
             {
-                xHandler = css::uno::Reference< css::frame::XDispatchProvider >(
+                xHandler.set(
                     css::uno::Reference<css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)
-                    ->createInstance(aHandler.m_sUNOName),
+                      ->createInstance(aHandler.m_sUNOName),
                     css::uno::UNO_QUERY);
             }
             catch(const css::uno::Exception&) {}
@@ -529,7 +529,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreateDispatchHelper( EDispatchHelper                                  eHelper     ,
                                                                                                  const css::uno::Reference< css::frame::XFrame >& xOwner      ,
                                                                                                  const OUString&                           sTarget     ,
-                                                                                                       sal_Int32                                  nSearchFlags)
+                                                                                                 sal_Int32                                  nSearchFlags)
 {
     css::uno::Reference< css::frame::XDispatch > xDispatchHelper;
 
@@ -543,7 +543,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     if ( ! m_xMenuDispatcher.is() )
                     {
                         MenuDispatcher* pDispatcher = new MenuDispatcher( m_xContext, xOwner );
-                        m_xMenuDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                        m_xMenuDispatcher.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                     xDispatchHelper = m_xMenuDispatcher;
                 }
@@ -552,7 +552,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
         case E_CREATEDISPATCHER :
                 {
                     LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, sTarget, nSearchFlags);
-                    xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                    xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
 
@@ -562,7 +562,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     if (xDesktop.is())
                     {
                         LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_BLANK, 0);
-                        xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                        xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                 }
                 break;
@@ -573,7 +573,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     if (xDesktop.is())
                     {
                         LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_DEFAULT, 0);
-                        xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                        xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                 }
                 break;
@@ -581,21 +581,21 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
         case E_SELFDISPATCHER :
                 {
                     LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_SELF, 0);
-                    xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                    xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
 
         case E_CLOSEDISPATCHER :
                 {
                     CloseDispatcher* pDispatcher = new CloseDispatcher( m_xContext, xOwner, sTarget );
-                    xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                    xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
 
         case E_STARTMODULEDISPATCHER :
                 {
                     StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( m_xContext, xOwner );
-                    xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                    xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
     }

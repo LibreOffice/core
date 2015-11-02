@@ -55,7 +55,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
 
                         m_xDesktop = css::frame::Desktop::create(m_xContext);
 
-                        m_xConfig = css::uno::Reference< css::container::XNameAccess >(
+                        m_xConfig.set(
                             ::comphelper::ConfigurationHelper::openConfig(
                                 m_xContext,
                                 "/org.openoffice.Setup/Office/Factories",
@@ -81,13 +81,13 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                         // Start listening for disposing events of these services,
                         // so we can react e.g. for an office shutdown
                         css::uno::Reference< css::lang::XComponent > xComponent;
-                        xComponent = css::uno::Reference< css::lang::XComponent >(m_xModuleManager, css::uno::UNO_QUERY);
+                        xComponent.set(m_xModuleManager, css::uno::UNO_QUERY);
                         if (xComponent.is())
                             xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
-                        xComponent = css::uno::Reference< css::lang::XComponent >(m_xDesktop, css::uno::UNO_QUERY);
+                        xComponent.set(m_xDesktop, css::uno::UNO_QUERY);
                         if (xComponent.is())
                             xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
-                        xComponent = css::uno::Reference< css::lang::XComponent >(m_xConfig, css::uno::UNO_QUERY);
+                        xComponent.set(m_xConfig, css::uno::UNO_QUERY);
                         if (xComponent.is())
                             xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
                     }
@@ -187,7 +187,7 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     if (xController.is())
         xFrame = xController->getFrame();
     if (xFrame.is() && xFrame->isTop())
-        xDesktopCheck = css::uno::Reference< css::frame::XDesktop >(xFrame->getCreator(), css::uno::UNO_QUERY);
+        xDesktopCheck.set(xFrame->getCreator(), css::uno::UNO_QUERY);
     if (!xDesktopCheck.is())
         return OUString();
 

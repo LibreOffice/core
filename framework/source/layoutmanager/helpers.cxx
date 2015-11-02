@@ -112,7 +112,7 @@ vcl::Window* getWindowFromXUIElement( const uno::Reference< ui::XUIElement >& xU
     SolarMutexGuard aGuard;
     uno::Reference< awt::XWindow > xWindow;
     if ( xUIElement.is() )
-        xWindow = uno::Reference< awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
+        xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
     return VCLUnoHelper::GetWindow( xWindow );
 }
 
@@ -170,7 +170,7 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< un
     aDescriptor.Type                =   awt::WindowClass_SIMPLE;
     aDescriptor.WindowServiceName   =   OUString::createFromAscii( pService );
     aDescriptor.ParentIndex         =   -1;
-    aDescriptor.Parent              =   uno::Reference< awt::XWindowPeer >( rParent, uno::UNO_QUERY );
+    aDescriptor.Parent.set( rParent, uno::UNO_QUERY );
     aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0);
     aDescriptor.WindowAttributes    =   0;
 

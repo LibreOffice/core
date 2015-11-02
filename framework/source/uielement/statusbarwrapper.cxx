@@ -113,7 +113,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                     pStatusBar = VclPtr<FrameworkStatusBar>::Create( pWindow, nStyles );
                     pStatusBarManager = new StatusBarManager( m_xContext, xFrame, m_aResourceURL, pStatusBar );
                     static_cast<FrameworkStatusBar*>(pStatusBar)->SetStatusBarManager( pStatusBarManager );
-                    m_xStatusBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
+                    m_xStatusBarManager.set( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
                     pStatusBar->SetUniqueId( HID_STATUSBAR );
                 }
             }

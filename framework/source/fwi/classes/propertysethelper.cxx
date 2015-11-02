@@ -187,7 +187,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     aEvent.PropertyHandle = aPropInfo.Handle;
     aEvent.OldValue       = aCurrentValue;
     aEvent.NewValue       = aValue;
-    aEvent.Source         = css::uno::Reference< css::uno::XInterface >(m_xBroadcaster.get(), css::uno::UNO_QUERY);
+    aEvent.Source.set(m_xBroadcaster.get(), css::uno::UNO_QUERY);
 
     if (m_bReleaseLockOnCall)
     {

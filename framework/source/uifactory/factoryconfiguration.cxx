@@ -201,7 +201,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 
         try
         {
-            m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ), UNO_QUERY );
+            m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ), UNO_QUERY );
         }
         catch ( const WrappedTargetException& )
         {

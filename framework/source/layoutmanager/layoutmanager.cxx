@@ -142,7 +142,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
     if (!comphelper::LibreOfficeKit::isActive())
     {
         m_pToolbarManager = new ToolbarLayoutManager( xContext, Reference<XUIElementFactory>(m_xUIElementFactoryManager, UNO_QUERY_THROW), this );
-        m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
+        m_xToolbarManager.set( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
     }
 
     m_aAsyncLayoutTimer.SetTimeout( 50 );
@@ -289,7 +289,7 @@ void LayoutManager::implts_reset( bool bAttached )
                 try
                 {
                     // Add listener to new module ui configuration manager
-                    xModuleCfgMgr = Reference< XUIConfiguration >( xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier ), UNO_QUERY );
+                    xModuleCfgMgr.set( xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier ), UNO_QUERY );
                     if ( xModuleCfgMgr.is() )
                         xModuleCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                 }
@@ -331,7 +331,7 @@ void LayoutManager::implts_reset( bool bAttached )
 
                     try
                     {
-                        xDocCfgMgr = Reference< XUIConfiguration >( xUIConfigurationManagerSupplier->getUIConfigurationManager(), UNO_QUERY );
+                        xDocCfgMgr.set( xUIConfigurationManagerSupplier->getUIConfigurationManager(), UNO_QUERY );
                         if ( xDocCfgMgr.is() )
                             xDocCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                     }
@@ -834,7 +834,7 @@ void LayoutManager::implts_destroyStatusBar()
 
     SolarMutexClearableGuard aWriteLock;
     m_aStatusBarElement.m_aName.clear();
-    xCompStatusBar = Reference< XComponent >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
+    xCompStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     m_aStatusBarElement.m_xUIElement.clear();
     aWriteLock.clear();
 
@@ -877,8 +877,8 @@ void LayoutManager::implts_createProgressBar()
     Reference< awt::XWindow > xContainerWindow;
 
     SolarMutexResettableGuard aWriteLock;
-    xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
-    xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
     xProgressBarBackup = m_xProgressBarBackup;
     m_xProgressBarBackup.clear();
     xContainerWindow = m_xContainerWindow;
@@ -918,8 +918,7 @@ void LayoutManager::implts_createProgressBar()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     aWriteLock.reset();
-    m_aProgressBarElement.m_xUIElement = Reference< XUIElement >(
-        static_cast< cppu::OWeakObject* >( pWrapper ), UNO_QUERY );
+    m_aProgressBarElement.m_xUIElement.set( static_cast< cppu::OWeakObject* >( pWrapper ), UNO_QUERY );
     aWriteLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -970,13 +969,13 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
-    xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
-    xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
     xContainerWindow = m_xContainerWindow;
 
     Reference< awt::XWindow > xWindow;
     if ( xStatusBar.is() )
-        xWindow = Reference< awt::XWindow >( xStatusBar->getRealInterface(), UNO_QUERY );
+        xWindow.set( xStatusBar->getRealInterface(), UNO_QUERY );
     else if ( xProgressBar.is() )
     {
         ProgressBarWrapper* pWrapper = static_cast<ProgressBarWrapper*>(xProgressBar.get());
@@ -1009,8 +1008,8 @@ bool LayoutManager::implts_showProgressBar()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aWriteLock;
-    xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
-    xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xStatusBar.set( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
     bool bVisible( m_bVisible );
 
     m_aProgressBarElement.m_bVisible = true;
@@ -1018,7 +1017,7 @@ bool LayoutManager::implts_showProgressBar()
     {
         if ( xStatusBar.is() && !m_aStatusBarElement.m_bMasterHide )
         {
-            xWindow = Reference< awt::XWindow >( xStatusBar->getRealInterface(), UNO_QUERY );
+            xWindow.set( xStatusBar->getRealInterface(), UNO_QUERY );
         }
         else if ( xProgressBar.is() )
         {
@@ -1053,7 +1052,7 @@ bool LayoutManager::implts_hideProgressBar()
     bool bHideStatusBar( false );
 
     SolarMutexGuard g;
-    xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBar.set( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
 
     bool bInternalStatusBar( false );
     if ( xProgressBar.is() )
@@ -1064,7 +1063,7 @@ bool LayoutManager::implts_hideProgressBar()
             xWindow = pWrapper->getStatusBar();
         Reference< ui::XUIElement > xStatusBarElement = m_aStatusBarElement.m_xUIElement;
         if ( xStatusBarElement.is() )
-            xStatusBar = Reference< awt::XWindow >( xStatusBarElement->getRealInterface(), UNO_QUERY );
+            xStatusBar.set( xStatusBarElement->getRealInterface(), UNO_QUERY );
         bInternalStatusBar = xStatusBar != xWindow;
     }
     m_aProgressBarElement.m_bVisible = false;
@@ -1176,7 +1175,7 @@ throw (uno::RuntimeException, std::exception)
                 pSysWindow->SetMenuBar(pMenuBar);
 
             m_bInplaceMenuSet = true;
-            m_xInplaceMenuBar = Reference< XComponent >( static_cast<OWeakObject *>(m_pInplaceMenuBar), UNO_QUERY );
+            m_xInplaceMenuBar.set( static_cast<OWeakObject *>(m_pInplaceMenuBar), UNO_QUERY );
         }
 
         aWriteLock.clear();
@@ -1370,7 +1369,7 @@ void LayoutManager::implts_reparentChildWindows()
     {
         try
         {
-            xStatusBarWindow = Reference< awt::XWindow >( aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+            xStatusBarWindow.set( aStatusBarElement.m_xUIElement->getRealInterface(), UNO_QUERY );
         }
         catch (const RuntimeException&)
         {
@@ -2485,7 +2484,7 @@ throw (uno::RuntimeException, std::exception)
 
     Reference< awt::XWindow > xWindow;
     if ( bStatusBarVisible && bVisible && xStatusBar.is() )
-        xWindow = Reference< awt::XWindow >( xStatusBar->getRealInterface(), UNO_QUERY );
+        xWindow.set( xStatusBar->getRealInterface(), UNO_QUERY );
     else if ( xProgressBar.is() && !xStatusBar.is() && bProgressBarVisible )
     {
         ProgressBarWrapper* pWrapper = static_cast<ProgressBarWrapper*>(xProgressBar.get());

@@ -1021,7 +1021,7 @@ void ToolbarLayoutManager::setParentWindow(
     uno::Reference< awt::XWindow > xBottomDockWindow( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
 
     SolarMutexClearableGuard aWriteLock;
-    m_xContainerWindow = uno::Reference< awt::XWindow2 >( xParentWindow, uno::UNO_QUERY );
+    m_xContainerWindow.set( xParentWindow, uno::UNO_QUERY );
     m_xDockAreaWindows[ui::DockingArea_DOCKINGAREA_TOP]    = xTopDockWindow;
     m_xDockAreaWindows[ui::DockingArea_DOCKINGAREA_LEFT]   = xLeftDockWindow;
     m_xDockAreaWindows[ui::DockingArea_DOCKINGAREA_RIGHT]  = xRightDockWindow;
@@ -1352,7 +1352,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
                 {
                     // We have to retrieve the window reference with try/catch as it is
                     // possible that all elements have been disposed!
-                    xWindow = uno::Reference< awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
+                    xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
                 }
                 catch (const uno::RuntimeException&)
                 {
@@ -1688,7 +1688,7 @@ uno::Reference< awt::XWindow > ToolbarLayoutManager::implts_getXWindow( const OU
     {
         if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
         {
-             xWindow = uno::Reference< awt::XWindow >( pIter->m_xUIElement->getRealInterface(), uno::UNO_QUERY );
+             xWindow.set( pIter->m_xUIElement->getRealInterface(), uno::UNO_QUERY );
              break;
         }
     }
@@ -3634,7 +3634,7 @@ throw (uno::RuntimeException, std::exception)
 
     {
         SolarMutexGuard aGuard;
-        xWindow = uno::Reference< awt::XWindow2 >( e.Source, uno::UNO_QUERY );
+        xWindow.set( e.Source, uno::UNO_QUERY );
         pWindow = VCLUnoHelper::GetWindow( xWindow );
 
         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
@@ -3837,8 +3837,8 @@ throw (uno::RuntimeException, std::exception)
 
                 try
                 {
-                    xCfgMgr  = uno::Reference< ui::XUIConfigurationManager >( rEvent.Source, uno::UNO_QUERY );
-                    xPropSet = uno::Reference< beans::XPropertySet >( xCfgMgr->getSettings( rEvent.ResourceURL, sal_False ), uno::UNO_QUERY );
+                    xCfgMgr.set( rEvent.Source, uno::UNO_QUERY );
+                    xPropSet.set( xCfgMgr->getSettings( rEvent.ResourceURL, sal_False ), uno::UNO_QUERY );
 
                     if ( xPropSet.is() )
                         xPropSet->getPropertyValue("UIName") >>= aUIName;

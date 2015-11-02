@@ -524,26 +524,26 @@ void Frame::initListeners()
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
 
     DispatchInformationProvider* pInfoHelper = new DispatchInformationProvider(m_xContext, this);
-    m_xDispatchInfoHelper = css::uno::Reference< css::frame::XDispatchInformationProvider >( static_cast< ::cppu::OWeakObject* >(pInfoHelper), css::uno::UNO_QUERY );
+    m_xDispatchInfoHelper.set( static_cast< ::cppu::OWeakObject* >(pInfoHelper), css::uno::UNO_QUERY );
 
     // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
     // Set created dispatch provider as slowest slave of it.
     // Hold interception helper by reference only - not by pointer!
     // So it's easier to destroy it.
     InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
-    m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
+    m_xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
     // Initialize a new XFrames-helper-object to handle XIndexAccess and XElementAccess.
     // We hold member as reference ... not as pointer too!
     // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
     // But look on dispose() for right order of deinitialization.
     OFrames* pFramesHelper = new OFrames( this, &m_aChildFrameContainer );
-    m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
+    m_xFramesHelper.set( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
     // Initialize a the drop target listener.
     // We hold member as reference ... not as pointer too!
     OpenFileDropTargetListener* pDropListener = new OpenFileDropTargetListener( m_xContext, this );
-    m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >( static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY );
+    m_xDropTargetListener.set( static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY );
 
     // Safe impossible cases
     // We can't work without these helpers!
@@ -853,7 +853,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     // Initialize title functionality
     TitleHelper* pTitleHelper = new TitleHelper( xContext );
-    m_xTitleHelper = css::uno::Reference< css::frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pTitleHelper), css::uno::UNO_QUERY_THROW);
+    m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pTitleHelper), css::uno::UNO_QUERY_THROW);
     pTitleHelper->setOwner(xThis);
 }
 
@@ -2038,7 +2038,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception
     if( m_xParent.is() )
     {
         m_xParent->getFrames()->remove( xThis );
-        m_xParent = css::uno::Reference< css::frame::XFramesSupplier >();
+        m_xParent.clear();
     }
 
     /* } SAFE */
@@ -2565,7 +2565,7 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
         aWriteLock.clear();
         implts_stopWindowListening();
         aWriteLock.reset();
-        m_xContainerWindow = css::uno::Reference< css::awt::XWindow >();
+        m_xContainerWindow.clear();
     }
 }
 
@@ -2801,7 +2801,7 @@ void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow 
         // All VclComponents are XComponents; so call dispose before discarding
         // a css::uno::Reference< XVclComponent >, because this frame is the owner of the window
         xWindow->dispose();
-        xWindow = css::uno::Reference< css::awt::XWindow >();
+        xWindow.clear();
     }
 }
 

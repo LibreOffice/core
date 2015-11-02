@@ -95,7 +95,7 @@ void Desktop::constructorInit()
     // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
     // But look on dispose() for right order of deinitialization.
     OFrames* pFramesHelper = new OFrames( this, &m_aChildTaskContainer );
-    m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
+    m_xFramesHelper.set( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
     // Initialize a new dispatchhelper-object to handle dispatches.
     // We use these helper as slave for our interceptor helper ... not directly!
@@ -108,14 +108,14 @@ void Desktop::constructorInit()
     // Hold interception helper by reference only - not by pointer!
     // So it's easier to destroy it.
     InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
-    m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
+    m_xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
     OUStringBuffer sUntitledPrefix (256);
     sUntitledPrefix.append      (FWK_RESSTR(STR_UNTITLED_DOCUMENT));
     sUntitledPrefix.append (" ");
 
     ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();
-    m_xTitleNumberGenerator = css::uno::Reference< css::frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pNumbers), css::uno::UNO_QUERY_THROW);
+    m_xTitleNumberGenerator.set(static_cast< ::cppu::OWeakObject* >(pNumbers), css::uno::UNO_QUERY_THROW);
     pNumbers->setOwner          ( static_cast< ::cppu::OWeakObject* >(this) );
     pNumbers->setUntitledPrefix ( sUntitledPrefix.makeStringAndClear ()     );
 
@@ -532,7 +532,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() th
         while( xNext.is() )
         {
             xLast = xNext;
-            xNext = css::uno::Reference< css::frame::XFramesSupplier >( xNext->getActiveFrame(), css::uno::UNO_QUERY );
+            xNext.set( xNext->getActiveFrame(), css::uno::UNO_QUERY );
         }
     }
     return css::uno::Reference< css::frame::XFrame >( xLast, css::uno::UNO_QUERY );
@@ -1142,7 +1142,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
     SolarMutexGuard g;
     if( m_eLoadState != E_INTERACTION )
     {
-        m_xLastFrame = css::uno::Reference< css::frame::XFrame >();
+        m_xLastFrame.clear();
         m_eLoadState = E_FAILED;
         if( aEvent.State == css::frame::DispatchResultState::SUCCESS )
         {
@@ -1213,13 +1213,13 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
     {
         if( ! xAbort.is() )
-            xAbort  = css::uno::Reference< css::task::XInteractionAbort >( lContinuations[nStep], css::uno::UNO_QUERY );
+            xAbort.set( lContinuations[nStep], css::uno::UNO_QUERY );
 
         if( ! xApprove.is() )
-            xApprove  = css::uno::Reference< css::task::XInteractionApprove >( lContinuations[nStep], css::uno::UNO_QUERY );
+            xApprove.set( lContinuations[nStep], css::uno::UNO_QUERY );
 
         if( ! xFilterSelect.is() )
-            xFilterSelect = css::uno::Reference< css::document::XInteractionFilterSelect >( lContinuations[nStep], css::uno::UNO_QUERY );
+            xFilterSelect.set( lContinuations[nStep], css::uno::UNO_QUERY );
     }
 
     // differ between abortable interactions (error, unknown filter ...)
@@ -1535,7 +1535,7 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
     if( !xController.is() )
     {
         // Controller not exist - use the VCL-component.
-        xComponent = css::uno::Reference< css::lang::XComponent >( xFrame->getComponentWindow(), css::uno::UNO_QUERY );
+        xComponent.set( xFrame->getComponentWindow(), css::uno::UNO_QUERY );
     }
     else
     {
@@ -1544,12 +1544,12 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
         if( xModel.is() )
         {
             // Model exist - use the model as component.
-            xComponent = css::uno::Reference< css::lang::XComponent >( xModel, css::uno::UNO_QUERY );
+            xComponent.set( xModel, css::uno::UNO_QUERY );
         }
         else
         {
             // Model not exist - use the controller as component.
-            xComponent = css::uno::Reference< css::lang::XComponent >( xController, css::uno::UNO_QUERY );
+            xComponent.set( xController, css::uno::UNO_QUERY );
         }
     }
 

@@ -292,7 +292,7 @@ void OFrames::impl_resetObject()
 
     // This instance can't work if the weakreference to owner is invalid!
     // Destroy this to reset this object.
-    m_xOwner = WeakReference< XFrame >();
+    m_xOwner.clear();
     // Reset pointer to shared container to!
     m_pFrameContainer = NULL;
 }

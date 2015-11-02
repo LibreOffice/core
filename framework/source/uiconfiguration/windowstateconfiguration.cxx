@@ -1249,7 +1249,7 @@ bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
         aPropValue.Value <<= sal_True;
         aArgs[1] <<= aPropValue;
 
-        m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(
+        m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationUpdateAccess", aArgs ), UNO_QUERY );
         if ( m_xConfigAccess.is() )
         {
@@ -1410,7 +1410,7 @@ throw (css::container::NoSuchElementException, css::lang::WrappedTargetException
             {
                 Reference< XNameAccess > xResourceURLWindowState;
                 ConfigurationAccess_WindowState* pModuleWindowState = new ConfigurationAccess_WindowState( aWindowStateConfigFile, m_xContext );
-                xResourceURLWindowState = Reference< XNameAccess >( static_cast< cppu::OWeakObject* >( pModuleWindowState ),UNO_QUERY );
+                xResourceURLWindowState.set( static_cast< cppu::OWeakObject* >( pModuleWindowState ),UNO_QUERY );
                 pModuleIter->second = xResourceURLWindowState;
                 a <<= xResourceURLWindowState;
             }

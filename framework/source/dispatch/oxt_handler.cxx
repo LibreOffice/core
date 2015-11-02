@@ -69,7 +69,7 @@ Oxt_Handler::~Oxt_Handler()
         css::frame::DispatchResultEvent aEvent;
         aEvent.State = css::frame::DispatchResultState::FAILURE;
         m_xListener->dispatchFinished( aEvent );
-        m_xListener = css::uno::Reference< css::frame::XDispatchResultListener >();
+        m_xListener.clear();
     }
 }
 

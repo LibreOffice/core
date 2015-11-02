@@ -215,7 +215,7 @@ throw ( css::container::NoSuchElementException,
 
         SolarMutexGuard aGuard;
         AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xContext );
-        xToolBar = Reference< css::ui::XUIElement >( static_cast<OWeakObject *>(pToolBarWrapper), UNO_QUERY );
+        xToolBar.set( static_cast<OWeakObject *>(pToolBarWrapper), UNO_QUERY );
         Reference< XInitialization > xInit( xToolBar, UNO_QUERY );
         xInit->initialize( aPropSeq );
     }

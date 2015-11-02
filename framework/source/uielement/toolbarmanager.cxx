@@ -913,9 +913,8 @@ void ToolBarManager::CreateControllers()
             }
 
             Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
-            xController = Reference< XStatusListener >( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                            aCommandURL, aArgs, m_xContext ),
-                                                        UNO_QUERY );
+            xController.set( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext( aCommandURL, aArgs, m_xContext ),
+                             UNO_QUERY );
             bInit = false; // Initialization is done through the factory service
         }
 
@@ -948,7 +947,7 @@ void ToolBarManager::CreateControllers()
                     MenuDescriptionMap::iterator it = m_aMenuMap.find( nId );
                     if ( it == m_aMenuMap.end() )
                     {
-                        xController = Reference< XStatusListener >(
+                        xController.set(
                             new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
 
                         // Accessibility support: Set toggle button role for specific commands
@@ -957,13 +956,13 @@ void ToolBarManager::CreateControllers()
                             m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
                     }
                     else
-                        xController = Reference< XStatusListener >(
+                        xController.set(
                             new MenuToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL, m_aModuleIdentifier, m_aMenuMap[ nId ] ));
                 }
             }
             else if ( pController )
             {
-                xController = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( pController ), UNO_QUERY );
+                xController.set( static_cast< ::cppu::OWeakObject *>( pController ), UNO_QUERY );
             }
         }
 
@@ -1109,7 +1108,7 @@ void ToolBarManager::AddImageOrientationListener()
             Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ),
             m_xContext,
             m_xFrame );
-        m_xImageOrientationListener = Reference< XComponent >( static_cast< ::cppu::OWeakObject *>(
+        m_xImageOrientationListener.set( static_cast< ::cppu::OWeakObject *>(
                                         pImageOrientation ), UNO_QUERY );
         pImageOrientation->addStatusListener(
             OUString( ".uno:ImageOrientation" ));
@@ -1162,7 +1161,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             if ( xSupplier.is() )
             {
                 m_xDocUICfgMgr.set( xSupplier->getUIConfigurationManager(), UNO_QUERY );
-                m_xDocImageManager = Reference< XImageManager >( m_xDocUICfgMgr->getImageManager(), UNO_QUERY );
+                m_xDocImageManager.set( m_xDocUICfgMgr->getImageManager(), UNO_QUERY );
                 m_xDocImageManager->addConfigurationListener(
                                         Reference< XUIConfigurationListener >(
                                             static_cast< OWeakObject* >( this ), UNO_QUERY ));
@@ -1183,7 +1182,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
             theModuleUIConfigurationManagerSupplier::get( m_xContext );
         m_xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
-        m_xModuleImageManager = Reference< XImageManager >( m_xUICfgMgr->getImageManager(), UNO_QUERY );
+        m_xModuleImageManager.set( m_xUICfgMgr->getImageManager(), UNO_QUERY );
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
                                                             static_cast< OWeakObject* >( this ), UNO_QUERY ));
     }

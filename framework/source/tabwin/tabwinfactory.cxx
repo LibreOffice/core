@@ -109,7 +109,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
         css::awt::WindowDescriptor aDescriptor;
         aDescriptor.Type                =   css::awt::WindowClass_TOP;
         aDescriptor.ParentIndex         =   -1;
-        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >();
+        aDescriptor.Parent.clear();
         aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0);
         aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER|
                                             css::awt::WindowAttribute::SIZEABLE|
@@ -118,8 +118,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
                                             css::awt::WindowAttribute::MINSIZE;
 
         // create a parent window
-        xTopWindow = css::uno::Reference< css::awt::XTopWindow >(
-                        xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
+        xTopWindow.set( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
     }
 
     if ( xTopWindow.is() )
@@ -133,8 +132,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
         aArgs[0] = css::uno::makeAny( aPropValue );
         pTabWindow->initialize( aArgs );
 
-        xReturn = css::uno::Reference< css::uno::XInterface >(
-                    static_cast< OWeakObject* >( pTabWindow ), css::uno::UNO_QUERY );
+        xReturn.set( static_cast< OWeakObject* >( pTabWindow ), css::uno::UNO_QUERY );
     }
 
     return xReturn;

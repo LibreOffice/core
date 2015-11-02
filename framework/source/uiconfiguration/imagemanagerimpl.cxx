@@ -544,7 +544,7 @@ bool ImageManagerImpl::implts_storeUserImages(
                     }
 
                     // Commit user bitmaps storage
-                    xTransaction = uno::Reference< XTransactedObject >( xUserBitmapsStorage, UNO_QUERY );
+                    xTransaction.set( xUserBitmapsStorage, UNO_QUERY );
                     if ( xTransaction.is() )
                         xTransaction->commit();
                 }
@@ -554,7 +554,7 @@ bool ImageManagerImpl::implts_storeUserImages(
                     ImagesConfiguration::StoreImages( m_xContext, xOutputStream, aUserImageListInfo );
 
                 // Commit user image storage
-                xTransaction = uno::Reference< XTransactedObject >( xUserImageStorage, UNO_QUERY );
+                xTransaction.set( xUserImageStorage, UNO_QUERY );
                 if ( xTransaction.is() )
                     xTransaction->commit();
             }
@@ -584,12 +584,12 @@ bool ImageManagerImpl::implts_storeUserImages(
             uno::Reference< XTransactedObject > xTransaction;
 
             // Commit user image storage
-            xTransaction = uno::Reference< XTransactedObject >( xUserImageStorage, UNO_QUERY );
+            xTransaction.set( xUserImageStorage, UNO_QUERY );
             if ( xTransaction.is() )
                 xTransaction->commit();
 
             // Commit user bitmaps storage
-            xTransaction = uno::Reference< XTransactedObject >( xUserBitmapsStorage, UNO_QUERY );
+            xTransaction.set( xUserBitmapsStorage, UNO_QUERY );
             if ( xTransaction.is() )
                 xTransaction->commit();
 
