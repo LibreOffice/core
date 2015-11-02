@@ -290,7 +290,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 cts_name, false /* no exc */ );
             if (nullptr != ret_type)
             {
-                if (g_verbose)
+                if (g_bVerbose)
                 {
                     ::System::Console::WriteLine(
                         "> resolving type {0} from {1}.",
@@ -402,7 +402,7 @@ Assembly ^ TypeEmitter::type_resolve(
             code->Emit( Emit::OpCodes::Stfld, field_Context );
             code->Emit( Emit::OpCodes::Ret );
 
-            if (g_verbose)
+            if (g_bVerbose)
             {
                 ::System::Console::WriteLine(
                     "> emitting exception type "
@@ -456,7 +456,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 type_Exception->GetConstructor( param_types ) );
             code->Emit( Emit::OpCodes::Ret );
 
-            if (g_verbose)
+            if (g_bVerbose)
             {
                 ::System::Console::WriteLine(
                     "> emitting exception type "
@@ -496,7 +496,7 @@ Assembly ^ TypeEmitter::type_resolve(
                                FieldAttributes::Literal) );
         field_builder->SetConstant( constant );
 
-        if (g_verbose)
+        if (g_bVerbose)
         {
             ::System::Console::WriteLine(
                 "> emitting constant type {0}", cts_name );
@@ -547,7 +547,7 @@ Assembly ^ TypeEmitter::type_resolve(
             field_builder->SetConstant( constant );
         }
 
-        if (g_verbose)
+        if (g_bVerbose)
         {
             ::System::Console::WriteLine(
                 "> emitting constants group type {0}", cts_name );
@@ -599,7 +599,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 ((::System::Int32) enum_values[ enum_pos ]) );
         }
 
-        if (g_verbose)
+        if (g_bVerbose)
         {
             ::System::Console::WriteLine(
                 "> emitting enum type {0}", cts_name );
@@ -1054,7 +1054,7 @@ Assembly ^ TypeEmitter::type_resolve(
     m_incomplete_ifaces->Remove( cts_name );
     xType->release();
 
-    if (g_verbose)
+    if (g_bVerbose)
     {
         ::System::Console::WriteLine(
             "> emitting interface type {0}", cts_name );
@@ -1407,7 +1407,7 @@ Assembly ^ TypeEmitter::type_resolve(
     code->Emit( Emit::OpCodes::Ret );
     entry->m_ctor = ctor_builder;
 
-    if (g_verbose)
+    if (g_bVerbose)
     {
         ::System::Console::WriteLine(
             "> emitting {0} type {1}",
@@ -1424,7 +1424,7 @@ Assembly ^ TypeEmitter::type_resolve(
     m_incomplete_structs->Remove( cts_name );
     entry->m_xType->release();
 
-    if (g_verbose)
+    if (g_bVerbose)
     {
         ::System::Console::WriteLine(
             "> emitting struct type {0}", cts_name);
@@ -1877,7 +1877,7 @@ Assembly ^ TypeEmitter::type_resolve(
     ::System::String ^ cts_name = type_builder->FullName;
     m_incomplete_services->Remove( cts_name );
     xServiceType->release();
-    if (g_verbose)
+    if (g_bVerbose)
     {
         ::System::Console::WriteLine(
             "> emitting service type {0}", cts_name );
@@ -2040,7 +2040,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     ::System::String ^ cts_name = type_builder->FullName;
     m_incomplete_singletons->Remove( cts_name );
     xSingletonType->release();
-    if (g_verbose)
+    if (g_bVerbose)
     {
         ::System::Console::WriteLine(
             "> emitting singleton type {0}", cts_name );

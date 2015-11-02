@@ -36,7 +36,7 @@ namespace climaker
 {
 
 
-extern bool g_verbose;
+extern bool g_bVerbose;
 
 ref struct Constants
 {
