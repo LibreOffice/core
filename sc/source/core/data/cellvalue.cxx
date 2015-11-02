@@ -502,7 +502,6 @@ ScRefCellValue::ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos )
 
 ScRefCellValue::~ScRefCellValue()
 {
-    clear();
 }
 
 void ScRefCellValue::clear()
