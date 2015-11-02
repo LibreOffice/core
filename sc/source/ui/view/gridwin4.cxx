@@ -953,11 +953,11 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // Similarly to Writer, we should set the mapmode once on the rDevice, and
     // not care about any zoom settings.
 
-    Fraction aFracX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
-    Fraction aFracY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
+    mTiledZoomX = Fraction(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
+    mTiledZoomY = Fraction(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
 
     // page break zoom, and aLogicMode in ScViewData
-    pViewData->SetZoom(aFracX, aFracY, true);
+    pViewData->SetZoom(mTiledZoomX, mTiledZoomY, true);
 
     double fTilePosXPixel = static_cast<double>(nTilePosX) * nOutputWidth / nTileWidth;
     double fTilePosYPixel = static_cast<double>(nTilePosY) * nOutputHeight / nTileHeight;
