@@ -86,7 +86,9 @@ public class _XIdlReflection extends MultiMethodTest{
 
         XIdlClass cls = oObj.getType(obj);
 
-        log.println("The name is " + cls.getName());
+        if (cls != null) {
+            log.println("The name is " + cls.getName());
+        }
 
         tRes.tested("getType()", cls != null);
     }
