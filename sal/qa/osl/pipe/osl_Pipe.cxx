@@ -766,6 +766,7 @@ namespace osl_StreamPipe
                         printf("read failed! \n");
                         return;
                     }
+                    buf[sizeof(buf)-1] = '\0';
                     printf("buffer is %s \n", buf);
                     printf("send\n");
                     nChars = aSenderPipe.send( m_pTestString2.getStr(), m_pTestString2.getLength() + 1 );
@@ -829,6 +830,7 @@ namespace osl_StreamPipe
                         printf("server receive failed! \n");
                         return;
                     }
+                    buf[sizeof(buf)-1] = '\0';
                     printf("received message is: %s\n", buf );
                 }
             }
