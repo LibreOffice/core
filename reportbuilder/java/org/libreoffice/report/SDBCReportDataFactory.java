@@ -64,7 +64,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
 
     private static final String ESCAPEPROCESSING = "EscapeProcessing";
 
-    private class RowSetProperties
+    private static class RowSetProperties
     {
 
         final Boolean escapeProcessing;
