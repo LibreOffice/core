@@ -155,10 +155,7 @@ public class ScDataPilotFieldGroupObj extends TestCase
         int x = sCellAdress.Column;
         int y = sCellAdress.Row + 3;
 
-
         oSheet.getCellByPosition (x, y);
-        Integer.valueOf(27);
-
 
         // create the test objects
         log.println ("Getting test objects");

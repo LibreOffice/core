@@ -175,7 +175,6 @@ public class ScIndexEnumeration_DataPilotItemsEnumeration
 
 
         oSheet.getCellByPosition(x, y);
-        Integer.valueOf(27);
 
         // create the test objects
         log.println("Getting test objects");
