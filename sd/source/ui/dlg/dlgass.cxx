@@ -241,6 +241,8 @@ public:
     DECL_LINK_TYPED( PresTypeHdl, Button*, void );
     DECL_LINK_TYPED( UpdateUserDataHdl, Edit&, void );
     DECL_LINK_TYPED( SelectEffectHdl, ListBox&, void);
+    DECL_LINK_TYPED( SelectVariantHdl, ListBox&, void);
+    DECL_LINK_TYPED( SelectSpeedHdl, ListBox&, void);
     DECL_LINK_TYPED( OpenButtonHdl, Button *, void );
 
     OUString            maCreateStr;
@@ -288,7 +290,9 @@ public:
     VclPtr<FixedText>          mpPage3EffectFL;
     VclPtr<FixedText>          mpPage3EffectFT;
     VclPtr<FadeEffectLB>       mpPage3EffectLB;
+    VclPtr<FixedText>          mpPage3VariantFT;
     VclPtr<FixedText>          mpPage3SpeedFT;
+    VclPtr<ListBox>            mpPage3VariantLB;
     VclPtr<ListBox>            mpPage3SpeedLB;
     VclPtr<FixedText>          mpPage3PresTypeFL;
     VclPtr<RadioButton>        mpPage3PresTypeLiveRB;
@@ -477,6 +481,8 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,vo
     assDlg->get(mpPage3EffectFL, "page3EffectLabel");
     assDlg->get(mpPage3EffectFT, "effectLabel");
     assDlg->get(mpPage3EffectLB, "effectCombobox");
+    assDlg->get(mpPage3VariantFT, "variantLabel");
+    assDlg->get(mpPage3VariantLB, "variantCombobox");
     assDlg->get(mpPage3SpeedFT, "speedLabel");
     assDlg->get(mpPage3SpeedLB, "speedCombobox");
     assDlg->get(mpPage3PresTypeFL, "presTypeLabel");
@@ -496,6 +502,8 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,vo
     maAssistentFunc.InsertControl(3, mpPage3EffectFL );
     maAssistentFunc.InsertControl(3, mpPage3EffectFT );
     maAssistentFunc.InsertControl(3, mpPage3EffectLB );
+    maAssistentFunc.InsertControl(3, mpPage3VariantFT );
+    maAssistentFunc.InsertControl(3, mpPage3VariantLB );
     maAssistentFunc.InsertControl(3, mpPage3SpeedFT );
     maAssistentFunc.InsertControl(3, mpPage3SpeedLB );
     maAssistentFunc.InsertControl(3, mpPage3PresTypeFL );
@@ -511,11 +519,14 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,vo
     mpPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
     mpPage3EffectLB->SetDropDownLineCount( 12 );
 
+    mpPage3VariantLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectVariantHdl ));
+    mpPage3VariantLB->SetDropDownLineCount( 4 );
+
     mpPage3SpeedLB->InsertEntry( SD_RESSTR(STR_SLOW) );
     mpPage3SpeedLB->InsertEntry( SD_RESSTR(STR_MEDIUM) );
     mpPage3SpeedLB->InsertEntry( SD_RESSTR(STR_FAST) );
     mpPage3SpeedLB->SetDropDownLineCount( 3 );
-    mpPage3SpeedLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
+    mpPage3SpeedLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectSpeedHdl ));
     mpPage3SpeedLB->SelectEntryPos( 1 );
 
     mpPage3PresTypeLiveRB->Check();
@@ -964,7 +975,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
             SdPage* pPage = pDoc->GetSdPage( nPgRelNum, PK_STANDARD );
             if( mpPage5PageListCT->IsPageChecked(nPgAbsNum) )
             {
-                mpPage3EffectLB->applySelected(pPage);
+                mpPage3EffectLB->applySelected(pPage, *mpPage3VariantLB);
                 const sal_Int32 nPos = mpPage3SpeedLB->GetSelectEntryPos();
                 pPage->setTransitionDuration( (nPos == 0) ? 3.0 : (nPos == 1) ? 2.0 : 1.0 );
                 if(bKiosk)
@@ -1096,6 +1107,17 @@ IMPL_LINK_TYPED( AssistentDlgImpl, SelectRegionHdl, ListBox&, rLB, void )
 IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, SelectEffectHdl, ListBox&, void)
 {
     maEffectPrevIdle.Start();
+    mpPage3EffectLB->FillVariantLB(*mpPage3VariantLB);
+}
+
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, SelectVariantHdl, ListBox&, void)
+{
+    maEffectPrevIdle.Start();
+}
+
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, SelectSpeedHdl, ListBox&, void)
+{
+    maEffectPrevIdle.Start();
 }
 
 IMPL_LINK_NOARG_TYPED( AssistentDlgImpl, OpenButtonHdl, Button*, void )
@@ -1118,7 +1140,7 @@ IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, EffectPreviewIdleHdl, Idle *, void)
             {
                 SdPage* pPage = pDoc->GetSdPage( mnShowPage, PK_STANDARD );
                 if( pPage )
-                    mpPage3EffectLB->applySelected(pPage);
+                    mpPage3EffectLB->applySelected(pPage, *mpPage3VariantLB);
             }
         }
         mpPreview->startPreview();
