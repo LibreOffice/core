@@ -1100,7 +1100,10 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
                     for (SCCOL nMerged = 0; nMerged < nMergedCells; ++nMerged)
                     {
-                        nPosX += pRowInfo[0].pCellInfo[nX+nOldMerged+nMerged].nWidth * nLayoutSign;
+                        SCCOL nCol = nX+nOldMerged+nMerged;
+                        if (nCol > nX2+2)
+                            break;
+                        nPosX += pRowInfo[0].pCellInfo[nCol].nWidth * nLayoutSign;
                     }
                 }
 
