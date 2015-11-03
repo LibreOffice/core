@@ -37,7 +37,6 @@ import com.sun.star.text.XFootnote;
 public class _XFootnote extends MultiMethodTest {
 
     public XFootnote oObj = null;        // oObj filled by MultiMethodTest
-    XInstCreator info = null;               // instance creator
 
     /**
      * Test calls the method. <p>
