@@ -91,7 +91,7 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
                     bMultiLine = lcl_GetTextWithBreaks(
                         *(const ScEditCell*)pCell, pDocument, aString );
                 else
-                    aCol[nCol].GetInputString( nRow, aString );
+                    aCol[nCol].GetString( nRow, aString );
                 break;
             case SVX_SEARCHIN_NOTE:
                 {
