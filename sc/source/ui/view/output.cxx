@@ -1059,7 +1059,10 @@ void ScOutputData::DrawBackground()
 
                     for (SCCOL nMerged = 0; nMerged < nMergedCells; ++nMerged)
                     {
-                        nPosX += pRowInfo[0].pCellInfo[nX+nOldMerged+nMerged].nWidth * nLayoutSign;
+                        SCCOL nCol = nX+nOldMerged+nMerged;
+                        if (nCol > nX2+2)
+                            break;
+                        nPosX += pRowInfo[0].pCellInfo[nCol].nWidth * nLayoutSign;
                     }
                 }
                 drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo );
