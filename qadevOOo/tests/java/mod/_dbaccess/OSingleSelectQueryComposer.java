@@ -135,8 +135,6 @@ import com.sun.star.uno.XInterface;
  */
 public class OSingleSelectQueryComposer extends TestCase {
 
-    String tableName = null;
-    DBTools.DataSourceInfo srcInf = null;
     protected static final String dbSourceName = "OSingleSelectQueryComposerDataSource";
 
     /**
