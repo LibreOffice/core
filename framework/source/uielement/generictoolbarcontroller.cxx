@@ -348,7 +348,7 @@ MenuToolbarController::createPopupWindow() throw (css::uno::RuntimeException, st
         Reference< XDispatchProvider > xDispatch;
         Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         pMenu = new Toolbarmenu();
-        m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, true, true ) );
+        m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, true, true, false ) );
         if (m_xMenuManager.is())
         {
             MenuBarManager& rMgr = dynamic_cast<MenuBarManager&>(*m_xMenuManager.get());

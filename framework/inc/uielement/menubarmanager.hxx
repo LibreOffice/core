@@ -95,7 +95,8 @@ class MenuBarManager : public css::frame::XStatusListener                ,
             const OUString& aModuleIdentifier,
             Menu* pMenu,
             bool bDelete,
-            bool bDeleteChildren );
+            bool bDeleteChildren,
+            bool bHasMenuBar = true );
 
         virtual ~MenuBarManager();
 
@@ -214,6 +215,7 @@ class MenuBarManager : public css::frame::XStatusListener                ,
         bool                                                         m_bRetrieveImages : 1,
                                                                      m_bAcceleratorCfg : 1;
         bool                                                         m_bModuleIdentified;
+        bool                                                         m_bHasMenuBar;
         OUString                                                     m_aMenuItemCommand;
         OUString                                                     m_aModuleIdentifier;
         Menu*                                                        m_pVCLMenu;

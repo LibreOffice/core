@@ -136,12 +136,13 @@ MenuBarManager::MenuBarManager(
     const Reference< XURLTransformer >& _xURLTransformer,
     const Reference< XDispatchProvider >& rDispatchProvider,
     const OUString& rModuleIdentifier,
-    Menu* pMenu, bool bDelete, bool bDeleteChildren ):
+    Menu* pMenu, bool bDelete, bool bDeleteChildren, bool bHasMenuBar ):
     OWeakObject()
     , m_bDisposed( false )
     , m_bRetrieveImages( false )
     , m_bAcceleratorCfg( false )
     , m_bModuleIdentified( false )
+    , m_bHasMenuBar( bHasMenuBar )
     , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
@@ -164,6 +165,7 @@ MenuBarManager::MenuBarManager(
     , m_bRetrieveImages( true )
     , m_bAcceleratorCfg( false )
     , m_bModuleIdentified( false )
+    , m_bHasMenuBar( true )
     , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
@@ -392,6 +394,7 @@ throw ( RuntimeException, std::exception )
     OUString aFeatureURL = Event.FeatureURL.Complete;
 
     SolarMutexGuard aSolarGuard;
+    if ( m_bHasMenuBar )
     {
         vcl::MenuInvalidator::Invalidated();
     }
@@ -801,6 +804,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
         }
 
         // Try to set accelerator keys
+        if ( m_bHasMenuBar )
         {
             RetrieveShortcuts( m_aMenuItemHandlerVector );
             std::vector< MenuItemHandler* >::iterator p;
@@ -898,7 +902,8 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
                                 {
                                     xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
                                     xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
-                                    xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
+                                    if ( m_bHasMenuBar )
+                                        xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
                                 }
                             }
                             else if ( !bPopupMenu )
@@ -1302,7 +1307,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 }
                 else
                 {
-                    MenuBarManager* pSubMenuMgr = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,rDispatchProvider, aModuleIdentifier, pPopup, bDeleteChildren, bDeleteChildren );
+                    MenuBarManager* pSubMenuMgr = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,rDispatchProvider, aModuleIdentifier, pPopup, bDeleteChildren, bDeleteChildren, m_bHasMenuBar );
                     AddMenu(pSubMenuMgr,aItemCommand,nItemId);
                 }
             }
@@ -1367,7 +1372,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         }
     }
 
-    if ( bAccessibilityEnabled )
+    if ( m_bHasMenuBar && bAccessibilityEnabled )
     {
         RetrieveShortcuts( m_aMenuItemHandlerVector );
         std::vector< MenuItemHandler* >::iterator p;
