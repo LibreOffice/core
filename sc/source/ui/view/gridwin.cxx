@@ -2404,7 +2404,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 bEditAllowed = false;
         }
 
-        if ( bEditAllowed )
+        // We don't want to activate the edit view for a single click in tiled rendering
+        // (but we should probably keep the same behaviour for double clicks).
+        if ( bEditAllowed && (!bIsTiledRendering || bDouble) )
         {
             // don't forward the event to an empty cell, causes deselection in
             // case we used the double-click to select the empty cell
@@ -5802,7 +5804,6 @@ void ScGridWindow::updateLibreOfficeKitCellCursor() {
     pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
 
     pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, aRect.toString().getStr());
-
 }
 
 void ScGridWindow::CursorChanged()
@@ -5811,8 +5812,6 @@ void ScGridWindow::CursorChanged()
     // now, just re-create them
 
     UpdateCursorOverlay();
-
-    updateLibreOfficeKitCellCursor();
 }
 
 void ScGridWindow::ImpCreateOverlayObjects()
@@ -5847,6 +5846,9 @@ void ScGridWindow::UpdateAllOverlays()
 
 void ScGridWindow::DeleteCursorOverlay()
 {
+    ScDocument* pDoc = pViewData->GetDocument();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
     mpOOCursors.reset();
 }
 
@@ -5963,11 +5965,6 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
 void ScGridWindow::UpdateCursorOverlay()
 {
     ScDocument* pDoc = pViewData->GetDocument();
-
-    // The cursor is rendered client-side in tiled rendering -
-    // see updateLibreOfficeKitCellCursor.
-    if (pDoc->GetDrawLayer()->isTiledRendering())
-        return;
 
     MapMode aDrawMode = GetDrawMapMode();
     MapMode aOldMode = GetMapMode();
@@ -6087,40 +6084,48 @@ void ScGridWindow::UpdateCursorOverlay()
         }
     }
 
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+
     if ( !aPixelRects.empty() )
     {
-        // #i70788# get the OverlayManager safely
-        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
-
-        if (xOverlayManager.is())
+        if (pDrawLayer->isTiledRendering()) {
+            updateLibreOfficeKitCellCursor();
+        }
+        else
         {
-            Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-            if (pViewData->GetActivePart() != eWhich)
-                // non-active pane uses a different color.
-                aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
-            std::vector< basegfx::B2DRange > aRanges;
-            const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            // #i70788# get the OverlayManager safely
+            rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-            for(size_t a(0); a < aPixelRects.size(); a++)
+            if (xOverlayManager.is())
             {
-                const Rectangle aRA(aPixelRects[a]);
-                basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
-                aRB.transform(aTransform);
-                aRanges.push_back(aRB);
+                Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+                if (pViewData->GetActivePart() != eWhich)
+                    // non-active pane uses a different color.
+                    aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
+                std::vector< basegfx::B2DRange > aRanges;
+                const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+
+                for(size_t a(0); a < aPixelRects.size(); a++)
+                {
+                    const Rectangle aRA(aPixelRects[a]);
+                    basegfx::B2DRange aRB(aRA.Left(), aRA.Top(), aRA.Right() + 1, aRA.Bottom() + 1);
+                    aRB.transform(aTransform);
+                    aRanges.push_back(aRB);
+                }
+
+                sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
+                    sdr::overlay::OVERLAY_SOLID,
+                    aCursorColor,
+                    aRanges,
+                    false);
+
+                xOverlayManager->add(*pOverlay);
+                mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
+                mpOOCursors->append(*pOverlay);
+
+                // notify the LibreOfficeKit too
+                updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
             }
-
-            sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
-                sdr::overlay::OVERLAY_SOLID,
-                aCursorColor,
-                aRanges,
-                false);
-
-            xOverlayManager->add(*pOverlay);
-            mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
-            mpOOCursors->append(*pOverlay);
-
-            // notify the LibreOfficeKit too
-            updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
         }
     }
 
