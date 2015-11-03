@@ -115,8 +115,7 @@ public class _XTextRange extends MultiMethodTest {
 
         log.println("End: "+exp);
 
-        tRes.tested( "getEnd()", oEndRange != null &&
-            exp.endsWith("End"));
+        tRes.tested( "getEnd()", exp.endsWith("End"));
 
         oEndRange.setString("");
     }
