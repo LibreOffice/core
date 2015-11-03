@@ -219,9 +219,9 @@ public:
      * @param pCommand uno command to be posted to the document, like ".uno:Bold"
      * @param pArguments arguments of the uno command.
      */
-    inline void postUnoCommand(const char* pCommand, const char* pArguments = 0)
+    inline void postUnoCommand(const char* pCommand, const char* pArguments = 0, bool bNotifyWhenFinished = false)
     {
-        mpDoc->pClass->postUnoCommand(mpDoc, pCommand, pArguments);
+        mpDoc->pClass->postUnoCommand(mpDoc, pCommand, pArguments, bNotifyWhenFinished);
     }
 
     /**

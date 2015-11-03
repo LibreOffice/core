@@ -21,6 +21,8 @@ namespace desktop {
     {
         uno::Reference<css::lang::XComponent> mxComponent;
         shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
+        LibreOfficeKitCallback mpCallback;
+        void *mpCallbackData;
 
         explicit LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent);
         ~LibLODocument_Impl();

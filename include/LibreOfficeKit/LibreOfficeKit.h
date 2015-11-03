@@ -12,6 +12,11 @@
 
 #include <stddef.h>
 
+#ifdef LOK_USE_UNSTABLE_API
+// the unstable API needs C99's bool
+#include <stdbool.h>
+#endif
+
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 #ifdef __cplusplus
@@ -144,7 +149,8 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::postUnoCommand
     void (*postUnoCommand) (LibreOfficeKitDocument* pThis,
                             const char* pCommand,
-                            const char* pArguments);
+                            const char* pArguments,
+                            bool bNotifyWhenFinished);
 
     /// @see lok::Document::setTextSelection
     void (*setTextSelection) (LibreOfficeKitDocument* pThis,

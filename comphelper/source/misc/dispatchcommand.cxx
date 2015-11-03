@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
@@ -30,7 +31,7 @@ using namespace css;
 
 namespace comphelper {
 
-bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, uno::Reference<css::frame::XDispatchResultListener> aListener)
 {
     // Target where we will execute the .uno: command
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
@@ -54,7 +55,11 @@ bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::bea
         return false;
 
     // And do the work...
-    xDisp->dispatch(aCommandURL, rArguments);
+    uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
+    if (xNotifyingDisp.is())
+        xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, aListener);
+    else
+        xNotifyingDisp->dispatch(aCommandURL, rArguments);
 
     return true;
 }
