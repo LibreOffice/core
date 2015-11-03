@@ -90,7 +90,6 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
         Reference< XNameAccess > xConfigAccess( getNodeAccess( xConfigProvider, rNodePath ) );
         if( xConfigAccess.is() )
         {
-            OUString aLabel( "Label" );
             Reference< XNameAccess > xNameAccess;
             Sequence< OUString > aNames( xConfigAccess->getElementNames() );
             const OUString* p = aNames.getConstArray();
@@ -101,7 +100,7 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
                 if( xNameAccess.is() )
                 {
                     OUString aUIName;
-                    xNameAccess->getByName( aLabel ) >>= aUIName;
+                    xNameAccess->getByName( "Label" ) >>= aUIName;
                     if( !aUIName.isEmpty() )
                     {
                         rStringMap[ *p ] = aUIName;
@@ -431,8 +430,6 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
         if( xTypeAccess.is() )
         {
             Reference< XNameAccess > xCategoryAccess;
-            const OUString aEffectsName( "Effects" );
-            const OUString aLabelName( "Label" );
 
             Sequence< OUString > aNames( xTypeAccess->getElementNames() );
             const OUString* p = aNames.getConstArray();
@@ -441,13 +438,13 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
             {
                 xTypeAccess->getByName( *p ) >>= xCategoryAccess;
 
-                if( xCategoryAccess.is() && xCategoryAccess->hasByName( aLabelName ) && xCategoryAccess->hasByName( aEffectsName ) )
+                if( xCategoryAccess.is() && xCategoryAccess->hasByName( "Label" ) && xCategoryAccess->hasByName( "Effects" ) )
                 {
                     OUString aLabel;
-                    xCategoryAccess->getByName( aLabelName ) >>= aLabel;
+                    xCategoryAccess->getByName( "Label" ) >>= aLabel;
 
                     Sequence< OUString > aEffects;
-                    xCategoryAccess->getByName( aEffectsName ) >>= aEffects;
+                    xCategoryAccess->getByName( "Effects" ) >>= aEffects;
 
                     EffectDescriptorList aEffectsList;
 
