@@ -269,8 +269,10 @@ static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
 static int doc_getView(LibreOfficeKitDocument* pThis);
 static int doc_getViews(LibreOfficeKitDocument* pThis);
 
-LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
-    mxComponent( xComponent )
+LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
+    : mxComponent(xComponent)
+    , mpCallback(nullptr)
+    , mpCallbackData(nullptr)
 {
     if (!(m_pDocumentClass = gDocumentClass.lock()))
     {
