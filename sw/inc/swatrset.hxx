@@ -157,7 +157,7 @@ private:
     static sal_uInt16* pVersionMap6;
     static sal_uInt16* pVersionMap7;
 
-    SwDoc* pDoc;
+    SwDoc* m_pDoc;
 
 public:
     SwAttrPool( SwDoc* pDoc );
@@ -165,8 +165,8 @@ protected:
     virtual ~SwAttrPool();
 public:
 
-          SwDoc* GetDoc()           { return pDoc; }
-    const SwDoc* GetDoc() const     { return pDoc; }
+          SwDoc* GetDoc()           { return m_pDoc; }
+    const SwDoc* GetDoc() const     { return m_pDoc; }
 
 };
 

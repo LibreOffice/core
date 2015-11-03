@@ -49,7 +49,7 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     : SfxItemPool( OUString("SWG"),
                     POOLATTR_BEGIN, POOLATTR_END-1,
                     aSlotTab, aAttrTab ),
-    pDoc( pD )
+    m_pDoc( pD )
 {
     SetVersionMap( 1, 1, 60, pVersionMap1 );
     SetVersionMap( 2, 1, 75, pVersionMap2 );
