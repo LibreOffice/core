@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_pcx_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_pcx_test, \
-    ipx \
+    gie \
 	sal \
 	test \
 	tl \

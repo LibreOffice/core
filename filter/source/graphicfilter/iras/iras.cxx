@@ -364,15 +364,8 @@ sal_uInt8 RASReader::ImplGetByte()
 
 //================== GraphicImport - die exportierte Funktion ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
-#if defined(DISABLE_DYNLOADING)
-#define GraphicImport iraGraphicImport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+iraGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     RASReader aRASReader(rStream);
 

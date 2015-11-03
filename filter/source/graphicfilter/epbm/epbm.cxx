@@ -190,15 +190,9 @@ void PBMWriter::ImplWriteNumber(sal_Int32 nNumber)
 // - exported function -
 
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
-#if defined(DISABLE_DYNLOADING)
-#define GraphicExport epbGraphicExport
-#endif
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
+epbGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     PBMWriter aPBMWriter(rStream);
 

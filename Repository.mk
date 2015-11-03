@@ -313,18 +313,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	drawinglayer \
 	editeng \
-	egi \
-	eme \
 	$(if $(filter WNT,$(OS)),$(if $(DISABLE_ATL),,emser)) \
-	epb \
-	epg \
-	epp \
-	eps \
-	ept \
-	era \
-	eti \
 	evtatt \
-	exp \
 	expwrap \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
 		flat \
@@ -346,19 +336,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
 	i18npool \
 	i18nsearch \
+    gie \
 	hyphen \
-	icd \
-	icg \
-	idx \
-	ime \
-	ipb \
-	ipd \
-	ips \
-	ipt \
-	ipx \
-	ira \
-	itg \
-	iti \
 	$(if $(ENABLE_JAVA),jdbc) \
 	ldapbe2 \
 	localebe1 \
