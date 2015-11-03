@@ -19,7 +19,7 @@
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-        GraphicImport(SvStream & rStream, Graphic & rGraphic,
+        imeGraphicImport(SvStream & rStream, Graphic & rGraphic,
         FilterConfigItem*);
 }
 
@@ -54,7 +54,7 @@ bool MetFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return GraphicImport(aFileStream, aGraphic, NULL);
+    return imeGraphicImport(aFileStream, aGraphic, NULL);
 }
 
 void MetFilterTest::testCVEs()

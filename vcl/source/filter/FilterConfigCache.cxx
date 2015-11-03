@@ -87,8 +87,8 @@ bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString
             if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
                 bIsPixelFormat = true;
         }
-        OUString sTemp(SVLIBRARY("?"));
-        sFilterName = sTemp.replaceFirst("?", sFilterName);
+        sExternalFilterName = sFilterName;
+        sFilterName = SVLIBRARY("gie");
     }
     return ! sFilterName.isEmpty();
 }
@@ -422,7 +422,22 @@ OUString FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
     return OUString("");
 }
 
-OUString FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
+OUString FilterConfigCache::GetExternalFilterName(sal_uInt16 nFormat, bool bExport)
+{
+    if (bExport)
+    {
+        if (nFormat < aExport.size())
+            return aExport[nFormat].sExternalFilterName;
+    }
+    else
+    {
+        if (nFormat < aImport.size())
+            return aImport[nFormat].sExternalFilterName;
+    }
+    return OUString("");
+}
+
+OUString FilterConfigCache::GetImportWildcard(sal_uInt16 nFormat, sal_Int32 nEntry)
 {
     OUString aWildcard( GetImportFormatExtension( nFormat, nEntry ) );
     if ( !aWildcard.isEmpty() )
@@ -442,7 +457,7 @@ OUString FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
     return OUString("");
 }
 
-sal_uInt16 FilterConfigCache::GetExportFormatNumber( const OUString& rFormatName )
+sal_uInt16 FilterConfigCache::GetExportFormatNumber(const OUString& rFormatName)
 {
     CacheVector::const_iterator aIter, aEnd;
     for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)

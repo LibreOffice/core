@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_pcd_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_pcd_test, \
-    icd \
+    gie \
 	sal \
 	test \
 	tl \

@@ -602,15 +602,8 @@ void TIFFWriter::EndCompression()
 
 
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
-#if defined(DISABLE_DYNLOADING)
-#define GraphicExport etiGraphicExport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
+etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     TIFFWriter aWriter(rStream);
     return aWriter.WriteTIFF( rGraphic, pFilterConfigItem );
