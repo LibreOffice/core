@@ -544,9 +544,9 @@ void ScGlobal::UpdatePPT( OutputDevice* pDev )
 
         if ( !pDev )
             pDev = Application::GetDefaultDevice();
-        Point aPix1000 = pDev->LogicToPixel( Point(10000,10000), MAP_TWIP );
-        nScreenPPTX = aPix1000.X() / 10000.0;
-        nScreenPPTY = aPix1000.Y() / 10000.0;
+        Point aPix1000 = pDev->LogicToPixel( Point(100000,100000), MAP_TWIP );
+        nScreenPPTX = aPix1000.X() / 100000.0;
+        nScreenPPTY = aPix1000.Y() / 100000.0;
         nPPTZoom = nCurrentZoom;
     }
 }
