@@ -264,7 +264,7 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         aCommand << "&height=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), rWindow.m_pRowBar->m_nSizePixel));
         std::stringstream ss;
         ss << "lok::Document::getCommandValues(" << aCommand.str() << ")";
-        g_info(ss.str().c_str());
+        g_info("%s", ss.str().c_str());
         char* pValues = pDocument->pClass->getCommandValues(pDocument, aCommand.str().c_str());
         std::stringstream aStream(pValues);
         free(pValues);
