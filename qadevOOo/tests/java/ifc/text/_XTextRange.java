@@ -78,9 +78,7 @@ public class _XTextRange extends MultiMethodTest {
 
         log.println("Start: "+exp);
 
-        tRes.tested( "getStart()", oStartRange != null &&
-            exp.startsWith("Start"));
-
+        tRes.tested( "getStart()", exp.startsWith("Start"));
 
         oStartRange.setString("");
 
