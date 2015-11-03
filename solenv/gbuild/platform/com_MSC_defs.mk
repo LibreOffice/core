@@ -248,9 +248,6 @@ gb_STDLIBS := \
 
 gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-WX)
 
-# there does not seem to be a way to force C++03 with MSVC
-gb_CXX03FLAGS :=
-
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-EHs \
