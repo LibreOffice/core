@@ -58,11 +58,12 @@ public class _XTablesSupplier extends MultiMethodTest {
                 (XServiceInfo.class, tabs.getByName(tabNames[0])) ;
         } catch (com.sun.star.uno.Exception e) {}
 
-        log.println("Support : " +
-            info.supportsService("com.sun.star.sdbcx.Table")) ;
+        if (info != null) {
+            log.println("Support : " +
+                info.supportsService("com.sun.star.sdbcx.Table")) ;
+        }
 
-
-        tRes.tested("getTables()", tabs != null) ;
+        tRes.tested("getTables()", info != null) ;
     }
 
 }  // finish class _XTablesSupplier
