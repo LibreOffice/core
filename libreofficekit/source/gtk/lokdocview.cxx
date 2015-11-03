@@ -2083,7 +2083,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * @aCommand: number of matches.
      */
     doc_view_signals[SEARCH_RESULT_COUNT] =
-        g_signal_new("search-result_count",
+        g_signal_new("search-result-count",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
