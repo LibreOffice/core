@@ -79,7 +79,7 @@ public class various extends TestCase {
      *
      * @see com.sun.star.bridge.XInstanceProvider
      */
-    private class MyInstanceProvider implements XInstanceProvider {
+    private static class MyInstanceProvider implements XInstanceProvider {
         /**
          * a MultiServiceFactory for creating instances
          *
