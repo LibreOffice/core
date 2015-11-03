@@ -129,8 +129,8 @@ OTextInputStream::~OTextInputStream()
 {
     if( mbEncodingInitialized )
     {
-        rtl_destroyUnicodeToTextContext( mConvText2Unicode, mContextText2Unicode );
-        rtl_destroyUnicodeToTextConverter( mConvText2Unicode );
+        rtl_destroyTextToUnicodeContext( mConvText2Unicode, mContextText2Unicode );
+        rtl_destroyTextToUnicodeConverter( mConvText2Unicode );
     }
 
     delete[] mpBuffer;
