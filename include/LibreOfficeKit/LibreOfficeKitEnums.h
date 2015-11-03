@@ -180,7 +180,22 @@ typedef enum
      * - searchResultSelection is an array of part-number and rectangle list
      *   pairs, in LOK_CALLBACK_SET_PART / LOK_CALLBACK_TEXT_SELECTION format.
      */
-    LOK_CALLBACK_SEARCH_RESULT_SELECTION
+    LOK_CALLBACK_SEARCH_RESULT_SELECTION,
+
+    /**
+     * Result of the UNO command execution when bNotifyWhenFinished was set
+     * to 'true' during the postUnoCommand() call.
+     *
+     * The result returns a success / failure state, and potentially
+     * additional data:
+     *
+     * {
+     *     "commandName": "...",    // the command for which this is the result
+     *     "success": true/false,   // when the result is "don't know", this is missing
+     *     // TODO "result": "..."  // UNO Any converted to JSON (not implemented yet)
+     * }
+     */
+    LOK_CALLBACK_UNO_COMMAND_RESULT
 }
 LibreOfficeKitCallbackType;
 

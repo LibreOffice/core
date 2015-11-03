@@ -184,12 +184,14 @@ gboolean                       lok_doc_view_get_edit               (LOKDocView* 
  * @pDocView: the #LOKDocView instance
  * @pCommand: the command to issue to LO core
  * @pArguments: the arguments to the given command
+ * @bNotifyWhenFinished: normally false, but it may be useful for eg. .uno:Save
  *
  * Posts the .uno: command to the LibreOfficeKit.
  */
 void                           lok_doc_view_post_command           (LOKDocView* pDocView,
                                                                     const gchar* pCommand,
-                                                                    const gchar* pArguments);
+                                                                    const gchar* pArguments,
+                                                                    gboolean bNotifyWhenFinished);
 
 /**
  * lok_doc_view_pixel_to_twip:

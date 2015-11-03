@@ -36,6 +36,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -241,7 +243,8 @@ static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nModifier);
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
-                               const char* pArguments);
+                               const char* pArguments,
+                               bool bNotifyWhenFinished);
 static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
                                   int nType,
                                   int nX,
@@ -884,9 +887,14 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis)
 }
 
 static void doc_registerCallback(LibreOfficeKitDocument* pThis,
-                                LibreOfficeKitCallback pCallback,
-                                void* pData)
+                                 LibreOfficeKitCallback pCallback,
+                                 void* pData)
 {
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    pDocument->mpCallback = pCallback;
+    pDocument->mpCallbackData = pData;
+
     if (comphelper::LibreOfficeKit::isViewCallback())
     {
         if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
@@ -951,13 +959,69 @@ static void jsonToPropertyValues(const char* pJSON, uno::Sequence<beans::Propert
     rPropertyValues = comphelper::containerToSequence(aArguments);
 }
 
-static void doc_postUnoCommand(LibreOfficeKitDocument* /*pThis*/, const char* pCommand, const char* pArguments)
+/** Class to react on finishing of a dispatched command.
+
+    This will call a LOK_COMMAND_FINISHED callback when postUnoCommand was
+    called with the parameter requesting the notification.
+
+    @see LibreOfficeKitCallbackType::LOK_CALLBACK_UNO_COMMAND_RESULT.
+*/
+class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
+{
+    OString maCommand;                 ///< Command for which this is the result.
+    LibreOfficeKitCallback mpCallback; ///< Callback to call.
+    void* mpCallbackData;              ///< The callback's data.
+
+public:
+    DispatchResultListener(const char* pCommand, LibreOfficeKitCallback pCallback, void* pCallbackData)
+        : maCommand(pCommand)
+        , mpCallback(pCallback)
+        , mpCallbackData(pCallbackData)
+    {
+        assert(mpCallback);
+    }
+
+    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override
+    {
+        boost::property_tree::ptree aTree;
+        aTree.put("commandName", maCommand.getStr());
+
+        if (rEvent.State != frame::DispatchResultState::DONTKNOW)
+        {
+            bool bSuccess = (rEvent.State == frame::DispatchResultState::SUCCESS);
+            aTree.put("success", bSuccess);
+        }
+
+        // TODO UNO Any rEvent.Result -> JSON
+        // aTree.put("result": "...");
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        mpCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, strdup(aStream.str().c_str()), mpCallbackData);
+    }
+
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) throw (css::uno::RuntimeException, std::exception) override {}
+};
+
+static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues;
     jsonToPropertyValues(pArguments, aPropertyValues);
-    if (!comphelper::dispatchCommand(aCommand, aPropertyValues))
+    bool bResult = false;
+
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    if (bNotifyWhenFinished && pDocument->mpCallback)
+    {
+        bResult = comphelper::dispatchCommand(aCommand, aPropertyValues,
+                new DispatchResultListener(pCommand, pDocument->mpCallback, pDocument->mpCallbackData));
+    }
+    else
+        bResult = comphelper::dispatchCommand(aCommand, aPropertyValues);
+
+    if (!bResult)
     {
         gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
     }

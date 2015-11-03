@@ -180,6 +180,7 @@ enum
     HYPERLINK_CLICKED,
     CURSOR_CHANGED,
     SEARCH_RESULT_COUNT,
+    COMMAND_RESULT,
 
     LAST_SIGNAL
 };
@@ -459,6 +460,11 @@ searchNotFound(LOKDocView* pDocView, const std::string& rString)
 static void searchResultCount(LOKDocView* pDocView, const std::string& rString)
 {
     g_signal_emit(pDocView, doc_view_signals[SEARCH_RESULT_COUNT], 0, rString.c_str());
+}
+
+static void commandResult(LOKDocView* pDocView, const std::string& rString)
+{
+    g_signal_emit(pDocView, doc_view_signals[COMMAND_RESULT], 0, rString.c_str());
 }
 
 static void
@@ -750,6 +756,11 @@ callback (gpointer pData)
         boost::property_tree::read_json(aStream, aTree);
         int nCount = aTree.get_child("searchResultSelection").size();
         searchResultCount(pDocView, std::to_string(nCount));
+    }
+    break;
+    case LOK_CALLBACK_UNO_COMMAND_RESULT:
+    {
+        commandResult(pDocView, pCallback->m_aPayload);
     }
     break;
     default:
@@ -1520,7 +1531,7 @@ postCommandInThread (gpointer data)
     std::stringstream ss;
     ss << "lok::Document::postUnoCommand(" << pLOEvent->m_pCommand << ", " << pLOEvent->m_pArguments << ")";
     g_info(ss.str().c_str());
-    priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pLOEvent->m_pCommand, pLOEvent->m_pArguments);
+    priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pLOEvent->m_pCommand, pLOEvent->m_pArguments, pLOEvent->m_bNotifyWhenFinished);
 }
 
 static void
@@ -2077,6 +2088,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_NONE, 4,
                      G_TYPE_INT, G_TYPE_INT,
                      G_TYPE_INT, G_TYPE_INT);
+
     /**
      * LOKDocView::search-result-count:
      * @pDocView: the #LOKDocView on which the signal is emitted
@@ -2084,6 +2096,22 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      */
     doc_view_signals[SEARCH_RESULT_COUNT] =
         g_signal_new("search-result-count",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__STRING,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
+
+    /**
+     * LOKDocView::command-result:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @aCommand: JSON containing the info about the command that finished,
+     * and its success status.
+     */
+    doc_view_signals[COMMAND_RESULT] =
+        g_signal_new("command-result",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
@@ -2326,7 +2354,8 @@ lok_doc_view_get_edit (LOKDocView* pDocView)
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_post_command (LOKDocView* pDocView,
                            const gchar* pCommand,
-                           const gchar* pArguments)
+                           const gchar* pArguments,
+                           gboolean bNotifyWhenFinished)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
@@ -2334,6 +2363,7 @@ lok_doc_view_post_command (LOKDocView* pDocView,
     GError* error = NULL;
     pLOEvent->m_pCommand = pCommand;
     pLOEvent->m_pArguments  = g_strdup(pArguments);
+    pLOEvent->m_bNotifyWhenFinished = bNotifyWhenFinished;
 
     g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
     g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);

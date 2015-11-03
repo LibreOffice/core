@@ -169,6 +169,7 @@ struct LOEvent
     ///@{
     const gchar* m_pCommand;
     gchar* m_pArguments;
+    gboolean m_bNotifyWhenFinished;
     ///@}
 
     /// @name open_document parameter
@@ -221,6 +222,7 @@ struct LOEvent
         : m_nType(type)
         , m_pCommand(0)
         , m_pArguments(0)
+        , m_bNotifyWhenFinished(false)
         , m_pPath(0)
         , m_bEdit(false)
         , m_nPartMode(0)

@@ -14,6 +14,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 
 namespace comphelper
 {
@@ -24,7 +25,9 @@ namespace comphelper
 
     @return true on success.
 */
-COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments);
+COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
+        const css::uno::Sequence<css::beans::PropertyValue>& rArguments,
+        css::uno::Reference<css::frame::XDispatchResultListener> aListener = css::uno::Reference<css::frame::XDispatchResultListener>());
 
 }
 

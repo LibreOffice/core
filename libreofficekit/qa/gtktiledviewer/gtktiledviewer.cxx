@@ -596,7 +596,7 @@ static void doSearch(GtkWidget* pButton, bool bBackwards)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    lok_doc_view_post_command(pLOKDocView, ".uno:ExecuteSearch", aStream.str().c_str());
+    lok_doc_view_post_command(pLOKDocView, ".uno:ExecuteSearch", aStream.str().c_str(), false);
 }
 
 /// Click handler for the search next button.
@@ -670,6 +670,12 @@ static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pD
             }
         }
     }
+}
+
+/// LOKDocView command finished -> just write it to the console, not that useful for the viewer.
+static void signalCommandResult(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer /*pData*/)
+{
+    fprintf(stderr, "Command finished: %s\n", pPayload);
 }
 
 static void loadChanged(LOKDocView* /*pLOKDocView*/, gdouble fValue, gpointer pData)
@@ -774,7 +780,11 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
         GtkToolItem* pItem = GTK_TOOL_ITEM(pWidget);
         const std::string& rString = rWindow.m_aToolItemCommandNames[pItem];
         g_info("toggleToolItem: lok_doc_view_post_command('%s')", rString.c_str());
-        lok_doc_view_post_command(pLOKDocView, rString.c_str(), 0);
+
+        // notify about the finished Save
+        gboolean bNotify = (rString == ".uno:Save");
+
+        lok_doc_view_post_command(pLOKDocView, rString.c_str(), 0, bNotify);
     }
 }
 
@@ -1172,6 +1182,7 @@ static void setupDocView(GtkWidget* pDocView)
 #endif
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
+    g_signal_connect(pDocView, "command-result", G_CALLBACK(signalCommandResult), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
     g_signal_connect(pDocView, "search-result-count", G_CALLBACK(signalSearchResultCount), NULL);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
