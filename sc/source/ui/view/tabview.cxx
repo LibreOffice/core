@@ -2351,14 +2351,38 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     }
 
     boost::property_tree::ptree aCols;
+    nTotal = 0;
+    nTotalPixels = 0;
     for (SCCOL nCol = 0; nCol <= nEndCol; ++nCol)
     {
-        boost::property_tree::ptree aCol;
         sal_uInt16 nSize = pDoc->GetColWidth(nCol, aViewData.GetTabNo());
-        aCol.put("size", OString::number(nSize).getStr());
         OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
-        aCol.put("text", aText.toUtf8().getStr());
-        aCols.push_back(std::make_pair("", aCol));
+
+        bool bSkip = false;
+        if (!rRectangle.IsEmpty())
+        {
+            long nLeft = std::max(rRectangle.Left(), nTotal);
+            long nRight = std::min(rRectangle.Right(), nTotal + nSize);
+            if (nRight < nLeft)
+                // They do not intersect.
+                bSkip = true;
+        }
+        if (!bSkip)
+        {
+            if (aCols.empty())
+            {
+                boost::property_tree::ptree aCol;
+                aCol.put("size", OString::number(long((nTotalPixels + 0.5) / aViewData.GetPPTX())).getStr());
+                aCol.put("text", "");
+                aCols.push_back(std::make_pair("", aCol));
+            }
+            boost::property_tree::ptree aCol;
+            aCol.put("size", OString::number(nSize).getStr());
+            aCol.put("text", aText.toUtf8().getStr());
+            aCols.push_back(std::make_pair("", aCol));
+        }
+        nTotal += nSize;
+        nTotalPixels += long(nSize * aViewData.GetPPTX());
     }
 
     boost::property_tree::ptree aTree;
