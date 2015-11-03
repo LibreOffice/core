@@ -207,7 +207,6 @@ public class _XActiveDataControl extends MultiMethodTest {
 
         // check, if any error occurred
         if (errorCalled) {
-            Status.failed("Unexpected error");
             log.println("Unexpected error " + error);
             ((Exception)error).printStackTrace(log);
         }
