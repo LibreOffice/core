@@ -6119,7 +6119,6 @@ foo bar
     AC_MSG_ERROR([Could not figure out what C++ library this is]))))
 AC_MSG_RESULT([$cpp_library_name])
 AC_LANG_POP([C++])
-AC_SUBST(CPP_LIBRARY)
 
 dnl ===================================================================
 dnl C++11
