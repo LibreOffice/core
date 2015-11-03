@@ -3115,7 +3115,7 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             GetParent()->IsNativeWidgetEnabled() )
         {
-            sal_Int32 nLeft = 4, nTop = 4, nRight = 4, nBottom = 4;
+            const sal_Int32 nLeft = 4, nTop = 4, nRight = 4, nBottom = 4;
             aPos.X() += nLeft;
             aPos.Y() += nTop;
             aSz.Width() -= nLeft + nRight;
