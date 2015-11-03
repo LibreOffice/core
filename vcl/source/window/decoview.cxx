@@ -1101,7 +1101,7 @@ void DecorationView::DrawHandle(const Rectangle& rRect, bool bVertical)
     mpOutDev->SetLineColor(rStyleSettings.GetDarkShadowColor());
     mpOutDev->SetFillColor(rStyleSettings.GetDarkShadowColor());
 
-    sal_Int32 nNumberOfPoints = 3;
+    const sal_Int32 nNumberOfPoints = 3;
 
     long nHalfWidth = aOutputSize.Width() / 2.0f;
     long nHalfHeight = aOutputSize.Height() / 2.0f;
