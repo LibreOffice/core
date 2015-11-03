@@ -173,14 +173,14 @@ void CalcContent( SwLayoutFrm *pLay,
 class SwFrmNotify
 {
 protected:
-    SwFrm *pFrm;
-    const SwRect aFrm;
-    const SwRect aPrt;
+    SwFrm *mpFrm;
+    const SwRect maFrm;
+    const SwRect maPrt;
     SwTwips mnFlyAnchorOfst;
     SwTwips mnFlyAnchorOfstNoWrap;
-    bool     bHadFollow;
-    bool     bInvaKeep;
-    bool     bValidSize;
+    bool     mbHadFollow;
+    bool     mbInvaKeep;
+    bool     mbValidSize;
     // #i49383#
     bool mbFrmDeleted;
 
@@ -188,15 +188,15 @@ public:
     SwFrmNotify( SwFrm *pFrm );
     ~SwFrmNotify();
 
-    const SwRect &Frm() const { return aFrm; }
-    void SetInvaKeep() { bInvaKeep = true; }
+    const SwRect &Frm() const { return maFrm; }
+    void SetInvaKeep() { mbInvaKeep = true; }
 };
 
 class SwLayNotify : public SwFrmNotify
 {
     bool bLowersComplete;
 
-    SwLayoutFrm *GetLay() { return static_cast<SwLayoutFrm*>(pFrm); }
+    SwLayoutFrm *GetLay() { return static_cast<SwLayoutFrm*>(mpFrm); }
 
 public:
     SwLayNotify( SwLayoutFrm *pLayFrm );
@@ -210,7 +210,7 @@ class SwFlyNotify : public SwLayNotify
 {
     SwPageFrm *pOldPage;
     const SwRect aFrmAndSpace;
-    SwFlyFrm *GetFly() { return static_cast<SwFlyFrm*>(pFrm); }
+    SwFlyFrm *GetFly() { return static_cast<SwFlyFrm*>(mpFrm); }
 
 public:
     SwFlyNotify( SwFlyFrm *pFlyFrm );

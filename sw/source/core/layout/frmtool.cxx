@@ -80,11 +80,11 @@ sal_uInt8 StackHack::nCnt = 0;
 bool StackHack::bLocked = false;
 
 SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
-    pFrm( pF ),
-    aFrm( pF->Frm() ),
-    aPrt( pF->Prt() ),
-    bInvaKeep( false ),
-    bValidSize( pF->GetValidSizeFlag() ),
+    mpFrm( pF ),
+    maFrm( pF->Frm() ),
+    maPrt( pF->Prt() ),
+    mbInvaKeep( false ),
+    mbValidSize( pF->GetValidSizeFlag() ),
     mbFrmDeleted( false )     // #i49383#
 {
     if ( pF->IsTextFrm() )
@@ -98,7 +98,7 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
         mnFlyAnchorOfstNoWrap = 0;
     }
 
-    bHadFollow = pF->IsContentFrm() && static_cast<SwContentFrm*>(pF)->GetFollow();
+    mbHadFollow = pF->IsContentFrm() && static_cast<SwContentFrm*>(pF)->GetFollow();
 }
 
 SwFrmNotify::~SwFrmNotify()
@@ -109,27 +109,27 @@ SwFrmNotify::~SwFrmNotify()
         return;
     }
 
-    SWRECTFN( pFrm )
-    const bool bAbsP = POS_DIFF( aFrm, pFrm->Frm() );
+    SWRECTFN( mpFrm )
+    const bool bAbsP = POS_DIFF( maFrm, mpFrm->Frm() );
     const bool bChgWidth =
-            (aFrm.*fnRect->fnGetWidth)() != (pFrm->Frm().*fnRect->fnGetWidth)();
+            (maFrm.*fnRect->fnGetWidth)() != (mpFrm->Frm().*fnRect->fnGetWidth)();
     const bool bChgHeight =
-            (aFrm.*fnRect->fnGetHeight)()!=(pFrm->Frm().*fnRect->fnGetHeight)();
-    const bool bChgFlyBasePos = pFrm->IsTextFrm() &&
-       ( ( mnFlyAnchorOfst != static_cast<SwTextFrm*>(pFrm)->GetBaseOfstForFly( true ) ) ||
-         ( mnFlyAnchorOfstNoWrap != static_cast<SwTextFrm*>(pFrm)->GetBaseOfstForFly( false ) ) );
+            (maFrm.*fnRect->fnGetHeight)()!=(mpFrm->Frm().*fnRect->fnGetHeight)();
+    const bool bChgFlyBasePos = mpFrm->IsTextFrm() &&
+       ( ( mnFlyAnchorOfst != static_cast<SwTextFrm*>(mpFrm)->GetBaseOfstForFly( true ) ) ||
+         ( mnFlyAnchorOfstNoWrap != static_cast<SwTextFrm*>(mpFrm)->GetBaseOfstForFly( false ) ) );
 
-    if ( pFrm->IsFlowFrm() && !pFrm->IsInFootnote() )
+    if ( mpFrm->IsFlowFrm() && !mpFrm->IsInFootnote() )
     {
-        SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
+        SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( mpFrm );
 
         if ( !pFlow->IsFollow() )
         {
-            if ( !pFrm->GetIndPrev() )
+            if ( !mpFrm->GetIndPrev() )
             {
-                if ( bInvaKeep )
+                if ( mbInvaKeep )
                 {
-                    SwFrm *pPre = pFrm->FindPrev();
+                    SwFrm *pPre = mpFrm->FindPrev();
                     if ( pPre && pPre->IsFlowFrm() )
                     {
                         // 1. pPre wants to keep with me:
@@ -154,8 +154,8 @@ SwFrmNotify::~SwFrmNotify()
             }
             else if ( !pFlow->HasFollow() )
             {
-                long nOldHeight = (aFrm.*fnRect->fnGetHeight)();
-                long nNewHeight = (pFrm->Frm().*fnRect->fnGetHeight)();
+                long nOldHeight = (maFrm.*fnRect->fnGetHeight)();
+                long nNewHeight = (mpFrm->Frm().*fnRect->fnGetHeight)();
                 if( (nOldHeight > nNewHeight) || (!nOldHeight && nNewHeight) )
                     pFlow->CheckKeep();
             }
@@ -164,9 +164,9 @@ SwFrmNotify::~SwFrmNotify()
 
     if ( bAbsP )
     {
-        pFrm->SetCompletePaint();
+        mpFrm->SetCompletePaint();
 
-        SwFrm* pNxt = pFrm->GetIndNext();
+        SwFrm* pNxt = mpFrm->GetIndNext();
         // #121888# - skip empty section frames
         while ( pNxt &&
                 pNxt->IsSctFrm() && !static_cast<SwSectionFrm*>(pNxt)->GetSection() )
@@ -180,49 +180,49 @@ SwFrmNotify::~SwFrmNotify()
         {
             // #104100# - correct condition for setting retouche
             // flag for vertical layout.
-            if( pFrm->IsRetoucheFrm() &&
-                (aFrm.*fnRect->fnTopDist)( (pFrm->Frm().*fnRect->fnGetTop)() ) > 0 )
+            if( mpFrm->IsRetoucheFrm() &&
+                (maFrm.*fnRect->fnTopDist)( (mpFrm->Frm().*fnRect->fnGetTop)() ) > 0 )
             {
-                pFrm->SetRetouche();
+                mpFrm->SetRetouche();
             }
 
             // A fresh follow frame does not have to be invalidated, because
             // it is already formatted:
-            if ( bHadFollow || !pFrm->IsContentFrm() || !static_cast<SwContentFrm*>(pFrm)->GetFollow() )
+            if ( mbHadFollow || !mpFrm->IsContentFrm() || !static_cast<SwContentFrm*>(mpFrm)->GetFollow() )
             {
-                if ( !pFrm->IsTabFrm() || !static_cast<SwTabFrm*>(pFrm)->GetFollow() )
-                    pFrm->InvalidateNextPos();
+                if ( !mpFrm->IsTabFrm() || !static_cast<SwTabFrm*>(mpFrm)->GetFollow() )
+                    mpFrm->InvalidateNextPos();
             }
         }
     }
 
     //For each resize of the background graphics is a repaint necessary.
     const bool bPrtWidth =
-            (aPrt.*fnRect->fnGetWidth)() != (pFrm->Prt().*fnRect->fnGetWidth)();
+            (maPrt.*fnRect->fnGetWidth)() != (mpFrm->Prt().*fnRect->fnGetWidth)();
     const bool bPrtHeight =
-            (aPrt.*fnRect->fnGetHeight)()!=(pFrm->Prt().*fnRect->fnGetHeight)();
+            (maPrt.*fnRect->fnGetHeight)()!=(mpFrm->Prt().*fnRect->fnGetHeight)();
     if ( bPrtWidth || bPrtHeight )
     {
         //UUUU
         bool bUseNewFillProperties(false);
-        if (pFrm->supportsFullDrawingLayerFillAttributeSet())
+        if (mpFrm->supportsFullDrawingLayerFillAttributeSet())
         {
-            drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pFrm->getSdrAllFillAttributesHelper());
+            drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(mpFrm->getSdrAllFillAttributesHelper());
             if(aFillAttributes.get() && aFillAttributes->isUsed())
             {
                 bUseNewFillProperties = true;
                 //UUUU use SetCompletePaint if needed
                 if(aFillAttributes->needCompleteRepaint())
                 {
-                    pFrm->SetCompletePaint();
+                    mpFrm->SetCompletePaint();
                 }
             }
         }
         if (!bUseNewFillProperties)
         {
-            const SvxGraphicPosition ePos = pFrm->GetAttrSet()->GetBackground().GetGraphicPos();
+            const SvxGraphicPosition ePos = mpFrm->GetAttrSet()->GetBackground().GetGraphicPos();
             if(GPOS_NONE != ePos && GPOS_TILED != ePos)
-                pFrm->SetCompletePaint();
+                mpFrm->SetCompletePaint();
         }
     }
     else
@@ -232,28 +232,28 @@ SwFrmNotify::~SwFrmNotify()
         // in order to force paint of the margin areas.
         if ( !bAbsP && (bChgWidth || bChgHeight) )
         {
-            pFrm->SetCompletePaint();
+            mpFrm->SetCompletePaint();
         }
     }
 
-    const bool bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
+    const bool bPrtP = POS_DIFF( maPrt, mpFrm->Prt() );
     if ( bAbsP || bPrtP || bChgWidth || bChgHeight ||
          bPrtWidth || bPrtHeight || bChgFlyBasePos )
     {
-        if( pFrm->IsAccessibleFrm() )
+        if( mpFrm->IsAccessibleFrm() )
         {
-            SwRootFrm *pRootFrm = pFrm->getRootFrm();
+            SwRootFrm *pRootFrm = mpFrm->getRootFrm();
             if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
                 pRootFrm->GetCurrShell() )
             {
-                pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( pFrm, aFrm );
+                pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( mpFrm, maFrm );
             }
         }
 
         // Notification of anchored objects
-        if ( pFrm->GetDrawObjs() )
+        if ( mpFrm->GetDrawObjs() )
         {
-            const SwSortedObjs &rObjs = *pFrm->GetDrawObjs();
+            const SwSortedObjs &rObjs = *mpFrm->GetDrawObjs();
             SwPageFrm* pPageFrm = 0;
             for ( size_t i = 0; i < rObjs.size(); ++i )
             {
@@ -290,7 +290,7 @@ SwFrmNotify::~SwFrmNotify()
                             // determine page frame, if needed.
                             if ( !pPageFrm )
                             {
-                                pPageFrm = pFrm->FindPageFrm();
+                                pPageFrm = mpFrm->FindPageFrm();
                             }
                             if ( pPageFrm != pFlyPageFrm )
                             {
@@ -370,13 +370,13 @@ SwFrmNotify::~SwFrmNotify()
             }
         }
     }
-    else if( pFrm->IsTextFrm() && bValidSize != pFrm->GetValidSizeFlag() )
+    else if( mpFrm->IsTextFrm() && mbValidSize != mpFrm->GetValidSizeFlag() )
     {
-        SwRootFrm *pRootFrm = pFrm->getRootFrm();
+        SwRootFrm *pRootFrm = mpFrm->getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
             pRootFrm->GetCurrShell() )
         {
-            pRootFrm->GetCurrShell()->Imp()->InvalidateAccessibleFrmContent( pFrm );
+            pRootFrm->GetCurrShell()->Imp()->InvalidateAccessibleFrmContent( mpFrm );
         }
     }
 
@@ -384,7 +384,7 @@ SwFrmNotify::~SwFrmNotify()
     SwFlyFrm* pFly = 0;
     // #i35879# Do not trust the inf flags. pFrm does not
     // necessarily have to have an upper!
-    if ( !pFrm->IsFlyFrm() && 0 != ( pFly = pFrm->ImplFindFlyFrm() ) )
+    if ( !mpFrm->IsFlyFrm() && 0 != ( pFly = mpFrm->ImplFindFlyFrm() ) )
     {
         // #i61999#
         // no invalidation of columned Writer fly frames, because automatic
@@ -461,7 +461,7 @@ SwLayNotify::~SwLayNotify()
     SwLayoutFrm *pLay = GetLay();
     SWRECTFN( pLay )
     bool bNotify = false;
-    if ( pLay->Prt().SSize() != aPrt.SSize() )
+    if ( pLay->Prt().SSize() != maPrt.SSize() )
     {
         if ( !IsLowersComplete() )
         {
@@ -471,10 +471,10 @@ SwLayNotify::~SwLayNotify()
             {
                 bInvaPercent = true;
                 long nNew = (pLay->Prt().*fnRect->fnGetHeight)();
-                if( nNew != (aPrt.*fnRect->fnGetHeight)() )
+                if( nNew != (maPrt.*fnRect->fnGetHeight)() )
                      static_cast<SwRowFrm*>(pLay)->AdjustCells( nNew, true);
                 if( (pLay->Prt().*fnRect->fnGetWidth)()
-                    != (aPrt.*fnRect->fnGetWidth)() )
+                    != (maPrt.*fnRect->fnGetWidth)() )
                      static_cast<SwRowFrm*>(pLay)->AdjustCells( 0, false );
             }
             else
@@ -505,26 +505,26 @@ SwLayNotify::~SwLayNotify()
                         if( pLay->Lower()->IsColumnFrm() && pLay->Lower()->GetNext() )
                             bLow = pLay->Lower()->Frm().Height() != pLay->Prt().Height();
                         else
-                            bLow = pLay->Prt().Width() != aPrt.Width();
+                            bLow = pLay->Prt().Width() != maPrt.Width();
                     }
                     else
                         bLow = false;
                 }
                 else if( pLay->IsFooterFrm() && !pLay->HasFixSize() )
-                    bLow = pLay->Prt().Width() != aPrt.Width();
+                    bLow = pLay->Prt().Width() != maPrt.Width();
                 else
                     bLow = true;
                 bInvaPercent = bLow;
                 if ( bLow )
                 {
-                    pLay->ChgLowersProp( aPrt.SSize() );
+                    pLay->ChgLowersProp( maPrt.SSize() );
                 }
                 // If the PrtArea has been extended, it might be possible that the chain of parts
                 // can take another frame. As a result, the "possible right one" needs to be
                 // invalidated. This only pays off if this or its Uppers are moveable sections.
                 // A PrtArea has been extended if width or height are larger than before.
-                if ( (pLay->Prt().Height() > aPrt.Height() ||
-                      pLay->Prt().Width()  > aPrt.Width()) &&
+                if ( (pLay->Prt().Height() > maPrt.Height() ||
+                      pLay->Prt().Width()  > maPrt.Width()) &&
                      (pLay->IsMoveable() || pLay->IsFlyFrm()) )
                 {
                     SwFrm *pTmpFrm = pLay->Lower();
@@ -539,7 +539,7 @@ SwLayNotify::~SwLayNotify()
             bNotify = true;
             //EXPENSIVE!! But how we do it more elegant?
             if( bInvaPercent )
-                pLay->InvaPercentLowers( pLay->Prt().Height() - aPrt.Height() );
+                pLay->InvaPercentLowers( pLay->Prt().Height() - maPrt.Height() );
         }
         if ( pLay->IsTabFrm() )
             //So that _only_ the shadow is drawn while resizing.
@@ -556,9 +556,9 @@ SwLayNotify::~SwLayNotify()
         }
     }
     //Notify Lower if the position has changed.
-    const bool bPrtPos = POS_DIFF( aPrt, pLay->Prt() );
-    const bool bPos = bPrtPos || POS_DIFF( aFrm, pLay->Frm() );
-    const bool bSize = pLay->Frm().SSize() != aFrm.SSize();
+    const bool bPrtPos = POS_DIFF( maPrt, pLay->Prt() );
+    const bool bPos = bPrtPos || POS_DIFF( maFrm, pLay->Frm() );
+    const bool bSize = pLay->Frm().SSize() != maFrm.SSize();
 
     if ( bPos && pLay->Lower() && !IsLowersComplete() )
         pLay->Lower()->InvalidatePos();
@@ -652,7 +652,7 @@ SwFlyNotify::~SwFlyNotify()
         {
             //If in the LayAction the IsAgain is set it can be
             //that the old page is destroyed in the meantime!
-            ::Notify( pFly, pOldPage, aFrmAndSpace, &aPrt );
+            ::Notify( pFly, pOldPage, aFrmAndSpace, &maPrt );
             // #i35640# - additional notify anchor text frame,
             // if Writer fly frame has changed its page
             if ( pFly->GetAnchorFrm()->IsTextFrm() &&
@@ -667,14 +667,14 @@ SwFlyNotify::~SwFlyNotify()
     //Have the size or the position changed,
     //so should the view know this.
     SWRECTFN( pFly )
-    const bool bPosChgd = POS_DIFF( aFrm, pFly->Frm() );
-    const bool bFrmChgd = pFly->Frm().SSize() != aFrm.SSize();
-    const bool bPrtChgd = aPrt != pFly->Prt();
+    const bool bPosChgd = POS_DIFF( maFrm, pFly->Frm() );
+    const bool bFrmChgd = pFly->Frm().SSize() != maFrm.SSize();
+    const bool bPrtChgd = maPrt != pFly->Prt();
     if ( bPosChgd || bFrmChgd || bPrtChgd )
     {
         pFly->NotifyDrawObj();
     }
-    if ( bPosChgd && aFrm.Pos().X() != FAR_AWAY )
+    if ( bPosChgd && maFrm.Pos().X() != FAR_AWAY )
     {
         // OD 2004-05-10 #i28701# - no direct move of lower Writer fly frames.
         // reason: New positioning and alignment (e.g. to-paragraph anchored,
@@ -739,7 +739,7 @@ SwFlyNotify::~SwFlyNotify()
 
 SwContentFrm *SwContentNotify::GetCnt()
 {
-    return static_cast<SwContentFrm*>(pFrm);
+    return static_cast<SwContentFrm*>(mpFrm);
 }
 
 SwContentNotify::SwContentNotify( SwContentFrm *pContentFrm ) :
@@ -781,8 +781,8 @@ SwContentNotify::~SwContentNotify()
         pCnt->SetCompletePaint();
 
     SWRECTFN( pCnt )
-    if ( pCnt->IsInTab() && ( POS_DIFF( pCnt->Frm(), aFrm ) ||
-                             pCnt->Frm().SSize() != aFrm.SSize()))
+    if ( pCnt->IsInTab() && ( POS_DIFF( pCnt->Frm(), maFrm ) ||
+                             pCnt->Frm().SSize() != maFrm.SSize()))
     {
         SwLayoutFrm* pCell = pCnt->GetUpper();
         while( !pCell->IsCellFrm() && pCell->GetUpper() )
@@ -839,7 +839,7 @@ SwContentNotify::~SwContentNotify()
         }
     }
 
-    const bool bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
+    const bool bFirst = (maFrm.*fnRect->fnGetWidth)() == 0;
 
     if ( pCnt->IsNoTextFrm() )
     {
@@ -854,9 +854,9 @@ SwContentNotify::~SwContentNotify()
                   pNd->IsOLESizeInvalid()) )
             {
                 const bool bNoTextFrmPrtAreaChanged =
-                        ( aPrt.SSize().Width() != 0 &&
-                          aPrt.SSize().Height() != 0 ) &&
-                        aPrt.SSize() != pCnt->Prt().SSize();
+                        ( maPrt.SSize().Width() != 0 &&
+                          maPrt.SSize().Height() != 0 ) &&
+                        maPrt.SSize() != pCnt->Prt().SSize();
                 OSL_ENSURE( pCnt->IsInFly(), "OLE not in FlyFrm" );
                 SwFlyFrm *pFly = pCnt->FindFlyFrm();
                 svt::EmbeddedObjectRef& xObj = pNd->GetOLEObj().GetObject();
@@ -969,7 +969,7 @@ SwContentNotify::~SwContentNotify()
     }
 
     // #i44049#
-    if ( pCnt->IsTextFrm() && POS_DIFF( aFrm, pCnt->Frm() ) )
+    if ( pCnt->IsTextFrm() && POS_DIFF( maFrm, pCnt->Frm() ) )
     {
         pCnt->InvalidateObjs( true );
     }
