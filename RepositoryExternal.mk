@@ -234,7 +234,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,cppunit)/src/cppunit/.libs -lcppunit \
+	$(call gb_UnpackedTarball_get_dir,cppunit)/src/cppunit/.libs/libcppunit$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -275,7 +275,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,glew)/lib/ -lGLEW \
+	$(call gb_UnpackedTarball_get_dir,glew)/lib/libGLEW$(gb_Library_PLAINEXT) \
 )
 endif
 
@@ -857,7 +857,7 @@ $(call gb_LinkTarget_use_external_project,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src/lib -latomic_ops \
+	$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src/lib/libatomic_ops$(gb_StaticLibrary_PLAINEXT) \
 )
 
 endef
@@ -998,7 +998,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,xslt)/libxslt/.libs -lxslt \
+	$(call gb_UnpackedTarball_get_dir,xslt)/libxslt/.libs/libxslt$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -1017,7 +1017,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,xslt)/libexslt/.libs -lexslt \
+	$(call gb_UnpackedTarball_get_dir,xslt)/libexslt/.libs/libexslt$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -1228,8 +1228,8 @@ else
 $(call gb_LinkTarget_use_packages,$(1),raptor rasqal redland)
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2 \
-	-L$(call gb_UnpackedTarball_get_dir,redland)/src/.libs -lrdf \
+	$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs/libraptor2$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,redland)/src/.libs/librdf$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -1278,9 +1278,9 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,cairo)/src/.libs -lcairo \
+	$(call gb_UnpackedTarball_get_dir,cairo)/src/.libs/libcairo$(gb_Library_DLLEXT) \
 	$(if $(filter-out MACOSX WNT,$(OS)), \
-		-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1 \
+		$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs/libpixman-1$(gb_Library_DLLEXT) \
 	) \
 )
 
@@ -1452,7 +1452,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib -licudata$(gb_ICU_suffix) \
+	$(call gb_UnpackedTarball_get_dir,icu)/source/lib/libicudata$(gb_ICU_suffix)$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -1467,7 +1467,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib -licui18n$(gb_ICU_suffix) \
+	$(call gb_UnpackedTarball_get_dir,icu)/source/lib/libicui18n$(gb_ICU_suffix)$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -1482,7 +1482,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib -licuuc$(gb_ICU_suffix) \
+	$(call gb_UnpackedTarball_get_dir,icu)/source/lib/libicuuc$(gb_ICU_suffix)$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -1732,7 +1732,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib/.libs -letonyek-0.1 \
+	$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib/.libs/libetonyek-0.1$(gb_Library_DLLEXT) \
 )
 $(call gb_LinkTarget_use_external_project,$(1),libetonyek)
 
@@ -1828,7 +1828,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,libodfgen)/src/.libs -lodfgen-0.1 \
+	$(call gb_UnpackedTarball_get_dir,libodfgen)/src/.libs/libodfgen-0.1$(gb_Library_DLLEXT) \
 )
 
 endef
@@ -2136,7 +2136,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,libwpg)/src/lib/.libs -lwpg-0.3 \
+	$(call gb_UnpackedTarball_get_dir,libwpg)/src/lib/.libs/libwpg-0.3$(gb_Library_DLLEXT) \
 )
 
 endef
@@ -2192,7 +2192,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,libwps)/src/lib/.libs -lwps-0.4 \
+	$(call gb_UnpackedTarball_get_dir,libwps)/src/lib/.libs/libwps-0.4$(gb_Library_DLLEXT) \
 )
 
 endef
@@ -2247,7 +2247,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,libmwaw)/src/lib/.libs -lmwaw-0.3 \
+	$(call gb_UnpackedTarball_get_dir,libmwaw)/src/lib/.libs/libmwaw-0.3$(gb_Library_DLLEXT) \
 )
 
 endef
@@ -2329,7 +2329,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,lpsolve)/lpsolve55 -llpsolve55 \
+	$(call gb_UnpackedTarball_get_dir,lpsolve)/lpsolve55/liblpsolve55$(gb_Library_DLLEXT) \
 )
 endif
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2363,13 +2363,14 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Cbc/src/.libs -lCbc -lCbcSolver \
-	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Cgl/src/.libs -lCgl \
-	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Clp/src/.libs -lClp \
-	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Clp/src/OsiClp/.libs -lOsiClp \
-	-L$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/src/.libs -lCoinMP \
-	-L$(call gb_UnpackedTarball_get_dir,coinmp)/CoinUtils/src/.libs -lCoinUtils \
-	-L$(call gb_UnpackedTarball_get_dir,coinmp)/Osi/src/Osi/.libs -lOsi \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/Cbc/src/.libs/libCbc$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/Cbc/src/.libs/libCbcSolver$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/Cgl/src/.libs/libCgl$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/Clp/src/.libs/libClp$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/Clp/src/OsiClp/.libs/libOsiClp$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/src/.libs/libCoinMP$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/CoinUtils/src/.libs/libCoinUtils$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/Osi/src/Osi/.libs/libOsi$(gb_Library_DLLEXT) \
 )
 endif
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2626,7 +2627,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,curl)/lib/.libs -lcurl \
+	$(call gb_UnpackedTarball_get_dir,curl)/lib/.libs/libcurl$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -2848,7 +2849,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,firebird)/gen/firebird/lib -lfbembed \
+	$(call gb_UnpackedTarball_get_dir,firebird)/gen/firebird/lib/libfbembed$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -3039,8 +3040,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,python3) \
-	-lpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m \
+	$(call gb_UnpackedTarball_get_dir,python3)/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -3113,7 +3113,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs -lorcus-0.10 \
+	$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs/liborcus-0.10$(gb_Library_DLLEXT) \
 )
 
 $(if $(SYSTEM_BOOST), \
@@ -3132,7 +3132,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs -lorcus-parser-0.10 \
+	$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs/liborcus-parser-0.10$(gb_Library_DLLEXT) \
 )
 
 endef
@@ -3291,10 +3291,9 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib \
-	-lnspr4 \
-	-lnss3 \
-	-lsmime3 \
+	$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/libnspr4$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/libnss3$(gb_Library_DLLEXT) \
+	$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/libsmime3$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -3308,7 +3307,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-    -L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lplc4 \
+    $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/libplc4$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -3322,7 +3321,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lssl3 \
+	$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/libssl3$(gb_Library_DLLEXT) \
 )
 endif
 
@@ -3962,7 +3961,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,bzip2) -lbz2 \
+	$(call gb_UnpackedTarball_get_dir,bzip2)/libbz2$(gb_StaticLibrary_PLAINEXT) \
 )
 endif
 

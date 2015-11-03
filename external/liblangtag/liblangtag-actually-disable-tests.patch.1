@@ -1,0 +1,13 @@
+because --disable-tests only disables running the tests, not linking them
+
+--- langtag/Makefile.in.orig	2015-11-03 23:43:07.902911113 +0100
++++ langtag/Makefile.in	2015-11-03 23:43:09.654910977 +0100
+@@ -410,7 +410,7 @@
+ NULL = 
+ AUTOMAKE_OPTIONS = dist-bzip2
+ #SUBDIRS += docs tests
+-SUBDIRS = liblangtag extensions data docs $(am__append_1) tests
++SUBDIRS = liblangtag extensions data docs $(am__append_1)
+ CONFIGURE_DEPENDENCIES = \
+ 	requires			\
+ 	$(NULL)

@@ -43,9 +43,6 @@ postgresql_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,openldap)/include
 postgresql_LDFLAGS  += \
 	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap_r/.libs \
 	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap/.libs \
-	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs \
-	$(if $(SYSTEM_NSS),,\
-		-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib) \
 
 endif
 
@@ -60,7 +57,8 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 				$(if $(WITH_GSSAPI),--with-gssapi)) \
 			CPPFLAGS="$(postgresql_CPPFLAGS)" \
 			LDFLAGS="$(postgresql_LDFLAGS)" \
-			EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4" \
+			EXTRA_LDAP_LIBS="$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs/liblber$(gb_StaticLibrary_PLAINEXT) \
+				$(foreach nsslib,ssl3 smime3 nss3 nssutil3 plds4 plc4 nspr4,$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/lib$(nsslib)$(gb_Library_DLLEXT))" \
 		&& cd src/interfaces/libpq \
 		&& MAKEFLAGS= && $(MAKE) all-static-lib)
 

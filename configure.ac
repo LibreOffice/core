@@ -7500,7 +7500,7 @@ else
     SYSTEM_ZLIB=
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${WORKDIR}/UnpackedTarball/zlib"
-    ZLIB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lzlib"
+    ZLIB_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/libzlib.a"
 fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
@@ -7661,7 +7661,7 @@ AS_IF([test "$COM" = "MSC"],
       [librevenge_libdir="${WORKDIR}/LinkTarget/Library"],
       [librevenge_libdir="${WORKDIR}/UnpackedTarball/librevenge/src/lib/.libs"]
 )
-libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0 >= 0.0.1],["-I${WORKDIR}/UnpackedTarball/librevenge/inc"],["-L${librevenge_libdir} -lrevenge-0.0"])
+libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0 >= 0.0.1],["-I${WORKDIR}/UnpackedTarball/librevenge/inc"],["${librevenge_libdir}/librevenge-0.0${DLLPOST}"])
 
 dnl ===================================================================
 dnl Check for system libe-book
@@ -7727,7 +7727,7 @@ AS_IF([test "$COM" = "MSC"],
       [libwpd_libdir="${WORKDIR}/LinkTarget/Library"],
       [libwpd_libdir="${WORKDIR}/UnpackedTarball/libwpd/src/lib/.libs"]
 )
-libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10],["-I${WORKDIR}/UnpackedTarball/libwpd/inc"],["-L${libwpd_libdir} -lwpd-0.10"])
+libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10],["-I${WORKDIR}/UnpackedTarball/libwpd/inc"],["${libwpd_libdir}/libwpd-0.10${DLLPOST}"])
 
 dnl ===================================================================
 dnl Check for system lcms2
@@ -7737,7 +7737,7 @@ if test "$with_system_lcms2" = "yes"; then
 else
     SYSTEM_LCMS2=
 fi
-libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2],["-I${WORKDIR}/UnpackedTarball/lcms2/include"],["-L${WORKDIR}/UnpackedTarball/lcms2/src/.libs -llcms2"])
+libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2],["-I${WORKDIR}/UnpackedTarball/lcms2/include"],["${WORKDIR}/UnpackedTarball/lcms2/src/.libs/liblcms2${DLLPOST}"])
 if test "$GCC" = "yes"; then
     LCMS2_CFLAGS="${LCMS2_CFLAGS} -Wno-long-long"
 fi
@@ -7901,7 +7901,7 @@ else
     if test "$COM" = "MSC"; then
         LIBXML_LIBS="${WORKDIR}/UnpackedTarball/xml2/win32/bin.msvc/libxml2.lib"
     else
-        LIBXML_LIBS="-L${WORKDIR}/UnpackedTarball/xml2/.libs -lxml2"
+        LIBXML_LIBS="${WORKDIR}/UnpackedTarball/xml2/.libs/libxml2${DLLPOST}"
     fi
     BUILD_TYPE="$BUILD_TYPE LIBXML2"
 fi
@@ -8235,7 +8235,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         AC_MSG_RESULT([internal])
         SYSTEM_MARIADB=
         MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb/include"
-        MARIADB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lmariadblib"
+        MARIADB_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/libmariadblib.a"
         BUILD_TYPE="$BUILD_TYPE MARIADB"
     fi
 
@@ -9040,7 +9040,7 @@ else
     # external libs): the system icu-config is quite unhelpful and spits out
     # dozens of weird flags and also default path -I/usr/include
     ICU_CFLAGS="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
-    ICU_LIBS="-L${WORKDIR}/UnpackedTarball/icu/source/lib"
+    ICU_LIBS="${WORKDIR}/UnpackedTarball/icu/source/lib/libicui18n${DLLPOST}"
 fi
 AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
@@ -9126,9 +9126,9 @@ if test $_os != WINNT -a $_os != Darwin -a $_os != iOS; then
     AC_MSG_RESULT([yes])
     ENABLE_HARFBUZZ="TRUE"
     if $PKG_CONFIG --atleast-version 0.9.18 harfbuzz; then
-        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.18],["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz -lharfbuzz-icu"])
+        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.18],["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],["${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.a ${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz-icu.a"])
     else
-        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz >= 0.9.10],[-I${WORKDIR}/UnpackedTarball/harfbuzz/src],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz -lharfbuzz-icu"])
+        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz >= 0.9.10],[-I${WORKDIR}/UnpackedTarball/harfbuzz/src],["${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.a ${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz-icu.a"])
     fi
 else
     AC_MSG_RESULT([no])
@@ -9269,7 +9269,7 @@ serf)
     # Check for system apr-util
     libo_CHECK_SYSTEM_MODULE([apr],[APR],[apr-util-1],
                              ["-I${WORKDIR}/UnpackedTarball/apr/include -I${WORKDIR}/UnpackedTarball/apr_util/include"],
-                             ["-L${WORKDIR}/UnpackedTarball/apr/.libs -lapr-1 -L${WORKDIR}/UnpackedTarball/apr_util/.libs -laprutil-1"])
+                             ["${WORKDIR}/UnpackedTarball/apr/.libs/libapr-1${DLLPOST} ${WORKDIR}/UnpackedTarball/apr_util/.libs/libaprutil-1${DLLPOST}"])
     if test "$COM" = "MSC"; then
         APR_LIB_DIR="LibR"
         test -n "${MSVC_USE_DEBUG_RUNTIME}" && APR_LIB_DIR="LibD"
@@ -9278,7 +9278,7 @@ serf)
 
     # Check for system serf
     libo_CHECK_SYSTEM_MODULE([serf],[SERF],[serf-1 >= 1.1.0],["-I${WORKDIR}/UnpackedTarball/serf"],
-                             ["-L${WORKDIR}/UnpackedTarball/serf/.libs -lserf-1"])
+                             ["${WORKDIR}/UnpackedTarball/serf/.libs/libserf-1${DLLPOST}"])
     if test "$COM" = "MSC"; then
         SERF_LIB_DIR="Release"
         test -n "${MSVC_USE_DEBUG_RUNTIME}" && SERF_LIB_DIR="Debug"
@@ -9457,7 +9457,7 @@ else
     if test "$COM" = "MSC"; then
         HUNSPELL_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/hunspell.lib"
     else
-        HUNSPELL_LIBS="-L${WORKDIR}/UnpackedTarball/hunspell/src/hunspell/.libs -lhunspell-1.3"
+        HUNSPELL_LIBS="${WORKDIR}/UnpackedTarball/hunspell/src/hunspell/.libs/libhunspell-1.3.a"
     fi
     BUILD_TYPE="$BUILD_TYPE HUNSPELL"
 fi
@@ -9495,7 +9495,7 @@ else
     if test "$COM" = "MSC"; then
         HYPHEN_LIB="${WORKDIR}/LinkTarget/StaticLibrary/hyphen.lib"
     else
-        HYPHEN_LIB="-L${WORKDIR}/UnpackedTarball/hyphen/.libs -lhyphen"
+        HYPHEN_LIB="${WORKDIR}/UnpackedTarball/hyphen/.libs/libhyphen.a"
     fi
 fi
 AC_SUBST(SYSTEM_HYPH)
@@ -9533,7 +9533,7 @@ else
     if test "$COM" = "MSC"; then
         MYTHES_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/mythes.lib"
     else
-        MYTHES_LIBS="-L${WORKDIR}/UnpackedTarball/mythes/.libs -lmythes-1.2"
+        MYTHES_LIBS="${WORKDIR}/UnpackedTarball/mythes/.libs/libmythes-1.2.a"
     fi
 fi
 AC_SUBST(SYSTEM_MYTHES)
@@ -11769,7 +11769,7 @@ if test "$enable_liblangtag" = "yes" -o \
         if test "$COM" = "MSC"; then
             LIBLANGTAG_LIBS="${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs/liblangtag.lib"
         else
-            LIBLANGTAG_LIBS="-L${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs -llangtag"
+            LIBLANGTAG_LIBS="${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs/liblangtag.a"
         fi
     fi
     AC_DEFINE(ENABLE_LIBLANGTAG)
@@ -11785,7 +11785,7 @@ dnl ===================================================================
 dnl Test whether to build libpng or rely on the system version
 dnl ===================================================================
 
-libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng],["-I${WORKDIR}/UnpackedTarball/png"],["-L${WORKDIR}/LinkTarget/StaticLibrary -lpng"])
+libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng],["-I${WORKDIR}/UnpackedTarball/png"],["${WORKDIR}/LinkTarget/StaticLibrary/libpng.a"])
 
 dnl ===================================================================
 dnl Check for runtime JVM search path

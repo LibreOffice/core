@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,langtag,\
 
 $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	external/liblangtag/liblangtag-msvc.patch \
+	external/liblangtag/liblangtag-actually-disable-tests.patch.1 \
 ))
 
 ifeq ($(OS),WNT)

@@ -40,7 +40,7 @@ endif
 ifneq ($(SYSTEM_BOOST),)
 liborcus_LIBS+=$(BOOST_SYSTEM_LIB) $(BOOST_IOSTREAMS_LIB)
 else
-liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_system -lboost_iostreams
+liborcus_LIBS+=$(call gb_StaticLibrary_get_target,boost_system) $(call gb_StaticLibrary_get_target,boost_iostreams)
 endif
 ifeq ($(OS),ANDROID)
 liborcus_LIBS+=-lgnustl_shared -lm

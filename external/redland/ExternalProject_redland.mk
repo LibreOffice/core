@@ -50,9 +50,9 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
-		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2 $(LIBXML_LIBS)" \
+		RAPTOR2_LIBS="$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs/libraptor2$(gb_Library_DLLEXT) $(LIBXML_LIBS)" \
 		RASQAL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,rasqal)/src" \
-		RASQAL_LIBS="-L$(call gb_UnpackedTarball_get_dir,rasqal)/src/.libs -lrasqal" \
+		RASQAL_LIBS="$(call gb_UnpackedTarball_get_dir,rasqal)/src/.libs/librasqal$(gb_Library_DLLEXT)" \
 		./configure --disable-gtk-doc \
 			--disable-modular \
 			--without-threads \

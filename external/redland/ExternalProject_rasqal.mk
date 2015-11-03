@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 		$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include") \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
-		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2" \
+		RAPTOR2_LIBS="$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs/libraptor2$(gb_Library_DLLEXT)" \
 		./configure --disable-gtk-doc \
 			--with-regex-library=posix \
 			--with-decimal=none \
