@@ -53,8 +53,11 @@ public:
     bool getDirection() const { return mbDirection; }
     sal_Int32 getFadeColor() const { return mnFadeColor; }
 
-    const OUString& getUIName() const { return maUIName; }
     const OUString& getPresetId() const { return maPresetId; }
+    const OUString& getGroupId() const { return maGroupId; }
+    const OUString& getSetId() const { return maSetId; }
+    const OUString& getSetLabel() const { return maSetLabel; }
+    const OUString& getVariantLabel() const { return maVariantLabel; }
 
 private:
     TransitionPreset( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
@@ -64,11 +67,13 @@ private:
     bool mbDirection;
     sal_Int32 mnFadeColor;
     OUString maPresetId;
-    OUString maUIName;
+    OUString maGroupId;
+    OUString maSetId;
+    OUString maSetLabel;
+    OUString maVariantLabel;
 
     static bool importTransitionsFile( TransitionPresetList& rList,
                                        css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceFactory,
-                                       UStringMap& rTransitionNameMap,
                                        const OUString& aFilename );
 };
 

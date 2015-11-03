@@ -32,6 +32,7 @@
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
+#include <officecfg/Office/UI/Effects.hxx>
 #include <tools/stream.hxx>
 
 #include <rtl/uri.hxx>
@@ -89,9 +90,15 @@ TransitionPreset::TransitionPreset( const css::uno::Reference< css::animations::
 
 bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                                               Reference< XMultiServiceFactory >& xServiceFactory,
-                                              UStringMap& rTransitionNameMap,
                                               const OUString& aURL )
 {
+    SAL_INFO("sd.transitions", "Importing " << aURL);
+
+    Reference< container::XNameAccess > xTransitionSets( officecfg::Office::UI::Effects::UserInterface::TransitionSets::get() );
+    Reference< container::XNameAccess > xTransitionGroups( officecfg::Office::UI::Effects::UserInterface::TransitionGroups::get() );
+    Reference< container::XNameAccess > xTransitionVariants( officecfg::Office::UI::Effects::UserInterface::TransitionVariants::get() );
+    Reference< container::XNameAccess > xTransitions( officecfg::Office::UI::Effects::UserInterface::Transitions::get() );
+
     // import transition presets
     Reference< XAnimationNode > xAnimationNode;
 
@@ -105,26 +112,75 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
             if( xChildNode->getType() == AnimationNodeType::PAR )
             {
-                // create it
                 TransitionPresetPtr pPreset( new TransitionPreset( xChildNode ) );
 
-                // name it
                 OUString aPresetId( pPreset->getPresetId() );
+
                 if( !aPresetId.isEmpty() )
                 {
-                    UStringMap::const_iterator aIter( rTransitionNameMap.find( aPresetId ) );
-                    if( aIter != rTransitionNameMap.end() )
-                        pPreset->maUIName = (*aIter).second;
+                    Reference< container::XNameAccess > xTransitionNode;
 
-                                // add it
-                    rList.push_back( pPreset );
+                    if (xTransitions->hasByName( aPresetId ) &&
+                        (xTransitions->getByName( aPresetId ) >>= xTransitionNode) &&
+                        xTransitionNode.is() )
+                    {
+                        OUString sSet;
+                        OUString sVariant;
+
+                        xTransitionNode->getByName( "Set" ) >>= sSet;
+                        xTransitionNode->getByName( "Variant" ) >>= sVariant;
+
+                        Reference< container::XNameAccess > xSetNode;
+
+                        xTransitionSets->getByName( sSet ) >>= xSetNode;
+                        if( xSetNode.is() )
+                        {
+                            pPreset->maSetId = sSet;
+                            xSetNode->getByName( "Label" ) >>= sSet;
+                            pPreset->maSetLabel = sSet;
+
+                            OUString sGroup;
+
+                            xSetNode->getByName( "Group" ) >>= sGroup;
+
+                            Reference< container::XNameAccess > xGroupNode;
+                            xTransitionGroups->getByName( sGroup ) >>= xGroupNode;
+
+                            if( xGroupNode.is() )
+                            {
+                                pPreset->maGroupId = sGroup;
+                                xGroupNode->getByName( "Label" ) >>= sGroup;
+                                if( !sVariant.isEmpty() )
+                                {
+                                    Reference< container::XNameAccess > xVariantNode;
+                                    xTransitionVariants->getByName( sVariant ) >>= xVariantNode;
+                                    if( xVariantNode.is() )
+                                    {
+                                        xVariantNode->getByName( "Label" ) >>= sVariant;
+                                        pPreset->maVariantLabel = sVariant;
+                                    }
+                                }
+
+                                pPreset->maSetLabel = sSet;
+                                SAL_INFO("sd.transitions", aPresetId << ": " << sGroup << "/" << sSet << (sVariant.isEmpty() ? OUString("") : OUString("/" + sVariant)));
+
+                                rList.push_back( pPreset );
+                            }
+                            else
+                                SAL_WARN("sd.transitions", "group node " << sGroup << " not found");
+                        }
+                        else
+                            SAL_WARN("sd.transitions", "set node " << sSet << " not found");
+                    }
+                    else
+                        SAL_WARN("sd.transitions", "transition node " << aPresetId << " not found");
                 }
             }
             else
-                {
-                    OSL_FAIL( "sd::TransitionPreset::importTransitionPresetList(), malformed xml configuration file, giving up!" );
-                    break;
-                }
+            {
+                SAL_WARN("sd.transitions", " malformed xml configuration file " << aURL );
+                break;
+            }
         }
     } catch( Exception& ) {
         return false;
@@ -154,10 +210,6 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
         Reference< XMultiServiceFactory > xConfigProvider =
             configuration::theDefaultProvider::get( xContext );
 
-        UStringMap aTransitionNameMap;
-        const OUString aTransitionPath("/org.openoffice.Office.UI.Effects/UserInterface/Transitions" );
-        implImportLabels( xConfigProvider, aTransitionPath, aTransitionNameMap );
-
         // read path to transition effects files from config
         Any propValue = uno::makeAny(
             beans::PropertyValue("nodepath", -1,
@@ -178,7 +230,6 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
             bRet |= importTransitionsFile( rList,
                                            xServiceFactory,
-                                           aTransitionNameMap,
                                            aURL );
         }
 

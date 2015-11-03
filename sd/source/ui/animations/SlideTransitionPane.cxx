@@ -60,7 +60,6 @@ using ::com::sun::star::uno::RuntimeException;
 
 using ::sd::framework::FrameworkHelper;
 
-// ::sd::impl::TransitionEffect
 namespace sd
 {
 namespace impl
@@ -265,55 +264,6 @@ void lcl_CreateUndoForPages(
     pManager->LeaveListAction();
 }
 
-sal_Int32 lcl_getTransitionEffectIndex(
-    SdDrawDocument * pDoc,
-    const ::sd::impl::TransitionEffect & rTransition )
-{
-    // first entry: "<none>"
-    sal_Int32 nResultIndex = LISTBOX_ENTRY_NOTFOUND;
-
-    if( pDoc )
-    {
-        sal_Int32 nCurrentIndex = 0;
-        const ::sd::TransitionPresetList & rPresetList = ::sd::TransitionPreset::getTransitionPresetList();
-        ::sd::TransitionPresetList::const_iterator aIt( rPresetList.begin());
-        const ::sd::TransitionPresetList::const_iterator aEndIt( rPresetList.end());
-        for( ; aIt != aEndIt; ++aIt, ++nCurrentIndex )
-        {
-            if( rTransition.operator==( *(*aIt) ))
-            {
-                nResultIndex = nCurrentIndex;
-                break;
-            }
-        }
-    }
-
-    return nResultIndex;
-}
-
-::sd::TransitionPresetPtr lcl_getTransitionPresetByUIName(
-    SdDrawDocument * pDoc,
-    const OUString & rUIName )
-{
-    ::sd::TransitionPresetPtr pResult;
-    if( pDoc )
-    {
-        const ::sd::TransitionPresetList& rPresetList = ::sd::TransitionPreset::getTransitionPresetList();
-        ::sd::TransitionPresetList::const_iterator aIter( rPresetList.begin() );
-        const ::sd::TransitionPresetList::const_iterator aEnd( rPresetList.end() );
-        for( ; aIter != aEnd; ++aIter )
-        {
-            if( (*aIter)->getUIName().equals( rUIName ))
-            {
-                pResult = *aIter;
-                break;
-            }
-        }
-    }
-
-    return pResult;
-}
-
 struct lcl_EqualsSoundFileName : public ::std::unary_function< OUString, bool >
 {
     explicit lcl_EqualsSoundFileName( const OUString & rStr ) :
@@ -424,6 +374,8 @@ SlideTransitionPane::SlideTransitionPane(
         maLateInitTimer()
 {
     get(mpLB_SLIDE_TRANSITIONS, "transitions_list");
+    get(mpFT_VARIANT, "variant_label");
+    get(mpLB_VARIANT, "variant_list");
     get(mpFT_SPEED, "speed_label");
     get(mpLB_SPEED, "speed_list");
     get(mpFT_SOUND, "sound_label");
@@ -439,6 +391,8 @@ SlideTransitionPane::SlideTransitionPane(
     mpLB_SLIDE_TRANSITIONS->set_width_request(mpLB_SLIDE_TRANSITIONS->approximate_char_width() * 16);
     mpLB_SLIDE_TRANSITIONS->SetDropDownLineCount(4);
 
+    mpLB_VARIANT->SetDropDownLineCount(4);
+
     if( pDoc )
         mxModel.set( pDoc->getUnoModel(), uno::UNO_QUERY );
     // TODO: get correct view
@@ -446,7 +400,8 @@ SlideTransitionPane::SlideTransitionPane(
         mxView.set( mxModel->getCurrentController(), uno::UNO_QUERY );
 
     // fill list box of slide transitions
-    mpLB_SLIDE_TRANSITIONS->InsertEntry( SD_RESSTR( STR_SLIDETRANSITION_NONE ) );
+    mpLB_SLIDE_TRANSITIONS->InsertEntry( SD_RESSTR( STR_SLIDETRANSITION_NONE ), Image( BitmapEx( "sd/cmd/transition-none.png" ) ) );
+    m_aTransitionLBToSet.push_back( "" );
 
     // set defaults
     mpCB_AUTO_PREVIEW->Check();      // automatic preview on
@@ -460,6 +415,7 @@ SlideTransitionPane::SlideTransitionPane(
 
     mpLB_SLIDE_TRANSITIONS->SetSelectHdl( LINK( this, SlideTransitionPane, TransitionSelected ));
 
+    mpLB_VARIANT->SetSelectHdl( LINK( this, SlideTransitionPane, VariantListBoxSelected ));
     mpLB_SPEED->SetSelectHdl( LINK( this, SlideTransitionPane, SpeedListBoxSelected ));
     mpLB_SOUND->SetSelectHdl( LINK( this, SlideTransitionPane, SoundListBoxSelected ));
     mpCB_LOOP_SOUND->SetClickHdl( LINK( this, SlideTransitionPane, LoopSoundBoxChecked ));
@@ -487,6 +443,8 @@ void SlideTransitionPane::dispose()
     maLateInitTimer.Stop();
     removeListener();
     mpLB_SLIDE_TRANSITIONS.clear();
+    mpFT_VARIANT.clear();
+    mpLB_VARIANT.clear();
     mpFT_SPEED.clear();
     mpLB_SPEED.clear();
     mpFT_SOUND.clear();
@@ -568,16 +526,16 @@ void SlideTransitionPane::updateControls()
     impl::TransitionEffect aEffect( *pFirstPage );
 
     // merge with other pages
-    ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aIt(
+    ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aPageIt(
         pSelectedPages->begin());
-    ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aEndIt(
+    ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aPageEndIt(
         pSelectedPages->end());
 
     // start with second page (note aIt != aEndIt, because ! aSelectedPages.empty())
-    for( ++aIt ;aIt != aEndIt; ++aIt )
+    for( ++aPageIt; aPageIt != aPageEndIt; ++aPageIt )
     {
-        if( *aIt )
-            aEffect.compareWith( *(*aIt) );
+        if( *aPageIt )
+            aEffect.compareWith( *(*aPageIt) );
     }
 
     // detect current slide effect
@@ -591,16 +549,47 @@ void SlideTransitionPane::updateControls()
             mpLB_SLIDE_TRANSITIONS->SelectEntryPos( 0 );
         else
         {
-            sal_Int32 nEntry = lcl_getTransitionEffectIndex( mpDrawDoc, aEffect );
+            int nEntry = LISTBOX_ENTRY_NOTFOUND;
+            const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
+            sd::TransitionPresetPtr pFound;
+
+            for( auto aIt: rPresetList )
+            {
+                if( aEffect.operator==( *aIt ))
+                {
+                    pFound = aIt;
+                    assert( m_aSetToTransitionLBIndex.find(aIt->getSetId()) != m_aSetToTransitionLBIndex.end() );
+                    nEntry = m_aSetToTransitionLBIndex[aIt->getSetId()];
+                    break;
+                }
+            }
+
+            mpLB_VARIANT->Clear();
             if( nEntry == LISTBOX_ENTRY_NOTFOUND )
+            {
                 mpLB_SLIDE_TRANSITIONS->SetNoSelection();
+                mpLB_VARIANT->Enable( false );
+            }
             else
             {
-                // first entry in list is "none", so add 1 after translation
-                if( m_aPresetIndexes.find( nEntry ) != m_aPresetIndexes.end())
-                    mpLB_SLIDE_TRANSITIONS->SelectEntryPos( m_aPresetIndexes[ nEntry ] + 1 );
+                // Fill in the variant listbox
+                for( auto aIt: rPresetList )
+                {
+                    if( aIt->getSetId().equals( pFound->getSetId() ) )
+                    {
+                        if( !aIt->getVariantLabel().isEmpty() )
+                        {
+                            mpLB_VARIANT->InsertEntry( aIt->getVariantLabel() );
+                            if( aEffect.operator==( *aIt ))
+                                mpLB_VARIANT->SelectEntryPos( mpLB_VARIANT->GetEntryCount()-1 );
+                        }
+                    }
+                }
+                if( mpLB_VARIANT->GetEntryCount() == 0 )
+                    mpLB_VARIANT->Enable( false );
                 else
-                    mpLB_SLIDE_TRANSITIONS->SetNoSelection();
+                    mpLB_VARIANT->Enable();
+                mpLB_SLIDE_TRANSITIONS->SelectEntryPos( nEntry );
             }
         }
     }
@@ -673,6 +662,7 @@ void SlideTransitionPane::updateControls()
 void SlideTransitionPane::updateControlState()
 {
     mpLB_SLIDE_TRANSITIONS->Enable( mbHasSelection );
+    mpLB_VARIANT->Enable( mbHasSelection && mpLB_VARIANT->GetEntryCount() > 0 );
     mpLB_SPEED->Enable( mbHasSelection );
     mpLB_SOUND->Enable( mbHasSelection );
     mpCB_LOOP_SOUND->Enable( mbHasSelection && (mpLB_SOUND->GetSelectEntryPos() > 2));
@@ -775,15 +765,28 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     if( mpLB_SLIDE_TRANSITIONS->IsEnabled() &&
         mpLB_SLIDE_TRANSITIONS->GetSelectEntryCount() > 0 )
     {
-        TransitionPresetPtr pPreset = lcl_getTransitionPresetByUIName(
-            mpDrawDoc, OUString( mpLB_SLIDE_TRANSITIONS->GetSelectEntry()));
+        const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
 
-        if( pPreset.get())
+        int nVariant = 0;
+        bool bFound = false;
+        for( auto aIter: rPresetList )
         {
-            aResult = impl::TransitionEffect( *pPreset );
-            aResult.setAllAmbiguous();
+            if( aIter->getSetId().equals(m_aTransitionLBToSet[mpLB_SLIDE_TRANSITIONS->GetSelectEntryPos()]) )
+            {
+                if( mpLB_VARIANT->GetSelectEntryPos() == nVariant)
+                {
+                    aResult = impl::TransitionEffect( *aIter );
+                    aResult.setAllAmbiguous();
+                    bFound = true;
+                    break;
+                }
+                else
+                {
+                    nVariant++;
+                }
+            }
         }
-        else
+        if( !bFound )
         {
             aResult.mnType = 0;
         }
@@ -1000,6 +1003,32 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, PlayButtonClicked, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, TransitionSelected, ListBox&, void)
 {
+    mpLB_VARIANT->Clear();
+
+    if( mpLB_SLIDE_TRANSITIONS->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
+        return;
+
+    if( mpLB_SLIDE_TRANSITIONS->GetSelectEntryPos() > 0)
+    {
+        const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
+
+        for( auto aIt: rPresetList )
+        {
+            if( m_aSetToTransitionLBIndex[aIt->getSetId()] == mpLB_SLIDE_TRANSITIONS->GetSelectEntryPos() )
+                mpLB_VARIANT->InsertEntry( aIt->getVariantLabel() );
+        }
+    }
+
+    if( mpLB_VARIANT->GetEntryCount() == 0 )
+    {
+        mpLB_VARIANT->Enable( false );
+    }
+    else
+    {
+        mpLB_VARIANT->Enable();
+        mpLB_VARIANT->SelectEntryPos( 0 );
+    }
+
     applyToSelectedPages();
 }
 
@@ -1010,6 +1039,11 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AdvanceSlideRadioButtonToggled, Radio
 }
 
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AdvanceTimeModified, Edit&, void)
+{
+    applyToSelectedPages();
+}
+
+IMPL_LINK_NOARG_TYPED(SlideTransitionPane, VariantListBoxSelected, ListBox&, void)
 {
     applyToSelectedPages();
 }
@@ -1048,21 +1082,42 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AutoPreviewClicked, Button*, void)
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
 {
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
-    TransitionPresetList::const_iterator aIter( rPresetList.begin() );
-    const TransitionPresetList::const_iterator aEnd( rPresetList.end() );
-    sal_uInt16 nIndex = 0;
-    ::std::size_t nUIIndex = 0;
-    while( aIter != aEnd )
+
+    for( auto aIter: rPresetList )
     {
-        TransitionPresetPtr pPreset = (*aIter++);
-        const OUString aUIName( pPreset->getUIName() );
-         if( !aUIName.isEmpty() )
+        TransitionPresetPtr pPreset = aIter;
+        const OUString sLabel( pPreset->getSetLabel() );
+        if( !sLabel.isEmpty() )
         {
-            mpLB_SLIDE_TRANSITIONS->InsertEntry( aUIName );
-            m_aPresetIndexes[ nIndex ] = (sal_uInt16)nUIIndex;
-            ++nUIIndex;
+            if( m_aNumVariants.find( pPreset->getSetId() ) == m_aNumVariants.end() )
+            {
+                OUString sImageName("sd/cmd/transition-" + pPreset->getSetId() + ".png");
+
+                mpLB_SLIDE_TRANSITIONS->InsertEntry( sLabel, Image( BitmapEx( sImageName) ) );
+
+                m_aTransitionLBToSet.push_back( pPreset->getSetId() );
+
+                assert( m_aTransitionLBToSet.size() == static_cast<size_t>( mpLB_SLIDE_TRANSITIONS->GetEntryCount() ) );
+
+                m_aNumVariants[ pPreset->getSetId() ] = 1;
+                m_aSetToTransitionLBIndex[ aIter->getSetId() ] = mpLB_SLIDE_TRANSITIONS->GetEntryCount() - 1;
+            }
+            else
+            {
+                m_aNumVariants[ pPreset->getSetId() ]++;
+            }
         }
-        ++nIndex;
+    }
+
+    for( int i = 0; i < mpLB_SLIDE_TRANSITIONS->GetEntryCount(); ++i )
+        SAL_INFO("sd.transitions", i << ":" << mpLB_SLIDE_TRANSITIONS->GetEntry( i ) << " (" << m_aTransitionLBToSet[i] << ")");
+
+    for( auto aIter: rPresetList )
+    {
+        SAL_INFO("sd.transitions",
+                 aIter->getPresetId() << ": " <<
+                 m_aSetToTransitionLBIndex[ aIter->getSetId() ] <<
+                 " (" << mpLB_SLIDE_TRANSITIONS->GetEntry( m_aSetToTransitionLBIndex[ aIter->getSetId() ] ) << ")" );
     }
 
     updateSoundList();

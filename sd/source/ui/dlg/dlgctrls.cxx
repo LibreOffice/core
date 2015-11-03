@@ -19,6 +19,9 @@
 
 #include <vcl/builderfactory.hxx>
 
+#include <map>
+#include <set>
+
 #include "strings.hrc"
 #include "dlgctrls.hxx"
 #include "sdresid.hxx"
@@ -29,6 +32,12 @@ using namespace ::sd;
 
 struct FadeEffectLBImpl
 {
+    // The set id of each entry
+    std::vector< OUString > maSet;
+
+    // How many variants each transition set has
+    std::map< OUString, int > maNumVariants;
+
     std::vector< TransitionPresetPtr > maPresets;
 };
 
@@ -51,25 +60,54 @@ void FadeEffectLB::dispose()
 
 void FadeEffectLB::Fill()
 {
-    TransitionPresetPtr pPreset;
-
     InsertEntry( SD_RESSTR( STR_EFFECT_NONE ) );
-    mpImpl->maPresets.push_back( pPreset );
+    mpImpl->maPresets.push_back( TransitionPresetPtr() );
+    mpImpl->maSet.push_back( "" );
 
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
-    TransitionPresetList::const_iterator aIter;
-    for( aIter = rPresetList.begin(); aIter != rPresetList.end(); ++aIter )
+
+    for( auto aIter = rPresetList.begin(); aIter != rPresetList.end(); ++aIter )
     {
-        pPreset = (*aIter);
-        const OUString aUIName( pPreset->getUIName() );
-        if( !aUIName.isEmpty() )
+        TransitionPresetPtr pPreset = *aIter;
+        const OUString sLabel( pPreset->getSetLabel() );
+        if( !sLabel.isEmpty() )
         {
-            InsertEntry( aUIName );
+            if( mpImpl->maNumVariants.find( pPreset->getSetId() ) == mpImpl->maNumVariants.end() )
+            {
+                InsertEntry( sLabel );
+                mpImpl->maSet.push_back( pPreset->getSetId() );
+                mpImpl->maNumVariants[pPreset->getSetId()] = 1;
+            }
+            else
+            {
+                mpImpl->maNumVariants[pPreset->getSetId()]++;
+            }
             mpImpl->maPresets.push_back( pPreset );
         }
     }
 
+    assert( static_cast<size_t>( GetEntryCount() ) == mpImpl->maSet.size() );
+    assert( mpImpl->maPresets.size() == 1 + TransitionPreset::getTransitionPresetList().size() );
+
     SelectEntryPos(0);
+}
+
+void FadeEffectLB::FillVariantLB(ListBox& rVariantLB)
+{
+    rVariantLB.Clear();
+    for( auto aIter = mpImpl->maPresets.begin(); aIter != mpImpl->maPresets.end(); ++aIter )
+    {
+        TransitionPresetPtr pPreset = *aIter;
+        if( !pPreset )
+            continue;
+        const OUString sLabel( pPreset->getSetLabel() );
+        if( !sLabel.isEmpty() && mpImpl->maSet[GetSelectEntryPos()].equals( pPreset->getSetId() ) )
+        {
+            rVariantLB.InsertEntry( pPreset->getVariantLabel() );
+        }
+    }
+    if( rVariantLB.GetEntryCount() > 0 )
+        rVariantLB.SelectEntryPos( 0 );
 }
 
 VCL_BUILDER_DECL_FACTORY(FadeEffectLB)
@@ -84,24 +122,35 @@ VCL_BUILDER_DECL_FACTORY(FadeEffectLB)
     rRet = VclPtr<FadeEffectLB>::Create(pParent, nBits);
 }
 
-void FadeEffectLB::applySelected( SdPage* pSlide ) const
+void FadeEffectLB::applySelected( SdPage* pSlide, ListBox& rVariantLB ) const
 {
-    const sal_Int32 nPos = GetSelectEntryPos();
+    if( !pSlide )
+        return;
 
-    if( pSlide && (static_cast<size_t>(nPos) < mpImpl->maPresets.size() ) )
+    if( GetSelectEntryPos() == 0 )
     {
-        TransitionPresetPtr pPreset( mpImpl->maPresets[nPos] );
+        pSlide->setTransitionType( 0 );
+        pSlide->setTransitionSubtype( 0 );
+        pSlide->setTransitionDirection( true );
+        pSlide->setTransitionFadeColor( 0 );
+        return;
+    }
 
-        if( pPreset.get() )
+    int nMatch = 0;
+    for( auto aIter = mpImpl->maPresets.begin(); aIter != mpImpl->maPresets.end(); ++aIter )
+    {
+        TransitionPresetPtr pPreset = *aIter;
+        if( !pPreset )
+            continue;
+        const OUString sLabel( pPreset->getSetLabel() );
+        if( !sLabel.isEmpty() && mpImpl->maSet[GetSelectEntryPos()].equals( pPreset->getSetId() ) )
         {
-            pPreset->apply( pSlide );
-        }
-        else
-        {
-            pSlide->setTransitionType( 0 );
-            pSlide->setTransitionSubtype( 0 );
-            pSlide->setTransitionDirection( true );
-            pSlide->setTransitionFadeColor( 0 );
+            if( nMatch == rVariantLB.GetSelectEntryPos() )
+            {
+                pPreset->apply( pSlide );
+                break;
+            }
+            nMatch++;
         }
     }
 }
