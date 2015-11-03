@@ -13,6 +13,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "mar_private.h"
 #include "mar.h"
 #include "cryptox.h"
@@ -197,7 +198,6 @@ mar_extract_and_verify_signatures_fp(FILE *fp,
   uint32_t signatureCount, signatureLen, numVerified = 0;
   uint32_t signatureAlgorithmIDs[MAX_SIGNATURES];
   int rv = -1;
-  int64_t curPos;
   uint8_t *extractedSignatures[MAX_SIGNATURES];
   uint32_t i;
 
@@ -285,7 +285,6 @@ mar_extract_and_verify_signatures_fp(FILE *fp,
     }
   }
 
-  curPos = ftello(fp);
   rv = mar_verify_signatures_for_fp(fp,
                                     provider,
                                     keys,
@@ -299,6 +298,7 @@ mar_extract_and_verify_signatures_fp(FILE *fp,
   /* If we reached here and we verified every
      signature, return success. */
   if (numVerified == signatureCount && keyCount == numVerified) {
+    assert(rv == 0); (void) rv;
     return CryptoX_Success;
   }
 
