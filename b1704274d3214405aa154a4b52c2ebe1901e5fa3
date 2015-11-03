@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_5852d5de",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3178,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-11-03T10:04:16Z",
+      "side": 1,
+      "message": "has been \n DBG_ASSERT( pAttr \u0026\u0026 pAttr-\u003eGetItem()-\u003eISA( SvxFieldItem ), \"Field of the wrong type! \");\nshould now be \n DBG_ASSERT( pAttr \u0026\u0026 dynamic_cast\u003c const SvxFieldItem* \u003e( pAttr-\u003eGetItem() ) !\u003d nullptr, \"Field of the wrong type! \");",
+      "revId": "b1704274d3214405aa154a4b52c2ebe1901e5fa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_b85dc1ee",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3527,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2015-11-03T10:04:16Z",
+      "side": 1,
+      "message": "has been \nDBG_ASSERT( pAttr \u0026\u0026 pAttr-\u003eGetItem()-\u003eISA( SvxFieldItem ), \"Wrong type of field!\" );\nshould be\nDBG_ASSERT( pAttr \u0026\u0026 dynamic_cast\u003c const SvxFieldItem* \u003e(pAttr-\u003eGetItem()) !\u003d nullptr, \"Wrong type of field!\" );",
+      "revId": "b1704274d3214405aa154a4b52c2ebe1901e5fa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
