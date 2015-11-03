@@ -400,16 +400,25 @@ void DesktopLOKTest::testRowColumnHeaders()
 void DesktopLOKTest::testCommandResult()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
 
     // the postUnoCommand() is supposed to be async, let's test it safely
     // [no idea if it is async in reality - most probably we are operating
     // under some solar mutex or something anyway ;-) - but...]
-    m_aCommandResultCondition.reset();
-
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
-
     TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
+
+    // nothing is triggered when we have no callback yet, we just time out on
+    // the condition var.
+    m_aCommandResultCondition.reset();
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
+    m_aCommandResultCondition.wait(aTimeValue);
+
+    CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
+
+    // but we get some real values when the callback is set up
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    m_aCommandResultCondition.reset();
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
     m_aCommandResultCondition.wait(aTimeValue);
 
     boost::property_tree::ptree aTree;
