@@ -101,7 +101,6 @@ public class _XUIConfigurationManager extends MultiMethodTest {
         boolean result = true;
         try {
             mxMenuBarSettings = oObj.getSettings(msResourceUrl, true);
-            result = mxMenuBarSettings != null;
             for (int i=0; i<mxMenuBarSettings.getCount(); i++) {
                 Object[] o = (Object[])mxMenuBarSettings.getByIndex(i);
                 log.println("+++++++++ i = " + i);
