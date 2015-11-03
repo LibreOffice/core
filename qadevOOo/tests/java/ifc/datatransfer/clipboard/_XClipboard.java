@@ -49,12 +49,8 @@ public class _XClipboard extends MultiMethodTest {
      * stores parameters passed to <code>lostOwnership</code> method.
      */
     static class MyOwner implements XClipboardOwner {
-        XClipboard board;
-        XTransferable contents;
 
         public void lostOwnership(XClipboard board, XTransferable contents) {
-            this.board = board;
-            this.contents = contents;
         }
 
     }
