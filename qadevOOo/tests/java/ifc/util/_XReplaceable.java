@@ -94,7 +94,7 @@ public class _XReplaceable extends MultiMethodTest {
         Rdesc = oObj.createReplaceDescriptor();
         Rdesc.setSearchString(mSearchString);
         Rdesc.setReplaceString(mReplaceString);
-        tRes.tested("createReplaceDescriptor()", Rdesc != null);
+        tRes.tested("createReplaceDescriptor()", true);
 
     }
 
