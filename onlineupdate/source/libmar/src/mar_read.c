@@ -405,6 +405,8 @@ mar_read_product_info_block(MarFile *mar,
                                  &hasAdditionalBlocks,
                                  &offsetAdditionalBlocks,
                                  &numAdditionalBlocks);
+  if (ret)
+    return ret;
   for (i = 0; i < numAdditionalBlocks; ++i) {
     /* Read the additional block size */
     if (fread(&additionalBlockSize,
