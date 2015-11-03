@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_580015ab",
+        "filename": "sd/source/ui/dlg/animobjs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-03T12:15:02Z",
+      "side": 1,
+      "message": "If you feel a need at all to add comments mentioning bug IDs, better use \"tdf#95298\", as \"#95298#\" would likely be interpreted as referencing the OOo/AOO bugtracker.",
+      "revId": "b97da8b791c7cc8c0ba0c15f5247dde40ea164df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
