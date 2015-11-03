@@ -430,7 +430,8 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     SdPage*     pPage = pMyDoc->GetSdPage(0, PK_STANDARD);
     SdrObject*  pObject;
 
-    if (pBtn == m_pBtnRemoveBitmap)
+    // tdf#95298 check m_nCurrentFrame for EMPTY_FRAMELIST to avoid out-of-bound array access
+    if (pBtn == m_pBtnRemoveBitmap && EMPTY_FRAMELIST  != m_nCurrentFrame)
     {
         delete m_FrameList[m_nCurrentFrame].first;
         delete m_FrameList[m_nCurrentFrame].second;
@@ -449,8 +450,8 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 
         if (m_nCurrentFrame >= m_FrameList.size())
         {
-            assert(m_FrameList.empty());
-            m_nCurrentFrame = EMPTY_FRAMELIST;
+            // tdf#95298 last frame was deleted, try to use the one before it or go on empty state
+            m_nCurrentFrame = m_FrameList.empty() ? EMPTY_FRAMELIST : m_FrameList.size() - 1;
         }
     }
     else // delete everything
@@ -539,7 +540,8 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 
 void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 {
-    if (!m_FrameList.empty())
+    // tdf#95298 check m_nCurrentFrame for EMPTY_FRAMELIST to avoid out-of-bound array access
+    if (!m_FrameList.empty() && EMPTY_FRAMELIST != m_nCurrentFrame)
     {
         BitmapEx aBmp(*m_FrameList[m_nCurrentFrame].first);
 
