@@ -479,14 +479,14 @@ public:
 struct EDITENG_DLLPUBLIC PaintFirstLineInfo
 {
     sal_Int32 mnPara;
+    short mnOrientation;
     const Point& mrStartPos;
     long mnBaseLineY;
     const Point& mrOrigin;
-    short mnOrientation;
     VclPtr<OutputDevice> mpOutDev;
 
     PaintFirstLineInfo( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
-        : mnPara( nPara ), mrStartPos( rStartPos ), mnBaseLineY( nBaseLineY ), mrOrigin( rOrigin ), mnOrientation( nOrientation ), mpOutDev( pOutDev )
+        : mnPara( nPara ), mnOrientation( nOrientation ), mrStartPos( rStartPos ), mnBaseLineY( nBaseLineY ), mrOrigin( rOrigin ), mpOutDev( pOutDev )
     {}
 };
 

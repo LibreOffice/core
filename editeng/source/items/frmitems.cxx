@@ -399,13 +399,13 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
 
-    nFirstLineOfst  ( 0 ),
     nTxtLeft        ( 0 ),
     nLeftMargin     ( 0 ),
     nRightMargin    ( 0 ),
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
+    nFirstLineOfst  ( 0 ),
     bAutoFirst      ( false ),
     bExplicitZeroMarginValRight(false),
     bExplicitZeroMarginValLeft(false)
@@ -420,13 +420,13 @@ SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
 
     SfxPoolItem( nId ),
 
-    nFirstLineOfst  ( nOfset ),
     nTxtLeft        ( nTLeft ),
     nLeftMargin     ( nLeft ),
     nRightMargin    ( nRight ),
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
+    nFirstLineOfst  ( nOfset ),
     bAutoFirst      ( false ),
     bExplicitZeroMarginValRight(false),
     bExplicitZeroMarginValLeft(false)

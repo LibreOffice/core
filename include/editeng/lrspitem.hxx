@@ -50,15 +50,15 @@
 
 class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 {
-    short   nFirstLineOfst;     // First-line indent _always_ relative to nTxtLeft
     long    nTxtLeft;           // We spend a sal_uInt16
     long    nLeftMargin;        // nLeft or the negative first-line indent
     long    nRightMargin;       // The unproblematic right edge
 
     sal_uInt16  nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
+    short   nFirstLineOfst;     // First-line indent _always_ relative to nTxtLeft
     bool        bAutoFirst  : 1;    // Automatic calculation of the first line indent
-    bool        bExplicitZeroMarginValRight;
-    bool        bExplicitZeroMarginValLeft;
+    bool        bExplicitZeroMarginValRight : 1;
+    bool        bExplicitZeroMarginValLeft : 1;
 
     void   AdjustLeft();        // nLeftMargin and nTxtLeft are being adjusted.
 
