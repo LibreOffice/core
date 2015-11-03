@@ -301,7 +301,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUno
     if (arguments != NULL)
         pArguments = pEnv->GetStringUTFChars(arguments, NULL);
 
-    pDocument->pClass->postUnoCommand(pDocument, pCommand, pArguments);
+    pDocument->pClass->postUnoCommand(pDocument, pCommand, pArguments, false);
 
     pEnv->ReleaseStringUTFChars(command, pCommand);
     if (arguments != NULL)
