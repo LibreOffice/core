@@ -582,7 +582,7 @@ SbError SbiStream::Open
         {
 
         // #??? For write access delete file if it already exists (not for appending)
-        if( (nStrmMode & StreamMode::WRITE) && !IsAppend() && !IsBinary() &&
+        if( (nStrmMode & StreamMode::WRITE) && !IsAppend() && !IsBinary() && !IsRandom() &&
             xSFI->exists( aNameStr ) && !xSFI->isFolder( aNameStr ) )
         {
             xSFI->kill( aNameStr );
