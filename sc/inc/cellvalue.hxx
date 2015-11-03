@@ -123,10 +123,6 @@ struct SC_DLLPUBLIC ScRefCellValue
 
     /**
      * Take cell value from specified position in specified document.
-     *
-     * Avoid the sequence of ScRefCellValue() default ctor followed by assign()
-     * as it results in performance penalty, use the
-     * ScRefCellValue(ScDocument&,const ScAddress&) ctor instead.
      */
     void assign( ScDocument& rDoc, const ScAddress& rPos );
 

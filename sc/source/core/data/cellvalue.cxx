@@ -495,9 +495,7 @@ ScRefCellValue::ScRefCellValue( const ScRefCellValue& r ) : meType(r.meType), mf
 
 ScRefCellValue::ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos )
 {
-    const ScRefCellValue& rCell = rDoc.GetRefCellValue(rPos);
-    meType = rCell.meType;
-    mfValue = rCell.mfValue;
+    assign( rDoc, rPos);
 }
 
 ScRefCellValue::~ScRefCellValue()
@@ -593,6 +591,11 @@ bool ScRefCellValue::equalsWithoutFormat( const ScRefCellValue& r ) const
 
 ScRefCellValue& ScRefCellValue::operator= ( const ScRefCellValue& r )
 {
+    // So we *could* have a copy-swap-idiom here for exception-safety if we had
+    // to slow down things.. but then implement an explicit move-ctor and pass
+    // r by-value instead of manually creating a temporary so the compiler can
+    // take advantage. And initialize
+    // ScRefCellValue(ScDocument&,const ScAddress&) with default ctor.
     meType = r.meType;
     mfValue = r.mfValue;    // largest member of union
     return *this;
