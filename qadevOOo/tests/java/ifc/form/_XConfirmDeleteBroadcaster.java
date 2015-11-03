@@ -44,7 +44,7 @@ public class _XConfirmDeleteBroadcaster extends MultiMethodTest {
     protected XConfirmDeleteListener mxConfirmDeleteListener =
                                                 new ConfirmDeleteImpl();
 
-    private class ConfirmDeleteImpl implements XConfirmDeleteListener {
+    private static class ConfirmDeleteImpl implements XConfirmDeleteListener {
         public boolean confirmDelete(RowChangeEvent rowChangeEvent) {
             return true;
         }
