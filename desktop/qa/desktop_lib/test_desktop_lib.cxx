@@ -72,6 +72,7 @@ public:
     void testSaveAs();
     void testSaveAsCalc();
     void testPasteWriter();
+    void testRowColumnHeaders();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -84,6 +85,7 @@ public:
     CPPUNIT_TEST(testSaveAs);
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
+    CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -350,6 +352,36 @@ void DesktopLOKTest::testPasteWriter()
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aText.getStr(), aText.getLength()));
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testRowColumnHeaders()
+{
+    LibLODocument_Impl* pDocument = loadDoc("search.ods");
+    boost::property_tree::ptree aTree;
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
+    std::stringstream aStream(pJSON);
+    free(pJSON);
+    CPPUNIT_ASSERT(!aStream.str().empty());
+
+    boost::property_tree::read_json(aStream, aTree);
+    for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
+    {
+        sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
+        CPPUNIT_ASSERT(nSize > 0);
+        OString aText(rValue.second.get<std::string>("text").c_str());
+        // This failed, as the first item did not contain the text of the first row.
+        CPPUNIT_ASSERT_EQUAL(OString("1"), aText);
+        break;
+    }
+
+    for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
+    {
+        sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
+        CPPUNIT_ASSERT(nSize > 0);
+        OString aText(rValue.second.get<std::string>("text").c_str());
+        CPPUNIT_ASSERT_EQUAL(OString("A"), aText);
+        break;
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

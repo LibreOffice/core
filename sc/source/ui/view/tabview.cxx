@@ -2332,7 +2332,7 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
         }
         if (!bSkip)
         {
-            if (aRows.empty())
+            if (aRows.empty() && nTotal > 0)
             {
                 // The sizes are relative sizes, so include the total skipped size before the real items.
                 boost::property_tree::ptree aRow;
@@ -2369,7 +2369,7 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
         }
         if (!bSkip)
         {
-            if (aCols.empty())
+            if (aCols.empty() && nTotal > 0)
             {
                 boost::property_tree::ptree aCol;
                 aCol.put("size", OString::number(long((nTotalPixels + 0.5) / aViewData.GetPPTX())).getStr());
