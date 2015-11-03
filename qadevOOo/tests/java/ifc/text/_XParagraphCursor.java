@@ -44,7 +44,6 @@ import com.sun.star.text.XParagraphCursor;
 public class _XParagraphCursor extends MultiMethodTest {
 
     public XParagraphCursor oObj = null;     // oObj filled by MultiMethodTest
-    XInstCreator info = null;               // instance creator
 
     /**
      * Test calls the method. <p>
