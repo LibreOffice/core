@@ -303,11 +303,11 @@ void ShutdownIcon::FromTemplate()
             PropertyValue* pArg = aArgs.getArray();
             pArg[0].Name = "Referer";
             pArg[0].Value <<= OUString("private:user");
-            css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
-            if ( xNotifyer.is() )
+            css::uno::Reference< css::frame::XNotifyingDispatch > xNotifier(xDisp, UNO_QUERY);
+            if (xNotifier.is())
             {
                 EnterModalMode();
-                xNotifyer->dispatchWithNotification( aTargetURL, aArgs, new SfxNotificationListener_Impl() );
+                xNotifier->dispatchWithNotification(aTargetURL, aArgs, new SfxNotificationListener_Impl());
             }
             else
                 xDisp->dispatch( aTargetURL, aArgs );

@@ -72,7 +72,7 @@ namespace sdr
             // to be able to live without the style.
             virtual void ForceStyleToHardAttributes() override;
 
-            // This is the notifyer from SfxListener
+            // This is the notifier from SfxListener
             virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
             // Set single item at the local ItemSet. *Does not use* AllowItemChange(),

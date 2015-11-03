@@ -78,7 +78,7 @@ namespace sdr
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;
 
-            // This is the notifyer from SfxListener
+            // This is the notifier from SfxListener
             virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
         };
     } // end of namespace properties
