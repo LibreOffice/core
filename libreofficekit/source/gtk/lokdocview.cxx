@@ -1530,7 +1530,7 @@ postCommandInThread (gpointer data)
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
     ss << "lok::Document::postUnoCommand(" << pLOEvent->m_pCommand << ", " << pLOEvent->m_pArguments << ")";
-    g_info(ss.str().c_str());
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pLOEvent->m_pCommand, pLOEvent->m_pArguments, pLOEvent->m_bNotifyWhenFinished);
 }
 
@@ -1566,7 +1566,7 @@ paintTileInThread (gpointer data)
         << aTileRectangle.x << ", " << aTileRectangle.y << ", "
         << pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) << ", "
         << pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) << ")";
-    g_info(ss.str().c_str());
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
                                          pBuffer,
                                          nTileSizePixels, nTileSizePixels,
