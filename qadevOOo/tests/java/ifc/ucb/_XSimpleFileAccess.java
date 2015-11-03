@@ -493,17 +493,18 @@ public class _XSimpleFileAccess extends MultiMethodTest {
 
             com.sun.star.io.XStream aStream =
                 oObj.openFileReadWrite(copiedFile);
-            tRes.tested("openFileReadWrite()", aStream != null);
 
             aStream.getInputStream().closeInput();
             aStream.getOutputStream().closeOutput();
 
             oObj.kill(copiedFile);
+
+            tRes.tested("openFileReadWrite()", true);
         }
         catch (com.sun.star.uno.Exception ex) {
             log.println("Exception occurred while testing 'openFileReadWrite()'");
             ex.printStackTrace(log);
-            tRes.tested("openFileReadWrite()",false);
+            tRes.tested("openFileReadWrite()", false);
         }
 
     } //EOF openFileReadWrite()
