@@ -106,7 +106,7 @@ public class _XLayoutManager extends MultiMethodTest {
             Object o = xElements[i].getRealInterface();
             log.println("Element " + i + ": " + o.toString() + "         " + utils.getImplName(o));
         }
-        tRes.tested("getElements()", xElements != null);
+        tRes.tested("getElements()", true);
     }
 
     public void _hideElement() {
