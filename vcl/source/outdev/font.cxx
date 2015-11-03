@@ -1886,7 +1886,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
         const sal_uInt16 nB = aRect.Left();
         // Use 18.75% as a threshold to define a centered fullwidth fullstop.
         // In general, nB/nH < 5% for most Japanese fonts.
-        bCentered = (nB > (((nH >> 1)+nH)>>3)) ? true : false;
+        bCentered = nB > (((nH >> 1)+nH)>>3);
     }
     mbFullstopCentered = bCentered ;
 }
