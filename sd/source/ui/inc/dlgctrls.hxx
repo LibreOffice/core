@@ -40,8 +40,9 @@ public:
     virtual void dispose() override;
     void         Fill();
 
-/*  void                        selectEffectFromPage( SdPage* pPage ); */
-    void                        applySelected( SdPage* pSlide ) const;
+    void         FillVariantLB(ListBox& rVariantLB);
+
+    void                        applySelected( SdPage* pSlide, ListBox& rVariantLB ) const;
 
     FadeEffectLBImpl*           mpImpl;
 };

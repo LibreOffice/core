@@ -32,6 +32,36 @@
         </info>
       </prop>
     </group>
+    <group oor:name="TransitionType">
+      <info>
+        <desc>Provides a mapping between transition ids and their hierarchical representation on the user interface.</desc>
+      </info>
+      <prop oor:name="Set" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>A localized text that describes the set of similar looking transitions the transition belongs to.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Variant" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>A localized text that identifies the variant inside a set of similar looking transitions the transition belongs to.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="TransitionSetType">
+      <info>
+        <desc>Provides a mapping between transition sets and their textual representation on the user interface.</desc>
+      </info>
+      <prop oor:name="Label" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized text that describes the animation effect.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Group" oor:type="xs:string" oor:localized="false">
+        <info>
+          <desc>A localized text that describes the top-level group of transitions the transition belongs to.</desc>
+        </info>
+      </prop>
+    </group>
     <group oor:name="PresetCategory">
       <info>
         <desc>Maps a custom animation effect node to an effect category.</desc>
@@ -58,7 +88,22 @@
           <desc>Contains preset ids for effects and identifiers that are used by the user interface."</desc>
         </info>
       </set>
-      <set oor:name="Transitions" oor:node-type="LabelType">
+      <set oor:name="TransitionGroups" oor:node-type="LabelType">
+        <info>
+          <desc>Contains transition grouping ids for transitions and identifiers that are used by the user interface."</desc>
+        </info>
+      </set>
+      <set oor:name="TransitionSets" oor:node-type="TransitionSetType">
+        <info>
+          <desc>Contains transition set ids for transitions and identifiers that are used by the user interface."</desc>
+        </info>
+      </set>
+      <set oor:name="TransitionVariants" oor:node-type="LabelType">
+        <info>
+          <desc>Contains transition variants ids for transitions and identifiers that are used by the user interface."</desc>
+        </info>
+      </set>
+      <set oor:name="Transitions" oor:node-type="TransitionType">
         <info>
           <desc>Contains transition ids for transitions and identifiers that are used by the user interface."</desc>
         </info>

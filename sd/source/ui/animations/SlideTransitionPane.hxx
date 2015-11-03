@@ -22,6 +22,7 @@
 #include "EventMultiplexer.hxx"
 
 #include "SlideSorterViewShell.hxx"
+#include "TransitionPreset.hxx"
 
 #include <vcl/ctrl.hxx>
 #include <vcl/lstbox.hxx>
@@ -92,6 +93,7 @@ private:
     DECL_LINK_TYPED( TransitionSelected, ListBox&, void );
     DECL_LINK_TYPED( AdvanceSlideRadioButtonToggled, RadioButton&, void );
     DECL_LINK_TYPED( AdvanceTimeModified, Edit&, void );
+    DECL_LINK_TYPED( VariantListBoxSelected, ListBox&, void );
     DECL_LINK_TYPED( SpeedListBoxSelected, ListBox&, void );
     DECL_LINK_TYPED( SoundListBoxSelected, ListBox&, void );
     DECL_LINK_TYPED( LoopSoundBoxChecked, Button*, void );
@@ -102,6 +104,8 @@ private:
     SdDrawDocument *  mpDrawDoc;
 
     VclPtr<ListBox>      mpLB_SLIDE_TRANSITIONS;
+    VclPtr<FixedText>    mpFT_VARIANT;
+    VclPtr<ListBox>      mpLB_VARIANT;
     VclPtr<FixedText>    mpFT_SPEED;
     VclPtr<ListBox>      mpLB_SPEED;
     VclPtr<FixedText>    mpFT_SOUND;
@@ -125,8 +129,14 @@ private:
     tSoundListType  maSoundList;
     mutable OUString maCurrentSoundFile;
 
-    typedef ::std::map< sal_uInt16, sal_uInt16 > tPresetIndexesType;
-    tPresetIndexesType m_aPresetIndexes;
+    // Map from TransitionSets (as in Effects.xcu) to mpLB_SLIDE_TRANSITIONS entry index.
+    std::map< OUString, int > m_aSetToTransitionLBIndex;
+
+    // The reverse mapping: TransitionSets id of each entry in mpLB_SLIDE_TRANSITIONS.
+    std::vector< OUString > m_aTransitionLBToSet;
+
+    // How many variants each transition set has
+    std::map< OUString, int > m_aNumVariants;
 
     Timer maLateInitTimer;
 };
