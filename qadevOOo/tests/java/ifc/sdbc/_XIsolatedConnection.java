@@ -86,9 +86,6 @@ public class _XIsolatedConnection extends MultiMethodTest {
 
         String user = null;
         String pwd = null;
-        if (userSettings == null) {
-            log.println("Required object relation not found !") ;
-        }
 
         if (userSettings[0] != null)
             user = userSettings[0].equals("")?"<empty>":userSettings[0];
