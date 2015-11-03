@@ -105,7 +105,7 @@ String RID_SVXSTR_CHARNAME_TYPEFACE
 };
 String RID_SVXSTR_CHARNAME_HIGHLIGHTING
 {
-    Text [ en-US ] = "Highlighting Color";
+    Text [ en-US ] = "Highlight Color";
 };
 String RID_SVXSTR_USE_REPLACE
 {
