@@ -29,12 +29,9 @@
 #include "sgfbram.hxx"
 #include "sgvmain.hxx"
 #include <memory>
+#include <cstdlib>
 
 extern SgfFontLst* pSgfFonts;
-
-#ifndef abs
-#define abs(x) ((x)<0 ? -(x) : (x))
-#endif
 
 //  Limitations:  only grey shadows, 2D and with fixed distance.
 // Start of AbsBase.Pas
@@ -922,8 +919,8 @@ void TextType::Draw(OutputDevice& rOut)
         xSize=32000 /2;      // break
         xSAdj=Pos2.x-Pos1.x; // to align for center/block
         //if (xSize<=0) { xSize=32000 /2; LineFit=true; }
-        FitXMul=sal::static_int_cast< sal_uInt16 >(abs(Pos2.x-Pos1.x)); FitXDiv=FitSize.x; if (FitXDiv==0) FitXDiv=1;
-        FitYMul=sal::static_int_cast< sal_uInt16 >(abs(Pos2.y-Pos1.y)); FitYDiv=FitSize.y; if (FitYDiv==0) FitYDiv=1;
+        FitXMul=sal::static_int_cast< sal_uInt16 >(std::abs(Pos2.x-Pos1.x)); FitXDiv=FitSize.x; if (FitXDiv==0) FitXDiv=1;
+        FitYMul=sal::static_int_cast< sal_uInt16 >(std::abs(Pos2.y-Pos1.y)); FitYDiv=FitSize.y; if (FitYDiv==0) FitYDiv=1;
     } else {
         xSize=Pos2.x-Pos1.x;
         xSAdj=xSize;
