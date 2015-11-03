@@ -33,7 +33,6 @@ public class PeerConfig implements XWindowListener
 {
 
     private final ArrayList<PeerTask> m_aPeerTasks = new ArrayList<PeerTask>();
-    private ArrayList<ControlTask> aControlTasks = new ArrayList<ControlTask>();
     private ArrayList<ImageUrlTask> aImageUrlTasks = new ArrayList<ImageUrlTask>();
     private UnoDialog oUnoDialog = null;
 
@@ -56,12 +55,6 @@ public class PeerConfig implements XWindowListener
             propvalues = propValues_;
             xControl = _xControl;
         }
-    }
-
-    private static class ControlTask
-    {
-        Object oModel;
-        String propname;
     }
 
     private static class ImageUrlTask
@@ -99,11 +92,6 @@ public class PeerConfig implements XWindowListener
                 {
                     xVclWindowPeer.setProperty(aPeerTask.propnames[n], aPeerTask.propvalues[n]);
                 }
-            }
-            for (int i = 0; i < this.aControlTasks.size(); i++)
-            {
-                ControlTask aControlTask = aControlTasks.get(i);
-                Helper.setUnoPropertyValue(aControlTask.oModel, aControlTask.propname, null);
             }
             for (int i = 0; i < this.aImageUrlTasks.size(); i++)
             {
