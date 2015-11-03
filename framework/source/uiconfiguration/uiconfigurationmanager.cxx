@@ -347,6 +347,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                     break;
 
                     case css::ui::UIElementType::MENUBAR:
+                    case css::ui::UIElementType::POPUPMENU:
                     {
                         try
                         {
@@ -364,11 +365,6 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         }
                     }
                     break;
-
-                    case css::ui::UIElementType::POPUPMENU:
-                    {
-                        break;
-                    }
 
                     case css::ui::UIElementType::TOOLBAR:
                     {
@@ -479,11 +475,13 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                     switch( rElementType.nElementType )
                     {
                         case css::ui::UIElementType::MENUBAR:
+                        case css::ui::UIElementType::POPUPMENU:
                         {
                             try
                             {
                                 MenuConfiguration aMenuCfg( m_xContext );
-                                aMenuCfg.StoreMenuBarConfigurationToXML( rElement.xSettings, xOutputStream );
+                                aMenuCfg.StoreMenuBarConfigurationToXML(
+                                    rElement.xSettings, xOutputStream, rElementType.nElementType == css::ui::UIElementType::MENUBAR );
                             }
                             catch ( const css::lang::WrappedTargetException& )
                             {

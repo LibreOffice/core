@@ -127,7 +127,8 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
 
     private:
           int       m_nElementDepth;
-          bool  m_bMenuBarMode;
+          enum class ReaderMode { None, MenuBar, MenuPopup };
+          ReaderMode m_eReaderMode;
           css::uno::Reference< css::container::XIndexContainer > m_xMenuBarContainer;
           css::uno::Reference< css::lang::XSingleComponentFactory > m_xContainerFactory;
 };  // OReadMenuDocumentHandler
@@ -254,7 +255,8 @@ class FWE_DLLPUBLIC OWriteMenuDocumentHandler
     public:
         OWriteMenuDocumentHandler(
             const css::uno::Reference< css::container::XIndexAccess >& rMenuBarContainer,
-            const css::uno::Reference< css::xml::sax::XDocumentHandler >& rDocumentHandler );
+            const css::uno::Reference< css::xml::sax::XDocumentHandler >& rDocumentHandler,
+            bool bIsMenuBar );
         virtual ~OWriteMenuDocumentHandler();
 
         void WriteMenuDocument() throw
@@ -270,6 +272,7 @@ class FWE_DLLPUBLIC OWriteMenuDocumentHandler
         css::uno::Reference< css::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
         css::uno::Reference< css::xml::sax::XAttributeList > m_xEmptyList;
         OUString m_aAttributeType;
+        bool m_bIsMenuBar;
 };
 
 } // namespace framework

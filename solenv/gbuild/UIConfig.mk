@@ -418,4 +418,22 @@ $(foreach toolbarfile,$(2),$(call gb_UIConfig_add_toolbarfile,$(1),$(toolbarfile
 
 endef
 
+# Add popupmenu config file to the package.
+#
+# The file is relative to $(SRCDIR) and without extension.
+#
+# gb_UIConfig_add_popupmenufile target file
+define gb_UIConfig_add_popupmenufile
+$(call gb_UIConfig__add_xmlfile,$(1),$(1),popupmenu,$(2))
+
+endef
+
+# Adds multiple popupmenu config files to the package.
+#
+# gb_UIConfig_add_popupmenufiles target file(s)
+define gb_UIConfig_add_popupmenufiles
+$(foreach popupmenufile,$(2),$(call gb_UIConfig_add_popupmenufile,$(1),$(popupmenufile)))
+
+endef
+
 # vim: set noet sw=4 ts=4:

@@ -118,7 +118,8 @@ public:
 
         void StoreMenuBarConfigurationToXML(
                       css::uno::Reference< css::container::XIndexAccess >& rMenuBarConfiguration,
-                      css::uno::Reference< css::io::XOutputStream >& rOutputStream )
+                      css::uno::Reference< css::io::XOutputStream >& rOutputStream,
+                      bool bIsMenuBar )
             throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
 
 private:

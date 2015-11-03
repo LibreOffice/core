@@ -64,6 +64,7 @@ using namespace framework;
 #define RESOURCETYPE_MENUBAR   "menubar"
 #define RESOURCETYPE_TOOLBAR   "toolbar"
 #define RESOURCETYPE_STATUSBAR "statusbar"
+#define RESOURCETYPE_POPUPMENU "popupmenu"
 
 namespace {
 
@@ -429,6 +430,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                     break;
 
                     case css::ui::UIElementType::MENUBAR:
+                    case css::ui::UIElementType::POPUPMENU:
                     {
                         try
                         {
@@ -446,11 +448,6 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                         }
                     }
                     break;
-
-                    case css::ui::UIElementType::POPUPMENU:
-                    {
-                        break;
-                    }
 
                     case css::ui::UIElementType::TOOLBAR:
                     {
@@ -570,11 +567,13 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
                     switch( rElementType.nElementType )
                     {
                         case css::ui::UIElementType::MENUBAR:
+                        case css::ui::UIElementType::POPUPMENU:
                         {
                             try
                             {
                                 MenuConfiguration aMenuCfg( m_xContext );
-                                aMenuCfg.StoreMenuBarConfigurationToXML( rElement.xSettings, xOutputStream );
+                                aMenuCfg.StoreMenuBarConfigurationToXML(
+                                    rElement.xSettings, xOutputStream, rElementType.nElementType == css::ui::UIElementType::MENUBAR );
                             }
                             catch ( const css::lang::WrappedTargetException& )
                             {
@@ -891,6 +890,8 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
             aResourceType = RESOURCETYPE_TOOLBAR;
         else if ( i == css::ui::UIElementType::STATUSBAR )
             aResourceType = RESOURCETYPE_STATUSBAR;
+        else if ( i == css::ui::UIElementType::POPUPMENU )
+            aResourceType = RESOURCETYPE_POPUPMENU;
 
         if ( !aResourceType.isEmpty() )
         {

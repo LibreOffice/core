@@ -217,7 +217,7 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
     const Reference< XIndexContainer >& rMenuBarContainer )
 :   m_nElementDepth( 0 ),
-    m_bMenuBarMode( false ),
+    m_eReaderMode( ReaderMode::None ),
     m_xMenuBarContainer( rMenuBarContainer ),
     m_xContainerFactory( rMenuBarContainer, UNO_QUERY )
 {
@@ -247,17 +247,24 @@ void SAL_CALL OReadMenuDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException, std::exception )
 {
-    if ( m_bMenuBarMode )
+    if ( m_eReaderMode != ReaderMode::None )
     {
         ++m_nElementDepth;
         m_xReader->startElement( aName, xAttrList );
     }
-    else if ( aName == ELEMENT_MENUBAR )
+    else
     {
+        if ( aName == ELEMENT_MENUBAR )
+        {
+            m_eReaderMode = ReaderMode::MenuBar;
+            m_xReader.set( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
+        }
+        else if ( aName == ELEMENT_MENUPOPUP )
+        {
+            m_eReaderMode = ReaderMode::MenuPopup;
+            m_xReader.set( new OReadMenuPopupHandler( m_xMenuBarContainer, m_xContainerFactory ));
+        }
         ++m_nElementDepth;
-        m_bMenuBarMode = true;
-        m_xReader.set( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
-
         m_xReader->startDocument();
     }
 }
@@ -270,7 +277,7 @@ throw(  SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException, std::exception )
 {
-    if ( m_bMenuBarMode )
+    if ( m_eReaderMode != ReaderMode::None )
     {
         --m_nElementDepth;
         m_xReader->endElement( aName );
@@ -278,13 +285,19 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
         {
             m_xReader->endDocument();
             m_xReader.clear();
-            m_bMenuBarMode = false;
-            if ( aName != ELEMENT_MENUBAR )
+            if ( m_eReaderMode == ReaderMode::MenuBar && aName != ELEMENT_MENUBAR )
             {
                 OUString aErrorMessage = getErrorLineString();
                 aErrorMessage += "closing element menubar expected!";
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
+            else if ( m_eReaderMode == ReaderMode::MenuPopup && aName != ELEMENT_MENUPOPUP )
+            {
+                OUString aErrorMessage = getErrorLineString();
+                aErrorMessage += "closing element menupopup expected!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+            m_eReaderMode = ReaderMode::None;
         }
     }
 }
@@ -728,9 +741,11 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
 
 OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
     const Reference< XIndexAccess >& rMenuBarContainer,
-    const Reference< XDocumentHandler >& rDocumentHandler ) :
+    const Reference< XDocumentHandler >& rDocumentHandler,
+    bool bIsMenuBar ) :
     m_xMenuBarContainer( rMenuBarContainer ),
-    m_xWriteDocumentHandler( rDocumentHandler )
+    m_xWriteDocumentHandler( rDocumentHandler ),
+    m_bIsMenuBar( bIsMenuBar )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList.set( static_cast<XAttributeList *>(pList), UNO_QUERY );
@@ -751,7 +766,7 @@ throw ( SAXException, RuntimeException )
 
     // write DOCTYPE line!
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
-    if ( xExtendedDocHandler.is() )
+    if ( m_bIsMenuBar /*FIXME*/ && xExtendedDocHandler.is() )
     {
         xExtendedDocHandler->unknown( MENUBAR_DOCTYPE );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
@@ -761,17 +776,23 @@ throw ( SAXException, RuntimeException )
                          m_aAttributeType,
                          OUString( XMLNS_MENU ) );
 
-    pList->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
-                         m_aAttributeType,
-                         OUString( "menubar" ) );
+    if ( m_bIsMenuBar ) //FIXME
+        pList->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
+                             m_aAttributeType,
+                             OUString( "menubar" ) );
 
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENUBAR, pList );
+    OUString aRootElement;
+    if ( m_bIsMenuBar )
+        aRootElement = ELEMENT_NS_MENUBAR;
+    else
+        aRootElement = ELEMENT_NS_MENUPOPUP;
+    m_xWriteDocumentHandler->startElement( aRootElement, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     WriteMenu( m_xMenuBarContainer );
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( ELEMENT_NS_MENUBAR );
+    m_xWriteDocumentHandler->endElement( aRootElement );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
