@@ -757,7 +757,7 @@ public class ODatabaseForm extends TestCase {
      * for the XDatabaseParameterBroadcaster test
      * @see ifc.form._XDatabaseParameterBroadcaster
      */
-    private class ParameterListenerImpl implements _XDatabaseParameterBroadcaster.CheckParameterListener {
+    private static class ParameterListenerImpl implements _XDatabaseParameterBroadcaster.CheckParameterListener {
         private boolean listenerWasCalled = false;
         private PrintWriter log = new PrintWriter(System.out);
 
