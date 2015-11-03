@@ -96,7 +96,7 @@ public class _XSearchable extends MultiMethodTest {
 
         Sdesc = oObj.createSearchDescriptor();
         Sdesc.setSearchString(mSearchString);
-        tRes.tested("createSearchDescriptor()", Sdesc != null);
+        tRes.tested("createSearchDescriptor()", true);
 
     }
 
