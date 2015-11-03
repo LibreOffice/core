@@ -55,7 +55,6 @@ public class _XNotifyingDispatch extends MultiMethodTest {
     */
     protected static class TestNotificationListener implements
             com.sun.star.frame.XDispatchResultListener {
-        public boolean disposingCalled = false ;
         public boolean finishedDispatch = false ;
         private final java.io.PrintWriter log;
 
@@ -64,7 +63,6 @@ public class _XNotifyingDispatch extends MultiMethodTest {
         }
 
         public void disposing(com.sun.star.lang.EventObject e) {
-            disposingCalled = true ;
             log.println("   disposing was called.") ;
         }
 
