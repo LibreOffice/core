@@ -139,7 +139,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFieldFlagO,"TOC_field_f.docx")
 {
-   // This test case is to verify \o flag should come once.
+    // This test case is to verify \o flag should come once.
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;

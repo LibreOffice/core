@@ -728,7 +728,7 @@ void RtfAttributeOutput::TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t p
     m_aCells[nCurrentDepth] = pRow->GetCells().size();
     for (sal_uInt32 i = 0; i < m_aCells[nCurrentDepth]; i++)
     {
-        const SwWriteTableCell *const pCell = pRow->GetCells()[ i ].get();
+        const SwWriteTableCell* const pCell = pRow->GetCells()[ i ].get();
         const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
 
         pTableTextNodeInfoInner->setCell(i);
@@ -756,7 +756,7 @@ void RtfAttributeOutput::TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer
 
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
     SwWriteTableRow* pRow = aRows[ pTableTextNodeInfoInner->getRow() ];
-    const SwWriteTableCell *const pCell = pRow->GetCells()[ pTableTextNodeInfoInner->getCell() ].get();
+    const SwWriteTableCell* const pCell = pRow->GetCells()[ pTableTextNodeInfoInner->getCell() ].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
     const SfxPoolItem* pItem;
     if (pCellFormat->GetAttrSet().HasItem(RES_BOX, &pItem))
@@ -799,7 +799,7 @@ void RtfAttributeOutput::TableBackgrounds(ww8::WW8TableNodeInfoInner::Pointer_t 
 {
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
     SwWriteTableRow* pRow = aRows[ pTableTextNodeInfoInner->getRow() ];
-    const SwWriteTableCell *const pCell = pRow->GetCells()[ pTableTextNodeInfoInner->getCell() ].get();
+    const SwWriteTableCell* const pCell = pRow->GetCells()[ pTableTextNodeInfoInner->getCell() ].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
     const SfxPoolItem* pItem;
     if (pCellFormat->GetAttrSet().HasItem(RES_BACKGROUND, &pItem))
@@ -879,7 +879,7 @@ void RtfAttributeOutput::TableVerticalCell(ww8::WW8TableNodeInfoInner::Pointer_t
 {
     const SwWriteTableRows& aRows = m_pTableWrt->GetRows();
     SwWriteTableRow* pRow = aRows[ pTableTextNodeInfoInner->getRow() ];
-    const SwWriteTableCell *const pCell = pRow->GetCells()[ pTableTextNodeInfoInner->getCell() ].get();
+    const SwWriteTableCell* const pCell = pRow->GetCells()[ pTableTextNodeInfoInner->getCell() ].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
     const SfxPoolItem* pItem;
 
