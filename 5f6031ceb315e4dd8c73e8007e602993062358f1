@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_b8b5c1d1",
+        "filename": "vcl/source/gdi/impbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-11-03T17:45:14Z",
+      "side": 1,
+      "message": "If there is a very high chance that nBitCount is 1 or 4, and a very low chance that nBitCount is 24, than this commit should be rejected.\n\nWhen I disassembled this function conditional jumps were used so incorrect branch prediction could cost us some clock cycles here.",
+      "revId": "5f6031ceb315e4dd8c73e8007e602993062358f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
