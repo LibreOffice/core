@@ -19,6 +19,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <osl/conditn.hxx>
 #include <svl/srchitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/tempfile.hxx>
@@ -67,6 +68,7 @@ public:
     void testSaveAsCalc();
     void testPasteWriter();
     void testRowColumnHeaders();
+    void testCommandResult();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -80,12 +82,17 @@ public:
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testRowColumnHeaders);
+    CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
     OString m_aTextSelection;
     std::vector<OString> m_aSearchResultSelection;
     std::vector<int> m_aSearchResultPart;
+
+    // for testCommandResult
+    osl::Condition m_aCommandResultCondition;
+    OString m_aCommandResult;
 };
 
 LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
@@ -147,6 +154,12 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
             m_aSearchResultSelection.push_back(rValue.second.get<std::string>("rectangles").c_str());
             m_aSearchResultPart.push_back(std::atoi(rValue.second.get<std::string>("part").c_str()));
         }
+    }
+    break;
+    case LOK_CALLBACK_UNO_COMMAND_RESULT:
+    {
+        m_aCommandResult = pPayload;
+        m_aCommandResultCondition.set();
     }
     break;
     }
@@ -376,6 +389,29 @@ void DesktopLOKTest::testRowColumnHeaders()
         CPPUNIT_ASSERT_EQUAL(OString("A"), aText);
         break;
     }
+}
+
+void DesktopLOKTest::testCommandResult()
+{
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    // the postUnoCommand() is supposed to be async, let's test it safely
+    // [no idea if it is async in reality - most probably we are operating
+    // under some solar mutex or something anyway ;-) - but...]
+    m_aCommandResultCondition.reset();
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
+
+    TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
+    m_aCommandResultCondition.wait(aTimeValue);
+
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(m_aCommandResult.getStr());
+    boost::property_tree::read_json(aStream, aTree);
+
+    CPPUNIT_ASSERT_EQUAL(aTree.get_child("commandName").get_value<std::string>(), std::string(".uno:Bold"));
+    CPPUNIT_ASSERT_EQUAL(aTree.get_child("success").get_value<bool>(), true);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
