@@ -173,7 +173,7 @@ public:
 class SW_DLLPUBLIC SwAttrSet : public SfxItemSet
 {
     // Pointer for Modify-System
-    SwAttrSet *pOldSet, *pNewSet;
+    SwAttrSet *m_pOldSet, *m_pNewSet;
 
     // Notification-Callback
     virtual void Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew ) override;

@@ -145,17 +145,17 @@ void SwAttrPool::removeAndDeleteSecondaryPools()
 }
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
-    : SfxItemSet( rPool, nWh1, nWh2 ), pOldSet( 0 ), pNewSet( 0 )
+    : SfxItemSet( rPool, nWh1, nWh2 ), m_pOldSet( 0 ), m_pNewSet( 0 )
 {
 }
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, const sal_uInt16* nWhichPairTable )
-    : SfxItemSet( rPool, nWhichPairTable ), pOldSet( 0 ), pNewSet( 0 )
+    : SfxItemSet( rPool, nWhichPairTable ), m_pOldSet( 0 ), m_pNewSet( 0 )
 {
 }
 
 SwAttrSet::SwAttrSet( const SwAttrSet& rSet )
-    : SfxItemSet( rSet ), pOldSet( 0 ), pNewSet( 0 )
+    : SfxItemSet( rSet ), m_pOldSet( 0 ), m_pNewSet( 0 )
 {
 }
 
@@ -194,30 +194,30 @@ SfxItemSet* SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool ) const
 bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    pNewSet = pNew;
-    pOldSet = pOld;
+    m_pNewSet = pNew;
+    m_pOldSet = pOld;
     bool bRet = 0 != SfxItemSet::Put( rAttr );
-    pOldSet = pNewSet = 0;
+    m_pOldSet = m_pNewSet = 0;
     return bRet;
 }
 
 bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    pNewSet = pNew;
-    pOldSet = pOld;
+    m_pNewSet = pNew;
+    m_pOldSet = pOld;
     bool bRet = SfxItemSet::Put( rSet );
-    pOldSet = pNewSet = 0;
+    m_pOldSet = m_pNewSet = 0;
     return bRet;
 }
 
 sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,
                                     SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    pNewSet = pNew;
-    pOldSet = pOld;
+    m_pNewSet = pNew;
+    m_pOldSet = pOld;
     sal_uInt16 nRet = SfxItemSet::ClearItem( nWhich );
-    pOldSet = pNewSet = 0;
+    m_pOldSet = m_pNewSet = 0;
     return nRet;
 }
 
@@ -225,32 +225,32 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                                     SwAttrSet* pOld, SwAttrSet* pNew )
 {
     OSL_ENSURE( nWhich1 <= nWhich2, "no valid range" );
-    pNewSet = pNew;
-    pOldSet = pOld;
+    m_pNewSet = pNew;
+    m_pOldSet = pOld;
     sal_uInt16 nRet = 0;
     for( ; nWhich1 <= nWhich2; ++nWhich1 )
         nRet = nRet + SfxItemSet::ClearItem( nWhich1 );
-    pOldSet = pNewSet = 0;
+    m_pOldSet = m_pNewSet = 0;
     return nRet;
 }
 
 int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
                              SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    pNewSet = pNew;
-    pOldSet = pOld;
+    m_pNewSet = pNew;
+    m_pOldSet = pOld;
     SfxItemSet::Intersect( rSet );
-    pOldSet = pNewSet = 0;
+    m_pOldSet = m_pNewSet = 0;
     return pNew ? pNew->Count() : ( pOld ? pOld->Count() : 0 );
 }
 
 /// Notification callback
 void  SwAttrSet::Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew )
 {
-    if( pOldSet )
-        pOldSet->PutChgd( rOld );
-    if( pNewSet )
-        pNewSet->PutChgd( rNew );
+    if( m_pOldSet )
+        m_pOldSet->PutChgd( rOld );
+    if( m_pNewSet )
+        m_pNewSet->PutChgd( rNew );
 }
 
 /** special treatment for some attributes
