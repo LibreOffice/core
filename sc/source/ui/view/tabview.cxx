@@ -2303,7 +2303,7 @@ void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<ed
     }
 }
 
-OUString ScTabView::getRowColumnHeaders()
+OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
 {
     ScDocument* pDoc = aViewData.GetDocument();
     if (!pDoc)
@@ -2314,14 +2314,40 @@ OUString ScTabView::getRowColumnHeaders()
     pDoc->GetTiledRenderingArea(aViewData.GetTabNo(), nEndCol, nEndRow);
 
     boost::property_tree::ptree aRows;
+    long nTotal = 0;
+    long nTotalPixels = 0;
     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
-        boost::property_tree::ptree aRow;
         sal_uInt16 nSize = pDoc->GetOriginalHeight(nRow, aViewData.GetTabNo());
-        aRow.put("size", OString::number(nSize).getStr());
         OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
-        aRow.put("text", aText.toUtf8().getStr());
-        aRows.push_back(std::make_pair("", aRow));
+
+        bool bSkip = false;
+        if (!rRectangle.IsEmpty())
+        {
+            long nTop = std::max(rRectangle.Top(), nTotal);
+            long nBottom = std::min(rRectangle.Bottom(), nTotal + nSize);
+            if (nBottom < nTop)
+                // They do not intersect.
+                bSkip = true;
+        }
+        if (!bSkip)
+        {
+            if (aRows.empty())
+            {
+                // The sizes are relative sizes, so include the total skipped size before the real items.
+                boost::property_tree::ptree aRow;
+                // Client is required to floor(), rather than round() the sizes in general, so add 0.5 here to have rounding.
+                aRow.put("size", OString::number(long((nTotalPixels + 0.5) / aViewData.GetPPTY())).getStr());
+                aRow.put("text", "");
+                aRows.push_back(std::make_pair("", aRow));
+            }
+            boost::property_tree::ptree aRow;
+            aRow.put("size", OString::number(nSize).getStr());
+            aRow.put("text", aText.toUtf8().getStr());
+            aRows.push_back(std::make_pair("", aRow));
+        }
+        nTotal += nSize;
+        nTotalPixels += long(nSize * aViewData.GetPPTY());
     }
 
     boost::property_tree::ptree aCols;

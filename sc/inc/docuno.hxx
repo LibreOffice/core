@@ -423,7 +423,7 @@ public:
     virtual bool isMimeTypeSupported() SAL_OVERRIDE;
 
     /// @see vcl::ITiledRenderable::getRowColumnHeaders().
-    virtual OUString getRowColumnHeaders() SAL_OVERRIDE;
+    virtual OUString getRowColumnHeaders(const Rectangle& rRectangle) SAL_OVERRIDE;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper2<

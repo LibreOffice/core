@@ -150,8 +150,11 @@ public:
 
     /**
      * Get position and content of row/column headers of Calc documents.
+     *
+     * @param rRectangle - if not empty, then limit the output only to the area of this rectangle
+     * @return a JSON describing position/content of rows/columns
      */
-    virtual OUString getRowColumnHeaders()
+    virtual OUString getRowColumnHeaders(const Rectangle& /*rRectangle*/)
     {
         return OUString();
     }
