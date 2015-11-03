@@ -1205,6 +1205,9 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
+    OString aCommand(pCommand);
+    static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
+
     if (!strcmp(pCommand, ".uno:CharFontName"))
     {
         return getFonts(pCommand);
@@ -1213,7 +1216,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         return getStyles(pThis, pCommand);
     }
-    else if (OString(pCommand) == ".uno:ViewRowColumnHeaders")
+    else if (aCommand.startsWith(aViewRowColumnHeaders))
     {
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
@@ -1222,7 +1225,45 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
             return 0;
         }
 
-        OUString aHeaders = pDoc->getRowColumnHeaders();
+        Rectangle aRectangle;
+        if (aCommand.getLength() > aViewRowColumnHeaders.getLength())
+        {
+            // Command has parameters.
+            int nX = 0;
+            int nY = 0;
+            int nWidth = 0;
+            int nHeight = 0;
+            OString aArguments = aCommand.copy(aViewRowColumnHeaders.getLength() + 1);
+            sal_Int32 nParamIndex = 0;
+            do
+            {
+                OString aParamToken = aArguments.getToken(0, '&', nParamIndex);
+                sal_Int32 nIndex = 0;
+                OString aKey;
+                OString aValue;
+                do
+                {
+                    OString aToken = aParamToken.getToken(0, '=', nIndex);
+                    if (!aKey.getLength())
+                        aKey = aToken;
+                    else
+                        aValue = aToken;
+                }
+                while (nIndex >= 0);
+                if (aKey == "x")
+                    nX = aValue.toInt32();
+                else if (aKey == "y")
+                    nY = aValue.toInt32();
+                else if (aKey == "width")
+                    nWidth = aValue.toInt32();
+                else if (aKey == "height")
+                    nHeight = aValue.toInt32();
+            }
+            while (nParamIndex >= 0);
+            aRectangle = Rectangle(nX, nY, nX + nWidth, nY + nHeight);
+        }
+
+        OUString aHeaders = pDoc->getRowColumnHeaders(aRectangle);
         OString aString = OUStringToOString(aHeaders, RTL_TEXTENCODING_UTF8);
         char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
         strcpy(pMemory, aString.getStr());

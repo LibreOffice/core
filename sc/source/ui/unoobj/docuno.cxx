@@ -872,7 +872,7 @@ bool ScModelObj::isMimeTypeSupported()
     return EditEngine::HasValidData(aDataHelper.GetTransferable());
 }
 
-OUString ScModelObj::getRowColumnHeaders()
+OUString ScModelObj::getRowColumnHeaders(const Rectangle& rRectangle)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
@@ -882,7 +882,7 @@ OUString ScModelObj::getRowColumnHeaders()
     if (!pTabView)
         return OUString();
 
-    return pTabView->getRowColumnHeaders();
+    return pTabView->getRowColumnHeaders(rRectangle);
 }
 
 void ScModelObj::initializeForTiledRendering()

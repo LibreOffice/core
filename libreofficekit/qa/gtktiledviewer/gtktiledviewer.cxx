@@ -256,8 +256,16 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
     if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
     {
-        g_info("lok::Document::getCommandValues(.uno:ViewRowColumnHeaders)");
-        char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
+        std::stringstream aCommand;
+        aCommand << ".uno:ViewRowColumnHeaders";
+        aCommand << "?x=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), rWindow.m_pColumnBar->m_nPositionPixel));
+        aCommand << "&width=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), rWindow.m_pColumnBar->m_nSizePixel));
+        aCommand << "&y=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), rWindow.m_pRowBar->m_nPositionPixel));
+        aCommand << "&height=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView), rWindow.m_pRowBar->m_nSizePixel));
+        std::stringstream ss;
+        ss << "lok::Document::getCommandValues(" << aCommand.str() << ")";
+        g_info(ss.str().c_str());
+        char* pValues = pDocument->pClass->getCommandValues(pDocument, aCommand.str().c_str());
         std::stringstream aStream(pValues);
         free(pValues);
         assert(!aStream.str().empty());

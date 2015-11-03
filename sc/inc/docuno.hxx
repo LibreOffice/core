@@ -406,7 +406,7 @@ public:
     virtual bool isMimeTypeSupported() override;
 
     /// @see vcl::ITiledRenderable::getRowColumnHeaders().
-    virtual OUString getRowColumnHeaders() override;
+    virtual OUString getRowColumnHeaders(const Rectangle& rRectangle) override;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper<
