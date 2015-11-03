@@ -20,7 +20,9 @@ cat << EOF
 
 Error: a unit test failed, please do one of:
 make $1Test_$2 CPPUNITTRACE="gdb --args"
-    # for interactive debugging on Linux
+    # for interactive debugging with gdb
+make $1Test_$2 CPPUNITTRACE="lldb --"
+    # for interactive debugging with lldb
 make $1Test_$2 VALGRIND=memcheck
     # for memory checking
 make $1Test_$2 DEBUGCPPUNIT=TRUE
