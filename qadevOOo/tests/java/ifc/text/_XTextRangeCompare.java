@@ -61,10 +61,8 @@ public class _XTextRangeCompare extends MultiMethodTest {
      */
     public XTextRangeCompare oObj = null;
     String nameStr = null;
-    XTextRange oRange = null;
     XTextCursor cursor1 = null;
     XTextCursor cursor2 = null;
-    String startStr = null;
     XText oText = null;
 
     /**
