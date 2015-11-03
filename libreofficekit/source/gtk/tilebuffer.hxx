@@ -105,7 +105,6 @@ class TileBuffer
 
        @param x the tile along the x-axis of the buffer
        @param y the tile along the y-axis of the buffer
-       @param aZoom current zoom factor of the document
        @param task GTask object containing the necessary data
        @param pool GThreadPool managed by the widget instance used for all the
        LOK calls made by widget. It is needed here because getTile invokes one
@@ -113,7 +112,7 @@ class TileBuffer
 
        @return the tile at the mentioned position (x, y)
      */
-    Tile& getTile(int x, int y, float aZoom, GTask* task, GThreadPool* pool);
+    Tile& getTile(int x, int y, GTask* task, GThreadPool* pool);
     /// Destroys all the tiles in the tile buffer; also frees the memory allocated
     /// for all the Tile objects.
     void resetAllTiles();

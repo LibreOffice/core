@@ -969,7 +969,7 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
                 GTask* task = g_task_new(pDocView, NULL, paintTileCallback, pLOEvent);
                 g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
 
-                Tile& currentTile = priv->m_pTileBuffer->getTile(nRow, nColumn, priv->m_fZoom, task, priv->lokThreadPool);
+                Tile& currentTile = priv->m_pTileBuffer->getTile(nRow, nColumn, task, priv->lokThreadPool);
                 GdkPixbuf* pPixBuf = currentTile.getBuffer();
                 gdk_cairo_set_source_pixbuf (pCairo, pPixBuf,
                                              twipToPixel(aTileRectangleTwips.x, priv->m_fZoom),

@@ -79,7 +79,7 @@ void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task,
     }
 }
 
-Tile& TileBuffer::getTile(int x, int y, float fZoom, GTask* task,
+Tile& TileBuffer::getTile(int x, int y, GTask* task,
                           GThreadPool* lokThreadPool)
 {
     int index = x * m_nWidth + y;
