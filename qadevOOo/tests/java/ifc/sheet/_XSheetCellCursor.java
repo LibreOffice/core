@@ -199,12 +199,6 @@ public class _XSheetCellCursor extends MultiMethodTest {
         }
 
         XMergeable mergeRange = UnoRuntime.queryInterface (XMergeable.class, newRange);
-        if (mergeRange == null) {
-            log.println("DB: newRange doesn't implement XMergeable interface");
-        } else {
-            log.println("DB: XMergeable interface successfully queried.");
-        }
-
         mergeRange.merge(true);
         log.println("DB: Successfully merged.") ;
 
