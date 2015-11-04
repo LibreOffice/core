@@ -127,8 +127,7 @@ void TestTextSearch::testSearches()
 void TestTextSearch::setUp()
 {
     BootstrapFixtureBase::setUp();
-    m_xSearch = uno::Reference< util::XTextSearch >(m_xSFactory->createInstance(
-        "com.sun.star.util.TextSearch"), uno::UNO_QUERY_THROW);
+    m_xSearch.set(m_xSFactory->createInstance("com.sun.star.util.TextSearch"), uno::UNO_QUERY_THROW);
 }
 
 void TestTextSearch::tearDown()

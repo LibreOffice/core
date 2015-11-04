@@ -205,7 +205,7 @@ int SAL_CALL main( int argc, char * argv[] )
     printf( " Done\n" );
 
     // check, if errornous strings make any problem
-    rAcceptor = Reference< XAcceptor > (
+    rAcceptor.set(
         xMgr->createInstance("com.sun.star.connection.Acceptor"),
         UNO_QUERY );
 

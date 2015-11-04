@@ -278,16 +278,16 @@ public:
     TestCase( const Reference< XMultiServiceFactory > & rSMgr,
               const Reference< XInterface > &r ) : m_rSmgr( rSMgr ), m_pTestListener( 0 )
     {
-        m_rControl = Reference<XActiveDataControl>( r, UNO_QUERY );
+        m_rControl.set( r, UNO_QUERY );
 
         Reference< XActiveDataSource > rSource ( r, UNO_QUERY );
         Reference< XActiveDataSink > rSink( r , UNO_QUERY );
 
-        m_rOutSource = Reference< XOutputStream > ( createPipe() );
+        m_rOutSource.set( createPipe() );
         rSink->setInputStream(Reference< XInputStream> (m_rOutSource,UNO_QUERY));
 
         Reference< XOutputStream > rOutSink( createPipe() );
-        m_rInSink = Reference< XInputStream > ( rOutSink, UNO_QUERY );
+        m_rInSink.set( rOutSink, UNO_QUERY );
         rSource->setOutputStream( rOutSink );
 
         m_pTestListener = new TestListener();

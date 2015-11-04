@@ -210,8 +210,7 @@ namespace io_acceptor
                         "trying to get service %s\n",
                         OUStringToOString(
                             delegatee, RTL_TEXTENCODING_ASCII_US).getStr());
-                    _xAcceptor = Reference<XAcceptor>(
-                        _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY);
+                    _xAcceptor.set(_xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY);
 
                     if(!_xAcceptor.is())
                     {

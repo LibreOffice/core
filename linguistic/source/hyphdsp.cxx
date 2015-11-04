@@ -617,10 +617,9 @@ Reference< XPossibleHyphens > SAL_CALL
                 // create specific service via it's implementation name
                 try
                 {
-                    xHyph = Reference< XHyphenator >(
-                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                                    pEntry->aSvcImplNames[0], aArgs, xContext ),
-                                UNO_QUERY );
+                    xHyph.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                   pEntry->aSvcImplNames[0], aArgs, xContext ),
+                               UNO_QUERY );
                 }
                 catch (uno::Exception &)
                 {

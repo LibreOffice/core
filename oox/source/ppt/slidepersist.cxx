@@ -278,7 +278,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                                                 {
                                                     xFamilies->getByName( sOutlineStyle ) >>= aXStyle;
                                                     if( aXStyle.is() )
-                                                        xPropSet = Reference< beans::XPropertySet >( aXStyle, UNO_QUERY_THROW );
+                                                        xPropSet.set( aXStyle, UNO_QUERY_THROW );
                                                 }
                                             }
                                             setTextStyle( xPropSet, rFilterBase, maDefaultTextStylePtr, nLevel );

@@ -466,7 +466,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
             return noMeanings;
         stem = 1;
 
-        xSpell = uno::Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+        xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
         if (!xSpell.is() || !xSpell->isValid( SPELLML_SUPPORT, nLanguage, rProperties ))
             return noMeanings;
         Reference< XSpellAlternatives > xTmpRes;

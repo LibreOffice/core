@@ -34,8 +34,7 @@ public:
 void TestOrdinalSuffix::setUp()
 {
     BootstrapFixtureBase::setUp();
-    m_xOrdinal = uno::Reference< i18n::XOrdinalSuffix >(m_xSFactory->createInstance(
-        "com.sun.star.i18n.OrdinalSuffix"), uno::UNO_QUERY_THROW);
+    m_xOrdinal.set(m_xSFactory->createInstance("com.sun.star.i18n.OrdinalSuffix"), uno::UNO_QUERY_THROW);
 }
 
 void TestOrdinalSuffix::tearDown()

@@ -171,8 +171,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
                 Reference< XThesaurus > xThes;
                 try
                 {
-                    xThes = Reference< XThesaurus >(
-                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                    xThes.set(  xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                                     pImplNames[i], aArgs, xContext ),
                                 UNO_QUERY );
                 }

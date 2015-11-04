@@ -1005,7 +1005,7 @@ uno::Reference< util::XChangesBatch > GrammarCheckingIterator::GetUpdateAccess()
             aValue.Value = uno::makeAny( OUString("org.openoffice.Office.Linguistic/ServiceManager") );
             uno::Sequence< uno::Any > aProps(1);
             aProps[0] <<= aValue;
-            m_xUpdateAccess = uno::Reference< util::XChangesBatch >(
+            m_xUpdateAccess.set(
                     xConfigurationProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess", aProps ),
                         uno::UNO_QUERY_THROW );

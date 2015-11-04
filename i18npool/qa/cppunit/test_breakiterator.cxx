@@ -980,8 +980,7 @@ void TestBreakIterator::testChinese()
 void TestBreakIterator::setUp()
 {
     BootstrapFixtureBase::setUp();
-    m_xBreak = uno::Reference< i18n::XBreakIterator >(m_xSFactory->createInstance(
-        "com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY_THROW);
+    m_xBreak.set(m_xSFactory->createInstance("com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY_THROW);
 }
 
 void TestBreakIterator::tearDown()

@@ -218,7 +218,7 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
     Reference< XInterface > xInt;
     try
     {
-        Reference<XMultiServiceFactory> xMSF = Reference<XMultiServiceFactory>(getComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);
+        Reference<XMultiServiceFactory> xMSF(getComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);
 
         xInt = xMSF->createInstance( rServiceName );
     }

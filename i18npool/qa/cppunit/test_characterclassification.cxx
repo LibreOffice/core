@@ -96,8 +96,7 @@ void TestCharacterClassification::testStringType()
 void TestCharacterClassification::setUp()
 {
     BootstrapFixtureBase::setUp();
-    m_xCC = uno::Reference< i18n::XCharacterClassification >(m_xSFactory->createInstance(
-        "com.sun.star.i18n.CharacterClassification"), uno::UNO_QUERY_THROW);
+    m_xCC.set(m_xSFactory->createInstance("com.sun.star.i18n.CharacterClassification"), uno::UNO_QUERY_THROW);
 }
 
 void TestCharacterClassification::tearDown()

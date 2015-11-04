@@ -94,7 +94,7 @@ namespace stoc_connector
 
                 if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN, osl::Security() ) )
                 {
-                    r = Reference < XConnection > ( static_cast<XConnection *>(pConn) );
+                    r.set( static_cast<XConnection *>(pConn) );
                 }
                 else
                 {
@@ -141,7 +141,7 @@ namespace stoc_connector
                                                sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
                 }
                 pConn->completeConnectionString();
-                r = Reference< XConnection > ( static_cast<XConnection *>(pConn) );
+                r.set( static_cast<XConnection *>(pConn) );
             }
             else
             {

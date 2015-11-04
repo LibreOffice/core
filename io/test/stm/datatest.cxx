@@ -172,15 +172,15 @@ sal_Int32 ODataStreamTest::test(
                 if( ! rSink.is() ) {
                     x = m_rFactory->createInstance(
                         "com.sun.star.io.DataInputStream" );
-                    rInput = Reference < XDataInputStream > ( x , UNO_QUERY);
-                    rSink = Reference<  XActiveDataSink > ( x , UNO_QUERY );
+                    rInput.set( x , UNO_QUERY);
+                    rSink.set( x , UNO_QUERY );
                 }
                 else if ( !rSource.is() )
                 {
                     x = m_rFactory->createInstance(
                         "com.sun.star.io.DataOutputStream" );
-                    rOutput = Reference< XDataOutputStream > ( x , UNO_QUERY );
-                    rSource = Reference< XActiveDataSource > ( x, UNO_QUERY );
+                    rOutput.set( x , UNO_QUERY );
+                    rSource.set( x, UNO_QUERY );
                 }
 
                 OSL_ASSERT( rPipeInput.is() );
@@ -750,14 +750,14 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
                 if( ! rSink.is() ) {
                     x = m_rFactory->createInstance(
                         "com.sun.star.io.ObjectInputStream" );
-                    rInput = Reference < XObjectInputStream > ( x , UNO_QUERY );
-                    rSink = Reference < XActiveDataSink > ( x , UNO_QUERY );
+                    rInput.set( x , UNO_QUERY );
+                    rSink.set( x , UNO_QUERY );
                 }
                 else if ( !rSource.is() ) {
                     x = m_rFactory->createInstance(
                         "com.sun.star.io.ObjectOutputStream" );
-                    rOutput = Reference <XObjectOutputStream > ( x , UNO_QUERY );
-                    rSource = Reference <XActiveDataSource>( x, UNO_QUERY );
+                    rOutput.set( x , UNO_QUERY );
+                    rSource.set( x, UNO_QUERY );
                 }
 
                 OSL_ASSERT( rPipeInput.is() );

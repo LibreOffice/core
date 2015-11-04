@@ -371,8 +371,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
                 Reference< XSpellChecker > xSpell;
                 try
                 {
-                    xSpell = Reference< XSpellChecker >(
-                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                    xSpell.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                                     pImplNames[i], aArgs, xContext ),
                                 UNO_QUERY );
                 }
@@ -557,8 +556,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 Reference< XSpellChecker > xSpell;
                 try
                 {
-                    xSpell = Reference< XSpellChecker >(
-                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                    xSpell.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                                     pImplNames[i], aArgs, xContext ),
                                 UNO_QUERY );
                 }

@@ -143,7 +143,7 @@ Reference< XInputStream > createStreamFromFile(
 
     Sequence<sal_Int8> seqIn(nLength);
     if (fread( seqIn.getArray(), nLength , 1 , f ) == 1)
-        r = Reference< XInputStream > ( new OInputStream( seqIn ) );
+        r.set( new OInputStream( seqIn ) );
     else
         fprintf(stderr, "failure reading %s\n", pcFile);
     fclose( f );

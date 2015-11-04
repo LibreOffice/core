@@ -97,10 +97,9 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
             uno::Reference< linguistic2::XSupportedLocales > xSuppLoc;
             try
             {
-                xSuppLoc = uno::Reference< linguistic2::XSupportedLocales >(
-                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                                   pImplNames[i], aArgs, xContext ),
-                                uno::UNO_QUERY );
+                xSuppLoc.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                 pImplNames[i], aArgs, xContext ),
+                              uno::UNO_QUERY );
             }
             catch (uno::Exception &)
             {
@@ -490,7 +489,7 @@ LngSvcMgr::LngSvcMgr()
     }
     if (xExtensionManager.is())
     {
-        xMB = uno::Reference<util::XModifyBroadcaster>(xExtensionManager, uno::UNO_QUERY_THROW);
+        xMB.set(xExtensionManager, uno::UNO_QUERY_THROW);
 
         uno::Reference<util::XModifyListener> xListener(this);
         xMB->addModifyListener( xListener );
@@ -1068,7 +1067,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                 {
                     try
                     {
-                        xSvc = uno::Reference< linguistic2::XSpellChecker >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                        xSvc.set( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                     }
                     catch (const uno::Exception &)
                     {
@@ -1130,7 +1129,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                 {
                     try
                     {
-                        xSvc = uno::Reference< linguistic2::XProofreader >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                        xSvc.set( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                     }
                     catch (const uno::Exception &)
                     {
@@ -1192,7 +1191,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                 {
                     try
                     {
-                        xSvc = uno::Reference< linguistic2::XHyphenator >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                        xSvc.set( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                     }
                     catch (const uno::Exception &)
                     {
@@ -1253,7 +1252,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                 {
                     try
                     {
-                        xSvc = uno::Reference< linguistic2::XThesaurus >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                        xSvc.set( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                     }
                     catch (const uno::Exception &)
                     {

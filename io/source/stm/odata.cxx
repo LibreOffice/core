@@ -1310,7 +1310,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject() throw (css::io::IO
         {
             // load the object
             Reference< XInterface > x = m_rSMgr->createInstanceWithContext( aName, m_rCxt );
-            xLoadedObj = Reference< XPersistObject >( x, UNO_QUERY );
+            xLoadedObj.set( x, UNO_QUERY );
             if( xLoadedObj.is() )
             {
                 sal_uInt32 nSize = m_aPersistVector.size();
