@@ -144,7 +144,7 @@ SwDrawModellListener_Impl::SwDrawModellListener_Impl( SdrModel *pDrawModel ) :
 
 SwDrawModellListener_Impl::~SwDrawModellListener_Impl()
 {
-    EndListening( *mpDrawModel );
+    Dispose();
 }
 
 void SAL_CALL SwDrawModellListener_Impl::addEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException, std::exception)
@@ -198,6 +198,9 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
 
 void SwDrawModellListener_Impl::Dispose()
 {
+    if (mpDrawModel != nullptr) {
+        EndListening( *mpDrawModel );
+    }
     mpDrawModel = nullptr;
 }
 
