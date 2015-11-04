@@ -1124,8 +1124,8 @@ void Shape::keepDiagramCompatibilityInfo( XmlFilterBase& rFilterBase )
         } else
             xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
 
-        xSet->setPropertyValue( OUString( "MoveProtect" ), Any( sal_True ) );
-        xSet->setPropertyValue( OUString( "SizeProtect" ), Any( sal_True ) );
+        xSet->setPropertyValue( "MoveProtect", Any( sal_True ) );
+        xSet->setPropertyValue( "SizeProtect", Any( sal_True ) );
 
         // Replace existing shapes with a new Graphic Object rendered
         // from them
@@ -1203,10 +1203,10 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
         Reference < lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
         xShape = Reference < XShape > ( xServiceFact->createInstance( "com.sun.star.drawing.GraphicObjectShape" ), UNO_QUERY_THROW );
         Reference < XPropertySet > xPropSet( xShape, UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( OUString( "Graphic" ), Any( xGraphic ) );
-        xPropSet->setPropertyValue( OUString( "MoveProtect" ), Any( sal_True ) );
-        xPropSet->setPropertyValue( OUString( "SizeProtect" ), Any( sal_True ) );
-        xPropSet->setPropertyValue( OUString( "Name" ), Any( OUString( "RenderedShapes" ) ) );
+        xPropSet->setPropertyValue(  "Graphic", Any( xGraphic ) );
+        xPropSet->setPropertyValue(  "MoveProtect", Any( sal_True ) );
+        xPropSet->setPropertyValue(  "SizeProtect", Any( sal_True ) );
+        xPropSet->setPropertyValue(  "Name", Any( OUString( "RenderedShapes" ) ) );
     }
     catch( const Exception& e )
     {

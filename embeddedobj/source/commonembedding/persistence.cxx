@@ -604,7 +604,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     aArgs[3].Name = "HierarchicalDocumentName";
     aArgs[3].Value <<= aHierarchName;
 
-    xStorable->storeToURL( OUString( "private:stream" ), aArgs );
+    xStorable->storeToURL( "private:stream", aArgs );
     try
     {
         xTempOut->closeOutput();

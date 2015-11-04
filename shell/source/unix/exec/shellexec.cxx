@@ -90,8 +90,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 
         if (xCurrentContext.is())
         {
-            Any aValue = xCurrentContext->getValueByName(
-                OUString( "system.desktop-environment"  ) );
+            Any aValue = xCurrentContext->getValueByName( "system.desktop-environment" );
 
             OUString aDesktopEnvironment;
             if (aValue >>= aDesktopEnvironment)
@@ -162,8 +161,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         css::uno::Reference< css::util::XMacroExpander > exp = css::util::theMacroExpander::get(m_xContext);
         OUString aProgramURL;
         try {
-            aProgramURL = exp->expandMacros(
-                OUString( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/"));
+            aProgramURL = exp->expandMacros( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/");
         } catch (css::lang::IllegalArgumentException &)
         {
             throw SystemShellExecuteException(

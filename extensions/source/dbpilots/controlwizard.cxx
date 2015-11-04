@@ -654,7 +654,7 @@ namespace dbp
             {
                 OUString sControlLabel(_pSettings->sControlLabel);
                 m_aContext.xObjectModel->setPropertyValue(
-                    OUString("Label"),
+                    "Label",
                     makeAny(sControlLabel)
                 );
             }

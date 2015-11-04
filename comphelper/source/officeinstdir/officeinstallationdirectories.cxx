@@ -281,9 +281,7 @@ void OfficeInstallationDirectories::initDirs()
 
             uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(m_xCtx);
 
-            *m_pOfficeBrandDir =
-                xExpander->expandMacros(
-                     OUString( "$BRAND_BASE_DIR" ) );
+            *m_pOfficeBrandDir = xExpander->expandMacros( "$BRAND_BASE_DIR" );
 
             OSL_ENSURE( !m_pOfficeBrandDir->isEmpty(),
                         "Unable to obtain office brand installation directory!" );
@@ -292,7 +290,7 @@ void OfficeInstallationDirectories::initDirs()
 
             *m_pUserDir =
                 xExpander->expandMacros(
-                    OUString("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) );
+                    "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" );
 
             OSL_ENSURE( !m_pUserDir->isEmpty(),
                         "Unable to obtain office user data directory!" );

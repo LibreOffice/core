@@ -133,7 +133,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
 
             uno::Reference< frame::XModel > xModel( xDocumentLoader->loadComponentFromURL(
                                                             aFileURL,
-                                                            OUString( "_blank" ),
+                                                            "_blank",
                                                             0,
                                                             aArgs ),
                                                         uno::UNO_QUERY );

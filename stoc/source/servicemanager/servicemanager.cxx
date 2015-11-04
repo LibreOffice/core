@@ -883,8 +883,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
     if (xProps.is())
     {
         Reference< XComponentContext > xDefContext;
-        xProps->getPropertyValue(
-            OUString("DefaultContext") ) >>= xDefContext;
+        xProps->getPropertyValue( "DefaultContext" ) >>= xDefContext;
         OSL_ENSURE(
             xContext == xDefContext,
             "### default context of service manager singleton differs from context holding it!" );
@@ -947,8 +946,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     if (xProps.is())
     {
         Reference< XComponentContext > xDefContext;
-        xProps->getPropertyValue(
-            OUString("DefaultContext") ) >>= xDefContext;
+        xProps->getPropertyValue( "DefaultContext" ) >>= xDefContext;
         OSL_ENSURE(
             xContext == xDefContext,
             "### default context of service manager singleton differs from context holding it!" );
@@ -1501,8 +1499,7 @@ void ORegistryServiceManager::fillAllNamesFromRegistry( HashSet_OWString & rSet 
 
     try
     {
-        Reference<XRegistryKey > xServicesKey = xRootKey->openKey(
-            OUString("SERVICES") );
+        Reference<XRegistryKey > xServicesKey = xRootKey->openKey( "SERVICES" );
         // root + /Services + /
         if( xServicesKey.is() )
         {

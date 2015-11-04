@@ -96,7 +96,7 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
         else
         {
             xCC->addResourceFactory(
-                OUString("private:resource/pane/Presenter/*"),
+                "private:resource/pane/Presenter/*",
                 this);
         }
     }

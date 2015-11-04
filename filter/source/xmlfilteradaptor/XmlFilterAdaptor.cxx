@@ -77,7 +77,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
         utl::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is()){
-        xStatusIndicator->start(OUString( "Loading :" ),nProgressRange);
+        xStatusIndicator->start( "Loading :",nProgressRange);
     }
 
     OUString sXMLImportService (  udImport  );
@@ -102,8 +102,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
 
      Reference< XPropertySet > xInfoSet(
         GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-     xInfoSet->setPropertyValue(
-        OUString( "BaseURI" ), makeAny( aBaseURI ));
+     xInfoSet->setPropertyValue( "BaseURI", makeAny( aBaseURI ));
     aAnys[0] <<= xInfoSet;
 
 
@@ -199,7 +198,7 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::Property
         utl::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is())
-       xStatusIndicator->start(OUString( "Saving :" ),nProgressRange);
+       xStatusIndicator->start( "Saving :",nProgressRange);
 
     // Set up converter bridge.
     Reference< css::xml::XExportFilter > xConverter(mxContext->getServiceManager()->createInstanceWithContext( udConvertClass, mxContext ), UNO_QUERY);
@@ -258,13 +257,11 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::Property
 
          Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-         xInfoSet->setPropertyValue(
-            OUString( "UsePrettyPrinting" ), makeAny( bPrettyPrint ));
+         xInfoSet->setPropertyValue("UsePrettyPrinting", makeAny( bPrettyPrint ));
         xInfoSet->setPropertyValue(
-                        OUString( "ExportTextNumberElement" ),
+                        "ExportTextNumberElement",
                         makeAny( bExportTextNumberElementForListItems ));
-         xInfoSet->setPropertyValue(
-            OUString( "BaseURI" ), makeAny( aBaseURI ));
+         xInfoSet->setPropertyValue("BaseURI", makeAny( aBaseURI ));
         aAnys[1] <<= xInfoSet;
 
         Reference< XExporter > xExporter( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(

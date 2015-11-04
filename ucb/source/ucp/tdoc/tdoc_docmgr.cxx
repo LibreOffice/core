@@ -144,8 +144,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
     {
         try
         {
-            uno::Any aValue = xPropSet->getPropertyValue(
-                OUString( "RuntimeUID" ) );
+            uno::Any aValue = xPropSet->getPropertyValue("RuntimeUID");
             aValue >>= aId;
         }
         catch ( beans::UnknownPropertyException const & )

@@ -77,7 +77,7 @@ namespace abp
         try
         {
             // check whether Evolution is available
-            Reference< XDriver > xDriver( xManager->getDriverByURL(OUString("sdbc:address:evolution:local")) );
+            Reference< XDriver > xDriver( xManager->getDriverByURL("sdbc:address:evolution:local") );
             if ( xDriver.is() )
                 bHaveEvolution = true;
         }
@@ -88,7 +88,7 @@ namespace abp
         // check whether KDE address book is available
         try
         {
-            Reference< XDriver > xDriver( xManager->getDriverByURL(OUString("sdbc:address:kab")) );
+            Reference< XDriver > xDriver( xManager->getDriverByURL("sdbc:address:kab") );
             if ( xDriver.is() )
                 bHaveKab = true;
         }
@@ -99,7 +99,7 @@ namespace abp
         try
         {
             // check whether Mac OS X address book is available
-            Reference< XDriver > xDriver( xManager->getDriverByURL(OUString("sdbc:address:macab")) );
+            Reference< XDriver > xDriver( xManager->getDriverByURL("sdbc:address:macab") );
             if ( xDriver.is() )
                 bHaveMacab = true;
         }

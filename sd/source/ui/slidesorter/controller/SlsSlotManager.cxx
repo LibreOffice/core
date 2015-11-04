@@ -181,7 +181,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             // First make sure that the sidebar is visible
             pShell->GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
             ::sfx2::sidebar::Sidebar::ShowPanel(
-                OUString("SdSlideTransitionPanel"),
+                "SdSlideTransitionPanel",
                 pShell->GetViewFrame()->GetFrame().GetFrameInterface());
             rRequest.Ignore ();
             break;

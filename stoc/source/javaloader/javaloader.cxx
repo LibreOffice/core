@@ -138,9 +138,8 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         // get a java vm, where we can create a loader
         css::uno::Reference<XJavaVM> javaVM_xJavaVM(
             m_xComponentContext->getValueByName(
-                OUString(
-                             "/singletons/"
-                             "com.sun.star.java.theJavaVirtualMachine")),
+                             ("/singletons/"
+                              "com.sun.star.java.theJavaVirtualMachine")),
             UNO_QUERY_THROW);
 
         // Use the special protocol of XJavaVM.getJavaVM:  If the passed in

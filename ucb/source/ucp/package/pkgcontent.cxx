@@ -2281,8 +2281,7 @@ bool Content::loadData(
             try
             {
                 uno::Any aHasEncryptedEntries
-                    = xPackagePropSet->getPropertyValue(
-                        OUString( "HasEncryptedEntries" ) );
+                    = xPackagePropSet->getPropertyValue( "HasEncryptedEntries" );
                 if ( !( aHasEncryptedEntries >>= rProps.bHasEncryptedEntries ) )
                 {
                     OSL_FAIL( "Content::loadData - "
@@ -2328,9 +2327,7 @@ bool Content::loadData(
             // MediaType
             try
             {
-                uno::Any aMediaType
-                    = xPropSet->getPropertyValue(
-                        OUString("MediaType") );
+                uno::Any aMediaType = xPropSet->getPropertyValue("MediaType");
                 if ( !( aMediaType >>= rProps.aMediaType ) )
                 {
                     OSL_FAIL( "Content::loadData - Got no MediaType value!" );
@@ -2372,9 +2369,7 @@ bool Content::loadData(
                 // Size ( only available for streams )
                 try
                 {
-                    uno::Any aSize
-                        = xPropSet->getPropertyValue(
-                            OUString("Size") );
+                    uno::Any aSize = xPropSet->getPropertyValue("Size");
                     if ( !( aSize >>= rProps.nSize ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Size value!" );
@@ -2395,9 +2390,7 @@ bool Content::loadData(
                 // Compressed ( only available for streams )
                 try
                 {
-                    uno::Any aCompressed
-                        = xPropSet->getPropertyValue(
-                            OUString("Compressed") );
+                    uno::Any aCompressed = xPropSet->getPropertyValue("Compressed");
                     if ( !( aCompressed >>= rProps.bCompressed ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Compressed value!" );
@@ -2418,9 +2411,7 @@ bool Content::loadData(
                 // Encrypted ( only available for streams )
                 try
                 {
-                    uno::Any aEncrypted
-                        = xPropSet->getPropertyValue(
-                            OUString("Encrypted") );
+                    uno::Any aEncrypted = xPropSet->getPropertyValue("Encrypted");
                     if ( !( aEncrypted >>= rProps.bEncrypted ) )
                     {
                         OSL_FAIL( "Content::loadData - Got no Encrypted value!" );
@@ -2514,7 +2505,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             try
             {
                 xPackagePropSet->setPropertyValue(
-                        OUString("EncryptionKey"),
+                        "EncryptionKey",
                         uno::makeAny( m_aProps.aEncryptionKey ) );
                 m_nModifiedProps &= ~ENCRYPTIONKEY_MODIFIED;
             }
@@ -2639,7 +2630,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         if ( m_nModifiedProps & MEDIATYPE_MODIFIED )
         {
             xPropSet->setPropertyValue(
-                                OUString("MediaType"),
+                                "MediaType",
                                 uno::makeAny( m_aProps.aMediaType ) );
             m_nModifiedProps &= ~MEDIATYPE_MODIFIED;
         }
@@ -2648,7 +2639,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             if ( !isFolder() )
                 xPropSet->setPropertyValue(
-                                OUString("Compressed"),
+                                "Compressed",
                                 uno::makeAny( m_aProps.bCompressed ) );
 
             m_nModifiedProps &= ~COMPRESSED_MODIFIED;
@@ -2658,7 +2649,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             if ( !isFolder() )
                 xPropSet->setPropertyValue(
-                                OUString("Encrypted"),
+                                "Encrypted",
                                 uno::makeAny( m_aProps.bEncrypted ) );
 
             m_nModifiedProps &= ~ENCRYPTED_MODIFIED;
@@ -2668,7 +2659,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         {
             if ( !isFolder() )
                 xPropSet->setPropertyValue(
-                            OUString("EncryptionKey"),
+                            "EncryptionKey",
                             uno::makeAny( m_aProps.aEncryptionKey ) );
 
             m_nModifiedProps &= ~ENCRYPTIONKEY_MODIFIED;

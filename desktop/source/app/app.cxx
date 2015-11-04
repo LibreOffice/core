@@ -660,13 +660,13 @@ bool Desktop::QueryExit()
 
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference< XPropertySet > xPropertySet(xDesktop, UNO_QUERY_THROW);
-    xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), Any(true) );
+    xPropertySet->setPropertyValue( SUSPEND_QUICKSTARTVETO, Any(true) );
 
     bool bExit = xDesktop->terminate();
 
     if ( !bExit )
     {
-        xPropertySet->setPropertyValue( OUString(SUSPEND_QUICKSTARTVETO ), Any(false) );
+        xPropertySet->setPropertyValue( SUSPEND_QUICKSTARTVETO, Any(false) );
     }
     else if (!Application::IsEventTestingModeEnabled())
     {
@@ -1941,8 +1941,8 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/swriter"),
-                OUString("_blank"), 0, args ), UNO_QUERY_THROW );
+            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( "private:factory/swriter",
+                "_blank", 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const css::uno::Exception& )
@@ -1953,8 +1953,8 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/scalc"),
-                OUString("_blank"), 0, args ), UNO_QUERY_THROW );
+            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( "private:factory/scalc",
+                "_blank", 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const css::uno::Exception& )
@@ -1965,8 +1965,8 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/sdraw"),
-                OUString("_blank"), 0, args ), UNO_QUERY_THROW );
+            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( "private:factory/sdraw",
+                "_blank", 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const css::uno::Exception& )
@@ -1977,8 +1977,8 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/simpress"),
-                OUString("_blank"), 0, args ), UNO_QUERY_THROW );
+            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( "private:factory/simpress",
+                "_blank", 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const css::uno::Exception& )
@@ -2099,9 +2099,7 @@ void Desktop::PreloadConfigurationData()
     css::frame::thePopupMenuControllerFactory::get( xContext );
     try
     {
-        (void)xPopupMenuControllerFactory->hasController(
-                    OUString( ".uno:CharFontName" ),
-                    OUString() );
+        (void)xPopupMenuControllerFactory->hasController( ".uno:CharFontName", OUString() );
     }
     catch ( const css::uno::Exception& )
     {
@@ -2207,7 +2205,7 @@ void Desktop::OpenClients()
         OUString aDefault( "0" );
         OUString aPreloadData;
 
-        aPerfTuneIniFile.getFrom( OUString( "QuickstartPreloadConfiguration" ), aPreloadData, aDefault );
+        aPerfTuneIniFile.getFrom( "QuickstartPreloadConfiguration", aPreloadData, aDefault );
         if ( aPreloadData == "1" )
         {
             if ( rArgs.IsWriter()  ||
@@ -2526,7 +2524,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             {
                 // no visible task that could be activated found
                 Reference< css::awt::XWindow > xContainerWindow;
-                Reference< XFrame > xBackingFrame = xDesktop->findFrame(OUString( "_blank" ), 0);
+                Reference< XFrame > xBackingFrame = xDesktop->findFrame( "_blank", 0);
                 if (xBackingFrame.is())
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
@@ -2696,7 +2694,7 @@ void Desktop::OpenSplashScreen()
             UNO_QUERY);
 
         if(m_rSplashScreen.is())
-                m_rSplashScreen->start(OUString("SplashScreen"), 100);
+                m_rSplashScreen->start("SplashScreen", 100);
     }
 
 }
@@ -2732,7 +2730,7 @@ void Desktop::DoFirstRunInitializations()
     try
     {
         Reference< XJobExecutor > xExecutor = theJobExecutor::get( ::comphelper::getProcessComponentContext() );
-        xExecutor->trigger( OUString("onFirstRunInitialization") );
+        xExecutor->trigger( "onFirstRunInitialization" );
     }
     catch(const css::uno::Exception&)
     {
@@ -2752,7 +2750,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
     {
         progress->SetSplashScreenProgress(60);
     }
-    Reference< XFrame > xBackingFrame = xDesktop->findFrame(OUString( "_blank" ), 0);
+    Reference< XFrame > xBackingFrame = xDesktop->findFrame( "_blank", 0);
     Reference< css::awt::XWindow > xContainerWindow;
 
     if (xBackingFrame.is())

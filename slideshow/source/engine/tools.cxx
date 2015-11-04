@@ -717,8 +717,7 @@ namespace slideshow
                                                             uno::UNO_QUERY_THROW );
             // read bound rect
             awt::Rectangle aTmpRect;
-            if( !(xPropSet->getPropertyValue(
-                      OUString("BoundRect") ) >>= aTmpRect) )
+            if( !(xPropSet->getPropertyValue("BoundRect") >>= aTmpRect) )
             {
                 ENSURE_OR_THROW( false,
                                   "getAPIShapeBounds(): Could not get \"BoundRect\" property from shape" );

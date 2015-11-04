@@ -212,7 +212,7 @@ void Listener::ConnectToController()
         {
             try
             {
-                xSet->addPropertyChangeListener(OUString("CurrentPage"), this);
+                xSet->addPropertyChangeListener("CurrentPage", this);
             }
             catch (beans::UnknownPropertyException&)
             {
@@ -220,7 +220,7 @@ void Listener::ConnectToController()
             }
             try
             {
-                xSet->addPropertyChangeListener(OUString("IsMasterPageMode"), this);
+                xSet->addPropertyChangeListener("IsMasterPageMode", this);
             }
             catch (beans::UnknownPropertyException&)
             {
@@ -252,12 +252,8 @@ void Listener::DisconnectFromController()
             // Remove the property listener.
             if (xSet.is())
             {
-                xSet->removePropertyChangeListener (
-                    OUString("CurrentPage"),
-                    this);
-                xSet->removePropertyChangeListener (
-                    OUString("IsMasterPageMode"),
-                    this);
+                xSet->removePropertyChangeListener( "CurrentPage", this );
+                xSet->removePropertyChangeListener( "IsMasterPageMode", this);
             }
 
             // Remove the dispose listener.

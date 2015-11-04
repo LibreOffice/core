@@ -11,6 +11,7 @@
 #include <limits>
 #include <stack>
 #include <string>
+#include <iostream>
 
 #include "compat.hxx"
 #include "plugin.hxx"
@@ -103,6 +104,8 @@ private:
         TreatEmpty treatEmpty);
 
     void handleOUStringCtor(
+        CallExpr const * expr, unsigned arg, std::string const & qname);
+    void handleOUStringCtor2(
         CallExpr const * expr, unsigned arg, std::string const & qname);
 
     std::stack<Expr const *> calls_;
@@ -545,6 +548,12 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             expr, 0, 1, qname, "rtl::OUStringBuffer::append",
             TreatEmpty::Error);
         return true;
+    }
+    // For places where we are calling a method with a 'const OUString&' param
+    for (unsigned i=0; i < fdecl->getNumParams(); ++i)
+    {
+        if (fdecl->getParamDecl(i)->getType().getAsString() == "const ::rtl::OUString &")
+            handleOUStringCtor2(expr, i, qname);
     }
     return true;
 }
@@ -1275,6 +1284,40 @@ void StringConstant::handleOUStringCtor(
         return;
     }
     //TODO: non, emb, trm
+    report(
+        DiagnosticsEngine::Warning,
+        ("in call of %0, replace OUString constructed from a string literal"
+         " directly with the string literal"),
+        e3->getExprLoc())
+        << qname << expr->getSourceRange();
+}
+
+// For places where we are calling a method with an 'const OUString&' param
+//
+void StringConstant::handleOUStringCtor2(
+    CallExpr const * expr, unsigned arg, std::string const & qname)
+{
+    auto e0 = expr->getArg(arg)->IgnoreParenImpCasts();
+    auto e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
+    if (e1 == nullptr) {
+        return;
+    }
+    e0 = e1->getSubExpr()->IgnoreParenImpCasts();
+    auto e2 = dyn_cast<CXXBindTemporaryExpr>(e0);
+    if (e2 == nullptr) {
+        return;
+    }
+    auto e3 = dyn_cast<CXXConstructExpr>(
+        e2->getSubExpr()->IgnoreParenImpCasts());
+    if (e3 == nullptr) {
+        return;
+    }
+    if (e3->getNumArgs() == 1)
+    {
+        std::string s = e3->getArg(0)->getType().getAsString();
+        if (s == "sal_Unicode" || s == "char")
+            return;
+    }
     report(
         DiagnosticsEngine::Warning,
         ("in call of %0, replace OUString constructed from a string literal"

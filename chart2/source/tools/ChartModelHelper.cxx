@@ -71,7 +71,7 @@ uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDa
                 {
                     ::com::sun::star::chart::ChartDataRowSource aDataRowSource(::com::sun::star::chart::ChartDataRowSource_COLUMNS);
 
-                    xProp->getPropertyValue( OUString("DataRowSource") ) >>= aDataRowSource;
+                    xProp->getPropertyValue( "DataRowSource" ) >>= aDataRowSource;
 
                     bDefaultDataInColumns = (::com::sun::star::chart::ChartDataRowSource_COLUMNS == aDataRowSource);
                 }

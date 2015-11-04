@@ -792,9 +792,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             Any aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
-                            xNewPropNameReplace->replaceByName(
-                                OUString("Handle"),
-                                aAny );
+                            xNewPropNameReplace->replaceByName( "Handle", aAny );
 
                             // ... value
                             aNewKey1 = aKey;
@@ -802,9 +800,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
-                            xNewPropNameReplace->replaceByName(
-                                OUString("Value"),
-                                aAny );
+                            xNewPropNameReplace->replaceByName( "Value", aAny );
 
                             // ... state
                             aNewKey1 = aKey;
@@ -812,9 +808,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
-                            xNewPropNameReplace->replaceByName(
-                                OUString("State"),
-                                aAny );
+                            xNewPropNameReplace->replaceByName( "State", aAny );
 
                             // ... attributes
                             aNewKey1 = aKey;
@@ -822,9 +816,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
-                            xNewPropNameReplace->replaceByName(
-                                OUString("Attributes"),
-                                aAny );
+                            xNewPropNameReplace->replaceByName( "Attributes", aAny );
 
                             // Insert new item.
                             xNewContainer->insertByName(
@@ -1308,13 +1300,11 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                     }
 
                     // Write value
-                    xNameReplace->replaceByName(
-                                    OUString("Value"),
-                                    aValue );
+                    xNameReplace->replaceByName( "Value", aValue );
 
                     // Write state ( Now it is a directly set value )
                     xNameReplace->replaceByName(
-                                    OUString("State"),
+                                    "State",
                                     makeAny(
                                         sal_Int32(
                                             PropertyState_DIRECT_VALUE ) ) );
@@ -1588,24 +1578,24 @@ void SAL_CALL PersistentPropertySet::addProperty(
 
                 // Set handle
                 xNameReplace->replaceByName(
-                                    OUString("Handle"),
+                                    "Handle",
                                     makeAny( sal_Int32( -1 ) ) );
 
                 // Set default value
                 xNameReplace->replaceByName(
-                                    OUString("Value"),
+                                    "Value",
                                     DefaultValue );
 
                 // Set state ( always "default" )
                 xNameReplace->replaceByName(
-                                    OUString("State"),
+                                    "State",
                                     makeAny(
                                         sal_Int32(
                                             PropertyState_DEFAULT_VALUE ) ) );
 
                 // Set attributes
                 xNameReplace->replaceByName(
-                                    OUString("Attributes"),
+                                    "Attributes",
                                     makeAny( sal_Int32( Attributes ) ) );
 
                 // Insert new item.
@@ -2041,7 +2031,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                     {
                         // Write handle
                         xNameReplace->replaceByName(
-                                    OUString("Handle"),
+                                    "Handle",
                                     makeAny( rNewValue.Handle ) );
 
                         // Save old value
@@ -2052,12 +2042,12 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                                                                 aValueName );
                         // Write value
                         xNameReplace->replaceByName(
-                                    OUString("Value"),
+                                    "Value",
                                     rNewValue.Value );
 
                         // Write state ( Now it is a directly set value )
                         xNameReplace->replaceByName(
-                                    OUString("State"),
+                                    "State",
                                     makeAny(
                                         sal_Int32(
                                             PropertyState_DIRECT_VALUE ) ) );

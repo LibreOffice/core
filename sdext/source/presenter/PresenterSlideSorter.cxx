@@ -351,7 +351,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         // Listen for changes of the current slide.
         Reference<beans::XPropertySet> xControllerProperties (rxController, UNO_QUERY_THROW);
         xControllerProperties->addPropertyChangeListener(
-            OUString("CurrentPage"),
+            "CurrentPage",
             this);
 
         // Move the current slide in the center of the window.

@@ -755,7 +755,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     OUString aLocation;
 
     Reference<XRegistryKey > xActivatorKey = xImplementationKey->openKey(
-        OUString("/UNO/ACTIVATOR") );
+        "/UNO/ACTIVATOR" );
     if( xActivatorKey.is() && xActivatorKey->getValueType() == RegistryValueType_ASCII )
     {
         aActivatorUrl = xActivatorKey->getAsciiValue();
@@ -765,7 +765,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         aActivatorName = tmpActivator.getToken(0, ':', nIndex );
 
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
-            OUString("/UNO/LOCATION") );
+            "/UNO/LOCATION" );
         if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
             aLocation = xLocationKey->getAsciiValue();
     }
@@ -774,7 +774,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         // old style"url"
         // the location of the program code of the implementation
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
-            OUString("/UNO/URL") );
+            "/UNO/URL" );
         // is the key of the right type ?
         if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
         {
@@ -819,8 +819,7 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
         // not yet loaded
         try
         {
-            Reference<XRegistryKey > xKey = xImplementationKey->openKey(
-                OUString("UNO/SERVICES") );
+            Reference<XRegistryKey > xKey = xImplementationKey->openKey( "UNO/SERVICES" );
 
             if (xKey.is())
             {

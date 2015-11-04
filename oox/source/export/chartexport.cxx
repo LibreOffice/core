@@ -144,8 +144,7 @@ public:
         OUString aRole;
 
         return ( xProp.is() &&
-                 (xProp->getPropertyValue(
-                     OUString(  "Role" ) ) >>= aRole ) &&
+                 (xProp->getPropertyValue( "Role" ) >>= aRole ) &&
                  m_aRole.equals( aRole ));
     }
 
@@ -707,8 +706,7 @@ void ChartExport::_ExportContent()
             Reference< lang::XServiceInfo > xServ( xChartDoc, uno::UNO_QUERY );
             if( xServ.is())
             {
-                if( xServ->supportsService(
-                        OUString("com.sun.star.chart.ChartTableAddressSupplier")))
+                if( xServ->supportsService("com.sun.star.chart.ChartTableAddressSupplier"))
                 {
                     Reference< beans::XPropertySet > xProp( xServ, uno::UNO_QUERY );
                     if( xProp.is())
@@ -717,8 +715,7 @@ void ChartExport::_ExportContent()
                         try
                         {
                             OUString sChartAddress;
-                            aAny = xProp->getPropertyValue(
-                                OUString("ChartRangeAddress"));
+                            aAny = xProp->getPropertyValue("ChartRangeAddress");
                             aAny >>= msChartAddress;
                             //maExportHelper.SetChartRangeAddress( sChartAddress );
 
@@ -795,8 +792,7 @@ void ChartExport::exportExternalData( Reference< css::chart::XChartDocument > xC
     {
         try
         {
-            Any aAny( xDocPropSet->getPropertyValue(
-                OUString(  "ExternalData" )));
+            Any aAny( xDocPropSet->getPropertyValue( "ExternalData" ));
             aAny >>= externalDataPath;
         }
         catch( beans::UnknownPropertyException & )
@@ -849,14 +845,11 @@ void ChartExport::exportChart( Reference< css::chart::XChartDocument > xChartDoc
         try
         {
             bool bHasSubTitle = false;
-            Any aAny( xDocPropSet->getPropertyValue(
-                OUString(  "HasMainTitle" )));
+            Any aAny( xDocPropSet->getPropertyValue("HasMainTitle"));
             aAny >>= bHasMainTitle;
-            aAny = xDocPropSet->getPropertyValue(
-                OUString(  "HasSubTitle" ));
+            aAny = xDocPropSet->getPropertyValue("HasSubTitle");
             aAny >>= bHasSubTitle;
-            aAny = xDocPropSet->getPropertyValue(
-                OUString(  "HasLegend" ));
+            aAny = xDocPropSet->getPropertyValue("HasLegend");
             aAny >>= bHasLegend;
         }
         catch( beans::UnknownPropertyException & )
@@ -976,8 +969,7 @@ void ChartExport::exportLegend( Reference< css::chart::XChartDocument > xChartDo
         css::chart::ChartLegendPosition aLegendPos = css::chart::ChartLegendPosition_NONE;
         try
         {
-            Any aAny( xProp->getPropertyValue(
-                OUString(  "Alignment" )));
+            Any aAny( xProp->getPropertyValue( "Alignment" ));
                 aAny >>= aLegendPos;
         }
         catch( beans::UnknownPropertyException & )
@@ -2424,16 +2416,13 @@ void ChartExport::InitPlotArea( )
     Reference<lang::XServiceInfo> xServiceInfo (mxDiagram, uno::UNO_QUERY);
     if (xServiceInfo.is())
     {
-        if (xServiceInfo->supportsService(
-            OUString("com.sun.star.chart.ChartAxisZSupplier")))
+        if (xServiceInfo->supportsService("com.sun.star.chart.ChartAxisZSupplier"))
         {
-            xDiagramProperties->getPropertyValue(
-                OUString("HasZAxis")) >>= mbHasZAxis;
+            xDiagramProperties->getPropertyValue("HasZAxis") >>= mbHasZAxis;
         }
     }
 
-    xDiagramProperties->getPropertyValue(
-        OUString ("Dim3D")) >>=  mbIs3DChart;
+    xDiagramProperties->getPropertyValue("Dim3D") >>=  mbIs3DChart;
 
     Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
     if( mbHasCategoryLabels && mxNewDiagram.is())
@@ -2487,30 +2476,19 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
 
        Reference< XPropertySet > xDiagramProperties (mxDiagram, uno::UNO_QUERY);
 
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasXAxisTitle")) >>= bHasXAxisTitle;
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasYAxisTitle")) >>= bHasYAxisTitle;
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasZAxisTitle")) >>= bHasZAxisTitle;
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasSecondaryXAxisTitle")) >>=  bHasSecondaryXAxisTitle;
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasSecondaryYAxisTitle")) >>=  bHasSecondaryYAxisTitle;
+    xDiagramProperties->getPropertyValue("HasXAxisTitle") >>= bHasXAxisTitle;
+    xDiagramProperties->getPropertyValue("HasYAxisTitle") >>= bHasYAxisTitle;
+    xDiagramProperties->getPropertyValue("HasZAxisTitle") >>= bHasZAxisTitle;
+    xDiagramProperties->getPropertyValue("HasSecondaryXAxisTitle") >>=  bHasSecondaryXAxisTitle;
+    xDiagramProperties->getPropertyValue("HasSecondaryYAxisTitle") >>=  bHasSecondaryYAxisTitle;
 
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasXAxisGrid")) >>=  bHasXAxisMajorGrid;
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasYAxisGrid")) >>=  bHasYAxisMajorGrid;
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasZAxisGrid")) >>=  bHasZAxisMajorGrid;
+    xDiagramProperties->getPropertyValue("HasXAxisGrid") >>=  bHasXAxisMajorGrid;
+    xDiagramProperties->getPropertyValue("HasYAxisGrid") >>=  bHasYAxisMajorGrid;
+    xDiagramProperties->getPropertyValue("HasZAxisGrid") >>=  bHasZAxisMajorGrid;
 
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasXAxisHelpGrid")) >>=  bHasXAxisMinorGrid;
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasYAxisHelpGrid")) >>=  bHasYAxisMinorGrid;
-    xDiagramProperties->getPropertyValue(
-        OUString ("HasZAxisHelpGrid")) >>=  bHasZAxisMinorGrid;
+    xDiagramProperties->getPropertyValue("HasXAxisHelpGrid") >>=  bHasXAxisMinorGrid;
+    xDiagramProperties->getPropertyValue("HasYAxisHelpGrid") >>=  bHasYAxisMinorGrid;
+    xDiagramProperties->getPropertyValue("HasZAxisHelpGrid") >>=  bHasZAxisMinorGrid;
 
     Reference< XPropertySet > xAxisProp;
     Reference< drawing::XShape > xAxisTitle;
@@ -2691,8 +2669,7 @@ void ChartExport::_exportAxis(
     bool bVisible = true;
     if( xAxisProp.is() )
     {
-        xAxisProp->getPropertyValue(
-            OUString ("Visible")) >>=  bVisible;
+        xAxisProp->getPropertyValue("Visible") >>=  bVisible;
     }
 
     // only export each axis only once non-deleted
@@ -3160,11 +3137,9 @@ void ChartExport::exportDataPoints(
     Sequence< sal_Int32 > aDataPointSeq;
     if( xSeriesProperties.is())
     {
-        Any aAny = xSeriesProperties->getPropertyValue(
-            OUString(  "AttributedDataPoints" ));
+        Any aAny = xSeriesProperties->getPropertyValue( "AttributedDataPoints" );
         aAny >>= aDataPointSeq;
-        xSeriesProperties->getPropertyValue(
-            OUString(  "VaryColorsByPoint" )) >>= bVaryColorsByPoint;
+        xSeriesProperties->getPropertyValue( "VaryColorsByPoint" ) >>= bVaryColorsByPoint;
     }
 
     const sal_Int32 * pPoints = aDataPointSeq.getConstArray();
@@ -3597,8 +3572,7 @@ Reference< chart2::data::XDataSequence>  getLabeledSequence(
             uno::Reference< chart2::data::XDataSequence > xSequence( aSequences[nI]->getValues());
             uno::Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
             OUString aRole;
-            if( ( xSeqProp->getPropertyValue(
-                            OUString( "Role" )) >>= aRole ) &&
+            if( ( xSeqProp->getPropertyValue( "Role" ) >>= aRole ) &&
                     aRole.match( aRolePrefix ) && aRole.indexOf(aDirection) >= 0 )
             {
                 return xSequence;

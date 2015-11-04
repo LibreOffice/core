@@ -1346,7 +1346,7 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
     xAnimate->setTarget(aAny);
 
     // set AttributeName
-    xAnimate->setAttributeName(OUString("Visibility"));
+    xAnimate->setAttributeName("Visibility");
 
     // set attribute value
     aAny <<= bVisible;

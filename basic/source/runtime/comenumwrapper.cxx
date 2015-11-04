@@ -31,7 +31,7 @@ sal_Bool SAL_CALL ComEnumerationWrapper::hasMoreElements()
         if ( m_xInvocation.is() )
         {
             sal_Int32 nLength = 0;
-            bResult = ( ( m_xInvocation->getValue( OUString("length" ) ) >>= nLength ) && nLength > m_nCurInd );
+            bResult = ( ( m_xInvocation->getValue( "length" ) >>= nLength ) && nLength > m_nCurInd );
         }
     }
     catch(const uno::Exception& )
@@ -55,7 +55,7 @@ uno::Any SAL_CALL ComEnumerationWrapper::nextElement()
 
             aArgs[0] <<= m_nCurInd++;
 
-            return m_xInvocation->invoke( OUString("item"),
+            return m_xInvocation->invoke( "item",
                                           aArgs,
                                           aNamedParamIndex,
                                           aNamedParam );

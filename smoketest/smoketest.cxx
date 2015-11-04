@@ -160,12 +160,12 @@ void Test::test() {
                 css::uno::Reference< css::frame::XModel >(
                     xDesktop->loadComponentFromURL(
                             test::toAbsoluteFileUrl(doc),
-                            OUString("_default"),
+                            "_default",
                             0, args),
                     css::uno::UNO_QUERY_THROW)->getCurrentController(),
                 css::uno::UNO_SET_THROW)->getFrame(),
             css::uno::UNO_QUERY_THROW)->queryDispatch(
-                url, OUString("_self"), 0),
+                url, "_self", 0),
         css::uno::UNO_QUERY_THROW);
     Result result;
     // Shifted to main thread to work around potential deadlocks (i112867):

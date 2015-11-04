@@ -122,7 +122,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             // First make sure that the sidebar is visible
             mrViewShell.GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
             sfx2::sidebar::Sidebar::ShowPanel(
-                OUString("SdLayoutsPanel"),
+                "SdLayoutsPanel",
                 mrViewShell.GetViewFrame()->GetFrame().GetFrameInterface());
             break;
         }

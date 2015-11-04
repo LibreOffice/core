@@ -759,14 +759,12 @@ void SvxConfigGroupListBox::GroupSelected()
                                 continue;
                             }
 
-                            Any value = xPropSet->getPropertyValue(
-                                OUString("URI"));
+                            Any value = xPropSet->getPropertyValue("URI");
                             value >>= uri;
 
                             try
                             {
-                                value = xPropSet->getPropertyValue(
-                                    OUString("Description"));
+                                value = xPropSet->getPropertyValue("Description");
                                 value >>= description;
                             }
                             catch (Exception &) {

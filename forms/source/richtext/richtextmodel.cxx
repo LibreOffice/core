@@ -401,8 +401,7 @@ namespace frm
             {
                 // forward to our aggregate, so the EditEngine knows about it
                 if ( m_xAggregateSet.is() )
-                    m_xAggregateSet->setPropertyValue(
-                        OUString( "WritingMode" ), _rValue );
+                    m_xAggregateSet->setPropertyValue( "WritingMode", _rValue );
             }
             break;
 

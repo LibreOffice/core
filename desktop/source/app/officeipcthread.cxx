@@ -512,7 +512,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         OUString aDefault( "0" );
         OUString aPreloadData;
 
-        aPerfTuneIniFile.getFrom( OUString( "FastPipeCommunication" ), aPreloadData, aDefault );
+        aPerfTuneIniFile.getFrom( "FastPipeCommunication", aPreloadData, aDefault );
 
 
         OUString aUserInstallPathHashCode;

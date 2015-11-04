@@ -117,7 +117,7 @@ IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, BrowseHdl, Button*, void)
     {
         xFilePicker->appendFilter(
              OUString(),
-             OUString( "*.*" )
+             "*.*"
              );
     }
     catch( const IllegalArgumentException& )

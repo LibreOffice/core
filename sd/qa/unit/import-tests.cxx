@@ -646,7 +646,7 @@ void SdImportTest::testFdo71075()
     CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
 
     uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-    aAny = xPropSet->getPropertyValue( OUString("Model") );
+    aAny = xPropSet->getPropertyValue( "Model" );
     CPPUNIT_ASSERT_MESSAGE( "failed to load shape", aAny.hasValue() );
 
     uno::Reference< chart::XChartDocument > xChartDoc;

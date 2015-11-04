@@ -600,8 +600,7 @@ void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
     if( !xNameReplace.is() )
         return;
 
-    xNameReplace->replaceByName( OUString("ForceSafeServiceImpl"),
-                                 makeAny(!_bEnabled) );
+    xNameReplace->replaceByName( "ForceSafeServiceImpl", makeAny(!_bEnabled) );
 
     Reference< XChangesBatch > xChangesBatch(
         mxForceFlagNameAccess, UNO_QUERY );

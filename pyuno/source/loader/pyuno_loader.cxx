@@ -188,8 +188,8 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
         rtl::Bootstrap bootstrap(path);
 
         // look for pythonhome
-        bootstrap.getFrom( OUString( "PYUNO_LOADER_PYTHONHOME"), pythonHome );
-        bootstrap.getFrom( OUString( "PYUNO_LOADER_PYTHONPATH" ) , pythonPath );
+        bootstrap.getFrom( "PYUNO_LOADER_PYTHONHOME", pythonHome );
+        bootstrap.getFrom( "PYUNO_LOADER_PYTHONPATH", pythonPath );
 
         // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
         // sadly, there is no api for setting the pythonpath, we have to use the environment variable

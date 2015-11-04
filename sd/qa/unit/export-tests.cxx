@@ -190,12 +190,12 @@ void SdExportTest::testN821567()
         xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySet > xPropSet( xPage, uno::UNO_QUERY );
-    uno::Any aAny = xPropSet->getPropertyValue( OUString("Background") );
+    uno::Any aAny = xPropSet->getPropertyValue( "Background" );
     if(aAny.hasValue())
     {
         uno::Reference< beans::XPropertySet > aXBackgroundPropSet;
         aAny >>= aXBackgroundPropSet;
-        aAny = aXBackgroundPropSet->getPropertyValue( OUString("FillBitmapName"));
+        aAny = aXBackgroundPropSet->getPropertyValue( "FillBitmapName" );
         aAny >>= bgImage;
     }
     CPPUNIT_ASSERT_MESSAGE("Slide Background is not exported properly", !bgImage.isEmpty());
@@ -594,7 +594,7 @@ void SdExportTest::testFdo83751()
     uno::Reference<document::XDocumentProperties> xProps( xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY );
     uno::Reference<beans::XPropertySet> xUDProps( xProps->getUserDefinedProperties(), uno::UNO_QUERY );
     OUString propValue;
-    xUDProps->getPropertyValue(OUString("Testing")) >>= propValue;
+    xUDProps->getPropertyValue("Testing") >>= propValue;
     CPPUNIT_ASSERT_EQUAL(OUString("Document"), propValue);
     xDocShRef->DoClose();
 }
@@ -1117,7 +1117,7 @@ void SdExportTest::testTdf91378()
       uno::Reference<document::XDocumentProperties> xProps( xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY );
       uno::Reference<beans::XPropertySet> xUDProps( xProps->getUserDefinedProperties(), uno::UNO_QUERY );
       OUString propValue;
-      xUDProps->getPropertyValue(OUString("Testing")) >>= propValue;
+      xUDProps->getPropertyValue("Testing") >>= propValue;
       CPPUNIT_ASSERT(propValue.isEmpty());
       xDocShRef = saveAndReload( xDocShRef, PPTX );
     }

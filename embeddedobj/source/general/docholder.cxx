@@ -532,7 +532,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
         if( xUIConfigManager.is())
         {
             xResult = xUIConfigManager->getSettings(
-                OUString( "private:resource/menubar/menubar" ),
+                "private:resource/menubar/menubar",
                 sal_False );
         }
     }
@@ -554,7 +554,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );
             xResult = xModUIConfMan->getSettings(
-                    OUString( "private:resource/menubar/menubar" ),
+                    "private:resource/menubar/menubar",
                     sal_False );
         }
     }
@@ -652,8 +652,7 @@ bool DocumentHolder::MergeMenus_Impl( const uno::Reference< css::frame::XLayoutM
     try
     {
         uno::Reference< css::ui::XUIElementSettings > xUISettings(
-            xContLM->getElement(
-                OUString( "private:resource/menubar/menubar" ) ),
+            xContLM->getElement( "private:resource/menubar/menubar" ),
             uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xContMenu = xUISettings->getSettings( sal_True );
         if ( !xContMenu.is() )
@@ -981,7 +980,7 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
                 sUrl = "private:object";
 
             xComponentLoader->loadComponentFromURL( sUrl,
-                                                        OUString( "_self" ),
+                                                        "_self",
                                                         0,
                                                         aArgs.getPropertyValues() );
 

@@ -900,7 +900,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                         sal_Int32 nTotalPageCount = aRangeEnum.size();
                         if ( bSecondPassForImpressNotes )
                             nTotalPageCount *= 2;
-                        mxStatusIndicator->start( OUString( ResId( PDF_PROGRESS_BAR, *pResMgr ) ), nTotalPageCount );
+                        mxStatusIndicator->start( ResId( PDF_PROGRESS_BAR, *pResMgr ), nTotalPageCount );
                     }
                 }
 

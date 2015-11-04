@@ -436,7 +436,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
         uno::Reference<lang::XComponent> xComponent;
         xComponent = xComponentLoader->loadComponentFromURL(
-                                            aURL, OUString("_blank"), 0,
+                                            aURL, "_blank", 0,
                                             aFilterOptions);
 
         if (!xComponent.is())
@@ -1464,7 +1464,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
 
     if (pUserProfilePath)
-        rtl::Bootstrap::set(OUString("UserInstallation"), OUString(pUserProfilePath, strlen(pUserProfilePath), RTL_TEXTENCODING_UTF8));
+        rtl::Bootstrap::set("UserInstallation", OUString(pUserProfilePath, strlen(pUserProfilePath), RTL_TEXTENCODING_UTF8));
 
     OUString aAppPath;
     if (pAppPath)

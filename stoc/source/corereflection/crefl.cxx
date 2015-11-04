@@ -64,8 +64,8 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     , _xMgr( xContext->getServiceManager(), UNO_QUERY )
     , _aElements( CACHE_SIZE )
 {
-    xContext->getValueByName( OUString(
-        "/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= _xTDMgr;
+    xContext->getValueByName(
+        "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
 }
 

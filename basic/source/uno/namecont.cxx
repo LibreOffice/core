@@ -3450,7 +3450,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
         try
         {
             Reference< XExtensionManager > xManager = ExtensionManager::get( m_xContext );
-            m_aUserPackagesSeq = xManager->getDeployedExtensions(OUString("user"),
+            m_aUserPackagesSeq = xManager->getDeployedExtensions("user",
                                                                  Reference< task::XAbortChannel >(),
                                                                  Reference< ucb::XCommandEnvironment >() );
         }
@@ -3505,7 +3505,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
         try
         {
             Reference< XExtensionManager > xSharedManager = ExtensionManager::get( m_xContext );
-            m_aSharedPackagesSeq = xSharedManager->getDeployedExtensions(OUString("shared"),
+            m_aSharedPackagesSeq = xSharedManager->getDeployedExtensions("shared",
                                                                          Reference< task::XAbortChannel >(),
                                                                          Reference< ucb::XCommandEnvironment >() );
         }
@@ -3559,7 +3559,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
         try
         {
             Reference< XExtensionManager > xManager = ExtensionManager::get( m_xContext );
-            m_aBundledPackagesSeq = xManager->getDeployedExtensions(OUString("bundled"),
+            m_aBundledPackagesSeq = xManager->getDeployedExtensions("bundled",
                                                                     Reference< task::XAbortChannel >(),
                                                                     Reference< ucb::XCommandEnvironment >() );
         }

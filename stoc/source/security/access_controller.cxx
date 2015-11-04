@@ -265,7 +265,7 @@ static inline Reference< security::XAccessControlContext > getDynamicRestriction
 {
     if (xContext.is())
     {
-        Any acc(xContext->getValueByName(OUString(s_acRestriction)));
+        Any acc(xContext->getValueByName(s_acRestriction));
         if (typelib_TypeClass_INTERFACE == acc.pType->eTypeClass)
         {
             // avoid ref-counting

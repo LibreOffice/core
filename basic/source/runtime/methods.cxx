@@ -3884,7 +3884,7 @@ OUString getObjectTypeName( SbxVariable* pVar )
                         {
                             try
                             {
-                                xInv->getValue( OUString( "$GetTypeName" ) ) >>= sRet;
+                                xInv->getValue( "$GetTypeName" ) >>= sRet;
                             }
                             catch(const Exception& )
                             {

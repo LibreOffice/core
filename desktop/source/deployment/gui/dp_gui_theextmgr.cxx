@@ -35,7 +35,7 @@
 #include "dp_update.hxx"
 
 #define USER_PACKAGE_MANAGER    OUString("user")
-#define SHARED_PACKAGE_MANAGER  OUString("shared")
+#define SHARED_PACKAGE_MANAGER  "shared"
 
 using namespace ::com::sun::star;
 

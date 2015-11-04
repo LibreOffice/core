@@ -3478,8 +3478,7 @@ void ToolbarSaveInData::SetSystemStyle(
     uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        uno::Any a = xPropSet->getPropertyValue(
-            OUString( "LayoutManager"  ) );
+        uno::Any a = xPropSet->getPropertyValue( "LayoutManager" );
         a >>= xLayoutManager;
     }
 
@@ -3990,7 +3989,7 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     if ( pToolbar->IsUserDefined() )
     {
         xProps->setPropertyValue(
-            OUString(ITEM_DESCRIPTOR_UINAME ),
+            ITEM_DESCRIPTOR_UINAME,
             uno::makeAny( OUString( pToolbar->GetName() ) ) );
     }
 
@@ -4038,7 +4037,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
         xPropertySet( xSettings, uno::UNO_QUERY );
 
     xPropertySet->setPropertyValue(
-        OUString(ITEM_DESCRIPTOR_UINAME ),
+            ITEM_DESCRIPTOR_UINAME,
             uno::makeAny( pToolbar->GetName() ) );
 
     try
@@ -5046,8 +5045,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
         uno::Reference< beans::XPropertySet > props =
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
-        uno::Any a = props->getPropertyValue(
-            OUString("SizePixel") );
+        uno::Any a = props->getPropertyValue( "SizePixel" );
         a >>= aSize;
         if (0 == aSize.Width || 0 == aSize.Height)
             return false;
@@ -5223,8 +5221,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
         uno::Reference< beans::XPropertySet > props =
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
 
-        uno::Any a = props->getPropertyValue(
-            OUString("SizePixel") );
+        uno::Any a = props->getPropertyValue("SizePixel");
 
             xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
             if ( xGraphic.is() )

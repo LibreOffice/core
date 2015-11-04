@@ -718,9 +718,7 @@ void BaseNode::showState() const
 
             // read shape name
             OUString aName;
-            if( (xPropSet->getPropertyValue(
-                     OUString("Name") )
-                 >>= aName) )
+            if( xPropSet->getPropertyValue("Name") >>= aName )
             {
                 SAL_INFO("slideshow.verbose", "Node info: n" <<
                          reinterpret_cast<const char*>(this)+debugGetCurrentOffset() <<

@@ -659,9 +659,7 @@ std::unique_ptr<PopupMenu> ViewTabListBox_Impl::CreateContextMenu()
                 {
                     Reference< XCommandInfo > aCommands = aCnt.getCommands();
                     if ( aCommands.is() )
-                        bEnableDelete
-                            = aCommands->hasCommandByName(
-                                OUString( "delete" ) );
+                        bEnableDelete = aCommands->hasCommandByName( "delete" );
                     else
                         bEnableDelete = false;
                 }
@@ -678,9 +676,7 @@ std::unique_ptr<PopupMenu> ViewTabListBox_Impl::CreateContextMenu()
                     Reference< XPropertySetInfo > aProps = aCnt.getProperties();
                     if ( aProps.is() )
                     {
-                        Property aProp
-                            = aProps->getPropertyByName(
-                                OUString( "Title" ) );
+                        Property aProp = aProps->getPropertyByName("Title");
                         bEnableRename
                             = !( aProp.Attributes & PropertyAttribute::READONLY );
                     }
@@ -762,9 +758,7 @@ void ViewTabListBox_Impl::DeleteEntries()
             ::ucbhelper::Content aCnt( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
             Reference< XCommandInfo > aCommands = aCnt.getCommands();
             if ( aCommands.is() )
-                canDelete
-                    = aCommands->hasCommandByName(
-                        OUString( "delete" ) );
+                canDelete = aCommands->hasCommandByName( "delete" );
             else
                 canDelete = false;
         }

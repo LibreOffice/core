@@ -42,7 +42,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
                 SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
     {
         fp = reinterpret_cast<VclAbstractDialogFactory* (SAL_CALL*)()>(
-            aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") ) );
+            aDialogLibrary.getFunctionSymbol( "CreateDialogFactory" ) );
     }
 #else
     fp = CreateDialogFactory;

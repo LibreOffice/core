@@ -222,7 +222,7 @@ OString Databases::getImageTheme()
                 lParams) );
 
     uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
-    uno::Any aResult = xAccess->getByHierarchicalName(OUString("Misc/SymbolStyle"));
+    uno::Any aResult = xAccess->getByHierarchicalName("Misc/SymbolStyle");
     OUString aSymbolsStyleName;
     aResult >>= aSymbolsStyleName;
 
@@ -985,7 +985,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
                 uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
                 if ( xVclWindowPeer.is() )
                 {
-                    uno::Any aHCMode = xVclWindowPeer->getProperty( OUString( "HighContrastMode" ) );
+                    uno::Any aHCMode = xVclWindowPeer->getProperty( "HighContrastMode" );
                     if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
                     {
                         aCSS = "highcontrastblack";
@@ -1258,7 +1258,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aUserPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( OUString("user"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( "user", Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bUserPackagesLoaded = true;
     }
 
@@ -1286,7 +1286,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aSharedPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( OUString("shared"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( "shared", Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bSharedPackagesLoaded = true;
     }
 
@@ -1314,7 +1314,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
     {
         Reference< XExtensionManager > xExtensionManager = ExtensionManager::get(m_xContext);
         m_aBundledPackagesSeq = xExtensionManager->getDeployedExtensions
-            ( OUString("bundled"), Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+            ( "bundled", Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         m_bBundledPackagesLoaded = true;
     }
 

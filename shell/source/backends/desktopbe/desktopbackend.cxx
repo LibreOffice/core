@@ -204,9 +204,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
     css::uno::Reference< css::uno::XCurrentContext > current(
         css::uno::getCurrentContext());
     if (current.is()) {
-        current->getValueByName(
-            OUString("system.desktop-environment")) >>=
-            desktop;
+        current->getValueByName("system.desktop-environment") >>= desktop;
     }
 
     // Fall back to the default if the specific backend is not available:

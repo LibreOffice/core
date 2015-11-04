@@ -229,10 +229,8 @@ void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPag
         awt::Size aSlideSize;
         try
         {
-            xPropertySet->getPropertyValue(
-                OUString("Width")) >>= aSlideSize.Width;
-            xPropertySet->getPropertyValue(
-                OUString("Height")) >>= aSlideSize.Height;
+            xPropertySet->getPropertyValue("Width") >>= aSlideSize.Width;
+            xPropertySet->getPropertyValue("Height") >>= aSlideSize.Height;
         }
         catch (beans::UnknownPropertyException&)
         {

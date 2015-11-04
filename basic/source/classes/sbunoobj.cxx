@@ -201,7 +201,7 @@ Reference< XHierarchicalNameAccess > getTypeProvider_Impl()
         if( xContext.is() )
         {
             xContext->getValueByName(
-                OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) )
+                "/singletons/com.sun.star.reflection.theTypeDescriptionManager" )
                     >>= xAccess;
             OSL_ENSURE( xAccess.is(), "### TypeDescriptionManager singleton not accessible!?" );
         }
@@ -1726,7 +1726,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
                 if ( xInv.is() )
                 {
                     OUString sTypeName;
-                    xInv->getValue( OUString( "$GetTypeName" ) ) >>= sTypeName;
+                    xInv->getValue( "$GetTypeName" ) >>= sTypeName;
                     if ( sTypeName.isEmpty() || sTypeName == "IDispatch" )
                     {
                         // can't check type, leave it pass

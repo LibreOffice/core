@@ -47,7 +47,7 @@ uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString
 
     args.insert(args.end(), rExtraArgs.begin(), rExtraArgs.end());
 
-    uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(rURL, OUString("_default"), 0, comphelper::containerToSequence(args));
+    uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(rURL, "_default", 0, comphelper::containerToSequence(args));
     OUString sMessage = "loading failed: " + rURL;
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString( sMessage, RTL_TEXTENCODING_UTF8 ).getStr( ), xComponent.is());
     return xComponent;

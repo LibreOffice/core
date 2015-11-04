@@ -40,7 +40,7 @@
 #endif
 
 // To be shorten source code by realking
-#define hconv(x)        OUString(hstr2ucsstr(x).c_str())
+#define hconv(x)        hstr2ucsstr(x).c_str()
 #define ascii(x)        OUString::createFromAscii(x)
 #define rstartEl(x,y)   do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(false)
 #define rendEl(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(false)
@@ -2700,7 +2700,7 @@ char *HwpReader::getPStyleName(int index, char *_buf)
 
 void HwpReader::makeChars(hchar_string & rStr)
 {
-    rchars(OUString(rStr.c_str()));
+    rchars(rStr.c_str());
     rStr.clear();
 }
 
@@ -3132,31 +3132,31 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
               padd("text:description", sXML_CDATA, hconv(field));
         rstartEl( "text:placeholder", rList);
         pList->clear();
-        rchars( OUString(rStr.c_str()));
+        rchars( rStr.c_str() );
         rendEl( "text:placeholder" );
     }
 /* Document Summary */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
-        if (hconv(hbox->str3) == "title")
+        if (OUString(hconv(hbox->str3)) == "title")
         {
             rstartEl( "text:title", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:title" );
         }
-        else if (hconv(hbox->str3) == "subject")
+        else if (OUString(hconv(hbox->str3)) == "subject")
         {
             rstartEl( "text:subject", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:subject" );
         }
-        else if (hconv(hbox->str3) == "author")
+        else if (OUString(hconv(hbox->str3)) == "author")
         {
             rstartEl( "text:author-name", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:author-name" );
         }
-        else if (hconv(hbox->str3) == "keywords")
+        else if (OUString(hconv(hbox->str3)) == "keywords")
         {
             rstartEl( "text:keywords", rList );
             rchars(  hconv(hbox->str2) );
@@ -3166,61 +3166,61 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
 /* Personal Information */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
-        if (hconv(hbox->str3) == "User")
+        if (OUString(hconv(hbox->str3)) == "User")
         {
             rstartEl( "text:sender-lastname", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:sender-lastname" );
         }
-        else if (hconv(hbox->str3) == "Company")
+        else if (OUString(hconv(hbox->str3)) == "Company")
         {
             rstartEl( "text:sender-company", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:sender-company" );
         }
-        else if (hconv(hbox->str3) == "Position")
+        else if (OUString(hconv(hbox->str3)) == "Position")
         {
             rstartEl( "text:sender-title", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:sender-title" );
         }
-        else if (hconv(hbox->str3) == "Division")
+        else if (OUString(hconv(hbox->str3)) == "Division")
         {
             rstartEl( "text:sender-position", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:sender-position" );
         }
-        else if (hconv(hbox->str3) == "Fax")
+        else if (OUString(hconv(hbox->str3)) == "Fax")
         {
             rstartEl( "text:sender-fax", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:sender-fax" );
         }
-        else if (hconv(hbox->str3) == "Pager")
+        else if (OUString(hconv(hbox->str3)) == "Pager")
         {
             rstartEl( "text:phone-private", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:phone-private" );
         }
-        else if (hconv(hbox->str3) == "E-mail")
+        else if (OUString(hconv(hbox->str3)) == "E-mail")
         {
             rstartEl( "text:sender-email", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:sender-email" );
         }
-        else if (hconv(hbox->str3) == "Zipcode(office)")
+        else if (OUString(hconv(hbox->str3)) == "Zipcode(office)")
         {
             rstartEl( "text:sender-postal-code", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:sender-postal-code" );
         }
-        else if (hconv(hbox->str3) == "Phone(office)")
+        else if (OUString(hconv(hbox->str3)) == "Phone(office)")
         {
             rstartEl( "text:sender-phone-work", rList );
             rchars(  hconv(hbox->str2) );
             rendEl( "text:sender-phone-work" );
         }
-        else if (hconv(hbox->str3) == "Address(office)")
+        else if (OUString(hconv(hbox->str3)) == "Address(office)")
         {
             rstartEl( "text:sender-street", rList );
             rchars(  hconv(hbox->str2) );
@@ -4767,7 +4767,7 @@ void HwpReader::makeMailMerge(MailMerge * hbox)
 void HwpReader::makeOutline(Outline * hbox)
 {
     if( hbox->kind == 1 )
-        rchars(OUString(hbox->GetUnicode().c_str()));
+        rchars( hbox->GetUnicode().c_str() );
 }
 
 

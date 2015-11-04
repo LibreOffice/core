@@ -83,7 +83,7 @@ void TiledRenderingTest::runAllTests()
     OUString aWorkdirRootPath = OUString::createFromAscii(pWorkdirRoot);
     OUString aWorkdirRootURL = getFileURLFromSystemPath(aWorkdirRootPath);
     OUString sUserInstallURL = aWorkdirRootURL + "/unittest";
-    rtl::Bootstrap::set(OUString("UserInstallation"), sUserInstallURL);
+    rtl::Bootstrap::set("UserInstallation", sUserInstallURL);
 
     std::unique_ptr< Office > pOffice( lok_cpp_init(
                                       m_sLOPath.c_str() ) );

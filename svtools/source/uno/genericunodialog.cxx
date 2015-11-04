@@ -147,7 +147,7 @@ void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle ) throw(Runti
 
     try
     {
-        setPropertyValue(OUString(UNODIALOG_PROPERTY_TITLE), makeAny(_rTitle));
+        setPropertyValue(UNODIALOG_PROPERTY_TITLE, makeAny(_rTitle));
     }
     catch(RuntimeException&)
     {

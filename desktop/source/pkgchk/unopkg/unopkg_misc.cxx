@@ -441,9 +441,7 @@ Reference<XComponentContext> getUNO(
 {
     // do not create any user data (for the root user) in --shared mode:
     if (shared) {
-        rtl::Bootstrap::set(
-            OUString("CFG_CacheUrl"),
-            OUString());
+        rtl::Bootstrap::set("CFG_CacheUrl", OUString());
     }
 
     // hold lock during process runtime:

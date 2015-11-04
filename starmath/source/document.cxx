@@ -756,12 +756,12 @@ bool SmDocShell::Load( SfxMedium& rMedium )
         uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
         if (
             (
-             xAccess->hasByName( OUString("content.xml") ) &&
-             xStorage->isStreamElement( OUString("content.xml") )
+             xAccess->hasByName( "content.xml" ) &&
+             xStorage->isStreamElement( "content.xml" )
             ) ||
             (
-             xAccess->hasByName( OUString("Content.xml") ) &&
-             xStorage->isStreamElement( OUString("Content.xml") )
+             xAccess->hasByName( "Content.xml" ) &&
+             xStorage->isStreamElement( "Content.xml" )
             )
            )
         {

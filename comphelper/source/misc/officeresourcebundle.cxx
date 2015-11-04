@@ -155,8 +155,7 @@ namespace comphelper
         Reference< XResourceBundleLoader > xLoader;
         try
         {
-            Any aValue( m_xContext->getValueByName(
-                OUString( "/singletons/com.sun.star.resource.OfficeResourceLoader" ) ) );
+            Any aValue( m_xContext->getValueByName( "/singletons/com.sun.star.resource.OfficeResourceLoader" ) );
             OSL_VERIFY( aValue >>= xLoader );
         }
         catch( const Exception& )

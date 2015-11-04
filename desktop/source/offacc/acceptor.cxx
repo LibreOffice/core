@@ -249,10 +249,8 @@ Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
             UNO_QUERY );
         if ( rNamingService.is() )
         {
-            rNamingService->registerObject(
-                OUString("StarOffice.ServiceManager" ), m_rContext->getServiceManager() );
-            rNamingService->registerObject(
-                OUString("StarOffice.ComponentContext" ), m_rContext );
+            rNamingService->registerObject( "StarOffice.ServiceManager", m_rContext->getServiceManager() );
+            rNamingService->registerObject( "StarOffice.ComponentContext", m_rContext );
             rInstance = rNamingService;
         }
     }

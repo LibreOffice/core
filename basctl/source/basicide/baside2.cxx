@@ -414,7 +414,7 @@ bool ModulWindow::LoadBasic()
         xFP->setDisplayDirectory ( aCurPath );
 
     xFP->appendFilter( "BASIC" , "*.bas" );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( "BASIC" );
 
     if( xFP->execute() == RET_OK )
@@ -465,7 +465,7 @@ bool ModulWindow::SaveBasicSource()
         xFP->setDisplayDirectory ( aCurPath );
 
     xFP->appendFilter( "BASIC", "*.bas" );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( "BASIC" );
 
     if( xFP->execute() == RET_OK )

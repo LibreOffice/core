@@ -154,7 +154,7 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
         {
              // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
              // keep the XUriReference implementation happy )
-             Reference< XUriReference > xBase = xFactory->parse( OUString("file:///") );
+             Reference< XUriReference > xBase = xFactory->parse( "file:///" );
 
              Reference< XUriReference > xPart = xFactory->parse(  rAttribs.getString( XML_Target, OUString() ) );
              Reference< XUriReference > xAbs = xFactory->makeAbsolute(  xBase, xPart, sal_True, RelativeUriExcessParentSegments_RETAIN );

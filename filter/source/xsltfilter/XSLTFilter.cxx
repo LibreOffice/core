@@ -255,7 +255,7 @@ namespace XSLT
 
         css::uno::Reference<XStringSubstitution>
                 subs(css::util::PathSubstitution::create(m_xContext));
-        OUString aWorkingDir(subs->getSubstituteVariableValue(OUString( "$(progurl)")));
+        OUString aWorkingDir(subs->getSubstituteVariableValue( "$(progurl)" ));
         INetURLObject aObj(aWorkingDir);
         aObj.setFinalSlash();
         bool bWasAbsolute;

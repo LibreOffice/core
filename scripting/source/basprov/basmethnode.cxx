@@ -269,7 +269,7 @@ namespace basprov
                     aArgs[3].Value <<= OUString("Module");
                     aArgs[4].Name = "Line";
                     aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
-                    xHelper->executeDispatch( xProv, OUString(".uno:BasicIDEAppear"), OUString(), 0, aArgs );
+                    xHelper->executeDispatch( xProv, ".uno:BasicIDEAppear", OUString(), 0, aArgs );
                 }
             }
         }

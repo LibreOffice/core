@@ -80,12 +80,12 @@ const uno::Reference < embed::XStorage >& EmbedImpl::GetReplacements()
         try
         {
             mxImageStorage = mxStorage->openStorageElement(
-                OUString("ObjectReplacements"), embed::ElementModes::READWRITE );
+                "ObjectReplacements", embed::ElementModes::READWRITE );
         }
         catch (const uno::Exception&)
         {
             mxImageStorage = mxStorage->openStorageElement(
-                OUString("ObjectReplacements"), embed::ElementModes::READ );
+                "ObjectReplacements", embed::ElementModes::READ );
         }
     }
 
@@ -1282,7 +1282,7 @@ namespace {
         try
         {
             uno::Reference< embed::XStorage > xPictures = xDocStor->openStorageElement(
-                                        OUString( "Pictures" ),
+                                        "Pictures",
                                         embed::ElementModes::READWRITE );
             uno::Reference< io::XStream > xObjReplStr = xPictures->openStreamElement(
                                         aStreamName,

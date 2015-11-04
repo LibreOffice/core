@@ -59,12 +59,10 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL syssh_component_getFactory(
 
     if (0 == ::rtl_str_compare( pImplName, SHELLEXEC_IMPL_NAME ))
     {
-        OUString serviceName( SHELLEXEC_SERVICE_NAME );
-
         xFactory = ::cppu::createSingleComponentFactory(
             createInstance,
-            OUString( SHELLEXEC_IMPL_NAME ),
-            Sequence< OUString >( &serviceName, 1 ) );
+            SHELLEXEC_IMPL_NAME,
+            Sequence< OUString > { SHELLEXEC_SERVICE_NAME } );
 
     }
 

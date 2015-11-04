@@ -511,11 +511,11 @@ static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFa
 {
     if( xTableFamily.is() ) try
     {
-        if( !xTableFamily->hasByName( OUString( rName ) ) )
+        if( !xTableFamily->hasByName( rName ) )
         {
             Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY_THROW );
             Reference< XNameReplace > xDefaultTableStyle( xFactory->createInstance(), UNO_QUERY_THROW );
-            xTableFamily->insertByName( OUString( rName ), Any( xDefaultTableStyle ) );
+            xTableFamily->insertByName( rName, Any( xDefaultTableStyle ) );
 
             xDefaultTableStyle->replaceByName( "body", rBody  );
             xDefaultTableStyle->replaceByName( "odd-rows" , rBanding );

@@ -384,7 +384,7 @@ Reference< css::resource::XStringResourcePersistence >
             return xRet;
         }
 
-        xRet = resource::StringResourceWithStorage::create(mxContext, xLibraryStor, bReadOnly, aLocale, OUString(aResourceFileNameBase), aComment);
+        xRet = resource::StringResourceWithStorage::create(mxContext, xLibraryStor, bReadOnly, aLocale, aResourceFileNameBase, aComment);
     }
     else
     {
@@ -392,7 +392,7 @@ Reference< css::resource::XStringResourcePersistence >
         // TODO: Real handler?
         Reference< task::XInteractionHandler > xDummyHandler;
 
-        xRet = resource::StringResourceWithLocation::create(mxContext, aLocation, bReadOnly, aLocale, OUString(aResourceFileNameBase), aComment, xDummyHandler);
+        xRet = resource::StringResourceWithLocation::create(mxContext, aLocation, bReadOnly, aLocale, aResourceFileNameBase, aComment, xDummyHandler);
     }
 
     return xRet;
@@ -539,7 +539,7 @@ void SfxDialogLibrary::storeResourcesToURL( const OUString& URL,
     if( m_xStringResourcePersistence.is() )
     {
         m_xStringResourcePersistence->storeToURL
-            ( URL, OUString(aResourceFileNameBase), aComment, xHandler );
+            ( URL, aResourceFileNameBase, aComment, xHandler );
     }
 }
 
@@ -551,7 +551,7 @@ void SfxDialogLibrary::storeResourcesToStorage( const css::uno::Reference< css::
     if( m_xStringResourcePersistence.is() )
     {
         m_xStringResourcePersistence->storeToStorage
-            ( xStorage, OUString(aResourceFileNameBase), aComment );
+            ( xStorage, aResourceFileNameBase, aComment );
     }
 }
 

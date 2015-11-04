@@ -685,11 +685,11 @@ bool DialogWindow::SaveDialog()
     if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    xFP->setDefaultName( OUString( GetName() ) );
+    xFP->setDefaultName( GetName() );
 
     OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
-    xFP->appendFilter( aDialogStr, OUString( "*.xdl" ) );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
+    xFP->appendFilter( aDialogStr, "*.xdl" );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
@@ -933,8 +933,8 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
         xFP->setDisplayDirectory ( aCurPath );
 
     OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
-    xFP->appendFilter( aDialogStr, OUString( "*.xdl" ) );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
+    xFP->appendFilter( aDialogStr, "*.xdl" );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
@@ -1283,7 +1283,7 @@ void DialogWindow::StoreData()
                     Reference< XComponentContext > xContext(
                         comphelper::getProcessComponentContext() );
                     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
-                    xLib->replaceByName( OUString( GetName() ), makeAny( xISP ) );
+                    xLib->replaceByName( GetName(), makeAny( xISP ) );
                 }
             }
         }

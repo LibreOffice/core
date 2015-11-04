@@ -49,7 +49,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     CPPUNIT_ASSERT( xDesktop.is() );
 
     // create a frame
-    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame( OUString("_blank"), 0 );
+    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame( "_blank", 0 );
     CPPUNIT_ASSERT( xTargetFrame.is() );
 
     // 1. Open the document
@@ -98,8 +98,8 @@ void ScCopyPasteTest::testCopyPasteXLS()
     args[0].Value <<= sal_True;
 
     uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
-            OUString("private:factory/scalc"),
-            OUString("_blank"),
+            "private:factory/scalc",
+            "_blank",
             0,
             args );
     CPPUNIT_ASSERT( xComponent.is() );

@@ -309,7 +309,7 @@ namespace basprov
 
 
         OUString aDescription = sfUri->getName();
-        OUString aLocation = sfUri->getParameter( OUString("location") );
+        OUString aLocation = sfUri->getParameter( "location" );
 
         sal_Int32 nIndex = 0;
         // In some strange circumstances the Library name can have an

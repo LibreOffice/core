@@ -962,7 +962,7 @@ void Test_Impl::testConstructorsService(
         0.123f,
         0.456,
         'X',
-        OUString("test"),
+        "test",
         UnoType< Any >::get(),
         makeAny(true),
         arg14,
@@ -1189,7 +1189,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             static_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( IMPLNAME ),
+            IMPLNAME,
             bridge_object::Test_Impl_create,
             bridge_object::getSupportedServiceNames() ) );
 

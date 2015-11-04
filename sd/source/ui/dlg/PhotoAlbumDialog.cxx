@@ -145,9 +145,9 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 ::awt::Size aPageSize;
 
                 xSlideProps->getPropertyValue(
-                    OUString("Width")) >>= aPageSize.Width;
+                    "Width") >>= aPageSize.Width;
                 xSlideProps->getPropertyValue(
-                    OUString("Height")) >>= aPageSize.Height;
+                    "Height") >>= aPageSize.Height;
 
                 ::awt::Point aPicPos;
 
@@ -188,9 +188,9 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 ::awt::Size aPageSize;
 
                 xSlideProps->getPropertyValue(
-                    OUString("Width")) >>= aPageSize.Width;
+                    "Width") >>= aPageSize.Width;
                 xSlideProps->getPropertyValue(
-                    OUString("Height")) >>= aPageSize.Height;
+                    "Height") >>= aPageSize.Height;
 
                 // grab the left one
                 void* pD1 = pImagesLst->GetEntryData(i);
@@ -293,9 +293,9 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 ::awt::Size aPageSize;
 
                 xSlideProps->getPropertyValue(
-                    OUString("Width")) >>= aPageSize.Width;
+                    "Width") >>= aPageSize.Width;
                 xSlideProps->getPropertyValue(
-                    OUString("Height")) >>= aPageSize.Height;
+                    "Height") >>= aPageSize.Height;
 
                 // grab the upper left one
                 void* pD1 = pImagesLst->GetEntryData(i);

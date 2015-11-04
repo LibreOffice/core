@@ -279,7 +279,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
     css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, css::uno::UNO_QUERY);
     if(!xConfRegistry_simple.is()) throw css::uno::RuntimeException("javavm.cxx: couldn't get ConfigurationRegistry", 0);
 
-    xConfRegistry_simple->open(OUString("org.openoffice.Inet"), sal_True, sal_False);
+    xConfRegistry_simple->open("org.openoffice.Inet", sal_True, sal_False);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
 //  if ooInetProxyType is not 0 then read the settings
@@ -373,7 +373,7 @@ void getDefaultLocaleFromConfig(
         throw css::uno::RuntimeException(
             OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
 
-    xConfRegistry_simple->open(OUString("org.openoffice.Setup"), sal_True, sal_False);
+    xConfRegistry_simple->open("org.openoffice.Setup", sal_True, sal_False);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
     // read locale
@@ -429,7 +429,7 @@ void getJavaPropsFromSafetySettings(
             OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
 
     xConfRegistry_simple->open(
-        OUString("org.openoffice.Office.Java"),
+        "org.openoffice.Office.Java",
         sal_True, sal_False);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey =
         xConfRegistry_simple->getRootKey();
@@ -455,7 +455,7 @@ void getJavaPropsFromSafetySettings(
             pjvm->pushProp(sProperty);
         }
         css::uno::Reference<css::registry::XRegistryKey> key_CheckSecurity= xRegistryRootKey->openKey(
-            OUString("VirtualMachine/Security"));
+            "VirtualMachine/Security");
         if( key_CheckSecurity.is())
         {
             bool val = (bool) key_CheckSecurity->getLongValue();
@@ -1531,8 +1531,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
     css::uno::Reference< css::util::XMacroExpander > exp = css::util::theMacroExpander::get(m_xContext);
     OUString baseUrl;
     try {
-        baseUrl = exp->expandMacros(
-            OUString("$URE_INTERNAL_JAVA_DIR/"));
+        baseUrl = exp->expandMacros("$URE_INTERNAL_JAVA_DIR/");
     } catch (css::lang::IllegalArgumentException &) {
         throw css::uno::RuntimeException(
             OUString("css::lang::IllegalArgumentException"),
@@ -1540,8 +1539,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
     }
     OUString classPath;
     try {
-        classPath = exp->expandMacros(
-            OUString("$URE_INTERNAL_JAVA_CLASSPATH"));
+        classPath = exp->expandMacros("$URE_INTERNAL_JAVA_CLASSPATH");
     } catch (css::lang::IllegalArgumentException &) {}
     jclass class_URLClassLoader = environment->FindClass(
         "java/net/URLClassLoader");

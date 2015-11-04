@@ -381,7 +381,7 @@ void EventMultiplexer::Implementation::ConnectToController()
         {
                 try
                 {
-                    xSet->addPropertyChangeListener(OUString(aCurrentPagePropertyName), this);
+                    xSet->addPropertyChangeListener(aCurrentPagePropertyName, this);
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
@@ -390,7 +390,7 @@ void EventMultiplexer::Implementation::ConnectToController()
 
                 try
                 {
-                    xSet->addPropertyChangeListener(OUString(aEditModePropertyName), this);
+                    xSet->addPropertyChangeListener(aEditModePropertyName, this);
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
@@ -425,7 +425,7 @@ void EventMultiplexer::Implementation::DisconnectFromController()
         {
             try
             {
-                xSet->removePropertyChangeListener(OUString(aCurrentPagePropertyName), this);
+                xSet->removePropertyChangeListener(aCurrentPagePropertyName, this);
             }
             catch (const beans::UnknownPropertyException&)
             {
@@ -434,7 +434,7 @@ void EventMultiplexer::Implementation::DisconnectFromController()
 
             try
             {
-                xSet->removePropertyChangeListener(OUString(aEditModePropertyName), this);
+                xSet->removePropertyChangeListener(aEditModePropertyName, this);
             }
             catch (const beans::UnknownPropertyException&)
             {

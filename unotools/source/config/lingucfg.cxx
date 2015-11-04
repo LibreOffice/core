@@ -912,7 +912,7 @@ bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
         xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
-        if (xNA->getByName( OUString(aG_SupportedDictionaryFormats) ) >>= rFormatList)
+        if (xNA->getByName( aG_SupportedDictionaryFormats ) >>= rFormatList)
             bSuccess = true;
         DBG_ASSERT( rFormatList.getLength(), "supported dictionary format list is empty" );
     }
@@ -953,16 +953,16 @@ bool SvtLinguConfig::GetDictionaryEntry(
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(OUString(aG_Dictionaries)), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( aG_Dictionaries ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
 
         // read group data...
         uno::Sequence< OUString >  aLocations;
         OUString                   aFormatName;
         uno::Sequence< OUString >  aLocaleNames;
-        bSuccess =  (xNA->getByName( OUString(aG_Locations) ) >>= aLocations)  &&
-                    (xNA->getByName( OUString(aG_Format) )    >>= aFormatName) &&
-                    (xNA->getByName( OUString(aG_Locales) )   >>= aLocaleNames);
+        bSuccess =  (xNA->getByName( aG_Locations ) >>= aLocations)  &&
+                    (xNA->getByName( aG_Format )    >>= aFormatName) &&
+                    (xNA->getByName( aG_Locales )   >>= aLocaleNames);
         DBG_ASSERT( aLocations.getLength(), "Dictionary locations not set" );
         DBG_ASSERT( !aFormatName.isEmpty(), "Dictionary format name not set" );
         DBG_ASSERT( aLocaleNames.getLength(), "No locales set for the dictionary" );
@@ -1000,7 +1000,7 @@ uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
-        xNA->getByName( OUString(aG_DisabledDictionaries) ) >>= aResult;
+        xNA->getByName( aG_DisabledDictionaries ) >>= aResult;
     }
     catch (uno::Exception &)
     {

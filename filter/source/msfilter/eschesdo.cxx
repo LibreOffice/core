@@ -1096,7 +1096,7 @@ basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& rxShape
 
                 if(mXPropSet.is())
                 {
-                    const Any aAny = mXPropSet->getPropertyValue(OUString("Transformation"));
+                    const Any aAny = mXPropSet->getPropertyValue("Transformation");
 
                     if(aAny.hasValue())
                     {

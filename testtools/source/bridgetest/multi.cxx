@@ -127,29 +127,27 @@ OUString testMulti(
             OUString("12" "abc"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
                 multi, css::uno::UNO_QUERY_THROW)->fn12(
-                    OUString("abc")));
+                    "abc"));
         checkEqual(
             OUString("12" "abc-2"),
             static_cast< test::testtools::bridgetest::XMultiBase2 * >(
-                multi.get())->fn12(OUString("abc-2")));
+                multi.get())->fn12("abc-2"));
         checkEqual(
             OUString("12" "abc-2"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn12(
-                    OUString("abc-2")));
+                multi, css::uno::UNO_QUERY_THROW)->fn12("abc-2"));
         checkEqual(
             OUString("12" "abc-5"),
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
-                multi.get())->fn12(OUString("abc-5")));
+                multi.get())->fn12("abc-5"));
         checkEqual(
             OUString("12" "abc-5"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn12(
-                    OUString("abc-5")));
+                multi, css::uno::UNO_QUERY_THROW)->fn12("abc-5"));
         checkEqual< sal_Int32 >(21 * 2, multi->fn21(2));
         checkEqual(
             OUString("22" "de"),
-            multi->fn22(OUString("de")));
+            multi->fn22("de"));
         checkEqual< sal_Int32 >(
             31 * 3,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
@@ -191,17 +189,15 @@ OUString testMulti(
         checkEqual(
             OUString("32" "f"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn32(
-                    OUString("f")));
+                multi, css::uno::UNO_QUERY_THROW)->fn32("f"));
         checkEqual(
             OUString("32" "f-5"),
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
-                multi.get())->fn32(OUString("f-5")));
+                multi.get())->fn32("f-5"));
         checkEqual(
             OUString("32" "f-5"),
             css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn32(
-                    OUString("f-5")));
+                multi, css::uno::UNO_QUERY_THROW)->fn32("f-5"));
         checkEqual< sal_Int32 >(
             33,
             css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
@@ -222,7 +218,7 @@ OUString testMulti(
         checkEqual< sal_Int32 >(71 * 7, multi->fn71(7));
         checkEqual(
             OUString("72" "g"),
-            multi->fn72(OUString("g")));
+            multi->fn72("g"));
         checkEqual< sal_Int32 >(73, multi->fn73());
     } catch (CheckFailed const & f) {
         return f.message;

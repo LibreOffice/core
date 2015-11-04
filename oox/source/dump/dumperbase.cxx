@@ -1510,7 +1510,7 @@ void Output::newLine()
 void Output::emptyLine( size_t nCount )
 {
     for( size_t nIdx = 0; nIdx < nCount; ++nIdx )
-        mxStrm->writeString( OUString( '\n' ) );
+        mxStrm->writeString( OUString('\n') );
 }
 
 void Output::incIndent()

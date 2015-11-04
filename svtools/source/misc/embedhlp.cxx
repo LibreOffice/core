@@ -914,7 +914,7 @@ OUString EmbeddedObjectRef::GetChartType()
                                 if( xProp.is())
                                 {
                                     bool bCurrent = false;
-                                    if( xProp->getPropertyValue( OUString("SwapXAndYAxis") ) >>= bCurrent )
+                                    if( xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bCurrent )
                                     {
                                         if (bCurrent)
                                             Style += "Bars";

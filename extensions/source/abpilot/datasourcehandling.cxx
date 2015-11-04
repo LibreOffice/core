@@ -146,7 +146,7 @@ namespace abp
             if (xNewDataSource.is())
             {
                 xNewDataSource->setPropertyValue(
-                    OUString( "URL" ),
+                    "URL",
                     makeAny( OUString::createFromAscii( _pInitialAsciiURL ) )
                 );
             }

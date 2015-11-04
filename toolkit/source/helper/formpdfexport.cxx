@@ -155,7 +155,7 @@ namespace toolkitform
 
             Reference< XInterface > xNormalizedLookup( _rxRadioModel, UNO_QUERY );
             OUString sRadioGroupName;
-            OSL_VERIFY( _rxRadioModel->getPropertyValue( OUString(FM_PROP_NAME) ) >>= sRadioGroupName );
+            OSL_VERIFY( _rxRadioModel->getPropertyValue( FM_PROP_NAME ) >>= sRadioGroupName );
 
             Reference< XIndexAccess > xCurrentContainer( xRoot );
             sal_Int32 nStartWithChild = 0;

@@ -620,7 +620,7 @@ static void activate_uno(GSimpleAction *action, GVariant*, gpointer)
             return;
 
         uno::Sequence < css::beans::PropertyValue > args(0);
-        xDesktop->loadComponentFromURL(sFactoryService, OUString("_blank"), 0, args);
+        xDesktop->loadComponentFromURL(sFactoryService, "_blank", 0, args);
         return;
     }
 

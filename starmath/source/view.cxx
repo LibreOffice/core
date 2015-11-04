@@ -1384,7 +1384,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
     uno::Reference <container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
     if (xNameAccess.is() && xNameAccess->getElementNames().getLength())
     {
-        if (xNameAccess->hasByName(OUString("content.xml")) || xNameAccess->hasByName(OUString("Content.xml")))
+        if (xNameAccess->hasByName("content.xml") || xNameAccess->hasByName("Content.xml"))
         {
             // is this a fabulous math package ?
             Reference<css::frame::XModel> xModel(pDoc->GetModel());

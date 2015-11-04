@@ -156,8 +156,7 @@ void RecursiveTest::test()
             OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
                      ".uno:WebHtml")),
         css::uno::UNO_QUERY_THROW);
-    properties_->addPropertyChangeListener(
-        OUString("Label"), this);
+    properties_->addPropertyChangeListener("Label", this);
     step();
     CPPUNIT_ASSERT(count_ == 0);
     css::uno::Reference< css::lang::XComponent >(
@@ -276,12 +275,9 @@ void Test::testSetSetMemberName()
                      "Commands")),
         css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNamed > member;
-    access->getByName(
-        OUString(".uno:FontworkGalleryFloater")) >>=
-        member;
+    access->getByName(".uno:FontworkGalleryFloater") >>= member;
     CPPUNIT_ASSERT(member.is());
-    member->setName(
-        OUString(".uno:FontworkShapeType"));
+    member->setName(".uno:FontworkShapeType");
     css::uno::Reference< css::util::XChangesBatch >(
         access, css::uno::UNO_QUERY_THROW)->commitChanges();
     css::uno::Reference< css::lang::XComponent >(
@@ -347,12 +343,9 @@ void Test::testReadCommands()
             css::uno::Reference< css::container::XNameAccess > child;
             if (access->getByName(names[j]) >>= child) {
                 CPPUNIT_ASSERT(child.is());
-                child->getByName(
-                    OUString("Label"));
-                child->getByName(
-                    OUString("ContextLabel"));
-                child->getByName(
-                    OUString("Properties"));
+                child->getByName("Label");
+                child->getByName("ContextLabel");
+                child->getByName("Properties");
             }
         }
     }

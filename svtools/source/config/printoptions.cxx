@@ -41,20 +41,20 @@ static sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
 #define DPI_COUNT (SAL_N_ELEMENTS(aDPIArray))
 
-#define ROOTNODE_START                                  OUString("Office.Common/Print/Option")
-#define ROOTNODE_PRINTOPTION                            OUString("org.openoffice.Office.Common/Print/Option")
+#define ROOTNODE_START                                  "Office.Common/Print/Option"
+#define ROOTNODE_PRINTOPTION                            "org.openoffice.Office.Common/Print/Option"
 
-#define PROPERTYNAME_REDUCETRANSPARENCY                 OUString("ReduceTransparency")
-#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            OUString("ReducedTransparencyMode")
-#define PROPERTYNAME_REDUCEGRADIENTS                    OUString("ReduceGradients")
-#define PROPERTYNAME_REDUCEDGRADIENTMODE                OUString("ReducedGradientMode")
-#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           OUString("ReducedGradientStepCount")
-#define PROPERTYNAME_REDUCEBITMAPS                      OUString("ReduceBitmaps")
-#define PROPERTYNAME_REDUCEDBITMAPMODE                  OUString("ReducedBitmapMode")
-#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            OUString("ReducedBitmapResolution")
-#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  OUString("ReducedBitmapIncludesTransparency")
-#define PROPERTYNAME_CONVERTTOGREYSCALES                OUString("ConvertToGreyscales")
-#define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        OUString("PDFAsStandardPrintJobFormat")
+#define PROPERTYNAME_REDUCETRANSPARENCY                 "ReduceTransparency"
+#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            "ReducedTransparencyMode"
+#define PROPERTYNAME_REDUCEGRADIENTS                    "ReduceGradients"
+#define PROPERTYNAME_REDUCEDGRADIENTMODE                "ReducedGradientMode"
+#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           "ReducedGradientStepCount"
+#define PROPERTYNAME_REDUCEBITMAPS                      "ReduceBitmaps"
+#define PROPERTYNAME_REDUCEDBITMAPMODE                  "ReducedBitmapMode"
+#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            "ReducedBitmapResolution"
+#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  "ReducedBitmapIncludesTransparency"
+#define PROPERTYNAME_CONVERTTOGREYSCALES                "ConvertToGreyscales"
+#define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        "PDFAsStandardPrintJobFormat"
 
 using namespace ::utl;
 using namespace ::osl;

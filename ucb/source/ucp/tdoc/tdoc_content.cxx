@@ -2383,7 +2383,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
             // According to MBA, if no mediatype is set, folder and all
             // its contents will be lost on save of the document!!!
             xPropSet->setPropertyValue(
-                OUString(  "MediaType"  ),
+                "MediaType",
                 uno::makeAny(
                     OUString(                        // @@@ better mediatype
                         "application/binary"  ) ) );

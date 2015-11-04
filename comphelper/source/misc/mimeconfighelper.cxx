@@ -532,8 +532,7 @@ OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( const OUString& 
                     OUString aEntryDocName;
 
                     if ( ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
-                      && ( xObjectProps->getByName(
-                                  OUString( "ObjectDocumentServiceName" ) ) >>= aEntryDocName )
+                      && ( xObjectProps->getByName( "ObjectDocumentServiceName" ) >>= aEntryDocName )
                       && aEntryDocName == aDocName )
                     {
                         xObjectProps->getByName("ObjectFactory") >>= aResult;

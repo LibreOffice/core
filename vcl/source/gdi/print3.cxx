@@ -234,12 +234,12 @@ static OUString queryFile( Printer* pPrinter )
                 bPDF = false;
         }
         if( bPS )
-            xFilePicker->appendFilter( OUString( "PostScript" ), OUString( "*.ps" ) );
+            xFilePicker->appendFilter( "PostScript", "*.ps" );
         if( bPDF )
-            xFilePicker->appendFilter( OUString( "Portable Document Format" ), OUString( "*.pdf" ) );
+            xFilePicker->appendFilter( "Portable Document Format", "*.pdf" );
 #elif defined WNT
         (void)pPrinter;
-        xFilePicker->appendFilter( OUString( "*.PRN" ), OUString( "*.prn" ) );
+        xFilePicker->appendFilter( "*.PRN", "*.prn" );
 #endif
         // add arbitrary files
         xFilePicker->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), "*.*");

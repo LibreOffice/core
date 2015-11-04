@@ -433,8 +433,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                     "No XPropertySet interface!" );
         try
         {
-            uno::Any aPropValue = xPropSet->getPropertyValue(
-                OUString( "OpenMode" ) );
+            uno::Any aPropValue = xPropSet->getPropertyValue("OpenMode");
 
             sal_Int32 nOpenMode = 0;
             if ( aPropValue >>= nOpenMode )

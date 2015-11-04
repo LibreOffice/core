@@ -322,7 +322,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     }
 
     if ( xLayoutManager.is() )
-        xLayoutManager->createElement( OUString( "private:resource/menubar/menubar" ));
+        xLayoutManager->createElement( "private:resource/menubar/menubar" );
 }
 
 BibDataManager* BibliographyLoader::GetDataManager()const

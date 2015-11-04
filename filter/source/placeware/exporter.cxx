@@ -301,7 +301,7 @@ bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOut
 
     if(xStatusIndicator.is())
     {
-        xStatusIndicator->start(OUString( "PlaceWare:" ),xDrawPages->getCount());
+        xStatusIndicator->start( "PlaceWare:", xDrawPages->getCount());
     }
 
     Reference< XDrawPage > xDrawPage;

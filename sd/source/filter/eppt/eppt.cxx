@@ -110,7 +110,7 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
     {
         mbStatusIndicator = true;
         mnStatMaxValue = ( mnPages + mnMasterPages ) * 5;
-        mXStatusIndicator->start( OUString( "PowerPoint Export" ), mnStatMaxValue + ( mnStatMaxValue >> 3 ) );
+        mXStatusIndicator->start( "PowerPoint Export", mnStatMaxValue + ( mnStatMaxValue >> 3 ) );
     }
 
     SvGlobalName aGName( 0x64818d10L, 0x4f9b, 0x11cf, 0x86, 0xea, 0x00, 0xaa, 0x00, 0xb9, 0x29, 0xe8 );
@@ -145,7 +145,7 @@ void PPTWriter::exportPPTPost( )
 
     if ( mbStatusIndicator )
     {
-        mXStatusIndicator->setText( OUString( "PowerPoint Export" ) );
+        mXStatusIndicator->setText( "PowerPoint Export" );
         sal_uInt32 nValue = mnStatMaxValue + ( mnStatMaxValue >> 3 );
         if ( nValue > mnLatestStatValue )
         {

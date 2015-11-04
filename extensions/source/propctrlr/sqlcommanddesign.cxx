@@ -247,8 +247,8 @@ namespace pcr
             aArgs[4].Value <<= m_xObjectAdapter->getEscapeProcessing();
 
             Reference< XComponent > xQueryDesign = xLoader->loadComponentFromURL(
-                OUString( ".component:DB/QueryDesign" ),
-                OUString( "_self" ),
+                ".component:DB/QueryDesign",
+                "_self",
                 FrameSearchFlag::TASKS | FrameSearchFlag::CREATE,
                 aArgs
             );
@@ -295,7 +295,7 @@ namespace pcr
             Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
             Reference< XFrames > xDesktopFramesCollection( xDesktop->getFrames(), UNO_QUERY_THROW );
-            xFrame = xDesktop->findFrame( OUString( "_blank" ), FrameSearchFlag::CREATE );
+            xFrame = xDesktop->findFrame( "_blank", FrameSearchFlag::CREATE );
             OSL_ENSURE( xFrame.is(), "SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow: could not create an empty frame!" );
             xDesktopFramesCollection->remove( xFrame );
         }
@@ -332,7 +332,7 @@ namespace pcr
                 Reference< XMultiServiceFactory >( m_xORB, UNO_QUERY ) );
 
             Reference< XDispatchProvider > xProvider( m_xDesigner->getFrame(), UNO_QUERY_THROW );
-            Reference< XDispatch > xDispatch( xProvider->queryDispatch( aCloseURL, OUString( "_top" ), FrameSearchFlag::SELF ) );
+            Reference< XDispatch > xDispatch( xProvider->queryDispatch( aCloseURL, "_top", FrameSearchFlag::SELF ) );
             OSL_ENSURE( xDispatch.is(), "SQLCommandDesigner::impl_closeDesigner_nothrow: no dispatcher for the CloseDoc command!" );
             if ( xDispatch.is() )
             {

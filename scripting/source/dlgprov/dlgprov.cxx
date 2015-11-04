@@ -112,7 +112,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
         Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
         // TODO: Ctor
         Reference< resource::XStringResourceManager > xStringResourceManager( xSMgr_->createInstanceWithContext
-            ( OUString("com.sun.star.resource.StringResourceWithLocation"),
+            ( "com.sun.star.resource.StringResourceWithLocation",
                 i_xContext ), UNO_QUERY );
         if( xStringResourceManager.is() )
         {
@@ -325,8 +325,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
             if ( nIndex != -1 )
                 sDlgName = sDescription.getToken( 0, (sal_Unicode)'.', nIndex );
 
-            OUString sLocation = sfUri->getParameter(
-                OUString("location") );
+            OUString sLocation = sfUri->getParameter( "location" );
 
 
             // get dialog library container

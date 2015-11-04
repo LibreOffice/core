@@ -128,7 +128,7 @@ handleNoSuchFilterRequest_(
     //            out by using DocumentService property later!
     uno::Reference< container::XEnumeration > xFilters
         = xFilterContainer->createSubSetEnumerationByQuery(
-            OUString( "_query_all:sort_prop=uiname:iflags=1:eflags=143360"));
+            "_query_all:sort_prop=uiname:iflags=1:eflags=143360");
     while (xFilters->hasMoreElements())
     {
         try

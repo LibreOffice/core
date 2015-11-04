@@ -321,14 +321,12 @@ namespace slideshow
                         {
                             OUString aURL;
                             xPropSet->getPropertyValue("MediaMimeType") >>= sMimeType;
-                            if ((xPropSet->getPropertyValue(
-                                  OUString( "PrivateTempFileURL")) >>= aURL)
+                            if ((xPropSet->getPropertyValue("PrivateTempFileURL") >>= aURL)
                                 && !aURL.isEmpty())
                             {
                                 implInitializeMediaPlayer( aURL, sMimeType );
                             }
-                            else if (xPropSet->getPropertyValue(
-                                  OUString( "MediaURL")) >>= aURL)
+                            else if (xPropSet->getPropertyValue("MediaURL") >>= aURL)
                             {
                                 implInitializeMediaPlayer( aURL, sMimeType );
                             }

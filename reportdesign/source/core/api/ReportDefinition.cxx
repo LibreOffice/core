@@ -2420,17 +2420,17 @@ uno::Reference< container::XNameAccess > SAL_CALL OReportDefinition::getStyleFam
         uno::Reference< container::XNameContainer> xStyles(m_pImpl->m_xStyles,uno::UNO_QUERY);
 
         uno::Reference< container::XNameContainer> xPageStyles = new OStylesHelper(cppu::UnoType<style::XStyle>::get());
-        xStyles->insertByName(OUString("PageStyles"),uno::makeAny(xPageStyles));
+        xStyles->insertByName("PageStyles",uno::makeAny(xPageStyles));
         uno::Reference< style::XStyle> xPageStyle(createInstance("com.sun.star.style.PageStyle"),uno::UNO_QUERY);
         xPageStyles->insertByName(xPageStyle->getName(),uno::makeAny(xPageStyle));
 
         uno::Reference< container::XNameContainer> xFrameStyles = new OStylesHelper(cppu::UnoType<style::XStyle>::get());
-        xStyles->insertByName(OUString("FrameStyles"),uno::makeAny(xFrameStyles));
+        xStyles->insertByName("FrameStyles",uno::makeAny(xFrameStyles));
         uno::Reference< style::XStyle> xFrameStyle(createInstance("com.sun.star.style.FrameStyle"),uno::UNO_QUERY);
         xFrameStyles->insertByName(xFrameStyle->getName(),uno::makeAny(xFrameStyle));
 
         uno::Reference< container::XNameContainer> xGraphicStyles = new OStylesHelper(cppu::UnoType<style::XStyle>::get());
-        xStyles->insertByName(OUString("graphics"),uno::makeAny(xGraphicStyles));
+        xStyles->insertByName("graphics",uno::makeAny(xGraphicStyles));
         uno::Reference< style::XStyle> xGraphicStyle(createInstance("com.sun.star.style.GraphicStyle"),uno::UNO_QUERY);
         xGraphicStyles->insertByName(xGraphicStyle->getName(),uno::makeAny(xGraphicStyle));
     }

@@ -522,7 +522,7 @@ void T602ImportFilter::inschrdef(unsigned char ch)
 
     pst.waspar = false;
     if (mxHandler.is())
-        mxHandler->characters(OUString(xch));
+        mxHandler->characters(xch);
 }
 
 void T602ImportFilter::wrtfnt()
