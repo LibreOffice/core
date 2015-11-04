@@ -45,10 +45,7 @@ void MacabCatalog::refreshTables()
     Sequence< OUString > aTypes(1);
     aTypes[0] = "%";
     Reference< XResultSet > xResult = m_xMetaData->getTables(
-        Any(),
-        OUString("%"),
-        OUString("%"),
-        aTypes);
+        Any(), "%", "%", aTypes);
 
     if (xResult.is())
     {
