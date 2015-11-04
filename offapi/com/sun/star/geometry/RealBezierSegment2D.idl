@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module geometry {
     the end point of the last curve, and the remaining members
     ignored.<p>
 
-    @see com.sun.star.rendering.XBezierPolyPolygon2D
+    @see com::sun::star::rendering::XBezierPolyPolygon2D
     @since OOo 2.0
  */
 struct RealBezierSegment2D

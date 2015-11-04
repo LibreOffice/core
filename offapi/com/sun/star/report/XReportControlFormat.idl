@@ -332,7 +332,7 @@ interface XReportControlFormat
     };
 
     /** determines the type of the strike out of the character.
-        @see com.sun.star.awt.FontStrikeout
+        @see com::sun::star::awt::FontStrikeout
     */
     [attribute,bound] short CharStrikeout
     {

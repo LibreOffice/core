@@ -127,7 +127,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
 
     /** merges the selected range of cells.
 
-        @see com:sun::star::CellRange
+        @see com::sun::star::CellRange
      */
     boolean mergeRange();
 
@@ -142,8 +142,8 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             `TRUE` if the range should be split vertically.
             Otherwise it will be split horizontally.
 
-        @see com:sun::star::Cell
-        @see com:sun::star::CellRange
+        @see com::sun::star::Cell
+        @see com::sun::star::CellRange
      */
     boolean splitRange( [in] short nCount,
              [in] boolean bHorizontal );

@@ -44,7 +44,7 @@ published service Footnote
     */
     interface com::sun::star::text::XText;
     /** contains an internal identifier for the use as SequenceNumber property in reference fields.
-     @see com.sun.star.text.textfield.GetReference.
+     @see com::sun::star::text::textfield::GetReference.
      */
     [optional, readonly, property]short ReferenceId;
 };

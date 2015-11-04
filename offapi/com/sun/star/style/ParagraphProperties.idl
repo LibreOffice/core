@@ -264,7 +264,7 @@ published service ParagraphProperties
      */
     [optional, property] byte ParaWidows;
     /** determines the type, color, and size of the shadow.
-     @see com.sun.star.table.ShadowFormat
+     @see com::sun::star::table::ShadowFormat
      */
     [optional, property] com::sun::star::table::ShadowFormat ParaShadowFormat;
     /** contains the left border of the object.
@@ -304,7 +304,7 @@ published service ParagraphProperties
         [property, optional] long BottomBorderDistance;
 
         /** determines the type of break that is applied at the beginning of the table.
-            @see com.sun.star.style.BreakType
+            @see com::sun::star::style::BreakType
          */
         [optional, property] com::sun::star::style::BreakType BreakType;
 

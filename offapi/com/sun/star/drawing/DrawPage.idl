@@ -50,9 +50,9 @@ published service DrawPage
         <p>Every draw page may contain a form layer - that is, a hierarchy of form elements. The layer can be
         accessed using this interface.</p>
 
-        @see com.sun.star.form.FormComponent
-        @see com.sun.star.form.FormComponents
-        @see com.sun.star.form.Forms
+        @see com::sun::star::form::FormComponent
+        @see com::sun::star::form::FormComponents
+        @see com::sun::star::form::Forms
     */
     [optional] interface com::sun::star::form::XFormsSupplier;
 };

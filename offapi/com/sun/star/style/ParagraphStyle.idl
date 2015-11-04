@@ -79,7 +79,7 @@ published service ParagraphStyle
      */
     [property] long ParaBottomMarginRelative;
 
-    /** determines the category of a paragraph style.@see com.sun.star.style.ParagraphStyleCategory
+    /** determines the category of a paragraph style. @see com::sun::star::style::ParagraphStyleCategory
      */
     [property] short Category;
 

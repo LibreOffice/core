@@ -36,7 +36,7 @@ published interface XBridge: com::sun::star::uno::XInterface
                              remote process. The call is delegated to
                              com.sun.star.bridge.XInstanceProvider.getInstance() in the
                              remote process.
-        @see com.sun.star.bridge.XInstanceProvider
+        @see com::sun::star::bridge::XInstanceProvider
      */
     com::sun::star::uno::XInterface getInstance( [in] string sInstanceName );
 
