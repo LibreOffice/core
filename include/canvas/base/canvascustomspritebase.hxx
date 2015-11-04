@@ -29,9 +29,6 @@
 #include <canvas/base/integerbitmapbase.hxx>
 #include <canvas/base/sprite.hxx>
 
-#include <boost/noncopyable.hpp>
-
-
 namespace canvas
 {
     /** Helper template to handle XCustomSprite method forwarding to
