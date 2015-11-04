@@ -1800,6 +1800,9 @@
       </node>
       <node oor:name=".uno:ToggleSheetGrid" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Grid Lines for Current Sheet</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Grid Lines for Sheet</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
