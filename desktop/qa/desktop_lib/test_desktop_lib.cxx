@@ -363,6 +363,35 @@ void DesktopLOKTest::testPasteWriter()
 
 void DesktopLOKTest::testRowColumnHeaders()
 {
+    /*
+     * Payload example:
+     *
+     * {
+     *     "rows": [
+     *         {
+     *             "size": "254.987250637468",
+     *             "text": "1"
+     *         },
+     *         {
+     *             "size": "509.974501274936",
+     *             "text": "2"
+     *         }
+     *     ],
+     *     "columns": [
+     *         {
+     *             "size": "1274.93625318734",
+     *             "text": "A"
+     *         },
+     *         {
+     *             "size": "2549.87250637468",
+     *             "text": "B"
+     *         }
+     *     ]
+     * }
+     *
+     * "size" defines the bottom/right boundary of a row/column in twips (size between 0 and boundary)
+     * "text" has the header label in UTF-8
+     */
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     boost::property_tree::ptree aTree;
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewRowColumnHeaders");
@@ -371,23 +400,38 @@ void DesktopLOKTest::testRowColumnHeaders()
     CPPUNIT_ASSERT(!aStream.str().empty());
 
     boost::property_tree::read_json(aStream, aTree);
+    sal_Int32 nPrevious = 0;
     for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
         CPPUNIT_ASSERT(nSize > 0);
         OString aText(rValue.second.get<std::string>("text").c_str());
-        // This failed, as the first item did not contain the text of the first row.
-        CPPUNIT_ASSERT_EQUAL(OString("1"), aText);
-        break;
+        if (!nPrevious)
+            // This failed, as the first item did not contain the text of the first row.
+            CPPUNIT_ASSERT_EQUAL(OString("1"), aText);
+        else
+        {
+            // Make sure that size is absolute: the first two items have the same relative size.
+            CPPUNIT_ASSERT(nPrevious < nSize);
+            break;
+        }
+        nPrevious = nSize;
     }
 
+    nPrevious = 0;
     for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
     {
         sal_Int32 nSize = OString(rValue.second.get<std::string>("size").c_str()).toInt32();
         CPPUNIT_ASSERT(nSize > 0);
         OString aText(rValue.second.get<std::string>("text").c_str());
-        CPPUNIT_ASSERT_EQUAL(OString("A"), aText);
-        break;
+        if (!nPrevious)
+            CPPUNIT_ASSERT_EQUAL(OString("A"), aText);
+        else
+        {
+            CPPUNIT_ASSERT(nPrevious < nSize);
+            break;
+        }
+        nPrevious = nSize;
     }
 }
 
