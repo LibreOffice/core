@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_ras_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_ras_test, \
-    ira \
+    gie \
 	sal \
 	test \
 	tl \

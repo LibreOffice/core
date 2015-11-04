@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_ppm_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_ppm_test, \
-    ipb \
+    gie \
 	sal \
 	test \
 	tl \

@@ -365,15 +365,8 @@ void PCDReader::ReadImage()
 
 //================== GraphicImport - the exported Function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
-#if defined(DISABLE_DYNLOADING)
-#define GraphicImport icdGraphicImport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem )
+icdGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
     PCDReader aPCDReader(rStream);
     return aPCDReader.ReadPCD(rGraphic, pConfigItem);
