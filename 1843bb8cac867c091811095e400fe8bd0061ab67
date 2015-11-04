@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_dbe19f00",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5682,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-04T17:28:13Z",
+      "side": 1,
+      "message": "Instead of allocating from the heap and having to delete them I\u0027d rather create them on the stack, which is also faster.",
+      "revId": "1843bb8cac867c091811095e400fe8bd0061ab67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
