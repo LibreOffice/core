@@ -187,7 +187,7 @@ namespace dbaui
             try
             {
                 Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier = theModuleUIConfigurationManagerSupplier::get( getContext() );
-                Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( OUString("com.sun.star.sdb.OfficeDatabaseDocument") );
+                Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( "com.sun.star.sdb.OfficeDatabaseDocument" );
                 Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 
                 Sequence< OUString> aSeq(1);

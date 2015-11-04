@@ -2314,7 +2314,7 @@ bool ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
         // don't simply overwrite an existent filter, this would lead to problems if this existent
         // filter contains parameters (since a keyset may add parameters itself)
         m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
-        m_xComposer->setFilter( OUString("0 = 1"  ) );
+        m_xComposer->setFilter( "0 = 1" );
     }
 
     m_xComposer->setOrder( m_aOrder );

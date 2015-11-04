@@ -141,7 +141,7 @@ namespace dbaui
                 Reference< XComponentLoader > xFrameLoader( m_xFrameLoader, UNO_QUERY_THROW );
                 xReturn = xFrameLoader->loadComponentFromURL(
                     m_sComponentURL,
-                    OUString("_self"),
+                    "_self",
                     0,
                     i_rDispatchArgs.getPropertyValues()
                 );

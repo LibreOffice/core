@@ -200,7 +200,7 @@ namespace dbaui
                     ), UNO_QUERY_THROW );
             }
 
-            xWizard->trigger( OUString( "start" ) );
+            xWizard->trigger( "start" );
             ::comphelper::disposeComponent( xWizard );
         }
         catch(const Exception&)

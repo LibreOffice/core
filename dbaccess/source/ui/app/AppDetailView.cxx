@@ -477,7 +477,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
             theModuleUIConfigurationManagerSupplier::get( getDetailView()->getBorderWin().getView()->getORB() );
         Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
-            OUString( "com.sun.star.sdb.OfficeDatabaseDocument" )
+            "com.sun.star.sdb.OfficeDatabaseDocument"
         );
         Reference< XImageManager > xImageMgr( xUIConfigMgr->getImageManager(), UNO_QUERY );
 

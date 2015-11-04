@@ -752,7 +752,7 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
     Reference< css::container::XNameContainer >  xNameCont(m_xRowSet, UNO_QUERY);
     {
         OUString sText(ModuleRes(STR_DATASOURCE_GRIDCONTROL_NAME));
-        xNameCont->insertByName(OUString(sText), makeAny(m_xGridModel));
+        xNameCont->insertByName(sText, makeAny(m_xGridModel));
     }
 
     // create the view
