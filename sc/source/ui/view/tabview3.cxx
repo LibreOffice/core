@@ -436,7 +436,7 @@ void ScTabView::SelectionChanged()
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_CURSORCHANGED));
-
+    AlignToCursor(aViewData.GetCurX(), aViewData.GetCurY(), SC_FOLLOW_LINE);
     CellContentChanged();
 }
 
