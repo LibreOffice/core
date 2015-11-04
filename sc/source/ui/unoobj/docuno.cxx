@@ -603,9 +603,6 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     if (!pGridWindow)
         return;
 
-    // update the aLogicMode in ScViewData to something predictable
-    pViewData->SetZoom(Fraction(1, 1), Fraction(1, 1), true);
-
     // Calc operates in pixels...
     MouseEvent aEvent(Point(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY()), nCount,
             MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
