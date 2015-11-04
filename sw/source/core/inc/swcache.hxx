@@ -136,34 +136,34 @@ class SwCacheObj
 {
     friend class SwCache;   /// Can do everything
 
-    SwCacheObj *pNext;      /// For the LRU chaining
-    SwCacheObj *pPrev;
+    SwCacheObj *m_pNext;      /// For the LRU chaining
+    SwCacheObj *m_pPrev;
 
-    sal_uInt16 nCachePos;   /// Position in the Cache array
+    sal_uInt16 m_nCachePos;   /// Position in the Cache array
 
-    sal_uInt8       nLock;
+    sal_uInt8       m_nLock;
 
-    inline SwCacheObj *GetNext() { return pNext; }
-    inline SwCacheObj *GetPrev() { return pPrev; }
-    inline void SetNext( SwCacheObj *pNew )  { pNext = pNew; }
-    inline void SetPrev( SwCacheObj *pNew )  { pPrev = pNew; }
+    inline SwCacheObj *GetNext() { return m_pNext; }
+    inline SwCacheObj *GetPrev() { return m_pPrev; }
+    inline void SetNext( SwCacheObj *pNew )  { m_pNext = pNew; }
+    inline void SetPrev( SwCacheObj *pNew )  { m_pPrev = pNew; }
 
-    inline void   SetCachePos( const sal_uInt16 nNew ) { nCachePos = nNew; }
+    inline void   SetCachePos( const sal_uInt16 nNew ) { m_nCachePos = nNew; }
 
 protected:
-    const void *pOwner;
+    const void *m_pOwner;
 
 public:
 
     SwCacheObj( const void *pOwner );
     virtual ~SwCacheObj();
 
-    inline const void *GetOwner() const { return pOwner; }
+    inline const void *GetOwner() const { return m_pOwner; }
     inline bool IsOwner( const void *pNew ) const;
 
-    inline sal_uInt16 GetCachePos() const { return nCachePos; }
+    inline sal_uInt16 GetCachePos() const { return m_nCachePos; }
 
-    inline bool IsLocked() const { return 0 != nLock; }
+    inline bool IsLocked() const { return 0 != m_nLock; }
 
 #ifdef DBG_UTIL
     void Lock();
@@ -230,7 +230,7 @@ inline void SwCache::DecreaseMax( const sal_uInt16 nSub )
 
 inline bool SwCacheObj::IsOwner( const void *pNew ) const
 {
-    return pOwner && pOwner == pNew;
+    return m_pOwner && m_pOwner == pNew;
 }
 
 inline SwCacheObj *SwCache::Next( SwCacheObj *pCacheObj)

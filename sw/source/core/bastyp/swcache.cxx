@@ -422,11 +422,11 @@ void SwCache::SetLRUOfst( const sal_uInt16 nOfst )
 }
 
 SwCacheObj::SwCacheObj( const void *pOwn ) :
-    pNext( 0 ),
-    pPrev( 0 ),
-    nCachePos( USHRT_MAX ),
-    nLock( 0 ),
-    pOwner( pOwn )
+    m_pNext( 0 ),
+    m_pPrev( 0 ),
+    m_nCachePos( USHRT_MAX ),
+    m_nLock( 0 ),
+    m_pOwner( pOwn )
 {
 }
 
@@ -437,14 +437,14 @@ SwCacheObj::~SwCacheObj()
 #ifdef DBG_UTIL
 void SwCacheObj::Lock()
 {
-    OSL_ENSURE( nLock < UCHAR_MAX, "Too many Locks for CacheObject." );
-    ++nLock;
+    OSL_ENSURE( m_nLock < UCHAR_MAX, "Too many Locks for CacheObject." );
+    ++m_nLock;
 }
 
 void SwCacheObj::Unlock()
 {
-    OSL_ENSURE( nLock, "No more Locks available." );
-    --nLock;
+    OSL_ENSURE( m_nLock, "No more Locks available." );
+    --m_nLock;
 }
 #endif
 

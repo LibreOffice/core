@@ -1867,7 +1867,7 @@ SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrm *pConstructor)
 
 SwBorderAttrs::~SwBorderAttrs()
 {
-    const_cast<SwModify *>(static_cast<SwModify const *>(pOwner))->SetInCache( false );
+    const_cast<SwModify *>(static_cast<SwModify const *>(m_pOwner))->SetInCache( false );
 }
 
 /* All calc methods calculate a safety distance in addition to the values given by the attributes.
