@@ -56,7 +56,7 @@ private:
     void ImpSaveWhich();
     void ImpRestoreWhich();
     sal_uIntPtr GetCurrentPos() const;
-    bool BegChangeEntry(sal_uIntPtr nPos);
+    bool BeginChangeEntry(sal_uIntPtr nPos);
 
 protected:
     virtual long GetRowCount() const override;
@@ -76,7 +76,7 @@ public:
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
     sal_uInt16 GetCurrentWhich() const;
     bool EndChangeEntry();
-    void     BrkChangeEntry();
+    void BreakChangeEntry();
 
     /** GetCellText returns the text at the given position
         @param  _nRow

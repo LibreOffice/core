@@ -187,7 +187,7 @@ void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
     }
     else if(nKeyCode == KEY_ESCAPE)
     {
-        pBrowseMerk->BrkChangeEntry();
+        pBrowseMerk->BreakChangeEntry();
         pBrowseMerk->GrabFocus();
     }
     else if(nKeyCode == KEY_UP || nKeyCode == KEY_DOWN)
@@ -392,7 +392,7 @@ void _SdrItemBrowserControl::DoubleClick(const BrowserMouseEvent&)
 {
     sal_uIntPtr nPos=GetCurrentPos();
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
-        BegChangeEntry(nPos);
+        BeginChangeEntry(nPos);
     }
 }
 
@@ -403,7 +403,7 @@ void _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
     sal_uIntPtr nPos=GetCurrentPos();
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
         if (nKeyCode==KEY_RETURN) {
-            if (BegChangeEntry(nPos)) bAusgewertet = true;
+            if (BeginChangeEntry(nPos)) bAusgewertet = true;
         } else if (nKeyCode==KEY_ESCAPE) {
 
         } else if (rKEvt.GetKeyCode().GetModifier()==KEY_SHIFT+KEY_MOD1+KEY_MOD2) { // Ctrl
@@ -488,9 +488,9 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
     }
 }
 
-bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
+bool _SdrItemBrowserControl::BeginChangeEntry(sal_uIntPtr nPos)
 {
-    BrkChangeEntry();
+    BreakChangeEntry();
     bool bRet = false;
     ImpItemListRow* pEntry=ImpGetEntry(nPos);
     if (pEntry!=NULL && !pEntry->bComment) {
@@ -543,7 +543,7 @@ bool _SdrItemBrowserControl::EndChangeEntry()
     return bRet;
 }
 
-void _SdrItemBrowserControl::BrkChangeEntry()
+void _SdrItemBrowserControl::BreakChangeEntry()
 {
     if (pEditControl!=nullptr) {
         pEditControl.disposeAndClear();
