@@ -143,8 +143,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
     {
         Reference<XTabBar> xBar (rxTabBar);
         if ( ! xBar.is())
-            xBar = Reference<XTabBar>(
-                mxConfigurationController->getResource(mxViewTabBarId), UNO_QUERY);
+            xBar.set( mxConfigurationController->getResource(mxViewTabBarId), UNO_QUERY);
 
         if (xBar.is())
         {

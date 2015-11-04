@@ -446,8 +446,7 @@ void SlideSorterModel::UpdatePageList()
                     xController->getModel(), UNO_QUERY);
                 if (xSupplier.is())
                 {
-                    xPages = Reference<container::XIndexAccess>(
-                        xSupplier->getMasterPages(), UNO_QUERY);
+                    xPages.set( xSupplier->getMasterPages(), UNO_QUERY);
                 }
             }
             break;
@@ -458,8 +457,7 @@ void SlideSorterModel::UpdatePageList()
                     xController->getModel(), UNO_QUERY);
                 if (xSupplier.is())
                 {
-                    xPages = Reference<container::XIndexAccess>(
-                        xSupplier->getDrawPages(), UNO_QUERY);
+                    xPages.set( xSupplier->getDrawPages(), UNO_QUERY);
                 }
             }
             break;

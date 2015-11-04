@@ -125,7 +125,7 @@ void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
         Reference<XConfigurationController> xCC (
             mxControllerManager->getConfigurationController());
         if (xCC.is())
-            xBar = Reference<XTabBar>(xCC->getResource(mxViewTabBarId), UNO_QUERY);
+            xBar.set(xCC->getResource(mxViewTabBarId), UNO_QUERY);
     }
 
     if (xBar.is())

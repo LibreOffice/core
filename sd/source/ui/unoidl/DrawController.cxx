@@ -339,7 +339,7 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage()
     // When there is not yet a sub controller (during initialization) then fall back
     // to the current page in mpCurrentPage.
     if ( ! xPage.is() && mpCurrentPage.is())
-        xPage = Reference<drawing::XDrawPage>(mpCurrentPage->getUnoPage(), UNO_QUERY);
+        xPage.set(mpCurrentPage->getUnoPage(), UNO_QUERY);
 
     return xPage;
 }
@@ -849,7 +849,7 @@ void DrawController::DisposeFrameworkControllers()
     if (xComponent.is())
         xComponent->dispose();
 
-    xComponent = Reference<XComponent>(mxConfigurationController, UNO_QUERY);
+    xComponent.set(mxConfigurationController, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
 }

@@ -88,7 +88,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
     {
         try
         {
-            mxViewId = Reference<XResourceId>(rArguments[0], UNO_QUERY_THROW);
+            mxViewId.set(rArguments[0], UNO_QUERY_THROW);
 
             // Get the XController.
             Reference<frame::XController> xController (rArguments[1], UNO_QUERY_THROW);
@@ -102,7 +102,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
                 pBase = pController->GetViewShellBase();
 
             // Get the parent window.
-            mxParentWindow = Reference<awt::XWindow>(rArguments[2], UNO_QUERY_THROW);
+            mxParentWindow.set(rArguments[2], UNO_QUERY_THROW);
             vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(mxParentWindow);
 
             mxParentWindow->addWindowListener(this);

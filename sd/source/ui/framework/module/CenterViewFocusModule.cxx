@@ -133,8 +133,7 @@ void CenterViewFocusModule::HandleNewView (
             AnchorBindingMode_DIRECT));
         Reference<XView> xView;
         if (xViewIds.getLength() > 0)
-            xView = Reference<XView>(
-                mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
+            xView.set( mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
         Reference<lang::XUnoTunnel> xTunnel (xView, UNO_QUERY);
         if (xTunnel.is() && mpBase!=NULL)
         {

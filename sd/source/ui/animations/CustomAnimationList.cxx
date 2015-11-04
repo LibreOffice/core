@@ -110,10 +110,10 @@ static sal_Int32 getShapeIndex( const Reference< XShape >& xShape )
     while( xChild.is() && !xPage.is() )
     {
         Reference< XInterface > x( xChild->getParent() );
-        xChild = Reference< XChild >::query( x );
+        xChild.set( x, UNO_QUERY );
         Reference< XDrawPage > xTestPage( x, UNO_QUERY );
         if( xTestPage.is() )
-            xPage = Reference< XShapes >::query( x );
+            xPage.set( x, UNO_QUERY );
     }
 
     sal_Int32 nIndex = 1;

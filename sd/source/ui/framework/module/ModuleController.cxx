@@ -211,7 +211,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
         LoadedFactoryContainer::const_iterator iLoadedFactory (
             mpLoadedFactories->find(iFactory->second));
         if (iLoadedFactory != mpLoadedFactories->end())
-            xFactory = Reference<XInterface>(iLoadedFactory->second, UNO_QUERY);
+            xFactory.set(iLoadedFactory->second, UNO_QUERY);
         if ( ! xFactory.is())
         {
             // Create a new instance of the factory.
@@ -251,7 +251,7 @@ void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
         try
         {
             // Get the XController from the first argument.
-            mxController = Reference<frame::XController>(aArguments[0], UNO_QUERY_THROW);
+            mxController.set(aArguments[0], UNO_QUERY_THROW);
 
             InstantiateStartupServices();
         }

@@ -225,7 +225,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
     css::uno::Reference < css::ui::dialogs::XFilePicker2 > xFileDlg = GetFilePicker();
 
     // get the control access
-    mxControlAccess = css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess > ( xFileDlg, css::uno::UNO_QUERY );
+    mxControlAccess.set( xFileDlg, css::uno::UNO_QUERY );
 
     if( mxControlAccess.is() )
     {

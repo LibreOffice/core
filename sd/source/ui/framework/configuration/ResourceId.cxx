@@ -500,7 +500,7 @@ void ResourceId::ParseResourceURL()
     {
         // Create the URL transformer.
         Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
-        xURLTransformer = Reference<util::XURLTransformer>(util::URLTransformer::create(xContext));
+        xURLTransformer.set(util::URLTransformer::create(xContext));
         mxURLTransformerWeak = xURLTransformer;
         SdGlobalResourceContainer::Instance().AddResource(
             Reference<XInterface>(xURLTransformer,UNO_QUERY));

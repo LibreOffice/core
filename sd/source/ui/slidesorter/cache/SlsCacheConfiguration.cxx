@@ -107,9 +107,7 @@ CacheConfiguration::CacheConfiguration()
             return;
 
         // Get the node for the slide sorter preview cache.
-        mxCacheNode = Reference<container::XNameAccess>(
-            xHierarchy->getByHierarchicalName(sPathToNode),
-            UNO_QUERY);
+        mxCacheNode.set( xHierarchy->getByHierarchicalName(sPathToNode), UNO_QUERY);
     }
     catch (RuntimeException &)
     {

@@ -203,7 +203,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     // get current controller and initialize listeners
     try
     {
-        mxView = Reference< XDrawView >::query(mrBase.GetController());
+        mxView.set(mrBase.GetController(), UNO_QUERY);
         addListener();
     }
     catch( Exception& )
@@ -325,7 +325,7 @@ IMPL_LINK_TYPED(CustomAnimationPane,EventMultiplexerListener,
             {
                 if( mrBase.GetMainViewShell()->GetShellType() == ViewShell::ST_IMPRESS )
                 {
-                    mxView = Reference<XDrawView>::query(mrBase.GetDrawController());
+                    mxView.set(mrBase.GetDrawController(), UNO_QUERY);
                     onSelectionChanged();
                     onChangeCurrentPage();
                     break;

@@ -122,14 +122,14 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
     // get current controller and initialize listeners
     try
     {
-        mxView = Reference< XDrawView >::query(mrBase.GetController());
+        mxView.set(mrBase.GetController(), UNO_QUERY);
         addListener();
 
         Reference< XController > xController( mrBase.GetController(), UNO_QUERY_THROW );
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( xController->getModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
         const OUString sFamilyName( "table" );
-        mxTableFamily = Reference< XIndexAccess >( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
+        mxTableFamily.set( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
     }
     catch (const Exception&)
     {
@@ -289,7 +289,7 @@ void TableDesignWidget::onSelectionChanged()
             Reference< XShapeDescriptor > xDesc( aSel, UNO_QUERY );
             if( xDesc.is() && ( xDesc->getShapeType() == "com.sun.star.drawing.TableShape" || xDesc->getShapeType() == "com.sun.star.presentation.TableShape" ) )
             {
-                xNewSelection = Reference< XPropertySet >::query( xDesc );
+                xNewSelection.set( xDesc, UNO_QUERY );
             }
         }
     }
@@ -459,7 +459,7 @@ IMPL_LINK_TYPED(TableDesignWidget,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-            mxView = Reference<XDrawView>::query( mrBase.GetController() );
+            mxView.set( mrBase.GetController(), UNO_QUERY );
             onSelectionChanged();
             break;
     }

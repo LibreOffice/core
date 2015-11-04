@@ -185,7 +185,7 @@ void AnnotationManagerImpl::init()
     try
     {
         addListener();
-        mxView = Reference< XDrawView >::query(mrBase.GetController());
+        mxView.set(mrBase.GetController(), UNO_QUERY);
     }
     catch( Exception& )
     {
@@ -893,7 +893,7 @@ IMPL_LINK_TYPED(AnnotationManagerImpl,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-            mxView = Reference<XDrawView>::query( mrBase.GetController() );
+            mxView.set( mrBase.GetController(), UNO_QUERY );
             onSelectionChanged();
             break;
     }

@@ -107,8 +107,7 @@ void AccessibleDrawDocumentView::Init()
     uno::Reference<drawing::XShapes> xShapeList;
     uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
     if (xView.is())
-        xShapeList = uno::Reference<drawing::XShapes> (
-            xView->getCurrentPage(), uno::UNO_QUERY);
+        xShapeList.set( xView->getCurrentPage(), uno::UNO_QUERY);
 
     // Create the children manager.
     mpChildrenManager = new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this);
@@ -151,7 +150,7 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
             uno::Reference<lang::XMultiServiceFactory> xFactory (mxModel, uno::UNO_QUERY);
             uno::Reference<drawing::XShape> xRectangle;
             if (xFactory.is())
-                xRectangle = uno::Reference<drawing::XShape>(xFactory->createInstance ("com.sun.star.drawing.RectangleShape"),
+                xRectangle.set(xFactory->createInstance ("com.sun.star.drawing.RectangleShape"),
                     uno::UNO_QUERY);
 
             // Set the shape's size and position.

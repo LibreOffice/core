@@ -78,7 +78,7 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
         try
         {
             // Get the XController from the first argument.
-            mxController = Reference<frame::XController>(aArguments[0], UNO_QUERY_THROW);
+            mxController.set(aArguments[0], UNO_QUERY_THROW);
 
             // Tunnel through the controller to obtain a ViewShellBase.
             Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY_THROW);

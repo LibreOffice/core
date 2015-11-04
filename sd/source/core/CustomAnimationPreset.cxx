@@ -71,9 +71,9 @@ static Reference< XNameAccess > getNodeAccess( const Reference< XMultiServiceFac
         aPropValue.Value <<= rNodePath;
         aArgs[0] <<= aPropValue;
 
-        xConfigAccess = Reference< XNameAccess >::query(
-            xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess" ,
-                aArgs ));
+        xConfigAccess.set(
+            xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", aArgs ),
+            UNO_QUERY);
     }
     catch (const Exception&)
     {

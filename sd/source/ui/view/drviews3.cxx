@@ -396,9 +396,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 Reference<XController> xController( xFrame->getController(), UNO_SET_THROW );
 
                 // Restore the configuration.
-                xControllerManager = Reference<XControllerManager>( xController, UNO_QUERY_THROW);
-                xConfigurationController = Reference<XConfigurationController>(
-                    xControllerManager->getConfigurationController());
+                xControllerManager.set( xController, UNO_QUERY_THROW );
+                xConfigurationController.set( xControllerManager->getConfigurationController() );
                 if ( ! xConfigurationController.is())
                     throw RuntimeException();
                 xConfigurationController->restoreConfiguration(xConfiguration);

@@ -337,9 +337,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     {
         mxScannerManager = scanner::ScannerManager::create( xContext );
 
-        mxScannerListener = uno::Reference< lang::XEventListener >(
-                            static_cast< ::cppu::OWeakObject* >( new ScannerEventListener( this ) ),
-                            uno::UNO_QUERY );
+        mxScannerListener.set( static_cast< ::cppu::OWeakObject* >( new ScannerEventListener( this ) ),
+                               uno::UNO_QUERY );
     }
     catch (Exception& exception)
     {
@@ -377,10 +376,7 @@ css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubCo
     if (IsMainViewShell())
     {
         // Create uno sub controller for the main view shell.
-        xSubController = css::uno::Reference<css::drawing::XDrawSubController>(
-            new SdUnoDrawView (
-                *this,
-                *GetView()));
+        xSubController.set( new SdUnoDrawView( *this, *GetView()));
     }
 
     return xSubController;

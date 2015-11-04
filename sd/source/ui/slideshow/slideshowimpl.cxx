@@ -303,7 +303,7 @@ bool AnimationSlideController::getSlideAPI( sal_Int32 nSlideNumber, Reference< X
 {
     if( isValidSlideNumber( nSlideNumber ) ) try
     {
-        xSlide = Reference< XDrawPage >( mxSlides->getByIndex(nSlideNumber), UNO_QUERY_THROW );
+        xSlide.set( mxSlides->getByIndex(nSlideNumber), UNO_QUERY_THROW );
 
         if( meMode == PREVIEW )
         {
@@ -1091,7 +1091,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
 {
     try
     {
-        mxShow = Reference< XSlideShow >( createSlideShow(), UNO_QUERY_THROW );
+        mxShow.set( createSlideShow(), UNO_QUERY_THROW );
 
         mxView = new SlideShowView(
                                              *mpShowWindow,

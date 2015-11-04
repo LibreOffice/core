@@ -193,10 +193,9 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
                 Reference<drawing::XMasterPageTarget> xTarget (mxPage, uno::UNO_QUERY);
                 if (xTarget.is())
                 {
-                    xSet = Reference<beans::XPropertySet> (xTarget->getMasterPage(),
-                        uno::UNO_QUERY);
+                    xSet.set(xTarget->getMasterPage(), uno::UNO_QUERY);
                     aBGSet = xSet->getPropertyValue ("Background");
-                    xBGSet = Reference<beans::XPropertySet> (aBGSet, uno::UNO_QUERY);
+                    xBGSet.set(aBGSet, uno::UNO_QUERY);
                 }
             }
             // Fetch the fill color.  Has to be extended to cope with

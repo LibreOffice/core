@@ -306,7 +306,7 @@ void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
             SdPage* pMasterPage = GetSelectedMasterPage();
             assert(pMasterPage); //rhbz#902884
             if (pMasterPage)
-                xSelectedMaster = uno::Reference<drawing::XDrawPage>(pMasterPage->getUnoPage(), uno::UNO_QUERY);
+                xSelectedMaster.set(pMasterPage->getUnoPage(), uno::UNO_QUERY);
             SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
             if (pViewFrame != NULL && xSelectedMaster.is())
             {

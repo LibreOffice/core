@@ -175,9 +175,7 @@ Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController()
     if (IsMainViewShell())
     {
         // Create uno sub controller for the main view shell.
-        xSubController = Reference<drawing::XDrawSubController>(
-            new SdUnoOutlineView (
-                *this));
+        xSubController.set( new SdUnoOutlineView(*this) );
     }
 
     return xSubController;

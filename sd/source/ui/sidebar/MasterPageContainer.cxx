@@ -842,7 +842,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
 
         // Create a new model.
         OUString sModelServiceName ( "com.sun.star.presentation.PresentationDocument");
-        mxModel = uno::Reference<frame::XModel>(
+        mxModel.set(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 sModelServiceName),
             uno::UNO_QUERY);

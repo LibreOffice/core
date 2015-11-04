@@ -236,9 +236,7 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
     if (IsMainViewShell())
     {
         // Create uno controller for the main view shell.
-        xSubController = Reference<drawing::XDrawSubController>(
-            new SdUnoSlideView (
-                *mpSlideSorter));
+        xSubController.set( new SdUnoSlideView( *mpSlideSorter));
     }
 
     return xSubController;

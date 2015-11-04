@@ -211,7 +211,7 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning()
 
     if (maFolderContent.isFolder())
     {
-        mxEntryEnvironment = Reference<css::ucb::XCommandEnvironment>();
+        mxEntryEnvironment.clear();
 
         //  We are interested only in three properties: the entry's name,
         //  its URL, and its content type.
@@ -222,8 +222,7 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning()
 
         //  Create a cursor to iterate over the templates in this folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
-        mxEntryResultSet = Reference<css::sdbc::XResultSet>(
-            maFolderContent.createCursor(aProps, eInclude));
+        mxEntryResultSet.set( maFolderContent.createCursor(aProps, eInclude));
     }
     else
         eNextState = ERROR;
@@ -294,12 +293,12 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning()
 {
     State eNextState (ERROR);
 
-    mxFolderResultSet = Reference<sdbc::XResultSet>();
+    mxFolderResultSet.clear();
 
     try
     {
         //  Create content for template folders.
-        mxFolderEnvironment = Reference<css::ucb::XCommandEnvironment>();
+        mxFolderEnvironment.clear();
         ::ucbhelper::Content aTemplateDir (mxTemplateRoot, mxFolderEnvironment, comphelper::getProcessComponentContext());
 
         //  Define the list of properties we are interested in.
@@ -309,8 +308,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning()
 
         //  Create an cursor to iterate over the template folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_ONLY;
-        mxFolderResultSet = Reference<sdbc::XResultSet>(
-            aTemplateDir.createCursor(aProps, eInclude));
+        mxFolderResultSet.set( aTemplateDir.createCursor(aProps, eInclude));
         if (mxFolderResultSet.is())
             eNextState = GATHER_FOLDER_LIST;
     }

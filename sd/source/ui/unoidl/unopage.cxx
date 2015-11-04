@@ -1598,7 +1598,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if( pObj )
-            xShape = Reference< drawing::XShape >::query( pObj->getUnoShape() );
+            xShape.set( pObj->getUnoShape(), UNO_QUERY );
     }
 
     mpView->HideSdrPage();
@@ -1649,7 +1649,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if( pObj )
-            xShape = Reference< drawing::XShape >::query( pObj->getUnoShape() );
+            xShape.set( pObj->getUnoShape(), UNO_QUERY );
     }
 
     mpView->HideSdrPage();
@@ -2364,7 +2364,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
         if(SvxFmDrawPage::mpPage->TRG_HasMasterPage())
         {
             SdrPage& rMasterPage = SvxFmDrawPage::mpPage->TRG_GetMasterPage();
-            xPage = uno::Reference< drawing::XDrawPage >( rMasterPage.getUnoPage(), uno::UNO_QUERY );
+            xPage.set( rMasterPage.getUnoPage(), uno::UNO_QUERY );
         }
 
         return xPage;
@@ -2638,7 +2638,7 @@ SdNavigationOrderAccess::SdNavigationOrderAccess( SdrPage* pPage )
             SdrObject* pObj = pPage->GetObj( nIndex );
             sal_uInt32 nNavPos = pObj->GetNavigationPosition();
             DBG_ASSERT( !maShapes[nNavPos].is(), "sd::SdNavigationOrderAccess::SdNavigationOrderAccess(), duplicate navigation positions from core!" );
-            maShapes[nNavPos] = Reference< XShape >( pObj->getUnoShape(), UNO_QUERY );
+            maShapes[nNavPos].set( pObj->getUnoShape(), UNO_QUERY );
         }
     }
 }

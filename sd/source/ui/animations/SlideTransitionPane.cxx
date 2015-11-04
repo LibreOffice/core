@@ -937,7 +937,7 @@ IMPL_LINK_TYPED(SlideTransitionPane,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
-            mxView = Reference<drawing::XDrawView>();
+            mxView.clear();
             onSelectionChanged();
             onChangeCurrentPage();
             break;
@@ -956,7 +956,7 @@ IMPL_LINK_TYPED(SlideTransitionPane,EventMultiplexerListener,
                 // passed with the event.
                 if (mrBase.GetMainViewShell() != 0)
                 {
-                    mxView = Reference<drawing::XDrawView>::query(mrBase.GetController());
+                    mxView.set(mrBase.GetController(), css::uno::UNO_QUERY);
                     onSelectionChanged();
                     onChangeCurrentPage();
                 }

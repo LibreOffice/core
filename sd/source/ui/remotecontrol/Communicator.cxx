@@ -67,10 +67,10 @@ void Communicator::execute()
 
         uno::Reference<presentation::XPresentationSupplier> xPS;
         if( xFrame.is() )
-            xPS = uno::Reference<presentation::XPresentationSupplier>( xFrame->getController()->getModel(), uno::UNO_QUERY );
+            xPS.set( xFrame->getController()->getModel(), uno::UNO_QUERY );
         uno::Reference<presentation::XPresentation2> xPresentation;
         if( xPS.is() )
-            xPresentation = uno::Reference<presentation::XPresentation2>( xPS->getPresentation(), uno::UNO_QUERY );
+            xPresentation.set( xPS->getPresentation(), uno::UNO_QUERY );
         if ( xPresentation.is() && xPresentation->isRunning() )
         {
             presentationStarted( xPresentation->getController() );
@@ -142,7 +142,7 @@ void Communicator::presentationStarted( const css::uno::Reference<
 {
     if ( pTransmitter )
     {
-        mListener = rtl::Reference<Listener>( new Listener( this, pTransmitter ) );
+        mListener.set( new Listener( this, pTransmitter ) );
         mListener->init( rController );
     }
 }

@@ -99,12 +99,8 @@ PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRang
         mpFieldEntry = NULL;
         sal_uInt32 nFieldType = 0;
 
-        mXPropSet = css::uno::Reference<
-            css::beans::XPropertySet >
-                ( rXTextRange, css::uno::UNO_QUERY );
-        mXPropState = css::uno::Reference<
-            css::beans::XPropertyState >
-                ( rXTextRange, css::uno::UNO_QUERY );
+        mXPropSet.set( rXTextRange, css::uno::UNO_QUERY );
+        mXPropState.set( rXTextRange, css::uno::UNO_QUERY );
 
         bool bPropSetsValid = ( mXPropSet.is() && mXPropState.is() );
         if ( bPropSetsValid )
@@ -709,9 +705,9 @@ ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > & rXTe
     nBulletFlags = 0;
     nParaFlags = 0;
 
-    mXPropSet = css::uno::Reference< css::beans::XPropertySet >( rXTextContent, css::uno::UNO_QUERY );
+    mXPropSet.set( rXTextContent, css::uno::UNO_QUERY );
 
-    mXPropState = css::uno::Reference< css::beans::XPropertyState >( rXTextContent, css::uno::UNO_QUERY );
+    mXPropState.set( rXTextContent, css::uno::UNO_QUERY );
 
     if ( mXPropSet.is() && mXPropState.is() )
     {

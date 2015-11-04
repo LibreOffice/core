@@ -258,11 +258,11 @@ bool PPTWriterBase::InitSOIface()
 {
     while( true )
     {
-        mXDrawPagesSupplier = Reference< XDrawPagesSupplier >( mXModel, UNO_QUERY );
+        mXDrawPagesSupplier.set( mXModel, UNO_QUERY );
         if ( !mXDrawPagesSupplier.is() )
             break;
 
-        mXMasterPagesSupplier = Reference< XMasterPagesSupplier >( mXModel, UNO_QUERY );
+        mXMasterPagesSupplier.set( mXModel, UNO_QUERY );
         if ( !mXMasterPagesSupplier.is() )
             break;
         mXDrawPages = mXMasterPagesSupplier->getMasterPages();
@@ -323,14 +323,14 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
             if ( !mXDrawPage.is() )
                 break;
         }
-        mXPagePropSet = Reference< XPropertySet >( mXDrawPage, UNO_QUERY );
+        mXPagePropSet.set( mXDrawPage, UNO_QUERY );
         if ( !mXPagePropSet.is() )
             break;
 
         if (GetPropertyValue( aAny, mXPagePropSet, OUString("IsBackgroundDark") ) )
             aAny >>= mbIsBackgroundDark;
 
-        mXShapes = Reference< XShapes >( mXDrawPage, UNO_QUERY );
+        mXShapes.set( mXDrawPage, UNO_QUERY );
         if ( !mXShapes.is() )
             break;
 
@@ -349,8 +349,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                 if ( aXMasterDrawPage.is() )
                 {
                     Reference< XPropertySet > aXMasterPagePropSet;
-                    aXMasterPagePropSet = Reference< XPropertySet >
-                        ( aXMasterDrawPage, UNO_QUERY );
+                    aXMasterPagePropSet.set( aXMasterDrawPage, UNO_QUERY );
                     if ( aXMasterPagePropSet.is() )
                     {
                         bool bBackground = GetPropertyValue( aAny, aXMasterPagePropSet, OUString( "Background" ) );
@@ -544,8 +543,7 @@ bool PPTWriterBase::GetStyleSheets()
         maStyleSheetList.push_back( new PPTExStyleSheet( nDefaultTab, dynamic_cast<PPTExBulletProvider*>(this) ) );
         SetCurrentStyleSheet( nPageNum );
         if ( GetPageByIndex( nPageNum, MASTER ) )
-            aXNamed = Reference< XNamed >
-                        ( mXDrawPage, UNO_QUERY );
+            aXNamed.set( mXDrawPage, UNO_QUERY );
 
         if ( aXStyleFamiliesSupplier.is() )
             aXNameAccess = aXStyleFamiliesSupplier->getStyleFamilies();
@@ -669,11 +667,11 @@ bool PPTWriterBase::CreateMainNotes()
     if ( !mXDrawPage.is() )
         return false;
 
-    mXPropSet = css::uno::Reference< css::beans::XPropertySet >( mXDrawPage, css::uno::UNO_QUERY );
+    mXPropSet.set( mXDrawPage, css::uno::UNO_QUERY );
     if ( !mXPropSet.is() )
         return false;
 
-    mXShapes = css::uno::Reference< css::drawing::XShapes >( mXDrawPage, css::uno::UNO_QUERY );
+    mXShapes.set( mXDrawPage, css::uno::UNO_QUERY );
     if ( !mXShapes.is() )
         return false;
 

@@ -141,8 +141,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     // Get the pane for the anchor URL.
     Reference<XPane> xPane;
     if (mxConfigurationController.is())
-        xPane = Reference<XPane>(mxConfigurationController->getResource(rxViewId->getAnchor()),
-            UNO_QUERY);
+        xPane.set(mxConfigurationController->getResource(rxViewId->getAnchor()), UNO_QUERY);
 
     // For main views use the frame view of the last main view.
     ::sd::FrameView* pFrameView = NULL;

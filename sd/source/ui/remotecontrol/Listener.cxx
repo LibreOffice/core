@@ -37,7 +37,7 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
 {
     if ( aController.is() )
     {
-        mController = css::uno::Reference< css::presentation::XSlideShowController >( aController );
+        mController.set( aController );
         aController->addSlideShowListener( this );
 
         sal_Int32 aSlides = aController->getSlideCount();

@@ -544,7 +544,7 @@ bool CustomAnimationEffect::checkForText()
         ParagraphTarget aParaTarget;
         maTarget >>= aParaTarget;
 
-        xText = Reference< XText >::query( aParaTarget.Shape );
+        xText.set( aParaTarget.Shape, UNO_QUERY );
 
         // get paragraph
         if( xText.is() )

@@ -101,7 +101,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage()
 
     SdPage* pPage = mrOutlineViewShell.getCurrentPage();
     if (pPage != NULL)
-        xPage = Reference<drawing::XDrawPage>::query(pPage->getUnoPage());
+        xPage.set(pPage->getUnoPage(), UNO_QUERY);
 
     return xPage;
 }

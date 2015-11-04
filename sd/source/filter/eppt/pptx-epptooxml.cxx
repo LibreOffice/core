@@ -1653,8 +1653,8 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
     xPropSet->setPropertyValue( "Layout", makeAny( short( aLayoutInfo[ nOffset ].nType ) ) );
     DBG(dump_pset( xPropSet ));
 
-    mXPagePropSet = Reference< XPropertySet >( xSlide, UNO_QUERY );
-    mXShapes = Reference< XShapes >( xSlide, UNO_QUERY );
+    mXPagePropSet.set( xSlide, UNO_QUERY );
+    mXShapes.set( xSlide, UNO_QUERY );
 
     if( mLayoutInfo[ nOffset ].mnFileIdArray.size() < mnMasterPages ) {
         mLayoutInfo[ nOffset ].mnFileIdArray.resize( mnMasterPages );

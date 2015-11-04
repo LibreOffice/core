@@ -82,7 +82,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
                 SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
                 if (pSdStyle->GetName().startsWith(aLayoutName))
                 {
-                    maStyleSheets[ pSdStyle->GetApiName() ] = rtl::Reference< SdStyleSheet >( pSdStyle );
+                    maStyleSheets[ pSdStyle->GetApiName() ].set( pSdStyle );
                 }
             }
         }

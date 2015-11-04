@@ -764,7 +764,7 @@ uno::Reference<drawing::XLayer> SdLayerManager::GetLayer (SdrLayer* pLayer)
 
     // Search existing xLayer for the given pLayer.
     if (mpLayers->findRef (xRef, static_cast<void*>(pLayer), compare_layers))
-        xLayer = uno::Reference<drawing::XLayer> (xRef, uno::UNO_QUERY);
+        xLayer.set(xRef, uno::UNO_QUERY);
 
     // Create the xLayer if necessary.
     if ( ! xLayer.is())

@@ -851,7 +851,7 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
             xDevice->createCompatibleLinePolyPolygon(aPoints));
         if (xLinePolygon.is())
             xLinePolygon->setClosed(0, sal_True);
-        xPolygon = Reference<rendering::XPolyPolygon2D>(xLinePolygon, UNO_QUERY);
+        xPolygon.set(xLinePolygon, UNO_QUERY);
     }
 
     return xPolygon;
@@ -894,7 +894,7 @@ void SAL_CALL PresenterCustomSprite::disposing()
     mxSprite = NULL;
     if (xComponent.is())
         xComponent->dispose();
-    mpCanvas = rtl::Reference<PresenterCanvas>();
+    mpCanvas.clear();
 }
 
 //----- XSprite ---------------------------------------------------------------

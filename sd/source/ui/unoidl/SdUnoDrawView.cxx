@@ -451,7 +451,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     SdrPage* pPage = pPV ? pPV->GetPage() : NULL;
 
     if(pPage)
-        xPage = Reference< drawing::XDrawPage >::query( pPage->getUnoPage() );
+        xPage.set( pPage->getUnoPage(), UNO_QUERY );
 
     return xPage;
 }

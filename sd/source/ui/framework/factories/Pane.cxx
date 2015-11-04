@@ -180,7 +180,7 @@ Reference<rendering::XCanvas> Pane::CreateCanvas()
         ::cppcanvas::SpriteCanvasSharedPtr pCanvas (
             cppcanvas::VCLFactory::createSpriteCanvas(*mpWindow));
         if (pCanvas.get() != NULL)
-            xCanvas = Reference<rendering::XCanvas>(pCanvas->getUNOSpriteCanvas(), UNO_QUERY);
+            xCanvas.set(pCanvas->getUNOSpriteCanvas(), UNO_QUERY);
     }
 
     return xCanvas;

@@ -332,7 +332,7 @@ const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() thro
 
 SdXImpressDocument* SdXImpressDocument::getImplementation( const uno::Reference< uno::XInterface >& xInt )
 {
-    css::uno::Reference< css::lang::XUnoTunnel > xUT( xInt, css::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
     if( xUT.is() )
         return reinterpret_cast<SdXImpressDocument*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( SdXImpressDocument::getUnoTunnelId() )));
     else
@@ -623,7 +623,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
         if( !rList.empty() )
         {
-            xRet = uno::Reference< container::XIndexAccess >(document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() ), uno::UNO_QUERY);
+            xRet.set(document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() ), uno::UNO_QUERY);
 
             uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
             DBG_ASSERT( xCont.is(), "SdXImpressDocument::getViewData() failed for OLE object" );
@@ -810,7 +810,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMast
         initializeDocument();
         SdPage* pPage = mpDoc->GetMasterSdPage( 0, PK_HANDOUT );
         if( pPage )
-            xPage = uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() );
+            xPage.set( pPage->getUnoPage(), uno::UNO_QUERY );
     }
     return xPage;
 }
@@ -3095,7 +3095,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             pMPage->EnsureMasterPageDefaultBackground();
         }
 
-        xDrawPage = uno::Reference< drawing::XDrawPage >::query( pMPage->getUnoPage() );
+        xDrawPage.set( pMPage->getUnoPage(), uno::UNO_QUERY );
 
         // create and insert new notes masterpage
         SdPage* pMNotesPage = mpModel->mpDoc->AllocSdPage(true);

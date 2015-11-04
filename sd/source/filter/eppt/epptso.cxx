@@ -979,9 +979,7 @@ bool PPTWriter::ImplGetText()
 {
     mnTextSize = 0;
     mbFontIndependentLineSpacing = false;
-    mXText = css::uno::Reference<
-        css::text::XSimpleText >
-            ( mXShape, css::uno::UNO_QUERY );
+    mXText.set( mXShape, css::uno::UNO_QUERY );
 
     if ( mXText.is() )
     {
@@ -2716,7 +2714,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 else
                 {
-                    mXText = css::uno::Reference< css::text::XSimpleText >( mXShape, css::uno::UNO_QUERY );
+                    mXText.set( mXShape, css::uno::UNO_QUERY );
 
                     if ( mXText.is() )
                         mnTextSize = mXText->getString().getLength();
@@ -3673,8 +3671,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         sal_Int32 nBottom = GetCellBottom( nRow,  maRect,aRows,xCell );
 
                         mbFontIndependentLineSpacing = false;
-                        mXPropSet = uno::Reference< beans::XPropertySet >( xCell, uno::UNO_QUERY_THROW );
-                        mXText = uno::Reference< text::XSimpleText >( xCell, uno::UNO_QUERY_THROW );
+                        mXPropSet.set( xCell, uno::UNO_QUERY_THROW );
+                        mXText.set( xCell, uno::UNO_QUERY_THROW );
                         mnTextSize = mXText->getString().getLength();
 
                         css::uno::Any aAny;

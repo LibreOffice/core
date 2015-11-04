@@ -761,7 +761,7 @@ bool PPTWriter::ImplCreateDocument()
         css::uno::Reference< css::presentation::XPresentation > aXPresentation( aXPresSupplier->getPresentation() );
         if ( aXPresentation.is() )
         {
-            mXPropSet = css::uno::Reference< css::beans::XPropertySet >( aXPresentation, css::uno::UNO_QUERY );
+            mXPropSet.set( aXPresentation, css::uno::UNO_QUERY );
             if ( mXPropSet.is() )
             {
                 OUString aCustomShow;

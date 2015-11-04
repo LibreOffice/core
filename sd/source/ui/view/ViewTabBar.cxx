@@ -210,7 +210,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
             Reference<XConfigurationController> xCC (
                 xControllerManager->getConfigurationController());
             if (xCC.is())
-                xPane = Reference<XPane>(xCC->getResource(rxViewTabBarId->getAnchor()), UNO_QUERY);
+                xPane.set(xCC->getResource(rxViewTabBarId->getAnchor()), UNO_QUERY);
         }
         catch (const RuntimeException&)
         {
@@ -351,11 +351,11 @@ bool ViewTabBar::ActivatePage()
         Reference<XView> xView;
         try
         {
-            xView = Reference<XView>(xConfigurationController->getResource(
-                ResourceId::create(
-                    ::comphelper::getProcessComponentContext(),
-                    FrameworkHelper::msCenterPaneURL)),
-                UNO_QUERY);
+            xView.set(xConfigurationController->getResource(
+                          ResourceId::create(
+                              ::comphelper::getProcessComponentContext(),
+                              FrameworkHelper::msCenterPaneURL)),
+                      UNO_QUERY);
         }
         catch (const DeploymentException&)
         {

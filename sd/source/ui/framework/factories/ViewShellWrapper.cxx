@@ -216,7 +216,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
                 bResult = true;
 
                 // Attach to the window of the new pane.
-                xWindow = Reference<awt::XWindow>(xPane->getWindow(), UNO_QUERY);
+                xWindow.set(xPane->getWindow(), UNO_QUERY);
                 if (xWindow.is())
                 {
                     xWindow->addWindowListener(this);
