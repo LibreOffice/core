@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_met_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_met_test, \
-    ime \
+    gie \
 	sal \
 	test \
 	tl \

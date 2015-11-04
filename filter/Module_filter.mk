@@ -21,31 +21,9 @@ $(eval $(call gb_Module_Module,filter))
 $(eval $(call gb_Module_add_targets,filter,\
 	Configuration_filter \
 	CustomTarget_svg \
-	$(if $(filter EXPORT,$(BUILD_TYPE)), \
-	    Library_egi \
-	    Library_eme \
-	    Library_epb \
-	    Library_epg \
-	    Library_epp \
-	    Library_eps \
-	    Library_ept \
-	    Library_era \
-	    Library_eti \
-	    Library_exp) \
+    Library_gie \
 	Library_filterconfig \
 	Library_flash \
-	Library_icd \
-	Library_icg \
-	Library_idx \
-	Library_ime \
-	Library_ipb \
-	Library_ipd \
-	Library_ips \
-	Library_ipt \
-	Library_ipx \
-	Library_ira \
-	Library_itg \
-	Library_iti \
 	Library_msfilter \
 	Library_odfflatxml \
 	Library_pdffilter \

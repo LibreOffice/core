@@ -522,15 +522,9 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
 //================== GraphicImport - the exported function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
-#if defined(DISABLE_DYNLOADING)
-#define GraphicImport ipsGraphicImport
-#endif
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     if ( rStream.GetError() )
         return false;
