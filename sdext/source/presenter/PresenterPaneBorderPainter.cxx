@@ -407,7 +407,7 @@ PresenterPaneBorderPainter::Renderer::Renderer (
     Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
     if (xFactory.is())
     {
-        mxPresenterHelper = Reference<drawing::XPresenterHelper>(
+        mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
                 "com.sun.star.comp.Draw.PresenterHelper",
                 rxContext),

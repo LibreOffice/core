@@ -736,7 +736,7 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
         Reference<XPane> xMainPane (mxMainPane, UNO_QUERY);
         if (xMainPane.is())
         {
-            mxMainWindow = Reference<awt::XWindow>(xMainPane->getWindow(), UNO_QUERY);
+            mxMainWindow.set(xMainPane->getWindow(), UNO_QUERY);
             mxMainWindow->addFocusListener(this);
         }
         mpAccessibleConsole = AccessibleConsole::Create(
@@ -785,7 +785,7 @@ void SAL_CALL PresenterAccessible::initialize (const css::uno::Sequence<css::uno
 {
     if (rArguments.getLength() >= 1)
     {
-        mxAccessibleParent = Reference<XAccessible>(rArguments[0], UNO_QUERY);
+        mxAccessibleParent.set(rArguments[0], UNO_QUERY);
         if (mpAccessibleConsole.is())
             mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
     }
@@ -834,7 +834,7 @@ void PresenterAccessible::AccessibleObject::SetWindow (
         }
 
         mxContentWindow = xContentWindow;
-        mxBorderWindow = Reference<awt::XWindow2>(rxBorderWindow, UNO_QUERY);
+        mxBorderWindow.set(rxBorderWindow, UNO_QUERY);
 
         if (mxContentWindow.is())
         {
@@ -1335,8 +1335,7 @@ awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation()
 {
     Reference<XAccessibleComponent> xParentComponent;
     if (mxParentAccessible.is())
-        xParentComponent = Reference<XAccessibleComponent>(
-            mxParentAccessible->getAccessibleContext(), UNO_QUERY);
+        xParentComponent.set( mxParentAccessible->getAccessibleContext(), UNO_QUERY);
     if (xParentComponent.is())
         return xParentComponent->getLocationOnScreen();
     else

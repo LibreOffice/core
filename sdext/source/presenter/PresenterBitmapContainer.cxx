@@ -88,7 +88,7 @@ void PresenterBitmapContainer::Initialize (
             rxComponentContext->getServiceManager(), UNO_QUERY);
         if ( ! xFactory.is())
             return;
-        mxPresenterHelper = Reference<drawing::XPresenterHelper>(
+        mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
                 "com.sun.star.drawing.PresenterHelper",
                 rxComponentContext),

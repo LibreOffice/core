@@ -92,7 +92,7 @@ PresenterSlidePreview::PresenterSlidePreview (
 
     Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager(), UNO_QUERY);
     if (xFactory.is())
-        mxPreviewRenderer = Reference<drawing::XSlideRenderer>(
+        mxPreviewRenderer.set(
             xFactory->createInstanceWithContext(
                 "com.sun.star.drawing.SlideRenderer",
                 rxContext),

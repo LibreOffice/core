@@ -82,7 +82,7 @@ PresenterPaneBorderManager::PresenterPaneBorderManager (
     {
         mxPointer = awt::Pointer::create(rxContext);
 
-        mxPresenterHelper = Reference<drawing::XPresenterHelper>(
+        mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
                 "com.sun.star.comp.Draw.PresenterHelper",
                 rxContext),
@@ -216,7 +216,7 @@ void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArgu
     {
         try
         {
-            mxParentWindow = Reference<awt::XWindow>(rArguments[0], UNO_QUERY_THROW);
+            mxParentWindow.set(rArguments[0], UNO_QUERY_THROW);
 
             // Get the outer and inner windows from the argument list and
             // build a window list of it.

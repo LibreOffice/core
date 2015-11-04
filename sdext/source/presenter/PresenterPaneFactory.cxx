@@ -87,7 +87,7 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
     {
         // Get the configuration controller.
         Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
-        xCC = Reference<XConfigurationController>(xCM->getConfigurationController());
+        xCC.set(xCM->getConfigurationController());
         mxConfigurationControllerWeak = xCC;
         if ( ! xCC.is())
         {
@@ -270,13 +270,11 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     ::rtl::Reference<PresenterPaneBase> xPane;
     if (bIsSpritePane)
     {
-        xPane = ::rtl::Reference<PresenterPaneBase>(
-            new PresenterSpritePane(xContext, mpPresenterController));
+        xPane.set( new PresenterSpritePane(xContext, mpPresenterController));
     }
     else
     {
-        xPane = ::rtl::Reference<PresenterPaneBase>(
-            new PresenterPane(xContext, mpPresenterController));
+        xPane.set( new PresenterPane(xContext, mpPresenterController));
     }
 
     // Supply arguments.

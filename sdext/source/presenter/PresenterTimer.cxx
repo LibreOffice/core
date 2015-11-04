@@ -368,7 +368,7 @@ TimerTask::TimerTask (
     }
     if ( ! pTimer.is())
     {
-        pTimer = ::rtl::Reference<PresenterClockTimer>(new PresenterClockTimer(rxContext));
+        pTimer.set(new PresenterClockTimer(rxContext));
         mpInstance = pTimer;
     }
     return pTimer;
@@ -385,7 +385,7 @@ PresenterClockTimer::PresenterClockTimer (const Reference<XComponentContext>& rx
     Reference<lang::XMultiComponentFactory> xFactory (
         rxContext->getServiceManager(), UNO_QUERY);
     if (xFactory.is())
-        mxRequestCallback = Reference<awt::XRequestCallback>(
+        mxRequestCallback.set(
             xFactory->createInstanceWithContext(
                 "com.sun.star.awt.AsyncCallback",
                 rxContext),

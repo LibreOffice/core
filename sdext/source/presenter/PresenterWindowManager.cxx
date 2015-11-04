@@ -1079,8 +1079,7 @@ void PresenterWindowManager::ProvideBackgroundBitmap()
             }
             else
             {
-                mxScaledBackgroundBitmap
-                    = Reference<rendering::XBitmap>(xBitmap, UNO_QUERY);
+                mxScaledBackgroundBitmap.set(xBitmap, UNO_QUERY);
             }
         }
     }
@@ -1166,7 +1165,7 @@ void PresenterWindowManager::UpdateWindowList()
                     mxComponentContext,
                     mpPresenterController));
             pManager->initialize(aArguments);
-            mxPaneBorderManager = Reference<XInterface>(static_cast<XWeak*>(pManager.get()));
+            mxPaneBorderManager.set(static_cast<XWeak*>(pManager.get()));
         }
     }
     catch (RuntimeException&)

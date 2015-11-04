@@ -113,7 +113,7 @@ PresenterButton::PresenterButton (
         if ( ! xFactory.is())
             throw RuntimeException();
 
-        mxPresenterHelper = Reference<drawing::XPresenterHelper>(
+        mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
                 "com.sun.star.comp.Draw.PresenterHelper",
                 rxComponentContext),
@@ -469,7 +469,7 @@ void PresenterButton::SetupButtonBitmaps()
             pRightBitmap);
 
     mxMouseOverBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(maButtonSize);
-    xCanvas = Reference<rendering::XCanvas>(mxMouseOverBitmap, UNO_QUERY);
+    xCanvas.set(mxMouseOverBitmap, UNO_QUERY);
     if (mpMouseOverFont.get()!=NULL && !mpMouseOverFont->mxFont.is() && mxCanvas.is())
         mpMouseOverFont->PrepareFont(mxCanvas);
     if (xCanvas.is())

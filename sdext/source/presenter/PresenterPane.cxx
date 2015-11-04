@@ -42,7 +42,7 @@ PresenterPane::PresenterPane (
 {
     Reference<lang::XMultiComponentFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
-    mxPresenterHelper = Reference<drawing::XPresenterHelper>(
+    mxPresenterHelper.set(
         xFactory->createInstanceWithContext(
             "com.sun.star.comp.Draw.PresenterHelper",
             mxComponentContext),

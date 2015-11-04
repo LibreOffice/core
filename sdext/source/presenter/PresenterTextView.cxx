@@ -93,7 +93,7 @@ PresenterTextView::PresenterTextView (
 
     // Create the script type detector that is used to split paragraphs into
     // portions of the same text direction.
-    mxScriptTypeDetector = Reference<i18n::XScriptTypeDetector>(
+    mxScriptTypeDetector.set(
         xFactory->createInstanceWithContext(
             "com.sun.star.i18n.ScriptTypeDetector",
             rxContext),

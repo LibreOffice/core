@@ -287,7 +287,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         Reference<lang::XMultiComponentFactory> xFactory (
             mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
 
-        mxPane = Reference<XPane>(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
+        mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
         mxWindow = mxPane->getWindow();
 
         // Add window listener.
@@ -301,7 +301,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         mnCurrentSlideIndex = mxSlideShowController->getCurrentSlideIndex();
 
         // Create the scroll bar.
-        mpVerticalScrollBar = ::rtl::Reference<PresenterScrollBar>(
+        mpVerticalScrollBar.set(
             new PresenterVerticalScrollBar(
                 rxContext,
                 mxWindow,
@@ -328,7 +328,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         mpLayout.reset(new Layout(mpVerticalScrollBar));
 
         // Create the preview cache.
-        mxPreviewCache = Reference<drawing::XSlidePreviewCache>(
+        mxPreviewCache.set(
             xFactory->createInstanceWithContext(
                 "com.sun.star.drawing.PresenterPreviewCache",
                 mxComponentContext),
@@ -910,8 +910,7 @@ void PresenterSlideSorter::PaintPreview (
         mxComponentContext,
         rxCanvas);
     Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
-    Reference<drawing::XDrawPage> xPage = Reference<drawing::XDrawPage>(
-        xIndexAccess->getByIndex(nSlideIndex), UNO_QUERY);
+    Reference<drawing::XDrawPage> xPage( xIndexAccess->getByIndex(nSlideIndex), UNO_QUERY);
     bool bTransition = PresenterController::HasTransition(xPage);
     bool bCustomAnimation = PresenterController::HasCustomAnimation(xPage);
 

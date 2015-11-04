@@ -93,8 +93,7 @@ PresenterSlideShowView::PresenterSlideShowView (
 
 void PresenterSlideShowView::LateInit()
 {
-    mxSlideShow = Reference<presentation::XSlideShow> (
-        mxSlideShowController->getSlideShow(), UNO_QUERY_THROW);
+    mxSlideShow.set( mxSlideShowController->getSlideShow(), UNO_QUERY_THROW);
     Reference<lang::XComponent> xSlideShowComponent (mxSlideShow, UNO_QUERY);
     if (xSlideShowComponent.is())
         xSlideShowComponent->addEventListener(static_cast<awt::XWindowListener*>(this));
@@ -847,8 +846,7 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
             awt::WindowAttribute::SIZEABLE
                 | awt::WindowAttribute::MOVEABLE
                 | awt::WindowAttribute::NODECORATION);
-        xViewWindow = Reference<awt::XWindow>(
-            xToolkit->createWindow(aWindowDescriptor),UNO_QUERY_THROW);
+        xViewWindow.set( xToolkit->createWindow(aWindowDescriptor),UNO_QUERY_THROW);
 
         // Make the background transparent.  The slide show paints its own background.
         Reference<awt::XWindowPeer> xPeer (xViewWindow, UNO_QUERY_THROW);

@@ -610,7 +610,7 @@ void PresenterScreen::ShutdownPresenterScreen()
     if (mpPresenterController.get() != NULL)
     {
         mpPresenterController->dispose();
-        mpPresenterController = rtl::Reference<PresenterController>();
+        mpPresenterController.clear();
     }
     mpPaneContainer = new PresenterPaneContainer(Reference<XComponentContext>(mxContextWeak));
 }

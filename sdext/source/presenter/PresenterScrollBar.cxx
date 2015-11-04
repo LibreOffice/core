@@ -107,7 +107,7 @@ PresenterScrollBar::PresenterScrollBar (
         if ( ! xFactory.is())
             throw RuntimeException();
 
-        mxPresenterHelper = Reference<drawing::XPresenterHelper>(
+        mxPresenterHelper.set(
             xFactory->createInstanceWithContext(
                 "com.sun.star.comp.Draw.PresenterHelper",
                 rxComponentContext),

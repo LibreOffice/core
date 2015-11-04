@@ -77,10 +77,9 @@ FileEmitContext::FileEmitContext( const OUString&                            rOr
     m_xSeek(),
     m_xOut()
 {
-    m_xContextStream = uno::Reference< io::XStream >(
-        io::TempFile::create(xContext), uno::UNO_QUERY_THROW );
+    m_xContextStream.set( io::TempFile::create(xContext), uno::UNO_QUERY_THROW );
     m_xOut = m_xContextStream->getOutputStream();
-    m_xSeek = uno::Reference<io::XSeekable>(m_xOut, uno::UNO_QUERY_THROW );
+    m_xSeek.set(m_xOut, uno::UNO_QUERY_THROW );
 
     oslFileError aErr = osl_File_E_None;
     if( (aErr=osl_openFile( rOrigFile.pData,

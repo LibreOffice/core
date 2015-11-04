@@ -695,11 +695,11 @@ void PresenterToolBar::ProcessEntry (
     else if ( sType == "PresentationTimeLabel" )
         pElement = PresentationTimeLabel::Create(this);
     else if ( sType == "VerticalSeparator" )
-        pElement = ::rtl::Reference<Element>(new VerticalSeparator(this));
+        pElement.set(new VerticalSeparator(this));
     else if ( sType == "HorizontalSeparator" )
-        pElement = ::rtl::Reference<Element>(new HorizontalSeparator(this));
+        pElement.set(new HorizontalSeparator(this));
     else if ( sType == "Label" )
-        pElement = ::rtl::Reference<Element>(new Label(this));
+        pElement.set(new Label(this));
     else if ( sType == "ChangeOrientation" )
     {
         mpCurrentContainerPart.reset(new ElementContainerPart());
@@ -1086,7 +1086,7 @@ PresenterToolBarView::PresenterToolBarView (
     {
         Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
         Reference<XConfigurationController> xCC(xCM->getConfigurationController(),UNO_QUERY_THROW);
-        mxPane = Reference<XPane>(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
+        mxPane.set(xCC->getResource(rxViewId->getAnchor()), UNO_QUERY_THROW);
 
         mxWindow = mxPane->getWindow();
         mxCanvas = mxPane->getCanvas();

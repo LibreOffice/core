@@ -104,7 +104,7 @@ public:
             {
                 if (nNextSlideIndex < nCount)
                 {
-                    xSlide = Reference<drawing::XDrawPage>(
+                    xSlide.set(
                         xSlideShowController->getSlideByIndex(nNextSlideIndex),
                          UNO_QUERY);
                 }
@@ -391,7 +391,7 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
                 Reference<frame::XController>(mxControllerWeak),
                 mpPresenterController));
         pShowView->LateInit();
-        xView = Reference<XView>(pShowView.get());
+        xView.set(pShowView.get());
     }
     catch (RuntimeException&)
     {
@@ -414,7 +414,7 @@ Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
 
     try
     {
-        xView = Reference<XView>(
+        xView.set(
             static_cast<XWeak*>(new NextSlidePreview(
                 mxComponentContext,
                 rxViewId,
@@ -454,7 +454,7 @@ Reference<XView> PresenterViewFactory::CreateNotesView(
 
     try
     {
-        xView = Reference<XView>(static_cast<XWeak*>(
+        xView.set(static_cast<XWeak*>(
             new PresenterNotesView(
                 mxComponentContext,
                 rxViewId,

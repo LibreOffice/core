@@ -402,7 +402,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                 {
                     Reference< XBitmap > xFillBitmap;
                     if ( aGraphicIter->maUser[ 0 ].mxPropertySet->getPropertyValue( "FillBitmap" ) >>= xFillBitmap )
-                        xGraphic = Reference< XGraphic >( xFillBitmap, UNO_QUERY_THROW );
+                        xGraphic.set( xFillBitmap, UNO_QUERY_THROW );
                 }
                 else if ( aGraphicIter->maUser[ 0 ].mxShape.is() )
                 {
@@ -686,7 +686,7 @@ bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 Sequence< PropertyValue > aLoadProps( 1 );
                 aLoadProps[ 0 ].Name = "Hidden";
                 aLoadProps[ 0 ].Value <<= true;
-                mxModel = Reference< XModel >( xComponentLoader->loadComponentFromURL(
+                mxModel.set( xComponentLoader->loadComponentFromURL(
                     maSaveAsURL, "_self", 0, aLoadProps ), UNO_QUERY );
             }
         }

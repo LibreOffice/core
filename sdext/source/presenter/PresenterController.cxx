@@ -160,7 +160,7 @@ PresenterController::PresenterController (
         rxContext->getServiceManager(), UNO_QUERY);
     if ( ! xFactory.is())
         return;
-    mxPresenterHelper = Reference<drawing::XPresenterHelper>(
+    mxPresenterHelper.set(
         xFactory->createInstanceWithContext(
             "com.sun.star.drawing.PresenterHelper",
             rxContext),
@@ -186,7 +186,7 @@ PresenterController::PresenterController (
     // Create a URLTransformer.
     if (xFactory.is())
     {
-        mxUrlTransformer = Reference<util::XURLTransformer>(util::URLTransformer::create(mxComponentContext));
+        mxUrlTransformer.set(util::URLTransformer::create(mxComponentContext));
     }
 }
 
@@ -294,8 +294,7 @@ void PresenterController::GetSlides (const sal_Int32 nOffset)
             if (nSlideIndex < xIndexAccess->getCount())
             {
                 mnCurrentSlideIndex = nSlideIndex;
-                mxCurrentSlide = Reference<drawing::XDrawPage>(
-                    xIndexAccess->getByIndex(nSlideIndex), UNO_QUERY);
+                mxCurrentSlide.set( xIndexAccess->getByIndex(nSlideIndex), UNO_QUERY);
             }
         }
     }
@@ -313,8 +312,7 @@ void PresenterController::GetSlides (const sal_Int32 nOffset)
             if (xIndexAccess.is())
             {
                 if (nNextSlideIndex < xIndexAccess->getCount())
-                    mxNextSlide = Reference<drawing::XDrawPage>(
-                        xIndexAccess->getByIndex(nNextSlideIndex), UNO_QUERY);
+                    mxNextSlide.set( xIndexAccess->getByIndex(nNextSlideIndex), UNO_QUERY);
             }
         }
     }
@@ -1140,7 +1138,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
 
     mpPaintManager.reset(new PresenterPaintManager(mxMainWindow, mxPresenterHelper, mpPaneContainer));
 
-    mxCanvas = Reference<rendering::XSpriteCanvas>(rxPane->getCanvas(), UNO_QUERY);
+    mxCanvas.set(rxPane->getCanvas(), UNO_QUERY);
 
     if (mxSlideShowController.is())
         mxSlideShowController->activate();
