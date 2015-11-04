@@ -74,7 +74,7 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
         uno::Reference <beans::XPropertySet> xPropertySet (rExport.GetModel(), uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges(xPropertySet->getPropertyValue(OUString(SC_UNO_DATABASERNG)), uno::UNO_QUERY);
+            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges(xPropertySet->getPropertyValue(SC_UNO_DATABASERNG), uno::UNO_QUERY);
             rExport.CheckAttrList();
             if (xDatabaseRanges.is())
             {
@@ -88,7 +88,7 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
                     {
                         uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
                         if (xDatabaseRangePropertySet.is() &&
-                            ::cppu::any2bool(xDatabaseRangePropertySet->getPropertyValue(OUString(SC_UNONAME_STRIPDAT))))
+                            ::cppu::any2bool(xDatabaseRangePropertySet->getPropertyValue(SC_UNONAME_STRIPDAT)))
                         {
                             uno::Sequence <beans::PropertyValue> aImportProperties(xDatabaseRange->getImportDescriptor());
                             sal_Int32 nLength = aImportProperties.getLength();

@@ -418,7 +418,7 @@ bool ScCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     for ( std::vector<ScCTB>::iterator it = rCTB.begin(); it != it_end; ++it )
     {
         // for each customtoolbar
-        CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( OUString("com.sun.star.sheet.SpreadsheetDocument" ) ) );
+        CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( "com.sun.star.sheet.SpreadsheetDocument" ) );
         helper.setMSOCommandMap( new  MSOExcelCommandConvertor() );
         // Ignore menu toolbars, excel doesn't ( afaics ) store
         // menu customizations ( but you can have menus in a customtoolbar

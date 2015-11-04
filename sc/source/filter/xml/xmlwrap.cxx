@@ -599,7 +599,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
             if ( xModelSet.is() ) try
             {
                 uno::Reference< script::vba::XVBACompatibility > xVBACompat( xModelSet->getPropertyValue(
-                    OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
+                    "BasicLibraries" ), uno::UNO_QUERY_THROW );
                 xVBACompat->setVBACompatibilityMode( sal_True );
             }
             catch( const uno::Exception& )
@@ -839,8 +839,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             try
             {
                 OUString aVersion;
-                if (( xPropSet->getPropertyValue(
-                    OUString("Version")) >>= aVersion )
+                if (( xPropSet->getPropertyValue("Version") >>= aVersion )
                     && aVersion != ODFVER_010_TEXT
                     && aVersion != ODFVER_011_TEXT )
                 {

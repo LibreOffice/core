@@ -485,7 +485,7 @@ ScVbaApplication::Names( const css::uno::Any& aIndex ) throw ( uno::RuntimeExcep
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPropertySet( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XNamedRanges > xNamedRanges( xPropertySet->getPropertyValue(
-        OUString( "NamedRanges" ) ), uno::UNO_QUERY_THROW );
+        "NamedRanges" ), uno::UNO_QUERY_THROW );
 
     css::uno::Reference< excel::XNames > xNames ( new ScVbaNames( this , mxContext , xNamedRanges , xModel ) );
     if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )

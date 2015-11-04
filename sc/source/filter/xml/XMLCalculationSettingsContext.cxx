@@ -127,15 +127,15 @@ void ScXMLCalculationSettingsContext::EndElement()
         uno::Reference <beans::XPropertySet> xPropertySet (GetScImport().GetModel(), uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            xPropertySet->setPropertyValue(OUString(SC_UNO_CALCASSHOWN), uno::makeAny(bCalcAsShown) );
-            xPropertySet->setPropertyValue(OUString(SC_UNO_IGNORECASE), uno::makeAny(bIgnoreCase) );
-            xPropertySet->setPropertyValue(OUString(SC_UNO_LOOKUPLABELS), uno::makeAny(bLookUpLabels) );
-            xPropertySet->setPropertyValue(OUString(SC_UNO_MATCHWHOLE), uno::makeAny(bMatchWholeCell) );
-            xPropertySet->setPropertyValue(OUString(SC_UNO_REGEXENABLED), uno::makeAny(bUseRegularExpressions) );
-            xPropertySet->setPropertyValue(OUString(SC_UNO_ITERENABLED), uno::makeAny(bIsIterationEnabled) );
-            xPropertySet->setPropertyValue( OUString(SC_UNO_ITERCOUNT), uno::makeAny(nIterationCount) );
-            xPropertySet->setPropertyValue( OUString(SC_UNO_ITEREPSILON), uno::makeAny(fIterationEpsilon) );
-            xPropertySet->setPropertyValue( OUString(SC_UNO_NULLDATE), uno::makeAny(aNullDate) );
+            xPropertySet->setPropertyValue( SC_UNO_CALCASSHOWN, uno::makeAny(bCalcAsShown) );
+            xPropertySet->setPropertyValue( SC_UNO_IGNORECASE, uno::makeAny(bIgnoreCase) );
+            xPropertySet->setPropertyValue( SC_UNO_LOOKUPLABELS, uno::makeAny(bLookUpLabels) );
+            xPropertySet->setPropertyValue( SC_UNO_MATCHWHOLE, uno::makeAny(bMatchWholeCell) );
+            xPropertySet->setPropertyValue( SC_UNO_REGEXENABLED, uno::makeAny(bUseRegularExpressions) );
+            xPropertySet->setPropertyValue( SC_UNO_ITERENABLED, uno::makeAny(bIsIterationEnabled) );
+            xPropertySet->setPropertyValue( SC_UNO_ITERCOUNT, uno::makeAny(nIterationCount) );
+            xPropertySet->setPropertyValue( SC_UNO_ITEREPSILON, uno::makeAny(fIterationEpsilon) );
+            xPropertySet->setPropertyValue( SC_UNO_NULLDATE, uno::makeAny(aNullDate) );
             if (GetScImport().GetDocument())
             {
                 ScXMLImport::MutexGuard aGuard(GetScImport());

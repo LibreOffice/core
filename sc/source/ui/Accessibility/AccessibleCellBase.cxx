@@ -118,7 +118,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_CCOLOR));
+                                uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_CCOLOR);
                                 aAny >>= nColor;
                             }
                         }
@@ -159,7 +159,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_CELLBACK));
+                                uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_CELLBACK);
                                 aAny >>= nColor;
                             }
                         }
@@ -392,7 +392,7 @@ OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_SHADOW));
+                                uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_SHADOW);
                                 aAny >>= aShadowFmt;
                             }
                         }
@@ -478,13 +478,13 @@ OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_TOPBORDER));
+                                uno::Any aAny = xCellProps->getPropertyValue(SC_UNONAME_TOPBORDER);
                                 aAny >>= aTopBorder;
-                                aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_BOTTBORDER));
+                                aAny = xCellProps->getPropertyValue(SC_UNONAME_BOTTBORDER);
                                 aAny >>= aBottomBorder;
-                                aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_LEFTBORDER));
+                                aAny = xCellProps->getPropertyValue(SC_UNONAME_LEFTBORDER);
                                 aAny >>= aLeftBorder;
-                                aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_RIGHTBORDER));
+                                aAny = xCellProps->getPropertyValue(SC_UNONAME_RIGHTBORDER);
                                 aAny >>= aRightBorder;
                             }
                         }

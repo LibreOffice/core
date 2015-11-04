@@ -340,7 +340,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException, std::exception)
 void SAL_CALL
 ScVbaWindow::setCaption( const uno::Any& _caption ) throw (uno::RuntimeException, std::exception)
 {
-    getFrameProps()->setPropertyValue( OUString( SC_UNONAME_TITLE ), _caption );
+    getFrameProps()->setPropertyValue( SC_UNONAME_TITLE, _caption );
 }
 
 uno::Any SAL_CALL

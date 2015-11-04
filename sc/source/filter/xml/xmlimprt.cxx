@@ -2702,7 +2702,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
                 if (xNumberPropertySet.is())
                 {
                     OUString sTemp;
-                    if ( xNumberPropertySet->getPropertyValue(OUString(SC_CURRENCYSYMBOL)) >>= sTemp)
+                    if ( xNumberPropertySet->getPropertyValue(SC_CURRENCYSYMBOL) >>= sTemp)
                     {
                         if (sCurrentCurrency.equals(sTemp))
                             return true;
@@ -3054,8 +3054,8 @@ void ScXMLImport::SetLabelRanges()
         uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            uno::Any aColAny = xPropertySet->getPropertyValue(OUString(SC_UNO_COLLABELRNG));
-            uno::Any aRowAny = xPropertySet->getPropertyValue(OUString(SC_UNO_ROWLABELRNG));
+            uno::Any aColAny = xPropertySet->getPropertyValue(SC_UNO_COLLABELRNG);
+            uno::Any aRowAny = xPropertySet->getPropertyValue(SC_UNO_ROWLABELRNG);
 
             uno::Reference< sheet::XLabelRanges > xColRanges;
             uno::Reference< sheet::XLabelRanges > xRowRanges;

@@ -95,7 +95,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pDoc = pViewData->GetDocument();
     m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS, static_cast<ScDocShell*>(pDoc->GetDocumentShell())),uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
-    xSet->setPropertyValue(OUString(SC_UNO_COMPILEFAP),uno::makeAny(sal_True));
+    xSet->setPropertyValue(SC_UNO_COMPILEFAP, uno::makeAny(sal_True));
 
     m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(SC_SERVICE_OPCODEMAPPER, static_cast<ScDocShell*>(pDoc->GetDocumentShell())),uno::UNO_QUERY);
 

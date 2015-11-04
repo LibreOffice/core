@@ -49,7 +49,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear(),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = reinterpret_cast<ScAbstractDialogFactory* (SAL_CALL*)()>(
-            aDialogLibrary.getFunctionSymbol( OUString("ScCreateDialogFactory") ));
+            aDialogLibrary.getFunctionSymbol( "ScCreateDialogFactory" ));
 #else
     fp = ScCreateDialogFactory();
 #endif

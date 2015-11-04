@@ -122,7 +122,7 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
     uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
     if (xPropertySet.is())
     {
-        uno::Reference<container::XIndexAccess> xIndex(xPropertySet->getPropertyValue(OUString(SC_UNO_DDELINKS)), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndex(xPropertySet->getPropertyValue(SC_UNO_DDELINKS), uno::UNO_QUERY);
         if (xIndex.is())
         {
             sal_Int32 nCount = xIndex->getCount();

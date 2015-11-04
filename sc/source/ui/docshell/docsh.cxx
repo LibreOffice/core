@@ -713,7 +713,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             uno::UNO_QUERY_THROW );
                         uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xServiceManager, uno::UNO_QUERY_THROW );
                         uno::Reference< container::XEnumeration> xEnum = xEnumAccess->createContentEnumeration(
-                            OUString( "com.sun.star.sheet.SpreadsheetDocumentJob" ) );
+                            "com.sun.star.sheet.SpreadsheetDocumentJob" );
                         if ( xEnum.is() )
                         {
                             while ( xEnum->hasMoreElements() )
@@ -2969,7 +2969,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     // Grab the Calc configuration.
     Reference<XUIConfigurationManager> xConfigMgr =
         xModuleCfgSupplier->getUIConfigurationManager(
-            OUString("com.sun.star.sheet.SpreadsheetDocument"));
+            "com.sun.star.sheet.SpreadsheetDocument");
 
     if (!xConfigMgr.is())
         return;
@@ -3015,15 +3015,15 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     switch (eType)
     {
         case ScOptionsUtil::KEY_DEFAULT:
-            xScAccel->setKeyEvent(aDelete, OUString(".uno:ClearContents"));
-            xScAccel->setKeyEvent(aBackspace, OUString(".uno:Delete"));
-            xScAccel->setKeyEvent(aCtrlD, OUString(".uno:FillDown"));
-            xScAccel->setKeyEvent(aAltDown, OUString(".uno:DataSelect"));
+            xScAccel->setKeyEvent(aDelete, ".uno:ClearContents");
+            xScAccel->setKeyEvent(aBackspace, ".uno:Delete");
+            xScAccel->setKeyEvent(aCtrlD, ".uno:FillDown");
+            xScAccel->setKeyEvent(aAltDown, ".uno:DataSelect");
         break;
         case ScOptionsUtil::KEY_OOO_LEGACY:
-            xScAccel->setKeyEvent(aDelete, OUString(".uno:Delete"));
-            xScAccel->setKeyEvent(aBackspace, OUString(".uno:ClearContents"));
-            xScAccel->setKeyEvent(aCtrlD, OUString(".uno:DataSelect"));
+            xScAccel->setKeyEvent(aDelete, ".uno:Delete");
+            xScAccel->setKeyEvent(aBackspace, ".uno:ClearContents");
+            xScAccel->setKeyEvent(aCtrlD, ".uno:DataSelect");
         break;
         default:
             ;

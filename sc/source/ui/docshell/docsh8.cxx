@@ -329,16 +329,16 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
         uno::Any aAny;
 
         aAny <<= xConnection;
-        xRowProp->setPropertyValue( OUString(SC_DBPROP_ACTIVECONNECTION), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, aAny );
 
         aAny <<= nType;
-        xRowProp->setPropertyValue( OUString(SC_DBPROP_COMMANDTYPE), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, aAny );
 
         aAny <<= OUString( aTabName );
-        xRowProp->setPropertyValue( OUString(SC_DBPROP_COMMAND), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, aAny );
 
         aAny <<= false;
-        xRowProp->setPropertyValue( OUString(SC_DBPROP_PROPCHANGE_NOTIFY), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_PROPCHANGE_NOTIFY, aAny );
 
         xRowSet->execute();
 
@@ -871,7 +871,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
         if (!xTableDesc.is()) return SCERR_EXPORT_CONNECT;
 
         aAny <<= OUString( aTabName );
-        xTableDesc->setPropertyValue( OUString(SC_DBPROP_NAME), aAny );
+        xTableDesc->setPropertyValue( SC_DBPROP_NAME, aAny );
 
         // create columns
 
@@ -904,16 +904,16 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
             if (!xColumnDesc.is()) return SCERR_EXPORT_CONNECT;
 
             aAny <<= pColNames[nCol];
-            xColumnDesc->setPropertyValue( OUString(SC_DBPROP_NAME), aAny );
+            xColumnDesc->setPropertyValue( SC_DBPROP_NAME, aAny );
 
             aAny <<= pColTypes[nCol];
-            xColumnDesc->setPropertyValue( OUString(SC_DBPROP_TYPE), aAny );
+            xColumnDesc->setPropertyValue( SC_DBPROP_TYPE, aAny );
 
             aAny <<= pColLengths[nCol];
-            xColumnDesc->setPropertyValue( OUString(SC_DBPROP_PRECISION), aAny );
+            xColumnDesc->setPropertyValue( SC_DBPROP_PRECISION, aAny );
 
             aAny <<= pColScales[nCol];
-            xColumnDesc->setPropertyValue( OUString(SC_DBPROP_SCALE), aAny );
+            xColumnDesc->setPropertyValue( SC_DBPROP_SCALE, aAny );
 
             xColumnsAppend->appendByDescriptor( xColumnDesc );
         }
@@ -930,13 +930,13 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
         if (!xRowProp.is()) return SCERR_EXPORT_CONNECT;
 
         aAny <<= xConnection;
-        xRowProp->setPropertyValue( OUString(SC_DBPROP_ACTIVECONNECTION), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, aAny );
 
         aAny <<= (sal_Int32) sdb::CommandType::TABLE;
-        xRowProp->setPropertyValue( OUString(SC_DBPROP_COMMANDTYPE), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, aAny );
 
         aAny <<= OUString( aTabName );
-        xRowProp->setPropertyValue( OUString(SC_DBPROP_COMMAND), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, aAny );
 
         xRowSet->execute();
 
