@@ -565,7 +565,7 @@ postprocess_main_SED := \
 	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \
 	-e 's,$${PRODUCTEXTENSION},.$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX),g' \
 	-e 's,$${STARTCENTER_ADDFEATURE_URL},http://extensions.libreoffice.org/,g' \
-	-e 's,$${STARTCENTER_INFO_URL},https://www.libreoffice.org/,g' \
+	-e 's,$${STARTCENTER_INFO_URL},https://collaboraoffice.com/,g' \
 	-e 's,$${STARTCENTER_HIDE_EXTERNAL_LINKS},0,g' \
 	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \
 
