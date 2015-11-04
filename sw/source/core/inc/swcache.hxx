@@ -169,8 +169,8 @@ public:
     void Lock();
     void Unlock();
 #else
-    inline void Lock() { ++nLock; }
-    inline void Unlock() { --nLock; }
+    inline void Lock() { ++m_nLock; }
+    inline void Unlock() { --m_nLock; }
 #endif
 };
 
