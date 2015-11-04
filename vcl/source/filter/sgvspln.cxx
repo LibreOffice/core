@@ -23,6 +23,17 @@
 #include <sgvspln.hxx>
 #include <cmath>
 
+#if defined(ANDROID)
+namespace std
+{
+template<typename T>
+T copysign(T x, T y)
+{
+    return copysign(x, y);
+}
+}
+#endif
+
 extern "C" {
 
 /*.pn 277 */
