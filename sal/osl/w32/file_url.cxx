@@ -593,6 +593,11 @@ static sal_Bool _osl_decodeURL( rtl_String* strUTF8, rtl_uString** pstrDecodedUR
                     *pDest++ = aChar;
             }
             break;
+        case '\0':
+        case '#':
+        case '?':
+            bValidEncoded = sal_False;
+            break;
         default:
             *pDest++ = *pSrc++;
             break;
