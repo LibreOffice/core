@@ -1392,14 +1392,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if ( !bUnixForceZeroExtLeading )
     {
-        xProps->setPropertyValue(
-            OUString("UnxForceZeroExtLeading"), makeAny( true ) );
+        xProps->setPropertyValue( "UnxForceZeroExtLeading", makeAny( true ) );
     }
 
     if ( !bUseOldPrinterMetrics )
     {
-        xProps->setPropertyValue(
-            OUString("UseOldPrinterMetrics"), makeAny( true ) );
+        xProps->setPropertyValue( "UseOldPrinterMetrics", makeAny( true ) );
     }
 
     // Old LO versions had 66 as the value for small caps percentage, later changed to 80.
@@ -1408,14 +1406,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // are considered to be old files, so set the compatibility option too.
     if ( !bSmallCapsPercentage66 )
     {
-        xProps->setPropertyValue(
-            OUString("SmallCapsPercentage66"), makeAny( true ) );
+        xProps->setPropertyValue( "SmallCapsPercentage66", makeAny( true ) );
     }
 
     if ( !bTabOverflow )
     {
-        xProps->setPropertyValue(
-            OUString("TabOverflow"), makeAny( false ) );
+        xProps->setPropertyValue( "TabOverflow", makeAny( false ) );
     }
 
     if ( !bUnbreakableNumberings )

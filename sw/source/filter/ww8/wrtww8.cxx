@@ -3554,7 +3554,7 @@ void WW8Export::RestoreMacroCmds()
     try
     {
         uno::Reference < io::XStream > xSrcStream =
-                xSrcRoot->openStreamElement( OUString(SL::aMSMacroCmds), embed::ElementModes::READ );
+                xSrcRoot->openStreamElement( SL::aMSMacroCmds, embed::ElementModes::READ );
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xSrcStream );
 
         if ( pStream && SVSTREAM_OK == pStream->GetError())

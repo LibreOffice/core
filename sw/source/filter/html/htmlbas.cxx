@@ -144,7 +144,7 @@ void SwHTMLParser::EndScript()
                     {
                         aBasicModule = "Modul";
                         aBasicModule += OUString::number( (sal_Int32)(++nSBModuleCnt) );
-                        bFound = xModLib->hasByName( OUString( aBasicModule ) );
+                        bFound = xModLib->hasByName( aBasicModule );
                     }
                 }
 

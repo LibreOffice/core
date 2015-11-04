@@ -45,7 +45,7 @@ Reference< XHyphenatedWord >  SwTextFormatInfo::HyphWord(
     Reference< XHyphenatedWord > xHyphWord;
 
     if( xHyph.is() )
-        xHyphWord = xHyph->hyphenate( OUString(rText),
+        xHyphWord = xHyph->hyphenate( rText,
                             g_pBreakIt->GetLocale( m_pFnt->GetLanguage() ),
                             rText.getLength() - nMinTrail, GetHyphValues() );
     return xHyphWord;

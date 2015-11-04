@@ -753,7 +753,7 @@ void PagePropertyPanel::StartUndo()
 {
     if ( mxUndoManager.is() )
     {
-        mxUndoManager->enterUndoContext( OUString("") );
+        mxUndoManager->enterUndoContext( "" );
     }
 }
 

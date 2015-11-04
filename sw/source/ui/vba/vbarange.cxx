@@ -224,7 +224,7 @@ SwVbaRange::Select() throw ( uno::RuntimeException, std::exception )
 void SAL_CALL
 SwVbaRange::InsertParagraph() throw ( uno::RuntimeException, std::exception )
 {
-    mxTextCursor->setString( OUString("") );
+    mxTextCursor->setString( "" );
     InsertParagraphBefore();
 }
 

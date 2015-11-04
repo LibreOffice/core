@@ -1294,19 +1294,19 @@ void SwUiWriterTest::testTdf77340()
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<style::XStyle> xStyle(xFactory->createInstance("com.sun.star.style.ParagraphStyle"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue(OUString("ParaBackColor"), uno::makeAny(sal_Int32(0xFF00FF)));
+    xPropSet->setPropertyValue("ParaBackColor", uno::makeAny(sal_Int32(0xFF00FF)));
     uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xNameAccess(xSupplier->getStyleFamilies());
     uno::Reference<container::XNameContainer> xNameCont;
     xNameAccess->getByName("ParagraphStyles") >>= xNameCont;
-    xNameCont->insertByName(OUString("myStyle"), uno::makeAny(xStyle));
+    xNameCont->insertByName("myStyle", uno::makeAny(xStyle));
     CPPUNIT_ASSERT_EQUAL(OUString("myStyle"), xStyle->getName());
     //Setting the properties with proper values
-    xPropSet->setPropertyValue(OUString("PageDescName"), uno::makeAny(OUString("First Page")));
-    xPropSet->setPropertyValue(OUString("PageNumberOffset"), uno::makeAny(sal_Int16(3)));
+    xPropSet->setPropertyValue("PageDescName", uno::makeAny(OUString("First Page")));
+    xPropSet->setPropertyValue("PageNumberOffset", uno::makeAny(sal_Int16(3)));
     //Getting the properties and checking that they have proper values
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("First Page")), xPropSet->getPropertyValue(OUString("PageDescName")));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(3)), xPropSet->getPropertyValue(OUString("PageNumberOffset")));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("First Page")), xPropSet->getPropertyValue("PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(3)), xPropSet->getPropertyValue("PageNumberOffset"));
 }
 
 void SwUiWriterTest::testTdf79236()
@@ -1417,8 +1417,8 @@ void SwUiWriterTest::testTextSearch()
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), aPropVal2[0].Value);
     //specifying the search attributes
     uno::Reference<beans::XPropertySet> xPropSet(xSearchDes, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue(OUString("SearchWords"), uno::makeAny(true));
-    xPropSet->setPropertyValue(OUString("SearchCaseSensitive"), uno::makeAny(true));
+    xPropSet->setPropertyValue("SearchWords", uno::makeAny(true));
+    xPropSet->setPropertyValue("SearchCaseSensitive", uno::makeAny(true));
     //this will search all the BOLD words
     uno::Reference<container::XIndexAccess> xIndex(xSearch->findAll(xSearchDes));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndex->getCount());
@@ -2174,7 +2174,7 @@ void SwUiWriterTest::testTdf90808()
     uno::Reference<text::XText> xText(xTextRange->getText(), uno::UNO_QUERY);
     uno::Reference<text::XParagraphCursor> xCrsr(xText->createTextCursor(), uno::UNO_QUERY);
     //inserting text into document so that the paragraph is not empty
-    xText->setString(OUString("Hello World!"));
+    xText->setString("Hello World!");
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
     //creating bookmark 1
     uno::Reference<text::XTextContent> xHeadingBookmark1(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
@@ -2274,42 +2274,42 @@ void SwUiWriterTest::testPropertyDefaults()
     uno::Reference<beans::XPropertyState> xPropState(xInterface, uno::UNO_QUERY);
     //testing CharFontName from style::CharacterProperties
     //getting property default
-    uno::Any aCharFontName = xPropState->getPropertyDefault(OUString("CharFontName"));
+    uno::Any aCharFontName = xPropState->getPropertyDefault("CharFontName");
     //asserting property default and defaults received from "css.text.Defaults" service
-    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharFontName")), aCharFontName);
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue("CharFontName"), aCharFontName);
     //changing the default value
-    xPropSet->setPropertyValue(OUString("CharFontName"), uno::makeAny(OUString("Symbol")));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Symbol")), xPropSet->getPropertyValue(OUString("CharFontName")));
+    xPropSet->setPropertyValue("CharFontName", uno::makeAny(OUString("Symbol")));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Symbol")), xPropSet->getPropertyValue("CharFontName"));
     //resetting the value to default
-    xPropState->setPropertyToDefault(OUString("CharFontName"));
-    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharFontName")), aCharFontName);
+    xPropState->setPropertyToDefault("CharFontName");
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue("CharFontName"), aCharFontName);
     //testing CharHeight from style::CharacterProperties
     //getting property default
-    uno::Any aCharHeight = xPropState->getPropertyDefault(OUString("CharHeight"));
+    uno::Any aCharHeight = xPropState->getPropertyDefault("CharHeight");
     //asserting property default and defaults received from "css.text.Defaults" service
-    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharHeight")), aCharHeight);
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue("CharHeight"), aCharHeight);
     //changing the default value
-    xPropSet->setPropertyValue(OUString("CharHeight"), uno::makeAny(float(14)));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(14)), xPropSet->getPropertyValue(OUString("CharHeight")));
+    xPropSet->setPropertyValue("CharHeight", uno::makeAny(float(14)));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(14)), xPropSet->getPropertyValue("CharHeight"));
     //resetting the value to default
-    xPropState->setPropertyToDefault(OUString("CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharHeight")), aCharHeight);
+    xPropState->setPropertyToDefault("CharHeight");
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue("CharHeight"), aCharHeight);
     //testing CharWeight from style::CharacterProperties
-    uno::Any aCharWeight = xPropSet->getPropertyValue(OUString("CharWeight"));
+    uno::Any aCharWeight = xPropSet->getPropertyValue("CharWeight");
     //changing the default value
-    xPropSet->setPropertyValue(OUString("CharWeight"), uno::makeAny(float(awt::FontWeight::BOLD)));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(awt::FontWeight::BOLD)), xPropSet->getPropertyValue(OUString("CharWeight")));
+    xPropSet->setPropertyValue("CharWeight", uno::makeAny(float(awt::FontWeight::BOLD)));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(awt::FontWeight::BOLD)), xPropSet->getPropertyValue("CharWeight"));
     //resetting the value to default
-    xPropState->setPropertyToDefault(OUString("CharWeight"));
-    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharWeight")), aCharWeight);
+    xPropState->setPropertyToDefault("CharWeight");
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue("CharWeight"), aCharWeight);
     //testing CharUnderline from style::CharacterProperties
-    uno::Any aCharUnderline = xPropSet->getPropertyValue(OUString("CharUnderline"));
+    uno::Any aCharUnderline = xPropSet->getPropertyValue("CharUnderline");
     //changing the default value
-    xPropSet->setPropertyValue(OUString("CharUnderline"), uno::makeAny(sal_Int16(awt::FontUnderline::SINGLE)));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(awt::FontUnderline::SINGLE)), xPropSet->getPropertyValue(OUString("CharUnderline")));
+    xPropSet->setPropertyValue("CharUnderline", uno::makeAny(sal_Int16(awt::FontUnderline::SINGLE)));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(awt::FontUnderline::SINGLE)), xPropSet->getPropertyValue("CharUnderline"));
     //resetting the value to default
-    xPropState->setPropertyToDefault(OUString("CharUnderline"));
-    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharUnderline")), aCharUnderline);
+    xPropState->setPropertyToDefault("CharUnderline");
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue("CharUnderline"), aCharUnderline);
 }
 
 void SwUiWriterTest::testTableBackgroundColor()
@@ -2362,7 +2362,7 @@ void SwUiWriterTest::testTdf88899()
     uno::Reference<text::XTextField> xTextField(xFact->createInstance("com.sun.star.text.textfield.docinfo.Custom"), uno::UNO_QUERY);
     //Setting Name Property
     uno::Reference<beans::XPropertySet> xPropSet(xTextField, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue(OUString("Name"), uno::makeAny(OUString("dateTime")));
+    xPropSet->setPropertyValue("Name", uno::makeAny(OUString("dateTime")));
     //Setting NumberFormat
     uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<util::XNumberFormatTypes> xNumFormat(xNumberFormatsSupplier->getNumberFormats(), uno::UNO_QUERY);
@@ -2370,7 +2370,7 @@ void SwUiWriterTest::testTdf88899()
     alocale.Language = "en";
     alocale.Country = "US";
     sal_Int16 key = xNumFormat->getStandardFormat(util::NumberFormat::DATETIME, alocale);
-    xPropSet->setPropertyValue(OUString("NumberFormat"), uno::makeAny(sal_Int16(key)));
+    xPropSet->setPropertyValue("NumberFormat", uno::makeAny(sal_Int16(key)));
     //Inserting Text Content
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xTextDocument->getText(), uno::UNO_QUERY);

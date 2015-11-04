@@ -393,7 +393,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGrabBag(0);
-    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
     bool bTheme = false;
@@ -417,7 +417,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xGroup->getCount()); // 1 rendered bitmap from the original shapes
 
     uno::Reference<beans::XPropertySet> xGroupPropertySet(getShape(1), uno::UNO_QUERY);
-    xGroupPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+    xGroupPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
     bool bData = false, bLayout = false, bQStyle = false, bColor = false, bDrawing = false;
@@ -508,7 +508,7 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGrabBag(0);
-    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
     bool CustomXml = false;
     for(int i = 0; i < aGrabBag.getLength(); ++i)
@@ -536,7 +536,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXGrabBag, "activex.docx")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGrabBag(0);
-    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
     bool bActiveX = false;
     for(int i = 0; i < aGrabBag.getLength(); ++i)
@@ -564,7 +564,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXBinGrabBag, "activexbin.docx")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGrabBag(0);
-    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
     bool bActiveX = false;
     for(int i = 0; i < aGrabBag.getLength(); ++i)

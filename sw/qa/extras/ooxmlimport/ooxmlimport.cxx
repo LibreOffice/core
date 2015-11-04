@@ -142,7 +142,7 @@ public:
                 args[0].Value <<= OUString("com.sun.star.text.TextDocument");
                 args[0].State = beans::PropertyState_DIRECT_VALUE;
 
-                uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(aURL, OUString("_default"), 0, args);
+                uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(aURL, "_default", 0, args);
                 OUString sMessage = "loading succeeded: " + aURL;
                 CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sMessage, RTL_TEXTENCODING_UTF8).getStr(), !xComponent.is());
             }

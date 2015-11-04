@@ -417,7 +417,7 @@ bool SwHyphIter::IsAuto()
 {
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     return xProp.is() && *static_cast<sal_Bool const *>(xProp->getPropertyValue(
-                                OUString(UPN_IS_HYPH_AUTO) ).getValue());
+                                UPN_IS_HYPH_AUTO ).getValue());
 }
 
 void SwHyphIter::ShowSelection()

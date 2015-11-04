@@ -1004,7 +1004,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
                                 ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
                             xCtrlAcc->setLabel( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                                                    OUString(SW_RES( STR_FDLG_TEMPLATE_NAME )));
+                                                    SW_RES( STR_FDLG_TEMPLATE_NAME ));
                         }
                         catch (const Exception&)
                         {

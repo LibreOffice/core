@@ -319,7 +319,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             {
                 // filter not found
                 OUString sHtml("HTML");
-                xFltMgr->appendFilter( sHtml, OUString("*.html;*.htm") );
+                xFltMgr->appendFilter( sHtml, "*.html;*.htm" );
                 xFltMgr->setCurrentFilter( sHtml ) ;
             }
 

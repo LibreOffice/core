@@ -93,7 +93,7 @@ bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::s
     try
     {
         SotClipboardFormatId nStgFormatId = SotStorage::GetFormatID( rStg );
-        bRet = rStg->isStreamElement( OUString("content.xml") );
+        bRet = rStg->isStreamElement( "content.xml" );
         if ( bRet )
             bRet = ( nStgFormatId != SotClipboardFormatId::NONE && ( rFilter.GetFormat() == nStgFormatId ) );
     }

@@ -41,14 +41,14 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
     if( pWhere )
     {
         uno::Reference< text::XTextRange > xTextRange = pWhere->getXTextRange();
-        xTextRange->setString( OUString("x") ); // set marker
+        xTextRange->setString( "x" ); // set marker
         uno::Reference< text::XTextRange > xEndMarker = xTextRange->getEnd();
-        xEndMarker->setString( OUString("x") ); // set marker
+        xEndMarker->setString( "x" ); // set marker
         uno::Reference< text::XText > xText = pWhere->getXText();
         mxEntry->applyTo( xEndMarker->getStart() );
         uno::Reference< text::XTextCursor > xTC = xText->createTextCursorByRange( xTextRange->getStart() );
         xTC->goRight( 1, sal_True );
-        xTC->setString( OUString("") ); // remove marker
+        xTC->setString( "" ); // remove marker
         // remove the blank paragraph if it is a rich text
         bool bRich = false;
         _richtext >>= bRich;
@@ -68,7 +68,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
                 xTVCursor->gotoRange( xEndMarker->getEnd(), sal_False );
             }
         }
-        xEndMarker->setString( OUString("") ); // remove marker
+        xEndMarker->setString( "" ); // remove marker
         xTC = xText->createTextCursorByRange( xEndMarker->getEnd() );
         pWhere->setXTextCursor( xTC );
     }
