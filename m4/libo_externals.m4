@@ -17,6 +17,8 @@ if test "$with_system_$1" = "yes"; then
     SYSTEM_$2=TRUE
     PKG_CHECK_MODULES([$2], [$3])
     $2_CFLAGS=$(printf '%s' "${$2_CFLAGS}" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${$2_LIBS}"
+    $2_LIBS="$filteredlibs"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_$2=
