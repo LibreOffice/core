@@ -97,6 +97,9 @@ private:
     VclPtr<CheckBox>       m_pUseOpenGL;
     VclPtr<CheckBox>       m_pForceOpenGL;
 
+    VclPtr<FixedText>      m_pOpenGLStatusEnabled;
+    VclPtr<FixedText>      m_pOpenGLStatusDisabled;
+
     VclPtr<ListBox>        m_pMousePosLB;
     VclPtr<ListBox>        m_pMouseMiddleLB;
 
@@ -113,6 +116,7 @@ private:
 #if defined( UNX )
     DECL_LINK_TYPED( OnAntialiasingToggled, CheckBox&, void );
 #endif
+    void UpdateOGLStatus();
 
 public:
     OfaViewTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

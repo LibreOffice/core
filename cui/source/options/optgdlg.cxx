@@ -635,6 +635,8 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pUseAntiAliase, "useaa");
     get(m_pUseOpenGL, "useopengl");
     get(m_pForceOpenGL, "forceopengl");
+    get(m_pOpenGLStatusEnabled, "openglenabled");
+    get(m_pOpenGLStatusDisabled, "opengldisabled");
     get(m_pMousePosLB, "mousepos");
     get(m_pMouseMiddleLB, "mousemiddle");
 
@@ -676,6 +678,8 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
         m_pUseOpenGL->Enable(false);
     if (officecfg::Office::Common::VCL::ForceOpenGL::isReadOnly())
         m_pForceOpenGL->Enable(false);
+
+    UpdateOGLStatus();
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -703,6 +707,8 @@ void OfaViewTabPage::dispose()
     m_pUseAntiAliase.clear();
     m_pUseOpenGL.clear();
     m_pForceOpenGL.clear();
+    m_pOpenGLStatusEnabled.clear();
+    m_pOpenGLStatusDisabled.clear();
     m_pMousePosLB.clear();
     m_pMouseMiddleLB.clear();
     SfxTabPage::dispose();
@@ -970,6 +976,14 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 #if defined( UNX )
     LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( *m_pFontAntiAliasing );
 #endif
+}
+
+void OfaViewTabPage::UpdateOGLStatus()
+{
+    // Easier than a custom translation string.
+    bool bEnabled = OpenGLWrapper::isVCLOpenGLEnabled();
+    m_pOpenGLStatusEnabled->Show(bEnabled);
+    m_pOpenGLStatusDisabled->Show(!bEnabled);
 }
 
 struct LanguageConfig_Impl
