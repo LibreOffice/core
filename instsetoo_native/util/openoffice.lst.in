@@ -69,7 +69,7 @@ LibreOffice
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL https://www.libreoffice.org/
+            STARTCENTER_INFO_URL https://collaboraoffice.com/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
