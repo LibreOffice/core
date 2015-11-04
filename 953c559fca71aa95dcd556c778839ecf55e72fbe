@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_1bc16781",
+        "filename": "sc/source/core/tool/userlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-04T13:27:40Z",
+      "side": 1,
+      "message": "Duplicating this part of the funcitonality is unnecessary. GetSubIndex() already does both searches, it just additionally has to return whether a case sensitive or insensitive match was found.",
+      "revId": "953c559fca71aa95dcd556c778839ecf55e72fbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_5bbbef0e",
+        "filename": "sc/source/core/tool/userlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-04T13:27:40Z",
+      "side": 1,
+      "message": "If GetSubIndex() returned also whether the match was case-sensitive it could be remembered here in matchData entries. Plus, the first case-sensitive match could already break the loop and return the corresponding ScUserListData*",
+      "revId": "953c559fca71aa95dcd556c778839ecf55e72fbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_7bbeb300",
+        "filename": "sc/source/core/tool/userlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-04T13:27:40Z",
+      "side": 1,
+      "message": "Use matchData.empty() instead. And place it before a check that involves matchData.size() because empty() is faster and having found no ScUserListData is more likely. In fact, if we returned a case-sensitive match early above, only the check on empty() would be needed and if matchData was not empty then simply the first (then case-insensitive) entry could be returned.",
+      "revId": "953c559fca71aa95dcd556c778839ecf55e72fbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_9b3b979c",
+        "filename": "sc/source/core/tool/userlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-04T13:27:40Z",
+      "side": 1,
+      "message": "The entire following loop and check is superfluous if GetSubIndex() returned also whether the match was case-sensitive and such match would be returned early.",
+      "revId": "953c559fca71aa95dcd556c778839ecf55e72fbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_bb365bb2",
+        "filename": "sc/source/core/tool/userlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-04T13:27:40Z",
+      "side": 1,
+      "message": "This call would be superfluous if GetSubIndex() returned also whether the match was case-sensitive and it was remembered in a matchData entry.",
+      "revId": "953c559fca71aa95dcd556c778839ecf55e72fbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
