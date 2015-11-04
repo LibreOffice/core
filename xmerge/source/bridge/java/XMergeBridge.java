@@ -399,123 +399,137 @@ public class XMergeBridge {
          Iterator<ConverterInfo> ciEnum= null;
 
          XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);
-
-
          XOutputStreamToOutputStreamAdapter newxos =new XOutputStreamToOutputStreamAdapter(device);
-         try{
-         ConverterInfoReader cir = new ConverterInfoReader(jarName,false);
-         ciEnum =cir.getConverterInfoEnumeration();
-         }
-         catch (ParserConfigurationException pexc){
-          System.out.println("Error:"+pexc);
-         }
-          catch ( org.xml.sax.SAXException pexc){
-          System.out.println("Error:"+pexc);
-         }
-         catch(Exception e){
-         System.out.println("Error:"+e);
-         }
-         ConverterInfoMgr. removeByJar(jarName);
-         if (convertFromOffice)
-         {
-
          try {
-
-             //Check to see if jar contains a plugin Impl
-
-                 ConverterInfoMgr.addPlugIn(ciEnum);
-             ConverterFactory cf = new ConverterFactory();
-
-             Convert cv = cf.getConverter(ConverterInfoMgr.findConverterInfo(sdMime,offMime),false);
-             if (cv == null) {
-                 System.out.println("\nNo plug-in exists to convert from <staroffice/sxw> to <specified format> ");
-
+             try{
+             ConverterInfoReader cir = new ConverterInfoReader(jarName,false);
+             ciEnum =cir.getConverterInfoEnumeration();
              }
-             else
+             catch (ParserConfigurationException pexc){
+              System.out.println("Error:"+pexc);
+             }
+              catch ( org.xml.sax.SAXException pexc){
+              System.out.println("Error:"+pexc);
+             }
+             catch(Exception e){
+             System.out.println("Error:"+e);
+             }
+             ConverterInfoMgr. removeByJar(jarName);
+             if (convertFromOffice)
              {
-                 cv.addInputStream(name,xis,false);
-                 ConvertData dataOut = cv.convert();
 
-                 Iterator<Object> docEnum = dataOut.getDocumentEnumeration();
+             try {
 
-                 if (docEnum.hasNext()){
-                     Document docOut      = (Document)docEnum.next();
-                     docOut.write(newxos);
+                 //Check to see if jar contains a plugin Impl
 
-                     newxos.flush();
-                     newxos.close();
-
-
-                     int i=1;
-                     while (docEnum.hasNext() && sURL.startsWith("file:")) {
-
-                     URI uri=new URI(sURL);
-                     String  newFileName= getPath(uri);
-
-                     File newFile;
-                     if (newFileName.lastIndexOf(".")!=-1){
-                         newFile =new File(newFileName.substring(0,newFileName.lastIndexOf("."))+String.valueOf(i)+newFileName.substring(newFileName.lastIndexOf(".")));
-                     }
-                     else{
-                        newFile =new File(newFileName.concat(String.valueOf(i)));
-                     }
-
-                     FileOutputStream fos = new FileOutputStream(newFile);
-                     docOut      = (Document)docEnum.next();
-                     docOut.write(fos);
-                     fos.flush();
-                     fos.close();
-                     i++;
-
-                     }
-
-                 }
-             }
-             ConverterInfoMgr.removeByJar(jarName);
-         }
-         catch (Exception ex1) {
-             IOException ex2 = new IOException();
-             ex2.initCause(ex1);
-             throw ex2;
-             }
-         }
-         else{
-
-         try {
-              //Check to see if jar contains a plugin Impl
                  ConverterInfoMgr.addPlugIn(ciEnum);
                  ConverterFactory cf = new ConverterFactory();
-             Convert cv = cf.getConverter(ConverterInfoMgr.findConverterInfo(sdMime,offMime),true);
-             if (cv == null) {
-                 System.out.println("\nNo plug-in exists to convert to <staroffice/sxw> from <specified format>");
-             }
-             else
-             {
 
-                 cv.addInputStream(name,xis,false);
-                 ConvertData dataIn = cv.convert();
-                 Iterator<Object> docEnum = dataIn.getDocumentEnumeration();
-                 while (docEnum.hasNext()) {
-                 OfficeDocument docIn      = (OfficeDocument)docEnum.next();
+                 Convert cv = cf.getConverter(ConverterInfoMgr.findConverterInfo(sdMime,offMime),false);
+                 if (cv == null) {
+                     System.out.println("\nNo plug-in exists to convert from <staroffice/sxw> to <specified format> ");
 
-                 docIn.write(newxos,false);
                  }
-                 newxos.close();
+                 else
+                 {
+                     cv.addInputStream(name,xis,false);
+                     ConvertData dataOut = cv.convert();
+
+                     Iterator<Object> docEnum = dataOut.getDocumentEnumeration();
+
+                     if (docEnum.hasNext()){
+                         Document docOut      = (Document)docEnum.next();
+                         docOut.write(newxos);
+
+                         newxos.flush();
+                         newxos.close();
+
+
+                         int i=1;
+                         while (docEnum.hasNext() && sURL.startsWith("file:")) {
+
+                         URI uri=new URI(sURL);
+                         String  newFileName= getPath(uri);
+
+                         File newFile;
+                         if (newFileName.lastIndexOf(".")!=-1){
+                             newFile =new File(newFileName.substring(0,newFileName.lastIndexOf("."))+String.valueOf(i)+newFileName.substring(newFileName.lastIndexOf(".")));
+                         }
+                         else{
+                            newFile =new File(newFileName.concat(String.valueOf(i)));
+                         }
+
+                         FileOutputStream fos = new FileOutputStream(newFile);
+                         docOut      = (Document)docEnum.next();
+                         docOut.write(fos);
+                         fos.flush();
+                         fos.close();
+                         i++;
+                         }
+
+                     }
+                 }
+                 ConverterInfoMgr.removeByJar(jarName);
              }
-             ConverterInfoMgr.removeByJar(jarName);
-         }
-         catch (StackOverflowError sOE){
-              System.out.println("\nERROR : Stack Overflow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
-         }
-         catch (Exception ex1) {
-             IOException ex2 = new IOException();
-             ex2.initCause(ex1);
-             throw ex2;
-         }
+             catch (Exception ex1) {
+                 IOException ex2 = new IOException();
+                 ex2.initCause(ex1);
+                 throw ex2;
+                 }
+             }
+             else{
 
+             try {
+                  //Check to see if jar contains a plugin Impl
+                     ConverterInfoMgr.addPlugIn(ciEnum);
+                     ConverterFactory cf = new ConverterFactory();
+                 Convert cv = cf.getConverter(ConverterInfoMgr.findConverterInfo(sdMime,offMime),true);
+                 if (cv == null) {
+                     System.out.println("\nNo plug-in exists to convert to <staroffice/sxw> from <specified format>");
+                 }
+                 else
+                 {
 
+                     cv.addInputStream(name,xis,false);
+                     ConvertData dataIn = cv.convert();
+                     Iterator<Object> docEnum = dataIn.getDocumentEnumeration();
+                     while (docEnum.hasNext()) {
+                     OfficeDocument docIn      = (OfficeDocument)docEnum.next();
+
+                     docIn.write(newxos,false);
+                     }
+                     newxos.close();
+                 }
+                 ConverterInfoMgr.removeByJar(jarName);
+             }
+             catch (StackOverflowError sOE){
+                  System.out.println("\nERROR : Stack Overflow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
+             }
+             catch (Exception ex1) {
+                 IOException ex2 = new IOException();
+                 ex2.initCause(ex1);
+                 throw ex2;
+                 }
+             }
          }
+         finally {
+                 if (newxos != null) {
+                     newxos.flush();
+                     newxos.close();
+                     newxos = null;
+                     }
+                 if (xis != null) {
+                     xis.close();
+                     xis = null;
+                     }
+                 }
 
+         /* Satisfy coverity */
+         newxos.flush();
+         newxos.close();
+         newxos = null;
+         xis.close();
+         xis    = null;
     }
 
         private String getPath(URI uri){
