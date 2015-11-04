@@ -191,7 +191,7 @@ published interface XReportDefinition
     [attribute,bound] string Caption;
 
     /** Specifies whether groups in a multi column report are kept together.
-        @see com.sun.star.report.GroupKeepTogether
+        @see com::sun::star::report::GroupKeepTogether
     */
     [attribute,bound] short GroupKeepTogether
     {

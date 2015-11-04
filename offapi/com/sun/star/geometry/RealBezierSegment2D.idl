@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module geometry {
     the end point of the last curve, and the remaining members
     ignored.<p>
 
-    @see com.sun.star.rendering.XBezierPolyPolygon2D
+    @see com::sun::star::rendering::XBezierPolyPolygon2D
     @since OpenOffice 2.0
  */
 published struct RealBezierSegment2D

@@ -38,7 +38,7 @@ module com { module sun { module star { module text {
 
 //=============================================================================
 /** This interface enables the object to handle numbering rules.
-     @see com.sun.star.text.NumberingRules
+     @see com::sun::star::text::NumberingRules
 */
 published interface XNumberingRulesSupplier : com::sun::star::uno::XInterface
 {

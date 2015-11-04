@@ -47,7 +47,7 @@ published interface XRowSetListener: com::sun::star::lang::XEventListener
         @param event
             contains information about the event
         @deprecated
-        @see com.sun.star.sdb.XRowsChangeListener
+        @see com::sun::star::sdb::XRowsChangeListener
      */
     [oneway] void rowChanged([in]com::sun::star::lang::EventObject event);
     //-------------------------------------------------------------------------

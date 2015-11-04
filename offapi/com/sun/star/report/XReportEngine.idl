@@ -69,7 +69,7 @@ module com {  module sun {  module star {  module report {
         OnReportEnded       Is fired when the report ended.
         OnPageEnded         Is fired when the page ended.
 
-    @see com.sun.star.document.OfficeDocument
+    @see com::sun::star::document::OfficeDocument
 */
 
 published interface XReportEngine

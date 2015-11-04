@@ -44,7 +44,7 @@
 
     <p>This bridge works with the urp protocol.
 
-   @see com.sun.star.bridge.Bridge
+   @see com::sun::star::bridge::Bridge
  */
 published service UrpBridge
 {

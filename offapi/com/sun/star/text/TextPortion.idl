@@ -73,8 +73,8 @@ published service TextPortion
     //-------------------------------------------------------------------------
     /** contains text frames, graphic objects, embedded objects or
         shapes that are anchored at or as character.
-        @see com.sun.star.text.TextFrame
-        @see com.sun.star.text.TextGraphicObject
+        @see com::sun::star::text::TextFrame
+        @see com::sun::star::text::TextGraphicObject
      */
     [optional]
     interface ::com::sun::star::container::XContentEnumerationAccess;

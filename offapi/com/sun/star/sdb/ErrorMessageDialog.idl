@@ -73,7 +73,7 @@ module com {  module sun {  module star {  module sdb {
     presented to the user in a consistent way.
     <br/>
     This can be reached by using this service.
-    @see com.sun.star.sdb.InteractionHandler
+    @see com::sun::star::sdb::InteractionHandler
     </p>
 */
 published service ErrorMessageDialog

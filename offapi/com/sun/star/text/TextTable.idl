@@ -135,7 +135,7 @@ published service TextTable
 
     [optional] interface com::sun::star::sheet::XCellRangeData;
 
-    /** determins the type of break that is applied at the beginning of the table.@see com.sun.star.style.BreakType
+    /** determins the type of break that is applied at the beginning of the table. @see com::sun::star::style::BreakType
      */
     [property] com::sun::star::style::BreakType BreakType;
     //-------------------------------------------------------------------------
@@ -150,7 +150,7 @@ published service TextTable
     [property] long RightMargin;
     //-------------------------------------------------------------------------
 
-    /** contains the horizontal orientation.@see com.sun.star.text.HoriOrientation
+    /** contains the horizontal orientation. @see com::sun::star::text::HoriOrientation
      */
     [property] short HoriOrient;
     //-------------------------------------------------------------------------
@@ -197,7 +197,7 @@ published service TextTable
         [optional, property] long HeaderRowCount;
         //-------------------------------------------------------------------------
 
-    /** determins the type, color and size of the shadow.@see com.sun.star.table.ShadowFormat
+    /** determins the type, color and size of the shadow. @see com::sun::star::table::ShadowFormat
      */
     [property] com::sun::star::table::ShadowFormat ShadowFormat;
     //-------------------------------------------------------------------------
@@ -238,13 +238,13 @@ published service TextTable
     [property] boolean ChartColumnAsLabel;
     //-------------------------------------------------------------------------
 
-    /** contains the description of the table borders.@see com.sun.star.table.TableBorder
+    /** contains the description of the table borders. @see com::sun::star::table::TableBorder
      */
     [property] com::sun::star::table::TableBorder TableBorder;
     //-------------------------------------------------------------------------
 
     /** contains the column description of the table.
-             @see com.sun.star.text.TableColumnSeparator
+             @see com::sun::star::text::TableColumnSeparator
      */
     [property] sequence<com::sun::star::text::TableColumnSeparator> TableColumnSeparators;
     //-------------------------------------------------------------------------

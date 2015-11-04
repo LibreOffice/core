@@ -70,7 +70,7 @@ published service DocumentIndexFormat
 
     //-------------------------------------------------------------------------
     /** return an object that provides the service "com.sun.star.text.DocumentIndexLevelFormat"
-     @see com.sun.star.text.DocumentIndexLevelFormat
+     @see com::sun::star::text::DocumentIndexLevelFormat
      */
     [property] sequence<string> LevelFormat;
 };
