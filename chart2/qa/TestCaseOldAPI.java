@@ -32,8 +32,8 @@ import com.sun.star.awt.*;
 import com.sun.star.container.*;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.CloseVetoException;
-
 import com.sun.star.uno.AnyConverter;
+import util.utils;
 
 /**
  * The following Complex Test will test the
@@ -360,7 +360,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             assure( "AutoMax is on", ! AnyConverter.toBoolean( xProp.getPropertyValue( "AutoMax" )) );
 
             assure( "Maximum value invalid",
-                    approxEqual(
+                    utils.approxEqual(
                         AnyConverter.toDouble( xProp.getPropertyValue( "Max" )),
                         nNewMax ));
 
@@ -369,7 +369,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
             xProp.setPropertyValue( "Origin", new Double( nNewOrigin ));
             assure( "Origin invalid",
-                    approxEqual(
+                    utils.approxEqual(
                         AnyConverter.toDouble( xProp.getPropertyValue( "Origin" )),
                         nNewOrigin ));
             xProp.setPropertyValue( "AutoOrigin", Boolean.TRUE);
@@ -941,19 +941,6 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
         return aResult;
     }
-
-
-
-    /// see rtl/math.hxx
-    private boolean approxEqual( double a, double b )
-    {
-        if( a == b )
-            return true;
-        double x = a - b;
-        return (x < 0.0 ? -x : x)
-            < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0)));
-    }
-
 
     /** returns true if a and b differ no more than tolerance.
 

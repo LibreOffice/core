@@ -874,4 +874,14 @@ public class utils {
      * Default short wait time for the Office
      */
     public static final int DEFAULT_SHORT_WAIT_MS = 500;
+
+    /// see rtl/math.hxx
+    public static boolean approxEqual( double a, double b )
+    {
+        if( a == b )
+            return true;
+        double x = a - b;
+        return (x < 0.0 ? -x : x)
+            < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0)));
+    }
 }

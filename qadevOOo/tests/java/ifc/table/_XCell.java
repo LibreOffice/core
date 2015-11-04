@@ -19,6 +19,7 @@
 package ifc.table;
 
 import lib.MultiMethodTest;
+import util.utils;
 
 import com.sun.star.table.CellContentType;
 import com.sun.star.table.XCell;
@@ -149,7 +150,7 @@ public class _XCell extends MultiMethodTest {
         oObj.setValue(inValue) ;
         double cellValue = oObj.getValue() ;
 
-        boolean result = Double.valueOf(cellValue).equals(inValue);
+        boolean result = utils.approxEqual(cellValue, inValue);
         tRes.tested("setValue()", result);
     } // end setValue()
 }
