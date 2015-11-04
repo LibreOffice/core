@@ -27,7 +27,7 @@ typedef std::vector<SwRect> SwRects;
 
 class SwRegionRects : public SwRects
 {
-    SwRect aOrigin; // Copy of StartRect.
+    SwRect m_aOrigin; // Copy of StartRect.
 
     inline void InsertRect( const SwRect &rRect, const sal_uInt16 nPos, bool &rDel);
 
@@ -44,8 +44,8 @@ public:
     // Combine adjacent rectangles.
     void Compress( bool bFuzzy = true );
 
-    inline const SwRect &GetOrigin() const { return aOrigin; }
-    inline void ChangeOrigin( const SwRect &rRect ) { aOrigin = rRect; }
+    inline const SwRect &GetOrigin() const { return m_aOrigin; }
+    inline void ChangeOrigin( const SwRect &rRect ) { m_aOrigin = rRect; }
 };
 
 #endif // INCLUDED_SW_INC_SWREGION_HXX

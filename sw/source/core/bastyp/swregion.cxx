@@ -23,10 +23,10 @@
 
 SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
     SwRects(),
-    aOrigin( rStartRect )
+    m_aOrigin( rStartRect )
 {
     reserve(nInit);
-    push_back( aOrigin );
+    push_back( m_aOrigin );
 }
 
 // If <rDel> is true then this Rect will be overwritten by <rRect> at
@@ -127,7 +127,7 @@ void SwRegionRects::Invert()
     // To avoid unnecessary memory requirements, create a "useful" initial size:
     // Number of rectangles in this area * 2 + 2 for the special case of a
     // single hole (so four Rects in the inverse case).
-    SwRegionRects aInvRegion( aOrigin, size()*2+2 );
+    SwRegionRects aInvRegion( m_aOrigin, size()*2+2 );
     for( const_iterator it = begin(); it != end(); ++it )
         aInvRegion -= *it;
 
