@@ -44,21 +44,6 @@ using ::rtl::OUString;
 
 namespace sd { namespace sidebar {
 
-namespace {
-    /** Note that these names have to be identical to (the tail of)
-        the entries in officecfg/registry/data/org/openoffice/Office/Impress.xcu
-        for the TaskPanelFactory.
-    */
-    const static char* gsResourceNameCustomAnimations = "/CustomAnimations";
-    const static char* gsResourceNameLayouts = "/Layouts";
-    const static char* gsResourceNameAllMasterPages = "/AllMasterPages";
-    const static char* gsResourceNameRecentMasterPages = "/RecentMasterPages";
-    const static char* gsResourceNameUsedMasterPages = "/UsedMasterPages";
-    const static char* gsResourceNameSlideTransitions = "/SlideTransitions";
-    const static char* gsResourceNameTableDesign = "/TableDesign";
-    const static char* gsResourceNameNavigator = "/NavigatorPanel";
-}
-
 Reference<lang::XEventListener> mxControllerDisposeListener;
 
 //----- PanelFactory --------------------------------------------------------
@@ -123,22 +108,26 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     VclPtr<vcl::Window> pControl;
     css::ui::LayoutSize aLayoutSize (-1,-1,-1);
 
+    /** Note that these names have to be identical to (the tail of)
+        the entries in officecfg/registry/data/org/openoffice/Office/Impress.xcu
+        for the TaskPanelFactory.
+    */
 #define EndsWith(s,t) s.endsWithAsciiL(t,strlen(t))
-    if (EndsWith(rsUIElementResourceURL, gsResourceNameCustomAnimations))
+    if (EndsWith(rsUIElementResourceURL, "/CustomAnimations"))
         pControl = VclPtr<CustomAnimationPanel>::Create(pParentWindow, *pBase, xFrame);
-    else if (EndsWith(rsUIElementResourceURL, gsResourceNameLayouts))
+    else if (EndsWith(rsUIElementResourceURL, "/Layouts"))
         pControl = VclPtr<LayoutMenu>::Create(pParentWindow, *pBase, xSidebar);
-    else if (EndsWith(rsUIElementResourceURL, gsResourceNameAllMasterPages))
+    else if (EndsWith(rsUIElementResourceURL, "/AllMasterPages"))
         pControl = AllMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
-    else if (EndsWith(rsUIElementResourceURL, gsResourceNameRecentMasterPages))
+    else if (EndsWith(rsUIElementResourceURL, "/RecentMasterPages"))
         pControl = RecentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
-    else if (EndsWith(rsUIElementResourceURL, gsResourceNameUsedMasterPages))
+    else if (EndsWith(rsUIElementResourceURL, "/UsedMasterPages"))
         pControl = CurrentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
-    else if (EndsWith(rsUIElementResourceURL, gsResourceNameSlideTransitions))
+    else if (EndsWith(rsUIElementResourceURL, "/SlideTransitions"))
         pControl = VclPtr<SlideTransitionPanel>::Create(pParentWindow, *pBase, xFrame);
-    else if (EndsWith(rsUIElementResourceURL, gsResourceNameTableDesign))
+    else if (EndsWith(rsUIElementResourceURL, "/TableDesign"))
         pControl = VclPtr<TableDesignPanel>::Create(pParentWindow, *pBase);
-    else if (EndsWith(rsUIElementResourceURL, gsResourceNameNavigator))
+    else if (EndsWith(rsUIElementResourceURL, "/NavigatorPanel"))
         pControl = VclPtr<NavigatorWrapper>::Create(pParentWindow, *pBase, pBindings);
 #undef EndsWith
 
