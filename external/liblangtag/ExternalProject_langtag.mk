@@ -23,6 +23,7 @@ $(eval $(call gb_ExternalProject_register_targets,langtag,\
 $(call gb_ExternalProject_get_state_target,langtag,build):
 	$(call gb_ExternalProject_run,build,\
 		MAKE=$(MAKE) ./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
+		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) "ac_cv_va_copy=no") \
 		LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \
