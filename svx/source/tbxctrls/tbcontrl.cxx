@@ -2633,15 +2633,12 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
     switch( GetSlotId() )
     {
         case SID_ATTR_CHAR_COLOR_BACKGROUND :
+        case SID_ATTR_CHAR_BACK_COLOR :
             pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_EXTRAS_CHARBACKGROUND ) );
             break;
 
         case SID_BACKGROUND_COLOR :
             pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
-            break;
-
-        case SID_ATTR_CHAR_BACK_COLOR :
-            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_CHAR_BACK_COLOR ) );
             break;
 
         case SID_FRAME_LINECOLOR:

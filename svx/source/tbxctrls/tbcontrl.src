@@ -125,11 +125,6 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text [ en-US ] = "Highlight Color" ;
 };
 
-String RID_SVXSTR_CHAR_BACK_COLOR
-{
-    Text [ en-US ] = "Text Background Color" ;
-};
-
 String RID_SVXSTR_BACKGROUND
 {
     Text [ en-US ] = "Background";

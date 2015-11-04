@@ -233,7 +233,6 @@
 // Strings of the ToolBox-Controls from tbcontrl.cxx
 #define RID_SVXSTR_FILLPATTERN              (RID_SVX_START + 191)
 #define RID_SVXSTR_FRAME                    (RID_SVX_START + 192)
-#define RID_SVXSTR_CHAR_BACK_COLOR          (RID_SVX_START + 193)
 #define RID_SVXSTR_FRAME_COLOR              (RID_SVX_START + 194)
 #define RID_SVXSTR_FRAME_STYLE              (RID_SVX_START + 195)
 #define RID_SVXSTR_EXTRAS_CHARBACKGROUND    (RID_SVX_START + 196)
