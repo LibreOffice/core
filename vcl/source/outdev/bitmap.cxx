@@ -666,7 +666,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             SalBitmap* pSalSrcBmp = rBmp.ImplGetImpBitmap()->ImplGetSalBitmap();
             SalBitmap* pSalAlphaBmp = rAlpha.ImplGetImpBitmap()->ImplGetSalBitmap();
 
-            // try the blen the alpha bitmap with the alpha virtual device
+            // try to blend the alpha bitmap with the alpha virtual device
             if (mpAlphaVDev)
             {
                 Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aRelPt, aOutSz ) );
