@@ -374,7 +374,7 @@ OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl )
             return OUString();
 
         uno::Reference< embed::XStorage > storage;
-        storage.set( GetExport().GetTargetStorage()->openStorageElement( OUString( "Fonts" ),
+        storage.set( GetExport().GetTargetStorage()->openStorageElement( "Fonts",
             ::embed::ElementModes::WRITE ), uno::UNO_QUERY_THROW );
         int index = 0;
         OUString name;

@@ -592,8 +592,7 @@ void SdXMLShapeContext::SetTransformation()
 
             aAny <<= aMatrix;
 
-            xPropSet->setPropertyValue(
-                OUString("Transformation"), aAny);
+            xPropSet->setPropertyValue("Transformation", aAny);
         }
     }
 }
@@ -1178,8 +1177,7 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             *pInnerSequence = awt::Point( mnX2 - aTopLeft.X, mnY2 - aTopLeft.Y);
 
             aAny <<= aPolyPoly;
-            xPropSet->setPropertyValue(
-                OUString("Geometry"), aAny);
+            xPropSet->setPropertyValue("Geometry", aAny);
         }
 
         // set sizes for transformation
@@ -1426,7 +1424,7 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
                         basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(basegfx::B2DPolyPolygon(aPolygon), aPointSequenceSequence);
                         aAny <<= aPointSequenceSequence;
-                        xPropSet->setPropertyValue(OUString("Geometry"), aAny);
+                        xPropSet->setPropertyValue("Geometry", aAny);
                     }
                 }
             }
@@ -1576,7 +1574,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                             aAny <<= aSourcePolyPolygon;
                         }
 
-                        xPropSet->setPropertyValue(OUString("Geometry"), aAny);
+                        xPropSet->setPropertyValue("Geometry", aAny);
                     }
 
                     // set pos, size, shear and rotate
@@ -3230,9 +3228,7 @@ void SdXMLPluginShapeContext::EndElement()
         else
         {
             // in case we have a media object
-            xProps->setPropertyValue(
-                    OUString("MediaURL"),
-                    uno::makeAny(maHref));
+            xProps->setPropertyValue( "MediaURL", uno::makeAny(maHref));
 
             xProps->setPropertyValue("MediaMimeType", uno::makeAny(maMimeType) );
 

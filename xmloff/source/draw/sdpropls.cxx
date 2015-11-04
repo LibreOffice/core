@@ -997,7 +997,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 uno::Reference<ucb::XAnyCompareFactory> xCompareFac( mxModel, uno::UNO_QUERY );
                 uno::Reference<ucb::XAnyCompare> xCompare;
                 if( xCompareFac.is() )
-                    xCompare = xCompareFac->createAnyCompareByName( OUString( "NumberingRules" ) );
+                    xCompare = xCompareFac->createAnyCompareByName( "NumberingRules" );
 
                 pHdl = new XMLNumRulePropHdl( xCompare );
                 break;

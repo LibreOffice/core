@@ -750,13 +750,11 @@ void XMLShapeImportHelper::finishShape(
     {
         if ( mrImporter.IsShapePositionInHoriL2R() &&
              xPropSet->getPropertySetInfo()->hasPropertyByName(
-                OUString("PositionLayoutDir")) )
+                "PositionLayoutDir") )
         {
             uno::Any aPosLayoutDir;
             aPosLayoutDir <<= text::PositionLayoutDir::PositionInHoriL2R;
-            xPropSet->setPropertyValue(
-                OUString("PositionLayoutDir"),
-                aPosLayoutDir );
+            xPropSet->setPropertyValue( "PositionLayoutDir", aPosLayoutDir );
         }
     }
 }
@@ -798,10 +796,10 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
     uno::Reference< beans::XPropertySet > xPropSet;
     aAny >>= xPropSet;
 
-    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( OUString("ZOrder") ) )
+    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( "ZOrder" ) )
     {
         aAny <<= nDestPos;
-        xPropSet->setPropertyValue( OUString("ZOrder"), aAny );
+        xPropSet->setPropertyValue( "ZOrder", aAny );
 
         for( ZOrderHint& rHint : maZOrderList )
         {

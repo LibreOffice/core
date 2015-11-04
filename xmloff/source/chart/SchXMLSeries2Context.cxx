@@ -985,12 +985,10 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                         switch( iStyle->meType )
                         {
                             case DataRowPointStyle::MEAN_VALUE:
-                                xSeriesProp->getPropertyValue(
-                                    OUString( "DataMeanValueProperties" )) >>= xStatPropSet;
+                                xSeriesProp->getPropertyValue("DataMeanValueProperties") >>= xStatPropSet;
                                 break;
                             case DataRowPointStyle::ERROR_INDICATOR:
-                                xSeriesProp->getPropertyValue(
-                                    OUString( "DataErrorProperties" ))  >>= xStatPropSet;
+                                xSeriesProp->getPropertyValue("DataErrorProperties")  >>= xStatPropSet;
                                 break;
                             default:
                                 break;

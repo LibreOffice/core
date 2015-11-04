@@ -2616,9 +2616,7 @@ void XMLPageVarGetFieldImportContext::PrepareField(
 
     // display old content (#96657#)
     aAny <<= GetContent();
-    xPropertySet->setPropertyValue(
-        OUString(sAPI_current_presentation),
-        aAny );
+    xPropertySet->setPropertyValue( sAPI_current_presentation, aAny );
 }
 
 

@@ -975,10 +975,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
         Any aAny = xFieldMasterNameAccess->getByName(sVarServiceName);
         aAny >>= xMaster;
 
-        aAny = xMaster->getPropertyValue(
-            // sPropertySubType
-            OUString(sAPI_sub_type)
-            );
+        aAny = xMaster->getPropertyValue(sAPI_sub_type);
         sal_Int16 nType = 0;
         aAny >>= nType;
 
@@ -1052,10 +1049,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
                 // set name
                 Any aAny;
                 aAny <<= sName;
-                xMaster->setPropertyValue(
-                    // sPropertyName
-                    OUString(sAPI_name)
-                    , aAny);
+                xMaster->setPropertyValue(sAPI_name, aAny);
 
                 if (eVarType != VarTypeUserField) {
                     // set subtype for setexp field
@@ -1063,10 +1057,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
                     aAny <<= ((eVarType == VarTypeSimple) ?
                               SetVariableType::VAR :
                               SetVariableType::SEQUENCE);
-                    xMaster->setPropertyValue(
-                        // sPropertySubType
-                        OUString(sAPI_sub_type)
-                        , aAny);
+                    xMaster->setPropertyValue(sAPI_sub_type, aAny);
                 } // else : user field: no subtype
 
             } else {

@@ -979,8 +979,7 @@ void XMLMetaFieldImportContext::InsertMeta(
                     OUString("IsFixedLanguage") );
                 Any any;
                 any <<= nKey;
-                xPropertySet->setPropertyValue(
-                    OUString("NumberFormat"), any);
+                xPropertySet->setPropertyValue("NumberFormat", any);
                 if ( xPropertySet->getPropertySetInfo()->
                         hasPropertyByName( sPropertyIsFixedLanguage ) )
                 {

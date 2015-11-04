@@ -189,32 +189,20 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     {
         try
         {
-            xProp->setPropertyValue(
-                    OUString( "HasXAxis" ), aFalseBool );
-            xProp->setPropertyValue(
-                    OUString( "HasXAxisGrid" ), aFalseBool );
-            xProp->setPropertyValue(
-                    OUString( "HasXAxisDescription" ), aFalseBool );
-            xProp->setPropertyValue(
-                    OUString( "HasSecondaryXAxis" ), aFalseBool );
-            xProp->setPropertyValue(
-                    OUString( "HasSecondaryXAxisDescription" ), aFalseBool );
+            xProp->setPropertyValue("HasXAxis", aFalseBool );
+            xProp->setPropertyValue("HasXAxisGrid", aFalseBool );
+            xProp->setPropertyValue("HasXAxisDescription", aFalseBool );
+            xProp->setPropertyValue("HasSecondaryXAxis", aFalseBool );
+            xProp->setPropertyValue("HasSecondaryXAxisDescription", aFalseBool );
 
-            xProp->setPropertyValue(
-                    OUString( "HasYAxis" ), aFalseBool );
-            xProp->setPropertyValue(
-                    OUString( "HasYAxisGrid" ), aFalseBool );
-            xProp->setPropertyValue(
-                    OUString( "HasYAxisDescription" ), aFalseBool );
-            xProp->setPropertyValue(
-                    OUString( "HasSecondaryYAxis" ), aFalseBool );
-            xProp->setPropertyValue(
-                    OUString( "HasSecondaryYAxisDescription" ), aFalseBool );
+            xProp->setPropertyValue("HasYAxis", aFalseBool );
+            xProp->setPropertyValue("HasYAxisGrid", aFalseBool );
+            xProp->setPropertyValue("HasYAxisDescription", aFalseBool );
+            xProp->setPropertyValue("HasSecondaryYAxis", aFalseBool );
+            xProp->setPropertyValue("HasSecondaryYAxisDescription", aFalseBool );
 
-            xProp->setPropertyValue(
-                    OUString( "HasZAxis" ), aFalseBool );
-            xProp->setPropertyValue(
-                    OUString( "HasZAxisDescription" ), aFalseBool );
+            xProp->setPropertyValue("HasZAxis", aFalseBool );
+            xProp->setPropertyValue("HasZAxisDescription", aFalseBool );
 
             uno::Any aAny;
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
@@ -296,14 +284,10 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             {
                 uno::Any aAny;
                 aAny <<= mrColHasLabels;
-                xDocProp->setPropertyValue(
-                    OUString( "DataSourceLabelsInFirstColumn" ),
-                    aAny );
+                xDocProp->setPropertyValue("DataSourceLabelsInFirstColumn", aAny );
 
                 aAny <<= mrRowHasLabels;
-                xDocProp->setPropertyValue(
-                    OUString( "DataSourceLabelsInFirstRow" ),
-                    aAny );
+                xDocProp->setPropertyValue("DataSourceLabelsInFirstRow", aAny );
             }
             catch( const beans::UnknownPropertyException & )
             {

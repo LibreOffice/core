@@ -895,8 +895,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         {
                             Reference< beans::XPropertySet > xOldSequenceProp( aLSeqIt->second->getValues(), uno::UNO_QUERY );
                             Reference< chart2::data::XDataSequence > xNewSequence(
-                                xDataProv->createDataSequenceByRangeRepresentation(
-                                    OUString("categories")));
+                                xDataProv->createDataSequenceByRangeRepresentation("categories"));
                             SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
                             aLSeqIt->second->setValues( xNewSequence );
