@@ -29,15 +29,8 @@ class FilterConfigItem;
 
 //================== GraphicImport - die exportierte Funktion ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
-#if defined(DISABLE_DYNLOADING)
-#define GraphicImport idxGraphicImport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+idxGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     DXFRepresentation aDXF;
     DXF2GDIMetaFile aConverter;

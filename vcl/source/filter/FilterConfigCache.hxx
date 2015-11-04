@@ -39,6 +39,7 @@ class FilterConfigCache
         OUString sDocumentService;
         OUString sFilterService;
         OUString sTemplateName;
+        OUString sExternalFilterName;
 
         OUString sMediaType;
         OUString sFilterType;
@@ -96,6 +97,8 @@ public:
     OUString    GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
     OUString    GetImportFilterType( sal_uInt16 nFormat );
     OUString    GetImportFilterTypeName( sal_uInt16 nFormat );
+    OUString    GetExternalFilterName(sal_uInt16 nFormat, bool bExport);
+
 
     bool    IsImportInternalFilter( sal_uInt16 nFormat );
 
