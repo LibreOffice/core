@@ -8,7 +8,7 @@
 
 using namespace rtl;
 
-bool JvmfwkUtil_isLoadableJVM( OUString aURL )
+bool JvmfwkUtil_isLoadableJVM( OUString const & aURL )
 {
     bool bRet = false;
 
