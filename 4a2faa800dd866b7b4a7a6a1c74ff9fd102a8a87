@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_fbc903ae",
+        "filename": "sc/source/ui/view/tabview3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-11-04T13:03:44Z",
+      "side": 1,
+      "message": "This is not the right place for such call. SelectionChanged() is called after all other updates are done when positioning the cell cursor or changing selection. In fact most places call SelectionChanged() after having called AlignToCursor(). Calling AlignToCursor() here again might even result in conflicting positioning, especially with a different SC_FOLLOW_... argument. Also, changing the view position after accessibility has already been notified of a change is wrong.\n\nPlease check the other places where AlignToCursor() or SelectionChanged() are called to get a gist of how things work.\n\nMaybe also take a look at if and how and from where ScTabView::MoveCursorAbs() is called in this and other use cases.",
+      "revId": "4a2faa800dd866b7b4a7a6a1c74ff9fd102a8a87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
