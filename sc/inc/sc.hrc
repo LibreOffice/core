@@ -297,7 +297,7 @@
 
 #define SID_DEL_ROWS            (EDIT_MENU_START + 16)//JN
 #define SID_DEL_COLS            (EDIT_MENU_START + 17)//JN
-
+// EDIT_MENU_START + 18 is defined in include/sfx2/sfxsids.hrc
 #define FID_CHG_SHOW            (EDIT_MENU_START + 19)
 
 #define EDIT_MENU_END           (EDIT_MENU_START + 20)
