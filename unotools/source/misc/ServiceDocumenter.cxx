@@ -21,7 +21,7 @@ void unotools::misc::ServiceDocumenter::showCoreDocs(const Reference<XServiceInf
         return;
     auto xMSF(m_xContext->getServiceManager());
     Reference<system::XSystemShellExecute> xShell(xMSF->createInstanceWithContext("com.sun.star.system.SystemShellExecute", m_xContext), uno::UNO_QUERY);
-    xShell->execute(m_sCoreBaseUrl + xService->getImplementationName(), "", 0);
+    xShell->execute(m_sCoreBaseUrl + xService->getImplementationName() + ".html", "", 0);
 }
 
 void unotools::misc::ServiceDocumenter::showInterfaceDocs(const Reference<XTypeProvider>& xTypeProvider)

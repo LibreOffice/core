@@ -7,9 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// only compile this on unixy system
+// as we dont want to bother with x-platform system()/mkdir()
+#if defined(__unix__)
+// only compile this on clang 3.7 or higher, which is known to work
+// there were problems on clang 3.5 at least
+#if (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 7))
 #include <cassert>
-
+#include <stdlib.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <regex>
 #include "plugin.hxx"
+#include "clang/Frontend/CompilerInstance.h"
 
 namespace {
 
@@ -58,9 +69,12 @@ class GetImplementationName:
     public loplugin::Plugin
 {
 public:
-    explicit GetImplementationName(InstantiationData const & data): Plugin(data)
+    explicit GetImplementationName(InstantiationData const & data)
+        : Plugin(data)
+        , m_Outdir(initOutdir())
+        , m_OutdirCreated(false)
+        , m_Srcdir(initSrcdir())
     {}
-
     void run() override;
 
     bool VisitCXXMethodDecl(clang::CXXMethodDecl const * decl);
@@ -70,6 +84,28 @@ private:
 
     bool returnsStringConstant(
         FunctionDecl const * decl, clang::StringRef * string);
+
+    void ensureOutdirCreated()
+    {
+        if(m_OutdirCreated)
+            return;
+        std::string cmd("mkdir -p ");
+        cmd += "\"" + m_Outdir + "\"";
+        if(system(cmd.c_str()) != 0) {
+            report(
+                clang::DiagnosticsEngine::Error,
+                "Error creating ServiceImplementations output dir \"%0\".")
+                << m_Outdir;
+        }
+        m_OutdirCreated = true;
+    }
+
+    void generateOutput(FunctionDecl const * decl, const std::string unoimpl, const std::string cppclass);
+    std::string initOutdir();
+    std::string initSrcdir();
+    const std::string m_Outdir;
+    bool m_OutdirCreated;
+    const std::string m_Srcdir;
 };
 
 void GetImplementationName::run() {
@@ -92,19 +128,15 @@ bool GetImplementationName::VisitCXXMethodDecl(
     {
         return true;
     }
-    clang::StringRef str;
-    if (!returnsStringConstant(decl, &str)) {
+    clang::StringRef unoimpl;
+    if (!returnsStringConstant(decl, &unoimpl)) {
         report(
             clang::DiagnosticsEngine::Warning,
             "cannot determine returned string", decl->getLocation())
             << decl->getSourceRange();
         return true;
     }
-    report(
-        clang::DiagnosticsEngine::Warning, "\"%0\" implemented by %1",
-        decl->getLocation())
-        << str << decl->getParent()->getQualifiedNameAsString()
-        << decl->getSourceRange();
+    generateOutput(decl, unoimpl.str(), decl->getParent()->getQualifiedNameAsString());
     return true;
 }
 
@@ -221,8 +253,54 @@ bool GetImplementationName::returnsStringConstant(
     }
 }
 
+void GetImplementationName::generateOutput(FunctionDecl const * decl, const std::string unoimpl, const std::string cppclass) {
+    ensureOutdirCreated();
+    clang::SourceManager& sm(compiler.getSourceManager());
+    const std::string absfilename(sm.getFilename(decl->getSourceRange().getBegin()).str());
+    if(absfilename.length() <= m_Srcdir.length())
+        return;
+    const std::string filename(absfilename.substr(m_Srcdir.length()+1));
+    const std::regex moduleregex("^\\w+");
+    std::smatch modulematch;
+    std::regex_search(filename, modulematch, moduleregex);
+    if(modulematch.empty())
+        return;
+    const std::string module(modulematch[0]);
+    const std::regex doublecolonregex("::");
+    const std::string cppclassweb(std::regex_replace(cppclass, doublecolonregex, "_1_1"));
+    std::ofstream redirectfile(m_Outdir + "/" + unoimpl + ".html");
+    redirectfile << "<meta http-equiv=\"refresh\" content=\"0; URL=http://docs.libreoffice.org/" << module << "/html/class" << cppclassweb << "\">\n";
+    redirectfile.close();
+}
+
+std::string GetImplementationName::initOutdir() {
+{
+    char* pWorkdir = getenv("WORKDIR");
+    if(pWorkdir) {
+        std::string result(pWorkdir);
+        result += "/ServiceImplementations";
+        return result;
+    }
+    report(
+        clang::DiagnosticsEngine::Error, "WORKDIR unset, dont know where to write service implementation info.");
+    return std::string();
+    }
+}
+
+std::string GetImplementationName::initSrcdir() {
+{
+    char* pSrcdir = getenv("SRCDIR");
+    if(!pSrcdir) {
+        report(
+            clang::DiagnosticsEngine::Error, "SRCDIR unset, dont know where the source base is.");
+    }
+    return std::string(pSrcdir);
+    }
+}
 loplugin::Plugin::Registration<GetImplementationName> X(
     "getimplementationname");
 }
+#endif
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
