@@ -32,6 +32,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -1141,6 +1142,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
+    OString aCommand(pCommand);
     if (!strcmp(pCommand, ".uno:CharFontName"))
     {
         return getFonts(pCommand);
@@ -1149,7 +1151,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         return getStyles(pThis, pCommand);
     }
-    else if (OString(pCommand) == ".uno:ViewRowColumnHeaders")
+    else if (aCommand == ".uno:ViewRowColumnHeaders" || aCommand.startsWith(".uno:CellCursor"))
     {
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
@@ -1158,8 +1160,39 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
             return 0;
         }
 
-        OUString aHeaders = pDoc->getRowColumnHeaders();
-        OString aString = OUStringToOString(aHeaders, RTL_TEXTENCODING_UTF8);
+        OString aString;
+        if (aCommand == ".uno:ViewRowColumnHeaders")
+        {
+            OUString aValue = pDoc->getRowColumnHeaders();
+            aString = OUStringToOString(aValue, RTL_TEXTENCODING_UTF8);
+        }
+        else if (aCommand.startsWith(".uno:CellCursor:"))
+        {
+            OString aParams = aCommand.copy(OString(".uno:CellCursor:").getLength());
+
+            sal_Int32 nIndex = 0;
+            OString aOutputWidth = aParams.getToken(0,  ',',  nIndex);
+            OString aOutputHeight = aParams.getToken(0,  ',',  nIndex);
+            OString aTileWidth = aParams.getToken(0,  ',',  nIndex);
+            OString aTileHeight = aParams.getToken(0,  ',',  nIndex);
+
+            int nOutputWidth, nOutputHeight;
+            long nTileWidth, nTileHeight;
+            if (!(comphelper::string::getTokenCount(aParams, ',') == 4
+                  && !aOutputWidth.isEmpty()
+                  && (nOutputWidth = aOutputWidth.toInt32()) != 0
+                  && !aOutputHeight.isEmpty()
+                  && (nOutputHeight = aOutputHeight.toInt32()) != 0
+                  && !aTileWidth.isEmpty()
+                  && (nTileWidth = aTileWidth.toInt64()) != 0
+                  && !aTileHeight.isEmpty()
+                  && (nTileHeight = aTileHeight.toInt64()) != 0))
+            {
+                gImpl->maLastExceptionMsg = "Can't parse arguments for .uno:CellCursor, no cursor returned";
+                return NULL;
+            }
+            aString = pDoc->getCellCursor(nOutputWidth, nOutputHeight, nTileWidth, nTileHeight);
+        }
         char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
         strcpy(pMemory, aString.getStr());
         return pMemory;

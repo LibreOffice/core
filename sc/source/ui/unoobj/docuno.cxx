@@ -885,6 +885,23 @@ OUString ScModelObj::getRowColumnHeaders()
     return pTabView->getRowColumnHeaders();
 }
 
+OString ScModelObj::getCellCursor( int nOutputWidth, int nOutputHeight,
+                                   long nTileWidth, long nTileHeight )
+{
+    SolarMutexGuard aGuard;
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+
+    if (!pViewData)
+        return OString();
+
+    ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+    if (!pGridWindow)
+        return OString();
+
+    return "{ \"commandName\": \".uno:CellCursor\", \"commandValues\": \"" + pGridWindow->getCellCursor( nOutputWidth, nOutputHeight, nTileWidth, nTileHeight ) + "\" }";
+}
+
 void ScModelObj::initializeForTiledRendering()
 {
     SolarMutexGuard aGuard;
