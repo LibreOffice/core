@@ -38,7 +38,6 @@
 
 #include <unotools/docinfohelper.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -51,6 +50,14 @@ XMLMetaExportComponent::XMLMetaExportComponent(
 
 XMLMetaExportComponent::~XMLMetaExportComponent()
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+XMLMetaExportComponent_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLMetaExportComponent(context, "XMLMetaExportComponent", SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
 void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -180,28 +187,6 @@ void XMLMetaExportComponent::_ExportMeta()
 void XMLMetaExportComponent::_ExportAutoStyles() {}
 void XMLMetaExportComponent::_ExportMasterStyles() {}
 void XMLMetaExportComponent::_ExportContent() {}
-
-
-uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames()
-    throw()
-{
-    const OUString aServiceName(
-         "com.sun.star.document.XMLOasisMetaExporter"  );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw()
-{
-    return OUString(  "XMLMetaExportComponent"  );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
-{
-    return static_cast<cppu::OWeakObject*>(new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportComponent_getImplementationName(), SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
-}
 
 uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
     throw()
