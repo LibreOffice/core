@@ -906,28 +906,9 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
 
     m_pReplaceED->SetSpaces(true);
     m_pShortED->SetSpaces(true);
-}
 
-void OfaAutocorrReplacePage::setTabs()
-{
-    m_pReplaceTLB->SetTab(0, m_pShortED->GetPosPixel().X(), MAP_PIXEL);
-    m_pReplaceTLB->SetTab(1, m_pReplaceED->GetPosPixel().X(), MAP_PIXEL);
-}
-
-void OfaAutocorrReplacePage::StateChanged(StateChangedType nStateChange)
-{
-    SfxTabPage::StateChanged(nStateChange);
-
-    if (nStateChange == StateChangedType::InitShow)
-    {
-        setTabs();
-    }
-}
-
-void OfaAutocorrReplacePage::Resize()
-{
-    SfxTabPage::Resize();
-    setTabs();
+    m_pShortED->ConnectColumn(m_pReplaceTLB, 0);
+    m_pReplaceED->ConnectColumn(m_pReplaceTLB, 1);
 }
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
@@ -1752,6 +1733,12 @@ IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
 
 VCL_BUILDER_FACTORY(AutoCorrEdit)
 
+void AutoCorrEdit::ConnectColumn(const VclPtr<SvTabListBox>& rTable, sal_Int32 nCol)
+{
+    m_xReplaceTLB = rTable;
+    m_nCol = nCol;
+}
+
 void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -1765,6 +1752,14 @@ void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
     }
     else if(bSpaces || aKeyCode.GetCode() != KEY_SPACE)
         Edit::KeyInput(rKEvt);
+}
+
+void AutoCorrEdit::Resize()
+{
+    Edit::Resize();
+    if (!m_xReplaceTLB)
+        return;
+    m_xReplaceTLB->SetTab(m_nCol, GetPosPixel().X(), MAP_PIXEL);
 }
 
 enum OfaQuoteOptions

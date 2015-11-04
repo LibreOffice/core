@@ -183,21 +183,35 @@ public:
 class AutoCorrEdit : public Edit
 {
     Link<>  aActionLink;
-    bool    bSpaces;
+    VclPtr<SvTabListBox> m_xReplaceTLB;
+    sal_Int32 m_nCol;
+    bool bSpaces;
 
-    public:
-                    AutoCorrEdit(vcl::Window* pParent, const ResId& rResId) :
-                        Edit(pParent, rResId), bSpaces(false){}
-                    AutoCorrEdit(vcl::Window* pParent) :
-                        Edit(pParent), bSpaces(false){}
+public:
+    AutoCorrEdit(vcl::Window* pParent, const ResId& rResId)
+        : Edit(pParent, rResId)
+        , m_nCol(0)
+        , bSpaces(false)
+    {
+    }
+
+    AutoCorrEdit(vcl::Window* pParent)
+        : Edit(pParent)
+        , m_nCol(0)
+        , bSpaces(false)
+    {
+    }
 
     void            SetActionHdl( const Link<>& rLink )
                                 { aActionLink = rLink;}
+
+    void            ConnectColumn(const VclPtr<SvTabListBox>& rTable, sal_Int32 nCol);
 
     void            SetSpaces(bool bSet)
                                 {bSpaces = bSet;}
 
     virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
 };
 
 // class OfaAutocorrReplacePage ------------------------------------------
@@ -259,7 +273,6 @@ private:
                                 LanguageType eOldLanguage,
                                 LanguageType eNewLanguage);
 
-        void setTabs();
 public:
                         OfaAutocorrReplacePage( vcl::Window* pParent, const SfxItemSet& rSet );
                         virtual ~OfaAutocorrReplacePage();
@@ -271,8 +284,6 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        StateChanged(StateChangedType nStateChange) SAL_OVERRIDE;
 
     void    SetLanguage(LanguageType eSet);
     void    DeleteEntry(const OUString& sShort, const OUString& sLong);
