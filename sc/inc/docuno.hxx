@@ -424,6 +424,12 @@ public:
 
     /// @see vcl::ITiledRenderable::getRowColumnHeaders().
     virtual OUString getRowColumnHeaders(const Rectangle& rRectangle) SAL_OVERRIDE;
+
+    /// @see vcl::ITiledRenderable::getCellCursor().
+    virtual OString getCellCursor( int nOutputWidth,
+                                   int nOutputHeight,
+                                   long nTileWidth,
+                                   long nTileHeight ) SAL_OVERRIDE;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper2<
