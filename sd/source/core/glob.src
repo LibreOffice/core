@@ -356,15 +356,6 @@ Resource RID_SD_ERRHDL
     };
 };
 
-String STR_3DOBJECTBARSHELL
-{
-    Text [ en-US ] = "3-D Settings" ;
-};
-String STR_FONTWORKOBJECTBARSHELL
-{
-    Text [ en-US ] = "Fontwork" ;
-};
-
 String STR_POOLSHEET_BANDED_CELL
 {
     Text [ en-US ] = "Banding cell" ;

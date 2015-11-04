@@ -111,8 +111,6 @@
 #define STR_SAVE_DOC                            RID_GLOB_START+100
 #define STR_PREVIEWVIEWSHELL                    RID_GLOB_START+101
 #define RID_SD_ERRHDL                           RID_GLOB_START+102
-#define STR_3DOBJECTBARSHELL                    RID_GLOB_START+104
-#define STR_FONTWORKOBJECTBARSHELL              RID_GLOB_START+105
 
 #define STR_PAGE_NAME                           RID_GLOB_START+111
 #define STR_SLIDE_NAME                          RID_GLOB_START+112
