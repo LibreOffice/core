@@ -53,7 +53,19 @@ XMLMetaExportComponent::~XMLMetaExportComponent()
 {
 }
 
+<<<<<<< HEAD
 void SAL_CALL XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+=======
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+XMLMetaExportComponent_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLMetaExportComponent(context, "XMLMetaExportComponent", SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
+}
+
+void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+>>>>>>> tdf#74608 xmloff:Constructor feature for XMLMetaExportComponent
 {
     try
     {
@@ -180,6 +192,7 @@ void XMLMetaExportComponent::_ExportAutoStyles() {}
 void XMLMetaExportComponent::_ExportMasterStyles() {}
 void XMLMetaExportComponent::_ExportContent() {}
 
+<<<<<<< HEAD
 
 uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames()
     throw()
@@ -199,6 +212,8 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
     return static_cast<cppu::OWeakObject*>(new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportComponent_getImplementationName(), SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
+=======
+>>>>>>> tdf#74608 xmloff:Constructor feature for XMLMetaExportComponent
 uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
     throw()
 {
