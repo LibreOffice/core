@@ -283,13 +283,6 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Content_createIn
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
     throw (css::uno::Exception);
 
-// meta export
-OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw();
-css::uno::Sequence<OUString> SAL_CALL XMLMetaExportComponent_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLMetaExportComponent_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
-
 // meta export OOo
 OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLMetaExportOOO_getSupportedServiceNames() throw();
