@@ -392,15 +392,15 @@ public:
 // SortArray needs to be traversed.
 class SwOrderIter
 {
-    const SwPageFrm *pPage;
-    const SdrObject *pCurrent;
-    const bool bFlysOnly;
+    const SwPageFrm *m_pPage;
+    const SdrObject *m_pCurrent;
+    const bool m_bFlysOnly;
 
 public:
     SwOrderIter( const SwPageFrm *pPage, bool bFlysOnly = true );
 
-    void             Current( const SdrObject *pNew ) { pCurrent = pNew; }
-    const SdrObject *operator()() const { return pCurrent; }
+    void             Current( const SdrObject *pNew ) { m_pCurrent = pNew; }
+    const SdrObject *operator()() const { return m_pCurrent; }
     const SdrObject *Top();
     const SdrObject *Bottom();
     const SdrObject *Next();

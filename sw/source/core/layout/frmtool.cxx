@@ -2226,18 +2226,18 @@ SwBorderAttrs *SwBorderAttrAccess::Get()
 }
 
 SwOrderIter::SwOrderIter( const SwPageFrm *pPg, bool bFlys ) :
-    pPage( pPg ),
-    pCurrent( 0 ),
-    bFlysOnly( bFlys )
+    m_pPage( pPg ),
+    m_pCurrent( 0 ),
+    m_bFlysOnly( bFlys )
 {
 }
 
 const SdrObject *SwOrderIter::Top()
 {
-    pCurrent = 0;
-    if ( pPage->GetSortedObjs() )
+    m_pCurrent = 0;
+    if ( m_pPage->GetSortedObjs() )
     {
-        const SwSortedObjs *pObjs = pPage->GetSortedObjs();
+        const SwSortedObjs *pObjs = m_pPage->GetSortedObjs();
         if ( pObjs->size() )
         {
             sal_uInt32 nTopOrd = 0;
@@ -2245,82 +2245,82 @@ const SdrObject *SwOrderIter::Top()
             for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp >= nTopOrd )
                 {
                     nTopOrd = nTmp;
-                    pCurrent = pObj;
+                    m_pCurrent = pObj;
                 }
             }
         }
     }
-    return pCurrent;
+    return m_pCurrent;
 }
 
 const SdrObject *SwOrderIter::Bottom()
 {
-    pCurrent = 0;
-    if ( pPage->GetSortedObjs() )
+    m_pCurrent = 0;
+    if ( m_pPage->GetSortedObjs() )
     {
         sal_uInt32 nBotOrd = USHRT_MAX;
-        const SwSortedObjs *pObjs = pPage->GetSortedObjs();
+        const SwSortedObjs *pObjs = m_pPage->GetSortedObjs();
         if ( pObjs->size() )
         {
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
             for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp < nBotOrd )
                 {
                     nBotOrd = nTmp;
-                    pCurrent = pObj;
+                    m_pCurrent = pObj;
                 }
             }
         }
     }
-    return pCurrent;
+    return m_pCurrent;
 }
 
 const SdrObject *SwOrderIter::Next()
 {
-    const sal_uInt32 nCurOrd = pCurrent ? pCurrent->GetOrdNumDirect() : 0;
-    pCurrent = 0;
-    if ( pPage->GetSortedObjs() )
+    const sal_uInt32 nCurOrd = m_pCurrent ? m_pCurrent->GetOrdNumDirect() : 0;
+    m_pCurrent = 0;
+    if ( m_pPage->GetSortedObjs() )
     {
         sal_uInt32 nOrd = USHRT_MAX;
-        const SwSortedObjs *pObjs = pPage->GetSortedObjs();
+        const SwSortedObjs *pObjs = m_pPage->GetSortedObjs();
         if ( pObjs->size() )
         {
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
             for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp > nCurOrd && nTmp < nOrd )
                 {
                     nOrd = nTmp;
-                    pCurrent = pObj;
+                    m_pCurrent = pObj;
                 }
             }
         }
     }
-    return pCurrent;
+    return m_pCurrent;
 }
 
 const SdrObject *SwOrderIter::Prev()
 {
-    const sal_uInt32 nCurOrd = pCurrent ? pCurrent->GetOrdNumDirect() : 0;
-    pCurrent = 0;
-    if ( pPage->GetSortedObjs() )
+    const sal_uInt32 nCurOrd = m_pCurrent ? m_pCurrent->GetOrdNumDirect() : 0;
+    m_pCurrent = 0;
+    if ( m_pPage->GetSortedObjs() )
     {
-        const SwSortedObjs *pObjs = pPage->GetSortedObjs();
+        const SwSortedObjs *pObjs = m_pPage->GetSortedObjs();
         if ( pObjs->size() )
         {
             sal_uInt32 nOrd = 0;
@@ -2328,18 +2328,18 @@ const SdrObject *SwOrderIter::Prev()
             for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+                if ( m_bFlysOnly && dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
                     continue;
                 sal_uInt32 nTmp = pObj->GetOrdNumDirect();
                 if ( nTmp < nCurOrd && nTmp >= nOrd )
                 {
                     nOrd = nTmp;
-                    pCurrent = pObj;
+                    m_pCurrent = pObj;
                 }
             }
         }
     }
-    return pCurrent;
+    return m_pCurrent;
 }
 
 /// Keep and restore the substructure of a layout frame for an action.
