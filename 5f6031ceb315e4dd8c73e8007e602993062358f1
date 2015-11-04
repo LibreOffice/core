@@ -16,6 +16,24 @@
       "revId": "5f6031ceb315e4dd8c73e8007e602993062358f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_3802713f",
+        "filename": "vcl/source/gdi/impbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-04T06:50:13Z",
+      "side": 1,
+      "message": "I would guess that 1 and 24 are the most likely values.\n24 for most of our stuff and 1 for mask layers.\n\nAlso this function is only used in two places, so if it shows up on a performance profile, it would be a good candidate for moving it to the header file (i.e. inlining)\n\nI seem to remember there is a bug/feature somewhere about creating and using a SAL_LIKELY macro(tdf#39631). Perhaps this would be a good use-case?",
+      "parentUuid": "faac7902_b8b5c1d1",
+      "revId": "5f6031ceb315e4dd8c73e8007e602993062358f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
