@@ -110,7 +110,9 @@ Sequence< rtl::OUString > SAL_CALL MysqlCDriver::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
+#ifndef SYSTEM_MYSQL_CPPCONN
 extern "C" { static void SAL_CALL thisModule() {} }
+#endif
 
 void MysqlCDriver::impl_initCppConn_lck_throw()
 {
