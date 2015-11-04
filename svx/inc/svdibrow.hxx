@@ -55,6 +55,8 @@ private:
     ImpItemListRow* ImpGetEntry(sal_uIntPtr nPos) const { return aList[nPos]; }
     void ImpSaveWhich();
     void ImpRestoreWhich();
+    sal_uIntPtr GetCurrentPos() const;
+    bool BegChangeEntry(sal_uIntPtr nPos);
 
 protected:
     virtual long GetRowCount() const override;
@@ -72,9 +74,7 @@ public:
     virtual void dispose() override;
     void Clear();
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
-    sal_uIntPtr GetCurrentPos() const;
     sal_uInt16 GetCurrentWhich() const;
-    bool BegChangeEntry(sal_uIntPtr nPos);
     bool EndChangeEntry();
     void     BrkChangeEntry();
 
