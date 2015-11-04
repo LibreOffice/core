@@ -437,6 +437,7 @@ public class XMergeBridge {
                                 docOut.write(fos);
                                 fos.flush();
                                 fos.close();
+                                fos = null;
                                 i++;
 
                             }
@@ -446,6 +447,12 @@ public class XMergeBridge {
                     ConverterInfoMgr.removeByJar(jarName);
                 }
                 catch (Exception ex1) {
+                    /* Satisfy coverity */
+                    newxos.flush();
+                    newxos.close();
+                    newxos = null;
+                    xis.close();
+                    xis    = null;
                     IOException ex2 = new IOException();
                     ex2.initCause(ex1);
                     throw ex2;
@@ -480,13 +487,24 @@ public class XMergeBridge {
                     System.out.println("\nERROR : Stack Overflow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
                 }
                 catch (Exception ex1) {
+                    /* Satisfy coverity */
+                    newxos.flush();
+                    newxos.close();
+                    newxos = null;
+                    xis.close();
+                    xis    = null;
                     IOException ex2 = new IOException();
                     ex2.initCause(ex1);
                     throw ex2;
                 }
 
             }
-
+            /* Satisfy coverity */
+            newxos.flush();
+            newxos.close();
+            newxos = null;
+            xis.close();
+            xis    = null;
         }
 
         private String getPath(URI uri){
