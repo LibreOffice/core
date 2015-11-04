@@ -174,12 +174,6 @@
 #include "ViewShellBase.hxx"
 #include <memory>
 
-namespace {
-    const char CustomAnimationPanelId[] = "SdCustomAnimationPanel";
-    const char SlideTransitionPanelId[] = "SdSlideTransitionPanel";
-    const char GalleryPanelId[] = "GalleryPanel";
-}
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -2718,11 +2712,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             OUString panelId;
             if (nSId == SID_CUSTOM_ANIMATION_PANEL)
-                panelId = CustomAnimationPanelId;
+                panelId = "SdCustomAnimationPanel";
             else if (nSId == SID_GALLERY)
-                panelId = GalleryPanelId;
+                panelId = "GalleryPanel";
             else if (nSId == SID_SLIDE_TRANSITIONS_PANEL)
-                panelId = SlideTransitionPanelId;
+                panelId = "SdSlideTransitionPanel";
 
             ::sfx2::sidebar::Sidebar::ShowPanel(
                 panelId,
