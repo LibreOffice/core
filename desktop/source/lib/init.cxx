@@ -32,6 +32,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -1209,6 +1210,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 {
     OString aCommand(pCommand);
     static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
+    static const OString aCellCursor(".uno:CellCursor");
 
     if (!strcmp(pCommand, ".uno:CharFontName"))
     {
@@ -1267,6 +1269,47 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 
         OUString aHeaders = pDoc->getRowColumnHeaders(aRectangle);
         OString aString = OUStringToOString(aHeaders, RTL_TEXTENCODING_UTF8);
+
+        char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
+        strcpy(pMemory, aString.getStr());
+        return pMemory;
+    }
+    else if (aCommand.startsWith(aCellCursor)
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            return 0;
+        }
+
+        OString aString;
+        OString aParams = aCommand.copy(OString(".uno:CellCursor:").getLength());
+
+        sal_Int32 nIndex = 0;
+        OString aOutputWidth = aParams.getToken(0,  ',',  nIndex);
+        OString aOutputHeight = aParams.getToken(0,  ',',  nIndex);
+        OString aTileWidth = aParams.getToken(0,  ',',  nIndex);
+        OString aTileHeight = aParams.getToken(0,  ',',  nIndex);
+
+        int nOutputWidth, nOutputHeight;
+        long nTileWidth, nTileHeight;
+        if (!(comphelper::string::getTokenCount(aParams, ',') == 4
+              && !aOutputWidth.isEmpty()
+              && (nOutputWidth = aOutputWidth.toInt32()) != 0
+              && !aOutputHeight.isEmpty()
+              && (nOutputHeight = aOutputHeight.toInt32()) != 0
+              && !aTileWidth.isEmpty()
+              && (nTileWidth = aTileWidth.toInt64()) != 0
+              && !aTileHeight.isEmpty()
+              && (nTileHeight = aTileHeight.toInt64()) != 0))
+        {
+            gImpl->maLastExceptionMsg = "Can't parse arguments for .uno:CellCursor, no cursor returned";
+            return NULL;
+        }
+
+        OString aString = pDoc->getCellCursor(nOutputWidth, nOutputHeight, nTileWidth, nTileHeight);
+
         char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
         strcpy(pMemory, aString.getStr());
         return pMemory;

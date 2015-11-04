@@ -159,6 +159,18 @@ public:
         return OUString();
     }
 
+    /**
+     * Get position and size of cell cursor in Calc.
+     * (This could maybe also be used for tables in Writer/Impress in future?)
+     */
+    virtual OString getCellCursor(int /*nOutputWidth*/,
+                                  int /*nOutputHeight*/,
+                                  long /*nTileWidth*/,
+                                  long /*nTileHeight*/)
+    {
+        return OString();
+    }
+
     /// Sets the clipboard of the component.
     virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) = 0;
 

@@ -300,6 +300,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
 
+
     void            updateLibreOfficeKitCellCursor();
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
@@ -438,6 +439,14 @@ public:
     void            DeleteShrinkOverlay();
     void            UpdateShrinkOverlay();
     void            UpdateAllOverlays();
+
+    /// @see ScModelObj::getCellCursor().
+    OString         getCellCursor(const Fraction& rZoomX,
+                                  const Fraction& rZoomY);
+    OString         getCellCursor(int nOutputWidth,
+                                  int nOutputHeight,
+                                  long nTileWidth,
+                                  long nTileHeight);
 
 protected:
     void ImpCreateOverlayObjects();

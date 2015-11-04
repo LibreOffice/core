@@ -5777,19 +5777,36 @@ bool ScGridWindow::InsideVisibleRange( SCCOL nPosX, SCROW nPosY )
     return maVisibleRange.isInside(nPosX, nPosY);
 }
 
-void ScGridWindow::updateLibreOfficeKitCellCursor() {
+// Use the same zoom calculations as in paintTile - this
+// means the client can ensure they can get the correct
+// cursor corresponding to their current tile sizings.
+OString ScGridWindow::getCellCursor( int nOutputWidth, int nOutputHeight,
+                                     long nTileWidth, long nTileHeight )
+{
+    Fraction zoomX = Fraction(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
+    Fraction zoomY = Fraction(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
+    return getCellCursor(zoomX, zoomY);
+}
+
+OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoomY) {
     ScDocument* pDoc = pViewData->GetDocument();
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
 
-    if (!pDrawLayer->isTiledRendering())
-        return;
+    // GridWindows stores a shown cell cursor in mpOOCursors, hence
+    // we can use that to determine whether we would want to be showing
+    // one (client-side) for tiled rendering too.
+    if (!pDrawLayer->isTiledRendering() || !mpOOCursors.get())
+    {
+        return OString("EMPTY");
+    }
 
     SCCOL nX = pViewData->GetCurX();
     SCROW nY = pViewData->GetCurY();
 
     Fraction defaultZoomX = pViewData->GetZoomX();
     Fraction defaultZoomY = pViewData->GetZoomX();
-    pViewData->SetZoom(mTiledZoomX, mTiledZoomY, true);
+
+    pViewData->SetZoom(rZoomX, rZoomY, true);
 
     Point aScrPos = pViewData->GetScrPos( nX, nY, eWhich, true );
     long nSizeXPix;
@@ -5803,7 +5820,15 @@ void ScGridWindow::updateLibreOfficeKitCellCursor() {
 
     pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
 
-    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, aRect.toString().getStr());
+    return aRect.toString();
+}
+
+void ScGridWindow::updateLibreOfficeKitCellCursor()
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    OString aCursor = getCellCursor(mTiledZoomX, mTiledZoomY);
+    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
 }
 
 void ScGridWindow::CursorChanged()
@@ -6089,6 +6114,7 @@ void ScGridWindow::UpdateCursorOverlay()
     if ( !aPixelRects.empty() )
     {
         if (pDrawLayer->isTiledRendering()) {
+            mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
             updateLibreOfficeKitCellCursor();
         }
         else
