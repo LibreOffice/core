@@ -28,8 +28,7 @@ static rtl::Reference<ConfigurationListener> getMiscListener()
 {
     static rtl::Reference<ConfigurationListener> xListener;
     if (!xListener.is())
-        xListener = rtl::Reference<ConfigurationListener>(
-            new ConfigurationListener("/org.openoffice.Office.Common/Misc"));
+        xListener.set(new ConfigurationListener("/org.openoffice.Office.Common/Misc"));
     return xListener;
 }
 

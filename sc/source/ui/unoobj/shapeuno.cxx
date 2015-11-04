@@ -99,7 +99,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
     osl_atomic_increment( &m_refCount );
 
     {
-        mxShapeAgg = uno::Reference<uno::XAggregation>( xShape, uno::UNO_QUERY );
+        mxShapeAgg.set( xShape, uno::UNO_QUERY );
         // extra block to force deletion of the temporary before setDelegator
     }
 

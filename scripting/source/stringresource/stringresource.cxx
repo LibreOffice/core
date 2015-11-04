@@ -1277,7 +1277,7 @@ BinaryOutput::BinaryOutput( Reference< XMultiComponentFactory > xMCF,
         , m_xContext( xContext )
 {
     m_xTempFile = io::TempFile::create( m_xContext );
-    m_xOutputStream = Reference< io::XOutputStream >( m_xTempFile, UNO_QUERY_THROW );
+    m_xOutputStream.set( m_xTempFile, UNO_QUERY_THROW );
 }
 
 template< class T >
@@ -1510,7 +1510,7 @@ Reference< io::XInputStream > BinaryInput::getInputStreamForSection( sal_Int32 n
         if( xSeekable.is() )
             xSeekable->seek( 0 );
 
-        xIn = Reference< io::XInputStream>( xTempOut, UNO_QUERY );
+        xIn.set( xTempOut, UNO_QUERY );
     }
     else
         OSL_FAIL( "BinaryInput::getInputStreamForSection(): Read past end" );

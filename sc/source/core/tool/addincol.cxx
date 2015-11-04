@@ -1546,7 +1546,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                 uno::Reference<uno::XInterface> xInterface;
                 rNewRes >>= xInterface;
                 if ( xInterface.is() )
-                    xVarRes = uno::Reference<sheet::XVolatileResult>( xInterface, uno::UNO_QUERY );
+                    xVarRes.set( xInterface, uno::UNO_QUERY );
 
                 if (!xVarRes.is())
                     nErrCode = errNoValue;          // unknown interface

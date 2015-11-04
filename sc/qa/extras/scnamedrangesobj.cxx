@@ -66,7 +66,7 @@ uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
     //set value from xnamedranges.hxx
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndexAccess(xDoc->getSheets(), UNO_QUERY_THROW);
-    xSheet = uno::Reference< sheet::XSpreadsheet >(xIndexAccess->getByIndex(nSheet),UNO_QUERY_THROW);
+    xSheet.set(xIndexAccess->getByIndex(nSheet),UNO_QUERY_THROW);
 
     return xNamedRanges;
 }

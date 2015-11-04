@@ -111,7 +111,7 @@ namespace dlgprov
         if ( xSMgr.is() )
         {
             args[0] <<= xModel;
-            mxListener = Reference< XScriptListener >( xSMgr->createInstanceWithArgumentsAndContext( "ooo.vba.EventListener", args, m_xContext ), UNO_QUERY );
+            mxListener.set( xSMgr->createInstanceWithArgumentsAndContext( "ooo.vba.EventListener", args, m_xContext ), UNO_QUERY );
         }
         if ( rxControl.is() )
         {
@@ -315,7 +315,7 @@ namespace dlgprov
 
                 for ( sal_Int32 i2 = 0; i2 < nControlCount; ++i2 )
                 {
-                    pObjects2[i2] = Reference< XInterface >( pControls[i2], UNO_QUERY );
+                    pObjects2[i2].set( pControls[i2], UNO_QUERY );
                 }
                 nestedAttachEvents( aObjects, Helper, sDialogCodeName );
             }
@@ -341,7 +341,7 @@ namespace dlgprov
                 Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
                 if ( xSMgr.is() )
                 {
-                    m_xEventAttacher = Reference< XEventAttacher >( xSMgr->createInstanceWithContext(
+                    m_xEventAttacher.set( xSMgr->createInstanceWithContext(
                         "com.sun.star.script.EventAttacher", m_xContext ), UNO_QUERY );
 
                     if ( !m_xEventAttacher.is() )

@@ -1898,7 +1898,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     {
         uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface(
                                     xIntDims->getByIndex(rElemDesc.Dimension) );
-        xDim = uno::Reference<container::XNamed>( xIntDim, uno::UNO_QUERY );
+        xDim.set( xIntDim, uno::UNO_QUERY );
     }
     OSL_ENSURE( xDim.is(), "dimension not found" );
     if ( !xDim.is() ) return;
@@ -2776,7 +2776,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
                 pArray[3] <<= OUString( rDesc.aParPass );
                 xInit->initialize( aSeq );
             }
-            xRet = uno::Reference<sheet::XDimensionsSupplier>( xInterface, uno::UNO_QUERY );
+            xRet.set( xInterface, uno::UNO_QUERY );
         }
         catch(uno::Exception&)
         {

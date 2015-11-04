@@ -308,8 +308,8 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
     {
         xFac = provider::theMasterScriptProviderFactory::get( xCtx );
 
-        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( OUString("user") ) ), UNO_QUERY_THROW );
-        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( OUString("share") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( makeAny( OUString("user") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( makeAny( OUString("share") ) ), UNO_QUERY_THROW );
     }
     // TODO proper exception handling, should throw
     catch( const Exception& e )
@@ -339,8 +339,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
                 {
                     Reference< document::XEmbeddedScripts > xScripts( model, UNO_QUERY );
                     if ( xScripts.is() )
-                        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >(
-                            xFac->createScriptProvider( makeAny( model ) ), UNO_QUERY_THROW );
+                        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( makeAny( model ) ), UNO_QUERY_THROW );
                 }
             }
         }

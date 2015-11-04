@@ -140,7 +140,7 @@ ProviderCache::populateCache() throw ( RuntimeException )
     {
         OUString languageProviderName( "com.sun.star.script.provider.LanguageScriptProvider"  );
 
-        Reference< container::XContentEnumerationAccess > xEnumAccess = Reference< container::XContentEnumerationAccess >( m_xMgr, UNO_QUERY_THROW );
+        Reference< container::XContentEnumerationAccess > xEnumAccess( m_xMgr, UNO_QUERY_THROW );
         Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
 
         while ( xEnum->hasMoreElements() )

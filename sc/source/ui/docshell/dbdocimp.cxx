@@ -195,8 +195,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         //  only text (title is still needed, for the cancel button)
         ScProgress aProgress( &rDocShell, ScGlobal::GetRscString(STR_UNDO_IMPORTDATA), 0 );
 
-        uno::Reference<sdbc::XRowSet> xRowSet = uno::Reference<sdbc::XRowSet>(
-                xResultSet, uno::UNO_QUERY );
+        uno::Reference<sdbc::XRowSet> xRowSet( xResultSet, uno::UNO_QUERY );
         bool bDispose = false;
         if ( !xRowSet.is() )
         {

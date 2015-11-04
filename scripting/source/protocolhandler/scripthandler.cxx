@@ -420,8 +420,7 @@ void ScriptProtocolHandler::createScriptProvider()
             Any aContext;
             if ( getScriptInvocation() )
                 aContext = makeAny( m_xScriptInvocation );
-            m_xScriptProvider = Reference< provider::XScriptProvider > (
-                xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
+            m_xScriptProvider.set( xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
         }
     }
     catch ( const RuntimeException & e )

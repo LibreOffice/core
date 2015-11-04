@@ -436,12 +436,12 @@ MasterScriptProvider::getChildNodes()
     sal_Int32 provIndex = 0;
     for ( ; provIndex < providers.getLength(); provIndex++ )
     {
-        children[ provIndex ] = Reference< browse::XBrowseNode >( providers[ provIndex ], UNO_QUERY );
+        children[ provIndex ].set( providers[ provIndex ], UNO_QUERY );
     }
 
     if ( hasPkgs  )
     {
-        children[ provIndex ] = Reference< browse::XBrowseNode >( pkgProv, UNO_QUERY );
+        children[ provIndex ].set( pkgProv, UNO_QUERY );
 
     }
 

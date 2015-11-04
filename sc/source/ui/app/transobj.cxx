@@ -467,7 +467,7 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
                 bRet = true;
 
                 xWorkStore->dispose();
-                xWorkStore = uno::Reference < embed::XStorage >();
+                xWorkStore.clear();
                 rxOStm->Commit();
             }
             break;

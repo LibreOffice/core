@@ -97,7 +97,7 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
 
         if( pObject && dynamic_cast<const SdrOle2Obj*>( pObject) !=  nullptr )
         {
-            Reference< drawing::XShape > xSourceDoc = Reference< drawing::XShape >( pObject->getUnoShape(), UNO_QUERY_THROW );
+            Reference< drawing::XShape > xSourceDoc( pObject->getUnoShape(), UNO_QUERY_THROW );
             GraphicHelper::SaveShapeAsGraphic( xSourceDoc );
         }
     }

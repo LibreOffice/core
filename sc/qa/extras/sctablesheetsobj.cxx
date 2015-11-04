@@ -84,7 +84,7 @@ uno::Reference< uno::XInterface > ScTableSheetsObj::init()
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(mxComponent.is());
-    xDocument = uno::Reference< sheet::XSpreadsheetDocument >(mxComponent, UNO_QUERY_THROW);
+    xDocument.set(mxComponent, UNO_QUERY_THROW);
     uno::Reference< uno::XInterface > xReturn( xDocument->getSheets(), UNO_QUERY_THROW);
 
     return xReturn;

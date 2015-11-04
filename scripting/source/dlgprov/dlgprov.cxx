@@ -284,7 +284,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
         Reference< uri::XUriReference > uriRef;
         for (;;)
         {
-            uriRef = Reference< uri::XUriReference >( xFac->parse( aURL ), UNO_QUERY );
+            uriRef.set( xFac->parse( aURL ), UNO_QUERY );
             if ( !uriRef.is() )
             {
                 OUString errorMsg("DialogProviderImpl::getDialogModel: failed to parse URI: ");
@@ -334,7 +334,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
             if ( sLocation == "application" )
             {
-                xLibContainer = Reference< XLibraryContainer >( SfxGetpApp()->GetDialogContainer(), UNO_QUERY );
+                xLibContainer.set( SfxGetpApp()->GetDialogContainer(), UNO_QUERY );
             }
             else if ( sLocation == "document" )
             {
@@ -447,7 +447,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
             Reference< container::XNameContainer > xDialogModel( createDialogModel( xInput , xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
 
-            xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
+            xCtrlModel.set( xDialogModel, UNO_QUERY );
         }
         return xCtrlModel;
     }
@@ -485,7 +485,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
                 {
                     Reference< frame::XFrame > xFrame( xController->getFrame(), UNO_QUERY );
                     if ( xFrame.is() )
-                        xPeer = Reference< XWindowPeer>( xFrame->getContainerWindow(), UNO_QUERY );
+                        xPeer.set( xFrame->getContainerWindow(), UNO_QUERY );
                 }
             }
 
@@ -519,11 +519,11 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
                 Reference< XInterface >* pObjects = aObjects.getArray();
                 for ( sal_Int32 i = 0; i < nControlCount; ++i )
                 {
-                    pObjects[i] = Reference<XInterface>( pControls[i], UNO_QUERY );
+                    pObjects[i].set( pControls[i], UNO_QUERY );
                 }
 
                 // also add the dialog control itself to the sequence
-                pObjects[nControlCount] = Reference<XInterface>( rxControl, UNO_QUERY );
+                pObjects[nControlCount].set( rxControl, UNO_QUERY );
 
                 Reference< XScriptEventsAttacher > xScriptEventsAttacher = new DialogEventsAttacherImpl
                     ( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
@@ -684,10 +684,9 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
                 }
             }
 
-            xCtrl = Reference< XControl >( createDialogControl( xCtrlMod, xParent ) );
+            xCtrl.set( createDialogControl( xCtrlMod, xParent ) );
             if ( xCtrl.is() )
             {
-                //xDialog = Reference< XDialog >( xCtrl, UNO_QUERY );
                 Reference< XIntrospectionAccess > xIntrospectionAccess = inspectHandler( xHandler );
                 attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode );
             }
