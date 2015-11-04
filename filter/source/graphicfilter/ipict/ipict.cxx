@@ -1965,15 +1965,8 @@ void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile)
 
 //================== GraphicImport - the exported function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
-#if defined(DISABLE_DYNLOADING)
-#define GraphicImport iptGraphicImport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
+iptGraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
 {
     GDIMetaFile aMTF;
     bool        bRet = false;

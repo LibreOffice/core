@@ -70,11 +70,6 @@
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
-#ifndef DISABLE_DYNLOADING
-#define IMPORT_FUNCTION_NAME    "GraphicImport"
-#define EXPORT_FUNCTION_NAME    "GraphicExport"
-#endif
-
 using namespace ::com::sun::star;
 
 using comphelper::string::getTokenCount;
@@ -940,20 +935,22 @@ struct ImpFilterLibCacheEntry
     osl::Module             maLibrary;
 #endif
     OUString                maFiltername;
+    OUString                maFormatName;
     PFilterCall             mpfnImport;
 
-                            ImpFilterLibCacheEntry( const OUString& rPathname, const OUString& rFiltername );
+    ImpFilterLibCacheEntry(const OUString& rPathname, const OUString& rFiltername, const OUString& rFormatName);
     bool                    operator==( const OUString& rFiltername ) const { return maFiltername == rFiltername; }
 
     PFilterCall             GetImportFunction();
 };
 
-ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const OUString& rFiltername ) :
+ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const OUString& rPathname, const OUString& rFiltername, const OUString& rFormatName ) :
         mpNext          ( NULL ),
 #ifndef DISABLE_DYNLOADING
         maLibrary       ( rPathname ),
 #endif
         maFiltername    ( rFiltername ),
+        maFormatName    ( rFormatName ),
         mpfnImport      ( NULL )
 {
 #ifdef DISABLE_DYNLOADING
@@ -982,8 +979,29 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
     if( !mpfnImport )
     {
 #ifndef DISABLE_DYNLOADING
-        mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString(IMPORT_FUNCTION_NAME)));
-#else
+        if (maFormatName.equalsAscii("icd"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("icdGraphicImport")));
+        else if (maFormatName.equalsAscii("idx"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("idxGraphicImport")));
+        else if (maFormatName.equalsAscii("ime"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("imeGraphicImport")));
+        else if (maFormatName.equalsAscii("ipb"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("ipbGraphicImport")));
+        else if (maFormatName.equalsAscii("ipd"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("ipdGraphicImport")));
+        else if (maFormatName.equalsAscii("ips"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("ipsGraphicImport")));
+        else if (maFormatName.equalsAscii("ipt"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("iptGraphicImport")));
+        else if (maFormatName.equalsAscii("ipx"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("ipxGraphicImport")));
+        else if (maFormatName.equalsAscii("ira"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("iraGraphicImport")));
+        else if (maFormatName.equalsAscii("itg"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("itgGraphicImport")));
+        else if (maFormatName.equalsAscii("iti"))
+            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString("itiGraphicImport")));
+ #else
         if( maFiltername.equalsAscii( "icd" ) )
             mpfnImport = icdGraphicImport;
         else if( maFiltername.equalsAscii( "idx" ) )
@@ -1006,7 +1024,7 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = itgGraphicImport;
         else if( maFiltername.equalsAscii( "iti" ) )
             mpfnImport = itiGraphicImport;
-#endif
+ #endif
     }
 
     return mpfnImport;
@@ -1021,7 +1039,7 @@ public:
                             ImpFilterLibCache();
                             ~ImpFilterLibCache();
 
-    ImpFilterLibCacheEntry* GetFilter( const OUString& rFilterPath, const OUString& rFiltername );
+    ImpFilterLibCacheEntry* GetFilter( const OUString& rFilterPath, const OUString& rFiltername, const OUString& rFormatName );
 };
 
 ImpFilterLibCache::ImpFilterLibCache() :
@@ -1041,13 +1059,13 @@ ImpFilterLibCache::~ImpFilterLibCache()
     }
 }
 
-ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const OUString& rFilterPath, const OUString& rFilterName )
+ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter(const OUString& rFilterPath, const OUString& rFilterName, const OUString& rFormatName)
 {
     ImpFilterLibCacheEntry* pEntry = mpFirst;
 
     while( pEntry )
     {
-        if( *pEntry == rFilterName )
+        if( *pEntry == rFilterName && pEntry->maFormatName == rFormatName )
             break;
         else
             pEntry = pEntry->mpNext;
@@ -1055,7 +1073,7 @@ ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const OUString& rFilterPat
     if( !pEntry )
     {
         OUString aPhysicalName( ImpCreateFullFilterPath( rFilterPath, rFilterName ) );
-        pEntry = new ImpFilterLibCacheEntry( aPhysicalName, rFilterName );
+        pEntry = new ImpFilterLibCacheEntry(aPhysicalName, rFilterName, rFormatName );
 #ifndef DISABLE_DYNLOADING
         if ( pEntry->maLibrary.is() )
 #endif
@@ -1324,6 +1342,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                                      WMF_EXTERNALHEADER *pExtHeader )
 {
     OUString                aFilterName;
+    OUString                aExternalFilterName;
     sal_uLong               nStreamBegin;
     sal_uInt16              nStatus;
     GraphicReader*          pContext = rGraphic.GetContext();
@@ -1404,6 +1423,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             *pDeterminedFormat = nFormat;
 
         aFilterName = pConfig->GetImportFilterName( nFormat );
+        aExternalFilterName = pConfig->GetExternalFilterName(nFormat, false);
     }
     else
     {
@@ -1698,7 +1718,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         sal_Int32 i, nTokenCount = getTokenCount(aFilterPath, ';');
         ImpFilterLibCache &rCache = Cache::get();
         for( i = 0; ( i < nTokenCount ) && ( pFilter == NULL ); i++ )
-            pFilter = rCache.GetFilter( aFilterPath.getToken(i, ';'), aFilterName );
+            pFilter = rCache.GetFilter(aFilterPath.getToken(i, ';'), aFilterName, aExternalFilterName);
         if( !pFilter )
             nStatus = GRFILTER_FILTERERROR;
         else
@@ -1874,6 +1894,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 
     FilterConfigItem aConfigItem( const_cast<uno::Sequence< beans::PropertyValue >*>(pFilterData) );
     OUString aFilterName( pConfig->GetExportFilterName( nFormat ) );
+    OUString aExternalFilterName(pConfig->GetExternalFilterName(nFormat, true));
 
     bAbort              = false;
     sal_uInt16      nStatus = GRFILTER_OK;
@@ -2115,9 +2136,30 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 OUString aPhysicalName( ImpCreateFullFilterPath( aFilterPath.getToken(i, ';'), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
 
-                PFilterCall pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString(EXPORT_FUNCTION_NAME)));
-                // Execute dialog in DLL
-#else
+                PFilterCall pFunc = NULL;
+                OUString tmpFilterName = aExternalFilterName;
+                if (tmpFilterName.equalsAscii("egi"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("egiGraphicExport")));
+                else if (tmpFilterName.equalsAscii("eme"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("emeGraphicExport")));
+                else if (tmpFilterName.equalsAscii("epb"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("epbGraphicExport")));
+                else if (tmpFilterName.equalsAscii("epg"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("epgGraphicExport")));
+                else if (tmpFilterName.equalsAscii("epp"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("eppGraphicExport")));
+                else if (tmpFilterName.equalsAscii("eps"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("epsGraphicExport")));
+                else if (tmpFilterName.equalsAscii("ept"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("eptGraphicExport")));
+                else if (tmpFilterName.equalsAscii("era"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("eraGraphicExport")));
+                else if (tmpFilterName.equalsAscii("eti"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("etiGraphicExport")));
+                else if (tmpFilterName.equalsAscii("exp"))
+                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString("expGraphicExport")));
+                 // Execute dialog in DLL
+ #else
                 PFilterCall pFunc = NULL;
                 if( aFilterName.equalsAscii( "egi" ) )
                     pFunc = egiGraphicExport;
@@ -2139,7 +2181,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                     pFunc = etiGraphicExport;
                 else if( aFilterName.equalsAscii( "exp" ) )
                     pFunc = expGraphicExport;
-#endif
+ #endif
                 if( pFunc )
                 {
                     if ( !(*pFunc)( rOStm, aGraphic, &aConfigItem ) )
