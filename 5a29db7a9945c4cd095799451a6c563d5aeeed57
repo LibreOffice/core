@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_9bba77bf",
+        "filename": "xmerge/source/bridge/java/XMergeBridge.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-04T19:46:05Z",
+      "side": 1,
+      "message": "what\u0027s the benefit of this dead store",
+      "revId": "5a29db7a9945c4cd095799451a6c563d5aeeed57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_3bca6b50",
+        "filename": "xmerge/source/bridge/java/XMergeBridge.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-04T19:46:05Z",
+      "side": 1,
+      "message": "probably better to use a single try { ... } finally { if (newxos !\u003d null) { newxos.flush(); newxos.close(); } } spanning the full lifetime of newxos (plus nulling newxos after it has been flushed/closed in the places where that had already been done explicitly) than to individually flush/close it on some of the code paths (or assume that flushing before closing is unnecessary, and that multiple calls to close are fine, and further simplifying the code accordingly)",
+      "revId": "5a29db7a9945c4cd095799451a6c563d5aeeed57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_fbaf437b",
+        "filename": "xmerge/source/bridge/java/XMergeBridge.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-04T19:46:05Z",
+      "side": 1,
+      "message": "better to use a single try { ... } finally { xis.close(); } spanning the full lifetime of xis than to individually close it on some of the code paths (and no need for the dead null store)",
+      "revId": "5a29db7a9945c4cd095799451a6c563d5aeeed57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
