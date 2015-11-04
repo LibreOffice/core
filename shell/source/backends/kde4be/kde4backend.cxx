@@ -145,9 +145,7 @@ Service::Service(): enabled_(false) {
         css::uno::getCurrentContext());
     if (context.is()) {
         OUString desktop;
-        context->getValueByName(
-            OUString("system.desktop-environment")) >>=
-            desktop;
+        context->getValueByName("system.desktop-environment") >>= desktop;
         enabled_ = desktop == "KDE4" && KApplication::kApplication() != 0;
     }
 }
