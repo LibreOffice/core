@@ -94,8 +94,8 @@
                     <menu:menuitem menu:id=".uno:CommentChange"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuitem menu:id=".uno:CompareDocuments"/>
+            <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:EditLinks"/>
             <menu:menuitem menu:id=".uno:PlugInsActive"/>
@@ -123,6 +123,7 @@
             <menu:menuitem menu:id=".uno:SplitWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Sidebar"/>
+            <menu:menuitem menu:id=".uno:DesignerDialog"/>
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuitem menu:id=".uno:FunctionBox"/>
@@ -400,8 +401,12 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ControlProperties"/>
-            <menu:menuitem menu:id=".uno:FormProperties"/>
+            <menu:menu menu:id=".uno:FormatFormMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:ControlProperties"/>
+                    <menu:menuitem menu:id=".uno:FormProperties"/>
+                </menu:menupopup>
+            </menu:menu>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:SheetMenu">
@@ -452,6 +457,7 @@
                     <menu:menuitem menu:id=".uno:RandomNumberGeneratorDialog"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:ToggleRelative"/>
             <menu:menu menu:id=".uno:SheetCommentMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:EditAnnotation"/>
