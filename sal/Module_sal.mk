@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	$(if $(filter-out MSC-120,$(COM)-$(VCVER)),CppunitTest_sal_osl_security) \
 	CppunitTest_sal_bytesequence \
 	CppunitTest_sal_osl_condition \
+	CppunitTest_sal_osl_getsystempathfromfileurl \
 	CppunitTest_sal_osl_mutex \
 	CppunitTest_sal_osl_old_test_file \
 	CppunitTest_sal_osl_pipe \
@@ -62,8 +63,5 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 ))
 
 endif
-
-# error when building test-getsystempathfromfileurl.cxx \
-	CppunitTest_sal_osl_getsystempathfromfileurl \
 
 # vim: set noet sw=4 ts=4:
