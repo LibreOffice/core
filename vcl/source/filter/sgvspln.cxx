@@ -570,14 +570,14 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
             if (y[n]!=y[0]) return 4;
         } break;
         case 4: {
-            if (abs(Marg01)>=MAXROOT) {
+            if (std::abs(Marg01)>=MAXROOT) {
                 alphX=0.0;
                 alphY=std::copysign(1.0,y[1]-y[0]);
             } else {
                 alphX=std::copysign(sqrt(1.0/(1.0+Marg01*Marg01)),x[1]-x[0]);
                 alphY=alphX*Marg01;
             }
-            if (abs(MargN1)>=MAXROOT) {
+            if (std::abs(MargN1)>=MAXROOT) {
                 betX=0.0;
                 betY=std::copysign(1.0,y[n]-y[n-1]);
             } else {
