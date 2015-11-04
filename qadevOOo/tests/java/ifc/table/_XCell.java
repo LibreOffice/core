@@ -143,15 +143,14 @@ public class _XCell extends MultiMethodTest {
     * Has <b> OK </b> status if the value set is equal to value get. <p>
     */
     public void _setValue() {
-        boolean result = true;
-        double cellValue = 0;
         log.println("setValue() ...");
 
-        oObj.setValue(222.333) ;
-        cellValue = oObj.getValue() ;
+        double inValue = 222.333;
+        oObj.setValue(inValue) ;
+        double cellValue = oObj.getValue() ;
 
-        result &= (cellValue == 222.333);
+        boolean result = Double.valueOf(cellValue).equals(inValue);
         tRes.tested("setValue()", result);
-       } // end setValue()
+    } // end setValue()
 }
 
