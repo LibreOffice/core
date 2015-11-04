@@ -18,6 +18,7 @@
  */
 
 #include <stdlib.h>
+#include <limits>
 
 #include "editeng/fontitem.hxx"
 #include "svdibrow.hxx"
@@ -62,6 +63,8 @@ using namespace com::sun::star;
 #define ITEMBROWSER_TYPECOL_ID  3
 #define ITEMBROWSER_NAMECOL_ID  4
 #define ITEMBROWSER_VALUECOL_ID 5
+
+#define ITEM_NOT_FOUND std::numeric_limits<std::size_t>::max()
 
 enum ItemType {
     ITEM_DONTKNOW, ITEM_BYTE, ITEM_INT16, ITEM_UINT16, ITEM_INT32, ITEM_UINT32,
@@ -279,8 +282,8 @@ void _SdrItemBrowserControl::ImpCtor()
 
 void _SdrItemBrowserControl::Clear()
 {
-    sal_uIntPtr nCount=aList.size();
-    for (sal_uIntPtr nNum=0; nNum<nCount; nNum++) {
+    const std::size_t nCount=aList.size();
+    for (std::size_t nNum=0; nNum<nCount; ++nNum) {
         delete ImpGetEntry(nNum);
     }
     aList.clear();
@@ -342,7 +345,7 @@ OUString _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) con
 
 void _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
-    if (nAktPaintRow<0 || (sal_uIntPtr)nAktPaintRow>=aList.size()) {
+    if (nAktPaintRow<0 || static_cast<std::size_t>(nAktPaintRow)>=aList.size()) {
         return;
     }
     Rectangle aR(rRect);
@@ -366,13 +369,13 @@ void _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRe
     }
 }
 
-sal_uIntPtr _SdrItemBrowserControl::GetCurrentPos() const
+std::size_t _SdrItemBrowserControl::GetCurrentPos() const
 {
-    sal_uIntPtr nRet=CONTAINER_ENTRY_NOTFOUND;
+    std::size_t nRet=ITEM_NOT_FOUND;
     if (GetSelectRowCount()==1) {
         long nPos=static_cast<BrowseBox*>(const_cast<_SdrItemBrowserControl *>(this))->FirstSelectedRow();
-        if (nPos>=0 && (sal_uIntPtr)nPos<aList.size()) {
-            nRet=(sal_uIntPtr)nPos;
+        if (nPos>=0 && static_cast<std::size_t>(nPos)<aList.size()) {
+            nRet = static_cast<std::size_t>(nPos);
         }
     }
     return nRet;
@@ -381,8 +384,8 @@ sal_uIntPtr _SdrItemBrowserControl::GetCurrentPos() const
 sal_uInt16 _SdrItemBrowserControl::GetCurrentWhich() const
 {
     sal_uInt16 nRet=0;
-    sal_uIntPtr nPos=GetCurrentPos();
-    if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
+    const std::size_t nPos=GetCurrentPos();
+    if (nPos!=ITEM_NOT_FOUND) {
         nRet=ImpGetEntry(nPos)->nWhichId;
     }
     return nRet;
@@ -390,8 +393,8 @@ sal_uInt16 _SdrItemBrowserControl::GetCurrentWhich() const
 
 void _SdrItemBrowserControl::DoubleClick(const BrowserMouseEvent&)
 {
-    sal_uIntPtr nPos=GetCurrentPos();
-    if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
+    const std::size_t nPos=GetCurrentPos();
+    if (nPos!=ITEM_NOT_FOUND) {
         BeginChangeEntry(nPos);
     }
 }
@@ -400,8 +403,8 @@ void _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16 nKeyCode=rKEvt.GetKeyCode().GetCode()+rKEvt.GetKeyCode().GetModifier();
     bool bAusgewertet = false;
-    sal_uIntPtr nPos=GetCurrentPos();
-    if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
+    const std::size_t nPos=GetCurrentPos();
+    if (nPos!=ITEM_NOT_FOUND) {
         if (nKeyCode==KEY_RETURN) {
             if (BeginChangeEntry(nPos)) bAusgewertet = true;
         } else if (nKeyCode==KEY_ESCAPE) {
@@ -468,8 +471,8 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
 {
     if (nLastWhich!=0) {
         bool bFnd = false;
-        sal_uIntPtr nCount=aList.size();
-        sal_uIntPtr nNum;
+        const std::size_t nCount=aList.size();
+        std::size_t nNum;
         for (nNum=0; nNum<nCount && !bFnd; nNum++) {
             ImpItemListRow* pEntry=ImpGetEntry(nNum);
             if (!pEntry->bComment) {
@@ -488,7 +491,7 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
     }
 }
 
-bool _SdrItemBrowserControl::BeginChangeEntry(sal_uIntPtr nPos)
+bool _SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
 {
     BreakChangeEntry();
     bool bRet = false;
@@ -555,7 +558,7 @@ void _SdrItemBrowserControl::BreakChangeEntry()
     }
 }
 
-void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntPtr nEntryNum)
+void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, std::size_t nEntryNum)
 {
     SAL_WARN_IF(nEntryNum > aList.size(), "svx", "trying to set item " << nEntryNum << "in a vector of size " << aList.size());
     if (nEntryNum >= aList.size()) {
@@ -1164,7 +1167,7 @@ IMPL_LINK_TYPED(SdrItemBrowser, ChangedHdl, _SdrItemBrowserControl&, rBrowse, vo
 
         if (!bDel) {
             SfxPoolItem* pNewItem=aSet.Get(pEntry->nWhichId).Clone();
-            long nLongVal = aNewText.toInt32();
+            sal_Int32 nLongVal = aNewText.toInt32();
             if (pEntry->bCanNum) {
                 if (nLongVal>pEntry->nMax) nLongVal=pEntry->nMax;
                 if (nLongVal<pEntry->nMin) nLongVal=pEntry->nMin;
@@ -1194,9 +1197,9 @@ IMPL_LINK_TYPED(SdrItemBrowser, ChangedHdl, _SdrItemBrowserControl&, rBrowse, vo
                     {
                         aNewText = aNewText.replace(',', '.');
                         double nVal = aNewText.toFloat();
-                        nLongVal = (long)(nVal * 100 + 0.5);
+                        nLongVal = static_cast<sal_Int32>(nVal * 100.0 + 0.5);
                     }
-                    static_cast<SfxInt32Item *>(pNewItem)->SetValue((sal_Int32)nLongVal);
+                    static_cast<SfxInt32Item *>(pNewItem)->SetValue(nLongVal);
                 } break;
                 case ITEM_UINT32: static_cast<SfxUInt32Item*>(pNewItem)->SetValue(aNewText.toInt32()); break;
                 case ITEM_ENUM  : static_cast<SfxEnumItemInterface*>(pNewItem)->SetEnumValue((sal_uInt16)nLongVal); break;
@@ -1233,12 +1236,12 @@ IMPL_LINK_TYPED(SdrItemBrowser, ChangedHdl, _SdrItemBrowserControl&, rBrowse, vo
                     static_cast<SvxFontItem*>(pNewItem)->SetStyleName(OUString());
                 } break;
                 case ITEM_FONTHEIGHT: {
-                    sal_uIntPtr nHgt=0;
+                    sal_uInt32 nHgt=0;
                     sal_uInt16 nProp=100;
                     if (aNewText.indexOf('%') != -1) {
-                        nProp=(sal_uInt16)nLongVal;
+                        nProp=static_cast<sal_uInt16>(nLongVal);
                     } else {
-                        nHgt=nLongVal;
+                        nHgt=static_cast<sal_uInt32>(nLongVal);
                     }
                     static_cast<SvxFontHeightItem*>(pNewItem)->SetHeight(nHgt,nProp);
                 } break;

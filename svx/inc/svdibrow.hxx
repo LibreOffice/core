@@ -51,12 +51,12 @@ friend class ImpItemEdit;
 
 private:
     void ImpCtor();
-    void ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntPtr nEntryNum);
-    ImpItemListRow* ImpGetEntry(sal_uIntPtr nPos) const { return aList[nPos]; }
+    void ImpSetEntry(const ImpItemListRow& rEntry, std::size_t nEntryNum);
+    ImpItemListRow* ImpGetEntry(std::size_t nPos) const { return aList[nPos]; }
     void ImpSaveWhich();
     void ImpRestoreWhich();
-    sal_uIntPtr GetCurrentPos() const;
-    bool BeginChangeEntry(sal_uIntPtr nPos);
+    std::size_t GetCurrentPos() const;
+    bool BeginChangeEntry(std::size_t nPos);
 
 protected:
     virtual long GetRowCount() const override;
