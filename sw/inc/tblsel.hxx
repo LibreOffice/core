@@ -121,17 +121,17 @@ bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 // For working on tab selection also for split tables.
 class SwSelUnion
 {
-    SwRect   aUnion;        // The rectangle enclosing the selection.
-    SwTabFrm *pTable;       // The (Follow-)Table for the Union.
+    SwRect   m_aUnion;        // The rectangle enclosing the selection.
+    SwTabFrm *m_pTable;       // The (Follow-)Table for the Union.
 
 public:
     SwSelUnion( const SwRect &rRect, SwTabFrm *pTab ) :
-        aUnion( rRect ), pTable( pTab ) {}
+        m_aUnion( rRect ), m_pTable( pTab ) {}
 
-    const SwRect&   GetUnion() const { return aUnion; }
-          SwRect&   GetUnion()       { return aUnion; }
-    const SwTabFrm *GetTable() const { return pTable; }
-          SwTabFrm *GetTable()       { return pTable; }
+    const SwRect&   GetUnion() const { return m_aUnion; }
+          SwRect&   GetUnion()       { return m_aUnion; }
+    const SwTabFrm *GetTable() const { return m_pTable; }
+          SwTabFrm *GetTable()       { return m_pTable; }
 };
 
 // Determines tables affected by a table selection and union rectangles
