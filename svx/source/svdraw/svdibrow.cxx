@@ -532,18 +532,12 @@ bool _SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
 
 bool _SdrItemBrowserControl::EndChangeEntry()
 {
-    bool bRet = false;
-    if (pEditControl!=nullptr) {
-        aEntryChangedHdl.Call(*this);
-        pEditControl.disposeAndClear();
-        delete pAktChangeEntry;
-        pAktChangeEntry=NULL;
-        vcl::Window* pParent=GetParent();
-        pParent->SetText(aWNamMerk);
-        SetMode(MYBROWSEMODE);
-        bRet = true;
-    }
-    return bRet;
+    if (!pEditControl)
+        return false;
+
+    aEntryChangedHdl.Call(*this);
+    BreakChangeEntry();
+    return true;
 }
 
 void _SdrItemBrowserControl::BreakChangeEntry()
