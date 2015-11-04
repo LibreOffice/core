@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_5bb64f3e",
+        "filename": "cui/source/options/optbasic.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-11-04T11:11:11Z",
+      "side": 1,
+      "message": "un-needed extra-line noise",
+      "revId": "abbaccf1cfc98fa55219b9d76585482beeb179e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_9b86f763",
+        "filename": "cui/source/options/optbasic.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-11-04T11:11:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "abbaccf1cfc98fa55219b9d76585482beeb179e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_bb813b50",
+        "filename": "cui/source/options/optbasic.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-11-04T11:11:11Z",
+      "side": 1,
+      "message": "would you mind fixing the indentation please.",
+      "revId": "abbaccf1cfc98fa55219b9d76585482beeb179e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
