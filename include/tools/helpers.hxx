@@ -12,28 +12,22 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <type_traits>
 
-#include <boost/mpl/or.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
-#include <boost/type_traits/is_signed.hpp>
-#include <boost/type_traits/is_unsigned.hpp>
-#include <boost/utility/enable_if.hpp>
-
-template<typename T>
-inline
-typename boost::enable_if<
-    boost::mpl::or_< boost::is_signed<T>, boost::is_floating_point<T> >, long>
-    ::type
-MinMax(T nVal, long nMin, long nMax)
+template<typename T,
+         typename std::enable_if<
+             std::is_signed<T>{} || std::is_floating_point<T>{}, long >::type* = nullptr>
+inline long MinMax(T nVal, long nMin, long nMax)
 {
     assert(nMin <= nMax);
     return nVal >= nMin
         ? (nVal <= nMax ? static_cast<long>(nVal) : nMax) : nMin;
 }
 
-template<typename T>
-inline typename boost::enable_if<boost::is_unsigned<T>, long>::type MinMax(
-    T nVal, long nMin, long nMax)
+template<typename T,
+         typename std::enable_if<
+             std::is_unsigned<T>::value >::type* = nullptr >
+inline long MinMax(T nVal, long nMin, long nMax)
 {
     assert(nMin <= nMax);
     return nMax < 0
