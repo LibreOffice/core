@@ -1304,7 +1304,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
             )
         {
             feature->second.xDispatcher = xProvider->queryDispatch(
-                feature->second.aURL, OUString("_parent"), FrameSearchFlag::PARENT
+                feature->second.aURL, "_parent", FrameSearchFlag::PARENT
             );
 
             if ( feature->second.xDispatcher.get() == static_cast< XDispatch* >( this ) )
@@ -1511,7 +1511,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< css::frame::XFrame > & _
     Reference< XFrame > xCurrentFrame( getFrame() );
     if ( xCurrentFrame.is() )
     {
-        m_xCurrentFrameParent = xCurrentFrame->findFrame(OUString("_parent"),FrameSearchFlag::PARENT);
+        m_xCurrentFrameParent = xCurrentFrame->findFrame("_parent",FrameSearchFlag::PARENT);
         if ( m_xCurrentFrameParent.is() )
             m_xCurrentFrameParent->addFrameActionListener(static_cast<css::frame::XFrameActionListener*>(this));
 
@@ -1526,7 +1526,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< css::frame::XFrame > & _
             if ( xLayouter.is() )
             {
                 Reference< XUIElement > xUI(
-                    xLayouter->getElement( OUString( "private:resource/toolbar/toolbar" ) ),
+                    xLayouter->getElement( "private:resource/toolbar/toolbar" ),
                     UNO_SET_THROW );
                 m_xMainToolbar.set(xUI->getRealInterface(), css::uno::UNO_QUERY);
                 OSL_ENSURE( m_xMainToolbar.is(), "SbaTableQueryBrowser::attachFrame: where's my toolbox?" );
@@ -2670,7 +2670,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
                                                 sReplace = sReplace.replaceFirst(sFilter, "");
                                                 xAnalyzer->setQuery(sReplace);
                                                 Reference<XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
-                                                xComposer->setFilter(OUString("0=1"));
+                                                xComposer->setFilter("0=1");
                                                 aName = xAnalyzer->getQuery();
                                                 nCommandType = CommandType::COMMAND;
                                             }
@@ -3456,7 +3456,7 @@ void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
 
             xFrameLoader->loadComponentFromURL(
                 xDocumentModel->getURL(),
-                OUString("_default"),
+                "_default",
                 nFrameSearchFlag,
                 aLoadArgPV
             );
@@ -3629,7 +3629,7 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
-            xLayoutManager->createElement( OUString( "private:resource/toolbar/toolbar" ));
+            xLayoutManager->createElement( "private:resource/toolbar/toolbar" );
             xLayoutManager->unlock();
             xLayoutManager->doLayout();
         }

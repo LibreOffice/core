@@ -509,7 +509,7 @@ namespace dbmm
                 aDocumentArgs.put( "ViewName", aView.second );
                 Reference< XInterface > xReloaded( xLoader->loadComponentFromURL(
                     sDocumentURL,
-                    OUString( "_self" ),
+                    "_self",
                     0,
                     aDocumentArgs.getPropertyValues()
                 ) );

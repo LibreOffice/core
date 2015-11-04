@@ -1551,7 +1551,7 @@ namespace dbmm
             Reference< XUriReferenceFactory > xUriRefFac = UriReferenceFactory::create( m_aContext );
             Reference< XVndSunStarScriptUrlReference > xUri( xUriRefFac->parse( _inout_rScriptCode ), UNO_QUERY_THROW );
 
-            OUString sScriptLanguage = xUri->getParameter( OUString( "language" ) );
+            OUString sScriptLanguage = xUri->getParameter( "language" );
             ScriptType eScriptType = eBasic;
             if ( !lcl_getScriptTypeFromLanguage( sScriptLanguage, eScriptType ) )
             {
@@ -1564,7 +1564,7 @@ namespace dbmm
                 return false;
             }
 
-            OUString sLocation = xUri->getParameter( OUString( "location" ) );
+            OUString sLocation = xUri->getParameter( "location" );
             if ( sLocation != "document" )
             {
                 // only document libraries must be migrated, of course

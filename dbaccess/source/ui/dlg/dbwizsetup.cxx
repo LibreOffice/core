@@ -944,7 +944,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                     aLoadArgs >>= aLoadArgPV;
 
                     m_xFrameLoader->loadComponentFromURL( m_sURL,
-                        OUString( "_default" ),
+                        "_default",
                         FrameSearchFlag::ALL,
                         aLoadArgPV
                     );

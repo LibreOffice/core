@@ -199,7 +199,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             try
             {
                 Reference< XModule > xModule( xController, UNO_QUERY_THROW );
-                xModule->setIdentifier( OUString( "com.sun.star.sdb.TableDataView" ) );
+                xModule->setIdentifier( "com.sun.star.sdb.TableDataView" );
             }
             catch( const Exception& )
             {

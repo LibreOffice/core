@@ -123,7 +123,7 @@ void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< Prop
         Reference< XDispatchProvider > xDispatchProvider( xController->getFrame(), UNO_QUERY_THROW );
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch(
             _rFeatureURL,
-            OUString( "_self" ),
+            "_self",
             FrameSearchFlag::AUTO
         ) );
 
@@ -1010,8 +1010,8 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
     if ( xLayoutManager.is() )
     {
         xLayoutManager->lock();
-        xLayoutManager->createElement( OUString( "private:resource/menubar/menubar" ));
-        xLayoutManager->createElement( OUString( "private:resource/toolbar/toolbar" ));
+        xLayoutManager->createElement( "private:resource/menubar/menubar" );
+        xLayoutManager->createElement( "private:resource/toolbar/toolbar" );
         xLayoutManager->unlock();
         xLayoutManager->doLayout();
     }
@@ -1243,7 +1243,7 @@ void OGenericUnoController::openHelpAgent( const URL& _rURL )
         Reference< XDispatchProvider > xDispProv( m_aCurrentFrame.getFrame(), UNO_QUERY );
         Reference< XDispatch > xHelpDispatch;
         if ( xDispProv.is() )
-            xHelpDispatch = xDispProv->queryDispatch(aURL, OUString( "_helpagent" ), FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
+            xHelpDispatch = xDispProv->queryDispatch(aURL, "_helpagent", FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
         OSL_ENSURE(xHelpDispatch.is(), "SbaTableQueryBrowser::openHelpAgent: could not get a dispatcher!");
         if (xHelpDispatch.is())
         {

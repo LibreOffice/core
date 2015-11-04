@@ -576,7 +576,7 @@ IMPL_LINK_NOARG_TYPED( DBContentLoader, OnStartTableWizard, void*, void )
         SolarMutexGuard aGuard;
         Reference< XJobExecutor > xTableWizard( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.wizards.table.CallTableWizard", aWizArgs, m_aContext), UNO_QUERY);
         if ( xTableWizard.is() )
-            xTableWizard->trigger(OUString("start"));
+            xTableWizard->trigger("start");
     }
     catch(const Exception&)
     {
