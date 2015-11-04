@@ -295,7 +295,7 @@ void ShutdownIcon::FromTemplate()
         css::uno::Reference < css::frame::XDispatch > xDisp;
         if ( xProv.is() )
         {
-            xDisp = xProv->queryDispatch( aTargetURL, OUString("_self"), 0 );
+            xDisp = xProv->queryDispatch( aTargetURL, "_self", 0 );
         }
         if ( xDisp.is() )
         {

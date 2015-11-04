@@ -115,19 +115,19 @@ void EnumContext::ProvideApplicationContainers()
     if (maApplicationMap.empty())
     {
         maApplicationVector.resize(static_cast<size_t>(EnumContext::__LastApplicationEnum)+1);
-        AddEntry(OUString("com.sun.star.text.TextDocument"), EnumContext::Application_Writer);
-        AddEntry(OUString("com.sun.star.text.GlobalDocument"), EnumContext::Application_WriterGlobal);
-        AddEntry(OUString("com.sun.star.text.WebDocument"), EnumContext::Application_WriterWeb);
-        AddEntry(OUString("com.sun.star.xforms.XMLFormDocument"), EnumContext::Application_WriterXML);
-        AddEntry(OUString("com.sun.star.sdb.FormDesign"), EnumContext::Application_WriterForm);
-        AddEntry(OUString("com.sun.star.sdb.TextReportDesign"), EnumContext::Application_WriterReport);
-        AddEntry(OUString("com.sun.star.sheet.SpreadsheetDocument"), EnumContext::Application_Calc);
-        AddEntry(OUString("com.sun.star.chart2.ChartDocument"), EnumContext::Application_Chart);
-        AddEntry(OUString("com.sun.star.drawing.DrawingDocument"), EnumContext::Application_Draw);
-        AddEntry(OUString("com.sun.star.presentation.PresentationDocument"), EnumContext::Application_Impress);
+        AddEntry("com.sun.star.text.TextDocument", EnumContext::Application_Writer);
+        AddEntry("com.sun.star.text.GlobalDocument", EnumContext::Application_WriterGlobal);
+        AddEntry("com.sun.star.text.WebDocument", EnumContext::Application_WriterWeb);
+        AddEntry("com.sun.star.xforms.XMLFormDocument", EnumContext::Application_WriterXML);
+        AddEntry("com.sun.star.sdb.FormDesign", EnumContext::Application_WriterForm);
+        AddEntry("com.sun.star.sdb.TextReportDesign", EnumContext::Application_WriterReport);
+        AddEntry("com.sun.star.sheet.SpreadsheetDocument", EnumContext::Application_Calc);
+        AddEntry("com.sun.star.chart2.ChartDocument", EnumContext::Application_Chart);
+        AddEntry("com.sun.star.drawing.DrawingDocument", EnumContext::Application_Draw);
+        AddEntry("com.sun.star.presentation.PresentationDocument", EnumContext::Application_Impress);
 
-        AddEntry(OUString("any"), EnumContext::Application_Any);
-        AddEntry(OUString("none"), EnumContext::Application_None);
+        AddEntry("any", EnumContext::Application_Any);
+        AddEntry("none", EnumContext::Application_None);
     }
 }
 
@@ -168,10 +168,10 @@ void EnumContext::ProvideContextContainers()
     if (maContextMap.empty())
     {
         maContextVector.resize(static_cast<size_t>(__LastContextEnum)+1);
-        AddEntry(OUString("any"), Context_Any);
-        AddEntry(OUString("default"), Context_Default);
-        AddEntry(OUString("empty"), Context_Empty);
-#define AddContext(context) AddEntry(OUString(#context), Context_##context);
+        AddEntry("any", Context_Any);
+        AddEntry("default", Context_Default);
+        AddEntry("empty", Context_Empty);
+#define AddContext(context) AddEntry(#context, Context_##context);
         AddContext(3DObject);
         AddContext(Annotation);
         AddContext(Auditing);

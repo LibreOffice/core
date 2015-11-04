@@ -157,7 +157,7 @@ private:
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( mxStorage, rEncryptionData );
 
         mxStorage->openStreamElement(
-                OUString( "content.xml"  ),
+                "content.xml",
                 embed::ElementModes::READ | embed::ElementModes::NOCREATE );
 
         // no exception -> success

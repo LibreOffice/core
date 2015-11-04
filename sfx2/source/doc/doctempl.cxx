@@ -833,7 +833,7 @@ bool SfxDocumentTemplates::CopyFrom
         {
             xStorable = uno::Reference< XStorable >(
                 xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::NO_DECODE),
-                                                OUString("_blank"),
+                                                "_blank",
                                                 0,
                                                 aArgs ),
                 UNO_QUERY );

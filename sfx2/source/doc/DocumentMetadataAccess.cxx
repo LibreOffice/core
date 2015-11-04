@@ -609,7 +609,7 @@ exportStream(struct DocumentMetadataAccess_Impl & i_rImpl,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
-            OUString("MediaType"),
+            "MediaType",
             uno::makeAny(OUString(s_rdfxml)));
     }
     const uno::Reference<io::XOutputStream> xOutStream(

@@ -1911,7 +1911,7 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
         sURL = i_rDoc.GetFactory().GetFactoryURL();
 
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
-    xLoader->loadComponentFromURL( sURL, OUString("_self"), 0,
+    xLoader->loadComponentFromURL( sURL, "_self", 0,
         aTransformLoadArgs.getPropertyValues() );
 
     SfxViewShell* pViewShell = SfxViewShell::Get( i_rFrame->getController() );
@@ -2841,7 +2841,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                             try
                             {
                                 xLMPropSet->setPropertyValue(
-                                    OUString( "HideCurrentUI" ),
+                                    "HideCurrentUI",
                                     makeAny( bNewFullScreenMode ));
                             }
                             catch ( css::beans::UnknownPropertyException& )
@@ -2943,8 +2943,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     css::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
                             css::uno::UNO_QUERY);
-                    css::uno::Any aProp = xSet->getPropertyValue(
-                        OUString( "LayoutManager" ) );
+                    css::uno::Any aProp = xSet->getPropertyValue( "LayoutManager" );
 
                     if ( !( aProp >>= xLayoutManager ))
                         rSet.Put( SfxBoolItem( nWhich, false ));
@@ -3035,7 +3034,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
             Reference < css::frame::XDispatch > xDisp;
             if ( xProv.is() )
-                xDisp = xProv->queryDispatch( aTargetURL, OUString("_beamer"), 31 );
+                xDisp = xProv->queryDispatch( aTargetURL, "_beamer", 31 );
             if ( xDisp.is() )
             {
                 Sequence < css::beans::PropertyValue > aArgs(1);

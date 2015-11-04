@@ -125,7 +125,7 @@ SidebarController::SidebarController (
 
     // Listen for theme property changes.
     Theme::GetPropertySet()->addPropertyChangeListener(
-        OUString(""),
+        "",
         static_cast<css::beans::XPropertyChangeListener*>(this));
 
     // Get the dispatch object as preparation to listen for changes of
@@ -219,7 +219,7 @@ void SAL_CALL SidebarController::disposing()
     }
 
     Theme::GetPropertySet()->removePropertyChangeListener(
-        OUString(""),
+        "",
         static_cast<css::beans::XPropertyChangeListener*>(this));
 
     maContextChangeUpdate.CancelRequest();

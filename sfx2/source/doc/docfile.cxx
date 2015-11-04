@@ -3536,7 +3536,7 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                     throw uno::RuntimeException();
 
                 uno::Reference< embed::XStorage > xMetaInf = xWriteableZipStor->openStorageElement(
-                                                OUString( "META-INF"  ),
+                                                "META-INF",
                                                 embed::ElementModes::READWRITE );
                 if ( !xMetaInf.is() )
                     throw uno::RuntimeException();

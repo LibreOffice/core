@@ -424,7 +424,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
         // This sub frame is created internally (if we called new SfxHelpWindow_Impl() ...)
         // It should exist :-)
-        xHelpContent = xHelpTask->findFrame(OUString("OFFICE_HELP"), FrameSearchFlag::CHILDREN);
+        xHelpContent = xHelpTask->findFrame("OFFICE_HELP", FrameSearchFlag::CHILDREN);
     }
 
     if (!xHelpContent.is())
@@ -619,7 +619,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
         UNO_QUERY);
     Reference< XFrame > xHelpContent = xDesktop->findFrame(
-        OUString("OFFICE_HELP"),
+        "OFFICE_HELP",
         FrameSearchFlag::CHILDREN);
 
     SfxHelpWindow_Impl* pHelpWindow = 0;

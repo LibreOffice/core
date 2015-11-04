@@ -644,7 +644,7 @@ SfxDocumentMetaData::getURLProperties(
                 }
             } else if (i_rMedium[i].Name == "HierarchicalDocumentName") {
                 xPropArg->addProperty(
-                    OUString("StreamRelPath"),
+                    "StreamRelPath",
                     css::beans::PropertyAttribute::MAYBEVOID,
                     i_rMedium[i].Value);
             }
@@ -654,7 +654,7 @@ SfxDocumentMetaData::getURLProperties(
                 "BaseURI", css::beans::PropertyAttribute::MAYBEVOID,
                 baseUri);
         }
-        xPropArg->addProperty(OUString("StreamName"),
+        xPropArg->addProperty("StreamName",
                 css::beans::PropertyAttribute::MAYBEVOID,
                 css::uno::makeAny(OUString(s_meta)));
     } catch (const css::uno::Exception &) {
@@ -1144,14 +1144,10 @@ void SAL_CALL SfxDocumentMetaData::init(
     m_xDoc = i_xDoc;
 
     // select nodes for standard meta data stuff
-    xPath->registerNS(OUString("xlink"),
-        OUString::createFromAscii(s_nsXLink));
-    xPath->registerNS(OUString("dc"),
-        OUString::createFromAscii(s_nsDC));
-    xPath->registerNS(OUString("office"),
-        OUString::createFromAscii(s_nsODF));
-    xPath->registerNS(OUString("meta"),
-        OUString::createFromAscii(s_nsODFMeta));
+    xPath->registerNS("xlink",  OUString::createFromAscii(s_nsXLink));
+    xPath->registerNS("dc",     OUString::createFromAscii(s_nsDC));
+    xPath->registerNS("office", OUString::createFromAscii(s_nsODF));
+    xPath->registerNS("meta",   OUString::createFromAscii(s_nsODFMeta));
     // NB: we do not handle the single-XML-file ODF variant, which would
     //     have the root element office:document.
     //     The root of such documents must be converted in the importer!
@@ -1195,19 +1191,19 @@ void SAL_CALL SfxDocumentMetaData::init(
             if (!xRElem.is()) {
                 xRElem = i_xDoc->createElementNS(
                     OUString::createFromAscii(s_nsODF),
-                    OUString("office:document-meta"));
+                    "office:document-meta");
                 css::uno::Reference<css::xml::dom::XNode> xRNode(xRElem,
                     css::uno::UNO_QUERY_THROW);
                 i_xDoc->appendChild(xRNode);
             }
             xRElem->setAttributeNS(OUString::createFromAscii(s_nsODF),
-                        OUString("office:version"),
-                        OUString("1.0"));
+                        "office:version",
+                        "1.0");
             // does not exist, otherwise m_xParent would not be null
             css::uno::Reference<css::xml::dom::XNode> xParent (
                 i_xDoc->createElementNS(
                     OUString::createFromAscii(s_nsODF),
-                    OUString("office:meta")),
+                    "office:meta"),
             css::uno::UNO_QUERY_THROW);
             xRElem->appendChild(xParent);
             m_xParent = xParent;
@@ -1276,10 +1272,10 @@ void SAL_CALL SfxDocumentMetaData::init(
         css::uno::Any any;
         OUString name = xElem->getAttributeNS(
                 OUString::createFromAscii(s_nsODFMeta),
-                OUString("name"));
+                "name");
         OUString type = xElem->getAttributeNS(
                 OUString::createFromAscii(s_nsODFMeta),
-                OUString("value-type"));
+                "value-type");
         OUString text = getNodeText(*it);
         if ( type == "float" ) {
             double d;
@@ -1870,7 +1866,7 @@ SfxDocumentMetaData::loadFromStorage(
     // open meta data file
     css::uno::Reference<css::io::XStream> xStream(
         xStorage->openStreamElement(
-            OUString(s_meta),
+            s_meta,
             css::embed::ElementModes::READ) );
     if (!xStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference<css::io::XInputStream> xInStream =
@@ -1944,20 +1940,20 @@ SfxDocumentMetaData::storeToStorage(
 
     // write into storage
     css::uno::Reference<css::io::XStream> xStream =
-        xStorage->openStreamElement(OUString(s_meta),
+        xStorage->openStreamElement(s_meta,
             css::embed::ElementModes::WRITE
             | css::embed::ElementModes::TRUNCATE);
     if (!xStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference< css::beans::XPropertySet > xStreamProps(xStream,
         css::uno::UNO_QUERY_THROW);
     xStreamProps->setPropertyValue(
-        OUString("MediaType"),
+        "MediaType",
         css::uno::makeAny(OUString("text/xml")));
     xStreamProps->setPropertyValue(
-        OUString("Compressed"),
+        "Compressed",
         css::uno::makeAny(false));
     xStreamProps->setPropertyValue(
-        OUString("UseCommonStoragePasswordEncryption"),
+        "UseCommonStoragePasswordEncryption",
         css::uno::makeAny(false));
     css::uno::Reference<css::io::XOutputStream> xOutStream =
         xStream->getOutputStream();

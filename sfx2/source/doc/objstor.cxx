@@ -219,7 +219,7 @@ bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
     try
     {
         uno::Reference< embed::XStorage > xVersion = xDocStorage->openStorageElement(
-                                                        OUString("Versions"),
+                                                        "Versions",
                                                         embed::ElementModes::READWRITE );
 
         DBG_ASSERT( xVersion.is(),
@@ -1606,14 +1606,14 @@ bool SfxObjectShell::SaveTo_Impl
                     if ( !xReadOrig.is() )
                         throw uno::RuntimeException();
                     uno::Reference< embed::XStorage > xMetaInf = xReadOrig->openStorageElement(
-                                OUString( "META-INF"  ),
+                                "META-INF",
                                 embed::ElementModes::READ );
 
                     uno::Reference< embed::XStorage > xTarget = rMedium.GetZipStorageToSign_Impl( false );
                     if ( !xTarget.is() )
                         throw uno::RuntimeException();
                     uno::Reference< embed::XStorage > xTargetMetaInf = xTarget->openStorageElement(
-                                OUString( "META-INF"  ),
+                                "META-INF",
                                 embed::ElementModes::READWRITE );
 
                     if ( xMetaInf.is() && xTargetMetaInf.is() )
@@ -3491,11 +3491,11 @@ bool SfxObjectShell::GenerateAndStoreThumbnail(bool bEncrypted, bool bIsTemplate
 
     try
     {
-        uno::Reference<embed::XStorage> xThumbnailStorage = xStorage->openStorageElement(OUString("Thumbnails"), embed::ElementModes::READWRITE);
+        uno::Reference<embed::XStorage> xThumbnailStorage = xStorage->openStorageElement("Thumbnails", embed::ElementModes::READWRITE);
 
         if (xThumbnailStorage.is())
         {
-            uno::Reference<io::XStream> xStream = xThumbnailStorage->openStreamElement(OUString("thumbnail.png"), embed::ElementModes::READWRITE);
+            uno::Reference<io::XStream> xStream = xThumbnailStorage->openStreamElement("thumbnail.png", embed::ElementModes::READWRITE);
 
             if (xStream.is() && WriteThumbnail(bEncrypted, bIsTemplate, xStream))
             {

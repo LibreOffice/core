@@ -231,7 +231,7 @@ static void showDocument( const char* pBaseName )
         if ( checkURL ( pBaseName, ".fodt", aURL ) ||
              checkURL ( pBaseName, ".html", aURL ) ||
              checkURL ( pBaseName, "", aURL ) ) {
-            xDesktop->loadComponentFromURL( aURL, OUString("_blank"), 0, args );
+            xDesktop->loadComponentFromURL( aURL, "_blank", 0, args );
         }
     } catch (const css::uno::Exception &) {
     }

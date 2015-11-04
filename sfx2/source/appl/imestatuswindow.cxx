@@ -95,7 +95,7 @@ void ImeStatusWindow::init()
         try
         {
             bool bShow;
-            if (getConfig()->getPropertyValue(OUString("ShowStatusWindow")) >>= bShow)
+            if (getConfig()->getPropertyValue("ShowStatusWindow") >>= bShow)
                 Application::ShowImeStatusWindow(bShow);
         }
         catch (css::uno::Exception &)
@@ -111,7 +111,7 @@ bool ImeStatusWindow::isShowing()
     try
     {
         bool bShow(false);
-        if (getConfig()->getPropertyValue(OUString("ShowStatusWindow")) >>= bShow)
+        if (getConfig()->getPropertyValue("ShowStatusWindow") >>= bShow)
             return bShow;
     }
     catch (css::uno::Exception &)
@@ -129,7 +129,7 @@ void ImeStatusWindow::show(bool bShow)
     {
         css::uno::Reference< css::beans::XPropertySet > xConfig(getConfig());
         xConfig->setPropertyValue(
-            OUString("ShowStatusWindow"),
+            "ShowStatusWindow",
             css::uno::makeAny(bShow));
         css::uno::Reference< css::util::XChangesBatch > xCommit(
             xConfig, css::uno::UNO_QUERY);
@@ -158,7 +158,7 @@ ImeStatusWindow::~ImeStatusWindow()
         try
         {
             m_xConfig->removePropertyChangeListener(
-                OUString("ShowStatusWindow"),
+                "ShowStatusWindow",
                 m_xConfigListener);
         }
         catch (css::uno::Exception &)
@@ -232,7 +232,7 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
         // no dispose notifications):
         m_xConfigListener = new WeakPropertyChangeListener(this);
         xConfig->addPropertyChangeListener(
-            OUString("ShowStatusWindow"),
+            "ShowStatusWindow",
             m_xConfigListener);
     }
     return xConfig;

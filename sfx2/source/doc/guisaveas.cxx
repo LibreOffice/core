@@ -1157,7 +1157,7 @@ bool ModelData_Impl::ShowDocumentInfoDialog()
                 {
                     uno::Reference< frame::XDispatch > xDispatch = xFrameDispatch->queryDispatch(
                                                                                 aURL,
-                                                                                OUString("_self"),
+                                                                                "_self",
                                                                                 0 );
                     if ( xDispatch.is() )
                     {

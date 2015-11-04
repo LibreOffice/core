@@ -190,8 +190,7 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
                     xPropSet = css::uno::Reference< css::beans::XPropertySet >( xLayoutManager, UNO_QUERY );
                     if ( xPropSet.is() )
                     {
-                        aValue = xPropSet->getPropertyValue(
-                            OUString( "LockCount" ) );
+                        aValue = xPropSet->getPropertyValue( "LockCount" );
                         aValue >>= m_pWrkWin->m_nLock;
                     }
                 }

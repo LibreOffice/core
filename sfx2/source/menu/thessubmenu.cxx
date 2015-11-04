@@ -127,7 +127,7 @@ OUString SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) co
 {
     OUString aRes;
     uno::Sequence< OUString > aServiceNames = m_xLngMgr->getConfiguredServices(
-            OUString("com.sun.star.linguistic2.Thesaurus"), rLocale );
+            "com.sun.star.linguistic2.Thesaurus", rLocale );
     // there should be at most one thesaurus configured for each language
     DBG_ASSERT( aServiceNames.getLength() <= 1, "more than one thesaurus found. Should not be possible" );
     if (aServiceNames.getLength() == 1)
