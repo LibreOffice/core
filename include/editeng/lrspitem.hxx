@@ -56,9 +56,9 @@ class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 
     sal_uInt16  nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
     short   nFirstLineOfst;     // First-line indent _always_ relative to nTxtLeft
-    bool        bAutoFirst  : 1;    // Automatic calculation of the first line indent
-    bool        bExplicitZeroMarginValRight : 1;
-    bool        bExplicitZeroMarginValLeft : 1;
+    bool        bAutoFirst;    // Automatic calculation of the first line indent
+    bool        bExplicitZeroMarginValRight;
+    bool        bExplicitZeroMarginValLeft;
 
     void   AdjustLeft();        // nLeftMargin and nTxtLeft are being adjusted.
 
