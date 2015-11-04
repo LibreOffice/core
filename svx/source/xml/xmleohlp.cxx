@@ -413,7 +413,7 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
                 // This is an ole object
                 uno::Reference< beans::XPropertySet > xProps( xStm, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
-                    OUString( "MediaType" ),
+                    "MediaType",
                     uno::makeAny( OUString( "application/vnd.sun.star.oleobject" ) ) );
 
                 xStm->getOutputStream()->closeOutput();

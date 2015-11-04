@@ -177,14 +177,10 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
 
     try
     {
-        xProps->setPropertyValue(
-            OUString( "MediaType" ),
-            uno::makeAny( OUString( "text/xml" ) ) );
+        xProps->setPropertyValue("MediaType",  uno::makeAny( OUString( "text/xml" ) ) );
 
         // use stock encryption
-        xProps->setPropertyValue(
-            OUString( "UseCommonStoragePasswordEncryption" ),
-            uno::makeAny( sal_True ) );
+        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
     } catch ( const uno::Exception & )
     {
         OSL_FAIL( "exception setting stream metadata" );
@@ -197,7 +193,7 @@ static void createStorageStream( uno::Reference < io::XOutputStream > *xOut,
 {
     uno::Reference < io::XStream > xStream;
     xStream = xSubStorage->openStreamElement(
-                        OUString( "Content.xml" ),
+                        "Content.xml",
                         embed::ElementModes::WRITE );
     *ppGraphicHelper = SvXMLGraphicHelper::Create( xSubStorage, GRAPHICHELPER_MODE_WRITE );
     initializeStreamMetadata( xStream );

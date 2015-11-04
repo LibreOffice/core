@@ -2967,7 +2967,7 @@ void FmXFormShell::startFiltering()
         {
             Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
             if (xModeSelector.is())
-                xModeSelector->setMode( OUString( "FilterMode"  ) );
+                xModeSelector->setMode( "FilterMode" );
         }
     }
 
@@ -3073,7 +3073,7 @@ void FmXFormShell::stopFiltering(bool bSave)
 
             Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
             if (xModeSelector.is())
-                xModeSelector->setMode( OUString( "DataMode"  ) );
+                xModeSelector->setMode( "DataMode" );
         }
         if (bSave)  // execute the filter
         {

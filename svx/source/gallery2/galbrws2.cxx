@@ -312,7 +312,7 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
             {
                 rCmdInfo.Dispatch = xDispatchProvider->queryDispatch(
                     rCmdInfo.URL,
-                    OUString( "_self" ),
+                    "_self",
                     css::frame::FrameSearchFlag::SELF );
             }
 
@@ -1069,7 +1069,7 @@ void GalleryBrowser2::Dispatch(
                 m_xTransformer->parseStrict( aURL );
                 xDispatch = xDispatchProvider->queryDispatch(
                     aURL,
-                    OUString( "_self" ),
+                    "_self",
                     css::frame::FrameSearchFlag::SELF );
             }
 

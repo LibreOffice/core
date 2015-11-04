@@ -3261,7 +3261,7 @@ void FormController::startFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode( OUString( "FilterMode"  ) );
+                xSelector->setMode( "FilterMode" );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
@@ -3387,7 +3387,7 @@ void FormController::stopFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode( OUString( "DataMode"  ) );
+                xSelector->setMode( "DataMode" );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);

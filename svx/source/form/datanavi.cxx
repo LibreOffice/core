@@ -1525,9 +1525,7 @@ namespace svxform
                                     xUIHelper->newModel( m_xFrameModel, sNewName ), UNO_SET_THROW );
 
                                 Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
-                                xModelProps->setPropertyValue(
-                                    OUString( "ExternalData" ),
-                                    makeAny( !bDocumentData ) );
+                                xModelProps->setPropertyValue("ExternalData", makeAny( !bDocumentData ) );
 
                                 sal_Int32 nNewPos = m_pModelsBox->InsertEntry( sNewName );
                                 m_pModelsBox->SelectEntryPos( nNewPos );
@@ -1554,8 +1552,7 @@ namespace svxform
                     Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
                     Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
                     bool bExternalData = false;
-                    OSL_VERIFY( xModelProps->getPropertyValue(
-                        OUString( "ExternalData" ) ) >>= bExternalData );
+                    OSL_VERIFY( xModelProps->getPropertyValue( "ExternalData" ) >>= bExternalData );
                     bDocumentData = !bExternalData;
                 }
                 catch( const Exception& )
@@ -1574,9 +1571,7 @@ namespace svxform
                             Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
                             Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
                             Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
-                            xModelProps->setPropertyValue(
-                                OUString( "ExternalData" ),
-                                makeAny( !bDocumentData ) );
+                            xModelProps->setPropertyValue( "ExternalData", makeAny( !bDocumentData ) );
                             bIsDocModified = true;
                         }
                         catch( const Exception& )

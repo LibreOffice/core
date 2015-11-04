@@ -2051,8 +2051,8 @@ struct SvxStyleToolBoxControl::Impl
 
             }
             else if( (
-                bSpecModeCalc = xServices->supportsService(OUString(
-                    "com.sun.star.sheet.SpreadsheetDocument"))))
+                bSpecModeCalc = xServices->supportsService(
+                    "com.sun.star.sheet.SpreadsheetDocument")))
             {
                 static const sal_Char* aCalcStyles[] =
                 {
@@ -2062,9 +2062,7 @@ struct SvxStyleToolBoxControl::Impl
                     "Result2"
                 };
                 Reference<container::XNameAccess> xCellStyles;
-                    xStylesSupplier->getStyleFamilies()->getByName(
-                        OUString("CellStyles")) >>=
-                        xCellStyles;
+                xStylesSupplier->getStyleFamilies()->getByName("CellStyles") >>= xCellStyles;
                 for( sal_uInt32 nStyle = 0; nStyle < sizeof( aCalcStyles ) / sizeof( sal_Char*); ++nStyle )
                 {
                     try
