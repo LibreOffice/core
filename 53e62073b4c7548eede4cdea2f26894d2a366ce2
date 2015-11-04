@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_bb8e5b25",
+        "filename": "sal/qa/rtl/ref/rtl_ref.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-11-04T18:54:14Z",
+      "side": 1,
+      "message": "I checked all of the other unit tests in rtl and the vast majority seem to use this one, so I figured this was probably the right one to use, but I could be wrong.",
+      "revId": "53e62073b4c7548eede4cdea2f26894d2a366ce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
