@@ -27,7 +27,6 @@
 #include <vcl/window.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <boost/tuple/tuple.hpp>
 
 #include <functional>
 
