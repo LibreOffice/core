@@ -94,8 +94,8 @@
                     <menu:menuitem menu:id=".uno:CommentChange"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuitem menu:id=".uno:CompareDocuments"/>
+            <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:EditLinks"/>
             <menu:menuitem menu:id=".uno:PlugInsActive"/>
@@ -123,6 +123,7 @@
             <menu:menuitem menu:id=".uno:SplitWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Sidebar"/>
+            <menu:menuitem menu:id=".uno:DesignerDialog"/>
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuitem menu:id=".uno:FunctionBox"/>
@@ -149,17 +150,6 @@
     <menu:menu menu:id=".uno:InsertMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:InsertGraphic"/>
-            <menu:menuitem menu:id=".uno:InsertObjectChart"/>
-            <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
-            <menu:menu menu:id=".uno:ShapesMenu">
-              <menu:menupopup>
-                <menu:menuitem menu:id=".uno:Line"/>
-                <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
-                <menu:menuitem menu:id=".uno:BasicShapes.rectangle"/>
-                <menu:menuitem menu:id=".uno:BasicShapes.ellipse"/>
-                <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
-              </menu:menupopup>
-            </menu:menu>
             <menu:menu menu:id=".uno:GraphicMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Gallery"/>
@@ -169,10 +159,10 @@
                             <menu:menuitem menu:id=".uno:TwainTransfer"/>
                         </menu:menupopup>
                     </menu:menu>
-                    <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
                     <menu:menuitem menu:id=".uno:InsertAVMedia"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:InsertObjectChart"/>
             <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
@@ -181,6 +171,17 @@
                     <menu:menuitem menu:id=".uno:InsertObjectChartFromFile"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menu menu:id=".uno:ShapesMenu">
+              <menu:menupopup>
+                <menu:menuitem menu:id=".uno:Line"/>
+                <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
+                <menu:menuitem menu:id=".uno:BasicShapes.rectangle"/>
+                <menu:menuitem menu:id=".uno:BasicShapes.ellipse"/>
+                <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
+              </menu:menupopup>
+            </menu:menu>
+            <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
+            <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FunctionDialog"/>
             <menu:menu menu:id=".uno:NamesMenu">
@@ -367,6 +368,12 @@
                     <menu:menuitem menu:id=".uno:ToggleObjectBezierMode"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menu menu:id=".uno:FormatFormMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:ControlProperties"/>
+                    <menu:menuitem menu:id=".uno:FormProperties"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:AnchorMenu">
                 <menu:menupopup>
@@ -399,9 +406,6 @@
                     <menu:menuitem menu:id=".uno:LeaveGroup"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ControlProperties"/>
-            <menu:menuitem menu:id=".uno:FormProperties"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:SheetMenu">
@@ -452,6 +456,7 @@
                     <menu:menuitem menu:id=".uno:RandomNumberGeneratorDialog"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:ToggleRelative"/>
             <menu:menu menu:id=".uno:SheetCommentMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:EditAnnotation"/>

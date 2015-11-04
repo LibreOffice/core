@@ -3227,6 +3227,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:FormatFormMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Form</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Image...</value>
@@ -4766,15 +4774,15 @@
       </node>
       <node oor:name=".uno:ControlProperties" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Con~trol...</value>
+          <value xml:lang="en-US">Con~trol Properties...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:FormProperties" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">For~m...</value>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">For~m Properties...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
