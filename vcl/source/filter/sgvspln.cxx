@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
-
 #include <tools/poly.hxx>
 #include <memory>
 
 #include <sgvspln.hxx>
+#include <cmath>
 
 extern "C" {
 
@@ -103,12 +102,6 @@ short basis()              /* calculate BASE machine independence     */
 #define MAXROOT   sqrt(POSMAX)
 
 #endif              /*-------------- END of ifdef --------------------*/
-
-/* defines for function macros:                                        */
-
-#define abs(X) ((X) >= 0  ?  (X) : -(X))        /* absolute number  X */
-#define sign(X, Y) (Y < 0 ? -abs(X) : abs(X))   /* sign of Y times    */
-                                                /* abs(X)             */
 
 /*--------------------  END of FILE u_const.h  -----------------------*/
 
@@ -579,16 +572,16 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
         case 4: {
             if (abs(Marg01)>=MAXROOT) {
                 alphX=0.0;
-                alphY=sign(1.0,y[1]-y[0]);
+                alphY=std::copysign(1.0,y[1]-y[0]);
             } else {
-                alphX=sign(sqrt(1.0/(1.0+Marg01*Marg01)),x[1]-x[0]);
+                alphX=std::copysign(sqrt(1.0/(1.0+Marg01*Marg01)),x[1]-x[0]);
                 alphY=alphX*Marg01;
             }
             if (abs(MargN1)>=MAXROOT) {
                 betX=0.0;
-                betY=sign(1.0,y[n]-y[n-1]);
+                betY=std::copysign(1.0,y[n]-y[n-1]);
             } else {
-                betX=sign(sqrt(1.0/(1.0+MargN1*MargN1)),x[n]-x[n-1]);
+                betX=std::copysign(sqrt(1.0/(1.0+MargN1*MargN1)),x[n]-x[n-1]);
                 betY=betX*MargN1;
             }
         }
