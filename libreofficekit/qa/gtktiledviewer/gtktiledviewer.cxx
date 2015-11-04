@@ -192,16 +192,16 @@ gboolean TiledRowColumnBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
 {
     cairo_set_source_rgb(pCairo, 0, 0, 0);
 
-    int nTotal = 0;
+    int nPrevious = 0;
     for (const Header& rHeader : m_aHeaders)
     {
         GdkRectangle aRectangle;
         if (m_eType == ROW)
         {
             aRectangle.x = 0;
-            aRectangle.y = nTotal - 1;
+            aRectangle.y = nPrevious - 1;
             aRectangle.width = ROW_HEADER_WIDTH - 1;
-            aRectangle.height = rHeader.m_nSize;
+            aRectangle.height = rHeader.m_nSize - nPrevious;
             // Left line.
             cairo_rectangle(pCairo, aRectangle.x, aRectangle.y, 1, aRectangle.height);
             cairo_fill(pCairo);
@@ -214,9 +214,9 @@ gboolean TiledRowColumnBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
         }
         else
         {
-            aRectangle.x = nTotal - 1;
+            aRectangle.x = nPrevious - 1;
             aRectangle.y = 0;
-            aRectangle.width = rHeader.m_nSize;
+            aRectangle.width = rHeader.m_nSize - nPrevious;
             aRectangle.height = COLUMN_HEADER_HEIGHT - 1;
             // Top line.
             cairo_rectangle(pCairo, aRectangle.x, aRectangle.y, aRectangle.width, 1);
@@ -229,8 +229,8 @@ gboolean TiledRowColumnBar::drawImpl(GtkWidget* /*pWidget*/, cairo_t* pCairo)
             cairo_fill(pCairo);
         }
         drawText(pCairo, aRectangle, rHeader.m_aText);
-        nTotal += rHeader.m_nSize;
-        if (nTotal > m_nSizePixel)
+        nPrevious = rHeader.m_nSize;
+        if (rHeader.m_nSize > m_nSizePixel)
             break;
     }
 
@@ -275,39 +275,29 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         gtk_widget_show(rWindow.m_pCornerButton->m_pDrawingArea);
 
         rWindow.m_pRowBar->m_aHeaders.clear();
-        int nTotal = 0;
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("rows"))
         {
-            int nSize = lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str()));
-            int nScrolledSize = nSize;
-            if (nTotal + nSize >= rWindow.m_pRowBar->m_nPositionPixel)
+            int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str())));
+            if (nSize >= rWindow.m_pRowBar->m_nPositionPixel)
             {
-                if (nTotal < rWindow.m_pRowBar->m_nPositionPixel)
-                    // First visible row: reduce height because the row is only partially visible.
-                    nScrolledSize = nTotal + nSize - rWindow.m_pRowBar->m_nPositionPixel;
+                int nScrolledSize = nSize - rWindow.m_pRowBar->m_nPositionPixel;
                 Header aHeader(nScrolledSize, rValue.second.get<std::string>("text"));
                 rWindow.m_pRowBar->m_aHeaders.push_back(aHeader);
             }
-            nTotal += nSize;
         }
         gtk_widget_show(rWindow.m_pRowBar->m_pDrawingArea);
         gtk_widget_queue_draw(rWindow.m_pRowBar->m_pDrawingArea);
 
         rWindow.m_pColumnBar->m_aHeaders.clear();
-        nTotal = 0;
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("columns"))
         {
-            int nSize = lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str()));
-            int nScrolledSize = nSize;
-            if (nTotal + nSize >= rWindow.m_pColumnBar->m_nPositionPixel)
+            int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), std::atof(rValue.second.get<std::string>("size").c_str())));
+            if (nSize >= rWindow.m_pColumnBar->m_nPositionPixel)
             {
-                if (nTotal < rWindow.m_pColumnBar->m_nPositionPixel)
-                    // First visible column: reduce width because the column is only partially visible.
-                    nScrolledSize = nTotal + nSize - rWindow.m_pColumnBar->m_nPositionPixel;
+                int nScrolledSize = nSize - rWindow.m_pColumnBar->m_nPositionPixel;
                 Header aHeader(nScrolledSize, rValue.second.get<std::string>("text"));
                 rWindow.m_pColumnBar->m_aHeaders.push_back(aHeader);
             }
-            nTotal += nSize;
         }
         gtk_widget_show(rWindow.m_pColumnBar->m_pDrawingArea);
         gtk_widget_queue_draw(rWindow.m_pColumnBar->m_pDrawingArea);
