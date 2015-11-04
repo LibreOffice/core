@@ -162,16 +162,13 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
 
     if ( !xTargetStream.is() )
     {
-        xTargetStream = uno::Reference < io::XStream >(
-            io::TempFile::create(m_xContext),
-            uno::UNO_QUERY_THROW );
-
-        xTargetSeek = uno::Reference< io::XSeekable >( xTargetStream, uno::UNO_QUERY_THROW );
+        xTargetStream.set( io::TempFile::create(m_xContext), uno::UNO_QUERY_THROW );
+        xTargetSeek.set( xTargetStream, uno::UNO_QUERY_THROW );
     }
     else
     {
         // the provided stream must be empty
-        xTargetSeek = uno::Reference< io::XSeekable >( xTargetStream, uno::UNO_QUERY_THROW );
+        xTargetSeek.set( xTargetStream, uno::UNO_QUERY_THROW );
         if ( xTargetSeek->getLength() )
             throw io::IOException();
     }

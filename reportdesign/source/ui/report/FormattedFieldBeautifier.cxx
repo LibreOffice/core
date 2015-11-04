@@ -178,7 +178,7 @@ namespace rptui
                         OReportSection& aOutputDevice = pSectionWindow->getReportSection(); // OutputDevice
                         OSectionView& aSdrView = aOutputDevice.getSectionView();            // SdrView
                         uno::Reference<awt::XControl> xControl = pUnoObj->GetUnoControl(aSdrView, aOutputDevice);
-                        xVclWindowPeer = uno::Reference<awt::XVclWindowPeer>( xControl->getPeer(), uno::UNO_QUERY);
+                        xVclWindowPeer.set( xControl->getPeer(), uno::UNO_QUERY);
                     }
                 }
             }

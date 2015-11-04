@@ -35,7 +35,7 @@ WrapStreamForShare::WrapStreamForShare( const uno::Reference< io::XInputStream >
 , m_xInStream( xInStream )
 , m_nCurPos( 0 )
 {
-    m_xSeekable = uno::Reference< io::XSeekable >( m_xInStream, uno::UNO_QUERY );
+    m_xSeekable.set( m_xInStream, uno::UNO_QUERY );
     if ( !m_rMutexRef.is() || !m_xInStream.is() || !m_xSeekable.is() )
     {
         OSL_FAIL( "Wrong initialization of wrapping stream!\n" );
@@ -124,8 +124,8 @@ void SAL_CALL WrapStreamForShare::closeInput()
 
     // the package is the owner so it will close the stream
     // m_xInStream->closeInput();
-    m_xInStream = uno::Reference< io::XInputStream >();
-    m_xSeekable = uno::Reference< io::XSeekable >();
+    m_xInStream.clear();
+    m_xSeekable.clear();
 }
 
 // XSeekable

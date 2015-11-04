@@ -194,18 +194,18 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
         {
             m_xContentStream = xSink->getInputStream();
             m_bOwnContent = true;
-            xSeekable = uno::Reference< io::XSeekable >( m_xContentStream, uno::UNO_QUERY );
+            xSeekable.set( m_xContentStream, uno::UNO_QUERY );
         }
     }
     else if ( (aArguments[0] >>= xStream ) )
     {
         // a writable stream can implement both XStream & XInputStream
         m_xContentStream = xStream->getInputStream();
-        xSeekable = uno::Reference< io::XSeekable >( xStream, uno::UNO_QUERY );
+        xSeekable.set( xStream, uno::UNO_QUERY );
     }
     else if ( aArguments[0] >>= m_xContentStream )
     {
-        xSeekable = uno::Reference< io::XSeekable >( m_xContentStream, uno::UNO_QUERY );
+        xSeekable.set( m_xContentStream, uno::UNO_QUERY );
     }
     else
         throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );

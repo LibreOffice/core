@@ -2526,7 +2526,7 @@ uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
         uno::Reference< frame::XModel >       xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
 
         ::framework::TitleHelper* pHelper = new ::framework::TitleHelper( m_aProps->m_xContext );
-        m_pImpl->m_xTitleHelper = uno::Reference< frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
+        m_pImpl->m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
         pHelper->setOwner                   (xThis   );
         pHelper->connectWithUntitledNumbers (uno::Reference<frame::XUntitledNumbers>(xDesktop, uno::UNO_QUERY_THROW));
     }
@@ -2543,9 +2543,9 @@ uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHel
 
     if ( ! m_pImpl->m_xNumberedControllers.is ())
     {
-        uno::Reference< frame::XModel > xThis   (static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
-        ::comphelper::NumberedCollection*         pHelper = new ::comphelper::NumberedCollection();
-        m_pImpl->m_xNumberedControllers = uno::Reference< frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
+        uno::Reference< frame::XModel >    xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
+        ::comphelper::NumberedCollection*  pHelper = new ::comphelper::NumberedCollection();
+        m_pImpl->m_xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
         pHelper->setUntitledPrefix (OUString(" : "));

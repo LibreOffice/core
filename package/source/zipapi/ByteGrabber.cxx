@@ -49,7 +49,7 @@ void ByteGrabber::setInputStream (uno::Reference < io::XInputStream > xNewStream
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     xStream = xNewStream;
-    xSeek = uno::Reference < io::XSeekable > (xNewStream, uno::UNO_QUERY);
+    xSeek.set(xNewStream, uno::UNO_QUERY);
 }
 
 // XInputStream chained

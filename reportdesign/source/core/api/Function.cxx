@@ -199,7 +199,7 @@ void SAL_CALL OFunction::setParent( const uno::Reference< uno::XInterface >& Par
         m_xParent = xFunctions;
     }
     else
-        m_xParent = uno::WeakReference< report::XFunctions >();
+        m_xParent.clear();
 }
 
 

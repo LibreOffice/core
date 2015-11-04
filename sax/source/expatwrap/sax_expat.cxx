@@ -371,7 +371,7 @@ SaxExpatParser::SaxExpatParser(  )
     m_pImpl = new SaxExpatParser_Impl;
 
     LocatorImpl *pLoc = new LocatorImpl( m_pImpl );
-    m_pImpl->rDocumentLocator = css::uno::Reference< XLocator > ( pLoc );
+    m_pImpl->rDocumentLocator.set( pLoc );
 
     // Performance-improvement; handing out the same object with every call of
     // the startElement callback is allowed (see sax-specification):

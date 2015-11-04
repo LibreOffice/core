@@ -190,7 +190,7 @@ namespace rptui
         uno::Reference<awt::XVclWindowPeer> xVclWindowPeer;
         uno::Reference<awt::XControl> xControl = getXControl(_xComponent);
 
-        xVclWindowPeer = uno::Reference<awt::XVclWindowPeer>( xControl->getPeer(), uno::UNO_QUERY);
+        xVclWindowPeer.set( xControl->getPeer(), uno::UNO_QUERY);
 
         return xVclWindowPeer;
     }

@@ -716,7 +716,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             {
                 // the stream must be seekable, if it is not it will be wrapped
                 m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, m_xContext );
-                m_xContentSeek = uno::Reference < XSeekable > ( m_xContentStream, UNO_QUERY );
+                m_xContentSeek.set( m_xContentStream, UNO_QUERY );
                 if ( ! m_xContentSeek.is() )
                     throw css::uno::Exception (THROW_WHERE "The package component _requires_ an XSeekable interface!",
                             static_cast < ::cppu::OWeakObject * > ( this ) );
@@ -1473,7 +1473,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     try
                     {
                         aOrigFileStream = xSimpleAccess->openFileWrite( m_aURL );
-                        xOrigTruncate = uno::Reference< io::XTruncate >( aOrigFileStream, uno::UNO_QUERY_THROW );
+                        xOrigTruncate.set( aOrigFileStream, uno::UNO_QUERY_THROW );
                         // after successful truncation the file is already corrupted
                         xOrigTruncate->truncate();
                     }
@@ -1494,7 +1494,7 @@ void SAL_CALL ZipPackage::commitChanges()
                             aOrigFileStream->closeOutput();
                         } catch ( uno::Exception& ) {}
 
-                        aOrigFileStream = uno::Reference< XOutputStream >();
+                        aOrigFileStream.clear();
                         // the original file can already be corrupted
                         bCanBeCorrupted = true;
                     }
@@ -1551,7 +1551,7 @@ void SAL_CALL ZipPackage::commitChanges()
 
 void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Reference< io::XInputStream >& xTempStream )
 {
-    m_xStream = uno::Reference< io::XStream >( xTempStream, uno::UNO_QUERY );
+    m_xStream.set( xTempStream, uno::UNO_QUERY );
     if ( m_xStream.is() )
         m_eMode = e_IMode_XStream;
     else

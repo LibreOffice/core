@@ -323,8 +323,8 @@ void OWriteStream_Impl::CleanCacheStream()
         catch( const uno::Exception& )
         {}
 
-        m_xCacheStream = uno::Reference< io::XStream >();
-        m_xCacheSeek = uno::Reference< io::XSeekable >();
+        m_xCacheStream.clear();
+        m_xCacheSeek.clear();
     }
 }
 
@@ -528,7 +528,7 @@ OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XIn
                     // the current position of the original stream should be still OK, copy further
                     ::comphelper::OStorageHelper::CopyInputToOutput( xStream, xTempOutStream );
                     xTempOutStream->closeOutput();
-                    xTempOutStream = uno::Reference< io::XOutputStream >();
+                    xTempOutStream.clear();
                 }
                 else
                     throw io::IOException(); // TODO:
@@ -614,7 +614,7 @@ OUString OWriteStream_Impl::FillTempGetFileName()
                             // the current position of the original stream should be still OK, copy further
                             ::comphelper::OStorageHelper::CopyInputToOutput( xOrigStream, xTempOutStream );
                             xTempOutStream->closeOutput();
-                            xTempOutStream = uno::Reference< io::XOutputStream >();
+                            xTempOutStream.clear();
                         }
                         else
                             throw io::IOException(); // TODO:
@@ -819,14 +819,12 @@ void OWriteStream_Impl::Commit()
 
         uno::Reference< io::XInputStream > xInStream( m_xCacheStream->getInputStream(), uno::UNO_SET_THROW );
 
-        xNewPackageStream = uno::Reference< packages::XDataSinkEncrSupport >(
-                                                        m_xPackage->createInstanceWithArguments( aSeq ),
-                                                        uno::UNO_QUERY_THROW );
+        xNewPackageStream.set( m_xPackage->createInstanceWithArguments( aSeq ), uno::UNO_QUERY_THROW );
 
         xNewPackageStream->setDataStream( xInStream );
 
-        m_xCacheStream = uno::Reference< io::XStream >();
-        m_xCacheSeek = uno::Reference< io::XSeekable >();
+        m_xCacheStream.clear();
+        m_xCacheSeek.clear();
 
     }
     else if ( !m_aTempURL.isEmpty() )
@@ -846,9 +844,7 @@ void OWriteStream_Impl::Commit()
         if ( !xInStream.is() )
             throw io::IOException();
 
-        xNewPackageStream = uno::Reference< packages::XDataSinkEncrSupport >(
-                                                        m_xPackage->createInstanceWithArguments( aSeq ),
-                                                        uno::UNO_QUERY_THROW );
+        xNewPackageStream.set( m_xPackage->createInstanceWithArguments( aSeq ), uno::UNO_QUERY_THROW );
 
         // TODO/NEW: Let the temporary file be removed after commit
         xNewPackageStream->setDataStream( xInStream );
@@ -919,8 +915,8 @@ void OWriteStream_Impl::Revert()
 
     if ( m_xCacheStream.is() )
     {
-        m_xCacheStream = uno::Reference< io::XStream >();
-        m_xCacheSeek = uno::Reference< io::XSeekable >();
+        m_xCacheStream.clear();
+        m_xCacheSeek.clear();
     }
 
     if ( !m_aTempURL.isEmpty() )
@@ -940,7 +936,7 @@ void OWriteStream_Impl::Revert()
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         // currently the relations storage is changed only on commit
-        m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
+        m_xNewRelInfoStream.clear();
         m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
         if ( m_xOrigRelInfoStream.is() )
         {
@@ -1039,7 +1035,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
             // in case of success the stream must be thrown away, that means that the OrigRelInfo is initialized
             // the reason for this is that the original stream might not be seekable ( at the same time the new
             // provided stream must be seekable ), so it must be read only once
-            m_xOrigRelInfoStream = uno::Reference< io::XInputStream >();
+            m_xOrigRelInfoStream.clear();
             m_nRelInfoStatus = RELINFO_READ;
         }
         catch( const uno::Exception& rException )
@@ -1446,9 +1442,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
 {
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
-        xTempFile = uno::Reference < io::XStream >(
-            io::TempFile::create(m_xContext),
-            uno::UNO_QUERY );
+        xTempFile.set( io::TempFile::create(m_xContext), uno::UNO_QUERY );
     else
         xTempFile = xTargetStream;
 
@@ -1472,7 +1466,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
 
     // TODO: remember last state of m_bUseCommonEncryption
     if ( !xTargetStream.is() )
-        xTargetStream = uno::Reference< io::XStream > (
+        xTargetStream.set(
             static_cast< ::cppu::OWeakObject* >(
                 new OInputSeekStream( xInStream, InsertOwnProps( aProps, m_bUseCommonEncryption ), m_nStorageType ) ),
             uno::UNO_QUERY_THROW );
@@ -1663,7 +1657,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 else
                 {
                     // the information is already parsed and the stream is stored, no need in temporary stream any more
-                    m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
+                    m_xNewRelInfoStream.clear();
                     m_nRelInfoStatus = RELINFO_READ;
                 }
             }
@@ -1673,7 +1667,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
             m_aOrigRelInfo = m_aNewRelInfo;
             m_bOrigRelInfoBroken = false;
             m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
-            m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
+            m_xNewRelInfoStream.clear();
         }
         else
         {
@@ -1721,7 +1715,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
     {
         m_xInStream = xStream->getInputStream();
         m_xOutStream = xStream->getOutputStream();
-        m_xSeekable = uno::Reference< io::XSeekable >( xStream, uno::UNO_QUERY );
+        m_xSeekable.set( xStream, uno::UNO_QUERY );
         OSL_ENSURE( m_xInStream.is() && m_xOutStream.is() && m_xSeekable.is(), "Stream implementation is incomplete!\n" );
     }
 }
@@ -1751,9 +1745,9 @@ void OWriteStream::DeInit()
     if ( m_xSeekable.is() )
         m_nInitPosition = m_xSeekable->getPosition();
 
-    m_xInStream = uno::Reference< io::XInputStream >();
-    m_xOutStream = uno::Reference< io::XOutputStream >();
-    m_xSeekable = uno::Reference< io::XSeekable >();
+    m_xInStream.clear();
+    m_xOutStream.clear();
+    m_xSeekable.clear();
     m_bInitOnDemand = true;
 }
 
@@ -2155,7 +2149,7 @@ void SAL_CALL OWriteStream::closeInput(  )
     // since it can not be reopened until output part is closed, it will be closed with output part.
     m_bInStreamDisconnected = true;
     // m_xInStream->closeInput();
-    // m_xInStream = uno::Reference< io::XInputStream >();
+    // m_xInStream.clear();
 
     if ( !m_xOutStream.is() )
         dispose();
@@ -2306,7 +2300,7 @@ void OWriteStream::CloseOutput_Impl()
     // all the checks must be done in calling method
 
     m_xOutStream->closeOutput();
-    m_xOutStream = uno::Reference< io::XOutputStream >();
+    m_xOutStream.clear();
 
     if ( !m_bInitOnDemand )
     {
@@ -2460,10 +2454,10 @@ void SAL_CALL OWriteStream::dispose()
         if ( m_xInStream.is() )
         {
             m_xInStream->closeInput();
-            m_xInStream = uno::Reference< io::XInputStream >();
+            m_xInStream.clear();
         }
 
-        m_xSeekable = uno::Reference< io::XSeekable >();
+        m_xSeekable.clear();
 
         m_pImpl->m_pAntiImpl = NULL;
 
@@ -2853,7 +2847,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
         throw container::ElementExistException(); // TODO
 
     m_pImpl->m_aNewRelInfo = aSeq;
-    m_pImpl->m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
+    m_pImpl->m_xNewRelInfoStream.clear();
     m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 }
 
@@ -2885,7 +2879,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
                     aSeq.realloc( nLength - 1 );
 
                     m_pImpl->m_aNewRelInfo = aSeq;
-                    m_pImpl->m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
+                    m_pImpl->m_xNewRelInfoStream.clear();
                     m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 
                     // TODO/LATER: in future the unification of the ID could be checked
@@ -2976,7 +2970,7 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
 
     aResultSeq.realloc( nResultInd );
     m_pImpl->m_aNewRelInfo = aResultSeq;
-    m_pImpl->m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
+    m_pImpl->m_xNewRelInfoStream.clear();
     m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 }
 
@@ -2996,7 +2990,7 @@ void SAL_CALL OWriteStream::clearRelationships()
         throw uno::RuntimeException();
 
     m_pImpl->m_aNewRelInfo.realloc( 0 );
-    m_pImpl->m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
+    m_pImpl->m_xNewRelInfoStream.clear();
     m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 }
 

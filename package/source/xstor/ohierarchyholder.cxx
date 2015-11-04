@@ -253,7 +253,7 @@ void OHierarchyElement_Impl::TestForClosing()
                 m_rParent->RemoveElement( this );
             }
 
-            m_xOwnStorage = uno::Reference< embed::XStorage >();
+            m_xOwnStorage.clear();
         }
     }
 }

@@ -118,7 +118,7 @@ Reference< XInputStream > createStreamFromFile(
         Sequence<sal_Int8> seqIn(nLength);
         fread( seqIn.getArray() , nLength , 1 , f );
 
-        r = Reference< XInputStream > ( new OInputStream( seqIn ) );
+        r.set( new OInputStream( seqIn ) );
         fclose( f );
     }
     return r;
@@ -500,7 +500,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance( "com.sun.star.registry.ImplementationRegistration" );
-        xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
+        xReg.set( x , UNO_QUERY );
     }
     catch( Exception & ) {
         printf( "Couldn't create ImplementationRegistration service\n" );

@@ -69,7 +69,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance( "com.sun.star.registry.ImplementationRegistration" );
-        xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
+        xReg.set( x , UNO_QUERY );
     }
     catch (const Exception&)
     {

@@ -141,7 +141,7 @@ void ZipPackageStream::CloseOwnStreamIfAny()
     if ( m_xStream.is() )
     {
         m_xStream->closeInput();
-        m_xStream = uno::Reference< io::XInputStream >();
+        m_xStream.clear();
         m_bHasSeekable = false;
     }
 }
@@ -349,12 +349,12 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         xTempSeek->seek( 0 );
 
         // close raw stream, package stream and folder
-        xInRaw = uno::Reference< io::XInputStream >();
-        xNewPSProps = uno::Reference< XPropertySet >();
-        xNPSTunnel = uno::Reference< XUnoTunnel >();
-        xNewPackStream = uno::Reference< XDataSinkEncrSupport >();
-        xTunnel = uno::Reference< XUnoTunnel >();
-        xRootNameContainer = uno::Reference< container::XNameContainer >();
+        xInRaw.clear();
+        xNewPSProps.clear();
+        xNPSTunnel.clear();
+        xNewPackStream.clear();
+        xTunnel.clear();
+        xRootNameContainer.clear();
 
         // return the stream representing the first temporary file
         return xTempIn;

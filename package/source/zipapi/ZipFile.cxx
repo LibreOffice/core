@@ -120,7 +120,7 @@ void ZipFile::setInputStream ( uno::Reference < XInputStream > xNewStream )
     ::osl::MutexGuard aGuard( m_aMutex );
 
     xStream = xNewStream;
-    xSeek = uno::Reference < XSeekable > ( xStream, UNO_QUERY );
+    xSeek.set( xStream, UNO_QUERY );
     aGrabber.setInputStream ( xStream );
 }
 
