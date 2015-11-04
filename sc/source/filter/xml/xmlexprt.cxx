@@ -324,7 +324,7 @@ void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShap
     if( xShapeProp.is() )
     {
         sal_Int16 nLayerID = 0;
-        if( (xShapeProp->getPropertyValue(OUString( SC_LAYERID )) >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
+        if( (xShapeProp->getPropertyValue( SC_LAYERID ) >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
             GetExport().AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
     }
 }
@@ -3385,7 +3385,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
         {
             uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
             if ( xProps.is() )
-                xProps->getPropertyValue( OUString( SC_UNONAME_HYPERLINK ) ) >>= sHlink;
+                xProps->getPropertyValue( SC_UNONAME_HYPERLINK ) >>= sHlink;
         }
         catch ( const beans::UnknownPropertyException& )
         {
@@ -3737,19 +3737,19 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
     uno::Reference<beans::XPropertySet> xPropertySet(xSpreadDoc, uno::UNO_QUERY);
     if (xPropertySet.is())
     {
-        bool bCalcAsShown (::cppu::any2bool( xPropertySet->getPropertyValue(OUString(SC_UNO_CALCASSHOWN)) ));
-        bool bIgnoreCase (::cppu::any2bool( xPropertySet->getPropertyValue(OUString(SC_UNO_IGNORECASE)) ));
-        bool bLookUpLabels (::cppu::any2bool( xPropertySet->getPropertyValue(OUString(SC_UNO_LOOKUPLABELS)) ));
-        bool bMatchWholeCell (::cppu::any2bool( xPropertySet->getPropertyValue(OUString(SC_UNO_MATCHWHOLE)) ));
-        bool bUseRegularExpressions (::cppu::any2bool( xPropertySet->getPropertyValue(OUString(SC_UNO_REGEXENABLED)) ));
-        bool bIsIterationEnabled (::cppu::any2bool( xPropertySet->getPropertyValue(OUString(SC_UNO_ITERENABLED)) ));
+        bool bCalcAsShown (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_CALCASSHOWN) ));
+        bool bIgnoreCase (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_IGNORECASE) ));
+        bool bLookUpLabels (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_LOOKUPLABELS) ));
+        bool bMatchWholeCell (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_MATCHWHOLE) ));
+        bool bUseRegularExpressions (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_REGEXENABLED) ));
+        bool bIsIterationEnabled (::cppu::any2bool( xPropertySet->getPropertyValue(SC_UNO_ITERENABLED) ));
         sal_uInt16 nYear2000 (pDoc ? pDoc->GetDocOptions().GetYear2000() : 0);
         sal_Int32 nIterationCount(100);
-        xPropertySet->getPropertyValue( OUString(SC_UNO_ITERCOUNT)) >>= nIterationCount;
+        xPropertySet->getPropertyValue( SC_UNO_ITERCOUNT ) >>= nIterationCount;
         double fIterationEpsilon = 0;
-        xPropertySet->getPropertyValue( OUString(SC_UNO_ITEREPSILON)) >>= fIterationEpsilon;
+        xPropertySet->getPropertyValue( SC_UNO_ITEREPSILON ) >>= fIterationEpsilon;
         util::Date aNullDate;
-        xPropertySet->getPropertyValue( OUString(SC_UNO_NULLDATE)) >>= aNullDate;
+        xPropertySet->getPropertyValue( SC_UNO_NULLDATE ) >>= aNullDate;
         if (bCalcAsShown || bIgnoreCase || !bLookUpLabels || !bMatchWholeCell || !bUseRegularExpressions ||
             bIsIterationEnabled || nIterationCount != 100 || !::rtl::math::approxEqual(fIterationEpsilon, 0.001) ||
             aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899 || nYear2000 != 1930)
@@ -3815,7 +3815,7 @@ void ScXMLExport::WriteTableSource()
             uno::Reference <beans::XPropertySet> xProps (GetModel(), uno::UNO_QUERY);
             if (xProps.is())
             {
-                uno::Reference <container::XIndexAccess> xIndex(xProps->getPropertyValue(OUString(SC_UNO_SHEETLINKS)), uno::UNO_QUERY);
+                uno::Reference <container::XIndexAccess> xIndex(xProps->getPropertyValue(SC_UNO_SHEETLINKS), uno::UNO_QUERY);
                 if (xIndex.is())
                 {
                     sal_Int32 nCount(xIndex->getCount());
@@ -3829,7 +3829,7 @@ void ScXMLExport::WriteTableSource()
                             if (xLinkProps.is())
                             {
                                 OUString sNewLink;
-                                if (xLinkProps->getPropertyValue(OUString(SC_UNONAME_LINKURL)) >>= sNewLink)
+                                if (xLinkProps->getPropertyValue(SC_UNONAME_LINKURL) >>= sNewLink)
                                     bFound = sLink.equals(sNewLink);
                             }
                         }
@@ -3839,9 +3839,9 @@ void ScXMLExport::WriteTableSource()
                             OUString sFilterOptions;
                             OUString sTableName (xLinkable->getLinkSheetName());
                             sal_Int32 nRefresh(0);
-                            xLinkProps->getPropertyValue(OUString(SC_UNONAME_FILTER)) >>= sFilter;
-                            xLinkProps->getPropertyValue(OUString(SC_UNONAME_FILTOPT)) >>= sFilterOptions;
-                            xLinkProps->getPropertyValue(OUString(SC_UNONAME_REFDELAY)) >>= nRefresh;
+                            xLinkProps->getPropertyValue(SC_UNONAME_FILTER) >>= sFilter;
+                            xLinkProps->getPropertyValue(SC_UNONAME_FILTOPT) >>= sFilterOptions;
+                            xLinkProps->getPropertyValue(SC_UNONAME_REFDELAY) >>= nRefresh;
                             if (!sLink.isEmpty())
                             {
                                 AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
@@ -3912,11 +3912,11 @@ void ScXMLExport::WriteTheLabelRanges( const uno::Reference< sheet::XSpreadsheet
     if( !xDocProp.is() ) return;
 
     sal_Int32 nCount(0);
-    uno::Reference< container::XIndexAccess > xColRangesIAccess(xDocProp->getPropertyValue( OUString( SC_UNO_COLLABELRNG ) ), uno::UNO_QUERY);
+    uno::Reference< container::XIndexAccess > xColRangesIAccess(xDocProp->getPropertyValue( SC_UNO_COLLABELRNG ), uno::UNO_QUERY);
     if( xColRangesIAccess.is() )
         nCount += xColRangesIAccess->getCount();
 
-    uno::Reference< container::XIndexAccess > xRowRangesIAccess(xDocProp->getPropertyValue( OUString( SC_UNO_ROWLABELRNG ) ), uno::UNO_QUERY);
+    uno::Reference< container::XIndexAccess > xRowRangesIAccess(xDocProp->getPropertyValue( SC_UNO_ROWLABELRNG ), uno::UNO_QUERY);
     if( xRowRangesIAccess.is() )
         nCount += xRowRangesIAccess->getCount();
 

@@ -357,7 +357,7 @@ static bool lcl_IsDuplicated(const Reference<XPropertySet>& rDimProps)
 {
     try
     {
-        Any aAny = rDimProps->getPropertyValue( OUString( SC_UNO_DP_ORIGINAL ) );
+        Any aAny = rDimProps->getPropertyValue( SC_UNO_DP_ORIGINAL );
         Reference< XNamed > xOriginal( aAny, UNO_QUERY );
         return xOriginal.is();
     }
@@ -376,7 +376,7 @@ static OUString lcl_GetOriginalName(const Reference< XNamed >& rDim)
     {
         try
         {
-            Any aAny = xDimProps->getPropertyValue(OUString(SC_UNO_DP_ORIGINAL));
+            Any aAny = xDimProps->getPropertyValue(SC_UNO_DP_ORIGINAL);
             aAny >>= xOriginal;
         }
         catch( Exception& )
@@ -1562,7 +1562,7 @@ static sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSourc
         for (sal_Int32 i = 0; i < nIntCount; ++i)
         {
             xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(OUString(SC_UNO_DP_ORIENTATION)) == rOrient))
+            if (xDim.is() && (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient))
                 ++nRet;
         }
     }
@@ -1602,7 +1602,7 @@ static bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSour
         while (i < nIntCount && !bOk)
         {
             xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(OUString(SC_UNO_DP_ORIENTATION)) == rOrient))
+            if (xDim.is() && (xDim->getPropertyValue(SC_UNO_DP_ORIENTATION) == rOrient))
             {
                 if (nPos == nIndex)
                 {
@@ -3470,7 +3470,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                     {
                         Reference< XPropertySet > xMemberProps( xMember, UNO_QUERY );
                         if( xMemberProps.is() )
-                            aRet = xMemberProps->getPropertyValue( OUString( SC_UNO_DP_SHOWDETAILS ) );
+                            aRet = xMemberProps->getPropertyValue( SC_UNO_DP_SHOWDETAILS );
                         else
                             aRet <<= true;
                     }
@@ -3485,7 +3485,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                     {
                         Reference< XPropertySet > xMemberProps( xMember, UNO_QUERY );
                         if( xMemberProps.is() )
-                            aRet <<= !cppu::any2bool( xMemberProps->getPropertyValue( OUString( SC_UNO_DP_ISVISIBLE ) ) );
+                            aRet <<= !cppu::any2bool( xMemberProps->getPropertyValue( SC_UNO_DP_ISVISIBLE ) );
                         else
                             aRet <<= false;
                     }

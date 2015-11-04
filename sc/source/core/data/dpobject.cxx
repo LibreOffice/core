@@ -1276,8 +1276,7 @@ bool ScDPObject::IsDuplicated( long nDim )
             {
                 try
                 {
-                    uno::Any aOrigAny = xDimProp->getPropertyValue(
-                                OUString(SC_UNO_DP_ORIGINAL) );
+                    uno::Any aOrigAny = xDimProp->getPropertyValue( SC_UNO_DP_ORIGINAL );
                     uno::Reference<uno::XInterface> xIntOrig;
                     if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
                         bDuplicated = true;
@@ -2018,8 +2017,7 @@ static sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& 
                 uno::Any aSubAny;
                 try
                 {
-                    aSubAny = xLevProp->getPropertyValue(
-                            OUString(SC_UNO_DP_SUBTOTAL) );
+                    aSubAny = xLevProp->getPropertyValue( SC_UNO_DP_SUBTOTAL );
                 }
                 catch(uno::Exception&)
                 {
@@ -2117,8 +2115,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
             long nDupSource = -1;
             try
             {
-                uno::Any aOrigAny = xDimProp->getPropertyValue(
-                    OUString(SC_UNO_DP_ORIGINAL_POS));
+                uno::Any aOrigAny = xDimProp->getPropertyValue(SC_UNO_DP_ORIGINAL_POS);
                 sal_Int32 nTmp = 0;
                 if (aOrigAny >>= nTmp)
                     nDupSource = static_cast<sal_Int32>(nTmp);
@@ -2165,7 +2162,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
             try
             {
                 if (nOrient == sheet::DataPilotFieldOrientation_DATA)
-                    xDimProp->getPropertyValue(OUString(SC_UNO_DP_REFVALUE))
+                    xDimProp->getPropertyValue(SC_UNO_DP_REFVALUE)
                         >>= rField.maFieldRef;
             }
             catch (uno::Exception&)
@@ -2281,11 +2278,11 @@ static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans
 
     try
     {
-        xLevProp->getPropertyValue( OUString( SC_UNO_DP_SORTING ) )
+        xLevProp->getPropertyValue( SC_UNO_DP_SORTING )
             >>= rData.maSortInfo;
-        xLevProp->getPropertyValue( OUString( SC_UNO_DP_LAYOUT ) )
+        xLevProp->getPropertyValue( SC_UNO_DP_LAYOUT )
             >>= rData.maLayoutInfo;
-        xLevProp->getPropertyValue( OUString( SC_UNO_DP_AUTOSHOW ) )
+        xLevProp->getPropertyValue( SC_UNO_DP_AUTOSHOW )
             >>= rData.maShowInfo;
     }
     catch(uno::Exception&)
@@ -2313,8 +2310,7 @@ bool ScDPObject::FillLabelDataForDimension(
     try
     {
         aFieldName = xDimName->getName();
-        uno::Any aOrigAny = xDimProp->getPropertyValue(
-                    OUString(SC_UNO_DP_ORIGINAL_POS));
+        uno::Any aOrigAny = xDimProp->getPropertyValue(SC_UNO_DP_ORIGINAL_POS);
         aOrigAny >>= nOrigPos;
     }
     catch(uno::Exception&)
@@ -2672,7 +2668,7 @@ bool ScDPObject::HasRegisteredSources()
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum = xEnAc->createContentEnumeration(
-                                        OUString( SCDPSOURCE_SERVICE ) );
+                                        SCDPSOURCE_SERVICE );
         if ( xEnum.is() && xEnum->hasMoreElements() )
             bFound = true;
     }
@@ -2691,7 +2687,7 @@ uno::Sequence<OUString> ScDPObject::GetRegisteredSources()
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum = xEnAc->createContentEnumeration(
-                                        OUString( SCDPSOURCE_SERVICE ) );
+                                        SCDPSOURCE_SERVICE );
         if ( xEnum.is() )
         {
             long nCount = 0;
@@ -2733,7 +2729,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
         return xRet;
 
     uno::Reference<container::XEnumeration> xEnum =
-        xEnAc->createContentEnumeration(OUString(SCDPSOURCE_SERVICE));
+        xEnAc->createContentEnumeration(SCDPSOURCE_SERVICE);
     if (!xEnum.is())
         return xRet;
 
@@ -3178,16 +3174,13 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
 
         uno::Any aAny;
         aAny <<= rDBName;
-        xRowProp->setPropertyValue(
-            OUString(SC_DBPROP_DATASOURCENAME), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_DATASOURCENAME, aAny );
 
         aAny <<= rCommand;
-        xRowProp->setPropertyValue(
-            OUString(SC_DBPROP_COMMAND), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMAND, aAny );
 
         aAny <<= nSdbType;
-        xRowProp->setPropertyValue(
-            OUString(SC_DBPROP_COMMANDTYPE), aAny );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, aAny );
 
         uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
         if ( xExecute.is() )

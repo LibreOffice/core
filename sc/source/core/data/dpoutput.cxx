@@ -704,8 +704,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     {
         try
         {
-            uno::Any aAny = xSrcProp->getPropertyValue(
-                    OUString(SC_UNO_DP_DATADESC) );
+            uno::Any aAny = xSrcProp->getPropertyValue( SC_UNO_DP_DATADESC );
             OUString aUStr;
             aAny >>= aUStr;
             aDataDescription = aUStr;

@@ -74,7 +74,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
     uno::Reference<frame::XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
-                                        OUString("_beamer"),
+                                        "_beamer",
                                         frame::FrameSearchFlag::CHILDREN);
     if (xBeamerFrame.is())
     {
@@ -217,16 +217,13 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 uno::Any aAny;
 
                 aAny <<= rParam.aDBName;
-                xRowProp->setPropertyValue(
-                            OUString(SC_DBPROP_DATASOURCENAME), aAny );
+                xRowProp->setPropertyValue( SC_DBPROP_DATASOURCENAME, aAny );
 
                 aAny <<= rParam.aStatement;
-                xRowProp->setPropertyValue(
-                            OUString(SC_DBPROP_COMMAND), aAny );
+                xRowProp->setPropertyValue( SC_DBPROP_COMMAND, aAny );
 
                 aAny <<= nType;
-                xRowProp->setPropertyValue(
-                            OUString(SC_DBPROP_COMMANDTYPE), aAny );
+                xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, aAny );
 
                 uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
                 if ( xExecute.is() )

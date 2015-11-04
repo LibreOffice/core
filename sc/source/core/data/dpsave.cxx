@@ -565,22 +565,22 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
         sheet::DataPilotFieldOrientation eOrient = (sheet::DataPilotFieldOrientation)nOrientation;
         aAny <<= eOrient;
-        xDimProp->setPropertyValue( OUString(SC_UNO_DP_ORIENTATION), aAny );
+        xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, aAny );
 
         sheet::GeneralFunction eFunc = (sheet::GeneralFunction)nFunction;
         aAny <<= eFunc;
-        xDimProp->setPropertyValue( OUString(SC_UNO_DP_FUNCTION), aAny );
+        xDimProp->setPropertyValue( SC_UNO_DP_FUNCTION, aAny );
 
         if ( nUsedHierarchy >= 0 )
         {
             aAny <<= (sal_Int32)nUsedHierarchy;
-            xDimProp->setPropertyValue( OUString(SC_UNO_DP_USEDHIERARCHY), aAny );
+            xDimProp->setPropertyValue( SC_UNO_DP_USEDHIERARCHY, aAny );
         }
 
         if ( pReferenceValue )
         {
             aAny <<= *pReferenceValue;
-            xDimProp->setPropertyValue( OUString(SC_UNO_DP_REFVALUE), aAny );
+            xDimProp->setPropertyValue( SC_UNO_DP_REFVALUE, aAny );
         }
 
         if (mpLayoutName)
@@ -641,7 +641,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                     for (long i=0; i<nSubTotalCount; i++)
                         pArray[i] = (sheet::GeneralFunction)pSubTotalFuncs[i];
                     aAny <<= aSeq;
-                    xLevProp->setPropertyValue( OUString(SC_UNO_DP_SUBTOTAL), aAny );
+                    xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL, aAny );
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                     lcl_SetBoolProperty( xLevProp,
@@ -1158,7 +1158,7 @@ static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& x
         {
             uno::Any aAny;
             aAny <<= eOrient;
-            xDimProp->setPropertyValue( OUString(SC_UNO_DP_ORIENTATION), aAny );
+            xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, aAny );
         }
     }
 }

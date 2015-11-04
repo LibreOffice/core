@@ -2375,7 +2375,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         }
 
         xModel.set(
-            xLoader->loadComponentFromURL( GetSharedFileURL(), OUString( "_blank" ), 0, aArgs ),
+            xLoader->loadComponentFromURL( GetSharedFileURL(), "_blank", 0, aArgs ),
             uno::UNO_QUERY_THROW );
         SC_MOD()->SetInSharedDocLoading( false );
     }

@@ -2257,7 +2257,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
         bLoaded = aModule.load(sFilterLib);
     if (bLoaded)
     {
-        oslGenericFunction fn = aModule.getFunctionSymbol( OUString( "ScFilterCreate" ) );
+        oslGenericFunction fn = aModule.getFunctionSymbol( "ScFilterCreate" );
         if (fn != NULL)
             plugin = reinterpret_cast<FilterFn>(fn)();
     }

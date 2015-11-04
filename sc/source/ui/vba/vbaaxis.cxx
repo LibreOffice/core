@@ -588,7 +588,7 @@ ScVbaAxis::getScaleType(  ) throw (script::BasicErrorException, uno::RuntimeExce
         if (isValueAxis())
         {
             bool bisLogarithmic = false;
-            mxPropertySet->getPropertyValue( OUString( OUString("Logarithmic")) ) >>= bisLogarithmic;
+            mxPropertySet->getPropertyValue( "Logarithmic" ) >>= bisLogarithmic;
             if (bisLogarithmic)
                 nScaleType = xlScaleLogarithmic;
             else

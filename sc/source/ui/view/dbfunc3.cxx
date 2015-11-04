@@ -2029,7 +2029,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
         if (!xPropSet.is())
             continue;
 
-        Any any = xPropSet->getPropertyValue( OUString(SC_UNO_DP_NUMBERFO) );
+        Any any = xPropSet->getPropertyValue( SC_UNO_DP_NUMBERFO );
         sal_Int32 nNumFmt = 0;
         if (!(any >>= nNumFmt))
             continue;

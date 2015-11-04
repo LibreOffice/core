@@ -48,7 +48,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
-                        xEnAc->createContentEnumeration( OUString(SCSOLVER_SERVICE) );
+                        xEnAc->createContentEnumeration( SCSOLVER_SERVICE );
         if ( xEnum.is() )
         {
             sal_Int32 nCount = 0;
@@ -98,7 +98,7 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const OUString& rImplNam
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
-                        xEnAc->createContentEnumeration( OUString(SCSOLVER_SERVICE) );
+                        xEnAc->createContentEnumeration( SCSOLVER_SERVICE );
         if ( xEnum.is() )
         {
             while ( xEnum->hasMoreElements() && !xSolver.is() )
