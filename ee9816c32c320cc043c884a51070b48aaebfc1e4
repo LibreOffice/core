@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_b8178153",
+        "filename": "sal/CppunitTest_sal_rtl_ref.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-04T09:19:13Z",
+      "side": 1,
+      "message": "the spaces and tabs in this file need cleaning up",
+      "revId": "ee9816c32c320cc043c884a51070b48aaebfc1e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_981c3d79",
+        "filename": "sal/qa/rtl/ref/rtl_ref.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-04T09:19:13Z",
+      "side": 1,
+      "message": "is this the right license header for this file?",
+      "revId": "ee9816c32c320cc043c884a51070b48aaebfc1e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
