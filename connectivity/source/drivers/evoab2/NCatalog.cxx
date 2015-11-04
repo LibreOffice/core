@@ -44,8 +44,8 @@ void OEvoabCatalog::refreshTables()
     TStringVector aVector;
     Sequence< OUString > aTypes(1);
     aTypes[0] = "TABLE";
-    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        OUString("%"),OUString("%"),aTypes);
+    Reference< XResultSet > xResult = m_xMetaData->getTables(
+        Any(), "%", "%", aTypes);
 
     if(xResult.is())
     {
