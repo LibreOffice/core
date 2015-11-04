@@ -410,7 +410,7 @@ void DesktopLOKTest::testCommandResult()
     // the condition var.
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
-    m_aCommandResultCondition.wait(aTimeValue);
+    m_aCommandResultCondition.wait(&aTimeValue);
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
 
@@ -419,7 +419,7 @@ void DesktopLOKTest::testCommandResult()
 
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", 0, true);
-    m_aCommandResultCondition.wait(aTimeValue);
+    m_aCommandResultCondition.wait(&aTimeValue);
 
     boost::property_tree::ptree aTree;
     std::stringstream aStream(m_aCommandResult.getStr());
