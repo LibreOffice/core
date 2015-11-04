@@ -28,8 +28,6 @@
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
-#include <boost/noncopyable.hpp>
-
 namespace com { namespace sun { namespace star { namespace text {
 
 class XTextContent;
