@@ -930,8 +930,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
                 Reference< chart2::data::XDataSequence > xSequence( aSequences[nI]->getValues());
                 Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
                 OUString aRole;
-                if( ( xSeqProp->getPropertyValue(
-                          OUString(  "Role" )) >>= aRole ) &&
+                if( ( xSeqProp->getPropertyValue( "Role" ) >>= aRole ) &&
                     aRole.match( aRolePrefix ))
                 {
                     aResult.push_back( xSequence );
@@ -1311,8 +1310,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
             Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
             if( xPropSet.is())
             {
-                Any aAny( xPropSet->getPropertyValue(
-                    OUString(  "String" )));
+                Any aAny( xPropSet->getPropertyValue( "String" ));
                 OUString aText;
                 aAny >>= aText;
                 exportText( aText );
@@ -1353,8 +1351,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
             Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
             if( xPropSet.is())
             {
-                Any aAny( xPropSet->getPropertyValue(
-                    OUString(  "String" )));
+                Any aAny( xPropSet->getPropertyValue( "String" ));
                 OUString aText;
                 aAny >>= aText;
                 exportText( aText );
@@ -1889,11 +1886,9 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                     {
                         bool bFirstCol = false, bFirstRow = false;
 
-                        aAny = xDocProp->getPropertyValue(
-                            OUString(  "DataSourceLabelsInFirstColumn" ));
+                        aAny = xDocProp->getPropertyValue( "DataSourceLabelsInFirstColumn" );
                         aAny >>= bFirstCol;
-                        aAny = xDocProp->getPropertyValue(
-                            OUString(  "DataSourceLabelsInFirstRow" ));
+                        aAny = xDocProp->getPropertyValue( "DataSourceLabelsInFirstRow" );
                         aAny >>= bFirstRow;
 
                         if( bFirstCol || bFirstRow )
@@ -2182,8 +2177,7 @@ void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XProperty
     if( bExportContent )
     {
         OUString aText;
-        Any aAny( rTitleProps->getPropertyValue(
-            OUString(  "String" )));
+        Any aAny( rTitleProps->getPropertyValue( "String" ));
         aAny >>= aText;
 
         Reference< drawing::XShape > xShape( rTitleProps, uno::UNO_QUERY );
@@ -2666,12 +2660,10 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 // determine attached axis
                                 try
                                 {
-                                    Any aAny( xPropSet->getPropertyValue(
-                                                  OUString(  "Axis" )));
+                                    Any aAny( xPropSet->getPropertyValue( "Axis" ));
                                     aAny >>= nAttachedAxis;
 
-                                    aAny = xPropSet->getPropertyValue(
-                                        OUString(  "MeanValue" ));
+                                    aAny = xPropSet->getPropertyValue( "MeanValue" );
                                     aAny >>= bHasMeanValueLine;
                                 }
                                 catch( const beans::UnknownPropertyException & rEx )
@@ -2827,8 +2819,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         Reference< beans::XPropertySet > xStatProp;
                         try
                         {
-                            Any aPropAny( xPropSet->getPropertyValue(
-                                            OUString(  "DataMeanValueProperties" )));
+                            Any aPropAny( xPropSet->getPropertyValue( "DataMeanValueProperties" ));
                             aPropAny >>= xStatProp;
                         }
                         catch( const uno::Exception & rEx )
@@ -3009,7 +3000,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 
                         // export position
                         chart2::RelativePosition aRelativePosition;
-                        if( xEquationProperties->getPropertyValue(OUString( "RelativePosition")) >>= aRelativePosition )
+                        if( xEquationProperties->getPropertyValue( "RelativePosition" ) >>= aRelativePosition )
                         {
                             double fX = aRelativePosition.Primary * rPageSize.Width;
                             double fY = aRelativePosition.Secondary * rPageSize.Height;
@@ -3628,8 +3619,7 @@ void SchXMLExport::_ExportContent()
             Reference< lang::XServiceInfo > xServ( xChartDoc, uno::UNO_QUERY );
             if( xServ.is())
             {
-                if( xServ->supportsService(
-                        OUString( "com.sun.star.chart.ChartTableAddressSupplier" )))
+                if( xServ->supportsService( "com.sun.star.chart.ChartTableAddressSupplier" ))
                 {
                     Reference< beans::XPropertySet > xProp( xServ, uno::UNO_QUERY );
                     if( xProp.is())
@@ -3638,14 +3628,12 @@ void SchXMLExport::_ExportContent()
                         try
                         {
                             OUString sChartAddress;
-                            aAny = xProp->getPropertyValue(
-                                OUString( "ChartRangeAddress" ));
+                            aAny = xProp->getPropertyValue( "ChartRangeAddress" );
                             aAny >>= sChartAddress;
                             maExportHelper->m_pImpl->SetChartRangeAddress( sChartAddress );
 
                             OUString sTableNumberList;
-                            aAny = xProp->getPropertyValue(
-                                OUString( "TableNumberList" ));
+                            aAny = xProp->getPropertyValue( "TableNumberList" );
                             aAny >>= sTableNumberList;
                             maExportHelper->m_pImpl->SetTableNumberList( sTableNumberList );
 

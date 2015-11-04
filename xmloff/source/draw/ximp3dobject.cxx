@@ -374,7 +374,7 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
                 // set polygon data
                 uno::Any aAny;
                 aAny <<= xPolyPolygon3D;
-                xPropSet->setPropertyValue(OUString("D3DPolyPolygon3D"), aAny);
+                xPropSet->setPropertyValue("D3DPolyPolygon3D", aAny);
             }
             else
             {

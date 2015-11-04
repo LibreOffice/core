@@ -1370,8 +1370,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
             Any aAny;
             aAny <<= GetXMLToken( eClass );
-            xConvPropSet->setPropertyValue(
-                    OUString("Class"), aAny );
+            xConvPropSet->setPropertyValue( "Class", aAny );
 
             Reference< XPropertySet > xPropSet =
                 mxExportInfo.is()

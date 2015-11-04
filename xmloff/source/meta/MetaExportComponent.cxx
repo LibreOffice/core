@@ -92,8 +92,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 
             uno::Any aAny;
             aAny <<= GetXMLToken( XML_TEXT );
-            xConvPropSet->setPropertyValue(
-                    OUString("Class"), aAny );
+            xConvPropSet->setPropertyValue("Class", aAny );
 
             uno::Reference< beans::XPropertySet > xPropSet =
                 getExportInfo().is()

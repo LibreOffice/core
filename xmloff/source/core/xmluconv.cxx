@@ -301,7 +301,7 @@ bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <com::
     if (xNumberFormatsSupplier.is())
     {
         const com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
-        return xPropertySet.is() && (xPropertySet->getPropertyValue(OUString(XML_NULLDATE)) >>= m_pImpl->m_aNullDate);
+        return xPropertySet.is() && (xPropertySet->getPropertyValue(XML_NULLDATE) >>= m_pImpl->m_aNullDate);
     }
     return false;
 }

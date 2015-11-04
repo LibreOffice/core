@@ -226,10 +226,10 @@ bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nN
             try
             {
                 uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
-                if ( xNumberPropertySet->getPropertyValue(OUString(XML_CURRENCYSYMBOL)) >>= sCurrencySymbol)
+                if ( xNumberPropertySet->getPropertyValue(XML_CURRENCYSYMBOL) >>= sCurrencySymbol)
                 {
                     OUString sCurrencyAbbreviation;
-                    if ( xNumberPropertySet->getPropertyValue(OUString(XML_CURRENCYABBREVIATION)) >>= sCurrencyAbbreviation)
+                    if ( xNumberPropertySet->getPropertyValue(XML_CURRENCYABBREVIATION) >>= sCurrencyAbbreviation)
                     {
                         if ( !sCurrencyAbbreviation.isEmpty())
                             sCurrencySymbol = sCurrencyAbbreviation;
@@ -263,9 +263,9 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
             try
             {
                 uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
-                xNumberPropertySet->getPropertyValue(OUString(XML_STANDARDFORMAT)) >>= bIsStandard;
+                xNumberPropertySet->getPropertyValue(XML_STANDARDFORMAT) >>= bIsStandard;
                 sal_Int16 nNumberType = sal_Int16();
-                if ( xNumberPropertySet->getPropertyValue(OUString(XML_TYPE)) >>= nNumberType )
+                if ( xNumberPropertySet->getPropertyValue(XML_TYPE) >>= nNumberType )
                 {
                     return nNumberType;
                 }
