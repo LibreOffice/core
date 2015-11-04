@@ -25,6 +25,24 @@ SCPDEFS=""
 GIT_NEEDED_SUBMODULES=""
 LO_PATH= # used by path_munge to construct a PATH variable
 
+FilterLibs()
+{
+    filteredlibs=
+    for f in $1; do
+        case "$f" in
+            # let's start with Fedora's paths for now
+            -L/lib|-L/lib/|-L/lib64|-L/lib64/|-L/usr/lib|-L/usr/lib/|-L/usr/lib64|-L/usr/lib64/)
+                # ignore it: on UNIXoids it is searched by default anyway
+                # but if it's given explicitly then it may override other paths
+                # (on Mac OS X it would be an error to use it instead of SDK)
+                ;;
+            *)
+                filteredlibs="$filteredlibs $f"
+                ;;
+        esac
+    done
+}
+
 PathFormat()
 {
     formatted_path="$1"
@@ -4793,6 +4811,8 @@ AC_SUBST(ENABLE_CUPS)
 if test "$test_fontconfig" = "yes"; then
     PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.4.1])
     SYSTEM_FONTCONFIG=TRUE
+    FilterLibs "${FONTCONFIG_LIBS}"
+    FONTCONFIG_LIBS="${filteredlibs}"
 fi
 AC_SUBST(FONTCONFIG_CFLAGS)
 AC_SUBST(FONTCONFIG_LIBS)
@@ -7597,6 +7617,8 @@ if test "$with_system_clucene" = "yes"; then
     SYSTEM_CLUCENE=TRUE
     PKG_CHECK_MODULES(CLUCENE, libclucene-core)
     CLUCENE_CFLAGS=[$(printf '%s' "$CLUCENE_CFLAGS" | sed -e 's@-I[^ ]*/CLucene/ext@@' -e "s/-I/${ISYSTEM?}/g")]
+    FilterLibs "${CLUCENE_LIBS}"
+    CLUCENE_LIBS="${filteredlibs}"
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     save_CPPFLAGS=$CPPFLAGS
@@ -7766,6 +7788,8 @@ if test  "$test_freetype" = "yes"; then
     # 9.9.3 is 2.2.0
     PKG_CHECK_MODULES(FREETYPE, freetype2 >= 9.9.3)
     FREETYPE_CFLAGS=$(printf '%s' "$FREETYPE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${FREETYPE_LIBS}"
+    FREETYPE_LIBS="${filteredlibs}"
     SYSTEM_FREETYPE=TRUE
     _save_libs="$LIBS"
     _save_cflags="$CFLAGS"
@@ -7824,8 +7848,12 @@ if test "$with_system_libxml" = "yes"; then
     else
         PKG_CHECK_MODULES(LIBXSLT, libxslt)
         LIBXSLT_CFLAGS=$(printf '%s' "$LIBXSLT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${LIBXSLT_LIBS}"
+        LIBXSLT_LIBS="${filteredlibs}"
         PKG_CHECK_MODULES(LIBEXSLT, libexslt)
         LIBEXSLT_CFLAGS=$(printf '%s' "$LIBEXSLT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${LIBEXSLT_LIBS}"
+        LIBEXSLT_LIBS="${filteredlibs}"
     fi
 
     dnl Check for xsltproc
@@ -7881,6 +7909,8 @@ if test "$with_system_libxml" = "yes"; then
     else
         PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.0)
         LIBXML_CFLAGS=$(printf '%s' "$LIBXML_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${LIBXML_LIBS}"
+        LIBXML_LIBS="${filteredlibs}"
     fi
 
     dnl Check for xmllint
@@ -8033,6 +8063,8 @@ if test $enable_python = system; then
             PYTHON_CFLAGS="-I$python_include"
             PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
         fi
+        FilterLibs "${PYTHON_LIBS}"
+        PYTHON_LIBS="${filteredlibs}"
     else
         dnl How to find out the cross-compilation Python installation path?
         dnl Let's hardocode what we know for different distributions for now...
@@ -8201,6 +8233,8 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
             MARIADB_LIBS=$(printf '%s' "$MARIADB_LIBS" \
                 | sed -e 's|/lib64/|/lib/|')
         fi
+        FilterLibs "${MARIADB_LIBS}"
+        MARIADB_LIBS="${filteredlibs}"
         AC_MSG_RESULT([includes '$MARIADB_CFLAGS', libraries '$MARIADB_LIBS'])
         AC_MSG_CHECKING([whether to bundle the MySQL/MariaDB client library])
         if test "$enable_bundle_mariadb" = "yes"; then
@@ -8387,6 +8421,8 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         fi
         POSTGRESQL_INC=-I$(${PGCONFIG} --includedir)
         POSTGRESQL_LIB="-L$(${PGCONFIG} --libdir)"
+        FilterLibs "${POSTGRESQL_LIB}"
+        POSTGRESQL_LIB="${filteredlibs}"
     else
         # if/when anything else than PostgreSQL uses Kerberos,
         # move this out of `test "x$enable_postgresql_sdbc" != "xno"'
@@ -8541,6 +8577,8 @@ if test "$enable_firebird_sdbc" = "yes" ; then
             AC_MSG_CHECKING([for Firebird Client library])
             FIREBIRD_CFLAGS=`$FIREBIRDCONFIG --cflags`
             FIREBIRD_LIBS=`$FIREBIRDCONFIG --embedlibs`
+            FilterLibs "${FIREBIRD_LIBS}"
+            FIREBIRD_LIBS="${filteredlibs}"
         fi
         AC_MSG_RESULT([includes `$FIREBIRD_CFLAGS', libraries `$FIREBIRD_LIBS'])
         AC_MSG_CHECKING([Firebird version])
@@ -8626,6 +8664,8 @@ if test "$with_system_curl" = "yes"; then
             AC_MSG_ERROR([curl development files not found])
         fi
         CURL_LIBS=`$CURLCONFIG --libs`
+        FilterLibs "${CURL_LIBS}"
+        CURL_LIBS="${filteredlibs}"
         CURL_CFLAGS=$("$CURLCONFIG" --cflags | sed -e "s/-I/${ISYSTEM?}/g")
         curl_version=`$CURLCONFIG --version | $SED -e 's/^libcurl //'`
 
@@ -8711,6 +8751,9 @@ if test "$with_system_boost" = "yes"; then
     fi
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
+    # this is in m4/ax_boost_base.m4
+    FilterLibs "${BOOST_LDFLAGS}"
+    BOOST_LDFLAGS="${filteredlibs}"
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"
@@ -9214,6 +9257,8 @@ if test "$USING_X11" = TRUE -a  "$test_xrender" = "yes"; then
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES(XRENDER, xrender)
     XRENDER_CFLAGS=$(printf '%s' "$XRENDER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${XRENDER_LIBS}"
+    XRENDER_LIBS="${filteredlibs}"
     AC_CHECK_LIB([Xrender], [XRenderQueryVersion], [:],
       [AC_MSG_ERROR(libXrender not found or functional)], [])
     AC_CHECK_HEADER(X11/extensions/Xrender.h, [],
@@ -9246,6 +9291,8 @@ if test "$USING_X11" = TRUE -a "$test_randr" = "yes" -a \( "$enable_randr" = "ye
             ENABLE_RANDR="TRUE"
         fi
         XRANDR_CFLAGS=$(printf '%s' "$XRANDR_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${XRANDR_LIBS}"
+        XRANDR_LIBS="${filteredlibs}"
     fi
 else
     ENABLE_RANDR=""
@@ -9399,6 +9446,8 @@ if test "$WITH_WEBDAV" = "neon" -a "$with_system_neon" = no -a "$enable_openssl"
     PKG_CHECK_MODULES(GNUTLS, [gnutls],,
         AC_MSG_ERROR([[Disabling OpenSSL was requested, but GNUTLS is not
                       available in the system to use as replacement.]]))
+    FilterLibs "${LIBGCRYPT_LIBS}"
+    LIBGCRYPT_LIBS="${filteredlibs}"
 else
     AC_MSG_RESULT([no])
 fi
@@ -9450,6 +9499,8 @@ if test "$with_system_hunspell" = "yes"; then
     AC_LANG_POP([C++])
     libo_MINGW_CHECK_DLL([libhunspell-1.3])
     HUNSPELL_CFLAGS=$(printf '%s' "$HUNSPELL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${HUNSPELL_LIBS}"
+    HUNSPELL_LIBS="${filteredlibs}"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=
@@ -9526,6 +9577,8 @@ if test "$with_system_mythes" = "yes"; then
     AC_LANG_POP([C++])
     libo_MINGW_CHECK_DLL([libmythes-1.2])
     MYTHES_CFLAGS=$(printf '%s' "$MYTHES_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${MYTHES_LIBS}"
+    MYTHES_LIBS="${filteredlibs}"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MYTHES=
@@ -9550,8 +9603,10 @@ if test "$enable_coinmp" != "no"; then
     ENABLE_COINMP=TRUE
     AC_MSG_RESULT([yes])
     if test "$with_system_coinmp" = "yes"; then
-    SYSTEM_COINMP=TRUE
-    PKG_CHECK_MODULES( COINMP, coinmp )
+        SYSTEM_COINMP=TRUE
+        PKG_CHECK_MODULES( COINMP, coinmp )
+        FilterLibs "${COINMP_LIBS}"
+        COINMP_LIBS="${filteredlibs}"
     else
         BUILD_TYPE="$BUILD_TYPE COINMP"
     fi
@@ -9983,6 +10038,8 @@ if test "x$enable_gtk3" = "xyes"; then
         AC_MSG_ERROR([gtk3 or dependent libraries of the correct versions, not found])
     fi
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${GTK3_LIBS}"
+    GTK3_LIBS="${filteredlibs}"
 fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
@@ -10047,6 +10104,8 @@ if test "$test_dbus" = "yes"; then
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= 0.70)
     DBUS_CFLAGS=$(printf '%s' "$DBUS_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${DBUS_LIBS}"
+    DBUS_LIBS="${filteredlibs}"
 else
     AC_MSG_RESULT([no])
 fi
@@ -10144,9 +10203,13 @@ if test  "$test_gtk" = "yes"; then
     if test "$ENABLE_GTK" = "TRUE"; then
         PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.18.0 gdk-pixbuf-2.0 >= 2.2 ,,AC_MSG_ERROR([requirements to build the gtk-plugin not met. Use --disable-gtk or install the missing packages]))
         GTK_CFLAGS=$(printf '%s' "$GTK_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${GTK_LIBS}"
+        GTK_LIBS="${filteredlibs}"
         PKG_CHECK_MODULES(GTHREAD, gthread-2.0,,AC_MSG_ERROR([requirements to build the gtk-plugin not met. Use --disable-gtk or install the missing packages]))
         BUILD_TYPE="$BUILD_TYPE GTK"
         GTHREAD_CFLAGS=$(printf '%s' "$GTK_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${GTHREAD_LIBS}"
+        GTHREAD_LIBS="${filteredlibs}"
 
         if test "x$enable_systray" = "xyes"; then
             ENABLE_SYSTRAY_GTK="TRUE"
@@ -10157,6 +10220,8 @@ if test  "$test_gtk" = "yes"; then
                           [ENABLE_GTK_PRINT="TRUE"],
                           [ENABLE_GTK_PRINT=""])
         GTK_PRINT_CFLAGS=$(printf '%s' "$GTK_PRINT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${GTK_PRINT_LIBS}"
+        GTK_PRINT_LIBS="${filteredlibs}"
 
         AC_MSG_CHECKING([whether to enable GIO support])
         if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
@@ -10166,6 +10231,8 @@ if test  "$test_gtk" = "yes"; then
             if test "$ENABLE_GIO" = "TRUE"; then
                 AC_DEFINE(ENABLE_GIO)
                 GIO_CFLAGS=$(printf '%s' "$GIO_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+                FilterLibs "${GIO_LIBS}"
+                GIO_LIBS="${filteredlibs}"
             fi
         else
             AC_MSG_RESULT([no])
@@ -10200,6 +10267,8 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_telepathy" = "yes"; 
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( TELEPATHY, telepathy-glib >= 0.18.0 glib-2.0 gobject-2.0 gthread-2.0 gio-2.0 gtk+-2.0 >= 2.18.0 )
     TELEPATHY_CFLAGS=$(printf '%s' "$TELEPATHY_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${TELEPATHY_LIBS}"
+    TELEPATHY_LIBS="${filteredlibs}"
 else
     AC_MSG_RESULT([no])
 fi
@@ -10255,6 +10324,8 @@ if test "$build_gstreamer_1_0" = "yes"; then
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( [GSTREAMER_1_0], [gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-pbutils-1.0 gstreamer-video-1.0] )
         GSTREAMER_1_0_CFLAGS=$(printf '%s' "$GSTREAMER_1_0_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${GSTREAMER_1_0_LIBS}"
+        GSTREAMER_1_0_LIBS="${filteredlibs}"
     else
         AC_MSG_RESULT([no])
     fi
@@ -10275,6 +10346,8 @@ if test "$build_gstreamer_0_10" = "yes"; then
             PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-pbutils-0.10] )
         ])
         GSTREAMER_0_10_CFLAGS=$(printf '%s' "$GSTREAMER_0_10_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${GSTREAMER_0_10_LIBS}"
+        GSTREAMER_0_10_LIBS="${filteredlibs}"
     else
         AC_MSG_RESULT([no])
     fi
@@ -10368,6 +10441,8 @@ if test "x$enable_gltf" != "xno" -a $_os != iOS -a $_os != Android; then
     if test "$with_system_libgltf" = "yes"; then
         SYSTEM_LIBGLTF=TRUE
         PKG_CHECK_MODULES( LIBGLTF, [libgltf-0.0 >= 0.0.1] )
+        FilterLibs "${LIBGLTF_LIBS}"
+        LIBGLTF_LIBS="${filteredlibs}"
     else
         BUILD_TYPE="$BUILD_TYPE LIBGLTF"
     fi
@@ -10412,6 +10487,8 @@ if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE"; then
         CPPFLAGS=$save_CPPFLAGS
         AC_LANG_POP([C++])
         OPENCOLLADA_CFLAGS=$(printf '%s' "$OPENCOLLADA_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${OPENCOLLADA_LIBS}"
+        OPENCOLLADA_LIBS="${filteredlibs}"
     else
         AC_MSG_RESULT([internal])
         BUILD_TYPE="$BUILD_TYPE OPENCOLLADA"
@@ -10441,6 +10518,8 @@ if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE"; then
         CPPFLAGS=$save_CPPFLAGS
         AC_LANG_POP([C++])
         COLLADA2GLTF_CFLAGS=$(printf '%s' "$COLLADA2GLTF_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${COLLADA2GLTF_LIBS}"
+        COLLADA2GLTF_LIBS="${filteredlibs}"
     else
         AC_MSG_RESULT([internal])
         BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
@@ -10508,6 +10587,9 @@ if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_
         AC_LANG_POP([C++])
         libo_MINGW_CHECK_DLL([libpoppler])
         POPPLER_CFLAGS=$(printf '%s' "$POPPLER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+
+        FilterLibs "${POPPLER_LIBS}"
+        POPPLER_LIBS="${filteredlibs}"
     else
         AC_MSG_RESULT([internal])
         SYSTEM_POPPLER=
@@ -11114,6 +11196,8 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
     KDE4_CFLAGS="-I$kde_incdir $QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     KDE4_LIBS="-L$kde_libdir -lkio -lkfile -lkdeui -lkdecore -L$qt_lib_dir $QT4_LIBS"
     KDE4_CFLAGS=$(printf '%s' "$KDE4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "$KDE4_LIBS"
+    KDE4_LIBS="$filteredlibs"
 
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
@@ -11137,6 +11221,8 @@ int main(int argc, char **argv) {
             KDE_HAVE_GLIB=1
             AC_DEFINE(KDE_HAVE_GLIB,1)
             KDE_GLIB_CFLAGS=$(printf '%s' "$KDE_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+            FilterLibs "${KDE_GLIB_LIBS}"
+            KDE_GLIB_LIBS="${filteredlibs}"
 
             qt4_fix_warning=
 
@@ -11245,6 +11331,8 @@ if test "$enable_evolution2" = "yes" -o "$enable_evolution2" = "TRUE"; then
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES(GOBJECT, gobject-2.0)
     GOBJECT_CFLAGS=$(printf '%s' "$GOBJECT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${GOBJECT_LIBS}"
+    GOBJECT_LIBS="${filteredlibs}"
     ENABLE_EVOAB2="TRUE"
 else
     ENABLE_EVOAB2=""
@@ -11575,6 +11663,8 @@ if test "$ENABLE_ONLINE_UPDATE_MAR" = "TRUE"; then
         SYSTEM_BZIP2=TRUE
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES(BZIP2, bzip2)
+        FilterLibs "${BZIP2_LIBS}"
+        BZIP2_LIBS="${filteredlibs}"
     else
         AC_MSG_RESULT([no])
         BUILD_TYPE="$BUILD_TYPE BZIP2"
@@ -11698,6 +11788,8 @@ if test "$test_cairo" = "yes"; then
 
         PKG_CHECK_MODULES( CAIRO, cairo >= 1.2.0 )
         CAIRO_CFLAGS=$(printf '%s' "$CAIRO_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${CAIRO_LIBS}"
+        CAIRO_LIBS="${filteredlibs}"
 
         if test "$test_xrender" = "yes"; then
             AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
@@ -11737,6 +11829,8 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_avahi" = "yes"; then
                       [ENABLE_AVAHI="TRUE"])
     AC_DEFINE(HAVE_FEATURE_AVAHI)
     AVAHI_CFLAGS=$(printf '%s' "$AVAHI_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${AVAHI_LIBS}"
+    AVAHI_LIBS="${filteredlibs}"
 fi
 
 AC_SUBST(ENABLE_AVAHI)
@@ -11761,6 +11855,8 @@ if test "$enable_liblangtag" = "yes" -o \
         dnl cf. <https://bitbucket.org/tagoh/liblangtag/commits/9324836a0d1c> "Fix a build issue with inline keyword"
         PKG_CHECK_EXISTS([liblangtag >= 0.5.5], [], [AC_DEFINE([LIBLANGTAG_INLINE_FIX])])
         LIBLANGTAG_CFLAGS=$(printf '%s' "$LIBLANGTAG_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${LIBLANGTAG_LIBS}"
+        LIBLANGTAG_LIBS="${filteredlibs}"
         libo_MINGW_CHECK_DLL([liblangtag])
     else
         SYSTEM_LIBLANGTAG=
