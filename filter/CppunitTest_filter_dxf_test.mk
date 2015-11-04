@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_dxf_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_dxf_test, \
-	idx \
+        gie \
 	sal \
 	test \
 	tl \

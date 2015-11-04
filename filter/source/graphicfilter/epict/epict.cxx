@@ -2255,15 +2255,8 @@ bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, F
 
 // GraphicExport - the exported Function
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
-#if defined(DISABLE_DYNLOADING)
-#define GraphicExport eptGraphicExport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem )
+eptGraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     PictWriter      aPictWriter;
 

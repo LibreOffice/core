@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_psd_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_psd_test, \
-    ipd \
+    gie \
 	sal \
 	test \
 	tl \

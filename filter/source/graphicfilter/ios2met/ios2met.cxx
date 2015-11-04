@@ -2766,15 +2766,8 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
 //================== GraphicImport - the exported function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
-#if defined(DISABLE_DYNLOADING)
-#define GraphicImport imeGraphicImport
-#endif
-
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+imeGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     OS2METReader    aOS2METReader;
     GDIMetaFile     aMTF;

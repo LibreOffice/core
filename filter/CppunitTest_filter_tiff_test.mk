@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_tiff_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_tiff_test, \
-    iti \
+    gie \
 	sal \
 	test \
 	tl \

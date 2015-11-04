@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_eps_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_eps_test, \
-	ips \
+	gie \
 	sal \
 	test \
 	tl \
