@@ -2325,6 +2325,7 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
         sal_uInt16 nSize = pDoc->GetOriginalHeight(nRow, aViewData.GetTabNo());
+        long nSizePixels = ScViewData::ToPixel(nSize, aViewData.GetPPTY());
         OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
 
         bool bSkip = false;
@@ -2338,22 +2339,13 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
         }
         if (!bSkip)
         {
-            if (aRows.empty() && nTotal > 0)
-            {
-                // The sizes are relative sizes, so include the total skipped size before the real items.
-                boost::property_tree::ptree aRow;
-                // Client is required to floor(), rather than round() the sizes in general, so add 0.5 here to have rounding.
-                aRow.put("size", OString::number(long((nTotalPixels + 0.5) / aViewData.GetPPTY())).getStr());
-                aRow.put("text", "");
-                aRows.push_back(std::make_pair("", aRow));
-            }
             boost::property_tree::ptree aRow;
-            aRow.put("size", OString::number(nSize).getStr());
+            aRow.put("size", OString::number((nTotalPixels + nSizePixels) / aViewData.GetPPTY()).getStr());
             aRow.put("text", aText.toUtf8().getStr());
             aRows.push_back(std::make_pair("", aRow));
         }
         nTotal += nSize;
-        nTotalPixels += long(nSize * aViewData.GetPPTY());
+        nTotalPixels += nSizePixels;
     }
 
     boost::property_tree::ptree aCols;
@@ -2362,6 +2354,7 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     for (SCCOL nCol = 0; nCol <= nEndCol; ++nCol)
     {
         sal_uInt16 nSize = pDoc->GetColWidth(nCol, aViewData.GetTabNo());
+        long nSizePixels = ScViewData::ToPixel(nSize, aViewData.GetPPTX());
         OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
 
         bool bSkip = false;
@@ -2375,20 +2368,13 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
         }
         if (!bSkip)
         {
-            if (aCols.empty() && nTotal > 0)
-            {
-                boost::property_tree::ptree aCol;
-                aCol.put("size", OString::number(long((nTotalPixels + 0.5) / aViewData.GetPPTX())).getStr());
-                aCol.put("text", "");
-                aCols.push_back(std::make_pair("", aCol));
-            }
             boost::property_tree::ptree aCol;
-            aCol.put("size", OString::number(nSize).getStr());
+            aCol.put("size", OString::number((nTotalPixels + nSizePixels) / aViewData.GetPPTX()).getStr());
             aCol.put("text", aText.toUtf8().getStr());
             aCols.push_back(std::make_pair("", aCol));
         }
         nTotal += nSize;
-        nTotalPixels += long(nSize * aViewData.GetPPTX());
+        nTotalPixels += nSizePixels;
     }
 
     boost::property_tree::ptree aTree;
