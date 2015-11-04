@@ -42,7 +42,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediaQuickTime_component_getFac
 
         xFactory.set( ::cppu::createSingleFactory(
                         static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        ::rtl::OUString(AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME ),
+                        AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME,
                         create_MediaPlayer, uno::Sequence< OUString >( &aServiceName, 1 ) ) );
     }
 
