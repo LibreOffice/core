@@ -639,10 +639,15 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
 
     aGrabber.seek(nPos);
     sal_Int32 nTestSig = aGrabber.ReadInt32();
-
     if (nTestSig != LOCSIG)
         throw ZipIOException("Invalid LOC header (bad signature)" );
-    sal_Int16 nVersion = aGrabber.ReadInt16();
+
+    // Ignore all (duplicated) information from the local file header.
+    // various programs produced "broken" zip files; even LO at some point.
+    // Just verify the path and calculate the data offset and otherwise
+    // rely on the central directory info.
+
+    aGrabber.ReadInt16(); //version
     aGrabber.ReadInt16(); //flag
     aGrabber.ReadInt16(); //how
     aGrabber.ReadInt32(); //time
@@ -682,18 +687,7 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
             rEntry.sPath = sLOCPath;
         }
 
-        // check basic local file header / entry consistency, just
-        // plain ignore bits 1 & 2 of the flag field - they are either
-        // purely informative, or even fully undefined (depending on
-        // nMethod)
-        // Do *not* compare nMethod / nHow, older versions with
-        // encrypted streams write mismatching DEFLATE/STORE pairs
-        // there.
-        // Do *not* compare timestamps, since MSO 2010 can produce documents
-        // with timestamp difference in the central directory entry and local
-        // file header.
-        bBroken = rEntry.nVersion != nVersion
-                        || rEntry.nPathLen != nPathLen
+        bBroken = rEntry.nPathLen != nPathLen
                         || !rEntry.sPath.equals( sLOCPath );
     }
     catch(...)
