@@ -114,8 +114,6 @@
 #define STR_3DOBJECTBARSHELL                    RID_GLOB_START+104
 #define STR_FONTWORKOBJECTBARSHELL              RID_GLOB_START+105
 
-#define STR_MASTERPAGESSELECTOR                 RID_GLOB_START+108
-
 #define STR_PAGE_NAME                           RID_GLOB_START+111
 #define STR_SLIDE_NAME                          RID_GLOB_START+112
 

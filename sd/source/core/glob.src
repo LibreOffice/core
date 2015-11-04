@@ -318,11 +318,6 @@ String STR_TASKPANELAYOUTMENU
     Text [ en-US ] = "Layout" ;
 };
 
-String STR_MASTERPAGESSELECTOR
-{
-    Text [ en-US ] = "Master Pages" ;
-};
-
 String STR_POWERPOINT_IMPORT
 {
     Text [ en-US ] = "PowerPoint Import";
