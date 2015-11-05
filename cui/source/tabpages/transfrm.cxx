@@ -633,10 +633,15 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
         SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
         if (eKind == OBJ_CUSTOMSHAPE)
         {
+            //save geometry
+            SdrCustomShapeGeometryItem aInitialGeometry =
+                static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+
             EnhancedCustomShape2d aShape(pObj);
-            Point aInitialPosition;
+
             for (int i = 0; i < 2; ++i)
             {
+                Point aInitialPosition;
                 if (!aShape.GetHandlePosition(i, aInitialPosition))
                     break;
                 m_aControlGroups[i]->Enable();
@@ -655,13 +660,9 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
                 aShape.GetHandlePosition(i, aMinPosition);
 
                 Rectangle aLogicRect = aShape.GetLogicRect();
+                aInitialPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
                 aMaxPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
                 aMinPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
-
-                aPosition.X = aInitialPosition.X();
-                aPosition.Y = aInitialPosition.Y();
-                aInitialPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
-                aShape.SetHandleControllerPosition(i, aPosition);
 
                 SetMetricValue(*m_aControlX[i], aInitialPosition.X(), ePoolUnit);
                 SetMetricValue(*m_aControlY[i], aInitialPosition.Y(), ePoolUnit);
@@ -681,6 +682,9 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
                     m_aControlY[i]->SetMax(aMaxPosition.Y(), FUNIT_MM);
                 }
             }
+
+            //restore geometry
+            pObj->SetMergedItem(aInitialGeometry);
         }
     }
     for (int i = 0; i < 2; ++i)
