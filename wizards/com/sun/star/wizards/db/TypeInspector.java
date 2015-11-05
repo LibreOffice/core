@@ -322,12 +322,9 @@ public class TypeInspector
                 int i = JavaTools.FieldInIntTable(nDataTypeInfos, curDataType, startindex);
                 startindex = i + 1;
                 bleaveloop = (i == -1);
-                if (!bleaveloop)
+                if (!bleaveloop && bisAutoIncrementableInfos[i])
                 {
-                    if (bisAutoIncrementableInfos[i])
-                    {
-                        return nDataTypeInfos[i];
-                    }
+                    return nDataTypeInfos[i];
                 }
             }
         }

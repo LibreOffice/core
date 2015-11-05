@@ -406,10 +406,8 @@ public class Format {
         if (rhs.attributes!= attributes)
                 return false;
 
-        if (rhs.sizeInPoints != 0) {
-            if (sizeInPoints != rhs.sizeInPoints)
-                return false;
-        }
+        if (rhs.sizeInPoints != 0 && sizeInPoints != rhs.sizeInPoints)
+            return false;
 
         if (fontName == null ? rhs.fontName != null : !fontName.equals(rhs.fontName))
             return false;

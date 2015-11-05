@@ -351,18 +351,15 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
 
     private void assignTableProperty(String _spropname, String _svalue)
     {
-        if (_svalue != null)
+        if (_svalue != null && !_svalue.equals(PropertyNames.EMPTY_STRING))
         {
-            if (!_svalue.equals(PropertyNames.EMPTY_STRING))
+            try
             {
-                try
-                {
-                    xPropTableDataDescriptor.setPropertyValue(_spropname, _svalue);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace(System.err);
-                }
+                xPropTableDataDescriptor.setPropertyValue(_spropname, _svalue);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace(System.err);
             }
         }
     }

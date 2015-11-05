@@ -461,10 +461,8 @@ public class TextStyle extends Style implements Cloneable {
         if (tStyle.values != values)
                 return false;
 
-        if (tStyle.sizeInPoints != 0) {
-            if (sizeInPoints != tStyle.sizeInPoints)
-                return false;
-        }
+        if (tStyle.sizeInPoints != 0 && sizeInPoints != tStyle.sizeInPoints)
+            return false;
 
         if (tStyle.fontName != null) {
             if (fontName == null)
@@ -498,29 +496,23 @@ public class TextStyle extends Style implements Cloneable {
      */
     private void writeAttributes(Element node) {
 
-        if ((mask & BOLD) != 0)
-            if ((values & BOLD) != 0)
-                node.setAttribute("fo:font-weight", "bold");
+        if ((mask & BOLD) != 0 && (values & BOLD) != 0)
+            node.setAttribute("fo:font-weight", "bold");
 
-        if ((mask & ITALIC) != 0)
-            if ((values & ITALIC) != 0)
-                node.setAttribute("fo:font-style", "italic");
+        if ((mask & ITALIC) != 0 && (values & ITALIC) != 0)
+            node.setAttribute("fo:font-style", "italic");
 
-        if ((mask & UNDERLINE) != 0)
-            if ((values & UNDERLINE) != 0)
-                node.setAttribute("style:text-underline", "single");
+        if ((mask & UNDERLINE) != 0 && (values & UNDERLINE) != 0)
+            node.setAttribute("style:text-underline", "single");
 
-        if ((mask & STRIKETHRU) != 0)
-            if ((values & STRIKETHRU) != 0)
-                node.setAttribute("style:text-crossing-out", "single-line");
+        if ((mask & STRIKETHRU) != 0 && (values & STRIKETHRU) != 0)
+            node.setAttribute("style:text-crossing-out", "single-line");
 
-        if ((mask & SUPERSCRIPT) != 0)
-            if ((values & SUPERSCRIPT) != 0)
-                node.setAttribute("style:text-position", "super 58%");
+        if ((mask & SUPERSCRIPT) != 0 && (values & SUPERSCRIPT) != 0)
+            node.setAttribute("style:text-position", "super 58%");
 
-        if ((mask & SUBSCRIPT) != 0)
-            if ((values & SUBSCRIPT) != 0)
-                node.setAttribute("style:text-position", "sub 58%");
+        if ((mask & SUBSCRIPT) != 0 && (values & SUBSCRIPT) != 0)
+            node.setAttribute("style:text-position", "sub 58%");
 
         if (sizeInPoints != 0) {
             node.setAttribute("fo:font-size", Integer.toString(sizeInPoints) + "pt");

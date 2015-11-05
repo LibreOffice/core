@@ -203,10 +203,8 @@ public final class Debug {
      * @param  msg   The message.
      */
     public static void log(int flag, String msg) {
-        if (isFlagSet(flag)) {
-            if (writer != null) {
-                writer.println(msg);
-            }
+        if (isFlagSet(flag) && writer != null) {
+            writer.println(msg);
         }
     }
 
@@ -223,12 +221,10 @@ public final class Debug {
      * @param   e     Throwable object.
      */
     public static void log(int flag, String msg, Throwable e) {
-        if (isFlagSet(flag)) {
-            if (writer != null) {
-                writer.println(msg);
-                if (e != null)
-                    e.printStackTrace(writer);
-            }
+        if (isFlagSet(flag) && writer != null) {
+            writer.println(msg);
+            if (e != null)
+                e.printStackTrace(writer);
         }
     }
 }

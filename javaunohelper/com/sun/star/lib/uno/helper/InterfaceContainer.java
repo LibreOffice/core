@@ -569,13 +569,10 @@ public class InterfaceContainer implements Cloneable
                 while (itColl.hasNext())
                 {
                     Object o= itColl.next();
-                    if (o != null)
+                    if (o != null && UnoRuntime.areSame(o, curElem))
                     {
-                        if (UnoRuntime.areSame(o, curElem))
-                        {
-                            bExists= true;
-                            break;
-                        }
+                        bExists= true;
+                        break;
                     }
                 }
             }

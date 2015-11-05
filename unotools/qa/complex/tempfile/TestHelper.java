@@ -164,11 +164,9 @@ public class TestHelper {
 
     public void KillTempFile ( String sTempFileURL, XSimpleFileAccess xSFA ) {
         try {
-            if ( sTempFileURL != null ) {
-                if ( xSFA != null ) {
-                    xSFA.kill( sTempFileURL );
-                    Message ( "Tempfile killed successfully." );
-                }
+            if ( sTempFileURL != null && xSFA != null ) {
+                xSFA.kill( sTempFileURL );
+                Message ( "Tempfile killed successfully." );
             }
         }
         catch ( Exception e ) {
@@ -180,11 +178,9 @@ public class TestHelper {
     public boolean IfTempFileExists( XSimpleFileAccess xSFA, String sTempFileURL ) {
         boolean bRet = false;
         try {
-            if ( sTempFileURL != null ) {
-                if ( xSFA != null ) {
-                    bRet = xSFA.exists( sTempFileURL );
-                    Message ( "Tempfile " + ( bRet ? "still " : "no longer " ) + "exists." );
-                }
+            if ( sTempFileURL != null && xSFA != null ) {
+                bRet = xSFA.exists( sTempFileURL );
+                Message ( "Tempfile " + ( bRet ? "still " : "no longer " ) + "exists." );
             }
         }
         catch( Exception e ) {

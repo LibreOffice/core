@@ -36,10 +36,8 @@ public class JREProperties
          try
         {
             boolean bNoAccess = false;
-            if(args.length > 0)
-            {
-                if (args[0].equals("noaccessibility"))
-                    bNoAccess = true;
+            if(args.length > 0 && args[0].equals("noaccessibility")) {
+                bNoAccess = true;
             }
 
             //We need to be able to switch this part off because

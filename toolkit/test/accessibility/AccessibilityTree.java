@@ -365,9 +365,8 @@ public class AccessibilityTree
             {
                 AccTreeNode aNode = (AccTreeNode)aObject;
                 XAccessibleContext xContext = aNode.getContext();
-                if (xContext != null)
-                    if (xContext.getAccessibleRole() >= 100)
-                        return true;
+                if (xContext != null && xContext.getAccessibleRole() >= 100)
+                    return true;
             }
             return false;
         }

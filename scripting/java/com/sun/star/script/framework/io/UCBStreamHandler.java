@@ -235,10 +235,8 @@ public class UCBStreamHandler extends URLStreamHandler {
 
             // TODO don't depend on result of available() or size()
             // just read stream 'till complete
-            if (sz == 0) {
-                if (xInputStream.available() > 0) {
-                    sz = xInputStream.available();
-                }
+            if (sz == 0 && xInputStream.available() > 0) {
+                sz = xInputStream.available();
             }
 
             LogUtils.DEBUG("size of file " + path  + " is " + sz);

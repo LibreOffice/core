@@ -68,12 +68,7 @@ public final class ConverterCapabilitiesImpl
     }
 
     public boolean canConvertAttribute(String tag, String attribute) {
-
-        if (OfficeConstants.TAG_SPACE.equals(tag)) {
-            if (OfficeConstants.ATTRIBUTE_SPACE_COUNT.equals(attribute))
-                return true;
-        }
-
-        return false;
+        return OfficeConstants.TAG_SPACE.equals(tag)
+                && OfficeConstants.ATTRIBUTE_SPACE_COUNT.equals(attribute);
     }
 }

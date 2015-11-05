@@ -140,15 +140,12 @@ public class Finalizer
         try
         {
             String sCurQueryName = AnyConverter.toString(Helper.getUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text"));
-            if (sCurQueryName != null)
+            if (sCurQueryName != null && sCurQueryName.equals(PropertyNames.EMPTY_STRING))
             {
-                if (sCurQueryName.equals(PropertyNames.EMPTY_STRING))
-                {
-                    String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
-                    sCurQueryName = resQuery + "_" + sCommandNames[0];
-                    sCurQueryName = CurDBMetaData.suggestName( CommandType.QUERY, sCurQueryName );
-                    Helper.setUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text", sCurQueryName);
-                }
+                String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
+                sCurQueryName = resQuery + "_" + sCommandNames[0];
+                sCurQueryName = CurDBMetaData.suggestName( CommandType.QUERY, sCurQueryName );
+                Helper.setUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text", sCurQueryName);
             }
             CurDBMetaData.setSummaryString();
             m_queryWizard.setControlProperty("txtSummary", "Text", CurDBMetaData.getSummaryString());

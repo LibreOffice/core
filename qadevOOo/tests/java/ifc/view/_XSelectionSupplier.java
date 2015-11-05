@@ -128,12 +128,10 @@ public class _XSelectionSupplier extends MultiMethodTest {
                         compRes = util.ValueComparer.equalValue(selections[i], curSelection);
                     }
                     log.println("selected object and current selection are equal: "+compRes);
-                    if (!compRes) {
-                        if ((selections[i]) instanceof Object[]){
-                            if (((Object[])selections[i])[0] instanceof Integer) {
-                                log.println("Getting: "+((Integer) ((Object[])curSelection)[0]).intValue());
-                                log.println("Expected: "+((Integer) ((Object[])selections[i])[0]).intValue());
-                            }
+                    if (!compRes && (selections[i]) instanceof Object[]){
+                        if (((Object[])selections[i])[0] instanceof Integer) {
+                            log.println("Getting: "+((Integer) ((Object[])curSelection)[0]).intValue());
+                            log.println("Expected: "+((Integer) ((Object[])selections[i])[0]).intValue());
                         }
                     }
                     res &= compRes;

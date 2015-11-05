@@ -203,12 +203,9 @@ public class FormConfiguration
         if (areexistingRelationsdefined())
         {
             short[] iselected = (short[]) Helper.getUnoArrayPropertyValue(UnoDialog.getModel(lstRelations), PropertyNames.SELECTED_ITEMS);
-            if (iselected != null)
+            if (iselected != null && iselected.length > 0)
             {
-                if (iselected.length > 0)
-                {
-                    return sreferencedTables[iselected[0]];
-                }
+                return sreferencedTables[iselected[0]];
             }
         }
         return PropertyNames.EMPTY_STRING;

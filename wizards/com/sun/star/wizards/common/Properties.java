@@ -72,15 +72,12 @@ public class Properties extends HashMap<String,Object>
     public static PropertyValue[] convertToPropertyValueArray(Object[] _oObjectArray)
     {
         PropertyValue[] retproperties = null;
-        if (_oObjectArray != null)
+        if (_oObjectArray != null && _oObjectArray.length > 0)
         {
-            if (_oObjectArray.length > 0)
+            retproperties = new PropertyValue[_oObjectArray.length];
+            for (int i = 0; i < _oObjectArray.length; i++)
             {
-                retproperties = new PropertyValue[_oObjectArray.length];
-                for (int i = 0; i < _oObjectArray.length; i++)
-                {
-                    retproperties[i] = (PropertyValue) _oObjectArray[i];
-                }
+                retproperties[i] = (PropertyValue) _oObjectArray[i];
             }
         }
         return retproperties;

@@ -61,11 +61,9 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
      */
     public byte[] getBinaryData() {
 
-        if (objData == null) {
-            // See if we came from a Zip file
-            if (zipFile != null) {
-                objData = zipFile.getNamedBytes(objName);
-            }
+        // See if we came from a Zip file
+        if (objData == null && zipFile != null) {
+            objData = zipFile.getNamedBytes(objName);
         }
 
         return objData;

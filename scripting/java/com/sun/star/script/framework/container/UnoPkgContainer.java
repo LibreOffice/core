@@ -98,25 +98,23 @@ public class UnoPkgContainer extends ParcelContainer {
             try {
                 DeployedUnoPackagesDB db = getUnoPackagesDB();
 
-                if (db != null) {
-                    if (db.removePackage(language, url)) {
-                        writeUnoPackageDB(db);
-                        ParcelContainer container = registeredPackages.get(url);
+                if (db != null && db.removePackage(language, url)) {
+                    writeUnoPackageDB(db);
+                    ParcelContainer container = registeredPackages.get(url);
 
-                        if (!container.hasElements()) {
-                            // When all libraries within a package bundle
-                            // ( for this language ) are removed also
-                            // remove the container from its parent
-                            // Otherwise, a container ( with no containees )
-                            // representing the uno package bundle will
-                            // still exist and so will get displayed
-                            if (container.parent() != null) {
-                                container.parent().removeChildContainer(container);
-                            }
+                    if (!container.hasElements()) {
+                        // When all libraries within a package bundle
+                        // ( for this language ) are removed also
+                        // remove the container from its parent
+                        // Otherwise, a container ( with no containees )
+                        // representing the uno package bundle will
+                        // still exist and so will get displayed
+                        if (container.parent() != null) {
+                            container.parent().removeChildContainer(container);
                         }
-
-                        registeredPackages.remove(url);
                     }
+
+                    registeredPackages.remove(url);
                 }
             } catch (Exception e) {
                 //TODO revisit exception handling and exception here

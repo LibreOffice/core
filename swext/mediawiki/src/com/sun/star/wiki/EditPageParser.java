@@ -130,24 +130,18 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
         else if ( t == HTML.Tag.TEXTAREA )
         {
             String sName = ( String ) a.getAttribute( HTML.Attribute.NAME );
-            if ( sName != null )
+            if ( sName != null && sName.equalsIgnoreCase( "wpTextbox1" ) )
             {
-                if ( sName.equalsIgnoreCase( "wpTextbox1" ) )
-                {
-                    m_nWikiArticleStart = pos;
-                }
+                m_nWikiArticleStart = pos;
             }
         }
         else if ( t == HTML.Tag.DIV )
         {
             String sId = ( String ) a.getAttribute( HTML.Attribute.ID );
             sClass = ( String ) a.getAttribute( HTML.Attribute.CLASS );
-            if ( sId != null )
+            if ( sId != null  && sId.equalsIgnoreCase( "contentSub" ) )
             {
-                if ( sId.equalsIgnoreCase( "contentSub" ) )
-                {
-                    m_bHTMLStartFound = true;
-                }
+                m_bHTMLStartFound = true;
             }
             if ( sClass != null )
             {

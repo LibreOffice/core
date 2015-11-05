@@ -95,22 +95,19 @@ public abstract class DBLimitedFieldSelection
     {
         short[] SelList = null;
         Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.STRING_ITEM_LIST, _AllFieldNames);
-        if (_SelFieldNames != null)
+        if (_SelFieldNames != null && curindex < _SelFieldNames.length)
         {
-            if (curindex < _SelFieldNames.length)
+            int index = JavaTools.FieldInList(_AllFieldNames, _SelFieldNames[curindex]);
+            if (index > -1)
             {
-                int index = JavaTools.FieldInList(_AllFieldNames, _SelFieldNames[curindex]);
-                if (index > -1)
-                {
-                    SelList = new short[] { (short) (index) };
-                }
-                else
-                {
-                    SelList = new short[] { (short) (0) };
-                }
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.SELECTED_ITEMS, SelList);
-                return;
+                SelList = new short[] { (short) (index) };
             }
+            else
+            {
+                SelList = new short[] { (short) (0) };
+            }
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.SELECTED_ITEMS, SelList);
+            return;
         }
         SelList = new short[] { (short) (0) };
         Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.SELECTED_ITEMS, SelList);

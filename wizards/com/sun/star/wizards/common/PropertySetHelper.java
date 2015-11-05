@@ -167,12 +167,9 @@ public class PropertySetHelper
                 DebugHelper.writeInfo(e.getMessage());
             }
         }
-        if (aObject == null)
+        if (aObject == null && getHashMap().containsKey(_sName))
         {
-            if (getHashMap().containsKey(_sName))
-            {
-                aObject = getHashMap().get(_sName);
-            }
+            aObject = getHashMap().get(_sName);
         }
         if (aObject != null)
         {

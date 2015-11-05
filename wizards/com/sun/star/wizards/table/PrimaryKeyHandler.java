@@ -224,13 +224,10 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         fieldnames = curTableDescriptor.getNonBinaryFieldNames();
         String[] skeyfieldnames = curPrimaryKeySelection.getSelectedFieldNames();
         curPrimaryKeySelection.initialize(fieldnames, false);
-        if (skeyfieldnames != null)
+        if (skeyfieldnames != null && skeyfieldnames.length > 0)
         {
-            if (skeyfieldnames.length > 0)
-            {
-                String[] snewkeyfieldnames = JavaTools.removeOutdatedFields(skeyfieldnames, fieldnames);
-                curPrimaryKeySelection.setSelectedFieldNames(snewkeyfieldnames);
-            }
+            String[] snewkeyfieldnames = JavaTools.removeOutdatedFields(skeyfieldnames, fieldnames);
+            curPrimaryKeySelection.setSelectedFieldNames(snewkeyfieldnames);
         }
         String selfield = lstSinglePrimeKey.getSelectedItem();
         Helper.setUnoPropertyValue(UnoDialog.getModel(lstSinglePrimeKey), PropertyNames.STRING_ITEM_LIST, fieldnames);
@@ -313,12 +310,9 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         try
         {
             XPropertySet xColPropertySet = curTableDescriptor.getByName(_fieldname);
-            if (xColPropertySet != null)
+            if (xColPropertySet != null && curTableDescriptor.getDBDataTypeInspector() != null)
             {
-                if (curTableDescriptor.getDBDataTypeInspector() != null)
-                {
-                    return curTableDescriptor.getDBDataTypeInspector().isAutoIncrementable(xColPropertySet);
-                }
+                return curTableDescriptor.getDBDataTypeInspector().isAutoIncrementable(xColPropertySet);
             }
         }
         catch (Exception e)

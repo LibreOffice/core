@@ -115,8 +115,7 @@ class AccessibleComponentHandler
     public void update (AccessibleTreeNode aNode)
     {
         maChildList.clear();
-        if (aNode instanceof AccTreeNode)
-            if (((AccTreeNode)aNode).getComponent() != null)
-                maChildList.setSize (4);
+        if (aNode instanceof AccTreeNode && ((AccTreeNode)aNode).getComponent() != null)
+            maChildList.setSize (4);
     }
 }

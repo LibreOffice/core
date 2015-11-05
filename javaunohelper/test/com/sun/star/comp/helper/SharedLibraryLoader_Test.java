@@ -61,9 +61,8 @@ public class SharedLibraryLoader_Test {
         sharedLibraryLoader = null;
         System.out.println("*******************************************************************");
         System.out.println("Test: <<< instantiate SharedLibraryLoader >>>");
-        if ( sharedLibraryLoaderFactory == null )
-            if ( ! test_getSharedLibraryLoaderFactory() )
-                return false;
+        if ( sharedLibraryLoaderFactory == null && ! test_getSharedLibraryLoaderFactory() )
+            return false;
 
         sharedLibraryLoader = UnoRuntime.queryInterface(
                 XImplementationLoader.class, sharedLibraryLoaderFactory.createInstance() );
@@ -83,9 +82,8 @@ public class SharedLibraryLoader_Test {
 
         System.out.println("*******************************************************************");
         System.out.println("Test: <<< load native ServiceManager >>>");
-        if ( sharedLibraryLoader == null )
-            if ( ! test_instantiateSharedLibraryLoader() )
-                return false;
+        if ( sharedLibraryLoader == null && ! test_instantiateSharedLibraryLoader() )
+            return false;
 
         System.err.println("- get the native ServiceManger factory");
         XSingleServiceFactory aSMgrFac =
@@ -108,9 +106,8 @@ public class SharedLibraryLoader_Test {
     {
         System.out.println("*******************************************************************");
         System.out.println("Test: <<< load native SimpleRegistry >>>");
-        if ( sharedLibraryLoader == null )
-            if ( ! test_instantiateSharedLibraryLoader() )
-                return false;
+        if ( sharedLibraryLoader == null && ! test_instantiateSharedLibraryLoader() )
+            return false;
 
         System.err.println("- get factory of the Registry");
         XSingleServiceFactory aRegFac =
@@ -134,9 +131,8 @@ public class SharedLibraryLoader_Test {
         System.out.println("*******************************************************************");
         System.out.println("Test: <<< register SharedLibraryLoader at the Registry >>>");
 
-        if ( simpleRegistry == null )
-            if ( ! test_loadNativeSimpleRegistry() )
-                return false;
+        if ( simpleRegistry == null && ! test_loadNativeSimpleRegistry() )
+            return false;
 
         com.sun.star.registry.XRegistryKey regKey = simpleRegistry.getRootKey();
         result = SharedLibraryLoader.writeRegistryServiceInfo( null,  regKey );

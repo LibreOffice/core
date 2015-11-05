@@ -395,12 +395,11 @@ class Canvas
         for (int i=nCount-1; i>=0; --i)
         {
             CanvasShape aObject = maObjectList.get(i);
-            if (aObject != null)
-                if (aObject.contains (e.getX(),e.getY()))
-                {
-                    aObjectUnderMouse = aObject;
-                    break;
-                }
+            if (aObject != null && aObject.contains (e.getX(),e.getY()))
+            {
+                aObjectUnderMouse = aObject;
+                break;
+            }
         }
         return aObjectUnderMouse;
     }

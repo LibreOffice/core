@@ -109,9 +109,8 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
             for(int i = 0; i < iBridges.length; ++ i) {
                 XBridge xBridge = UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
 
-                if(xBridge != null) {
-                    if(xBridge.getName().equals(sName))
-                        throw new BridgeExistsException(sName + " already exists");
+                if(xBridge != null && xBridge.getName().equals(sName)) {
+                    throw new BridgeExistsException(sName + " already exists");
                 }
             }
         }

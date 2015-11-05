@@ -237,14 +237,11 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         if (curTableDescriptor.supportsPrimaryKeys())
         {
             String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields();
-            if (keyfieldnames != null)
+            if (keyfieldnames != null && keyfieldnames.length > 0)
             {
-                if (keyfieldnames.length > 0)
-                {
-                    boolean bIsAutoIncrement = curPrimaryKeyHandler.isAutoIncremented();
-                    bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename, keyfieldnames, bIsAutoIncrement);
-                    bTableCreated = true;
-                }
+                boolean bIsAutoIncrement = curPrimaryKeyHandler.isAutoIncremented();
+                bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename, keyfieldnames, bIsAutoIncrement);
+                bTableCreated = true;
             }
         }
         if (!bTableCreated)

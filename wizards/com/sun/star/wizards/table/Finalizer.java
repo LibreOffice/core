@@ -93,110 +93,104 @@ public class Finalizer
             txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
             if (this.curtabledescriptor.xDBMetaData.supportsCatalogsInTableDefinitions())
             {
-                if (sCatalogNames != null)
+                if (sCatalogNames != null && sCatalogNames.length > 0)
                 {
-                    if (sCatalogNames.length > 0)
+                    bsupportsCatalogs = true;
+                    String sCatalog = PropertyNames.EMPTY_STRING;
+                    try
                     {
-                        bsupportsCatalogs = true;
-                        String sCatalog = PropertyNames.EMPTY_STRING;
-                        try
-                        {
-                            sCatalog = curtabledescriptor.DBConnection.getCatalog();
-                        }
-                        catch (SQLException e1)
-                        {
-                            e1.printStackTrace(System.err);
-                        }
-                        CurUnoDialog.insertLabel("lblCatalog",
+                        sCatalog = curtabledescriptor.DBConnection.getCatalog();
+                    }
+                    catch (SQLException e1)
+                    {
+                        e1.printStackTrace(System.err);
+                    }
+                    CurUnoDialog.insertLabel("lblCatalog",
+                            new String[]
+                            {
+                                PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                            },
+                            new Object[]
+                            {
+                                8, slblCatalog, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, Short.valueOf(curtabindex++), 120
+                            });
+
+                    try
+                    {
+                        xCatalogListBox = CurUnoDialog.insertListBox("lstCatalog", null, null,
                                 new String[]
                                 {
-                                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                 },
                                 new Object[]
                                 {
-                                    8, slblCatalog, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, Short.valueOf(curtabindex++), 120
+                                    Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", Short.valueOf(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sCatalogNames, Short.valueOf(curtabindex++), 80
                                 });
-
-                        try
+                        int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
+                        if (isel < 0)
                         {
-                            xCatalogListBox = CurUnoDialog.insertListBox("lstCatalog", null, null,
-                                    new String[]
-                                    {
-                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
-                                    },
-                                    new Object[]
-                                    {
-                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", Short.valueOf(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sCatalogNames, Short.valueOf(curtabindex++), 80
-                                    });
-                            int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
-                            if (isel < 0)
-                            {
-                                isel = 0;
-                            }
-                            CurUnoDialog.setControlProperty("lstCatalog", PropertyNames.SELECTED_ITEMS, new short[]
-                                    {
-                                        (short) isel
-                                    });
+                            isel = 0;
                         }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace(System.err);
-                        }
-                        nListBoxPosX = 200;
+                        CurUnoDialog.setControlProperty("lstCatalog", PropertyNames.SELECTED_ITEMS, new short[]
+                                {
+                                    (short) isel
+                                });
                     }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace(System.err);
+                    }
+                    nListBoxPosX = 200;
                 }
             }
             if (this.curtabledescriptor.xDBMetaData.supportsSchemasInTableDefinitions())
             {
-                if (sSchemaNames != null)
+                if (sSchemaNames != null && sSchemaNames.length > 0)
                 {
-                    if (sSchemaNames.length > 0)
+                    bsupportsSchemata = true;
+                    String sSchema = PropertyNames.EMPTY_STRING;
+                    try
                     {
-                        bsupportsSchemata = true;
-                        String sSchema = PropertyNames.EMPTY_STRING;
-                        try
-                        {
-                            sSchema = (String) curtabledescriptor.getDataSourcePropertySet().getPropertyValue("User");
-                        }
-                        catch (Exception e1)
-                        {
-                            e1.printStackTrace(System.err);
-                        }
-                        CurUnoDialog.insertLabel("lblSchema",
+                        sSchema = (String) curtabledescriptor.getDataSourcePropertySet().getPropertyValue("User");
+                    }
+                    catch (Exception e1)
+                    {
+                        e1.printStackTrace(System.err);
+                    }
+                    CurUnoDialog.insertLabel("lblSchema",
+                            new String[]
+                            {
+                                PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                            },
+                            new Object[]
+                            {
+                                8, slblSchema, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, Short.valueOf(curtabindex++), 80
+                            });
+
+                    try
+                    {
+                        xSchemaListBox = CurUnoDialog.insertListBox("lstSchema", null, null,
                                 new String[]
                                 {
-                                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                 },
                                 new Object[]
                                 {
-                                    8, slblSchema, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, Short.valueOf(curtabindex++), 80
+                                    Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", Short.valueOf(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sSchemaNames, Short.valueOf(curtabindex++), 80
                                 });
-
-                        try
+                        int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
+                        if (isel < 0)
                         {
-                            xSchemaListBox = CurUnoDialog.insertListBox("lstSchema", null, null,
-                                    new String[]
-                                    {
-                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
-                                    },
-                                    new Object[]
-                                    {
-                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", Short.valueOf(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sSchemaNames, Short.valueOf(curtabindex++), 80
-                                    });
-                            int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
-                            if (isel < 0)
-                            {
-                                isel = 0;
-                            }
-                            CurUnoDialog.setControlProperty("lstSchema", PropertyNames.SELECTED_ITEMS, new short[]
-                                    {
-                                        (short) isel
-                                    });
+                            isel = 0;
                         }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace(System.err);
-                        }
+                        CurUnoDialog.setControlProperty("lstSchema", PropertyNames.SELECTED_ITEMS, new short[]
+                                {
+                                    (short) isel
+                                });
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace(System.err);
                     }
                 }
             }

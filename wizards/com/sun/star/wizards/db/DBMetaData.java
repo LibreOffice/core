@@ -324,12 +324,9 @@ public class DBMetaData
 
     public String[] getQueryNames()
     {
-        if (QueryNames != null)
+        if (QueryNames != null && QueryNames.length > 0)
         {
-            if (QueryNames.length > 0)
-            {
-                return QueryNames;
-            }
+            return QueryNames;
         }
         QueryNames = getQueryNamesAsNameAccess().getElementNames();
         return QueryNames;
@@ -337,12 +334,9 @@ public class DBMetaData
 
     public String[] getTableNames()
     {
-        if (TableNames != null)
+        if (TableNames != null && TableNames.length > 0)
         {
-            if (TableNames.length > 0)
-            {
-                return TableNames;
-            }
+            return TableNames;
         }
         TableNames = getTableNamesAsNameAccess().getElementNames();
         return TableNames;

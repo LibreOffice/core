@@ -237,9 +237,8 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
             try {
                 PropertyState state = pState.getPropertyState(pName);
 
-                if (state.equals(PropertyState.DIRECT_VALUE)) {
-                    if (isUsable(pName)) direct.add(pName);
-                }
+                if (state.equals(PropertyState.DIRECT_VALUE) && isUsable(pName))
+                    direct.add(pName);
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Property '" + pName + "'");
             }

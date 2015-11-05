@@ -299,15 +299,12 @@ public class FormDocument extends TextDocument
                 {
                     LinkFieldNames = _curFieldLinker.getLinkFieldNames(_curFormConfiguration.getRelationController(), sRefTableName);
                 }
-                if (LinkFieldNames != null)
+                if (LinkFieldNames != null && LinkFieldNames.length > 0)
                 {
-                    if (LinkFieldNames.length > 0)
-                    {
-                        oSubControlForm.xPropertySet.setPropertyValue("DetailFields", LinkFieldNames[0]);
-                        oSubControlForm.xPropertySet.setPropertyValue("MasterFields", LinkFieldNames[1]);
-                        oSubControlForm.finalizeControls();
-                        return true;
-                    }
+                    oSubControlForm.xPropertySet.setPropertyValue("DetailFields", LinkFieldNames[0]);
+                    oSubControlForm.xPropertySet.setPropertyValue("MasterFields", LinkFieldNames[1]);
+                    oSubControlForm.finalizeControls();
+                    return true;
                 }
                 return false;
             }

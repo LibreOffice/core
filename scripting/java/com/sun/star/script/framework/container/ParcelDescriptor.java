@@ -114,11 +114,9 @@ public class ParcelDescriptor {
     }
 
     public String getLanguage() {
-        if (language == null) {
-            if (document != null) {
-                Element e = document.getDocumentElement();
-                language = e.getAttribute("language");
-            }
+        if (language == null && document != null) {
+            Element e = document.getDocumentElement();
+            language = e.getAttribute("language");
         }
 
         return language;
