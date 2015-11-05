@@ -560,9 +560,7 @@ XResultSet_impl::queryContentIdentifier(
     {
         if( ! m_aIdents[m_nRow].is() )
         {
-            FileContentIdentifier* p
-                = new FileContentIdentifier( m_aUnqPath[  m_nRow ] );
-            m_aIdents[m_nRow] = uno::Reference< ucb::XContentIdentifier >(p);
+            m_aIdents[m_nRow].set( new FileContentIdentifier( m_aUnqPath[  m_nRow ] ) );
         }
         return m_aIdents[m_nRow];
     }

@@ -891,8 +891,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
                 if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
                 {
-                    xAdditionalPropSet
-                        = uno::Reference< beans::XPropertySet >(
+                    xAdditionalPropSet.set(
                             rProvider->getAdditionalPropertySet( rContentId,
                                                                  false ),
                             uno::UNO_QUERY );

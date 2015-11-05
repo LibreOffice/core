@@ -570,7 +570,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     Reference< XActiveDataStreamer > xSink = static_cast<XActiveDataStreamer*>(new OActiveDataStreamer());
-    Reference< XInterface > xSinkIface = Reference< XInterface >::query( xSink );
+    Reference< XInterface > xSinkIface( xSink, UNO_QUERY );
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;

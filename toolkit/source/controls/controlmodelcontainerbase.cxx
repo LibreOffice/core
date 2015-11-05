@@ -1213,7 +1213,7 @@ void ResourceListener::stopListening()
     // --- SAFE ---
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
     if ( m_bListening && m_xResource.is() )
-        xModifyBroadcaster = Reference< util::XModifyBroadcaster >( m_xResource, UNO_QUERY );
+        xModifyBroadcaster.set( m_xResource, UNO_QUERY );
     aGuard.clear();
     // --- SAFE ---
 
@@ -1291,7 +1291,7 @@ throw ( RuntimeException, std::exception )
         aGuard.reset();
         m_bListening = false;
         xResource = m_xResource;
-        xListener = Reference< lang::XEventListener >( m_xListener, UNO_QUERY );
+        xListener.set( m_xListener, UNO_QUERY );
         m_xResource.clear();
         aGuard.clear();
         // --- SAFE ---
@@ -1316,7 +1316,7 @@ throw ( RuntimeException, std::exception )
         // --- SAFE ---
         aGuard.reset();
         m_bListening = false;
-        xListener = Reference< lang::XEventListener >( m_xListener, UNO_QUERY );
+        xListener.set( m_xListener, UNO_QUERY );
         xResource = m_xResource;
         m_xResource.clear();
         m_xListener.clear();
@@ -1773,7 +1773,7 @@ static void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XSt
         Reference< XPropertySet > xPropertySet;
 
         if ( xControl.is() )
-            xPropertySet = Reference< XPropertySet >( xControl->getModel(), UNO_QUERY );
+            xPropertySet.set( xControl->getModel(), UNO_QUERY );
 
         if ( !xPropertySet.is() )
             continue;

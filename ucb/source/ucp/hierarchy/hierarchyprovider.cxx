@@ -186,8 +186,7 @@ HierarchyContentProvider::getConfigProvider(
         try
         {
             ConfigProviderMapEntry aEntry;
-            aEntry.xConfigProvider
-                = uno::Reference< lang::XMultiServiceFactory >(
+            aEntry.xConfigProvider.set(
                                 m_xContext->getServiceManager()->createInstanceWithContext(rServiceSpecifier, m_xContext),
                                 uno::UNO_QUERY );
 
@@ -246,8 +245,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
 
                     (*it).second.bTriedToGetRootReadAccess = true;
 
-                    (*it).second.xRootReadAccess
-                        = uno::Reference< container::XHierarchicalNameAccess >(
+                    (*it).second.xRootReadAccess.set(
                             xConfigProv->createInstanceWithArguments(
                                 "com.sun.star.ucb.HierarchyDataReadAccess",
                                 aArguments ),

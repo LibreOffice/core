@@ -1238,8 +1238,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     if ( ! success )
         return;
 
-    FileContentIdentifier* p = new FileContentIdentifier( m_aUncPath );
-    m_xContentIdentifier = Reference< XContentIdentifier >( p );
+    m_xContentIdentifier.set( new FileContentIdentifier( m_aUncPath ) );
 
     m_pMyShell->registerNotifier( m_aUncPath,this );
     m_pMyShell->insertDefaultProperties( m_aUncPath );
@@ -1286,7 +1285,7 @@ BaseContent::cEXC( const OUString& aNewName )
     Reference< XContentIdentifier > xOldRef = m_xContentIdentifier;
     m_aUncPath = aNewName;
     FileContentIdentifier* pp = new FileContentIdentifier( aNewName );
-    m_xContentIdentifier = Reference< XContentIdentifier >( pp );
+    m_xContentIdentifier.set( pp );
 
     ContentEventNotifier* p = 0;
     if( m_pContentEventListeners )

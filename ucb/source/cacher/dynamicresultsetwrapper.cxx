@@ -59,7 +59,7 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
                 , m_xListener( NULL )
 {
     m_pMyListenerImpl = new DynamicResultSetWrapperListener( this );
-    m_xMyListenerImpl = Reference< XDynamicResultSetListener >( m_pMyListenerImpl );
+    m_xMyListenerImpl.set( m_pMyListenerImpl );
     //call impl_init() at the end of constructor of derived class
 };
 
@@ -146,7 +146,7 @@ void SAL_CALL DynamicResultSetWrapper::dispose()
             return;
         m_bInDispose = true;
 
-        xSourceComponent = Reference< XComponent >(m_xSource, UNO_QUERY);
+        xSourceComponent.set(m_xSource, UNO_QUERY);
 
         if( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
         {
@@ -341,7 +341,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper::getStaticResultSet()
 
         xSource = m_xSource;
         m_bStatic = true;
-        xMyListenerImpl = Reference< XEventListener > ::query( m_xMyListenerImpl );
+        xMyListenerImpl.set( m_xMyListenerImpl, UNO_QUERY );
     }
 
     if( xSource.is() )

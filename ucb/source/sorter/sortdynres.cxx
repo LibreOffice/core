@@ -65,7 +65,7 @@ SortedDynamicResultSet::SortedDynamicResultSet(
     mpDisposeEventListeners = NULL;
     mpOwnListener           = new SortedDynamicResultSetListener( this );
 
-    mxOwnListener = Reference< XDynamicResultSetListener >( mpOwnListener );
+    mxOwnListener.set( mpOwnListener );
 
     mxOriginal  = xOriginal;
     maOptions   = aOptions;

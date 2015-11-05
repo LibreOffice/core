@@ -447,7 +447,7 @@ void SAL_CALL FileProvider::initProperties()
         // static const sal_Int32 MAC_NOTATION = (sal_Int32)3;
 
         XPropertySetInfoImpl2* p = new XPropertySetInfoImpl2();
-        m_xPropertySetInfo = Reference< XPropertySetInfo >( p );
+        m_xPropertySetInfo.set( p );
     }
 }
 

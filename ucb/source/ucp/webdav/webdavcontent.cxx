@@ -1283,8 +1283,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 // Process local Additional Properties.
                 if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
                 {
-                    xAdditionalPropSet
-                        = uno::Reference< beans::XPropertySet >(
+                    xAdditionalPropSet.set(
                             rProvider->getAdditionalPropertySet( rContentId,
                                                                  false ),
                             uno::UNO_QUERY );
@@ -2141,8 +2140,7 @@ uno::Any Content::open(
             // Unreachable
         }
 
-        uno::Reference< io::XOutputStream > xOut
-            = uno::Reference< io::XOutputStream >( rArg.Sink, uno::UNO_QUERY );
+        uno::Reference< io::XOutputStream > xOut( rArg.Sink, uno::UNO_QUERY );
         if ( xOut.is() )
         {
             // PUSH: write data
@@ -2185,9 +2183,7 @@ uno::Any Content::open(
         }
         else
         {
-            uno::Reference< io::XActiveDataSink > xDataSink
-                = uno::Reference< io::XActiveDataSink >( rArg.Sink,
-                                                         uno::UNO_QUERY );
+            uno::Reference< io::XActiveDataSink > xDataSink( rArg.Sink, uno::UNO_QUERY );
             if ( xDataSink.is() )
             {
                 // PULL: wait for client read

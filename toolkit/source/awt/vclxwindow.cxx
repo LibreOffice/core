@@ -2357,7 +2357,7 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
 
     if ( aAC.get() == xSource.get() )
     {   // yep, it does
-        mpImpl->mxAccessibleContext = uno::Reference< accessibility::XAccessibleContext >();
+        mpImpl->mxAccessibleContext.clear();
     }
 }
 

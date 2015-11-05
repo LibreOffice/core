@@ -606,9 +606,7 @@ bool HierarchyDataSource::createConfigPath(
     {                                                           \
         osl::Guard< osl::Mutex > aGuard( m_aMutex );            \
         if ( !m_xCfg##member_name.is() )                        \
-            m_xCfg##member_name                                 \
-                = uno::Reference< interface_name >(             \
-                    m_xConfigAccess, uno::UNO_QUERY );          \
+            m_xCfg##member_name.set( m_xConfigAccess, uno::UNO_QUERY ); \
         xOrig = m_xCfg##member_name;                            \
     }
 

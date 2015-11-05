@@ -700,10 +700,10 @@ CachedContentResultSet::CachedContentResultSet(
                 , m_bTriedToGetTypeConverter( false )
                 , m_xTypeConverter( NULL )
 {
-    m_xFetchProvider = Reference< XFetchProvider >( m_xResultSetOrigin, UNO_QUERY );
+    m_xFetchProvider.set( m_xResultSetOrigin, UNO_QUERY );
     OSL_ENSURE( m_xFetchProvider.is(), "interface XFetchProvider is required" );
 
-    m_xFetchProviderForContentAccess = Reference< XFetchProviderForContentAccess >( m_xResultSetOrigin, UNO_QUERY );
+    m_xFetchProviderForContentAccess.set( m_xResultSetOrigin, UNO_QUERY );
     OSL_ENSURE( m_xFetchProviderForContentAccess.is(), "interface XFetchProviderForContentAccess is required" );
 
     impl_init();
@@ -2190,7 +2190,7 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
     if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
     {
         m_bTriedToGetTypeConverter = true;
-        m_xTypeConverter = Reference< XTypeConverter >( Converter::create(m_xContext) );
+        m_xTypeConverter.set( Converter::create(m_xContext) );
 
         OSL_ENSURE( m_xTypeConverter.is(),
                     "PropertyValueSet::getTypeConverter() - "

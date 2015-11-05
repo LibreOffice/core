@@ -240,7 +240,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
     uno::Reference< container::XHierarchicalNameAccess > xNameAccess;
     try
     {
-        xNameAccess = uno::Reference< container::XHierarchicalNameAccess >(
+        xNameAccess.set(
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 "com.sun.star.packages.comp.ZipPackage",
                 aArguments, m_xContext ),

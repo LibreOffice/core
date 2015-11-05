@@ -905,8 +905,7 @@ bool UniversalContentBroker::getContentProviderData(
 
         if ( !m_xNotifier.is() )
         {
-            m_xNotifier = uno::Reference< util::XChangesNotifier >(
-                                                xInterface, uno::UNO_QUERY_THROW );
+            m_xNotifier.set( xInterface, uno::UNO_QUERY_THROW );
 
             m_xNotifier->addChangesListener( this );
         }

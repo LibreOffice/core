@@ -626,8 +626,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
         css::uno::Reference<css::uno::XComponentContext> xContext =
             ::cppu::defaultBootstrap_InitialComponentContext();
 
-        xServiceManager = css::uno::Reference<css::lang::XMultiServiceFactory>(
-            xContext->getServiceManager(), css::uno::UNO_QUERY_THROW );
+        xServiceManager.set( xContext->getServiceManager(), css::uno::UNO_QUERY_THROW );
         // set global process service factory used by unotools config helpers
         ::comphelper::setProcessServiceFactory( xServiceManager );
     }

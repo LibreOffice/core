@@ -966,8 +966,7 @@ uno::Reference< io::XInputStream > getInputStream(
 
             xCommandProcessorS->execute( aOpenCommand, 0, rContext.xEnv );
 
-            xInputStream = uno::Reference< io::XInputStream >(
-                                    xOutputStream, uno::UNO_QUERY );
+            xInputStream.set( xOutputStream, uno::UNO_QUERY );
         }
         catch ( uno::RuntimeException const & )
         {

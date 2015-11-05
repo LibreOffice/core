@@ -117,7 +117,7 @@
         {
             {
                 // ensure that the temporary gets destructed NOW
-                m_xAggregate = Reference< XAggregation >(_rxAggregateInstance, UNO_QUERY);
+                m_xAggregate.set(_rxAggregateInstance, UNO_QUERY);
             }
             OSL_ENSURE(m_xAggregate.is(), "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid object given!");
 

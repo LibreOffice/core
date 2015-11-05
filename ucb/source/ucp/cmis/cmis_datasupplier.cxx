@@ -157,7 +157,7 @@ namespace cmis
     void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
     {
         if ( nIndex < maResults.size() )
-            maResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
+            maResults[ nIndex ]->xRow.clear();
     }
 
     void DataSupplier::close()

@@ -73,9 +73,7 @@ StorageElementFactory::createTemporaryStorage()
 
     OSL_ENSURE( xStorageFac.is(), "Can't create storage factory!" );
     if ( xStorageFac.is() )
-        xStorage = uno::Reference< embed::XStorage >(
-                            xStorageFac->createInstance(),
-                            uno::UNO_QUERY );
+        xStorage.set( xStorageFac->createInstance(), uno::UNO_QUERY );
 
     if ( !xStorage.is() )
         throw uno::RuntimeException();

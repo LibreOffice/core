@@ -239,7 +239,7 @@ namespace toolkit
 
             if ( !m_xCachedFormatter.is() )
             {
-                m_xCachedFormatter = Reference< XNumberFormatter >(
+                m_xCachedFormatter.set(
                     NumberFormatter::create(::comphelper::getProcessComponentContext()),
                     UNO_QUERY_THROW
                 );

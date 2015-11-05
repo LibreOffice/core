@@ -265,7 +265,7 @@ bool HierarchyEntry::setData(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         if ( !m_xConfigProvider.is() )
-            m_xConfigProvider = uno::Reference< lang::XMultiServiceFactory >(
+            m_xConfigProvider.set(
                 m_xContext->getServiceManager()->createInstanceWithContext(m_aServiceSpecifier, m_xContext),
                 uno::UNO_QUERY );
 
@@ -367,8 +367,7 @@ bool HierarchyEntry::setData(
                         // Special handling for children of root,
                         // which is not an entry. It's only a set
                         // of entries.
-                        xFac = uno::Reference< lang::XSingleServiceFactory >(
-                            xParentNameAccess, uno::UNO_QUERY );
+                        xFac.set( xParentNameAccess, uno::UNO_QUERY );
                     }
                     else
                     {
@@ -382,18 +381,14 @@ bool HierarchyEntry::setData(
 
                     if ( xFac.is() )
                     {
-                        xNameReplace
-                            = uno::Reference< container::XNameReplace >(
-                                xFac->createInstance(), uno::UNO_QUERY );
+                        xNameReplace.set( xFac->createInstance(), uno::UNO_QUERY );
 
                         OSL_ENSURE( xNameReplace.is(),
                                 "HierarchyEntry::setData - No name replace!" );
 
                         if ( xNameReplace.is() )
                         {
-                            xContainer
-                                = uno::Reference< container::XNameContainer >(
-                                    xFac, uno::UNO_QUERY );
+                            xContainer.set( xFac, uno::UNO_QUERY );
 
                             OSL_ENSURE( xContainer.is(),
                                 "HierarchyEntry::setData - No container!" );
@@ -517,7 +512,7 @@ bool HierarchyEntry::move(
     try
     {
         if ( !m_xConfigProvider.is() )
-            m_xConfigProvider = uno::Reference< lang::XMultiServiceFactory >(
+            m_xConfigProvider.set(
                 m_xContext->getServiceManager()->createInstanceWithContext(m_aServiceSpecifier, m_xContext),
                 uno::UNO_QUERY );
 
@@ -557,7 +552,7 @@ bool HierarchyEntry::move(
         aProperty.Value <<= aOldParentPath;
         aArguments[ 0 ] <<= aProperty;
 
-        xOldParentBatch = uno::Reference< util::XChangesBatch >(
+        xOldParentBatch.set(
             m_xConfigProvider->createInstanceWithArguments(
                 READWRITE_SERVICE_NAME,
                 aArguments ),
@@ -581,7 +576,7 @@ bool HierarchyEntry::move(
             aProperty.Value <<= aNewParentPath;
             aArguments[ 0 ] <<= aProperty;
 
-            xNewParentBatch = uno::Reference< util::XChangesBatch >(
+            xNewParentBatch.set(
                 m_xConfigProvider->createInstanceWithArguments(
                     READWRITE_SERVICE_NAME,
                     aArguments ),
@@ -616,9 +611,7 @@ bool HierarchyEntry::move(
 
     try
     {
-        xOldParentNameAccess
-            = uno::Reference< container::XNameAccess >(
-                xOldParentBatch, uno::UNO_QUERY );
+        xOldParentNameAccess.set( xOldParentBatch, uno::UNO_QUERY );
 
         OSL_ENSURE( xOldParentNameAccess.is(),
                     "HierarchyEntry::move - No name access!" );
@@ -628,8 +621,7 @@ bool HierarchyEntry::move(
 
         if ( bOldRoot )
         {
-            xOldNameContainer = uno::Reference< container::XNameContainer >(
-                                        xOldParentNameAccess, uno::UNO_QUERY );
+            xOldNameContainer.set( xOldParentNameAccess, uno::UNO_QUERY );
         }
         else
         {
@@ -687,9 +679,7 @@ bool HierarchyEntry::move(
 
         uno::Reference< container::XNameAccess > xNewParentNameAccess;
         if ( bDifferentParents )
-            xNewParentNameAccess
-                = uno::Reference< container::XNameAccess >(
-                    xNewParentBatch, uno::UNO_QUERY );
+            xNewParentNameAccess.set( xNewParentBatch, uno::UNO_QUERY );
         else
             xNewParentNameAccess = xOldParentNameAccess;
 
@@ -704,9 +694,7 @@ bool HierarchyEntry::move(
         {
             if ( bNewRoot )
             {
-                xNewNameContainer
-                    = uno::Reference< container::XNameContainer >(
-                        xNewParentNameAccess, uno::UNO_QUERY );
+                xNewNameContainer.set( xNewParentNameAccess, uno::UNO_QUERY );
             }
             else
             {
@@ -783,7 +771,7 @@ bool HierarchyEntry::remove()
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         if ( !m_xConfigProvider.is() )
-            m_xConfigProvider = uno::Reference< lang::XMultiServiceFactory >(
+            m_xConfigProvider.set(
                 m_xContext->getServiceManager()->createInstanceWithContext(m_aServiceSpecifier, m_xContext),
                 uno::UNO_QUERY );
 
@@ -838,8 +826,7 @@ bool HierarchyEntry::remove()
                     // Special handling for children of root,
                     // which is not an entry. It's only a set
                     // of entries.
-                    xContainer = uno::Reference< container::XNameContainer >(
-                        xParentNameAccess, uno::UNO_QUERY );
+                    xContainer.set( xParentNameAccess, uno::UNO_QUERY );
                 }
                 else
                 {
@@ -915,9 +902,7 @@ bool HierarchyEntry::first( iterator& it )
                         >>= xNameAccess;
                 }
                 else
-                    xNameAccess
-                        = uno::Reference< container::XNameAccess >(
-                                xRootHierNameAccess, uno::UNO_QUERY );
+                    xNameAccess.set( xRootHierNameAccess, uno::UNO_QUERY );
 
                 OSL_ENSURE( xNameAccess.is(),
                             "HierarchyEntry::first - No name access!" );
@@ -1036,8 +1021,7 @@ HierarchyEntry::getRootReadAccess()
             try
             {
                 if ( !m_xConfigProvider.is() )
-                    m_xConfigProvider
-                        = uno::Reference< lang::XMultiServiceFactory >(
+                    m_xConfigProvider.set(
                             m_xContext->getServiceManager()->createInstanceWithContext(m_aServiceSpecifier, m_xContext),
                             uno::UNO_QUERY );
 
@@ -1053,8 +1037,7 @@ HierarchyEntry::getRootReadAccess()
 
                     m_bTriedToGetRootReadAccess = true;
 
-                    m_xRootReadAccess
-                        = uno::Reference< container::XHierarchicalNameAccess >(
+                    m_xRootReadAccess.set(
                             m_xConfigProvider->createInstanceWithArguments(
                                 READ_SERVICE_NAME,
                                 aArguments ),

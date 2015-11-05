@@ -58,7 +58,7 @@ ContentResultSetWrapper::ContentResultSetWrapper(
                 , m_pVetoableChangeListeners( NULL )
 {
     m_pMyListenerImpl = new ContentResultSetWrapperListener( this );
-    m_xMyListenerImpl = Reference< XPropertyChangeListener >( m_pMyListenerImpl );
+    m_xMyListenerImpl.set( m_pMyListenerImpl );
 
     OSL_ENSURE( m_xResultSetOrigin.is(), "XResultSet is required" );
 
@@ -471,8 +471,7 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
     ReacquireableGuard aGuard( m_aMutex );
     if( !m_xMetaDataFromOrigin.is() && m_xResultSetOrigin.is() )
     {
-        Reference< XResultSetMetaDataSupplier > xMetaDataSupplier
-            = Reference< XResultSetMetaDataSupplier >(
+        Reference< XResultSetMetaDataSupplier > xMetaDataSupplier(
                 m_xResultSetOrigin, UNO_QUERY );
 
         if( xMetaDataSupplier.is() )

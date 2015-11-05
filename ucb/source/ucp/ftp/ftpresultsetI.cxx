@@ -90,7 +90,7 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
             else
                 xRow->appendVoid(seqProp[i]);
         }
-        m_aItems[n] = Reference<XRow>(xRow.get());
+        m_aItems[n].set(xRow.get());
     }
 }
 

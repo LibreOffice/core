@@ -105,9 +105,9 @@ bool StdTabController::ImplCreateComponentSequence(
         if ( xCtrl.is() )
         {
             if (bPeerComponent)
-                pComps[n] = Reference< XWindow > (xCtrl->getPeer(), UNO_QUERY);
+                pComps[n].set(xCtrl->getPeer(), UNO_QUERY);
             else
-                pComps[n] = Reference< XWindow > (xCtrl, UNO_QUERY);
+                pComps[n].set(xCtrl, UNO_QUERY);
 
             // TabStop-Property
             if ( pTabs )

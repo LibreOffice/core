@@ -978,8 +978,8 @@ sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
 
     throw( SQLException, RuntimeException )
 {
-    Reference < XRow > xRowOne = Reference< XRow >::query( xResultOne );
-    Reference < XRow > xRowTwo = Reference< XRow >::query( xResultTwo );
+    Reference < XRow > xRowOne( xResultOne, UNO_QUERY );
+    Reference < XRow > xRowTwo( xResultTwo, UNO_QUERY );
 
     sal_IntPtr nCompare = 0;
     sal_IntPtr nColumn = pSortInfo->mnColumn;

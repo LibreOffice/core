@@ -115,10 +115,8 @@ DocumentContentFactory::createDocumentContent(
     uno::Reference< frame::XTransientDocumentsDocumentContentFactory > xDocFac;
     try
     {
-        xDocFac
-            = uno::Reference< frame::XTransientDocumentsDocumentContentFactory >(
-                m_xSMgr->createInstance("com.sun.star.ucb.TransientDocumentsContentProvider"),
-                uno::UNO_QUERY );
+        xDocFac.set( m_xSMgr->createInstance("com.sun.star.ucb.TransientDocumentsContentProvider"),
+                     uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
     {

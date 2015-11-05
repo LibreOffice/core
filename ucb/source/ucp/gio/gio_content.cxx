@@ -834,8 +834,8 @@ bool Content::feedSink( uno::Reference< uno::XInterface > xSink,
     if ( !xSink.is() )
         return false;
 
-    uno::Reference< io::XOutputStream > xOut = uno::Reference< io::XOutputStream >(xSink, uno::UNO_QUERY );
-    uno::Reference< io::XActiveDataSink > xDataSink = uno::Reference< io::XActiveDataSink >(xSink, uno::UNO_QUERY );
+    uno::Reference< io::XOutputStream > xOut(xSink, uno::UNO_QUERY );
+    uno::Reference< io::XActiveDataSink > xDataSink(xSink, uno::UNO_QUERY );
 
     if ( !xOut.is() && !xDataSink.is() )
         return false;

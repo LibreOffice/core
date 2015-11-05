@@ -310,9 +310,7 @@ UcbContentProviderProxy::getContentProvider()
     {
         try
         {
-            m_xProvider
-                = Reference< XContentProvider >(
-                      m_xSMgr->createInstance( m_aService ), UNO_QUERY );
+            m_xProvider.set( m_xSMgr->createInstance( m_aService ), UNO_QUERY );
             if ( m_aArguments == "NoConfig" )
             {
                 Reference<XInitialization> xInit(m_xProvider,UNO_QUERY);

@@ -306,7 +306,7 @@ uno::Reference< sheet::XNamedRanges> XSpreadsheets2::getNamedRanges(uno::Referen
 void XSpreadsheets2::importSheetToCopy()
 {
     uno::Reference< container::XNameAccess> xSrcNameAccess(init(),UNO_QUERY_THROW);
-    xSrcSheet = uno::Reference< sheet::XSpreadsheet >( xSrcNameAccess->getByName(aSrcSheetName), UNO_QUERY_THROW);
+    xSrcSheet.set( xSrcNameAccess->getByName(aSrcSheetName), UNO_QUERY_THROW);
 
     uno::Reference< lang::XComponent > xDestComponent;
     if (!xDestComponent.is())
@@ -322,11 +322,11 @@ void XSpreadsheets2::importSheetToCopy()
     }
     else
     {
-        xDestDoc = uno::Reference< sheet::XSpreadsheetDocument >(xDestComponent,UNO_QUERY_THROW);
+        xDestDoc.set(xDestComponent,UNO_QUERY_THROW);
     }
 
     uno::Reference< container::XNameAccess > xDestSheetNameAccess (xDestDoc->getSheets(), UNO_QUERY_THROW);
-    xDestSheet = uno::Reference< sheet::XSpreadsheet > ( xDestSheetNameAccess->getByName(aSrcSheetName), UNO_QUERY_THROW);
+    xDestSheet.set( xDestSheetNameAccess->getByName(aSrcSheetName), UNO_QUERY_THROW);
 }
 
 bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUString& aSrcContent )

@@ -432,7 +432,7 @@ void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
-        m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
+        m_pImpl->m_aResults[ nIndex ]->xRow.clear();
 }
 
 
