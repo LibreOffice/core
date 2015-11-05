@@ -592,7 +592,7 @@ static void activate_uno(GSimpleAction *action, GVariant*, gpointer)
 
     uno::Reference < css::frame::XFrame > xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())
-        xFrame = uno::Reference < css::frame::XFrame >(xDesktop, uno::UNO_QUERY);
+        xFrame.set(xDesktop, uno::UNO_QUERY);
 
     if (!xFrame.is())
         return;

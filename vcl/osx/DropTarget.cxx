@@ -338,7 +338,7 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 {
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
-    mXCurrentDragClipboard = uno::Reference<XClipboard>();
+    mXCurrentDragClipboard.clear();
     [[NSCursor arrowCursor] set];
 }
 
@@ -438,7 +438,7 @@ void SAL_CALL DropTarget::dropComplete(sal_Bool success) throw (RuntimeException
 {
     // Reset the internal transferable used as shortcut in case this is
     // an internal D&D operation
-    DragSource::g_XTransferable = uno::Reference<XTransferable>();
+    DragSource::g_XTransferable.clear();
     DragSource::g_DropSuccessSet = true;
     DragSource::g_DropSuccess = success;
 }

@@ -50,7 +50,7 @@ void RtfTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
+    m_xFilter.set(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
 }
 
 bool RtfTest::load(const OUString&,

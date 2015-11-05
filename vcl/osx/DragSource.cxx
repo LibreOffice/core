@@ -123,7 +123,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
                              bDropSuccess );
 
     mDragSource->mXDragSrcListener->dragDropEnd(dsde);
-    mDragSource->mXDragSrcListener = uno::Reference<XDragSourceListener>();
+    mDragSource->mXDragSrcListener.clear();
 }
 
 -(void)draggedImage:(NSImage *)draggedImage movedTo:(NSPoint)screenPoint
@@ -276,7 +276,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 
   [dragImage release];
 
-  g_XTransferable = uno::Reference<XTransferable>();
+  g_XTransferable.clear();
   g_DragSourceView = nil;
 
   // reset drop success flags

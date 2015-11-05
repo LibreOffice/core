@@ -837,7 +837,7 @@ void OpenGLWatchdogThread::start()
 {
     assert (gxWatchdog == NULL);
     gpWatchdogExit = osl_createCondition();
-    gxWatchdog = rtl::Reference<OpenGLWatchdogThread>(new OpenGLWatchdogThread());
+    gxWatchdog.set(new OpenGLWatchdogThread());
     gxWatchdog->launch();
 }
 

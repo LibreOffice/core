@@ -1864,8 +1864,7 @@ protected:
         {
             uno::Reference<uno::XComponentContext> xComponentContext
                 = ::cppu::defaultBootstrap_InitialComponentContext();
-            xMSF = uno::Reference<lang::XMultiServiceFactory>
-                (xComponentContext->getServiceManager(), uno::UNO_QUERY);
+            xMSF.set(xComponentContext->getServiceManager(), uno::UNO_QUERY);
             if(!xMSF.is())
                 Application::Abort("Bootstrap failure - no service manager");
 

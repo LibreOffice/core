@@ -137,7 +137,7 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
                     "com.sun.star.configuration.ConfigurationUpdateAccess",
                     aArguments );
             if ( xUpdatableView.is() )
-                xPropSet = Reference< XPropertySet >( xUpdatableView, UNO_QUERY );
+                xPropSet.set( xUpdatableView, UNO_QUERY );
         }
         catch ( ::com::sun::star::uno::Exception& )
         {
