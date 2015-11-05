@@ -1169,7 +1169,18 @@ size_t ScDBCollection::NamedDBs::size() const
 
 bool ScDBCollection::NamedDBs::operator== (const NamedDBs& r) const
 {
-    return m_DBs == r.m_DBs;
+    if (m_DBs.size() != r.m_DBs.size())
+    {
+        return false;
+    }
+    for (auto iter1 = m_DBs.begin(), iter2 = r.m_DBs.begin(); iter1 != m_DBs.end(); ++iter1, ++iter2)
+    {
+        if (**iter1 != **iter2)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 ScDBCollection::AnonDBs::iterator ScDBCollection::AnonDBs::begin()
