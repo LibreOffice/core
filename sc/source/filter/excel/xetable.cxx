@@ -723,13 +723,18 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     mxText = xText;
     mnSstIndex = 0;
 
-    // create the cell format
-    sal_uInt16 nXclFont = mxText->RemoveLeadingFont();
-    if( GetXFId() == EXC_XFID_NOTFOUND )
+    const XclFormatRunVec& rFormats = mxText->GetFormats();
+    // Create the cell format and remove formatting of the leading run
+    // if the entire string is equally formatted
+    if( rFormats.size() == 1 )
     {
-        OSL_ENSURE( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
-        bool bForceLineBreak = mxText->IsWrapped();
-        SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
+        sal_uInt16 nXclFont = mxText->RemoveLeadingFont();
+        if( GetXFId() == EXC_XFID_NOTFOUND )
+        {
+            OSL_ENSURE( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
+            bool bForceLineBreak = mxText->IsWrapped();
+            SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
+        }
     }
 
     // get auto-wrap attribute from cell format
