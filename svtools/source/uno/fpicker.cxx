@@ -66,7 +66,7 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
-        xResult = Reference< css::uno::XInterface >( Application::createFilePicker( context ) );
+        xResult.set( Application::createFilePicker( context ) );
 
         if (!xResult.is())
         {
@@ -139,7 +139,7 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
     Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
-        xResult = Reference< css::uno::XInterface >( Application::createFolderPicker( context ) );
+        xResult.set( Application::createFolderPicker( context ) );
         if (!xResult.is())
         {
             try

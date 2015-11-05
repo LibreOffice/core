@@ -1062,7 +1062,7 @@ namespace svxform
     {
         DBG_ASSERT( _xModel.is(), "XFormsPage::SetModel(): invalid model" );
 
-        m_xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( _xModel, UNO_QUERY );
+        m_xUIHelper.set( _xModel, UNO_QUERY );
         OUString sRet;
         m_bHasModel = true;
         const ImageList& rImageList = m_pNaviWin->GetItemImageList();
@@ -1406,9 +1406,8 @@ namespace svxform
         // get our frame
         DBG_ASSERT( pBindings != NULL,
                     "DataNavigatorWindow::LoadModels(): no SfxBindings; can't get frame" );
-        m_xFrame = Reference<XFrame>(
-            pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(),
-            UNO_QUERY );
+        m_xFrame.set( pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(),
+                      UNO_QUERY );
         DBG_ASSERT( m_xFrame.is(), "DataNavigatorWindow::LoadModels(): no frame" );
         // add frameaction listener
         Reference< XFrameActionListener > xListener(
@@ -1483,7 +1482,7 @@ namespace svxform
         {
             Any aAny = m_xDataContainer->getByName( sSelectedModel );
             if ( aAny >>= xModel )
-                xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( xModel, UNO_QUERY );
+                xUIHelper.set( xModel, UNO_QUERY );
         }
         catch ( Exception& )
         {
@@ -2799,7 +2798,7 @@ namespace svxform
 
                 Reference< css::xforms::XModel > xModel;
                 if ( ( m_xBinding->getPropertyValue( PN_BINDING_MODEL ) >>= xModel ) && xModel.is() )
-                    m_xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( xModel, UNO_QUERY );
+                    m_xUIHelper.set( xModel, UNO_QUERY );
             }
             catch (const Exception&)
             {
@@ -3196,7 +3195,7 @@ namespace svxform
                 try
                 {
                     m_xNewSubmission = xModel->createSubmission();
-                    m_xSubmission = Reference< XPropertySet >( m_xNewSubmission, UNO_QUERY );
+                    m_xSubmission.set( m_xNewSubmission, UNO_QUERY );
                 }
                 catch ( Exception& )
                 {

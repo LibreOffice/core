@@ -481,7 +481,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
     //get dictionaries
     {
         if(!m_xContext.is())
-            m_xContext = Reference< XComponentContext >( ::cppu::defaultBootstrap_InitialComponentContext() );
+            m_xContext.set( ::cppu::defaultBootstrap_InitialComponentContext() );
         if(m_xContext.is())
         {
             Reference< linguistic2::XConversionDictionaryList > xDictionaryList = linguistic2::ConversionDictionaryList::create(m_xContext);
@@ -496,30 +496,30 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
                     aLocale.Language = "zh";
 
                     if( xContainer->hasByName( aNameTo_Simplified ) )
-                        xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
+                        xDictionary_To_Simplified.set(
                                 xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
                     else
                     {
                         aLocale.Country = "TW";
-                        xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
+                        xDictionary_To_Simplified.set(
                                 xDictionaryList->addNewDictionary( aNameTo_Simplified
-                                , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
-                                    ), UNO_QUERY );
+                                    , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
+                                ), UNO_QUERY );
                     }
                     if (xDictionary_To_Simplified.is())
                         xDictionary_To_Simplified->setActive( sal_True );
 
 
                     if( xContainer->hasByName( aNameTo_Traditional ) )
-                        xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
+                        xDictionary_To_Traditional.set(
                                 xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
                     else
                     {
                         aLocale.Country = "CN";
-                        xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
+                        xDictionary_To_Traditional.set(
                                 xDictionaryList->addNewDictionary( aNameTo_Traditional
-                                , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
-                                    ), UNO_QUERY );
+                                    ,aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE),
+                                UNO_QUERY );
                     }
                     if (xDictionary_To_Traditional.is())
                         xDictionary_To_Traditional->setActive( sal_True );

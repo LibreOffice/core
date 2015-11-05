@@ -113,11 +113,11 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
 {
     try
     {
-        m_xCfg = css::uno::Reference< css::container::XNameAccess >(
+        m_xCfg.set(
             ::comphelper::ConfigurationHelper::openConfig(
-            comphelper::getProcessComponentContext(),
-            s_sAccessibility,
-            ::comphelper::ConfigurationHelper::E_STANDARD),
+                comphelper::getProcessComponentContext(),
+                s_sAccessibility,
+                ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY);
 
         bIsModified = false;

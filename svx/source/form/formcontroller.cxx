@@ -570,7 +570,7 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
     osl_atomic_increment(&m_refCount);
     {
         m_xTabController = TabController::create( m_xComponentContext );
-        m_xAggregate = Reference< XAggregation >( m_xTabController, UNO_QUERY_THROW );
+        m_xAggregate.set( m_xTabController, UNO_QUERY_THROW );
         m_xAggregate->setDelegator( *this );
     }
     osl_atomic_decrement(&m_refCount);
@@ -1664,7 +1664,7 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
             // zunaechst das Control fragen ob es das IFace unterstuetzt
             Reference< XBoundComponent >  xBound(m_xCurrentControl, UNO_QUERY);
             if (!xBound.is() && m_xCurrentControl.is())
-                xBound  = Reference< XBoundComponent > (m_xCurrentControl->getModel(), UNO_QUERY);
+                xBound.set(m_xCurrentControl->getModel(), UNO_QUERY);
 
             // lock if we lose the focus during commit
             m_bCommitLock = true;
@@ -1867,8 +1867,8 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model) th
         // set the new model wait for the load event
         if (m_xTabController.is())
             m_xTabController->setModel(Model);
-        m_xModelAsIndex = Reference< XIndexAccess > (Model, UNO_QUERY);
-        m_xModelAsManager = Reference< XEventAttacherManager > (Model, UNO_QUERY);
+        m_xModelAsIndex.set(Model, UNO_QUERY);
+        m_xModelAsManager.set(Model, UNO_QUERY);
 
         // only if both ifaces exit, the controller will work successful
         if (!m_xModelAsIndex.is() || !m_xModelAsManager.is())
@@ -2015,7 +2015,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XContainer >  xCurrentContainer;
     if (m_xTabController.is())
-        xCurrentContainer = Reference< XContainer > (m_xTabController->getContainer(), UNO_QUERY);
+        xCurrentContainer.set(m_xTabController->getContainer(), UNO_QUERY);
     if (xCurrentContainer.is())
     {
         xCurrentContainer->removeContainerListener(this);
@@ -2828,7 +2828,7 @@ void SAL_CALL FormController::elementInserted(const ContainerEvent& evt) throw( 
     // are we in filtermode and a XModeSelector has inserted an element
     else if (m_bFiltering && Reference< XModeSelector > (evt.Source, UNO_QUERY).is())
     {
-        xModel = Reference< XFormComponent > (evt.Source, UNO_QUERY);
+        xModel.set(evt.Source, UNO_QUERY);
         if (xModel.is() && m_xModelAsIndex == xModel->getParent())
         {
             Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);

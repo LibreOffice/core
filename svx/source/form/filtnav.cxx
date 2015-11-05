@@ -1878,8 +1878,8 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
                  xParent.is();
                  xParent = xChild.is() ? xChild->getParent() : Reference< XInterface > ())
             {
-                xContainer = Reference< XIndexAccess > (xParent, UNO_QUERY);
-                xChild = Reference< XChild > (xParent, UNO_QUERY);
+                xContainer.set(xParent, UNO_QUERY);
+                xChild.set(xParent, UNO_QUERY);
             }
         }
         m_pNavigator->UpdateContent(xContainer, xController);

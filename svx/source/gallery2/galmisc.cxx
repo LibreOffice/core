@@ -365,7 +365,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
     if ( xMonitor.is() )
     {
-        mxProgressBar = uno::Reference< awt::XProgressBar >( xMonitor, uno::UNO_QUERY );
+        mxProgressBar.set( xMonitor, uno::UNO_QUERY );
 
         if( mxProgressBar.is() )
         {

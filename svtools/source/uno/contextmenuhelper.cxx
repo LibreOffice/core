@@ -404,8 +404,7 @@ ContextMenuHelper::associateUIConfigurationManagers()
                 {
                     uno::Reference< ui::XUIConfigurationManager > xDocUICfgMgr(
                         xSupplier->getUIConfigurationManager(), uno::UNO_QUERY );
-                    m_xDocImageMgr = uno::Reference< ui::XImageManager >(
-                        xDocUICfgMgr->getImageManager(), uno::UNO_QUERY );
+                    m_xDocImageMgr.set( xDocUICfgMgr->getImageManager(), uno::UNO_QUERY );
                 }
             }
 
@@ -424,8 +423,7 @@ ContextMenuHelper::associateUIConfigurationManagers()
                 xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId ));
             if ( xUICfgMgr.is() )
             {
-                m_xModuleImageMgr = uno::Reference< ui::XImageManager >(
-                    xUICfgMgr->getImageManager(), uno::UNO_QUERY );
+                m_xModuleImageMgr.set( xUICfgMgr->getImageManager(), uno::UNO_QUERY );
             }
 
             uno::Reference< container::XNameAccess > xNameAccess(

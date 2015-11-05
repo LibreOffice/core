@@ -262,9 +262,9 @@ void CursorWrapper::ImplConstruct(const Reference< css::sdbc::XResultSet>& _rxCu
 
 const CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSet>& _rxCursor)
 {
-    m_xMoveOperations = Reference< css::sdbc::XResultSet>(_rxCursor, UNO_QUERY);
-    m_xBookmarkOperations = Reference< css::sdbcx::XRowLocate>(_rxCursor, UNO_QUERY);
-    m_xColumnsSupplier = Reference< css::sdbcx::XColumnsSupplier>(_rxCursor, UNO_QUERY);
+    m_xMoveOperations.set(_rxCursor, UNO_QUERY);
+    m_xBookmarkOperations.set(_rxCursor, UNO_QUERY);
+    m_xColumnsSupplier.set(_rxCursor, UNO_QUERY);
     if (!m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is())
     {   // all or nothing !!
         m_xMoveOperations = NULL;
@@ -428,7 +428,7 @@ bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
     Reference< css::sdbcx::XColumnsSupplier> xSupplyCols(_rxRowSet, UNO_QUERY);
     Reference< css::container::XIndexAccess> xCols;
     if (xSupplyCols.is())
-        xCols = Reference< css::container::XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
+        xCols.set(xSupplyCols->getColumns(), UNO_QUERY);
     if (xCols.is() && (xCols->getCount() > 0))
         bIsAlive = true;
 

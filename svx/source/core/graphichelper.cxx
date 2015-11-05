@@ -268,7 +268,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
                 aDescriptor[1].Name = "URL";
                 aDescriptor[1].Value <<= sPath;
 
-                Reference< XComponent > xSourceDocument = Reference< XComponent >( xShape, UNO_QUERY_THROW );
+                Reference< XComponent > xSourceDocument( xShape, UNO_QUERY_THROW );
                 if ( xSourceDocument.is() )
                 {
                     xGraphicExporter->setSourceDocument( xSourceDocument );

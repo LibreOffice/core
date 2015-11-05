@@ -91,7 +91,7 @@ void FmSearchThread::onTerminated()
 FmRecordCountListener::FmRecordCountListener(const Reference< css::sdbc::XResultSet > & dbcCursor)
 {
 
-    m_xListening = Reference< css::beans::XPropertySet > (dbcCursor, UNO_QUERY);
+    m_xListening.set(dbcCursor, UNO_QUERY);
     if (!m_xListening.is())
         return;
 
@@ -310,7 +310,7 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< css::container::XI
 
     // die FieldInfo dazu aufbauen
     FieldInfo fiCurrent;
-    fiCurrent.xContents = Reference< css::sdb::XColumn > (xCurrentField, UNO_QUERY);
+    fiCurrent.xContents.set(xCurrentField, UNO_QUERY);
     fiCurrent.nFormatKey = ::comphelper::getINT32(xProperties->getPropertyValue(FM_PROP_FORMATKEY));
     fiCurrent.bDoubleHandling = false;
     if (m_xFormatSupplier.is())
@@ -693,9 +693,8 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_nTransliterationFlags(0)
 {
 
-    m_xFormatter = Reference< css::util::XNumberFormatter >(
-                    css::util::NumberFormatter::create( ::comphelper::getProcessComponentContext() ),
-                    UNO_QUERY_THROW);
+    m_xFormatter.set( css::util::NumberFormatter::create( ::comphelper::getProcessComponentContext() ),
+                      UNO_QUERY_THROW);
     m_xFormatter->attachNumberFormatsSupplier(m_xFormatSupplier);
 
     Init(sVisibleFields);
@@ -1257,7 +1256,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, bool bForce)
         {
             Reference< css::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
             DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
-            xFields = Reference< css::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
+            xFields.set(xSupplyCols->getColumns(), UNO_QUERY);
             BuildAndInsertFieldInfo(xFields, m_arrFieldMapping[i]);
         }
     }
@@ -1266,7 +1265,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, bool bForce)
         Reference< css::container::XIndexAccess >  xFields;
         Reference< css::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
-        xFields = Reference< css::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
+        xFields.set (xSupplyCols->getColumns(), UNO_QUERY);
         BuildAndInsertFieldInfo(xFields, m_arrFieldMapping[static_cast< size_t >(nFieldIndex)]);
     }
 

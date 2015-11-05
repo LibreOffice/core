@@ -199,7 +199,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
 
 void SvEmbedTransferHelper::ObjectReleased()
 {
-    m_xObj = uno::Reference< embed::XEmbeddedObject >();
+    m_xObj.clear();
 }
 
 void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,

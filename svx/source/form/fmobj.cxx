@@ -237,7 +237,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
             {
                 if ( xSearch == xOldForms )
                     break;
-                xSearch = Reference< XChild >( xSearch->getParent(), UNO_QUERY );
+                xSearch.set( xSearch->getParent(), UNO_QUERY );
             }
             if ( xSearch.is() ) // implies xSearch == xOldForms, which means we're a valid part of our current page forms hierarchy
             {
@@ -410,7 +410,7 @@ namespace
         Reference< css::form::XFormComponent> xChild(_xElement, UNO_QUERY);
         Reference< css::container::XIndexAccess> xParent;
         if (xChild.is())
-            xParent = Reference< css::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
+            xParent.set(xChild->getParent(), UNO_QUERY);
 
         // while the current content is a form
         OUString sReturn;
@@ -433,7 +433,7 @@ namespace
             // travel up
             xChild.set(xParent, css::uno::UNO_QUERY);
             if (xChild.is())
-                xParent = Reference< css::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
+                xParent.set(xChild->getParent(), UNO_QUERY);
         }
 
         _rTopLevelElement = xParent;
@@ -576,8 +576,8 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         // of left siblings with the same DSS, which counts for all their ancestors, too)
 
         // go down
-        xDestContainer = Reference< XIndexContainer > (xCurrentDestForm, UNO_QUERY);
-        xSourceContainer = Reference< XIndexContainer > (xSourceForm, UNO_QUERY);
+        xDestContainer.set(xCurrentDestForm, UNO_QUERY);
+        xSourceContainer.set(xSourceForm, UNO_QUERY);
         DBG_ASSERT(xDestContainer.is() && xSourceContainer.is(), "FmFormObj::ensureModelEnv : invalid container !");
     }
     while ( nTokIndex >= 0 );

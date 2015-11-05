@@ -424,7 +424,7 @@ void SAL_CALL SvxPixelCtlAccessible::disposing()
                 mnClientId =  0;
             }
         }
-        //mxParent = uno::Reference< XAccessible >();
+        //mxParent.clear();
 
     }
 }
@@ -497,7 +497,7 @@ uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Poin
 
 void SvxPixelCtlAccessible::LoseFocus()
 {
-    m_xCurChild = uno::Reference< XAccessible >() ;
+    m_xCurChild.clear();
 }
 
 void SvxPixelCtlAccessibleChild::CheckChild()
@@ -808,7 +808,7 @@ void SAL_CALL SvxPixelCtlAccessibleChild::disposing()
             mnClientId =  0;
         }
 
-        mxParent = uno::Reference< XAccessible >();
+        mxParent.clear();
 
         delete mpBoundingBox;
     }

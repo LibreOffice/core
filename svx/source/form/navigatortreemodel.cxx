@@ -273,9 +273,9 @@ namespace svxform
 
             Reference< XIndexContainer >  xContainer;
             if (pFolder)
-                xContainer = Reference< XIndexContainer > (pFolder->GetFormIface(), UNO_QUERY);
+                xContainer.set(pFolder->GetFormIface(), UNO_QUERY);
             else
-                xContainer = Reference< XIndexContainer > (GetForms(), UNO_QUERY);
+                xContainer.set(GetForms(), UNO_QUERY);
 
             bool bUndo = m_pFormModel->IsUndoEnabled();
 

@@ -712,7 +712,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
             pPage = new SdrPage(*mrModel.mpDoc);
 
         mrModel.mpDoc->InsertPage( pPage, (sal_uInt16)nIndex );
-        xDrawPage = uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() );
+        xDrawPage.set( pPage->getUnoPage(), uno::UNO_QUERY );
     }
 
     return xDrawPage;

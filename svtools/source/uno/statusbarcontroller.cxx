@@ -387,7 +387,7 @@ void StatusbarController::addStatusListener( const OUString& aCommandURL )
                 xURLTransformer->parseStrict( aTargetURL );
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-                xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
+                xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
                 URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
                 if ( aIter != m_aListenerMap.end() )
                 {
@@ -435,7 +435,7 @@ void StatusbarController::bindListener()
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
-            xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
             URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
             while ( pIter != m_aListenerMap.end() )
             {

@@ -851,7 +851,7 @@ void AssignmentPersistentData::ImplCommit()
             Reference< XTablesSupplier > xSupplTables(xConn, UNO_QUERY);
             if (xSupplTables.is())
             {
-                m_xCurrentDatasourceTables = Reference< XNameAccess >(xSupplTables->getTables(), UNO_QUERY);
+                m_xCurrentDatasourceTables.set(xSupplTables->getTables(), UNO_QUERY);
                 if (m_xCurrentDatasourceTables.is())
                     aTableNames = m_xCurrentDatasourceTables->getElementNames();
             }

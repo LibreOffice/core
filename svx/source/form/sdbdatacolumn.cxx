@@ -38,8 +38,8 @@ namespace svxform
     DataColumn::DataColumn(const Reference< css::beans::XPropertySet>& _rxIFace)
     {
         m_xPropertySet = _rxIFace;
-        m_xColumn = Reference< css::sdb::XColumn>(_rxIFace, UNO_QUERY);
-        m_xColumnUpdate = Reference< css::sdb::XColumnUpdate>(_rxIFace, UNO_QUERY);
+        m_xColumn.set(_rxIFace, UNO_QUERY);
+        m_xColumnUpdate.set(_rxIFace, UNO_QUERY);
 
         if (!m_xPropertySet.is() || !m_xColumn.is())
         {

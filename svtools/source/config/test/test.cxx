@@ -210,7 +210,7 @@ Reference< XMultiServiceFactory > TestApplication::getUNOServiceManager()
     {
         Reference< XComponentContext > rCtx =
             cppu::defaultBootstrap_InitialComponentContext();
-        smgr = Reference< XMultiServiceFactory > ( rCtx->getServiceManager() , UNO_QUERY );
+        smgr.set( rCtx->getServiceManager() , UNO_QUERY );
     }
     return smgr;
 }

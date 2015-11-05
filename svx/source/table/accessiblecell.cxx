@@ -258,7 +258,7 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet() 
             }
             // Create a copy of the state set that may be modified by the
             // caller without affecting the current state set.
-            xStateSet = Reference<XAccessibleStateSet>(new ::utl::AccessibleStateSetHelper (*pStateSet));
+            xStateSet.set(new ::utl::AccessibleStateSetHelper (*pStateSet));
         }
     }
 

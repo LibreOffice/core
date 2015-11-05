@@ -1539,7 +1539,7 @@ void FmXFormShell::ExecuteSearch()
                 Reference< XGridPeer> xGridPeer(xActiveControl->getPeer(), UNO_QUERY);
                 Reference< XIndexAccess> xColumns;
                 if (xGridPeer.is())
-                    xColumns = Reference< XIndexAccess>(xGridPeer->getColumns(),UNO_QUERY);
+                    xColumns.set(xGridPeer->getColumns(),UNO_QUERY);
 
                 sal_Int16 nViewCol = xGrid->getCurrentColumnPosition();
                 sal_Int16 nModelCol = GridView2ModelPos(xColumns, nViewCol);
@@ -1664,7 +1664,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
     if (!xCurrentForms.is())
     {   // im alive-Modus sind meine Forms nicht gesetzt, wohl aber die an der Page
         if (m_pShell->GetCurPage())
-            xCurrentForms = Reference< XIndexAccess>( m_pShell->GetCurPage()->GetForms( false ), UNO_QUERY );
+            xCurrentForms.set( m_pShell->GetCurPage()->GetForms( false ), UNO_QUERY );
     }
     if (!xCurrentForms.is())
         return;
@@ -1852,7 +1852,7 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
         // switch all nav dispatchers belonging to the form of the current nav controller to 'non active'
         Reference< XResultSet> xNavigationForm;
         if (m_xNavigationController.is())
-            xNavigationForm = Reference< XResultSet>(m_xNavigationController->getModel(), UNO_QUERY);
+            xNavigationForm.set(m_xNavigationController->getModel(), UNO_QUERY);
         aGuard.clear();
 
         m_bInActivate = true;
@@ -1860,7 +1860,7 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
         // check if the 2 controllers serve different forms
         Reference< XResultSet> xOldForm;
         if (m_xActiveController.is())
-            xOldForm = Reference< XResultSet>(m_xActiveController->getModel(), UNO_QUERY);
+            xOldForm.set(m_xActiveController->getModel(), UNO_QUERY);
         Reference< XResultSet> xNewForm;
         if (xController.is())
             xNewForm = Reference< XResultSet>(xController->getModel(), UNO_QUERY);
@@ -1925,7 +1925,7 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
         // activate all dispatchers belonging to form of the new navigation controller
         xNavigationForm = NULL;
         if (m_xNavigationController.is())
-            xNavigationForm = Reference< XResultSet>(m_xNavigationController->getModel(), UNO_QUERY);
+            xNavigationForm.set(m_xNavigationController->getModel(), UNO_QUERY);
 
         m_bInActivate = false;
 
@@ -2110,11 +2110,11 @@ void FmXFormShell::startListening()
                         Reference< runtime::XFormController > xParent;
                         while (xChild.is())
                         {
-                            xChild = Reference< XChild>(xChild->getParent(), UNO_QUERY);
-                            xParent  = Reference< runtime::XFormController >(xChild, UNO_QUERY);
+                            xChild.set(xChild->getParent(), UNO_QUERY);
+                            xParent.set(xChild, UNO_QUERY);
                             Reference< XPropertySet> xParentSet;
                             if (xParent.is())
-                                xParentSet = Reference< XPropertySet>(xParent->getModel(), UNO_QUERY);
+                                xParentSet.set(xParent->getModel(), UNO_QUERY);
                             if (xParentSet.is())
                             {
                                 xParentSet->getPropertyValue(FM_PROP_NAVIGATION) >>= m_eNavigate;
@@ -2143,7 +2143,7 @@ void FmXFormShell::startListening()
                 Reference< XPropertySet> xNavigationSet;
                 if (m_xNavigationController.is())
                 {
-                    xNavigationSet = Reference< XPropertySet>(m_xNavigationController->getModel(), UNO_QUERY);
+                    xNavigationSet.set(m_xNavigationController->getModel(), UNO_QUERY);
                     if (xNavigationSet.is())
                         xNavigationSet->addPropertyChangeListener(FM_PROP_ROWCOUNT,this);
                 }

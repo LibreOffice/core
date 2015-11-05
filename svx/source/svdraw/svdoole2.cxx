@@ -303,8 +303,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
             throw embed::ObjectSaveVetoException();
 
         // the common persistence is supported by objects and links
-        xPersist = uno::Reference< embed::XCommonEmbedPersist >( mpObj->GetObjRef(), uno::UNO_QUERY_THROW );
-        xModifiable = uno::Reference< util::XModifiable >( mpObj->GetParentXModel(), uno::UNO_QUERY );
+        xPersist.set( mpObj->GetObjRef(), uno::UNO_QUERY_THROW );
+        xModifiable.set( mpObj->GetParentXModel(), uno::UNO_QUERY );
     }
 
     xPersist->storeOwn();
@@ -342,7 +342,7 @@ uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComp
 
     SolarMutexGuard aGuard;
     if ( mpObj )
-        xResult = uno::Reference< util::XCloseable >( mpObj->GetParentXModel(), uno::UNO_QUERY );
+        xResult.set( mpObj->GetParentXModel(), uno::UNO_QUERY );
 
     return xResult;
 }

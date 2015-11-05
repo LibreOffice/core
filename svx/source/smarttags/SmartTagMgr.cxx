@@ -125,7 +125,7 @@ void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange>& xRange,
     {
         Reference < smarttags::XSmartTagRecognizer > xRecognizer = maRecognizerList[i];
 
-        Reference< smarttags::XRangeBasedSmartTagRecognizer > xRangeBasedRecognizer = Reference< smarttags::XRangeBasedSmartTagRecognizer >( xRecognizer, UNO_QUERY);
+        Reference< smarttags::XRangeBasedSmartTagRecognizer > xRangeBasedRecognizer( xRecognizer, UNO_QUERY);
 
         if (!xRangeBasedRecognizer.is()) continue;
 
@@ -354,7 +354,7 @@ void SmartTagMgr::LoadLibraries()
         Reference< lang::XServiceInfo > xsInfo;
 
         if (a >>= xsInfo)
-            xSCF = Reference< lang::XSingleComponentFactory >(xsInfo, UNO_QUERY);
+            xSCF.set(xsInfo, UNO_QUERY);
         else
             continue;
 
@@ -381,7 +381,7 @@ void SmartTagMgr::LoadLibraries()
         Reference< lang::XSingleComponentFactory > xSCF;
 
         if (a >>= xsInfo)
-            xSCF = Reference< lang::XSingleComponentFactory >(xsInfo, UNO_QUERY);
+            xSCF.set(xsInfo, UNO_QUERY);
         else
             continue;
 
@@ -437,7 +437,7 @@ void SmartTagMgr::PrepareConfiguration( const OUString& rConfigurationGroupName 
 
     if ( xConfigurationAccess.is() )
     {
-        mxConfigurationSettings = Reference< beans::XPropertySet >( xConfigurationAccess, UNO_QUERY );
+        mxConfigurationSettings.set( xConfigurationAccess, UNO_QUERY );
     }
 }
 

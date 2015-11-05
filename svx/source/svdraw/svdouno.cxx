@@ -458,7 +458,7 @@ void SdrUnoObj::CreateUnoControlModel(const OUString& rModelName)
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     if (!aUnoControlModelTypeName.isEmpty() )
     {
-        xModel = uno::Reference< awt::XControlModel >(xContext->getServiceManager()->createInstanceWithContext(
+        xModel.set(xContext->getServiceManager()->createInstanceWithContext(
             aUnoControlModelTypeName, xContext), uno::UNO_QUERY);
 
         if (xModel.is())
@@ -478,8 +478,7 @@ void SdrUnoObj::CreateUnoControlModel(const OUString& rModelName,
     uno::Reference< awt::XControlModel >   xModel;
     if (!aUnoControlModelTypeName.isEmpty() && rxSFac.is() )
     {
-        xModel = uno::Reference< awt::XControlModel >(rxSFac->createInstance(
-            aUnoControlModelTypeName), uno::UNO_QUERY);
+        xModel.set(rxSFac->createInstance(aUnoControlModelTypeName), uno::UNO_QUERY);
 
         if (xModel.is())
             SetChanged();

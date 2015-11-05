@@ -2137,7 +2137,7 @@ throw ( Exception, RuntimeException, std::exception)
                                                                 SID_STYLE_FAMILY_START + i,
                                                                 OUString::createFromAscii( StyleSlotToStyleCommand[i] ),
                                                                 *this );
-            m_xBoundItems[i] = Reference< XComponent >( static_cast< OWeakObject* >( pBoundItems[i] ), UNO_QUERY );
+            m_xBoundItems[i].set( static_cast< OWeakObject* >( pBoundItems[i] ), UNO_QUERY );
             pFamilyState[i]  = NULL;
         }
     }

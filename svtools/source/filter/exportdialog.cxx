@@ -466,11 +466,11 @@ bool ExportDialog::GetGraphicStream()
 
             uno::Reference< lang::XComponent > xSourceDoc;
             if ( mxPage.is() )
-                xSourceDoc = uno::Reference< lang::XComponent >( mxPage, uno::UNO_QUERY_THROW );
+                xSourceDoc.set( mxPage, uno::UNO_QUERY_THROW );
             else if ( mxShapes.is() )
-                xSourceDoc = uno::Reference< lang::XComponent >( mxShapes, uno::UNO_QUERY_THROW );
+                xSourceDoc.set( mxShapes, uno::UNO_QUERY_THROW );
             else if ( mxShape.is() )
-                xSourceDoc = uno::Reference< lang::XComponent >( mxShape, uno::UNO_QUERY_THROW );
+                xSourceDoc.set( mxShape, uno::UNO_QUERY_THROW );
             if ( xSourceDoc.is() )
             {
                 xGraphicExporter->setSourceDocument( xSourceDoc );

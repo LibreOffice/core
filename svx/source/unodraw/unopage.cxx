@@ -452,7 +452,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if( pObj )
-             xShapeGroup = Reference< drawing::XShapeGroup >::query( pObj->getUnoShape() );
+             xShapeGroup.set( pObj->getUnoShape(), UNO_QUERY );
     }
 
     mpView->HideSdrPage();

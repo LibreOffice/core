@@ -368,7 +368,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleAtPoint( const aw
             }
             else
             {
-                xRet = Reference< XAccessible >( pEntry->GetAccessible(true), UNO_QUERY );
+                xRet.set( pEntry->GetAccessible(true), UNO_QUERY );
             }
         }
     }

@@ -189,8 +189,7 @@ void GalApp::Init()
 
         uno::Reference<uno::XComponentContext> xComponentContext
             = ::cppu::defaultBootstrap_InitialComponentContext();
-        xMSF = uno::Reference<lang::XMultiServiceFactory>
-            ( xComponentContext->getServiceManager(), uno::UNO_QUERY );
+        xMSF.set( xComponentContext->getServiceManager(), uno::UNO_QUERY );
         if( !xMSF.is() )
         {
             fprintf( stderr, "Failed to bootstrap\n" );

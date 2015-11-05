@@ -1067,7 +1067,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         Any aInteraction;
         Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(1);
         ::comphelper::OInteractionApprove* pApprove = new ::comphelper::OInteractionApprove();
-        lContinuations[0] = Reference< XInteractionContinuation >(static_cast< XInteractionContinuation* >(pApprove), UNO_QUERY);
+        lContinuations[0].set(static_cast< XInteractionContinuation* >(pApprove), UNO_QUERY);
 
         GraphicFilterRequest aErrorCode;
         aErrorCode.ErrCode = nStatus;
@@ -1098,9 +1098,9 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
     // any break inside this one loop while will throw a IllegalArgumentException
     do
     {
-        mxPage = Reference< XDrawPage >::query( xComponent );
-        mxShapes = Reference< XShapes >::query( xComponent );
-        mxShape = Reference< XShape >::query( xComponent );
+        mxPage.set( xComponent, UNO_QUERY );
+        mxShapes.set( xComponent, UNO_QUERY );
+        mxShape.set( xComponent, UNO_QUERY );
 
         // Step 1: try a generic XShapes
         if( !mxPage.is() && !mxShape.is() && mxShapes.is() )
@@ -1132,9 +1132,9 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
             do
             {
                 xInt = xChild->getParent();
-                mxPage = Reference< XDrawPage >::query( xInt );
+                mxPage.set( xInt, UNO_QUERY );
                 if( !mxPage.is() )
-                    xChild = Reference< XChild >::query( xInt );
+                    xChild.set( xInt, UNO_QUERY );
             }
             while( !mxPage.is() && xChild.is() );
 

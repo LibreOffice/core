@@ -110,7 +110,7 @@ public:
     }
     Reference<XRubySelection> GetRubySelection()
     {
-        xSelection = Reference<XRubySelection>(xController, UNO_QUERY);
+        xSelection.set(xController, UNO_QUERY);
         return xSelection;
     }
     void UpdateRubyValues()
@@ -155,7 +155,7 @@ void SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
 
             bHasSelectionChanged = true;
             xController = xCtrl;
-            xSelSupp = Reference<XSelectionSupplier>(xController, UNO_QUERY);
+            xSelSupp.set(xController, UNO_QUERY);
             if (xSelSupp.is())
                 xSelSupp->addSelectionChangeListener(this);
         }

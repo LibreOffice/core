@@ -171,7 +171,7 @@ uno::Reference<XAccessible>
                 ShapeTypeHandler::Instance().CreateAccessibleObject (
                     aShapeInfo,
                     maShapeTreeInfo));
-            rChildDescriptor.mxAccessibleShape = uno::Reference<XAccessible> (
+            rChildDescriptor.mxAccessibleShape.set(
                 static_cast<uno::XWeak*>(pShape.get()),
                 uno::UNO_QUERY);
             if ( pShape.is() )
@@ -613,8 +613,7 @@ void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo
         SolarMutexGuard g;
         xCurrentBroadcaster = maShapeTreeInfo.GetModelBroadcaster();
         xCurrentController = maShapeTreeInfo.GetController();
-        xCurrentSelectionSupplier = Reference<view::XSelectionSupplier> (
-            xCurrentController, uno::UNO_QUERY);
+        xCurrentSelectionSupplier.set( xCurrentController, uno::UNO_QUERY);
         maShapeTreeInfo = rShapeTreeInfo;
     }
 
@@ -893,10 +892,8 @@ void ChildrenManagerImpl::UpdateSelection()
     Reference<drawing::XShape> xSelectedShape;
     if (xSelectionSupplier.is())
     {
-        xSelectedShapeAccess = Reference<container::XIndexAccess> (
-            xSelectionSupplier->getSelection(), uno::UNO_QUERY);
-        xSelectedShape = Reference<drawing::XShape> (
-            xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+        xSelectedShapeAccess.set( xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+        xSelectedShape.set( xSelectionSupplier->getSelection(), uno::UNO_QUERY);
     }
 
     // Remember the current and new focused shape.

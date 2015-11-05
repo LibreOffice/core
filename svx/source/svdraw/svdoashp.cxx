@@ -428,7 +428,7 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
         aArgument[ 0 ] <<= aPropValues;
         Reference< XInterface > xInterface( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aEngine, aArgument, xContext ) );
         if ( xInterface.is() )
-            mxCustomShapeEngine = Reference< XCustomShapeEngine >( xInterface, UNO_QUERY );
+            mxCustomShapeEngine.set( xInterface, UNO_QUERY );
     }
 
     return mxCustomShapeEngine;

@@ -112,7 +112,7 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
     // specify our internal dispatch provider
     // frame or desktop?! => document or global config.
     bool bDesktopIsUsed = false;
-    m_xDispatcher  = css::uno::Reference< css::frame::XDispatchProvider >(xEnv, css::uno::UNO_QUERY);
+    m_xDispatcher.set(xEnv, css::uno::UNO_QUERY);
     if (!m_xDispatcher.is())
     {
         aLock.clear();

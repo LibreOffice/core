@@ -1136,7 +1136,7 @@ namespace accessibility
                 ::uno::Reference< XAccessible > xPara;
                 ::accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( begin->first.get() );
                 if( aHardRef.is() )
-                    xPara = ::uno::Reference< XAccessible >( aHardRef.getRef(), ::uno::UNO_QUERY );
+                    xPara.set( aHardRef.getRef(), ::uno::UNO_QUERY );
 
                 // release everything from the remove position until the end
                 maParaManager.Release(aFunctor.GetParaIndex(), nCurrParas);

@@ -349,7 +349,7 @@ void SAL_CALL SvtRulerAccessible::disposing()
                 comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
                 mnClientId =  0;
             }
-            mxParent = uno::Reference< XAccessible >();
+            mxParent.clear();
         }
     }
 }

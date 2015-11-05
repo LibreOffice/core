@@ -94,14 +94,14 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
 
     for ( i = 0; i < aSeqCont.getLength(); i++ )
     {
-        abort = Reference< XInteractionAbort>::query( aSeqCont[i]);
+        abort.set( aSeqCont[i], UNO_QUERY );
         if ( abort.is() )
             break;
     }
 
     for ( i= 0; i < aSeqCont.getLength(); i++)
     {
-        retry= Reference<XInteractionRetry>::query( aSeqCont[i]);
+        retry.set( aSeqCont[i], UNO_QUERY );
         if ( retry.is() )
             break;
     }

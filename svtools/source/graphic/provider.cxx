@@ -358,7 +358,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 
         if( xGraphic.is() )
         {
-            xRet = uno::Reference< beans::XPropertySet >( xGraphic, uno::UNO_QUERY );
+            xRet.set( xGraphic, uno::UNO_QUERY );
         }
         else
         {
@@ -371,7 +371,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
     {
         uno::Reference< ::graphic::XGraphic > xGraphic( implLoadBitmap( xBtm ) );
         if( xGraphic.is() )
-            xRet = uno::Reference< beans::XPropertySet >( xGraphic, uno::UNO_QUERY );
+            xRet.set( xGraphic, uno::UNO_QUERY );
     }
 
     return xRet;

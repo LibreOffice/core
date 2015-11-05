@@ -1108,9 +1108,9 @@ namespace svxform
 
             // position in DropParents, where to insert dropped entries
             if (pTargetData)
-                xContainer = Reference< XIndexContainer > (pTargetData->GetElement(), UNO_QUERY);
+                xContainer.set(pTargetData->GetElement(), UNO_QUERY);
             else
-                xContainer = Reference< XIndexContainer > (GetNavModel()->GetForms(), UNO_QUERY);
+                xContainer.set(GetNavModel()->GetForms(), UNO_QUERY);
 
             // always insert at the end
             nIndex = xContainer->getCount();
@@ -1135,7 +1135,7 @@ namespace svxform
 
             if (aEvts.getLength())
             {
-                xManager = Reference< XEventAttacherManager > (xContainer, UNO_QUERY);
+                xManager.set(xContainer, UNO_QUERY);
                 if (xManager.is())
                     xManager->registerScriptEvents(nIndex, aEvts);
             }

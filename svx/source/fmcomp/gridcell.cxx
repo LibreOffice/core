@@ -207,7 +207,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< css::bea
     }
     Reference< XRowSet >  xCur;
     if (m_rParent.getDataSource())
-        xCur = Reference< XRowSet > (Reference< XInterface >(*m_rParent.getDataSource()), UNO_QUERY);
+        xCur.set(Reference< XInterface >(*m_rParent.getDataSource()), UNO_QUERY);
         // TODO : the cursor wrapper should use an XRowSet interface, too
 
     pCellControl->Init( m_rParent.GetDataWindow(), xCur );
@@ -1919,7 +1919,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         Reference< css::util::XNumberFormatsSupplier >  xSupplier;
         Reference< XRowSet > xForm;
         if ( m_rColumn.GetParent().getDataSource() )
-            xForm = Reference< XRowSet >( Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY );
+            xForm.set( Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY );
         if ( xForm.is() )
             xSupplier = getNumberFormats( getConnection( xForm ), true );
         SvNumberFormatter* pFormatterUsed = NULL;
@@ -3002,7 +3002,7 @@ void DbFilterField::Update()
         // the columnmodel
         Reference< css::container::XChild >  xModelAsChild(m_rColumn.getModel(), UNO_QUERY);
         // the grid model
-        xModelAsChild = Reference< css::container::XChild > (xModelAsChild->getParent(),UNO_QUERY);
+        xModelAsChild.set(xModelAsChild->getParent(),UNO_QUERY);
         Reference< XRowSet >  xForm(xModelAsChild->getParent(), UNO_QUERY);
         if (!xForm.is())
             return;
