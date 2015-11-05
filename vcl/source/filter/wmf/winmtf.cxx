@@ -944,12 +944,11 @@ sal_uInt32 WinMtfOutput::SetRasterOp( sal_uInt32 nRasterOp )
     if ( nRasterOp != mnRop )
     {
         mnRop = nRasterOp;
-        static WinMtfLineStyle aNopLineStyle;
 
         if ( mbNopMode && ( nRasterOp != R2_NOP ) )
         {   // changing modes from R2_NOP so set pen and brush
             maFillStyle = m_NopFillStyle;
-            maLineStyle = aNopLineStyle;
+            maLineStyle = m_NopLineStyle;
             mbNopMode = false;
         }
         switch( nRasterOp )
@@ -968,7 +967,7 @@ sal_uInt32 WinMtfOutput::SetRasterOp( sal_uInt32 nRasterOp )
                 if( !mbNopMode )
                 {
                     m_NopFillStyle = maFillStyle;
-                    aNopLineStyle = maLineStyle;
+                    m_NopLineStyle = maLineStyle;
                     maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), true );
                     maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), true );
                     mbNopMode = true;
