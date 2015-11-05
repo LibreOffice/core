@@ -1747,6 +1747,16 @@ IMPL_LINK_TYPED(OfaAutocorrExceptPage, ModifyHdl, Edit&, rEdt, void)
 
 VCL_BUILDER_FACTORY(AutoCorrEdit)
 
+void AutoCorrEdit::dispose()
+{
+    m_xReplaceTLB.disposeAndClear();
+    Edit::dispose();
+}
+
+AutoCorrEdit::~AutoCorrEdit() {
+    disposeOnce();
+}
+
 void AutoCorrEdit::ConnectColumn(const VclPtr<SvTabListBox>& rTable, sal_Int32 nCol)
 {
     m_xReplaceTLB = rTable;

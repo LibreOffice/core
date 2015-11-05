@@ -188,6 +188,8 @@ class AutoCorrEdit : public Edit
     sal_Int32 m_nCol;
     bool bSpaces;
 
+    void dispose() override;
+
 public:
     AutoCorrEdit(vcl::Window* pParent, const ResId& rResId)
         : Edit(pParent, rResId)
@@ -202,6 +204,8 @@ public:
         , bSpaces(false)
     {
     }
+
+    virtual ~AutoCorrEdit();
 
     void            SetActionHdl( const Link<AutoCorrEdit&,bool>& rLink )
                                 { aActionLink = rLink;}
