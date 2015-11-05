@@ -75,7 +75,7 @@ uno::Reference<drawing::XDrawPage> FormControlHelper::FormControlHelper_Impl::ge
 uno::Reference<lang::XMultiServiceFactory> FormControlHelper::FormControlHelper_Impl::getServiceFactory()
 {
     if (! rServiceFactory.is())
-        rServiceFactory = uno::Reference<lang::XMultiServiceFactory>(rTextDocument, uno::UNO_QUERY);
+        rServiceFactory.set(rTextDocument, uno::UNO_QUERY);
 
     return rServiceFactory;
 }
@@ -110,7 +110,7 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
                 xFormProperties->setPropertyValue("Name", aAny);
             }
 
-            rForm = uno::Reference<form::XForm>(xForm, uno::UNO_QUERY);
+            rForm.set(xForm, uno::UNO_QUERY);
 
             uno::Reference<container::XIndexContainer> xForms(xFormsNamedContainer, uno::UNO_QUERY);
             uno::Any aAny(xForm);
@@ -157,7 +157,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> const& x
     if (!xInterface.is())
         return false;
 
-    m_pImpl->rFormComponent = uno::Reference<form::XFormComponent>(xInterface, uno::UNO_QUERY);
+    m_pImpl->rFormComponent.set(xInterface, uno::UNO_QUERY);
     if (!m_pImpl->rFormComponent.is())
         return false;
 

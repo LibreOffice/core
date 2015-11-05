@@ -1143,7 +1143,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 uno::makeAny( m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
                                     text::TextContentAnchorType_AT_CHARACTER :
                                     text::TextContentAnchorType_AS_CHARACTER ));
-            xGraphicObject = uno::Reference< text::XTextContent >( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
+            xGraphicObject.set( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
 
             //shapes have only one border
             table::BorderLine2 aBorderLine;
