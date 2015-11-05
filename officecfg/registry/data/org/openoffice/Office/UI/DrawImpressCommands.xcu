@@ -1586,11 +1586,6 @@
           <value xml:lang="en-US">La~yer</value>
         </prop>
       </node>
-      <node oor:name=".uno:GridMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Gr~id</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ConvertMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Convert</value>
