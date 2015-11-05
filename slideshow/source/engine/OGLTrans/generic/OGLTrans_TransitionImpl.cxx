@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <algorithm>
@@ -1843,6 +1844,75 @@ std::shared_ptr<OGLTransitionImpl> makeVortex()
     aSettings.mnRequiredGLVersion = 2.0;
 
     return makeVortexTransition(aLeavingSlide, aEnteringSlide, aSettings, NX, NY);
+}
+
+namespace
+{
+
+class RippleTransition : public ShaderTransition
+{
+public:
+    RippleTransition(const TransitionScene& rScene, const TransitionSettings& rSettings, const glm::vec2& rCenter)
+        : ShaderTransition(rScene, rSettings),
+          maCenter(rCenter)
+    {
+    }
+
+private:
+    virtual GLuint makeShader() override;
+
+    glm::vec2 maCenter;
+};
+
+GLuint RippleTransition::makeShader()
+{
+    GLuint nProgram = OpenGLHelper::LoadShaders( "basicVertexShader", "rippleFragmentShader" );
+
+    if (nProgram)
+    {
+        glUseProgram(nProgram);
+
+        GLint nCenterLocation = glGetUniformLocation(nProgram, "center");
+        CHECK_GL_ERROR();
+
+        glUniform2fv(nCenterLocation, 1, glm::value_ptr(maCenter));
+        CHECK_GL_ERROR();
+    }
+
+    return nProgram;
+}
+
+std::shared_ptr<OGLTransitionImpl>
+makeRippleTransition(const Primitives_t& rLeavingSlidePrimitives,
+                     const Primitives_t& rEnteringSlidePrimitives,
+                     const TransitionSettings& rSettings)
+{
+    // The center point should be adjustable by the user, but we have no way to do that in the UI
+    return std::make_shared<RippleTransition>(TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
+                                              rSettings,
+                                              glm::vec2(0.5, 0.5));
+}
+
+}
+
+std::shared_ptr<OGLTransitionImpl> makeRipple()
+{
+    Primitive Slide;
+
+    Slide.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
+    Slide.pushTriangle (glm::vec2 (1,0), glm::vec2 (0,1), glm::vec2 (1,1));
+
+    Primitives_t aLeavingSlide;
+    aLeavingSlide.push_back (Slide);
+
+    Primitives_t aEnteringSlide;
+    aEnteringSlide.push_back (Slide);
+
+    TransitionSettings aSettings;
+    aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+    aSettings.mnRequiredGLVersion = 2.0;
+
+    return makeRippleTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeNewsflash()

@@ -1597,6 +1597,14 @@
           <value xml:lang="en-US">Vortex</value>
         </prop>
       </node>
+      <node oor:name="ripple" oor:op="replace">
+        <prop oor:name="Group" oor:type="xs:string">
+          <value>exciting</value>
+        </prop>
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Ripple</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="TransitionVariants">
       <node oor:name="plain" oor:op="replace">
@@ -2333,6 +2341,11 @@
       <node oor:name="vortex" oor:op="replace">
         <prop oor:name="Set" oor:type="xs:string">
           <value>vortex</value>
+        </prop>
+      </node>
+      <node oor:name="ripple" oor:op="replace">
+        <prop oor:name="Set" oor:type="xs:string">
+          <value>ripple</value>
         </prop>
       </node>
     </node>

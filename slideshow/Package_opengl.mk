@@ -15,6 +15,7 @@ $(eval $(call gb_Package_add_files,slideshow_opengl_shader,$(LIBO_ETC_FOLDER)/op
 		staticFragmentShader.glsl \
 		vortexFragmentShader.glsl \
 		vortexVertexShader.glsl \
+		rippleFragmentShader.glsl \
 ))
 
 # vim: set noet sw=4 ts=4:
