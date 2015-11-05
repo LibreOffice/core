@@ -471,16 +471,16 @@ const char* PowerPointExport::GetCornerDirection( sal_uInt8 nDirection )
 
     switch( nDirection ) {
     case 4:
-        pDirection = "rd";
+        pDirection = "lu";
         break;
     case 5:
-        pDirection = "ld";
-        break;
-    case 6:
         pDirection = "ru";
         break;
+    case 6:
+        pDirection = "ld";
+        break;
     case 7:
-        pDirection = "lu";
+        pDirection = "rd";
         break;
     }
 
