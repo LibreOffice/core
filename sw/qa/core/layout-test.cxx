@@ -86,7 +86,7 @@ void SwLayoutTest::setUp()
     m_xWriterComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Writer.TextDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
-    mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
+    mxDesktop = css::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }
 
 void SwLayoutTest::tearDown()

@@ -658,7 +658,7 @@ DECLARE_OOXMLEXPORT_TEST(testFixedDateFields, "fixed-date-field.docx")
 
     // Check fixed property was imported and date value was parsed correctly
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, "IsFixed"));
-    com::sun::star::util::DateTime date = getProperty<com::sun::star::util::DateTime>(xField, "DateTimeValue");
+    css::util::DateTime date = getProperty<css::util::DateTime>(xField, "DateTimeValue");
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)24, date.Day);
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)7, date.Month);
     CPPUNIT_ASSERT_EQUAL((sal_Int16)2014, date.Year);

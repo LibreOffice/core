@@ -200,7 +200,7 @@ protected:
     // Returns page number of the first page of a MM document inside the large MM document (used in the SHELL case).
     int documentStartPageNumber( int document ) const;
 
-    uno::Reference< com::sun::star::task::XJob > mxJob;
+    uno::Reference< css::task::XJob > mxJob;
     uno::Sequence< beans::NamedValue > mSeqMailMergeArgs;
     OUString mailMergeOutputURL;
     OUString mailMergeOutputPrefix;

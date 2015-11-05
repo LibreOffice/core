@@ -1694,7 +1694,7 @@ DECLARE_OOXMLIMPORT_TEST(testChartProp, "chart-prop.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8890), getProperty<sal_Int32>(xPropertySet, "Height"));
 }
 
-void lcl_countTextFrames(com::sun::star::uno::Reference< lang::XComponent >& xComponent,
+void lcl_countTextFrames(css::uno::Reference< lang::XComponent >& xComponent,
    sal_Int32 nExpected )
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(xComponent, uno::UNO_QUERY);

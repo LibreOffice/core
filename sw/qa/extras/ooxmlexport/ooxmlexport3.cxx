@@ -613,7 +613,7 @@ DECLARE_OOXMLEXPORT_TEST(testImageCrop, "ImageCrop.docx")
 {
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
-    ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+    css::text::GraphicCrop aGraphicCropStruct;
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
@@ -742,7 +742,7 @@ DECLARE_OOXMLEXPORT_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
 #if !defined(MACOSX)
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
-    ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+    css::text::GraphicCrop aGraphicCropStruct;
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
@@ -763,7 +763,7 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
      */
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
-    ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+    css::text::GraphicCrop aGraphicCropStruct;
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 

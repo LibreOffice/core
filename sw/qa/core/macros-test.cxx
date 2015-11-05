@@ -126,7 +126,7 @@ void SwMacrosTest::testStarBasic()
     OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
-    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
@@ -161,7 +161,7 @@ void SwMacrosTest::testVba()
     {
         OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
-        uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
+        uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
         OUStringBuffer sMsg( "Failed to load " );
         sMsg.append ( aFileName );
         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
@@ -258,7 +258,7 @@ void SwMacrosTest::testControlShapeGrouping()
 {
     OUString aFileName;
     createFileURL("testControlShapeGrouping.", "odt", aFileName);
-    Reference< com::sun::star::lang::XComponent > xComponent(
+    Reference< css::lang::XComponent > xComponent(
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument"));
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -395,7 +395,7 @@ void SwMacrosTest::testFdo68983()
 {
     OUString aFileName;
     createFileURL("fdo68983.", "odt", aFileName);
-    Reference< com::sun::star::lang::XComponent > xComponent =
+    Reference< css::lang::XComponent > xComponent =
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo68983.odt", xComponent.is());
@@ -504,7 +504,7 @@ void SwMacrosTest::setUp()
     m_xWriterComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Writer.TextDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
-    mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
+    mxDesktop = css::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }
 
 void SwMacrosTest::tearDown()
