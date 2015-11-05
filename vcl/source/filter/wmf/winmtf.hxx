@@ -543,6 +543,7 @@ class WinMtfOutput
 
     WinMtfLineStyle     maLatestLineStyle;
     WinMtfLineStyle     maLineStyle;
+    WinMtfLineStyle     m_NopLineStyle;
     WinMtfFillStyle     maLatestFillStyle;
     WinMtfFillStyle     maFillStyle;
     WinMtfFillStyle     m_NopFillStyle;
