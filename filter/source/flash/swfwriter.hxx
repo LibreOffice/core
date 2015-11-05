@@ -29,7 +29,6 @@
 #include <vcl/vclptr.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/color.hxx>
-#include <tools/poly.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -41,12 +40,16 @@
 
 class GDIMetaFile;
 class BitmapEx;
-namespace tools { class PolyPolygon; }
 class Gradient;
 class SvtGraphicFill;
 class SvtGraphicStroke;
 class LineInfo;
 namespace basegfx { class B2DPolygon; }
+namespace tools
+{
+    class Polygon;
+    class PolyPolygon;
+}
 
 inline sal_uInt16 _uInt16( sal_Int32 nValue )
 {

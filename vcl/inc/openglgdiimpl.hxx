@@ -29,7 +29,6 @@
 #include "opengl/texture.hxx"
 #include "regionband.hxx"
 
-#include <tools/poly.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
 class SalFrame;
@@ -40,6 +39,12 @@ namespace basegfx
 {
 class B2DTrapezoid;
 };
+
+namespace tools
+{
+    class Polygon;
+    class PolyPolygon;
+}
 
 struct TextureCombo
 {

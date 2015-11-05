@@ -26,7 +26,6 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/uno/XReference.hpp>
-#include <tools/poly.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include "oox/drawingml/drawingmltypes.hxx"
 #include <oox/token/tokens.hxx>
@@ -59,6 +58,10 @@ namespace io {
 }}}
 
 class OutlinerParaObject;
+
+namespace tools {
+    class PolyPolygon;
+}
 
 namespace oox {
 namespace core {

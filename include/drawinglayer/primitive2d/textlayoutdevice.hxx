@@ -22,7 +22,6 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <tools/poly.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vector>
 #include <com/sun/star/lang/Locale.hpp>
@@ -36,6 +35,7 @@ namespace rtl {
 };
 class OutputDevice;
 class GDIMetaFile;
+class Rectangle;
 enum class DrawTextFlags;
 namespace drawinglayer { namespace attribute {
     class FontAttribute;

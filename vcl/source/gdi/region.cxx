@@ -32,6 +32,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/poly.hxx>
 
 namespace
 {

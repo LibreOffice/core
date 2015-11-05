@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_REGBAND_HXX
 #define INCLUDED_VCL_INC_REGBAND_HXX
 
-#include <tools/poly.hxx>
+#include <sal/types.h>
 
 /*
 

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_COMMONCONVERTERS_HXX
 #define INCLUDED_CHART2_SOURCE_INC_COMMONCONVERTERS_HXX
 
-#include <tools/poly.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>

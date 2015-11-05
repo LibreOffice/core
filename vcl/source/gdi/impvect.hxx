@@ -20,8 +20,9 @@
 #ifndef INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
 #define INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
 
-#include <tools/poly.hxx>
 #include <vcl/gdimtf.hxx>
+
+namespace tools { class PolyPolygon; }
 
 // - Vectorizer -
 namespace ImplVectorizer
