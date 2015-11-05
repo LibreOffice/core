@@ -49,6 +49,8 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <vcl/svapp.hxx>
@@ -640,6 +642,7 @@ void SwDocShell::SubInitNew()
 
     sal_uInt16 nRange[] =   {
         RES_PARATR_ADJUST, RES_PARATR_ADJUST,
+        RES_PARATR_ORPHANS,      RES_PARATR_WIDOWS,
         RES_CHRATR_COLOR, RES_CHRATR_COLOR,
         RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
         RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
@@ -680,6 +683,13 @@ void SwDocShell::SubInitNew()
                                           SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP ) );
     }
     aDfltSet.Put( SvxColorItem( Color( COL_AUTO ), RES_CHRATR_COLOR ) );
+
+    // only set Widow/Orphan defaults on a new document, not an opened one
+    if( GetMedium() && GetMedium()->GetOrigURL().isEmpty() )
+    {
+        aDfltSet.Put( SvxWidowsItem(  (sal_uInt8) 2, RES_PARATR_WIDOWS)  );
+        aDfltSet.Put( SvxOrphansItem( (sal_uInt8) 2, RES_PARATR_ORPHANS) );
+    }
 
     m_pDoc->SetDefault( aDfltSet );
 
