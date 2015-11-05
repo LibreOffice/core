@@ -62,7 +62,7 @@
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <svl/itemprop.hxx>
-#include <svx/unomod.hxx>
+#include <svx/fmdmod.hxx>
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -126,7 +126,7 @@ typedef cppu::WeakImplHelper
 SwXTextDocumentBaseClass;
 
 class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
-    public SvxUnoDrawMSFactory,
+    public SvxFmMSFactory,
     public SfxBaseModel,
     public vcl::ITiledRenderable,
     public ::com::sun::star::tiledrendering::XTiledRenderable

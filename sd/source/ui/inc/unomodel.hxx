@@ -43,7 +43,7 @@
 
 #include <svl/lstner.hxx>
 #include <sfx2/sfxbasemodel.hxx>
-#include <svx/unomod.hxx>
+#include <svx/fmdmod.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/ITiledRenderable.hxx>
@@ -69,7 +69,7 @@ extern OUString getPageApiNameFromUiName( const OUString& rUIName );
 *                                                                      *
 ***********************************************************************/
 class SD_DLLPUBLIC SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
-                           public SvxUnoDrawMSFactory,
+                           public SvxFmMSFactory,
                            public css::drawing::XDrawPageDuplicator,
                            public css::drawing::XLayerSupplier,
                            public css::drawing::XMasterPagesSupplier,
@@ -191,7 +191,7 @@ public:
     // XPresentationSupplier
     virtual css::uno::Reference< css::presentation::XPresentation > SAL_CALL getPresentation(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // XMultiServiceFactory ( SvxUnoDrawMSFactory )
+    // XMultiServiceFactory ( SvxFmMSFactory )
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
     createInstanceWithArguments(

@@ -2424,14 +2424,14 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
     }
     else
     {
-        //  alles was ich nicht kenn, werf ich der SvxUnoDrawMSFactory an den Hals,
+        //  alles was ich nicht kenn, werf ich der SvxFmMSFactory an den Hals,
         //  da wird dann 'ne Exception geworfen, wenn's nicht passt...
 
         try
         {
             xRet = arguments == 0
-                ? SvxUnoDrawMSFactory::createInstance(aServiceSpecifier)
-                : SvxUnoDrawMSFactory::createInstanceWithArguments(
+                ? SvxFmMSFactory::createInstance(aServiceSpecifier)
+                : SvxFmMSFactory::createInstanceWithArguments(
                     aServiceSpecifier, *arguments);
             // extra block to force deletion of the temporary before ScShapeObj ctor (setDelegator)
         }
@@ -2490,10 +2490,10 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
 
     //! warum sind die Parameter bei concatServiceNames nicht const ???
     //! return concatServiceNames( ScServiceProvider::GetAllServiceNames(),
-    //!                            SvxUnoDrawMSFactory::getAvailableServiceNames() );
+    //!                            SvxFmMSFactory::getAvailableServiceNames() );
 
     uno::Sequence<OUString> aMyServices(ScServiceProvider::GetAllServiceNames());
-    uno::Sequence<OUString> aDrawServices(SvxUnoDrawMSFactory::getAvailableServiceNames());
+    uno::Sequence<OUString> aDrawServices(SvxFmMSFactory::getAvailableServiceNames());
 
     return concatServiceNames( aMyServices, aDrawServices );
 }

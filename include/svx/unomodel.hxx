@@ -26,13 +26,13 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sfx2/sfxbasemodel.hxx>
+#include <svx/fmdmod.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/unomod.hxx>
 
 class SdrModel;
 
 class SVX_DLLPUBLIC SvxUnoDrawingModel : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
-                           public SvxUnoDrawMSFactory,
+                           public SvxFmMSFactory,
                            public css::drawing::XDrawPagesSupplier,
                            public css::lang::XServiceInfo,
                            public css::ucb::XAnyCompareFactory
@@ -76,7 +76,7 @@ public:
     // XDrawPagesSupplier
     virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL getDrawPages(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // XMultiServiceFactory ( SvxUnoDrawMSFactory )
+    // XMultiServiceFactory ( SvxFmMSFactory )
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 

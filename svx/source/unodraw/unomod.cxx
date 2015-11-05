@@ -26,7 +26,6 @@
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -51,8 +50,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xmlgrhlp.hxx>
-#include <fmobj.hxx>
-#include "fmservs.hxx"
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -199,23 +196,10 @@ css::uno::Reference<css::uno::XInterface> create(
 
 }
 
-uno::Reference< uno::XInterface >  SAL_CALL SvxUnoDrawMSFactory::createInstance(const OUString& rServiceSpecifier)
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& rServiceSpecifier )
     throw( uno::Exception, uno::RuntimeException, std::exception )
 {
-    css::uno::Reference< css::uno::XInterface >  xRet;
-    if ( rServiceSpecifier.startsWith( "com.sun.star.form.component." ) )
-    {
-        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
-        xRet = xContext->getServiceManager()->createInstanceWithContext(rServiceSpecifier, xContext);
-    }
-    else if ( rServiceSpecifier == "com.sun.star.drawing.ControlShape" )
-    {
-        SdrObject* pObj = new FmFormObj();
-        xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj)));
-    }
-    if (!xRet.is())
-        xRet = create(rServiceSpecifier, "");
-    return xRet;
+    return create(rServiceSpecifier, "");
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField( const OUString& ServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException)
@@ -236,44 +220,11 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWi
     throw lang::NoSupportException();
 }
 
-
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames()
     throw( uno::RuntimeException, std::exception )
 {
-    static const OUString aSvxComponentServiceNameList[] =
-    {
-        OUString(FM_SUN_COMPONENT_TEXTFIELD),
-        OUString(FM_SUN_COMPONENT_FORM),
-        OUString(FM_SUN_COMPONENT_LISTBOX),
-        OUString(FM_SUN_COMPONENT_COMBOBOX),
-        OUString(FM_SUN_COMPONENT_RADIOBUTTON),
-        OUString(FM_SUN_COMPONENT_GROUPBOX),
-        OUString(FM_SUN_COMPONENT_FIXEDTEXT),
-        OUString(FM_SUN_COMPONENT_COMMANDBUTTON),
-        OUString(FM_SUN_COMPONENT_CHECKBOX),
-        OUString(FM_SUN_COMPONENT_GRIDCONTROL),
-        OUString(FM_SUN_COMPONENT_IMAGEBUTTON),
-        OUString(FM_SUN_COMPONENT_FILECONTROL),
-        OUString(FM_SUN_COMPONENT_TIMEFIELD),
-        OUString(FM_SUN_COMPONENT_DATEFIELD),
-        OUString(FM_SUN_COMPONENT_NUMERICFIELD),
-        OUString(FM_SUN_COMPONENT_CURRENCYFIELD),
-        OUString(FM_SUN_COMPONENT_PATTERNFIELD),
-        OUString(FM_SUN_COMPONENT_HIDDENCONTROL),
-        OUString(FM_SUN_COMPONENT_IMAGECONTROL)
-    };
-
-    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
-
-    uno::Sequence< OUString > aSeq( nSvxComponentServiceNameListCount );
-    OUString* pStrings = aSeq.getArray();
-    for( sal_uInt16 nIdx = 0; nIdx < nSvxComponentServiceNameListCount; nIdx++ )
-        pStrings[nIdx] = aSvxComponentServiceNameList[nIdx];
-
-    uno::Sequence< OUString > aParentSeq( UHashMap::getServiceNames() );
-    return concatServiceNames( aParentSeq, aSeq );
+    return UHashMap::getServiceNames();
 }
-
 
 uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence< OUString >& rServices1, uno::Sequence< OUString >& rServices2 ) throw()
 {
@@ -398,7 +349,7 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SvxUnoDrawingModel::getDrawPages(
     return xDrawPages;
 }
 
-// XMultiServiceFactory ( SvxUnoDrawMSFactory )
+// XMultiServiceFactory ( SvxFmMSFactory )
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( const OUString& aServiceSpecifier )
     throw(uno::Exception, uno::RuntimeException, std::exception)
 {
@@ -552,7 +503,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
     }
     else
     {
-        xRet = SvxUnoDrawMSFactory::createInstance( aServiceSpecifier );
+        xRet = SvxFmMSFactory::createInstance( aServiceSpecifier );
     }
 
     return xRet;
@@ -561,7 +512,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    const uno::Sequence< OUString > aSNS_ORG( SvxUnoDrawMSFactory::getAvailableServiceNames() );
+    const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
     uno::Sequence< OUString > aSNS( 21 );
 
