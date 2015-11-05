@@ -29,7 +29,7 @@ public:
     Point*          mpPointAry;
     sal_uInt8*           mpFlagAry;
     sal_uInt16          mnPoints;
-    sal_uIntPtr           mnRefCount;
+    sal_uInt32      mnRefCount;
 };
 
 class SAL_WARN_UNUSED ImplPolygon  : public ImplPolygonData
@@ -55,7 +55,7 @@ class SAL_WARN_UNUSED ImplPolyPolygon
 {
 public:
     tools::Polygon** mpPolyAry;
-    sal_uIntPtr         mnRefCount;
+    sal_uInt32          mnRefCount;
     sal_uInt16          mnCount;
     sal_uInt16          mnSize;
     sal_uInt16          mnResize;

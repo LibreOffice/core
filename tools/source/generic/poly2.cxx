@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define POLY_CLIP_INT   0
-#define POLY_CLIP_UNION 1
-#define POLY_CLIP_DIFF  2
-#define POLY_CLIP_XOR   3
-
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -99,7 +94,7 @@ PolyPolygon::PolyPolygon( const tools::Polygon& rPoly )
 
 PolyPolygon::PolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
-    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFFFFFE, "PolyPolygon: RefCount overflow" );
+    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < (SAL_MAX_UINT32-1), "PolyPolygon: RefCount overflow" );
 
     mpImplPolyPolygon = rPolyPoly.mpImplPolyPolygon;
     mpImplPolyPolygon->mnRefCount++;
@@ -312,15 +307,15 @@ tools::PolyPolygon PolyPolygon::SubdivideBezier( const tools::PolyPolygon& rPoly
 
 void PolyPolygon::GetIntersection( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult ) const
 {
-    ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_INT );
+    ImplDoOperation( rPolyPoly, rResult, PolyClipOp::INTERSECT );
 }
 
 void PolyPolygon::GetUnion( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult ) const
 {
-    ImplDoOperation( rPolyPoly, rResult, POLY_CLIP_UNION );
+    ImplDoOperation( rPolyPoly, rResult, PolyClipOp::UNION );
 }
 
-void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, sal_uIntPtr nOperation ) const
+void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, PolyClipOp nOperation ) const
 {
     // Convert to B2DPolyPolygon, temporarily. It might be
     // advantageous in the future, to have a tools::PolyPolygon adaptor that
@@ -337,21 +332,21 @@ void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::P
     {
         // All code extracted from svx/source/svdraw/svedtv2.cxx
 
-        case POLY_CLIP_UNION:
+        case PolyClipOp::UNION:
         {
             // merge A and B (OR)
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
-        case POLY_CLIP_DIFF:
+        case PolyClipOp::DIFF:
         {
             // subtract B from A (DIFF)
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
-        case POLY_CLIP_XOR:
+        case PolyClipOp::XOR:
         {
             // compute XOR between poly A and B
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
@@ -359,7 +354,7 @@ void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::P
         }
 
         default:
-        case POLY_CLIP_INT:
+        case PolyClipOp::INTERSECT:
         {
             // cut poly 1 against polys 2..n (AND)
             aMergePolyPolygonA = basegfx::tools::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
@@ -528,7 +523,7 @@ PolyPolygon& PolyPolygon::operator=( const tools::PolyPolygon& rPolyPoly )
     if (this == &rPolyPoly)
         return *this;
 
-    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < 0xFFFFFFFE, "PolyPolygon: RefCount overflow" );
+    DBG_ASSERT( rPolyPoly.mpImplPolyPolygon->mnRefCount < (SAL_MAX_UINT32-1), "PolyPolygon: RefCount overflow" );
 
     rPolyPoly.mpImplPolyPolygon->mnRefCount++;
 

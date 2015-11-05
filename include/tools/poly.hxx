@@ -89,7 +89,7 @@ public:
                                  const sal_uInt8* pFlagAry = NULL );
                         Polygon( const Rectangle& rRect );
                         Polygon( const Rectangle& rRect,
-                                 sal_uIntPtr nHorzRound, sal_uIntPtr nVertRound );
+                                 sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
                         Polygon( const Point& rCenter,
                                  long nRadX, long nRadY,
                                  sal_uInt16 nPoints = 0 );
@@ -190,7 +190,13 @@ class TOOLS_DLLPUBLIC SAL_WARN_UNUSED PolyPolygon
 private:
     ImplPolyPolygon*    mpImplPolyPolygon;
 
-    TOOLS_DLLPRIVATE void  ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, sal_uIntPtr nOperation ) const;
+    enum class PolyClipOp {
+        INTERSECT,
+        UNION,
+        DIFF,
+        XOR
+    };
+    TOOLS_DLLPRIVATE void  ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, PolyClipOp nOperation ) const;
 
 public:
                         PolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
