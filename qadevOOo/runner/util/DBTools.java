@@ -123,13 +123,6 @@ public class DBTools {
         private String[] TableFilter = null ;
 
         /**
-        * Creates an empty instance.
-        */
-        public DataSourceInfo()
-        {
-        }
-
-        /**
         * Creates new <code>com.sun.star.sdb.DataSource</code> service
         * instance and copies all fields (which are not null) to
         * appropriate service properties.

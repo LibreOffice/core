@@ -24,10 +24,6 @@ public class AWeakBase extends WeakBase implements XEventListener
 {
     public int nDisposingCalled= 0;
 
-    public AWeakBase()
-    {
-    }
-
     public void disposing(com.sun.star.lang.EventObject eventObject)
     {
         nDisposingCalled++;

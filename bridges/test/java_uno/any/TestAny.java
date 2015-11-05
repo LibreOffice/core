@@ -2210,7 +2210,6 @@ final class TestAny {
     }
 
     private static class BaseException extends com.sun.star.uno.Exception {
-        public BaseException() {}
 
         @Override
         public boolean equals(Object obj) {
@@ -2219,7 +2218,6 @@ final class TestAny {
     }
 
     private static class DerivedException extends BaseException {
-        public DerivedException() {}
 
         @Override
         public boolean equals(Object obj) {
@@ -2230,8 +2228,6 @@ final class TestAny {
     private static class BaseRuntimeException
         extends com.sun.star.uno.RuntimeException
     {
-        public BaseRuntimeException() {}
-
         @Override
         public boolean equals(Object obj) {
             return obj != null
@@ -2241,8 +2237,6 @@ final class TestAny {
 
     private static class DerivedRuntimeException extends BaseRuntimeException
     {
-        public DerivedRuntimeException() {}
-
         @Override
         public boolean equals(Object obj) {
             return obj != null

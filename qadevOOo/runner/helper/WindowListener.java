@@ -24,12 +24,6 @@ package helper;
 public class WindowListener implements com.sun.star.awt.XWindowListener {
 
     /**
-     * Creates a new WindowListener
-     */
-    public WindowListener() {
-    }
-
-    /**
      * The window hidden event
      */
     public void windowHidden(com.sun.star.lang.EventObject eventObject) {
