@@ -43,11 +43,11 @@ namespace ppt
 #define PPT_TRANSITION_TYPE_COVER           4
 #define PPT_TRANSITION_TYPE_DISSOLVE        5
 #define PPT_TRANSITION_TYPE_FADE            6
-#define PPT_TRANSITION_TYPE_PULL            7
+#define PPT_TRANSITION_TYPE_PULL            7 // Uncover in MS-PPT Specs
 #define PPT_TRANSITION_TYPE_RANDOM_BARS     8
 #define PPT_TRANSITION_TYPE_STRIPS          9
 #define PPT_TRANSITION_TYPE_WIPE           10
-#define PPT_TRANSITION_TYPE_ZOOM           11
+#define PPT_TRANSITION_TYPE_ZOOM           11 // Box In/Out in MS-PPT Specs
 #define PPT_TRANSITION_TYPE_SPLIT          13
 
 // effects, new in xp
@@ -57,7 +57,7 @@ namespace ppt
 #define PPT_TRANSITION_TYPE_PUSH            20
 #define PPT_TRANSITION_TYPE_COMB            21
 #define PPT_TRANSITION_TYPE_NEWSFLASH       22
-#define PPT_TRANSITION_TYPE_SMOOTHFADE      23
+#define PPT_TRANSITION_TYPE_SMOOTHFADE      23 // Alpha Fade in MS-PPT Specs
 #define PPT_TRANSITION_TYPE_WHEEL           26
 #define PPT_TRANSITION_TYPE_CIRCLE          27
 
