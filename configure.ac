@@ -3691,11 +3691,10 @@ if test "$_os" = "WINNT"; then
             # Remove /cl.exe from CC case insensitive
             AC_MSG_RESULT([found Visual C++ $vcyear $vcexpress ($CC)])
             if test "$BITNESS_OVERRIDE" = ""; then
-                COMPATH=`echo $CC | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
+                COMPATH=`echo "$CC" | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
             else
                 if test -n "$VC_PRODUCT_DIR"; then
-                    # Huh, why not just an assignment?
-                    COMPATH=`echo $VC_PRODUCT_DIR`
+                    COMPATH=$VC_PRODUCT_DIR
                 fi
             fi
             if test "$BITNESS_OVERRIDE" = ""; then
