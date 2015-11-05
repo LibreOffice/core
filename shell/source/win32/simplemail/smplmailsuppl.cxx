@@ -64,7 +64,7 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
     if ((handle != INVALID_HANDLE_VALUE) && (handle != NULL))
     {
         FreeLibrary(handle);
-        xSmplMailClient = Reference<XSimpleMailClient>(new CSmplMailClient());
+        xSmplMailClient.set(new CSmplMailClient());
     }
     return xSmplMailClient;
 }

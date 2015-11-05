@@ -101,8 +101,7 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     uno::Reference< lang::XComponent > xModelComp(xModel, uno::UNO_QUERY );
 
     bool bEmbedded = false;
-    uno::Reference <lang::XUnoTunnel> xTunnel;
-    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
     SmModel *pModel = reinterpret_cast<SmModel *>
         (xTunnel->getSomething(SmModel::getUnoTunnelId()));
 
@@ -294,9 +293,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     uno::Sequence< PropertyValue > aProps(0);
     xFilter->filter( aProps );
 
-    uno::Reference<lang::XUnoTunnel> xFilterTunnel;
-    xFilterTunnel = uno::Reference<lang::XUnoTunnel>
-        ( xFilter, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xFilterTunnel( xFilter, uno::UNO_QUERY );
     SmXMLExport *pFilter = reinterpret_cast< SmXMLExport * >(
                 sal::static_int_cast< sal_uIntPtr >(
                 xFilterTunnel->getSomething( SmXMLExport::getUnoTunnelId() )));
@@ -436,8 +433,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
     else
     {
         uno::Reference <frame::XModel> xModel = GetModel();
-        uno::Reference <lang::XUnoTunnel> xTunnel;
-        xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+        uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
         SmModel *pModel = reinterpret_cast<SmModel *>
             (xTunnel->getSomething(SmModel::getUnoTunnelId()));
 
@@ -475,8 +471,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 void SmXMLExport::_ExportContent()
 {
     uno::Reference <frame::XModel> xModel = GetModel();
-    uno::Reference <lang::XUnoTunnel> xTunnel;
-    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
     SmModel *pModel = reinterpret_cast<SmModel *>
         (xTunnel->getSomething(SmModel::getUnoTunnelId()));
     SmDocShell *pDocShell = pModel ?
@@ -530,8 +525,7 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
     if ( !xModel.is() )
         return;
 
-    uno::Reference <lang::XUnoTunnel> xTunnel;
-    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
     SmModel *pModel = reinterpret_cast<SmModel *>
         (xTunnel->getSomething(SmModel::getUnoTunnelId()));
 

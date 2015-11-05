@@ -1468,7 +1468,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     Shapes->add(rPolyShape);
 
                     //Retrieve shape properties
-                    uno::Reference< beans::XPropertySet > aXPropSet = uno::Reference< beans::XPropertySet >( rPolyShape, uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySet > aXPropSet( rPolyShape, uno::UNO_QUERY );
                     //Construct a sequence of points sequence
                     drawing::PointSequenceSequence aRetval;
                     //Create only one sequence for one polygon

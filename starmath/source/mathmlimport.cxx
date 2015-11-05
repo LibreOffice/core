@@ -95,8 +95,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
     bool bEmbedded = false;
-    uno::Reference <lang::XUnoTunnel> xTunnel;
-    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
     SmModel *pModel = reinterpret_cast<SmModel *>
         (xTunnel->getSomething(SmModel::getUnoTunnelId()));
 
@@ -279,9 +278,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     {
         xParser->parseStream( aParserInput );
 
-        uno::Reference<lang::XUnoTunnel> xFilterTunnel;
-        xFilterTunnel = uno::Reference<lang::XUnoTunnel>
-            ( xFilter, uno::UNO_QUERY );
+        uno::Reference<lang::XUnoTunnel> xFilterTunnel( xFilter, uno::UNO_QUERY );
         SmXMLImport *pFilter = reinterpret_cast< SmXMLImport * >(
                 sal::static_int_cast< sal_uIntPtr >(
                 xFilterTunnel->getSomething( SmXMLImport::getUnoTunnelId() )));
@@ -491,8 +488,7 @@ void SmXMLImport::endDocument()
     if (NULL != (pTree = GetTree()))
     {
         uno::Reference <frame::XModel> xModel = GetModel();
-        uno::Reference <lang::XUnoTunnel> xTunnel;
-        xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+        uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
         SmModel *pModel = reinterpret_cast<SmModel *>
             (xTunnel->getSomething(SmModel::getUnoTunnelId()));
 
@@ -2896,8 +2892,7 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     if ( !xModel.is() )
         return;
 
-    uno::Reference <lang::XUnoTunnel> xTunnel;
-    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
     SmModel *pModel = reinterpret_cast<SmModel *>
         (xTunnel->getSomething(SmModel::getUnoTunnelId()));
 

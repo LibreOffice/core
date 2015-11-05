@@ -647,8 +647,8 @@ void SAL_CALL OLESimpleStorage::dispose()
     DELETEZ( m_pStorage );
     DELETEZ( m_pStream );
 
-    m_xStream = uno::Reference< io::XStream >();
-    m_xTempStream = uno::Reference< io::XStream >();
+    m_xStream.clear();
+    m_xTempStream.clear();
 
     m_bDisposed = true;
 }
