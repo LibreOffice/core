@@ -114,7 +114,7 @@ void SwOneExampleFrame::CreateControl()
                                     xMgr = comphelper::getProcessServiceFactory();
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     uno::Reference< uno::XInterface >  xInst = xMgr->createInstance( "com.sun.star.frame.FrameControl" );
-    _xControl = uno::Reference< awt::XControl >(xInst, uno::UNO_QUERY);
+    _xControl.set(xInst, uno::UNO_QUERY);
     if(_xControl.is())
     {
         uno::Reference< awt::XWindowPeer >  xParent( aTopWindow->GetComponentInterface() );

@@ -1707,7 +1707,7 @@ Reference<XNumberingTypeInfo> SwFieldMgr::GetNumberingInfo() const
     {
         Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
         Reference<XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
-        const_cast<SwFieldMgr*>(this)->xNumberingInfo = Reference<XNumberingTypeInfo>(xDefNum, UNO_QUERY);
+        const_cast<SwFieldMgr*>(this)->xNumberingInfo.set(xDefNum, UNO_QUERY);
     }
     return xNumberingInfo;
 }

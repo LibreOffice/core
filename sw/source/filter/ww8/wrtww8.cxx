@@ -367,8 +367,7 @@ static void WriteDop( WW8Export& rWrt )
     if (pDocShell) {
         uno::Reference<lang::XComponent> xModelComp(pDocShell->GetModel(),
            uno::UNO_QUERY);
-        xProps = uno::Reference<beans::XPropertySet>(xModelComp,
-           uno::UNO_QUERY);
+        xProps.set(xModelComp, uno::UNO_QUERY);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             xModelComp, uno::UNO_QUERY_THROW);
         xDocProps = xDPS->getDocumentProperties();

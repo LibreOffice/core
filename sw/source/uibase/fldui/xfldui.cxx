@@ -65,7 +65,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
     Reference<XColumnsSupplier> xColsSupplier;
     if(bIsTable)
     {
-        Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
+        Reference<XTablesSupplier> xTSupplier(xConnection, UNO_QUERY);
         if(xTSupplier.is())
         {
             Reference<XNameAccess> xTables = xTSupplier->getTables();
@@ -75,7 +75,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
                 Any aTable = xTables->getByName(rTableQryName);
                 Reference<XPropertySet> xPropSet;
                 aTable >>= xPropSet;
-                xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
+                xColsSupplier.set(xPropSet, UNO_QUERY);
             }
             catch (const Exception&)
             {
@@ -84,7 +84,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
     }
     else
     {
-        Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
+        Reference<XQueriesSupplier> xQSupplier(xConnection, UNO_QUERY);
         if(xQSupplier.is())
         {
             Reference<XNameAccess> xQueries = xQSupplier->getQueries();
@@ -94,7 +94,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
                 Any aQuery = xQueries->getByName(rTableQryName);
                 Reference<XPropertySet> xPropSet;
                 aQuery >>= xPropSet;
-                xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
+                xColsSupplier.set(xPropSet, UNO_QUERY);
             }
             catch (const Exception&)
             {

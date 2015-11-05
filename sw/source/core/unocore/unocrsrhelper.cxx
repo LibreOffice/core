@@ -991,9 +991,8 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
         aArgs[1] <<= embed::ElementModes::READ;
         try
         {
-            xReadStorage = uno::Reference< embed::XStorage >(
-                            ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
-                            uno::UNO_QUERY );
+            xReadStorage.set( ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
+                              uno::UNO_QUERY );
         }
         catch( const io::IOException& rEx)
         {

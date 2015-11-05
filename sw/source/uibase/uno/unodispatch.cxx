@@ -43,7 +43,7 @@ SwXDispatchProviderInterceptor::SwXDispatchProviderInterceptor(SwView& rVw) :
     m_pView(&rVw)
 {
     uno::Reference< frame::XFrame> xUnoFrame = m_pView->GetViewFrame()->GetFrame().GetFrameInterface();
-    m_xIntercepted = uno::Reference< frame::XDispatchProviderInterception>(xUnoFrame, uno::UNO_QUERY);
+    m_xIntercepted.set(xUnoFrame, uno::UNO_QUERY);
     if(m_xIntercepted.is())
     {
         m_refCount++;

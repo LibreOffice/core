@@ -178,8 +178,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
              OUString sIndexTypeName(OUString::createFromAscii( IndexServiceNames[
                     nTOXIndex <= TOX_AUTHORITIES ? nTOXIndex : TOX_USER] ));
-             pxIndexSectionsArr[nTOXIndex]->xDocumentIndex = uno::Reference< text::XDocumentIndex > (xFact->createInstance(
-                                                    sIndexTypeName), uno::UNO_QUERY);
+             pxIndexSectionsArr[nTOXIndex]->xDocumentIndex.set(xFact->createInstance(sIndexTypeName), uno::UNO_QUERY);
              uno::Reference< text::XTextContent >  xContent(pxIndexSectionsArr[nTOXIndex]->xDocumentIndex, uno::UNO_QUERY);
              uno::Reference< text::XTextRange >  xRg(xCrsr, uno::UNO_QUERY);
              xCrsr->getText()->insertTextContent(xRg, xContent, sal_False);

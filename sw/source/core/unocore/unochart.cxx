@@ -142,7 +142,7 @@ void SwChartLockController_Helper::LockUnlockAllCharts( bool bLock )
                     uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
                     if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
                     {
-                        xRes = uno::Reference < frame::XModel >( xIP->getComponent(), uno::UNO_QUERY );
+                        xRes.set( xIP->getComponent(), uno::UNO_QUERY );
                         if (xRes.is())
                         {
                             if (bLock)
@@ -2696,10 +2696,10 @@ void SwChartLabeledDataSequence::SetDataSequence(
     rxDest = rxSource;
 
     // start listening to new data-sequence
-    xC = uno::Reference< lang::XComponent >( rxDest, uno::UNO_QUERY );
+    xC.set( rxDest, uno::UNO_QUERY );
     if (xC.is())
         xC->addEventListener( xEL );
-    xMB = uno::Reference< util::XModifyBroadcaster >( rxDest, uno::UNO_QUERY );
+    xMB.set( rxDest, uno::UNO_QUERY );
     if (xMB.is())
         xMB->addModifyListener( xML );
 }

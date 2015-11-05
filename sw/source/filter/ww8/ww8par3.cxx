@@ -2427,7 +2427,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
     if( !xCreate.is() )
         return false;
 
-    rFComp = uno::Reference<form::XFormComponent>(xCreate, uno::UNO_QUERY);
+    rFComp.set(xCreate, uno::UNO_QUERY);
     if( !rFComp.is() )
         return false;
 
@@ -2519,7 +2519,7 @@ bool WW8FormulaCheckBox::Import(const uno::Reference <
     if( !xCreate.is() )
         return false;
 
-    rFComp = uno::Reference< form::XFormComponent >( xCreate, uno::UNO_QUERY );
+    rFComp.set( xCreate, uno::UNO_QUERY );
     if( !rFComp.is() )
         return false;
 

@@ -132,7 +132,7 @@ uno::Reference< frame::XDispatch > SAL_CALL SwUnoModule::queryDispatch(
     SwGlobals::ensure();
     const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
     if ( pSlot )
-        xReturn = uno::Reference< frame::XDispatch >(static_cast< frame::XDispatch* >(this), uno::UNO_QUERY);
+        xReturn.set(static_cast< frame::XDispatch* >(this), uno::UNO_QUERY);
 
     return xReturn;
 }

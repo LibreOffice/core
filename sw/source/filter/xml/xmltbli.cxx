@@ -1356,7 +1356,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         OSL_ENSURE( xIfc.is(), "Couldn't create a table" );
 
         if( xIfc.is() )
-            xTable = Reference< XTextTable > ( xIfc, UNO_QUERY );
+            xTable.set( xIfc, UNO_QUERY );
     }
 
     if( xTable.is() )

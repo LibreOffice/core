@@ -341,7 +341,7 @@ uno::Any SwXTextView::getSelection()
                     OSL_ENSURE(rSh.GetTableFormat(), "not a table format?");
                     uno::Reference< text::XTextTableCursor >  xCrsr = new SwXTextTableCursor(*rSh.GetTableFormat(),
                                                     rSh.GetTableCrsr());
-                    aRef = uno::Reference< uno::XInterface >  (xCrsr, uno::UNO_QUERY);
+                    aRef.set(xCrsr, uno::UNO_QUERY);
                     break;
                 }
 
@@ -353,7 +353,7 @@ uno::Any SwXTextView::getSelection()
             case SHELL_MODE_TEXT            :
             {
                 uno::Reference< container::XIndexAccess > xPos = SwXTextRanges::Create(rSh.GetCrsr());
-                aRef = uno::Reference< uno::XInterface >(xPos, uno::UNO_QUERY);
+                aRef.set(xPos, uno::UNO_QUERY);
             }
             break;
             case SHELL_MODE_FRAME           :
@@ -407,7 +407,7 @@ uno::Any SwXTextView::getSelection()
                     uno::Reference< drawing::XShape >  xShape(xInt, uno::UNO_QUERY);
                     xShCol->add(xShape);
                 }
-                aRef = uno::Reference< uno::XInterface >(xShCol, uno::UNO_QUERY);
+                aRef.set(xShCol, uno::UNO_QUERY);
             }
             break;
             default:;//prevent warning

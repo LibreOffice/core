@@ -306,7 +306,7 @@ struct SwDBManager_Impl
 static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDataSource> xSource)
 {
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    rParam.xFormatter = uno::Reference<util::XNumberFormatter>(util::NumberFormatter::create(xContext), uno::UNO_QUERY);
+    rParam.xFormatter.set(util::NumberFormatter::create(xContext), uno::UNO_QUERY);
     if(!xSource.is())
         xSource = SwDBManager::getDataSourceAsParent(rParam.xConnection, rParam.sDataSource);
 
@@ -690,7 +690,7 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
     }
     if(xConnection.is())
     {
-        uno::Reference<sdbcx::XTablesSupplier> xTSupplier = uno::Reference<sdbcx::XTablesSupplier>(xConnection, uno::UNO_QUERY);
+        uno::Reference<sdbcx::XTablesSupplier> xTSupplier(xConnection, uno::UNO_QUERY);
         if(xTSupplier.is())
         {
             uno::Reference<container::XNameAccess> xTables = xTSupplier->getTables();
@@ -702,7 +702,7 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
                 pListBox->SetEntryData(nEntry, nullptr);
             }
         }
-        uno::Reference<sdb::XQueriesSupplier> xQSupplier = uno::Reference<sdb::XQueriesSupplier>(xConnection, uno::UNO_QUERY);
+        uno::Reference<sdb::XQueriesSupplier> xQSupplier(xConnection, uno::UNO_QUERY);
         if(xQSupplier.is())
         {
             uno::Reference<container::XNameAccess> xQueries = xQSupplier->getQueries();
@@ -1694,7 +1694,7 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> xSour
     {
         uno::Reference<container::XChild> xChild(xConnection, uno::UNO_QUERY);
         if ( xChild.is() )
-            xSource = uno::Reference<sdbc::XDataSource>(xChild->getParent(), uno::UNO_QUERY);
+            xSource.set(xChild->getParent(), uno::UNO_QUERY);
     }
     if(xSource.is() && xConnection.is() && xColumn.is() && pNFormatr)
     {
@@ -1779,7 +1779,7 @@ sal_Int32 SwDBManager::GetColumnType( const OUString& rDBName,
     if(pParam && pParam->xConnection.is())
     {
         xConnection = pParam->xConnection;
-        xColsSupp = uno::Reference< sdbcx::XColumnsSupplier >( pParam->xResultSet, uno::UNO_QUERY );
+        xColsSupp.set( pParam->xResultSet, uno::UNO_QUERY );
     }
     else
     {
@@ -1840,7 +1840,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
         if(eTableOrQuery == SwDBSelect::UNKNOWN)
         {
             //search for a table with the given command name
-            uno::Reference<sdbcx::XTablesSupplier> xTSupplier = uno::Reference<sdbcx::XTablesSupplier>(xConnection, uno::UNO_QUERY);
+            uno::Reference<sdbcx::XTablesSupplier> xTSupplier(xConnection, uno::UNO_QUERY);
             if(xTSupplier.is())
             {
                 uno::Reference<container::XNameAccess> xTables = xTSupplier->getTables();
@@ -1868,7 +1868,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
         xRowProperties->setPropertyValue("FetchSize", uno::makeAny((sal_Int32)10));
         xRowProperties->setPropertyValue("ActiveConnection", uno::makeAny(xConnection));
         xRowSet->execute();
-        xRet = uno::Reference<sdbcx::XColumnsSupplier>( xRowSet, uno::UNO_QUERY );
+        xRet.set( xRowSet, uno::UNO_QUERY );
     }
     catch (const uno::Exception& e)
     {
@@ -2970,7 +2970,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
     uno::Reference<sdbc::XDataSource> xSource;
     uno::Reference<container::XChild> xChild(xConnection, uno::UNO_QUERY);
     if(xChild.is())
-        xSource = uno::Reference<sdbc::XDataSource>(xChild->getParent(), uno::UNO_QUERY);
+        xSource.set(xChild->getParent(), uno::UNO_QUERY);
     if(!xSource.is())
         xSource = dbtools::getDataSource(sDataSource, xContext);
     uno::Reference< sdbcx::XColumnsSupplier > xColSupp( xResSet, uno::UNO_QUERY );
@@ -3010,7 +3010,7 @@ uno::Reference<sdbc::XDataSource> SwDBManager::getDataSourceAsParent(const uno::
     {
         uno::Reference<container::XChild> xChild(_xConnection, uno::UNO_QUERY);
         if ( xChild.is() )
-            xSource = uno::Reference<sdbc::XDataSource>(xChild->getParent(), uno::UNO_QUERY);
+            xSource.set(xChild->getParent(), uno::UNO_QUERY);
         if ( !xSource.is() )
             xSource = dbtools::getDataSource(_sDataSourceName, ::comphelper::getProcessComponentContext());
     }
@@ -3049,7 +3049,7 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
                     uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(comphelper::getComponentContext(xMgr), 0), uno::UNO_QUERY_THROW );
                     xRowSet->executeWithCompletion(xHandler);
                 }
-                xResultSet = uno::Reference<sdbc::XResultSet>(xRowSet, uno::UNO_QUERY);
+                xResultSet.set(xRowSet, uno::UNO_QUERY);
             }
         }
     }

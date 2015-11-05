@@ -452,7 +452,7 @@ void SwXTextDocument::GetNumberFormatter()
                 SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj(
                                     pDocShell->GetDoc()->GetNumberFormatter());
                 Reference< util::XNumberFormatsSupplier >  xTmp = pNumFormat;
-                xNumFormatAgg = Reference< XAggregation >(xTmp, UNO_QUERY);
+                xNumFormatAgg.set(xTmp, UNO_QUERY);
             }
             if(xNumFormatAgg.is())
                 xNumFormatAgg->setDelegator(static_cast<cppu::OWeakObject*>(static_cast<SwXTextDocumentBaseClass*>(this)));

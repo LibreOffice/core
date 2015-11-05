@@ -544,7 +544,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
         {
             m_aDBData.sDataSource = SvTabListBox::GetEntryText(pSelect, ITEMID_NAME - 1);
             m_xDBContext->getByName(m_aDBData.sDataSource) >>= xComplConnection;
-            pUserData->xSource = uno::Reference<XDataSource>(xComplConnection, UNO_QUERY);
+            pUserData->xSource.set(xComplConnection, UNO_QUERY);
 
             uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             uno::Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );

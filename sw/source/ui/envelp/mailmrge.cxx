@@ -230,10 +230,10 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
                 m_pBeamerWin->Show();
             }
             uno::Reference<XController> xController = m_xFrame->getController();
-            pImpl->xFController = uno::Reference<runtime::XFormController>(xController, UNO_QUERY);
+            pImpl->xFController.set(xController, UNO_QUERY);
             if(pImpl->xFController.is()) {
                 uno::Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
-                pImpl->xSelSupp = uno::Reference<XSelectionSupplier>(xCtrl, UNO_QUERY);
+                pImpl->xSelSupp.set(xCtrl, UNO_QUERY);
                 if(pImpl->xSelSupp.is()) {
                     pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
                     pImpl->xSelSupp->addSelectionChangeListener(  pImpl->xChgLstnr );

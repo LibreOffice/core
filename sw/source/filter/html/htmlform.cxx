@@ -303,8 +303,7 @@ const uno::Reference< container::XIndexContainer >& SwHTMLForm_Impl::GetForms()
 
             uno::Reference< container::XNameContainer > xNameCont =
                 xFormsSupplier->getForms();
-            xForms = uno::Reference< container::XIndexContainer >( xNameCont,
-                                                              UNO_QUERY );
+            xForms.set( xNameCont, UNO_QUERY );
 
             OSL_ENSURE( xForms.is(), "XForms nicht erhalten" );
         }
@@ -319,7 +318,7 @@ const uno::Reference< drawing::XShapes > & SwHTMLForm_Impl::GetShapes()
         GetDrawPage();
         if( xDrawPage.is() )
         {
-            xShapes = uno::Reference< drawing::XShapes >( xDrawPage, UNO_QUERY );
+            xShapes.set( xDrawPage, UNO_QUERY );
             OSL_ENSURE( xShapes.is(),
                     "XShapes nicht vom drawing::XDrawPage erhalten" );
         }
@@ -418,7 +417,7 @@ SwHTMLImageWatcher::SwHTMLImageWatcher(
     uno::Reference< drawing::XControlShape > xControlShape( xShape, UNO_QUERY );
     uno::Reference< awt::XControlModel > xControlModel(
             xControlShape->getControl() );
-    xSrc = uno::Reference< XImageProducerSupplier >( xControlModel, UNO_QUERY );
+    xSrc.set( xControlModel, UNO_QUERY );
     OSL_ENSURE( xSrc.is(), "Kein XImageProducerSupplier" );
 
     // Als Event-Listener am Shape anmelden, damit wir es beim dispose
@@ -895,7 +894,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         if( !xCreate.is() )
             return xShape;
 
-        xShape = uno::Reference< drawing::XShape >( xCreate, UNO_QUERY );
+        xShape.set( xCreate, UNO_QUERY );
 
         OSL_ENSURE( xShape.is(), "XShape nicht erhalten" );
         awt::Size aTmpSz;

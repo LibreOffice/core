@@ -97,10 +97,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
     {
         uno::Reference< mail::XMailServiceProvider > xMailServiceProvider(
             mail::MailServiceProvider::create( xContext ) );
-        xSmtpServer = uno::Reference< mail::XSmtpService > (
-                        xMailServiceProvider->create(
-                        mail::MailServiceType_SMTP
-                        ), uno::UNO_QUERY);
+        xSmtpServer.set(xMailServiceProvider->create(mail::MailServiceType_SMTP), uno::UNO_QUERY);
 
         uno::Reference< mail::XConnectionListener> xConnectionListener(new SwConnectionListener());
 
@@ -155,7 +152,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     rConfigItem.GetMailPort(),
                     rConfigItem.IsSecureConnection() ? OUString("Ssl") : OUString("Insecure") );
         xSmtpServer->connect(xConnectionContext, xAuthenticator);
-        rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
+        rxInMailService.set( xSmtpServer, uno::UNO_QUERY );
     }
     catch (const uno::Exception&)
     {

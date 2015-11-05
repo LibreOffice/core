@@ -277,7 +277,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                 Reference<XColumnsSupplier> xColsSupplier;
                 if(bTable)
                 {
-                    Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
+                    Reference<XTablesSupplier> xTSupplier(xConnection, UNO_QUERY);
                     if(xTSupplier.is())
                     {
                         Reference<XNameAccess> xTables = xTSupplier->getTables();
@@ -287,7 +287,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                             Any aTable = xTables->getByName(sTableName);
                             Reference<XPropertySet> xPropSet;
                             aTable >>= xPropSet;
-                            xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
+                            xColsSupplier.set(xPropSet, UNO_QUERY);
                         }
                         catch (const Exception&)
                         {
@@ -296,7 +296,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                 }
                 else
                 {
-                    Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
+                    Reference<XQueriesSupplier> xQSupplier(xConnection, UNO_QUERY);
                     if(xQSupplier.is())
                     {
                         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
@@ -306,7 +306,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                             Any aQuery = xQueries->getByName(sTableName);
                             Reference<XPropertySet> xPropSet;
                             aQuery >>= xPropSet;
-                            xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
+                            xColsSupplier.set(xPropSet, UNO_QUERY);
                         }
                         catch (const Exception&)
                         {
@@ -341,7 +341,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                 Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
                 if (xConnection.is())
                 {
-                    Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
+                    Reference<XTablesSupplier> xTSupplier(xConnection, UNO_QUERY);
                     if(xTSupplier.is())
                     {
                         Reference<XNameAccess> xTables = xTSupplier->getTables();
@@ -359,7 +359,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                         }
                     }
 
-                    Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
+                    Reference<XQueriesSupplier> xQSupplier(xConnection, UNO_QUERY);
                     if(xQSupplier.is())
                     {
                         Reference<XNameAccess> xQueries = xQSupplier->getQueries();

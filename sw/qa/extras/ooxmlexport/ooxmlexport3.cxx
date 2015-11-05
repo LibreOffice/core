@@ -188,7 +188,7 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     // This was 0, as export of w:outlineLvl was missing.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(properties, "OutlineLevel"));
 
-    properties = uno::Reference< beans::XPropertySet >(paragraphStyles->getByName("Heading 11"), uno::UNO_QUERY);
+    properties.set(paragraphStyles->getByName("Heading 11"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getProperty<OUString>(properties, "FollowStyle"));
 
     // Make sure style #2 is Heading 1.

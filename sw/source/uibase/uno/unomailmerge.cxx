@@ -145,8 +145,7 @@ static bool LoadFromURL_impl(
     try
     {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-        xTmpModel = Reference < XModel >( xDesktop->loadComponentFromURL(
-                rURL, "_blank", 0, aArgs ), UNO_QUERY );
+        xTmpModel.set( xDesktop->loadComponentFromURL( rURL, "_blank", 0, aArgs ), UNO_QUERY );
     }
     catch (const Exception&)
     {
@@ -642,7 +641,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                     xRowSet->execute(); // build ResultSet from properties
                 if( !xCurConnection.is() )
                     xCurConnection.set( xRowSetPropSet->getPropertyValue( "ActiveConnection" ), UNO_QUERY );
-                xCurResultSet = Reference< sdbc::XResultSet >( xRowSet, UNO_QUERY );
+                xCurResultSet.set( xRowSet, UNO_QUERY );
                 OSL_ENSURE( xCurResultSet.is(), "failed to build ResultSet" );
             }
         }

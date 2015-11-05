@@ -134,7 +134,7 @@ public:
             {
                 OUString aURL(getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename));
                 CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
-                uno::Reference<frame::XComponentLoader> xLoader = uno::Reference<frame::XComponentLoader>(mxDesktop, uno::UNO_QUERY);
+                uno::Reference<frame::XComponentLoader> xLoader(mxDesktop, uno::UNO_QUERY);
                 CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
                 uno::Sequence<beans::PropertyValue> args(1);
                 args[0].Name = "DocumentService";
@@ -2119,7 +2119,7 @@ DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeRunFonts, "dml-groupshape-runfonts.doc
 {
     // Fonts defined by w:rFonts was not imported and so the font specified by a:fontRef was used.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+    uno::Reference<text::XText> xText    = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
     uno::Reference<text::XTextRange> xRun = getRun(getParagraphOfText(1, xText),1);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun, "CharFontName"));
     CPPUNIT_ASSERT_EQUAL(OUString("Arial Unicode MS"), getProperty<OUString>(xRun, "CharFontNameComplex"));

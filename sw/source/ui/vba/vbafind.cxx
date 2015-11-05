@@ -92,7 +92,7 @@ uno::Reference< text::XTextRange > SwVbaFind::FindOneElement() throw ( uno::Runt
         }
         else if( xFoundOne.is() && !InRange( xFoundOne ) )
         {
-            xFoundOne = uno::Reference< text::XTextRange >();
+            xFoundOne.clear();
         }
     }
     else

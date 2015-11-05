@@ -802,7 +802,7 @@ void SwXAutoTextEntry::GetBodyText ()
     StartListening( *&xDocSh );
 
     pBodyText = new SwXBodyText ( xDocSh->GetDoc() );
-    xBodyText = uno::Reference < lang::XServiceInfo > ( *pBodyText, uno::UNO_QUERY);
+    xBodyText.set( *pBodyText, uno::UNO_QUERY);
 }
 
 uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor() throw( uno::RuntimeException, std::exception )
@@ -928,7 +928,7 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
         pDoc = pCursor->GetDoc();
     else if ( pText && pText->GetDoc() )
     {
-        xTunnel = uno::Reference < lang::XUnoTunnel > (pText->getStart(), uno::UNO_QUERY);
+        xTunnel.set(pText->getStart(), uno::UNO_QUERY);
         if (xTunnel.is())
         {
             pCursor = reinterpret_cast < OTextCursorHelper* >

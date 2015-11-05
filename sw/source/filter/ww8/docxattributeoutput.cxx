@@ -421,7 +421,7 @@ bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
     uno::Reference< drawing::XShape > xShape;
     const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
     if (pSdrObj)
-        xShape = uno::Reference< drawing::XShape >(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+        xShape.set(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
     if (xPropertySet.is())

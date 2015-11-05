@@ -691,7 +691,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
                 bRet = true;
 
                 xWorkStore->dispose();
-                xWorkStore = uno::Reference < embed::XStorage >();
+                xWorkStore.clear();
                 xStream->Commit();
             }
             catch (const uno::Exception&)

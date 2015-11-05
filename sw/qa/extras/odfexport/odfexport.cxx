@@ -642,7 +642,7 @@ DECLARE_ODFEXPORT_TEST(testFdo43807, "fdo43807.odt")
     uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
 
-    xSet = uno::Reference<beans::XPropertySet>(getParagraph(2), uno::UNO_QUERY);
+    xSet.set(getParagraph(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("User Defined Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
 }
 

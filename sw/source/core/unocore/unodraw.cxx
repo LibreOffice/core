@@ -364,7 +364,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) 
                 xPrSet = new SwXGroupShape( xCreate );
             else
                 xPrSet = new SwXShape( xCreate );
-            xRet = uno::Reference< drawing::XShape >(xPrSet, uno::UNO_QUERY);
+            xRet.set(xPrSet, uno::UNO_QUERY);
         }
     }
     return xRet;
@@ -403,7 +403,7 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
     std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDrawPage->GetDoc());
     for(sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
     {
-        uno::Reference<drawing::XShape> xShape = uno::Reference<drawing::XShape>(pDrawPage->getByIndex(nIdx, &aTextBoxes), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(pDrawPage->getByIndex(nIdx, &aTextBoxes), uno::UNO_QUERY);
         *pInserter++ = uno::makeAny(xShape);
     }
 }
@@ -806,7 +806,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                     if(pContact)
                     {
                         uno::Reference< uno::XInterface >  xInt = SwFmDrawPage::GetInterface( pContact->GetMaster() );
-                        xRet = uno::Reference< drawing::XShapeGroup >(xInt, uno::UNO_QUERY);
+                        xRet.set(xInt, uno::UNO_QUERY);
                     }
                     pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
                 }

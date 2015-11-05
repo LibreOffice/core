@@ -857,8 +857,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 uno::Reference<text::XTextField> const xField =
                     SwXTextField::CreateXTextField(m_pImpl->m_pDoc, pField);
 
-                pRetSeq[i] = uno::Reference<text::XDependentTextField>(xField,
-                        uno::UNO_QUERY);
+                pRetSeq[i].set(xField, uno::UNO_QUERY);
             }
             aRet <<= aRetSeq;
         }

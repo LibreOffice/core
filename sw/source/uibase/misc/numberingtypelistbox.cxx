@@ -43,7 +43,7 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( vcl::Window* pWin, WinBits nStyl
     uno::Reference<uno::XComponentContext>          xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<text::XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
 
-    pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
+    pImpl->xInfo.set(xDefNum, uno::UNO_QUERY);
 }
 
 bool SwNumberingTypeListBox::set_property(const OString &rKey, const OString &rValue)

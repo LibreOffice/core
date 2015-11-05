@@ -299,7 +299,7 @@ uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
             uno::Reference < uno::XInterface > xIfc =
                 xFactory->createInstance( "com.sun.star.style.ConditionalParagraphStyle" );
             if( xIfc.is() )
-                xNewStyle = uno::Reference < style::XStyle >( xIfc, uno::UNO_QUERY );
+                xNewStyle.set( xIfc, uno::UNO_QUERY );
         }
     }
     else

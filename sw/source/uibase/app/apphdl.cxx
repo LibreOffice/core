@@ -382,8 +382,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                         aDescriptor[svx::daConnection] >>= xConnection;
                     uno::Reference<container::XChild> xChild(xConnection, uno::UNO_QUERY);
                     if(xChild.is())
-                        xSource = uno::Reference<sdbc::XDataSource>(
-                            xChild->getParent(), uno::UNO_QUERY);
+                        xSource.set(xChild->getParent(), uno::UNO_QUERY);
                     m_pMMConfig->SetCurrentConnection(
                         xSource, SharedConnection( xConnection, SharedConnection::NoTakeOwnership ),
                         xColumnsSupplier, aDBData);
