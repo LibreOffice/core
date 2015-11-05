@@ -151,7 +151,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
     sal_uInt32  nPresetSubType = 0;
     bool    bTranslated = false;
 
-    if ( ( nPresetClass == (sal_uInt32)EffectPresetClass::ENTRANCE ) || ( nPresetClass == (sal_uInt32)EffectPresetClass::EXIT ) )
+    if ( ( nPresetClass == sal_uInt32(EffectPresetClass::ENTRANCE) ) || ( nPresetClass == sal_uInt32(EffectPresetClass::EXIT) ) )
     {
         if ( nPresetId != 21 )
         {
