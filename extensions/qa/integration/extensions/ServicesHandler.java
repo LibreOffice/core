@@ -29,7 +29,7 @@ public class ServicesHandler implements XPropertyHandler
     private final XComponentContext   m_context;
     private String[]            m_supportedServices;
 
-    private class ClickHandler implements com.sun.star.awt.XActionListener
+    private static class ClickHandler implements com.sun.star.awt.XActionListener
     {
         XComponentContext   m_context;
         private final String      m_serviceName;

@@ -122,7 +122,7 @@ public class CheckOGroupBoxModel
      * Listener implementation which sets a flag when
      * listener was called.
      */
-    private class MyChangeListener implements XPropertiesChangeListener
+    private static class MyChangeListener implements XPropertiesChangeListener
     {
 
         private boolean propertiesChanged = false;

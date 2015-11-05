@@ -254,11 +254,11 @@ public class Map
         return someValue;
     }
 
-    private class DummyInterface implements XInterface
+    private static class DummyInterface implements XInterface
     {
     }
 
-    private class DummySet implements XSet
+    private static class DummySet implements XSet
     {
         public boolean has( Object arg0 )       { throw new UnsupportedOperationException( "Not implemented." ); }
         public void insert( Object arg0 )       { throw new UnsupportedOperationException( "Not implemented." ); }

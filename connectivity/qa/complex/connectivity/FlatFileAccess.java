@@ -74,7 +74,7 @@ public class FlatFileAccess extends ComplexTestCase
     {
     }
 
-    private class EqualityDate extends Date
+    private static class EqualityDate extends Date
     {
         EqualityDate( short i_day, short i_month, short i_year )
         {
@@ -177,7 +177,7 @@ public class FlatFileAccess extends ComplexTestCase
         Object getValue( final RowSet i_rowSet ) throws SQLException;
     }
 
-    private abstract class RowSetColumnValueGetter implements RowSetValueGetter
+    private static abstract class RowSetColumnValueGetter implements RowSetValueGetter
     {
         RowSetColumnValueGetter( final int i_columnIndex )
         {
@@ -187,7 +187,7 @@ public class FlatFileAccess extends ComplexTestCase
         protected final int m_columnIndex;
     }
 
-    private class RowSetIntGetter extends RowSetColumnValueGetter
+    private static class RowSetIntGetter extends RowSetColumnValueGetter
     {
         RowSetIntGetter( final int i_columnIndex )
         {
@@ -200,7 +200,7 @@ public class FlatFileAccess extends ComplexTestCase
         }
     }
 
-    private class RowSetDateGetter extends RowSetColumnValueGetter
+    private static class RowSetDateGetter extends RowSetColumnValueGetter
     {
         RowSetDateGetter( final int i_columnIndex )
         {

@@ -141,7 +141,7 @@ public class CheckImageManager  {
     }
 
 
-    private class OXUIConfigurationListenerImpl implements _XUIConfiguration.XUIConfigurationListenerImpl {
+    private static class OXUIConfigurationListenerImpl implements _XUIConfiguration.XUIConfigurationListenerImpl {
         private boolean triggered = false;
 
         public boolean actionWasTriggered() {

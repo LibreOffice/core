@@ -214,7 +214,7 @@ public class PathSubstitutionTest
      * Class for containing the substitution variables with their
      * values and some information.
      */
-    private class VariableContainer
+    private static class VariableContainer
     {
 
         public ArrayList<String> varName;

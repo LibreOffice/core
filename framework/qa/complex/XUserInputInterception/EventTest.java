@@ -400,7 +400,7 @@ public class EventTest {
      * press a key with the <CODE>Robot</CODE> class
      * @see java.awt.Robot
      */
-    private class EventTrigger implements Runnable {
+    private static class EventTrigger implements Runnable {
 
         /**
          * represents an <CODE>EventType</CODE>

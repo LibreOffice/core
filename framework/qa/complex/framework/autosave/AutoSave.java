@@ -62,7 +62,7 @@ import static org.junit.Assert.*;
 public class AutoSave
 {
 
-    private class AutoSaveListener implements XStatusListener
+    private static class AutoSaveListener implements XStatusListener
     {
         private XDispatch m_xAutoSave;
         private URL m_aRegistration;
