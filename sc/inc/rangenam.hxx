@@ -26,9 +26,9 @@
 #include "scdllapi.h"
 #include "calcmacros.hxx"
 
+#include <memory>
 #include <map>
 #include <vector>
-#include <boost/ptr_container/ptr_map.hpp>
 
 class ScDocument;
 class ScTokenArray;
@@ -170,8 +170,8 @@ class ScRangeName
 {
 private:
     typedef std::vector<ScRangeData*> IndexDataType;
-    typedef ::boost::ptr_map<OUString, ScRangeData> DataType;
-    DataType maData;
+    typedef ::std::map<OUString, std::unique_ptr<ScRangeData>> DataType;
+    DataType m_Data;
     IndexDataType maIndexToData;
 
 public:
@@ -208,7 +208,7 @@ public:
     bool empty() const;
 
     /** Insert object into set.
-        @ATTENTION: The underlying ::boost::ptr_map_adapter::insert(p) takes
+        @ATTENTION: The underlying ::std::map<std::unique_ptr>::insert(p) takes
         ownership of p and if it can't insert it deletes the object! So, if
         this insert here returns false the object where p pointed to is gone!
      */
