@@ -25,15 +25,15 @@
 #include "osl/security.h"
 #include <osl/pipe.h>
 
-/* On Windows, jpipe.dll must not have dependencies on any other URE DLLs, as
-   Java System.LoadLibrary could otherwise not load it.  Therefore, on Windows,
-   this code goes into a jpipx.dll that the jpipe.dll wrapper loads with
-   LoadLibraryEx(LOAD_WITH_ALTERED_SEARCH_PATH).  The function names in this
-   wrapped code are truncated from the long JNICALL names, as JNICALL causes
-   some "@N" with different numeric values for N (and probably different across
-   32 and 64 bit) to be added to the symbol names, which the calls to
-   GetProcAddress in wrapper/wrapper.c would otheriwse have to take into
-   account.
+/* On Windows, jpipe.dll must not have static dependencies on any other URE DLLs
+   (sal3.dll, uwinapi.dll), as Java System.LoadLibrary could otherwise not load
+   it.  Therefore, on Windows, this code goes into a jpipx.dll that the jpipe.dll
+   wrapper loads with LoadLibraryEx(LOAD_WITH_ALTERED_SEARCH_PATH).
+   The function names in this wrapped code are truncated from the long JNICALL
+   names, as JNICALL causes some "@N" with different numeric values for
+   N (and probably different across 32 and 64 bit) to be added to the symbol
+   names, which the calls to GetProcAddress in wrapper/wrapper.c would otherwise
+   have to take into account.
 */
 
 /*****************************************************************************/
