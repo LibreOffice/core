@@ -218,7 +218,9 @@ public class _XChartDataArray extends MultiMethodTest {
             bResult = false;
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[i].length; j++) {
-                bResult &= data[i][j] == _data[i][j];
+                if (data[i][j] != _data[i][j]) {
+                    bResult = false;
+                }
             }
         }
 
