@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_e6b4c6d2",
+        "filename": "qadevOOo/tests/java/ifc/drawing/_XDrawPageSummarizer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-05T22:47:46Z",
+      "side": 0,
+      "message": "when grepping for other uses of Status.failed in qadevOOo, they generally appear to be\n\n  throw new StatusException(Status.failed(...\n\nso what might rather be the case here is that the outer part is missing?",
+      "revId": "c81142b277546714c0dfa8f9c2961c8ef80bc6d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
