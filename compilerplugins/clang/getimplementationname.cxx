@@ -298,7 +298,7 @@ std::string GetImplementationName::initSrcdir() {
     }
 }
 loplugin::Plugin::Registration<GetImplementationName> X(
-    "getimplementationname");
+    "getimplementationname", false);
 }
 #endif
 #endif
