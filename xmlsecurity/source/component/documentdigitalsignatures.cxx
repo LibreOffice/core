@@ -210,7 +210,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
 {
     Reference< io::XStream > xStream;
     if ( xSignStream.is() )
-        xStream = Reference< io::XStream >( xSignStream, UNO_QUERY );
+        xStream.set( xSignStream, UNO_QUERY );
     return ImplViewSignatures( rxStorage, xStream, eMode, bReadOnly );
 }
 
@@ -269,7 +269,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
     {
         aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( rxStorage, embed::ElementModes::READ, eMode );
         if ( aStreamHelper.xSignatureStream.is() )
-            xInputStream = Reference< io::XInputStream >( aStreamHelper.xSignatureStream, UNO_QUERY );
+            xInputStream.set( aStreamHelper.xSignatureStream, UNO_QUERY );
     }
 
     if ( !xInputStream.is() )

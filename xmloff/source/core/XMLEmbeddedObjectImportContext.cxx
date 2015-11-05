@@ -150,7 +150,7 @@ bool XMLEmbeddedObjectImportContext::SetComponent(
 
     Reference< XComponentContext > xContext( GetImport().GetComponentContext() );
 
-    xHandler = Reference < XDocumentHandler >(
+    xHandler.set(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sFilterService, aArgs, xContext),
         UNO_QUERY);
 

@@ -193,8 +193,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
     uno::Reference<uno::XInterface> xInstance = rxContext->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", rxContext);
     OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
-    uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap
-        =  uno::Reference<mozilla::XMozillaBootstrap>(xInstance,uno::UNO_QUERY);
+    uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance,uno::UNO_QUERY);
     OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
 
     if (xMozillaBootstrap.is())

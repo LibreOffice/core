@@ -103,7 +103,7 @@ void SAL_CALL XMLMetaImportComponent::setTargetDocument(
     const uno::Reference< lang::XComponent >& xDoc )
     throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
-    mxDocProps = uno::Reference< document::XDocumentProperties >::query( xDoc );
+    mxDocProps.set( xDoc, uno::UNO_QUERY );
     if( !mxDocProps.is() )
         throw lang::IllegalArgumentException(OUString(
             "XMLMetaImportComponent::setTargetDocument: argument is no "

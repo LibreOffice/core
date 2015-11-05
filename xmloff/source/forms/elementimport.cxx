@@ -619,7 +619,7 @@ namespace xmloff
             Reference< XInterface > xPure = xContext->getServiceManager()->createInstanceWithContext(m_sServiceName, xContext);
             OSL_ENSURE(xPure.is(),
                         OStringBuffer("OElementImport::createElement: service factory gave me no object (service name: ").append(OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US)).append(")!").getStr());
-            xReturn = Reference< XPropertySet >(xPure, UNO_QUERY);
+            xReturn.set(xPure, UNO_QUERY);
         }
         else
             OSL_FAIL("OElementImport::createElement: no service name to create an element!");
@@ -1853,7 +1853,7 @@ namespace xmloff
         Reference< XCloneable > xCloneList(_rxAttrList, UNO_QUERY);
         OSL_ENSURE(xCloneList.is(), "OColumnWrapperImport::StartElement: AttributeList not cloneable!");
         if ( xCloneList.is() )
-            m_xOwnAttributes = Reference< XAttributeList >(xCloneList->createClone(), UNO_QUERY);
+            m_xOwnAttributes.set(xCloneList->createClone(), UNO_QUERY);
         OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: no cloned list!");
     }
 

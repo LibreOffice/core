@@ -701,7 +701,7 @@ AnimationNodeContext::AnimationNodeContext(
             {
                 Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-                mxNode = Reference< XAnimationNode >(
+                mxNode.set(
                     xContext->getServiceManager()->createInstanceWithContext(OUString::createFromAscii(pServiceName), xContext),
                     UNO_QUERY_THROW );
 
@@ -1296,7 +1296,7 @@ AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxCon
         GetXMLToken(XML_N_ANIMATION),
         XML_NAMESPACE_ANIMATION);
 
-    mxRootNode = Reference<XAnimationNode>( SequenceTimeContainer::create(rxContext), UNO_QUERY_THROW );
+    mxRootNode.set( SequenceTimeContainer::create(rxContext), UNO_QUERY_THROW );
 }
 
 AnimationsImport::~AnimationsImport() throw ()

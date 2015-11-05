@@ -169,7 +169,7 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             break;
     }
     xDiaProp->setPropertyValue( aPropName, uno::makeAny(sal_True) );
-    xResult = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+    xResult.set( xAxis->getAxisTitle(), uno::UNO_QUERY );
     return xResult;
 }
 
@@ -433,7 +433,7 @@ void SchXMLAxisContext::CreateAxis()
             return;
     }
 
-    m_xAxisProps = Reference<beans::XPropertySet>( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ), uno::UNO_QUERY );
+    m_xAxisProps.set( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ), uno::UNO_QUERY );
 
     if( m_bAddMissingXAxisForNetCharts && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y && m_aCurrentAxis.nAxisIndex==0 )
     {

@@ -50,7 +50,7 @@ void* SAL_CALL nss_component_getFactory( const sal_Char* pImplName , void* pServ
 #ifdef XMLSEC_CRYPTO_NSS
         if( SEInitializer_NssImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
-            xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
+            xFactory.set( createSingleFactory(
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 SEInitializer_NssImpl_createInstance, SEInitializer_NssImpl_getSupportedServiceNames() ) );
@@ -74,7 +74,7 @@ void* SAL_CALL nss_component_getFactory( const sal_Char* pImplName , void* pServ
 #else
         if( ONSSInitializer_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
-            xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
+            xFactory.set( createSingleFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 ONSSInitializer_createInstance, ONSSInitializer_getSupportedServiceNames() ) );

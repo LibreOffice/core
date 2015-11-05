@@ -382,8 +382,7 @@ void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
                                     Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
                                     if(xServiceFact.is())
                                     {
-                                        xBackgroundSet = Reference< beans::XPropertySet >::query(
-                                            xServiceFact->createInstance("com.sun.star.drawing.Background"));
+                                        xBackgroundSet.set(xServiceFact->createInstance("com.sun.star.drawing.Background"), UNO_QUERY);
                                     }
                                 }
 
@@ -595,7 +594,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
             if( !aEnumerator.getNextToken(sId) )
                 break;
 
-            aShapes[nIndex] = Reference< XShape >( rIdMapper.getReference( sId ), UNO_QUERY );
+            aShapes[nIndex].set( rIdMapper.getReference( sId ), UNO_QUERY );
         }
 
         for( nIndex = 0; nIndex < nCount; ++nIndex )

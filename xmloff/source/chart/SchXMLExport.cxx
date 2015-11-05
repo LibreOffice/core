@@ -1586,7 +1586,7 @@ void SchXMLExportHelper_Impl::exportTable()
     {
         Reference< chart::XChartDocument > xChartDoc( mrExport.GetModel(), uno::UNO_QUERY );
         if( xChartDoc.is() )
-            xAnyDescriptionAccess = Reference< chart2::XAnyDescriptionAccess >( xChartDoc->getData(), uno::UNO_QUERY );
+            xAnyDescriptionAccess.set( xChartDoc->getData(), uno::UNO_QUERY );
     }
 
     if( bHasOwnData )
@@ -1856,7 +1856,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
     std::unique_ptr<SvXMLElementExport> xElPlotArea;
     // get property states for autostyles
-    xPropSet = Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY );
+    xPropSet.set( xDiagram, uno::UNO_QUERY );
     if( xPropSet.is())
     {
         if( mxExpPropMapper.is())

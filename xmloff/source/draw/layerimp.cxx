@@ -122,7 +122,7 @@ void SdXMLLayerContext::EndElement()
         {
             Reference< XLayerManager > xLayerManager( mxLayerManager, UNO_QUERY );
             if( xLayerManager.is() )
-                xLayer = Reference< XPropertySet >::query( xLayerManager->insertNewByIndex( xLayerManager->getCount() ) );
+                xLayer.set( xLayerManager->insertNewByIndex( xLayerManager->getCount() ), UNO_QUERY );
             DBG_ASSERT( xLayer.is(), "xmloff::SdXMLLayerContext::EndElement(), failed to create new XLayer!" );
 
             if( xLayer.is() )

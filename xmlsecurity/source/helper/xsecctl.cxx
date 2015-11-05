@@ -148,7 +148,7 @@ void XSecController::createXSecComponent( )
 
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
 
-    m_xXMLSignature = cssu::Reference< cssxc::XXMLSignature >(
+    m_xXMLSignature.set(
         xMCF->createInstanceWithContext( sXMLSignature, mxCtx ),
         cssu::UNO_QUERY );
 
@@ -158,7 +158,7 @@ void XSecController::createXSecComponent( )
      * XMLSignature created successfully.
      */
     {
-        m_xXMLDocumentWrapper = cssu::Reference< cssxw::XXMLDocumentWrapper >(
+        m_xXMLDocumentWrapper.set(
             xMCF->createInstanceWithContext( sXMLDocument, mxCtx ),
             cssu::UNO_QUERY );
     }
@@ -169,7 +169,7 @@ void XSecController::createXSecComponent( )
      * XMLDocumentWrapper created successfully.
      */
     {
-        m_xSAXEventKeeper = cssu::Reference< cssxc::sax::XSecuritySAXEventKeeper >(
+        m_xSAXEventKeeper.set(
             xMCF->createInstanceWithContext( sSAXEventKeeper, mxCtx ),
             cssu::UNO_QUERY );
     }

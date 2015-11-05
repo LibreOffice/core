@@ -59,7 +59,7 @@ inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
         return xReturn;
 
     // ensure that the object is a XNameContainer (we strongly need this for inserting child elements)
-    m_xMeAsContainer = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >(xReturn, ::com::sun::star::uno::UNO_QUERY);
+    m_xMeAsContainer.set(xReturn, ::com::sun::star::uno::UNO_QUERY);
     if (!m_xMeAsContainer.is())
     {
         OSL_FAIL("OContainerImport::createElement: invalid element (no XNameContainer) created!");

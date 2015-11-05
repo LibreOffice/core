@@ -403,8 +403,7 @@ ResultSetBase::queryContentIdentifier(
     {
         OUString url = queryContentIdentifierString();
         if( ! m_aIdents[m_nRow].is() && !url.isEmpty() )
-            m_aIdents[m_nRow] = uno::Reference< ucb::XContentIdentifier >(
-                new ::ucbhelper::ContentIdentifier( url ) );
+            m_aIdents[m_nRow].set( new ::ucbhelper::ContentIdentifier( url ) );
         return m_aIdents[m_nRow];
     }
 

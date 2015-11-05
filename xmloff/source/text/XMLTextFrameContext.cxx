@@ -571,7 +571,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
                 Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
                 DBG_ASSERT( xIfc.is(), "couldn't create frame" );
                 if( xIfc.is() )
-                    xPropSet = Reference < XPropertySet >( xIfc, UNO_QUERY );
+                    xPropSet.set( xIfc, UNO_QUERY );
             }
         }
     }

@@ -72,16 +72,16 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
     if( xShowsSupplier.is() )
     {
         mpImpl->mxShows = xShowsSupplier->getCustomPresentations();
-        mpImpl->mxShowFactory = Reference< XSingleServiceFactory >::query( mpImpl->mxShows );
+        mpImpl->mxShowFactory.set( mpImpl->mxShows, UNO_QUERY );
     }
 
     Reference< XDrawPagesSupplier > xDrawPagesSupplier( rImport.GetModel(), UNO_QUERY );
     if( xDrawPagesSupplier.is() )
-        mpImpl->mxPages = Reference< XNameAccess >::query( xDrawPagesSupplier->getDrawPages() );
+        mpImpl->mxPages.set( xDrawPagesSupplier->getDrawPages(), UNO_QUERY );
 
     Reference< XPresentationSupplier > xPresentationSupplier( rImport.GetModel(), UNO_QUERY );
     if( xPresentationSupplier.is() )
-        mpImpl->mxPresProps = Reference< XPropertySet >::query( xPresentationSupplier->getPresentation() );
+        mpImpl->mxPresProps.set( xPresentationSupplier->getPresentation(), UNO_QUERY );
 
     if( mpImpl->mxPresProps.is() )
     {

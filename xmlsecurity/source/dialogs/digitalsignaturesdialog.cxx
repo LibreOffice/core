@@ -780,7 +780,7 @@ SignatureStreamHelper DigitalSignaturesDialog::ImplOpenSignatureStream(
         if (nStreamOpenMode & css::embed::ElementModes::TRUNCATE)
         {
             //We write always into a new temporary stream.
-            mxTempSignatureStream = Reference < css::io::XStream >(css::io::TempFile::create(mxCtx), UNO_QUERY_THROW);
+            mxTempSignatureStream.set(css::io::TempFile::create(mxCtx), UNO_QUERY_THROW);
             aHelper.xSignatureStream = mxTempSignatureStream;
         }
         else

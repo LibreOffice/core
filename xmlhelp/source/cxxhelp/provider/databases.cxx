@@ -104,7 +104,7 @@ OUString Databases::expandURL( const OUString& aURL, Reference< uno::XComponentC
         Reference< uri::XUriReference > uriRef;
         for (;;)
         {
-            uriRef = Reference< uri::XUriReference >( xFac->parse( aRetURL ), UNO_QUERY );
+            uriRef.set( xFac->parse( aRetURL ), UNO_QUERY );
             if ( uriRef.is() )
             {
                 Reference < uri::XVndSunStarExpandUrl > sxUri( uriRef, UNO_QUERY );
@@ -138,7 +138,7 @@ Databases::Databases( bool showBasic,
       vendVersion( "%VENDORVERSION" ),
       vendShort( "%VENDORSHORT" )
 {
-    m_xSMgr = Reference< XMultiComponentFactory >( m_xContext->getServiceManager(), UNO_QUERY );
+    m_xSMgr.set( m_xContext->getServiceManager(), UNO_QUERY );
 
     m_vAdd[0] = 12;
     m_vAdd[1] = 15;
@@ -880,7 +880,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
 
             if ( xIfc.is() )
             {
-                it->second = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
+                it->second.set( xIfc, UNO_QUERY );
 
                 OSL_ENSURE( it->second.is(),
                             "ContentProvider::createPackage - "
@@ -1679,7 +1679,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
 
         if ( xIfc.is() )
         {
-            xNA = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
+            xNA.set( xIfc, UNO_QUERY );
 
             OSL_ENSURE( xNA.is(),
                 "JarFileIterator::implGetJarFromPackage() - "

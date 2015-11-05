@@ -85,7 +85,7 @@ struct SvXMLUnitConverter::Impl
 void SvXMLUnitConverter::Impl::createNumTypeInfo() const
 {
     Reference<XDefaultNumberingProvider> xDefNum = DefaultNumberingProvider::create(m_xContext);
-    m_xNumTypeInfo = Reference<XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
+    m_xNumTypeInfo.set(xDefNum, uno::UNO_QUERY);
 }
 
 const uno::Reference< text::XNumberingTypeInfo >&

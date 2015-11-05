@@ -1338,9 +1338,8 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
             }
             else
             {
-                xPropState = Reference< XPropertyState >(
-                                    xParaStyles->getByName( aParentStyle ),
-                                    UNO_QUERY );
+                xPropState.set( xParaStyles->getByName( aParentStyle ),
+                                UNO_QUERY );
                 if ( !xPropState.is() )
                 {
                     // error case
@@ -1379,7 +1378,7 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
                 else
                 {
                     // search list style at parent
-                    xStyle = Reference<XStyle>( xPropState, UNO_QUERY );
+                    xStyle.set( xPropState, UNO_QUERY );
                 }
             }
         }

@@ -859,8 +859,7 @@ Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Refere
             const OUString * pEnd = pBegin + aServiceNames.getLength();
             if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
             {
-                xRet = Reference< chart2::data::XDataProvider >(
-                    xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );
+                xRet.set( xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );
             }
         }
     }

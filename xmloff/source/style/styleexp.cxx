@@ -275,7 +275,7 @@ bool XMLStyleExport::exportStyle(
                 }
                 else
                 {
-                    xPropState = Reference< XPropertyState >( xStyles->getByName( aParentStyle ), UNO_QUERY );
+                    xPropState.set( xStyles->getByName( aParentStyle ), UNO_QUERY );
                     if ( !xPropState.is() )
                     {
                         break;
@@ -287,7 +287,7 @@ bool XMLStyleExport::exportStyle(
                     }
                     else
                     {
-                        xStyle = Reference<XStyle>( xPropState, UNO_QUERY );
+                        xStyle.set( xPropState, UNO_QUERY );
                     }
                 }
             }

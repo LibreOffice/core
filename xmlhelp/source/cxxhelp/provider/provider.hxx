@@ -118,11 +118,10 @@ namespace chelp {
         // XConainerListener ( derive from XEventListener )
 
         virtual void SAL_CALL
-        disposing( const ::com::sun::star::lang::EventObject& Source )
+        disposing( const ::com::sun::star::lang::EventObject& /*Source*/ )
             throw (::com::sun::star::uno::RuntimeException, std::exception) override
         {
-            (void)Source;
-            m_xContainer = com::sun::star::uno::Reference<com::sun::star::container::XContainer>(0);
+            m_xContainer.clear();
         }
 
         virtual void SAL_CALL

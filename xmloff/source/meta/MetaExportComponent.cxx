@@ -106,7 +106,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             aArgs[2] <<= GetModel();
 
             // get filter component
-            xDocHandler = uno::Reference< xml::sax::XDocumentHandler >(
+            xDocHandler.set(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.comp.Oasis2OOoTransformer", aArgs, xContext),
                 uno::UNO_QUERY_THROW );

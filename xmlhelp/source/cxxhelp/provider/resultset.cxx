@@ -53,12 +53,12 @@ DynamicResultSet::~DynamicResultSet()
 
 void DynamicResultSet::initStatic()
 {
-    m_xResultSet1 = Reference< XResultSet >( m_pFactory->createResultSet() );
+    m_xResultSet1.set( m_pFactory->createResultSet() );
 }
 
 void DynamicResultSet::initDynamic()
 {
-    m_xResultSet1 = Reference< XResultSet >( m_pFactory->createResultSet() );
+    m_xResultSet1.set( m_pFactory->createResultSet() );
 
     m_xResultSet2 = m_xResultSet1;
 }

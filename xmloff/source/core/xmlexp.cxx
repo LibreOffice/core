@@ -302,7 +302,7 @@ SvXMLExport_Impl::SvXMLExport_Impl()
 void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandler > &rHandler )
 {
     mxHandler = rHandler;
-    mxExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( mxHandler, UNO_QUERY );
+    mxExtHandler.set( mxHandler, UNO_QUERY );
 }
 
 void SvXMLExport::_InitCtor()
@@ -599,7 +599,7 @@ SvXMLExport::~SvXMLExport()
 void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
     throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
-    mxModel = uno::Reference< frame::XModel >::query( xDoc );
+    mxModel.set( xDoc, UNO_QUERY );
     if( !mxModel.is() )
         throw lang::IllegalArgumentException();
     if (mxModel.is() && ! mxEventListener.is())
@@ -1336,15 +1336,15 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             {
                 if( !mxGraphicResolver.is() )
                 {
-                    mxGraphicResolver = Reference< XGraphicObjectResolver >::query(
-                        xFactory->createInstance( "com.sun.star.document.ExportGraphicObjectResolver" ));
+                    mxGraphicResolver.set(
+                        xFactory->createInstance( "com.sun.star.document.ExportGraphicObjectResolver" ), UNO_QUERY);
                     bOwnGraphicResolver = mxGraphicResolver.is();
                 }
 
                 if( !mxEmbeddedResolver.is() )
                 {
-                    mxEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
-                        xFactory->createInstance( "com.sun.star.document.ExportEmbeddedObjectResolver" ));
+                    mxEmbeddedResolver.set(
+                        xFactory->createInstance( "com.sun.star.document.ExportEmbeddedObjectResolver" ), UNO_QUERY);
                     bOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
@@ -1391,7 +1391,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             if( xTmpDocHandler.is() )
             {
                 mxHandler = xTmpDocHandler;
-                mxExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( mxHandler, UNO_QUERY );
+                mxExtHandler.set( mxHandler, UNO_QUERY );
             }
         }
         catch(const com::sun::star::uno::Exception&)

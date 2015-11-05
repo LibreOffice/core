@@ -1080,7 +1080,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             {
                 uno::Reference< drawing::XDrawPageSupplier  > xSupp( xDoc, uno::UNO_QUERY );
                 if( xSupp.is())
-                    mxDrawPage = uno::Reference< drawing::XShapes >( xSupp->getDrawPage(), uno::UNO_QUERY );
+                    mxDrawPage.set( xSupp->getDrawPage(), uno::UNO_QUERY );
 
                 SAL_WARN_IF( !mxDrawPage.is(), "xmloff.chart", "Invalid Chart Page" );
             }

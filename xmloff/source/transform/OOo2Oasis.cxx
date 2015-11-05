@@ -1942,7 +1942,7 @@ void SAL_CALL OOo2OasisTransformer::Initialize(
         try
         {
             // get filter component
-            xDocHandler = Reference< XDocumentHandler >(
+            xDocHandler.set(
                     xContext->getServiceManager()->createInstanceWithArgumentsAndContext(m_aSubServiceName, rArguments, xContext),
                     UNO_QUERY);
         }

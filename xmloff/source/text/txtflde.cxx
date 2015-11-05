@@ -2935,7 +2935,7 @@ bool XMLTextFieldExport::GetDependentFieldPropertySet(
     {
         // get first one and return
         Reference<XDependentTextField> xTField = aFields[0];
-        xField = Reference<XPropertySet>(xTField, UNO_QUERY);
+        xField.set(xTField, UNO_QUERY);
         DBG_ASSERT(xField.is(),
                   "Surprisinlgy, this TextField refuses to be a PropertySet!");
         return true;

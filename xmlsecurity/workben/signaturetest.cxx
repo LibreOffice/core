@@ -77,7 +77,7 @@ void Main();
             return -1;
         }
 
-        xMSF = uno::Reference< lang::XMultiServiceFactory >(xCtx->getServiceManager(), uno::UNO_QUERY );
+        xMSF.set(xCtx->getServiceManager(), uno::UNO_QUERY );
 
         if ( !xMSF.is() )
         {

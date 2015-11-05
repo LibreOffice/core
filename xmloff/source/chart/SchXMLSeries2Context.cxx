@@ -229,7 +229,7 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeq( xSeriesSource->getDataSequences());
     sal_Int32 nOldCount = aOldSeq.getLength();
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeq( nOldCount + 1 );
-    aNewSeq[0] = Reference< chart2::data::XLabeledDataSequence >(xLabeledSeq, uno::UNO_QUERY_THROW);
+    aNewSeq[0].set(xLabeledSeq, uno::UNO_QUERY_THROW);
     for( sal_Int32 nN=0; nN<nOldCount; nN++ )
         aNewSeq[nN+1] = aOldSeq[nN];
     xSeriesSink->setData( aNewSeq );

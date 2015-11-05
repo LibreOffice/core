@@ -259,7 +259,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
         if( !xSupplier.is() )
             return;
 
-        mxGluePoints = uno::Reference< container::XIdentifierContainer >::query( xSupplier->getGluePoints() );
+        mxGluePoints.set( xSupplier->getGluePoints(), UNO_QUERY );
 
         if( !mxGluePoints.is() )
             return;
@@ -479,7 +479,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         }
     }
 
-    mxLockable = uno::Reference< document::XActionLockable >::query( xShape );
+    mxLockable.set( xShape, UNO_QUERY );
 
     if( mxLockable.is() )
         mxLockable->addActionLock();
@@ -503,7 +503,7 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
             if ( serviceName == "com.sun.star.drawing.OLE2Shape" &&
                  uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
             {
-                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"), uno::UNO_QUERY);
+                xShape.set(xServiceFact->createInstance("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"), uno::UNO_QUERY);
             }
             else if (serviceName == "com.sun.star.drawing.GraphicObjectShape"
                      || serviceName == "com.sun.star.drawing.MediaShape"
@@ -511,14 +511,12 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
             {
                 css::uno::Sequence<css::uno::Any> args(1);
                 args[0] <<= GetImport().GetDocumentBase();
-                xShape = css::uno::Reference<css::drawing::XShape>(
-                    xServiceFact->createInstanceWithArguments(
-                        serviceName, args),
-                    css::uno::UNO_QUERY);
+                xShape.set( xServiceFact->createInstanceWithArguments(serviceName, args),
+                            css::uno::UNO_QUERY);
             }
             else
             {
-                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(serviceName), uno::UNO_QUERY);
+                xShape.set(xServiceFact->createInstance(serviceName), uno::UNO_QUERY);
             }
             if( xShape.is() )
                 AddShape( xShape );
@@ -970,7 +968,7 @@ void SdXMLShapeContext::onDemandRescueUsefulDataFromTemporary( const SvXMLImport
             if( !xSupplier.is() )
                 return;
 
-            mxGluePoints = uno::Reference< container::XIdentifierContainer >::query( xSupplier->getGluePoints() );
+            mxGluePoints.set( xSupplier->getGluePoints(), UNO_QUERY );
 
             if( !mxGluePoints.is() )
                 return;

@@ -214,7 +214,7 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
  ******************************************************************************/
 {
     SvXMLAttributeList* pAttributeList = new SvXMLAttributeList();
-    cssu::Reference < cssxs::XAttributeList > xAttrList = cssu::Reference< cssxs::XAttributeList > (pAttributeList);
+    cssu::Reference < cssxs::XAttributeList > xAttrList(pAttributeList);
 
     xmlNsPtr pNsDef = pNode->nsDef;
 

@@ -88,7 +88,7 @@ void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     {
         SetStyle( false );
 
-        mxChildren = uno::Reference< drawing::XShapes >::query( mxShape );
+        mxChildren.set( mxShape, uno::UNO_QUERY );
         if( mxChildren.is() )
             GetImport().GetShapeImport()->pushGroupForSorting( mxChildren );
     }

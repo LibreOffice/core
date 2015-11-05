@@ -508,19 +508,19 @@ void SAL_CALL SvXMLImport::startDocument()
             {
                 if( !mxGraphicResolver.is() )
                 {
-                    mxGraphicResolver = Reference< XGraphicObjectResolver >::query(
-                        xFactory->createInstance(
-                                // #99870# Import... instead of Export...
-                                "com.sun.star.document.ImportGraphicObjectResolver"));
+                    // #99870# Import... instead of Export...
+                    mxGraphicResolver.set(
+                        xFactory->createInstance("com.sun.star.document.ImportGraphicObjectResolver"),
+                        UNO_QUERY);
                     mpImpl->mbOwnGraphicResolver = mxGraphicResolver.is();
                 }
 
                 if( !mxEmbeddedResolver.is() )
                 {
-                    mxEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
-                        xFactory->createInstance(
-                                // #99870# Import... instead of Export...
-                                "com.sun.star.document.ImportEmbeddedObjectResolver"));
+                    // #99870# Import... instead of Export...
+                    mxEmbeddedResolver.set(
+                        xFactory->createInstance("com.sun.star.document.ImportEmbeddedObjectResolver"),
+                        UNO_QUERY);
                     mpImpl->mbOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
@@ -910,7 +910,7 @@ void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
 void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
     throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
-    mxModel = uno::Reference< frame::XModel >::query( xDoc );
+    mxModel.set( xDoc, UNO_QUERY );
     if( !mxModel.is() )
         throw lang::IllegalArgumentException();
 
@@ -1122,7 +1122,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetGradientHelper()
             {
                 try
                 {
-                    mxGradientHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                    mxGradientHelper.set( xServiceFact->createInstance(
                         "com.sun.star.drawing.GradientTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
@@ -1145,7 +1145,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetHatchHelper()
             {
                 try
                 {
-                    mxHatchHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                    mxHatchHelper.set( xServiceFact->createInstance(
                         "com.sun.star.drawing.HatchTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
@@ -1168,7 +1168,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetBitmapHelper()
             {
                 try
                 {
-                    mxBitmapHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                    mxBitmapHelper.set( xServiceFact->createInstance(
                         "com.sun.star.drawing.BitmapTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
@@ -1191,7 +1191,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetTransGradientHelp
             {
                 try
                 {
-                    mxTransGradientHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                    mxTransGradientHelper.set( xServiceFact->createInstance(
                         "com.sun.star.drawing.TransparencyGradientTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
@@ -1214,8 +1214,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetMarkerHelper()
             {
                 try
                 {
-                    mxMarkerHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
-                        "com.sun.star.drawing.MarkerTable" ), UNO_QUERY);
+                    mxMarkerHelper.set( xServiceFact->createInstance( "com.sun.star.drawing.MarkerTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1237,8 +1236,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
             {
                 try
                 {
-                    mxDashHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
-                        "com.sun.star.drawing.DashTable" ), UNO_QUERY);
+                    mxDashHelper.set( xServiceFact->createInstance( "com.sun.star.drawing.DashTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1518,7 +1516,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
 void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
 {
     if (!mxNumberStyles.is())
-        mxNumberStyles = uno::Reference< container::XNameContainer >( comphelper::NameContainer_createInstance( ::cppu::UnoType<sal_Int32>::get()) );
+        mxNumberStyles.set( comphelper::NameContainer_createInstance( ::cppu::UnoType<sal_Int32>::get()) );
     if (mxNumberStyles.is())
     {
         uno::Any aAny;

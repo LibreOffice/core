@@ -113,7 +113,7 @@ namespace xmloff
             // nothing to do at all
             return false;
 
-        _rxForms = Reference< XIndexAccess >(xFormsSupp->getForms(), UNO_QUERY);
+        _rxForms.set(xFormsSupp->getForms(), UNO_QUERY);
         Reference< XServiceInfo > xSI(_rxForms, UNO_QUERY); // order is important!
         OSL_ENSURE(xSI.is(), "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (must not be NULL and must have a ServiceInfo)!");
         if (!xSI.is())

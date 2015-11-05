@@ -354,7 +354,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             xExp->exportDoc( ::xmloff::token::XML_VERSION );
 
-            xVerStream = uno::Reference< io::XStream >(); // use refcounting for now to dispose
+            xVerStream.clear(); // use refcounting for now to dispose
         }
         catch( uno::Exception& )
         {

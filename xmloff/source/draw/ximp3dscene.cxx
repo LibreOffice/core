@@ -111,7 +111,7 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     {
         SetStyle();
 
-        mxChildren = uno::Reference< drawing::XShapes >::query( mxShape );
+        mxChildren.set( mxShape, uno::UNO_QUERY );
         if( mxChildren.is() )
             GetImport().GetShapeImport()->pushGroupForSorting( mxChildren );
 

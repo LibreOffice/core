@@ -563,7 +563,7 @@ void XMLAnimationsEffectContext::EndElement()
             Reference< XPropertySet > xSet;
             if( mpImpl->maLastShapeId != maShapeId )
             {
-                xSet = Reference< XPropertySet >::query( GetImport().getInterfaceToIdentifierMapper().getReference( maShapeId ) );
+                xSet.set( GetImport().getInterfaceToIdentifierMapper().getReference( maShapeId ), UNO_QUERY );
                 if( xSet.is() )
                 {
                     // check for presentation shape service

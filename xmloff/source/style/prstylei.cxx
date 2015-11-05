@@ -241,7 +241,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
             Reference < XInterface > xIfc =
                 xFactory->createInstance( sServiceName );
             if( xIfc.is() )
-                xNewStyle = Reference < XStyle >( xIfc, UNO_QUERY );
+                xNewStyle.set( xIfc, UNO_QUERY );
         }
     }
 

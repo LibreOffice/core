@@ -74,7 +74,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
          * create a SignatureCreator
          */
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
-    xReferenceResolvedListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
+    xReferenceResolvedListener.set(
         xMCF->createInstanceWithContext(SIGNATURECREATOR_COMPONENT, mxCtx),
         cssu::UNO_QUERY);
 

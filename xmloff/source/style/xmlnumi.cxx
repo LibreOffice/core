@@ -1252,7 +1252,7 @@ Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(
     if( !xIfc.is() )
         return xNumRule;
 
-    xNumRule = Reference<XIndexReplace>( xIfc, UNO_QUERY );
+    xNumRule.set( xIfc, UNO_QUERY );
     DBG_ASSERT( xNumRule.is(), "go no numbering rule" );
 
     return xNumRule;

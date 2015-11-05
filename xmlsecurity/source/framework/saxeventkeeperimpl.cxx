@@ -1341,10 +1341,8 @@ void SAL_CALL SAXEventKeeperImpl::initialize( const cssu::Sequence< cssu::Any >&
     OSL_ASSERT(aArguments.getLength() == 1);
 
     aArguments[0] >>= m_xXMLDocument;
-    m_xDocumentHandler = cssu::Reference< cssxs::XDocumentHandler >(
-        m_xXMLDocument, cssu::UNO_QUERY );
-    m_xCompressedDocumentHandler = cssu::Reference< cssxcsax::XCompressedDocumentHandler >(
-        m_xXMLDocument, cssu::UNO_QUERY );
+    m_xDocumentHandler.set( m_xXMLDocument, cssu::UNO_QUERY );
+    m_xCompressedDocumentHandler.set( m_xXMLDocument, cssu::UNO_QUERY );
 
     m_pRootBufferNode = new BufferNode(m_xXMLDocument->getCurrentElement());
     m_pCurrentBufferNode = m_pRootBufferNode;
