@@ -1348,7 +1348,8 @@ void SdExportTest::testTdf80224()
 }
 
 bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> xDoc, sal_Int32 nSlideNumber,
-                           sal_Int16 nExpectedTransitionType, sal_Int16 nExpectedTransitionSubType)
+                           sal_Int16 nExpectedTransitionType, sal_Int16 nExpectedTransitionSubType,
+                           bool bExpectedDirection = false)
 {
     sal_Int32 nSlideIndex = nSlideNumber - 1;
 
@@ -1362,17 +1363,25 @@ bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> xDoc, sal
     sal_Int16 nTransitionType = 0;
     if ((aAny >>= nTransitionType) == false)
         return false;
+    if (nExpectedTransitionType != nTransitionType)
+        return false;
 
     aAny = xPropSet->getPropertyValue(OUString("TransitionSubtype"));
     sal_Int16 nTransitionSubtype = 0;
     if ((aAny >>= nTransitionSubtype) == false)
         return false;
-
-    if (nExpectedTransitionType != nTransitionType)
-        return false;
     if (nExpectedTransitionSubType != nTransitionSubtype)
         return false;
 
+    if (xPropSet->getPropertySetInfo()->hasPropertyByName(OUString("TransitionDirection")))
+    {
+        aAny = xPropSet->getPropertyValue(OUString("TransitionDirection"));
+        bool bDirection = false;
+        if ((aAny >>= bDirection) == false)
+            return false;
+        if (bExpectedDirection != bDirection)
+            return false;
+    }
     return true;
 }
 
@@ -1381,6 +1390,12 @@ void SdExportTest::testExportTransitionsPPTX()
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/AllTransitions.odp"), ODP);
     xDocShRef = saveAndReload(xDocShRef, PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+
+    // WIPE TRANSITIONS
+    checkTransitionOnPage(xDoc, 01, css::animations::TransitionType::BARWIPE, css::animations::TransitionSubType::TOPTOBOTTOM, true);
+    checkTransitionOnPage(xDoc, 02, css::animations::TransitionType::BARWIPE, css::animations::TransitionSubType::LEFTTORIGHT, false);
+    checkTransitionOnPage(xDoc, 03, css::animations::TransitionType::BARWIPE, css::animations::TransitionSubType::LEFTTORIGHT, true);
+    checkTransitionOnPage(xDoc, 04, css::animations::TransitionType::BARWIPE, css::animations::TransitionSubType::TOPTOBOTTOM, false);
 
     checkTransitionOnPage(xDoc, 71, css::animations::TransitionType::ZOOM, css::animations::TransitionSubType::ROTATEIN);
     checkTransitionOnPage(xDoc, 41, css::animations::TransitionType::PUSHWIPE, css::animations::TransitionSubType::COMBHORIZONTAL);
