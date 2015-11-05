@@ -29,7 +29,7 @@ namespace std
 template<typename T>
 T copysign(T x, T y)
 {
-    return copysign(x, y);
+    return ::copysign(x, y);
 }
 }
 #endif
