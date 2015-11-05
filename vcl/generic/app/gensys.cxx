@@ -191,21 +191,9 @@ const char* SalGenericSystem::getFrameResName()
 
 const char* SalGenericSystem::getFrameClassName()
 {
-    static OStringBuffer aClassName;
-    if( aClassName.isEmpty() )
-    {
-        OUString aIni, aProduct;
-        rtl::Bootstrap::get( "BRAND_BASE_DIR", aIni );
-        aIni += "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" );
-        rtl::Bootstrap aBootstrap( aIni );
-        aBootstrap.getFrom( "ProductKey", aProduct );
-
-        if( !aProduct.isEmpty() )
-            aClassName.append( OUStringToOString( aProduct, osl_getThreadTextEncoding() ) );
-        else
-            aClassName.append( OUStringToOString( utl::ConfigManager::getProductName(), osl_getThreadTextEncoding()));
-    }
-    return aClassName.getStr();
+    // Someone somewhere hard coded LibreOffice. If frame class name is not LibreOffice, strange repaint
+    // problems occur with edit boxes, dropdown list boxes, etc.
+    return "LibreOffice";
 }
 
 #endif
