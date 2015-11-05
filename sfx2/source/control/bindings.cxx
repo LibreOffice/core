@@ -1813,8 +1813,7 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
 
         css::uno::Reference < css::frame::XDispatchProvider > xProv;
         if ( pDisp )
-            xProv = css::uno::Reference < css::frame::XDispatchProvider >
-                                        ( pDisp->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
+            xProv.set( pDisp->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
 
         SetDispatchProvider_Impl( xProv );
         InvalidateAll( true );
@@ -2175,7 +2174,7 @@ uno::Reference < frame::XDispatch > SfxBindings::GetDispatch( const SfxSlot* pSl
             new SfxOfficeDispatch( *this, pDispatcher, pSlot, aURL );
 
         pDispatch->SetMasterUnoCommand( bMasterCommand );
-        xRet = uno::Reference < frame::XDispatch >( pDispatch );
+        xRet.set( pDispatch );
         if ( !pCache )
             pCache = GetStateCache( pSlot->nSlotId );
 

@@ -195,7 +195,7 @@ bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XCloseab
         try
         {
             m_pPreventer = new SfxClosePreventer_Impl();
-            m_xPreventer = uno::Reference< util::XCloseListener >( m_pPreventer );
+            m_xPreventer.set( m_pPreventer );
             xCloseable->addCloseListener( m_xPreventer );
             m_xCloseable = xCloseable;
             bResult = true;

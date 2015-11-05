@@ -1094,10 +1094,10 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     uno::Reference < frame::XComponentLoader > xLoader;
     if ( pFrame )
     {
-        xLoader = uno::Reference < frame::XComponentLoader >( pFrame->GetFrameInterface(), uno::UNO_QUERY );
+        xLoader.set( pFrame->GetFrameInterface(), uno::UNO_QUERY );
     }
     else
-        xLoader = uno::Reference < frame::XComponentLoader >( frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY );
+        xLoader.set( frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY );
 
     Reference <lang::XComponent> xComp;
     try

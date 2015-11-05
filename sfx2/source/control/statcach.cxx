@@ -68,7 +68,7 @@ void SAL_CALL BindDispatch_Impl::disposing( const css::lang::EventObject& ) thro
     if ( xDisp.is() )
     {
         xDisp->removeStatusListener( static_cast<css::frame::XStatusListener*>(this), aURL );
-        xDisp = css::uno::Reference< css::frame::XDispatch > ();
+        xDisp.clear();
     }
 }
 
@@ -154,7 +154,7 @@ void BindDispatch_Impl::Release()
     if ( xDisp.is() )
     {
         xDisp->removeStatusListener( static_cast<css::frame::XStatusListener*>(this), aURL );
-        xDisp = css::uno::Reference< css::frame::XDispatch > ();
+        xDisp.clear();
     }
 
     pCache = NULL;

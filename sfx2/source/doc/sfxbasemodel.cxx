@@ -433,7 +433,7 @@ void SfxOwnFramesLocker::UnlockFrames()
 
                 pWindow->Enable();
 
-                m_aLockedFrames[nInd] = Reference< frame::XFrame >();
+                m_aLockedFrames[nInd].clear();
             }
         }
         catch( Exception& )
@@ -784,8 +784,8 @@ void SAL_CALL SfxBaseModel::dispose() throw(RuntimeException, std::exception)
         EndListening( *m_pData->m_pObjectShell );
     }
 
-    m_pData->m_xCurrent = Reference< frame::XController > ();
-    m_pData->m_seqControllers = Sequence< Reference< frame::XController > > () ;
+    m_pData->m_xCurrent.clear();
+    m_pData->m_seqControllers.realloc(0);
 
     // m_pData member must be set to zero before 0delete is called to
     // force disposed exception whenever someone tries to access our
@@ -1121,7 +1121,7 @@ void SAL_CALL SfxBaseModel::disconnectController( const Reference< frame::XContr
     m_pData->m_seqControllers = aNewSeq;
 
     if ( xController == m_pData->m_xCurrent )
-        m_pData->m_xCurrent = Reference< frame::XController > ();
+        m_pData->m_xCurrent.clear();
 }
 
 namespace
@@ -3218,10 +3218,8 @@ Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() throw
             // currently no frame for this document at all or View is under construction
             return Reference < container::XIndexAccess >();
 
-        m_pData->m_contViewData = Reference < container::XIndexAccess >(
-                document::IndexedPropertyValues::create(
-                   ::comphelper::getProcessComponentContext() ),
-                UNO_QUERY );
+        m_pData->m_contViewData.set( document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() ),
+                                     UNO_QUERY );
 
         if ( !m_pData->m_contViewData.is() )
         {
@@ -3934,7 +3932,7 @@ Reference< frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
         Reference< frame::XModel >              xThis   (static_cast< frame::XModel* >(this), UNO_QUERY_THROW);
 
         ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(xContext);
-        m_pData->m_xTitleHelper = Reference< frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
+        m_pData->m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
         pHelper->setOwner                   (xThis   );
         pHelper->connectWithUntitledNumbers (xDesktop);
     }
@@ -3952,7 +3950,7 @@ Reference< frame::XUntitledNumbers > SfxBaseModel::impl_getUntitledHelper ()
         Reference< frame::XModel > xThis   (static_cast< frame::XModel* >(this), UNO_QUERY_THROW);
         ::comphelper::NumberedCollection*         pHelper = new ::comphelper::NumberedCollection();
 
-        m_pData->m_xNumberedControllers = Reference< frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
+        m_pData->m_xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
         pHelper->setUntitledPrefix (OUString(" : "));

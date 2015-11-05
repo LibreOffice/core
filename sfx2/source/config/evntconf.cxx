@@ -225,13 +225,12 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, const OUString& aEventName, cons
     uno::Reference < document::XEventsSupplier > xSupplier;
     if ( pDoc )
     {
-        xSupplier = uno::Reference < document::XEventsSupplier >( pDoc->GetModel(), uno::UNO_QUERY );
+        xSupplier.set( pDoc->GetModel(), uno::UNO_QUERY );
     }
     else
     {
-        xSupplier = uno::Reference < document::XEventsSupplier >
-                ( frame::theGlobalEventBroadcaster::get(::comphelper::getProcessComponentContext()),
-                  uno::UNO_QUERY );
+        xSupplier.set( frame::theGlobalEventBroadcaster::get(::comphelper::getProcessComponentContext()),
+                       uno::UNO_QUERY );
     }
 
     if ( xSupplier.is() )

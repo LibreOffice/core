@@ -238,7 +238,7 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
         rEvent.ContextName);
     if (maRequestedContext != maCurrentContext)
     {
-        mxCurrentController = css::uno::Reference<css::frame::XController>(rEvent.Source, css::uno::UNO_QUERY);
+        mxCurrentController.set(rEvent.Source, css::uno::UNO_QUERY);
         maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
         // TODO: this call is redundant but mandatory for unit test to update context on document loading

@@ -1835,10 +1835,8 @@ bool SfxObjectShell::UseInteractionToHandleError(
             uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations(2);
             ::comphelper::OInteractionAbort* pAbort = new ::comphelper::OInteractionAbort();
             ::comphelper::OInteractionApprove* pApprove = new ::comphelper::OInteractionApprove();
-            lContinuations[0] = uno::Reference< task::XInteractionContinuation >(
-                                 static_cast< task::XInteractionContinuation* >( pAbort ), uno::UNO_QUERY );
-            lContinuations[1] = uno::Reference< task::XInteractionContinuation >(
-                                 static_cast< task::XInteractionContinuation* >( pApprove ), uno::UNO_QUERY );
+            lContinuations[0].set( static_cast< task::XInteractionContinuation* >( pAbort ), uno::UNO_QUERY );
+            lContinuations[1].set( static_cast< task::XInteractionContinuation* >( pApprove ), uno::UNO_QUERY );
 
             task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = nError;

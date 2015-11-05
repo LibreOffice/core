@@ -1680,9 +1680,9 @@ RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > rMod
     OUString temp;
     uno::Reference< uno::XInterface > temp2;
     document::FilterOptionsRequest aOptionsRequest( temp,
-                                                                      temp2,
-                                                                      rModel,
-                                                                      rProperties );
+                                                    temp2,
+                                                    rModel,
+                                                    rProperties );
 
     m_aRequest <<= aOptionsRequest;
 
@@ -1690,8 +1690,8 @@ RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > rMod
     m_pOptions = new FilterOptionsContinuation;
 
     m_lContinuations.realloc( 2 );
-    m_lContinuations[0] = uno::Reference< task::XInteractionContinuation >( m_pAbort  );
-    m_lContinuations[1] = uno::Reference< task::XInteractionContinuation >( m_pOptions );
+    m_lContinuations[0].set( m_pAbort  );
+    m_lContinuations[1].set( m_pOptions );
 }
 
 uno::Any SAL_CALL RequestFilterOptions::getRequest()
@@ -1727,15 +1727,13 @@ RequestPackageReparation_Impl::RequestPackageReparation_Impl( const OUString& aN
 {
     OUString temp;
     uno::Reference< uno::XInterface > temp2;
-    document::BrokenPackageRequest aBrokenPackageRequest( temp,
-                                                                                 temp2,
-                                                                              aName );
-       m_aRequest <<= aBrokenPackageRequest;
+    document::BrokenPackageRequest aBrokenPackageRequest( temp, temp2, aName );
+    m_aRequest <<= aBrokenPackageRequest;
     m_pApprove = new comphelper::OInteractionApprove;
     m_pDisapprove = new comphelper::OInteractionDisapprove;
-       m_lContinuations.realloc( 2 );
-       m_lContinuations[0] = uno::Reference< task::XInteractionContinuation >( m_pApprove );
-       m_lContinuations[1] = uno::Reference< task::XInteractionContinuation >( m_pDisapprove );
+    m_lContinuations.realloc( 2 );
+    m_lContinuations[0].set( m_pApprove );
+    m_lContinuations[1].set( m_pDisapprove );
 }
 
 bool RequestPackageReparation_Impl::isApproved()
@@ -1795,13 +1793,11 @@ NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( const OUString& aName )
 {
     OUString temp;
     uno::Reference< uno::XInterface > temp2;
-    document::BrokenPackageRequest aBrokenPackageRequest( temp,
-                                                                                 temp2,
-                                                                              aName );
-       m_aRequest <<= aBrokenPackageRequest;
-    m_pAbort  = new comphelper::OInteractionAbort;
-       m_lContinuations.realloc( 1 );
-       m_lContinuations[0] = uno::Reference< task::XInteractionContinuation >( m_pAbort  );
+    document::BrokenPackageRequest aBrokenPackageRequest( temp, temp2, aName );
+    m_aRequest <<= aBrokenPackageRequest;
+    m_pAbort     = new comphelper::OInteractionAbort;
+    m_lContinuations.realloc( 1 );
+    m_lContinuations[0].set( m_pAbort  );
 }
 
 uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()

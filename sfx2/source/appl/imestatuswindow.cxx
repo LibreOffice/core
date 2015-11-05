@@ -209,8 +209,7 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
                 css::beans::PropertyState_DIRECT_VALUE);
             css::uno::Sequence< css::uno::Any > aArgs(1);
             aArgs[0] <<= aArg;
-            m_xConfig
-                = css::uno::Reference< css::beans::XPropertySet >(
+            m_xConfig.set(
                     xProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess",
                         aArgs),

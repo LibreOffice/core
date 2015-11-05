@@ -992,8 +992,7 @@ SfxFrameStatusListener* SfxPopupWindow::GetOrCreateStatusListener()
                                     ::comphelper::getProcessComponentContext(),
                                     m_xFrame,
                                     this );
-        m_xStatusListener = Reference< XComponent >( static_cast< cppu::OWeakObject* >(
-                                                        m_pStatusListener ), UNO_QUERY );
+        m_xStatusListener.set( static_cast< cppu::OWeakObject* >( m_pStatusListener ), UNO_QUERY );
     }
 
     return m_pStatusListener;

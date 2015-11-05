@@ -183,9 +183,8 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
                                                     m_pTbx,
                                                     nItemId,
                                                     aCommandStr );
-    xStopRecTbxCtrl = uno::Reference< frame::XToolbarController >(
-                            static_cast< cppu::OWeakObject* >( pController ),
-                        uno::UNO_QUERY );
+    xStopRecTbxCtrl.set( static_cast< cppu::OWeakObject* >( pController ),
+                         uno::UNO_QUERY );
     uno::Reference< util::XUpdatable > xUpdate( xStopRecTbxCtrl, uno::UNO_QUERY );
     if ( xUpdate.is() )
         xUpdate->update();

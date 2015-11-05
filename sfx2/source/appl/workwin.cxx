@@ -187,7 +187,7 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
                             css::uno::Reference< css::frame::XLayoutManagerListener >(
                                 static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
 
-                    xPropSet = css::uno::Reference< css::beans::XPropertySet >( xLayoutManager, UNO_QUERY );
+                    xPropSet.set( xLayoutManager, UNO_QUERY );
                     if ( xPropSet.is() )
                     {
                         aValue = xPropSet->getPropertyValue( "LockCount" );
@@ -237,7 +237,7 @@ throw( css::uno::RuntimeException, std::exception )
     css::uno::Reference< css::frame::XFrame > xFrame( m_xFrame.get(), css::uno::UNO_QUERY );
     if ( xFrame.is() )
     {
-        m_xFrame = css::uno::Reference< css::frame::XFrame >();
+        m_xFrame.clear();
         m_bHasFrame = false;
 
         css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
@@ -279,7 +279,7 @@ throw( css::uno::RuntimeException, std::exception )
     SolarMutexGuard aGuard;
     m_pWrkWin = 0;
     m_bHasFrame = false;
-    m_xFrame = css::uno::Reference< css::frame::XFrame >();
+    m_xFrame.clear();
 }
 
 
@@ -554,9 +554,8 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxBindings& rB, SfxWorkWindow*
     // create and initialize layout manager listener
     Reference< css::frame::XFrame > xFrame = GetFrameInterface();
     LayoutManagerListener* pLayoutManagerListener = new LayoutManagerListener( this );
-    m_xLayoutManagerListener = css::uno::Reference< css::lang::XComponent >(
-                                    static_cast< cppu::OWeakObject* >( pLayoutManagerListener ),
-                                        css::uno::UNO_QUERY );
+    m_xLayoutManagerListener.set( static_cast< cppu::OWeakObject* >( pLayoutManagerListener ),
+                                  css::uno::UNO_QUERY );
     pLayoutManagerListener->setFrame( xFrame );
 }
 
@@ -1197,8 +1196,7 @@ Reference< css::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
                 xLayoutManager->getElement( m_aProgressBarResName );
             if ( xProgressBar.is() )
             {
-                xStatusIndicator = Reference< css::task::XStatusIndicator >(
-                    xProgressBar->getRealInterface(), UNO_QUERY );
+                xStatusIndicator.set( xProgressBar->getRealInterface(), UNO_QUERY );
             }
         }
     }

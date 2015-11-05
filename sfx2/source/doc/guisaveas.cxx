@@ -354,9 +354,9 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
             // because chart2 only writes the basic stream out.
             // In future in might make sense to implement a full scale object shell in
             // chart2 and make chart2 an own program.
-            m_xModel = uno::Reference< frame::XModel >(xCurrentComponent, uno::UNO_QUERY_THROW );
-            m_xStorable = uno::Reference< frame::XStorable >(xModel, uno::UNO_QUERY_THROW );
-            m_xStorable2 = uno::Reference< frame::XStorable2 >(xModel, uno::UNO_QUERY_THROW );
+            m_xModel.set(xCurrentComponent, uno::UNO_QUERY_THROW );
+            m_xStorable.set(xModel, uno::UNO_QUERY_THROW );
+            m_xStorable2.set(xModel, uno::UNO_QUERY_THROW );
         }
     }
     catch(...)
@@ -397,7 +397,7 @@ uno::Reference< frame::XStorable > ModelData_Impl::GetStorable()
 {
     if ( !m_xStorable.is() )
     {
-        m_xStorable = uno::Reference< frame::XStorable >( m_xModel, uno::UNO_QUERY );
+        m_xStorable.set( m_xModel, uno::UNO_QUERY );
         if ( !m_xStorable.is() )
             throw uno::RuntimeException();
     }
@@ -410,7 +410,7 @@ uno::Reference< frame::XStorable2 > ModelData_Impl::GetStorable2()
 {
     if ( !m_xStorable2.is() )
     {
-        m_xStorable2 = uno::Reference< frame::XStorable2 >( m_xModel, uno::UNO_QUERY );
+        m_xStorable2.set( m_xModel, uno::UNO_QUERY );
         if ( !m_xStorable2.is() )
             throw uno::RuntimeException();
     }
@@ -423,7 +423,7 @@ uno::Reference< util::XModifiable > ModelData_Impl::GetModifiable()
 {
     if ( !m_xModifiable.is() )
     {
-        m_xModifiable = uno::Reference< util::XModifiable >( m_xModel, uno::UNO_QUERY );
+        m_xModifiable.set( m_xModel, uno::UNO_QUERY );
         if ( !m_xModifiable.is() )
             throw uno::RuntimeException();
     }
@@ -1181,7 +1181,7 @@ OUString ModelData_Impl::GetRecommendedExtension( const OUString& aTypeName )
    if ( aTypeName.isEmpty() )
        return OUString();
 
-   uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
+   uno::Reference< container::XNameAccess > xTypeDetection(
        comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"),
        uno::UNO_QUERY );
    if ( xTypeDetection.is() )
@@ -1260,7 +1260,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
         if ( !aRecommendedName.isEmpty() && !aTypeName.isEmpty() )
         {
             // adjust the extension to the type
-            uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
+            uno::Reference< container::XNameAccess > xTypeDetection(
                 comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"),
                 uno::UNO_QUERY );
             if ( xTypeDetection.is() )
@@ -1294,9 +1294,8 @@ uno::Reference< container::XNameAccess > SfxStoringHelper::GetFilterConfiguratio
 {
     if ( !m_xFilterCFG.is() )
     {
-        m_xFilterCFG = uno::Reference< container::XNameAccess >(
-            comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.FilterFactory"),
-            uno::UNO_QUERY );
+        m_xFilterCFG.set( comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.FilterFactory"),
+                          uno::UNO_QUERY );
 
         if ( !m_xFilterCFG.is() )
             throw uno::RuntimeException();
@@ -1310,7 +1309,7 @@ uno::Reference< container::XContainerQuery > SfxStoringHelper::GetFilterQuery()
 {
     if ( !m_xFilterQuery.is() )
     {
-        m_xFilterQuery = uno::Reference< container::XContainerQuery >( GetFilterConfiguration(), uno::UNO_QUERY );
+        m_xFilterQuery.set( GetFilterConfiguration(), uno::UNO_QUERY );
         if ( !m_xFilterQuery.is() )
             throw uno::RuntimeException();
     }

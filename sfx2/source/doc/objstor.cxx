@@ -431,7 +431,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 void SfxObjectShell::PrepareSecondTryLoad_Impl()
 {
     // only for internal use
-    pImp->m_xDocStorage = uno::Reference< embed::XStorage >();
+    pImp->m_xDocStorage.clear();
     pImp->m_bIsInit = false;
     ResetError();
 }
@@ -891,9 +891,8 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
         css::uno::Reference< XNameAccess > xFilterCFG;
         if( xServiceManager.is() )
         {
-            xFilterCFG = css::uno::Reference< XNameAccess >(
-                xServiceManager->createInstance("com.sun.star.document.FilterFactory"),
-                UNO_QUERY );
+            xFilterCFG.set( xServiceManager->createInstance("com.sun.star.document.FilterFactory"),
+                            UNO_QUERY );
         }
 
         if( xFilterCFG.is() )
@@ -2203,11 +2202,14 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
     uno::Reference< document::XFilter > xLoader;
     if ( !aFilterImplName.isEmpty() )
     {
-        try{
-        xLoader = uno::Reference< document::XFilter >
-            ( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
-        }catch(const uno::Exception&)
-            { xLoader.clear(); }
+        try
+        {
+            xLoader.set( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
+        }
+        catch(const uno::Exception&)
+        {
+            xLoader.clear();
+        }
     }
     if ( xLoader.is() )
     {
@@ -2334,11 +2336,14 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 
         if ( !aFilterImplName.isEmpty() )
         {
-            try{
-            xExporter = uno::Reference< document::XExporter >
-                ( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
-            }catch(const uno::Exception&)
-                { xExporter.clear(); }
+            try
+            {
+                xExporter.set( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
+            }
+            catch(const uno::Exception&)
+            {
+                xExporter.clear();
+            }
         }
     }
 

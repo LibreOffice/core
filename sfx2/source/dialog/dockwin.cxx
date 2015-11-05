@@ -155,7 +155,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     uno::Reference< awt::XWindow > xWindow;
     try
     {
-        xWindow = uno::Reference< awt::XWindow>(
+        xWindow.set(
             xFactoryMgr->createInstanceWithArgumentsAndContext( aArgs, xContext ),
             uno::UNO_QUERY );
 

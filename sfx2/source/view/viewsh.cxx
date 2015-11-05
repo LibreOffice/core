@@ -141,7 +141,7 @@ private:
 SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView, const uno::Reference< datatransfer::clipboard::XClipboardNotifier >& xClpbrdNtfr )
   : m_pViewShell( 0 ), m_xClpbrdNtfr( xClpbrdNtfr )
 {
-    m_xCtrl = uno::Reference < lang::XComponent >( pView->GetController(), uno::UNO_QUERY );
+    m_xCtrl.set( pView->GetController(), uno::UNO_QUERY );
     if ( m_xCtrl.is() )
     {
         m_xCtrl->addEventListener( uno::Reference < lang::XEventListener > ( static_cast < lang::XEventListener* >( this ) ) );
@@ -244,9 +244,8 @@ static OUString RetrieveLabelFromCommand(
 
         if ( !xNameAccess.is() )
         {
-            xNameAccess = css::uno::Reference< css::container::XNameAccess >(
-                css::frame::theUICommandDescription::get(xContext),
-                    css::uno::UNO_QUERY_THROW );
+            xNameAccess.set( css::frame::theUICommandDescription::get(xContext),
+                             css::uno::UNO_QUERY_THROW );
             s_xNameAccess = xNameAccess;
         }
 
@@ -1949,7 +1948,7 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuI
         &rIn, &rMenuIdentifier );
 
     // get selection from controller
-    aEvent.Selection = uno::Reference < view::XSelectionSupplier > ( GetController(), uno::UNO_QUERY );
+    aEvent.Selection.set( GetController(), uno::UNO_QUERY );
 
     // call interceptors
     ::cppu::OInterfaceIteratorHelper aIt( pImp->aInterceptorContainer );
@@ -2049,7 +2048,7 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
     {
         Reference< frame::XModel > xModel( pObj->GetModel() );
         if( xModel.is() )
-            xRender = Reference< view::XRenderable >( xModel, UNO_QUERY );
+            xRender.set( xModel, UNO_QUERY );
     }
     return xRender;
 }
@@ -2058,8 +2057,7 @@ uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetC
 {
     uno::Reference< datatransfer::clipboard::XClipboardNotifier > xClipboardNotifier;
     if ( GetViewFrame() )
-        xClipboardNotifier = uno::Reference< datatransfer::clipboard::XClipboardNotifier >(
-            GetViewFrame()->GetWindow().GetClipboard(), uno::UNO_QUERY );
+        xClipboardNotifier.set( GetViewFrame()->GetWindow().GetClipboard(), uno::UNO_QUERY );
 
     return xClipboardNotifier;
 }

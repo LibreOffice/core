@@ -111,7 +111,7 @@ Image SAL_CALL GetImage(
         if ( xSupplier.is() )
         {
             Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
-            xDocImgMgr = Reference< XImageManager >( xDocUICfgMgr->getImageManager(), UNO_QUERY );
+            xDocImgMgr.set( xDocUICfgMgr->getImageManager(), UNO_QUERY );
         }
     }
 
@@ -176,7 +176,7 @@ Image SAL_CALL GetImage(
                 }
 
                 Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId );
-                xModuleImageManager = Reference< XImageManager >( xUICfgMgr->getImageManager(), UNO_QUERY );
+                xModuleImageManager.set( xUICfgMgr->getImageManager(), UNO_QUERY );
                 m_aModuleIdToImageMgrMap.insert( ModuleIdToImagegMgr::value_type( aModuleId, xModuleImageManager ));
             }
 

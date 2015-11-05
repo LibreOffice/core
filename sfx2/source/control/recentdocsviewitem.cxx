@@ -191,7 +191,7 @@ void RecentDocsViewItem::OpenDocument()
     uno::Reference<frame::XFrame> xActiveFrame = xDesktop->getActiveFrame();
 
     //osl::ClearableMutexGuard aLock(m_aMutex);
-    xDispatchProvider = Reference<frame::XDispatchProvider>(xActiveFrame, UNO_QUERY);
+    xDispatchProvider.set(xActiveFrame, UNO_QUERY);
     //aLock.clear();
 
     aTargetURL.Complete = maURL;

@@ -284,7 +284,7 @@ void ShutdownIcon::FromTemplate()
         css::uno::Reference < css::frame::XFramesSupplier > xDesktop ( getInstance()->m_xDesktop, UNO_QUERY);
         css::uno::Reference < css::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
         if ( !xFrame.is() )
-            xFrame = css::uno::Reference < css::frame::XFrame >( xDesktop, UNO_QUERY );
+            xFrame.set( xDesktop, UNO_QUERY );
 
         URL aTargetURL;
         aTargetURL.Complete = ".uno:NewDoc";

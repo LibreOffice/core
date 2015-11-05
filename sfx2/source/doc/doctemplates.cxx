@@ -455,7 +455,7 @@ void SfxDocTplService_Impl::init_Impl()
         }
 
         OUString const aService = SERVICENAME_TYPEDETECTION;
-        mxType = uno::Reference< XTypeDetection > ( mxContext->getServiceManager()->createInstanceWithContext(aService, mxContext), UNO_QUERY );
+        mxType.set( mxContext->getServiceManager()->createInstanceWithContext(aService, mxContext), UNO_QUERY );
 
         getDirList();
         readFolderList();

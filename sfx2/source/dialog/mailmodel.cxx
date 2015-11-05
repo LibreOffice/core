@@ -518,8 +518,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
                     if ( xDispatchProvider.is() )
                     {
-                        xPrepareDispatch = css::uno::Reference< css::frame::XDispatch >(
-                            xDispatchProvider->queryDispatch( aPrepareURL, OUString(), 0 ));
+                        xPrepareDispatch.set( xDispatchProvider->queryDispatch( aPrepareURL, OUString(), 0 ));
                         if ( xPrepareDispatch.is() )
                         {
                                 PrepareListener_Impl* pPrepareListener;
@@ -587,7 +586,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
                         if ( xDispatchProvider.is() )
                         {
-                            css::uno::Reference< css::frame::XDispatch > xDispatch = css::uno::Reference< css::frame::XDispatch >(
+                            css::uno::Reference< css::frame::XDispatch > xDispatch(
                                 xDispatchProvider->queryDispatch( aURL, OUString(), 0 ));
                             if ( xDispatch.is() )
                             {

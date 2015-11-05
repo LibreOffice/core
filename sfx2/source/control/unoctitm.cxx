@@ -197,7 +197,7 @@ void SfxUnoControllerItem::ReleaseDispatch()
     if ( xDispatch.is() )
     {
         xDispatch->removeStatusListener( static_cast<css::frame::XStatusListener*>(this), aCommand );
-        xDispatch = css::uno::Reference< css::frame::XDispatch > ();
+        xDispatch.clear();
     }
 }
 
@@ -211,7 +211,7 @@ void SfxUnoControllerItem::GetNewDispatch()
     }
 
     // forget old dispatch
-    xDispatch = css::uno::Reference< css::frame::XDispatch > ();
+    xDispatch.clear();
 
     // no arms, no cookies !
     if ( !pBindings->GetDispatcher_Impl() || !pBindings->GetDispatcher_Impl()->GetFrame() )

@@ -774,7 +774,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                     Reference< frame::XFrame > xParentFrame;
                     Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
                     if ( xOwnFrame.is() )
-                        xParentFrame = Reference< frame::XFrame >( xOwnFrame->getCreator(), uno::UNO_QUERY );
+                        xParentFrame.set( xOwnFrame->getCreator(), uno::UNO_QUERY );
 
                     if ( xParentFrame.is() )
                     {
@@ -831,7 +831,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                     Reference< frame::XFrame > xParentFrame;
                     Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
                     if ( xOwnFrame.is() )
-                        xParentFrame = Reference< frame::XFrame >( xOwnFrame->getCreator(), uno::UNO_QUERY );
+                        xParentFrame.set( xOwnFrame->getCreator(), uno::UNO_QUERY );
 
                     if ( xParentFrame.is() )
                     {
@@ -1499,7 +1499,7 @@ Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
         Reference< frame::XController >      xThis            (static_cast< frame::XController* >(this), uno::UNO_QUERY_THROW);
 
         ::framework::TitleHelper* pHelper                 = new ::framework::TitleHelper(::comphelper::getProcessComponentContext());
-                                  m_pData->m_xTitleHelper = Reference< frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
+        m_pData->m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
 
         pHelper->setOwner                   (xThis            );
         pHelper->connectWithUntitledNumbers (xUntitledProvider);

@@ -582,7 +582,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
                 OUString("unexpected source or called twice"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
-    m_xWindow = css::uno::Reference< css::awt::XWindow >();
+    m_xWindow.clear();
 
     /* } SAFE */
 }
@@ -629,7 +629,7 @@ void SAL_CALL BackingComp::dispose()
         }
         css::uno::Reference< css::awt::XKeyListener > xKeyThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         m_xWindow->removeKeyListener(xKeyThis);
-        m_xWindow = css::uno::Reference< css::awt::XWindow >();
+        m_xWindow.clear();
     }
 
     // forget all other used references

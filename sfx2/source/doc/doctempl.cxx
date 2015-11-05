@@ -831,15 +831,14 @@ bool SfxDocumentTemplates::CopyFrom
         uno::Reference< XStorable > xStorable;
         try
         {
-            xStorable = uno::Reference< XStorable >(
+            xStorable.set(
                 xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::NO_DECODE),
                                                 "_blank",
                                                 0,
                                                 aArgs ),
                 UNO_QUERY );
 
-            xDocPropsSupplier = uno::Reference< XDocumentPropertiesSupplier >(
-                xStorable, UNO_QUERY );
+            xDocPropsSupplier.set( xStorable, UNO_QUERY );
         }
         catch( Exception& )
         {

@@ -88,12 +88,12 @@ class DisposeListener : public ::cppu::WeakImplHelper< css::lang::XEventListener
 
             if( m_pOwner && m_pData )
             {
-                m_pData->xListener = css::uno::Reference< css::lang::XEventListener >();
+                m_pData->xListener.clear();
 
                 if ( m_pData->pWorkWin )
                 {
                     // m_pOwner and m_pData will be killed
-                    m_pData->xFrame    = css::uno::Reference< css::frame::XFrame >();
+                    m_pData->xFrame.clear();
                     m_pData->pWorkWin->GetBindings().Execute( m_pOwner->GetType() );
                 }
                 else
@@ -747,7 +747,7 @@ void SfxChildWindow::SetFrame( const css::uno::Reference< css::frame::XFrame > &
         // Use already existing or create new one.
         if( rFrame.is() )
             if( !pImp->xListener.is() )
-                pImp->xListener = css::uno::Reference< css::lang::XEventListener >( new DisposeListener( this, pImp ) );
+                pImp->xListener.set( new DisposeListener( this, pImp ) );
 
         // Set new frame in data container
         // and build new listener connection, if necessary.

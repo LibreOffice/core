@@ -956,7 +956,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 m_bHaveFilterOptions = true;
                 if( xFactory.is() )
                 {
-                    mxFilterCFG = uno::Reference< XNameAccess >(
+                    mxFilterCFG.set(
                         xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
                         UNO_QUERY );
                 }
@@ -972,7 +972,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 mbHasSelectionBox = true;
                 if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
                 {
-                    mxFilterCFG = uno::Reference< XNameAccess >(
+                    mxFilterCFG.set(
                         xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
                         UNO_QUERY );
                 }

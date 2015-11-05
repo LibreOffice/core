@@ -213,7 +213,7 @@ void BackingWindow::dispose()
                 xDropTarget->setActive(false);
             }
         }
-        mxDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
+        mxDropTargetListener.clear();
     }
     disposeBuilder();
     mpOpenButton.clear();

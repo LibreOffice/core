@@ -241,9 +241,8 @@ void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEven
                 }
                 else
                 {
-                    xProv = uno::Reference< frame::XDispatchProvider > (
-                                frame::Desktop::create( ::comphelper::getProcessComponentContext() ),
-                                uno::UNO_QUERY );
+                    xProv.set( frame::Desktop::create( ::comphelper::getProcessComponentContext() ),
+                               uno::UNO_QUERY );
                 }
 
                 uno::Reference < frame::XDispatch > xDisp;

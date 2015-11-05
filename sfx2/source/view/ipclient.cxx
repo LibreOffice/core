@@ -630,7 +630,7 @@ SfxInPlaceClient::~SfxInPlaceClient()
     m_pImp->m_pClient = NULL;
 
     // the next call will destroy m_pImp if no other reference to it exists
-    m_pImp->m_xClient = uno::Reference < embed::XEmbeddedClient >();
+    m_pImp->m_xClient.clear();
     m_pImp->release();
 
     // TODO/LATER:

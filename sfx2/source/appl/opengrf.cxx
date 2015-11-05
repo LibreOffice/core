@@ -89,7 +89,7 @@ SvxOpenGrf_Impl::SvxOpenGrf_Impl()
             SFXWB_GRAPHIC)
 {
     uno::Reference < XFilePicker2 > xFP = aFileDlg.GetFilePicker();
-    xCtrlAcc = uno::Reference < XFilePickerControlAccess >(xFP, UNO_QUERY);
+    xCtrlAcc.set(xFP, UNO_QUERY);
 }
 
 

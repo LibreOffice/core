@@ -639,7 +639,7 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const css::uno::Sequence <
     uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
     uno::Reference< container::XContainerQuery > xTypeCFG;
     if( xServiceManager.is() )
-        xTypeCFG   = uno::Reference < css::container::XContainerQuery >( xServiceManager->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
+        xTypeCFG.set( xServiceManager->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
     if ( xTypeCFG.is() )
     {
         // make query for all types matching the properties
@@ -813,8 +813,8 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const OUString& rName, 
         uno::Reference< container::XNameAccess >     xTypeCFG                                                  ;
         if( xServiceManager.is() )
         {
-            xFilterCFG = uno::Reference< container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
-            xTypeCFG   = uno::Reference< container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
+            xFilterCFG.set( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
+            xTypeCFG.set( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
         }
 
         if( xFilterCFG.is() && xTypeCFG.is() )
@@ -1150,8 +1150,8 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
         uno::Reference< container::XNameAccess >     xTypeCFG                                                  ;
         if( xServiceManager.is() )
         {
-            xFilterCFG = uno::Reference< container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
-            xTypeCFG   = uno::Reference< container::XNameAccess >( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
+            xFilterCFG.set( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
+            xTypeCFG.set( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
         }
 
         if( xFilterCFG.is() && xTypeCFG.is() )

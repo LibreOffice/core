@@ -1320,8 +1320,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
 
         const SfxUnoAnyItem* pxProgressItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetItemSet(), SID_PROGRESS_STATUSBAR_CONTROL, false);
         if( pxProgressItem && ( pxProgressItem->GetValue() >>= xStatusIndicator ) )
-            xProgressHandler = Reference< css::ucb::XProgressHandler >(
-                                    new utl::ProgressHandlerWrap( xStatusIndicator ) );
+            xProgressHandler.set( new utl::ProgressHandlerWrap( xStatusIndicator ) );
 
         uno::Sequence< beans::PropertyValue > aAddProps( 2 );
         aAddProps[0].Name = "RepairPackage";
@@ -1358,8 +1357,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
 
     try
     {
-        pImp->xStorage = uno::Reference< embed::XStorage >(
-                            ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
+        pImp->xStorage.set( ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
                             uno::UNO_QUERY );
     }
     catch( const uno::Exception& )

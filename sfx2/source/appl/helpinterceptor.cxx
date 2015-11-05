@@ -106,7 +106,7 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
 
 void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
 {
-    m_xIntercepted = Reference< XDispatchProviderInterception>( xFrame, UNO_QUERY );
+    m_xIntercepted.set( xFrame, UNO_QUERY );
 
     if ( m_xIntercepted.is() )
         m_xIntercepted->registerDispatchProviderInterceptor( static_cast<XDispatchProviderInterceptor*>(this) );
@@ -145,7 +145,7 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     {
         DBG_ASSERT( xResult.is(), "invalid dispatch" );
         HelpDispatch_Impl* pHelpDispatch = new HelpDispatch_Impl( *this, xResult );
-        xResult = Reference< XDispatch >( static_cast< ::cppu::OWeakObject* >(pHelpDispatch), UNO_QUERY );
+        xResult.set( static_cast< ::cppu::OWeakObject* >(pHelpDispatch), UNO_QUERY );
     }
 
     return xResult;

@@ -1069,7 +1069,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if ( xModel.is() )
                 xController = xModel->getCurrentController();
             else
-                xController = Reference < XController >( xComp, UNO_QUERY );
+                xController.set( xComp, UNO_QUERY );
 
         }
         else

@@ -208,9 +208,8 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
 SfxQueryStatus::SfxQueryStatus( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand )
 {
     m_pSfxQueryStatusImpl = new SfxQueryStatus_Impl( rDispatchProvider, nSlotId, rCommand );
-    m_xStatusListener     = Reference< XStatusListener >(
-                                static_cast< cppu::OWeakObject* >( m_pSfxQueryStatusImpl ),
-                                UNO_QUERY );
+    m_xStatusListener.set( static_cast< cppu::OWeakObject* >( m_pSfxQueryStatusImpl ),
+                           UNO_QUERY );
 }
 
 SfxQueryStatus::~SfxQueryStatus()

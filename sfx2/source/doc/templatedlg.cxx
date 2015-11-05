@@ -1131,9 +1131,8 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
 
         try
         {
-            xStorable = uno::Reference< XStorable >(
-                        mxDesktop->loadComponentFromURL(pItem->getPath(),"_default", 0, aArgs ),
-                        uno::UNO_QUERY );
+            xStorable.set( mxDesktop->loadComponentFromURL(pItem->getPath(),"_default", 0, aArgs ),
+                           uno::UNO_QUERY );
         }
         catch( const uno::Exception& )
         {

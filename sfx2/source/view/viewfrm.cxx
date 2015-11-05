@@ -2616,9 +2616,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
         else
         {
-            xLib = css::uno::Reference< css::container::XNameAccess >(
-                        xLibCont->createLibrary(sLib),
-                        css::uno::UNO_QUERY);
+            xLib.set( xLibCont->createLibrary(sLib), css::uno::UNO_QUERY);
         }
 
         // pack the macro as direct usable "sub" routine
