@@ -81,9 +81,9 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     // always on top of text.
     // but in invisible layer. <ConnectToLayout> will move the object
     // to the visible layer.
-    pNewDrawObj->SetLayer( pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
+    pNewDrawObj->SetLayer( m_pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
 
-    SfxItemSet aFrmSet( pDoc->GetAttrPool(),
+    SfxItemSet aFrmSet( m_pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrmSet );
@@ -159,7 +159,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eTopType )
     {
         const SwStartNode *pFlySttNd =
-            pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
+            m_pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
 
         if( pFlySttNd )
         {
@@ -196,11 +196,11 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
     else if( FLY_AT_FLY != aAnchor.GetAnchorId() )
     {
-        aAnchor.SetAnchor( pPam->GetPoint() );
+        aAnchor.SetAnchor( m_pPam->GetPoint() );
     }
     aFrmSet.Put( aAnchor );
 
-    pDoc->getIDocumentContentOperations().InsertDrawObj( *pPam, *pNewDrawObj, aFrmSet );
+    m_pDoc->getIDocumentContentOperations().InsertDrawObj( *m_pPam, *pNewDrawObj, aFrmSet );
 }
 
 static void PutEEPoolItem( SfxItemSet &rEEItemSet,
@@ -251,8 +251,8 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
 void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 {
 
-    OSL_ENSURE( !pMarquee, "Marquee in Marquee???" );
-    aContents.clear();
+    OSL_ENSURE( !m_pMarquee, "Marquee in Marquee???" );
+    m_aContents.clear();
 
     OUString aId, aStyle, aClass;
 
@@ -359,14 +359,14 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // Ein DrawTextobj anlegen
     // #i52858# - method name changed
-    SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+    SwDrawModel* pModel = m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SdrPage* pPg = pModel->GetPage( 0 );
-    pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,
+    m_pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,
                                              OBJ_TEXT, pPg, pModel );
-    if( !pMarquee )
+    if( !m_pMarquee )
         return;
 
-    pPg->InsertObject( pMarquee );
+    pPg->InsertObject( m_pMarquee );
 
     if( !aId.isEmpty() )
         InsertBookmark( aId );
@@ -400,7 +400,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // die Default-Farbe (aus der Standard-Vorlage) setzen, damit ueberhaupt
     // eine sinnvolle Farbe gesetzt ist.
     const Color& rDfltColor =
-        pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
+        m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
             ->GetColor().GetValue();
     aItemSet.Put( SvxColorItem( rDfltColor, EE_CHAR_COLOR ) );
 
@@ -418,7 +418,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         0
     };
     SwTextNode const*const pTextNd =
-        pPam->GetPoint()->nNode.GetNode().GetTextNode();
+        m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
     if( pTextNd )
     {
         const SfxItemSet& rItemSet = pTextNd->GetAnyFormatColl().GetAttrSet();
@@ -431,7 +431,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // die Attribute der Umgebung am Draw-Objekt setzen
-    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&m_aAttrTab);
     for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
         _HTMLAttr *pAttr = *pHTMLAttributes;
@@ -447,8 +447,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // Styles parsen (funktioniert hier nur fuer Attribute, die auch
     // am Zeichen-Objekt gesetzt werden koennen)
-    SfxItemSet aStyleItemSet( pDoc->GetAttrPool(),
-                              pCSS1Parser->GetWhichMap() );
+    SfxItemSet aStyleItemSet( m_pDoc->GetAttrPool(),
+                              m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass )  &&
         ParseStyleOptions( aStyle, aId, aClass, aStyleItemSet, aPropInfo ) )
@@ -480,10 +480,10 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( SVX_CSS1_LTYPE_TWIP== aPropInfo.eHeightType )
         aTwipSz.Height() = aPropInfo.nHeight;
 
-    bFixMarqueeWidth = false;
+    m_bFixMarqueeWidth = false;
     if( !nWidth || bPrcWidth )
     {
-        if( pTable )
+        if( m_pTable )
         {
             if( !pCurTable )
             {
@@ -491,7 +491,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 // in einer Zelle. Da jetzt keine vernuenftige Zuordung
                 // zu einer Zelle moeglich ist, passen wir hir die
                 // Breite dem Inhalt der Laufschrift an.
-                bFixMarqueeWidth = true;
+                m_bFixMarqueeWidth = true;
             }
             else if( !nWidth )
             {
@@ -516,14 +516,14 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         aTwipSz.Height() = MINFLY;
     aItemSet.Put( makeSdrTextMinFrameHeightItem( aTwipSz.Height() ) );
 
-    pMarquee->SetMergedItemSetAndBroadcast(aItemSet);
+    m_pMarquee->SetMergedItemSetAndBroadcast(aItemSet);
 
     if( aTwipSz.Width() < MINFLY )
         aTwipSz.Width() = MINFLY;
-    pMarquee->SetLogicRect( Rectangle( 0, 0, aTwipSz.Width(), aTwipSz.Height() ) );
+    m_pMarquee->SetLogicRect( Rectangle( 0, 0, aTwipSz.Width(), aTwipSz.Height() ) );
 
     // und das Objekt in das Dok einfuegen
-    InsertDrawObject( pMarquee, aSpace, eVertOri, eHoriOri, aStyleItemSet,
+    InsertDrawObject( m_pMarquee, aSpace, eVertOri, eHoriOri, aStyleItemSet,
                       aPropInfo );
 
     // Das Zeichen-Objekt der Tabelle bekanntmachen. Ist ein bisserl
@@ -533,44 +533,44 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // pTable kann uebrigens auch nicht verwendet werden, denn die
     // Laufschrift kann sich auch mal in einer Sub-Tabelle befinden.
     if( pCurTable && bPrcWidth)
-        RegisterDrawObjectToTable( pCurTable, pMarquee, (sal_uInt8)nWidth );
+        RegisterDrawObjectToTable( pCurTable, m_pMarquee, (sal_uInt8)nWidth );
 }
 
 void SwHTMLParser::EndMarquee()
 {
-    OSL_ENSURE( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
+    OSL_ENSURE( m_pMarquee && OBJ_TEXT==m_pMarquee->GetObjIdentifier(),
             "kein Marquee oder falscher Typ" );
 
-    if( bFixMarqueeWidth )
+    if( m_bFixMarqueeWidth )
     {
         // Da es keine fixe Hoehe gibt, das Text-Objekt erstmal breiter
         // als den Text machen, damit nicht umgebrochen wird.
-        const Rectangle& rOldRect = pMarquee->GetLogicRect();
-        pMarquee->SetLogicRect( Rectangle( rOldRect.TopLeft(),
+        const Rectangle& rOldRect = m_pMarquee->GetLogicRect();
+        m_pMarquee->SetLogicRect( Rectangle( rOldRect.TopLeft(),
                                            Size( USHRT_MAX, 240 ) ) );
     }
 
     // den gesammelten Text einfuegen
-    static_cast<SdrTextObj*>(pMarquee)->SetText( aContents );
-    pMarquee->SetMergedItemSetAndBroadcast( pMarquee->GetMergedItemSet() );
+    static_cast<SdrTextObj*>(m_pMarquee)->SetText( m_aContents );
+    m_pMarquee->SetMergedItemSetAndBroadcast( m_pMarquee->GetMergedItemSet() );
 
-    if( bFixMarqueeWidth )
+    if( m_bFixMarqueeWidth )
     {
         // die Groesse dem Text anpassen.
-        static_cast<SdrTextObj*>(pMarquee)->FitFrameToTextSize();
+        static_cast<SdrTextObj*>(m_pMarquee)->FitFrameToTextSize();
     }
 
-    aContents.clear();
-    pMarquee = 0;
+    m_aContents.clear();
+    m_pMarquee = 0;
 }
 
 void SwHTMLParser::InsertMarqueeText()
 {
-    OSL_ENSURE( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
+    OSL_ENSURE( m_pMarquee && OBJ_TEXT==m_pMarquee->GetObjIdentifier(),
             "kein Marquee oder falscher Typ" );
 
     // das akteulle Textstueck an den Text anhaengen
-    aContents += aToken;
+    m_aContents += aToken;
 }
 
 void SwHTMLParser::ResizeDrawObject( SdrObject* pObj, SwTwips nWidth )

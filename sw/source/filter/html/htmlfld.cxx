@@ -264,7 +264,7 @@ void SwHTMLParser::NewField()
     {
         SvtUserOptions aOpt;
         const OUString& rUser = aOpt.GetFullName();
-        SwDocShell *pDocShell(pDoc->GetDocShell());
+        SwDocShell *pDocShell(m_pDoc->GetDocShell());
         OSL_ENSURE(pDocShell, "no SwDocShell");
         if (pDocShell) {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -284,7 +284,7 @@ void SwHTMLParser::NewField()
     if( RES_DATEFLD==nType || RES_TIMEFLD==nType )
         nWhich = RES_DATETIMEFLD;
 
-    SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetSysFieldType( nWhich );
+    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( nWhich );
     SwField *pNewField = 0;
     bool bInsOnEndTag = false;
 
@@ -347,7 +347,7 @@ void SwHTMLParser::NewField()
             if( !aValue.isEmpty() )
                 nSub |= FIXEDFLD;
 
-            SvNumberFormatter *pFormatter = pDoc->GetNumberFormatter();
+            SvNumberFormatter *pFormatter = m_pDoc->GetNumberFormatter();
             if( pFormatOption )
             {
                 const OUString& rFormat = pFormatOption->GetString();
@@ -378,12 +378,12 @@ void SwHTMLParser::NewField()
         {
             sal_uInt16 nSub = 0;
 
-            SvNumberFormatter *pFormatter = pDoc->GetNumberFormatter();
+            SvNumberFormatter *pFormatter = m_pDoc->GetNumberFormatter();
             sal_uInt32 nNumFormat;
             LanguageType eLang;
             double dValue = GetTableDataOptionsValNum(
                                 nNumFormat, eLang, aNumValue, aNumFormat,
-                                *pDoc->GetNumberFormatter() );
+                                *m_pDoc->GetNumberFormatter() );
             short nFormatType = pFormatter->GetType( nNumFormat );
             switch( nFormatType )
             {
@@ -456,7 +456,7 @@ void SwHTMLParser::NewField()
                     LanguageType eLang;
                     dValue = GetTableDataOptionsValNum(
                                     nNumFormat, eLang, aNumValue, aNumFormat,
-                                    *pDoc->GetNumberFormatter() );
+                                    *m_pDoc->GetNumberFormatter() );
                     bFixed &= bHasNumValue;
                 }
                 else
@@ -493,7 +493,7 @@ void SwHTMLParser::NewField()
                 if( pFormatOption )
                     pFormatOption->GetEnum( nFormat, aHTMLPageNumFieldFormatTable );
                 pNewField = new SwDocStatField(static_cast<SwDocStatFieldType*>(pType), nSub, nFormat);
-                bUpdateDocStat |= (DS_PAGE != nFormat);
+                m_bUpdateDocStat |= (DS_PAGE != nFormat);
             }
         }
         break;
@@ -520,77 +520,77 @@ void SwHTMLParser::NewField()
     {
         if (bInsOnEndTag)
         {
-            pField = pNewField;
+            m_pField = pNewField;
         }
         else
         {
-            pDoc->getIDocumentContentOperations().InsertPoolItem(*pPam, SwFormatField(*pNewField));
+            m_pDoc->getIDocumentContentOperations().InsertPoolItem(*m_pPam, SwFormatField(*pNewField));
             delete pNewField;
         }
-        bInField = true;
+        m_bInField = true;
     }
 }
 
 void SwHTMLParser::EndField()
 {
-    if( pField )
+    if( m_pField )
     {
-        switch( pField->Which() )
+        switch( m_pField->Which() )
         {
         case RES_DOCINFOFLD:
-            OSL_ENSURE( static_cast<SwDocInfoField*>(pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwDocInfoField*>(m_pField)->IsFixed(),
                     "DokInfo-Feld haette nicht gemerkt werden muessen" );
-            static_cast<SwDocInfoField*>(pField)->SetExpansion( aContents );
+            static_cast<SwDocInfoField*>(m_pField)->SetExpansion( m_aContents );
             break;
 
         case RES_EXTUSERFLD:
-            OSL_ENSURE( static_cast<SwExtUserField*>(pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwExtUserField*>(m_pField)->IsFixed(),
                     "ExtUser-Feld haette nicht gemerkt werden muessen" );
-            static_cast<SwExtUserField*>(pField)->SetExpansion( aContents );
+            static_cast<SwExtUserField*>(m_pField)->SetExpansion( m_aContents );
             break;
 
         case RES_AUTHORFLD:
-            OSL_ENSURE( static_cast<SwAuthorField*>(pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwAuthorField*>(m_pField)->IsFixed(),
                     "Author-Feld haette nicht gemerkt werden muessen" );
-            static_cast<SwAuthorField*>(pField)->SetExpansion( aContents );
+            static_cast<SwAuthorField*>(m_pField)->SetExpansion( m_aContents );
             break;
 
         case RES_FILENAMEFLD:
-            OSL_ENSURE( static_cast<SwFileNameField*>(pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwFileNameField*>(m_pField)->IsFixed(),
                     "FileName-Feld haette nicht gemerkt werden muessen" );
-            static_cast<SwFileNameField*>(pField)->SetExpansion( aContents );
+            static_cast<SwFileNameField*>(m_pField)->SetExpansion( m_aContents );
             break;
         }
 
-        pDoc->getIDocumentContentOperations().InsertPoolItem( *pPam, SwFormatField(*pField) );
-        delete pField;
-        pField = 0;
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatField(*m_pField) );
+        delete m_pField;
+        m_pField = 0;
     }
 
-    bInField = false;
-    aContents.clear();
+    m_bInField = false;
+    m_aContents.clear();
 }
 
 void SwHTMLParser::InsertFieldText()
 {
-    if( pField )
+    if( m_pField )
     {
         // das aktuelle Textstueck an den Text anhaengen
-        aContents += aToken;
+        m_aContents += aToken;
     }
 }
 
 void SwHTMLParser::InsertCommentText( const sal_Char *pTag )
 {
-    bool bEmpty = aContents.isEmpty();
+    bool bEmpty = m_aContents.isEmpty();
     if( !bEmpty )
-        aContents += "\n";
+        m_aContents += "\n";
 
-    aContents += aToken;
+    m_aContents += aToken;
     if( bEmpty && pTag )
     {
-        OUString aTmp( aContents );
-        aContents = "HTML: <" + OUString( *pTag ) + ">" + aTmp;
+        OUString aTmp( m_aContents );
+        m_aContents = "HTML: <" + OUString( *pTag ) + ">" + aTmp;
     }
 }
 
@@ -607,18 +607,18 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
     // MIB 24.06.97: Wenn ein PostIt nach einen Space eingefuegt
     // werden soll, fuegen wir es vor dem Space ein. Dann gibt es
     // weniger Probleme beim Formatieren (bug #40483#)
-    const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
-    SwTextNode *pTextNd = pPam->GetNode().GetTextNode();
+    const sal_Int32 nPos = m_pPam->GetPoint()->nContent.GetIndex();
+    SwTextNode *pTextNd = m_pPam->GetNode().GetTextNode();
     bool bMoveFwd = false;
     if (nPos>0 && pTextNd && (' ' == pTextNd->GetText()[nPos-1]))
     {
         bMoveFwd = true;
 
-        sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
-        const sal_Int32 nIdx = pPam->GetPoint()->nContent.GetIndex();
-        for( auto i = aSetAttrTab.size(); i > 0; )
+        sal_uLong nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
+        const sal_Int32 nIdx = m_pPam->GetPoint()->nContent.GetIndex();
+        for( auto i = m_aSetAttrTab.size(); i > 0; )
         {
-            _HTMLAttr *pAttr = aSetAttrTab[--i];
+            _HTMLAttr *pAttr = m_aSetAttrTab[--i];
             if( pAttr->GetSttParaIdx() != nNodeIdx ||
                 pAttr->GetSttCnt() != nIdx )
                 break;
@@ -632,16 +632,16 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
         }
 
         if( bMoveFwd )
-            pPam->Move( fnMoveBackward );
+            m_pPam->Move( fnMoveBackward );
     }
 
     SwPostItField aPostItField(
-                    static_cast<SwPostItFieldType*>(pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
+                    static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
                     aEmptyOUStr, aComment, aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
     InsertAttr( SwFormatField( aPostItField ) );
 
     if( bMoveFwd )
-        pPam->Move( fnMoveForward );
+        m_pPam->Move( fnMoveForward );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

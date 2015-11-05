@@ -380,7 +380,7 @@ void SwHTMLParser::InsertEmbed()
         aCmdLst.Append( rOption.GetTokenString(), rOption.GetString() );
     }
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
+    SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
@@ -406,7 +406,7 @@ void SwHTMLParser::InsertEmbed()
     bool bHasURL = !aURL.isEmpty() &&
                    aURLObj.SetURL(
                        URIHelper::SmartRel2Abs(
-                           INetURLObject(sBaseURL), aURL,
+                           INetURLObject(m_sBaseURL), aURL,
                            URIHelper::GetMaybeFileHdl()) );
 
     // do not insert plugin if it has neither URL nor type
@@ -437,7 +437,7 @@ void SwHTMLParser::InsertEmbed()
         }
     }
 
-    SfxItemSet aFrmSet( pDoc->GetAttrPool(),
+    SfxItemSet aFrmSet( m_pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrmSet );
@@ -450,7 +450,7 @@ void SwHTMLParser::InsertEmbed()
     else
     {
         SwFormatAnchor aAnchor( FLY_AT_PARA );
-        aAnchor.SetAnchor( pPam->GetPoint() );
+        aAnchor.SetAnchor( m_pPam->GetPoint() );
         aFrmSet.Put( aAnchor );
         aFrmSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME) );
         aFrmSet.Put( SwFormatSurround( SURROUND_THROUGHT ) );
@@ -465,7 +465,7 @@ void SwHTMLParser::InsertEmbed()
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        pDoc->getIDocumentContentOperations().Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
+        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
 
     // Namen am FrameFormat setzen
     if( !aName.isEmpty() )
@@ -473,7 +473,7 @@ void SwHTMLParser::InsertEmbed()
 
     // den alternativen Text setzen
     SwNoTextNode *pNoTextNd =
-        pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+        m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                           ->GetIndex()+1 ]->GetNoTextNode();
     pNoTextNd->SetTitle( aAlt );
 
@@ -500,8 +500,8 @@ void SwHTMLParser::NewObject()
     bool bPrcWidth = false, bPrcHeight = false,
              bDeclare = false;
     // Eine neue Command-List anlegen
-    delete pAppletImpl;
-    pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(),
+    delete m_pAppletImpl;
+    m_pAppletImpl = new SwApplet_Impl( m_pDoc->GetAttrPool(),
                                      RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -574,7 +574,7 @@ void SwHTMLParser::NewObject()
             break;
         }
         // Es werden alle Parameter auch an das Applet weitergereicht
-        pAppletImpl->AppendParam( rOption.GetTokenString(),
+        m_pAppletImpl->AppendParam( rOption.GetTokenString(),
                                   rOption.GetString() );
 
     }
@@ -599,19 +599,19 @@ void SwHTMLParser::NewObject()
 
     if( !bIsApplet )
     {
-        delete pAppletImpl;
-        pAppletImpl = 0;
+        delete m_pAppletImpl;
+        m_pAppletImpl = 0;
         return;
     }
 
-    pAppletImpl->SetAltText( aStandBy );
+    m_pAppletImpl->SetAltText( aStandBy );
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
+    SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
-    SfxItemSet& rFrmSet = pAppletImpl->GetItemSet();
+    SfxItemSet& rFrmSet = m_pAppletImpl->GetItemSet();
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( rFrmSet );
 
@@ -629,31 +629,31 @@ void SwHTMLParser::NewObject()
 void SwHTMLParser::EndObject()
 {
 #if HAVE_FEATURE_JAVA
-    if( !pAppletImpl )
+    if( !m_pAppletImpl )
         return;
-    if( pAppletImpl->CreateApplet( sBaseURL ) )
+    if( m_pAppletImpl->CreateApplet( m_sBaseURL ) )
     {
-        pAppletImpl->FinishApplet();
+        m_pAppletImpl->FinishApplet();
 
         // und in das Dok einfuegen
         SwFrameFormat* pFlyFormat =
-            pDoc->getIDocumentContentOperations().Insert( *pPam,
-                    ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
-                    &pAppletImpl->GetItemSet(),
+            m_pDoc->getIDocumentContentOperations().Insert( *m_pPam,
+                    ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
+                    &m_pAppletImpl->GetItemSet(),
                     NULL,
                     NULL );
 
         // den alternativen Namen setzen
         SwNoTextNode *pNoTextNd =
-            pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+            m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                               ->GetIndex()+1 ]->GetNoTextNode();
-        pNoTextNd->SetTitle( pAppletImpl->GetAltText() );
+        pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
 
         // Ggf Frames anlegen und auto-geb. Rahmen registrieren
         RegisterFlyFrm( pFlyFormat );
 
-        delete pAppletImpl;
-        pAppletImpl = 0;
+        delete m_pAppletImpl;
+        m_pAppletImpl = 0;
     }
 #else
     (void) this;                // Silence loplugin:staticmethods
@@ -671,8 +671,8 @@ void SwHTMLParser::InsertApplet()
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
     // Eine neue Command-List anlegen
-    delete pAppletImpl;
-    pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+    delete m_pAppletImpl;
+    m_pAppletImpl = new SwApplet_Impl( m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -725,28 +725,28 @@ void SwHTMLParser::InsertApplet()
         }
 
         // Es werden alle Parameter auch an das Applet weitergereicht
-        pAppletImpl->AppendParam( rOption.GetTokenString(),
+        m_pAppletImpl->AppendParam( rOption.GetTokenString(),
                                   rOption.GetString() );
     }
 
     if( aCode.isEmpty() )
     {
-        delete pAppletImpl;
-        pAppletImpl = 0;
+        delete m_pAppletImpl;
+        m_pAppletImpl = 0;
         return;
     }
 
     if ( !aCodeBase.isEmpty() )
-        aCodeBase = INetURLObject::GetAbsURL( sBaseURL, aCodeBase );
-    pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase, sBaseURL );//, aAlt );
-    pAppletImpl->SetAltText( aAlt );
+        aCodeBase = INetURLObject::GetAbsURL( m_sBaseURL, aCodeBase );
+    m_pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase, m_sBaseURL );//, aAlt );
+    m_pAppletImpl->SetAltText( aAlt );
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
+    SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
-    SfxItemSet& rFrmSet = pAppletImpl->GetItemSet();
+    SfxItemSet& rFrmSet = m_pAppletImpl->GetItemSet();
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( rFrmSet );
 
@@ -764,30 +764,30 @@ void SwHTMLParser::InsertApplet()
 void SwHTMLParser::EndApplet()
 {
 #if HAVE_FEATURE_JAVA
-    if( !pAppletImpl )
+    if( !m_pAppletImpl )
         return;
 
-    pAppletImpl->FinishApplet();
+    m_pAppletImpl->FinishApplet();
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        pDoc->getIDocumentContentOperations().Insert( *pPam,
-                    ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
-                    &pAppletImpl->GetItemSet(),
+        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam,
+                    ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
+                    &m_pAppletImpl->GetItemSet(),
                     NULL,
                     NULL );
 
     // den alternativen Namen setzen
     SwNoTextNode *pNoTextNd =
-        pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+        m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                           ->GetIndex()+1 ]->GetNoTextNode();
-    pNoTextNd->SetTitle( pAppletImpl->GetAltText() );
+    pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     RegisterFlyFrm( pFlyFormat );
 
-    delete pAppletImpl;
-    pAppletImpl = 0;
+    delete m_pAppletImpl;
+    m_pAppletImpl = 0;
 #else
     (void) this;
 #endif
@@ -796,7 +796,7 @@ void SwHTMLParser::EndApplet()
 void SwHTMLParser::InsertParam()
 {
 #if HAVE_FEATURE_JAVA
-    if( !pAppletImpl )
+    if( !m_pAppletImpl )
         return;
 
     OUString aName, aValue;
@@ -819,7 +819,7 @@ void SwHTMLParser::InsertParam()
     if( aName.isEmpty() )
         return;
 
-    pAppletImpl->AppendParam( aName, aValue );
+    m_pAppletImpl->AppendParam( aName, aValue );
 #else
     (void) this;
 #endif
@@ -878,7 +878,7 @@ void SwHTMLParser::InsertFloatingFrame()
     // und jetzt die fuer den SfxFrame
     SfxFrameDescriptor aFrameDesc;
 
-    SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, rHTMLOptions, sBaseURL );
+    SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, rHTMLOptions, m_sBaseURL );
 
     // den Floating-Frame anlegen
     comphelper::EmbeddedObjectContainer aCnt;
@@ -923,13 +923,13 @@ void SwHTMLParser::InsertFloatingFrame()
     {
     }
 
-    SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
+    SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     // den Itemset holen
-    SfxItemSet aFrmSet( pDoc->GetAttrPool(),
+    SfxItemSet aFrmSet( m_pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrmSet );
@@ -945,18 +945,18 @@ void SwHTMLParser::InsertFloatingFrame()
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        pDoc->getIDocumentContentOperations().Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
+        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
 
     // den alternativen Namen setzen
     SwNoTextNode *pNoTextNd =
-        pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+        m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                           ->GetIndex()+1 ]->GetNoTextNode();
     pNoTextNd->SetTitle( aAlt );
 
     // Ggf Frames anlegen und auto-geb. Rahmen registrieren
     RegisterFlyFrm( pFlyFormat );
 
-    bInFloatingFrame = true;
+    m_bInFloatingFrame = true;
 }
 
 sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )

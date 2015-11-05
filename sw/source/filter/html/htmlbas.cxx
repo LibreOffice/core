@@ -60,13 +60,13 @@ static HTMLOutEvent aBodyEventTable[] =
 
 void SwHTMLParser::NewScript()
 {
-    ParseScriptOptions( aScriptType, sBaseURL, eScriptLang, aScriptURL,
-                        aBasicLib, aBasicModule );
+    ParseScriptOptions( m_aScriptType, m_sBaseURL, m_eScriptLang, m_aScriptURL,
+                        m_aBasicLib, m_aBasicModule );
 
-    if( !aScriptURL.isEmpty() )
+    if( !m_aScriptURL.isEmpty() )
     {
         // Den Inhalt des Script-Tags ignorieren
-        bIgnoreRawData = true;
+        m_bIgnoreRawData = true;
     }
 }
 
@@ -75,7 +75,7 @@ void SwHTMLParser::EndScript()
     bool bInsIntoBasic = false,
          bInsSrcIntoField = false;
 
-    switch( eScriptLang )
+    switch( m_eScriptLang )
     {
     case HTML_SL_STARBASIC:
         bInsIntoBasic = true;
@@ -85,34 +85,34 @@ void SwHTMLParser::EndScript()
         break;
     }
 
-    bIgnoreRawData = false;
-    aScriptSource = convertLineEnd(aScriptSource, GetSystemLineEnd());
+    m_bIgnoreRawData = false;
+    m_aScriptSource = convertLineEnd(m_aScriptSource, GetSystemLineEnd());
 
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
-    if( bInsSrcIntoField && !bIgnoreHTMLComments )
+    if( bInsSrcIntoField && !m_bIgnoreHTMLComments )
     {
         SwScriptFieldType *pType =
-            static_cast<SwScriptFieldType*>(pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_SCRIPTFLD ));
+            static_cast<SwScriptFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_SCRIPTFLD ));
 
-        SwScriptField aField( pType, aScriptType,
-                            !aScriptURL.isEmpty() ? aScriptURL : aScriptSource,
-                            !aScriptURL.isEmpty() );
+        SwScriptField aField( pType, m_aScriptType,
+                            !m_aScriptURL.isEmpty() ? m_aScriptURL : m_aScriptSource,
+                            !m_aScriptURL.isEmpty() );
         InsertAttr( SwFormatField( aField ) );
     }
 
-    SwDocShell *pDocSh = pDoc->GetDocShell();
-    if( !aScriptSource.isEmpty() && pDocSh &&
+    SwDocShell *pDocSh = m_pDoc->GetDocShell();
+    if( !m_aScriptSource.isEmpty() && pDocSh &&
         bInsIntoBasic && IsNewDoc() )
     {
     // Fuer JavaScript und StarBasic noch ein Basic-Modul anlegen
         // Das Basic entfernt natuerlich weiterhin keine SGML-Kommentare
-        RemoveSGMLComment( aScriptSource, true );
+        RemoveSGMLComment( m_aScriptSource, true );
 
         // get library name
         OUString aLibName;
-        if( !aBasicLib.isEmpty() )
-            aLibName = aBasicLib;
+        if( !m_aBasicLib.isEmpty() )
+            aLibName = m_aBasicLib;
         else
             aLibName = "Standard";
 
@@ -136,24 +136,24 @@ void SwHTMLParser::EndScript()
 
             if ( xModLib.is() )
             {
-                if( aBasicModule.isEmpty() )
+                if( m_aBasicModule.isEmpty() )
                 {
                     // create module name
                     bool bFound = true;
                     while( bFound )
                     {
-                        aBasicModule = "Modul";
-                        aBasicModule += OUString::number( (sal_Int32)(++nSBModuleCnt) );
-                        bFound = xModLib->hasByName( aBasicModule );
+                        m_aBasicModule = "Modul";
+                        m_aBasicModule += OUString::number( (sal_Int32)(++m_nSBModuleCnt) );
+                        bFound = xModLib->hasByName( m_aBasicModule );
                     }
                 }
 
                 // create module
-                OUString aModName( aBasicModule );
+                OUString aModName( m_aBasicModule );
                 if ( !xModLib->hasByName( aModName ) )
                 {
                     Any aElement;
-                    aElement <<= OUString( aScriptSource );
+                    aElement <<= OUString( m_aScriptSource );
                     xModLib->insertByName( aModName , aElement );
                 }
             }
@@ -172,63 +172,63 @@ void SwHTMLParser::EndScript()
         }
     }
 
-    aScriptSource.clear();
-    aScriptType.clear();
-    aScriptURL.clear();
+    m_aScriptSource.clear();
+    m_aScriptType.clear();
+    m_aScriptURL.clear();
 
-    aBasicLib.clear();
-    aBasicModule.clear();
+    m_aBasicLib.clear();
+    m_aBasicModule.clear();
 }
 
 void SwHTMLParser::AddScriptSource()
 {
     // Hier merken wir und nur ein par Strings
     if( aToken.getLength() > 2 &&
-        (HTML_SL_STARBASIC==eScriptLang && aToken[ 0 ] == '\'') )
+        (HTML_SL_STARBASIC==m_eScriptLang && aToken[ 0 ] == '\'') )
     {
         sal_Int32 nPos = -1;
-        if( aBasicLib.isEmpty() )
+        if( m_aBasicLib.isEmpty() )
         {
             nPos = aToken.indexOf( OOO_STRING_SVTOOLS_HTML_SB_library );
             if( nPos != -1 )
             {
-                aBasicLib =
+                m_aBasicLib =
                     aToken.copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_library) - 1 );
-                aBasicLib = comphelper::string::strip(aBasicLib, ' ');
+                m_aBasicLib = comphelper::string::strip(m_aBasicLib, ' ');
             }
         }
 
-        if( aBasicModule.isEmpty() && nPos == -1 )
+        if( m_aBasicModule.isEmpty() && nPos == -1 )
         {
             nPos = aToken.indexOf( OOO_STRING_SVTOOLS_HTML_SB_module );
             if( nPos != -1 )
             {
-                aBasicModule =
+                m_aBasicModule =
                     aToken.copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_module) - 1 );
-                aBasicModule = comphelper::string::strip(aBasicModule, ' ');
+                m_aBasicModule = comphelper::string::strip(m_aBasicModule, ' ');
             }
         }
 
         if( nPos == -1 )
         {
-            if( !aScriptSource.isEmpty() )
-                aScriptSource += "\n";
-            aScriptSource += aToken;
+            if( !m_aScriptSource.isEmpty() )
+                m_aScriptSource += "\n";
+            m_aScriptSource += aToken;
         }
     }
-    else if( !aScriptSource.isEmpty() || !aToken.isEmpty() )
+    else if( !m_aScriptSource.isEmpty() || !aToken.isEmpty() )
     {
         // Leerzeilen am Anfang werden ignoriert
-        if( !aScriptSource.isEmpty() )
+        if( !m_aScriptSource.isEmpty() )
         {
-            aScriptSource += "\n";
+            m_aScriptSource += "\n";
         }
         else
         {
             // Wir stehen hinter dem CR/LF der Zeile davor
-            nScriptStartLineNr = GetLineNr() - 1;
+            m_nScriptStartLineNr = GetLineNr() - 1;
         }
-        aScriptSource += aToken;
+        m_aScriptSource += aToken;
     }
 }
 
@@ -240,7 +240,7 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
     if( rName.isEmpty() )
         return;
 
-    SwDocShell *pDocSh = pDoc->GetDocShell();
+    SwDocShell *pDocSh = m_pDoc->GetDocShell();
     OSL_ENSURE( pDocSh, "Wo ist die DocShell?" );
     if( !pDocSh )
         return;

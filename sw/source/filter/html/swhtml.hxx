@@ -357,127 +357,127 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     friend class _CellSaveStruct;
     friend class _CaptionSaveStruct;
 
-    OUString      aPathToFile;
-    OUString      sBaseURL;
-    OUString      sSaveBaseURL;
-    OUString      aBasicLib;
-    OUString      aBasicModule;
-    OUString      aScriptSource;  // Inhalt des aktuellen Script-Blocks
-    OUString      aScriptType;    // Type des gelesenen Scripts (StarBasic/VB/JAVA)
-    OUString      aScriptURL;     // URL eines Scripts
-    OUString      aStyleSource;   // Inhalt des aktuellen Style-Sheets
-    OUString      aContents;      // Text des akteullen Marquee, Feldes etc.
-    OUString      sTitle;
-    OUString      aUnknownToken;  // ein gestartetes unbekanntes Token
-    OUString      aBulletGrfs[MAXLEVEL];
-    OUString      sJmpMark;
+    OUString      m_aPathToFile;
+    OUString      m_sBaseURL;
+    OUString      m_sSaveBaseURL;
+    OUString      m_aBasicLib;
+    OUString      m_aBasicModule;
+    OUString      m_aScriptSource;  // Inhalt des aktuellen Script-Blocks
+    OUString      m_aScriptType;    // Type des gelesenen Scripts (StarBasic/VB/JAVA)
+    OUString      m_aScriptURL;     // URL eines Scripts
+    OUString      m_aStyleSource;   // Inhalt des aktuellen Style-Sheets
+    OUString      m_aContents;      // Text des akteullen Marquee, Feldes etc.
+    OUString      m_sTitle;
+    OUString      m_aUnknownToken;  // ein gestartetes unbekanntes Token
+    OUString      m_aBulletGrfs[MAXLEVEL];
+    OUString      m_sJmpMark;
 
-    std::vector<sal_uInt16>   aBaseFontStack; // Stack fuer <BASEFONT>
+    std::vector<sal_uInt16>   m_aBaseFontStack; // Stack fuer <BASEFONT>
                                 // Bit 0-2: Fontgroesse (1-7)
-    std::vector<sal_uInt16>   aFontStack;     // Stack fuer <FONT>, <BIG>, <SMALL>
+    std::vector<sal_uInt16>   m_aFontStack;     // Stack fuer <FONT>, <BIG>, <SMALL>
                                 // Bit 0-2: Fontgroesse (1-7)
                                 // Bit 15: Fontfarbe wurde gesetzt
 
-    _HTMLAttrs      aSetAttrTab;// "geschlossene", noch nicht gesetzte Attr.
-    _HTMLAttrs      aParaAttrs; // vorlauefige Absatz-Attribute
-    _HTMLAttrTable  aAttrTab;   // "offene" Attribute
-    _HTMLAttrContexts aContexts;// der aktuelle Attribut/Token-Kontext
-    std::vector<SwFrameFormat *> aMoveFlyFrms;// Fly-Frames, the anchor is moved
-    std::deque<sal_Int32> aMoveFlyCnts;// and the Content-Positions
+    _HTMLAttrs      m_aSetAttrTab;// "geschlossene", noch nicht gesetzte Attr.
+    _HTMLAttrs      m_aParaAttrs; // vorlauefige Absatz-Attribute
+    _HTMLAttrTable  m_aAttrTab;   // "offene" Attribute
+    _HTMLAttrContexts m_aContexts;// der aktuelle Attribut/Token-Kontext
+    std::vector<SwFrameFormat *> m_aMoveFlyFrms;// Fly-Frames, the anchor is moved
+    std::deque<sal_Int32> m_aMoveFlyCnts;// and the Content-Positions
 
-    SwApplet_Impl *pAppletImpl; // das aktuelle Applet
+    SwApplet_Impl *m_pAppletImpl; // das aktuelle Applet
 
-    SwCSS1Parser    *pCSS1Parser;   // der Style-Sheet-Parser
-    SwHTMLNumRuleInfo *pNumRuleInfo;
-    SwPendingStack  *pPendStack;
+    SwCSS1Parser    *m_pCSS1Parser;   // der Style-Sheet-Parser
+    SwHTMLNumRuleInfo *m_pNumRuleInfo;
+    SwPendingStack  *m_pPendStack;
 
-    SwDoc           *pDoc;
-    SwPaM           *pPam;      // SwPosition duerfte doch reichen, oder ??
-    SwViewShell       *pActionViewShell;  // SwViewShell, an der das StartAction
+    SwDoc           *m_pDoc;
+    SwPaM           *m_pPam;      // SwPosition duerfte doch reichen, oder ??
+    SwViewShell       *m_pActionViewShell;  // SwViewShell, an der das StartAction
                                         // gerufen wurde.
-    SwNodeIndex     *pSttNdIdx;
+    SwNodeIndex     *m_pSttNdIdx;
 
-    HTMLTable       *pTable;    // die aktuelle "auesserste" Tabelle
-    SwHTMLForm_Impl *pFormImpl;// die aktuelle Form
-    SdrObject       *pMarquee;  // aktuelles Marquee
-    SwField         *pField;    // aktuelles Feld
-    ImageMap        *pImageMap; // aktuelle Image-Map
+    HTMLTable       *m_pTable;    // die aktuelle "auesserste" Tabelle
+    SwHTMLForm_Impl *m_pFormImpl;// die aktuelle Form
+    SdrObject       *m_pMarquee;  // aktuelles Marquee
+    SwField         *m_pField;    // aktuelles Feld
+    ImageMap        *m_pImageMap; // aktuelle Image-Map
     ImageMaps       *m_pImageMaps; ///< all Image-Maps that have been read
-    SwHTMLFootEndNote_Impl *pFootEndNoteImpl;
+    SwHTMLFootEndNote_Impl *m_pFootEndNoteImpl;
 
-    Size    aHTMLPageSize;      // die Seitengroesse der HTML-Vorlage
+    Size    m_aHTMLPageSize;      // die Seitengroesse der HTML-Vorlage
 
-    sal_uInt32  aFontHeights[7];    // die Font-Hoehen 1-7
-    sal_uInt32  nScriptStartLineNr; // Zeilennummer eines Script-Blocks
-    ImplSVEvent * nEventId;
+    sal_uInt32  m_aFontHeights[7];    // die Font-Hoehen 1-7
+    sal_uInt32  m_nScriptStartLineNr; // Zeilennummer eines Script-Blocks
+    ImplSVEvent * m_nEventId;
 
-    sal_uInt16  nBaseFontStMin;
-    sal_uInt16  nFontStMin;
-    sal_uInt16  nDefListDeep;
-    sal_uInt16  nFontStHeadStart;   // Elemente im Font-Stack bei <Hn>
-    sal_uInt16  nSBModuleCnt;       // Zaehler fuer Basic-Module
-    sal_uInt16  nMissingImgMaps;    // Wie viele Image-Maps fehlen noch?
-    size_t nParaCnt;
-    size_t nContextStMin;           // Untergrenze fuer PopContext
-    size_t nContextStAttrMin;       // Untergrenze fuer Attributierung
-    sal_uInt16  nSelectEntryCnt;    // Anzahl der Eintraege der akt. Listbox
-    sal_uInt16  nOpenParaToken;     // ein geoeffnetes Absatz-Element
+    sal_uInt16  m_nBaseFontStMin;
+    sal_uInt16  m_nFontStMin;
+    sal_uInt16  m_nDefListDeep;
+    sal_uInt16  m_nFontStHeadStart;   // Elemente im Font-Stack bei <Hn>
+    sal_uInt16  m_nSBModuleCnt;       // Zaehler fuer Basic-Module
+    sal_uInt16  m_nMissingImgMaps;    // Wie viele Image-Maps fehlen noch?
+    size_t m_nParaCnt;
+    size_t m_nContextStMin;           // Untergrenze fuer PopContext
+    size_t m_nContextStAttrMin;       // Untergrenze fuer Attributierung
+    sal_uInt16  m_nSelectEntryCnt;    // Anzahl der Eintraege der akt. Listbox
+    sal_uInt16  m_nOpenParaToken;     // ein geoeffnetes Absatz-Element
 
     enum JumpToMarks { JUMPTO_NONE, JUMPTO_MARK, JUMPTO_TABLE, JUMPTO_FRAME,
-                        JUMPTO_REGION, JUMPTO_GRAPHIC } eJumpTo;
+                        JUMPTO_REGION, JUMPTO_GRAPHIC } m_eJumpTo;
 
 #ifdef DBG_UTIL
     sal_uInt16  m_nContinue;        // depth of Continue calls
 #endif
 
-    SvxAdjust   eParaAdjust;    // Ausrichtung des aktuellen Absatz
-    HTMLScriptLanguage eScriptLang; // die aktuelle Script-Language
+    SvxAdjust   m_eParaAdjust;    // Ausrichtung des aktuellen Absatz
+    HTMLScriptLanguage m_eScriptLang; // die aktuelle Script-Language
 
-    bool bOldIsHTMLMode : 1;    // War's mal ein HTML-Dokument?
+    bool m_bOldIsHTMLMode : 1;    // War's mal ein HTML-Dokument?
 
-    bool bDocInitalized : 1;    // Dokument bzw. Shell wurden initialisiert
+    bool m_bDocInitalized : 1;    // Dokument bzw. Shell wurden initialisiert
                                 // Flag um doppeltes init durch Rekursion
                                 // zu verhindern.
-    bool bViewCreated : 1;      // die View wurde schon erzeugt (asynchron)
-    bool bSetCrsr : 1;          // Crsr wieder auf den Anfang setzen
-    bool bSetModEnabled : 1;
+    bool m_bViewCreated : 1;      // die View wurde schon erzeugt (asynchron)
+    bool m_bSetCrsr : 1;          // Crsr wieder auf den Anfang setzen
+    bool m_bSetModEnabled : 1;
 
-    bool bInFloatingFrame : 1;  // Wir sind in einen Floating Frame
-    bool bInField : 1;
-    bool bKeepUnknown : 1;      // unbekannte/nicht unterstuetze Tokens beh.
+    bool m_bInFloatingFrame : 1;  // Wir sind in einen Floating Frame
+    bool m_bInField : 1;
+    bool m_bKeepUnknown : 1;      // unbekannte/nicht unterstuetze Tokens beh.
     // 8
-    bool bCallNextToken : 1;    // In Tabellen: NextToken in jedem Fall rufen
-    bool bIgnoreRawData : 1;    // Inhalt eines Scripts/Styles ignorieren.
-    bool bLBEntrySelected : 1;  // Ist der aktuelle Listbox-Eintrag selekt.
-    bool bTAIgnoreNewPara : 1;  // naechstes LF in TextArea ignorieren?
-    bool bFixMarqueeWidth : 1;  // Groesse einer Laufschrift anpassen?
-    bool bFixMarqueeHeight : 1;
+    bool m_bCallNextToken : 1;    // In Tabellen: NextToken in jedem Fall rufen
+    bool m_bIgnoreRawData : 1;    // Inhalt eines Scripts/Styles ignorieren.
+    bool m_bLBEntrySelected : 1;  // Ist der aktuelle Listbox-Eintrag selekt.
+    bool m_bTAIgnoreNewPara : 1;  // naechstes LF in TextArea ignorieren?
+    bool m_bFixMarqueeWidth : 1;  // Groesse einer Laufschrift anpassen?
+    bool m_bFixMarqueeHeight : 1;
 
-    bool bUpperSpace : 1;       // obererer Absatz-Abstand wird benoetigt
-    bool bNoParSpace : 1;
+    bool m_bUpperSpace : 1;       // obererer Absatz-Abstand wird benoetigt
+    bool m_bNoParSpace : 1;
     // 16
 
-    bool bAnyStarBasic : 1;     // gibt es ueberhaupt ein StarBasic-Modul
-    bool bInNoEmbed : 1;        // Wir sind in einem NOEMBED-Bereich
+    bool m_bAnyStarBasic : 1;     // gibt es ueberhaupt ein StarBasic-Modul
+    bool m_bInNoEmbed : 1;        // Wir sind in einem NOEMBED-Bereich
 
-    bool bInTitle : 1;          // Wir sind im Titel
+    bool m_bInTitle : 1;          // Wir sind im Titel
 
-    bool bChkJumpMark : 1;      // springe ggfs. zu einem vorgegebenem Mark
-    bool bUpdateDocStat : 1;
-    bool bFixSelectWidth : 1;   // Breite eines Selects neu setzen?
-    bool bFixSelectHeight : 1;  // Breite eines Selects neu setzen?
-    bool bTextArea : 1;
+    bool m_bChkJumpMark : 1;      // springe ggfs. zu einem vorgegebenem Mark
+    bool m_bUpdateDocStat : 1;
+    bool m_bFixSelectWidth : 1;   // Breite eines Selects neu setzen?
+    bool m_bFixSelectHeight : 1;  // Breite eines Selects neu setzen?
+    bool m_bTextArea : 1;
     // 24
-    bool bSelect : 1;
-    bool bInFootEndNoteAnchor : 1;
-    bool bInFootEndNoteSymbol : 1;
-    bool bIgnoreHTMLComments : 1;
-    bool bRemoveHidden : 1; // the filter implementation might set the hidden flag
+    bool m_bSelect : 1;
+    bool m_bInFootEndNoteAnchor : 1;
+    bool m_bInFootEndNoteSymbol : 1;
+    bool m_bIgnoreHTMLComments : 1;
+    bool m_bRemoveHidden : 1; // the filter implementation might set the hidden flag
 
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
     OUString m_InfoNames[4];
 
-    SfxViewFrame* pTempViewFrame;
+    SfxViewFrame* m_pTempViewFrame;
 
     void DeleteFormImpl();
 
@@ -495,7 +495,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     inline void SetAttr( bool bChkEnd = true, bool bBeforeTable = false,
                          _HTMLAttrs *pPostIts = 0 )
     {
-        if( !aSetAttrTab.empty() || !aMoveFlyFrms.empty() )
+        if( !m_aSetAttrTab.empty() || !m_aMoveFlyFrms.empty() )
             _SetAttr( bChkEnd, bBeforeTable, pPostIts );
     }
 
@@ -545,7 +545,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     SwTwips GetCurrentBrowseWidth();
 
-    SwHTMLNumRuleInfo& GetNumInfo() { return *pNumRuleInfo; }
+    SwHTMLNumRuleInfo& GetNumInfo() { return *m_pNumRuleInfo; }
     // add parameter <bCountedInList>
     void SetNodeNum( sal_uInt8 nLevel, bool bCountedInList );
 
@@ -717,7 +717,7 @@ private:
     void InsertParam();     // htmlplug.cxx
 
     void InsertFloatingFrame();
-    void EndFloatingFrame() { bInFloatingFrame = false; }
+    void EndFloatingFrame() { m_bInFloatingFrame = false; }
 
     // <BODY>-Tag auswerten: Hintergrund-Grafiken und -Farben setzen (htmlgrin.cxx)
     void InsertBodyOptions();
@@ -978,7 +978,7 @@ inline bool SwHTMLParser::HasStyleOptions( const OUString &rStyle,
 
 inline void SwHTMLParser::PushContext( _HTMLAttrContext *pCntxt )
 {
-    aContexts.push_back( pCntxt );
+    m_aContexts.push_back( pCntxt );
 }
 
 #endif

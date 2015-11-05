@@ -123,14 +123,14 @@ sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
 
 void SwHTMLParser::FillEndNoteInfo( const OUString& rContent )
 {
-    SwEndNoteInfo aInfo( pDoc->GetEndNoteInfo() );
+    SwEndNoteInfo aInfo( m_pDoc->GetEndNoteInfo() );
     lcl_html_getEndNoteInfo( aInfo, rContent, true );
-    pDoc->SetEndNoteInfo( aInfo );
+    m_pDoc->SetEndNoteInfo( aInfo );
 }
 
 void SwHTMLParser::FillFootNoteInfo( const OUString& rContent )
 {
-    SwFootnoteInfo aInfo( pDoc->GetFootnoteInfo() );
+    SwFootnoteInfo aInfo( m_pDoc->GetFootnoteInfo() );
 
     sal_Int32 nStrPos = lcl_html_getEndNoteInfo( aInfo, rContent, false );
 
@@ -177,80 +177,80 @@ void SwHTMLParser::FillFootNoteInfo( const OUString& rContent )
         }
     }
 
-    pDoc->SetFootnoteInfo( aInfo );
+    m_pDoc->SetFootnoteInfo( aInfo );
 }
 
 void SwHTMLParser::InsertFootEndNote( const OUString& rName, bool bEndNote,
                                       bool bFixed )
 {
-    if( !pFootEndNoteImpl )
-        pFootEndNoteImpl = new SwHTMLFootEndNote_Impl;
+    if( !m_pFootEndNoteImpl )
+        m_pFootEndNoteImpl = new SwHTMLFootEndNote_Impl;
 
-    pFootEndNoteImpl->sName = rName;
-    if( pFootEndNoteImpl->sName.getLength() > 3 )
-        pFootEndNoteImpl->sName = pFootEndNoteImpl->sName.copy( 0, pFootEndNoteImpl->sName.getLength() - 3 );
-    pFootEndNoteImpl->sName = pFootEndNoteImpl->sName.toAsciiUpperCase();
-    pFootEndNoteImpl->bEndNote = bEndNote;
-    pFootEndNoteImpl->bFixed = bFixed;
-    pFootEndNoteImpl->sContent = aEmptyOUStr;
+    m_pFootEndNoteImpl->sName = rName;
+    if( m_pFootEndNoteImpl->sName.getLength() > 3 )
+        m_pFootEndNoteImpl->sName = m_pFootEndNoteImpl->sName.copy( 0, m_pFootEndNoteImpl->sName.getLength() - 3 );
+    m_pFootEndNoteImpl->sName = m_pFootEndNoteImpl->sName.toAsciiUpperCase();
+    m_pFootEndNoteImpl->bEndNote = bEndNote;
+    m_pFootEndNoteImpl->bFixed = bFixed;
+    m_pFootEndNoteImpl->sContent = aEmptyOUStr;
 }
 
 void SwHTMLParser::FinishFootEndNote()
 {
-    if( !pFootEndNoteImpl )
+    if( !m_pFootEndNoteImpl )
         return;
 
-    SwFormatFootnote aFootnote( pFootEndNoteImpl->bEndNote );
-    if( pFootEndNoteImpl->bFixed )
-        aFootnote.SetNumStr( pFootEndNoteImpl->sContent );
+    SwFormatFootnote aFootnote( m_pFootEndNoteImpl->bEndNote );
+    if( m_pFootEndNoteImpl->bFixed )
+        aFootnote.SetNumStr( m_pFootEndNoteImpl->sContent );
 
-    pDoc->getIDocumentContentOperations().InsertPoolItem( *pPam, aFootnote );
+    m_pDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, aFootnote );
     SwTextFootnote * const pTextFootnote = static_cast<SwTextFootnote *>(
-        pPam->GetNode().GetTextNode()->GetTextAttrForCharAt(
-            pPam->GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_FTN ) );
+        m_pPam->GetNode().GetTextNode()->GetTextAttrForCharAt(
+            m_pPam->GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_FTN ) );
     // In Kopf- und Fusszeilen duerfen keine Fussnoten eingefuegt werden.
     if( pTextFootnote )
     {
-        pFootEndNoteImpl->aTextFootnotes.push_back( pTextFootnote );
-        pFootEndNoteImpl->aNames.push_back(pFootEndNoteImpl->sName);
+        m_pFootEndNoteImpl->aTextFootnotes.push_back( pTextFootnote );
+        m_pFootEndNoteImpl->aNames.push_back(m_pFootEndNoteImpl->sName);
     }
-    pFootEndNoteImpl->sName = aEmptyOUStr;
-    pFootEndNoteImpl->sContent = aEmptyOUStr;
-    pFootEndNoteImpl->bFixed = false;
+    m_pFootEndNoteImpl->sName = aEmptyOUStr;
+    m_pFootEndNoteImpl->sContent = aEmptyOUStr;
+    m_pFootEndNoteImpl->bFixed = false;
 }
 
 void SwHTMLParser::InsertFootEndNoteText()
 {
-    if( pFootEndNoteImpl && pFootEndNoteImpl->bFixed )
-        pFootEndNoteImpl->sContent += aToken;
+    if( m_pFootEndNoteImpl && m_pFootEndNoteImpl->bFixed )
+        m_pFootEndNoteImpl->sContent += aToken;
 }
 
 void SwHTMLParser::DeleteFootEndNoteImpl()
 {
-    delete pFootEndNoteImpl;
-    pFootEndNoteImpl = 0;
+    delete m_pFootEndNoteImpl;
+    m_pFootEndNoteImpl = 0;
 }
 
 SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
 {
     SwNodeIndex *pStartNodeIdx = 0;
 
-    if( pFootEndNoteImpl )
+    if( m_pFootEndNoteImpl )
     {
         OUString aName(rName.toAsciiUpperCase());
 
-        size_t nCount = pFootEndNoteImpl->aNames.size();
+        size_t nCount = m_pFootEndNoteImpl->aNames.size();
         for(size_t i = 0; i < nCount; ++i)
         {
-            if(pFootEndNoteImpl->aNames[i] == aName)
+            if(m_pFootEndNoteImpl->aNames[i] == aName)
             {
-                pStartNodeIdx = pFootEndNoteImpl->aTextFootnotes[i]->GetStartNode();
-                pFootEndNoteImpl->aNames.erase(pFootEndNoteImpl->aNames.begin() + i);
-                pFootEndNoteImpl->aTextFootnotes.erase( pFootEndNoteImpl->aTextFootnotes.begin() + i );
-                if(pFootEndNoteImpl->aNames.empty())
+                pStartNodeIdx = m_pFootEndNoteImpl->aTextFootnotes[i]->GetStartNode();
+                m_pFootEndNoteImpl->aNames.erase(m_pFootEndNoteImpl->aNames.begin() + i);
+                m_pFootEndNoteImpl->aTextFootnotes.erase( m_pFootEndNoteImpl->aTextFootnotes.begin() + i );
+                if(m_pFootEndNoteImpl->aNames.empty())
                 {
-                    delete pFootEndNoteImpl;
-                    pFootEndNoteImpl = 0;
+                    delete m_pFootEndNoteImpl;
+                    m_pFootEndNoteImpl = 0;
                 }
 
                 break;

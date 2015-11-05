@@ -127,13 +127,13 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 {
     // preliminary paragraph attributes are not allowed here, they could
     // be set here and then the pointers become invalid!
-    OSL_ENSURE(aParaAttrs.empty(),
+    OSL_ENSURE(m_aParaAttrs.empty(),
         "Danger: there are non-final paragraph attributes");
-    if( !aParaAttrs.empty() )
-        aParaAttrs.clear();
+    if( !m_aParaAttrs.empty() )
+        m_aParaAttrs.clear();
 
-    const SwNodeIndex* pOldEndPara = &pPam->GetPoint()->nNode;
-    sal_Int32 nOldEndCnt = pPam->GetPoint()->nContent.GetIndex();
+    const SwNodeIndex* pOldEndPara = &m_pPam->GetPoint()->nNode;
+    sal_Int32 nOldEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
 
     const SwNodeIndex& rNewSttPara = rNewPos.nNode;
     sal_Int32 nNewSttCnt = rNewPos.nContent.GetIndex();
@@ -142,7 +142,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 
     // alle noch offenen Attribute beenden und hinter der Tabelle
     // neu aufspannen
-    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&m_aAttrTab);
     for (auto nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
         _HTMLAttr *pAttr = *pHTMLAttributes;
@@ -159,14 +159,14 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                 // beendet werden
                 if( !bMoveBack )
                 {
-                    bMoveBack = pPam->Move( fnMoveBackward );
-                    nOldEndCnt = pPam->GetPoint()->nContent.GetIndex();
+                    bMoveBack = m_pPam->Move( fnMoveBackward );
+                    nOldEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
                 }
             }
             else if( bMoveBack )
             {
-                pPam->Move( fnMoveForward );
-                nOldEndCnt = pPam->GetPoint()->nContent.GetIndex();
+                m_pPam->Move( fnMoveForward );
+                nOldEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
             }
 
             if( (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
@@ -186,9 +186,9 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                 else
                 {
                     if (pSetAttr->bInsAtStart)
-                        aSetAttrTab.push_front( pSetAttr );
+                        m_aSetAttrTab.push_front( pSetAttr );
                     else
-                        aSetAttrTab.push_back( pSetAttr );
+                        m_aSetAttrTab.push_back( pSetAttr );
                 }
             }
             else if( pPrev )
@@ -201,9 +201,9 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                 else
                 {
                     if (pPrev->bInsAtStart)
-                        aSetAttrTab.push_front( pPrev );
+                        m_aSetAttrTab.push_front( pPrev );
                     else
-                        aSetAttrTab.push_back( pPrev );
+                        m_aSetAttrTab.push_back( pPrev );
                 }
             }
 
@@ -219,7 +219,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
     }
 
     if( bMoveBack )
-        pPam->Move( fnMoveForward );
+        m_pPam->Move( fnMoveForward );
 
 }
 
@@ -257,21 +257,21 @@ void SwHTMLParser::SaveDocContext( _HTMLAttrContext *pCntxt,
             SaveAttrTab( *pSaveAttrTab );
         }
 
-        pSave->SetPos( *pPam->GetPoint() );
-        *pPam->GetPoint() = *pNewPos;
+        pSave->SetPos( *m_pPam->GetPoint() );
+        *m_pPam->GetPoint() = *pNewPos;
     }
 
     // Mit dem Setzen von nContextStMin koennen automatisch auch
     // keine gerade offenen Listen (DL/OL/UL) mehr beendet werden.
     if( (HTML_CNTXT_PROTECT_STACK & nFlags) != 0  )
     {
-        pSave->SetContextStMin( nContextStMin );
-        nContextStMin = aContexts.size();
+        pSave->SetContextStMin( m_nContextStMin );
+        m_nContextStMin = m_aContexts.size();
 
         if( (HTML_CNTXT_KEEP_ATTRS & nFlags) == 0 )
         {
-            pSave->SetContextStAttrMin( nContextStAttrMin );
-            nContextStAttrMin = aContexts.size();
+            pSave->SetContextStAttrMin( m_nContextStAttrMin );
+            m_nContextStAttrMin = m_aContexts.size();
         }
     }
 }
@@ -303,7 +303,7 @@ void SwHTMLParser::RestoreDocContext( _HTMLAttrContext *pCntxt )
             RestoreAttrTab( *pSaveAttrTab );
         }
 
-        *pPam->GetPoint() = *pSave->GetPos();
+        *m_pPam->GetPoint() = *pSave->GetPos();
 
         // Die bisherigen Attribute koennen wir schonmal setzen.
         SetAttr();
@@ -311,9 +311,9 @@ void SwHTMLParser::RestoreDocContext( _HTMLAttrContext *pCntxt )
 
     if( SIZE_MAX != pSave->GetContextStMin() )
     {
-        nContextStMin = pSave->GetContextStMin();
+        m_nContextStMin = pSave->GetContextStMin();
         if( SIZE_MAX != pSave->GetContextStAttrMin() )
-            nContextStAttrMin = pSave->GetContextStAttrMin();
+            m_nContextStAttrMin = pSave->GetContextStAttrMin();
     }
 
     if( !pSave->GetKeepNumRules() )
@@ -331,7 +331,7 @@ void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
     {
         // Alle noch offenen Kontexte beenden. Der eigene
         // Kontext muss bereits geloscht sein!
-        while( aContexts.size() > nContextStMin )
+        while( m_aContexts.size() > m_nContextStMin )
         {
             _HTMLAttrContext *pCntxt = PopContext();
             OSL_ENSURE( pCntxt != pContext,
@@ -360,7 +360,7 @@ void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
 
     // Ggf. noch einen Ansatz-Umbruch einfuegen
     if( AM_NONE != pContext->GetAppendMode() &&
-        pPam->GetPoint()->nContent.GetIndex() )
+        m_pPam->GetPoint()->nContent.GetIndex() )
         AppendTextNode( pContext->GetAppendMode() );
 
     // PRE-/LISTING- und XMP-Umgebungen wieder starten
@@ -423,7 +423,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
     // - es wurde eine Breite angegeben (in beiden Faellen noetig)
     if( SwCSS1Parser::MayBePositioned( rPropInfo ) )
     {
-        SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),
+        SfxItemSet aFrmItemSet( m_pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrmItemSet );
@@ -463,7 +463,7 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
         SwCSS1Parser::MayBePositioned( rPropInfo ) )
     {
         // Container-Klasse
-        SfxItemSet *pFrmItemSet = pContext->GetFrmItemSet( pDoc );
+        SfxItemSet *pFrmItemSet = pContext->GetFrmItemSet( m_pDoc );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs( *pFrmItemSet );
 
@@ -489,32 +489,32 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 {
     // Ein DropCap-Attribut basteln, wenn auf Zeichen-Ebene vor dem
     // ersten Zeichen ein float: left vorkommt
-    if( bCharLvl && !pPam->GetPoint()->nContent.GetIndex() &&
+    if( bCharLvl && !m_pPam->GetPoint()->nContent.GetIndex() &&
         SVX_ADJUST_LEFT == rPropInfo.eFloat )
     {
         SwFormatDrop aDrop;
         aDrop.GetChars() = 1;
 
-        pCSS1Parser->FillDropCap( aDrop, rItemSet );
+        m_pCSS1Parser->FillDropCap( aDrop, rItemSet );
 
         // Nur wenn das Initial auch ueber mehrere Zeilen geht, wird das
         // DropCap-Attribut gesetzt. Sonst setzten wir die Attribute hart.
         if( aDrop.GetLines() > 1 )
         {
-            NewAttr( &aAttrTab.pDropCap, aDrop );
+            NewAttr( &m_aAttrTab.pDropCap, aDrop );
 
             _HTMLAttrs &rAttrs = pContext->GetAttrs();
-            rAttrs.push_back( aAttrTab.pDropCap );
+            rAttrs.push_back( m_aAttrTab.pDropCap );
 
             return;
         }
     }
 
     if( !bCharLvl )
-        pCSS1Parser->SetFormatBreak( rItemSet, rPropInfo );
+        m_pCSS1Parser->SetFormatBreak( rItemSet, rPropInfo );
 
-    OSL_ENSURE(aContexts.size() <= nContextStAttrMin ||
-            aContexts.back() != pContext,
+    OSL_ENSURE(m_aContexts.size() <= m_nContextStAttrMin ||
+            m_aContexts.back() != pContext,
             "SwHTMLParser::InsertAttrs: Context already on the Stack");
 
     SfxItemIter aIter( rItemSet );
@@ -539,8 +539,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 // obersten Kontext, denn den veraendern wir ja gerade) ...
                 sal_uInt16 nOldLeft = 0, nOldRight = 0;
                 short nOldIndent = 0;
-                bool bIgnoreTop = aContexts.size() > nContextStMin &&
-                                  aContexts.back() == pContext;
+                bool bIgnoreTop = m_aContexts.size() > m_nContextStMin &&
+                                  m_aContexts.back() == pContext;
                 GetMarginsFromContext( nOldLeft, nOldRight, nOldIndent,
                                        bIgnoreTop  );
 
@@ -588,8 +588,8 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 aLRItem.SetTextFirstLineOfst( nIndent );
                 aLRItem.SetTextLeft( nLeft );
                 aLRItem.SetRight( nRight );
-                NewAttr( &aAttrTab.pLRSpace, aLRItem );
-                EndAttr( aAttrTab.pLRSpace, 0, false );
+                NewAttr( &m_aAttrTab.pLRSpace, aLRItem );
+                EndAttr( m_aAttrTab.pLRSpace, 0, false );
             }
             break;
 
@@ -604,33 +604,33 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 if( !rPropInfo.bBottomMargin )
                     aULSpace.SetLower( nLower );
 
-                NewAttr( &aAttrTab.pULSpace, aULSpace );
+                NewAttr( &m_aAttrTab.pULSpace, aULSpace );
 
                 // ... und noch die Kontext-Information speichern
                 _HTMLAttrs &rAttrs = pContext->GetAttrs();
-                rAttrs.push_back( aAttrTab.pULSpace );
+                rAttrs.push_back( m_aAttrTab.pULSpace );
 
                 pContext->SetULSpace( aULSpace.GetUpper(), aULSpace.GetLower() );
             }
             else
             {
-                ppAttr = &aAttrTab.pULSpace;
+                ppAttr = &m_aAttrTab.pULSpace;
             }
             break;
         case RES_CHRATR_FONTSIZE:
             // es werden keine Attribute mit %-Angaben gesetzt
             if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
-                ppAttr = &aAttrTab.pFontHeight;
+                ppAttr = &m_aAttrTab.pFontHeight;
             break;
         case RES_CHRATR_CJK_FONTSIZE:
             // es werden keine Attribute mit %-Angaben gesetzt
             if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
-                ppAttr = &aAttrTab.pFontHeightCJK;
+                ppAttr = &m_aAttrTab.pFontHeightCJK;
             break;
         case RES_CHRATR_CTL_FONTSIZE:
             // es werden keine Attribute mit %-Angaben gesetzt
             if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
-                ppAttr = &aAttrTab.pFontHeightCTL;
+                ppAttr = &m_aAttrTab.pFontHeightCTL;
             break;
 
         case RES_BACKGROUND:
@@ -641,16 +641,16 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 aBrushItem.SetWhich( RES_CHRATR_BACKGROUND );
 
                 // Das Attribut setzen ...
-                NewAttr( &aAttrTab.pCharBrush, aBrushItem );
+                NewAttr( &m_aAttrTab.pCharBrush, aBrushItem );
 
                 // ... und noch die Kontext-Information speichern
                 _HTMLAttrs &rAttrs = pContext->GetAttrs();
-                rAttrs.push_back( aAttrTab.pCharBrush );
+                rAttrs.push_back( m_aAttrTab.pCharBrush );
             }
             else if( pContext->GetToken() != HTML_TABLEHEADER_ON &&
                      pContext->GetToken() != HTML_TABLEDATA_ON )
             {
-                ppAttr = &aAttrTab.pBrush;
+                ppAttr = &m_aAttrTab.pBrush;
             }
             break;
 
@@ -660,14 +660,14 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 SvxBoxItem aBoxItem( *static_cast<const SvxBoxItem *>(pItem) );
                 aBoxItem.SetWhich( RES_CHRATR_BOX );
 
-                NewAttr( &aAttrTab.pCharBox, aBoxItem );
+                NewAttr( &m_aAttrTab.pCharBox, aBoxItem );
 
                 _HTMLAttrs &rAttrs = pContext->GetAttrs();
-                rAttrs.push_back( aAttrTab.pCharBox );
+                rAttrs.push_back( m_aAttrTab.pCharBox );
             }
             else
             {
-                ppAttr = &aAttrTab.pBox;
+                ppAttr = &m_aAttrTab.pBox;
             }
             break;
 

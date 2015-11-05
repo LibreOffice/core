@@ -1549,119 +1549,119 @@ _HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
     switch( nWhich )
     {
     case RES_CHRATR_BLINK:
-        ppAttr = &aAttrTab.pBlink;
+        ppAttr = &m_aAttrTab.pBlink;
         break;
     case RES_CHRATR_CASEMAP:
-        ppAttr = &aAttrTab.pCaseMap;
+        ppAttr = &m_aAttrTab.pCaseMap;
         break;
     case RES_CHRATR_COLOR:
-        ppAttr = &aAttrTab.pFontColor;
+        ppAttr = &m_aAttrTab.pFontColor;
         break;
     case RES_CHRATR_CROSSEDOUT:
-        ppAttr = &aAttrTab.pStrike;
+        ppAttr = &m_aAttrTab.pStrike;
         break;
     case RES_CHRATR_ESCAPEMENT:
-        ppAttr = &aAttrTab.pEscapement;
+        ppAttr = &m_aAttrTab.pEscapement;
         break;
     case RES_CHRATR_FONT:
-        ppAttr = &aAttrTab.pFont;
+        ppAttr = &m_aAttrTab.pFont;
         break;
     case RES_CHRATR_CJK_FONT:
-        ppAttr = &aAttrTab.pFontCJK;
+        ppAttr = &m_aAttrTab.pFontCJK;
         break;
     case RES_CHRATR_CTL_FONT:
-        ppAttr = &aAttrTab.pFontCTL;
+        ppAttr = &m_aAttrTab.pFontCTL;
         break;
     case RES_CHRATR_FONTSIZE:
-        ppAttr = &aAttrTab.pFontHeight;
+        ppAttr = &m_aAttrTab.pFontHeight;
         break;
     case RES_CHRATR_CJK_FONTSIZE:
-        ppAttr = &aAttrTab.pFontHeightCJK;
+        ppAttr = &m_aAttrTab.pFontHeightCJK;
         break;
     case RES_CHRATR_CTL_FONTSIZE:
-        ppAttr = &aAttrTab.pFontHeightCTL;
+        ppAttr = &m_aAttrTab.pFontHeightCTL;
         break;
     case RES_CHRATR_KERNING:
-        ppAttr = &aAttrTab.pKerning;
+        ppAttr = &m_aAttrTab.pKerning;
         break;
     case RES_CHRATR_POSTURE:
-        ppAttr = &aAttrTab.pItalic;
+        ppAttr = &m_aAttrTab.pItalic;
         break;
     case RES_CHRATR_CJK_POSTURE:
-        ppAttr = &aAttrTab.pItalicCJK;
+        ppAttr = &m_aAttrTab.pItalicCJK;
         break;
     case RES_CHRATR_CTL_POSTURE:
-        ppAttr = &aAttrTab.pItalicCTL;
+        ppAttr = &m_aAttrTab.pItalicCTL;
         break;
     case RES_CHRATR_UNDERLINE:
-        ppAttr = &aAttrTab.pUnderline;
+        ppAttr = &m_aAttrTab.pUnderline;
         break;
     case RES_CHRATR_WEIGHT:
-        ppAttr = &aAttrTab.pBold;
+        ppAttr = &m_aAttrTab.pBold;
         break;
     case RES_CHRATR_CJK_WEIGHT:
-        ppAttr = &aAttrTab.pBoldCJK;
+        ppAttr = &m_aAttrTab.pBoldCJK;
         break;
     case RES_CHRATR_CTL_WEIGHT:
-        ppAttr = &aAttrTab.pBoldCTL;
+        ppAttr = &m_aAttrTab.pBoldCTL;
         break;
     case RES_CHRATR_BACKGROUND:
-        ppAttr = &aAttrTab.pCharBrush;
+        ppAttr = &m_aAttrTab.pCharBrush;
         break;
     case RES_CHRATR_BOX:
-        ppAttr = &aAttrTab.pCharBox;
+        ppAttr = &m_aAttrTab.pCharBox;
         break;
 
     case RES_PARATR_LINESPACING:
-        ppAttr = &aAttrTab.pLineSpacing;
+        ppAttr = &m_aAttrTab.pLineSpacing;
         break;
     case RES_PARATR_ADJUST:
-        ppAttr = &aAttrTab.pAdjust;
+        ppAttr = &m_aAttrTab.pAdjust;
         break;
 
     case RES_LR_SPACE:
-        ppAttr = &aAttrTab.pLRSpace;
+        ppAttr = &m_aAttrTab.pLRSpace;
         break;
     case RES_UL_SPACE:
-        ppAttr = &aAttrTab.pULSpace;
+        ppAttr = &m_aAttrTab.pULSpace;
         break;
     case RES_BOX:
-        ppAttr = &aAttrTab.pBox;
+        ppAttr = &m_aAttrTab.pBox;
         break;
     case RES_BACKGROUND:
-        ppAttr = &aAttrTab.pBrush;
+        ppAttr = &m_aAttrTab.pBrush;
         break;
     case RES_BREAK:
-        ppAttr = &aAttrTab.pBreak;
+        ppAttr = &m_aAttrTab.pBreak;
         break;
     case RES_PAGEDESC:
-        ppAttr = &aAttrTab.pPageDesc;
+        ppAttr = &m_aAttrTab.pPageDesc;
         break;
     case RES_PARATR_SPLIT:
-        ppAttr = &aAttrTab.pSplit;
+        ppAttr = &m_aAttrTab.pSplit;
         break;
     case RES_PARATR_WIDOWS:
-        ppAttr = &aAttrTab.pWidows;
+        ppAttr = &m_aAttrTab.pWidows;
         break;
     case RES_PARATR_ORPHANS:
-        ppAttr = &aAttrTab.pOrphans;
+        ppAttr = &m_aAttrTab.pOrphans;
         break;
     case RES_KEEP:
-        ppAttr = &aAttrTab.pKeep;
+        ppAttr = &m_aAttrTab.pKeep;
         break;
 
     case RES_CHRATR_LANGUAGE:
-        ppAttr = &aAttrTab.pLanguage;
+        ppAttr = &m_aAttrTab.pLanguage;
         break;
     case RES_CHRATR_CJK_LANGUAGE:
-        ppAttr = &aAttrTab.pLanguageCJK;
+        ppAttr = &m_aAttrTab.pLanguageCJK;
         break;
     case RES_CHRATR_CTL_LANGUAGE:
-        ppAttr = &aAttrTab.pLanguageCTL;
+        ppAttr = &m_aAttrTab.pLanguageCTL;
         break;
 
     case RES_FRAMEDIR:
-        ppAttr = &aAttrTab.pDirection;
+        ppAttr = &m_aAttrTab.pDirection;
         break;
     }
 
@@ -1680,18 +1680,18 @@ void SwHTMLParser::NewStyle()
             sType = rOption.GetString();
     }
 
-    bIgnoreRawData = sType.getLength() &&
+    m_bIgnoreRawData = sType.getLength() &&
                      !sType.getToken(0,';').equalsAscii(sCSS_mimetype);
 }
 
 void SwHTMLParser::EndStyle()
 {
-    bIgnoreRawData = false;
+    m_bIgnoreRawData = false;
 
-    if( !aStyleSource.isEmpty() )
+    if( !m_aStyleSource.isEmpty() )
     {
-        pCSS1Parser->ParseStyleSheet( aStyleSource );
-        aStyleSource.clear();
+        m_pCSS1Parser->ParseStyleSheet( m_aStyleSource );
+        m_aStyleSource.clear();
     }
 }
 
@@ -1716,8 +1716,8 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
     }
 
     // wurde abgebrochen?
-    if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
-        || 1 == pDoc->getReferenceCount() )
+    if( ( m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->IsAbortingImport() )
+        || 1 == m_pDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
         eState = SVPAR_ERROR;
@@ -1735,15 +1735,15 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
 void SwHTMLParser::InsertLink()
 {
     bool bFinishDownload = false;
-    if( pPendStack )
+    if( m_pPendStack )
     {
         OSL_ENSURE( ShouldFinishFileDownload(),
                 "Pending-Stack ohne File-Download?" );
 
-        SwPendingStack* pTmp = pPendStack->pNext;
-        delete pPendStack;
-        pPendStack = pTmp;
-        OSL_ENSURE( !pPendStack, "Wo kommt der Pending-Stack her?" );
+        SwPendingStack* pTmp = m_pPendStack->pNext;
+        delete m_pPendStack;
+        m_pPendStack = pTmp;
+        OSL_ENSURE( !m_pPendStack, "Wo kommt der Pending-Stack her?" );
 
         bFinishDownload = true;
     }
@@ -1761,7 +1761,7 @@ void SwHTMLParser::InsertLink()
                     sRel = rOption.GetString();
                     break;
                 case HTML_O_HREF:
-                    sHRef = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), rOption.GetString(), Link<OUString *, bool>(), false );
+                    sHRef = URIHelper::SmartRel2Abs( INetURLObject( m_sBaseURL ), rOption.GetString(), Link<OUString *, bool>(), false );
                     break;
                 case HTML_O_TYPE:
                     sType = rOption.GetString();
@@ -1788,7 +1788,7 @@ void SwHTMLParser::InsertLink()
                     // Der Style wird asynchron geladen und ist erst beim
                     // naechsten Continue-Aufruf da. Wir muessen deshalb einen
                     // Pending-Stack anlegen, damit wir hierher zurueckkehren
-                    pPendStack = new SwPendingStack( HTML_LINK, pPendStack );
+                    m_pPendStack = new SwPendingStack( HTML_LINK, m_pPendStack );
                 }
             }
             else
@@ -1796,7 +1796,7 @@ void SwHTMLParser::InsertLink()
                 // File synchron holen
                 OUString sSource;
                 if( FileDownload( sHRef, sSource ) )
-                    pCSS1Parser->ParseStyleSheet( sSource );
+                    m_pCSS1Parser->ParseStyleSheet( sSource );
             }
         }
     }
@@ -1805,7 +1805,7 @@ void SwHTMLParser::InsertLink()
     {
         OUString sSource;
         if( FinishFileDownload( sSource ) && !sSource.isEmpty() )
-            pCSS1Parser->ParseStyleSheet( sSource );
+            m_pCSS1Parser->ParseStyleSheet( sSource );
     }
 }
 
@@ -1875,7 +1875,7 @@ bool SwHTMLParser::ParseStyleOptions( const OUString &rStyle,
     {
         OUString aClass( rClass );
         SwCSS1Parser::GetScriptFromClass( aClass );
-        const SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
+        const SvxCSS1MapEntry *pClass = m_pCSS1Parser->GetClass( aClass );
         if( pClass )
         {
             SvxCSS1Parser::MergeStyles( pClass->GetItemSet(),
@@ -1887,7 +1887,7 @@ bool SwHTMLParser::ParseStyleOptions( const OUString &rStyle,
 
     if( !rId.isEmpty() )
     {
-        const SvxCSS1MapEntry *pId = pCSS1Parser->GetId( rId );
+        const SvxCSS1MapEntry *pId = m_pCSS1Parser->GetId( rId );
         if( pId )
             SvxCSS1Parser::MergeStyles( pId->GetItemSet(),
                                       pId->GetPropertyInfo(),
@@ -1898,7 +1898,7 @@ bool SwHTMLParser::ParseStyleOptions( const OUString &rStyle,
 
     if( !rStyle.isEmpty() )
     {
-        pCSS1Parser->ParseStyleOption( rStyle, rItemSet, rPropInfo );
+        m_pCSS1Parser->ParseStyleOption( rStyle, rItemSet, rPropInfo );
         bRet = true;
     }
 
@@ -1962,7 +1962,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
             // sie nicht schon in einem Rahmen stehen und sonst
             // Rahmengebunden.
             const SwStartNode *pFlySttNd =
-                pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
+                m_pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
             if( pFlySttNd )
             {
                 aAnchor.SetType( FLY_AT_FLY );
@@ -1980,7 +1980,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         else
         {
             aAnchor.SetType( FLY_AT_PARA );
-            aAnchor.SetAnchor( pPam->GetPoint() );
+            aAnchor.SetAnchor( m_pPam->GetPoint() );
             eVertOri = text::VertOrientation::TOP;
             eVertRel = text::RelOrientation::CHAR;
             if( SVX_CSS1_LTYPE_TWIP == rPropInfo.eLeftType )
@@ -2002,11 +2002,11 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         // der Absatz noch leer ist und sonst auto-gebunden.
         // Auto-gebundene Rahmen werden zunaechst an der Position davor
         // eingefuegt und erst spaeter verschoben.
-        const sal_Int32 nContent = pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nContent = m_pPam->GetPoint()->nContent.GetIndex();
         if( nContent )
         {
             aAnchor.SetType( FLY_AT_CHAR );
-            pPam->Move( fnMoveBackward );
+            m_pPam->Move( fnMoveBackward );
             eVertOri = text::VertOrientation::CHAR_BOTTOM;
             eVertRel = text::RelOrientation::CHAR;
         }
@@ -2017,10 +2017,10 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
             eVertRel = text::RelOrientation::PRINT_AREA;
         }
 
-        aAnchor.SetAnchor( pPam->GetPoint() );
+        aAnchor.SetAnchor( m_pPam->GetPoint() );
 
         if( nContent )
-            pPam->Move( fnMoveForward );
+            m_pPam->Move( fnMoveForward );
 
         sal_uInt16 nLeftSpace = 0, nRightSpace = 0;
         short nIndent = 0;
@@ -2129,17 +2129,17 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
 _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken, sal_uInt16 nLimit,
                                             bool bRemove )
 {
-    _HTMLAttrContexts::size_type nPos = aContexts.size();
-    if( nPos <= nContextStMin )
+    _HTMLAttrContexts::size_type nPos = m_aContexts.size();
+    if( nPos <= m_nContextStMin )
         return 0;
 
     bool bFound = 0==nToken;
     if( nToken )
     {
         // Stack-Eintrag zu dem Token suchen
-        while( nPos > nContextStMin )
+        while( nPos > m_nContextStMin )
         {
-            sal_uInt16 nCntxtToken = aContexts[--nPos]->GetToken();
+            sal_uInt16 nCntxtToken = m_aContexts[--nPos]->GetToken();
             if( nCntxtToken == nToken )
             {
                 bFound = true;
@@ -2159,9 +2159,9 @@ _HTMLAttrContext *SwHTMLParser::PopContext( sal_uInt16 nToken, sal_uInt16 nLimit
     _HTMLAttrContext *pCntxt = 0;
     if( bFound )
     {
-        pCntxt = aContexts[nPos];
+        pCntxt = m_aContexts[nPos];
         if( bRemove )
-            aContexts.erase( aContexts.begin() + nPos );
+            m_aContexts.erase( m_aContexts.begin() + nPos );
     }
 
     return pCntxt;
@@ -2172,7 +2172,7 @@ bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
                                           short& nIndent,
                                           bool bIgnoreTopContext ) const
 {
-    _HTMLAttrContexts::size_type nPos = aContexts.size();
+    _HTMLAttrContexts::size_type nPos = m_aContexts.size();
     if( bIgnoreTopContext )
     {
         if( !nPos )
@@ -2181,9 +2181,9 @@ bool SwHTMLParser::GetMarginsFromContext( sal_uInt16& nLeft,
             nPos--;
     }
 
-    while( nPos > nContextStAttrMin )
+    while( nPos > m_nContextStAttrMin )
     {
-        const _HTMLAttrContext *pCntxt = aContexts[--nPos];
+        const _HTMLAttrContext *pCntxt = m_aContexts[--nPos];
         if( pCntxt->IsLRSpaceChanged() )
         {
             pCntxt->GetMargins( nLeft, nRight, nIndent );
@@ -2218,10 +2218,10 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
     sal_uInt16 nDfltColl = 0;
     OUString aDfltClass;
 
-    _HTMLAttrContexts::size_type nPos = aContexts.size();
-    while( nPos > nContextStAttrMin )
+    _HTMLAttrContexts::size_type nPos = m_aContexts.size();
+    while( nPos > m_nContextStAttrMin )
     {
-        const _HTMLAttrContext *pCntxt = aContexts[--nPos];
+        const _HTMLAttrContext *pCntxt = m_aContexts[--nPos];
         if( pCntxt->IsULSpaceChanged() )
         {
             pCntxt->GetULSpace( nUpper, nLower );
@@ -2239,7 +2239,7 @@ void SwHTMLParser::GetULSpaceFromContext( sal_uInt16& nUpper,
         nDfltColl = RES_POOLCOLL_TEXT;
 
     const SwTextFormatColl *pColl =
-        pCSS1Parser->GetTextFormatColl( nDfltColl, aDfltClass );
+        m_pCSS1Parser->GetTextFormatColl( nDfltColl, aDfltClass );
     const SvxULSpaceItem& rULSpace = pColl->GetULSpace();
     nUpper = rULSpace.GetUpper();
     nLower = rULSpace.GetLower();
@@ -2255,7 +2255,7 @@ void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, bool bRemove )
             // Fuer DropCaps noch die Anzahl der Zeichen anpassen. Wenn
             // es am Ende 0 sind, wird das Attribut invalidiert und dann
             // von _SetAttr gar nicht erst gesetzt.
-            sal_Int32 nChars = pPam->GetPoint()->nContent.GetIndex();
+            sal_Int32 nChars = m_pPam->GetPoint()->nContent.GetIndex();
             if( nChars < 1 )
                 pAttr->Invalidate();
             else if( nChars > MAX_DROPCAP_CHARS )
@@ -2286,10 +2286,10 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
             NewAttr( ppAttr, *pItem );
             if( RES_PARATR_BEGIN > nWhich )
                 (*ppAttr)->SetLikePara();
-            aParaAttrs.push_back( *ppAttr );
+            m_aParaAttrs.push_back( *ppAttr );
             bool bSuccess = EndAttr( *ppAttr, 0, false );
             if (!bSuccess)
-                aParaAttrs.pop_back();
+                m_aParaAttrs.pop_back();
         }
 
         pItem = aIter.NextItem();
