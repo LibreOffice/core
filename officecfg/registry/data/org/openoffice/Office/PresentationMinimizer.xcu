@@ -118,9 +118,6 @@ The current presentation contains no OLE objects.</value>
         <prop oor:name="STR_CHOOSE_SLIDES">
             <value xml:lang="en-US">Choose which slides to delete</value>
         </prop>
-        <prop oor:name="STR_MASTER_PAGES">
-            <value xml:lang="en-US">Master Pages</value>
-        </prop>
         <prop oor:name="STR_DELETE_MASTER_PAGES">
             <value xml:lang="en-US">Delete unused ~master pages</value>
         </prop>
@@ -138,12 +135,6 @@ The current presentation contains no OLE objects.</value>
         </prop>
         <prop oor:name="STR_SUMMARY_TITLE">
             <value xml:lang="en-US">Choose where to apply the following changes</value>
-        </prop>
-        <prop oor:name="STR_PROGRESS">
-            <value xml:lang="en-US">Progress</value>
-        </prop>
-        <prop oor:name="STR_OBJECTS_OPTIMIZED">
-            <value xml:lang="en-US">Objects optimized</value>
         </prop>
         <prop oor:name="STR_APPLY_TO_CURRENT">
             <value xml:lang="en-US">~Apply changes to current presentation</value>
@@ -172,20 +163,8 @@ The current presentation contains no OLE objects.</value>
         <prop oor:name="STR_ESTIMATED_FILESIZE">
             <value xml:lang="en-US">Estimated new file size:</value>
         </prop>
-        <prop oor:name="STR_MB">
-            <value xml:lang="en-US">%1 MB</value>
-        </prop>
         <prop oor:name="MY_SETTINGS">
             <value xml:lang="en-US">My Settings </value>
-        </prop>
-        <prop oor:name="STR_DEFAULT_SESSION">
-            <value xml:lang="en-US">default session</value>
-        </prop>
-        <prop oor:name="STR_MODIFY_WARNING">
-            <value xml:lang="en-US">The optimization will modify the current document. Do you want to continue?</value>
-        </prop>
-        <prop oor:name="STR_YES">
-            <value xml:lang="en-US">~Yes</value>
         </prop>
         <prop oor:name="STR_OK">
             <value xml:lang="en-US">OK</value>

@@ -255,10 +255,6 @@ The current presentation contains no OLE objects.</value>
 		<info><desc>String STR_CHOOSE_SLIDES.</desc></info>
 				<value>Choose which slides to delete</value>
 			</prop>
-			<prop oor:name="STR_MASTER_PAGES" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_MASTER_PAGES.</desc></info>
-				<value>Master Pages</value>
-			</prop>
 			<prop oor:name="STR_DELETE_MASTER_PAGES" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_DELETE_MASTER_PAGES.</desc></info>
 				<value>Delete unused ~master pages</value>
@@ -282,14 +278,6 @@ The current presentation contains no OLE objects.</value>
 			<prop oor:name="STR_SUMMARY_TITLE" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_SUMMARY_TITLE.</desc></info>
 				<value>Choose where to apply the following changes</value>
-			</prop>
-			<prop oor:name="STR_PROGRESS" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_PROGRESS.</desc></info>
-				<value>Progress</value>
-			</prop>
-			<prop oor:name="STR_OBJECTS_OPTIMIZED" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_OBJECTS_OPTIMIZED.</desc></info>
-				<value>Objects optimized</value>
 			</prop>
 			<prop oor:name="STR_APPLY_TO_CURRENT" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_APPLY_TO_CURRENT.</desc></info>
@@ -329,25 +317,9 @@ The current presentation contains no OLE objects.</value>
 		<info><desc>String STR_ESTIMATED_FILESIZE.</desc></info>
 				<value>Estimated new file size:</value>
 			</prop>
-			<prop oor:name="STR_MB" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_MB.</desc></info>
-				<value>%1 MB</value>
-			</prop>
 			<prop oor:name="MY_SETTINGS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String MY_SETTINGS.</desc></info>
 				<value>My Settings</value>
-			</prop>
-			<prop oor:name="STR_DEFAULT_SESSION" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_DEFAULT_SESSION.</desc></info>
-				<value>default session</value>
-			</prop>
-			<prop oor:name="STR_MODIFY_WARNING" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_MODIFY_WARNING.</desc></info>
-				<value>The optimization will modify the current document. Do you want to continue?</value>
-			</prop>
-			<prop oor:name="STR_YES" oor:type="xs:string" oor:localized="true">
-		<info><desc>String STR_YES.</desc></info>
-				<value>~Yes</value>
 			</prop>
             <prop oor:name="STR_OK" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_OK.</desc></info>
