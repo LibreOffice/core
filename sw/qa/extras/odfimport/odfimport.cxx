@@ -29,8 +29,8 @@
 #include <olmenu.hxx>
 #include <cmdid.h>
 
-typedef std::map<OUString, com::sun::star::uno::Sequence< com::sun::star::table::BorderLine> > AllBordersMap;
-typedef std::pair<OUString, com::sun::star::uno::Sequence< com::sun::star::table::BorderLine> > StringSequencePair;
+typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
+typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
 
 class Test : public SwModelTestBase
 {
