@@ -64,15 +64,15 @@ public:
 
 class SwUndoFieldFromAPI : public SwUndoField
 {
-    com::sun::star::uno::Any aOldVal, aNewVal;
+    css::uno::Any aOldVal, aNewVal;
     sal_uInt16 nWhich;
 
     void DoImpl();
 
 public:
     SwUndoFieldFromAPI(const SwPosition & rPos,
-                       const com::sun::star::uno::Any & rOldVal,
-                       const com::sun::star::uno::Any & rNewVal,
+                       const css::uno::Any & rOldVal,
+                       const css::uno::Any & rNewVal,
                        sal_uInt16 nWhich);
     virtual ~SwUndoFieldFromAPI();
 

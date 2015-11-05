@@ -29,8 +29,8 @@
 class SwFieldType;
 
 typedef ::cppu::WeakImplHelper
-<   ::com::sun::star::container::XNameAccess
-,   ::com::sun::star::lang::XServiceInfo
+<   css::container::XNameAccess
+,   css::lang::XServiceInfo
 > SwXTextFieldMasters_Base;
 
 class SwXTextFieldMasters
@@ -47,37 +47,37 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(
             const OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName(
+    virtual css::uno::Any SAL_CALL getByName(
             const OUString& rName)
-        throw (::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getElementNames() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
+        getElementNames() throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName(const OUString& rName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 };
 
 typedef ::cppu::WeakImplHelper
-<   ::com::sun::star::container::XEnumerationAccess
-,   ::com::sun::star::lang::XServiceInfo
-,   ::com::sun::star::util::XRefreshable
+<   css::container::XEnumerationAccess
+,   css::lang::XServiceInfo
+,   css::util::XRefreshable
 > SwXTextFieldTypes_Base;
 
 class SwXTextFieldTypes
@@ -99,37 +99,37 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(
             const OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XEnumeration >  SAL_CALL
+    virtual css::uno::Reference<
+            css::container::XEnumeration >  SAL_CALL
         createEnumeration()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XRefreshable
     virtual void SAL_CALL refresh()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addRefreshListener(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::util::XRefreshListener>& xListener)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<
+                css::util::XRefreshListener>& xListener)
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeRefreshListener(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::util::XRefreshListener>& xListener)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<
+                css::util::XRefreshListener>& xListener)
+        throw (css::uno::RuntimeException, std::exception) override;
 
 };
 

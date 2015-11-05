@@ -70,21 +70,21 @@ namespace SwUnoCursorHelper
     {
         private:
             //  keep Any's mapped by (WhichId << 16 ) + (MemberId)
-            std::map<sal_uInt32, com::sun::star::uno::Any> m_Map;
+            std::map<sal_uInt32, css::uno::Any> m_Map;
 
         public:
-            void    SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any& rAny );
-            bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any*& pAny );
+            void    SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const css::uno::Any& rAny );
+            bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const css::uno::Any*& pAny );
     };
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
+    css::uno::Reference< css::text::XTextContent >
         GetNestedTextContent(SwTextNode & rTextNode, sal_Int32 const nIndex,
             bool const bParent);
 
     bool                    getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
-                                        , com::sun::star::uno::Any *pAny
-                                        , com::sun::star::beans::PropertyState& eState
+                                        , css::uno::Any *pAny
+                                        , css::beans::PropertyState& eState
                                         , const SwTextNode* pNode = 0 );
 
     void                        GetCurPageStyle(SwPaM& rPaM, OUString &rString);
@@ -98,39 +98,39 @@ namespace SwUnoCursorHelper
     void                        resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam);
     void                        InsertFile(SwUnoCrsr* pUnoCrsr,
                                     const OUString& rURL,
-                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rOptions)
-        throw (com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException,
+                                    const css::uno::Sequence< css::beans::PropertyValue >& rOptions)
+        throw (css::lang::IllegalArgumentException,
+               css::io::IOException,
+               css::uno::RuntimeException,
                std::exception);
 
     void                        getNumberingProperty(
                                     SwPaM& rPam,
-                                    com::sun::star::beans::PropertyState& eState,
-                                    com::sun::star::uno::Any *pAny );
+                                    css::beans::PropertyState& eState,
+                                    css::uno::Any *pAny );
 
     void                        setNumberingProperty(
-                                    const com::sun::star::uno::Any& rValue,
+                                    const css::uno::Any& rValue,
                                     SwPaM& rPam);
 
     sal_Int16                   IsNodeNumStart(
                                     SwPaM& rPam,
-                                    com::sun::star::beans::PropertyState& eState);
+                                    css::beans::PropertyState& eState);
 
     bool    DocInsertStringSplitCR(  SwDoc &rDoc,
                     const SwPaM &rNewCursor, const OUString &rText,
                     const bool bForceExpandHints );
     void    makeRedline( SwPaM& rPaM, const OUString& RedlineType,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
-                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties )
+                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     void    makeTableRowRedline( SwTableLine& rTableLine, const OUString& RedlineType,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
-                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties )
+                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     SW_DLLPUBLIC void    makeTableCellRedline( SwTableBox& rTableBox, const OUString& RedlineType,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
-                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties )
+                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     /// @param bTableMode: attributes should be applied to a table selection
     void SetCrsrAttr(SwPaM & rPam, const SfxItemSet & rSet,
@@ -145,11 +145,10 @@ namespace SwUnoCursorHelper
     void SelectPam(SwPaM & rPam, const bool bExpand);
     void SetString(SwCursor & rCursor, const OUString & rString);
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+    css::uno::Sequence< css::beans::PropertyValue >
            CreateSortDescriptor(const bool bFromTable);
     bool ConvertSortProperties(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue >& rDescriptor,
+            const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor,
             SwSortOptions & rSortOpt);
 
     /// @param bTableMode: attributes should be applied to a table selection
@@ -157,19 +156,19 @@ namespace SwUnoCursorHelper
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName,
-            const ::com::sun::star::uno::Any & rValue,
+            const css::uno::Any & rValue,
             const SetAttrMode nAttrMode = SetAttrMode::DEFAULT,
             const bool bTableMode = false)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::beans::PropertyVetoException,
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+        throw (css::beans::UnknownPropertyException,
+                css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException);
     /// @param bTableMode: attributes should be applied to a table selection
     void SetPropertyValues(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &
+            const css::uno::Sequence< css::beans::PropertyValue > &
             rPropertyValues,
             const SetAttrMode nAttrMode = SetAttrMode::DEFAULT,
             const bool bTableMode = false)
@@ -179,53 +178,52 @@ namespace SwUnoCursorHelper
                css::lang::WrappedTargetException,
                css::uno::RuntimeException,
                std::exception);
-    ::com::sun::star::uno::Any  GetPropertyValue(
+    css::uno::Any  GetPropertyValue(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException,
+        throw (css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException,
                std::exception);
-    ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyState > GetPropertyStates(
+    css::uno::Sequence< css::beans::PropertyState > GetPropertyStates(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
-            const ::com::sun::star::uno::Sequence< OUString >&
+            const css::uno::Sequence< OUString >&
                 rPropertyNames,
             const SwGetPropertyStatesCaller eCaller =
                 SW_PROPERTY_STATE_CALLER_DEFAULT)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-               ::com::sun::star::uno::RuntimeException,
+        throw (css::beans::UnknownPropertyException,
+               css::uno::RuntimeException,
                std::exception);
-    ::com::sun::star::beans::PropertyState GetPropertyState(
+    css::beans::PropertyState GetPropertyState(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
+        throw (css::beans::UnknownPropertyException,
+                css::uno::RuntimeException);
     void SetPropertyToDefault(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException, std::exception);
-    ::com::sun::star::uno::Any  GetPropertyDefault(
+        throw (css::beans::UnknownPropertyException,
+                css::uno::RuntimeException, std::exception);
+    css::uno::Any  GetPropertyDefault(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+        throw (css::beans::UnknownPropertyException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException);
 
     bool SetPageDesc(
-            const ::com::sun::star::uno::Any& rValue,
+            const css::uno::Any& rValue,
             SwDoc & rDoc, SfxItemSet & rSet);
-    void SetTextFormatColl(const ::com::sun::star::uno::Any & rAny, SwPaM & rPaM)
+    void SetTextFormatColl(const css::uno::Any & rAny, SwPaM & rPaM)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
     bool SetCursorPropertyValue(
             SfxItemPropertySimpleEntry const& rEntry,
-            ::com::sun::star::uno::Any const& rValue,
+            css::uno::Any const& rValue,
             SwPaM & rPam, SfxItemSet & rItemSet)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException,
                css::uno::DeploymentException, std::exception);
@@ -234,16 +232,14 @@ namespace SwUnoCursorHelper
     /// at most one of the out parameters gets assigned a non-null value
     /// o_rpPaM is newly allocated and must be deleted; other parameters not
     SW_DLLPUBLIC void GetSelectableFromAny(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface> const& xIfc,
+        css::uno::Reference<css::uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
         SwPaM *& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
         OUString & o_rTableName, SwUnoTableCrsr const*& o_rpTableCursor,
         ::sw::mark::IMark const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects);
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XFlatParagraphIterator>
+    css::uno::Reference<css::text::XFlatParagraphIterator>
             CreateFlatParagraphIterator(SwDoc &, sal_Int32,  bool);
 
 } // namespace SwUnoCursorHelper

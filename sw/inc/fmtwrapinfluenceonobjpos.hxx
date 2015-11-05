@@ -34,8 +34,7 @@ public:
 
     // #i35017# - constant name has changed
     SwFormatWrapInfluenceOnObjPos(
-            sal_Int16 _nWrapInfluenceOnPosition =
-            com::sun::star::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
+            sal_Int16 _nWrapInfluenceOnPosition = css::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
     SwFormatWrapInfluenceOnObjPos(
             const SwFormatWrapInfluenceOnObjPos& _rCpy );
     virtual ~SwFormatWrapInfluenceOnObjPos();
@@ -47,8 +46,8 @@ public:
     virtual bool operator==( const SfxPoolItem& _rAttr ) const override;
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const override;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     /// direct accessors to data
     void SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition );

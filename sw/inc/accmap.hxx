@@ -92,7 +92,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
     /// preview-to-display coordinates
     SwAccPreviewData* mpPreview;
 
-    ::com::sun::star::uno::WeakReference < ::com::sun::star::accessibility::XAccessible > mxCursorContext;
+    css::uno::WeakReference < css::accessibility::XAccessible > mxCursorContext;
 
     sal_Int32 mnPara;
 
@@ -102,9 +102,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 
     void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
 
-    void InvalidateCursorPosition(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rAcc );
+    void InvalidateCursorPosition( const css::uno::Reference<css::accessibility::XAccessible>& rAcc );
     void DoInvalidateShapeSelection(bool bInvalidateFocusMode = false);
 
     void InvalidateShapeSelection();
@@ -116,8 +114,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 
     void _InvalidateRelationSet( const SwFrm* pFrm, bool bFrom );
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>
+    css::uno::Reference<css::accessibility::XAccessible>
             _GetDocumentView( bool bPagePreview );
 
     /** method to build up a new data structure of the accessible paragraphs,
@@ -134,11 +131,9 @@ public:
     SwAccessibleMap( SwViewShell *pSh );
     virtual ~SwAccessibleMap();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> GetDocumentView();
+    css::uno::Reference<css::accessibility::XAccessible> GetDocumentView();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> GetDocumentPreview(
+    css::uno::Reference<css::accessibility::XAccessible> GetDocumentPreview(
                             const std::vector<PreviewPage*>& _rPreviewPages,
                             const Fraction&  _rScale,
                             const SwPageFrm* _pSelectedPageFrm,
@@ -147,8 +142,7 @@ public:
     ::rtl::Reference < SwAccessibleContext > GetContextImpl(
                                                  const SwFrm *pFrm,
                                                 bool bCreate = true );
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> GetContext(
+    css::uno::Reference<css::accessibility::XAccessible> GetContext(
                                                  const SwFrm *pFrm,
                                                 bool bCreate = true );
 
@@ -156,8 +150,7 @@ public:
                                         const SdrObject *pObj,
                                         SwAccessibleContext *pParentImpl,
                                         bool bCreate = true );
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> GetContext(
+    css::uno::Reference<css::accessibility::XAccessible> GetContext(
                                         const SdrObject *pObj,
                                         SwAccessibleContext *pParentImpl,
                                         bool bCreate = true );
@@ -168,11 +161,11 @@ public:
     }
     static bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
     void AddShapeContext(const SdrObject *pObj,
-                             ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccShape);
+                             css::uno::Reference < css::accessibility::XAccessible > xAccShape);
 
     void AddGroupContext(const SdrObject *pParentObj,
-                    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccParent);
-    void RemoveGroupContext(const SdrObject *pParentObj, ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccParent);
+                    css::uno::Reference < css::accessibility::XAccessible > xAccParent);
+    void RemoveGroupContext(const SdrObject *pParentObj, css::uno::Reference < css::accessibility::XAccessible > xAccParent);
 
     const SwRect& GetVisArea() const;
 
@@ -267,16 +260,16 @@ public:
     // IAccessibleParent
     virtual bool ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const css::uno::Reference< css::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (::com::sun::star::uno::RuntimeException) override;
+    )   throw (css::uno::RuntimeException) override;
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
-        (::com::sun::star::beans::XPropertySet* pSet)
-        throw (::com::sun::star::uno::RuntimeException) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >   GetAccessibleCaption (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape)
-    throw (::com::sun::star::uno::RuntimeException) override;
+        (css::beans::XPropertySet* pSet)
+        throw (css::uno::RuntimeException) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible >   GetAccessibleCaption (
+        const css::uno::Reference< css::drawing::XShape > & xShape)
+    throw (css::uno::RuntimeException) override;
 
     // additional Core/Pixel conversions for internal use; also works
     // for preview
@@ -308,7 +301,7 @@ private:
 public:
     virtual bool IsDocumentSelAll() override;
 
-    ::com::sun::star::uno::WeakReference < ::com::sun::star::accessibility::XAccessible >
+    css::uno::WeakReference < css::accessibility::XAccessible >
         GetCursorContext() const { return mxCursorContext; }
 
     //Para Container for InvalidateCursorPosition

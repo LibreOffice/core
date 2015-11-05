@@ -27,7 +27,7 @@ class SwPrintOptions : public SwPrintData, public utl::ConfigItem
 private:
     bool            bIsWeb;
 
-    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    css::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
 
@@ -35,7 +35,7 @@ public:
     SwPrintOptions(bool bWeb);
     virtual ~SwPrintOptions();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual void            doSetModified( ) override { bModified = true; SetModified();}
 
     SwPrintOptions& operator=(const SwPrintData& rData)

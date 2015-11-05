@@ -121,8 +121,8 @@ public:
 
     virtual sal_uInt16  GetSubType() const override;
     virtual void        SetSubType(sal_uInt16 nType) override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     static sal_Int32    GetReferenceTextPos( const SwFormatField& rFormat, SwDoc& rDoc, sal_Int32 nHint = 0);
     // #i82544#
@@ -191,8 +191,8 @@ public:
     const SwNode* GetOutlineChgNd() const   { return pOutlChgNd; }
     void SetOutlineChgNd( const SwNode* p ) { pOutlChgNd = p; }
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 inline void SwSetExpFieldType::SetType( sal_uInt16 nTyp )
@@ -254,8 +254,8 @@ public:
     /// Query formula.
     virtual OUString       GetPar2()   const override;
     virtual void                SetPar2(const OUString& rStr) override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 inline OUString SwSetExpField::GetExpStr() const
@@ -348,8 +348,8 @@ public:
 
     virtual sal_uInt16      GetSubType() const override;
     virtual void            SetSubType(sal_uInt16 nSub) override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Sorted list of input fields and DropDown fields
@@ -416,8 +416,8 @@ public:
     /// The formula.
     virtual OUString GetPar2()   const override;
     virtual void        SetPar2(const OUString& rStr) override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 #endif // INCLUDED_SW_INC_EXPFLD_HXX

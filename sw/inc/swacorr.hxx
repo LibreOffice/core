@@ -38,12 +38,12 @@ protected:
     // rShort is stream-name - encrypted!
     virtual bool GetLongText( const OUString& rShort, OUString& rLong ) override;
 
-    virtual void refreshBlockList( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& ) override;
+    virtual void refreshBlockList( const css::uno::Reference < css::embed::XStorage >& ) override;
 
     // Text with attributes (only SWG-format!).
     // rShort is stream-name - encrypted!
-    virtual bool PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                              const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& ) override;
+    virtual bool PutText( const css::uno::Reference < css::embed::XStorage >&,
+                          const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& ) override;
 
 public:
     SwAutoCorrect( const SvxAutoCorrect& rACorr );

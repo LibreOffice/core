@@ -168,8 +168,8 @@ public:
     bool IsHidden() const               { return m_bHidden; }
     void SetHidden( bool bValue )       { m_bHidden = bValue; }
 
-    void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
-    void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
+    void GetGrabBagItem(css::uno::Any& rVal) const;
+    void SetGrabBagItem(const css::uno::Any& rVal);
 
     /// Query / set bAutoUpdateFormat-flag.
     bool IsAutoUpdateFormat() const                { return m_bAutoUpdateFormat; }

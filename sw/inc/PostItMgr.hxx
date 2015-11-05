@@ -109,11 +109,11 @@ class SwNoteProps: public utl::ConfigItem
             : ConfigItem(OUString("Office.Writer/Notes"))
             , bIsShowAnchor(false)
         {
-            const ::com::sun::star::uno::Sequence< OUString >& rNames = GetPropertyNames();
-                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aValues = GetProperties(rNames);
-                const ::com::sun::star::uno::Any* pValues = aValues.getConstArray();
-                SAL_WARN_IF(aValues.getLength() != rNames.getLength(), "sw", "GetProperties failed");
-                if (aValues.getLength())
+            const css::uno::Sequence< OUString >& rNames = GetPropertyNames();
+            css::uno::Sequence< css::uno::Any > aValues = GetProperties(rNames);
+            const css::uno::Any* pValues = aValues.getConstArray();
+            SAL_WARN_IF(aValues.getLength() != rNames.getLength(), "sw", "GetProperties failed");
+            if (aValues.getLength())
                     pValues[0]>>=bIsShowAnchor;
         }
 
@@ -121,9 +121,9 @@ class SwNoteProps: public utl::ConfigItem
         {
             return bIsShowAnchor;
         }
-        static ::com::sun::star::uno::Sequence< OUString >& GetPropertyNames()
+        static css::uno::Sequence< OUString >& GetPropertyNames()
         {
-            static ::com::sun::star::uno::Sequence< OUString > aNames;
+            static css::uno::Sequence< OUString > aNames;
             if(!aNames.getLength())
             {
                 aNames.realloc(1);
@@ -133,7 +133,7 @@ class SwNoteProps: public utl::ConfigItem
             return aNames;
         }
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 class SwPostItMgr: public SfxListener
@@ -268,8 +268,8 @@ class SwPostItMgr: public SfxListener
         void CheckMetaText();
 
         sal_uInt16 Replace(SvxSearchItem* pItem);
-        sal_uInt16 SearchReplace(const SwFormatField &pField, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
-        sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
+        sal_uInt16 SearchReplace(const SwFormatField &pField, const css::util::SearchOptions& rSearchOptions,bool bSrchForward);
+        sal_uInt16 FinishSearchReplace(const css::util::SearchOptions& rSearchOptions,bool bSrchForward);
 
         void AssureStdModeAtShell();
 

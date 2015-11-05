@@ -27,7 +27,7 @@ struct SwDBData
 {
     OUString     sDataSource;
     OUString     sCommand;       //table, query or statement
-    sal_Int32           nCommandType; //com::sun::star::sdb::CommandType
+    sal_Int32    nCommandType; //css::sdb::CommandType
     SwDBData() :
         nCommandType(0){}
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;

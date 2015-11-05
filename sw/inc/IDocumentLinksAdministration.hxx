@@ -50,9 +50,9 @@ using rtl::OUString;
 
     /** SS fuers Linken von Dokumentteilen  / ?? for linking of parts of documents.
     */
-    virtual bool GetData(const OUString& rItem, const OUString& rMimeType, ::com::sun::star::uno::Any& rValue) const = 0;
+    virtual bool GetData(const OUString& rItem, const OUString& rMimeType, css::uno::Any& rValue) const = 0;
 
-    virtual bool SetData(const OUString& rItem, const OUString& rMimeType, const ::com::sun::star::uno::Any& rValue) = 0;
+    virtual bool SetData(const OUString& rItem, const OUString& rMimeType, const css::uno::Any& rValue) = 0;
 
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem) = 0;
 

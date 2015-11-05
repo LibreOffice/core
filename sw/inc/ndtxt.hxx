@@ -112,8 +112,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
 
     ::std::unique_ptr< OUString > m_pNumStringCache;
 
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::text::XTextContent> m_wXParagraph;
+    css::uno::WeakReference<css::text::XTextContent> m_wXParagraph;
 
     //UUUU DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
@@ -350,7 +349,7 @@ public:
             const OUString & rText );
     void ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             const OUString& rText,
-            const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
+            const css::uno::Sequence<sal_Int32>& rOffsets );
 
     /// Virtual methods from ContentNode.
     virtual SwContentFrm *MakeFrm( SwFrm* ) override;
@@ -781,11 +780,9 @@ public:
 
     sal_uInt16 GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd ) const;
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::text::XTextContent> const& GetXParagraph() const
+    SAL_DLLPRIVATE css::uno::WeakReference<css::text::XTextContent> const& GetXParagraph() const
             { return m_wXParagraph; }
-    SAL_DLLPRIVATE void SetXParagraph(::com::sun::star::uno::Reference<
-                    ::com::sun::star::text::XTextContent> const& xParagraph)
+    SAL_DLLPRIVATE void SetXParagraph(css::uno::Reference<css::text::XTextContent> const& xParagraph)
             { m_wXParagraph = xParagraph; }
 
     /// sfx2::Metadatable
@@ -793,8 +790,7 @@ public:
     virtual bool IsInClipboard() const override;
     virtual bool IsInUndo() const override;
     virtual bool IsInContent() const override;
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() override;
+    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
 
     bool IsCollapse() const;
 

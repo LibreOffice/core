@@ -131,7 +131,7 @@ enum class DocumentSettingId
        @returns
        a list of forbidden characters.
     */
-    virtual const com::sun::star::i18n::ForbiddenCharacters*
+    virtual const css::i18n::ForbiddenCharacters*
         getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const = 0;
 
     /** Set the forbidden characters.
@@ -143,7 +143,7 @@ enum class DocumentSettingId
        [in] the new list of forbidden characters for language lang.
     */
     virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
-                                        /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters ) = 0;
+                                        /*[in]*/ const css::i18n::ForbiddenCharacters& rForbiddenCharacters ) = 0;
 
     /** Get the forbidden character table and creates one if necessary.
 

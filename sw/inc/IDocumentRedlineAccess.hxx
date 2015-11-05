@@ -199,10 +199,10 @@ public:
         /*[in]*/const SwPaM& rPam,
         /*[in]*/const OUString& rComment) = 0;
 
-    virtual const ::com::sun::star::uno::Sequence <sal_Int8>& GetRedlinePassword() const = 0;
+    virtual const css::uno::Sequence <sal_Int8>& GetRedlinePassword() const = 0;
 
     virtual void SetRedlinePassword(
-        /*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword) = 0;
+        /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) = 0;
 
 protected:
      virtual ~IDocumentRedlineAccess() {};

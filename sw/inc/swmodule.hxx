@@ -97,12 +97,9 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     std::vector<OUString>* m_pAuthorNames;
 
     // DictionaryList listener to trigger spellchecking or hyphenation
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceEventListener > m_xLinguServiceEventListener;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::scanner::XScannerManager2 >    m_xScannerManager;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
+    css::uno::Reference< css::linguistic2::XLinguServiceEventListener > m_xLinguServiceEventListener;
+    css::uno::Reference< css::scanner::XScannerManager2 >    m_xScannerManager;
+    css::uno::Reference< css::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
 
     bool                m_bAuthorInitialised : 1;
     bool                m_bEmbeddedLoadSave : 1;
@@ -230,22 +227,18 @@ public:
     static void  CheckSpellChanges( bool bOnlineSpelling,
                     bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags );
 
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceEventListener >
+    inline css::uno::Reference< css::linguistic2::XLinguServiceEventListener >
             GetLngSvcEvtListener();
     void    CreateLngSvcEvtListener();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::scanner::XScannerManager2 >
+    css::uno::Reference< css::scanner::XScannerManager2 >
             GetScannerManager();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLanguageGuessing >
+    css::uno::Reference< css::linguistic2::XLanguageGuessing >
             GetLanguageGuesser();
 };
 
-inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XLinguServiceEventListener >
+inline css::uno::Reference< css::linguistic2::XLinguServiceEventListener >
         SwModule::GetLngSvcEvtListener()
 {
     return m_xLinguServiceEventListener;

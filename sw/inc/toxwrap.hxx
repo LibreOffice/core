@@ -36,30 +36,30 @@ namespace lang {
 
 class SW_DLLPUBLIC IndexEntrySupplierWrapper
 {
-    ::com::sun::star::lang::Locale aLcl;
-    ::com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
+    css::lang::Locale aLcl;
+    css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;
 
 public:
     IndexEntrySupplierWrapper();
     ~IndexEntrySupplierWrapper();
 
-    void SetLocale( const ::com::sun::star::lang::Locale& rLocale ) { aLcl = rLocale; }
+    void SetLocale( const css::lang::Locale& rLocale ) { aLcl = rLocale; }
 
     OUString GetIndexKey( const OUString& rText, const OUString& rTextReading,
-                        const ::com::sun::star::lang::Locale& rLocale ) const;
+                        const css::lang::Locale& rLocale ) const;
 
     OUString GetFollowingText( bool bMorePages ) const;
 
-    ::com::sun::star::uno::Sequence< OUString >
-    GetAlgorithmList( const ::com::sun::star::lang::Locale& rLcl ) const;
+    css::uno::Sequence< OUString >
+    GetAlgorithmList( const css::lang::Locale& rLcl ) const;
 
-    bool LoadAlgorithm( const ::com::sun::star::lang::Locale& rLcl,
+    bool LoadAlgorithm( const css::lang::Locale& rLcl,
                             const OUString& sSortAlgorithm, long nOptions ) const;
 
     sal_Int16 CompareIndexEntry( const OUString& rText1, const OUString& rTextReading1,
-                                 const ::com::sun::star::lang::Locale& rLcl1,
+                                 const css::lang::Locale& rLcl1,
                                  const OUString& rText2, const OUString& rTextReading2,
-                                 const ::com::sun::star::lang::Locale& rLcl2 ) const;
+                                 const css::lang::Locale& rLcl2 ) const;
 };
 
 #endif

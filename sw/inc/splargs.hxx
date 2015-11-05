@@ -84,16 +84,14 @@ struct SwConversionArgs : SwArgsBase
 
 struct SwSpellArgs : SwArgsBase
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >     xSpeller;
+    css::uno::Reference< css::linguistic2::XSpellChecker1 >     xSpeller;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
+    css::uno::Reference< css::linguistic2::XSpellAlternatives > xSpellAlt;
 
     bool bIsGrammarCheck;
 
-    SwSpellArgs(::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XSpellChecker1 > &rxSplChk,
+    SwSpellArgs(css::uno::Reference<
+            css::linguistic2::XSpellChecker1 > &rxSplChk,
             SwTextNode* pStart, SwIndex& rStart,
             SwTextNode* pEnd, SwIndex& rEnd,
             bool bGrammar )
