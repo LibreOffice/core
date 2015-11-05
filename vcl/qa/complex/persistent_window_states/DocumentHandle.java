@@ -22,12 +22,14 @@ import helper.WindowListener;
 
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.WindowEvent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XFrame;
+import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
@@ -42,7 +44,7 @@ public class DocumentHandle {
     // the current window
     private XWindow xWin = null;
     // a own window listener
-    private final WindowListener wl;
+    private final MyWindowListener wl;
 
     /**
      * Constructor
@@ -50,7 +52,7 @@ public class DocumentHandle {
      */
     public DocumentHandle(XComponentLoader xCompLoader) {
         this.xCompLoader = xCompLoader;
-        wl = new WindowListener();
+        wl = new MyWindowListener();
     }
 
     /**
@@ -61,7 +63,7 @@ public class DocumentHandle {
      */
     public Rectangle loadDocument(XMultiServiceFactory xMSF, String docName, boolean hidden)
                                                             throws Exception{
-        wl.resetTrigger();
+        wl.resizedTrigger = false;
         try {
             PropertyValue [] szArgs = null;
             if (hidden) {
@@ -140,10 +142,36 @@ public class DocumentHandle {
      * @return True if resize worked.
      */
     private boolean resizeDocument(XMultiServiceFactory xMSF, Rectangle newPosSize){
-        wl.resetTrigger();
+        wl.resizedTrigger = false;
         xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
                                     newPosSize.Height, PosSize.POSSIZE);
         util.utils.waitForEventIdle(xMSF);
         return wl.resizedTrigger;
+    }
+
+    private static class MyWindowListener implements com.sun.star.awt.XWindowListener {
+        // resize called
+        public boolean resizedTrigger = false;
+
+        @Override
+        public void disposing(EventObject eventObject) {
+        }
+
+        @Override
+        public void windowHidden(EventObject eventObject) {
+        }
+
+        @Override
+        public void windowMoved(WindowEvent eventObject) {
+        }
+
+        @Override
+        public void windowResized(WindowEvent eventObject) {
+            resizedTrigger = true;
+        }
+
+        @Override
+        public void windowShown(EventObject eventObject) {
+        }
     }
 }
