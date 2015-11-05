@@ -85,7 +85,7 @@ public class _XFootnote extends MultiMethodTest {
         String res = oObj.getLabel();
 
         log.println("verify setLabel result");
-        result = (res.equals(str));
+        result = res.equals(str);
         if (result) {
             log.println(" ... setLabel() - OK");
         }

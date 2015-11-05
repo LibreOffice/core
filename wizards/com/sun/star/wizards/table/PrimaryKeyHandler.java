@@ -420,17 +420,17 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         }
         else if (optUseExisting.getState())
         {
-            return (new String[]
+            return new String[]
                     {
                         lstSinglePrimeKey.getSelectedItem()
-                    });
+                    };
         }
         else if (optAddAutomatically.getState())
         {
-            return (new String[]
+            return new String[]
                     {
                         SAUTOMATICKEYFIELDNAME
-                    });
+                    };
         }
         return null;
     }

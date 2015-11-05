@@ -116,7 +116,7 @@ public class _XWarningsSupplier extends MultiMethodTest {
         try {
             oObj.clearWarnings();
             Object warns = oObj.getWarnings();
-            res = (utils.isVoid(warns));
+            res = utils.isVoid(warns);
         } catch (SQLException e) {
             log.println("Exception occurred :");
             e.printStackTrace(log);

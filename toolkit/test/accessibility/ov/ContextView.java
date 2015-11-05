@@ -112,7 +112,7 @@ public class ContextView
     @Override
     public String GetTitle ()
     {
-        return ("Context");
+        return "Context";
     }
 
     /** Listen for changes regarding displayed values.

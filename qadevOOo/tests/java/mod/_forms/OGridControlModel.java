@@ -229,7 +229,7 @@ class OGridControlModelold extends TestCase {
     */
     @Override
     protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
-        SOfficeFactory SOF = SOfficeFactory.getFactory((tParam.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
         log.println("creating a draw document");
         xDrawDoc = SOF.createDrawDoc(null);
     }

@@ -118,7 +118,7 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
             throw newEx;
         }
 
-        return (bytesRead);
+        return bytesRead;
     }
 
     @Override

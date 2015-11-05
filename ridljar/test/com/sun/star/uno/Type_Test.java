@@ -49,9 +49,7 @@ public final class Type_Test {
         assertSame(
             "sequence of sequence of XComponentContext",
             XComponentContext[][].class,
-            (new Type(
-                "[][]com.sun.star.uno.XComponentContext", TypeClass.SEQUENCE).
-             getZClass()));
+            new Type("[][]com.sun.star.uno.XComponentContext", TypeClass.SEQUENCE).getZClass());
         assertSame(
             "enum TypeClass", TypeClass.class,
             new Type("com.sun.star.uno.TypeClass", TypeClass.ENUM).getZClass());
@@ -60,27 +58,20 @@ public final class Type_Test {
             new Type("com.sun.star.uno.Uik", TypeClass.STRUCT).getZClass());
         assertSame(
             "exception Exception", com.sun.star.uno.Exception.class,
-            (new Type("com.sun.star.uno.Exception", TypeClass.EXCEPTION).
-             getZClass()));
+            new Type("com.sun.star.uno.Exception", TypeClass.EXCEPTION).getZClass());
         assertSame(
             "exception RuntimeException",
             com.sun.star.uno.RuntimeException.class,
-            (new Type("com.sun.star.uno.RuntimeException", TypeClass.EXCEPTION).
-             getZClass()));
+            new Type("com.sun.star.uno.RuntimeException", TypeClass.EXCEPTION).getZClass());
         assertSame(
             "exception DeploymentException", DeploymentException.class,
-            (new Type(
-                "com.sun.star.uno.DeploymentException", TypeClass.EXCEPTION).
-             getZClass()));
+            new Type("com.sun.star.uno.DeploymentException", TypeClass.EXCEPTION).getZClass());
         assertSame(
             "interface XInterface", XInterface.class,
-            (new Type("com.sun.star.uno.XInterface", TypeClass.INTERFACE).
-             getZClass()));
+            new Type("com.sun.star.uno.XInterface", TypeClass.INTERFACE).getZClass());
         assertSame(
             "interface XComponentContext", XComponentContext.class,
-            (new Type(
-                "com.sun.star.uno.XComponentContext", TypeClass.INTERFACE).
-             getZClass()));
+            new Type("com.sun.star.uno.XComponentContext", TypeClass.INTERFACE). getZClass());
 
         assertSame(boolean.class, new Type(boolean.class).getZClass());
         assertSame(boolean.class, new Type(Boolean.class).getZClass());

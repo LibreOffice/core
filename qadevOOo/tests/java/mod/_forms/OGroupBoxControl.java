@@ -73,7 +73,7 @@ public class OGroupBoxControl extends TestCase {
      */
     @Override
     protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
-        SOfficeFactory SOF = SOfficeFactory.getFactory((Param.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
 
         log.println("creating a textdocument");
         xTextDoc = SOF.createTextDoc(null);

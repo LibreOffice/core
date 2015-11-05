@@ -241,7 +241,7 @@ public class AggregateComponent extends ControlScroller
                 oControlRow = ControlRowVector.get(fieldcount);
                 oControlRow.setVisible(false);
             }
-            super.setScrollValue(getScrollValue() - 1, (fieldcount));
+            super.setScrollValue(getScrollValue() - 1, fieldcount);
             super.unregisterControlGroup(fieldcount);
 
         }

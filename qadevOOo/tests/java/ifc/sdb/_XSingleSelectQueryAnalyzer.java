@@ -123,7 +123,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         try{
             String filter = "\"Identifier\" = 'BOR02b'";
             xComposer.setFilter(filter);
-            tRes.tested("getFilter()", (oObj.getFilter().equals(filter)));
+            tRes.tested("getFilter()", oObj.getFilter().equals(filter));
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -154,7 +154,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
             PropertyValue[][] aStructuredFilter = oObj.getStructuredFilter();
             xComposer.setFilter("");
             xComposer.setStructuredFilter(aStructuredFilter);
-            tRes.tested("getStructuredFilter()", (oObj.getFilter().equals(complexFilter)));
+            tRes.tested("getStructuredFilter()", oObj.getFilter().equals(complexFilter));
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -173,7 +173,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         try{
             String group = "\"Identifier\"";
             xComposer.setGroup(group);
-            tRes.tested("getGroup()", (oObj.getGroup().equals(group)));
+            tRes.tested("getGroup()", oObj.getGroup().equals(group));
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -210,8 +210,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         try{
             String clause = "\"Identifier\" = 'BOR02b'";
             xComposer.setHavingClause(clause);
-            tRes.tested("getHavingClause()", (
-                                        oObj.getHavingClause().equals(clause)));
+            tRes.tested("getHavingClause()", oObj.getHavingClause().equals(clause));
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -242,7 +241,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
            xComposer.setHavingClause("");
            xComposer.setStructuredHavingClause(aStructuredHaving);
            tRes.tested("getStructuredHavingClause()",
-                                (oObj.getHavingClause().equals(complexFilter)));
+                                oObj.getHavingClause().equals(complexFilter));
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -258,7 +257,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
         try{
             String order = "\"Identifier\"";
             xComposer.setOrder(order);
-            tRes.tested("getOrder()", (oObj.getOrder().equals(order)));
+            tRes.tested("getOrder()", oObj.getOrder().equals(order));
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());

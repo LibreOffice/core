@@ -78,7 +78,7 @@ public class WeakBase implements XWeak, XTypeProvider
                 for(int i = 0; i < interfaces.length; ++ i)
                 {
                     // Test if it is a UNO interface
-                    if (com.sun.star.uno.XInterface.class.isAssignableFrom((interfaces[i])))
+                    if (com.sun.star.uno.XInterface.class.isAssignableFrom(interfaces[i]))
                         vec.add(new Type(interfaces[i]));
                 }
                 // get the superclass the currentClass inherits from

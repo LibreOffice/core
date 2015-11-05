@@ -127,8 +127,7 @@ public final class TypeDescription_Test {
     @Test public void testUnsigned() throws ClassNotFoundException {
         assertEquals(
             "TypeDescription for UNSIGNED LONG", "unsigned long",
-            (TypeDescription.getTypeDescription(Type.UNSIGNED_LONG).
-             getTypeName()));
+            TypeDescription.getTypeDescription(Type.UNSIGNED_LONG).getTypeName());
     }
 
     @Test public void testGetMethodDescription() {
@@ -139,8 +138,7 @@ public final class TypeDescription_Test {
     @Test public void testSequence() throws ClassNotFoundException {
         assertEquals(
             "unsigned short",
-            (TypeDescription.getTypeDescription("[]unsigned short").
-             getComponentType().getTypeName()));
+            TypeDescription.getTypeDescription("[]unsigned short").getComponentType().getTypeName());
     }
 
     public interface XBase extends XInterface {

@@ -119,7 +119,7 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
 
         while (!done) {
             String[] HangulHanja = getLeftAndRight(counter, xSheet);
-            done = (HangulHanja[0].equals(""));
+            done = HangulHanja[0].equals("");
             counter++;
 
             if (!done) {

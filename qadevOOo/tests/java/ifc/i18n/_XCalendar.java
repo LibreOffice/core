@@ -324,7 +324,7 @@ public class _XCalendar extends MultiMethodTest {
                 log.println("*** " + lang + " ... FAILED ***");
                 log.println(error);
             }
-            res &= (error.equals(""));
+            res &= error.equals("");
         }
 
         tRes.tested("setValue()", res);

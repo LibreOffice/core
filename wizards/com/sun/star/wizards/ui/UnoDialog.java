@@ -194,7 +194,7 @@ public class UnoDialog
         XControl xControl2 = xDlgContainer.getControl(ControlName);
         XView xView = UnoRuntime.queryInterface(XView.class, xControl2);
         Size aSize = xView.getSize();
-        double dblMAPWidth = (((Integer) Helper.getUnoPropertyValue(xControl2.getModel(), PropertyNames.PROPERTY_WIDTH)).intValue());
+        double dblMAPWidth = ((Integer) Helper.getUnoPropertyValue(xControl2.getModel(), PropertyNames.PROPERTY_WIDTH)).intValue();
         return ((aSize.Width) / dblMAPWidth);
     }
 

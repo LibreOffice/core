@@ -117,7 +117,7 @@ public class SwXTextPortion extends TestCase {
         XEnumeration oEnum = oEnumA.createEnumeration();
 
         int n = 0;
-        while ((oEnum.hasMoreElements())) {
+        while (oEnum.hasMoreElements()) {
             param = (XInterface) AnyConverter.toObject(new Type(
                     XInterface.class), oEnum.nextElement());
             log.println("Element Nr.: " + n);

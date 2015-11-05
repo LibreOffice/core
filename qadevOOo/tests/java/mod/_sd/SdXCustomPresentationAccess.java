@@ -147,8 +147,7 @@ public class SdXCustomPresentationAccess extends TestCase {
 
         // INDEX : _XNameContainer
         log.println( "adding XNameContainerINDEX as mod relation to environment" );
-        tEnv.addObjRelation("XNameContainerINDEX",
-            (Integer.valueOf(THRCNT)).toString());
+        tEnv.addObjRelation("XNameContainerINDEX", Integer.valueOf(THRCNT).toString());
 
         // INSTANCEn : _XNameContainer; _XNameReplace
         log.println( "adding INSTANCEn as mod relation to environment" );

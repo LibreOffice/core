@@ -242,7 +242,7 @@ class CanvasShape
     */
     public boolean contains (int x, int y)
     {
-        return (maShape.contains (x,y));
+        return maShape.contains (x,y);
     }
 
     public void highlight ()

@@ -257,7 +257,7 @@ public class SwXMailMerge extends TestCase {
 
             String tmpDatabaseFile = tmpDatabaseUrl + databaseName + ".odb";
             System.out.println("try to delete '"+tmpDatabaseFile+"'");
-            utils.deleteFile((Param.getMSF()), tmpDatabaseFile);
+            utils.deleteFile(Param.getMSF(), tmpDatabaseFile);
 
 
             tmpDatabaseUrl = "sdbc:dbase:file:///" + tmpDatabaseUrl ;

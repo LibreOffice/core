@@ -73,7 +73,7 @@ public class _XDiagram extends MultiMethodTest {
 
         String stype = oObj.getDiagramType();
         log.println("Current Diagram Type is " + stype);
-        result = (stype.startsWith("com.sun.star.chart."));
+        result = stype.startsWith("com.sun.star.chart.");
 
         tRes.tested("getDiagramType()", result);
     }

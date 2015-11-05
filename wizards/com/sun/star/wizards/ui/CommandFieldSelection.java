@@ -331,7 +331,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         {
             return sCommandname.substring(sTablePrefix.length());
         }
-        else if ((sCommandname.startsWith(this.sQueryPrefix)))
+        else if (sCommandname.startsWith(this.sQueryPrefix))
         {
             return sCommandname.substring(sQueryPrefix.length());
         }

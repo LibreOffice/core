@@ -182,7 +182,7 @@ public class ReportFinalizer
     }
     public void initialize(RecordParser _CurDBMetaData)
     {
-        String FirstCommandName = (_CurDBMetaData.getIncludedCommandNames())[0];
+        String FirstCommandName = _CurDBMetaData.getIncludedCommandNames()[0];
         String DefaultName = Desktop.getUniqueName(_CurDBMetaData.getReportDocuments(), FirstCommandName);
         if (!DefaultName.equals(OldDefaultName))
         {

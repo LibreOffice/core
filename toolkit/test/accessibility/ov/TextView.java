@@ -110,7 +110,7 @@ public class TextView
     @Override
     public String GetTitle ()
     {
-        return ("Text");
+        return "Text";
     }
 
     @Override

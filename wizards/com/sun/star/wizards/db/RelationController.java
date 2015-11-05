@@ -55,7 +55,7 @@ public class RelationController extends CommandName
         try
         {
             ArrayList<String> aReferencedTableVector = new ArrayList<String>();
-            XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getExportedKeys((getCatalogName(this)), getSchemaName(), getTableName());
+            XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getExportedKeys(getCatalogName(this), getSchemaName(), getTableName());
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             while (xResultSet.next())
             {

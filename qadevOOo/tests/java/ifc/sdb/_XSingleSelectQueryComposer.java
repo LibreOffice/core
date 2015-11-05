@@ -128,7 +128,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         try{
             String filter = "\"Identifier\" = 'BOR02b'";
             oObj.setFilter(filter);
-            tRes.tested("setFilter()", (xQueryAna.getFilter().equals(filter)));
+            tRes.tested("setFilter()", xQueryAna.getFilter().equals(filter));
 
         } catch (SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -152,7 +152,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
             PropertyValue[][] aStructuredFilter = xQueryAna.getStructuredFilter();
             oObj.setFilter("");
             oObj.setStructuredFilter(aStructuredFilter);
-            tRes.tested("setStructuredFilter()", (xQueryAna.getFilter().equals(complexFilter)));
+            tRes.tested("setStructuredFilter()", xQueryAna.getFilter().equals(complexFilter));
 
         } catch (SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -312,7 +312,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         try{
             String group = "\"Identifier\"";
             oObj.setGroup(group);
-            tRes.tested("setGroup()", (xQueryAna.getGroup().equals(group)));
+            tRes.tested("setGroup()", xQueryAna.getGroup().equals(group));
 
         } catch (SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -330,8 +330,8 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         try{
             String clause = "\"Identifier\" = 'BOR02b'";
             oObj.setHavingClause(clause);
-            tRes.tested("setHavingClause()", (
-                                   xQueryAna.getHavingClause().equals(clause)));
+            tRes.tested("setHavingClause()",
+                                   xQueryAna.getHavingClause().equals(clause));
 
         } catch (SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -367,7 +367,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
            oObj.setHavingClause("");
            oObj.setStructuredHavingClause(aStructuredHaving);
            tRes.tested("setStructuredHavingClause()",
-                           (xQueryAna.getHavingClause().equals(complexFilter)));
+                           xQueryAna.getHavingClause().equals(complexFilter));
 
         } catch (SQLException e){
             log.println("unexpected Exception: " + e.toString());
@@ -509,7 +509,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         try{
             String order = "\"Identifier\"";
             oObj.setOrder(order);
-            tRes.tested("setOrder()", (xQueryAna.getOrder().equals(order)));
+            tRes.tested("setOrder()", xQueryAna.getOrder().equals(order));
 
         } catch (SQLException e){
             log.println("unexpected Exception: " + e.toString());

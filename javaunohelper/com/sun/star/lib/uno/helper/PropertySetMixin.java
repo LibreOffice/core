@@ -126,14 +126,14 @@ public final class PropertySetMixin {
         idlClass = getReflection(type.getTypeName());
         XTypeDescription ifc;
         try {
-            ifc = UnoRuntime.queryInterface(
-                XTypeDescription.class,
-                (UnoRuntime.queryInterface(
+            XHierarchicalNameAccess xhna = UnoRuntime.queryInterface(
                     XHierarchicalNameAccess.class,
                     context.getValueByName(
                         "/singletons/com.sun.star.reflection."
-                        + "theTypeDescriptionManager")).
-                 getByHierarchicalName(type.getTypeName())));
+                        + "theTypeDescriptionManager"));
+            ifc = UnoRuntime.queryInterface(
+                XTypeDescription.class,
+                xhna.getByHierarchicalName(type.getTypeName()));
         } catch (NoSuchElementException e) {
             throw new RuntimeException(e);
         }
@@ -636,9 +636,7 @@ public final class PropertySetMixin {
                         break;
                     }
                     attrAttribs |= n;
-                    t = (UnoRuntime.queryInterface(
-                             XStructTypeDescription.class, t)).
-                        getTypeArguments()[0];
+                    t = UnoRuntime.queryInterface(XStructTypeDescription.class, t).getTypeArguments()[0];
                 }
                 String name = members[i].getMemberName();
                 boolean present = true;

@@ -119,7 +119,7 @@ public class _XPropertyState extends MultiMethodTest {
             boolean result = true ;
             String localName = pName;
             if (localName == null) {
-                localName = (propertySetInfo.getProperties()[0]).Name;
+                localName = propertySetInfo.getProperties()[0].Name;
             }
             try {
                 propDef = oObj.getPropertyDefault(localName);
@@ -147,7 +147,7 @@ public class _XPropertyState extends MultiMethodTest {
 
             String localName = pName;
             if (localName == null) {
-                localName = (propertySetInfo.getProperties()[0]).Name;
+                localName = propertySetInfo.getProperties()[0].Name;
             }
 
             try {
@@ -175,7 +175,7 @@ public class _XPropertyState extends MultiMethodTest {
 
             String localName = pName;
             if (localName == null) {
-                localName = (propertySetInfo.getProperties()[0]).Name;
+                localName = propertySetInfo.getProperties()[0].Name;
             }
 
             try {

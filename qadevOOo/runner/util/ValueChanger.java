@@ -153,7 +153,7 @@ public class ValueChanger {
             com.sun.star.style.TabAlign TA1 = com.sun.star.style.TabAlign.CENTER;
             com.sun.star.style.TabAlign TA2 = com.sun.star.style.TabAlign.RIGHT;
 
-            if ((TSold.Alignment).equals(TA1))
+            if (TSold.Alignment.equals(TA1))
                 TS.Alignment = TA2;
             else
                 TS.Alignment = TA1;

@@ -192,7 +192,7 @@ public class ODatasourceBrowser extends TestCase {
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory((Param.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
 
         log.println("creating a text document");
         xTextDoc = SOF.createTextDoc(null);

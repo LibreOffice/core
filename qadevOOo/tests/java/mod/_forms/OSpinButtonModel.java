@@ -42,7 +42,7 @@ public class OSpinButtonModel extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) throws Exception {
 
         log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc((tParam.getMSF()));
+        xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
     }
 
     /**

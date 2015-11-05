@@ -537,7 +537,7 @@ public class utils {
     public static boolean isVoid(Object aObject) {
         if (aObject instanceof com.sun.star.uno.Any) {
             com.sun.star.uno.Any oAny = (com.sun.star.uno.Any) aObject;
-            return (oAny.getType().getTypeName().equals("void"));
+            return oAny.getType().getTypeName().equals("void");
         } else {
             return false;
         }

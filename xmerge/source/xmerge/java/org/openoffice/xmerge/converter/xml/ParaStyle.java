@@ -322,7 +322,7 @@ public class ParaStyle extends Style implements Cloneable {
     private void setAttribute(int attr, String value) {
         isSet[attr] = true;
         try {
-            this.value[attr] = (((conversionAlgorithm)algor[attr].newInstance())).I(value);
+            this.value[attr] = ((conversionAlgorithm)algor[attr].newInstance()).I(value);
         } catch (Exception e) {
             Debug.log(Debug.ERROR, "Instantiation error", e);
         }

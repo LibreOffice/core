@@ -116,7 +116,7 @@ public class FocusView
     @Override
     public String GetTitle ()
     {
-        return ("Focus");
+        return "Focus";
     }
 
     synchronized public void actionPerformed (ActionEvent aEvent)

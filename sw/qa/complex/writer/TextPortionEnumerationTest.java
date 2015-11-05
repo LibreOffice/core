@@ -253,7 +253,7 @@ abstract class ContentNode extends TreeNode
         return super.toString() + "\tcontent: " + m_Content;
     }
     boolean equals(ContentNode other) {
-        return (other.m_Content.equals(m_Content));
+        return other.m_Content.equals(m_Content);
     }
 }
 
@@ -4145,8 +4145,8 @@ public class TextPortionEnumerationTest
 
     static boolean eq(StringPair i_Left, StringPair i_Right)
     {
-        return ((i_Left.First).equals(i_Right.First)) &&
-            ((i_Left.Second).equals(i_Right.Second));
+        return (i_Left.First.equals(i_Right.First)) &&
+               (i_Left.Second.equals(i_Right.Second));
     }
 
     @BeforeClass public static void setUpConnection() throws Exception {

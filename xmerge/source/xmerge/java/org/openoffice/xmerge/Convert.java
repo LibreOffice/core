@@ -228,6 +228,6 @@ public class Convert implements Cloneable {
      */
     public Document getOfficeDocument(String name, InputStream is)
         throws IOException {
-        return(ci.getPluginFactory().createOfficeDocument(name, is));
+        return ci.getPluginFactory().createOfficeDocument(name, is);
     }
 }

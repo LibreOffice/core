@@ -704,7 +704,7 @@ public class LocalOfficeConnection
             if (unoPath == null)
                 throw new java.io.IOException( "UNO_PATH environment variable is not set (required system path to the office program directory)" );
 
-            cmdArray[0] = (new File(unoPath, OFFICE_APP_NAME)).getPath();
+            cmdArray[0] = new File(unoPath, OFFICE_APP_NAME).getPath();
             cmdArray[1] = "--nologo";
             cmdArray[2] = "--nodefault";
             if ( mConnType.equals( "pipe" ) )

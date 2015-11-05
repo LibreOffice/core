@@ -114,7 +114,7 @@ public final class ConverterInfoMgr {
     *          exist.
     */
    private static Iterator<ConverterInfo> getConverterInfoEnumeration() {
-      return (converterInfoList.iterator());
+      return converterInfoList.iterator();
    }
 
    /**

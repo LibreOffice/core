@@ -158,7 +158,7 @@ public class _XControl extends MultiMethodTest {
         requiredMethod("setModel()");
         XControlModel the_model = (XControlModel) tEnv.getObjRelation("MODEL");
         XControlModel get = oObj.getModel();
-        boolean res = (get.equals(the_model));
+        boolean res = get.equals(the_model);
         if (!res) {
             log.println("getting: "+get.toString());
             log.println("expected: "+the_model.toString());

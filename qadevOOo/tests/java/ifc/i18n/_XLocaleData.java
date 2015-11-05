@@ -233,7 +233,7 @@ public class _XLocaleData extends MultiMethodTest {
         for (int i=0;i<7;i++) {
             Implementation[] impl = oObj.getCollatorImplementations(getLocale(i));
             for (int j=0;j<impl.length;j++) {
-                if ((impl[j].unoID.equals(""))) {
+                if (impl[j].unoID.equals("")) {
                     printit = true;
                 }
                 res &= (!impl[j].unoID.equals(""));
@@ -258,7 +258,7 @@ public class _XLocaleData extends MultiMethodTest {
         for (int i=0;i<7;i++) {
             String[] str = oObj.getSearchOptions(getLocale(i));
             for (int j=0;j<str.length;j++) {
-                if ((str[j].equals(""))) {
+                if (str[j].equals("")) {
                     printit = true;
                 }
                 res &= (!str[j].equals(""));
@@ -283,7 +283,7 @@ public class _XLocaleData extends MultiMethodTest {
         for (int i=0;i<7;i++) {
             String[] str = oObj.getCollationOptions(getLocale(i));
             for (int j=0;j<str.length;j++) {
-                if ((str[j].equals(""))) {
+                if (str[j].equals("")) {
                     printit = true;
                 }
                 res &= (!str[j].equals(""));
@@ -308,7 +308,7 @@ public class _XLocaleData extends MultiMethodTest {
         for (int i=0;i<7;i++) {
             String[] str = oObj.getTransliterations(getLocale(i));
             for (int j=0;j<str.length;j++) {
-                if ((str[j].equals(""))) {
+                if (str[j].equals("")) {
                     printit = true;
                 }
                 res &= (!str[j].equals(""));
@@ -355,7 +355,7 @@ public class _XLocaleData extends MultiMethodTest {
         for (int i=0;i<7;i++) {
             String[] str = oObj.getReservedWord(getLocale(i));
             for (int j=0;j<str.length;j++) {
-                if ((str[j].equals(""))) {
+                if (str[j].equals("")) {
                     printit = true;
                 }
                 res &= (!str[j].equals(""));

@@ -91,11 +91,8 @@ public class TabController extends TestCase {
         XForm form = null;
 
         try {
-            form = (XForm) AnyConverter.toObject(new Type(XForm.class),
-                                                 (FormTools.getForms(
-                                                         WriterTools.getDrawPage(
-                                                                 xTextDoc)))
-                                                     .getByName("MyForm"));
+            Object temp = FormTools.getForms( WriterTools.getDrawPage(xTextDoc) ).getByName("MyForm");
+            form = (XForm) AnyConverter.toObject(new Type(XForm.class), temp);
         } catch (Exception e) {
             log.println("Couldn't get Form");
             e.printStackTrace(log);

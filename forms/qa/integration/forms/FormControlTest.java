@@ -669,7 +669,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     {
         try
         {
-            if ( ( "f_time" ).equals(fieldName) )
+            if ( "f_time".equals(fieldName) )
                 // http://bugs.mysql.com/bug.php?id=5681
                 return true;
             if (fieldName == null) {

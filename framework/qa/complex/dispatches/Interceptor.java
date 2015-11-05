@@ -304,6 +304,6 @@ public class Interceptor implements XDispatch,
     private boolean impl_match(String sVal1, String sVal2)
     {
         // TODO implement wildcard match
-        return (sVal1.equals(sVal2));
+        return sVal1.equals(sVal2);
     }
 }

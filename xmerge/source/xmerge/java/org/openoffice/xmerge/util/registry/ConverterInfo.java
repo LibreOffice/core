@@ -260,7 +260,7 @@ public class ConverterInfo {
      *          device mime-type.
      */
     public Iterator<String> getDeviceMime() {
-        return(piDeviceMime.iterator());
+        return piDeviceMime.iterator();
     }
 
     /**

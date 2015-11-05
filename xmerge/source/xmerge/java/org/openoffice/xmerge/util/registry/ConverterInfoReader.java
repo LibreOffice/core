@@ -247,6 +247,6 @@ public class ConverterInfoReader {
      * @return  An {@code Enumeration} of {@code ConverterInfo} objects.
      */
     public Iterator<ConverterInfo> getConverterInfoEnumeration() {
-       return (converterInfoList.iterator());
+       return converterInfoList.iterator();
     }
 }

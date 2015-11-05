@@ -76,7 +76,7 @@ public final class CharacterBaseParagraphMerge implements NodeMergeAlgorithm {
 
             int extraChar = 0;
             int orgDiffCount = diffCount;
-            TextNodeEntry orgTextNode = (orgNodeList.get(i));
+            TextNodeEntry orgTextNode = orgNodeList.get(i);
 
             Debug.log(Debug.INFO, "checking node " + (i + 1) + " of " + numNode);
 

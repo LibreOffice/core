@@ -88,7 +88,7 @@ public class InstCreator implements XInstCreator {
             XFootnotesSupplier oTTS = UnoRuntime.queryInterface(
                                 XFootnotesSupplier.class, xParent );
 
-            return( oTTS.getFootnotes() );
+            return oTTS.getFootnotes();
         }
 
         if ( iDsc instanceof TextSectionDsc ) {

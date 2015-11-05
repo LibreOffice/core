@@ -121,7 +121,7 @@ public class XMergeBridge {
                         origName=origName.substring(origName.lastIndexOf("/")+1,origName.length());
                     }
                     if (origName.lastIndexOf(".")>=0){
-                        name = origName.substring(0,(origName.lastIndexOf(".")));
+                        name = origName.substring(0, origName.lastIndexOf("."));
                     }
                     else{
                         name=origName;

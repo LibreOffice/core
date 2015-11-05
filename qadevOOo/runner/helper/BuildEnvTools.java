@@ -83,7 +83,7 @@ public class BuildEnvTools {
             error = true;
         }
 
-        mCygwin = (param.getBool(PropertyName.CYGWIN));
+        mCygwin = param.getBool(PropertyName.CYGWIN);
 
         if (error) {
             throw new ParameterNotFoundException(msg);

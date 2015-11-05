@@ -160,7 +160,7 @@ public class _XPersistObject extends MultiMethodTest {
 
                 persCopy.read(iStream);
 
-                bResult = ( persCopy.getServiceName().equals(sname) );
+                bResult = persCopy.getServiceName().equals(sname);
 
             }
 

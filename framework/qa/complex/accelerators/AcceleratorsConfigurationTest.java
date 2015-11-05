@@ -767,7 +767,7 @@ public class AcceleratorsConfigurationTest
 
     private XMultiServiceFactory getMSF()
     {
-        return(UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager()));
+        return UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
     }
 
     // setup and close connections

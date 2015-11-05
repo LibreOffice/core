@@ -95,7 +95,7 @@ public class _XPagePrintable extends MultiMethodTest {
         Boolean newlandscape = Boolean.valueOf(!landscape.booleanValue());
         PrintSettings[8].Value = newlandscape;
         oObj.setPagePrintSettings(PrintSettings);
-        res = (oObj.getPagePrintSettings()[8].Value.equals(newlandscape));
+        res = oObj.getPagePrintSettings()[8].Value.equals(newlandscape);
 
         tRes.tested("setPagePrintSettings()",res);
     }

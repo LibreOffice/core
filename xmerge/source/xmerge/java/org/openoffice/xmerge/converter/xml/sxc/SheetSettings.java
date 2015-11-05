@@ -89,7 +89,7 @@ public class SheetSettings implements OfficeConstants {
      * @return The position as a {@code Point}.
      */
     public Point getCursor() {
-        return (new Point(cursorX, cursorY));
+        return new Point(cursorX, cursorY);
     }
 
     /**
@@ -124,7 +124,7 @@ public class SheetSettings implements OfficeConstants {
      */
     public Point getSplit() {
 
-        return (new Point(splitPointX, splitPointY));
+        return new Point(splitPointX, splitPointY);
     }
 
     /**
@@ -134,7 +134,7 @@ public class SheetSettings implements OfficeConstants {
      */
     public Point getSplitType() {
 
-        return (new Point(splitTypeX, splitTypeY));
+        return new Point(splitTypeX, splitTypeY);
     }
 
     /**

@@ -133,7 +133,7 @@ public class KeyMapping
 
     public short mapIdentifier2Code(String sIdentifier)
     {
-        return (aIdentifierHashMap.get(sIdentifier)).shortValue();
+        return aIdentifierHashMap.get(sIdentifier).shortValue();
     }
 
     public String mapCode2Identifier(short nCode)

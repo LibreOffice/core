@@ -334,7 +334,7 @@ public class FilterComponent
     {
         boolean bisany = true;
         int ifilterstate = SOI_MATCHALL;
-        bisany = (this.optMatchAny.getState());
+        bisany = this.optMatchAny.getState();
         if (bisany)
         {
             ifilterstate = SOI_MATCHANY;
@@ -722,8 +722,8 @@ public class FilterComponent
                         Object oValue = Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue");
                         if (!AnyConverter.isVoid(oValue))
                         {
-                            String sValue = (String.valueOf(oValue));
-                            return (!sValue.equals(PropertyNames.EMPTY_STRING));
+                            String sValue = String.valueOf(oValue);
+                            return !sValue.equals(PropertyNames.EMPTY_STRING);
                         }
                     }
                 }
@@ -916,7 +916,7 @@ public class FilterComponent
         // TODO make a difference between Text and Numbers
         private Object getValue()
         {
-            return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue"));
+            return Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue");
         }
 
 

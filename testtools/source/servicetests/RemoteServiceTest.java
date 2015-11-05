@@ -20,6 +20,7 @@ package servicetests;
 
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
+import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.connection.Acceptor;
@@ -44,12 +45,11 @@ public final class RemoteServiceTest extends TestBase {
         Thread.sleep(5000); // wait for server to start accepting
         return new TestServiceFactory() {
                 public Object get() throws Exception {
-                    return (UnoUrlResolver.create(
-                                Bootstrap.createInitialComponentContext(null))).
-                        resolve(
-                            "uno:" + CONNECTION_DESCRIPTION + ";"
+                    XUnoUrlResolver resolver = UnoUrlResolver.create(Bootstrap.createInitialComponentContext(null));
+                    String sUrl = "uno:" + CONNECTION_DESCRIPTION + ";"
                             + PROTOCOL_DESCRIPTION
-                            + ";testtools.servicetests.TestService2");
+                            + ";testtools.servicetests.TestService2";
+                    return resolver.resolve(sUrl);
                 }
 
                 public void dispose() throws Exception {

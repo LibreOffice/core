@@ -95,7 +95,7 @@ public final class XmlUtil {
             case Node.ELEMENT_NODE:
                 Element oldElem = (Element)newNode;
                 String tagName  = newNode.getNodeName();
-                Element newElem = (docNode.createElement(tagName));
+                Element newElem = docNode.createElement(tagName);
 
                 // copy the attributes
                 NamedNodeMap attrs = oldElem.getAttributes();

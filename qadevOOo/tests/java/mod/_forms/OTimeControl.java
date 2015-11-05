@@ -95,7 +95,7 @@ public class OTimeControl extends TestCase {
      */
     @Override
     protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
-        SOfficeFactory SOF = SOfficeFactory.getFactory((Param.getMSF()));
+        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
 
         log.println("creating a textdocument");
         xTextDoc = SOF.createTextDoc(null);
@@ -217,7 +217,7 @@ public class OTimeControl extends TestCase {
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);
 
-        FormTools.switchDesignOf((Param.getMSF()), xTextDoc);
+        FormTools.switchDesignOf(Param.getMSF(), xTextDoc);
         util.utils.waitForEventIdle(Param.getMSF());
 
         return tEnv;

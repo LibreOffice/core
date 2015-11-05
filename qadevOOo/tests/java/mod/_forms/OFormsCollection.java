@@ -77,7 +77,7 @@ public class OFormsCollection extends TestCase {
     @Override
     protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         log.println("creating a draw document");
-        xDrawDoc = DrawTools.createDrawDoc((tParam.getMSF()));
+        xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
     }
 
     /**

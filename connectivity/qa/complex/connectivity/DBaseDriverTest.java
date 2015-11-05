@@ -55,16 +55,16 @@ public class DBaseDriverTest extends ComplexTestCase implements TestCase
 
     public void Functions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
-        DBaseStringFunctions aStringTest = new DBaseStringFunctions((param.getMSF()), this);
+        DBaseStringFunctions aStringTest = new DBaseStringFunctions(param.getMSF(), this);
         aStringTest.testFunctions();
 
-        DBaseNumericFunctions aNumericTest = new DBaseNumericFunctions((param.getMSF()), this);
+        DBaseNumericFunctions aNumericTest = new DBaseNumericFunctions(param.getMSF(), this);
         aNumericTest.testFunctions();
 
-        DBaseDateFunctions aDateTest = new DBaseDateFunctions((param.getMSF()), this);
+        DBaseDateFunctions aDateTest = new DBaseDateFunctions(param.getMSF(), this);
         aDateTest.testFunctions();
 
-        DBaseSqlTests aSqlTest = new DBaseSqlTests((param.getMSF()), this);
+        DBaseSqlTests aSqlTest = new DBaseSqlTests(param.getMSF(), this);
         aSqlTest.testFunctions();
     }
 }

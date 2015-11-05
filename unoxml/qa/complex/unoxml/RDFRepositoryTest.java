@@ -596,8 +596,7 @@ public class RDFRepositoryTest
                 throw new RuntimeException();
             }
             for (int i = 0; i < left.length; ++i) {
-                int eq = (left[i].getStringValue().compareTo(
-                            right[i].getStringValue()));
+                int eq = left[i].getStringValue().compareTo(right[i].getStringValue());
                 if (eq != 0) return eq;
             }
             return 0;

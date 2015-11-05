@@ -44,7 +44,7 @@ public class _XIntrospection extends MultiMethodTest {
     public void _inspect() {
        boolean result = true;
        XIntrospectionAccess xIA = oObj.inspect(oObj);
-       result = (xIA.hasMethod("acquire",1));
+       result = xIA.hasMethod("acquire",1);
        tRes.tested("inspect()",result);
     }
 

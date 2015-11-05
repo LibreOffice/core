@@ -216,7 +216,7 @@ public class GenericModelTest extends TestCase {
     @Override
     protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         log.println("creating a textdocument");
-        m_xTextDoc = WriterTools.createTextDoc((tParam.getMSF()));
+        m_xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
         m_ConnectionColsed = false;
         debug = tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
         m_propertiesToSet.clear();
@@ -392,7 +392,7 @@ public class GenericModelTest extends TestCase {
         utils.copyFile(xMSF, sourceTestDB, destTestDB);
 
         m_dbTools = new DBTools( xMSF );
-        String tmpDir = utils.getOfficeTemp((xMSF));
+        String tmpDir = utils.getOfficeTemp(xMSF);
 
         DBTools.DataSourceInfo srcInf = m_dbTools.newDataSourceInfo();
         srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);

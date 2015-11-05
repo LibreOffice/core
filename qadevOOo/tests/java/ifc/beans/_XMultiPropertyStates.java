@@ -155,8 +155,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
             the_first[0] = propName;
             log.println("Setting " + propName + " to default");
             oObj.setPropertiesToDefault(the_first);
-            result = (oObj.getPropertyStates(the_first)[0].equals
-                (PropertyState.DEFAULT_VALUE));
+            result = oObj.getPropertyStates(the_first)[0].equals(PropertyState.DEFAULT_VALUE);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("some properties seem to be unknown: " + e.toString());
         }

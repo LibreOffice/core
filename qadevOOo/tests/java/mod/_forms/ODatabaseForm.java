@@ -229,7 +229,7 @@ public class ODatabaseForm extends TestCase {
 
     @Override
     protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
-        tmpDir = utils.getOfficeTemp((tParam.getMSF()));
+        tmpDir = utils.getOfficeTemp(tParam.getMSF());
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
@@ -296,7 +296,7 @@ public class ODatabaseForm extends TestCase {
                 oldF = utils.getFullURL(origDB);
                 newF = utils.getOfficeTemp(tParam.getMSF()) + tableName +
                        ".dbf";
-            } while (!utils.tryOverwriteFile((tParam.getMSF()), oldF, newF) &&
+            } while (!utils.tryOverwriteFile(tParam.getMSF(), oldF, newF) &&
                      (uniqueSuffix++ < 50));
         }
     }
@@ -322,7 +322,7 @@ public class ODatabaseForm extends TestCase {
         }
 
         log.println("creating a text document");
-        xTextDoc = WriterTools.createTextDoc((Param.getMSF()));
+        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
 
         //initialize test table
         if (isMySQLDB) {
@@ -439,11 +439,8 @@ public class ODatabaseForm extends TestCase {
         formLoader.load();
 
         try {
-            oObj = (XForm) AnyConverter.toObject(new Type(XForm.class),
-                                                 (FormTools.getForms(
-                                                         WriterTools.getDrawPage(
-                                                                 xTextDoc)))
-                                                     .getByName("MyForm"));
+            Object temp1 = FormTools.getForms( WriterTools.getDrawPage(xTextDoc) ).getByName("MyForm");
+            oObj = (XForm) AnyConverter.toObject(new Type(XForm.class), temp1);
 
             XPropertySet xSetProp = UnoRuntime.queryInterface(
                                             XPropertySet.class, oObj);
