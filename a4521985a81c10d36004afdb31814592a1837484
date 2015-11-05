@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_86c4da40",
+        "filename": "xmerge/source/bridge/java/XMergeBridge.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-05T22:57:43Z",
+      "side": 1,
+      "message": "set newxos\u003dnull here so it wont\u0027t get flushed/closed again in the finally block (assuming doing so would not be good)",
+      "revId": "a4521985a81c10d36004afdb31814592a1837484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_66c1f62e",
+        "filename": "xmerge/source/bridge/java/XMergeBridge.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-05T22:57:43Z",
+      "side": 1,
+      "message": "set newxos\u003dnull here so it wont\u0027t get flushed/closed again in the finally block (assuming doing so would not be good)",
+      "revId": "a4521985a81c10d36004afdb31814592a1837484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_26c7ee46",
+        "filename": "xmerge/source/bridge/java/XMergeBridge.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-05T22:57:43Z",
+      "side": 1,
+      "message": "xis can never be null",
+      "revId": "a4521985a81c10d36004afdb31814592a1837484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
