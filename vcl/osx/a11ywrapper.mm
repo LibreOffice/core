@@ -83,27 +83,27 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     // Querying all supported interfaces
     try {
         // XAccessibleComponent
-        mpReferenceWrapper -> rAccessibleComponent = Reference < XAccessibleComponent > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleComponent.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleExtendedComponent
-        mpReferenceWrapper -> rAccessibleExtendedComponent = Reference < XAccessibleExtendedComponent > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleExtendedComponent.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleSelection
-        mpReferenceWrapper -> rAccessibleSelection = Reference< XAccessibleSelection > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleSelection.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleTable
-        mpReferenceWrapper -> rAccessibleTable = Reference < XAccessibleTable > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleTable.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleText
-        mpReferenceWrapper -> rAccessibleText = Reference < XAccessibleText > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleText.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleEditableText
-        mpReferenceWrapper -> rAccessibleEditableText = Reference < XAccessibleEditableText > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleEditableText.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleValue
-        mpReferenceWrapper -> rAccessibleValue = Reference < XAccessibleValue > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleValue.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleAction
-        mpReferenceWrapper -> rAccessibleAction = Reference < XAccessibleAction > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleAction.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleTextAttributes
-        mpReferenceWrapper -> rAccessibleTextAttributes = Reference < XAccessibleTextAttributes > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleTextAttributes.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleMultiLineText
-        mpReferenceWrapper -> rAccessibleMultiLineText = Reference < XAccessibleMultiLineText > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleMultiLineText.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleTextMarkup
-        mpReferenceWrapper -> rAccessibleTextMarkup = Reference < XAccessibleTextMarkup > ( rxAccessibleContext, UNO_QUERY );
+        mpReferenceWrapper->rAccessibleTextMarkup.set( rxAccessibleContext, UNO_QUERY );
         // XAccessibleEventBroadcaster
         #if 0
         /* #i102033# NSAccessibility does not seemt to know an equivalent for transient children.
@@ -313,7 +313,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
         if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
             for ( int index = 0; index < relationMemberOf.TargetSet.getLength(); index++ ) {
-                Reference < XAccessible > rMateAccessible = Reference < XAccessible > ( relationMemberOf.TargetSet[index], UNO_QUERY );
+                Reference < XAccessible > rMateAccessible( relationMemberOf.TargetSet[index], UNO_QUERY );
                 if ( rMateAccessible.is() ) {
                     Reference< XAccessibleContext > rMateAccessibleContext( rMateAccessible -> getAccessibleContext() );
                     if ( rMateAccessibleContext.is() ) {

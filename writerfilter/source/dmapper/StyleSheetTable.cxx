@@ -975,11 +975,11 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     else
                     {
                         bInsert = true;
-                        xStyle = uno::Reference< style::XStyle >(xDocFactory->createInstance(
-                                    bParaStyle ?
+                        xStyle.set(xDocFactory->createInstance(
+                                     bParaStyle ?
                                         getPropertyName( PROP_SERVICE_PARA_STYLE ) :
                                         (bListStyle ? OUString("com.sun.star.style.NumberingStyle") : getPropertyName( PROP_SERVICE_CHAR_STYLE ))),
-                                        uno::UNO_QUERY_THROW);
+                                   uno::UNO_QUERY_THROW);
 
                         // Numbering styles have to be inserted early, as e.g. the NumberingRules property is only available after insertion.
                         if (bListStyle)
@@ -1493,7 +1493,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     try{
         if(!m_pImpl->m_xTextDefaults.is())
         {
-            m_pImpl->m_xTextDefaults = uno::Reference< beans::XPropertySet>(
+            m_pImpl->m_xTextDefaults.set(
                 m_pImpl->m_rDMapper.GetTextFactory()->createInstance("com.sun.star.text.Defaults"),
                 uno::UNO_QUERY_THROW );
         }

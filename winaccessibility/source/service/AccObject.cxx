@@ -160,7 +160,7 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
     ImplInitializeCreateObj();
 
     m_xAccContextRef = m_xAccRef->getAccessibleContext();
-    m_xAccActionRef = Reference< XAccessibleAction > (m_xAccContextRef,UNO_QUERY);
+    m_xAccActionRef.set(m_xAccContextRef,UNO_QUERY);
     m_accRole = m_xAccContextRef -> getAccessibleRole();
     if( m_pIMAcc )
     {
@@ -302,7 +302,7 @@ void AccObject::UpdateDescription()
    */
 void  AccObject::UpdateAction()
 {
-    m_xAccActionRef = Reference< XAccessibleAction > (m_xAccContextRef,UNO_QUERY);
+    m_xAccActionRef.set(m_xAccContextRef,UNO_QUERY);
 
     if( m_xAccActionRef.is() && m_pIMAcc )
     {

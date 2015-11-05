@@ -502,9 +502,8 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
             {
                 uno::Sequence< OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFirstPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
-                m_aFirstPageStyle = uno::Reference< beans::XPropertySet > (
-                        xTextFactory->createInstance("com.sun.star.style.PageStyle"),
-                        uno::UNO_QUERY);
+                m_aFirstPageStyle.set( xTextFactory->createInstance("com.sun.star.style.PageStyle"),
+                                       uno::UNO_QUERY);
 
                 // Call insertByName() before GetPageStyle(), otherwise the
                 // first and the follow page style will have the same name, and
@@ -530,9 +529,8 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
             {
                 uno::Sequence< OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFollowPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
-                m_aFollowPageStyle = uno::Reference< beans::XPropertySet > (
-                        xTextFactory->createInstance("com.sun.star.style.PageStyle"),
-                        uno::UNO_QUERY);
+                m_aFollowPageStyle.set( xTextFactory->createInstance("com.sun.star.style.PageStyle"),
+                                        uno::UNO_QUERY);
                 xPageStyles->insertByName( m_sFollowPageStyleName, uno::makeAny(m_aFollowPageStyle) );
             }
             else if(!m_aFollowPageStyle.is() && xPageStyles.is() )
@@ -959,10 +957,10 @@ uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection,
     {
         uno::Reference<container::XEnumerationAccess> xEnumAccess(rDM_Impl.GetBodyText(), uno::UNO_QUERY_THROW);
         uno::Reference<container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
-        xRangeProperties = uno::Reference<beans::XPropertySet>(xEnum->nextElement(), uno::UNO_QUERY_THROW);
+        xRangeProperties.set(xEnum->nextElement(), uno::UNO_QUERY_THROW);
     }
     else if (xStartingRange.is())
-        xRangeProperties = uno::Reference<beans::XPropertySet>(xStartingRange, uno::UNO_QUERY_THROW);
+        xRangeProperties.set(xStartingRange, uno::UNO_QUERY_THROW);
     return xRangeProperties;
 }
 
@@ -1036,12 +1034,12 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 uno::Reference< beans::XPropertySet > xRangeProperties;
                 if( m_xStartingRange.is() )
                 {
-                    xRangeProperties = uno::Reference< beans::XPropertySet >( m_xStartingRange, uno::UNO_QUERY_THROW );
+                    xRangeProperties.set( m_xStartingRange, uno::UNO_QUERY_THROW );
                 }
                 else
                 {
                     //set the start value at the beginning of the document
-                    xRangeProperties = uno::Reference< beans::XPropertySet >( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
+                    xRangeProperties.set( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
                 }
                 xRangeProperties->setPropertyValue( getPropertyName( PROP_PARA_LINE_NUMBER_START_VALUE ), uno::makeAny( m_nLnnMin ));
             }
@@ -1091,12 +1089,12 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         uno::Reference< beans::XPropertySet > xRangeProperties;
         if( m_xStartingRange.is() )
         {
-            xRangeProperties = uno::Reference< beans::XPropertySet >( m_xStartingRange, uno::UNO_QUERY_THROW );
+            xRangeProperties.set( m_xStartingRange, uno::UNO_QUERY_THROW );
         }
         else
         {
             //set the start value at the beginning of the document
-            xRangeProperties = uno::Reference< beans::XPropertySet >( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
+            xRangeProperties.set( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
         }
         xRangeProperties->setPropertyValue(getPropertyName(PROP_BREAK_TYPE), uno::makeAny(style::BreakType_COLUMN_BEFORE));
     }
@@ -1193,7 +1191,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         try
         {
             uno::Reference< beans::XPropertySet > xDocProperties;
-            xDocProperties = uno::Reference< beans::XPropertySet >( rDM_Impl.GetTextDocument(), uno::UNO_QUERY_THROW );
+            xDocProperties.set( rDM_Impl.GetTextDocument(), uno::UNO_QUERY_THROW );
             bool bSquaredPageMode = false;
             Insert(PROP_GRID_STANDARD_MODE, uno::makeAny( !bSquaredPageMode ));
             xDocProperties->setPropertyValue("DefaultPageMode", uno::makeAny( bSquaredPageMode ));

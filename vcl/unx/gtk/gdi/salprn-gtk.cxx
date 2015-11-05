@@ -895,7 +895,7 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
     uno::Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
     uno::Reference < XFrame > xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())
-        xFrame = uno::Reference < XFrame >(xDesktop, UNO_QUERY);
+        xFrame.set(xDesktop, UNO_QUERY);
 
     uno::Reference < XFilter > xFilter(
         ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.PDFFilter"),
@@ -908,7 +908,7 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
         if (xFrame.is())
             xController = xFrame->getController();
         if (xController.is())
-            xDoc = uno::Reference< XComponent >(xController->getModel(), UNO_QUERY);
+            xDoc.set(xController->getModel(), UNO_QUERY);
 
         SvFileStream aStream(rFileURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC);
         uno::Reference< XOutputStream > xOStm(new utl::OOutputStreamWrapper(aStream));
@@ -954,15 +954,15 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
                    uno::Reference< XNamed > xName;
 
                    if (xController.is())
-                       xSpreadsheetView = uno::Reference< XSpreadsheetView >(xController, UNO_QUERY);
+                       xSpreadsheetView.set(xController, UNO_QUERY);
                    if (xSpreadsheetView.is())
-                       xSheet = uno::Reference< XSpreadsheet>(xSpreadsheetView->getActiveSheet());
+                       xSheet.set(xSpreadsheetView->getActiveSheet());
                    if (xSheet.is())
-                       xName = uno::Reference < XNamed >(xSheet, UNO_QUERY);
+                       xName.set(xSheet, UNO_QUERY);
                    if (xName.is())
-                       xSheetDoc = uno::Reference< XSpreadsheetDocument >(xController->getModel(), UNO_QUERY);
+                       xSheetDoc.set(xController->getModel(), UNO_QUERY);
                    if (xSheetDoc.is())
-                       xSheets = uno::Reference< XIndexAccess >(xSheetDoc->getSheets(), UNO_QUERY);
+                       xSheets.set(xSheetDoc->getSheets(), UNO_QUERY);
                    if (xSheets.is())
                    {
                        const OUString &rName = xName->getName();

@@ -85,7 +85,7 @@ using namespace ::com::sun::star::uno;
             if ( rxParent.is() ) {
                 Reference < XAccessibleContext > rxContext = rxParent->getAccessibleContext();
                 if ( rxContext.is() && rxContext -> getAccessibleRole() == AccessibleRole::PANEL ) {
-                    Reference < XAccessibleComponent > rxComponent = Reference < XAccessibleComponent > ( rxParent -> getAccessibleContext(), UNO_QUERY );
+                    Reference < XAccessibleComponent > rxComponent( rxParent -> getAccessibleContext(), UNO_QUERY );
                     if ( rxComponent.is() ) {
                         rxComponent -> grabFocus();
                     }

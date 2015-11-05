@@ -242,7 +242,7 @@ DomainMapper_Impl::DomainMapper_Impl(
 {
     appendTableManager( );
     GetBodyText();
-    uno::Reference< text::XTextAppend > xBodyTextAppend = uno::Reference< text::XTextAppend >( m_xBodyText, uno::UNO_QUERY );
+    uno::Reference< text::XTextAppend > xBodyTextAppend( m_xBodyText, uno::UNO_QUERY );
     m_aTextAppendStack.push(TextAppendContext(xBodyTextAppend,
                 m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(m_xInsertTextRange)));
 
@@ -301,8 +301,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
 {
     if( !m_xDocumentSettings.is() && m_xTextFactory.is())
     {
-        m_xDocumentSettings = uno::Reference< beans::XPropertySet >(
-            m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
+        m_xDocumentSettings.set( m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
     }
     return m_xDocumentSettings;
 }
@@ -1447,7 +1446,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
             static const char sSectionService[] = "com.sun.star.text.TextSection";
             uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance(sSectionService), uno::UNO_QUERY_THROW );
             xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
-            xRet = uno::Reference< beans::XPropertySet > (xSection, uno::UNO_QUERY );
+            xRet.set(xSection, uno::UNO_QUERY );
         }
         catch(const uno::Exception&)
         {
@@ -1719,9 +1718,8 @@ void DomainMapper_Impl::PushAnnotation()
         m_bIsInComments = true;
         if (!GetTextFactory().is())
             return;
-        m_xAnnotationField = uno::Reference< beans::XPropertySet >( GetTextFactory()->createInstance(
-                "com.sun.star.text.TextField.Annotation" ),
-            uno::UNO_QUERY_THROW );
+        m_xAnnotationField.set( GetTextFactory()->createInstance( "com.sun.star.text.TextField.Annotation" ),
+                                uno::UNO_QUERY_THROW );
         uno::Reference< text::XText > xAnnotationText;
         m_xAnnotationField->getPropertyValue("TextRange") >>= xAnnotationText;
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ),
@@ -2607,16 +2605,14 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
     if(xFieldMasterAccess->hasByName(sFieldMasterName))
     {
         //get the master
-        xMaster = uno::Reference< beans::XPropertySet >(xFieldMasterAccess->getByName(sFieldMasterName),
-                                                                            uno::UNO_QUERY_THROW);
+        xMaster.set(xFieldMasterAccess->getByName(sFieldMasterName), uno::UNO_QUERY_THROW);
     }
     else
     {
         //create the master
-        xMaster = uno::Reference< beans::XPropertySet >(
-                m_xTextFactory->createInstance(sFieldMasterService), uno::UNO_QUERY_THROW);
+        xMaster.set( m_xTextFactory->createInstance(sFieldMasterService), uno::UNO_QUERY_THROW);
         //set the master's name
-            xMaster->setPropertyValue(
+        xMaster->setPropertyValue(
                     getPropertyName(PROP_NAME),
                     uno::makeAny(rFieldMasterName));
     }
@@ -3623,7 +3619,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     if (m_xTextFactory.is())
                     {
                         xFieldInterface = m_xTextFactory->createInstance(sServiceName);
-                        xFieldProperties = uno::Reference< beans::XPropertySet >( xFieldInterface, uno::UNO_QUERY_THROW);
+                        xFieldProperties.set( xFieldInterface, uno::UNO_QUERY_THROW);
                     }
                 }
                 switch( aIt->second.eFieldId )
@@ -4480,9 +4476,9 @@ void DomainMapper_Impl::PopFieldContext()
                 }
                 else
                 {
-                    xToInsert = uno::Reference< text::XTextContent >(pContext->GetTC(), uno::UNO_QUERY);
+                    xToInsert.set(pContext->GetTC(), uno::UNO_QUERY);
                     if( !xToInsert.is() && !m_bStartTOC && !m_bStartIndex && !m_bStartBibliography )
-                        xToInsert = uno::Reference< text::XTextContent >(pContext->GetTextField(), uno::UNO_QUERY);
+                        xToInsert.set( pContext->GetTextField(), uno::UNO_QUERY);
                     if( xToInsert.is() && !m_bStartTOC && !m_bStartIndex && !m_bStartBibliography)
                     {
                         PropertyMap aMap;

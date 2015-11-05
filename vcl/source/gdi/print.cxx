@@ -157,7 +157,7 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
             else
                 aVal.Value <<= OUString( "/org.openoffice.Office.Common/Print/Option/Printer" );
             aArgs.getArray()[0] <<= aVal;
-            xConfigAccess = Reference< XNameAccess >(
+            xConfigAccess.set(
                     xConfigProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationAccess", aArgs ),
                         UNO_QUERY );
