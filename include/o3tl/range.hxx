@@ -22,7 +22,7 @@
 
 
 #include <cstring>
-#include <boost/assert.hpp>
+#include <cassert>
 
 
 
@@ -106,8 +106,8 @@ range<T>::range( T i_inclusiveLowerBorder,
     :   nBegin(i_inclusiveLowerBorder),
         nEnd(i_exclusiveUpperBorder)
 {
-    BOOST_ASSERT(   nBegin <= nEnd
-                 && "Invalid parameters for range<> constructor.");
+    assert( nBegin <= nEnd
+            && "Invalid parameters for range<> constructor.");
 }
 
 template <class T>
@@ -133,8 +133,8 @@ template <class T>
 inline std::size_t
 range<T>::size() const
 {
-    BOOST_ASSERT(   nBegin <= nEnd
-                 && "Invalid range limits in range<>::size().");
+    assert( nBegin <= nEnd
+            && "Invalid range limits in range<>::size().");
     return static_cast<std::size_t>( end() - begin() );
 }
 
