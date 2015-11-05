@@ -446,18 +446,19 @@ const char* PowerPointExport::GetSideDirection( sal_uInt8 nDirection )
 {
     const char* pDirection = NULL;
 
-    switch( nDirection ) {
+    switch(nDirection)
+    {
     case 0:
-        pDirection = "r";
-        break;
-    case 1:
-        pDirection = "d";
-        break;
-    case 2:
         pDirection = "l";
         break;
-    case 3:
+    case 1:
         pDirection = "u";
+        break;
+    case 2:
+        pDirection = "r";
+        break;
+    case 3:
+        pDirection = "d";
         break;
     }
 
@@ -640,6 +641,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
         case PPT_TRANSITION_TYPE_NONE:
         default:
         nTransition = 0;
+        break;
     }
 
     if( nTransition )
