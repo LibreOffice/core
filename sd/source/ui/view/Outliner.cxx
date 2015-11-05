@@ -1384,7 +1384,7 @@ void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
 void Outliner::EnterEditMode (bool bGrabFocus)
 {
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
-    if (pOutlinerView != NULL)
+    if (pOutlinerView && mpTextObj)
     {
         pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1)));
         SetPaperSize( mpTextObj->GetLogicRect().GetSize() );
