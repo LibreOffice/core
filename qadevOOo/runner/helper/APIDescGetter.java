@@ -298,7 +298,7 @@ public class APIDescGetter extends DescGetter
                 }
                 if (aToken.hasMoreTokens())
                 {
-                    StringHelper.removeQuoteIfExists(aToken.nextToken());
+                    aToken.nextToken();
                 }
                 if (aToken.hasMoreTokens())
                 {
