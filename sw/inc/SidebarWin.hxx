@@ -177,6 +177,7 @@ class SwSidebarWin : public vcl::Window
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
 
         virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) override;
+        void PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
 
     protected:
         virtual void    DataChanged( const DataChangedEvent& aEvent) override;
