@@ -175,13 +175,13 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     rRenderContext.SetFont(aPaintFont);
 
     // size of region to be displayed
-    const long lDispW = aItem.lLeft + aItem.lHDist + ((aItem.nCols == 1)
-                            ? aItem.lLeft
-                            : ROUND(aItem.lHDist / 10.0));
+    const long lDispW = aItem.m_lLeft + aItem.m_lHDist + ((aItem.m_nCols == 1)
+                            ? aItem.m_lLeft
+                            : ROUND(aItem.m_lHDist / 10.0));
 
-    const long lDispH = aItem.lUpper + aItem.lVDist + ((aItem.nRows == 1)
-                            ? aItem.lUpper
-                            : ROUND(aItem.lVDist / 10.0));
+    const long lDispH = aItem.m_lUpper + aItem.m_lVDist + ((aItem.m_nRows == 1)
+                            ? aItem.m_lUpper
+                            : ROUND(aItem.m_lVDist / 10.0));
 
     // Scale factor
     const float fx = float(lOutWPix23) / std::max(1L, lDispW);
@@ -194,12 +194,12 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
     const long lX0 = (lOutWPix - lOutlineW) / 2;
     const long lY0 = (lOutHPix - lOutlineH) / 2;
-    const long lX1 = lX0 + ROUND(f *  aItem.lLeft );
-    const long lY1 = lY0 + ROUND(f *  aItem.lUpper);
-    const long lX2 = lX0 + ROUND(f * (aItem.lLeft  + aItem.lWidth ));
-    const long lY2 = lY0 + ROUND(f * (aItem.lUpper + aItem.lHeight));
-    const long lX3 = lX0 + ROUND(f * (aItem.lLeft  + aItem.lHDist ));
-    const long lY3 = lY0 + ROUND(f * (aItem.lUpper + aItem.lVDist ));
+    const long lX1 = lX0 + ROUND(f *  aItem.m_lLeft );
+    const long lY1 = lY0 + ROUND(f *  aItem.m_lUpper);
+    const long lX2 = lX0 + ROUND(f * (aItem.m_lLeft  + aItem.m_lWidth ));
+    const long lY2 = lY0 + ROUND(f * (aItem.m_lUpper + aItem.m_lHeight));
+    const long lX3 = lX0 + ROUND(f * (aItem.m_lLeft  + aItem.m_lHDist ));
+    const long lY3 = lY0 + ROUND(f * (aItem.m_lUpper + aItem.m_lVDist ));
 
     // draw outline (area)
     rRenderContext.DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
@@ -208,26 +208,26 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     rRenderContext.SetLineColor(rFieldTextColor);
     rRenderContext.DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Up
     rRenderContext.DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Left
-    if (aItem.nCols == 1)
+    if (aItem.m_nCols == 1)
         rRenderContext.DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Right
-    if (aItem.nRows == 1)
+    if (aItem.m_nRows == 1)
         rRenderContext.DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
 
     // Labels
     rRenderContext.SetClipRegion(vcl::Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
     rRenderContext.SetFillColor(COL_LIGHTGRAYBLUE);
-    const sal_Int32 nRows = std::min<sal_Int32>(2, aItem.nRows);
-    const sal_Int32 nCols = std::min<sal_Int32>(2, aItem.nCols);
+    const sal_Int32 nRows = std::min<sal_Int32>(2, aItem.m_nRows);
+    const sal_Int32 nCols = std::min<sal_Int32>(2, aItem.m_nCols);
     for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
         for (sal_Int32 nCol = 0; nCol < nCols; ++nCol)
-            rRenderContext.DrawRect(Rectangle(Point(lX0 + ROUND(f * (aItem.lLeft  + nCol * aItem.lHDist)),
-                                                    lY0 + ROUND(f * (aItem.lUpper + nRow * aItem.lVDist))),
-                                              Size(ROUND(f * aItem.lWidth),
-                                                   ROUND(f * aItem.lHeight))));
+            rRenderContext.DrawRect(Rectangle(Point(lX0 + ROUND(f * (aItem.m_lLeft  + nCol * aItem.m_lHDist)),
+                                                    lY0 + ROUND(f * (aItem.m_lUpper + nRow * aItem.m_lVDist))),
+                                              Size(ROUND(f * aItem.m_lWidth),
+                                                   ROUND(f * aItem.m_lHeight))));
     rRenderContext.SetClipRegion();
 
     // annotation: left border
-    if (aItem.lLeft)
+    if (aItem.m_lLeft)
     {
         long lX = (lX0 + lX1) / 2;
         DrawArrow(rRenderContext, Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), false);
@@ -236,10 +236,10 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     }
 
     // annotation: upper border
-    if (aItem.lUpper)
+    if (aItem.m_lUpper)
     {
         DrawArrow(rRenderContext, Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), false);
-        rRenderContext.DrawText(Point(lX0 - 10 - lUpperWidth, lY0 + ROUND(f*aItem.lUpper/2.0 - lXHeight/2.0)), aUpperStr);
+        rRenderContext.DrawText(Point(lX0 - 10 - lUpperWidth, lY0 + ROUND(f*aItem.m_lUpper/2.0 - lXHeight/2.0)), aUpperStr);
     }
 
     // annotation: width and height
@@ -255,7 +255,7 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     }
 
     // annotation: horizontal gap
-    if (aItem.nCols > 1)
+    if (aItem.m_nCols > 1)
     {
         long lX = (lX1 + lX3) / 2;
         DrawArrow(rRenderContext, Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), false);
@@ -264,10 +264,10 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     }
 
     // annotation: vertical gap
-    if (aItem.nRows > 1)
+    if (aItem.m_nRows > 1)
     {
         DrawArrow(rRenderContext, Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), false);
-        rRenderContext.DrawText(Point(lX0 - 10 - lVDistWidth, lY1 + ROUND(f*aItem.lVDist/2.0 - lXHeight/2.0)), aVDistStr);
+        rRenderContext.DrawText(Point(lX0 - 10 - lVDistWidth, lY1 + ROUND(f*aItem.m_lVDist/2.0 - lXHeight/2.0)), aVDistStr);
     }
 
     // annotation: columns
@@ -506,19 +506,19 @@ void SwLabFormatPage::FillItem(SwLabItem& rItem)
 {
     if (bModified)
     {
-        rItem.aMake = rItem.aType = SW_RESSTR(STR_CUSTOM);
+        rItem.m_aMake = rItem.m_aType = SW_RESSTR(STR_CUSTOM);
 
         SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
-        rItem.lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
-        rItem.lVDist  = rRec.lVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
-        rItem.lWidth  = rRec.lWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
-        rItem.lHeight = rRec.lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
-        rItem.lLeft   = rRec.lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
-        rItem.lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
-        rItem.nCols   = rRec.nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
-        rItem.nRows   = rRec.nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
-        rItem.lPWidth  = rRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
-        rItem.lPHeight = rRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
+        rItem.m_lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
+        rItem.m_lVDist  = rRec.lVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
+        rItem.m_lWidth  = rRec.lWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
+        rItem.m_lHeight = rRec.lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
+        rItem.m_lLeft   = rRec.lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
+        rItem.m_lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
+        rItem.m_nCols   = rRec.nCols   = static_cast< sal_Int32 >(m_pColsField->GetValue());
+        rItem.m_nRows   = rRec.nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
+        rItem.m_lPWidth  = rRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
+        rItem.m_lPHeight = rRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     }
 }
 
@@ -535,31 +535,31 @@ void SwLabFormatPage::Reset(const SfxItemSet* )
     // Initialise fields
     GetParentSwLabDlg()->GetLabItem(aItem);
 
-    m_pHDistField->SetMax(100 * aItem.lHDist , FUNIT_TWIP);
-    m_pVDistField->SetMax(100 * aItem.lVDist , FUNIT_TWIP);
-    m_pWidthField->SetMax(100 * aItem.lWidth , FUNIT_TWIP);
-    m_pHeightField->SetMax(100 * aItem.lHeight, FUNIT_TWIP);
-    m_pLeftField->SetMax(100 * aItem.lLeft  , FUNIT_TWIP);
-    m_pUpperField->SetMax(100 * aItem.lUpper , FUNIT_TWIP);
-    m_pPWidthField->SetMax(100 * aItem.lPWidth , FUNIT_TWIP);
-    m_pPHeightField->SetMax(100 * aItem.lPHeight, FUNIT_TWIP);
+    m_pHDistField->SetMax(100 * aItem.m_lHDist , FUNIT_TWIP);
+    m_pVDistField->SetMax(100 * aItem.m_lVDist , FUNIT_TWIP);
+    m_pWidthField->SetMax(100 * aItem.m_lWidth , FUNIT_TWIP);
+    m_pHeightField->SetMax(100 * aItem.m_lHeight, FUNIT_TWIP);
+    m_pLeftField->SetMax(100 * aItem.m_lLeft  , FUNIT_TWIP);
+    m_pUpperField->SetMax(100 * aItem.m_lUpper , FUNIT_TWIP);
+    m_pPWidthField->SetMax(100 * aItem.m_lPWidth , FUNIT_TWIP);
+    m_pPHeightField->SetMax(100 * aItem.m_lPHeight, FUNIT_TWIP);
 
-    SETFLDVAL(*m_pHDistField, aItem.lHDist );
-    SETFLDVAL(*m_pVDistField , aItem.lVDist );
-    SETFLDVAL(*m_pWidthField , aItem.lWidth );
-    SETFLDVAL(*m_pHeightField, aItem.lHeight);
-    SETFLDVAL(*m_pLeftField  , aItem.lLeft  );
-    SETFLDVAL(*m_pUpperField , aItem.lUpper );
-    SETFLDVAL(*m_pPWidthField , aItem.lPWidth );
-    SETFLDVAL(*m_pPHeightField, aItem.lPHeight);
+    SETFLDVAL(*m_pHDistField, aItem.m_lHDist );
+    SETFLDVAL(*m_pVDistField , aItem.m_lVDist );
+    SETFLDVAL(*m_pWidthField , aItem.m_lWidth );
+    SETFLDVAL(*m_pHeightField, aItem.m_lHeight);
+    SETFLDVAL(*m_pLeftField  , aItem.m_lLeft  );
+    SETFLDVAL(*m_pUpperField , aItem.m_lUpper );
+    SETFLDVAL(*m_pPWidthField , aItem.m_lPWidth );
+    SETFLDVAL(*m_pPHeightField, aItem.m_lPHeight);
 
-    m_pColsField->SetMax(aItem.nCols);
-    m_pRowsField->SetMax(aItem.nRows);
+    m_pColsField->SetMax(aItem.m_nCols);
+    m_pRowsField->SetMax(aItem.m_nRows);
 
-    m_pColsField->SetValue(aItem.nCols);
-    m_pRowsField->SetValue(aItem.nRows);
-    m_pMakeFI->SetText(aItem.aMake);
-    m_pTypeFI->SetText(aItem.aType);
+    m_pColsField->SetValue(aItem.m_nCols);
+    m_pRowsField->SetValue(aItem.m_nRows);
+    m_pMakeFI->SetText(aItem.m_aMake);
+    m_pTypeFI->SetText(aItem.m_aType);
     PreviewHdl(0);
 }
 
@@ -576,9 +576,9 @@ IMPL_LINK_NOARG_TYPED(SwLabFormatPage, SaveHdl, Button*, void)
     aRec.nRows   = static_cast< sal_Int32 >(m_pRowsField->GetValue());
     aRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
     aRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
-    aRec.bCont = aItem.bCont;
+    aRec.bCont = aItem.m_bCont;
     ScopedVclPtrInstance< SwSaveLabelDlg > pSaveDlg(this, aRec);
-    pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
+    pSaveDlg->SetLabel(aItem.m_aLstMake, aItem.m_aLstType);
     pSaveDlg->Execute();
     if(pSaveDlg->GetLabel(aItem))
     {
@@ -589,8 +589,8 @@ IMPL_LINK_NOARG_TYPED(SwLabFormatPage, SaveHdl, Button*, void)
         {
             rMakes = rMan;
         }
-        m_pMakeFI->SetText(aItem.aMake);
-        m_pTypeFI->SetText(aItem.aType);
+        m_pMakeFI->SetText(aItem.m_aMake);
+        m_pTypeFI->SetText(aItem.m_aType);
     }
 }
 
@@ -672,18 +672,18 @@ bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
 {
     if(bSuccess)
     {
-        rItem.aMake = m_pMakeCB->GetText();
-        rItem.aType = m_pTypeED->GetText();
-        rItem.lHDist  = rLabRec.lHDist;
-        rItem.lVDist  = rLabRec.lVDist;
-        rItem.lWidth  = rLabRec.lWidth;
-        rItem.lHeight = rLabRec.lHeight;
-        rItem.lLeft   = rLabRec.lLeft;
-        rItem.lUpper  = rLabRec.lUpper;
-        rItem.nCols   = rLabRec.nCols;
-        rItem.nRows   = rLabRec.nRows;
-        rItem.lPWidth  = rLabRec.lPWidth;
-        rItem.lPHeight = rLabRec.lPHeight;
+        rItem.m_aMake = m_pMakeCB->GetText();
+        rItem.m_aType = m_pTypeED->GetText();
+        rItem.m_lHDist  = rLabRec.lHDist;
+        rItem.m_lVDist  = rLabRec.lVDist;
+        rItem.m_lWidth  = rLabRec.lWidth;
+        rItem.m_lHeight = rLabRec.lHeight;
+        rItem.m_lLeft   = rLabRec.lLeft;
+        rItem.m_lUpper  = rLabRec.lUpper;
+        rItem.m_nCols   = rLabRec.nCols;
+        rItem.m_nRows   = rLabRec.nRows;
+        rItem.m_lPWidth  = rLabRec.lPWidth;
+        rItem.m_lPHeight = rLabRec.lPHeight;
     }
     return bSuccess;
 }

@@ -40,67 +40,67 @@ public:
 
     virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const override;
 
-    OUString   aLstMake; // remember last selection
-    OUString   aLstType;
-    OUString   sDBName;  // used database
+    OUString   m_aLstMake; // remember last selection
+    OUString   m_aLstType;
+    OUString   m_sDBName;  // used database
 
-    OUString   aWriting; // label
-    OUString   aMake;   // label mark
-    OUString   aType;   // label type
-    OUString   aBin;    // printer shaft
-    sal_Int32       lHDist;  // horizontal distance (user)
-    sal_Int32       lVDist;  // vertical distance (user)
-    sal_Int32       lWidth;  // width (user)
-    sal_Int32       lHeight;  // height (user)
-    sal_Int32       lLeft;   // left border (user)
-    sal_Int32       lUpper;  // upper border (user)
-    sal_Int32       nCols;   // number of columns (user)
-    sal_Int32       nRows;   // number of rows (user)
-    sal_Int32       nCol;    // column for single print
-    sal_Int32       nRow;    // row for single print
-    sal_Int32       lPHeight; // paper height
-    sal_Int32       lPWidth;  // paper width
-    bool        bAddr;// address as label?
-    bool        bCont;// continuous paper?
-    bool        bPage;// whole page or single labels?
-    bool        bSynchron;// synchronise all labels
+    OUString   m_aWriting; // label
+    OUString   m_aMake;   // label mark
+    OUString   m_aType;   // label type
+    OUString   m_aBin;    // printer shaft
+    sal_Int32       m_lHDist;  // horizontal distance (user)
+    sal_Int32       m_lVDist;  // vertical distance (user)
+    sal_Int32       m_lWidth;  // width (user)
+    sal_Int32       m_lHeight;  // height (user)
+    sal_Int32       m_lLeft;   // left border (user)
+    sal_Int32       m_lUpper;  // upper border (user)
+    sal_Int32       m_nCols;   // number of columns (user)
+    sal_Int32       m_nRows;   // number of rows (user)
+    sal_Int32       m_nCol;    // column for single print
+    sal_Int32       m_nRow;    // row for single print
+    sal_Int32       m_lPHeight; // paper height
+    sal_Int32       m_lPWidth;  // paper width
+    bool        m_bAddr;// address as label?
+    bool        m_bCont;// continuous paper?
+    bool        m_bPage;// whole page or single labels?
+    bool        m_bSynchron;// synchronise all labels
 
     //parts of the business card
-    OUString   aPrivFirstName;
-    OUString   aPrivName;
-    OUString   aPrivShortCut;
-    OUString   aPrivFirstName2;
-    OUString   aPrivName2;
-    OUString   aPrivShortCut2;
-    OUString   aPrivStreet;
-    OUString   aPrivZip;
-    OUString   aPrivCity;
-    OUString   aPrivCountry;
-    OUString   aPrivState;
-    OUString   aPrivTitle;
-    OUString   aPrivProfession;
-    OUString   aPrivPhone;
-    OUString   aPrivMobile;
-    OUString   aPrivFax;
-    OUString   aPrivWWW;
-    OUString   aPrivMail;
-    OUString   aCompCompany;
-    OUString   aCompCompanyExt;
-    OUString   aCompSlogan;
-    OUString   aCompStreet;
-    OUString   aCompZip;
-    OUString   aCompCity;
-    OUString   aCompCountry;
-    OUString   aCompState;
-    OUString   aCompPosition;
-    OUString   aCompPhone;
-    OUString   aCompMobile;
-    OUString   aCompFax;
-    OUString   aCompWWW;
-    OUString   aCompMail;
+    OUString   m_aPrivFirstName;
+    OUString   m_aPrivName;
+    OUString   m_aPrivShortCut;
+    OUString   m_aPrivFirstName2;
+    OUString   m_aPrivName2;
+    OUString   m_aPrivShortCut2;
+    OUString   m_aPrivStreet;
+    OUString   m_aPrivZip;
+    OUString   m_aPrivCity;
+    OUString   m_aPrivCountry;
+    OUString   m_aPrivState;
+    OUString   m_aPrivTitle;
+    OUString   m_aPrivProfession;
+    OUString   m_aPrivPhone;
+    OUString   m_aPrivMobile;
+    OUString   m_aPrivFax;
+    OUString   m_aPrivWWW;
+    OUString   m_aPrivMail;
+    OUString   m_aCompCompany;
+    OUString   m_aCompCompanyExt;
+    OUString   m_aCompSlogan;
+    OUString   m_aCompStreet;
+    OUString   m_aCompZip;
+    OUString   m_aCompCity;
+    OUString   m_aCompCountry;
+    OUString   m_aCompState;
+    OUString   m_aCompPosition;
+    OUString   m_aCompPhone;
+    OUString   m_aCompMobile;
+    OUString   m_aCompFax;
+    OUString   m_aCompWWW;
+    OUString   m_aCompMail;
 
-    OUString   sGlossaryGroup;
-    OUString   sGlossaryBlockName;
+    OUString   m_sGlossaryGroup;
+    OUString   m_sGlossaryBlockName;
 };
 
 class SwLabCfgItem : public utl::ConfigItem

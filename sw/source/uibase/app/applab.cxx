@@ -92,9 +92,9 @@ static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& 
 
     //anchor frame to page
     aSet.Put( SwFormatAnchor( FLY_AT_PAGE, nPhyPageNum ) );
-    aSet.Put( SwFormatHoriOrient( rItem.lLeft + static_cast<SwTwips>(nCol) * rItem.lHDist,
+    aSet.Put( SwFormatHoriOrient( rItem.m_lLeft + static_cast<SwTwips>(nCol) * rItem.m_lHDist,
                                text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
-    aSet.Put( SwFormatVertOrient( rItem.lUpper + static_cast<SwTwips>(nRow) * rItem.lVDist,
+    aSet.Put( SwFormatVertOrient( rItem.m_lUpper + static_cast<SwTwips>(nRow) * rItem.m_lVDist,
                                text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     const SwFrameFormat *pFormat = rSh.NewFlyFrm(aSet, true,  &rFormat );  // Insert Fly
     OSL_ENSURE( pFormat, "Fly not inserted" );
@@ -103,16 +103,16 @@ static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& 
 
     rSh.SetTextFormatColl( rSh.GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
 
-    if(!rItem.bSynchron || !(nCol|nRow))
+    if(!rItem.m_bSynchron || !(nCol|nRow))
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialog creation failed!");
         ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
         if ( fnSetActGroup )
-            (*fnSetActGroup)( rItem.sGlossaryGroup );
+            (*fnSetActGroup)( rItem.m_sGlossaryGroup );
         SwGlossaryHdl* pGlosHdl = rSh.GetView().GetGlosHdl();
-        pGlosHdl->SetCurGroup(rItem.sGlossaryGroup, true);
-        pGlosHdl->InsertGlossary( rItem.sGlossaryBlockName );
+        pGlosHdl->SetCurGroup(rItem.m_sGlossaryGroup, true);
+        pGlosHdl->InsertGlossary( rItem.m_sGlossaryBlockName );
     }
 
     return pFormat;
@@ -129,9 +129,9 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
 
     //anchor frame to page
     aSet.Put( SwFormatAnchor( FLY_AT_PAGE, nPhyPageNum ) );
-    aSet.Put( SwFormatHoriOrient( rItem.lLeft + static_cast<SwTwips>(nCol) * rItem.lHDist,
+    aSet.Put( SwFormatHoriOrient( rItem.m_lLeft + static_cast<SwTwips>(nCol) * rItem.m_lHDist,
                                text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
-    aSet.Put( SwFormatVertOrient( rItem.lUpper + static_cast<SwTwips>(nRow) * rItem.lVDist,
+    aSet.Put( SwFormatVertOrient( rItem.m_lUpper + static_cast<SwTwips>(nRow) * rItem.m_lVDist,
                                text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     const SwFrameFormat *pFormat = rSh.NewFlyFrm(aSet, true,  &rFormat );  // Insert Fly
     OSL_ENSURE( pFormat, "Fly not inserted" );
@@ -142,7 +142,7 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
 
     // If applicable "next dataset"
     OUString sDBName;
-    if( (!rItem.bSynchron || !(nCol|nRow)) && !(sDBName = InsertLabEnvText( rSh, rFieldMgr, rItem.aWriting )).isEmpty() && !bLast )
+    if( (!rItem.m_bSynchron || !(nCol|nRow)) && !(sDBName = InsertLabEnvText( rSh, rFieldMgr, rItem.m_aWriting )).isEmpty() && !bLast )
     {
         sDBName = comphelper::string::setToken(sDBName, 3, DB_DELIM, "True");
         SwInsertField_Data aData(TYP_DBNEXTSETFLD, 0, sDBName, aEmptyOUStr, 0, &rSh );
@@ -231,7 +231,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             SwWait aWait( static_cast<SwDocShell&>(*xDocSh), true );
 
             SET_CURR_SHELL(pSh);
-            pSh->SetLabelDoc(rItem.bSynchron);
+            pSh->SetLabelDoc(rItem.m_bSynchron);
             pSh->DoUndo( false );
             pSh->StartAllAction();
 
@@ -243,8 +243,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             // Borders
             SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
             SvxULSpaceItem aULMargin( RES_UL_SPACE );
-            aLRMargin.SetLeft ((sal_uInt16) rItem.lLeft );
-            aULMargin.SetUpper((sal_uInt16) rItem.lUpper);
+            aLRMargin.SetLeft ((sal_uInt16) rItem.m_lLeft );
+            aULMargin.SetUpper((sal_uInt16) rItem.m_lUpper);
             aLRMargin.SetRight( 0 );
             aULMargin.SetLower( 0 );
             rFormat.SetFormatAttr(aLRMargin);
@@ -260,8 +260,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
             // Set page size
             long lPgWidth, lPgHeight;
-            lPgWidth  = (rItem.lPWidth > MINLAY ? rItem.lPWidth : MINLAY);
-            lPgHeight = (rItem.lPHeight > MINLAY ? rItem.lPHeight : MINLAY);
+            lPgWidth  = (rItem.m_lPWidth > MINLAY ? rItem.m_lPWidth : MINLAY);
+            lPgHeight = (rItem.m_lPHeight > MINLAY ? rItem.m_lPHeight : MINLAY);
             rFormat.SetFormatAttr( SwFormatFrmSize( ATT_FIX_SIZE, lPgWidth, lPgHeight ));
             // Numbering type
             SvxNumberType aType;
@@ -278,7 +278,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             rFormat.SetFormatAttr(aItem);
 
             // Determine orientation of the resulting page
-            aDesc.SetLandscape(rItem.lPWidth > rItem.lPHeight);
+            aDesc.SetLandscape(rItem.m_lPWidth > rItem.m_lPHeight);
 
             pSh->ChgPageDesc( 0, aDesc );
 
@@ -288,10 +288,10 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
             // Prepare border template
             SwFrameFormat* pFormat = pSh->GetFrameFormatFromPool( RES_POOLFRM_LABEL );
-            sal_Int32 iResultWidth = rItem.lLeft + (rItem.nCols - 1) * rItem.lHDist + rItem.lWidth - rItem.lPWidth;
-            sal_Int32 iResultHeight = rItem.lUpper + (rItem.nRows - 1) * rItem.lVDist + rItem.lHeight - rItem.lPHeight;
-            sal_Int32 iWidth = (iResultWidth > 0 ? rItem.lWidth - (iResultWidth / rItem.nCols) - 1 : rItem.lWidth);
-            sal_Int32 iHeight = (iResultHeight > 0 ? rItem.lHeight - (iResultHeight / rItem.nRows) - 1 : rItem.lHeight);
+            sal_Int32 iResultWidth = rItem.m_lLeft + (rItem.m_nCols - 1) * rItem.m_lHDist + rItem.m_lWidth - rItem.m_lPWidth;
+            sal_Int32 iResultHeight = rItem.m_lUpper + (rItem.m_nRows - 1) * rItem.m_lVDist + rItem.m_lHeight - rItem.m_lPHeight;
+            sal_Int32 iWidth = (iResultWidth > 0 ? rItem.m_lWidth - (iResultWidth / rItem.m_nCols) - 1 : rItem.m_lWidth);
+            sal_Int32 iHeight = (iResultHeight > 0 ? rItem.m_lHeight - (iResultHeight / rItem.m_nRows) - 1 : rItem.m_lHeight);
             SwFormatFrmSize aFrmSize(  ATT_FIX_SIZE, iWidth, iHeight );
             pFormat->SetFormatAttr( aFrmSize );
 
@@ -302,26 +302,26 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             pFormat->SetFormatAttr( aFrmNoLRSpace );
 
             const SwFrameFormat *pFirstFlyFormat = 0;
-            if ( rItem.bPage )
+            if ( rItem.m_bPage )
             {
                 SwFormatVertOrient aFrmVertOrient( pFormat->GetVertOrient() );
                 aFrmVertOrient.SetVertOrient( text::VertOrientation::TOP );
                 pFormat->SetFormatAttr(aFrmVertOrient);
 
-                for ( sal_Int32 i = 0; i < rItem.nRows; ++i )
+                for ( sal_Int32 i = 0; i < rItem.m_nRows; ++i )
                 {
-                    for ( sal_Int32 j = 0; j < rItem.nCols; ++j )
+                    for ( sal_Int32 j = 0; j < rItem.m_nCols; ++j )
                     {
                         pSh->Push();
                         const SwFrameFormat *pTmp = ( bLabel ?
                                                  lcl_InsertLabText( *pSh, rItem, *pFormat, *pFieldMgr, j, i,
-                                                   i == rItem.nRows - 1 && j == rItem.nCols - 1 ) :
+                                                   i == rItem.m_nRows - 1 && j == rItem.m_nCols - 1 ) :
                                                  lcl_InsertBCText( *pSh, rItem, *pFormat, j, i ) );
                         if (!(i|j))
                         {
                             pFirstFlyFormat = pTmp;
 
-                            if (rItem.bSynchron)
+                            if (rItem.m_bSynchron)
                             {
                                 // if there is no content in the fly then
                                 // don't leave the fly!!!
@@ -341,7 +341,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                                 pSh->InsertSection(aSect);
                             }
                         }
-                        else if (rItem.bSynchron)
+                        else if (rItem.m_bSynchron)
                         {
                             SwSectionData aSect(FILE_LINK_SECTION,
                                     pSh->GetUniqueSectionName());
@@ -364,11 +364,11 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             {
                 pFirstFlyFormat = bLabel ?
                     lcl_InsertLabText( *pSh, rItem, *pFormat, *pFieldMgr,
-                            static_cast< sal_uInt16 >(rItem.nCol - 1),
-                            static_cast< sal_uInt16 >(rItem.nRow - 1), true ) :
+                            static_cast< sal_uInt16 >(rItem.m_nCol - 1),
+                            static_cast< sal_uInt16 >(rItem.m_nRow - 1), true ) :
                     lcl_InsertBCText(*pSh, rItem, *pFormat,
-                            static_cast< sal_uInt16 >(rItem.nCol - 1),
-                            static_cast< sal_uInt16 >(rItem.nRow - 1));
+                            static_cast< sal_uInt16 >(rItem.m_nCol - 1),
+                            static_cast< sal_uInt16 >(rItem.m_nRow - 1));
             }
 
             //fill the user fields
@@ -392,13 +392,13 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             pSh->DoUndo();
         }
 
-        if( rItem.aWriting.indexOf( '<' ) >= 0 )
+        if( rItem.m_aWriting.indexOf( '<' ) >= 0 )
         {
             // Open database browser on recently used database
             ShowDBObj( *pNewView, pSh->GetDBData() );
         }
 
-        if( rItem.bSynchron )
+        if( rItem.m_bSynchron )
         {
             SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
             assert(pDisp && "No dispatcher in frame?");

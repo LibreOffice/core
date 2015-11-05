@@ -34,23 +34,23 @@ using namespace ::com::sun::star::uno;
 SwLabItem::SwLabItem() :
 
     SfxPoolItem(FN_LABEL),
-    lLeft (0),
-    lUpper(0),
-    nCols (1),
-    nRows (1),
-    nCol  (1),
-    nRow  (1)
+    m_lLeft (0),
+    m_lUpper(0),
+    m_nCols (1),
+    m_nRows (1),
+    m_nCol  (1),
+    m_nRow  (1)
 {
-    bAddr     =
-    bCont     =
-    bSynchron = false;
-    bPage  = true;
-    lHDist   =
-    lVDist   =
-    lWidth   =
-    lHeight  =
-    lPWidth  =
-    lPHeight = 5669; // 10 cm
+    m_bAddr     =
+    m_bCont     =
+    m_bSynchron = false;
+    m_bPage  = true;
+    m_lHDist   =
+    m_lVDist   =
+    m_lWidth   =
+    m_lHeight  =
+    m_lPWidth  =
+    m_lPHeight = 5669; // 10 cm
 }
 
 SwLabItem::SwLabItem(const SwLabItem& rItem) :
@@ -61,63 +61,63 @@ SwLabItem::SwLabItem(const SwLabItem& rItem) :
 
 SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
 {
-    bAddr    = rItem.bAddr;
-    aWriting = rItem.aWriting;
-    bCont    = rItem.bCont;
-    sDBName  = rItem.sDBName;
-    aLstMake = rItem.aLstMake;
-    aLstType = rItem.aLstType;
-    aMake    = rItem.aMake;
-    aType    = rItem.aType;
-    bPage    = rItem.bPage;
-    bSynchron = rItem.bSynchron;
-    aBin     = rItem.aBin;
-    nCol     = rItem.nCol;
-    nRow     = rItem.nRow;
-    lHDist   = rItem.lHDist;
-    lVDist   = rItem.lVDist;
-    lWidth   = rItem.lWidth;
-    lHeight  = rItem.lHeight;
-    lLeft    = rItem.lLeft;
-    lUpper   = rItem.lUpper;
-    nCols    = rItem.nCols;
-    nRows    = rItem.nRows;
-    lPWidth  = rItem.lPWidth;
-    lPHeight = rItem.lPHeight;
-    aPrivFirstName =        rItem.aPrivFirstName;
-    aPrivName =             rItem.aPrivName;
-    aPrivShortCut =         rItem.aPrivShortCut;
-    aPrivFirstName2 =       rItem.aPrivFirstName2;
-    aPrivName2 =            rItem.aPrivName2;
-    aPrivShortCut2 =        rItem.aPrivShortCut2;
-    aPrivStreet =           rItem.aPrivStreet;
-    aPrivZip =              rItem.aPrivZip;
-    aPrivCity =             rItem.aPrivCity;
-    aPrivCountry =          rItem.aPrivCountry;
-    aPrivState =            rItem.aPrivState;
-    aPrivTitle =            rItem.aPrivTitle;
-    aPrivProfession =       rItem.aPrivProfession;
-    aPrivPhone =            rItem.aPrivPhone;
-    aPrivMobile =           rItem.aPrivMobile;
-    aPrivFax =              rItem.aPrivFax;
-    aPrivWWW =              rItem.aPrivWWW;
-    aPrivMail =             rItem.aPrivMail;
-    aCompCompany =          rItem.aCompCompany;
-    aCompCompanyExt =       rItem.aCompCompanyExt;
-    aCompSlogan =           rItem.aCompSlogan;
-    aCompStreet =           rItem.aCompStreet;
-    aCompZip =              rItem.aCompZip;
-    aCompCity =             rItem.aCompCity;
-    aCompCountry =          rItem.aCompCountry;
-    aCompState =            rItem.aCompState;
-    aCompPosition =         rItem.aCompPosition;
-    aCompPhone =            rItem.aCompPhone;
-    aCompMobile =           rItem.aCompMobile;
-    aCompFax =              rItem.aCompFax;
-    aCompWWW =              rItem.aCompWWW;
-    aCompMail =             rItem.aCompMail;
-    sGlossaryGroup =        rItem.sGlossaryGroup;
-    sGlossaryBlockName =    rItem.sGlossaryBlockName;
+    m_bAddr    = rItem.m_bAddr;
+    m_aWriting = rItem.m_aWriting;
+    m_bCont    = rItem.m_bCont;
+    m_sDBName  = rItem.m_sDBName;
+    m_aLstMake = rItem.m_aLstMake;
+    m_aLstType = rItem.m_aLstType;
+    m_aMake    = rItem.m_aMake;
+    m_aType    = rItem.m_aType;
+    m_bPage    = rItem.m_bPage;
+    m_bSynchron = rItem.m_bSynchron;
+    m_aBin     = rItem.m_aBin;
+    m_nCol     = rItem.m_nCol;
+    m_nRow     = rItem.m_nRow;
+    m_lHDist   = rItem.m_lHDist;
+    m_lVDist   = rItem.m_lVDist;
+    m_lWidth   = rItem.m_lWidth;
+    m_lHeight  = rItem.m_lHeight;
+    m_lLeft    = rItem.m_lLeft;
+    m_lUpper   = rItem.m_lUpper;
+    m_nCols    = rItem.m_nCols;
+    m_nRows    = rItem.m_nRows;
+    m_lPWidth  = rItem.m_lPWidth;
+    m_lPHeight = rItem.m_lPHeight;
+    m_aPrivFirstName =        rItem.m_aPrivFirstName;
+    m_aPrivName =             rItem.m_aPrivName;
+    m_aPrivShortCut =         rItem.m_aPrivShortCut;
+    m_aPrivFirstName2 =       rItem.m_aPrivFirstName2;
+    m_aPrivName2 =            rItem.m_aPrivName2;
+    m_aPrivShortCut2 =        rItem.m_aPrivShortCut2;
+    m_aPrivStreet =           rItem.m_aPrivStreet;
+    m_aPrivZip =              rItem.m_aPrivZip;
+    m_aPrivCity =             rItem.m_aPrivCity;
+    m_aPrivCountry =          rItem.m_aPrivCountry;
+    m_aPrivState =            rItem.m_aPrivState;
+    m_aPrivTitle =            rItem.m_aPrivTitle;
+    m_aPrivProfession =       rItem.m_aPrivProfession;
+    m_aPrivPhone =            rItem.m_aPrivPhone;
+    m_aPrivMobile =           rItem.m_aPrivMobile;
+    m_aPrivFax =              rItem.m_aPrivFax;
+    m_aPrivWWW =              rItem.m_aPrivWWW;
+    m_aPrivMail =             rItem.m_aPrivMail;
+    m_aCompCompany =          rItem.m_aCompCompany;
+    m_aCompCompanyExt =       rItem.m_aCompCompanyExt;
+    m_aCompSlogan =           rItem.m_aCompSlogan;
+    m_aCompStreet =           rItem.m_aCompStreet;
+    m_aCompZip =              rItem.m_aCompZip;
+    m_aCompCity =             rItem.m_aCompCity;
+    m_aCompCountry =          rItem.m_aCompCountry;
+    m_aCompState =            rItem.m_aCompState;
+    m_aCompPosition =         rItem.m_aCompPosition;
+    m_aCompPhone =            rItem.m_aCompPhone;
+    m_aCompMobile =           rItem.m_aCompMobile;
+    m_aCompFax =              rItem.m_aCompFax;
+    m_aCompWWW =              rItem.m_aCompWWW;
+    m_aCompMail =             rItem.m_aCompMail;
+    m_sGlossaryGroup =        rItem.m_sGlossaryGroup;
+    m_sGlossaryBlockName =    rItem.m_sGlossaryBlockName;
     return *this;
 }
 
@@ -125,63 +125,63 @@ bool SwLabItem::operator ==(const SfxPoolItem& rItem) const
 {
     const SwLabItem& rLab = static_cast<const SwLabItem&>( rItem);
 
-    return bAddr    == rLab.bAddr   &&
-           bCont    == rLab.bCont   &&
-           bPage    == rLab.bPage   &&
-           bSynchron == rLab.bSynchron &&
-           aBin     == rLab.aBin    &&
-           nCol     == rLab.nCol    &&
-           nRow     == rLab.nRow    &&
-           lHDist   == rLab.lHDist  &&
-           lVDist   == rLab.lVDist  &&
-           lWidth   == rLab.lWidth  &&
-           lHeight  == rLab.lHeight &&
-           lLeft    == rLab.lLeft   &&
-           lUpper   == rLab.lUpper  &&
-           nCols    == rLab.nCols   &&
-           nRows    == rLab.nRows   &&
-           lPWidth  == rLab.lPWidth &&
-           lPHeight == rLab.lPHeight&&
-           aWriting == rLab.aWriting&&
-           aMake    == rLab.aMake   &&
-           aType    == rLab.aType   &&
-           aLstMake == rLab.aLstMake&&
-           aLstType == rLab.aLstType&&
-           sDBName  == rLab.sDBName &&
-            aPrivFirstName ==       rLab.aPrivFirstName&&
-            aPrivName ==             rLab.aPrivName&&
-            aPrivShortCut ==         rLab.aPrivShortCut&&
-               aPrivFirstName2 ==        rLab.aPrivFirstName2&&
-            aPrivName2 ==            rLab.aPrivName2&&
-            aPrivShortCut2 ==        rLab.aPrivShortCut2&&
-            aPrivStreet ==           rLab.aPrivStreet&&
-            aPrivZip ==              rLab.aPrivZip&&
-            aPrivCity ==             rLab.aPrivCity&&
-            aPrivCountry ==          rLab.aPrivCountry&&
-            aPrivState ==            rLab.aPrivState&&
-            aPrivTitle ==            rLab.aPrivTitle&&
-            aPrivProfession ==       rLab.aPrivProfession&&
-            aPrivPhone ==            rLab.aPrivPhone&&
-            aPrivMobile ==           rLab.aPrivMobile&&
-            aPrivFax ==              rLab.aPrivFax&&
-            aPrivWWW ==              rLab.aPrivWWW&&
-            aPrivMail ==             rLab.aPrivMail&&
-            aCompCompany ==          rLab.aCompCompany&&
-            aCompCompanyExt ==       rLab.aCompCompanyExt&&
-            aCompSlogan ==           rLab.aCompSlogan&&
-            aCompStreet ==           rLab.aCompStreet&&
-            aCompZip ==              rLab.aCompZip&&
-            aCompCity ==             rLab.aCompCity&&
-            aCompCountry ==          rLab.aCompCountry&&
-            aCompState ==            rLab.aCompState&&
-            aCompPosition ==         rLab.aCompPosition&&
-            aCompPhone ==            rLab.aCompPhone&&
-            aCompMobile ==           rLab.aCompMobile&&
-            aCompFax ==              rLab.aCompFax&&
-            aCompWWW ==              rLab.aCompWWW&&
-            aCompMail ==             rLab.aCompMail &&
-            sGlossaryGroup ==        rLab.sGlossaryGroup &&
-            sGlossaryBlockName ==    rLab.sGlossaryBlockName;
+    return m_bAddr    == rLab.m_bAddr   &&
+           m_bCont    == rLab.m_bCont   &&
+           m_bPage    == rLab.m_bPage   &&
+           m_bSynchron == rLab.m_bSynchron &&
+           m_aBin     == rLab.m_aBin    &&
+           m_nCol     == rLab.m_nCol    &&
+           m_nRow     == rLab.m_nRow    &&
+           m_lHDist   == rLab.m_lHDist  &&
+           m_lVDist   == rLab.m_lVDist  &&
+           m_lWidth   == rLab.m_lWidth  &&
+           m_lHeight  == rLab.m_lHeight &&
+           m_lLeft    == rLab.m_lLeft   &&
+           m_lUpper   == rLab.m_lUpper  &&
+           m_nCols    == rLab.m_nCols   &&
+           m_nRows    == rLab.m_nRows   &&
+           m_lPWidth  == rLab.m_lPWidth &&
+           m_lPHeight == rLab.m_lPHeight&&
+           m_aWriting == rLab.m_aWriting&&
+           m_aMake    == rLab.m_aMake   &&
+           m_aType    == rLab.m_aType   &&
+           m_aLstMake == rLab.m_aLstMake&&
+           m_aLstType == rLab.m_aLstType&&
+           m_sDBName  == rLab.m_sDBName &&
+            m_aPrivFirstName ==       rLab.m_aPrivFirstName&&
+            m_aPrivName ==             rLab.m_aPrivName&&
+            m_aPrivShortCut ==         rLab.m_aPrivShortCut&&
+               m_aPrivFirstName2 ==        rLab.m_aPrivFirstName2&&
+            m_aPrivName2 ==            rLab.m_aPrivName2&&
+            m_aPrivShortCut2 ==        rLab.m_aPrivShortCut2&&
+            m_aPrivStreet ==           rLab.m_aPrivStreet&&
+            m_aPrivZip ==              rLab.m_aPrivZip&&
+            m_aPrivCity ==             rLab.m_aPrivCity&&
+            m_aPrivCountry ==          rLab.m_aPrivCountry&&
+            m_aPrivState ==            rLab.m_aPrivState&&
+            m_aPrivTitle ==            rLab.m_aPrivTitle&&
+            m_aPrivProfession ==       rLab.m_aPrivProfession&&
+            m_aPrivPhone ==            rLab.m_aPrivPhone&&
+            m_aPrivMobile ==           rLab.m_aPrivMobile&&
+            m_aPrivFax ==              rLab.m_aPrivFax&&
+            m_aPrivWWW ==              rLab.m_aPrivWWW&&
+            m_aPrivMail ==             rLab.m_aPrivMail&&
+            m_aCompCompany ==          rLab.m_aCompCompany&&
+            m_aCompCompanyExt ==       rLab.m_aCompCompanyExt&&
+            m_aCompSlogan ==           rLab.m_aCompSlogan&&
+            m_aCompStreet ==           rLab.m_aCompStreet&&
+            m_aCompZip ==              rLab.m_aCompZip&&
+            m_aCompCity ==             rLab.m_aCompCity&&
+            m_aCompCountry ==          rLab.m_aCompCountry&&
+            m_aCompState ==            rLab.m_aCompState&&
+            m_aCompPosition ==         rLab.m_aCompPosition&&
+            m_aCompPhone ==            rLab.m_aCompPhone&&
+            m_aCompMobile ==           rLab.m_aCompMobile&&
+            m_aCompFax ==              rLab.m_aCompFax&&
+            m_aCompWWW ==              rLab.m_aCompWWW&&
+            m_aCompMail ==             rLab.m_aCompMail &&
+            m_sGlossaryGroup ==        rLab.m_sGlossaryGroup &&
+            m_sGlossaryBlockName ==    rLab.m_sGlossaryBlockName;
 }
 
 SfxPoolItem* SwLabItem::Clone(SfxItemPool*) const
@@ -287,84 +287,84 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
                     bNoConfigValues = false;
                 switch(nProperty)
                 {
-                    case  0: aItem.bCont = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Medium/Continuous",
-                    case  1: pValues[nProp] >>= aItem.aMake;            break;// "Medium/Brand",
-                    case  2: pValues[nProp] >>= aItem.aType;            break;// "Medium/Type",
-                    case  3: pValues[nProp] >>= aItem.nCols;            break;// "Format/Column",
-                    case  4: pValues[nProp] >>= aItem.nRows;            break;// "Format/Row",
+                    case  0: aItem.m_bCont = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Medium/Continuous",
+                    case  1: pValues[nProp] >>= aItem.m_aMake;            break;// "Medium/Brand",
+                    case  2: pValues[nProp] >>= aItem.m_aType;            break;// "Medium/Type",
+                    case  3: pValues[nProp] >>= aItem.m_nCols;            break;// "Format/Column",
+                    case  4: pValues[nProp] >>= aItem.m_nRows;            break;// "Format/Row",
                     case  5:
-                        pValues[nProp] >>= aItem.lHDist;
-                        aItem.lHDist = convertMm100ToTwip(aItem.lHDist);
+                        pValues[nProp] >>= aItem.m_lHDist;
+                        aItem.m_lHDist = convertMm100ToTwip(aItem.m_lHDist);
                     break;// "Format/HorizontalDistance",
                     case  6:
-                        pValues[nProp] >>= aItem.lVDist;
-                        aItem.lVDist = convertMm100ToTwip(aItem.lVDist);
+                        pValues[nProp] >>= aItem.m_lVDist;
+                        aItem.m_lVDist = convertMm100ToTwip(aItem.m_lVDist);
                     break;// "Format/VerticalDistance",
                     case  7:
-                        pValues[nProp] >>= aItem.lWidth;
-                        aItem.lWidth = convertMm100ToTwip(aItem.lWidth);
+                        pValues[nProp] >>= aItem.m_lWidth;
+                        aItem.m_lWidth = convertMm100ToTwip(aItem.m_lWidth);
                     break;// "Format/Width",
                     case  8:
-                        pValues[nProp] >>= aItem.lHeight;
-                        aItem.lHeight = convertMm100ToTwip(aItem.lHeight);
+                        pValues[nProp] >>= aItem.m_lHeight;
+                        aItem.m_lHeight = convertMm100ToTwip(aItem.m_lHeight);
                     break;// "Format/Height",
                     case  9:
-                        pValues[nProp] >>= aItem.lLeft;
-                        aItem.lLeft = convertMm100ToTwip(aItem.lLeft);
+                        pValues[nProp] >>= aItem.m_lLeft;
+                        aItem.m_lLeft = convertMm100ToTwip(aItem.m_lLeft);
                     break;// "Format/LeftMargin",
                     case 10:
-                        pValues[nProp] >>= aItem.lUpper;
-                        aItem.lUpper = convertMm100ToTwip(aItem.lUpper);
+                        pValues[nProp] >>= aItem.m_lUpper;
+                        aItem.m_lUpper = convertMm100ToTwip(aItem.m_lUpper);
                     break;// "Format/TopMargin",
                     case 11:
-                        pValues[nProp] >>= aItem.lPWidth;
-                        aItem.lPWidth = convertMm100ToTwip(aItem.lPWidth);
+                        pValues[nProp] >>= aItem.m_lPWidth;
+                        aItem.m_lPWidth = convertMm100ToTwip(aItem.m_lPWidth);
                     break;// "Format/PageWidth",
                     case 12:
-                        pValues[nProp] >>= aItem.lPHeight;
-                        aItem.lPHeight = convertMm100ToTwip(aItem.lPHeight);
+                        pValues[nProp] >>= aItem.m_lPHeight;
+                        aItem.m_lPHeight = convertMm100ToTwip(aItem.m_lPHeight);
                     break;// "Format/PageHeight",
-                    case 13: aItem.bSynchron = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Option/Synchronize",
-                    case 14: aItem.bPage = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Option/Page",
-                    case 15: pValues[nProp] >>= aItem.nCol;             break;// "Option/Column",
-                    case 16: pValues[nProp] >>= aItem.nRow;             break;// "Option/Row"
-                    case 17: aItem.bAddr = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Inscription/UseAddress",
-                    case 18: pValues[nProp] >>= aItem.aWriting;         break;// "Inscription/Address",
-                    case 19: pValues[nProp] >>= aItem.sDBName;          break;// "Inscription/Database"
-                    case 20: pValues[nProp] >>= aItem.aPrivFirstName;   break;// "PrivateAddress/FirstName",
-                    case 21: pValues[nProp] >>= aItem.aPrivName;        break;// "PrivateAddress/Name",
-                    case 22: pValues[nProp] >>= aItem.aPrivShortCut;    break;// "PrivateAddress/ShortCut",
-                    case 23: pValues[nProp] >>= aItem.aPrivFirstName2;  break;// "PrivateAddress/SecondFirstName",
-                    case 24: pValues[nProp] >>= aItem.aPrivName2;       break;// "PrivateAddress/SecondName",
-                    case 25: pValues[nProp] >>= aItem.aPrivShortCut2;   break;// "PrivateAddress/SecondShortCut",
-                    case 26: pValues[nProp] >>= aItem.aPrivStreet;      break;// "PrivateAddress/Street",
-                    case 27: pValues[nProp] >>= aItem.aPrivZip;         break;// "PrivateAddress/Zip",
-                    case 28: pValues[nProp] >>= aItem.aPrivCity;        break;// "PrivateAddress/City",
-                    case 29: pValues[nProp] >>= aItem.aPrivCountry;     break;// "PrivateAddress/Country",
-                    case 30: pValues[nProp] >>= aItem.aPrivState;       break;// "PrivateAddress/State",
-                    case 31: pValues[nProp] >>= aItem.aPrivTitle;       break;// "PrivateAddress/Title",
-                    case 32: pValues[nProp] >>= aItem.aPrivProfession;  break;// "PrivateAddress/Profession",
-                    case 33: pValues[nProp] >>= aItem.aPrivPhone;       break;// "PrivateAddress/Phone",
-                    case 34: pValues[nProp] >>= aItem.aPrivMobile;      break;// "PrivateAddress/Mobile",
-                    case 35: pValues[nProp] >>= aItem.aPrivFax;         break;// "PrivateAddress/Fax",
-                    case 36: pValues[nProp] >>= aItem.aPrivWWW;         break;// "PrivateAddress/WebAddress",
-                    case 37: pValues[nProp] >>= aItem.aPrivMail;        break;// "PrivateAddress/Email",
-                    case 38: pValues[nProp] >>= aItem.aCompCompany;     break;// "BusinessAddress/Company",
-                    case 39: pValues[nProp] >>= aItem.aCompCompanyExt;  break;// "BusinessAddress/CompanyExt",
-                    case 40: pValues[nProp] >>= aItem.aCompSlogan;      break;// "BusinessAddress/Slogan",
-                    case 41: pValues[nProp] >>= aItem.aCompStreet;      break;// "BusinessAddress/Street",
-                    case 42: pValues[nProp] >>= aItem.aCompZip;         break;// "BusinessAddress/Zip",
-                    case 43: pValues[nProp] >>= aItem.aCompCity;        break;// "BusinessAddress/City",
-                    case 44: pValues[nProp] >>= aItem.aCompCountry;     break;// "BusinessAddress/Country",
-                    case 45: pValues[nProp] >>= aItem.aCompState;       break;// "BusinessAddress/State",
-                    case 46: pValues[nProp] >>= aItem.aCompPosition;    break;// "BusinessAddress/Position",
-                    case 47: pValues[nProp] >>= aItem.aCompPhone;       break;// "BusinessAddress/Phone",
-                    case 48: pValues[nProp] >>= aItem.aCompMobile;      break;// "BusinessAddress/Mobile",
-                    case 49: pValues[nProp] >>= aItem.aCompFax;         break;// "BusinessAddress/Fax",
-                    case 50: pValues[nProp] >>= aItem.aCompWWW;         break;// "BusinessAddress/WebAddress",
-                    case 51: pValues[nProp] >>= aItem.aCompMail;        break;// "BusinessAddress/Email",
-                    case 52: pValues[nProp] >>= aItem.sGlossaryGroup;   break;// "AutoText/Group"
-                    case 53: pValues[nProp] >>= aItem.sGlossaryBlockName; break;// "AutoText/Block"
+                    case 13: aItem.m_bSynchron = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Option/Synchronize",
+                    case 14: aItem.m_bPage = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Option/Page",
+                    case 15: pValues[nProp] >>= aItem.m_nCol;             break;// "Option/Column",
+                    case 16: pValues[nProp] >>= aItem.m_nRow;             break;// "Option/Row"
+                    case 17: aItem.m_bAddr = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Inscription/UseAddress",
+                    case 18: pValues[nProp] >>= aItem.m_aWriting;         break;// "Inscription/Address",
+                    case 19: pValues[nProp] >>= aItem.m_sDBName;          break;// "Inscription/Database"
+                    case 20: pValues[nProp] >>= aItem.m_aPrivFirstName;   break;// "PrivateAddress/FirstName",
+                    case 21: pValues[nProp] >>= aItem.m_aPrivName;        break;// "PrivateAddress/Name",
+                    case 22: pValues[nProp] >>= aItem.m_aPrivShortCut;    break;// "PrivateAddress/ShortCut",
+                    case 23: pValues[nProp] >>= aItem.m_aPrivFirstName2;  break;// "PrivateAddress/SecondFirstName",
+                    case 24: pValues[nProp] >>= aItem.m_aPrivName2;       break;// "PrivateAddress/SecondName",
+                    case 25: pValues[nProp] >>= aItem.m_aPrivShortCut2;   break;// "PrivateAddress/SecondShortCut",
+                    case 26: pValues[nProp] >>= aItem.m_aPrivStreet;      break;// "PrivateAddress/Street",
+                    case 27: pValues[nProp] >>= aItem.m_aPrivZip;         break;// "PrivateAddress/Zip",
+                    case 28: pValues[nProp] >>= aItem.m_aPrivCity;        break;// "PrivateAddress/City",
+                    case 29: pValues[nProp] >>= aItem.m_aPrivCountry;     break;// "PrivateAddress/Country",
+                    case 30: pValues[nProp] >>= aItem.m_aPrivState;       break;// "PrivateAddress/State",
+                    case 31: pValues[nProp] >>= aItem.m_aPrivTitle;       break;// "PrivateAddress/Title",
+                    case 32: pValues[nProp] >>= aItem.m_aPrivProfession;  break;// "PrivateAddress/Profession",
+                    case 33: pValues[nProp] >>= aItem.m_aPrivPhone;       break;// "PrivateAddress/Phone",
+                    case 34: pValues[nProp] >>= aItem.m_aPrivMobile;      break;// "PrivateAddress/Mobile",
+                    case 35: pValues[nProp] >>= aItem.m_aPrivFax;         break;// "PrivateAddress/Fax",
+                    case 36: pValues[nProp] >>= aItem.m_aPrivWWW;         break;// "PrivateAddress/WebAddress",
+                    case 37: pValues[nProp] >>= aItem.m_aPrivMail;        break;// "PrivateAddress/Email",
+                    case 38: pValues[nProp] >>= aItem.m_aCompCompany;     break;// "BusinessAddress/Company",
+                    case 39: pValues[nProp] >>= aItem.m_aCompCompanyExt;  break;// "BusinessAddress/CompanyExt",
+                    case 40: pValues[nProp] >>= aItem.m_aCompSlogan;      break;// "BusinessAddress/Slogan",
+                    case 41: pValues[nProp] >>= aItem.m_aCompStreet;      break;// "BusinessAddress/Street",
+                    case 42: pValues[nProp] >>= aItem.m_aCompZip;         break;// "BusinessAddress/Zip",
+                    case 43: pValues[nProp] >>= aItem.m_aCompCity;        break;// "BusinessAddress/City",
+                    case 44: pValues[nProp] >>= aItem.m_aCompCountry;     break;// "BusinessAddress/Country",
+                    case 45: pValues[nProp] >>= aItem.m_aCompState;       break;// "BusinessAddress/State",
+                    case 46: pValues[nProp] >>= aItem.m_aCompPosition;    break;// "BusinessAddress/Position",
+                    case 47: pValues[nProp] >>= aItem.m_aCompPhone;       break;// "BusinessAddress/Phone",
+                    case 48: pValues[nProp] >>= aItem.m_aCompMobile;      break;// "BusinessAddress/Mobile",
+                    case 49: pValues[nProp] >>= aItem.m_aCompFax;         break;// "BusinessAddress/Fax",
+                    case 50: pValues[nProp] >>= aItem.m_aCompWWW;         break;// "BusinessAddress/WebAddress",
+                    case 51: pValues[nProp] >>= aItem.m_aCompMail;        break;// "BusinessAddress/Email",
+                    case 52: pValues[nProp] >>= aItem.m_sGlossaryGroup;   break;// "AutoText/Group"
+                    case 53: pValues[nProp] >>= aItem.m_sGlossaryBlockName; break;// "AutoText/Block"
                 }
             }
         }
@@ -373,23 +373,23 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
     {
 
         SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
-        aItem.aPrivFirstName = rUserOpt.GetFirstName();
-        aItem.aPrivName = rUserOpt.GetLastName();
-        aItem.aPrivShortCut = rUserOpt.GetID();
-        aItem.aCompCompany = rUserOpt.GetCompany();
-        aItem.aCompStreet = aItem.aPrivStreet = rUserOpt.GetStreet();
+        aItem.m_aPrivFirstName = rUserOpt.GetFirstName();
+        aItem.m_aPrivName = rUserOpt.GetLastName();
+        aItem.m_aPrivShortCut = rUserOpt.GetID();
+        aItem.m_aCompCompany = rUserOpt.GetCompany();
+        aItem.m_aCompStreet = aItem.m_aPrivStreet = rUserOpt.GetStreet();
 
-        aItem.aCompCountry = aItem.aPrivCountry = rUserOpt.GetCountry();
-        aItem.aCompZip = aItem.aPrivZip= rUserOpt.GetZip();
-        aItem.aCompCity = aItem.aPrivCity = rUserOpt.GetCity();
-        aItem.aPrivTitle = rUserOpt.GetTitle();
-        aItem.aCompPosition = rUserOpt.GetPosition();
-        aItem.aPrivPhone = rUserOpt.GetTelephoneHome();
-        aItem.aCompPhone = rUserOpt.GetTelephoneWork();
-        aItem.aCompFax = aItem.aPrivFax = rUserOpt.GetFax();
-        aItem.aCompMail = aItem.aPrivMail = rUserOpt.GetEmail();
-        aItem.aCompState = aItem.aPrivState = rUserOpt.GetState();
-        aItem.bSynchron = true;
+        aItem.m_aCompCountry = aItem.m_aPrivCountry = rUserOpt.GetCountry();
+        aItem.m_aCompZip = aItem.m_aPrivZip= rUserOpt.GetZip();
+        aItem.m_aCompCity = aItem.m_aPrivCity = rUserOpt.GetCity();
+        aItem.m_aPrivTitle = rUserOpt.GetTitle();
+        aItem.m_aCompPosition = rUserOpt.GetPosition();
+        aItem.m_aPrivPhone = rUserOpt.GetTelephoneHome();
+        aItem.m_aCompPhone = rUserOpt.GetTelephoneWork();
+        aItem.m_aCompFax = aItem.m_aPrivFax = rUserOpt.GetFax();
+        aItem.m_aCompMail = aItem.m_aPrivMail = rUserOpt.GetEmail();
+        aItem.m_aCompState = aItem.m_aPrivState = rUserOpt.GetState();
+        aItem.m_bSynchron = true;
         SetModified();
     }
 }
@@ -409,60 +409,60 @@ void SwLabCfgItem::ImplCommit()
             nProperty += 3;
         switch(nProperty)
         {
-            case  0: pValues[nProp] <<= aItem.bCont;            break;// "Medium/Continuous",
-            case  1: pValues[nProp] <<= aItem.aMake;            break;// "Medium/Brand",
-            case  2: pValues[nProp] <<= aItem.aType;            break;// "Medium/Type",
-            case  3: pValues[nProp] <<= aItem.nCols;            break;// "Format/Column",
-            case  4: pValues[nProp] <<= aItem.nRows;            break;// "Format/Row",
-            case  5: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lHDist));break;// "Format/HorizontalDistance",
-            case  6: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lVDist));break;// "Format/VerticalDistance",
-            case  7: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lWidth));            break;// "Format/Width",
-            case  8: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lHeight));           break;// "Format/Height",
-            case  9: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lLeft));         break;// "Format/LeftMargin",
-            case 10: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lUpper));            break;// "Format/TopMargin",
-            case 11: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lPWidth)); break;// "Format/Page Width",
-            case 12: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lPHeight)); break;// "Format/PageHeight",
-            case 13: pValues[nProp] <<= aItem.bSynchron;        break;// "Option/Synchronize",
-            case 14: pValues[nProp] <<= aItem.bPage;            break;// "Option/Page",
-            case 15: pValues[nProp] <<= aItem.nCol;            break;// "Option/Column",
-            case 16: pValues[nProp] <<= aItem.nRow;            break;// "Option/Row"
-            case 17: pValues[nProp] <<= aItem.bAddr;            break;// "Inscription/UseAddress",
-            case 18: pValues[nProp] <<= aItem.aWriting;         break;// "Inscription/Address",
-            case 19: pValues[nProp] <<= aItem.sDBName;          break;// "Inscription/Database"
-            case 20: pValues[nProp] <<= aItem.aPrivFirstName;   break;// "PrivateAddress/FirstName",
-            case 21: pValues[nProp] <<= aItem.aPrivName;        break;// "PrivateAddress/Name",
-            case 22: pValues[nProp] <<= aItem.aPrivShortCut;    break;// "PrivateAddress/ShortCut",
-            case 23: pValues[nProp] <<= aItem.aPrivFirstName2;  break;// "PrivateAddress/SecondFirstName",
-            case 24: pValues[nProp] <<= aItem.aPrivName2;       break;// "PrivateAddress/SecondName",
-            case 25: pValues[nProp] <<= aItem.aPrivShortCut2;   break;// "PrivateAddress/SecondShortCut",
-            case 26: pValues[nProp] <<= aItem.aPrivStreet;      break;// "PrivateAddress/Street",
-            case 27: pValues[nProp] <<= aItem.aPrivZip;         break;// "PrivateAddress/Zip",
-            case 28: pValues[nProp] <<= aItem.aPrivCity;        break;// "PrivateAddress/City",
-            case 29: pValues[nProp] <<= aItem.aPrivCountry;     break;// "PrivateAddress/Country",
-            case 30: pValues[nProp] <<= aItem.aPrivState;       break;// "PrivateAddress/State",
-            case 31: pValues[nProp] <<= aItem.aPrivTitle;       break;// "PrivateAddress/Title",
-            case 32: pValues[nProp] <<= aItem.aPrivProfession;  break;// "PrivateAddress/Profession",
-            case 33: pValues[nProp] <<= aItem.aPrivPhone;       break;// "PrivateAddress/Phone",
-            case 34: pValues[nProp] <<= aItem.aPrivMobile;      break;// "PrivateAddress/Mobile",
-            case 35: pValues[nProp] <<= aItem.aPrivFax;         break;// "PrivateAddress/Fax",
-            case 36: pValues[nProp] <<= aItem.aPrivWWW;         break;// "PrivateAddress/WebAddress",
-            case 37: pValues[nProp] <<= aItem.aPrivMail;        break;// "PrivateAddress/Email",
-            case 38: pValues[nProp] <<= aItem.aCompCompany;     break;// "BusinessAddress/Company",
-            case 39: pValues[nProp] <<= aItem.aCompCompanyExt;  break;// "BusinessAddress/CompanyExt",
-            case 40: pValues[nProp] <<= aItem.aCompSlogan;      break;// "BusinessAddress/Slogan",
-            case 41: pValues[nProp] <<= aItem.aCompStreet;      break;// "BusinessAddress/Street",
-            case 42: pValues[nProp] <<= aItem.aCompZip;         break;// "BusinessAddress/Zip",
-            case 43: pValues[nProp] <<= aItem.aCompCity;        break;// "BusinessAddress/City",
-            case 44: pValues[nProp] <<= aItem.aCompCountry;     break;// "BusinessAddress/Country",
-            case 45: pValues[nProp] <<= aItem.aCompState;       break;// "BusinessAddress/State",
-            case 46: pValues[nProp] <<= aItem.aCompPosition;    break;// "BusinessAddress/Position",
-            case 47: pValues[nProp] <<= aItem.aCompPhone;       break;// "BusinessAddress/Phone",
-            case 48: pValues[nProp] <<= aItem.aCompMobile;      break;// "BusinessAddress/Mobile",
-            case 49: pValues[nProp] <<= aItem.aCompFax;         break;// "BusinessAddress/Fax",
-            case 50: pValues[nProp] <<= aItem.aCompWWW;         break;// "BusinessAddress/WebAddress",
-            case 51: pValues[nProp] <<= aItem.aCompMail;        break;// "BusinessAddress/Email",
-            case 52: pValues[nProp] <<= aItem.sGlossaryGroup;   break;// "AutoText/Group"
-            case 53: pValues[nProp] <<= aItem.sGlossaryBlockName; break;// "AutoText/Block"
+            case  0: pValues[nProp] <<= aItem.m_bCont;            break;// "Medium/Continuous",
+            case  1: pValues[nProp] <<= aItem.m_aMake;            break;// "Medium/Brand",
+            case  2: pValues[nProp] <<= aItem.m_aType;            break;// "Medium/Type",
+            case  3: pValues[nProp] <<= aItem.m_nCols;            break;// "Format/Column",
+            case  4: pValues[nProp] <<= aItem.m_nRows;            break;// "Format/Row",
+            case  5: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.m_lHDist));break;// "Format/HorizontalDistance",
+            case  6: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.m_lVDist));break;// "Format/VerticalDistance",
+            case  7: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.m_lWidth));            break;// "Format/Width",
+            case  8: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.m_lHeight));           break;// "Format/Height",
+            case  9: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.m_lLeft));         break;// "Format/LeftMargin",
+            case 10: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.m_lUpper));            break;// "Format/TopMargin",
+            case 11: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.m_lPWidth)); break;// "Format/Page Width",
+            case 12: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.m_lPHeight)); break;// "Format/PageHeight",
+            case 13: pValues[nProp] <<= aItem.m_bSynchron;        break;// "Option/Synchronize",
+            case 14: pValues[nProp] <<= aItem.m_bPage;            break;// "Option/Page",
+            case 15: pValues[nProp] <<= aItem.m_nCol;            break;// "Option/Column",
+            case 16: pValues[nProp] <<= aItem.m_nRow;            break;// "Option/Row"
+            case 17: pValues[nProp] <<= aItem.m_bAddr;            break;// "Inscription/UseAddress",
+            case 18: pValues[nProp] <<= aItem.m_aWriting;         break;// "Inscription/Address",
+            case 19: pValues[nProp] <<= aItem.m_sDBName;          break;// "Inscription/Database"
+            case 20: pValues[nProp] <<= aItem.m_aPrivFirstName;   break;// "PrivateAddress/FirstName",
+            case 21: pValues[nProp] <<= aItem.m_aPrivName;        break;// "PrivateAddress/Name",
+            case 22: pValues[nProp] <<= aItem.m_aPrivShortCut;    break;// "PrivateAddress/ShortCut",
+            case 23: pValues[nProp] <<= aItem.m_aPrivFirstName2;  break;// "PrivateAddress/SecondFirstName",
+            case 24: pValues[nProp] <<= aItem.m_aPrivName2;       break;// "PrivateAddress/SecondName",
+            case 25: pValues[nProp] <<= aItem.m_aPrivShortCut2;   break;// "PrivateAddress/SecondShortCut",
+            case 26: pValues[nProp] <<= aItem.m_aPrivStreet;      break;// "PrivateAddress/Street",
+            case 27: pValues[nProp] <<= aItem.m_aPrivZip;         break;// "PrivateAddress/Zip",
+            case 28: pValues[nProp] <<= aItem.m_aPrivCity;        break;// "PrivateAddress/City",
+            case 29: pValues[nProp] <<= aItem.m_aPrivCountry;     break;// "PrivateAddress/Country",
+            case 30: pValues[nProp] <<= aItem.m_aPrivState;       break;// "PrivateAddress/State",
+            case 31: pValues[nProp] <<= aItem.m_aPrivTitle;       break;// "PrivateAddress/Title",
+            case 32: pValues[nProp] <<= aItem.m_aPrivProfession;  break;// "PrivateAddress/Profession",
+            case 33: pValues[nProp] <<= aItem.m_aPrivPhone;       break;// "PrivateAddress/Phone",
+            case 34: pValues[nProp] <<= aItem.m_aPrivMobile;      break;// "PrivateAddress/Mobile",
+            case 35: pValues[nProp] <<= aItem.m_aPrivFax;         break;// "PrivateAddress/Fax",
+            case 36: pValues[nProp] <<= aItem.m_aPrivWWW;         break;// "PrivateAddress/WebAddress",
+            case 37: pValues[nProp] <<= aItem.m_aPrivMail;        break;// "PrivateAddress/Email",
+            case 38: pValues[nProp] <<= aItem.m_aCompCompany;     break;// "BusinessAddress/Company",
+            case 39: pValues[nProp] <<= aItem.m_aCompCompanyExt;  break;// "BusinessAddress/CompanyExt",
+            case 40: pValues[nProp] <<= aItem.m_aCompSlogan;      break;// "BusinessAddress/Slogan",
+            case 41: pValues[nProp] <<= aItem.m_aCompStreet;      break;// "BusinessAddress/Street",
+            case 42: pValues[nProp] <<= aItem.m_aCompZip;         break;// "BusinessAddress/Zip",
+            case 43: pValues[nProp] <<= aItem.m_aCompCity;        break;// "BusinessAddress/City",
+            case 44: pValues[nProp] <<= aItem.m_aCompCountry;     break;// "BusinessAddress/Country",
+            case 45: pValues[nProp] <<= aItem.m_aCompState;       break;// "BusinessAddress/State",
+            case 46: pValues[nProp] <<= aItem.m_aCompPosition;    break;// "BusinessAddress/Position",
+            case 47: pValues[nProp] <<= aItem.m_aCompPhone;       break;// "BusinessAddress/Phone",
+            case 48: pValues[nProp] <<= aItem.m_aCompMobile;      break;// "BusinessAddress/Mobile",
+            case 49: pValues[nProp] <<= aItem.m_aCompFax;         break;// "BusinessAddress/Fax",
+            case 50: pValues[nProp] <<= aItem.m_aCompWWW;         break;// "BusinessAddress/WebAddress",
+            case 51: pValues[nProp] <<= aItem.m_aCompMail;        break;// "BusinessAddress/Email",
+            case 52: pValues[nProp] <<= aItem.m_sGlossaryGroup;   break;// "AutoText/Group"
+            case 53: pValues[nProp] <<= aItem.m_sGlossaryBlockName; break;// "AutoText/Block"
         }
     }
     PutProperties(aNames, aValues);

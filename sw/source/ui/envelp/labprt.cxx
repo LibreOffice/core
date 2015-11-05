@@ -126,10 +126,10 @@ SfxTabPage::sfxpg SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwLabPrtPage::FillItem(SwLabItem& rItem)
 {
-    rItem.bPage = m_pPageButton->IsChecked();
-    rItem.nCol = static_cast<sal_Int32>(m_pColField->GetValue());
-    rItem.nRow = static_cast<sal_Int32>(m_pRowField->GetValue());
-    rItem.bSynchron = m_pSynchronCB->IsChecked() && m_pSynchronCB->IsEnabled();
+    rItem.m_bPage = m_pPageButton->IsChecked();
+    rItem.m_nCol = static_cast<sal_Int32>(m_pColField->GetValue());
+    rItem.m_nRow = static_cast<sal_Int32>(m_pRowField->GetValue());
+    rItem.m_bSynchron = m_pSynchronCB->IsChecked() && m_pSynchronCB->IsEnabled();
 }
 
 bool SwLabPrtPage::FillItemSet(SfxItemSet* rSet)
@@ -147,10 +147,10 @@ void SwLabPrtPage::Reset(const SfxItemSet* )
     SwLabItem aItem;
     GetParentSwLabDlg()->GetLabItem(aItem);
 
-    m_pColField->SetValue   (aItem.nCol);
-    m_pRowField->SetValue   (aItem.nRow);
+    m_pColField->SetValue   (aItem.m_nCol);
+    m_pRowField->SetValue   (aItem.m_nRow);
 
-    if (aItem.bPage)
+    if (aItem.m_bPage)
     {
         m_pPageButton->Check();
         m_pPageButton->GetClickHdl().Call(m_pPageButton);
@@ -169,13 +169,13 @@ void SwLabPrtPage::Reset(const SfxItemSet* )
     else
         m_pPrinterInfo->SetText(Printer::GetDefaultPrinterName());
 
-    m_pColField->SetMax(aItem.nCols);
-    m_pRowField->SetMax(aItem.nRows);
+    m_pColField->SetMax(aItem.m_nCols);
+    m_pRowField->SetMax(aItem.m_nRows);
 
     m_pColField->SetLast(m_pColField->GetMax());
     m_pRowField->SetLast(m_pRowField->GetMax());
 
-    m_pSynchronCB->Check(aItem.bSynchron);
+    m_pSynchronCB->Check(aItem.m_bSynchron);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
