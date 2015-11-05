@@ -541,9 +541,6 @@ public class OOoBeanTest
                         break;
                     }
                 }
-                else
-                {
-                }
 
             } finally {
                 bean.stopOOoConnection();

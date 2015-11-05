@@ -148,9 +148,7 @@ public class _XDocumentHandler extends MultiMethodTest {
         if (xmlData == null || checker == null) throw new StatusException
             (Status.failed("Relation wasn't found")) ;
 
-        if (targetDocSet != null){
-
-        }else{
+        if (targetDocSet == null){
             log.println("object relation 'XDocumentHandler.TargetDocumentSetter' not used.");
             log.println("be sure that the test have a target to write throu");
         }

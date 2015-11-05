@@ -467,9 +467,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             {
                 sMessage = m_oResource.getResText(UIConsts.RID_REPORT + 92);
             }
-            else
-            {
-            }
             // show a dialog with the error message
             SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMessage);
         }

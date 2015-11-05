@@ -71,29 +71,27 @@ public class _XDataOutputStream extends MultiMethodTest {
 
             if (dataElem instanceof Boolean) {
                 ((Boolean)dataElem).booleanValue();
-            } else
-            if (dataElem instanceof Byte) {
+            }
+            else if (dataElem instanceof Byte) {
                 ((Byte)dataElem).byteValue();
-            } else
-            if (dataElem instanceof Character) {
+            }
+            else if (dataElem instanceof Character) {
                 ((Character)dataElem).charValue();
-            } else
-            if (dataElem instanceof Short) {
+            }
+            else if (dataElem instanceof Short) {
                 ((Short)dataElem).shortValue();
-            } else
-            if (dataElem instanceof Integer) {
+            }
+            else if (dataElem instanceof Integer) {
                 ((Integer)dataElem).intValue();
-            } else
-            if (dataElem instanceof Long) {
+            }
+            else if (dataElem instanceof Long) {
                 ((Long)dataElem).longValue();
-            } else
-            if (dataElem instanceof Float) {
+            }
+            else if (dataElem instanceof Float) {
                 ((Float)dataElem).floatValue();
-            } else
-            if (dataElem instanceof Double) {
+            }
+            else if (dataElem instanceof Double) {
                 ((Double)dataElem).doubleValue();
-            } else
-            if (dataElem instanceof String) {
             }
         }
     }

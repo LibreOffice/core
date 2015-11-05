@@ -119,9 +119,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
             oSheet.getCellByPosition(3,21).setValue(200);
 
             // catch some sleight of hand threads
-            if (oSheet.getCellByPosition(1,21).getValue() == 200){
-            }
-            else{
+            if (oSheet.getCellByPosition(1,21).getValue() != 200){
                 log.println("Cells were already inserted. "+
                     "Delete old cells now");
                 XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, oSheet);

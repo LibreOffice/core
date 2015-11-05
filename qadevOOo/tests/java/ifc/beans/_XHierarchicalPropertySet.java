@@ -33,8 +33,7 @@ public class _XHierarchicalPropertySet extends MultiMethodTest {
         XHierarchicalPropertySetInfo hpsi = oObj.getHierarchicalPropertySetInfo();
         boolean res = true;
 
-        if (hpsi != null) {
-        } else {
+        if (hpsi == null) {
             log.println(
                     "The component doesn't provide HierarchicalPropertySetInfo");
             tRes.tested("getHierarchicalPropertySetInfo()",

@@ -111,8 +111,7 @@ public class _XCalendar extends MultiMethodTest {
                           ", Country: "+ installed_locales[i].Country +
                           ", Variant: "+ installed_locales[i].Country;
             oObj.loadDefaultCalendar(installed_locales[i]);
-            if (oObj.getLoadedCalendar().Default) {
-            } else {
+            if (!oObj.getLoadedCalendar().Default) {
                 log.println(lang + " ... FAILED");
             }
             res &= oObj.getLoadedCalendar().Default;
@@ -135,8 +134,7 @@ public class _XCalendar extends MultiMethodTest {
                           ", Variant: "+ installed_locales[i].Country;
             calendars[i] = oObj.getAllCalendars(installed_locales[i]);
             count[i] = calendars[i].length-1;
-            if (calendars[i].length > 0) {
-            } else {
+            if (calendars[i].length <= 0) {
                 log.println(lang + " ... FAILED");
             }
             res &= (calendars[i].length > 0);
@@ -163,8 +161,7 @@ public class _XCalendar extends MultiMethodTest {
                           ", Country: "+ installed_locales[i].Country +
                           ", Variant: "+ installed_locales[i].Country;
             oObj.loadCalendar(calendars[i][0], installed_locales[i]);
-            if (calendars[i][0].equals(oObj.getLoadedCalendar().Name)) {
-            } else {
+            if (!calendars[i][0].equals(oObj.getLoadedCalendar().Name)) {
                 log.println(lang + " ... FAILED");
             }
             res &= calendars[i][0].equals(oObj.getLoadedCalendar().Name);
@@ -192,8 +189,7 @@ public class _XCalendar extends MultiMethodTest {
                           ", Country: "+ installed_locales[i].Country +
                           ", Variant: "+ installed_locales[i].Country;
             oObj.loadCalendar(calendars[i][0], installed_locales[i]);
-            if (calendars[i][0].equals(oObj.getLoadedCalendar().Name)) {
-            } else {
+            if (!calendars[i][0].equals(oObj.getLoadedCalendar().Name)) {
                 log.println(lang + " ... FAILED");
             }
             res &= calendars[i][0].equals(oObj.getLoadedCalendar().Name);
@@ -219,8 +215,7 @@ public class _XCalendar extends MultiMethodTest {
                           ", Variant: "+ installed_locales[i].Country;
             oObj.loadCalendar(calendars[i][0], installed_locales[i]);
             String uID = oObj.getUniqueID();
-            if (uID.equals(calendars[i][0])) {
-            } else {
+            if (!uID.equals(calendars[i][0])) {
                 log.println(lang + " ... FAILED");
             }
             res &= uID.equals(calendars[i][0]);
@@ -244,8 +239,7 @@ public class _XCalendar extends MultiMethodTest {
                           ", Variant: "+ installed_locales[i].Country;
             oObj.setDateTime(newDTime);
             double aDTime = oObj.getDateTime();
-            if (aDTime == newDTime) {
-            } else {
+            if (aDTime != newDTime) {
                 log.println(lang + " ... FAILED");
             }
             res &= (aDTime == newDTime);
@@ -269,8 +263,7 @@ public class _XCalendar extends MultiMethodTest {
                           ", Variant: "+ installed_locales[i].Country;
             oObj.setDateTime(newDTime);
             double aDTime = oObj.getDateTime();
-            if (aDTime == newDTime) {
-            } else {
+            if (aDTime != newDTime) {
                 log.println(lang + " ... FAILED");
             }
             res &= (aDTime == newDTime);
