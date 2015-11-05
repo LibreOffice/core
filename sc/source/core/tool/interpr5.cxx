@@ -3251,6 +3251,8 @@ void ScInterpreter::ScInfo()
             PushDouble( 1 );
         else if( aStr == "RECALC" )
             PushString( ScGlobal::GetRscString( pDok->GetAutoCalc() ? STR_RECALC_AUTO : STR_RECALC_MANUAL ) );
+        else if (aStr == "DIRECTORY" || aStr == "MEMAVAIL" || aStr == "MEMUSED" || aStr == "ORIGIN" || aStr == "TOTMEM")
+            PushNA();
         else
             PushIllegalArgument();
     }
