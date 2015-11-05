@@ -41,7 +41,7 @@ namespace
         const char*     pType;              // Mime encoding on our side
     };
 
-    static TypeEntry aConversionTab[] =
+    static const TypeEntry aConversionTab[] =
     {
         { "ISO10646-1", "text/plain;charset=utf-16" },
         { "UTF8_STRING", "text/plain;charset=utf-8" },
