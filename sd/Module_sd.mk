@@ -34,10 +34,14 @@ $(eval $(call gb_Module_add_check_targets,sd,\
     CppunitTest_sd_filters_test \
     CppunitTest_sd_html_export_tests \
     CppunitTest_sd_tiledrendering \
-    CppunitTest_sd_svg_export_tests \
 ))
 endif
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Module_add_check_targets,sd,\
+    CppunitTest_sd_svg_export_tests \
+))
+endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     JunitTest_sd_unoapi \
