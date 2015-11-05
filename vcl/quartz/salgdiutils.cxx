@@ -89,6 +89,10 @@ void AquaSalGraphics::UnsetState()
     }
 }
 
+/**
+ * (re-)create the off-screen mxLayer we render everything to if
+ * necessary: eg. not initialized yet, or it has an incorrect size.
+ */
 bool AquaSalGraphics::CheckContext()
 {
     if( mbWindow && mpFrame && mpFrame->getNSWindow() )
@@ -174,6 +178,11 @@ CGContextRef AquaSalGraphics::GetContext()
     return mrContext;
 }
 
+/**
+ * Blit the contents of our internal mxLayer state to the
+ * associated window, if any; cf. drawRect event handling
+ * on the frame.
+ */
 void AquaSalGraphics::UpdateWindow( NSRect& )
 {
     if( !mpFrame )
