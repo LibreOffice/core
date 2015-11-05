@@ -401,7 +401,7 @@ static sal_uInt16 lcl_WriteRun( XclExpXmlStream& rStrm, const ScfUInt16Vec& rBuf
         rWorksheet->endElement( XML_rPr );
     }
     rWorksheet->startElement( XML_t,
-            FSEND );
+            FSNS(XML_xml, XML_space), "preserve", FSEND );
     rWorksheet->writeEscaped( XclXmlUtils::ToOUString( rBuffer, nStart, nLength ) );
     rWorksheet->endElement( XML_t );
     rWorksheet->endElement( XML_r );
