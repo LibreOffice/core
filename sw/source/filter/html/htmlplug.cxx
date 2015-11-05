@@ -1016,7 +1016,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     sal_uLong nFrmOpts;
 
     // wenn meoglich vor dem "Objekt" einen Zeilen-Umbruch ausgeben
-    if( rHTMLWrt.bLFPossible )
+    if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine( true );
 
     if( !rFrameFormat.GetName().isEmpty() )
@@ -1045,7 +1045,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
                 .append("=\"");
             rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
 
@@ -1056,7 +1056,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type)
                 .append("=\"");
             rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aType, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aType, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
 
@@ -1091,7 +1091,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_codebase)
                     .append("=\"");
                 rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
                 sOut.append('\"');
             }
         }
@@ -1103,7 +1103,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_code)
             .append("=\"");
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aClass, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut.append('\"');
 
         // NAME
@@ -1115,7 +1115,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
             rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
 
@@ -1137,8 +1137,8 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
 
         SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
                                         xSet,
-                                        rHTMLWrt.eDestEnc,
-                                        &rHTMLWrt.aNonConvertableCharacters );
+                                        rHTMLWrt.m_eDestEnc,
+                                        &rHTMLWrt.m_aNonConvertableCharacters );
 
         nFrmOpts = bInCntnr ? HTML_FRMOPTS_IFRAME_CNTNR
                             : HTML_FRMOPTS_IFRAME;
@@ -1175,9 +1175,9 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             {
                 const OUString& rValue = rCommand.GetArgument();
                 rWrt.Strm().WriteChar( ' ' );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
                 rWrt.Strm().WriteCharPtr( "=\"" );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters ).WriteChar( '\"' );
             }
             else if( SwHtmlOptType::PARAM == nType )
             {
@@ -1201,11 +1201,11 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
                 .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
             rWrt.Strm().WriteCharPtr( sBuf.makeStringAndClear().getStr() );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sBuf.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_value)
                 .append("=\"");
             rWrt.Strm().WriteCharPtr( sBuf.makeStringAndClear().getStr() );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteCharPtr( "\">" );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
         }
 
         rHTMLWrt.DecIndentLevel(); // Inhalt von Applet einruecken
@@ -1232,9 +1232,9 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             {
                 const OUString& rValue = rCommand.GetArgument();
                 rWrt.Strm().WriteChar( ' ' );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
                 rWrt.Strm().WriteCharPtr( "=\"" );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters ).WriteChar( '\"' );
             }
         }
         rHTMLWrt.Strm().WriteChar( '>' );

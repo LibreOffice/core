@@ -274,35 +274,35 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     size_t nPos;
     if( rFormatFootnote.IsEndNote() )
     {
-        nPos = rHTMLWrt.pFootEndNotes ? rHTMLWrt.pFootEndNotes->size() : 0;
-        OSL_ENSURE( nPos == static_cast<size_t>(rHTMLWrt.nFootNote + rHTMLWrt.nEndNote),
+        nPos = rHTMLWrt.m_pFootEndNotes ? rHTMLWrt.m_pFootEndNotes->size() : 0;
+        OSL_ENSURE( nPos == static_cast<size_t>(rHTMLWrt.m_nFootNote + rHTMLWrt.m_nEndNote),
                 "OutHTML_SwFormatFootnote: wrong position" );
         sClass = OOO_STRING_SVTOOLS_HTML_sdendnote_anc;
-        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote + OUString::number( (sal_Int32)(++rHTMLWrt.nEndNote) );
+        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote + OUString::number( (sal_Int32)(++rHTMLWrt.m_nEndNote) );
     }
     else
     {
-        nPos = rHTMLWrt.nFootNote;
+        nPos = rHTMLWrt.m_nFootNote;
         sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote_anc;
-        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote + OUString::number( (sal_Int32)(++rHTMLWrt.nFootNote));
+        sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote + OUString::number( (sal_Int32)(++rHTMLWrt.m_nFootNote));
     }
 
-    if( !rHTMLWrt.pFootEndNotes )
-        rHTMLWrt.pFootEndNotes = new SwHTMLTextFootnotes;
-    rHTMLWrt.pFootEndNotes->insert( rHTMLWrt.pFootEndNotes->begin() + nPos, pTextFootnote );
+    if( !rHTMLWrt.m_pFootEndNotes )
+        rHTMLWrt.m_pFootEndNotes = new SwHTMLTextFootnotes;
+    rHTMLWrt.m_pFootEndNotes->insert( rHTMLWrt.m_pFootEndNotes->begin() + nPos, pTextFootnote );
 
     OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_anchor).append("\" ")
         .append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"#");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol).append('\"');
     if( !rFormatFootnote.GetNumStr().isEmpty() )
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
@@ -311,7 +311,7 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript );
 
     HTMLOutFuncs::Out_String( rWrt.Strm(), rFormatFootnote.GetViewNumStr(*rWrt.pDoc),
-                                 rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                                 rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, false );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
 
@@ -320,44 +320,44 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
 
 void SwHTMLWriter::OutFootEndNotes()
 {
-    OSL_ENSURE( pFootEndNotes,
+    OSL_ENSURE( m_pFootEndNotes,
             "SwHTMLWriter::OutFootEndNotes(): unnoetiger Aufruf" );
-    if( !pFootEndNotes )
+    if( !m_pFootEndNotes )
         return;
 
 #if OSL_DEBUG_LEVEL > 0
-    sal_uInt16 nFootnote = nFootNote, nEn = nEndNote;
+    sal_uInt16 nFootnote = m_nFootNote, nEn = m_nEndNote;
 #endif
-    nFootNote = 0, nEndNote = 0;
+    m_nFootNote = 0, m_nEndNote = 0;
 
-    for( auto *pTextFootnote : *pFootEndNotes )
+    for( auto *pTextFootnote : *m_pFootEndNotes )
     {
-        pFormatFootnote = &pTextFootnote->GetFootnote();
+        m_pFormatFootnote = &pTextFootnote->GetFootnote();
 
         OUString sFootnoteName, sClass;
-        if( pFormatFootnote->IsEndNote() )
+        if( m_pFormatFootnote->IsEndNote() )
         {
             sClass = OOO_STRING_SVTOOLS_HTML_sdendnote;
             sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote;
-            sFootnoteName += OUString::number((sal_Int32)(++nEndNote));
+            sFootnoteName += OUString::number((sal_Int32)(++m_nEndNote));
         }
         else
         {
             sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote;
             sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote;
-            sFootnoteName += OUString::number((sal_Int32)(++nFootNote));
+            sFootnoteName += OUString::number((sal_Int32)(++m_nFootNote));
         }
 
-        if( bLFPossible )
+        if( m_bLFPossible )
             OutNewLine();
         OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)
             .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id).append("=\"");
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-        HTMLOutFuncs::Out_String( Strm(), sFootnoteName, eDestEnc, &aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), sFootnoteName, m_eDestEnc, &m_aNonConvertableCharacters );
         Strm().WriteCharPtr( "\">" );
 
-        bLFPossible = true;
+        m_bLFPossible = true;
         IncIndentLevel();   // Inhalt von <DIV> einruecken
 
         OSL_ENSURE( pTextFootnote, "SwHTMLWriter::OutFootEndNotes: SwTextFootnote fehlt" );
@@ -372,34 +372,34 @@ void SwHTMLWriter::OutFootEndNotes()
         }
 
         DecIndentLevel();   // Inhalt von <DIV> einruecken
-        if( bLFPossible )
+        if( m_bLFPossible )
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
-        bLFPossible = true;
+        m_bLFPossible = true;
 
-        OSL_ENSURE( !pFormatFootnote,
+        OSL_ENSURE( !m_pFormatFootnote,
                 "SwHTMLWriter::OutFootEndNotes: Footnote wurde nicht ausgegeben" );
-        if( pFormatFootnote )
+        if( m_pFormatFootnote )
         {
-            if( pFormatFootnote->IsEndNote() )
-                nEndNote++;
+            if( m_pFormatFootnote->IsEndNote() )
+                m_nEndNote++;
             else
-                nFootNote++;
+                m_nFootNote++;
 
-            pFormatFootnote = 0;
+            m_pFormatFootnote = 0;
         }
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE( nFootnote == nFootNote,
+    OSL_ENSURE( nFootnote == m_nFootNote,
             "SwHTMLWriter::OutFootEndNotes: Anzahl Fussnoten stimmt nicht" );
-    OSL_ENSURE( nEn == nEndNote,
+    OSL_ENSURE( nEn == m_nEndNote,
             "SwHTMLWriter::OutFootEndNotes: Anzahl Endnoten stimmt nicht" );
 #endif
 
-    delete pFootEndNotes;
-    pFootEndNotes = 0;
-    nFootNote = nEndNote = 0;
+    delete m_pFootEndNotes;
+    m_pFootEndNotes = 0;
+    m_nFootNote = m_nEndNote = 0;
 }
 
 OUString SwHTMLWriter::GetFootEndNoteSym( const SwFormatFootnote& rFormatFootnote )
@@ -430,19 +430,19 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
     {
         sClass = OOO_STRING_SVTOOLS_HTML_sdendnote_sym;
         sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote;
-        sFootnoteName += OUString::number((sal_Int32)nEndNote);
+        sFootnoteName += OUString::number((sal_Int32)m_nEndNote);
         pInfo = &pDoc->GetEndNoteInfo();
     }
     else
     {
         sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote_sym;
         sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote;
-        sFootnoteName += OUString::number((sal_Int32)nFootNote);
+        sFootnoteName += OUString::number((sal_Int32)m_nFootNote);
         pInfo = &pDoc->GetFootnoteInfo();
     }
 
     const SwCharFormat *pSymCharFormat = pInfo->GetCharFormat( *pDoc );
-    if( pSymCharFormat && 0 != aScriptTextStyles.count( pSymCharFormat->GetName() ) )
+    if( pSymCharFormat && 0 != m_aScriptTextStyles.count( pSymCharFormat->GetName() ) )
     {
         switch( nScript )
         {
@@ -462,18 +462,18 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"");
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( Strm(), sClass, eDestEnc, &aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), sClass, m_eDestEnc, &m_aNonConvertableCharacters );
     sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( Strm(), sFootnoteName, eDestEnc, &aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), sFootnoteName, m_eDestEnc, &m_aNonConvertableCharacters );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol).append("\" ")
         .append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"#");
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( Strm(), sFootnoteName, eDestEnc, &aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), sFootnoteName, m_eDestEnc, &m_aNonConvertableCharacters );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_anchor).append("\">");
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-    HTMLOutFuncs::Out_String( Strm(), rNum, eDestEnc, &aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), rNum, m_eDestEnc, &m_aNonConvertableCharacters );
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
 }
 
@@ -533,7 +533,7 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString *pParts,
         .append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"").append(pName)
         .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aContent, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aContent, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     rWrt.Strm().WriteCharPtr( "\">" );
 }
 

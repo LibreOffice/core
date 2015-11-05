@@ -257,7 +257,7 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
 void SwHTMLWriter::OutBasic()
 {
 #if HAVE_FEATURE_SCRIPTING
-    if( !bCfgStarBasic )
+    if( !m_bCfgStarBasic )
         return;
 
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
@@ -295,7 +295,7 @@ void SwHTMLWriter::OutBasic()
                     .append("=\"text/x-");
                 Strm().WriteCharPtr( sOut.getStr() );
                 // Entities aren't welcome here
-                Strm().WriteCharPtr( OUStringToOString(sLang, eDestEnc).getStr() )
+                Strm().WriteCharPtr( OUStringToOString(sLang, m_eDestEnc).getStr() )
                    .WriteCharPtr( "\">" );
             }
 
@@ -304,7 +304,7 @@ void SwHTMLWriter::OutBasic()
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), rModule.GetSource(),
                                      sLang, eType, aEmptyOUStr,
                                      &rLibName, &rModName,
-                                     eDestEnc, &aNonConvertableCharacters );
+                                     m_eDestEnc, &m_aNonConvertableCharacters );
         }
     }
 #endif
@@ -337,7 +337,7 @@ void SwHTMLWriter::OutBasicBodyEvents()
 
     if( !aDocTable.empty() )
         HTMLOutFuncs::Out_Events( Strm(), aDocTable, aBodyEventTable,
-                                  bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
+                                  m_bCfgStarBasic, m_eDestEnc, &m_aNonConvertableCharacters );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -218,22 +218,22 @@ bool SwHTMLWriter::HasControls() const
     size_t i = 0;
 
     // Skip all controls in front of the current paragraph
-    while ( i < aHTMLControls.size() && aHTMLControls[i]->nNdIdx < nStartIdx )
+    while ( i < m_aHTMLControls.size() && m_aHTMLControls[i]->nNdIdx < nStartIdx )
         ++i;
 
-    return i < aHTMLControls.size() && aHTMLControls[i]->nNdIdx == nStartIdx;
+    return i < m_aHTMLControls.size() && m_aHTMLControls[i]->nNdIdx == nStartIdx;
 }
 
 void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
 {
-    if( bPreserveForm )     // wir sind in einer Tabelle oder einem Bereich
+    if( m_bPreserveForm )     // wir sind in einer Tabelle oder einem Bereich
         return;             // ueber dem eine Form aufgespannt wurde
 
     if( !bTag_On )
     {
         // die Form beenden wenn alle Controls ausgegeben wurden
         if( mxFormComps.is() &&
-            mxFormComps->getCount() == nFormCntrlCnt )
+            mxFormComps->getCount() == m_nFormCntrlCnt )
         {
             OutForm( false, mxFormComps );
             mxFormComps.clear();
@@ -247,16 +247,16 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
 
     // Ueberspringen von Controls vor dem interesanten Bereich
     size_t i = 0;
-    while ( i < aHTMLControls.size() && aHTMLControls[i]->nNdIdx < nStartIdx )
+    while ( i < m_aHTMLControls.size() && m_aHTMLControls[i]->nNdIdx < nStartIdx )
         ++i;
 
     if( !pStartNd )
     {
         // Check fuer einen einzelnen Node: da ist nur interessant, ob
         // es zu dem Node ein Control gibt und zu welcher Form es gehoert
-        if( i < aHTMLControls.size() &&
-            aHTMLControls[i]->nNdIdx == nStartIdx )
-            xNewFormComps = aHTMLControls[i]->xFormComps;
+        if( i < m_aHTMLControls.size() &&
+            m_aHTMLControls[i]->nNdIdx == nStartIdx )
+            xNewFormComps = m_aHTMLControls[i]->xFormComps;
     }
     else
     {
@@ -269,16 +269,16 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
         const SwStartNode *pCurrentStNd = 0; // und der Start-Node eines Ctrls
         sal_Int32 nCurrentCtrls = 0;   // und die in ihr gefundenen Controls
         sal_uInt32 nEndIdx =  pStartNd->EndOfSectionIndex();
-        for( ; i < aHTMLControls.size() &&
-            aHTMLControls[i]->nNdIdx <= nEndIdx; i++ )
+        for( ; i < m_aHTMLControls.size() &&
+            m_aHTMLControls[i]->nNdIdx <= nEndIdx; i++ )
         {
             const SwStartNode *pCntrlStNd =
-                pDoc->GetNodes()[aHTMLControls[i]->nNdIdx]->StartOfSectionNode();
+                pDoc->GetNodes()[m_aHTMLControls[i]->nNdIdx]->StartOfSectionNode();
 
             if( xCurrentFormComps.is() )
             {
                 // Wir befinden uns bereits in einer Form ...
-                if( xCurrentFormComps==aHTMLControls[i]->xFormComps )
+                if( xCurrentFormComps==m_aHTMLControls[i]->xFormComps )
                 {
                     // ... und das Control befindet sich auch darin ...
                     if( pCurrentStNd!=pCntrlStNd )
@@ -289,25 +289,25 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
                         xNewFormComps = xCurrentFormComps;
                         break;
                     }
-                    nCurrentCtrls = nCurrentCtrls + aHTMLControls[i]->nCount;
+                    nCurrentCtrls = nCurrentCtrls + m_aHTMLControls[i]->nCount;
                 }
                 else
                 {
                     // ... aber das Control liegt in einer anderen Zelle:
                     // Da tun wir so, als ob wir eine neue Form aufmachen
                     // und suchen weiter.
-                    xCurrentFormComps = aHTMLControls[i]->xFormComps;
+                    xCurrentFormComps = m_aHTMLControls[i]->xFormComps;
                     pCurrentStNd = pCntrlStNd;
-                    nCurrentCtrls = aHTMLControls[i]->nCount;
+                    nCurrentCtrls = m_aHTMLControls[i]->nCount;
                 }
             }
             else
             {
                 // Wir befinden uns noch in keiner Form:
                 // Da tun wir mal so, als ob wie wir die Form aufmachen.
-                xCurrentFormComps = aHTMLControls[i]->xFormComps;
+                xCurrentFormComps = m_aHTMLControls[i]->xFormComps;
                 pCurrentStNd = pCntrlStNd;
-                nCurrentCtrls = aHTMLControls[i]->nCount;
+                nCurrentCtrls = m_aHTMLControls[i]->nCount;
             }
         }
         if( !xNewFormComps.is() && xCurrentFormComps.is() &&
@@ -441,21 +441,21 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
 void SwHTMLWriter::OutForm( bool bOn,
                 const uno::Reference< container::XIndexContainer > & rFormComps )
 {
-    nFormCntrlCnt = 0;
+    m_nFormCntrlCnt = 0;
 
     if( !bOn )
     {
         DecIndentLevel(); // Inhalt der Form einruecken
-        if( bLFPossible )
+        if( m_bLFPossible )
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_form, false );
-        bLFPossible = true;
+        m_bLFPossible = true;
 
         return;
     }
 
     // die neue Form wird geoeffnet
-    if( bLFPossible )
+    if( m_bLFPossible )
         OutNewLine();
     OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_form);
 
@@ -468,7 +468,7 @@ void SwHTMLWriter::OutForm( bool bOn,
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
         Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( Strm(), *static_cast<OUString const *>(aTmp.getValue()),
-                                  eDestEnc, &aNonConvertableCharacters );
+                                  m_eDestEnc, &m_aNonConvertableCharacters );
         sOut = "\"";
     }
 
@@ -480,7 +480,7 @@ void SwHTMLWriter::OutForm( bool bOn,
         Strm().WriteOString( sOut );
         OUString aURL( *static_cast<OUString const *>(aTmp.getValue()) );
         aURL = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), aURL);
-        HTMLOutFuncs::Out_String( Strm(), aURL, eDestEnc, &aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), aURL, m_eDestEnc, &m_aNonConvertableCharacters );
         sOut = "\"";
     }
 
@@ -527,17 +527,17 @@ void SwHTMLWriter::OutForm( bool bOn,
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_target) + "=\"";
         Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( Strm(), *static_cast<OUString const *>(aTmp.getValue()),
-                                  eDestEnc, &aNonConvertableCharacters );
+                                  m_eDestEnc, &m_aNonConvertableCharacters );
         sOut = "\"";
     }
 
     Strm().WriteOString( sOut );
     uno::Reference< form::XFormComponent > xFormComp( rFormComps, uno::UNO_QUERY );
-    lcl_html_outEvents( Strm(), xFormComp, bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
+    lcl_html_outEvents( Strm(), xFormComp, m_bCfgStarBasic, m_eDestEnc, &m_aNonConvertableCharacters );
     Strm().WriteChar( '>' );
 
     IncIndentLevel(); // Inhalt der Form einruecken
-    bLFPossible = true;
+    m_bLFPossible = true;
 }
 
 void SwHTMLWriter::OutHiddenControls(
@@ -588,7 +588,7 @@ void SwHTMLWriter::OutHiddenControls(
         if( form::FormComponentType::HIDDENCONTROL ==
                                             *static_cast<sal_Int16 const *>(aTmp.getValue()) )
         {
-            if( bLFPossible )
+            if( m_bLFPossible )
                 OutNewLine( true );
             OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_input) + " " +
                 OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"" +
@@ -601,7 +601,7 @@ void SwHTMLWriter::OutHiddenControls(
                 sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
                 Strm().WriteOString( sOut );
                 HTMLOutFuncs::Out_String( Strm(), *static_cast<OUString const *>(aTmp.getValue()),
-                                          eDestEnc, &aNonConvertableCharacters );
+                                          m_eDestEnc, &m_aNonConvertableCharacters );
                 sOut = "\"";
             }
             aTmp = xPropSet->getPropertyValue( "HiddenValue" );
@@ -611,13 +611,13 @@ void SwHTMLWriter::OutHiddenControls(
                 sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_value) + "=\"";
                 Strm().WriteOString( sOut );
                 HTMLOutFuncs::Out_String( Strm(), *static_cast<OUString const *>(aTmp.getValue()),
-                                          eDestEnc, &aNonConvertableCharacters );
+                                          m_eDestEnc, &m_aNonConvertableCharacters );
                 sOut = "\"";
             }
             sOut += ">";
             Strm().WriteOString( sOut );
 
-            nFormCntrlCnt++;
+            m_nFormCntrlCnt++;
         }
         else if( lcl_html_isHTMLControl( *static_cast<sal_Int16 const *>(aTmp.getValue()) ) )
         {
@@ -702,7 +702,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             xPropSet->getPropertySetInfo();
 
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-    rHTMLWrt.nFormCntrlCnt++;
+    rHTMLWrt.m_nFormCntrlCnt++;
 
     enum Tag { TAG_INPUT, TAG_SELECT, TAG_TEXTAREA, TAG_NONE };
     static char const * const TagNames[] = {
@@ -784,7 +784,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         break;
 
     case form::FormComponentType::LISTBOX:
-        if( rHTMLWrt.bLFPossible )
+        if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine( true );
         eTag = TAG_SELECT;
         aTmp = xPropSet->getPropertyValue( "Dropdown" );
@@ -826,7 +826,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
             if( bMultiLine )
             {
-                if( rHTMLWrt.bLFPossible )
+                if( rHTMLWrt.m_bLFPossible )
                     rHTMLWrt.OutNewLine( true );
                 eTag = TAG_TEXTAREA;
 
@@ -938,7 +938,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), *static_cast<OUString const *>(aTmp.getValue()),
-                                  rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                                  rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut = "\"";
     }
 
@@ -953,7 +953,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_value) + "=\"";
         rWrt.Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), sValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), sValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut = "\"";
     }
 
@@ -970,7 +970,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
             HTMLOutFuncs::Out_String( rWrt.Strm(),
                         URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), *static_cast<OUString const *>(aTmp.getValue())),
-                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                        rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut = "\"";
         }
 
@@ -1031,7 +1031,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     if( nFrmOpts != 0 )
         aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrmOpts );
 
-    if( rHTMLWrt.bCfgOutStyles )
+    if( rHTMLWrt.m_bCfgOutStyles )
     {
         bool bEdit = TAG_TEXTAREA == eTag || TYPE_FILE == eType ||
                      TYPE_TEXT == eType;
@@ -1142,8 +1142,8 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     }
 
     uno::Reference< form::XFormComponent >  xFormComp( xControlModel, uno::UNO_QUERY );
-    lcl_html_outEvents( rWrt.Strm(), xFormComp, rHTMLWrt.bCfgStarBasic,
-                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+    lcl_html_outEvents( rWrt.Strm(), xFormComp, rHTMLWrt.m_bCfgStarBasic,
+                        rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
 
     rWrt.Strm().WriteChar( '>' );
 
@@ -1205,7 +1205,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_value) + "=\"";
                     rWrt.Strm().WriteOString( sOut );
                     HTMLOutFuncs::Out_String( rWrt.Strm(), sVal,
-                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                        rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
                     sOut = "\"";
                 }
                 if( bSelected )
@@ -1215,7 +1215,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 rWrt.Strm().WriteOString( sOut );
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(), pStrings[i],
-                                          rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                                          rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             }
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_option, false );
 
@@ -1245,7 +1245,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     rWrt.Strm().WriteCharPtr( SAL_NEWLINE_STRING );
                 OUString aLine = sVal.getToken( 0, 0x0A, nPos );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine,
-                                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+                                        rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
             }
         }
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_textarea, false );
@@ -1258,7 +1258,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         {
             sValue = *static_cast<OUString const *>(aTmp.getValue());
             HTMLOutFuncs::Out_String( rWrt.Strm(), sValue,
-                rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( ' ' );
+                rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters ).WriteChar( ' ' );
         }
     }
 
@@ -1266,7 +1266,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
 
     // Controls sind nicht absatz-gebunden, deshalb kein LF mehr ausgeben!
-    rHTMLWrt.bLFPossible = false;
+    rHTMLWrt.m_bLFPossible = false;
 
     if( rHTMLWrt.mxFormComps.is() )
         rHTMLWrt.OutHiddenControls( rHTMLWrt.mxFormComps, xPropSet );
@@ -1313,12 +1313,12 @@ void SwHTMLWriter::GetControls()
     // Ueber dieses Array laesst sich dann feststellen, wo form::Forms geoeffnet
     // und geschlossen werden muessen.
 
-    if( pHTMLPosFlyFrms )
+    if( m_pHTMLPosFlyFrms )
     {
         // die absatz-gebundenen Controls einsammeln
-        for( size_t i=0; i<pHTMLPosFlyFrms->size(); i++ )
+        for( size_t i=0; i<m_pHTMLPosFlyFrms->size(); i++ )
         {
-            const SwHTMLPosFlyFrm* pPosFlyFrm = (*pHTMLPosFlyFrms)[ i ];
+            const SwHTMLPosFlyFrm* pPosFlyFrm = (*m_pHTMLPosFlyFrms)[ i ];
             if( HTML_OUT_CONTROL != pPosFlyFrm->GetOutFn() )
                 continue;
 
@@ -1327,7 +1327,7 @@ void SwHTMLWriter::GetControls()
             if( !pSdrObj )
                 continue;
 
-            AddControl( aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj),
+            AddControl( m_aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj),
                         pPosFlyFrm->GetNdIndex().GetIndex() );
         }
     }
@@ -1350,7 +1350,7 @@ void SwHTMLWriter::GetControls()
         if( !pSdrObj )
             continue;
 
-        AddControl( aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj), pPos->nNode.GetIndex() );
+        AddControl( m_aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj), pPos->nNode.GetIndex() );
     }
 }
 

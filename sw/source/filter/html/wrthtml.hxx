@@ -262,12 +262,12 @@ class IDocumentStylePoolAccess;
 
 class SwHTMLWriter : public Writer
 {
-    SwHTMLPosFlyFrms *pHTMLPosFlyFrms;
-    SwHTMLNumRuleInfo *pNumRuleInfo;// aktuelle Numerierung
-    SwHTMLNumRuleInfo *pNextNumRuleInfo;
-    sal_uInt32 nHTMLMode;               // Beschreibung der Export-Konfiguration
+    SwHTMLPosFlyFrms *m_pHTMLPosFlyFrms;
+    SwHTMLNumRuleInfo *m_pNumRuleInfo;// aktuelle Numerierung
+    SwHTMLNumRuleInfo *m_pNextNumRuleInfo;
+    sal_uInt32 m_nHTMLMode;               // Beschreibung der Export-Konfiguration
 
-    FieldUnit eCSS1Unit;
+    FieldUnit m_eCSS1Unit;
 
     sal_uInt16 OutHeaderAttrs();
     const SwPageDesc *MakeHeader( sal_uInt16& rHeaderAtrs );
@@ -281,76 +281,76 @@ protected:
     void SetupFilterOptions(SfxMedium& rMedium) override;
 
 public:
-    std::vector<OUString> aImgMapNames;     // geschriebene Image Maps
-    std::set<OUString> aImplicitMarks;// implizite Stprungmarken
-    std::set<OUString> aNumRuleNames;// Names of exported num rules
-    std::set<OUString> aScriptParaStyles;// script dependent para styles
-    std::set<OUString> aScriptTextStyles;// script dependent text styles
-    std::vector<OUString> aOutlineMarks;
-    std::vector<sal_uInt32> aOutlineMarkPoss;
-    HTMLControls aHTMLControls;     // die zu schreibenden Forms
+    std::vector<OUString> m_aImgMapNames;     // geschriebene Image Maps
+    std::set<OUString> m_aImplicitMarks;// implizite Stprungmarken
+    std::set<OUString> m_aNumRuleNames;// Names of exported num rules
+    std::set<OUString> m_aScriptParaStyles;// script dependent para styles
+    std::set<OUString> m_aScriptTextStyles;// script dependent text styles
+    std::vector<OUString> m_aOutlineMarks;
+    std::vector<sal_uInt32> m_aOutlineMarkPoss;
+    HTMLControls m_aHTMLControls;     // die zu schreibenden Forms
     SwHTMLFormatInfos m_CharFormatInfos;
     SwHTMLFormatInfos m_TextCollInfos;
-    std::vector<SwFormatINetFormat*> aINetFormats; // die "offenen" INet-Attribute
-    SwHTMLTextFootnotes *pFootEndNotes;
+    std::vector<SwFormatINetFormat*> m_aINetFormats; // die "offenen" INet-Attribute
+    SwHTMLTextFootnotes *m_pFootEndNotes;
 
-    OUString aCSS1Selector;           // der Selektor eines Styles
-    OUString aNonConvertableCharacters;
-    OUString aBulletGrfs[MAXLEVEL];   // die Grafiken fuer Listen
+    OUString m_aCSS1Selector;           // der Selektor eines Styles
+    OUString m_aNonConvertableCharacters;
+    OUString m_aBulletGrfs[MAXLEVEL];   // die Grafiken fuer Listen
 
     css::uno::Reference<css::container::XIndexContainer> mxFormComps; // die aktuelle Form
 
-    SwDoc *pTemplate;               // die HTML-Vorlage
-    Color *pDfltColor;              // default Farbe
-    SwNodeIndex *pStartNdIdx;       // Index des ersten Absatz
-    const SwPageDesc *pCurrPageDesc;// Die aktuelle Seiten-Vorlage
-    const SwFormatFootnote *pFormatFootnote;
+    SwDoc *m_pTemplate;               // die HTML-Vorlage
+    Color *m_pDfltColor;              // default Farbe
+    SwNodeIndex *m_pStartNdIdx;       // Index des ersten Absatz
+    const SwPageDesc *m_pCurrPageDesc;// Die aktuelle Seiten-Vorlage
+    const SwFormatFootnote *m_pFormatFootnote;
 
-    sal_uInt32 aFontHeights[7];         // die Font-Hoehen 1-7
+    sal_uInt32 m_aFontHeights[7];         // die Font-Hoehen 1-7
 
-    sal_uInt32 nWarn;                   // Result-Code fuer Warnungen
-    sal_uInt32 nLastLFPos;              // letzte Position eines LF
+    sal_uInt32 m_nWarn;                   // Result-Code fuer Warnungen
+    sal_uInt32 m_nLastLFPos;              // letzte Position eines LF
 
-    sal_uInt16 nLastParaToken;          // fuers Absaetze zusammenhalten
-    sal_Int32 nBkmkTabPos;              // akt. Position in der Bookmark-Tabelle
-    sal_uInt16 nImgMapCnt;              // zum eindeutig
-    sal_uInt16 nFormCntrlCnt;
-    sal_uInt16 nEndNote;
-    sal_uInt16 nFootNote;
-    sal_Int32 nLeftMargin;              // linker Einzug (z.B. aus Listen)
-    sal_Int32 nDfltLeftMargin;          // die defaults, der nicht geschrieben
-    sal_Int32 nDfltRightMargin;     // werden muessen (aus der Vorlage)
-    short  nFirstLineIndent;        // Erstzeilen-Einzug (aus Listen)
-    short  nDfltFirstLineIndent;    // nicht zu schreibender default
-    sal_uInt16 nDfltTopMargin;          // die defaults, der nicht geschrieben
-    sal_uInt16 nDfltBottomMargin;       // werden muessen (aus der Vorlage)
-    sal_uInt16 nIndentLvl;              // wie weit ist eingerueckt?
-    sal_Int32 nWhishLineLen;           // wie lang darf eine Zeile werden?
-    sal_uInt16 nDefListLvl;             // welcher DL-Level existiert gerade
-    sal_Int32  nDefListMargin;          // Wie weit wird in DL eingerueckt
-    sal_uInt16 nHeaderFooterSpace;
-    sal_uInt16 nTextAttrsToIgnore;
-    sal_uInt16 nExportMode;
-    sal_uInt16 nCSS1OutMode;
-    sal_uInt16 nCSS1Script;         // contains default script (that's the one
+    sal_uInt16 m_nLastParaToken;          // fuers Absaetze zusammenhalten
+    sal_Int32 m_nBkmkTabPos;              // akt. Position in der Bookmark-Tabelle
+    sal_uInt16 m_nImgMapCnt;              // zum eindeutig
+    sal_uInt16 m_nFormCntrlCnt;
+    sal_uInt16 m_nEndNote;
+    sal_uInt16 m_nFootNote;
+    sal_Int32 m_nLeftMargin;              // linker Einzug (z.B. aus Listen)
+    sal_Int32 m_nDfltLeftMargin;          // die defaults, der nicht geschrieben
+    sal_Int32 m_nDfltRightMargin;     // werden muessen (aus der Vorlage)
+    short  m_nFirstLineIndent;        // Erstzeilen-Einzug (aus Listen)
+    short  m_nDfltFirstLineIndent;    // nicht zu schreibender default
+    sal_uInt16 m_nDfltTopMargin;          // die defaults, der nicht geschrieben
+    sal_uInt16 m_nDfltBottomMargin;       // werden muessen (aus der Vorlage)
+    sal_uInt16 m_nIndentLvl;              // wie weit ist eingerueckt?
+    sal_Int32 m_nWhishLineLen;           // wie lang darf eine Zeile werden?
+    sal_uInt16 m_nDefListLvl;             // welcher DL-Level existiert gerade
+    sal_Int32  m_nDefListMargin;          // Wie weit wird in DL eingerueckt
+    sal_uInt16 m_nHeaderFooterSpace;
+    sal_uInt16 m_nTextAttrsToIgnore;
+    sal_uInt16 m_nExportMode;
+    sal_uInt16 m_nCSS1OutMode;
+    sal_uInt16 m_nCSS1Script;         // contains default script (that's the one
                                     // that is not contained in class names)
-    sal_uInt16 nDirection;          // the current direction
+    sal_uInt16 m_nDirection;          // the current direction
 
-    rtl_TextEncoding    eDestEnc;
-    LanguageType        eLang;
+    rtl_TextEncoding    m_eDestEnc;
+    LanguageType        m_eLang;
 
     // Beschreibung der Export-Konfiguration
     // 0
-    bool bCfgOutStyles : 1;         // Styles exportieren
-    bool bCfgPreferStyles : 1;      // Styles herkoemmlichen Tags vorziehen
-    bool bCfgFormFeed : 1;          // Form-Feeds exportieren
-    bool bCfgStarBasic : 1;         // StarBasic exportieren
-    bool bCfgCpyLinkedGrfs : 1;
+    bool m_bCfgOutStyles : 1;         // Styles exportieren
+    bool m_bCfgPreferStyles : 1;      // Styles herkoemmlichen Tags vorziehen
+    bool m_bCfgFormFeed : 1;          // Form-Feeds exportieren
+    bool m_bCfgStarBasic : 1;         // StarBasic exportieren
+    bool m_bCfgCpyLinkedGrfs : 1;
 
     // Beschreibung dessen, was exportiert wird
 
-    bool bFirstLine : 1;            // wird die 1. Zeile ausgegeben ?
-    bool bTagOn : 1;                // Tag an oder aus/Attr-Start oder -Ende
+    bool m_bFirstLine : 1;            // wird die 1. Zeile ausgegeben ?
+    bool m_bTagOn : 1;                // Tag an oder aus/Attr-Start oder -Ende
 
     // Die folgenden beiden Flags geben an, wir Attribute exportiert werden:
     // bTextAttr bOutOpts
@@ -360,44 +360,44 @@ public:
     // 0        1           (Absatz-)Attribute: Das Attribut wird als Option
     //                          eines bereits geschrieben Tags exportiert. Es
     //                          gibt kein End-Tag.
-    bool bTextAttr : 1;
+    bool m_bTextAttr : 1;
     // 8
-    bool bOutOpts : 1;
+    bool m_bOutOpts : 1;
 
-    bool bOutTable : 1;             // wird der Tabelleninhalt geschrieben?
-    bool bOutHeader : 1;
-    bool bOutFooter : 1;
-    bool bOutFlyFrame : 1;
+    bool m_bOutTable : 1;             // wird der Tabelleninhalt geschrieben?
+    bool m_bOutHeader : 1;
+    bool m_bOutFooter : 1;
+    bool m_bOutFlyFrame : 1;
 
     // Flags fuer Style-Export
 
-    bool bFirstCSS1Rule : 1;        // wurde schon eine Property ausgegeben
-    bool bFirstCSS1Property : 1;    // wurde schon eine Property ausgegeben
-    bool bPoolCollTextModified : 1; // die Textkoerper-Vorlage wurde
+    bool m_bFirstCSS1Rule : 1;        // wurde schon eine Property ausgegeben
+    bool m_bFirstCSS1Property : 1;    // wurde schon eine Property ausgegeben
+    bool m_bPoolCollTextModified : 1; // die Textkoerper-Vorlage wurde
                                     // modifiziert.
     // 16
-    bool bCSS1IgnoreFirstPageDesc : 1;
+    bool m_bCSS1IgnoreFirstPageDesc : 1;
 
     // was muss/kann/darf nicht ausgegeben werden?
 
-    bool bNoAlign : 1;              // HTML-Tag erlaubt kein ALIGN=...
-    bool bClearLeft : 1;            // <BR CLEAR=LEFT> am Absatz-Ende ausg.
-    bool bClearRight : 1;           // <BR CLEAR=RIGHT> am Absatz-Ende ausg.
-    bool bLFPossible : 1;           // ein Zeilenumbruch darf eingef. werden
+    bool m_bNoAlign : 1;              // HTML-Tag erlaubt kein ALIGN=...
+    bool m_bClearLeft : 1;            // <BR CLEAR=LEFT> am Absatz-Ende ausg.
+    bool m_bClearRight : 1;           // <BR CLEAR=RIGHT> am Absatz-Ende ausg.
+    bool m_bLFPossible : 1;           // ein Zeilenumbruch darf eingef. werden
 
     // sonstiges
 
-    bool bPreserveForm : 1;         // die aktuelle Form beibehalten
+    bool m_bPreserveForm : 1;         // die aktuelle Form beibehalten
 
-    bool bCfgNetscape4 : 1;         // Netscape4 Hacks
+    bool m_bCfgNetscape4 : 1;         // Netscape4 Hacks
 
     bool mbSkipImages : 1;
     /// If HTML header and footer should be written as well, or just the content itself.
     bool mbSkipHeaderFooter : 1;
 
 #define sCSS2_P_CLASS_leaders "leaders"
-    bool bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders
-    bool bParaDotLeaders : 1;       // for TOC dot leaders
+    bool m_bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders
+    bool m_bParaDotLeaders : 1;       // for TOC dot leaders
     // 25
 
     explicit SwHTMLWriter( const OUString& rBaseURL );
@@ -486,17 +486,17 @@ public:
 
     void IncIndentLevel()
     {
-        nIndentLvl++;
+        m_nIndentLvl++;
     }
     void DecIndentLevel()
     {
-        if ( nIndentLvl ) nIndentLvl--;
+        if ( m_nIndentLvl ) m_nIndentLvl--;
     }
     OString GetIndentString(sal_uInt16 nIncLvl = 0);
 
     sal_Int32 GetLineLen()
     {
-        return (sal_Int32)(Strm().Tell()-nLastLFPos);
+        return (sal_Int32)(Strm().Tell()-m_nLastLFPos);
     }
     void OutNewLine( bool bCheck=false );
 
@@ -515,14 +515,14 @@ public:
     sal_uInt16 GetHTMLFontSize( sal_uInt32 nFontHeight ) const;
 
     // Die aktuelle Numerierungs-Information holen.
-    SwHTMLNumRuleInfo& GetNumInfo() { return *pNumRuleInfo; }
+    SwHTMLNumRuleInfo& GetNumInfo() { return *m_pNumRuleInfo; }
 
     // Die Numerierungs-Information des naechsten Absatz holen. Sie
     // muss noch nicht vorhanden sein!
-    SwHTMLNumRuleInfo *GetNextNumInfo() { return pNextNumRuleInfo; }
+    SwHTMLNumRuleInfo *GetNextNumInfo() { return m_pNextNumRuleInfo; }
 
     // Die Numerierungs-Information des naechsten Absatz setzen.
-    void SetNextNumInfo( SwHTMLNumRuleInfo *pNxt ) { pNextNumRuleInfo=pNxt; }
+    void SetNextNumInfo( SwHTMLNumRuleInfo *pNxt ) { m_pNextNumRuleInfo=pNxt; }
 
     // Die Numerierungs-Information des naeschten Absatz fuellen.
     void FillNextNumInfo();
@@ -555,11 +555,11 @@ public:
 
     sal_uInt32 GetHTMLMode() const
     {
-        return nHTMLMode;
+        return m_nHTMLMode;
     }
     bool IsHTMLMode( sal_uInt32 nMode ) const
     {
-        return (nHTMLMode & nMode) != 0;
+        return (m_nHTMLMode & nMode) != 0;
     }
 
     inline bool IsCSS1Source( sal_uInt16 n ) const;
@@ -571,19 +571,19 @@ public:
     static sal_uInt16 GetCSS1ScriptForScriptType( sal_uInt16 nScriptType );
     static sal_uInt16 GetLangWhichIdFromScript( sal_uInt16 nScript );
 
-    FieldUnit GetCSS1Unit() const { return eCSS1Unit; }
+    FieldUnit GetCSS1Unit() const { return m_eCSS1Unit; }
 
     sal_Int32 indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& rText );
 };
 
 inline bool SwHTMLWriter::IsCSS1Source( sal_uInt16 n ) const
 {
-    return n == (nCSS1OutMode & CSS1_OUTMODE_SOURCE);
+    return n == (m_nCSS1OutMode & CSS1_OUTMODE_SOURCE);
 }
 
 inline bool SwHTMLWriter::IsCSS1Script( sal_uInt16 n ) const
 {
-    sal_uInt16 nScript = (nCSS1OutMode & CSS1_OUTMODE_SCRIPT);
+    sal_uInt16 nScript = (m_nCSS1OutMode & CSS1_OUTMODE_SCRIPT);
     return CSS1_OUTMODE_ANY_SCRIPT == nScript || n == nScript;
 }
 

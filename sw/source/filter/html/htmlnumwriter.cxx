@@ -45,7 +45,7 @@ using namespace css;
 
 void SwHTMLWriter::FillNextNumInfo()
 {
-    pNextNumRuleInfo = 0;
+    m_pNextNumRuleInfo = 0;
 
     sal_uLong nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
 
@@ -56,7 +56,7 @@ void SwHTMLWriter::FillNextNumInfo()
         if( pNd->IsTextNode() )
         {
             // Der naechste wird als naechstes ausgegeben.
-            pNextNumRuleInfo = new SwHTMLNumRuleInfo( *pNd->GetTextNode() );
+            m_pNextNumRuleInfo = new SwHTMLNumRuleInfo( *pNd->GetTextNode() );
 
             // Vor einer Tabelle behalten wir erst einmal die alte Ebene bei,
             // wenn die gleiche Numerierung hinter der Tabelle
@@ -64,10 +64,10 @@ void SwHTMLWriter::FillNextNumInfo()
             // wird. Die Tabelle wird ann beim Import so weit eingeruckt,
             // wie es der Num-Ebene entspricht.
             if( bTable &&
-                pNextNumRuleInfo->GetNumRule()==GetNumInfo().GetNumRule() &&
-                !pNextNumRuleInfo->IsRestart() )
+                m_pNextNumRuleInfo->GetNumRule()==GetNumInfo().GetNumRule() &&
+                !m_pNextNumRuleInfo->IsRestart() )
             {
-                pNextNumRuleInfo->SetDepth( GetNumInfo().GetDepth() );
+                m_pNextNumRuleInfo->SetDepth( GetNumInfo().GetDepth() );
             }
         }
         else if( pNd->IsTableNode() )
@@ -81,16 +81,16 @@ void SwHTMLWriter::FillNextNumInfo()
         {
             // In allen anderen Faellen ist die Numerierung erstmal
             // zu Ende.
-            pNextNumRuleInfo = new SwHTMLNumRuleInfo;
+            m_pNextNumRuleInfo = new SwHTMLNumRuleInfo;
         }
     }
-    while( !pNextNumRuleInfo );
+    while( !m_pNextNumRuleInfo );
 }
 
 void SwHTMLWriter::ClearNextNumInfo()
 {
-    delete pNextNumRuleInfo;
-    pNextNumRuleInfo = 0;
+    delete m_pNextNumRuleInfo;
+    m_pNextNumRuleInfo = 0;
 }
 
 Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
@@ -108,7 +108,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
     if( !bSameRule && rInfo.GetDepth() )
     {
         OUString aName( rInfo.GetNumRule()->GetName() );
-        if( 0 != rWrt.aNumRuleNames.count( aName ) )
+        if( 0 != rWrt.m_aNumRuleNames.count( aName ) )
         {
             // The rule has been applied before
             sal_Int16 eType = rInfo.GetNumRule()
@@ -166,11 +166,11 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         }
         else
         {
-            rWrt.aNumRuleNames.insert( aName );
+            rWrt.m_aNumRuleNames.insert( aName );
         }
     }
 
-    OSL_ENSURE( rWrt.nLastParaToken == 0,
+    OSL_ENSURE( rWrt.m_nLastParaToken == 0,
                 "<PRE> wurde nicht vor <OL> beendet." );
     sal_uInt16 nPrevDepth =
         (bSameRule && !rInfo.IsRestart()) ? rPrevInfo.GetDepth() : 0;
@@ -179,7 +179,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
     {
         rWrt.OutNewLine(); // <OL>/<UL> in eine neue Zeile
 
-        rWrt.aBulletGrfs[i].clear();
+        rWrt.m_aBulletGrfs[i].clear();
         OStringBuffer sOut;
         sOut.append('<');
         const SwNumFormat& rNumFormat = rInfo.GetNumRule()->Get( i );
@@ -273,7 +273,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         if (!sOut.isEmpty())
             rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-        if( rWrt.bCfgOutStyles )
+        if( rWrt.m_bCfgOutStyles )
             OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (sal_uInt8)i );
 
         rWrt.Strm().WriteChar( '>' );
@@ -295,7 +295,7 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
         return rWrt;
     }
 
-    OSL_ENSURE( rWrt.nLastParaToken == 0,
+    OSL_ENSURE( rWrt.m_nLastParaToken == 0,
                 "<PRE> wurde nicht vor </OL> beendet." );
     sal_uInt16 nNextDepth =
         (bSameRule && !rNextInfo.IsRestart()) ? rNextInfo.GetDepth() : 0;
@@ -305,7 +305,7 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
     for( sal_uInt16 i=rInfo.GetDepth(); i>nNextDepth; i-- )
     {
         rWrt.DecIndentLevel(); // Inhalt von <OL> einruecken
-        if( rWrt.bLFPossible )
+        if( rWrt.m_bLFPossible )
             rWrt.OutNewLine(); // </OL>/</UL> in eine neue Zeile
 
         // es wird also eine Liste angefangen oder beendet:
@@ -316,7 +316,7 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
         else
             pStr = OOO_STRING_SVTOOLS_HTML_orderlist;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, false );
-        rWrt.bLFPossible = true;
+        rWrt.m_bLFPossible = true;
     }
 
     return rWrt;

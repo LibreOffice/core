@@ -246,9 +246,9 @@ sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrameFormat& rFrameFormat,
                     // leerer Rahmen? Nur wenn kein Rahmen am
                     // Text- oder Start-Node verankert ist.
                     bEmpty = true;
-                    if( pHTMLPosFlyFrms )
+                    if( m_pHTMLPosFlyFrms )
                     {
-                        for( auto pHTMLPosFlyFrm : *pHTMLPosFlyFrms )
+                        for( auto pHTMLPosFlyFrm : *m_pHTMLPosFlyFrms )
                         {
                             sal_uLong nIdx = pHTMLPosFlyFrm->GetNdIndex().GetIndex();
                             bEmpty = (nIdx != nStt) && (nIdx != nStt-1);
@@ -310,7 +310,7 @@ void SwHTMLWriter::CollectFlyFrms()
         {
         case FLY_AT_PAGE:
         case FLY_AT_FLY:
-            nMode = aHTMLOutFrmPageFlyTable[eType][nExportMode];
+            nMode = aHTMLOutFrmPageFlyTable[eType][m_nExportMode];
             break;
 
         case FLY_AT_PARA:
@@ -325,30 +325,30 @@ void SwHTMLWriter::CollectFlyFrms()
                     static_cast<const SvxLRSpaceItem&>(pACNd->GetAttr(RES_LR_SPACE));
                 if( rLRItem.GetTextLeft() || rLRItem.GetRight() )
                 {
-                    nMode = aHTMLOutFrmParaFrameTable[eType][nExportMode];
+                    nMode = aHTMLOutFrmParaFrameTable[eType][m_nExportMode];
                     break;
                 }
             }
-            nMode = aHTMLOutFrmParaPrtAreaTable[eType][nExportMode];
+            nMode = aHTMLOutFrmParaPrtAreaTable[eType][m_nExportMode];
             break;
 
         case FLY_AT_CHAR:
             if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
-                nMode = aHTMLOutFrmParaPrtAreaTable[eType][nExportMode];
+                nMode = aHTMLOutFrmParaPrtAreaTable[eType][m_nExportMode];
             else
-                nMode = aHTMLOutFrmParaOtherTable[eType][nExportMode];
+                nMode = aHTMLOutFrmParaOtherTable[eType][m_nExportMode];
             break;
 
         default:
-            nMode = aHTMLOutFrmParaPrtAreaTable[eType][nExportMode];
+            nMode = aHTMLOutFrmParaPrtAreaTable[eType][m_nExportMode];
             break;
         }
 
-        if( !pHTMLPosFlyFrms )
-            pHTMLPosFlyFrms = new SwHTMLPosFlyFrms;
+        if( !m_pHTMLPosFlyFrms )
+            m_pHTMLPosFlyFrms = new SwHTMLPosFlyFrms;
 
         SwHTMLPosFlyFrm *pNew = new SwHTMLPosFlyFrm(**aIter, pSdrObj, nMode);
-        pHTMLPosFlyFrms->insert( pNew );
+        m_pHTMLPosFlyFrms->insert( pNew );
     }
 }
 
@@ -361,20 +361,20 @@ bool SwHTMLWriter::OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nContentIdx, sal_uInt8
     // manchmal wieder von vorne anfangen, nachdem ein Fly ausgegeben
     // wurde.
     bool bRestart = true;
-    while( pHTMLPosFlyFrms && bRestart )
+    while( m_pHTMLPosFlyFrms && bRestart )
     {
         bFlysLeft = bRestart = false;
 
         // suche nach dem Anfang der FlyFrames
         size_t i {0};
 
-        for( ; i < pHTMLPosFlyFrms->size() &&
-            (*pHTMLPosFlyFrms)[i]->GetNdIndex().GetIndex() < nNdIdx; i++ )
+        for( ; i < m_pHTMLPosFlyFrms->size() &&
+            (*m_pHTMLPosFlyFrms)[i]->GetNdIndex().GetIndex() < nNdIdx; i++ )
             ;
-        for( ; !bRestart && i < pHTMLPosFlyFrms->size() &&
-            (*pHTMLPosFlyFrms)[i]->GetNdIndex().GetIndex() == nNdIdx; i++ )
+        for( ; !bRestart && i < m_pHTMLPosFlyFrms->size() &&
+            (*m_pHTMLPosFlyFrms)[i]->GetNdIndex().GetIndex() == nNdIdx; i++ )
         {
-            SwHTMLPosFlyFrm *pPosFly = (*pHTMLPosFlyFrms)[i];
+            SwHTMLPosFlyFrm *pPosFly = (*m_pHTMLPosFlyFrms)[i];
             if( ( HTML_POS_ANY == nPos ||
                   pPosFly->GetOutPos() == nPos ) &&
                 pPosFly->GetContentIndex() == nContentIdx )
@@ -382,12 +382,12 @@ bool SwHTMLWriter::OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nContentIdx, sal_uInt8
                 // Erst entfernen ist wichtig, weil in tieferen
                 // Rekursionen evtl. weitere Eintraege oder das
                 // ganze Array geloscht werden koennte.
-                pHTMLPosFlyFrms->erase(i);
+                m_pHTMLPosFlyFrms->erase(i);
                 i--;
-                if( pHTMLPosFlyFrms->empty() )
+                if( m_pHTMLPosFlyFrms->empty() )
                 {
-                    delete pHTMLPosFlyFrms;
-                    pHTMLPosFlyFrms = 0;
+                    delete m_pHTMLPosFlyFrms;
+                    m_pHTMLPosFlyFrms = 0;
                     bRestart = true;    // nicht wirklich, nur raus
                                         // aus der Schleife
                 }
@@ -430,7 +430,7 @@ void SwHTMLWriter::OutFrameFormat( sal_uInt8 nMode, const SwFrameFormat& rFrameF
     if( HTML_CNTNR_NONE != nCntnrMode )
     {
 
-        if( bLFPossible && HTML_CNTNR_DIV == nCntnrMode )
+        if( m_bLFPossible && HTML_CNTNR_DIV == nCntnrMode )
             OutNewLine();
 
         OStringBuffer sOut;
@@ -457,7 +457,7 @@ void SwHTMLWriter::OutFrameFormat( sal_uInt8 nMode, const SwFrameFormat& rFrameF
         if( HTML_CNTNR_DIV == nCntnrMode )
         {
             IncIndentLevel();
-            bLFPossible = true;
+            m_bLFPossible = true;
         }
     }
 
@@ -509,10 +509,10 @@ void SwHTMLWriter::OutFrameFormat( sal_uInt8 nMode, const SwFrameFormat& rFrameF
     if( HTML_CNTNR_DIV == nCntnrMode )
     {
         DecIndentLevel();
-        if( bLFPossible )
+        if( m_bLFPossible )
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
-        bLFPossible = true;
+        m_bLFPossible = true;
     }
     else if( HTML_CNTNR_SPAN == nCntnrMode )
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
@@ -537,7 +537,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         sOut.append(' ').append(pStr).
             append("=\"");
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-        HTMLOutFuncs::Out_String( Strm(), rFrameFormat.GetName(), eDestEnc, &aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), rFrameFormat.GetName(), m_eDestEnc, &m_aNonConvertableCharacters );
         sOut.append('\"');
     }
 
@@ -555,7 +555,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_alt).
             append("=\"");
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-        HTMLOutFuncs::Out_String( Strm(), rAlternateText, eDestEnc, &aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), rAlternateText, m_eDestEnc, &m_aNonConvertableCharacters );
         sOut.append('\"');
     }
 
@@ -611,7 +611,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         aTwipSpc.Width() =
             ( static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft() +
                 static_cast<const SvxLRSpaceItem*>(pItem)->GetRight() ) / 2;
-        nDfltLeftMargin = nDfltRightMargin = aTwipSpc.Width();
+        m_nDfltLeftMargin = m_nDfltRightMargin = aTwipSpc.Width();
     }
     if( (nFrmOpts & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, true, &pItem ))
@@ -619,7 +619,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         aTwipSpc.Height()  =
             ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
                 static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2;
-        nDfltTopMargin = nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
+        m_nDfltTopMargin = m_nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
     }
 
     if( (nFrmOpts & HTML_FRMOPT_SPACE) &&
@@ -761,7 +761,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
                 case SURROUND_LEFT:
                 case SURROUND_PARALLEL:
                     if( bAnchorOnly )
-                        bClearRight = true;
+                        m_bClearRight = true;
                     break;
                 default:
                     ;
@@ -782,7 +782,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
                 case SURROUND_RIGHT:
                 case SURROUND_PARALLEL:
                     if( bAnchorOnly )
-                        bClearLeft = true;
+                        m_bClearLeft = true;
                     break;
                 default:
                     ;
@@ -879,7 +879,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         aTwipSpc.Width() =
             ( static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft() +
                 static_cast<const SvxLRSpaceItem*>(pItem)->GetRight() ) / 2;
-        nDfltLeftMargin = nDfltRightMargin = aTwipSpc.Width();
+        m_nDfltLeftMargin = m_nDfltRightMargin = aTwipSpc.Width();
     }
     if( (nFrameOptions & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, true, &pItem ))
@@ -887,7 +887,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         aTwipSpc.Height()  =
             ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
                 static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2;
-        nDfltTopMargin = nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
+        m_nDfltTopMargin = m_nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
     }
 
     if( (nFrameOptions & HTML_FRMOPT_SPACE) &&
@@ -1024,7 +1024,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
                 case SURROUND_LEFT:
                 case SURROUND_PARALLEL:
                     if( bAnchorOnly )
-                        bClearRight = true;
+                        m_bClearRight = true;
                     break;
                 default:
                     ;
@@ -1045,7 +1045,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
                 case SURROUND_RIGHT:
                 case SURROUND_PARALLEL:
                     if( bAnchorOnly )
-                        bClearLeft = true;
+                        m_bClearLeft = true;
                     break;
                 default:
                     break;
@@ -1098,17 +1098,17 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
             aNameBase = OOO_STRING_SVTOOLS_HTML_map;
 
         if (aIMapName.isEmpty())
-            aIMapName = aNameBase + OUString::number(rHTMLWrt.nImgMapCnt);
+            aIMapName = aNameBase + OUString::number(rHTMLWrt.m_nImgMapCnt);
 
         bool bFound;
         do
         {
             bFound = false;
-            for (size_t i = 0; i < rHTMLWrt.aImgMapNames.size(); ++i)
+            for (size_t i = 0; i < rHTMLWrt.m_aImgMapNames.size(); ++i)
             {
                 // TODO: Unicode: Comparison is case insensitive for ASCII
                 // characters only now!
-                if (aIMapName.equalsIgnoreAsciiCase(rHTMLWrt.aImgMapNames[i]))
+                if (aIMapName.equalsIgnoreAsciiCase(rHTMLWrt.m_aImgMapNames[i]))
                 {
                     bFound = true;
                     break;
@@ -1116,8 +1116,8 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
             }
             if (bFound)
             {
-                rHTMLWrt.nImgMapCnt++;
-                aIMapName = aNameBase + OUString::number( rHTMLWrt.nImgMapCnt );
+                rHTMLWrt.m_nImgMapCnt++;
+                aIMapName = aNameBase + OUString::number( rHTMLWrt.m_nImgMapCnt );
             }
         } while (bFound);
 
@@ -1161,12 +1161,12 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
             }
         }
 
-        rHTMLWrt.aImgMapNames.push_back(aIMapName);
+        rHTMLWrt.m_aImgMapNames.push_back(aIMapName);
 
         OString aIndMap, aIndArea;
         const sal_Char *pIndArea = 0, *pIndMap = 0;
 
-        if (rHTMLWrt.bLFPossible)
+        if (rHTMLWrt.m_bLFPossible)
         {
             rHTMLWrt.OutNewLine( true );
             aIndMap = rHTMLWrt.GetIndentString();
@@ -1181,19 +1181,19 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
             aScaledIMap.Scale(aScaleX, aScaleY);
             HTMLOutFuncs::Out_ImageMap( rHTMLWrt.Strm(), rHTMLWrt.GetBaseURL(), aScaledIMap, aIMapName,
                                         aIMapEventTable,
-                                        rHTMLWrt.bCfgStarBasic,
+                                        rHTMLWrt.m_bCfgStarBasic,
                                         SAL_NEWLINE_STRING, pIndArea, pIndMap,
-                                        rHTMLWrt.eDestEnc,
-                                        &rHTMLWrt.aNonConvertableCharacters );
+                                        rHTMLWrt.m_eDestEnc,
+                                        &rHTMLWrt.m_aNonConvertableCharacters );
         }
         else
         {
             HTMLOutFuncs::Out_ImageMap( rHTMLWrt.Strm(), rHTMLWrt.GetBaseURL(), *pIMap, aIMapName,
                                         aIMapEventTable,
-                                        rHTMLWrt.bCfgStarBasic,
+                                        rHTMLWrt.m_bCfgStarBasic,
                                         SAL_NEWLINE_STRING, pIndArea, pIndMap,
-                                         rHTMLWrt.eDestEnc,
-                                        &rHTMLWrt.aNonConvertableCharacters );
+                                         rHTMLWrt.m_eDestEnc,
+                                        &rHTMLWrt.m_aNonConvertableCharacters );
         }
     }
     return aIMapName;
@@ -1213,9 +1213,9 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         return rHTMLWrt;
 
     // ggf. ein noch offenes Attribut voruebergehend beenden
-    if( !rHTMLWrt.aINetFormats.empty() )
+    if( !rHTMLWrt.m_aINetFormats.empty() )
     {
-        SwFormatINetFormat* pINetFormat = rHTMLWrt.aINetFormats.back();
+        SwFormatINetFormat* pINetFormat = rHTMLWrt.m_aINetFormats.back();
         OutHTML_INetFormat( rWrt, *pINetFormat, false );
     }
 
@@ -1226,7 +1226,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     OUString aIMapName = lclWriteOutImap(rHTMLWrt, rItemSet, rFrameFormat, rRealSize, pAltImgMap, pURLItem);
 
     // put img into new line
-    if( rHTMLWrt.bLFPossible )
+    if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine( true );
 
     HtmlWriter aHtml(rWrt.Strm());
@@ -1284,7 +1284,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
                 const SvxMacroTableDtor& rMacTable = pMacItem->GetMacroTable();
                 if (!rMacTable.empty())
                 {
-                    HtmlWriterHelper::applyEvents(aHtml, rMacTable, aAnchorEventTable, rHTMLWrt.bCfgStarBasic);
+                    HtmlWriterHelper::applyEvents(aHtml, rMacTable, aAnchorEventTable, rHTMLWrt.m_bCfgStarBasic);
                 }
             }
         }
@@ -1360,7 +1360,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     OUString aGraphicInBase64;
     if ( !XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64) )
     {
-        rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+        rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
     }
 
     OStringBuffer sBuffer;
@@ -1375,7 +1375,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         const SvxMacroTableDtor& rMacTable = static_cast<const SvxMacroItem *>(pItem)->GetMacroTable();
         if (!rMacTable.empty())
         {
-            HtmlWriterHelper::applyEvents(aHtml, rMacTable, aImageEventTable, rHTMLWrt.bCfgStarBasic);
+            HtmlWriterHelper::applyEvents(aHtml, rMacTable, aImageEventTable, rHTMLWrt.m_bCfgStarBasic);
         }
     }
 
@@ -1401,11 +1401,11 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
 
     aHtml.flushStack();
 
-    if( !rHTMLWrt.aINetFormats.empty() )
+    if( !rHTMLWrt.m_aINetFormats.empty() )
     {
         // es ist noch ein Attribut auf dem Stack, das wieder geoeffnet
         // werden muss
-        SwFormatINetFormat *pINetFormat = rHTMLWrt.aINetFormats.back();
+        SwFormatINetFormat *pINetFormat = rHTMLWrt.m_aINetFormats.back();
         OutHTML_INetFormat( rWrt, *pINetFormat, true );
     }
 
@@ -1426,7 +1426,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
         {
             if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
             {
-                rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+                rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
             }
         }
     }
@@ -1440,7 +1440,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
     append("list-style-image: ").append("url(").
     append(OOO_STRING_SVTOOLS_HTML_O_data).append(":");
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
     sOut.append(");").append('\"');
 
     if (pTag)
@@ -1490,7 +1490,7 @@ static Writer& OutHTML_FrameFormatTableNode( Writer& rWrt, const SwFrameFormat& 
         HTMLSaveData aSaveData( rHTMLWrt, pTableNd->GetIndex()+1,
                                 pTableNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
-        rHTMLWrt.bOutFlyFrame = true;
+        rHTMLWrt.m_bOutFlyFrame = true;
         OutHTML_SwTableNode( rHTMLWrt, *pTableNd, &rFrameFormat, &aCaption,
                            bTopCaption );
     }
@@ -1510,7 +1510,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     rHTMLWrt.OutAndSetDefList( 0 );
 
     // als Multicol ausgeben
-    if( rHTMLWrt.bLFPossible )
+    if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
 
     OStringBuffer sOut;
@@ -1553,7 +1553,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
 
     rWrt.Strm().WriteChar( '>' );
 
-    rHTMLWrt.bLFPossible = true;
+    rHTMLWrt.m_bLFPossible = true;
     rHTMLWrt.IncIndentLevel();  // den Inhalt von Multicol einruecken;
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
@@ -1567,15 +1567,15 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
         HTMLSaveData aSaveData( rHTMLWrt, nStt+1,
                                 pSttNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
-        rHTMLWrt.bOutFlyFrame = true;
+        rHTMLWrt.m_bOutFlyFrame = true;
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
 
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
-    if( rHTMLWrt.bLFPossible )
+    if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_multicol, false );
-    rHTMLWrt.bLFPossible = true;
+    rHTMLWrt.m_bLFPossible = true;
 
     return rWrt;
 }
@@ -1585,7 +1585,7 @@ static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& r
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     // wenn meoglich vor der Grafik einen Zeilen-Umbruch ausgeben
-    if( rHTMLWrt.bLFPossible )
+    if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine( true );
 
     OStringBuffer sOut;
@@ -1622,7 +1622,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
         pStr = OOO_STRING_SVTOOLS_HTML_span;
 
     // als DIV ausgeben
-    if( rHTMLWrt.bLFPossible )
+    if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
 
     OStringBuffer sOut;
@@ -1637,7 +1637,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     rWrt.Strm().WriteChar( '>' );
 
     rHTMLWrt.IncIndentLevel();  // den Inhalt einruecken
-    rHTMLWrt.bLFPossible = true;
+    rHTMLWrt.m_bLFPossible = true;
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     sal_uLong nStt = rFlyContent.GetContentIdx()->GetIndex();
@@ -1654,12 +1654,12 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
         HTMLSaveData aSaveData( rHTMLWrt, nStt+1,
                                 pSttNd->EndOfSectionIndex(),
                                    true, &rFrameFormat );
-        rHTMLWrt.bOutFlyFrame = true;
+        rHTMLWrt.m_bOutFlyFrame = true;
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
 
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
-    if( rHTMLWrt.bLFPossible )
+    if( rHTMLWrt.m_bLFPossible )
         rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, false );
 
@@ -1724,21 +1724,21 @@ static Writer& OutHTML_FrameFormatAsMarquee( Writer& rWrt, const SwFrameFormat& 
     SfxItemSet aItemSet( *rFormatItemSet.GetPool(), RES_CHRATR_BEGIN,
                                                  RES_CHRATR_END );
     SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, &rSdrObj, true );
-    bool bCfgOutStylesOld = rHTMLWrt.bCfgOutStyles;
-    rHTMLWrt.bCfgOutStyles = false;
-    rHTMLWrt.bTextAttr = true;
-    rHTMLWrt.bTagOn = true;
+    bool bCfgOutStylesOld = rHTMLWrt.m_bCfgOutStyles;
+    rHTMLWrt.m_bCfgOutStyles = false;
+    rHTMLWrt.m_bTextAttr = true;
+    rHTMLWrt.m_bTagOn = true;
     Out_SfxItemSet( aHTMLAttrFnTab, rWrt, aItemSet, false );
-    rHTMLWrt.bTextAttr = false;
+    rHTMLWrt.m_bTextAttr = false;
 
     OutHTML_DrawFrameFormatAsMarquee( rHTMLWrt,
                                  static_cast<const SwDrawFrameFormat &>(rFrameFormat),
                                  rSdrObj );
-    rHTMLWrt.bTextAttr = true;
-    rHTMLWrt.bTagOn = false;
+    rHTMLWrt.m_bTextAttr = true;
+    rHTMLWrt.m_bTagOn = false;
     Out_SfxItemSet( aHTMLAttrFnTab, rWrt, aItemSet, false );
-    rHTMLWrt.bTextAttr = false;
-    rHTMLWrt.bCfgOutStyles = bCfgOutStylesOld;
+    rHTMLWrt.m_bTextAttr = false;
+    rHTMLWrt.m_bCfgOutStyles = bCfgOutStylesOld;
 
     return rWrt;
 }
@@ -1763,7 +1763,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     // ggf. abgezogen.
     const SvxULSpaceItem& rULSpace = rFrameFormat.GetULSpace();
     sal_uInt16 nSize = bHeader ? rULSpace.GetLower() : rULSpace.GetUpper();
-    rHTMLWrt.nHeaderFooterSpace = nSize;
+    rHTMLWrt.m_nHeaderFooterSpace = nSize;
 
     OString aSpacer;
     if( rHTMLWrt.IsHTMLMode(HTMLMODE_VERT_SPACER) &&
@@ -1800,9 +1800,9 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
                                 pSttNd->EndOfSectionIndex() );
 
         if( bHeader )
-            rHTMLWrt.bOutHeader = true;
+            rHTMLWrt.m_bOutHeader = true;
         else
-            rHTMLWrt.bOutFooter = true;
+            rHTMLWrt.m_bOutFooter = true;
 
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
@@ -1817,7 +1817,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
 
-    rHTMLWrt.nHeaderFooterSpace = 0;
+    rHTMLWrt.m_nHeaderFooterSpace = 0;
 
     return rWrt;
 }
@@ -1875,7 +1875,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
         {
             aURL = aURL.replaceAt( nPos - 1, 3, OUString(cMarkSeparator)  );
         }
-        aImplicitMarks.insert( aURL );
+        m_aImplicitMarks.insert( aURL );
     }
     else if( sCmp == "outline" )
     {
@@ -1888,16 +1888,16 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
             sal_uInt32 nIdx = aPos.nNode.GetIndex();
 
             sal_uInt32 nIns=0;
-            while( nIns < aOutlineMarkPoss.size() &&
-                   aOutlineMarkPoss[nIns] < nIdx )
+            while( nIns < m_aOutlineMarkPoss.size() &&
+                   m_aOutlineMarkPoss[nIns] < nIdx )
                 nIns++;
 
-            aOutlineMarkPoss.insert( aOutlineMarkPoss.begin()+nIns, nIdx );
+            m_aOutlineMarkPoss.insert( m_aOutlineMarkPoss.begin()+nIns, nIdx );
             if( bEncoded )
             {
                 aURL = aURL.replaceAt( nPos - 1, 3, OUString(cMarkSeparator) );
             }
-            aOutlineMarks.insert( aOutlineMarks.begin()+nIns, aURL );
+            m_aOutlineMarks.insert( m_aOutlineMarks.begin()+nIns, aURL );
         }
     }
     else if( sCmp == "text" )
