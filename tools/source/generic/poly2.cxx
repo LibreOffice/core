@@ -224,7 +224,7 @@ void PolyPolygon::Clear()
     }
 }
 
-void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData* pData )
+void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 {
     if(bool(nOptimizeFlags) && Count())
     {
@@ -245,7 +245,7 @@ void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimize
             tools::PolyPolygon aPolyPoly;
 
             AdaptiveSubdivide(aPolyPoly);
-            aPolyPoly.Optimize(nOptimizeFlags, pData);
+            aPolyPoly.Optimize(nOptimizeFlags);
             *this = aPolyPoly;
         }
         else
@@ -259,7 +259,7 @@ void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimize
                 const Rectangle aBound( GetBoundRect() );
 
                 fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
-                nPercent = pData ? pData->GetPercentValue() : 50;
+                nPercent = 50;
                 nOptimizeFlags &= ~PolyOptimizeFlags::EDGES;
             }
 
@@ -280,7 +280,7 @@ void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimize
                 }
 
                 if( bool(nOptimizeFlags) )
-                    mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( nOptimizeFlags, pData );
+                    mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( nOptimizeFlags );
             }
         }
     }

@@ -904,7 +904,7 @@ double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 )
     return sqrt( fDx * fDx + fDy * fDy );
 }
 
-void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData* pData )
+void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 {
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "Optimizing could fail with beziers!" );
 
@@ -916,7 +916,7 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData
         {
             const Rectangle aBound( GetBoundRect() );
             const double    fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
-            const sal_uInt16    nPercent = pData ? pData->GetPercentValue() : 50;
+            const sal_uInt16 nPercent = 50;
 
             Optimize( PolyOptimizeFlags::NO_SAME );
             ImplReduceEdges( *this, fArea, nPercent );
@@ -925,12 +925,7 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData
         {
             tools::Polygon aNewPoly;
             const Point& rFirst = mpImplPolygon->mpPointAry[ 0 ];
-            sal_uIntPtr nReduce;
-
-            if( nOptimizeFlags & ( PolyOptimizeFlags::REDUCE ) )
-                nReduce = pData ? pData->GetAbsValue() : 4UL;
-            else
-                nReduce = 0UL;
+            const sal_uIntPtr nReduce = ( nOptimizeFlags & PolyOptimizeFlags::REDUCE ) ? 4 : 0;
 
             while( nSize && ( mpImplPolygon->mpPointAry[ nSize - 1 ] == rFirst ) )
                 nSize--;

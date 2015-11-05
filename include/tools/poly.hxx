@@ -57,23 +57,6 @@ enum PolyFlags
     POLY_SYMMTR
 };
 
-class SAL_WARN_UNUSED PolyOptimizeData
-{
-private:
-
-    enum DataType   { DATA_NONE = 0, DATA_ABSOLUT = 1, DATA_PERCENT = 2 };
-    DataType        eType;
-    union           { sal_uIntPtr mnAbsolut; sal_uInt16 mnPercent; };
-
-public:
-                    PolyOptimizeData() : eType( DATA_NONE ) {}
-                    PolyOptimizeData( sal_uIntPtr nAbsolut ) : eType( DATA_ABSOLUT ), mnAbsolut( nAbsolut ) {}
-                    PolyOptimizeData( sal_uInt16 nPercent ) : eType( DATA_PERCENT ), mnPercent( nPercent ) {}
-
-    sal_uIntPtr     GetAbsValue() const { (void) eType; DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
-    sal_uInt16      GetPercentValue() const { (void) eType; DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
-};
-
 class SvStream;
 class ImplPolygon;
 class ImplPolyPolygon;
@@ -141,7 +124,7 @@ public:
     bool                IsRightOrientated() const;
     double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 );
     void                Clip( const Rectangle& rRect, bool bPolygon = true );
-    void                Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData* pData = NULL );
+    void                Optimize( PolyOptimizeFlags nOptimizeFlags );
 
     /** Adaptive subdivision of polygons with curves
 
@@ -227,7 +210,7 @@ public:
     sal_uInt16          Count() const;
     Rectangle           GetBoundRect() const;
     void                Clip( const Rectangle& rRect );
-    void                Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData* pData = NULL );
+    void                Optimize( PolyOptimizeFlags nOptimizeFlags );
 
     /** Adaptive subdivision of polygons with curves
 
