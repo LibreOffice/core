@@ -771,22 +771,25 @@ sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTra
         nPPTTransitionType = PPT_TRANSITION_TYPE_FADE;
     }
     break;
-    case PPT_TRANSITION_TYPE_COMB :
-    {
-        nPPTTransitionType = PPT_TRANSITION_TYPE_COMB;
-        if ( nTransitionSubtype == TransitionSubType::COMBVERTICAL )
-        nDirection++;
-    }
-    break;
     case TransitionType::PUSHWIPE :
     {
-        nPPTTransitionType = PPT_TRANSITION_TYPE_PUSH;
-        switch( nTransitionSubtype )
+        if (nTransitionSubtype == TransitionSubType::COMBVERTICAL ||
+            nTransitionSubtype == TransitionSubType::COMBHORIZONTAL)
         {
-        case TransitionSubType::FROMRIGHT: nDirection = 0; break;
-        case TransitionSubType::FROMBOTTOM: nDirection = 1; break;
-        case TransitionSubType::FROMLEFT: nDirection = 2; break;
-        case TransitionSubType::FROMTOP: nDirection = 3; break;
+            nPPTTransitionType = PPT_TRANSITION_TYPE_COMB;
+        }
+        else
+        {
+            nPPTTransitionType = PPT_TRANSITION_TYPE_PUSH;
+        }
+        switch (nTransitionSubtype)
+        {
+            case TransitionSubType::FROMRIGHT: nDirection = 0; break;
+            case TransitionSubType::FROMBOTTOM: nDirection = 1; break;
+            case TransitionSubType::FROMLEFT: nDirection = 2; break;
+            case TransitionSubType::FROMTOP: nDirection = 3; break;
+            case TransitionSubType::COMBHORIZONTAL: nDirection = 0; break;
+            case TransitionSubType::COMBVERTICAL: nDirection = 1; break;
         }
     }
     break;
@@ -827,6 +830,18 @@ sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTra
             break;
         default:
             nPPTTransitionType = PPT_TRANSITION_TYPE_DIAMOND;
+            break;
+        }
+    }
+    break;
+    case TransitionType::ZOOM:
+    {
+        switch(nTransitionSubtype)
+        {
+        case TransitionSubType::ROTATEIN:
+            nPPTTransitionType = PPT_TRANSITION_TYPE_NEWSFLASH;
+            break;
+        default:
             break;
         }
     }

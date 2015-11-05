@@ -46,6 +46,8 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -66,6 +68,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
+
 
 #include <svx/svdotable.hxx>
 
@@ -127,6 +130,7 @@ public:
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
     void testTransparentBackground();
+    void testExportTransitionsPPTX();
 
     void testFdo90607();
     void testTdf91378();
@@ -168,6 +172,7 @@ public:
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
     CPPUNIT_TEST(testTransparentBackground);
+    CPPUNIT_TEST(testExportTransitionsPPTX);
     CPPUNIT_TEST(testTdf91378);
 
 #if !defined WNT
@@ -1340,6 +1345,46 @@ void SdExportTest::testTdf80224()
     xPropSet->getPropertyValue("CharColor") >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6644396), nCharColor);
     xDocShRef->DoClose();
+}
+
+bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> xDoc, sal_Int32 nSlideNumber,
+                           sal_Int16 nExpectedTransitionType, sal_Int16 nExpectedTransitionSubType)
+{
+    sal_Int32 nSlideIndex = nSlideNumber - 1;
+
+    CPPUNIT_ASSERT_MESSAGE("Slide/Page index out of range", nSlideIndex < xDoc->getDrawPages()->getCount());
+
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(nSlideIndex), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
+    uno::Any aAny;
+
+    aAny = xPropSet->getPropertyValue(OUString("TransitionType"));
+    sal_Int16 nTransitionType = 0;
+    if ((aAny >>= nTransitionType) == false)
+        return false;
+
+    aAny = xPropSet->getPropertyValue(OUString("TransitionSubtype"));
+    sal_Int16 nTransitionSubtype = 0;
+    if ((aAny >>= nTransitionSubtype) == false)
+        return false;
+
+    if (nExpectedTransitionType != nTransitionType)
+        return false;
+    if (nExpectedTransitionSubType != nTransitionSubtype)
+        return false;
+
+    return true;
+}
+
+void SdExportTest::testExportTransitionsPPTX()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/AllTransitions.odp"), ODP);
+    xDocShRef = saveAndReload(xDocShRef, PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+
+    checkTransitionOnPage(xDoc, 71, css::animations::TransitionType::ZOOM, css::animations::TransitionSubType::ROTATEIN);
+    checkTransitionOnPage(xDoc, 41, css::animations::TransitionType::PUSHWIPE, css::animations::TransitionSubType::COMBHORIZONTAL);
+    checkTransitionOnPage(xDoc, 42, css::animations::TransitionType::PUSHWIPE, css::animations::TransitionSubType::COMBVERTICAL);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
