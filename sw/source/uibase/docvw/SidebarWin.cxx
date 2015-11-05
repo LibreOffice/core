@@ -80,6 +80,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <comphelper/lok.hxx>
 
 namespace sw { namespace sidebarwindows {
 
@@ -230,7 +231,25 @@ void SwSidebarWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
                              Size(GetMetaButtonAreaWidth(),
                                   mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height()));
 
-        rRenderContext.DrawRect(PixelToLogic(aRectangle));
+        if (comphelper::LibreOfficeKit::isActive())
+            aRectangle = rRect;
+        else
+            aRectangle = PixelToLogic(aRectangle);
+        rRenderContext.DrawRect(aRectangle);
+    }
+}
+
+void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+{
+    Paint(rRenderContext, rRect);
+
+    for (sal_uInt16 i = 0; i < GetChildCount(); ++i)
+    {
+        vcl::Window* pChild = GetChild(i);
+        if (pChild == mpSidebarTextControl.get())
+            mpSidebarTextControl->PaintTile(rRenderContext, rRect);
+        else
+            SAL_WARN("sw.uibase", "SwSidebarWin::PaintTile: unhandled child " << pChild);
     }
 }
 

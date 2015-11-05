@@ -847,6 +847,21 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
     }
 }
 
+void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const Rectangle& /*rRect*/)
+{
+    for (SwSidebarItem* pItem : mvPostItFields)
+    {
+        SwSidebarWin* pPostIt = pItem->pPostIt;
+        if (!pPostIt)
+            continue;
+
+        Point aPoint(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
+        Size aSize(pPostIt->PixelToLogic(pPostIt->GetSizePixel()));
+        Rectangle aRectangle(aPoint, aSize);
+        pPostIt->PaintTile(rRenderContext, aRectangle);
+    }
+}
+
 void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
 {
     OSL_ENSURE((lScroll % GetScrollSize() )==0,"SwPostItMgr::Scroll: scrolling by wrong value");

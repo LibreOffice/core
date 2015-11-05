@@ -1901,6 +1901,9 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // draw - works in logic coordinates
     Paint(rDevice, aOutRect);
 
+    if (SwPostItMgr* pPostItMgr = GetPostItMgr())
+        pPostItMgr->PaintTile(rDevice, aOutRect);
+
     // SwViewShell's output device tear down
     mpOut = pSaveOut;
     mbInLibreOfficeKitCallback = false;
