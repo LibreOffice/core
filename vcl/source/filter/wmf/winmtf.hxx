@@ -545,6 +545,7 @@ class WinMtfOutput
     WinMtfLineStyle     maLineStyle;
     WinMtfFillStyle     maLatestFillStyle;
     WinMtfFillStyle     maFillStyle;
+    WinMtfFillStyle     m_NopFillStyle;
     vcl::Font           maLatestFont;
     vcl::Font           maFont;
     sal_uInt32          mnLatestTextAlign;
