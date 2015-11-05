@@ -381,9 +381,8 @@ namespace oox { namespace ppt {
             mnTransitionSubType = TransitionSubType::DEFAULT;
             break;
         case PPT_TOKEN( newsflash ):
-            // this is what the PPT binary filter does.... not sure I agree.
-            mnTransitionType = TransitionType::FOURBOXWIPE;
-            mnTransitionSubType = TransitionSubType::CORNERSOUT;
+            mnTransitionType = TransitionType::ZOOM;
+            mnTransitionSubType = TransitionSubType::ROTATEIN;
             break;
         case PPT_TOKEN( plus ):
             mnTransitionType = TransitionType::FOURBOXWIPE;
