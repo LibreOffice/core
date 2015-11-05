@@ -72,7 +72,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
        @retval true            putting of value was successful
        @retval false           else
     */
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) = 0;
+    virtual bool PutValueToField(const SwPosition & rPos, const css::uno::Any& rVal, sal_uInt16 nWhich) = 0;
 
     // Call update of expression fields. All expressions are re-evaluated.
 
@@ -115,7 +115,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) = 0;
 
     // In Calculator set all SetExpression fields that are valid up to the indicated position
-    // (Node [ + ::com::sun::star::ucb::Content]).
+    // (Node [ + css::ucb::Content]).
     // A generated list of all fields may be passed along too
     // (if the address != 0 and the pointer == 0 a new list will be returned).
     virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) = 0;

@@ -147,10 +147,10 @@ class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg
 class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPilot
 {
     DECL_ABSTDLG_BASE( AbstractSwInsertDBColAutoPilot_Impl,SwInsertDBColAutoPilot)
-    virtual void DataToDoc( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rSelection,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet) override;
+    virtual void DataToDoc( const css::uno::Sequence< css::uno::Any >& rSelection,
+        css::uno::Reference< css::sdbc::XDataSource> rxSource,
+        css::uno::Reference< css::sdbc::XConnection> xConnection,
+        css::uno::Reference< css::sdbc::XResultSet > xResultSet) override;
 };
 
 class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog
@@ -213,8 +213,8 @@ class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
     DECL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl,SwRenameXNamedDlg )
     virtual void    SetForbiddenChars( const OUString& rSet ) override;
     virtual void SetAlternativeAccess(
-             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xSecond,
-             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xThird ) override;
+             css::uno::Reference< css::container::XNameAccess > & xSecond,
+             css::uno::Reference< css::container::XNameAccess > & xThird ) override;
 };
 
 class AbstractSwModalRedlineAcceptDlg_Impl : public AbstractSwModalRedlineAcceptDlg
@@ -279,8 +279,8 @@ class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
     DECL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl,SwMailMergeDlg)
     virtual DBManagerOptions GetMergeType() override ;
     virtual const OUString& GetSaveFilter() const override;
-    virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const override ;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const override;
+    virtual const css::uno::Sequence< css::uno::Any > GetSelection() const override ;
+    virtual css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const override;
     virtual bool IsSaveSingleDoc() const override;
     virtual bool IsGenerateFromDataBase() const override;
     virtual OUString GetColumnName() const override;
@@ -370,7 +370,7 @@ public:
 
     virtual SfxAbstractDialog*              CreateSfxDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
+                                    const css::uno::Reference< css::frame::XFrame >& _rxFrame,
                                                                         sal_uInt32 nResId
                                                                         ) override;
     virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(SfxBindings* pBindings,
@@ -387,8 +387,8 @@ public:
     virtual VclAbstractDialog * CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV,int nResId) override;
 
     virtual AbstractSwInsertDBColAutoPilot* CreateSwInsertDBColAutoPilot(SwView& rView,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
-        com::sun::star::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier> xColSupp,
+        css::uno::Reference< css::sdbc::XDataSource> rxSource,
+        css::uno::Reference<css::sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData) override;
     virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh) override;
 
@@ -423,8 +423,8 @@ public:
     virtual AbstractSwFieldDlg * CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent) override;
     virtual SfxAbstractDialog*   CreateSwFieldEditDlg ( SwView& rVw, int nResId ) override;
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg(vcl::Window* pParent,
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess) override;
+        css::uno::Reference< css::container::XNamed > & xNamed,
+        css::uno::Reference< css::container::XNameAccess > & xNameAccess) override;
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(vcl::Window *pParent) override;
 
     virtual VclAbstractDialog*          CreateTableMergeDialog(vcl::Window* pParent, bool& rWithPrev) override;
@@ -459,8 +459,8 @@ public:
                                                 const OUString& rSourceName,
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
-                                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
-                                                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0 ) override;
+                                                const css::uno::Reference< css::sdbc::XConnection>& xConnection,
+                                                css::uno::Sequence< css::uno::Any >* pSelection = 0 ) override;
     virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg(vcl::Window* pParent) override;
     virtual AbstractMailMergeFieldConnectionsDlg* CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent) override;
     virtual VclAbstractDialog*          CreateMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr &rTOXMgr) override;

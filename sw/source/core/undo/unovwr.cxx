@@ -37,8 +37,8 @@
 #include <undo.hrc>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::uno;
+using namespace css::i18n;
+using namespace css::uno;
 
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )

@@ -44,8 +44,8 @@
 const char XMLN_BLOCKLIST[] = "BlockList.xml";
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
+using namespace css::uno;
+using namespace css::container;
 using namespace css::xml::sax;
 using namespace xmloff::token;
 

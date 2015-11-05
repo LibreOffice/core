@@ -54,11 +54,11 @@
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
+using namespace css::uno;
+using namespace css::container;
+using namespace css::document;
+using namespace css::beans;
+using namespace css::lang;
 
 SwXMLWriter::SwXMLWriter( const OUString& rBaseURL )
 {
@@ -151,7 +151,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("TargetStorage"),0, cppu::UnoType<embed::XStorage>::get(),
-              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+              css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(

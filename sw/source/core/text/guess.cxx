@@ -34,10 +34,10 @@
 #include <paratr.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::linguistic2;
+using namespace css::uno;
+using namespace css::i18n;
+using namespace css::beans;
+using namespace css::linguistic2;
 
 #define CH_FULL_BLANK 0x3000
 

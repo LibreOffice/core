@@ -670,7 +670,7 @@ public:
 
     /// restore selections.
     void HyphEnd();
-    com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
+    css::uno::Reference< css::uno::XInterface>
                 HyphContinue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     void HyphIgnore();
@@ -680,13 +680,13 @@ public:
 
     const SwTable& InsertTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                                 sal_uInt16 nRows, sal_uInt16 nCols,
-                                sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
+                                sal_Int16 eAdj = css::text::HoriOrientation::FULL,
                                 const SwTableAutoFormat* pTAFormat = 0 );
 
     void InsertDDETable( const SwInsertTableOptions& rInsTableOpts,  ///< HEADLINE_NO_BORDER
                          SwDDEFieldType* pDDEType,
                          sal_uInt16 nRows, sal_uInt16 nCols,
-                         sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL );
+                         sal_Int16 eAdj = css::text::HoriOrientation::FULL );
 
     void UpdateTable();
     void SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName );
@@ -694,7 +694,7 @@ public:
     SwFrameFormat *GetTableFormat();
     bool TextToTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                       sal_Unicode cCh,
-                      sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
+                      sal_Int16 eAdj = css::text::HoriOrientation::FULL,
                       const SwTableAutoFormat* pTAFormat = 0 );
     bool TableToText( sal_Unicode cCh );
     bool IsTextToTableAvailable() const;
@@ -729,7 +729,7 @@ public:
 
     /// Restore selections.
     void SpellEnd( SwConversionArgs *pConvArgs = 0, bool bRestoreSelection = true );
-    ::com::sun::star::uno::Any SpellContinue(
+    css::uno::Any SpellContinue(
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
                     SwConversionArgs *pConvArgs = 0 );
 
@@ -755,14 +755,13 @@ public:
     /// Is hyphenation active somewhere else?
     static bool HasHyphIter();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellAlternatives >
+    css::uno::Reference< css::linguistic2::XSpellAlternatives >
             GetCorrection( const Point* pPt, SwRect& rSelectRect );
 
-    bool GetGrammarCorrection( ::com::sun::star::linguistic2::ProofreadingResult /*out*/ &rResult,
+    bool GetGrammarCorrection( css::linguistic2::ProofreadingResult /*out*/ &rResult,
             sal_Int32 /*out*/ &rErrorPosInText,
             sal_Int32 /*out*/ &rErrorIndexInResult,
-            ::com::sun::star::uno::Sequence< OUString > /*out*/ &rSuggestions,
+            css::uno::Sequence< OUString > /*out*/ &rSuggestions,
             const Point* pPt, SwRect& rSelectRect );
 
     static void IgnoreGrammarErrorAt( SwPaM& rErrorPosition );

@@ -80,8 +80,8 @@ public:
 
     virtual SwFieldType* Copy()    const override;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
     inline void         SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*              GetDoc(){ return m_pDoc; }
@@ -167,8 +167,8 @@ public:
     virtual void        SetPar1(const OUString& rStr) override;
     virtual SwFieldType* ChgTyp( SwFieldType* ) override;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
     sal_IntPtr          GetHandle() const       { return m_nHandle; }
 

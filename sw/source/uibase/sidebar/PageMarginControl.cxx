@@ -434,7 +434,7 @@ bool PageMarginControl::GetUserCustomValues()
     SvtViewOptions aWinOpt( E_WINDOW, SWPAGE_LEFT_GVALUE );
     if ( aWinOpt.Exists() )
     {
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt.GetUserData();
+        css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt.GetUserData();
         OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
@@ -446,7 +446,7 @@ bool PageMarginControl::GetUserCustomValues()
     SvtViewOptions aWinOpt2( E_WINDOW, SWPAGE_RIGHT_GVALUE );
     if ( aWinOpt2.Exists() )
     {
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt2.GetUserData();
+        css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt2.GetUserData();
         OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
@@ -458,7 +458,7 @@ bool PageMarginControl::GetUserCustomValues()
     SvtViewOptions aWinOpt3( E_WINDOW, SWPAGE_TOP_GVALUE );
     if ( aWinOpt3.Exists() )
     {
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt3.GetUserData();
+        css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt3.GetUserData();
         OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
@@ -470,7 +470,7 @@ bool PageMarginControl::GetUserCustomValues()
     SvtViewOptions aWinOpt4( E_WINDOW, SWPAGE_DOWN_GVALUE );
     if ( aWinOpt4.Exists() )
     {
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt4.GetUserData();
+        css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt4.GetUserData();
         OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
@@ -482,7 +482,7 @@ bool PageMarginControl::GetUserCustomValues()
     SvtViewOptions aWinOpt5( E_WINDOW, SWPAGE_MIRROR_GVALUE );
     if ( aWinOpt5.Exists() )
     {
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt5.GetUserData();
+        css::uno::Sequence < css::beans::NamedValue > aSeq = aWinOpt5.GetUserData();
         OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
@@ -501,7 +501,7 @@ void PageMarginControl::StoreUserCustomValues()
         return;
     }
 
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
+    css::uno::Sequence < css::beans::NamedValue > aSeq(1);
     SvtViewOptions aWinOpt( E_WINDOW, SWPAGE_LEFT_GVALUE );
 
     aSeq[0].Name = "mnPageLeftMargin";

@@ -75,7 +75,7 @@
 #include <com/sun/star/i18n/Boundary.hpp>
 
 
-using namespace ::com::sun::star::i18n;
+using namespace css::i18n;
 
 namespace
 {

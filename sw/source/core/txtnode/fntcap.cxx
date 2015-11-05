@@ -33,7 +33,7 @@
 #include <scriptinfo.hxx>
 #include <fntcap.hxx>
 
-using namespace ::com::sun::star::i18n;
+using namespace css::i18n;
 
 // The information encapsulated in SwCapitalInfo is required
 // by the ::Do functions. They contain the information about

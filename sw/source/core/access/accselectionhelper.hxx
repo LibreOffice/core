@@ -34,7 +34,7 @@ class SwAccessibleSelectionHelper
     SwFEShell* GetFEShell();
 
     void throwIndexOutOfBoundsException()
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
+        throw ( css::lang::IndexOutOfBoundsException );
 
 public:
     SwAccessibleSelectionHelper( SwAccessibleContext& rContext );
@@ -44,26 +44,26 @@ public:
 
     void selectAccessibleChild(
         sal_Int32 nChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException );
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException );
 
     bool isAccessibleChildSelected(
         sal_Int32 nChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException );
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException );
     void selectAllAccessibleChildren(  )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( css::uno::RuntimeException );
     sal_Int32 getSelectedAccessibleChildCount(  )
-        throw ( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getSelectedAccessibleChild(
+        throw ( css::uno::RuntimeException );
+    css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild(
         sal_Int32 nSelectedChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException);
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException);
     // index has to be treated as global child index.
     void deselectAccessibleChild(
         sal_Int32 nChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException );
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException );
 };
 
 #endif

@@ -29,9 +29,9 @@
 #include "access.hrc"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::accessibility;
+using namespace css::lang;
+using namespace css::uno;
+using namespace css::accessibility;
 
 const sal_Char sImplementationNameHeader[] = "com.sun.star.comp.Writer.SwAccessibleHeaderView";
 const sal_Char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessibleFooterView";
@@ -113,7 +113,7 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleHeaderFooter::getImplementationId()
 }
 
 sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XAccessible > xParent =  getAccessibleParent();
     if (xParent.is())

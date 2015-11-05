@@ -123,7 +123,7 @@
 #include <svx/xfillit0.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::document;
+using namespace css::document;
 
 const sal_Char sFrameFormatStr[] = "Frameformat";
 const sal_Char sEmptyPageStr[] = "Empty Page";

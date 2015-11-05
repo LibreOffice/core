@@ -656,7 +656,7 @@ SwCalcOper SwCalc::GetToken()
     if( nCommandPos >= sCommand.getLength() )
         return eCurrOper = CALC_ENDCALC;
 
-    using namespace ::com::sun::star::i18n;
+    using namespace css::i18n;
     {
         // Parse any token.
         ParseResult aRes = pCharClass->parseAnyToken( sCommand, nCommandPos,
@@ -1545,7 +1545,7 @@ bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
 bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
 {
     bool bRet = false;
-    using namespace ::com::sun::star::i18n;
+    using namespace css::i18n;
     {
         // Parse any token.
         ParseResult aRes = GetAppCharClass().parseAnyToken( rStr, 0,

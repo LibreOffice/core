@@ -37,8 +37,8 @@ class SW_DLLPUBLIC SwFormatVertOrient: public SfxPoolItem
     sal_Int16       m_eRelation;
 public:
     TYPEINFO_OVERRIDE();
-    SwFormatVertOrient( SwTwips nY = 0, sal_Int16 eVert = com::sun::star::text::VertOrientation::NONE,
-                     sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA );
+    SwFormatVertOrient( SwTwips nY = 0, sal_Int16 eVert = css::text::VertOrientation::NONE,
+                     sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA );
     inline SwFormatVertOrient &operator=( const SwFormatVertOrient &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
@@ -49,8 +49,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const override;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     SvStream& Store(SvStream &rStream, sal_uInt16 itemVersion) const override;
     SfxPoolItem* Create(SvStream &rStream, sal_uInt16 itemVersion) const override;
@@ -74,8 +74,8 @@ class SW_DLLPUBLIC SwFormatHoriOrient: public SfxPoolItem
     bool            m_bPosToggle : 1; ///< Flip position on even pages.
 public:
     TYPEINFO_OVERRIDE();
-    SwFormatHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
-        sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, bool bPos = false );
+    SwFormatHoriOrient( SwTwips nX = 0, sal_Int16 eHori = css::text::HoriOrientation::NONE,
+        sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA, bool bPos = false );
     inline SwFormatHoriOrient &operator=( const SwFormatHoriOrient &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
@@ -86,8 +86,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const override;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     sal_Int16 GetHoriOrient() const { return m_eOrient; }
     sal_Int16 GetRelationOrient() const { return m_eRelation; }

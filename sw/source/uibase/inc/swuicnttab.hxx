@@ -51,8 +51,8 @@ namespace com{namespace sun{namespace star{
 
 struct SwIndexSections_Impl
 {
-    com::sun::star::uno::Reference< com::sun::star::text::XTextSection >    xContainerSection;
-    com::sun::star::uno::Reference< com::sun::star::text::XDocumentIndex >    xDocumentIndex;
+    css::uno::Reference< css::text::XTextSection >    xContainerSection;
+    css::uno::Reference< css::text::XDocumentIndex >    xDocumentIndex;
 };
 
 class SwOneExampleFrame;

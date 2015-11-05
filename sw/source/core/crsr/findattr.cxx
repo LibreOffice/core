@@ -46,8 +46,8 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
+using namespace css::lang;
+using namespace css::util;
 
 typedef std::set<SwFormat*> SwpFormats;
 

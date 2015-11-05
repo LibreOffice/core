@@ -37,8 +37,8 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
+using namespace css::uno;
+using namespace css::beans;
 
 #define ROUND(x) static_cast<long>((x) + .5)
 

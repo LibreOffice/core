@@ -42,7 +42,7 @@ using container::XNameContainer;
 using xforms::XModel2;
 using frame::XModule;
 using xforms::XFormsUIHelper1;
-using com::sun::star::container::XIndexAccess;
+using css::container::XIndexAccess;
 
 
 bool SwDoc::isXForms() const

@@ -34,8 +34,8 @@ class SwFrameFormat;
 class SwXTextCursor;
 
 typedef ::cppu::WeakAggImplHelper2
-<   ::com::sun::star::lang::XServiceInfo
-,   ::com::sun::star::container::XEnumerationAccess
+<   css::lang::XServiceInfo
+,   css::container::XEnumerationAccess
 > SwXBodyText_Base;
 
 class SwXBodyText
@@ -54,64 +54,60 @@ public:
     SwXTextCursor * CreateTextCursor(const bool bIgnoreTables = false);
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type& rType)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface(
+            const css::uno::Type& rType)
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire() throw() override { OWeakObject::acquire(); }
     virtual void SAL_CALL release() throw() override { OWeakObject::release(); }
 
     // XAggregation
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
-            const ::com::sun::star::uno::Type& rType)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryAggregation(
+            const css::uno::Type& rType)
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+    virtual css::uno::Sequence< css::uno::Type >
         SAL_CALL getTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(
             const OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XEnumeration >  SAL_CALL
+    virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
         createEnumeration()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XSimpleText
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextCursor >  SAL_CALL
+    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
         createTextCursor()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextCursor >  SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
         createTextCursorByRange(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange > & xTextPosition)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::text::XTextRange > & xTextPosition)
+        throw (css::uno::RuntimeException, std::exception) override;
 
 };
 
 typedef ::cppu::WeakImplHelper
-<   ::com::sun::star::lang::XServiceInfo
-,   ::com::sun::star::container::XEnumerationAccess
+<   css::lang::XServiceInfo
+,   css::container::XEnumerationAccess
 > SwXHeadFootText_Base;
 
 class SwXHeadFootText
@@ -127,10 +123,9 @@ private:
 protected:
 
     virtual const SwStartNode *GetStartNode() const override;
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextCursor >
+    virtual css::uno::Reference< css::text::XTextCursor >
         CreateCursor()
-        throw (::com::sun::star::uno::RuntimeException) override;
+        throw (css::uno::RuntimeException) override;
 
     virtual ~SwXHeadFootText();
 
@@ -138,58 +133,54 @@ protected:
 
 public:
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
+    static css::uno::Reference< css::text::XText >
         CreateXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader);
     static bool IsXHeadFootText(SwClient *const pClient);
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type& rType)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface(
+            const css::uno::Type& rType)
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire() throw() override { OWeakObject::acquire(); }
     virtual void SAL_CALL release() throw() override { OWeakObject::release(); }
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+    virtual css::uno::Sequence< css::uno::Type >
         SAL_CALL getTypes()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(
             const OUString& rServiceName)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XEnumeration >  SAL_CALL
+    virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
         createEnumeration()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // XSimpleText
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextCursor >  SAL_CALL
+    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
         createTextCursor()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextCursor >  SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
         createTextCursorByRange(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange > & xTextPosition)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::text::XTextRange > & xTextPosition)
+        throw (css::uno::RuntimeException, std::exception) override;
 
 };
 

@@ -167,14 +167,14 @@ public:
 
        @param rItems the new items
     */
-    void SetItems(const com::sun::star::uno::Sequence<OUString> & rItems);
+    void SetItems(const css::uno::Sequence<OUString> & rItems);
 
     /**
         Returns the items of the dropdown box.
 
         @return the items of the dropdown box
     */
-    com::sun::star::uno::Sequence<OUString> GetItemSequence() const;
+    css::uno::Sequence<OUString> GetItemSequence() const;
 
     /**
        Returns the selected item.
@@ -248,7 +248,7 @@ public:
           - FIELD_PROP_PAR3 Get the help text of the field.
           - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
-    virtual bool QueryValue(com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) const override;
+    virtual bool QueryValue(css::uno::Any &rVal, sal_uInt16 nWhichId) const override;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -260,7 +260,7 @@ public:
           - FIELD_PROP_PAR3  Set the help text of the field.
           - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
-    virtual bool PutValue(const com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) override;
+    virtual bool PutValue(const css::uno::Any &rVal, sal_uInt16 nWhichId) override;
 };
 
 #endif

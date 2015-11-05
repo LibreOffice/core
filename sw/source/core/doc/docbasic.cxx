@@ -33,7 +33,7 @@
 #include <swevent.hxx>
 #include <memory>
 
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 {

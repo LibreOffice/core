@@ -248,7 +248,7 @@ private:
     static const SfxObjectShell* pShowShell;
 
     void        InsertRegion( const SwGlblDocContent* _pContent,
-                              const com::sun::star::uno::Sequence< OUString >& _rFiles );
+                              const css::uno::Sequence< OUString >& _rFiles );
 
     DECL_LINK_TYPED(  DialogClosedHdl, sfx2::FileDialogHelper*, void );
 

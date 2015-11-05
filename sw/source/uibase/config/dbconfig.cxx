@@ -26,7 +26,7 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace css::uno;
 
 const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 {
@@ -111,6 +111,6 @@ const SwDBData& SwDBConfig::GetBibliographySource()
 }
 
 void SwDBConfig::ImplCommit() {}
-void SwDBConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwDBConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

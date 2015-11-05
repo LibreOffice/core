@@ -158,7 +158,7 @@ Reference< XAccessibleKeyBinding > SAL_CALL
             new ::comphelper::OAccessibleKeyBindingHelper();
         xKeyBinding = pKeyBindingHelper;
 
-        ::com::sun::star::awt::KeyStroke aKeyStroke;
+        css::awt::KeyStroke aKeyStroke;
         aKeyStroke.Modifiers = 0;
         aKeyStroke.KeyCode = KEY_RETURN;
         aKeyStroke.KeyChar = 0;
@@ -227,7 +227,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getEndIndex()
 }
 
 sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::isValid(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

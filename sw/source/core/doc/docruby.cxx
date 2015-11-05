@@ -38,7 +38,7 @@
 #include <breakit.hxx>
 #include <crsskip.hxx>
 
-using namespace ::com::sun::star::i18n;
+using namespace css::i18n;
 
 /*
  * Members in the list:

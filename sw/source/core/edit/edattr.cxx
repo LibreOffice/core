@@ -544,11 +544,11 @@ static inline SvtScriptType lcl_SetScriptFlags( sal_uInt16 nType )
 {
     switch( nType )
     {
-        case ::com::sun::star::i18n::ScriptType::LATIN:
+        case css::i18n::ScriptType::LATIN:
             return SvtScriptType::LATIN;
-        case ::com::sun::star::i18n::ScriptType::ASIAN:
+        case css::i18n::ScriptType::ASIAN:
             return SvtScriptType::ASIAN;
-        case ::com::sun::star::i18n::ScriptType::COMPLEX:
+        case css::i18n::ScriptType::COMPLEX:
             return SvtScriptType::COMPLEX;
         default:
             return SvtScriptType::NONE;

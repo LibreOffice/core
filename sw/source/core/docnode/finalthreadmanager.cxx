@@ -299,7 +299,7 @@ css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceN
     return s;
 }
 
-// ::com::sun::star::util::XJobManager:
+// css::util::XJobManager:
 void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(maMutex);
@@ -353,7 +353,7 @@ void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeExcept
     }
 }
 
-// ::com::sun::star::frame::XTerminateListener
+// css::frame::XTerminateListener
 void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject& ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(maMutex);
@@ -438,15 +438,15 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     SwThreadJoiner::ReleaseThreadJoiner();
 }
 
-// ::com::sun:star::lang::XEventListener (inherited via com::sun::star::frame::XTerminateListener)
+// ::com::sun:star::lang::XEventListener (inherited via css::frame::XTerminateListener)
 void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
     // nothing to do, because instance doesn't hold any references of observed objects
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_util_comp_FinalThreadManager_get_implementation(::com::sun::star::uno::XComponentContext* context,
-                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_util_comp_FinalThreadManager_get_implementation(css::uno::XComponentContext* context,
+                                css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new FinalThreadManager(context));
 }

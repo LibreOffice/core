@@ -108,10 +108,10 @@ using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
 using namespace nsFieldFlags;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::drawing::XShape;
+using css::uno::Reference;
+using css::uno::UNO_QUERY;
+using css::beans::XPropertySet;
+using css::drawing::XShape;
 
 bool SwBasicEscherEx::IsRelUrl()
 {
@@ -3162,14 +3162,14 @@ SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : oox
 // in transitioning away old filter for ole/ocx controls, ReadOCXStream has been made pure virtual in
 // filter/source/msocximex.cxx, so.. we need an implementation here
 bool  SwMSConvertControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShape > *pShapeRef,
+        css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl )
 {
     uno::Reference< form::XFormComponent > xFComp;
     bool bRes = oox::ole::MSConvertOCXControls::ReadOCXStorage( rSrc1, xFComp );
     if ( bRes && xFComp.is() )
     {
-        com::sun::star::awt::Size aSz;  // not used in import
+        css::awt::Size aSz;  // not used in import
         bRes = InsertControl( xFComp, aSz,pShapeRef,bFloatingCtrl);
     }
     return bRes;

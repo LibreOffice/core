@@ -98,8 +98,8 @@
 #include "fldbas.hxx"      // SwField
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::container;
+using namespace css::accessibility;
+using namespace css::container;
 
 using beans::PropertyValue;
 using beans::XMultiPropertySet;
@@ -1230,7 +1230,7 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
     }
     else if ( rType == cppu::UnoType<XAccessibleTextSelection>::get())
     {
-        uno::Reference< com::sun::star::accessibility::XAccessibleTextSelection > aTextExtension = this;
+        uno::Reference< css::accessibility::XAccessibleTextSelection > aTextExtension = this;
         aRet <<= aTextExtension;
     }
     else if ( rType == cppu::UnoType<XAccessibleExtendedAttributes>::get())
@@ -1349,7 +1349,7 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessibleParagraph::GetCurrentTabStop( sal_Int32 nIndex  )
+css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabStop( sal_Int32 nIndex  )
 {
     SolarMutexGuard aGuard;
 
@@ -1389,7 +1389,7 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessiblePa
     GetFrm()->GetCharRect( aCoreRect, aPosition, &aMoveState );
 
     // already get the caret position
-    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > tabs;
+    css::uno::Sequence< css::style::TabStop > tabs;
     const sal_Int32 nStrLen = GetTextNode()->GetText().getLength();
     if( nStrLen > 0 )
     {
@@ -2342,20 +2342,20 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         //tab stop
         if (rValue.Name == UNO_NAME_TABSTOPS)
         {
-            com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > tabs = GetCurrentTabStop( nIndex );
+            css::uno::Sequence< css::style::TabStop > tabs = GetCurrentTabStop( nIndex );
             if( !tabs.hasElements() )
             {
                 tabs.realloc(1);
-                ::com::sun::star::style::TabStop ts;
-                com::sun::star::awt::Rectangle rc0 = getCharacterBounds(0);
-                com::sun::star::awt::Rectangle rc1 = getCharacterBounds(nIndex);
+                css::style::TabStop ts;
+                css::awt::Rectangle rc0 = getCharacterBounds(0);
+                css::awt::Rectangle rc1 = getCharacterBounds(nIndex);
                 if( rc1.X - rc0.X >= 48 )
                     ts.Position = (rc1.X - rc0.X) - (rc1.X - rc0.X - 48)% 47 + 47;
                 else
                     ts.Position = 48;
                 ts.DecimalChar = ' ';
                 ts.FillChar = ' ';
-                ts.Alignment = ::com::sun::star::style::TabAlign_LEFT;
+                ts.Alignment = css::style::TabAlign_LEFT;
                 tabs[0] = ts;
             }
             rValue.Value <<= tabs;
@@ -3304,14 +3304,14 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
 }
 
 //MSAA Extension Implementation in app  module
-sal_Bool SAL_CALL SwAccessibleParagraph::scrollToPosition( const ::com::sun::star::awt::Point&, sal_Bool )
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwAccessibleParagraph::scrollToPosition( const css::awt::Point&, sal_Bool )
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     return sal_False;
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
-    throw (::com::sun::star::uno::RuntimeException,
+    throw (css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard g;
@@ -3350,8 +3350,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionStart( sal_Int32 nSelectedPortionIndex )
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException,
+    throw (css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aGuard;
@@ -3364,8 +3364,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionStart( sal_Int32 nSe
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionEnd( sal_Int32 nSelectedPortionIndex )
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException,
+    throw (css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aGuard;
@@ -3378,8 +3378,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionEnd( sal_Int32 nSele
 }
 
 sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionIndex )
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException,
+    throw (css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard g;
@@ -3436,8 +3436,8 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 startOffset, sal_Int32 endOffset)
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException,
+    throw (css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aGuard;
@@ -3823,7 +3823,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
     return bRet;
 }
 
-sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -3841,7 +3841,7 @@ sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole() throw (::com::sun:
 //Get the real heading level, Heading1 ~ Heading10
 sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 {
-    uno::Reference< ::com::sun::star::beans::XPropertySet > xPortion = CreateUnoPortion( 0, 0 );
+    uno::Reference< css::beans::XPropertySet > xPortion = CreateUnoPortion( 0, 0 );
     OUString pString = "ParaStyleName";
     uno::Any styleAny = xPortion->getPropertyValue( pString );
     OUString sValue;
@@ -3863,7 +3863,7 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 }
 
 uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

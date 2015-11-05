@@ -51,7 +51,7 @@
 #include <unochart.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 //Added for bug #i119954# Application crashed if undo/redo covert nest table to text
 bool ConvertTableToText( const SwTableNode *pTableNode, sal_Unicode cCh );

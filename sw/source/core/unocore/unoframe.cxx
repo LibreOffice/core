@@ -141,9 +141,9 @@
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::style::XStyleFamiliesSupplier;
+using css::frame::XModel;
+using css::container::XNameAccess;
+using css::style::XStyleFamiliesSupplier;
 
 const sal_Char sPackageProtocol[] = "vnd.sun.star.Package:";
 const sal_Char sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";

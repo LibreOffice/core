@@ -40,7 +40,7 @@
 #include <unofldmid.h>
 #include <calbck.hxx>
 
-using namespace ::com::sun::star::sdbc;
+using namespace css::sdbc;
 using namespace ::com::sun::star;
 
 /// replace database separator by dots for display

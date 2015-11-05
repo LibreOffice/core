@@ -22,7 +22,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 

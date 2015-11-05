@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 
 SwWrongArea::SwWrongArea( const OUString& rType, WrongListType listType,
-        com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+        css::uno::Reference< css::container::XStringKeyMap > xPropertyBag,
         sal_Int32 nPos,
         sal_Int32 nLen)
 : maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(0)
@@ -33,7 +33,7 @@ SwWrongArea::SwWrongArea( const OUString& rType, WrongListType listType,
 }
 
 SwWrongArea::SwWrongArea( const OUString& rType,
-        com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+        css::uno::Reference< css::container::XStringKeyMap > xPropertyBag,
         sal_Int32 nPos,
         sal_Int32 nLen,
         SwWrongList* pSubList)
@@ -629,7 +629,7 @@ bool SwWrongList::LookForEntry( sal_Int32 nBegin, sal_Int32 nEnd ) {
 }
 
 void SwWrongList::Insert( const OUString& rType,
-                          com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                          css::uno::Reference< css::container::XStringKeyMap > xPropertyBag,
                           sal_Int32 nNewPos, sal_Int32 nNewLen )
 {
     std::vector<SwWrongArea>::iterator aIter = maList.begin();

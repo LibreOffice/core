@@ -71,9 +71,9 @@
 #include <unomid.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
+using namespace css::linguistic2;
+using namespace css::uno;
+using namespace css::beans;
 
 #define CHAR_UNDERSCORE ((sal_Unicode)0x005F)
 #define CHAR_LEFT_ARROW ((sal_Unicode)0x25C0)

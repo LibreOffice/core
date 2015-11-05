@@ -23,7 +23,7 @@
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 TYPEINIT1(SwFormatWrapInfluenceOnObjPos, SfxPoolItem);
 

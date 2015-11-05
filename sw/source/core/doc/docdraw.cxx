@@ -69,7 +69,7 @@
 #include <calbck.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::linguistic2;
+using namespace css::linguistic2;
 
 /** local method to determine positioning and alignment attributes for a drawing
  *  object, which is newly connected to the layout.

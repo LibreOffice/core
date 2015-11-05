@@ -59,7 +59,7 @@
 #include <deque>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace css::uno;
 using namespace com::sun::star;
 
 class SwOLELRUCache
@@ -152,7 +152,7 @@ public:
 
     virtual void        Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) override;
+        const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
     bool            Connect() { return GetRealObject() != NULL; }
 };

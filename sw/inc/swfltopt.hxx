@@ -32,7 +32,7 @@ public:
 
     void GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
                      sal_uInt32* pValues );
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

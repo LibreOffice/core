@@ -51,13 +51,13 @@ public:
     ~SwOLEObj();
 
     bool UnloadObject();
-    static bool UnloadObject( ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xObj,
+    static bool UnloadObject( css::uno::Reference< css::embed::XEmbeddedObject > xObj,
                                 const SwDoc* pDoc,
                                 sal_Int64 nAspect );
 
     OUString GetDescription();
 
-    const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
+    const css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
     OUString GetCurrentPersistName() const { return aName; }
     OUString GetStyleString();

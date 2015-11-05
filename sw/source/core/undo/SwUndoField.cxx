@@ -31,7 +31,7 @@
 #include <dbfld.hxx>
 #include <docsh.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 SwUndoField::SwUndoField(const SwPosition & rPos, SwUndoId _nId )
     : SwUndo(_nId)

@@ -42,22 +42,22 @@ class SwTextMarkupHelper
         ~SwTextMarkupHelper() {}
 
         sal_Int32 getTextMarkupCount( const sal_Int32 nTextMarkupType )
-                throw (::com::sun::star::lang::IllegalArgumentException,
-                       ::com::sun::star::uno::RuntimeException);
+                throw (css::lang::IllegalArgumentException,
+                       css::uno::RuntimeException);
 
-        ::com::sun::star::accessibility::TextSegment getTextMarkup(
+        css::accessibility::TextSegment getTextMarkup(
                                             const sal_Int32 nTextMarkupIndex,
                                             const sal_Int32 nTextMarkupType )
-                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                       ::com::sun::star::lang::IllegalArgumentException,
-                       ::com::sun::star::uno::RuntimeException);
+                throw (css::lang::IndexOutOfBoundsException,
+                       css::lang::IllegalArgumentException,
+                       css::uno::RuntimeException);
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::accessibility::TextSegment >
+        css::uno::Sequence< css::accessibility::TextSegment >
                 getTextMarkupAtIndex( const sal_Int32 nCharIndex,
                                       const sal_Int32 nTextMarkupType )
-                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                       ::com::sun::star::lang::IllegalArgumentException,
-                       ::com::sun::star::uno::RuntimeException);
+                throw (css::lang::IndexOutOfBoundsException,
+                       css::lang::IllegalArgumentException,
+                       css::uno::RuntimeException);
 
     private:
         SwTextMarkupHelper( const SwTextMarkupHelper& ) = delete;

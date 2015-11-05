@@ -68,8 +68,8 @@ public:
     void UpdateChart();
 
     /// @return the XModel of the newly inserted chart if successful
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-        InsertChart( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > &rxDataProvider, bool bFillWithData, const OUString &rCellRange, SwFlyFrameFormat** ppFlyFrameFormat = 0 );
+    css::uno::Reference< css::frame::XModel >
+        InsertChart( css::uno::Reference< css::chart2::data::XDataProvider > &rxDataProvider, bool bFillWithData, const OUString &rCellRange, SwFlyFrameFormat** ppFlyFrameFormat = 0 );
 };
 
 inline SwTableFUNC::SwTableFUNC(SwFrameFormat &rFormat) :

@@ -42,7 +42,7 @@ namespace SWUnoHelper {
 
 // calls over the compherl the getEnumAsInt32 function and handle the
 // exceptions.
-sal_Int32 GetEnumAsInt32( const com::sun::star::uno::Any& rVal );
+sal_Int32 GetEnumAsInt32( const css::uno::Any& rVal );
 
 // methods for UCB actions:
     // delete the file under this URL

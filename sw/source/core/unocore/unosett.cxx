@@ -71,11 +71,11 @@
 #include <paratr.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::style;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::beans;
+using namespace css::text;
+using namespace css::style;
 
 // Constants for the css::text::ColumnSeparatorStyle
 #define API_COL_LINE_NONE               0

@@ -29,7 +29,7 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 SwLabItem::SwLabItem() :
 
@@ -394,7 +394,7 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
     }
 }
 
-void SwLabCfgItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwLabCfgItem::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void SwLabCfgItem::ImplCommit()
 {

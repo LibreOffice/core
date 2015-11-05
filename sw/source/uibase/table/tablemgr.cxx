@@ -225,7 +225,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     uno::Reference < embed::XEmbeddedObject > xObj =
         aCnt.CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aObjName );
 
-    ::svt::EmbeddedObjectRef aEmbObjRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
+    ::svt::EmbeddedObjectRef aEmbObjRef( xObj, css::embed::Aspects::MSOLE_CONTENT );
     if ( xObj.is() )
     {
 

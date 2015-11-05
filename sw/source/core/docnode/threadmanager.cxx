@@ -130,7 +130,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
         if ( bThreadFinished )
         {
             // release thread as job from thread joiner instance
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager > rThreadJoiner( mrThreadJoiner );
+            css::uno::Reference< css::util::XJobManager > rThreadJoiner( mrThreadJoiner );
             if ( rThreadJoiner.is() )
             {
                 rThreadJoiner->releaseJob( aTmpThreadData.aJob );
@@ -183,7 +183,7 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
         maStartedThreads.push_back( rThreadData );
 
         // register thread as job at thread joiner instance
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager > rThreadJoiner( mrThreadJoiner );
+        css::uno::Reference< css::util::XJobManager > rThreadJoiner( mrThreadJoiner );
         if ( rThreadJoiner.is() )
         {
             rThreadJoiner->registerJob( rThreadData.aJob );

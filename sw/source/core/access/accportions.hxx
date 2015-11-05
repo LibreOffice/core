@@ -77,7 +77,7 @@ class SwAccessiblePortionData : public SwPortionHandler
     static size_t FindLastBreak( const Positions_t& rPositions, sal_Int32 nValue );
 
     /// fill the boundary with the values from rPositions[nPos]
-    static void FillBoundary(com::sun::star::i18n::Boundary& rBound,
+    static void FillBoundary(css::i18n::Boundary& rBound,
                       const Positions_t& rPositions,
                       size_t nPos );
 
@@ -104,7 +104,7 @@ public:
     virtual void Finish() override;
 
     virtual void SetAttrFieldType( sal_uInt16 nAttrFieldType ) override;
-    bool FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos );
+    bool FillBoundaryIFDateField( css::i18n::Boundary& rBound, const sal_Int32 nPos );
     bool IsIndexInFootnode(sal_Int32 nIndex);
     bool IsInGrayPortion( sal_Int32 nPos );
     sal_Int32 GetFieldIndex(sal_Int32 nPos);
@@ -117,11 +117,11 @@ public:
     const OUString& GetAccessibleString() const;
 
     /// get the start & end positions of the sentence
-    void GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
+    void GetLineBoundary( css::i18n::Boundary& rBound,
                           sal_Int32 nPos ) const;
 
     // get start and end position of the last line
-    void GetLastLineBoundary( com::sun::star::i18n::Boundary& rBound ) const;
+    void GetLastLineBoundary( css::i18n::Boundary& rBound ) const;
 
     /// Determine whether this core position is valid for these portions.
     /// (A paragraph may be split into several frames, e.g. at page
@@ -139,7 +139,7 @@ public:
     sal_Int32 GetLineCount() const;
     sal_Int32 GetLineNo( const sal_Int32 nPos ) const;
     void GetBoundaryOfLine( const sal_Int32 nLineNo,
-                            com::sun::star::i18n::Boundary& rLineBound );
+                            css::i18n::Boundary& rLineBound );
 
     /// get the position in the model string for a given
     /// (accessibility) position
@@ -155,11 +155,11 @@ public:
 
     // get boundaries of words/sentences. The data structures are
     // created on-demand.
-    void GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
+    void GetSentenceBoundary( css::i18n::Boundary& rBound,
                               sal_Int32 nPos );
 
     // get (a) boundary for attribute change
-    void GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
+    void GetAttributeBoundary( css::i18n::Boundary& rBound,
                                sal_Int32 nPos ) const;
 
     /// Convert start and end positions into core positions.

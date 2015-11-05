@@ -64,7 +64,7 @@
 #include <SwUndoField.hxx>
 #include <calbck.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 // the StartIndex can be supplied optionally (e.g. if it was queried before - is a virtual
 // method otherwise!)

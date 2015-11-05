@@ -60,9 +60,9 @@
 #define ZOOM_ENTRIES 9
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::frame;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::frame;
 
 SFX_IMPL_TOOLBOX_CONTROL( SwTbxAutoTextCtrl, SfxVoidItem );
 SFX_IMPL_TOOLBOX_CONTROL( SwTbxFieldCtrl, SfxBoolItem );

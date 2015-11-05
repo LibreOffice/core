@@ -47,15 +47,15 @@ namespace sw { namespace sidebar {
 
 VclPtr<vcl::Window> WrapPropertyPanel::Create (
     vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+    const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException("no parent Window given to WrapPropertyPanel::Create", NULL, 0);
+        throw css::lang::IllegalArgumentException("no parent Window given to WrapPropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to WrapPropertyPanel::Create", NULL, 1);
+        throw css::lang::IllegalArgumentException("no XFrame given to WrapPropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to WrapPropertyPanel::Create", NULL, 2);
+        throw css::lang::IllegalArgumentException("no SfxBindings given to WrapPropertyPanel::Create", NULL, 2);
 
     return VclPtr<WrapPropertyPanel>::Create(
                         pParent,
@@ -65,7 +65,7 @@ VclPtr<vcl::Window> WrapPropertyPanel::Create (
 
 WrapPropertyPanel::WrapPropertyPanel(
     vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+    const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings )
     : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame)
     , mxFrame( rxFrame )

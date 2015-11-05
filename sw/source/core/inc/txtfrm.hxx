@@ -204,7 +204,7 @@ protected:
 
 public:
 
-    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos ) override;
+    css::uno::Sequence< css::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos ) override;
 
     /**
      * This is public, as it needs to be called by some methods in order to save the Prepare

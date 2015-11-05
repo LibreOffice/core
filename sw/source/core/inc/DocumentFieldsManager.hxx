@@ -43,7 +43,7 @@ public:
     virtual void RemoveFieldType(size_t nField) override;
     virtual void UpdateFields( SfxPoolItem* pNewHt, bool bCloseDB) override;
     virtual void InsDeletedFieldType(SwFieldType &) override;
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) override;
+    virtual bool PutValueToField(const SwPosition & rPos, const css::uno::Any& rVal, sal_uInt16 nWhich) override;
     virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) override;
     virtual void UpdateRefFields(SfxPoolItem* pHt) override;
     virtual void UpdateTableFields(SfxPoolItem* pHt) override;

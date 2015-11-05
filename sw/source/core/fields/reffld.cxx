@@ -67,8 +67,8 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::lang;
+using namespace css::text;
+using namespace css::lang;
 
 static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 {

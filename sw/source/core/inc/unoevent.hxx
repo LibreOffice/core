@@ -37,7 +37,7 @@ class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 protected:
     virtual ~SwHyperlinkEventDescriptor();
 public:
@@ -48,8 +48,8 @@ public:
     void copyMacrosIntoINetFormat(SwFormatINetFormat& aFormat);
 
     void copyMacrosFromNameReplace(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XNameReplace> & xReplace);
+        css::uno::Reference<
+            css::container::XNameReplace> & xReplace);
 };
 
 // SwEventDescriptor for
@@ -71,7 +71,7 @@ public:
     virtual ~SwFrameEventDescriptor();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
     virtual void setMacroItem(const SvxMacroItem& rItem) override;
@@ -91,7 +91,7 @@ public:
     virtual ~SwFrameStyleEventDescriptor();
 
     virtual OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
     virtual void setMacroItem(const SvxMacroItem& rItem) override;

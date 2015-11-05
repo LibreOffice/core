@@ -36,7 +36,7 @@
 
 using namespace utl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 {
@@ -365,7 +365,7 @@ void SwLayoutViewConfig::Load()
     }
 }
 
-void SwLayoutViewConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwLayoutViewConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 Sequence<OUString> SwGridConfig::GetPropertyNames()
 {
@@ -456,7 +456,7 @@ void SwGridConfig::Load()
     }
 }
 
-void SwGridConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwGridConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 Sequence<OUString> SwCursorConfig::GetPropertyNames()
 {
@@ -538,7 +538,7 @@ void SwCursorConfig::Load()
     }
 }
 
-void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwCursorConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
     ConfigItem("Office.WriterWeb/Background",
@@ -567,7 +567,7 @@ void SwWebColorConfig::ImplCommit()
     PutProperties(aPropNames, aValues);
 }
 
-void SwWebColorConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwWebColorConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void SwWebColorConfig::Load()
 {

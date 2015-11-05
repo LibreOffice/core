@@ -50,7 +50,7 @@
 
 #include <set>
 
-using namespace ::com::sun::star::lang;
+using namespace css::lang;
 using namespace ::com::sun::star;
 
 SwSortOptions*      SwSortElement::pOptions = 0;

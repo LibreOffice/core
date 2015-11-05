@@ -414,7 +414,7 @@ const css::i18n::ForbiddenCharacters*
 }
 
 void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
-                                   /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
+                                   /*[in]*/ const css::i18n::ForbiddenCharacters& rFChars )
 {
     if( !mxForbiddenCharsTable.is() )
     {

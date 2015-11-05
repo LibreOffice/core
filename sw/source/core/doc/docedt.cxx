@@ -49,8 +49,8 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::i18n;
+using namespace css::linguistic2;
+using namespace css::i18n;
 
 
 void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,

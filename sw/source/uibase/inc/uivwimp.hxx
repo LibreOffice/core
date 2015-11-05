@@ -46,7 +46,7 @@ namespace com{ namespace sun{ namespace star {
 }}}
 
 class SwScannerEventListener : public ::cppu::WeakImplHelper<
-    ::com::sun::star::lang::XEventListener >
+    css::lang::XEventListener >
 {
     SwView* pView;
 
@@ -57,24 +57,24 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing(
-                    const ::com::sun::star::lang::EventObject& rEventObject ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                    const css::lang::EventObject& rEventObject ) throw(css::uno::RuntimeException, std::exception) override;
 
     void ViewDestroyed() { pView = 0; }
 };
 
 // Clipboard EventListener
 class SwClipboardChangeListener : public ::cppu::WeakImplHelper<
-    ::com::sun::star::datatransfer::clipboard::XClipboardListener >
+    css::datatransfer::clipboard::XClipboardListener >
 {
     SwView* pView;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEventObject )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rEventObject )
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XClipboardListener
-    virtual void SAL_CALL changedContents( const ::com::sun::star::datatransfer::clipboard::ClipboardEvent& rEventObject )
-        throw (com::sun::star::uno::RuntimeException,
+    virtual void SAL_CALL changedContents( const css::datatransfer::clipboard::ClipboardEvent& rEventObject )
+        throw (css::uno::RuntimeException,
                std::exception) override;
 
 public:
@@ -90,11 +90,11 @@ class SwMailMergeConfigItem;
 
 class SwView_Impl
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >  xScanEvtLstnr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >  xClipEvtLstnr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >   xDisProvInterceptor;
-    ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >              mxXTextView;       // UNO object
-    com::sun::star::uno::WeakReference< com::sun::star::lang::XUnoTunnel > xTransferable;
+    css::uno::Reference< css::lang::XEventListener >  xScanEvtLstnr;
+    css::uno::Reference< css::lang::XEventListener >  xClipEvtLstnr;
+    css::uno::Reference< css::frame::XDispatchProviderInterceptor >   xDisProvInterceptor;
+    css::uno::Reference< css::view::XSelectionSupplier >              mxXTextView;       // UNO object
+    css::uno::WeakReference< css::lang::XUnoTunnel > xTransferable;
 
     // temporary document for printing text of selection / multi selection
     // in PDF export.
@@ -125,7 +125,7 @@ public:
 
     void                            SetShellMode(ShellModes eSet);
 
-    ::com::sun::star::view::XSelectionSupplier* GetUNOObject();
+    css::view::XSelectionSupplier* GetUNOObject();
     SwXTextView*                    GetUNOObject_Impl();
     void                            Invalidate();
 

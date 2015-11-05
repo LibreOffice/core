@@ -53,13 +53,13 @@
 #include <unomid.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-using namespace com::sun::star::ui::dialogs;
+using namespace css::text;
+using namespace css::beans;
+using namespace css::container;
+using namespace css::lang;
+using namespace css::ucb;
+using namespace css::uno;
+using namespace css::ui::dialogs;
 
 static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,

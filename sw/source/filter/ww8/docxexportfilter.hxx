@@ -30,7 +30,7 @@
 class DocxExportFilter : public oox::core::XmlFilterBase
 {
 public:
-    explicit DocxExportFilter( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+    explicit DocxExportFilter( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     // FIXME these should not even exist for the export-only filter!
     // For now, let's just do empty implementations of those.

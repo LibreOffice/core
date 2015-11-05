@@ -31,8 +31,7 @@ class SwCalendarWrapper : public CalendarWrapper
     sal_uInt16 nLang;
 
 public:
-    SwCalendarWrapper( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XComponentContext > & rxContext = ::comphelper::getProcessComponentContext() )
+    SwCalendarWrapper( const css::uno::Reference< css::uno::XComponentContext > & rxContext = ::comphelper::getProcessComponentContext() )
         : CalendarWrapper( rxContext ), nLang( LANGUAGE_SYSTEM )
     {}
 

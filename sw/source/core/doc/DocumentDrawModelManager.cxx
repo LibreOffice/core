@@ -141,9 +141,9 @@ void DocumentDrawModelManager::InitDrawModel()
     if (!utl::ConfigManager::IsAvoidConfig())
     {
         SAL_INFO( "sw.doc", "before create Spellchecker/Hyphenator" );
-        ::com::sun::star::uno::Reference< com::sun::star::linguistic2::XSpellChecker1 > xSpell = ::GetSpellChecker();
+        css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpell = ::GetSpellChecker();
         rOutliner.SetSpeller( xSpell );
-        ::com::sun::star::uno::Reference< com::sun::star::linguistic2::XHyphenator > xHyphenator( ::GetHyphenator() );
+        css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( ::GetHyphenator() );
         rOutliner.SetHyphenator( xHyphenator );
         SAL_INFO( "sw.doc", "after create Spellchecker/Hyphenator" );
     }

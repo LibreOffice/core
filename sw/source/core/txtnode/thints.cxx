@@ -83,7 +83,7 @@
 #define CHECK_NOTMERGED
 #endif
 
-using namespace ::com::sun::star::i18n;
+using namespace css::i18n;
 
 SwpHints::SwpHints()
     : m_pHistory(0)

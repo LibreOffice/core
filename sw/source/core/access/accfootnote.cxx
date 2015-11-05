@@ -33,9 +33,9 @@
 #include "access.hrc"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::accessibility;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::accessibility;
 
 const sal_Char sServiceNameFootnote[] = "com.sun.star.text.AccessibleFootnoteView";
 const sal_Char sServiceNameEndnote[] = "com.sun.star.text.AccessibleEndnoteView";

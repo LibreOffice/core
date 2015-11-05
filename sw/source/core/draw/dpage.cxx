@@ -45,9 +45,9 @@
 #include <grfatr.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::frame;
+using namespace css::uno;
+using namespace css::drawing;
+using namespace css::frame;
 
 SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, bMasterPage),

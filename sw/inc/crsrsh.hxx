@@ -135,7 +135,7 @@ const int CRSR_POSOLD = 0x01,   // cursor stays at old position
           CRSR_POSCHG = 0x02;   // position changed by the layout
 
 /// Helperfunction to resolve backward references in regular expressions
-OUString *ReplaceBackReferences( const com::sun::star::util::SearchOptions& rSearchOpt, SwPaM* pPam );
+OUString *ReplaceBackReferences( const css::util::SearchOptions& rSearchOpt, SwPaM* pPam );
 
 class SW_DLLPUBLIC SwCrsrShell
     : public SwViewShell
@@ -369,7 +369,7 @@ public:
     bool MoveColumn( SwWhichColumn, SwPosColumn );
     bool MoveRegion( SwWhichRegion, SwPosRegion );
 
-    sal_uLong Find( const com::sun::star::util::SearchOptions& rSearchOpt,
+    sal_uLong Find( const css::util::SearchOptions& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
@@ -384,7 +384,7 @@ public:
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng,
-                const com::sun::star::util::SearchOptions* pSearchOpt = 0,
+                const css::util::SearchOptions* pSearchOpt = 0,
                 const SfxItemSet* rReplSet = 0 );
 
     //  Position the Cursor
@@ -725,9 +725,9 @@ public:
     bool ExpandToSentenceBorders();
 
     // get position from current cursor
-    bool IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES )const;
-    bool IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    bool IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    bool IsStartWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES )const;
+    bool IsEndWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    bool IsInWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
     bool IsStartSentence() const;
     bool IsEndSentence() const;
     bool IsSttPara() const;
@@ -773,14 +773,14 @@ public:
     // get smart tags at point position
     void GetSmartTagTerm( const Point& rPt,
                           SwRect& rSelectRect,
-                          ::com::sun::star::uno::Sequence< OUString >& rSmartTagTypes,
-                          ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
-                          ::com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rRange );
+                          css::uno::Sequence< OUString >& rSmartTagTypes,
+                          css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
+                          css::uno::Reference<css::text::XTextRange>& rRange );
 
     // get smart tags at current cursor position
-    void GetSmartTagTerm( ::com::sun::star::uno::Sequence< OUString >& rSmartTagTypes,
-                          ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
-                          ::com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rRange ) const;
+    void GetSmartTagTerm( css::uno::Sequence< OUString >& rSmartTagTypes,
+                          css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
+                          css::uno::Reference<css::text::XTextRange>& rRange ) const;
 
     bool IsPageAtPos( const Point &rPt ) const;
 

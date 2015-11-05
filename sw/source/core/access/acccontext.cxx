@@ -51,7 +51,7 @@
 
 using namespace sw::access;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace css::accessibility;
 
 void SwAccessibleContext::InitStates()
 {

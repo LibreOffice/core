@@ -67,7 +67,7 @@
 #include <calbck.hxx>
 #include "ndole.hxx"
 
-using namespace ::com::sun::star::i18n;
+using namespace css::i18n;
 
 TYPEINIT1( SwContentNode, SwModify )
 

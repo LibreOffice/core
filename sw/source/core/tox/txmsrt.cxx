@@ -45,7 +45,7 @@
 #include <reffld.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 // Initialize strings
 sal_uInt16 SwTOXSortTabBase::nOpt = 0;

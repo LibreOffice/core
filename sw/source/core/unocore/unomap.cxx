@@ -90,9 +90,9 @@
 #include <svx/xdef.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
+using namespace css::lang;
+using namespace css::uno;
+using namespace css::beans;
 
 #ifndef MID_TXT_LMARGIN
 #define MID_TXT_LMARGIN 11

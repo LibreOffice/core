@@ -63,7 +63,7 @@ private:
     SwDoc& m_rDoc;
 
     SwViewShell *mpCurrentView; //< SwDoc should get a new member mpCurrentView
-    SwLayouter *mpLayouter; /**< ::com::sun::star::frame::Controller for complex layout formatting
+    SwLayouter *mpLayouter; /**< css::frame::Controller for complex layout formatting
                            like footnote/endnote in sections */
 };
 

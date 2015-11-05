@@ -45,10 +45,10 @@
 
 #include <unomid.h>
 
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::uno;
+using namespace css::container;
+using namespace css::lang;
+using namespace css::sdb;
+using namespace css::uno;
 
 // edit insert-field
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)

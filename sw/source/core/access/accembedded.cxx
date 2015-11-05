@@ -30,8 +30,8 @@
 #include <docsh.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::accessibility;
+using namespace css::lang;
+using namespace css::accessibility;
 
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleEmbeddedObject";
 
@@ -47,14 +47,14 @@ SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject()
 }
 
 // XInterface
-com::sun::star::uno::Any SAL_CALL
-    SwAccessibleEmbeddedObject::queryInterface (const com::sun::star::uno::Type & rType)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL
+    SwAccessibleEmbeddedObject::queryInterface (const css::uno::Type & rType)
+    throw (css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aReturn = SwAccessibleNoTextFrame::queryInterface (rType);
+    css::uno::Any aReturn = SwAccessibleNoTextFrame::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
-         static_cast< ::com::sun::star::accessibility::XAccessibleExtendedAttributes* >(this) );
+         static_cast< css::accessibility::XAccessibleExtendedAttributes* >(this) );
     return aReturn;
 }
 
@@ -101,12 +101,12 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementation
 }
 
 // XAccessibleExtendedAttributes
-::com::sun::star::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
-    ::com::sun::star::uno::Any strRet;
+    css::uno::Any strRet;
     OUString style;
     SwFlyFrm* pFFrm = getFlyFrm();
 

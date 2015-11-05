@@ -35,8 +35,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui::dialogs;
+using namespace css::uno;
+using namespace css::ui::dialogs;
 using namespace ::sfx2;
 
 class TiledRenderingApp : public Application

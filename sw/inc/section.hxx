@@ -67,7 +67,7 @@ private:
     OUString m_sCondition;
     OUString m_sLinkFileName;
     OUString m_sLinkFilePassword; // Must be changed to Sequence.
-    ::com::sun::star::uno::Sequence <sal_Int8> m_Password;
+    css::uno::Sequence <sal_Int8> m_Password;
 
     /// It seems this flag caches the current final "hidden" state.
     bool m_bHiddenFlag          : 1;
@@ -125,9 +125,9 @@ public:
     OUString GetLinkFilePassword() const        { return m_sLinkFilePassword; }
     void SetLinkFilePassword(OUString const& rS){ m_sLinkFilePassword = rS; }
 
-    ::com::sun::star::uno::Sequence<sal_Int8> const& GetPassword() const
+    css::uno::Sequence<sal_Int8> const& GetPassword() const
                                             { return m_Password; }
-    void SetPassword(::com::sun::star::uno::Sequence<sal_Int8> const& rNew)
+    void SetPassword(css::uno::Sequence<sal_Int8> const& rNew)
                                             { m_Password = rNew; }
     bool IsLinkType() const
     { return (DDE_LINK_SECTION == m_eType) || (FILE_LINK_SECTION == m_eType); }
@@ -211,7 +211,7 @@ public:
         { m_Data.SetLinkFilePassword(rS); }
 
     // Get / set password of this section
-    ::com::sun::star::uno::Sequence<sal_Int8> const& GetPassword() const
+    css::uno::Sequence<sal_Int8> const& GetPassword() const
                                             { return m_Data.GetPassword(); }
 
     // Data server methods.
@@ -283,8 +283,7 @@ class SW_DLLPUBLIC SwSectionFormat
         in case of an index, both a SwXDocumentIndex and a SwXTextSection
         register at this SwSectionFormat, so we need to have two refs.
      */
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::text::XTextSection> m_wXTextSection;
+    css::uno::WeakReference<css::text::XTextSection> m_wXTextSection;
 
     SAL_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
@@ -327,11 +326,9 @@ public:
     // Is section a valid one for global document?
     const SwSection* GetGlobalDocSection() const;
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::text::XTextSection> const& GetXTextSection() const
+    SAL_DLLPRIVATE css::uno::WeakReference<css::text::XTextSection> const& GetXTextSection() const
             { return m_wXTextSection; }
-    SAL_DLLPRIVATE void SetXTextSection(::com::sun::star::uno::Reference<
-                    ::com::sun::star::text::XTextSection> const& xTextSection)
+    SAL_DLLPRIVATE void SetXTextSection(css::uno::Reference<css::text::XTextSection> const& xTextSection)
             { m_wXTextSection = xTextSection; }
 
     // sfx2::Metadatable
@@ -339,8 +336,7 @@ public:
     virtual bool IsInClipboard() const override;
     virtual bool IsInUndo() const override;
     virtual bool IsInContent() const override;
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XMetadatable > MakeUnoObject() override;
+    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 };

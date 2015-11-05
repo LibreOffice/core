@@ -42,26 +42,26 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
     const SvGlobalName aOutplaceClassId;
 
     static SwNoTextNode *GetNoTextNode(
-        const ::com::sun::star::uno::Reference <
-                ::com::sun::star::beans::XPropertySet >& rPropSet );
+        const css::uno::Reference <
+                css::beans::XPropertySet >& rPropSet );
 
 protected:
     virtual void exportStyleContent(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::style::XStyle > & rStyle ) override;
+            const css::uno::Reference<
+                css::style::XStyle > & rStyle ) override;
 
     virtual void _collectTextEmbeddedAutoStyles(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
+        const css::uno::Reference <
+            css::beans::XPropertySet > & rPropSet ) override;
     virtual void _exportTextEmbedded(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rPropSet,
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo ) override;
+        const css::uno::Reference <
+            css::beans::XPropertySet > & rPropSet,
+        const css::uno::Reference <
+            css::beans::XPropertySetInfo > & rPropSetInfo ) override;
 
     virtual void exportTable(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextContent > & rTextContent,
+        const css::uno::Reference <
+            css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress ) override;
 
 public:

@@ -49,7 +49,7 @@ struct SwDocMergeInfo
 
 class SW_DLLPUBLIC SwMailMergeConfigItem
 {
-//    com::sun::star::uno::Sequence< OUString>     m_aSavedDocuments;
+//    css::uno::Sequence< OUString>     m_aSavedDocuments;
     SwMailMergeConfigItem_Impl* m_pImpl;
     //session information - not stored in configuration
     bool m_bAddressInserted;
@@ -82,18 +82,18 @@ public:
     const ResStringArray& GetDefaultAddressHeaders() const;
 
     void SetCurrentConnection(
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xSource,
+        css::uno::Reference< css::sdbc::XDataSource> xSource,
         const SharedConnection& rConnection,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xColumnsSupplier,
+        css::uno::Reference< css::sdbcx::XColumnsSupplier> xColumnsSupplier,
         const SwDBData& rDBData);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> GetSource();
+    css::uno::Reference< css::sdbc::XDataSource> GetSource();
 
     SharedConnection GetConnection();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> GetColumnsSupplier();
+    css::uno::Reference< css::sdbcx::XColumnsSupplier> GetColumnsSupplier();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
+    css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const;
 
     void DisposeResultSet();
 
@@ -112,7 +112,7 @@ public:
     void ExcludeRecord(sal_Int32 nRecord, bool bExclude);
     css::uno::Sequence< css::uno::Any> GetSelection() const;
 
-    const com::sun::star::uno::Sequence<OUString>& GetSavedDocuments() const;
+    const css::uno::Sequence<OUString>& GetSavedDocuments() const;
     void AddSavedDocument(const OUString& rName);
 
     bool IsOutputToLetter()const;
@@ -124,8 +124,8 @@ public:
     bool IsHideEmptyParagraphs() const;
     void SetHideEmptyParagraphs(bool bSet);
 
-    const com::sun::star::uno::Sequence<OUString> GetAddressBlocks() const;
-    void SetAddressBlocks(const com::sun::star::uno::Sequence< OUString>& rBlocks);
+    const css::uno::Sequence<OUString> GetAddressBlocks() const;
+    void SetAddressBlocks(const css::uno::Sequence< OUString>& rBlocks);
 
     void SetCurrentAddressBlockIndex( sal_Int32 nSet );
     sal_Int32 GetCurrentAddressBlockIndex() const;
@@ -140,8 +140,8 @@ public:
     bool IsGreetingLine(bool bInEMail) const;
     void SetGreetingLine(bool bSet, bool bInEMail);
 
-    const com::sun::star::uno::Sequence<OUString> GetGreetings(Gender eType) const;
-    void SetGreetings(Gender eType, const com::sun::star::uno::Sequence< OUString>& rBlocks);
+    const css::uno::Sequence<OUString> GetGreetings(Gender eType) const;
+    void SetGreetings(Gender eType, const css::uno::Sequence< OUString>& rBlocks);
 
     sal_Int32 GetCurrentGreeting(Gender eType) const;
     void SetCurrentGreeting(Gender eType, sal_Int32 nIndex);
@@ -151,10 +151,10 @@ public:
     void SetFemaleGenderValue(const OUString& rValue);
 
     //returns the assignment in the order of the default headers (GetDefaultAddressHeaders())
-    com::sun::star::uno::Sequence<OUString> GetColumnAssignment( const SwDBData& rDBData ) const;
+    css::uno::Sequence<OUString> GetColumnAssignment( const SwDBData& rDBData ) const;
     void SetColumnAssignment(
         const SwDBData& rDBData,
-        const com::sun::star::uno::Sequence< OUString>& );
+        const css::uno::Sequence< OUString>& );
 
     bool IsAddressFieldsAssigned() const;
     bool IsGreetingFieldsAssigned() const;

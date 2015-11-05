@@ -1540,7 +1540,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
     // set the document locale
 
-    com::sun::star::lang::Locale aDocLocale( LanguageTag( SwEnhancedPDFExportHelper::GetDefaultLanguage() ).getLocale() );
+    css::lang::Locale aDocLocale( LanguageTag( SwEnhancedPDFExportHelper::GetDefaultLanguage() ).getLocale() );
     pPDFExtOutDevData->SetDocumentLocale( aDocLocale );
 
     // Prepare the output device:

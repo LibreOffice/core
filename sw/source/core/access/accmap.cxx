@@ -73,7 +73,7 @@
 #include <calbck.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace css::accessibility;
 using namespace ::sw::access;
 
 struct SwFrmFunc
@@ -2097,7 +2097,7 @@ void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, uno::Reference < XA
 }
 
 //Added by yanjun for sym2_6407
-void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj, ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccParent)
+void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj, css::uno::Reference < css::accessibility::XAccessible > xAccParent)
 {
     osl::MutexGuard aGuard( maMutex );
     if (mpShapeMap && pParentObj && pParentObj->IsGroupObject() && xAccParent.is())
@@ -3236,7 +3236,7 @@ bool SwAccessibleMap::ReplaceChild (
 }
 
 //Get the accessible control shape from the model object, here model object is with XPropertySet type
-::accessibility::AccessibleControlShape * SwAccessibleMap::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException)
+::accessibility::AccessibleControlShape * SwAccessibleMap::GetAccControlShapeFromModel(css::beans::XPropertySet* pSet) throw (css::uno::RuntimeException)
 {
     if( mpShapeMap )
     {
@@ -3259,9 +3259,9 @@ bool SwAccessibleMap::ReplaceChild (
     return NULL;
 }
 
-::com::sun::star::uno::Reference< XAccessible >
-    SwAccessibleMap::GetAccessibleCaption (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&)
-    throw (::com::sun::star::uno::RuntimeException)
+css::uno::Reference< XAccessible >
+    SwAccessibleMap::GetAccessibleCaption (const css::uno::Reference< css::drawing::XShape >&)
+    throw (css::uno::RuntimeException)
 {
     return NULL;
 }

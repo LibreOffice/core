@@ -90,10 +90,10 @@
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::smarttags;
+using namespace css::beans;
+using namespace css::uno;
+using namespace css::linguistic2;
+using namespace css::smarttags;
 
 // Lingu-Dispatcher
 
@@ -741,7 +741,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                             uno::Reference< frame::XFrame > xFrame;
                             if ( pSfxViewFrame )
                                 xFrame = pSfxViewFrame->GetFrame().GetFrameInterface();
-                            com::sun::star::util::URL aURL;
+                            css::util::URL aURL;
                             uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY );
 
                             try

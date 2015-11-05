@@ -26,9 +26,9 @@
 
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
 
-using ::com::sun::star::lang::IndexOutOfBoundsException;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Sequence;
+using css::lang::IndexOutOfBoundsException;
+using css::uno::RuntimeException;
+using css::uno::Sequence;
 
 SwAccessiblePreview::SwAccessiblePreview( SwAccessibleMap *pMp ) :
     SwAccessibleDocumentBase( pMp )
@@ -67,12 +67,12 @@ Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription() throw (com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription() throw (css::uno::RuntimeException, std::exception)
 {
     return GetResource( STR_ACCESS_PREVIEW_DOC_NAME );
 }
 
-OUString SAL_CALL SwAccessiblePreview::getAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL SwAccessiblePreview::getAccessibleName() throw (css::uno::RuntimeException, std::exception)
 {
     OUString sLclName = SwAccessibleDocumentBase::getAccessibleName();
     sLclName += " ";
@@ -82,7 +82,7 @@ OUString SAL_CALL SwAccessiblePreview::getAccessibleName() throw (::com::sun::st
 
 void SwAccessiblePreview::_InvalidateFocus()
 {
-    FireStateChangedEvent( ::com::sun::star::accessibility::AccessibleStateType::FOCUSED, true );
+    FireStateChangedEvent( css::accessibility::AccessibleStateType::FOCUSED, true );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

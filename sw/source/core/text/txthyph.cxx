@@ -31,10 +31,10 @@
 #include <rootfrm.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::i18n;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::linguistic2;
+using namespace css::i18n;
 
 Reference< XHyphenatedWord >  SwTextFormatInfo::HyphWord(
                                 const OUString &rText, const sal_Int32 nMinTrail )

@@ -70,7 +70,7 @@ struct SwSortElement
     static SwDoc*               pDoc;
     static const FlatFndBox*    pBox;
     static CollatorWrapper*     pSortCollator;
-    static ::com::sun::star::lang::Locale* pLocale;
+    static css::lang::Locale* pLocale;
     static OUString*            pLastAlgorithm;
     static LocaleDataWrapper*   pLclData;
 

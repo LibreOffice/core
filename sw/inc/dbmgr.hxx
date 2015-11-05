@@ -62,9 +62,9 @@ namespace svx {
 
 struct SwDBFormatData
 {
-    com::sun::star::util::Date aNullDate;
-    com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter> xFormatter;
-    com::sun::star::lang::Locale aLocale;
+    css::util::Date aNullDate;
+    css::uno::Reference< css::util::XNumberFormatter> xFormatter;
+    css::lang::Locale aLocale;
 };
 
 namespace vcl {
@@ -100,13 +100,13 @@ enum class SwDBSelect
 
 struct SwDSParam : public SwDBData
 {
-    com::sun::star::util::Date  aNullDate;
+    css::util::Date  aNullDate;
 
-    ::com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatter>    xFormatter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       xStatement;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       xResultSet;
-    ::com::sun::star::uno::Sequence<  ::com::sun::star::uno::Any >              aSelection;
+    css::uno::Reference<css::util::XNumberFormatter>    xFormatter;
+    css::uno::Reference< css::sdbc::XConnection>       xConnection;
+    css::uno::Reference< css::sdbc::XStatement>        xStatement;
+    css::uno::Reference< css::sdbc::XResultSet>        xResultSet;
+    css::uno::Sequence<  css::uno::Any >               aSelection;
     bool bScrollable;
     bool bEndOfDB;
     bool bAfterSelection;
@@ -121,8 +121,8 @@ struct SwDSParam : public SwDBData
         {}
 
     SwDSParam(const SwDBData& rData,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>&    xResSet,
-        const ::com::sun::star::uno::Sequence<  ::com::sun::star::uno::Any >&   rSelection) :
+        const css::uno::Reference< css::sdbc::XResultSet>&    xResSet,
+        const css::uno::Sequence<  css::uno::Any >&   rSelection) :
         SwDBData(rData),
         xResultSet(xResSet),
         aSelection(rSelection),
@@ -167,7 +167,7 @@ struct SwMergeDescriptor
 
     SwMailMergeConfigItem*                              pMailMergeConfigItem;
 
-    ::com::sun::star::uno::Sequence<  ::com::sun::star::beans::PropertyValue >  aPrintOptions;
+    css::uno::Sequence<  css::beans::PropertyValue >  aPrintOptions;
 
     SwMergeDescriptor( DBManagerOptions nType, SwWrtShell& rShell, svx::ODataAccessDescriptor& rDesc ) :
         nMergeType(nType),
@@ -272,9 +272,9 @@ public:
                             css::uno::Reference< css::sdbc::XConnection> xConnection,
                             const OUString& rTableName, bool bAppend = false);
 
-    static sal_uLong GetColumnFormat( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xSource,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xColumn,
+    static sal_uLong GetColumnFormat( css::uno::Reference< css::sdbc::XDataSource> xSource,
+                            css::uno::Reference< css::sdbc::XConnection> xConnection,
+                            css::uno::Reference< css::beans::XPropertySet> xColumn,
                             SvNumberFormatter* pNFormatr,
                             long nLanguage );
 
@@ -290,11 +290,11 @@ public:
     inline bool     IsInMerge() const   { return bInMerge; }
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
-                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties,
+                        const css::uno::Sequence< css::beans::PropertyValue>& rProperties,
                         bool bWithDataSourceBrowser = false);
 
     static void     InsertText(SwWrtShell& rSh,
-                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);
+                        const css::uno::Sequence< css::beans::PropertyValue>& rProperties);
 
     /// check if a data source is open
     bool            IsDataSourceOpen(const OUString& rDataSource,
@@ -309,7 +309,7 @@ public:
                             OUString& rResult, double* pNumber);
     /** create and store or find an already stored connection to a data source for use
     in SwFieldMgr and SwDBTreeList */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
+    css::uno::Reference< css::sdbc::XConnection>
                     RegisterConnection(OUString const& rSource);
 
     const SwDSParam* CreateDSData(const SwDBData& rData)
@@ -333,22 +333,22 @@ public:
     static const SwDBData& GetAddressDBName();
 
     static OUString GetDBField(
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xColumnProp,
+                    css::uno::Reference< css::beans::XPropertySet > xColumnProp,
                     const SwDBFormatData& rDBFormatData,
                     double *pNumber = NULL);
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
+    static css::uno::Reference< css::sdbc::XConnection>
             GetConnection(const OUString& rDataSource,
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rxSource);
+                css::uno::Reference< css::sdbc::XDataSource>& rxSource);
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>
-            GetColumnSupplier(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>,
+    static css::uno::Reference< css::sdbcx::XColumnsSupplier>
+            GetColumnSupplier(css::uno::Reference< css::sdbc::XConnection>,
                                     const OUString& rTableOrQuery,
                                     SwDBSelect eTableOrQuery = SwDBSelect::UNKNOWN);
 
-    static ::com::sun::star::uno::Sequence<OUString> GetExistingDatabaseNames();
+    static css::uno::Sequence<OUString> GetExistingDatabaseNames();
 
-    static DBConnURITypes GetDBunoURI(const OUString &rURI, ::com::sun::star::uno::Any &aURLAny);
+    static DBConnURITypes GetDBunoURI(const OUString &rURI, css::uno::Any &aURLAny);
 
     /**
      Loads a data source from file and registers it.
@@ -365,8 +365,8 @@ public:
      In case of success it returns the registered name, otherwise an empty string.
      Optionally add a prefix to the registered DB name.
      */
-    static OUString            LoadAndRegisterDataSource(const DBConnURITypes type, const ::com::sun::star::uno::Any &rUnoURI,
-                                                         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings,
+    static OUString            LoadAndRegisterDataSource(const DBConnURITypes type, const css::uno::Any &rUnoURI,
+                                                         const css::uno::Reference < css::beans::XPropertySet > *pSettings,
                                                          const OUString &rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0,
                                                          SwDocShell* pDocShell = 0);
     /**
@@ -376,7 +376,7 @@ public:
      In case of success it returns the registered name, otherwise an empty string.
      */
     static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0,
-                                                         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings = 0);
+                                                         const css::uno::Reference < css::beans::XPropertySet > *pSettings = 0);
 
     /// Load the embedded data source of the document and also register it.
     void LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell);
@@ -393,8 +393,8 @@ public:
         @return
             The data source.
     */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>
-            getDataSourceAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,const OUString& _sDataSourceName);
+    static css::uno::Reference< css::sdbc::XDataSource>
+            getDataSourceAsParent(const css::uno::Reference< css::sdbc::XConnection>& _xConnection,const OUString& _sDataSourceName);
 
     /** creates a RowSet, which must be disposed after use.
         @param  _sDataSourceName
@@ -409,11 +409,11 @@ public:
             The new created RowSet.
 
     */
-    static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>
+    static css::uno::Reference< css::sdbc::XResultSet>
             createCursor(   const OUString& _sDataSourceName,
                             const OUString& _sCommand,
                             sal_Int32 _nCommandType,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                            const css::uno::Reference< css::sdbc::XConnection>& _xConnection
                             );
 
     void setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell);

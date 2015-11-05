@@ -38,9 +38,9 @@
 #include <hintids.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::lang;
 
 SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc ) :
     m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_DEFAULT ) ),

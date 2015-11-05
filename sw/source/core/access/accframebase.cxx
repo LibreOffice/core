@@ -41,7 +41,7 @@
 #include <fmtanchr.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace css::accessibility;
 
 bool SwAccessibleFrameBase::IsSelected()
 {

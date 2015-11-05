@@ -59,7 +59,7 @@
 #include <calbck.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::text;
+using namespace css::text;
 
 static sal_Int16 lcl_SubTypeToAPI(sal_uInt16 nSubType)
 {

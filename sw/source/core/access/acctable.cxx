@@ -55,7 +55,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace css::accessibility;
 using namespace ::sw::access;
 
 typedef ::std::set < sal_Int32 > Int32Set_Impl;
@@ -1700,7 +1700,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getBackground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     const SvxBrushItem &rBack = GetFrm()->GetAttrSet()->GetBackground();
     sal_uInt32 crBack = rBack.GetColor().GetColor();

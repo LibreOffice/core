@@ -35,12 +35,12 @@
 #include <helpid.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
+using namespace css::sdbcx;
+using namespace css::sdbc;
+using namespace css::sdb;
+using namespace css::uno;
+using namespace css::container;
+using namespace css::beans;
 
 class SwAddressTable : public SvSimpleTable
 {

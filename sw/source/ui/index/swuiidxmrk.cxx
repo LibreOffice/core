@@ -69,9 +69,9 @@ static sal_uInt16 nKey1Pos = USHRT_MAX;
 static sal_uInt16 nKey2Pos = USHRT_MAX;
 
 using namespace com::sun::star;
-using namespace com::sun::star::i18n;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::util;
+using namespace css::i18n;
+using namespace css::lang;
+using namespace css::util;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 

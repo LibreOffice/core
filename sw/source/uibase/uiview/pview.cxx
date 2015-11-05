@@ -1844,20 +1844,20 @@ bool SwPagePreview::HandleWheelCommands( const CommandEvent& rCEvt )
     return bOk;
 }
 
-uno::Reference< ::com::sun::star::accessibility::XAccessible >
+uno::Reference< css::accessibility::XAccessible >
     SwPagePreviewWin::CreateAccessible()
 {
     SolarMutexGuard aGuard; // this should have happened already!!!
 
     OSL_ENSURE( GetViewShell() != NULL, "We need a view shell" );
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible( false );
+    css::uno::Reference< css::accessibility::XAccessible > xAcc = GetAccessible( false );
     if (xAcc.is())
     {
         return xAcc;
     }
     if (mpViewShell)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccPreview = mpViewShell->CreateAccessiblePreview();
+        css::uno::Reference< css::accessibility::XAccessible > xAccPreview = mpViewShell->CreateAccessiblePreview();
         SetAccessible(xAccPreview);
     }
     return GetAccessible( false );

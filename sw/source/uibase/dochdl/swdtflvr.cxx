@@ -145,8 +145,8 @@ extern bool g_bExecuteDrag;
 
 using namespace ::svx;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::datatransfer;
+using namespace css::uno;
+using namespace css::datatransfer;
 using namespace nsTransferBufferType;
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
@@ -172,7 +172,7 @@ public:
     SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh );
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) override;
+        const OUString& rMimeType, const css::uno::Any & rValue ) override;
     virtual void Closed() override;
 
     bool WriteData( SvStream& rStrm );

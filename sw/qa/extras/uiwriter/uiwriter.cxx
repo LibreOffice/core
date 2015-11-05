@@ -1138,7 +1138,7 @@ void SwUiWriterTest::testTdf51741()
 void SwUiWriterTest::testDefaultsOfOutlineNumbering()
 {
     uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance("com.sun.star.text.DefaultNumberingProvider"), uno::UNO_QUERY);
-    com::sun::star::lang::Locale alocale;
+    css::lang::Locale alocale;
     alocale.Language = "en";
     alocale.Country = "US";
     uno::Sequence<beans::PropertyValues> aPropVal(xDefNum->getDefaultContinuousNumberingLevels(alocale));
@@ -1212,18 +1212,18 @@ void SwUiWriterTest::testXFlatParagraph()
     //changing the attributes of last para
     uno::Sequence<beans::PropertyValue> aDescriptor =
     {
-        beans::PropertyValue("CharWeight", sal_Int32(0), uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), beans::PropertyState_DIRECT_VALUE)
+        beans::PropertyValue("CharWeight", sal_Int32(0), uno::makeAny(float(css::awt::FontWeight::BOLD)), beans::PropertyState_DIRECT_VALUE)
     };
     xFlatPara3->changeAttributes(sal_Int32(0), sal_Int32(5), aDescriptor);
     //checking Language Portions
     uno::Sequence<::sal_Int32> aLangPortions(xFlatPara4->getLanguagePortions());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aLangPortions.getLength());
     //examining Language of text
-    com::sun::star::lang::Locale alocale = xFlatPara4->getLanguageOfText(sal_Int32(0), sal_Int32(4));
+    css::lang::Locale alocale = xFlatPara4->getLanguageOfText(sal_Int32(0), sal_Int32(4));
     CPPUNIT_ASSERT_EQUAL(OUString("en"), alocale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("US"), alocale.Country);
     //examining Primary Language of text
-    com::sun::star::lang::Locale aprimarylocale = xFlatPara4->getPrimaryLanguageOfText(sal_Int32(0), sal_Int32(20));
+    css::lang::Locale aprimarylocale = xFlatPara4->getPrimaryLanguageOfText(sal_Int32(0), sal_Int32(20));
     CPPUNIT_ASSERT_EQUAL(OUString("en"), aprimarylocale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("US"), aprimarylocale.Country);
 }
@@ -1231,7 +1231,7 @@ void SwUiWriterTest::testXFlatParagraph()
 void SwUiWriterTest::testTdf81995()
 {
     uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance("com.sun.star.text.DefaultNumberingProvider"), uno::UNO_QUERY);
-    com::sun::star::lang::Locale alocale;
+    css::lang::Locale alocale;
     alocale.Language = "en";
     alocale.Country = "US";
     uno::Sequence<uno::Reference<container::XIndexAccess>> aIndexAccess(xDefNum->getDefaultOutlineNumberings(alocale));
@@ -1407,14 +1407,14 @@ void SwUiWriterTest::testTextSearch()
     //setting some properties
     uno::Sequence<beans::PropertyValue> aDescriptor =
     {
-        beans::PropertyValue("CharWeight", sal_Int32(0), uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), beans::PropertyState_DIRECT_VALUE)
+        beans::PropertyValue("CharWeight", sal_Int32(0), uno::makeAny(float(css::awt::FontWeight::BOLD)), beans::PropertyState_DIRECT_VALUE)
     };
     xProp->setSearchAttributes(aDescriptor);
     //receiving the defined properties and asserting them with expected values, covering UNO
     uno::Sequence<beans::PropertyValue> aPropVal2(xProp->getSearchAttributes());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aPropVal2.getLength());
     CPPUNIT_ASSERT_EQUAL(OUString("CharWeight"), aPropVal2[0].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), aPropVal2[0].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(css::awt::FontWeight::BOLD)), aPropVal2[0].Value);
     //specifying the search attributes
     uno::Reference<beans::XPropertySet> xPropSet(xSearchDes, uno::UNO_QUERY_THROW);
     xPropSet->setPropertyValue("SearchWords", uno::makeAny(true));
@@ -1431,7 +1431,7 @@ void SwUiWriterTest::testTextSearch()
     uno::Sequence<beans::PropertyValue> aRepProp(xProp2->getReplaceAttributes());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRepProp.getLength());
     CPPUNIT_ASSERT_EQUAL(OUString("CharWeight"), aRepProp[0].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), aRepProp[0].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(css::awt::FontWeight::BOLD)), aRepProp[0].Value);
     //setting strings for replacement
     xReplaceDes->setSearchString("test");
     xReplaceDes->setReplaceString("task");
@@ -1697,22 +1697,22 @@ void SwUiWriterTest::testSearchWithTransliterate()
     aIdx = SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     aPaM = SwPaM(aIdx);
     pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is Other PARAGRAPH");
-    com::sun::star::util::SearchOptions SearchOpt;
-    SearchOpt.algorithmType = com::sun::star::util::SearchAlgorithms_ABSOLUTE;
+    css::util::SearchOptions SearchOpt;
+    SearchOpt.algorithmType = css::util::SearchAlgorithms_ABSOLUTE;
     SearchOpt.searchFlag = 0x00000001;
     SearchOpt.searchString = "other";
     SearchOpt.replaceString.clear();
     SearchOpt.changedChars = 0;
     SearchOpt.deletedChars = 0;
     SearchOpt.insertedChars = 0;
-    SearchOpt.transliterateFlags = com::sun::star::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
+    SearchOpt.transliterateFlags = css::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
     //transliteration option set so that at least one of the search strings is not found
     sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END);
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString(""),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(0,(int)case1);
     SearchOpt.searchString = "paragraph";
-    SearchOpt.transliterateFlags = com::sun::star::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
+    SearchOpt.transliterateFlags = css::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
     //transliteration option set so that all search strings are found
     sal_uLong case2 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END);
     pShellCrsr = pWrtShell->getShellCrsr(true);
@@ -2191,7 +2191,7 @@ void SwUiWriterTest::testTdf90808()
     //inserting the bookmark in same paragraph, at the end
     //only one bookmark of this type is allowed in each paragraph an exception of com.sun.star.lang.IllegalArgumentException must be thrown when inserting the other bookmark in same paragraph
     xCrsr->gotoEndOfParagraph(true);
-    CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCrsr, xHeadingBookmark2, true), com::sun::star::lang::IllegalArgumentException);
+    CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCrsr, xHeadingBookmark2, true), css::lang::IllegalArgumentException);
     //now testing for __RefNumPara__
     //creating bookmark 1
     uno::Reference<text::XTextContent> xNumBookmark1(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
@@ -2208,7 +2208,7 @@ void SwUiWriterTest::testTdf90808()
     //inserting the bookmark in same paragraph, at the end
     //only one bookmark of this type is allowed in each paragraph an exception of com.sun.star.lang.IllegalArgumentException must be thrown when inserting the other bookmark in same paragraph
     xCrsr->gotoEndOfParagraph(true);
-    CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCrsr, xNumBookmark2, true), com::sun::star::lang::IllegalArgumentException);
+    CPPUNIT_ASSERT_THROW(xText->insertTextContent(xCrsr, xNumBookmark2, true), css::lang::IllegalArgumentException);
 }
 
 void SwUiWriterTest::testTdf75137()
@@ -2356,7 +2356,7 @@ void SwUiWriterTest::testTdf88899()
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xProps(xDocumentPropertiesSupplier->getDocumentProperties());
     uno::Reference<beans::XPropertyContainer> xUserProps(xProps->getUserDefinedProperties(), uno::UNO_QUERY);
-    com::sun::star::util::DateTime aDateTime = {sal_uInt32(1234567), sal_uInt16(3), sal_uInt16(3), sal_uInt16(3), sal_uInt16(10), sal_uInt16(11), sal_uInt16(2014), true};
+    css::util::DateTime aDateTime = {sal_uInt32(1234567), sal_uInt16(3), sal_uInt16(3), sal_uInt16(3), sal_uInt16(10), sal_uInt16(11), sal_uInt16(2014), true};
     xUserProps->addProperty("dateTime", sal_Int16(beans::PropertyAttribute::OPTIONAL), uno::makeAny(aDateTime));
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextField> xTextField(xFact->createInstance("com.sun.star.text.textfield.docinfo.Custom"), uno::UNO_QUERY);
@@ -2366,7 +2366,7 @@ void SwUiWriterTest::testTdf88899()
     //Setting NumberFormat
     uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<util::XNumberFormatTypes> xNumFormat(xNumberFormatsSupplier->getNumberFormats(), uno::UNO_QUERY);
-    com::sun::star::lang::Locale alocale;
+    css::lang::Locale alocale;
     alocale.Language = "en";
     alocale.Country = "US";
     sal_Int16 key = xNumFormat->getStandardFormat(util::NumberFormat::DATETIME, alocale);

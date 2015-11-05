@@ -20,8 +20,8 @@
 #include <acchyperlink.hxx>
 #include <acchypertextdata.hxx>
 
-using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace css::accessibility;
+using namespace css::uno;
 
 SwAccessibleHyperTextData::SwAccessibleHyperTextData() :
     maMap()

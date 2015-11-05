@@ -38,7 +38,7 @@
 #include "xmlexpit.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 using namespace ::xmloff::token;
 
 enum SvXMLTokenMapAttrs

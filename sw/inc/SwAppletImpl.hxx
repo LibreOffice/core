@@ -45,7 +45,7 @@ class SfxItemSet;
 
 class SwApplet_Impl
 {
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xApplet;
+    css::uno::Reference < css::embed::XEmbeddedObject > xApplet;
     SvCommandList     aCommandList;
     SfxItemSet        aItemSet;
     OUString   sAlt;
@@ -63,7 +63,7 @@ public:
     void AppendParam( const OUString& rName, const OUString& rValue );
 #endif
     void FinishApplet();
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetApplet() { return xApplet; }
+    css::uno::Reference < css::embed::XEmbeddedObject > GetApplet() { return xApplet; }
     SfxItemSet& GetItemSet() { return aItemSet; }
     const OUString& GetAltText() const { return sAlt; }
     void SetAltText( const OUString& rAlt ) {sAlt = rAlt;}

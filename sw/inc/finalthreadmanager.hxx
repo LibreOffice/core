@@ -34,32 +34,32 @@ class CancelJobsThread;
 class TerminateOfficeThread;
 class SwPauseThreadStarting;
 
-class FinalThreadManager : public ::cppu::WeakImplHelper< com::sun::star::lang::XServiceInfo,
-                                                           com::sun::star::util::XJobManager,
-                                                           com::sun::star::frame::XTerminateListener2 >
+class FinalThreadManager : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,
+                                                           css::util::XJobManager,
+                                                           css::frame::XTerminateListener2 >
 {
 public:
-    explicit FinalThreadManager(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context);
+    explicit FinalThreadManager(css::uno::Reference< css::uno::XComponentContext > const & context);
 
-    // ::com::sun::star::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XServiceInfo:
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::util::XJobManager:
-    virtual void SAL_CALL registerJob(const com::sun::star::uno::Reference< com::sun::star::util::XCancellable > & Job) throw (com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL releaseJob(const com::sun::star::uno::Reference< com::sun::star::util::XCancellable > & Job) throw (com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancelAllJobs() throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::util::XJobManager:
+    virtual void SAL_CALL registerJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL releaseJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL cancelAllJobs() throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::frame::XTerminateListener2
-    virtual void SAL_CALL cancelTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::frame::XTerminateListener2
+    virtual void SAL_CALL cancelTermination( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::frame::XTerminateListener (inherited via com::sun::star::frame::XTerminateListener2)
-    virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::frame::XTerminateListener (inherited via css::frame::XTerminateListener2)
+    virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun:star::lang::XEventListener (inherited via com::sun::star::frame::XTerminateListener)
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // ::com::sun:star::lang::XEventListener (inherited via css::frame::XTerminateListener)
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
 private:
     FinalThreadManager(FinalThreadManager &) = delete;
@@ -69,11 +69,11 @@ private:
 
     void registerAsListenerAtDesktop();
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     osl::Mutex maMutex;
 
-    std::list< com::sun::star::uno::Reference< com::sun::star::util::XCancellable > > maThreads;
+    std::list< css::uno::Reference< css::util::XCancellable > > maThreads;
     CancelJobsThread* mpCancelJobsThread;
     TerminateOfficeThread* mpTerminateOfficeThread;
     SwPauseThreadStarting* mpPauseThreadStarting;

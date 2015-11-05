@@ -27,9 +27,9 @@
 #include "accgraphic.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::accessibility;
+using namespace css::lang;
+using namespace css::uno;
+using namespace css::accessibility;
 
 SwAccessibleGraphic::SwAccessibleGraphic(
         SwAccessibleMap* pInitMap,
@@ -72,7 +72,7 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
 
 //  Return this object's role.
 sal_Int16 SAL_CALL SwAccessibleGraphic::getAccessibleRole()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

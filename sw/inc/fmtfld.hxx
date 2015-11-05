@@ -44,8 +44,7 @@ class SW_DLLPUBLIC SwFormatField
     friend void _InitCore();
     SwFormatField( sal_uInt16 nWhich ); // for default-Attibute
 
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::text::XTextField> m_wXTextField;
+    css::uno::WeakReference<css::text::XTextField> m_wXTextField;
 
     SwField* mpField;
     SwTextField* mpTextField; // the TextAttribute
@@ -109,11 +108,9 @@ public:
     bool IsFieldInDoc() const;
     bool IsProtect() const;
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::text::XTextField> const& GetXTextField() const
+    SAL_DLLPRIVATE css::uno::WeakReference<css::text::XTextField> const& GetXTextField() const
             { return m_wXTextField; }
-    SAL_DLLPRIVATE void SetXTextField(::com::sun::star::uno::Reference<
-                    ::com::sun::star::text::XTextField> const& xTextField)
+    SAL_DLLPRIVATE void SetXTextField(css::uno::Reference<css::text::XTextField> const& xTextField)
             { m_wXTextField = xTextField; }
 };
 

@@ -47,7 +47,7 @@
 #include "acctable.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace css::accessibility;
 using namespace sw::access;
 
 const sal_Char sServiceName[] = "com.sun.star.table.AccessibleCellView";
@@ -412,12 +412,12 @@ static OUString ReplaceFourChar(const OUString& oldOUString)
     return aRet;
 }
 
-::com::sun::star::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
-    ::com::sun::star::uno::Any strRet;
+    css::uno::Any strRet;
     SwFrameFormat *pFrameFormat = GetTableBoxFormat();
     assert(pFrameFormat);
 
@@ -433,7 +433,7 @@ static OUString ReplaceFourChar(const OUString& oldOUString)
 }
 
 sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

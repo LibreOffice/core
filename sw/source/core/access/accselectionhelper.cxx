@@ -33,13 +33,13 @@
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <fmtanchr.hxx>
 
-using namespace ::com::sun::star::accessibility;
+using namespace css::accessibility;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
-using ::com::sun::star::accessibility::XAccessible;
-using ::com::sun::star::accessibility::XAccessibleContext;
-using ::com::sun::star::accessibility::XAccessibleSelection;
+using css::accessibility::XAccessible;
+using css::accessibility::XAccessibleContext;
+using css::accessibility::XAccessibleSelection;
 
 using namespace ::sw::access;
 

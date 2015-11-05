@@ -499,11 +499,9 @@ public:
     sal_Int32 GetBrowseWidth() const;
     void SetBrowseBorder( const Size& rNew );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
-            CreateAccessiblePreview();
+    css::uno::Reference< css::accessibility::XAccessible >  CreateAccessiblePreview();
 
     void ShowPreviewSelection( sal_uInt16 nSelPage );
     void InvalidateAccessibleFocus();

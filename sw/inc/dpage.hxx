@@ -50,7 +50,7 @@ public:
 
     bool RequestHelp( vcl::Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() override;
+    virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 
 protected:
     void lateInit(const SwDPage& rPage, SwDrawModel* pNewModel = 0);

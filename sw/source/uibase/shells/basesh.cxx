@@ -149,9 +149,9 @@ namespace
 }
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
+using namespace css::uno;
+using namespace css::frame;
+using namespace css::lang;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwBaseShell, SfxShell)
 
@@ -716,7 +716,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             sal_Int8 nGalleryItemType( pGalleryItem->GetType() );
 
             if ( (!rSh.IsSelFrmMode() || nSelType & nsSelectionType::SEL_GRF) &&
-                nGalleryItemType == com::sun::star::gallery::GalleryItemType::GRAPHIC )
+                nGalleryItemType == css::gallery::GalleryItemType::GRAPHIC )
             {
                 SwWait aWait( *rView.GetDocShell(), true );
 
@@ -731,7 +731,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 GetView().GetEditWin().GrabFocus();
             }
             else if(!rSh.IsSelFrmMode() &&
-                nGalleryItemType == com::sun::star::gallery::GalleryItemType::MEDIA  )
+                nGalleryItemType == css::gallery::GalleryItemType::MEDIA  )
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
                 GetView().GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON, &aMediaURLItem, 0L );

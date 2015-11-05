@@ -819,7 +819,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
             const short nScriptType = ScriptTypeDetector::getCTLScriptType( rText, nSearchStt );
             sal_Int32 nNextCTLScriptStart = nSearchStt;
             short nCurrentScriptType = nScriptType;
-            while( com::sun::star::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
+            while( css::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
             {
                 nNextCTLScriptStart = ScriptTypeDetector::endOfCTLScriptType( rText, nNextCTLScriptStart );
                 if( nNextCTLScriptStart >= rText.getLength() || nNextCTLScriptStart >= nChg )
@@ -1713,7 +1713,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
 // script, see NewTextPortion
 bool SwScriptInfo::IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int32 nLen )
 {
-    using namespace ::com::sun::star::i18n;
+    using namespace css::i18n;
     static const ScriptTypeList typeList[] = {
         { UnicodeScript_kArabic, UnicodeScript_kArabic, UnicodeScript_kArabic },        // 11,
         { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, UnicodeScript_kScriptCount }    // 88

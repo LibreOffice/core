@@ -155,8 +155,8 @@ void SwTOXMark::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew)
     NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
-        SetXTOXMark(::com::sun::star::uno::Reference<
-                        ::com::sun::star::text::XDocumentIndexMark>(0));
+        SetXTOXMark(css::uno::Reference<
+                        css::text::XDocumentIndexMark>(0));
     }
 }
 

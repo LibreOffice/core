@@ -51,7 +51,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 namespace
 {

@@ -80,7 +80,7 @@ class SW_DLLPUBLIC SwDocShell
     SwWrtShell* m_pWrtShell;
 
     comphelper::EmbeddedObjectContainer* m_pOLEChildList;
-    sal_Int16   m_nUpdateDocMode;   ///< contains the com::sun::star::document::UpdateDocMode
+    sal_Int16   m_nUpdateDocMode;   ///< contains the css::document::UpdateDocMode
     bool        m_IsATemplate;      ///< prevent nested calls of UpdateFontList
 
     bool m_IsRemovedInvisibleContent;
@@ -95,13 +95,13 @@ class SW_DLLPUBLIC SwDocShell
     SAL_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     /// FileIO
-    SAL_DLLPRIVATE virtual bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) override;
+    SAL_DLLPRIVATE virtual bool InitNew( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
     SAL_DLLPRIVATE virtual bool Load( SfxMedium& rMedium ) override;
     SAL_DLLPRIVATE virtual bool LoadFrom( SfxMedium& rMedium ) override;
     SAL_DLLPRIVATE virtual bool ConvertFrom( SfxMedium &rMedium ) override;
     SAL_DLLPRIVATE virtual bool ConvertTo( SfxMedium &rMedium ) override;
     SAL_DLLPRIVATE virtual bool SaveAs( SfxMedium& rMedium ) override;
-    SAL_DLLPRIVATE virtual bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) override;
+    SAL_DLLPRIVATE virtual bool SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
 
     SAL_DLLPRIVATE virtual bool     PrepareClose( bool bUI = true ) override;
 
@@ -233,9 +233,9 @@ public:
 
 #if defined WNT
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
-                             ::com::sun::star::uno::Any & rValue ) override;
+                             css::uno::Any & rValue ) override;
     virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,
-                             const ::com::sun::star::uno::Any & rValue ) override;
+                             const css::uno::Any & rValue ) override;
 #endif
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem ) override;
     virtual void ReconnectDdeLink(SfxObjectShell& rServer) override;
@@ -284,7 +284,7 @@ public:
     void InvalidateModel();
     void ReactivateModel();
 
-    virtual ::com::sun::star::uno::Sequence< OUString >  GetEventNames() override;
+    virtual css::uno::Sequence< OUString >  GetEventNames() override;
 
     /// #i20883# Digital Signatures and Encryption
     virtual HiddenInformation GetHiddenInformationState( HiddenInformation nStates ) override;
@@ -294,7 +294,7 @@ public:
      read by the binary filter: */
     virtual void UpdateLinks() override;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+    css::uno::Reference< css::frame::XController >
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
@@ -309,7 +309,7 @@ public:
     virtual bool    HasChangeRecordProtection() const override;
     virtual void    SetChangeRecording( bool bActivate ) override;
     virtual bool    SetProtectionPassword( const OUString &rPassword ) override;
-    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
+    virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     virtual void libreOfficeKitCallback(int nType, const char* pPayload) const override;
     virtual bool isTiledRendering() const override;

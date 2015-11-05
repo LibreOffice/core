@@ -101,7 +101,7 @@
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 using namespace nsSwDocInfoSubType;
 
 SwPageNumberFieldType::SwPageNumberFieldType()

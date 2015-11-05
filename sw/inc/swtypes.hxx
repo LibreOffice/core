@@ -158,14 +158,10 @@ extern ResMgr* pSwResMgr;           // Is in swapp0.cxx.
 #define SW_RES(i)       ResId(i,*pSwResMgr)
 #define SW_RESSTR(i)    SW_RES(i).toString()
 
-::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();
-::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XHyphenator >    GetHyphenator();
-::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XThesaurus >     GetThesaurus();
-::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XLinguProperties > GetLinguPropertySet();
+css::uno::Reference< css::linguistic2::XSpellChecker1 > GetSpellChecker();
+css::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();
+css::uno::Reference< css::linguistic2::XThesaurus >     GetThesaurus();
+css::uno::Reference< css::linguistic2::XLinguProperties > GetLinguPropertySet();
 
 // Returns the twip size of this graphic.
 SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
@@ -228,12 +224,12 @@ SW_DLLPUBLIC const LanguageTag& GetAppLanguageTag();
 #if 0
 // I18N doesn't get this right, can't specify more than one to ignore
 #define SW_COLLATOR_IGNORES ( \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE | \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_KANA | \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_WIDTH )
+    css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE | \
+    css::i18n::CollatorOptions::CollatorOptions_IGNORE_KANA | \
+    css::i18n::CollatorOptions::CollatorOptions_IGNORE_WIDTH )
 #else
 #define SW_COLLATOR_IGNORES ( \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
+    css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
 #endif
 
 SW_DLLPUBLIC CollatorWrapper& GetAppCollator();

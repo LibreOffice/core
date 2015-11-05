@@ -120,7 +120,7 @@ class WW8_WrPc;
 namespace com { namespace sun { namespace star { namespace embed {
 class XEmbeddedObject;
 } } } }
-typedef std::map<const com::sun::star::embed::XEmbeddedObject*, sal_Int32> WW8OleMap;
+typedef std::map<const css::embed::XEmbeddedObject*, sal_Int32> WW8OleMap;
 struct WW8_PdAttrDesc;
 class SvxBrushItem;
 
@@ -765,7 +765,7 @@ public:
                     const OUString &rHelp,
                     const OUString &ToolTip,
                     const OUString &rSelected,
-                    com::sun::star::uno::Sequence<OUString> &rListItems) = 0;
+                    css::uno::Sequence<OUString> &rListItems) = 0;
 
     virtual void DoFormText(const SwInputField * pField) = 0;
 
@@ -992,8 +992,8 @@ private:
 
     void RestoreMacroCmds();
 
-    void DoComboBox(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet);
-    void DoCheckBox(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet);
+    void DoComboBox(css::uno::Reference<css::beans::XPropertySet> xPropSet);
+    void DoCheckBox(css::uno::Reference<css::beans::XPropertySet> xPropSet);
 
 public:
 
@@ -1113,7 +1113,7 @@ public:
                     const OUString &rHelp,
                     const OUString &ToolTip,
                     const OUString &rSelected,
-                    com::sun::star::uno::Sequence<OUString> &rListItems) override;
+                    css::uno::Sequence<OUString> &rListItems) override;
 
     virtual void DoFormText(const SwInputField * pField) override;
 

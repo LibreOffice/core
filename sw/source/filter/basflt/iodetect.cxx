@@ -87,7 +87,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const OUString& rFormatNm,
     return 0;
 }
 
-bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter)
+bool SwIoSystem::IsValidStgFilter( const css::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter)
 {
     bool bRet = false;
     try
@@ -97,7 +97,7 @@ bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::s
         if ( bRet )
             bRet = ( nStgFormatId != SotClipboardFormatId::NONE && ( rFilter.GetFormat() == nStgFormatId ) );
     }
-    catch (const com::sun::star::uno::Exception& )
+    catch (const css::uno::Exception& )
     {
     }
 

@@ -119,8 +119,8 @@ public:
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 
-        virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const override;
-        virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) override;
+        virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
+        virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
 };
 
 #endif // INCLUDED_SW_INC_FLDDAT_HXX

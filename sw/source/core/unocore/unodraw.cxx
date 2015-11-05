@@ -376,7 +376,7 @@ namespace
         : public SwSimpleEnumeration_Base
     {
         private:
-            typedef ::std::list< ::com::sun::star::uno::Any > shapescontainer_t;
+            typedef ::std::list< css::uno::Any > shapescontainer_t;
             shapescontainer_t m_aShapes;
         protected:
             virtual ~SwXShapesEnumeration() {};
@@ -2688,8 +2688,8 @@ void SwXShape::_AdjustPositionProperties( const awt::Point& rPosition )
     Writer specific position, which is the attribute position in layout direction
     #i59051#
 */
-::com::sun::star::awt::Point SwXShape::_ConvertStartOrEndPosToLayoutDir(
-                            const ::com::sun::star::awt::Point& aStartOrEndPos )
+css::awt::Point SwXShape::_ConvertStartOrEndPosToLayoutDir(
+                            const css::awt::Point& aStartOrEndPos )
 {
     awt::Point aConvertedPos( aStartOrEndPos );
 
@@ -2726,8 +2726,8 @@ void SwXShape::_AdjustPositionProperties( const awt::Point& rPosition )
     return aConvertedPos;
 }
 
-::com::sun::star::drawing::PolyPolygonBezierCoords SwXShape::_ConvertPolyPolygonBezierToLayoutDir(
-                    const ::com::sun::star::drawing::PolyPolygonBezierCoords& aPath )
+css::drawing::PolyPolygonBezierCoords SwXShape::_ConvertPolyPolygonBezierToLayoutDir(
+                    const css::drawing::PolyPolygonBezierCoords& aPath )
 {
     drawing::PolyPolygonBezierCoords aConvertedPath( aPath );
 

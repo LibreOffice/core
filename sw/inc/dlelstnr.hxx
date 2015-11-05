@@ -46,16 +46,13 @@ namespace com { namespace sun { namespace star {
 class SwLinguServiceEventListener :
     public cppu::WeakImplHelper
     <
-        com::sun::star::linguistic2::XLinguServiceEventListener,
-        com::sun::star::frame::XTerminateListener
+        css::linguistic2::XLinguServiceEventListener,
+        css::frame::XTerminateListener
     >
 {
-    com::sun::star::uno::Reference<
-        com::sun::star::frame::XDesktop2 >                      xDesktop;
-    com::sun::star::uno::Reference<
-        com::sun::star::linguistic2::XLinguServiceManager2 >    xLngSvcMgr;
-    com::sun::star::uno::Reference<
-        com::sun::star::linguistic2::XProofreadingIterator >    xGCIterator;
+    css::uno::Reference<css::frame::XDesktop2 >                      xDesktop;
+    css::uno::Reference<css::linguistic2::XLinguServiceManager2 >    xLngSvcMgr;
+    css::uno::Reference<css::linguistic2::XProofreadingIterator >    xGCIterator;
 
     SwLinguServiceEventListener(const SwLinguServiceEventListener &) = delete;
     SwLinguServiceEventListener & operator = (const SwLinguServiceEventListener &) = delete;
@@ -65,14 +62,14 @@ public:
     virtual ~SwLinguServiceEventListener();
 
     /// XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rEventObj ) throw(css::uno::RuntimeException, std::exception) override;
 
     /// XLinguServiceEventListener
-    virtual void SAL_CALL processLinguServiceEvent( const ::com::sun::star::linguistic2::LinguServiceEvent& rLngSvcEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL processLinguServiceEvent( const css::linguistic2::LinguServiceEvent& rLngSvcEvent ) throw(css::uno::RuntimeException, std::exception) override;
 
     /// XTerminateListener
-    virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL queryTermination( const css::lang::EventObject& rEventObj ) throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& rEventObj ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

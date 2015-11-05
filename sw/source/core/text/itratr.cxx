@@ -56,7 +56,7 @@
 #include <editeng/lrspitem.hxx>
 #include <calbck.hxx>
 
-using namespace ::com::sun::star::i18n;
+using namespace css::i18n;
 using namespace ::com::sun::star;
 
 void SwAttrIter::Chg( SwTextAttr *pHt )

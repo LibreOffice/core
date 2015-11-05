@@ -207,7 +207,7 @@ private:
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainFrom;
     bool m_bCheckForOLEInCaption;
 
-    SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  ) const;
+    SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm( const css::uno::Reference < css::embed::XEmbeddedObject >&  ) const;
 
     /// Terminate actions for all shells and call ChangeLink.
     SAL_DLLPRIVATE void EndAllActionAndCall();
@@ -328,8 +328,8 @@ public:
      i#22341 - adjustments for new vertical alignment at top of line */
     void CalcBoundRect( SwRect& _orRect,
                         const RndStdIds _nAnchorId,
-                        const sal_Int16 _eHoriRelOrient = com::sun::star::text::RelOrientation::FRAME,
-                        const sal_Int16 _eVertRelOrient = com::sun::star::text::RelOrientation::FRAME,
+                        const sal_Int16 _eHoriRelOrient = css::text::RelOrientation::FRAME,
+                        const sal_Int16 _eVertRelOrient = css::text::RelOrientation::FRAME,
                         const SwPosition* _pToCharContentPos = NULL,
                         const bool _bFollowTextFlow = false,
                         bool _bMirror = false,
@@ -428,7 +428,7 @@ public:
      If the values are not allowed, the formatting clips and determines scaling.
      See CalcAndSetScale().
      The @return value is the applied size. */
-    Size RequestObjectResize( const SwRect &rRect, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
+    Size RequestObjectResize( const SwRect &rRect, const css::uno::Reference < css::embed::XEmbeddedObject >& );
 
     /// The layout has been changed, so the active object has to be moved after that
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
@@ -457,7 +457,7 @@ public:
     OUString GetFlyName() const;
 
     /// get reference to OLE object (if there is one) for selected FlyFrame
-    const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef() const;
+    const css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef() const;
 
     /// Created unique name for frame.
     OUString GetUniqueGrfName() const;
@@ -580,7 +580,7 @@ public:
     // --> #i972#
     /** for starmath formulas anchored 'as char' it aligns it baseline to baseline
      changing the previous vertical orientation */
-    void AlignFormulaToBaseline( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly = 0 );
+    void AlignFormulaToBaseline( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, SwFlyFrm * pFly = 0 );
 
     /// aligns all formulas with anchor 'as char' to baseline
     void AlignAllFormulasToBaseline();
@@ -612,8 +612,8 @@ public:
 
     const SwRect& GetAnyCurRect( CurRectType eType,
                                  const Point* pPt = 0,
-                                 const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& =
-                                 ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >() ) const;
+                                 const css::uno::Reference < css::embed::XEmbeddedObject >& =
+                                 css::uno::Reference < css::embed::XEmbeddedObject >() ) const;
 
     /// Page number of the page containing Point, O if no page.
     sal_uInt16 GetPageNumber( const Point &rPoint ) const;

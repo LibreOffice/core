@@ -42,9 +42,9 @@
 #include <calbck.hxx>
 #include <unomid.h>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::lang;
 
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
     : nRefCount(0)
@@ -420,7 +420,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
 
     case FIELD_PROP_LOCALE:
         {
-            com::sun::star::lang::Locale aLocale;
+            css::lang::Locale aLocale;
             if( (bRet = rAny >>= aLocale ))
                 SetLanguage( LanguageTag::convertToLanguageType( aLocale ));
         }

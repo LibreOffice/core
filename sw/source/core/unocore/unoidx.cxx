@@ -2263,8 +2263,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
             case PROPERTY_MAP_INDEX_OBJECTS:
             {
-                uno::Sequence<com::sun::star::beans::PropertyValue> aValues(1);
-                com::sun::star::beans::PropertyValue propertyVal;
+                uno::Sequence<css::beans::PropertyValue> aValues(1);
+                css::beans::PropertyValue propertyVal;
                 rValue >>= aValues;
                 propertyVal = aValues[0];
                 m_pImpl->m_sCitaitonText = lcl_AnyToString(propertyVal.Value);

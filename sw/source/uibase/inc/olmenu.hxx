@@ -36,15 +36,15 @@ class SwWrtShell;
 class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
 {
     SwWrtShell* m_pSh;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionary >  >     m_aDics;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellAlternatives > m_xSpellAlt;
+    css::uno::Sequence< css::uno::Reference<
+        css::linguistic2::XDictionary >  >     m_aDics;
+    css::uno::Reference<
+        css::linguistic2::XSpellAlternatives > m_xSpellAlt;
 
-    ::com::sun::star::linguistic2::ProofreadingResult m_xGrammarResult;
+    css::linguistic2::ProofreadingResult m_xGrammarResult;
     sal_Int32 m_nGrammarError;
 
-    ::com::sun::star::uno::Sequence< OUString >  m_aSuggestions;
+    css::uno::Sequence< OUString >  m_aSuggestions;
     OUString m_sExplanationLink;
 
     LanguageType                m_nCheckedLanguage;
@@ -61,7 +61,7 @@ class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
     Image     m_aInfo16;
 
     static void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
-            const ::com::sun::star::uno::Sequence< OUString >& aSeq, SwWrtShell* pWrtSh,
+            const css::uno::Sequence< OUString >& aSeq, SwWrtShell* pWrtSh,
             std::map< sal_Int16, OUString > &rLangTable );
 
     using PopupMenu::Execute;
@@ -71,14 +71,14 @@ class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
 
 public:
     SwSpellPopup( SwWrtShell *pWrtSh,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XSpellAlternatives >  &xAlt,
+            const css::uno::Reference<
+                css::linguistic2::XSpellAlternatives >  &xAlt,
             const OUString & rParaText );
 
     SwSpellPopup( SwWrtShell *pWrtSh,
-            const ::com::sun::star::linguistic2::ProofreadingResult &rResult,
+            const css::linguistic2::ProofreadingResult &rResult,
             sal_Int32 nErrorInResult,
-            const ::com::sun::star::uno::Sequence< OUString > &rSuggestions,
+            const css::uno::Sequence< OUString > &rSuggestions,
             const OUString & rParaText );
 
     sal_uInt16  Execute( const Rectangle& rPopupPos, vcl::Window* pWin );

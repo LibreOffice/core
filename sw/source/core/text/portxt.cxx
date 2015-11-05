@@ -43,7 +43,7 @@
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::i18n::ScriptType;
+using namespace css::i18n::ScriptType;
 
 // Returns for how many characters an extra space has to be added
 // (for justified alignment).

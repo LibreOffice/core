@@ -28,7 +28,7 @@
 class SwCheckIt
 {
 public:
-    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedInputSequenceChecker > xCheck;
+    css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xCheck;
 
     SwCheckIt();
 };

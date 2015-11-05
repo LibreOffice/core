@@ -52,7 +52,7 @@
 #include <redline.hxx>
 #include <txatbase.hxx>
 
-using namespace ::com::sun::star::i18n;
+using namespace css::i18n;
 
 static const sal_uInt16 coSrchRplcThreshold = 60000;
 

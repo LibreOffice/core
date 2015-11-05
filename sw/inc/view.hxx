@@ -387,7 +387,7 @@ public:
                                         SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL, bool bIsAPI=false) override;
     ShellModes              GetShellMode();
 
-    com::sun::star::view::XSelectionSupplier*       GetUNOObject();
+    css::view::XSelectionSupplier*       GetUNOObject();
 
     OUString                GetSelectionTextParam( bool bCompleteWords,
                                                    bool bEraseTrail );
@@ -403,7 +403,7 @@ public:
     OUString                GetThesaurusLookUpText( bool bSelection ) const;
 
     // immediately switch shell -> for GetSelectionObject
-    void        StopShellTimer();
+    void                    StopShellTimer();
 
     inline SwWrtShell&      GetWrtShell   () const { return *m_pWrtShell; }
     inline SwWrtShell*      GetWrtShellPtr() const { return  m_pWrtShell; }
@@ -412,7 +412,7 @@ public:
     inline const SwEditWin &GetEditWin () const { return *m_pEditWin; }
 
 #if defined WNT || defined UNX
-    void ScannerEventHdl( const ::com::sun::star::lang::EventObject& rEventObject );
+    void ScannerEventHdl( const css::lang::EventObject& rEventObject );
 #endif
 
     // hand the handler for text blocks to the shell; create if applicable
@@ -470,10 +470,10 @@ public:
     void            SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly = false );
 
     void            ShowHScrollbar(bool bShow);
-    bool        IsHScrollbarVisible()const;
+    bool            IsHScrollbarVisible()const;
 
     void            ShowVScrollbar(bool bShow);
-    bool        IsVScrollbarVisible()const;
+    bool            IsVScrollbarVisible()const;
 
     void            EnableHScrollbar(bool bEnable);
     void            EnableVScrollbar(bool bEnable);
@@ -569,8 +569,8 @@ public:
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
-    virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse ) override;
-    virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse ) override;
+    virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
+    virtual void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
 
     void SetCrsrAtTop( bool bFlag, bool bCenter = false )
         { m_bTopCrsr = bFlag, m_bCenterCrsr = bCenter; }

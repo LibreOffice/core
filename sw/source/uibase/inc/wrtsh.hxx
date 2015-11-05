@@ -362,7 +362,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;
 
     // search and replace
-    sal_uLong SearchPattern(const com::sun::star::util::SearchOptions& rSearchOpt,
+    sal_uLong SearchPattern(const css::util::SearchOptions& rSearchOpt,
                          bool bSearchInNotes,
                          SwDocPositions eStart, SwDocPositions eEnd,
                          FindRanges eFlags = FND_IN_BODY,
@@ -377,7 +377,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                          bool bNoColls,
                          SwDocPositions eStart, SwDocPositions eEnd,
                          FindRanges eFlags = FND_IN_BODY,
-                         const com::sun::star::util::SearchOptions* pSearchOpt = 0,
+                         const css::util::SearchOptions* pSearchOpt = 0,
                          const SfxItemSet* pReplaceSet = 0);
 
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar );

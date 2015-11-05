@@ -42,15 +42,15 @@ class SwView;
 class SwSmartTagPopup : public PopupMenu
 {
     SwView*  mpSwView;
-    com::sun::star::uno::Reference< com::sun::star::text::XTextRange > mxTextRange;
+    css::uno::Reference< css::text::XTextRange > mxTextRange;
 
     struct InvokeAction
     {
-        com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > mxAction;
-        com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > mxSmartTagProperties;
+        css::uno::Reference< css::smarttags::XSmartTagAction > mxAction;
+        css::uno::Reference< css::container::XStringKeyMap > mxSmartTagProperties;
         sal_uInt32 mnActionID;
-        InvokeAction( com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > xAction,
-                      com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xSmartTagProperties,
+        InvokeAction( css::uno::Reference< css::smarttags::XSmartTagAction > xAction,
+                      css::uno::Reference< css::container::XStringKeyMap > xSmartTagProperties,
                       sal_uInt32 nActionID ) : mxAction( xAction ), mxSmartTagProperties( xSmartTagProperties ), mnActionID( nActionID ) {}
     };
 
@@ -60,9 +60,9 @@ class SwSmartTagPopup : public PopupMenu
 
 public:
     SwSmartTagPopup( SwView* _pSwView,
-                     ::com::sun::star::uno::Sequence< OUString >& rSmartTagTypes,
-                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
-                     ::com::sun::star::uno::Reference< com::sun::star::text::XTextRange > xTextRange );
+                     css::uno::Sequence< OUString >& rSmartTagTypes,
+                     css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
+                     css::uno::Reference< css::text::XTextRange > xTextRange );
 
     sal_uInt16  Execute( const Rectangle& rPopupPos, vcl::Window* pWin );
 };

@@ -81,9 +81,9 @@
 #include <modcfg.hxx>
 #include <memory>
 
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace css::i18n;
+using namespace css::lang;
+using namespace css::uno;
 
 /*
  * Internal functions

@@ -21,8 +21,8 @@
 #include "xmlimp.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
+using namespace css::uno;
+using namespace css::text;
 
 class SwXMLBodyContentContext_Impl : public SvXMLImportContext
 {

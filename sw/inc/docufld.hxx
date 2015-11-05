@@ -170,8 +170,8 @@ public:
     virtual void        SetPar2(const OUString& rStr) override;
 
     virtual sal_uInt16  GetSubType() const override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     OUString GetUserString() const            { return sUserStr; }
     void SetUserString( const OUString& rS )  { sUserStr = rS; }
@@ -199,8 +199,8 @@ public:
     inline void         SetExpansion(const OUString& rStr) { aContent = rStr; }
     inline OUString     GetContent() const { return aContent; }
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 class SwFileNameFieldType : public SwFieldType
@@ -226,8 +226,8 @@ public:
     inline void         SetExpansion(const OUString& rStr) { aContent = rStr; }
     inline OUString     GetContent() const { return aContent; }
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 class SwTemplNameFieldType : public SwFieldType
@@ -247,15 +247,15 @@ public:
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Document statistics
 class SwDocStatFieldType : public SwFieldType
 {
     SwDoc*          pDoc;
-    sal_Int16       nNumberingType; ///< com::sun::star::style::NumberingType
+    sal_Int16       nNumberingType; ///< css::style::NumberingType
 
 public:
     SwDocStatFieldType(SwDoc*);
@@ -280,8 +280,8 @@ public:
 
     virtual sal_uInt16      GetSubType() const override;
     virtual void        SetSubType(sal_uInt16 nSub) override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 class SwHiddenTextFieldType : public SwFieldType
@@ -344,8 +344,8 @@ public:
 
     virtual sal_uInt16  GetSubType() const override;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Field that expands to an empty line (without height).
@@ -374,8 +374,8 @@ public:
     /// Query, set condition.
     virtual OUString    GetPar1() const override;
     virtual void        SetPar1(const OUString& rStr) override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 class SwMacroFieldType : public SwFieldType
@@ -416,8 +416,8 @@ public:
     /// Macrotext
     virtual OUString  GetPar2() const override;
     virtual void    SetPar2(const OUString& rStr) override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     static void CreateMacroString( OUString& rMacro,
                                    const OUString& rMacroName,
@@ -484,8 +484,8 @@ public:
 
     sal_Int32 GetNumberOfParagraphs() const;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
     virtual OUString    GetDescription() const override;
 };
 
@@ -518,8 +518,8 @@ public:
     OUString                GetName() const { return aName; }
     void                    SetName( const OUString& rName ) { aName = rName; }
     inline void             SetExpansion(const OUString& rStr) { aContent = rStr; }
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Extended User settings.
@@ -548,8 +548,8 @@ public:
 
     inline void         SetExpansion(const OUString& rStr) { aContent = rStr; }
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Relative page numbers - field.
@@ -585,8 +585,8 @@ public:
 
     short GetOffset() const         { return nOffset; }
     void SetOffset( short nOff )    { nOffset = nOff; }
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Relative page numbers - query field.
@@ -619,8 +619,8 @@ public:
     void SetText( const OUString& rText )      { sText = rText; }
 
     void ChangeExpansion( const SwFrm* pFrm, const SwTextField* pField );
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Field to jump to and edit.
@@ -656,8 +656,8 @@ public:
 
     SwCharFormat* GetCharFormat() const
         { return static_cast<SwJumpEditFieldType*>(GetTyp())->GetCharFormat(); }
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 class SwScriptFieldType : public SwFieldType
@@ -695,8 +695,8 @@ public:
 
     bool                    IsCodeURL() const { return bCodeURL; }
     void                    SetCodeURL( bool bURL ) { bCodeURL = bURL; }
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 // Combined Character Fieldtype
@@ -725,8 +725,8 @@ public:
     virtual OUString    GetPar1() const override;
     virtual void        SetPar1(const OUString& rStr) override;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
 #endif // INCLUDED_SW_INC_DOCUFLD_HXX
