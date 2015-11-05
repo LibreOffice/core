@@ -427,10 +427,9 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
         const XclExpFont* pFont = NULL;
         for ( ; aIt != aEnd; ++aIt )
         {
-            // pFont getting first then pass it to run otherwise pFont is NULL.
-            pFont = rFonts.GetFont( aIt->mnFontIdx );
             nStart = lcl_WriteRun( rStrm, GetUnicodeBuffer(),
                     nStart, aIt->mnChar-nStart, pFont );
+            pFont = rFonts.GetFont( aIt->mnFontIdx );
         }
         lcl_WriteRun( rStrm, GetUnicodeBuffer(),
                 nStart, GetUnicodeBuffer().size() - nStart, pFont );
