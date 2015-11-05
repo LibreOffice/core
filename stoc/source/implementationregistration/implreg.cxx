@@ -1553,7 +1553,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
         xRegistry = xReg;
     }
     else {
-        Reference < XPropertySet > xPropSet = Reference< XPropertySet >::query( m_xSMgr );
+        Reference < XPropertySet > xPropSet( m_xSMgr, UNO_QUERY );
         if( xPropSet.is() ) {
             try {
                 Any aAny = xPropSet->getPropertyValue( spool().Registry );

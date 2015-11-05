@@ -203,7 +203,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 
     Reference<XEnumerationAccess> xImplEnum(xSMgr, UNO_QUERY);
     OSL_ENSURE( xImplEnum.is() , "query on XEnumeration failed" );
-    xEnum = Reference<XEnumeration >(xImplEnum->createEnumeration());
+    xEnum.set(xImplEnum->createEnumeration());
     OSL_ENSURE( xEnum.is() , "createEnumeration failed" );
     nLen = 0;
     while( xEnum->hasMoreElements() )

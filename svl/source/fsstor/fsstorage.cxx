@@ -410,7 +410,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
                 if ( pStream )
                 {
                     if ( !pStream->GetError() )
-                        xResult = uno::Reference < io::XStream >( new ::utl::OStreamWrapper( *pStream ) );
+                        xResult.set( new ::utl::OStreamWrapper( *pStream ) );
                     else
                         delete pStream;
                 }
@@ -540,11 +540,10 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
             throw io::IOException(); // there is no such folder
 
         ::ucbhelper::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
-        xResult = uno::Reference< embed::XStorage >(
-                            static_cast< OWeakObject* >( new FSStorage( aResultContent,
-                                                                        nStorageMode,
-                                                                        m_pImpl->m_xContext ) ),
-                            uno::UNO_QUERY );
+        xResult.set( static_cast< OWeakObject* >( new FSStorage( aResultContent,
+                                                                 nStorageMode,
+                                                                 m_pImpl->m_xContext ) ),
+                     uno::UNO_QUERY );
     }
     catch( embed::InvalidStorageException& )
     {

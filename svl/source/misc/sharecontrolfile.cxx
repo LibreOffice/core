@@ -144,11 +144,11 @@ void ShareControlFile::Close()
         catch( uno::Exception& )
         {}
 
-        m_xStream = uno::Reference< io::XStream >();
-        m_xInputStream = uno::Reference< io::XInputStream >();
-        m_xOutputStream = uno::Reference< io::XOutputStream >();
-        m_xSeekable = uno::Reference< io::XSeekable >();
-        m_xTruncate = uno::Reference< io::XTruncate >();
+        m_xStream.clear();
+        m_xInputStream.clear();
+        m_xOutputStream.clear();
+        m_xSeekable.clear();
+        m_xTruncate.clear();
         m_aUsersData.clear();
     }
 }

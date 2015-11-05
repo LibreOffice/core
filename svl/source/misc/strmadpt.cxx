@@ -222,8 +222,7 @@ bool SvInputStream::open()
             SetError(ERRCODE_IO_INVALIDDEVICE);
             return false;
         }
-        m_xSeekable
-            = uno::Reference< io::XSeekable >(m_xStream, uno::UNO_QUERY);
+        m_xSeekable.set(m_xStream, uno::UNO_QUERY);
         if (!m_xSeekable.is())
             m_pPipe = new SvDataPipe_Impl;
     }

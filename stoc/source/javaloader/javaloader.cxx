@@ -247,8 +247,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
                 throw RuntimeException(
                     "javaloader error - no type information for XImplementationLoader");
 
-            m_javaLoader = css::uno::Reference<XImplementationLoader>(static_cast<XImplementationLoader *>(
-                            java_curr.mapInterface(joJavaLoader, pType_XImplementationLoader)));
+            m_javaLoader.set(static_cast<XImplementationLoader *>(java_curr.mapInterface(joJavaLoader, pType_XImplementationLoader)));
             pJNIEnv->DeleteLocalRef( joJavaLoader );
             if(!m_javaLoader.is())
                 throw RuntimeException(

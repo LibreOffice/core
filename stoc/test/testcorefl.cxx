@@ -246,7 +246,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any blup;
         blup <<= aStructC;
         Any gulp;
-        rField = Reference< XIdlField2 > ( xRefl->forName("ModuleA.StructC")->getField(OUString("aString")) , UNO_QUERY);
+        rField.set( xRefl->forName("ModuleA.StructC")->getField(OUString("aString")) , UNO_QUERY);
         rField->set( blup, gulp);
         OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 64");
         return sal_False;
@@ -262,8 +262,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         gulp <<= 3.14f;
         Any blup;
         blup <<= aStructC;
-        rField = Reference< XIdlField2 > (
-            xRefl->forName("ModuleA.StructC")->getField(OUString("aString")) , UNO_QUERY);
+        rField.set( xRefl->forName("ModuleA.StructC")->getField(OUString("aString")) , UNO_QUERY);
         xRefl->forName("ModuleA.StructC")->getField(OUString("aString"))->set(blup, gulp);
         OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 65");
         return sal_False;

@@ -886,7 +886,7 @@ Reference<XElementAccess> ImplIntrospectionAccess::getXElementAccess()
     if( !mxObjElementAccess.is() )
     {
         aGuard.clear();
-        Reference<XElementAccess> xElementAccess = Reference<XElementAccess>::query( mxIface );
+        Reference<XElementAccess> xElementAccess( mxIface, UNO_QUERY );
         aGuard.reset();
         if( !mxObjElementAccess.is() )
             mxObjElementAccess = xElementAccess;
@@ -901,18 +901,18 @@ void ImplIntrospectionAccess::cacheXNameContainer()
     Reference<XNameAccess> xNameAccess;
     if (mpStaticImpl->mbNameContainer)
     {
-        xNameContainer = Reference<XNameContainer>::query( mxIface );
-        xNameReplace = Reference<XNameReplace>::query( xNameContainer );
-        xNameAccess = Reference<XNameAccess>::query( xNameContainer );
+        xNameContainer.set( mxIface, UNO_QUERY );
+        xNameReplace.set( xNameContainer, UNO_QUERY );
+        xNameAccess.set( xNameContainer, UNO_QUERY );
     }
     else if (mpStaticImpl->mbNameReplace)
     {
-        xNameReplace = Reference<XNameReplace>::query( mxIface );
-        xNameAccess = Reference<XNameAccess>::query( xNameReplace );
+        xNameReplace.set( mxIface, UNO_QUERY );
+        xNameAccess.set( xNameReplace, UNO_QUERY );
     }
     else if (mpStaticImpl->mbNameAccess)
     {
-        xNameAccess = Reference<XNameAccess>::query( mxIface );
+        xNameAccess.set( mxIface, UNO_QUERY );
     }
 
     {
@@ -969,18 +969,18 @@ void ImplIntrospectionAccess::cacheXIndexContainer()
     Reference<XIndexAccess> xIndexAccess;
     if (mpStaticImpl->mbIndexContainer)
     {
-        xIndexContainer = Reference<XIndexContainer>::query( mxIface );
-        xIndexReplace = Reference<XIndexReplace>::query( xIndexContainer );
-        xIndexAccess = Reference<XIndexAccess>::query( xIndexContainer );
+        xIndexContainer.set( mxIface, UNO_QUERY );
+        xIndexReplace.set( xIndexContainer, UNO_QUERY );
+        xIndexAccess.set( xIndexContainer, UNO_QUERY );
     }
     else if (mpStaticImpl->mbIndexReplace)
     {
-        xIndexReplace = Reference<XIndexReplace>::query( mxIface );
-        xIndexAccess = Reference<XIndexAccess>::query( xIndexReplace );
+        xIndexReplace.set( mxIface, UNO_QUERY );
+        xIndexAccess.set( xIndexReplace, UNO_QUERY );
     }
     else if (mpStaticImpl->mbIndexAccess)
     {
-        xIndexAccess = Reference<XIndexAccess>::query( mxIface );
+        xIndexAccess.set( mxIface, UNO_QUERY );
     }
 
     {
@@ -1037,7 +1037,7 @@ Reference<XEnumerationAccess> ImplIntrospectionAccess::getXEnumerationAccess()
     if( !mxObjEnumerationAccess.is() )
     {
         aGuard.clear();
-        Reference<XEnumerationAccess> xEnumerationAccess = Reference<XEnumerationAccess>::query( mxIface );
+        Reference<XEnumerationAccess> xEnumerationAccess( mxIface, UNO_QUERY );
         aGuard.reset();
         if( !mxObjEnumerationAccess.is() )
             mxObjEnumerationAccess = xEnumerationAccess;
@@ -1052,7 +1052,7 @@ Reference<XIdlArray> ImplIntrospectionAccess::getXIdlArray()
     if( !mxObjIdlArray.is() )
     {
         aGuard.clear();
-        Reference<XIdlArray> xIdlArray = Reference<XIdlArray>::query( mxIface );
+        Reference<XIdlArray> xIdlArray( mxIface, UNO_QUERY );
         aGuard.reset();
         if( !mxObjIdlArray.is() )
             mxObjIdlArray = xIdlArray;
@@ -1763,7 +1763,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     // Look for interfaces XTypeProvider and PropertySet
     if( eType == TypeClass_INTERFACE )
     {
-        xTypeProvider = Reference<XTypeProvider>::query( x );
+        xTypeProvider.set( x, UNO_QUERY );
         if( xTypeProvider.is() )
         {
             SupportedTypesSeq = xTypeProvider->getTypes();
@@ -1775,7 +1775,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 {
                     if( pTypes[i].getTypeName() == "com.sun.star.beans.XPropertySet" )
                     {
-                        xPropSet = Reference<XPropertySet>::query( x );
+                        xPropSet.set( x, UNO_QUERY );
                         break;
                     }
                 }
@@ -1786,7 +1786,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 "object of type \"" << aToInspectObj.getValueTypeName()
                     << "\" lacks XTypeProvider");
             SupportedTypesSeq = Sequence<Type>(&aToInspectObj.getValueType(), 1);
-            xPropSet = Reference<XPropertySet>::query( x );
+            xPropSet.set( x, UNO_QUERY );
         }
 
         // Now try to get the PropertySetInfo
@@ -1856,7 +1856,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         if( xPropSet.is() && xPropSetInfo.is() )
         {
             // Is there also a FastPropertySet?
-            Reference<XFastPropertySet> xDummy = Reference<XFastPropertySet>::query( x );
+            Reference<XFastPropertySet> xDummy( x, UNO_QUERY );
             bool bFast = pAccess->mbFastPropSet = xDummy.is();
 
             Sequence<Property> aPropSeq = xPropSetInfo->getProperties();

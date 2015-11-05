@@ -395,7 +395,7 @@ PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xSe
     // m_pStorageFile->Notify() can be called
     ::osl::MutexGuard aGuard( mMutex );
 
-    mComponent = Reference< XComponent >( xServiceFactory, UNO_QUERY );
+    mComponent.set( xServiceFactory, UNO_QUERY );
     mComponent->addEventListener( this );
 
     m_pStorageFile = new StorageItem( this, OUString("Office.Common/Passwords") );

@@ -351,12 +351,12 @@ Any Invocation_Impl::getMaterial() throw(RuntimeException, std::exception)
     Reference<XMaterialHolder> xMaterialHolder;
     if( _xDirect.is() )
     {
-        xMaterialHolder = Reference<XMaterialHolder>::query( _xDirect );
+        xMaterialHolder.set( _xDirect, UNO_QUERY );
         //_xDirect->queryInterface( XMaterialHolder::getSmartUik(), xMaterialHolder );
     }
     else if( _xIntrospectionAccess.is() )
     {
-        xMaterialHolder = Reference<XMaterialHolder>::query( _xIntrospectionAccess );
+        xMaterialHolder.set( _xIntrospectionAccess, UNO_QUERY );
         //_xIntrospectionAccess->queryInterface( XMaterialHolder::getSmartUik(), xMaterialHolder );
     }
     if( xMaterialHolder.is() )
@@ -377,21 +377,21 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
     _aMaterial = rMaterial;
 
     // First do this outside the guard
-    _xDirect = Reference<XInvocation>::query( xObj );
+    _xDirect.set( xObj, UNO_QUERY );
 
     if( _xDirect.is() )
     {
         // Consult object directly
-        _xElementAccess     = Reference<XElementAccess>::query( _xDirect );
-        _xEnumerationAccess = Reference<XEnumerationAccess>::query( _xDirect );
-        _xIndexAccess       = Reference<XIndexAccess>::query( _xDirect );
-        _xIndexReplace      = Reference<XIndexReplace>::query( _xDirect );
-        _xIndexContainer    = Reference<XIndexContainer>::query( _xDirect );
-        _xNameAccess        = Reference<XNameAccess>::query( _xDirect );
-        _xNameReplace       = Reference<XNameReplace>::query( _xDirect );
-        _xNameContainer     = Reference<XNameContainer>::query( _xDirect );
-        _xENDirect          = Reference<XExactName>::query( _xDirect );
-        _xDirect2           = Reference<XInvocation2>::query( _xDirect );
+        _xElementAccess.set( _xDirect, UNO_QUERY );
+        _xEnumerationAccess.set( _xDirect, UNO_QUERY );
+        _xIndexAccess.set( _xDirect, UNO_QUERY );
+        _xIndexReplace.set( _xDirect, UNO_QUERY );
+        _xIndexContainer.set( _xDirect, UNO_QUERY );
+        _xNameAccess.set( _xDirect, UNO_QUERY );
+        _xNameReplace.set( _xDirect, UNO_QUERY );
+        _xNameContainer.set( _xDirect, UNO_QUERY );
+        _xENDirect.set( _xDirect, UNO_QUERY );
+        _xDirect2.set( _xDirect, UNO_QUERY );
 
         // only once!!!
         //_xIntrospectionAccess = XIntrospectionAccessRef();
@@ -405,52 +405,51 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
             _xIntrospectionAccess = xIntrospection->inspect( _aMaterial );
             if( _xIntrospectionAccess.is() )
             {
-                _xElementAccess = Reference<XElementAccess>::query(
+                _xElementAccess.set(
                       _xIntrospectionAccess->queryAdapter(
-                                 cppu::UnoType<XElementAccess>::get()) );
+                                 cppu::UnoType<XElementAccess>::get()), UNO_QUERY );
 
                 if( _xElementAccess.is() )
                 {
-                    _xEnumerationAccess = Reference<XEnumerationAccess>::query(
+                    _xEnumerationAccess.set(
                                _xIntrospectionAccess->queryAdapter(
-                                    cppu::UnoType<XEnumerationAccess>::get()) );
+                                    cppu::UnoType<XEnumerationAccess>::get()), UNO_QUERY );
 
-                    _xIndexAccess = Reference<XIndexAccess>::query(
+                    _xIndexAccess.set(
                            _xIntrospectionAccess->queryAdapter(
-                                    cppu::UnoType<XIndexAccess>::get()) );
+                                    cppu::UnoType<XIndexAccess>::get()), UNO_QUERY );
 
                     if( _xIndexAccess.is() )
                     {
-                        _xIndexReplace = Reference<XIndexReplace>::query(
+                        _xIndexReplace.set(
                              _xIntrospectionAccess->queryAdapter(
-                                        cppu::UnoType<XIndexReplace>::get()) );
+                                        cppu::UnoType<XIndexReplace>::get()), UNO_QUERY );
 
-                        _xIndexContainer = Reference<XIndexContainer>::query(
+                        _xIndexContainer.set(
                              _xIntrospectionAccess->queryAdapter(
-                                        cppu::UnoType<XIndexContainer>::get()) );
+                                        cppu::UnoType<XIndexContainer>::get()), UNO_QUERY );
                     }
 
-                    _xNameAccess = Reference<XNameAccess>::query(
+                    _xNameAccess.set(
                          _xIntrospectionAccess->queryAdapter(
-                                    cppu::UnoType<XNameAccess>::get()) );
+                                    cppu::UnoType<XNameAccess>::get()), UNO_QUERY );
 
                     if( _xNameAccess.is() )
                     {
-                        _xNameReplace = Reference<XNameReplace>::query(
+                        _xNameReplace.set(
                                    _xIntrospectionAccess->queryAdapter(
-                                       cppu::UnoType<XNameReplace>::get()) );
+                                       cppu::UnoType<XNameReplace>::get()), UNO_QUERY );
 
-                        _xNameContainer = Reference<XNameContainer>::query(
+                        _xNameContainer.set(
                                    _xIntrospectionAccess->queryAdapter(
-                                       cppu::UnoType<XNameContainer>::get()) );
+                                       cppu::UnoType<XNameContainer>::get()), UNO_QUERY );
                     }
                 }
 
-                _xPropertySet = Reference<XPropertySet>::query(
-                           _xIntrospectionAccess->queryAdapter(
-                               cppu::UnoType<XPropertySet>::get()) );
+                _xPropertySet.set( _xIntrospectionAccess->queryAdapter( cppu::UnoType<XPropertySet>::get()),
+                                   UNO_QUERY );
 
-                _xENIntrospection = Reference<XExactName>::query( _xIntrospectionAccess );
+                _xENIntrospection.set( _xIntrospectionAccess, UNO_QUERY );
             }
         }
         /* only once !!!
@@ -1114,7 +1113,7 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
     , mxSMgr( xCtx->getServiceManager() )
     , xCoreReflection( css::reflection::theCoreReflection::get(mxCtx) )
 {
-    xTypeConverter = Reference<XTypeConverter>(
+    xTypeConverter.set(
         mxSMgr->createInstanceWithContext( "com.sun.star.script.Converter", xCtx ),
         UNO_QUERY );
     xIntrospection = theIntrospection::get(xCtx);
@@ -1169,7 +1168,7 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
 Reference<XInterface> SAL_CALL InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )
     throw( RuntimeException )
 {
-    Reference<XInterface> xService = Reference< XInterface > ( *new InvocationService( xCtx ) );
+    Reference<XInterface> xService( *new InvocationService( xCtx ) );
     return xService;
 }
 

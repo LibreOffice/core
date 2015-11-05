@@ -381,8 +381,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
                     css::uno::makeAny(e)); //TODO: preserve type of e
             }
             if (service.is()) {
-                parser = css::uno::Reference< css::uri::XUriSchemeParser >(
-                    service, css::uno::UNO_QUERY_THROW);
+                parser.set( service, css::uno::UNO_QUERY_THROW);
             }
         }
     }

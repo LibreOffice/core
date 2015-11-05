@@ -152,8 +152,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::getSingleton(
         {
             if (m_bDisposed)
                 throw css::lang::DisposedException();
-            xComponent = css::uno::Reference< css::lang::XComponent >(
-                rContext, css::uno::UNO_QUERY_THROW);
+            xComponent.set( rContext, css::uno::UNO_QUERY_THROW);
             m_xSingleton = static_cast< cppu::OWeakObject * >(
                 new JavaVirtualMachine(rContext));
         }
@@ -183,8 +182,7 @@ void SingletonFactory::dispose()
     css::uno::Reference< css::lang::XComponent > xComponent;
     {
         osl::MutexGuard aGuard(m_aMutex);
-        xComponent = css::uno::Reference< css::lang::XComponent >(
-            m_xSingleton, css::uno::UNO_QUERY);
+        xComponent.set( m_xSingleton, css::uno::UNO_QUERY);
         m_xSingleton.clear();
         m_bDisposed = true;
     }
@@ -1349,8 +1347,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
                 css::uno::makeAny( (sal_Int32)-1),
                 css::beans::PropertyState_DIRECT_VALUE);
 
-            m_xInetConfiguration
-                = css::uno::Reference< css::container::XContainer >(
+            m_xInetConfiguration.set(
                     xConfigProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationAccess",
                         aArguments),
@@ -1373,8 +1370,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
                 css::uno::makeAny( (sal_Int32)-1),
                 css::beans::PropertyState_DIRECT_VALUE);
 
-            m_xJavaConfiguration
-                = css::uno::Reference< css::container::XContainer >(
+            m_xJavaConfiguration.set(
                     xConfigProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationAccess",
                         aArguments2),
