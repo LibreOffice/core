@@ -22,13 +22,13 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 
 enum SwSurround {
-    SURROUND_NONE = com::sun::star::text::WrapTextMode_NONE,
+    SURROUND_NONE = css::text::WrapTextMode_NONE,
     SURROUND_BEGIN = SURROUND_NONE,
-    SURROUND_THROUGHT = com::sun::star::text::WrapTextMode_THROUGHT,
-    SURROUND_PARALLEL = com::sun::star::text::WrapTextMode_PARALLEL,
-    SURROUND_IDEAL = com::sun::star::text::WrapTextMode_DYNAMIC,
-    SURROUND_LEFT = com::sun::star::text::WrapTextMode_LEFT,
-    SURROUND_RIGHT = com::sun::star::text::WrapTextMode_RIGHT,
+    SURROUND_THROUGHT = css::text::WrapTextMode_THROUGHT,
+    SURROUND_PARALLEL = css::text::WrapTextMode_PARALLEL,
+    SURROUND_IDEAL = css::text::WrapTextMode_DYNAMIC,
+    SURROUND_LEFT = css::text::WrapTextMode_LEFT,
+    SURROUND_RIGHT = css::text::WrapTextMode_RIGHT,
     SURROUND_END
 };
 

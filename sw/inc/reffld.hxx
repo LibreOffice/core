@@ -135,13 +135,13 @@ public:
     virtual OUString    GetPar1() const override;
     virtual void        SetPar1(const OUString& rStr) override;
 
-    virtual OUString GetPar2() const override;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual OUString    GetPar2() const override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 
     void                ConvertProgrammaticToUIName();
 
-    virtual OUString GetDescription() const override;
+    virtual OUString    GetDescription() const override;
 };
 
 #endif /// INCLUDED_SW_INC_REFFLD_HXX

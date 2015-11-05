@@ -42,8 +42,7 @@ class SW_DLLPUBLIC SwFrameFormat: public SwFormat
     friend class SwPageDesc;    ///< Is allowed to call protected CTor.
     friend class ::sw::DocumentLayoutManager; ///< Is allowed to call protected CTor.
 
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::uno::XInterface> m_wXObject;
+    css::uno::WeakReference<css::uno::XInterface> m_wXObject;
 
     //UUUU DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
@@ -127,11 +126,9 @@ public:
 
     virtual OUString GetDescription() const;
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::uno::XInterface> const& GetXObject() const
+    SAL_DLLPRIVATE css::uno::WeakReference<css::uno::XInterface> const& GetXObject() const
             { return m_wXObject; }
-    SAL_DLLPRIVATE void SetXObject(::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XInterface> const& xObject)
+    SAL_DLLPRIVATE void SetXObject(css::uno::Reference<css::uno::XInterface> const& xObject)
             { m_wXObject = xObject; }
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrameFormat)
@@ -251,7 +248,7 @@ protected:
 
           meLayoutDir( SwFrameFormat::HORI_L2R ),
 
-          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
+          mnPositionLayoutDir( css::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
 
           mbPosAttrSet( false )
 
@@ -262,7 +259,7 @@ protected:
           m_pSdrObjectCached(NULL),
           meLayoutDir( SwFrameFormat::HORI_L2R ),
 
-          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
+          mnPositionLayoutDir( css::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
 
           mbPosAttrSet( false )
     {}

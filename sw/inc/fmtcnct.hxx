@@ -48,7 +48,7 @@ public:
                                     OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const override;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
 
     SwFlyFrameFormat* GetPrev() const { return const_cast<SwFlyFrameFormat*>(static_cast<const SwFlyFrameFormat*>(aPrev.GetRegisteredIn())); }
     SwFlyFrameFormat* GetNext() const { return const_cast<SwFlyFrameFormat*>(static_cast<const SwFlyFrameFormat*>(aNext.GetRegisteredIn())); }

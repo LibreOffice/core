@@ -33,11 +33,11 @@ enum class SvtScriptType;
 
 class SW_DLLPUBLIC SwBreakIt : private ::boost::noncopyable
 {
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
-    mutable com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xBreak;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    mutable css::uno::Reference< css::i18n::XBreakIterator > xBreak;
 
     LanguageTag * m_pLanguageTag;   ///< language tag of the current locale
-    com::sun::star::i18n::ForbiddenCharacters * m_pForbidden;
+    css::i18n::ForbiddenCharacters * m_pForbidden;
 
     LanguageType aForbiddenLang; ///< language of the current forbiddenChar struct
 
@@ -49,32 +49,32 @@ class SW_DLLPUBLIC SwBreakIt : private ::boost::noncopyable
 
     // private (see @ _Create, _Delete).
     explicit SwBreakIt(
-        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxContext);
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext);
     ~SwBreakIt();
 
 public:
     // private (see @ source/core/bastyp/init.cxx).
     static void _Create(
-        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxContext);
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext);
     static void _Delete();
 
 public:
     static SwBreakIt * Get();
 
-    com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > GetBreakIter()
+    css::uno::Reference< css::i18n::XBreakIterator > GetBreakIter()
     {
         createBreakIterator();
         return xBreak;
     }
 
-    const com::sun::star::lang::Locale& GetLocale( const LanguageType aLang )
+    const css::lang::Locale& GetLocale( const LanguageType aLang )
     {
         if( !m_pLanguageTag || m_pLanguageTag->getLanguageType() != aLang )
             _GetLocale( aLang );
         return m_pLanguageTag->getLocale();
     }
 
-    const com::sun::star::lang::Locale& GetLocale( const LanguageTag& rLanguageTag )
+    const css::lang::Locale& GetLocale( const LanguageTag& rLanguageTag )
     {
         // Use LanguageType comparison instead of LanguageTag::operator!=()
         // because here the LanguageTag is already a known LanguageType value
@@ -103,7 +103,7 @@ public:
         return *m_pLanguageTag;
     }
 
-    const com::sun::star::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
+    const css::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
     {
         if( !m_pForbidden || aForbiddenLang != aLang )
             _GetForbidden( aLang );

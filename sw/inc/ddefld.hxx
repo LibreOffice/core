@@ -52,8 +52,8 @@ public:
     virtual SwFieldType* Copy() const override;
     virtual OUString GetName() const override;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const override;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) override;
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     OUString GetCmd() const;
     void SetCmd( const OUString& aStr );

@@ -43,7 +43,7 @@ struct SwFillCrsrPos
     SwFillMode eMode;       ///< desired fill-up rule
     SwFillCrsrPos( SwFillMode eMd = FILL_TAB ) :
         nParaCnt( 0 ), nTabCnt( 0 ), nSpaceCnt( 0 ), nColumnCnt( 0 ),
-        eOrient( com::sun::star::text::HoriOrientation::NONE ), eMode( eMd )
+        eOrient( css::text::HoriOrientation::NONE ), eMode( eMd )
     {}
 };
 

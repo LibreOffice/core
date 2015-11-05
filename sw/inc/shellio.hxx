@@ -148,7 +148,7 @@ class SW_DLLPUBLIC SwReader: public SwDocFac
 {
     SvStream* pStrm;
     tools::SvRef<SotStorage> pStg;
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
+    css::uno::Reference < css::embed::XStorage > xStg;
     SfxMedium* pMedium;     // Who wants to obtain a Medium (W4W).
 
     SwPaM* pCrsr;
@@ -167,7 +167,7 @@ public:
     // Document and position in document are taken from SwPaM.
     SwReader( SvStream&, const OUString& rFilename, const OUString& rBaseURL, SwPaM& );
     SwReader( SfxMedium&, const OUString& rFilename, SwPaM& );
-    SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString& rFilename, SwPaM& );
+    SwReader( const css::uno::Reference < css::embed::XStorage >&, const OUString& rFilename, SwPaM& );
 
     // The only export interface is SwReader::Read(...)!!!
     sal_uLong Read( const Reader& );
@@ -203,7 +203,7 @@ class SW_DLLPUBLIC Reader
 protected:
     SvStream* pStrm;
     tools::SvRef<SotStorage> pStg;
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
+    css::uno::Reference < css::embed::XStorage > xStg;
     SfxMedium* pMedium;     // Who wants to obtain a Medium (W4W).
 
     SwgReaderOption aOpt;
@@ -414,7 +414,7 @@ public:
 
     virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 );
             sal_uLong Write( SwPaM&, SvStream&,  const OUString* = 0 );
-    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 );
+    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 );
     virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = 0 );
 
     virtual void SetupFilterOptions(SfxMedium& rMedium);
@@ -462,7 +462,7 @@ class SW_DLLPUBLIC StgWriter : public Writer
 protected:
     OUString aFltName;
     tools::SvRef<SotStorage> pStg;
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
+    css::uno::Reference < css::embed::XStorage > xStg;
 
     // Create error at call.
     virtual sal_uLong WriteStream() override;
@@ -476,7 +476,7 @@ public:
 
     virtual bool IsStgWriter() const override;
 
-    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 ) override;
+    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 ) override;
     virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = 0 ) override;
 
     SotStorage& GetStorage() const       { return *pStg; }
@@ -488,7 +488,7 @@ class SW_DLLPUBLIC SwWriter
 {
     SvStream* pStrm;
     tools::SvRef<SotStorage> pStg;
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
+    css::uno::Reference < css::embed::XStorage > xStg;
     SfxMedium* pMedium;
 
     SwPaM* pOutPam;
@@ -504,7 +504,7 @@ public:
     SwWriter( SvStream&, SwDoc & );
     SwWriter( SvStream&, SwPaM &, bool bWriteAll = false );
 
-    SwWriter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, SwDoc& );
+    SwWriter( const css::uno::Reference < css::embed::XStorage >&, SwDoc& );
 
     SwWriter( SfxMedium&, SwCrsrShell &, bool bWriteAll = false );
     SwWriter( SfxMedium&, SwDoc & );

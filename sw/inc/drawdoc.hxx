@@ -40,12 +40,11 @@ public:
 
     virtual SdrPage* AllocPage(bool bMasterPage) override;
 
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::embed::XStorage> GetDocumentStorage() const override;
+    virtual css::uno::Reference<css::embed::XStorage> GetDocumentStorage() const override;
 
 protected:
     /// override of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() override;
+    virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
 };
 
 #endif

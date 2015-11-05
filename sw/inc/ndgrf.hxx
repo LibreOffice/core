@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
 
     std::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
-    com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
+    css::uno::Reference<css::io::XInputStream> mxInputStream;
     bool mbIsStreamReadOnly;
 
     SwGrfNode( const SwNodeIndex& rWhere,
@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
         after its usage. Could be NULL, if the stream isn't found.
     */
     SvStream* _GetStreamForEmbedGrf(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _refPics,
+            const css::uno::Reference< css::embed::XStorage >& _refPics,
             const OUString& rStreamName ) const;
 
     /** helper method to get a substorage of the document storage for readonly access.
@@ -109,7 +109,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
         @return XStorage
         reference to substorage or the root storage
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > _GetDocSubstorageOrRoot(
+    css::uno::Reference< css::embed::XStorage > _GetDocSubstorageOrRoot(
                                                 const OUString& aStgName ) const;
 
     /// allow reaction on change of content of GraphicObject, so always call
@@ -196,7 +196,7 @@ public:
     bool IsLinkedInputStreamReady() const { return mbLinkedInputStreamReady;}
     void TriggerAsyncRetrieveInputStream();
     void ApplyInputStream(
-        com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
+        css::uno::Reference<css::io::XInputStream> xInputStream,
         const bool bIsStreamReadOnly );
     void UpdateLinkWithInputStream();
     bool IsAsyncRetrieveInputStreamPossible() const;

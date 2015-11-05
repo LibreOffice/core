@@ -29,13 +29,12 @@ protected:
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                   const OUString& rLocalName,
-                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                  const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 public:
     std::vector<OUString*> &rSectionList;
 
     SwXMLSectionList(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
         std::vector<OUString*> &rNewSectionList );
 
     virtual ~SwXMLSectionList ( )
@@ -50,12 +49,10 @@ public:
     SvXMLSectionListContext ( SwXMLSectionList& rImport,
                            sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                           const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                           const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
     virtual ~SvXMLSectionListContext();
 };
 

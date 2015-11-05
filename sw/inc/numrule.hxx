@@ -272,8 +272,8 @@ public:
 
     void Validate();
     void dumpAsXml(xmlTextWriterPtr w) const;
-    void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
-    void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
+    void GetGrabBagItem(css::uno::Any& rVal) const;
+    void SetGrabBagItem(const css::uno::Any& rVal);
 };
 
 /// namespace for static functions and methods for numbering and bullets

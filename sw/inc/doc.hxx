@@ -262,9 +262,9 @@ class SW_DLLPUBLIC SwDoc :
     SwDBData    maDBData;                //< database descriptor
     OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
     std::vector<OUString> m_PatternNames; //< Array for names of document-templates
-    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
+    css::uno::Reference<css::container::XNameContainer>
         mxXForms;                        //< container with XForms models
-    mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
+    mutable css::uno::Reference< css::linguistic2::XProofreadingIterator > m_xGCIterator;
 
     const std::unique_ptr< ::sw::mark::MarkManager> mpMarkManager;
     const std::unique_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
@@ -341,8 +341,8 @@ class SW_DLLPUBLIC SwDoc :
 
     // table of forbidden characters of this document
     rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
-    com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > mxVbaEvents;
-    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> m_xTemplateToProjectCache;
+    css::uno::Reference< css::script::vba::XVBAEventProcessor > mxVbaEvents;
+    css::uno::Reference<css::container::XNameContainer> m_xTemplateToProjectCache;
 
     /// Table styles (autoformats that are applied with table changes).
     std::unique_ptr<SwTableAutoFormatTable> mpTableStyles;
@@ -623,7 +623,7 @@ public:
 
     /** Returns positions of all FlyFrames in the document.
      If a Pam-Pointer is passed the FlyFrames attached to paragraphes
-     have to be surrounded completely by ::com::sun::star::awt::Selection.
+     have to be surrounded completely by css::awt::Selection.
      ( Start < Pos < End ) !!!
      (Required for Writers.) */
     SwPosFlyFrms GetAllFlyFormats( const SwPaM* = 0,
@@ -687,14 +687,12 @@ public:
     /** Operations on the content of the document e.g.
         spell-checking/hyphenating/word-counting
     */
-    ::com::sun::star::uno::Any
-            Spell( SwPaM&, ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XSpellChecker1 > &,
+    css::uno::Any
+            Spell( SwPaM&, css::uno::Reference< css::linguistic2::XSpellChecker1 > &,
                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt, bool bGrammarCheck,
                    SwConversionArgs *pConvArgs = 0 ) const;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenatedWord >
+    css::uno::Reference< css::linguistic2::XHyphenatedWord >
             Hyphenate( SwPaM *pPam, const Point &rCrsrPos,
                          sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
@@ -887,7 +885,7 @@ public:
 
         Convenince function used by ReplaceDocumentProperties to skip some UNO calls.
      */
-    void ReplaceUserDefinedDocumentProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xSourceDocProps );
+    void ReplaceUserDefinedDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties > xSourceDocProps );
 
     /** Replace document properties with those from rSource.
 
@@ -1373,7 +1371,7 @@ public:
     SfxObjectShell* GetPersist() const;
 
     // Pointer to storage of SfxDocShells. Can be 0!!!
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetDocStorage();
+    css::uno::Reference< css::embed::XStorage > GetDocStorage();
 
     // Query / set flag indicating if document is loaded asynchronously at this moment.
     bool IsInLoadAsynchron() const             { return mbInLoadAsynchron; }
@@ -1606,10 +1604,10 @@ public:
     // access methods for XForms model(s)
 
     // access container for XForms model; will be NULL if !isXForms()
-    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
+    css::uno::Reference<css::container::XNameContainer>
         getXForms() const { return mxXForms;}
 
-    com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > GetGCIterator() const;
+    css::uno::Reference< css::linguistic2::XProofreadingIterator > GetGCIterator() const;
 
     // #i31958# is this an XForms document?
     bool isXForms() const;
@@ -1624,9 +1622,9 @@ public:
     void SetDefaultPageMode(bool bSquaredPageMode);
     bool IsSquaredPageMode() const;
 
-    com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > GetVbaEventProcessor();
-    void SetVBATemplateToProjectCache( com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xCache ) { m_xTemplateToProjectCache = xCache; };
-        com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };
+    css::uno::Reference< css::script::vba::XVBAEventProcessor > GetVbaEventProcessor();
+    void SetVBATemplateToProjectCache( css::uno::Reference< css::container::XNameContainer >& xCache ) { m_xTemplateToProjectCache = xCache; };
+    css::uno::Reference< css::container::XNameContainer > GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
     ::sw::UndoManager      & GetUndoManager();

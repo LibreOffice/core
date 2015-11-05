@@ -75,7 +75,7 @@ class SwRevisionConfig : public utl::ConfigItem
     sal_uInt16          nMarkAlign;     //Revision/LinesChanged/Mark
     Color           aMarkColor;     //Revision/LinesChanged/Color
 
-    static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    static const css::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void            ImplCommit() override;
 
@@ -83,7 +83,7 @@ public:
     SwRevisionConfig();
     virtual ~SwRevisionConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -99,7 +99,7 @@ class SwCompareConfig : public utl::ConfigItem
     bool            bIgnorePieces;  //Compare/Settings/Ignore pieces of length
     sal_uInt16      nPieceLen;		//Compare/Settings/Ignore pieces of length
 
-    static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    static const css::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() override;
 
@@ -107,7 +107,7 @@ public:
     SwCompareConfig();
     virtual ~SwCompareConfig();
 
-    virtual void    Notify( const ::com::sun::star::uno::Sequence< OUString >& ) override { };
+    virtual void    Notify( const css::uno::Sequence< OUString >& ) override { };
     void            Load();
     void            SetModified() {ConfigItem::SetModified(); }
 };
@@ -127,7 +127,7 @@ class SwInsertConfig : public utl::ConfigItem
     SwInsertTableOptions    aInsTableOpts;
     bool            bIsWeb;
 
-    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    const css::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() override;
 
@@ -135,7 +135,7 @@ public:
     SwInsertConfig(bool bWeb);
     virtual ~SwInsertConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -154,7 +154,7 @@ class SwTableConfig : public utl::ConfigItem
     bool    bInsTableChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
     bool    bInsTableAlignNum;        // Table/Input/Alignment                // Align numbers.
 
-    static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    static const css::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() override;
 
@@ -162,7 +162,7 @@ public:
     SwTableConfig(bool bWeb);
     virtual ~SwTableConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -184,7 +184,7 @@ class SwMiscConfig : public utl::ConfigItem
     OUString    sMailingPath;               // FormLetter/FileOutput/Path
     OUString    sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
 
-    static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    static const css::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() override;
 
@@ -192,7 +192,7 @@ public:
     SwMiscConfig();
     virtual ~SwMiscConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };

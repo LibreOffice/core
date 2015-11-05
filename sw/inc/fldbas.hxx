@@ -232,8 +232,7 @@ OUString  FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat);
 
 class SW_DLLPUBLIC SwFieldType : public SwModify
 {
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::beans::XPropertySet> m_wXFieldMaster;
+    css::uno::WeakReference<css::beans::XPropertySet> m_wXFieldMaster;
 
     sal_uInt16 m_nWhich;
 
@@ -248,11 +247,9 @@ protected:
 
 public:
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::beans::XPropertySet> const& GetXObject() const
+    SAL_DLLPRIVATE css::uno::WeakReference<css::beans::XPropertySet> const& GetXObject() const
             { return m_wXFieldMaster; }
-    SAL_DLLPRIVATE void SetXObject(::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> const& xFieldMaster)
+    SAL_DLLPRIVATE void SetXObject(css::uno::Reference<css::beans::XPropertySet> const& xFieldMaster)
             { m_wXFieldMaster = xFieldMaster; }
 
     static OUString    GetTypeStr( sal_uInt16 nTypeId );
@@ -260,8 +257,8 @@ public:
     /// Only in derived classes.
     virtual OUString        GetName() const;
     virtual SwFieldType*    Copy()    const = 0;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );
 
             sal_uInt16          Which() const { return m_nWhich; }
 
@@ -350,8 +347,8 @@ public:
     virtual void        SetPar1(const OUString& rStr);
     virtual void        SetPar2(const OUString& rStr);
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId );
 
     /// Does the field possess an action on its ClickHandler? (e.g. INetFields, ...).
     bool            HasClickHdl() const;

@@ -90,8 +90,8 @@ public:
 
     virtual void            SetHidden( bool bHidden ) override;
     virtual bool            IsHidden( ) const override;
-    void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
-    void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
+    void SetGrabBagItem(const css::uno::Any& rVal);
+    void GetGrabBagItem(css::uno::Any& rVal) const;
 
     /** add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value false,
      which indicates that the indent attributes at a paragraph style should

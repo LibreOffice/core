@@ -59,8 +59,8 @@ public:
     bool                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( bool b )    { bDeleted = b; }
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const override;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) override;
+    virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nMId ) const override;
+    virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
 
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
@@ -97,7 +97,7 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
 public:
     SwUserField(SwUserFieldType*, sal_uInt16 nSub = 0, sal_uInt32 nFormat = 0);
 
-    virtual sal_uInt16          GetSubType() const override;
+    virtual sal_uInt16      GetSubType() const override;
     virtual void            SetSubType(sal_uInt16 nSub) override;
 
     virtual double          GetValue() const override;
@@ -106,13 +106,13 @@ public:
     virtual OUString        GetFieldName() const override;
 
     // Name cannot be changed.
-    virtual OUString   GetPar1() const override;
+    virtual OUString        GetPar1() const override;
 
     // Content.
-    virtual OUString   GetPar2() const override;
+    virtual OUString        GetPar2() const override;
     virtual void            SetPar2(const OUString& rStr) override;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
 };
 
 #endif // INCLUDED_SW_INC_USRFLD_HXX
