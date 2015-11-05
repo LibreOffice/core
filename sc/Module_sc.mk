@@ -22,12 +22,6 @@ $(eval $(call gb_Module_add_l10n_targets,sc,\
 	UIConfig_scalc \
 ))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-$(eval $(call gb_Module_add_targets,sc,\
-	Library_scqahelper \
-))
-endif
-
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 
 $(eval $(call gb_Module_add_targets,sc,\
@@ -45,6 +39,8 @@ $(eval $(call gb_Module_add_targets,sc,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,sc,\
+	$(if $(filter $(BUILD_TYPE),$(DESKTOP)),, \
+		Library_scqahelper) \
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sc_ucalc) \
     CppunitTest_sc_filters_test \
