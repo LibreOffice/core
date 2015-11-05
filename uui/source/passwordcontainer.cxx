@@ -382,9 +382,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
 
     for ( sal_Int32 i = 0; i < rContinuations.getLength(); ++i )
     {
-        xSupplyAuthentication
-            = uno::Reference< ucb::XInteractionSupplyAuthentication >(
-                rContinuations[i], uno::UNO_QUERY );
+        xSupplyAuthentication.set( rContinuations[i], uno::UNO_QUERY );
         if( xSupplyAuthentication.is() )
             break;
     }

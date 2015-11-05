@@ -1076,7 +1076,7 @@ uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() cons
             aValue.Value = uno::makeAny(OUString("org.openoffice.Office.Linguistic"));
             uno::Sequence< uno::Any > aProps(1);
             aProps[0] <<= aValue;
-            m_xMainUpdateAccess = uno::Reference< util::XChangesBatch >(
+            m_xMainUpdateAccess.set(
                     xConfigurationProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess", aProps),
                         uno::UNO_QUERY_THROW );

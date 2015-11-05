@@ -76,9 +76,8 @@ namespace DOM
             {
                 if( strcmp(reinterpret_cast<char const *>(xName), reinterpret_cast<char const *>(cur->name)) == 0)
                 {
-                    aNode = Reference< XNode >(
-                            m_pElement->GetOwnerDocument().GetCNode(
-                                reinterpret_cast<xmlNodePtr>(cur)).get() );
+                    aNode.set( m_pElement->GetOwnerDocument().GetCNode(
+                                   reinterpret_cast<xmlNodePtr>(cur)).get() );
                     break;
                 }
                 cur = cur->next;
@@ -113,9 +112,8 @@ namespace DOM
                 if( strcmp(reinterpret_cast<char const *>(xName), reinterpret_cast<char const *>(cur->name)) == 0 &&
                     cur->ns == pNs)
                 {
-                    aNode = Reference< XNode >(
-                            m_pElement->GetOwnerDocument().GetCNode(
-                                reinterpret_cast<xmlNodePtr>(cur)).get() );
+                    aNode.set( m_pElement->GetOwnerDocument().GetCNode(
+                                  reinterpret_cast<xmlNodePtr>(cur)).get() );
                     break;
                 }
                 cur = cur->next;
@@ -142,8 +140,7 @@ namespace DOM
             {
                 if (count == index)
                 {
-                    aNode = Reference< XNode >(
-                            m_pElement->GetOwnerDocument().GetCNode(
+                    aNode.set( m_pElement->GetOwnerDocument().GetCNode(
                                 reinterpret_cast<xmlNodePtr>(cur)).get() );
                     break;
                 }

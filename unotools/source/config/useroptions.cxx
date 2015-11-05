@@ -126,7 +126,7 @@ SvtUserOptions::Impl::Impl() :
 {
     try
     {
-        m_xCfg = uno::Reference<container::XNameAccess>(
+        m_xCfg.set(
             comphelper::ConfigurationHelper::openConfig(
                 comphelper::getProcessComponentContext(),
                 "org.openoffice.UserProfile/Data",
@@ -135,7 +135,7 @@ SvtUserOptions::Impl::Impl() :
             uno::UNO_QUERY
         );
 
-        m_xData = uno::Reference<beans::XPropertySet>(m_xCfg, uno::UNO_QUERY);
+        m_xData.set(m_xCfg, uno::UNO_QUERY);
         uno::Reference<util::XChangesNotifier> xChgNot(m_xCfg, uno::UNO_QUERY);
         try
         {

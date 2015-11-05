@@ -154,12 +154,11 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
 
     try
     {
-        m_xRoot = css::uno::Reference< css::container::XNameAccess >(
-                        ::comphelper::ConfigurationHelper::openConfig(
+        m_xRoot.set( ::comphelper::ConfigurationHelper::openConfig(
                             ::comphelper::getProcessComponentContext(),
                             PACKAGE_VIEWS,
                             ::comphelper::ConfigurationHelper::E_STANDARD),
-                        css::uno::UNO_QUERY);
+                     css::uno::UNO_QUERY);
         if (m_xRoot.is())
             m_xRoot->getByName(sList) >>= m_xSet;
     }

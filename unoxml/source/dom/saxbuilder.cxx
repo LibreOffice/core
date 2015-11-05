@@ -256,9 +256,7 @@ namespace DOM
             // no URI for prefix
             aElement = m_aDocument->createElement(aName);
         }
-        aElement = Reference< XElement > (
-            m_aNodeStack.top()->appendChild(aElement),
-            UNO_QUERY);
+        aElement.set( m_aNodeStack.top()->appendChild(aElement), UNO_QUERY);
         m_aNodeStack.push(aElement);
 
         // set non xmlns attributes

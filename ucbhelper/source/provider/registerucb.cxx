@@ -80,7 +80,7 @@ registerAtUcb(
         if (!xProvider.is())
             try
             {
-                xProvider = uno::Reference< ucb::XContentProvider >(
+                xProvider.set(
                     rxContext->getServiceManager()->createInstanceWithContext(rName, rxContext),
                     uno::UNO_QUERY);
             }

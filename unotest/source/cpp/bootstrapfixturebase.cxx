@@ -99,7 +99,7 @@ void test::BootstrapFixtureBase::setUp()
 
     m_xContext = comphelper::getProcessComponentContext();
     m_xFactory = m_xContext->getServiceManager();
-    m_xSFactory = uno::Reference<lang::XMultiServiceFactory>(m_xFactory, uno::UNO_QUERY_THROW);
+    m_xSFactory.set(m_xFactory, uno::UNO_QUERY_THROW);
 }
 
 void test::BootstrapFixtureBase::tearDown()

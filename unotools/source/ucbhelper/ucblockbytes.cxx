@@ -544,13 +544,11 @@ Moderator::Moderator(
 
     Reference < XActiveDataSink > xActiveSink(*pxSink,UNO_QUERY);
     if(xActiveSink.is())
-        *pxSink = Reference<XInterface>(
-            static_cast<cppu::OWeakObject*>(new ModeratorsActiveDataSink(*this)));
+        pxSink->set( static_cast<cppu::OWeakObject*>(new ModeratorsActiveDataSink(*this)));
 
     Reference<XActiveDataStreamer> xStreamer( *pxSink, UNO_QUERY );
     if ( xStreamer.is() )
-        *pxSink = Reference<XInterface>(
-            static_cast<cppu::OWeakObject*>(new ModeratorsActiveDataStreamer(*this)));
+        pxSink->set( static_cast<cppu::OWeakObject*>(new ModeratorsActiveDataStreamer(*this)));
 
     if(dec == 0)
         m_aArg.Argument <<= aPostArg;
@@ -860,7 +858,7 @@ static bool UCBOpenContentSync(
                         = ir->getSelection();
                     if(ref.is()) {
                         Reference<XInterface> xInt(ref.get());
-                        xRet = Reference<XInteractionRetry>(xInt,UNO_QUERY);
+                        xRet.set(xInt,UNO_QUERY);
                     }
                 }
 
@@ -1103,7 +1101,7 @@ bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
     {
         m_xOutputStream = aStream->getOutputStream();
         setInputStream_Impl( aStream->getInputStream(), false );
-        m_xSeekable = Reference < XSeekable > ( aStream, UNO_QUERY );
+        m_xSeekable.set( aStream, UNO_QUERY );
     }
     else
     {
@@ -1129,15 +1127,15 @@ bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputSt
 
         if( bSetXSeekable )
         {
-            m_xSeekable = Reference < XSeekable > ( rxInputStream, UNO_QUERY );
+            m_xSeekable.set( rxInputStream, UNO_QUERY );
             if( !m_xSeekable.is() && rxInputStream.is() )
             {
                 Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                Reference< XOutputStream > rxTempOut = Reference < XOutputStream > ( TempFile::create(xContext), UNO_QUERY_THROW );
+                Reference< XOutputStream > rxTempOut( TempFile::create(xContext), UNO_QUERY_THROW );
 
                 ::comphelper::OStorageHelper::CopyInputToOutput( rxInputStream, rxTempOut );
-                m_xInputStream = Reference< XInputStream >( rxTempOut, UNO_QUERY );
-                m_xSeekable = Reference < XSeekable > ( rxTempOut, UNO_QUERY );
+                m_xInputStream.set( rxTempOut, UNO_QUERY );
+                m_xSeekable.set( rxTempOut, UNO_QUERY );
             }
         }
 

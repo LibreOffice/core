@@ -44,10 +44,8 @@ IMPL_LINK_NOARG_TYPED(UnknownAuthDialog, OKHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(UnknownAuthDialog, ViewCertHdl_Impl, Button*, void)
 {
-    uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
-
-    xDocumentDigitalSignatures = uno::Reference< css::security::XDocumentDigitalSignatures >(
-                    css::security::DocumentDigitalSignatures::createDefault(m_xContext) );
+    uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures(
+        css::security::DocumentDigitalSignatures::createDefault(m_xContext) );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 }

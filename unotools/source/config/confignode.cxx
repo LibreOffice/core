@@ -54,8 +54,8 @@ namespace utl
         if (_rxNode.is())
         {
             // collect all interfaces necessary
-            m_xHierarchyAccess = Reference< XHierarchicalNameAccess >(_rxNode, UNO_QUERY);
-            m_xDirectAccess = Reference< XNameAccess >(_rxNode, UNO_QUERY);
+            m_xHierarchyAccess.set(_rxNode, UNO_QUERY);
+            m_xDirectAccess.set(_rxNode, UNO_QUERY);
 
             // reset _all_ interfaces if _one_ of them is not supported
             if (!m_xHierarchyAccess.is() || !m_xDirectAccess.is())
@@ -65,8 +65,8 @@ namespace utl
             }
 
             // now for the non-critical interfaces
-            m_xReplaceAccess = Reference< XNameReplace >(_rxNode, UNO_QUERY);
-            m_xContainerAccess = Reference< XNameContainer >(_rxNode, UNO_QUERY);
+            m_xReplaceAccess.set(_rxNode, UNO_QUERY);
+            m_xContainerAccess.set(_rxNode, UNO_QUERY);
         }
 
         Reference< XComponent > xConfigNodeComp(m_xDirectAccess, UNO_QUERY);

@@ -25,7 +25,7 @@ namespace unotest {
 uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService, const uno::Sequence<beans::PropertyValue>& rExtraArgs)
 {
     CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
-    uno::Reference<frame::XComponentLoader> xLoader = uno::Reference<frame::XComponentLoader>(mxDesktop, uno::UNO_QUERY);
+    uno::Reference<frame::XComponentLoader> xLoader(mxDesktop, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
     std::vector<beans::PropertyValue> args;
     beans::PropertyValue aMacroValue;

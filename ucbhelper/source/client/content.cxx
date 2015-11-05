@@ -1298,8 +1298,7 @@ Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
         osl::MutexGuard aGuard( m_aMutex );
 
         if ( !m_xCommandProcessor.is() )
-            m_xCommandProcessor
-                = Reference< XCommandProcessor >( getContent(), UNO_QUERY );
+            m_xCommandProcessor.set( getContent(), UNO_QUERY );
     }
 
     return m_xCommandProcessor;

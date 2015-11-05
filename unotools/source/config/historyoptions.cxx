@@ -106,18 +106,18 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
 {
     try
     {
-        m_xCfg = Reference<container::XNameAccess> (
+        m_xCfg.set(
             ::comphelper::ConfigurationHelper::openConfig(
-            ::comphelper::getProcessComponentContext(),
-            s_sHistories,
-            ::comphelper::ConfigurationHelper::E_STANDARD),
+                ::comphelper::getProcessComponentContext(),
+                s_sHistories,
+                ::comphelper::ConfigurationHelper::E_STANDARD),
             uno::UNO_QUERY);
 
-        m_xCommonXCU = Reference<container::XNameAccess> (
+        m_xCommonXCU.set(
             ::comphelper::ConfigurationHelper::openConfig(
-            ::comphelper::getProcessComponentContext(),
-            s_sCommonHistory,
-            ::comphelper::ConfigurationHelper::E_STANDARD),
+                ::comphelper::getProcessComponentContext(),
+                s_sCommonHistory,
+                ::comphelper::ConfigurationHelper::E_STANDARD),
             uno::UNO_QUERY);
     }
     catch(const uno::Exception& ex)
@@ -444,7 +444,7 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
             }
             if (nLength != nMaxSize)
             {
-                xFac = uno::Reference<lang::XSingleServiceFactory>(xOrderList, uno::UNO_QUERY);
+                xFac.set(xOrderList, uno::UNO_QUERY);
                 xInst = xFac->createInstance();
                 OUString sPush = OUString::number(nLength++);
                 xOrderList->insertByName(sPush, uno::makeAny(xInst));
@@ -461,11 +461,11 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
             xSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(sURL));
 
             // Append the item to ItemList.
-            xFac = uno::Reference<lang::XSingleServiceFactory>(xItemList, uno::UNO_QUERY);
+            xFac.set(xItemList, uno::UNO_QUERY);
             xInst = xFac->createInstance();
             xItemList->insertByName(sURL, uno::makeAny(xInst));
 
-            xSet = uno::Reference<beans::XPropertySet>(xInst, uno::UNO_QUERY);
+            xSet.set(xInst, uno::UNO_QUERY);
             xSet->setPropertyValue(s_sFilter, uno::makeAny(sFilter));
             xSet->setPropertyValue(s_sTitle, uno::makeAny(sTitle));
             xSet->setPropertyValue(s_sPassword, uno::makeAny(sPassword));

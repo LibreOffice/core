@@ -1078,9 +1078,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     css::uno::Reference< css::container::XNameAccess > xTypeCfg;
     try
     {
-        xFilterCfg = css::uno::Reference< css::container::XNameAccess >(
+        xFilterCfg.set(
             xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext), css::uno::UNO_QUERY);
-        xTypeCfg = css::uno::Reference< css::container::XNameAccess >(
+        xTypeCfg.set(
             xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext), css::uno::UNO_QUERY);
     }
     catch(const css::uno::RuntimeException&)

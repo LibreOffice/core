@@ -369,8 +369,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
 
             // Register as listener for config changes.
 
-            m_xNotifier = uno::Reference< util::XChangesNotifier >(
-                                                xInterface, uno::UNO_QUERY );
+            m_xNotifier.set( xInterface, uno::UNO_QUERY );
 
             OSL_ENSURE( m_xNotifier.is(),
                         "InternetProxyDecider - No notifier!" );
