@@ -375,6 +375,8 @@ public class XMergeBridge {
             XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);
 
             XOutputStreamToOutputStreamAdapter newxos =new XOutputStreamToOutputStreamAdapter(device);
+
+            /* make sure newxos and xis get closed */
             try{
                 ConverterInfoReader cir = new ConverterInfoReader(jarName,false);
                 ciEnum =cir.getConverterInfoEnumeration();
