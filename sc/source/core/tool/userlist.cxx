@@ -274,7 +274,7 @@ ScUserList::ScUserList(const ScUserList& r) :
 
 const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
 {
-    std::vector<DataType::const_iterator> matchData;
+    const ScUserListData* pFirstCaseInsensitive = nullptr;
     DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
     sal_uInt16 nIndex;
     bool bMatchCase = false;
@@ -285,15 +285,12 @@ const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
         {
             if (bMatchCase)
                 return &(*itr);
-            matchData.push_back(itr);
+            if (!pFirstCaseInsensitive)
+                pFirstCaseInsensitive = &(*itr);
         }
     }
-    if (matchData.empty())
-    {
-        return NULL;
-    }
 
-    return &(**matchData.begin());
+    return pFirstCaseInsensitive;
 }
 
 const ScUserListData& ScUserList::operator[](size_t nIndex) const
