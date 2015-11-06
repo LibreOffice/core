@@ -1018,7 +1018,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
     try
     {
         uno::Sequence< OUString > aElementNames;
-        GetElementNamesFor( OUString(aG_Dictionaries), aElementNames );
+        GetElementNamesFor( aG_Dictionaries, aElementNames );
         sal_Int32 nLen = aElementNames.getLength();
         const OUString *pElementNames = aElementNames.getConstArray();
 

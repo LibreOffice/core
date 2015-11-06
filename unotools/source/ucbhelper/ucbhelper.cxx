@@ -113,7 +113,7 @@ std::vector<OUString> getContents(OUString const & url) {
 OUString getCasePreservingUrl(const INetURLObject& url) {
     return
         content(url).executeCommand(
-            OUString("getCasePreservingURL"),
+            "getCasePreservingURL",
             css::uno::Any()).
         get<OUString>();
 }
@@ -208,7 +208,7 @@ bool utl::UCBContentHelper::GetTitle(
 bool utl::UCBContentHelper::Kill(OUString const & url) {
     try {
         content(url).executeCommand(
-            OUString("delete"),
+            "delete",
             css::uno::makeAny(true));
         return true;
     } catch (css::uno::RuntimeException const &) {
@@ -323,11 +323,11 @@ bool utl::UCBContentHelper::IsYounger(
         return
             convert(
                 content(younger).getPropertyValue(
-                    OUString("DateModified")).
+                    "DateModified").
                 get<css::util::DateTime>())
             > convert(
                 content(older).getPropertyValue(
-                    OUString("DateModified")).
+                    "DateModified").
                 get<css::util::DateTime>());
     } catch (css::uno::RuntimeException const &) {
         throw;

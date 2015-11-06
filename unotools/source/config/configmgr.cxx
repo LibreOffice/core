@@ -91,50 +91,50 @@ struct theConfigManager:
 
 OUString utl::ConfigManager::getAboutBoxProductVersion() {
     return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("Product/ooSetupVersionAboutBox"));
+        "/org.openoffice.Setup",
+        "Product/ooSetupVersionAboutBox");
 }
 
 OUString utl::ConfigManager::getAboutBoxProductVersionSuffix() {
     return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("Product/ooSetupVersionAboutBoxSuffix"));
+        "/org.openoffice.Setup",
+        "Product/ooSetupVersionAboutBoxSuffix");
 }
 
 OUString utl::ConfigManager::getDefaultCurrency() {
     return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("L10N/ooSetupCurrency"));
+        "/org.openoffice.Setup",
+        "L10N/ooSetupCurrency");
 }
 
 OUString utl::ConfigManager::getLocale() {
     return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("L10N/ooLocale"));
+        "/org.openoffice.Setup",
+        "L10N/ooLocale");
 }
 
 OUString utl::ConfigManager::getProductExtension() {
     return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("Product/ooSetupExtension"));
+        "/org.openoffice.Setup",
+        "Product/ooSetupExtension");
 }
 
 OUString utl::ConfigManager::getProductName() {
     return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("Product/ooName"));
+        "/org.openoffice.Setup",
+        "Product/ooName");
 }
 
 OUString utl::ConfigManager::getProductVersion() {
     return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("Product/ooSetupVersion"));
+        "/org.openoffice.Setup",
+        "Product/ooSetupVersion");
 }
 
 OUString utl::ConfigManager::getVendor() {
     return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("Product/ooVendor"));
+        "/org.openoffice.Setup",
+        "Product/ooVendor");
 }
 
 void utl::ConfigManager::storeConfigItems() {

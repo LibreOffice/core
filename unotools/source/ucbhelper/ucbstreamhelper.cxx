@@ -60,7 +60,7 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
                 ::ucbhelper::Content aCnt(
                     rFileName, Reference < XCommandEnvironment >(),
                     comphelper::getProcessComponentContext() );
-                aCnt.executeCommand( OUString("delete"), makeAny( true ) );
+                aCnt.executeCommand( "delete", makeAny( true ) );
             }
 
             catch ( const CommandAbortedException& )
@@ -93,7 +93,7 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
                 aInsertArg.ReplaceExisting = sal_False;
                 Any aCmdArg;
                 aCmdArg <<= aInsertArg;
-                aContent.executeCommand( OUString("insert"), aCmdArg );
+                aContent.executeCommand( "insert", aCmdArg );
             }
 
             // it is NOT an error when the stream already exists and no truncation was desired
