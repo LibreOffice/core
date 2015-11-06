@@ -800,7 +800,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     if ( aServiceName == "tabcontrolnotabs" )
     {
         nWinBits |= WB_NOBORDER;
-        nType = ImplGetComponentType( OUString( "tabcontrol" ) );
+        nType = ImplGetComponentType( "tabcontrol" );
     }
     if ( !pParent )
     {
