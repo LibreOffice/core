@@ -43,7 +43,7 @@ using namespace ::sf_misc;
 #define BASPROV_PROPERTY_ID_URI         1
 #define BASPROV_PROPERTY_ID_EDITABLE    2
 
-#define BASPROV_PROPERTY_URI            OUString( "URI"  )
+#define BASPROV_PROPERTY_URI            "URI"
 #define BASPROV_PROPERTY_EDITABLE       "Editable"
 
 #define BASPROV_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY
