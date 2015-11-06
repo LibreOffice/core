@@ -43,7 +43,7 @@ namespace svgio
 
         const SvgStyleAttributes* SvgPathNode::getSvgStyleAttributes() const
         {
-            return checkForCssStyle(OUString("path"), maSvgStyleAttributes);
+            return checkForCssStyle("path", maSvgStyleAttributes);
         }
 
         void SvgPathNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

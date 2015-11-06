@@ -51,7 +51,7 @@ namespace svgio
             else
             {
                 // #i125258# for SVGTokenG take CssStyles into account
-                return checkForCssStyle(OUString("g"), maSvgStyleAttributes);
+                return checkForCssStyle("g", maSvgStyleAttributes);
             }
         }
 

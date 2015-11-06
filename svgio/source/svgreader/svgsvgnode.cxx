@@ -112,7 +112,7 @@ namespace svgio
         const SvgStyleAttributes* SvgSvgNode::getSvgStyleAttributes() const
         {
             // #i125258# svg node can have CssStyles, too, so check for it here
-            return checkForCssStyle(OUString("svg"), maSvgStyleAttributes);
+            return checkForCssStyle("svg", maSvgStyleAttributes);
         }
 
         void SvgSvgNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

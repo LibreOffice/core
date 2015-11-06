@@ -45,7 +45,7 @@ namespace svgio
 
         const SvgStyleAttributes* SvgLineNode::getSvgStyleAttributes() const
         {
-            return checkForCssStyle(OUString("line"), maSvgStyleAttributes);
+            return checkForCssStyle("line", maSvgStyleAttributes);
         }
 
         void SvgLineNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

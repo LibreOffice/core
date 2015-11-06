@@ -62,7 +62,7 @@ namespace svgio
 
         const SvgStyleAttributes* SvgImageNode::getSvgStyleAttributes() const
         {
-            return checkForCssStyle(OUString("image"), maSvgStyleAttributes);
+            return checkForCssStyle("image", maSvgStyleAttributes);
         }
 
         void SvgImageNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

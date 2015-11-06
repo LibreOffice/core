@@ -228,7 +228,7 @@ namespace svgio
                         if ( aViewPort.isEmpty() )
                         {
 #ifdef DBG_UTIL
-                            myAssert(OUString("Design error, this case should have been handled in the caller"));
+                            myAssert("Design error, this case should have been handled in the caller");
 #endif
                             // no viewPort, assume a normal page size (A4)
                             aViewPort = basegfx::B2DRange(
