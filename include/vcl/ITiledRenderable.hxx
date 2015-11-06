@@ -21,6 +21,9 @@ namespace vcl
 
 class VCL_DLLPUBLIC ITiledRenderable
 {
+protected:
+    int nTilePixelWidth, nTilePixelHeight;
+    int nTileTwipWidth, nTileTwipHeight;
 public:
     virtual ~ITiledRenderable();
 
@@ -176,6 +179,16 @@ public:
 
     /// If the current contents of the clipboard is something we can paste.
     virtual bool isMimeTypeSupported() = 0;
+
+    /**
+     * Save the client's view so that we can compute the right zoom level
+     * for the mouse events.
+     * @param nTilePixelWidth - tile width in pixels
+     * @param nTilePixelHeight - tile height in pixels
+     * @param nTileTwipWidth - tile width in twips
+     * @param nTileTwipHeight - tile height in twips
+     */
+    virtual void setClientView(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth, int nTileTwipHeight) = 0;
 };
 
 } // namespace vcl

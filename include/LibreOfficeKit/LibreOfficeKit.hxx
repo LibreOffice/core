@@ -292,6 +292,23 @@ public:
     }
 
     /**
+     * Save the client's view so that we can compute the right zoom level
+     * for the mouse events.
+     * @param nTilePixelWidth - tile width in pixels
+     * @param nTilePixelHeight - tile height in pixels
+     * @param nTileTwipWidth - tile width in twips
+     * @param nTileTwipHeight - tile height in twips
+     */
+    inline void setClientView(
+            int nTilePixelWidth,
+            int nTilePixelHeight,
+            int nTileTwipWidth,
+            int nTileTwipHeight)
+    {
+        mpDoc->pClass->setClientView(mpDoc, nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
+    }
+
+    /**
      * Create a new view for an existing document.
      * By default a loaded document has 1 view.
      * @return the ID of the new view.
