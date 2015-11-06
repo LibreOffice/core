@@ -112,7 +112,7 @@ namespace toolkit
             INetURLObject aURL( i_imageURL );
             if ( aURL.GetProtocol() != INetProtocol::PrivSoffice )
             {
-                OSL_VERIFY( aURL.insertName( OUString( "hicontrast" ), false, 0 ) );
+                OSL_VERIFY( aURL.insertName( "hicontrast", false, 0 ) );
                 return aURL.GetMainURL( INetURLObject::NO_DECODE );
             }
             // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
