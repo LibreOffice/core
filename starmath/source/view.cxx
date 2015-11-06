@@ -2008,7 +2008,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
 {
     SetStatusText(OUString());
     SetWindow(aGraphic.get());
-    SfxShell::SetName(OUString("SmView"));
+    SfxShell::SetName("SmView");
     SfxShell::SetUndoManager( &GetDoc()->GetEditEngine().GetUndoManager() );
     SetHelpId( HID_SMA_VIEWSHELL_DOCUMENT );
 }

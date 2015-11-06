@@ -238,7 +238,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         //! see also SmDocShell::GetEditEngine() !
         //!
 
-        pEditEngine->SetDefTab(sal_uInt16(GetTextWidth(OUString("XXXX"))));
+        pEditEngine->SetDefTab(sal_uInt16(GetTextWidth("XXXX")));
 
         SetEditEngineDefaultFonts(*pEditEngineItemPool);
 

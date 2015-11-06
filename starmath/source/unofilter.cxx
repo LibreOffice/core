@@ -71,7 +71,7 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
             {
                 tools::SvRef<SotStorage> aStorage(new SotStorage(pStream.get(), false));
                 // Is this a MathType Storage?
-                if (aStorage->IsStream(OUString("Equation Native")))
+                if (aStorage->IsStream("Equation Native"))
                 {
                     if (SmModel* pModel = dynamic_cast<SmModel*>(m_xDstDoc.get()))
                     {

@@ -555,7 +555,7 @@ void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
 int MathType::Parse(SotStorage *pStor)
 {
     tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(
-        OUString("Equation Native"),
+        "Equation Native",
         STREAM_STD_READ | StreamMode::NOCREATE);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
         return 0;
@@ -1889,7 +1889,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
 
         SvGlobalName aGName(0x0002ce02L, 0x0000, 0x0000,0xc0,0x00,
             0x00,0x00,0x00,0x00,0x00,0x46 );
-        pStor->SetClass( aGName, SotClipboardFormatId::NONE, OUString("Microsoft Equation 3.0"));
+        pStor->SetClass( aGName, SotClipboardFormatId::NONE, "Microsoft Equation 3.0");
 
         static sal_uInt8 const aCompObj[] = {
             0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
@@ -1906,7 +1906,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
-        tools::SvRef<SotStorageStream> xStor( pStor->OpenSotStream(OUString("\1CompObj")));
+        tools::SvRef<SotStorageStream> xStor( pStor->OpenSotStream("\1CompObj"));
         xStor->Write(aCompObj,sizeof(aCompObj));
 
         static sal_uInt8 const aOle[] = {
@@ -1914,12 +1914,12 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00
             };
-        tools::SvRef<SotStorageStream> xStor2( pStor->OpenSotStream(OUString("\1Ole")));
+        tools::SvRef<SotStorageStream> xStor2( pStor->OpenSotStream("\1Ole"));
         xStor2->Write(aOle,sizeof(aOle));
         xStor.Clear();
         xStor2.Clear();
 
-        tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(OUString("Equation Native"));
+        tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream("Equation Native");
         if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
             return 0;
 

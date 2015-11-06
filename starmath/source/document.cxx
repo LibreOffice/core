@@ -371,7 +371,7 @@ EditEngine& SmDocShell::GetEditEngine()
 
         pEditEngine->EnableUndo( true );
         pEditEngine->SetDefTab( sal_uInt16(
-            Application::GetDefaultDevice()->GetTextWidth(OUString("XXXX"))) );
+            Application::GetDefaultDevice()->GetTextWidth("XXXX")) );
 
         pEditEngine->SetControlWord(
                 (pEditEngine->GetControlWord() | EEControlBits::AUTOINDENTING) &
@@ -713,7 +713,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
             if ( SotStorage::IsStorageFile( pStream ) )
             {
                 tools::SvRef<SotStorage> aStorage = new SotStorage( pStream, false );
-                if ( aStorage->IsStream(OUString("Equation Native")) )
+                if ( aStorage->IsStream("Equation Native") )
                 {
                     // is this a MathType Storage?
                     MathType aEquation( aText );
