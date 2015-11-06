@@ -478,7 +478,7 @@ void SaneDlg::InitFields()
                 else // SANE_UNIT_PIXEL
                 {
                     pField->SetValue( (int)fValue, FUNIT_CUSTOM );
-                    pField->SetCustomUnitText(OUString("Pixel"));
+                    pField->SetCustomUnitText("Pixel");
                 }
                 switch( i ) {
                     case 0: aTopLeft.X() = (int)fValue;break;

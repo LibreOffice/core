@@ -44,7 +44,7 @@ namespace abp
     OABSPilotUno::OABSPilotUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty( OUString("DataSourceName"), PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
+        registerProperty( "DataSourceName", PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
             &m_sDataSourceName, cppu::UnoType<decltype(m_sDataSourceName)>::get() );
     }
 

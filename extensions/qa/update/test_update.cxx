@@ -101,11 +101,11 @@ protected:
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
 
         if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider,
-                    OUString( "Linux" ),
-                    OUString( "x86" ),
+                    "Linux",
+                    "x86",
                     m_aRepositoryList,
-                    OUString( "111111-222222-333333-444444" ),
-                    OUString( "InstallSetID" ) ) )
+                    "111111-222222-333333-444444",
+                    "InstallSetID" ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.size() == 1 );
             CPPUNIT_ASSERT( aInfo.Sources[0].URL == "http://www.libreoffice.org/download/" );
@@ -121,11 +121,11 @@ protected:
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
 
         if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider,
-                    OUString( "Linux" ),
-                    OUString( "x86" ),
+                    "Linux",
+                    "x86",
                     m_aRepositoryList,
-                    OUString( "123456-abcdef-1a2b3c-4d5e6f" ),
-                    OUString( "InstallSetID" ) ) )
+                    "123456-abcdef-1a2b3c-4d5e6f",
+                    "InstallSetID" ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.empty() );
         }

@@ -379,7 +379,7 @@ namespace pcr
             rpButton = VclPtr<PushButton>::Create( m_pTheParent, WB_NOPOINTERFOCUS );
             rpButton->SetGetFocusHdl( LINK( this, OBrowserLine, OnButtonFocus ) );
             rpButton->SetClickHdl( LINK( this, OBrowserLine, OnButtonClicked ) );
-            rpButton->SetText(OUString("..."));
+            rpButton->SetText("...");
         }
 
         rpButton->Show();

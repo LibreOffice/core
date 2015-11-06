@@ -313,7 +313,7 @@ namespace logging
 
     Reference< XLogger > SAL_CALL LoggerPool::getDefaultLogger(  ) throw (RuntimeException, std::exception)
     {
-        return getNamedLogger( OUString( "org.openoffice.logging.DefaultLogger" ) );
+        return getNamedLogger( "org.openoffice.logging.DefaultLogger" );
     }
 
     void createRegistryInfo_LoggerPool()

@@ -176,8 +176,8 @@ Sequence<css::plugin::PluginDescription> XPluginManager_Impl::getPluginDescripti
     Sequence<css::plugin::PluginDescription> aRet;
 
     vcl::SettingsConfigItem* pCfg = vcl::SettingsConfigItem::get();
-    OUString aVal( pCfg->getValue( OUString(  "BrowserPlugins"  ),
-                                        OUString(  "Disabled"  ) ) );
+    OUString aVal( pCfg->getValue( "BrowserPlugins",
+                                        "Disabled" ) );
     if( ! aVal.toBoolean() )
     {
         aRet = impl_getPluginDescriptions();
