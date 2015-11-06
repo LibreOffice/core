@@ -461,7 +461,7 @@ ScVbaApplication::wait( double time ) throw (uno::RuntimeException, std::excepti
     SbxVariableRef aRef = new SbxVariable;
     aRef->PutDouble( time );
     aArgs->Put(  aRef, 1 );
-    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( OUString("WaitUntil"), SbxCLASS_METHOD ));
+    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( "WaitUntil", SbxCLASS_METHOD ));
 
     if ( pMeth )
     {
@@ -752,7 +752,7 @@ ScVbaApplication::setDisplayFullScreen( sal_Bool bSet )  throw (uno::RuntimeExce
     // #FIXME calling  ScViewUtil::SetFullScreen( *pShell, bSet );
     // directly results in a strange crash, using dispatch instead
     if ( bSet != getDisplayFullScreen() )
-        dispatchRequests( getCurrentDocument(), OUString(".uno:FullScreen") );
+        dispatchRequests( getCurrentDocument(), ".uno:FullScreen" );
 }
 
 sal_Bool SAL_CALL
@@ -894,19 +894,19 @@ ScVbaApplication::setDefaultFilePath( const OUString& DefaultFilePath ) throw (u
 OUString SAL_CALL
 ScVbaApplication::getDefaultFilePath() throw (uno::RuntimeException, std::exception)
 {
-    return getOfficePath( OUString("Work"));
+    return getOfficePath( "Work");
 }
 
 OUString SAL_CALL
 ScVbaApplication::getLibraryPath() throw (uno::RuntimeException, std::exception)
 {
-    return getOfficePath( OUString("Basic"));
+    return getOfficePath( "Basic");
 }
 
 OUString SAL_CALL
 ScVbaApplication::getTemplatesPath() throw (uno::RuntimeException, std::exception)
 {
-    return getOfficePath( OUString("Template"));
+    return getOfficePath( "Template");
 }
 
 OUString SAL_CALL
@@ -1260,7 +1260,7 @@ uno::Any SAL_CALL
 ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeException, std::exception )
 {
     StarBASIC* pBasic = SfxApplication::GetBasic();
-    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( OUString("FuncCaller"), SbxCLASS_METHOD ));
+    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( "FuncCaller", SbxCLASS_METHOD ));
     uno::Any aRet;
     if ( pMeth )
     {

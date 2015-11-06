@@ -2598,7 +2598,7 @@ void ScViewFunc::MoveTable(
         {
             while (pDestDoc->GetTableCount() > 1)
                 pDestDoc->DeleteTab(0);
-            pDestDoc->RenameTab( 0, OUString("______42_____"),
+            pDestDoc->RenameTab( 0, "______42_____",
                         false );
         }
 

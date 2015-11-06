@@ -119,7 +119,7 @@ void ScDLL::Init()
     ScModule* pMod = new ScModule( &ScDocShell::Factory() );
     (*ppShlPtr) = pMod;
 
-    ScDocShell::Factory().SetDocumentServiceName( OUString( "com.sun.star.sheet.SpreadsheetDocument" ) );
+    ScDocShell::Factory().SetDocumentServiceName( "com.sun.star.sheet.SpreadsheetDocument" );
 
     // Not until the ResManager is initialized
     // The AppOptions must be initialized not until after ScGlobal::Init

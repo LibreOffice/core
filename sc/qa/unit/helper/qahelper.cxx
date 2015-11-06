@@ -177,7 +177,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
 {
     //test Sheet1 with csv file
     OUString aCSVFileName;
-    pTest->createCSVPath(OUString("numberFormat."), aCSVFileName);
+    pTest->createCSVPath("numberFormat.", aCSVFileName);
     testFile(aCSVFileName, *pDoc, 0, PureString);
     //need to test the color of B3
     //it's not a font color!
@@ -249,7 +249,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     //test Sheet3 only for ods and xlsx
     if ( nFormat == ODS || nFormat == XLSX )
     {
-        pTest->createCSVPath(OUString("conditionalFormatting."), aCSVFileName);
+        pTest->createCSVPath("conditionalFormatting.", aCSVFileName);
         testCondFile(aCSVFileName, pDoc, 2);
         // test parent cell style import ( fdo#55198 )
         if ( nFormat == XLSX )

@@ -275,11 +275,11 @@ sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSup
             if ( xDimProp.is() )
             {
                 bFound = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                    OUString(SC_UNO_DP_ISDATALAYOUT) );
+                    SC_UNO_DP_ISDATALAYOUT );
                 //TODO: error checking -- is "IsDataLayoutDimension" property required??
                 if (bFound)
                     nRet = ScUnoHelpFunctions::GetEnumProperty(
-                            xDimProp, OUString(SC_UNO_DP_ORIENTATION),
+                            xDimProp, SC_UNO_DP_ORIENTATION,
                             sheet::DataPilotFieldOrientation_HIDDEN );
             }
         }
@@ -1049,11 +1049,11 @@ bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelDa
         Reference<beans::XPropertySet> xMemProp(xMember, UNO_QUERY);
         if (xMemProp.is())
         {
-            aMem.mbVisible     = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(SC_UNO_DP_ISVISIBLE));
-            aMem.mbShowDetails = ScUnoHelpFunctions::GetBoolProperty(xMemProp, OUString(SC_UNO_DP_SHOWDETAILS));
+            aMem.mbVisible     = ScUnoHelpFunctions::GetBoolProperty(xMemProp, SC_UNO_DP_ISVISIBLE);
+            aMem.mbShowDetails = ScUnoHelpFunctions::GetBoolProperty(xMemProp, SC_UNO_DP_SHOWDETAILS);
 
             aMem.maLayoutName = ScUnoHelpFunctions::GetStringProperty(
-                xMemProp, OUString(SC_UNO_DP_LAYOUTNAME), OUString());
+                xMemProp, SC_UNO_DP_LAYOUTNAME, OUString());
         }
 
         aMembers.push_back(aMem);
@@ -1207,7 +1207,7 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
             continue;
 
         OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
-            xPropSet, OUString(SC_UNO_DP_LAYOUTNAME), OUString());
+            xPropSet, SC_UNO_DP_LAYOUTNAME, OUString());
         if (aLayoutName.equalsIgnoreAsciiCase(rName))
             return true;
     }
@@ -1233,7 +1233,7 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
             if ( xDimName.is() && xDimProp.is() )
             {
                 bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                                OUString(SC_UNO_DP_ISDATALAYOUT) );
+                                SC_UNO_DP_ISDATALAYOUT );
                 //TODO: error checking -- is "IsDataLayoutDimension" property required??
 
                 OUString aName;
@@ -1251,7 +1251,7 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
 
                 if (pFlags)
                     *pFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                OUString(SC_UNO_DP_FLAGS) );
+                                SC_UNO_DP_FLAGS );
             }
         }
     }
@@ -1701,9 +1701,9 @@ bool ScDPObject::ParseFilters(
         uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
         uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDim, uno::UNO_QUERY );
         bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                            OUString(SC_UNO_DP_ISDATALAYOUT) );
+                            SC_UNO_DP_ISDATALAYOUT );
         sal_Int32 nOrient = ScUnoHelpFunctions::GetEnumProperty(
-                            xDimProp, OUString(SC_UNO_DP_ORIENTATION),
+                            xDimProp, SC_UNO_DP_ORIENTATION,
                             sheet::DataPilotFieldOrientation_HIDDEN );
         if ( !bDataLayout )
         {
@@ -1721,7 +1721,7 @@ bool ScDPObject::ParseFilters(
 
                 uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
                 sal_Int32 nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                                    OUString(SC_UNO_DP_USEDHIERARCHY) );
+                                                    SC_UNO_DP_USEDHIERARCHY );
                 if ( nHierarchy >= xHiers->getCount() )
                     nHierarchy = 0;
 
@@ -1906,7 +1906,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
 
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
     bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                        OUString(SC_UNO_DP_ISDATALAYOUT) );
+                        SC_UNO_DP_ISDATALAYOUT );
     if (bDataLayout)
     {
         //  the elements of the data layout dimension can't be found by their names
@@ -1964,7 +1964,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
             if ( xMbrProp.is() )
             {
                 bShowDetails = ScUnoHelpFunctions::GetBoolProperty( xMbrProp,
-                                    OUString(SC_UNO_DP_SHOWDETAILS) );
+                                    SC_UNO_DP_SHOWDETAILS );
                 //TODO: don't set bFound if property is unknown?
                 bFound = true;
             }
@@ -1999,7 +1999,7 @@ static sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& 
     {
         uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
         long nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                OUString(SC_UNO_DP_USEDHIERARCHY) );
+                                SC_UNO_DP_USEDHIERARCHY );
         if ( nHierarchy >= xHiers->getCount() )
             nHierarchy = 0;
 
@@ -2083,7 +2083,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
 
         // dimension orientation, hidden by default.
         long nDimOrient = ScUnoHelpFunctions::GetEnumProperty(
-                            xDimProp, OUString(SC_UNO_DP_ORIENTATION),
+                            xDimProp, SC_UNO_DP_ORIENTATION,
                             sheet::DataPilotFieldOrientation_HIDDEN );
 
         if ( xDimProp.is() && nDimOrient == nOrient )
@@ -2095,7 +2095,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
             if ( nOrient == sheet::DataPilotFieldOrientation_DATA )
             {
                 sheet::GeneralFunction eFunc = (sheet::GeneralFunction)ScUnoHelpFunctions::GetEnumProperty(
-                                            xDimProp, OUString(SC_UNO_DP_FUNCTION),
+                                            xDimProp, SC_UNO_DP_FUNCTION,
                                             sheet::GeneralFunction_NONE );
                 if ( eFunc == sheet::GeneralFunction_AUTO )
                 {
@@ -2109,7 +2109,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
 
             // is this data layout dimension?
             bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty(
-                xDimProp, OUString(SC_UNO_DP_ISDATALAYOUT));
+                xDimProp, SC_UNO_DP_ISDATALAYOUT);
 
             // is this dimension cloned?
             long nDupSource = -1;
@@ -2156,7 +2156,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
             rField.nFuncMask = nMask;
             rField.mnDupCount = nDupCount;
             long nPos = ScUnoHelpFunctions::GetLongProperty(
-                xDimProp, OUString(SC_UNO_DP_POSITION));
+                xDimProp, SC_UNO_DP_POSITION);
             aPos.push_back(nPos);
 
             try
@@ -2223,15 +2223,15 @@ bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
         try
         {
             rParam.bMakeTotalCol = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        OUString(SC_UNO_DP_COLGRAND), true );
+                        SC_UNO_DP_COLGRAND, true );
             rParam.bMakeTotalRow = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        OUString(SC_UNO_DP_ROWGRAND), true );
+                        SC_UNO_DP_ROWGRAND, true );
 
             // following properties may be missing for external sources
             rParam.bIgnoreEmptyRows = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        OUString(SC_UNO_DP_IGNOREEMPTY) );
+                        SC_UNO_DP_IGNOREEMPTY );
             rParam.bDetectCategories = ScUnoHelpFunctions::GetBoolProperty( xProp,
-                        OUString(SC_UNO_DP_REPEATEMPTY) );
+                        SC_UNO_DP_REPEATEMPTY );
         }
         catch(uno::Exception&)
         {
@@ -2249,7 +2249,7 @@ static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans
 
     uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
     long nHierarchy = ScUnoHelpFunctions::GetLongProperty(
-        xDimProp, OUString(SC_UNO_DP_USEDHIERARCHY));
+        xDimProp, SC_UNO_DP_USEDHIERARCHY);
     if ( nHierarchy >= xHiers->getCount() )
         nHierarchy = 0;
     rData.mnUsedHier = nHierarchy;
@@ -2271,10 +2271,10 @@ static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans
         return;
 
     rData.mbShowAll = ScUnoHelpFunctions::GetBoolProperty(
-        xLevProp, OUString(SC_UNO_DP_SHOWEMPTY));
+        xLevProp, SC_UNO_DP_SHOWEMPTY);
 
     rData.mbRepeatItemLabels = ScUnoHelpFunctions::GetBoolProperty(
-        xLevProp, OUString(SC_UNO_DP_REPEATITEMLABELS));
+        xLevProp, SC_UNO_DP_REPEATITEMLABELS);
 
     try
     {
@@ -2302,7 +2302,7 @@ bool ScDPObject::FillLabelDataForDimension(
         return false;
 
     bool bData = ScUnoHelpFunctions::GetBoolProperty(
-        xDimProp, OUString(SC_UNO_DP_ISDATALAYOUT));
+        xDimProp, SC_UNO_DP_ISDATALAYOUT);
     //TODO: error checking -- is "IsDataLayoutDimension" property required??
 
     sal_Int32 nOrigPos = -1;
@@ -2318,10 +2318,10 @@ bool ScDPObject::FillLabelDataForDimension(
     }
 
     OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
-        xDimProp, OUString(SC_UNO_DP_LAYOUTNAME), OUString());
+        xDimProp, SC_UNO_DP_LAYOUTNAME, OUString());
 
     OUString aSubtotalName = ScUnoHelpFunctions::GetStringProperty(
-        xDimProp, OUString(SC_UNO_DP_FIELD_SUBTOTALNAME), OUString());
+        xDimProp, SC_UNO_DP_FIELD_SUBTOTALNAME, OUString());
 
     bool bIsValue = true;                               //TODO: check
 
@@ -2349,7 +2349,7 @@ bool ScDPObject::FillLabelDataForDimension(
         GetMembers(nDim, GetUsedHierarchy(nDim), rLabelData.maMembers);
         lcl_FillLabelData(rLabelData, xDimProp);
         rLabelData.mnFlags = ScUnoHelpFunctions::GetLongProperty(
-            xDimProp, OUString(SC_UNO_DP_FLAGS) );
+            xDimProp, SC_UNO_DP_FLAGS );
     }
     return true;
 }
@@ -2429,7 +2429,7 @@ sal_Int32 ScDPObject::GetUsedHierarchy( sal_Int32 nDim )
     uno::Reference<container::XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
     uno::Reference<beans::XPropertySet> xDim(xIntDims->getByIndex( nDim ), uno::UNO_QUERY);
     if (xDim.is())
-        nHier = ScUnoHelpFunctions::GetLongProperty( xDim, OUString( SC_UNO_DP_USEDHIERARCHY ) );
+        nHier = ScUnoHelpFunctions::GetLongProperty( xDim, SC_UNO_DP_USEDHIERARCHY );
     return nHier;
 }
 

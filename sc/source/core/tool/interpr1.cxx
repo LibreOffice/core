@@ -3247,7 +3247,7 @@ static OUString lcl_convertIntoHalfWidth( const OUString & rStr )
 
     if( bFirstASCCall )
     {
-        aTrans.loadModuleByImplName( OUString( "FULLWIDTH_HALFWIDTH_LIKE_ASC" ), LANGUAGE_SYSTEM );
+        aTrans.loadModuleByImplName( "FULLWIDTH_HALFWIDTH_LIKE_ASC", LANGUAGE_SYSTEM );
         bFirstASCCall = false;
     }
 
@@ -3261,7 +3261,7 @@ static OUString lcl_convertIntoFullWidth( const OUString & rStr )
 
     if( bFirstJISCall )
     {
-        aTrans.loadModuleByImplName( OUString( "HALFWIDTH_FULLWIDTH_LIKE_JIS" ), LANGUAGE_SYSTEM );
+        aTrans.loadModuleByImplName( "HALFWIDTH_FULLWIDTH_LIKE_JIS", LANGUAGE_SYSTEM );
         bFirstJISCall = false;
     }
 

@@ -80,7 +80,7 @@ ScCellShell::ScCellShell(ScViewData* pData) :
     bPastePossible(false)
 {
     SetHelpId(HID_SCSHELL_CELLSH);
-    SetName(OUString("Cell"));
+    SetName("Cell");
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Cell));
 }
 

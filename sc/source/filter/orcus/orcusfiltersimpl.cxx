@@ -72,7 +72,7 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, SfxMedium& rMedium) const
     }
     catch (const std::exception&)
     {
-        rDoc.InsertTab(SC_TAB_APPEND, OUString("Foo"));
+        rDoc.InsertTab(SC_TAB_APPEND, "Foo");
         rDoc.SetString(0, 0, 0, "Failed to load!!!");
         return false;
     }

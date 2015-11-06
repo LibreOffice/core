@@ -143,7 +143,7 @@ ScFormatShell::ScFormatShell(ScViewData* pData) :
         pMgr->SetMaxUndoActionCount( 0 );
     }
     SetHelpId(HID_SCSHELL_FORMATSH);
-    SetName(OUString("Format"));
+    SetName("Format");
 }
 
 ScFormatShell::~ScFormatShell()

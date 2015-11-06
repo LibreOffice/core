@@ -438,7 +438,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                             aProperties[ 0 ].Name = "Name";
                             aProperties[ 0 ].Value <<= aChartName;
 
-                            pModelObj->NotifyChanges( OUString( "insert-chart" ), aChangeRanges, aProperties );
+                            pModelObj->NotifyChanges( "insert-chart", aChangeRanges, aProperties );
                         }
                     }
                 }

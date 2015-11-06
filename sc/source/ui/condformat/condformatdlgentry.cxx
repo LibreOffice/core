@@ -1503,7 +1503,7 @@ void ScIconSetFrmtDataEntry::SetFirstEntry()
     maEdEntry->Hide();
     maLbEntryType->Hide();
     maFtEntry->Hide();
-    maEdEntry->SetText(OUString("0"));
+    maEdEntry->SetText("0");
     maLbEntryType->SelectEntryPos(1);
 }
 

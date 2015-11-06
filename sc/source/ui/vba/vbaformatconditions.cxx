@@ -253,7 +253,7 @@ ScVbaFormatConditions::getStyleName()
     if ( !pStyles )
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
     uno::Sequence< OUString > sCellStyleNames = pStyles->getStyleNames();
-    return ContainerUtilities::getUniqueName(sCellStyleNames, sStyleNamePrefix, OUString("_"));
+    return ContainerUtilities::getUniqueName(sCellStyleNames, sStyleNamePrefix, "_");
 }
 
 void

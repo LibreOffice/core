@@ -1046,9 +1046,9 @@ void ScMasterPageContext::Finish( bool bOverwrite )
 {
     XMLTextMasterPageContext::Finish(bOverwrite);
     if (!bContainsRightFooter)
-        ClearContent(OUString(SC_UNO_PAGE_RIGHTFTRCON));
+        ClearContent(SC_UNO_PAGE_RIGHTFTRCON);
     if (!bContainsRightHeader)
-        ClearContent(OUString(SC_UNO_PAGE_RIGHTHDRCON));
+        ClearContent(SC_UNO_PAGE_RIGHTHDRCON);
 }
 
 ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,

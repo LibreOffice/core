@@ -65,7 +65,7 @@ uno::Reference< uno::XInterface > ScConditionalFormatTest::init()
 {
     // get the test file
     OUString aFileURL;
-    createFileURL(OUString("new_cond_format_test.ods"), aFileURL);
+    createFileURL("new_cond_format_test.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxComponent.is());
@@ -124,7 +124,7 @@ void ScConditionalFormatTest::testUndoAnchor()
 {
     const OString sFailedMessage = OString("Failed on :");
     OUString aFileURL;
-    createFileURL(OUString("document_with_linked_graphic.ods"), aFileURL);
+    createFileURL("document_with_linked_graphic.ods", aFileURL);
     // open the document with graphic included
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());

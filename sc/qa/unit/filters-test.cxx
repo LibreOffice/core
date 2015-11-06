@@ -128,22 +128,22 @@ bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
 void ScFiltersTest::testCVEs()
 {
 #ifndef DISABLE_CVE_TESTS
-    testDir(OUString("Quattro Pro 6.0"),
+    testDir("Quattro Pro 6.0",
         getURLFromSrc("/sc/qa/unit/data/qpro/"), OUString());
 
     //warning, the current "sylk filter" in sc (docsh.cxx) automatically
     //chains on failure on trying as csv, rtf, etc. so "success" may
     //not indicate that it imported as .slk.
-    testDir(OUString("SYLK"),
+    testDir("SYLK",
         getURLFromSrc("/sc/qa/unit/data/slk/"), OUString());
 
-    testDir(OUString("MS Excel 97"),
+    testDir("MS Excel 97",
         getURLFromSrc("/sc/qa/unit/data/xls/"), OUString());
 
-    testDir(OUString("dBase"),
+    testDir("dBase",
         getURLFromSrc("/sc/qa/unit/data/dbf/"), OUString());
 
-    testDir(OUString("Lotus"),
+    testDir("Lotus",
         getURLFromSrc("/sc/qa/unit/data/wks/"), OUString());
 
 #endif

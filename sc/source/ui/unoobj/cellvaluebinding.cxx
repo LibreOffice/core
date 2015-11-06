@@ -58,7 +58,7 @@ namespace calc
         // register our property at the base class
         CellAddress aInitialPropValue;
         registerPropertyNoMember(
-            OUString( "BoundCell" ),
+            "BoundCell",
             PROP_HANDLE_BOUND_CELL,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             cppu::UnoType<decltype(aInitialPropValue)>::get(),

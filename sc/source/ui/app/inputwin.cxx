@@ -2071,7 +2071,7 @@ ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
     nTipVisible ( 0 ),
     bFormulaMode( false )
 {
-    Size aSize( GetTextWidth( OUString("GW99999:GW99999") ),
+    Size aSize( GetTextWidth( "GW99999:GW99999" ),
                 GetTextHeight() );
     aSize.Width() += 25;    // FIXME: ??
     aSize.Height() = CalcWindowSizePixel(11); // Functions: 10 MRU + "others..."

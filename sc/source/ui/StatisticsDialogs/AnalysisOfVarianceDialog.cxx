@@ -307,7 +307,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
         output.nextColumn();
 
         // Sum of Squares
-        OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, OUString("DEVSQ(%RANGE%)"), strWildcardRange, mDocument, mAddressDetails);
+        OUString aSSPart = lclCreateMultiParameterFormula(aRangeList, "DEVSQ(%RANGE%)", strWildcardRange, mDocument, mAddressDetails);
         aTemplate.setTemplate("=SUM(%RANGE%)");
         aTemplate.applyString(strWildcardRange, aSSPart);
         aTemplate.autoReplaceAddress("%WITHIN_SS%", output.current());

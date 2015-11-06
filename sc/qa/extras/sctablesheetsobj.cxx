@@ -80,7 +80,7 @@ uno::Reference< lang::XComponent > ScTableSheetsObj::loadFromDesktop(const OUStr
 uno::Reference< uno::XInterface > ScTableSheetsObj::init()
 {
     OUString aFileURL;
-    createFileURL(OUString("rangenamessrc.ods"), aFileURL);
+    createFileURL("rangenamessrc.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(mxComponent.is());

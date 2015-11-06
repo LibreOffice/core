@@ -73,7 +73,7 @@ uno::Reference< uno::XInterface > ScConditionalFormatTest::init(sal_Int32 nIndex
     {
         // get the test file
         OUString aFileURL;
-        createFileURL(OUString("new_cond_format_api.ods"), aFileURL);
+        createFileURL("new_cond_format_api.ods", aFileURL);
         mxComponent = loadFromDesktop(aFileURL);
     }
     CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());

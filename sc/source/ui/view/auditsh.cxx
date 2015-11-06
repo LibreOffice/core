@@ -56,7 +56,7 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
         pMgr->SetMaxUndoActionCount( 0 );
     }
     SetHelpId( HID_SCSHELL_AUDIT );
-    SetName(OUString("Auditing"));
+    SetName("Auditing");
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Auditing));
 }
 

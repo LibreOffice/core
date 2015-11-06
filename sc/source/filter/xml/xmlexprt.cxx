@@ -896,7 +896,7 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const table::CellRangeAd
 void ScXMLExport::ExportExternalRefCacheStyles()
 {
     sal_Int32 nEntryIndex = GetCellStylesPropertySetMapper()->FindEntryIndex(
-        "NumberFormat", XML_NAMESPACE_STYLE, OUString("data-style-name"));
+        "NumberFormat", XML_NAMESPACE_STYLE, "data-style-name");
 
     if (nEntryIndex < 0)
         // No entry index for the number format is found.
@@ -936,7 +936,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
         {
             bool bIsAuto;
             nIndex = pCellStyles->GetIndexOfStyleName(
-                aName, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX), bIsAuto);
+                aName, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX, bIsAuto);
         }
 
         // store the number format to index mapping for later use.
@@ -1899,7 +1899,7 @@ void ScXMLExport::_ExportStyles( bool bUsed )
         {
             uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance("com.sun.star.sheet.Defaults"), uno::UNO_QUERY);
             if (xProperties.is())
-                aStylesExp->exportDefaultStyle(xProperties, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), xCellStylesExportPropertySetMapper);
+                aStylesExp->exportDefaultStyle(xProperties, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper);
             if (pSharedData->HasShapes())
             {
                 GetShapeExport()->ExportGraphicDefaults();

@@ -3359,16 +3359,16 @@ void Test::testFuncPRODUCT()
 
     ScAddress aPos(3, 0, 0);
     m_pDoc->SetValue(0, 0, 0, 3.0); // A1
-    m_pDoc->SetString(aPos, OUString("=PRODUCT(A1)"));
+    m_pDoc->SetString(aPos, "=PRODUCT(A1)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", 3.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(0, 0, 0, -3.0); // A1
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", -3.0, m_pDoc->GetValue(aPos));
-    m_pDoc->SetString(aPos, OUString("=PRODUCT(B1)"));
+    m_pDoc->SetString(aPos, "=PRODUCT(B1)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", 0.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(1, 0, 0, 10.0); // B1
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", 10.0, m_pDoc->GetValue(aPos));
 
-    m_pDoc->SetString(aPos, OUString("=PRODUCT(A1:C3)"));
+    m_pDoc->SetString(aPos, "=PRODUCT(A1:C3)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", -30.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(1, 1, 0, -1.0); // B2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", 30.0, m_pDoc->GetValue(aPos));
@@ -3387,18 +3387,18 @@ void Test::testFuncPRODUCT()
     m_pDoc->SetValue(2, 2, 0, 0.0); // C3
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of PRODUCT failed", 0.0, m_pDoc->GetValue(aPos), 10e-4);
 
-    m_pDoc->SetString(aPos, OUString("=PRODUCT({2;3;4})"));
+    m_pDoc->SetString(aPos, "=PRODUCT({2;3;4})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", 24.0, m_pDoc->GetValue(aPos));
-    m_pDoc->SetString(aPos, OUString("=PRODUCT({2;-2;2})"));
+    m_pDoc->SetString(aPos, "=PRODUCT({2;-2;2})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", -8.0, m_pDoc->GetValue(aPos));
-    m_pDoc->SetString(aPos, OUString("=PRODUCT({8;0.125;-1})"));
+    m_pDoc->SetString(aPos, "=PRODUCT({8;0.125;-1})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", -1.0, m_pDoc->GetValue(aPos));
 
-    m_pDoc->SetString(aPos, OUString("=PRODUCT({2;3};{4;5})"));
+    m_pDoc->SetString(aPos, "=PRODUCT({2;3};{4;5})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", 120.0, m_pDoc->GetValue(aPos));
-    m_pDoc->SetString(aPos, OUString("=PRODUCT({10;-8};{3;-1};{15;30};{7})"));
+    m_pDoc->SetString(aPos, "=PRODUCT({10;-8};{3;-1};{15;30};{7})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", 756000.0, m_pDoc->GetValue(aPos));
-    m_pDoc->SetString(aPos, OUString("=PRODUCT({10;-0.1;8};{0.125;4;0.25;2};{0.5};{1};{-1})"));
+    m_pDoc->SetString(aPos, "=PRODUCT({10;-0.1;8};{0.125;4;0.25;2};{0.5};{1};{-1})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", 1.0, m_pDoc->GetValue(aPos));
 
     m_pDoc->DeleteTab(0);
@@ -3457,7 +3457,7 @@ void Test::testFuncSUMXMY2()
     CPPUNIT_ASSERT_EQUAL(9.0,  m_pDoc->GetValue(aPos));
 
     double result = 0.0;
-    m_pDoc->SetString(0, 4, 0, OUString("=SUMXMY2({2;3;4};{4;3;2})"));
+    m_pDoc->SetString(0, 4, 0, "=SUMXMY2({2;3;4};{4;3;2})");
     m_pDoc->GetValue(0, 4, 0, result);
     CPPUNIT_ASSERT_MESSAGE("Calculation of SUMXMY2 with inline arrays failed", result == 8.0);
 
@@ -3528,38 +3528,38 @@ void Test::testFuncN()
     // Put values to reference.
     double val = 0;
     m_pDoc->SetValue(0, 0, 0, val);
-    m_pDoc->SetString(0, 2, 0, OUString("Text"));
+    m_pDoc->SetString(0, 2, 0, "Text");
     val = 1;
     m_pDoc->SetValue(0, 3, 0, val);
     val = -1;
     m_pDoc->SetValue(0, 4, 0, val);
     val = 12.3;
     m_pDoc->SetValue(0, 5, 0, val);
-    m_pDoc->SetString(0, 6, 0, OUString("'12.3"));
+    m_pDoc->SetString(0, 6, 0, "'12.3");
 
     // Cell references
-    m_pDoc->SetString(1, 0, 0, OUString("=N(A1)"));
-    m_pDoc->SetString(1, 1, 0, OUString("=N(A2)"));
-    m_pDoc->SetString(1, 2, 0, OUString("=N(A3)"));
-    m_pDoc->SetString(1, 3, 0, OUString("=N(A4)"));
-    m_pDoc->SetString(1, 4, 0, OUString("=N(A5)"));
-    m_pDoc->SetString(1, 5, 0, OUString("=N(A6)"));
-    m_pDoc->SetString(1, 6, 0, OUString("=N(A9)"));
+    m_pDoc->SetString(1, 0, 0, "=N(A1)");
+    m_pDoc->SetString(1, 1, 0, "=N(A2)");
+    m_pDoc->SetString(1, 2, 0, "=N(A3)");
+    m_pDoc->SetString(1, 3, 0, "=N(A4)");
+    m_pDoc->SetString(1, 4, 0, "=N(A5)");
+    m_pDoc->SetString(1, 5, 0, "=N(A6)");
+    m_pDoc->SetString(1, 6, 0, "=N(A9)");
 
     // In-line values
-    m_pDoc->SetString(1, 7, 0, OUString("=N(0)"));
-    m_pDoc->SetString(1, 8, 0, OUString("=N(1)"));
-    m_pDoc->SetString(1, 9, 0, OUString("=N(-1)"));
-    m_pDoc->SetString(1, 10, 0, OUString("=N(123)"));
-    m_pDoc->SetString(1, 11, 0, OUString("=N(\"\")"));
-    m_pDoc->SetString(1, 12, 0, OUString("=N(\"12\")"));
-    m_pDoc->SetString(1, 13, 0, OUString("=N(\"foo\")"));
+    m_pDoc->SetString(1, 7, 0, "=N(0)");
+    m_pDoc->SetString(1, 8, 0, "=N(1)");
+    m_pDoc->SetString(1, 9, 0, "=N(-1)");
+    m_pDoc->SetString(1, 10, 0, "=N(123)");
+    m_pDoc->SetString(1, 11, 0, "=N(\"\")");
+    m_pDoc->SetString(1, 12, 0, "=N(\"12\")");
+    m_pDoc->SetString(1, 13, 0, "=N(\"foo\")");
 
     // Range references
-    m_pDoc->SetString(2, 2, 0, OUString("=N(A1:A8)"));
-    m_pDoc->SetString(2, 3, 0, OUString("=N(A1:A8)"));
-    m_pDoc->SetString(2, 4, 0, OUString("=N(A1:A8)"));
-    m_pDoc->SetString(2, 5, 0, OUString("=N(A1:A8)"));
+    m_pDoc->SetString(2, 2, 0, "=N(A1:A8)");
+    m_pDoc->SetString(2, 3, 0, "=N(A1:A8)");
+    m_pDoc->SetString(2, 4, 0, "=N(A1:A8)");
+    m_pDoc->SetString(2, 5, 0, "=N(A1:A8)");
 
     // Calculate and check the results.
     m_pDoc->CalcAll();
@@ -3669,8 +3669,8 @@ void Test::testFuncCOUNTIF()
     // Clear A1:A2.
     clearRange(m_pDoc, ScRange(0, 0, 0, 0, 1, 0));
 
-    m_pDoc->SetString(0, 0, 0, OUString("=\"\""));
-    m_pDoc->SetString(0, 1, 0, OUString("=COUNTIF(A1;1)"));
+    m_pDoc->SetString(0, 0, 0, "=\"\"");
+    m_pDoc->SetString(0, 1, 0, "=COUNTIF(A1;1)");
 
     double result = m_pDoc->GetValue(0, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("We shouldn't count empty string as valid number.", result == 0.0);
@@ -3850,7 +3850,7 @@ void Test::testFuncSHEET()
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (SC_TAB_APPEND, aTabName1));
 
-    m_pDoc->SetString(0, 0, 0, OUString("=SHEETS()"));
+    m_pDoc->SetString(0, 0, 0, "=SHEETS()");
     m_pDoc->CalcFormulaTree(false, false);
     double original;
     m_pDoc->GetValue(0, 0, 0, original);
@@ -3884,7 +3884,7 @@ void Test::testFuncNOW()
 
     double val = 1;
     m_pDoc->SetValue(0, 0, 0, val);
-    m_pDoc->SetString(0, 1, 0, OUString("=IF(A1>0;NOW();0"));
+    m_pDoc->SetString(0, 1, 0, "=IF(A1>0;NOW();0");
     double now1;
     m_pDoc->GetValue(0, 1, 0, now1);
     CPPUNIT_ASSERT_MESSAGE("Value of NOW() should be positive.", now1 > 0.0);
@@ -5109,8 +5109,8 @@ void Test::testExternalRef()
 
     // Test external references on the main document while the external
     // document is still in memory.
-    m_pDoc->InsertTab(0, OUString("Test Sheet"));
-    m_pDoc->SetString(0, 0, 0, OUString("='file:///extdata.fake'#Data1.A1"));
+    m_pDoc->InsertTab(0, "Test Sheet");
+    m_pDoc->SetString(0, 0, 0, "='file:///extdata.fake'#Data1.A1");
     OUString test = m_pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(name));
 
@@ -5127,15 +5127,15 @@ void Test::testExternalRef()
     CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[1].equals(aExtSh2Name));
     CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[2].equals(aExtSh3Name));
 
-    m_pDoc->SetString(1, 0, 0, OUString("='file:///extdata.fake'#Data1.B1"));
+    m_pDoc->SetString(1, 0, 0, "='file:///extdata.fake'#Data1.B1");
     test = m_pDoc->GetString(1, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(value));
 
-    m_pDoc->SetString(0, 1, 0, OUString("='file:///extdata.fake'#Data1.A2"));
-    m_pDoc->SetString(0, 2, 0, OUString("='file:///extdata.fake'#Data1.A3"));
-    m_pDoc->SetString(0, 3, 0, OUString("='file:///extdata.fake'#Data1.A4"));
-    m_pDoc->SetString(0, 4, 0, OUString("='file:///extdata.fake'#Data1.A5"));
-    m_pDoc->SetString(0, 5, 0, OUString("='file:///extdata.fake'#Data1.A6"));
+    m_pDoc->SetString(0, 1, 0, "='file:///extdata.fake'#Data1.A2");
+    m_pDoc->SetString(0, 2, 0, "='file:///extdata.fake'#Data1.A3");
+    m_pDoc->SetString(0, 3, 0, "='file:///extdata.fake'#Data1.A4");
+    m_pDoc->SetString(0, 4, 0, "='file:///extdata.fake'#Data1.A5");
+    m_pDoc->SetString(0, 5, 0, "='file:///extdata.fake'#Data1.A6");
 
     {
         // Referencing an empty cell should display '0'.
@@ -5146,11 +5146,11 @@ void Test::testExternalRef()
             CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
         }
     }
-    m_pDoc->SetString(1, 1, 0, OUString("='file:///extdata.fake'#Data1.B2"));
-    m_pDoc->SetString(1, 2, 0, OUString("='file:///extdata.fake'#Data1.B3"));
-    m_pDoc->SetString(1, 3, 0, OUString("='file:///extdata.fake'#Data1.B4"));
-    m_pDoc->SetString(1, 4, 0, OUString("='file:///extdata.fake'#Data1.B5"));
-    m_pDoc->SetString(1, 5, 0, OUString("='file:///extdata.fake'#Data1.B6"));
+    m_pDoc->SetString(1, 1, 0, "='file:///extdata.fake'#Data1.B2");
+    m_pDoc->SetString(1, 2, 0, "='file:///extdata.fake'#Data1.B3");
+    m_pDoc->SetString(1, 3, 0, "='file:///extdata.fake'#Data1.B4");
+    m_pDoc->SetString(1, 4, 0, "='file:///extdata.fake'#Data1.B5");
+    m_pDoc->SetString(1, 5, 0, "='file:///extdata.fake'#Data1.B6");
     {
         double pChecks[] = { 10, 11, 12, 13, 0 };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
@@ -5160,10 +5160,10 @@ void Test::testExternalRef()
         }
     }
 
-    m_pDoc->SetString(2, 0, 0, OUString("='file:///extdata.fake'#Data3.A1"));
-    m_pDoc->SetString(2, 1, 0, OUString("='file:///extdata.fake'#Data3.A2"));
-    m_pDoc->SetString(2, 2, 0, OUString("='file:///extdata.fake'#Data3.A3"));
-    m_pDoc->SetString(2, 3, 0, OUString("='file:///extdata.fake'#Data3.A4"));
+    m_pDoc->SetString(2, 0, 0, "='file:///extdata.fake'#Data3.A1");
+    m_pDoc->SetString(2, 1, 0, "='file:///extdata.fake'#Data3.A2");
+    m_pDoc->SetString(2, 2, 0, "='file:///extdata.fake'#Data3.A3");
+    m_pDoc->SetString(2, 3, 0, "='file:///extdata.fake'#Data3.A4");
     {
         const char* pChecks[] = { "Name", "Edward", "Frank", "George" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
@@ -5173,10 +5173,10 @@ void Test::testExternalRef()
         }
     }
 
-    m_pDoc->SetString(3, 0, 0, OUString("='file:///extdata.fake'#Data3.B1"));
-    m_pDoc->SetString(3, 1, 0, OUString("='file:///extdata.fake'#Data3.B2"));
-    m_pDoc->SetString(3, 2, 0, OUString("='file:///extdata.fake'#Data3.B3"));
-    m_pDoc->SetString(3, 3, 0, OUString("='file:///extdata.fake'#Data3.B4"));
+    m_pDoc->SetString(3, 0, 0, "='file:///extdata.fake'#Data3.B1");
+    m_pDoc->SetString(3, 1, 0, "='file:///extdata.fake'#Data3.B2");
+    m_pDoc->SetString(3, 2, 0, "='file:///extdata.fake'#Data3.B3");
+    m_pDoc->SetString(3, 3, 0, "='file:///extdata.fake'#Data3.B4");
     {
         const char* pChecks[] = { "Value", "99", "98", "97" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
@@ -5236,7 +5236,7 @@ void Test::testExternalRangeName()
     pRangeName->insert(pRangeData);
 
     m_pDoc->InsertTab(0, "Test Sheet");
-    m_pDoc->SetString(0, 1, 0, OUString("='file:///extdata.fake'#ExternalName"));
+    m_pDoc->SetString(0, 1, 0, "='file:///extdata.fake'#ExternalName");
 
     double nVal = m_pDoc->GetValue(0, 1, 0);
     ASSERT_DOUBLES_EQUAL(123.456, nVal);
@@ -5252,12 +5252,12 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc)
     Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
     Test::clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
-    rExtDoc.SetString(0, 0, 0, OUString("'1.2"));
-    rExtDoc.SetString(0, 1, 0, OUString("Foo"));
+    rExtDoc.SetString(0, 0, 0, "'1.2");
+    rExtDoc.SetString(0, 1, 0, "Foo");
     rExtDoc.SetValue(0, 2, 0, 12.3);
-    pDoc->SetString(0, 0, 0, OUString("=T('file:///extdata.fake'#Data.A1)"));
-    pDoc->SetString(0, 1, 0, OUString("=T('file:///extdata.fake'#Data.A2)"));
-    pDoc->SetString(0, 2, 0, OUString("=T('file:///extdata.fake'#Data.A3)"));
+    pDoc->SetString(0, 0, 0, "=T('file:///extdata.fake'#Data.A1)");
+    pDoc->SetString(0, 1, 0, "=T('file:///extdata.fake'#Data.A2)");
+    pDoc->SetString(0, 2, 0, "=T('file:///extdata.fake'#Data.A3)");
     pDoc->CalcAll();
 
     OUString aRes = pDoc->GetString(0, 0, 0);
@@ -5332,7 +5332,7 @@ void Test::testExternalRefFunctions()
 
     // Populate the external source document.
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
-    rExtDoc.InsertTab(0, OUString("Data"));
+    rExtDoc.InsertTab(0, "Data");
     double val = 1;
     rExtDoc.SetValue(0, 0, 0, val);
     // leave cell B1 empty.
@@ -5346,7 +5346,7 @@ void Test::testExternalRefFunctions()
     rExtDoc.SetValue(0, 3, 0, val);
     rExtDoc.SetValue(1, 3, 0, val);
 
-    m_pDoc->InsertTab(0, OUString("Test"));
+    m_pDoc->InsertTab(0, "Test");
 
     struct {
         const char* pFormula; double fResult;

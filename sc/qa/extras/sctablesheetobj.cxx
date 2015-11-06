@@ -56,7 +56,7 @@ ScTableSheetObj::ScTableSheetObj():
 uno::Reference< uno::XInterface > ScTableSheetObj::init()
 {
     OUString aFileURL;
-    createFileURL(OUString("ScTableSheetObj.ods"), aFileURL);
+    createFileURL("ScTableSheetObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());

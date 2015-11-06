@@ -510,7 +510,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
         nStylesRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
                    : OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
-            OUString("styles.xml"),
+            "styles.xml",
             "", aStylesArgs, true);
 
         SAL_INFO( "sc.filter", "styles import end" );
@@ -535,8 +535,8 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
         nDocRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentImporter")
                    : OUString("com.sun.star.comp.Calc.XMLContentImporter"),
-            OUString("content.xml"),
-            OUString("Content.xml"), aDocArgs,
+            "content.xml",
+            "Content.xml", aDocArgs,
             true);
 
         SAL_INFO( "sc.filter", "content import end" );
@@ -868,7 +868,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             SAL_INFO( "sc.filter", "meta export start" );
 
             bMetaRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
-                OUString("meta.xml"),
+                "meta.xml",
                 sTextMediaType,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaExporter")
                        : OUString("com.sun.star.comp.Calc.XMLMetaExporter"),
@@ -909,7 +909,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             SAL_INFO( "sc.filter", "styles export start" );
 
             bStylesRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
-                OUString("styles.xml"),
+                "styles.xml",
                 sTextMediaType,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesExporter")
                        : OUString("com.sun.star.comp.Calc.XMLStylesExporter"),
@@ -933,7 +933,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             SAL_INFO( "sc.filter", "content export start" );
 
             bDocRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
-                OUString("content.xml"),
+                "content.xml",
                 sTextMediaType,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentExporter")
                        : OUString("com.sun.star.comp.Calc.XMLContentExporter"),
@@ -961,7 +961,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             SAL_INFO( "sc.filter", "settings export start" );
 
             bSettingsRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
-                OUString("settings.xml"),
+                "settings.xml",
                 sTextMediaType,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsExporter")
                        : OUString("com.sun.star.comp.Calc.XMLSettingsExporter"),

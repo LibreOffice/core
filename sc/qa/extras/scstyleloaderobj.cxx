@@ -93,7 +93,7 @@ uno::Reference< lang::XComponent > ScStyleLoaderObj::getSourceComponent(){
 OUString ScStyleLoaderObj::getTestURL(){
 
       OUString aFileURL;
-      createFileURL(OUString("ScStyleLoaderObj.ods"), aFileURL);
+      createFileURL("ScStyleLoaderObj.ods", aFileURL);
 
       return aFileURL;
 }

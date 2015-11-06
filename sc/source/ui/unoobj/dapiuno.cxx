@@ -1644,7 +1644,7 @@ static bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSour
             OUString sOriginalName( lcl_GetOriginalName( xDimName ) );
             rFieldId.maFieldName = sOriginalName;
             rFieldId.mbDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDim,
-                        OUString(SC_UNO_DP_ISDATALAYOUT) );
+                        SC_UNO_DP_ISDATALAYOUT );
 
             sal_Int32 nRepeat = 0;
             if ( rOrient.hasValue() && lcl_IsDuplicated( xDim ) )
@@ -2621,7 +2621,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
         //! localized prefix string
-        OUString aGroupName = pGroupDimension->CreateGroupName( OUString( "Group" ) );
+        OUString aGroupName = pGroupDimension->CreateGroupName( "Group" );
         ScDPSaveGroupItem aGroup( aGroupName );
         Reference< XNameAccess > xMembers = GetMembers();
         if (!xMembers.is())

@@ -205,7 +205,7 @@ bool ScDocShell::KillFile( const INetURLObject& rURL )
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
                         uno::Reference< css::ucb::XCommandEnvironment >(),
                         comphelper::getProcessComponentContext() );
-        aCnt.executeCommand( OUString( "delete" ),
+        aCnt.executeCommand( "delete",
                                 comphelper::makeBoolAny( true ) );
     }
     catch( uno::Exception& )

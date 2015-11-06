@@ -551,7 +551,7 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
 
 void ScDrawStringsVars::SetHashText()
 {
-    SetAutoText(OUString("###"));
+    SetAutoText("###");
 }
 
 void ScDrawStringsVars::RepeatToFill( long nColWidth )

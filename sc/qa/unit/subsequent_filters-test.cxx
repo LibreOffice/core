@@ -481,7 +481,7 @@ void ScFiltersTest::testHardRecalcODS()
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath(OUString("hard-recalc."), aCSVFileName);
+    createCSVPath("hard-recalc.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();
@@ -497,22 +497,22 @@ void ScFiltersTest::testFunctionsODS()
     OUString aCSVFileName;
 
     //test logical functions
-    createCSVPath(OUString("logical-functions."), aCSVFileName);
+    createCSVPath("logical-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 0);
     //test spreadsheet functions
-    createCSVPath(OUString("spreadsheet-functions."), aCSVFileName);
+    createCSVPath("spreadsheet-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 1);
     //test mathematical functions
-    createCSVPath(OUString("mathematical-functions."), aCSVFileName);
+    createCSVPath("mathematical-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 2, PureString);
     //test information functions
-    createCSVPath(OUString("information-functions."), aCSVFileName);
+    createCSVPath("information-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 3);
     // text functions
-    createCSVPath(OUString("text-functions."), aCSVFileName);
+    createCSVPath("text-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 4, PureString);
     // statistical functions
-    createCSVPath(OUString("statistical-functions."), aCSVFileName);
+    createCSVPath("statistical-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 5);
     // financial functions
     createCSVPath("financial-functions.", aCSVFileName);
@@ -581,19 +581,19 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         OUString aCSVFileName;
 
         //test cached formula results of logical functions
-        createCSVPath(OUString("logical-functions."), aCSVFileName);
+        createCSVPath("logical-functions.", aCSVFileName);
         testFile(aCSVFileName, rDoc, 0);
         //test cached formula results of spreadsheet functions
-        createCSVPath(OUString("spreadsheet-functions."), aCSVFileName);
+        createCSVPath("spreadsheet-functions.", aCSVFileName);
         testFile(aCSVFileName, rDoc, 1);
         //test cached formula results of mathematical functions
-        createCSVPath(OUString("mathematical-functions."), aCSVFileName);
+        createCSVPath("mathematical-functions.", aCSVFileName);
         testFile(aCSVFileName, rDoc, 2, PureString);
         //test cached formula results of information functions
-        createCSVPath(OUString("information-functions."), aCSVFileName);
+        createCSVPath("information-functions.", aCSVFileName);
         testFile(aCSVFileName, rDoc, 3);
         // text functions
-        createCSVPath(OUString("text-functions."), aCSVFileName);
+        createCSVPath("text-functions.", aCSVFileName);
         testFile(aCSVFileName, rDoc, 4, PureString);
 
         xDocSh->DoClose();
@@ -850,7 +850,7 @@ void ScFiltersTest::testMatrixODS()
     ScDocument& rDoc = xDocSh->GetDocument();
 
     OUString aCSVFileName;
-    createCSVPath(OUString("matrix."), aCSVFileName);
+    createCSVPath("matrix.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();
@@ -865,7 +865,7 @@ void ScFiltersTest::testMatrixXLS()
     ScDocument& rDoc = xDocSh->GetDocument();
 
     OUString aCSVFileName;
-    createCSVPath(OUString("matrix."), aCSVFileName);
+    createCSVPath("matrix.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();
@@ -1031,7 +1031,7 @@ void ScFiltersTest::testBugFixesODS()
     {
         // fdo#40967
         OUString aCSVFileName;
-        createCSVPath(OUString("bugFix_Sheet2."), aCSVFileName);
+        createCSVPath("bugFix_Sheet2.", aCSVFileName);
         testFile(aCSVFileName, rDoc, 1);
     }
 
@@ -1102,7 +1102,7 @@ void ScFiltersTest::testMergedCellsODS()
 
     //check sheet1 content
     OUString aCSVFileName1;
-    createCSVPath(OUString("merged1."), aCSVFileName1);
+    createCSVPath("merged1.", aCSVFileName1);
     testFile(aCSVFileName1, rDoc, 0);
 
     //check sheet1 merged cells
@@ -1112,7 +1112,7 @@ void ScFiltersTest::testMergedCellsODS()
 
     //check sheet2 content
     OUString aCSVFileName2;
-    createCSVPath(OUString("merged2."), aCSVFileName2);
+    createCSVPath("merged2.", aCSVFileName2);
     testFile(aCSVFileName2, rDoc, 1);
 
     //check sheet2 merged cells
@@ -1128,12 +1128,12 @@ void ScFiltersTest::testRepeatedColumnsODS()
 
     //text
     OUString aCSVFileName1;
-    createCSVPath(OUString("repeatedColumns1."), aCSVFileName1);
+    createCSVPath("repeatedColumns1.", aCSVFileName1);
     testFile(aCSVFileName1, rDoc, 0);
 
     //numbers
     OUString aCSVFileName2;
-    createCSVPath(OUString("repeatedColumns2."), aCSVFileName2);
+    createCSVPath("repeatedColumns2.", aCSVFileName2);
     testFile(aCSVFileName2, rDoc, 1);
 
     xDocSh->DoClose();
@@ -1278,11 +1278,11 @@ void ScFiltersTest::testDataValidityODS()
 
     //check each sheet's content
     OUString aCSVFileName1;
-    createCSVPath(OUString("dataValidity1."), aCSVFileName1);
+    createCSVPath("dataValidity1.", aCSVFileName1);
     testFile(aCSVFileName1, rDoc, 0);
 
     OUString aCSVFileName2;
-    createCSVPath(OUString("dataValidity2."), aCSVFileName2);
+    createCSVPath("dataValidity2.", aCSVFileName2);
     testFile(aCSVFileName2, rDoc, 1);
 
     xDocSh->DoClose();

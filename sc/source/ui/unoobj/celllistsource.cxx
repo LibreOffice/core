@@ -54,7 +54,7 @@ namespace calc
         // register our property at the base class
         CellRangeAddress aInitialPropValue;
         registerPropertyNoMember(
-            OUString( "CellRange" ),
+            "CellRange",
             PROP_HANDLE_RANGE_ADDRESS,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             cppu::UnoType<decltype(aInitialPropValue)>::get(),

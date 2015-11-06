@@ -896,7 +896,7 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, const SdrM
     }
     SfxStringItem aUrl( SID_FILE_NAME, rURL );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
-    aTarget.SetValue(OUString("_blank"));
+    aTarget.SetValue("_blank");
     SfxViewFrame* pFrame = NULL;
     OUString aReferName;
     if ( pScActiveViewShell )

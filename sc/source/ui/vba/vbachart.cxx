@@ -262,7 +262,7 @@ try
         case xlSurfaceWireframe:
         case xlSurfaceTopView:
         case xlSurfaceTopViewWireframe:
-            setDiagram( OUString("com.sun.star.chart.BarDiagram"));
+            setDiagram( "com.sun.star.chart.BarDiagram");
             break;
         case xlLine:
         case xl3DLine:
@@ -271,7 +271,7 @@ try
         case xlLineMarkers:
         case xlLineMarkersStacked:
         case xlLineMarkersStacked100:
-            setDiagram( OUString("com.sun.star.chart.LineDiagram"));
+            setDiagram( "com.sun.star.chart.LineDiagram");
             break;
         case xl3DArea:
         case xlArea:
@@ -279,17 +279,17 @@ try
         case xlAreaStacked100:
         case xl3DAreaStacked:
         case xl3DAreaStacked100:
-            setDiagram( OUString("com.sun.star.chart.AreaDiagram") );
+            setDiagram( "com.sun.star.chart.AreaDiagram" );
             break;
         case xlDoughnut:
         case xlDoughnutExploded:
-            setDiagram( OUString("com.sun.star.chart.DonutDiagram") );
+            setDiagram( "com.sun.star.chart.DonutDiagram" );
             break;
         case xlStockHLC:
         case xlStockOHLC:
         case xlStockVHLC:
         case xlStockVOHLC:
-            setDiagram( OUString("com.sun.star.chart.StockDiagram"));
+            setDiagram( "com.sun.star.chart.StockDiagram");
             mxDiagramPropertySet->setPropertyValue( UPDOWN, uno::makeAny((_nChartType == xlStockOHLC) || (_nChartType == xlStockVOHLC)));
             mxDiagramPropertySet->setPropertyValue( VOLUME, uno::makeAny((_nChartType == xlStockVHLC) || (_nChartType == xlStockVOHLC)));
             break;
@@ -300,13 +300,13 @@ try
         case xl3DPie:
         case xlPie:
         case xlBarOfPie:                            // not possible (Zoom pie)
-            setDiagram( OUString("com.sun.star.chart.PieDiagram"));
+            setDiagram( "com.sun.star.chart.PieDiagram");
             break;
 
         case xlRadar:
         case xlRadarMarkers:
         case xlRadarFilled:
-            setDiagram( OUString("com.sun.star.chart.NetDiagram"));
+            setDiagram( "com.sun.star.chart.NetDiagram");
             break;
         case xlXYScatter:
         case xlBubble:                      // not possible
@@ -315,7 +315,7 @@ try
         case xlXYScatterLinesNoMarkers:
         case xlXYScatterSmooth:
         case xlXYScatterSmoothNoMarkers:
-            setDiagram( OUString("com.sun.star.chart.XYDiagram"));
+            setDiagram( "com.sun.star.chart.XYDiagram");
             switch(_nChartType)
             {
                 case xlXYScatter:

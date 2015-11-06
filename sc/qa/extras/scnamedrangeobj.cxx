@@ -66,7 +66,7 @@ ScNamedRangeObj::ScNamedRangeObj():
 uno::Reference< sheet::XNamedRanges > ScNamedRangeObj::init_impl()
 {
     OUString aFileURL;
-    createFileURL(OUString("ScNamedRangeObj.ods"), aFileURL);
+    createFileURL("ScNamedRangeObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
@@ -90,7 +90,7 @@ uno::Reference< sheet::XNamedRange> ScNamedRangeObj::getNamedRange(const OUStrin
 
 uno::Reference< uno::XInterface > ScNamedRangeObj::init()
 {
-    return getNamedRange(OUString("NamedRange"));
+    return getNamedRange("NamedRange");
 }
 
 void ScNamedRangeObj::setUp()

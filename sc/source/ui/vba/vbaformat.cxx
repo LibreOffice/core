@@ -65,7 +65,7 @@ ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xP
     try
     {
         if ( !mxModel.is() )
-            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString( "XModel Interface could not be retrieved") );
+            DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, "XModel Interface could not be retrieved" );
         // mxServiceInfo is unused,
         // mxNumberFormatsSupplier is initialized when needed in initializeNumberFormats.
     }
@@ -120,7 +120,7 @@ ScVbaFormat< Ifc... >::getVerticalAlignment(  ) throw (script::BasicErrorExcepti
     uno::Any aResult = aNULL();
     try
     {
-        if (!isAmbiguous( OUString( SC_UNONAME_CELLVJUS ) ) )
+        if (!isAmbiguous( SC_UNONAME_CELLVJUS ) )
         {
             sal_Int32 aAPIAlignment = table::CellVertJustify2::STANDARD;
             mxPropertySet->getPropertyValue( SC_UNONAME_CELLVJUS ) >>= aAPIAlignment;
@@ -275,7 +275,7 @@ ScVbaFormat< Ifc... >::getOrientation(  ) throw (script::BasicErrorException, un
     uno::Any NRetOrientation = aNULL();
     try
     {
-        if (!isAmbiguous(OUString( SC_UNONAME_CELLORI )))
+        if (!isAmbiguous(SC_UNONAME_CELLORI))
         {
             table::CellOrientation aOrientation = table::CellOrientation_STANDARD;
             if ( !(  mxPropertySet->getPropertyValue( SC_UNONAME_CELLORI ) >>= aOrientation ) )

@@ -657,7 +657,7 @@ bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
 
         while (pXmlNode != NULL && bRetVal)
         {
-            sTagName  = OUStringToOString(OUString("Index"), RTL_TEXTENCODING_UTF8);
+            sTagName  = OUStringToOString("Index", RTL_TEXTENCODING_UTF8);
             if (xmlStrcmp(pXmlNode->name, reinterpret_cast<xmlChar const *>(sTagName.getStr())) == 0)
             {
                 if (pXmlNode->children != NULL && pXmlNode->children->type == XML_TEXT_NODE)
@@ -671,7 +671,7 @@ bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
                 }
             }
 
-            sTagName  = OUStringToOString(OUString("Type"), RTL_TEXTENCODING_UTF8);
+            sTagName  = OUStringToOString("Type", RTL_TEXTENCODING_UTF8);
             if (xmlStrcmp(pXmlNode->name, reinterpret_cast<xmlChar const *>(sTagName.getStr())) == 0)
             {
                 if (pXmlNode->children != NULL && pXmlNode->children->type == XML_TEXT_NODE)
@@ -685,7 +685,7 @@ bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
                 }
             }
 
-            sTagName  = OUStringToOString(OUString("Managed"), RTL_TEXTENCODING_UTF8);
+            sTagName  = OUStringToOString("Managed", RTL_TEXTENCODING_UTF8);
             if (xmlStrcmp(pXmlNode->name, reinterpret_cast<xmlChar const *>(sTagName.getStr())) == 0)
             {
                 if (pXmlNode->children != NULL && pXmlNode->children->type == XML_TEXT_NODE)
@@ -726,13 +726,13 @@ OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, 
 
     xmlDocPtr pXmlDoc = xmlNewDoc(reinterpret_cast<const xmlChar*>("1.0"));
 
-    sTagName = OUStringToOString(OUString("ScCondFormatDlg"), RTL_TEXTENCODING_UTF8);
+    sTagName = OUStringToOString("ScCondFormatDlg", RTL_TEXTENCODING_UTF8);
     pTagName = reinterpret_cast<const xmlChar*>(sTagName.getStr());
     pXmlRoot = xmlNewDocNode(pXmlDoc, NULL, pTagName, NULL);
 
     xmlDocSetRootElement(pXmlDoc, pXmlRoot);
 
-    sTagName  = OUStringToOString(OUString("Index"), RTL_TEXTENCODING_UTF8);
+    sTagName  = OUStringToOString("Index", RTL_TEXTENCODING_UTF8);
     sTagValue = OUStringToOString(OUString::number(nIndex), RTL_TEXTENCODING_UTF8);
     pTagName  = reinterpret_cast<const xmlChar*>(sTagName.getStr());
     pTagValue = reinterpret_cast<const xmlChar*>(sTagValue.getStr());
@@ -740,7 +740,7 @@ OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, 
 
     xmlAddChild(pXmlRoot, pXmlNode);
 
-    sTagName  = OUStringToOString(OUString("Type"), RTL_TEXTENCODING_UTF8);
+    sTagName  = OUStringToOString("Type", RTL_TEXTENCODING_UTF8);
     sTagValue = OUStringToOString(OUString::number(nType), RTL_TEXTENCODING_UTF8);
     pTagName  = reinterpret_cast<const xmlChar*>(sTagName.getStr());
     pTagValue = reinterpret_cast<const xmlChar*>(sTagValue.getStr());
@@ -748,7 +748,7 @@ OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, 
 
     xmlAddChild(pXmlRoot, pXmlNode);
 
-    sTagName  = OUStringToOString(OUString("Managed"), RTL_TEXTENCODING_UTF8);
+    sTagName  = OUStringToOString("Managed", RTL_TEXTENCODING_UTF8);
     sTagValue = OUStringToOString(OUString::boolean(bManaged), RTL_TEXTENCODING_UTF8);
     pTagName  = reinterpret_cast<const xmlChar*>(sTagName.getStr());
     pTagValue = reinterpret_cast<const xmlChar*>(sTagValue.getStr());

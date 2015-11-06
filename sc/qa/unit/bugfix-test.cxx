@@ -107,7 +107,7 @@ void ScFiltersTest::testTdf64229()
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath(OUString("fdo64229b."), aCSVFileName);
+    createCSVPath("fdo64229b.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();
@@ -125,7 +125,7 @@ void ScFiltersTest::testTdf36933()
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath(OUString("fdo36933test."), aCSVFileName);
+    createCSVPath("fdo36933test.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();
@@ -143,7 +143,7 @@ void ScFiltersTest::testTdf43700()
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath(OUString("fdo43700test."), aCSVFileName);
+    createCSVPath("fdo43700test.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();
@@ -161,7 +161,7 @@ void ScFiltersTest::testTdf43534()
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath(OUString("fdo43534test."), aCSVFileName);
+    createCSVPath("fdo43534test.", aCSVFileName);
     // testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();

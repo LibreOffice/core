@@ -1957,7 +1957,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
     SCROW nEndRow = aRange.aEnd.Row();
     OUString aCellStr;
     OUString aValStr;
-    lcl_WriteSimpleString( rStrm, OUString("ID;PCALCOOO32") );
+    lcl_WriteSimpleString( rStrm, "ID;PCALCOOO32" );
     WriteUnicodeOrByteEndl( rStrm );
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)

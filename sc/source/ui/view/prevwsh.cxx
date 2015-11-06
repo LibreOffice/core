@@ -144,7 +144,7 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
     pVerScroll->Show( false );
     pCorner->Show();
     SetHelpId( HID_SCSHELL_PREVWSH );
-    SetName(OUString("Preview"));
+    SetName("Preview");
 }
 
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,

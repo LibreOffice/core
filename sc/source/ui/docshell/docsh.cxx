@@ -452,7 +452,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
         bRet = aImport.Import(ScXMLImportWrapper::ALL, nError);
 
     if ( nError )
-        pLoadMedium->SetError( nError, OUString( OSL_LOG_PREFIX ) );
+        pLoadMedium->SetError( nError, OSL_LOG_PREFIX );
 
     processDataStream(*this, aImport.GetImportPostProcessData());
 
@@ -584,10 +584,10 @@ bool ScDocShell::Load( SfxMedium& rMedium )
     }
 
     if (!bRet && !rMedium.GetError())
-        rMedium.SetError( SVSTREAM_FILEFORMAT_ERROR, OUString( OSL_LOG_PREFIX ) );
+        rMedium.SetError( SVSTREAM_FILEFORMAT_ERROR, OSL_LOG_PREFIX );
 
     if (rMedium.GetError())
-        SetError( rMedium.GetError(), OUString( OSL_LOG_PREFIX ) );
+        SetError( rMedium.GetError(), OSL_LOG_PREFIX );
 
     InitItems();
     CalcOutputFactor();
@@ -922,7 +922,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         }
 
                         if ( !bSuccess )
-                            SetError( ERRCODE_IO_ABORT, OUString( OSL_LOG_PREFIX ) ); // this error code will produce no error message, but will break the further saving process
+                            SetError( ERRCODE_IO_ABORT, OSL_LOG_PREFIX ); // this error code will produce no error message, but will break the further saving process
                     }
 #endif
 
@@ -939,7 +939,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                         if( RET_NO == aBox->Execute())
                         {
-                            SetError( ERRCODE_IO_ABORT, OUString( OSL_LOG_PREFIX ) ); // this error code will produce no error message, but will break the further saving process
+                            SetError( ERRCODE_IO_ABORT, OSL_LOG_PREFIX ); // this error code will produce no error message, but will break the further saving process
                         }
                     }
                 } // fall through
@@ -1074,7 +1074,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (eError != eERR_OK)
                 {
                     if (!GetError())
-                        SetError(eError, OUString( OSL_LOG_PREFIX ));
+                        SetError(eError, OSL_LOG_PREFIX);
                 }
                 else
                     bRet = true;
@@ -1103,7 +1103,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError(eError, OUString( OSL_LOG_PREFIX ));
+                    SetError(eError, OSL_LOG_PREFIX);
 
                 if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                     bRet = true;
@@ -1140,13 +1140,13 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError == SCWARN_IMPORT_RANGE_OVERFLOW)
             {
                 if (!GetError())
-                    SetError(eError, OUString( OSL_LOG_PREFIX ));
+                    SetError(eError, OSL_LOG_PREFIX);
                 bRet = true;
             }
             else if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError(eError, OUString( OSL_LOG_PREFIX ));
+                    SetError(eError, OSL_LOG_PREFIX);
             }
             else
                 bRet = true;
@@ -1217,7 +1217,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError(eError, OUString( OSL_LOG_PREFIX ));
+                    SetError(eError, OSL_LOG_PREFIX);
             }
             else if (!GetError() && (bOverflowRow || bOverflowCol || bOverflowCell))
             {
@@ -1225,7 +1225,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 FltError nWarn = (bOverflowRow ? SCWARN_IMPORT_ROW_OVERFLOW :
                         (bOverflowCol ? SCWARN_IMPORT_COLUMN_OVERFLOW :
                          SCWARN_IMPORT_CELL_OVERFLOW));
-                SetError( nWarn, OUString( OSL_LOG_PREFIX ));
+                SetError( nWarn, OSL_LOG_PREFIX);
             }
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
@@ -1257,7 +1257,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError(eError, OUString( OSL_LOG_PREFIX ));
+                    SetError(eError, OSL_LOG_PREFIX);
                 bRet = ( eError == SCWARN_IMPORT_RANGE_OVERFLOW );
             }
             else
@@ -1295,7 +1295,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (eError != eERR_OK)
                 {
                     if (!GetError())
-                        SetError(eError, OUString( OSL_LOG_PREFIX ));
+                        SetError(eError, OSL_LOG_PREFIX);
 
                     if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                         bRet = true;
@@ -1331,7 +1331,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             if ( eError != eERR_OK && !GetError() )
-                SetError(eError, OUString( OSL_LOG_PREFIX ));
+                SetError(eError, OSL_LOG_PREFIX);
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
             bSetRowHeights = true;
@@ -1342,7 +1342,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if (eError != eERR_OK)
             {
                 if (!GetError())
-                    SetError( eError, OUString( OSL_LOG_PREFIX ) );
+                    SetError( eError, OSL_LOG_PREFIX );
                 if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                     bRet = true;
             }
@@ -1368,7 +1368,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     if (eError != eERR_OK)
                     {
                         if (!GetError())
-                            SetError(eError, OUString( OSL_LOG_PREFIX ));
+                            SetError(eError, OSL_LOG_PREFIX);
 
                         if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                             bRet = true;
@@ -1388,7 +1388,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             if ( eError != eERR_OK && !GetError() )
-                SetError(eError, OUString( OSL_LOG_PREFIX ));
+                SetError(eError, OSL_LOG_PREFIX);
         }
         else if (aFltName == pFilterHtml || aFltName == pFilterHtmlWebQ)
         {
@@ -1420,7 +1420,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     if (eError != eERR_OK)
                     {
                         if (!GetError())
-                            SetError(eError, OUString( OSL_LOG_PREFIX ));
+                            SetError(eError, OSL_LOG_PREFIX);
 
                         if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                             bRet = true;
@@ -1439,12 +1439,12 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             if ( eError != eERR_OK && !GetError() )
-                SetError(eError, OUString( OSL_LOG_PREFIX ));
+                SetError(eError, OSL_LOG_PREFIX);
         }
         else
         {
             if (!GetError())
-                SetError(SCERR_IMPORT_NI, OUString( OSL_LOG_PREFIX ));
+                SetError(SCERR_IMPORT_NI, OSL_LOG_PREFIX);
         }
 
         if (!bCalc3)
@@ -2256,7 +2256,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             FltError eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
 
             if( eError && !GetError() )
-                SetError( eError, OUString( OSL_LOG_PREFIX ) );
+                SetError( eError, OSL_LOG_PREFIX );
 
             // don't return false for warnings
             bRet = ((eError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK) || (eError == eERR_OK);
@@ -2264,7 +2264,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         else
         {
             // export aborted, i.e. "Save without password" warning
-            SetError( ERRCODE_ABORT, OUString( OSL_LOG_PREFIX ) );
+            SetError( ERRCODE_ABORT, OSL_LOG_PREFIX );
         }
     }
     else if (aFltName == pFilterAscii)
@@ -2297,7 +2297,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
             if (aDocument.GetTableCount() > 1)
                 if (!rMed.GetError())
-                    rMed.SetError(SCWARN_EXPORT_ASCII, OUString( OSL_LOG_PREFIX ));
+                    rMed.SetError(SCWARN_EXPORT_ASCII, OSL_LOG_PREFIX);
         }
     }
     else if (aFltName == pFilterDBase)
@@ -2334,11 +2334,11 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INetProtocol::File );
         if ( bHasMemo )
-            aTmpFile.setExtension(OUString("dbt"));
+            aTmpFile.setExtension("dbt");
         if ( eError != eERR_OK )
         {
             if (!GetError())
-                SetError(eError, OUString( OSL_LOG_PREFIX ));
+                SetError(eError, OSL_LOG_PREFIX);
             if ( bHasMemo && IsDocument( aTmpFile ) )
                 KillFile( aTmpFile );
         }
@@ -2350,7 +2350,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 const SfxStringItem* pNameItem =
                     static_cast<const SfxStringItem*>( rMed.GetItemSet()->GetItem( SID_FILE_NAME ) );
                 INetURLObject aDbtFile( pNameItem->GetValue(), INetProtocol::File );
-                aDbtFile.setExtension(OUString("dbt"));
+                aDbtFile.setExtension("dbt");
                 if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )
                     bRet = false;
                 if ( bRet && !MoveFile( aTmpFile, aDbtFile ) )
@@ -2359,7 +2359,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 {
                     KillFile( aTmpFile );
                     if ( !GetError() )
-                        SetError( SCERR_EXPORT_DATA, OUString( OSL_LOG_PREFIX ) );
+                        SetError( SCERR_EXPORT_DATA, OSL_LOG_PREFIX );
                 }
             }
         }
@@ -2393,7 +2393,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
             if (aDocument.GetTableCount() > 1)
                 if (!rMed.GetError())
-                    rMed.SetError(SCWARN_EXPORT_ASCII, OUString( OSL_LOG_PREFIX ));
+                    rMed.SetError(SCWARN_EXPORT_ASCII, OSL_LOG_PREFIX);
         }
     }
     else if (aFltName == pFilterSylk)
@@ -2435,14 +2435,14 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 SetError(*new StringErrorInfo(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
                     aImExport.GetNonConvertibleChars(),
-                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO), OUString(OSL_LOG_PREFIX));
+                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO), OSL_LOG_PREFIX);
             }
         }
     }
     else
     {
         if (GetError())
-            SetError(SCERR_IMPORT_NI, OUString(OSL_LOG_PREFIX));
+            SetError(SCERR_IMPORT_NI, OSL_LOG_PREFIX);
     }
     return bRet;
 }

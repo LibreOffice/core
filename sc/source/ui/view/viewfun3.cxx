@@ -473,8 +473,8 @@ void ScViewFunc::PasteFromSystem()
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
         {
-            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
-            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
+            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName("Biff8");
+            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName("Biff5");
 
             SotExchangeDest nDestination = SotExchangeDest::SCDOC_FREE_AREA;
             sal_uInt16 nSourceOptions = EXCHG_IN_ACTION_COPY;
@@ -623,8 +623,8 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     {
             TransferableDataHelper aDataHelper( rxTransferable );
         {
-            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
-            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
+            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName("Biff8");
+            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName("Biff5");
             SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
                 //  first SvDraw-model, then drawing
                 //  (only one drawing is allowed)

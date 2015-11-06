@@ -76,14 +76,14 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     bBoldSet = true;
 
     Size aSize = LogicToPixel( Size(
-        GetTextWidth(OUString("8888")),
+        GetTextWidth("8888"),
         GetTextHeight() ) );
     aSize.Width()  += 4;    // place for highlight border
     aSize.Height() += 3;
     SetSizePixel( aSize );
 
     nWidth = nSmallWidth = aSize.Width();
-    nBigWidth = LogicToPixel( Size( GetTextWidth(OUString("8888888")), 0 ) ).Width() + 5;
+    nBigWidth = LogicToPixel( Size( GetTextWidth("8888888"), 0 ) ).Width() + 5;
 
     SetBackground();
 }

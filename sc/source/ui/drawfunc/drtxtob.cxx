@@ -128,7 +128,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     }
 
     SetHelpId( HID_SCSHELL_DRTXTOB );
-    SetName(OUString("DrawText"));
+    SetName("DrawText");
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawText));
 }
 

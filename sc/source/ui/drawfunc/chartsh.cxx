@@ -61,7 +61,7 @@ ScChartShell::ScChartShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
     SetHelpId( HID_SCSHELL_CHARTSH );
-    SetName( OUString("ChartObject") );
+    SetName( "ChartObject" );
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Chart));
 }
 

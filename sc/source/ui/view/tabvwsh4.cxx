@@ -1438,7 +1438,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
 
     EnableAutoSpell(rDoc.GetDocOptions().IsAutoSpell());
 
-    SetName(OUString("View")); // for SBX
+    SetName("View"); // for SBX
     Color aColBlack( COL_BLACK );
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( GetActiveWin() );

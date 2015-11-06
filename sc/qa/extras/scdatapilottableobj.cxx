@@ -112,7 +112,7 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::getSheets()
 uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
 {
     OUString aFileURL;
-    createFileURL(OUString("ScDataPilotTableObj.ods"), aFileURL);
+    createFileURL("ScDataPilotTableObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());

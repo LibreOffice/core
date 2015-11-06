@@ -106,7 +106,7 @@ void AlignmentPropertyPanel::Initialize()
 {
     mpFTLeftIndent->Disable();
     mpMFLeftIndent->Disable();
-    mpMFLeftIndent->SetAccessibleName(OUString( "Left Indent"));    //wj acc
+    mpMFLeftIndent->SetAccessibleName("Left Indent");    //wj acc
     Link<Edit&,void> aLink = LINK(this, AlignmentPropertyPanel, MFLeftIndentMdyHdl);
     mpMFLeftIndent->SetModifyHdl ( aLink );
 
@@ -115,7 +115,7 @@ void AlignmentPropertyPanel::Initialize()
     mpCBXWrapText->SetClickHdl ( LINK(this, AlignmentPropertyPanel, CBOXWrapTextClkHdl) );
 
     //rotation
-    mpMtrAngle->SetAccessibleName(OUString( "Text Orientation"));   //wj acc
+    mpMtrAngle->SetAccessibleName("Text Orientation");   //wj acc
     mpMtrAngle->SetModifyHdl(LINK( this, AlignmentPropertyPanel, AngleModifiedHdl));
     mpMtrAngle->EnableAutocomplete( false );
     mpCBStacked->SetClickHdl(LINK(this, AlignmentPropertyPanel, ClickStackHdl));

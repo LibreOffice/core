@@ -82,7 +82,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDo
     mpParentMenu(dynamic_cast<ScMenuFloatingWindow*>(pParent))
 {
     SetMenuStackLevel(nMenuStackLevel);
-    SetText(OUString("ScMenuFloatingWindow"));
+    SetText("ScMenuFloatingWindow");
 
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
 

@@ -4361,7 +4361,7 @@ void Test::testSearchCells()
     m_pDoc->SetString(ScAddress(0,6,0), "C");
 
     SvxSearchItem aItem(SID_SEARCH_ITEM);
-    aItem.SetSearchString(OUString("A"));
+    aItem.SetSearchString("A");
     aItem.SetCommand(SvxSearchCmd::FIND_ALL);
     ScMarkData aMarkData;
     aMarkData.SelectOneTable(0);

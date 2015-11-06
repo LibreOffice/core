@@ -60,7 +60,7 @@ ScDataPilotFieldObj::ScDataPilotFieldObj()
 uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
 {
     OUString aFileURL;
-    createFileURL(OUString("scdatapilotfieldobj.ods"), aFileURL);
+    createFileURL("scdatapilotfieldobj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());

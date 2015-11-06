@@ -1002,7 +1002,7 @@ bool ScAutoFormat::Load()
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
-    aURL.Append( OUString( sAutoTblFmtName ) );
+    aURL.Append( sAutoTblFmtName );
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READ );
     SvStream* pStream = aMedium.GetInStream();

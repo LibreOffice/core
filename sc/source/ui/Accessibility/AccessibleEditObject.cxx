@@ -399,13 +399,13 @@ void ScAccessibleEditObject::CreateTextHelper()
 sal_Int32 SAL_CALL ScAccessibleEditObject::getForeground(  )
         throw (css::uno::RuntimeException, std::exception)
 {
-    return GetFgBgColor(OUString(SC_UNONAME_CCOLOR));
+    return GetFgBgColor(SC_UNONAME_CCOLOR);
 }
 
 sal_Int32 SAL_CALL ScAccessibleEditObject::getBackground(  )
         throw (css::uno::RuntimeException, std::exception)
 {
-    return GetFgBgColor(OUString(SC_UNONAME_CELLBACK));
+    return GetFgBgColor(SC_UNONAME_CELLBACK);
 }
 
 sal_Int32 ScAccessibleEditObject::GetFgBgColor( const OUString &strPropColor)

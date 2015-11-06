@@ -54,7 +54,7 @@ ScNamedRangesObj::ScNamedRangesObj()
 uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
 {
     OUString aFileURL;
-    createFileURL(OUString("ScNamedRangeObj.ods"), aFileURL);
+    createFileURL("ScNamedRangeObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());

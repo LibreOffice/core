@@ -73,7 +73,7 @@ uno::Reference< uno::XInterface > ScAnnontationsObj::init()
 {
     // get the test file
     OUString aFileURL;
-    createFileURL(OUString("ScAnnotationObj.ods"), aFileURL);
+    createFileURL("ScAnnotationObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxComponent.is());

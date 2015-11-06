@@ -186,8 +186,8 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
 
 void Test::testPivotTable()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -343,7 +343,7 @@ void Test::testPivotTable()
     // Insert a brand new pivot table object once again, but this time, don't
     // create the output to avoid creating a data cache.
     m_pDoc->DeleteTab(1);
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(1, "Table");
 
     pDPObj = createDPFromRange(
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
@@ -370,8 +370,8 @@ void Test::testPivotTable()
 
 void Test::testPivotTableLabels()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -426,8 +426,8 @@ void Test::testPivotTableLabels()
 
 void Test::testPivotTableDateLabels()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -502,8 +502,8 @@ void Test::testPivotTableDateLabels()
 
 void Test::testPivotTableFilters()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -564,7 +564,7 @@ void Test::testPivotTableFilters()
     ScAddress aFormulaAddr = aOutRange.aEnd;
     aFormulaAddr.IncRow(2);
     m_pDoc->SetString(aFormulaAddr.Col(), aFormulaAddr.Row(), aFormulaAddr.Tab(),
-                      OUString("=B6"));
+                      "=B6");
     double fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 80.0);
 
@@ -572,7 +572,7 @@ void Test::testPivotTableFilters()
     pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
     ScDPSaveDimension* pPageDim = aSaveData.GetDimensionByName(
-        OUString("Group2"));
+        "Group2");
     CPPUNIT_ASSERT_MESSAGE("Dimension not found", pPageDim);
     OUString aPage("A");
     pPageDim->SetCurrentPage(&aPage);
@@ -655,8 +655,8 @@ void Test::testPivotTableFilters()
 
 void Test::testPivotTableNamedSource()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
     DPFieldDef aFields[] = {
@@ -755,7 +755,7 @@ void Test::testPivotTableNamedSource()
 
 void Test::testPivotTableCache()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(0, "Data");
 
     // Raw data
     const char* aData[][3] = {
@@ -940,8 +940,8 @@ void Test::testPivotTableCache()
 
 void Test::testPivotTableDuplicateDataFields()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Raw data
     const char* aData[][2] = {
@@ -1037,8 +1037,8 @@ void Test::testPivotTableDuplicateDataFields()
 
 void Test::testPivotTableNormalGrouping()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Raw data
     const char* aData[][2] = {
@@ -1109,9 +1109,9 @@ void Test::testPivotTableNormalGrouping()
         CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName == "Group1");
 
         ScDPSaveGroupItem aGroup(aGroupName);
-        aGroup.AddElement(OUString("A"));
-        aGroup.AddElement(OUString("B"));
-        aGroup.AddElement(OUString("C"));
+        aGroup.AddElement("A");
+        aGroup.AddElement("B");
+        aGroup.AddElement("C");
         aGroupDim.AddGroupItem(aGroup);
         pDimData->AddGroupDimension(aGroupDim);
 
@@ -1151,9 +1151,9 @@ void Test::testPivotTableNormalGrouping()
         CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName == "Group2");
 
         ScDPSaveGroupItem aGroup(aGroupName);
-        aGroup.AddElement(OUString("D"));
-        aGroup.AddElement(OUString("E"));
-        aGroup.AddElement(OUString("F"));
+        aGroup.AddElement("D");
+        aGroup.AddElement("E");
+        aGroup.AddElement("F");
         pGroupDim->AddGroupItem(aGroup);
     }
 
@@ -1188,8 +1188,8 @@ void Test::testPivotTableNormalGrouping()
 
 void Test::testPivotTableNumberGrouping()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Raw data
     const char* aData[][2] = {
@@ -1283,8 +1283,8 @@ void Test::testPivotTableNumberGrouping()
 
 void Test::testPivotTableDateGrouping()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Raw data
     const char* aData[][2] = {
@@ -1392,9 +1392,9 @@ void Test::testPivotTableDateGrouping()
     {
         // Let's hide year 2012.
         pSaveData = pDPObj->GetSaveData();
-        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(OUString("Years"));
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName("Years");
         CPPUNIT_ASSERT_MESSAGE("Years dimension should exist.", pDim);
-        ScDPSaveMember* pMem = pDim->GetMemberByName(OUString("2012"));
+        ScDPSaveMember* pMem = pDim->GetMemberByName("2012");
         CPPUNIT_ASSERT_MESSAGE("Member should exist.", pMem);
         pMem->SetIsVisible(false);
     }
@@ -1457,8 +1457,8 @@ void Test::testPivotTableDateGrouping()
 
 void Test::testPivotTableEmptyRows()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Raw data
     const char* aData[][2] = {
@@ -1570,8 +1570,8 @@ void Test::testPivotTableEmptyRows()
 
 void Test::testPivotTableTextNumber()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Raw data
     const char* aData[][2] = {
@@ -1674,8 +1674,8 @@ void Test::testPivotTableTextNumber()
 
 void Test::testPivotTableCaseInsensitiveStrings()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Raw data
     const char* aData[][2] = {
@@ -1766,8 +1766,8 @@ void Test::testPivotTableNumStability()
         { "Total", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     size_t nRowCount = SAL_N_ELEMENTS(aData);
     ScAddress aPos(1,1,0);
@@ -1835,8 +1835,8 @@ void Test::testPivotTableNumStability()
 
 void Test::testPivotTableFieldReference()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Raw data
     const char* aData[][2] = {
@@ -2325,8 +2325,8 @@ void Test::testFuncGETPIVOTDATALeafAccess()
 
 void Test::testPivotTableRepeatItemLabels()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
-    m_pDoc->InsertTab(1, OUString("Table"));
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
 
     // Dimension definition
     DPFieldDef aFields[] = {

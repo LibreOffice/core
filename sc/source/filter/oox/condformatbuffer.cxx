@@ -348,7 +348,7 @@ void IconSetRule::importCfvo( const AttributeList& rAttribs )
 
 void IconSetRule::importAttribs( const AttributeList& rAttribs )
 {
-    maIconSetType = rAttribs.getString( XML_iconSet, OUString("3TrafficLights1") );
+    maIconSetType = rAttribs.getString( XML_iconSet, "3TrafficLights1" );
     mxFormatData->mbShowValue = rAttribs.getBool( XML_showValue, true );
     mxFormatData->mbReverse = rAttribs.getBool( XML_reverse, false );
     mbCustom = rAttribs.getBool(XML_custom, false);
