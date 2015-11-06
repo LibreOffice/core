@@ -290,10 +290,10 @@ bool INetMIMEMessage::EnableAttachMultipartFormDataChild()
     m_aBoundary += sTail;
 
     // Set header fields.
-    SetMIMEVersion(OUString("1.0"));
+    SetMIMEVersion("1.0");
     SetContentType(
         OUString::fromUtf8("multipart/form-data; boundary=" + m_aBoundary));
-    SetContentTransferEncoding(OUString("7bit"));
+    SetContentTransferEncoding("7bit");
 
     // Done.
     return true;
