@@ -515,7 +515,34 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
     if( !nPPTTransitionType && eFadeEffect != FadeEffect_NONE )
         nPPTTransitionType = GetTransition( eFadeEffect, nDirection );
 
-    if( nPPTTransitionType ) {
+    bool bOOXmlSpecificTransition = false;
+
+    sal_Int32 nTransition = 0;
+    const char* pDirection = NULL;
+    const char* pOrientation = NULL;
+    const char* pThruBlk = NULL;
+    const char* pSpokes = NULL;
+    char pSpokesTmp[2] = "0";
+
+    if (!nPPTTransitionType)
+    {
+        switch(nTransitionType)
+        {
+            case animations::TransitionType::BARWIPE:
+            {
+                if (animations::TransitionSubType::FADEOVERCOLOR)
+                {
+                    nTransition = XML_cut;
+                    pThruBlk = "true";
+                    bOOXmlSpecificTransition = true;
+                }
+            }
+            break;
+        }
+    }
+
+    if (nPPTTransitionType || bOOXmlSpecificTransition)
+    {
     AnimationSpeed animationSpeed = AnimationSpeed_MEDIUM;
     const char* speed = NULL;
     sal_Int32 advanceTiming = -1;
@@ -549,99 +576,97 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
                  XML_advTm, advanceTiming != -1 ? I32S( advanceTiming*1000 ) : NULL,
                  FSEND );
 
-    sal_Int32 nTransition = 0;
-    const char* pDirection = NULL;
-    const char* pOrientation = NULL;
-    const char* pThruBlk = NULL;
-    const char* pSpokes = NULL;
-    char pSpokesTmp[2] = "0";
 
-    switch( nPPTTransitionType ) {
-        case PPT_TRANSITION_TYPE_BLINDS:
-        nTransition = XML_blinds;
-        pDirection = ( nDirection == 0) ? "vert" : "horz";
-        break;
-        case PPT_TRANSITION_TYPE_CHECKER:
-        nTransition = XML_checker;
-        pDirection = ( nDirection == 1) ? "vert" : "horz";
-        break;
-        case PPT_TRANSITION_TYPE_CIRCLE:
-        nTransition = XML_circle;
-        break;
-        case PPT_TRANSITION_TYPE_COMB:
-        nTransition = XML_comb;
-        pDirection = ( nDirection == 1) ? "vert" : "horz";
-        break;
-        case PPT_TRANSITION_TYPE_COVER:
-        nTransition = XML_cover;
-        pDirection = Get8Direction( nDirection );
-        break;
-        case PPT_TRANSITION_TYPE_DIAMOND:
-        nTransition = XML_diamond;
-        break;
-        case PPT_TRANSITION_TYPE_DISSOLVE:
-        nTransition = XML_dissolve;
-        break;
-        case PPT_TRANSITION_TYPE_FADE:
-        nTransition = XML_fade;
-        pThruBlk = "true";
-        break;
-        case PPT_TRANSITION_TYPE_SMOOTHFADE:
-        nTransition = XML_fade;
-        break;
-        case PPT_TRANSITION_TYPE_NEWSFLASH:
-        nTransition = XML_newsflash;
-        break;
-        case PPT_TRANSITION_TYPE_PLUS:
-        nTransition = XML_plus;
-        break;
-        case PPT_TRANSITION_TYPE_PULL:
-        nTransition = XML_pull;
-        pDirection = Get8Direction( nDirection );
-        break;
-        case PPT_TRANSITION_TYPE_PUSH:
-        nTransition = XML_push;
-        pDirection = GetSideDirection( nDirection );
-        break;
-        case PPT_TRANSITION_TYPE_RANDOM:
-        nTransition = XML_random;
-        break;
-        case PPT_TRANSITION_TYPE_RANDOM_BARS:
-        nTransition = XML_randomBar;
-        pDirection = ( nDirection == 1) ? "vert" : "horz";
-        break;
-        case PPT_TRANSITION_TYPE_SPLIT:
-        nTransition = XML_split;
-        pDirection = ( nDirection & 1) ? "in" : "out";
-        pOrientation = ( nDirection < 2) ? "horz" : "vert";
-        break;
-        case PPT_TRANSITION_TYPE_STRIPS:
-        nTransition = XML_strips;
-        pDirection = GetCornerDirection( nDirection );
-        break;
-        case PPT_TRANSITION_TYPE_WEDGE:
-        nTransition = XML_wedge;
-        break;
-        case PPT_TRANSITION_TYPE_WHEEL:
-        nTransition = XML_wheel;
-        if( nDirection != 4 && nDirection <= 9 ) {
-            pSpokesTmp[0] = '0' + nDirection;
-            pSpokes = pSpokesTmp;
+    if (!bOOXmlSpecificTransition)
+    {
+        switch(nPPTTransitionType)
+        {
+            case PPT_TRANSITION_TYPE_BLINDS:
+            nTransition = XML_blinds;
+            pDirection = (nDirection == 0) ? "vert" : "horz";
+            break;
+            case PPT_TRANSITION_TYPE_CHECKER:
+            nTransition = XML_checker;
+            pDirection = ( nDirection == 1) ? "vert" : "horz";
+            break;
+            case PPT_TRANSITION_TYPE_CIRCLE:
+            nTransition = XML_circle;
+            break;
+            case PPT_TRANSITION_TYPE_COMB:
+            nTransition = XML_comb;
+            pDirection = (nDirection == 1) ? "vert" : "horz";
+            break;
+            case PPT_TRANSITION_TYPE_COVER:
+            nTransition = XML_cover;
+            pDirection = Get8Direction( nDirection );
+            break;
+            case PPT_TRANSITION_TYPE_DIAMOND:
+            nTransition = XML_diamond;
+            break;
+            case PPT_TRANSITION_TYPE_DISSOLVE:
+            nTransition = XML_dissolve;
+            break;
+            case PPT_TRANSITION_TYPE_FADE:
+            nTransition = XML_fade;
+            pThruBlk = "true";
+            break;
+            case PPT_TRANSITION_TYPE_SMOOTHFADE:
+            nTransition = XML_fade;
+            break;
+            case PPT_TRANSITION_TYPE_NEWSFLASH:
+            nTransition = XML_newsflash;
+            break;
+            case PPT_TRANSITION_TYPE_PLUS:
+            nTransition = XML_plus;
+            break;
+            case PPT_TRANSITION_TYPE_PULL:
+            nTransition = XML_pull;
+            pDirection = Get8Direction(nDirection);
+            break;
+            case PPT_TRANSITION_TYPE_PUSH:
+            nTransition = XML_push;
+            pDirection = GetSideDirection(nDirection);
+            break;
+            case PPT_TRANSITION_TYPE_RANDOM:
+            nTransition = XML_random;
+            break;
+            case PPT_TRANSITION_TYPE_RANDOM_BARS:
+            nTransition = XML_randomBar;
+            pDirection = (nDirection == 1) ? "vert" : "horz";
+            break;
+            case PPT_TRANSITION_TYPE_SPLIT:
+            nTransition = XML_split;
+            pDirection = (nDirection & 1) ? "in" : "out";
+            pOrientation = (nDirection < 2) ? "horz" : "vert";
+            break;
+            case PPT_TRANSITION_TYPE_STRIPS:
+            nTransition = XML_strips;
+            pDirection = GetCornerDirection( nDirection );
+            break;
+            case PPT_TRANSITION_TYPE_WEDGE:
+            nTransition = XML_wedge;
+            break;
+            case PPT_TRANSITION_TYPE_WHEEL:
+            nTransition = XML_wheel;
+            if( nDirection != 4 && nDirection <= 9 ) {
+                pSpokesTmp[0] = '0' + nDirection;
+                pSpokes = pSpokesTmp;
+            }
+            break;
+            case PPT_TRANSITION_TYPE_WIPE:
+            nTransition = XML_wipe;
+            pDirection = GetSideDirection( nDirection );
+            break;
+            case PPT_TRANSITION_TYPE_ZOOM:
+            nTransition = XML_zoom;
+            pDirection = (nDirection == 1) ? "in" : "out";
+            break;
+            // coverity[dead_error_line] - following conditions exist to avoid compiler warning
+            case PPT_TRANSITION_TYPE_NONE:
+            default:
+            nTransition = 0;
+            break;
         }
-        break;
-        case PPT_TRANSITION_TYPE_WIPE:
-        nTransition = XML_wipe;
-        pDirection = GetSideDirection( nDirection );
-        break;
-        case PPT_TRANSITION_TYPE_ZOOM:
-        nTransition = XML_zoom;
-        pDirection = ( nDirection == 1) ? "in" : "out";
-        break;
-        // coverity[dead_error_line] - following conditions exist to avoid compiler warning
-        case PPT_TRANSITION_TYPE_NONE:
-        default:
-        nTransition = 0;
-        break;
     }
 
     if( nTransition )

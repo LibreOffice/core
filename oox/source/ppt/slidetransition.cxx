@@ -288,11 +288,9 @@ namespace oox { namespace ppt {
             mbTransitionDirectionNormal = false;
             break;
         case PPT_TOKEN( cut ):
-            // The binfilter seems to ignore this transition.
-            // Fade to black instead if thrBlk is true.
             if( param1 )
             {
-                mnTransitionType = TransitionType::FADE;
+                mnTransitionType = TransitionType::BARWIPE;
                 mnTransitionSubType = TransitionSubType::FADEOVERCOLOR;
             }
             OSL_TRACE( "OOX: cut transition fallback." );
