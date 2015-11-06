@@ -484,8 +484,10 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
                 SwFrameFormat* pFrameFormat = ::FindFrameFormat(&GetObject());
                 SwFormatFrmSize aSize(pFormat->GetFrmSize());
                 SwTwips nShrinked = aSize.GetHeight() - (nProposedRelPosY - nAdjustedRelPosY);
-                aSize.SetHeight( nShrinked > 0 ? nShrinked : 0 );
-                pFrameFormat->SetFormatAttr(aSize);
+                if (nShrinked >= 0) {
+                    aSize.SetHeight( nShrinked );
+                    pFrameFormat->SetFormatAttr(aSize);
+                }
                 nAdjustedRelPosY = nProposedRelPosY;
             } else if ( SwTextBoxHelper::findTextBox(pFormat) )
                 // when the shape has a textbox, use only the proposed vertical position
