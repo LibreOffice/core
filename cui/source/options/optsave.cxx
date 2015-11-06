@@ -51,7 +51,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace comphelper;
 
-#define CFG_PAGE_AND_GROUP          OUString("General"), OUString("LoadSave")
+#define CFG_PAGE_AND_GROUP          "General", "LoadSave"
 
 
 
