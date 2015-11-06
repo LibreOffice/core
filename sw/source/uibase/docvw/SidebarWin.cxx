@@ -246,10 +246,15 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
     for (sal_uInt16 i = 0; i < GetChildCount(); ++i)
     {
         vcl::Window* pChild = GetChild(i);
-        if (pChild == mpSidebarTextControl.get())
-            mpSidebarTextControl->PaintTile(rRenderContext, rRect);
-        else
-            SAL_WARN("sw.uibase", "SwSidebarWin::PaintTile: unhandled child " << pChild);
+        rRenderContext.Push(PushFlags::MAPMODE);
+        Point aOffset(PixelToLogic(pChild->GetPosPixel()));
+        MapMode aMapMode(rRenderContext.GetMapMode());
+        aMapMode.SetOrigin(aMapMode.GetOrigin() + aOffset);
+        rRenderContext.SetMapMode(aMapMode);
+
+        pChild->Paint(rRenderContext, rRect);
+
+        rRenderContext.Pop();
     }
 }
 
