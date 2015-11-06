@@ -23,7 +23,8 @@
 #include "rangelst.hxx"
 #include "chartpos.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
+#include <vector>
 
 class ScDocument;
 
@@ -90,8 +91,9 @@ public:
 
 class ScChartCollection
 {
-    typedef ::boost::ptr_vector<ScChartArray> DataType;
-    DataType maData;
+    typedef ::std::vector<std::unique_ptr<ScChartArray>> DataType;
+    DataType m_Data;
+
 public:
     ScChartCollection();
     ScChartCollection(const ScChartCollection& rColl);

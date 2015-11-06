@@ -29,6 +29,9 @@
 #include "formulacell.hxx"
 #include "docoptio.hxx"
 
+#include <comphelper/stl_types.hxx>
+#include <o3tl/make_unique.hxx>
+
 #include <vector>
 
 using ::std::vector;
@@ -419,46 +422,51 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 }
 
 ScChartCollection::ScChartCollection() {}
-ScChartCollection::ScChartCollection(const ScChartCollection& r) :
-    maData(r.maData) {}
+ScChartCollection::ScChartCollection(const ScChartCollection& r)
+{
+    for (auto const& it : r.m_Data)
+    {
+        m_Data.push_back(o3tl::make_unique<ScChartArray>(*it));
+    }
+}
 
 void ScChartCollection::push_back(ScChartArray* p)
 {
-    maData.push_back(p);
+    m_Data.push_back(std::unique_ptr<ScChartArray>(p));
 }
 
 void ScChartCollection::clear()
 {
-    maData.clear();
+    m_Data.clear();
 }
 
 size_t ScChartCollection::size() const
 {
-    return maData.size();
+    return m_Data.size();
 }
 
 bool ScChartCollection::empty() const
 {
-    return maData.empty();
+    return m_Data.empty();
 }
 
 ScChartArray* ScChartCollection::operator[](size_t nIndex)
 {
-    if (maData.size() <= nIndex)
-        return NULL;
-    return &maData[nIndex];
+    if (m_Data.size() <= nIndex)
+        return nullptr;
+    return m_Data[nIndex].get();
 }
 
 const ScChartArray* ScChartCollection::operator[](size_t nIndex) const
 {
-    if (maData.size() <= nIndex)
-        return NULL;
-    return &maData[nIndex];
+    if (m_Data.size() <= nIndex)
+        return nullptr;
+    return m_Data[nIndex].get();
 }
 
 bool ScChartCollection::operator==(const ScChartCollection& rCmp) const
 {
-    return maData == rCmp.maData;
+    return ::comphelper::ContainerUniquePtrEquals(m_Data, rCmp.m_Data);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
