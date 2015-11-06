@@ -10,12 +10,14 @@
 #define M_PI 3.1415926535897932384626433832795
 
 uniform float time;
+uniform ivec2 numTiles;
 uniform sampler2D permTexture;
-attribute vec2 center;
+attribute vec2 tileCenter;
 attribute int tileXIndex;
 attribute int tileYIndex;
 attribute int vertexIndexInTile;
 varying vec2 v_texturePosition;
+varying float v_textureSelect;
 
 float snoise(vec2 p)
 {
@@ -35,14 +37,6 @@ mat4 rotationMatrix(vec3 axis, float angle)
                 0.0,                                0.0,                                0.0,                                1.0);
 }
 
-mat4 translateMatrix(vec2 whereTo)
-{
-    return mat4(1, 0, 0, whereTo.x,
-                0, 1, 0, whereTo.y,
-                0, 0, 1,         0,
-                0, 0, 0,         1);
-}
-
 void main( void )
 {
     vec4 v = gl_Vertex;
@@ -50,16 +44,62 @@ void main( void )
     // Of course this is nothing like what it will eventually be; just
     // experimenting to get at least something.
 
-    v -= vec4(center, 0, 0);
-    if (time <= 0.5)
-        v = rotationMatrix(vec3(0, 1, 0), time*M_PI) * v;
+    // Move the tile on a semicircular path so that it will end up at the correct place
+    // Move half the tiles one way, half the other.
+
+    // Each tile moves during only half of the transition. The letmost
+    // tiles start moving immediately and arrive at their end position
+    // at time=0.5, when the tiles there (the rightmost ones) start
+    // moving.
+
+    float startTime = float(tileXIndex)/(numTiles.x-1) * 0.5;
+    float endTime = startTime + 0.5;
+
+    if (time <= startTime)
+    {
+        // Still at start location, nothing needed
+        v_textureSelect = 0;
+    }
+    else if (time > startTime && time <= endTime)
+    {
+        // Moving
+        float moveTime = (time - startTime) * 2;
+
+        // First: Rotate the tile around its Y axis,
+        // It rotates 180 degrees during the transition.
+        // Translate to origin, rotate.
+
+        v -= vec4(tileCenter, 0, 0);
+
+        // A semi-random number 0..1, different for neighbouring tiles
+        float fuzz = snoise(256*vec2(float(tileXIndex)/(numTiles.x-1), float(tileYIndex)/(numTiles.y-1)));
+
+        float rotation = moveTime;
+
+        // experiment: perturb rotation a bit randomly
+        // rotation = moveTime - fuzz*(0.5-abs(time - 0.5));
+
+        v = rotationMatrix(vec3(0, 1, 0), rotation*M_PI) * v;
+
+        v.x += tileCenter.x * cos(moveTime*M_PI);
+        v.y += tileCenter.y;
+        v.z += (fuzz < 0.5 ? -1 : 1) * tileCenter.x * sin(moveTime*M_PI);
+
+        // Perturb z a bit randomly
+        v.z += ((((tileXIndex << 3) ^ tileYIndex) % 10) - 5) * (1 - abs(time-0.5)*2);
+
+        v_textureSelect = float(rotation > 0.5);
+    }
     else
-        v = rotationMatrix(vec3(0, 1, 0), -(1-time)*M_PI) * v;
-    v += vec4(center, 0, 0);
+    {
+        // At end location. Tile is 180 degrees rotated
 
-    // v.z += 10 * (snoise(vec2(tileXIndex, tileYIndex))-0.5) * (1 - abs(time-0.5)*2);
+        v -= vec4(tileCenter, 0, 0);
+        v = rotationMatrix(vec3(0, 1, 0), M_PI) * v;
+        v += vec4(-tileCenter.x, tileCenter.y, 0, 0);
 
-    v.z += ((((tileXIndex << 3) ^ tileYIndex) % 10) - 5) * (1 - abs(time-0.5)*2) + 0*vertexIndexInTile;
+        v_textureSelect = 1;
+    }
 
     gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * v;
 

@@ -1511,25 +1511,32 @@ void ShaderTransition::impl_preparePermShader()
     CHECK_GL_ERROR();
     if( m_nProgramObject ) {
         glUseProgram( m_nProgramObject );
+        CHECK_GL_ERROR();
 
         GLint location = glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
         if( location != -1 ) {
             glUniform1i( location, 0 );  // texture unit 0
+            CHECK_GL_ERROR();
         }
 
         glActiveTexture(GL_TEXTURE1);
+        CHECK_GL_ERROR();
         if( !m_nHelperTexture )
             initPermTexture( &m_nHelperTexture );
+
         glActiveTexture(GL_TEXTURE0);
+        CHECK_GL_ERROR();
 
         location = glGetUniformLocation( m_nProgramObject, "permTexture" );
         if( location != -1 ) {
             glUniform1i( location, 1 );  // texture unit 1
+            CHECK_GL_ERROR();
         }
 
         location = glGetUniformLocation( m_nProgramObject, "enteringSlideTexture" );
         if( location != -1 ) {
             glUniform1i( location, 2 );  // texture unit 2
+            CHECK_GL_ERROR();
         }
     }
     CHECK_GL_ERROR();
@@ -1652,21 +1659,20 @@ class VortexTransition : public ShaderTransition
 public:
     VortexTransition(const TransitionScene& rScene, const TransitionSettings& rSettings, int nNX, int nNY)
         : ShaderTransition(rScene, rSettings)
-        , mnCenterLocation(0)
+        , mnTileCenterLocation(0)
         , mnTileXIndexLocation(0)
         , mnTileYIndexLocation(0)
         , mnVertexIndexInTileLocation(0)
-        , mnCenterBuffer(0)
+        , mnTileCenterBuffer(0)
         , mnTileXIndexBuffer(0)
         , mnTileYIndexBuffer(0)
         , mnVertexIndexInTileBuffer(0)
-        , mnNX(nNX)
-        , mnNY(nNY)
+        , maNumTiles(nNX,nNY)
     {
-        mvCenters.resize(6*mnNX*mnNY);
-        mvTileXIndexes.resize(6*mnNX*mnNY);
-        mvTileYIndexes.resize(6*mnNX*mnNY);
-        mvVertexIndexesInTiles.resize(6*mnNX*mnNY);
+        mvTileCenters.resize(6*maNumTiles.x*maNumTiles.y);
+        mvTileXIndexes.resize(6*maNumTiles.x*maNumTiles.y);
+        mvTileYIndexes.resize(6*maNumTiles.x*maNumTiles.y);
+        mvVertexIndexesInTiles.resize(6*maNumTiles.x*maNumTiles.y);
     }
 
 private:
@@ -1676,18 +1682,18 @@ private:
 
     virtual GLuint makeShader() override;
 
-    GLint mnCenterLocation;
+    GLint mnTileCenterLocation;
     GLint mnTileXIndexLocation;
     GLint mnTileYIndexLocation;
     GLint mnVertexIndexInTileLocation;
-    GLuint mnCenterBuffer;
+    GLuint mnTileCenterBuffer;
     GLuint mnTileXIndexBuffer;
     GLuint mnTileYIndexBuffer;
     GLuint mnVertexIndexInTileBuffer;
 
-    int mnNX, mnNY;
+    glm::ivec2 maNumTiles;
 
-    std::vector<glm::vec2> mvCenters;
+    std::vector<glm::vec2> mvTileCenters;
     std::vector<GLint> mvTileXIndexes;
     std::vector<GLint> mvTileYIndexes;
     std::vector<GLint> mvVertexIndexesInTiles;
@@ -1697,11 +1703,11 @@ void VortexTransition::prepare( double, double, double, double, double )
 {
     glDisable(GL_CULL_FACE);
 
-    glBindBuffer(GL_ARRAY_BUFFER, mnCenterBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mnTileCenterBuffer);
     CHECK_GL_ERROR();
-    glEnableVertexAttribArray(mnCenterLocation);
+    glEnableVertexAttribArray(mnTileCenterLocation);
     CHECK_GL_ERROR();
-    glVertexAttribPointer(mnCenterLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(mnTileCenterLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
     CHECK_GL_ERROR();
 
     glBindBuffer(GL_ARRAY_BUFFER, mnTileXIndexBuffer);
@@ -1738,16 +1744,28 @@ GLuint VortexTransition::makeShader()
 {
     GLuint nProgram = OpenGLHelper::LoadShaders( "vortexVertexShader", "vortexFragmentShader" );
 
-    mnCenterLocation = glGetAttribLocation(nProgram, "center");
-    CHECK_GL_ERROR();
-    mnTileXIndexLocation = glGetAttribLocation(nProgram, "tileXIndex");
-    CHECK_GL_ERROR();
-    mnTileYIndexLocation = glGetAttribLocation(nProgram, "tileYIndex");
-    CHECK_GL_ERROR();
-    mnVertexIndexInTileLocation = glGetAttribLocation(nProgram, "vertexIndexInTile");
-    CHECK_GL_ERROR();
+    if (nProgram)
+    {
+        mnTileCenterLocation = glGetAttribLocation(nProgram, "tileCenter");
+        CHECK_GL_ERROR();
+        mnTileXIndexLocation = glGetAttribLocation(nProgram, "tileXIndex");
+        CHECK_GL_ERROR();
+        mnTileYIndexLocation = glGetAttribLocation(nProgram, "tileYIndex");
+        CHECK_GL_ERROR();
+        mnVertexIndexInTileLocation = glGetAttribLocation(nProgram, "vertexIndexInTile");
+        CHECK_GL_ERROR();
 
-    glGenBuffers(1, &mnCenterBuffer);
+        glUseProgram(nProgram);
+        CHECK_GL_ERROR();
+
+        GLint nNumTilesLocation = glGetUniformLocation(nProgram, "numTiles");
+        CHECK_GL_ERROR();
+
+        glUniform2iv(nNumTilesLocation, 1, glm::value_ptr(maNumTiles));
+        CHECK_GL_ERROR();
+    }
+
+    glGenBuffers(1, &mnTileCenterBuffer);
     CHECK_GL_ERROR();
     glGenBuffers(1, &mnTileXIndexBuffer);
     CHECK_GL_ERROR();
@@ -1759,9 +1777,9 @@ GLuint VortexTransition::makeShader()
     // Two triangles, i.e. six vertices, per tile
     {
         int n = 0;
-        for (int x = 0; x < mnNX; x++)
+        for (int x = 0; x < maNumTiles.x; x++)
         {
-            for (int y = 0; y < mnNY; y++)
+            for (int y = 0; y < maNumTiles.y; y++)
             {
                 for (int v = 0; v < 6; v++)
                 {
@@ -1770,7 +1788,7 @@ GLuint VortexTransition::makeShader()
                     // coordinates. Why the code can't use those from the start I don't
                     // know... Confusing. Anyway, so here when we store the center of each rectangle
                     // that the vertices belong to, we need to use the actual coordinates.
-                    mvCenters[n] = glm::vec2(2*((x+0.5)/mnNX) - 1, -2*((y+0.5)/mnNY) + 1);
+                    mvTileCenters[n] = glm::vec2(2*((x+0.5)/maNumTiles.x) - 1, -2*((y+0.5)/maNumTiles.y) + 1);
 
                     mvTileXIndexes[n] = x;
                     mvTileYIndexes[n] = y;
@@ -1781,9 +1799,9 @@ GLuint VortexTransition::makeShader()
         }
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, mnCenterBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mnTileCenterBuffer);
     CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, mvCenters.size()*sizeof(glm::vec2), mvCenters.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, mvTileCenters.size()*sizeof(glm::vec2), mvTileCenters.data(), GL_STATIC_DRAW);
     CHECK_GL_ERROR();
 
     glBindBuffer(GL_ARRAY_BUFFER, mnTileXIndexBuffer);
@@ -1871,6 +1889,7 @@ GLuint RippleTransition::makeShader()
     if (nProgram)
     {
         glUseProgram(nProgram);
+        CHECK_GL_ERROR();
 
         GLint nCenterLocation = glGetUniformLocation(nProgram, "center");
         CHECK_GL_ERROR();

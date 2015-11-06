@@ -9,21 +9,22 @@
 
 uniform sampler2D leavingSlideTexture;
 uniform sampler2D enteringSlideTexture;
-uniform sampler2D permTexture;
 uniform float time;
 varying vec2 v_texturePosition;
-
-float snoise(vec2 p)
-{
-    return texture2D(permTexture, p).r;
-}
+varying float v_textureSelect;
 
 void main()
 {
-    if (time <= 0.5)
+    if (v_textureSelect == 0)
+    {
         gl_FragColor = texture2D(leavingSlideTexture, v_texturePosition);
+    }
     else
-        gl_FragColor = texture2D(enteringSlideTexture, v_texturePosition);
+    {
+        vec2 pos = v_texturePosition;
+        pos.x = 1 - pos.x;
+        gl_FragColor = texture2D(enteringSlideTexture, pos);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
