@@ -38,6 +38,14 @@
 
 #if defined LIBO_INTERNAL_ONLY
 
+// A replacement for ImplHelperN has deliberately been left out, as ImplHelperN
+// is unlikely ever be a better choice htan WeakImplHelper, so all their
+// existing uses are probably confused and should use WeakImplHelper instead.
+//
+// Replacements for WeakAggImplHelperN and AggImplInheritanceHelper1 have
+// deliberately been left out, as the underlying aggregation mechanism is known
+// broken in general and should not be used.
+
 namespace cppu {
 
 /// @cond INTERNAL
