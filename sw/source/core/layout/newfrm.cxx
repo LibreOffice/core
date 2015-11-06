@@ -452,7 +452,7 @@ void InitCurrShells( SwRootFrm *pRoot )
 |*/
 SwRootFrm::SwRootFrm( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     SwLayoutFrm( pFormat->GetDoc()->MakeFrameFormat(
-        OUString("Root"), pFormat ), 0 ),
+        "Root", pFormat ), 0 ),
     maPagesArea(),
     mnViewWidth( -1 ),
     mnColumns( 0 ),

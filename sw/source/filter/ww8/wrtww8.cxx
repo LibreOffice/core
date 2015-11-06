@@ -1535,7 +1535,7 @@ sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
     if( !m_pRedlAuthors )
     {
         m_pRedlAuthors = new WW8_WrtRedlineAuthor;
-        m_pRedlAuthors->AddName(OUString("Unknown"));
+        m_pRedlAuthors->AddName("Unknown");
     }
     return m_pRedlAuthors->AddName( SW_MOD()->GetRedlineAuthor( nId ) );
 }

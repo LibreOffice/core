@@ -194,9 +194,9 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     rIDCO.AppendTextNode(*aPaM.GetPoint());
-    rIDCO.InsertString(aPaM, OUString("A"));
+    rIDCO.InsertString(aPaM, "A");
     rIDCO.AppendTextNode(*aPaM.GetPoint());
-    rIDCO.InsertString(aPaM, OUString("A"));
+    rIDCO.InsertString(aPaM, "A");
     rIDCO.AppendTextNode(*aPaM.GetPoint());
     aPaM.Move(fnMoveBackward, fnGoNode);
     aPaM.Move(fnMoveBackward, fnGoNode);
@@ -233,7 +233,7 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     rIDCO.AppendTextNode(*aPaM.GetPoint());
-    rIDCO.InsertString(aPaM, OUString("ABC"));
+    rIDCO.InsertString(aPaM, "ABC");
     aPaM.Move(fnMoveBackward, fnGoContent);
     aPaM.SetMark();
     aPaM.Move(fnMoveBackward, fnGoContent);
@@ -443,11 +443,11 @@ void SwMacrosTest::testFindReplace()
     auto pPaM(pDoc->CreateUnoCrsr(SwPosition(aIdx)));
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
-    rIDCO.InsertString(*pPaM, OUString("foo"));
+    rIDCO.InsertString(*pPaM, "foo");
     rIDCO.AppendTextNode(*pPaM->GetPoint());
-    rIDCO.InsertString(*pPaM, OUString("bar"));
+    rIDCO.InsertString(*pPaM, "bar");
     rIDCO.AppendTextNode(*pPaM->GetPoint());
-    rIDCO.InsertString(*pPaM, OUString("baz"));
+    rIDCO.InsertString(*pPaM, "baz");
     pPaM->Move(fnMoveBackward, fnGoDoc);
 
     bool bCancel(false);

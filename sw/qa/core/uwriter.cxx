@@ -281,17 +281,17 @@ SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
     SwPaM aPaM(aIdx);
 
     SwFormatFootnote aFootnote;
-    aFootnote.SetNumStr(OUString("foo"));
+    aFootnote.SetNumStr("foo");
 
     pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA BBBBB "));
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, "AAAAA BBBBB ");
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
     sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
     pTextNode->InsertItem(aFootnote, nPos, nPos);
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" CCCCC "));
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, " CCCCC ");
     nPos = aPaM.GetPoint()->nContent.GetIndex();
     pTextNode->InsertItem(aFootnote, nPos, nPos);
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" DDDDD"));
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, " DDDDD");
     CPPUNIT_ASSERT(pTextNode->GetText().getLength() == (4*5) + 5 + 2);
 
     //set start of selection to first B
@@ -328,7 +328,7 @@ SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
     SwPaM aPaM(aIdx);
 
     pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA"));
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, "AAAAA");
     IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     sw::mark::IFieldmark *pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(
             pMarksAccess->makeNoTextFieldBookmark(aPaM, "test", ODF_FORMDROPDOWN));
@@ -337,7 +337,7 @@ SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
     vListEntries[0] = "BBBBB";
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(sal_Int32(0));
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("CCCCC"));
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, "CCCCC");
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11),
             pTextNode->GetText().getLength());
@@ -685,11 +685,11 @@ void SwDocTest::testSwScanner()
         SwDocStat aDocStat;
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
         pTextNode = aPaM.GetNode().GetTextNode();
         sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
         SwFormatFootnote aFootnote;
-        aFootnote.SetNumStr(OUString("banana"));
+        aFootnote.SetNumStr("banana");
         SwTextAttr* pTA = pTextNode->InsertItem(aFootnote, nPos, nPos);
         CPPUNIT_ASSERT(pTA);
         CPPUNIT_ASSERT(pTextNode->Len() == 6); //Apple + 0x02
@@ -710,7 +710,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("refmark anchor should not be counted", aDocStat.nChar == 11);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
 
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
@@ -718,7 +718,7 @@ void SwDocTest::testSwScanner()
             OUString("Some Text"), OUString("Initials"), OUString("Name"), aDate );
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFormatField(aPostIt));
 
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
         pTextNode = aPaM.GetNode().GetTextNode();
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
@@ -735,7 +735,7 @@ void SwDocTest::testSwScanner()
 
         const char aString[] = "Lorem ipsum";
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aString));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aString);
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
@@ -924,7 +924,7 @@ void SwDocTest::testMergePortionsDeleteNotSorted()
 {
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("  AABBCC"));
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "  AABBCC");
 
     SwCharFormat *const pCharFormat(m_pDoc->MakeCharFormat("foo", 0));
     SwFormatCharFormat const charFormat(pCharFormat);
@@ -956,14 +956,14 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 1"));
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 1");
     m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
 
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("graphic anchor>><<graphic anchor"));
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "graphic anchor>><<graphic anchor");
     SwNodeIndex nPara2 = aPaM.GetPoint()->nNode;
     m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
 
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 3"));
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 3");
 
     aPaM.GetPoint()->nNode = nPara2;
     aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
@@ -1156,7 +1156,7 @@ void SwDocTest::testTransliterate()
     // just some simple test to see if it's totally broken
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("foobar"));
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "foobar");
     aPaM.SetMark();
     aPaM.GetPoint()->nContent = 0;
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"), aPaM.GetText());
@@ -1223,22 +1223,22 @@ void SwDocTest::testMarkMove()
     {
         SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
         SwPaM aPaM(aIdx);
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 1"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 1");
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
-        pMarksAccess->makeMark(aPaM, OUString("Para1"), IDocumentMarkAccess::MarkType::BOOKMARK);
+        pMarksAccess->makeMark(aPaM, "Para1", IDocumentMarkAccess::MarkType::BOOKMARK);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 2"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 2");
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
-        pMarksAccess->makeMark(aPaM, OUString("Para2"), IDocumentMarkAccess::MarkType::BOOKMARK);
+        pMarksAccess->makeMark(aPaM, "Para2", IDocumentMarkAccess::MarkType::BOOKMARK);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 3"));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 3");
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
-        pMarksAccess->makeMark(aPaM, OUString("Para3"), IDocumentMarkAccess::MarkType::BOOKMARK);
+        pMarksAccess->makeMark(aPaM, "Para3", IDocumentMarkAccess::MarkType::BOOKMARK);
     }
 
     // join paragraph 2 and 3 and check

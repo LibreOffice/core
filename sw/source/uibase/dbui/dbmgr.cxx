@@ -2836,7 +2836,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
             //copy rSh to aTempFile
             OUString sTempURL;
             const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                        OUString(FILTER_XML),
+                        FILTER_XML,
                         SwDocShell::Factory().GetFilterContainer() );
             try
             {

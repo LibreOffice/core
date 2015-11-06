@@ -696,7 +696,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SaveOutputHdl_Impl, Button*, pButton, voi
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                OUString( FILTER_XML ),
+                FILTER_XML,
                 SwDocShell::Factory().GetFilterContainer() );
 
         uno::Sequence< beans::PropertyValue > aValues(1);
@@ -1008,14 +1008,14 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SendDocumentsHdl_Impl, Button*, pButton, 
             //Make sure we don't pick e.g. the flat xml filter
             //for this format
             pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                OUString( FILTER_XML ),
+                FILTER_XML,
                 SwDocShell::Factory().GetFilterContainer() );
         }
         break;
         case MM_DOCTYPE_PDF:
         {
             pSfxFlt = pFilterContainer->GetFilter4FilterName(
-                OUString("writer_pdf_Export"),
+                "writer_pdf_Export",
                 SfxFilterFlags::EXPORT);
         }
         break;
@@ -1049,7 +1049,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SendDocumentsHdl_Impl, Button*, pButton, 
         {
             bAsBody = true;
             pSfxFlt = pFilterContainer->GetFilter4FilterName(
-                OUString("Text (encoded)"), SfxFilterFlags::EXPORT);
+                "Text (encoded)", SfxFilterFlags::EXPORT);
         }
         break;
     }
@@ -1118,7 +1118,7 @@ IMPL_LINK_TYPED(SwMailMergeOutputPage, SendDocumentsHdl_Impl, Button*, pButton, 
         INetURLObject(), utl::TempFile::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
     const SfxFilter *pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
-            OUString( FILTER_XML ),
+            FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
 
     uno::Sequence< beans::PropertyValue > aValues(1);

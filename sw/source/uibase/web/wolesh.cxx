@@ -48,7 +48,7 @@ SwWebOleShell::SwWebOleShell(SwView &_rView) :
     SwOleShell(_rView)
 
 {
-    SetName(OUString("Object"));
+    SetName("Object");
     SetHelpId(SW_OLESHELL);
 }
 

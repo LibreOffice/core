@@ -120,13 +120,13 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
         /* Bug 62703 - and also WinWord Docs w/o ClipBoardId! */
         if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         {
-            bRet = (rStg.IsContained(OUString("0Table"))
-                    || rStg.IsContained(OUString("1Table")))
+            bRet = (rStg.IsContained("0Table")
+                    || rStg.IsContained("1Table"))
                 == (rFilter.GetUserData() == FILTER_WW8);
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
                 tools::SvRef<SotStorageStream> xRef =
-                    rStg.OpenSotStream(OUString("WordDocument"),
+                    rStg.OpenSotStream("WordDocument",
                             STREAM_STD_READ | StreamMode::NOCREATE );
                 xRef->Seek(10);
                 sal_uInt8 nByte;

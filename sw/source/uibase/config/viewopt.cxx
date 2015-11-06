@@ -131,7 +131,7 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
 sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut )
 {
     assert(pOut && "no Outdev");
-    return sal_uInt16(pOut->GetTextWidth( OUString(aPostItStr )));
+    return sal_uInt16(pOut->GetTextWidth( aPostItStr));
 }
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript )

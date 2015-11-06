@@ -50,7 +50,7 @@ SwOleShell::SwOleShell(SwView &_rView) :
     SwFrameShell(_rView)
 
 {
-    SetName(OUString("Object"));
+    SetName("Object");
     SetHelpId(SW_OLESHELL);
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_OLE));
 }

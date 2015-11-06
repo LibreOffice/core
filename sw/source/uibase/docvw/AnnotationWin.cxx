@@ -250,8 +250,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     if (!pText->GetTextObject().GetText(0).isEmpty())
         GetOutlinerView()->GetEditView().InsertText(pText->GetTextObject());
     else
-        GetOutlinerView()->InsertText(OUString("..."));
-    GetOutlinerView()->InsertText(OUString("\"\n"));
+        GetOutlinerView()->InsertText("...");
+    GetOutlinerView()->InsertText("\"\n");
 
     GetOutlinerView()->SetSelection(ESelection(0,0,EE_PARA_ALL,EE_TEXTPOS_ALL));
     SfxItemSet aAnswerSet( DocView().GetDocShell()->GetPool() );

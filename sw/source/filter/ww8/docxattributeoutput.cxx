@@ -1240,7 +1240,7 @@ void DocxAttributeOutput::EndRun()
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     if(GetExport().m_bTabInTOC && m_pHyperlinkAttrList.is())
     {
-        RunText(OUString("\t")) ;
+        RunText("\t") ;
     }
     m_pSerializer->mergeTopMarks(Tag_EndRun_1, sax_fastparser::MergeMarks::PREPEND); // merges with "postponed run start", see above
 
@@ -1576,7 +1576,7 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
 
         // Replace tabs by </instrText><tab/><instrText>
         if ( i < ( nNbToken - 1 ) )
-            RunText( OUString( "\t" ) );
+            RunText( "\t" );
     }
 
     m_pSerializer->endElementNS( XML_w, XML_r );

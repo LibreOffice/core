@@ -540,7 +540,7 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
 
 void RtfAttributeOutput::EndRuby()
 {
-    m_rExport.OutputField(0, ww::eEQ, OUString(")"), WRITEFIELD_END | WRITEFIELD_CLOSE);
+    m_rExport.OutputField(0, ww::eEQ, ")", WRITEFIELD_END | WRITEFIELD_CLOSE);
     EndRun();
 }
 

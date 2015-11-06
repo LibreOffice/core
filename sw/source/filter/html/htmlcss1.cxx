@@ -224,7 +224,7 @@ void SwCSS1Parser::SetLinkCharFormats()
     OSL_ENSURE( !bLinkCharFormatsSet, "Aufruf von SetLinkCharFormats unnoetig" );
 
     SvxCSS1MapEntry *pStyleEntry =
-        GetTag( OUString(OOO_STRING_SVTOOLS_HTML_anchor) );
+        GetTag( OOO_STRING_SVTOOLS_HTML_anchor );
     SwCharFormat *pUnvisited = 0, *pVisited = 0;
     if( pStyleEntry )
     {

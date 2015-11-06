@@ -286,7 +286,7 @@ void SwUiWriterTest::testReplaceForward()
 
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
     lcl_selectCharacters(aPaM, 5, 9);
-    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, OUString("toto"), false);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
 
     CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
 
@@ -329,16 +329,16 @@ void SwUiWriterTest::testBookmarkCopy()
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwCursor aPaM(SwPosition(aIdx), nullptr, false);
-    rIDCO.InsertString(aPaM, OUString("foo"));
+    rIDCO.InsertString(aPaM, "foo");
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
-    rIDCO.InsertString(aPaM, OUString("bar"));
+    rIDCO.InsertString(aPaM, "bar");
     aPaM.SetMark();
     aPaM.MovePara(GetfnParaCurr(), GetfnParaStart());
-    rIDMA.makeMark(aPaM, OUString("Mark"), IDocumentMarkAccess::MarkType::BOOKMARK);
+    rIDMA.makeMark(aPaM, "Mark", IDocumentMarkAccess::MarkType::BOOKMARK);
     aPaM.Exchange();
     aPaM.DeleteMark();
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
-    rIDCO.InsertString(aPaM, OUString("baz"));
+    rIDCO.InsertString(aPaM, "baz");
 
     // copy range
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
@@ -412,11 +412,11 @@ void SwUiWriterTest::testReplaceBackward()
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("toto titi tutu"));
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, "toto titi tutu");
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
     lcl_selectCharacters(aPaM, 9, 5);
 
-    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, OUString("toto"), false);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
 
     CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
 
@@ -903,7 +903,7 @@ void SwUiWriterTest::testBookmarkUndo()
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
 
-    pMarkAccess->makeMark(aPaM, OUString("Mark"), IDocumentMarkAccess::MarkType::BOOKMARK);
+    pMarkAccess->makeMark(aPaM, "Mark", IDocumentMarkAccess::MarkType::BOOKMARK);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
@@ -1055,7 +1055,7 @@ void SwUiWriterTest::testTdf63214()
         aPaM.SetMark();
         aPaM.Move(fnMoveForward, fnGoContent);
         //Inserting a crossRefBookmark
-        pMarkAccess->makeMark(aPaM, OUString("Bookmark"), IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
+        pMarkAccess->makeMark(aPaM, "Bookmark", IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     }
     //moving cursor to the end of paragraph
@@ -1084,7 +1084,7 @@ void SwUiWriterTest::testTdf51741()
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
     //Modification 1
-    pMarkAccess->makeMark(aPaM, OUString("Mark"), IDocumentMarkAccess::MarkType::BOOKMARK);
+    pMarkAccess->makeMark(aPaM, "Mark", IDocumentMarkAccess::MarkType::BOOKMARK);
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
@@ -1172,9 +1172,9 @@ void SwUiWriterTest::testDeleteTableRedlines()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
     uno::Sequence<beans::PropertyValue> aDescriptor;
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox(OUString("A1")))), OUString("TableCellInsert"), aDescriptor);
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox(OUString("B1")))), OUString("TableCellInsert"), aDescriptor);
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox(OUString("C1")))), OUString("TableCellInsert"), aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox("A1"))), "TableCellInsert", aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox("B1"))), "TableCellInsert", aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox("C1"))), "TableCellInsert", aDescriptor);
     IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
     SwExtraRedlineTable& rExtras = rIDRA.GetExtraRedlineTable();
     rExtras.DeleteAllTableRedlines(pDoc, rTbl, false, sal_uInt16(USHRT_MAX));
@@ -1314,7 +1314,7 @@ void SwUiWriterTest::testTdf79236()
     SwDoc* pDoc = createDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     //Getting some paragraph style
-    SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName("Text Body");
     const SwAttrSet& rAttrSet = pTextFormat->GetAttrSet();
     SfxItemSet* pNewSet = rAttrSet.Clone();
     sal_uInt16 initialCount = pNewSet->Count();
@@ -1335,7 +1335,7 @@ void SwUiWriterTest::testTdf79236()
     //Setting the updated item set on the style
     pDoc->ChgFormat(*pTextFormat, *pNewSet);
     //Checking the Changes
-    SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName("Text Body");
     const SwAttrSet& rAttrSet2 = pTextFormat2->GetAttrSet();
     const SvxAdjustItem& rAdjustItem2 = rAttrSet2.GetAdjust();
     SvxAdjust Adjust2 = rAdjustItem2.GetAdjust();
@@ -1343,7 +1343,7 @@ void SwUiWriterTest::testTdf79236()
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust2);
     //Undo the changes
     rUndoManager.Undo();
-    SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName("Text Body");
     const SwAttrSet& rAttrSet3 = pTextFormat3->GetAttrSet();
     const SvxAdjustItem& rAdjustItem3 = rAttrSet3.GetAdjust();
     SvxAdjust Adjust3 = rAdjustItem3.GetAdjust();
@@ -1351,7 +1351,7 @@ void SwUiWriterTest::testTdf79236()
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_LEFT, Adjust3);
     //Redo the changes
     rUndoManager.Redo();
-    SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName("Text Body");
     const SwAttrSet& rAttrSet4 = pTextFormat4->GetAttrSet();
     const SvxAdjustItem& rAdjustItem4 = rAttrSet4.GetAdjust();
     SvxAdjust Adjust4 = rAdjustItem4.GetAdjust();
@@ -1359,7 +1359,7 @@ void SwUiWriterTest::testTdf79236()
     CPPUNIT_ASSERT_EQUAL(SVX_ADJUST_RIGHT, Adjust4);
     //Undo the changes
     rUndoManager.Undo();
-    SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName(OUString("Text Body"));
+    SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName("Text Body");
     const SwAttrSet& rAttrSet5 = pTextFormat5->GetAttrSet();
     const SvxAdjustItem& rAdjustItem5 = rAttrSet5.GetAdjust();
     SvxAdjust Adjust5 = rAdjustItem5.GetAdjust();
@@ -1455,8 +1455,8 @@ void SwUiWriterTest::testTdf69282()
     uno::Reference<lang::XComponent> xSourceDoc(mxComponent, uno::UNO_QUERY);
     mxComponent.clear();
     SwDoc* target = createDoc();
-    SwPageDesc* sPageDesc = source->MakePageDesc(OUString("SourceStyle"));
-    SwPageDesc* tPageDesc = target->MakePageDesc(OUString("TargetStyle"));
+    SwPageDesc* sPageDesc = source->MakePageDesc("SourceStyle");
+    SwPageDesc* tPageDesc = target->MakePageDesc("TargetStyle");
     sPageDesc->ChgFirstShare(false);
     CPPUNIT_ASSERT(!sPageDesc->IsFirstShared());
     SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
@@ -1516,8 +1516,8 @@ void SwUiWriterTest::testTdf69282WithMirror()
     uno::Reference<lang::XComponent> xSourceDoc(mxComponent, uno::UNO_QUERY);
     mxComponent.clear();
     SwDoc* target = createDoc();
-    SwPageDesc* sPageDesc = source->MakePageDesc(OUString("SourceStyle"));
-    SwPageDesc* tPageDesc = target->MakePageDesc(OUString("TargetStyle"));
+    SwPageDesc* sPageDesc = source->MakePageDesc("SourceStyle");
+    SwPageDesc* tPageDesc = target->MakePageDesc("TargetStyle");
     //Enabling Mirror
     sPageDesc->SetUseOn(nsUseOnPage::PD_MIRROR);
     SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
@@ -1640,7 +1640,7 @@ void SwUiWriterTest::testTdf60967()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    pWrtShell->ChangeHeaderOrFooter(OUString("Default Style"), true, true, true);
+    pWrtShell->ChangeHeaderOrFooter("Default Style", true, true, true);
     //Inserting table
     SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
     pWrtShell->InsertTable(TableOpt, 2, 2);
@@ -1726,7 +1726,7 @@ void SwUiWriterTest::testTdf77342()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
     //inserting first footnote
-    pWrtShell->InsertFootnote(OUString(""));
+    pWrtShell->InsertFootnote("");
     SwFieldType* pField = pWrtShell->GetFieldType(0, RES_GETREFFLD);
     SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pField);
     //moving cursor to the starting of document
@@ -1735,14 +1735,14 @@ void SwUiWriterTest::testTdf77342()
     SwGetRefField aField1(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(0), REF_CONTENT);
     pWrtShell->Insert(aField1);
     //inserting second footnote
-    pWrtShell->InsertFootnote(OUString(""));
+    pWrtShell->InsertFootnote("");
     pWrtShell->SttDoc();
     pCrsr->Move(fnMoveForward);
     //inserting reference field 2
     SwGetRefField aField2(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(1), REF_CONTENT);
     pWrtShell->Insert(aField2);
     //inserting third footnote
-    pWrtShell->InsertFootnote(OUString(""));
+    pWrtShell->InsertFootnote("");
     pWrtShell->SttDoc();
     pCrsr->Move(fnMoveForward);
     pCrsr->Move(fnMoveForward);
@@ -2216,10 +2216,10 @@ void SwUiWriterTest::testTdf75137()
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(true);
-    pWrtShell->InsertFootnote(OUString("This is first footnote"));
+    pWrtShell->InsertFootnote("This is first footnote");
     sal_uLong firstIndex = pShellCrsr->GetNode().GetIndex();
     pShellCrsr->GotoFootnoteAnchor();
-    pWrtShell->InsertFootnote(OUString("This is second footnote"));
+    pWrtShell->InsertFootnote("This is second footnote");
     pWrtShell->Up(false);
     sal_uLong secondIndex = pShellCrsr->GetNode().GetIndex();
     pWrtShell->Down(false);
@@ -2525,13 +2525,13 @@ void SwUiWriterTest::testUnoCursorPointer()
 void SwUiWriterTest::testTextTableCellNames()
 {
     sal_Int32 nCol, nRow2;
-    SwXTextTable::GetCellPosition( OUString("z1"), nCol, nRow2);
+    SwXTextTable::GetCellPosition( "z1", nCol, nRow2);
     CPPUNIT_ASSERT(nCol == 51);
-    SwXTextTable::GetCellPosition( OUString("AA1"), nCol, nRow2);
+    SwXTextTable::GetCellPosition( "AA1", nCol, nRow2);
     CPPUNIT_ASSERT(nCol == 52);
-    SwXTextTable::GetCellPosition( OUString("AB1"), nCol, nRow2);
+    SwXTextTable::GetCellPosition( "AB1", nCol, nRow2);
     CPPUNIT_ASSERT(nCol == 53);
-    SwXTextTable::GetCellPosition( OUString("BB1"), nCol, nRow2);
+    SwXTextTable::GetCellPosition( "BB1", nCol, nRow2);
     CPPUNIT_ASSERT(nCol == 105);
 }
 

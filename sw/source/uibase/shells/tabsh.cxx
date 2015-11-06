@@ -1377,7 +1377,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
 SwTableShell::SwTableShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
-    SetName(OUString("Table"));
+    SetName("Table");
     SetHelpId(SW_TABSHELL);
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Table));
 }

@@ -56,7 +56,7 @@ SwWebGrfShell::SwWebGrfShell(SwView &_rView) :
     SwGrfShell(_rView)
 
 {
-    SetName(OUString("Graphic"));
+    SetName("Graphic");
     SetHelpId(SW_GRFSHELL);
 }
 

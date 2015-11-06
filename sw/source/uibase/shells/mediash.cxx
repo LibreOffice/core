@@ -190,7 +190,7 @@ SwMediaShell::SwMediaShell(SwView &_rView) :
     SwBaseShell(_rView)
 
 {
-    SetName(OUString("Media Playback"));
+    SetName("Media Playback");
     SetHelpId(SW_MEDIASHELL);
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Media));
 }

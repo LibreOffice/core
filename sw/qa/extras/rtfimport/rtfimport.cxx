@@ -548,7 +548,7 @@ DECLARE_RTFIMPORT_TEST(testFdo38786, "fdo38786.rtf")
 DECLARE_RTFIMPORT_TEST(testN757651, "n757651.rtf")
 {
     // The bug was that due to buggy layout the text expanded to two pages.
-    if (Application::GetDefaultDevice()->IsFontAvailable(OUString("Times New Roman")))
+    if (Application::GetDefaultDevice()->IsFontAvailable("Times New Roman"))
         CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 

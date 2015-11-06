@@ -102,12 +102,12 @@ SwDLL::SwDLL()
     SwModule* pModule = new SwModule( pWDocFact, pDocFact, pGlobDocFact );
     *ppShlPtr = pModule;
 
-    pWDocFact->SetDocumentServiceName(OUString("com.sun.star.text.WebDocument"));
+    pWDocFact->SetDocumentServiceName("com.sun.star.text.WebDocument");
 
     if (xOpt && xOpt->IsWriter())
     {
-        pGlobDocFact->SetDocumentServiceName(OUString("com.sun.star.text.GlobalDocument"));
-        pDocFact->SetDocumentServiceName(OUString("com.sun.star.text.TextDocument"));
+        pGlobDocFact->SetDocumentServiceName("com.sun.star.text.GlobalDocument");
+        pDocFact->SetDocumentServiceName("com.sun.star.text.TextDocument");
     }
 
     // register SvDraw-Fields

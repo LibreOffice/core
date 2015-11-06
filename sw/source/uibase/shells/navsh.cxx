@@ -38,7 +38,7 @@ void SwNavigationShell::InitInterface_Impl()
 SwNavigationShell::SwNavigationShell(SwView &_rView)
     : SwBaseShell( _rView )
 {
-    SetName(OUString("Navigation"));
+    SetName("Navigation");
     SetHelpId(SW_NAVIGATIONSHELL);
 }
 

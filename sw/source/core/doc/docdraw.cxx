@@ -253,7 +253,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             pObj->NbcMove( Size( aAnchorPos.getX(), aAnchorPos.getY() ) );
         }
 
-        pFormat = MakeDrawFrameFormat( OUString("DrawObject"),
+        pFormat = MakeDrawFrameFormat( "DrawObject",
                                 GetDfltFrameFormat() );
         pFormat->SetFormatAttr( aAnch );
         // #i36010# - set layout direction of the position

@@ -1192,7 +1192,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     mbResetFormDesignMode( false ),
     mbFormDesignModeToReset( false )
 {
-    SetName(OUString("PageView" ));
+    SetName("PageView");
     SetWindow( pViewWin );
     SetHelpId(SW_PAGEPREVIEW);
     _CreateScrollbar( true );

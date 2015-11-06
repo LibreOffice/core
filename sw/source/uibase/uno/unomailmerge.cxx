@@ -775,7 +775,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     // save document with temporary filename
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-            OUString( FILTER_XML ),
+            FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
     OUString aExtension(comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(), '*'));
     utl::TempFile aTempFile( "SwMM", true, &aExtension );

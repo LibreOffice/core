@@ -938,7 +938,7 @@ SwGrfShell::~SwGrfShell()
 SwGrfShell::SwGrfShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
-    SetName(OUString("Graphic"));
+    SetName("Graphic");
     SetHelpId(SW_GRFSHELL);
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Graphic));
 }

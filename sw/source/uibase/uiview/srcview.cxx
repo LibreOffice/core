@@ -257,7 +257,7 @@ void SwSrcView::SaveContentTo(SfxMedium& rMed)
 void SwSrcView::Init()
 {
     SetHelpId(SW_SRC_VIEWSHELL);
-    SetName(OUString("Source"));
+    SetName("Source");
     SetWindow( aEditWin.get() );
     SwDocShell* pDocShell = GetDocShell();
     // If the doc is still loading, then the DocShell must fire up
@@ -306,7 +306,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             // search for an html filter for export
             SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
             const SfxFilter* pFilter =
-                pFilterCont->GetFilter4Extension( OUString("html"), SfxFilterFlags::EXPORT );
+                pFilterCont->GetFilter4Extension( "html", SfxFilterFlags::EXPORT );
             if ( pFilter )
             {
                 // filter found -> use its uiname and wildcard

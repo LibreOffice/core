@@ -508,7 +508,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
     SfxBoolItem aBrowse( SID_BROWSE, true );
 
     if( nFilter & URLLOAD_NEWVIEW )
-        aTargetFrameName.SetValue( OUString("_blank") );
+        aTargetFrameName.SetValue( "_blank" );
 
     const SfxPoolItem* aArr[] = {
                 &aName,

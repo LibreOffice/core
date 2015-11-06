@@ -7360,7 +7360,7 @@ const vcl::Font& SwPageFrm::GetEmptyPageFont()
         pEmptyPgFont->SetSize( Size( 0, 80 * 20 )); // == 80 pt
         pEmptyPgFont->SetWeight( WEIGHT_BOLD );
         pEmptyPgFont->SetStyleName( aEmptyOUStr );
-        pEmptyPgFont->SetName(OUString("Helvetica"));
+        pEmptyPgFont->SetName("Helvetica");
         pEmptyPgFont->SetFamily( FAMILY_SWISS );
         pEmptyPgFont->SetTransparent( true );
         pEmptyPgFont->SetColor( COL_GRAY );

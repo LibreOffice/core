@@ -474,7 +474,7 @@ SwRewriter SwUndoInsert::GetRewriter() const
 
     if ( ! bDone )
     {
-        aResult.AddRule(UndoArg1, OUString("??"));
+        aResult.AddRule(UndoArg1, "??");
     }
 
     return aResult;

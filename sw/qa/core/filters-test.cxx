@@ -133,47 +133,47 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
 
 void SwFiltersTest::testCVEs()
 {
-    testDir(OUString("StarOffice XML (Writer)"),
+    testDir("StarOffice XML (Writer)",
             getURLFromSrc("/sw/qa/core/data/xml/"),
-            OUString(FILTER_XML),
+            FILTER_XML,
             SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
-    testDir(OUString("writer8"),
+    testDir("writer8",
             getURLFromSrc("/sw/qa/core/data/odt/"),
-            OUString(FILTER_XML),
+            FILTER_XML,
             SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
-    testDir(OUString("MS Word 97"),
+    testDir("MS Word 97",
             getURLFromSrc("/sw/qa/core/data/ww8/"),
-            OUString(FILTER_WW8));
+            FILTER_WW8);
 
-    testDir(OUString("MS WinWord 6.0"),
+    testDir("MS WinWord 6.0",
             getURLFromSrc("/sw/qa/core/data/ww6/"),
-            OUString(sWW6));
+            sWW6);
 
-    testDir(OUString("MS WinWord 5"),
+    testDir("MS WinWord 5",
             getURLFromSrc("/sw/qa/core/data/ww5/"),
-            OUString(sWW5));
+            sWW5);
 
-    testDir(OUString("Text (encoded)"),
+    testDir("Text (encoded)",
             getURLFromSrc("/sw/qa/core/data/txt/"),
-            OUString(FILTER_TEXT_DLG));
+            FILTER_TEXT_DLG);
 
-    testDir(OUString("MS Word 2007 XML"),
+    testDir("MS Word 2007 XML",
             getURLFromSrc("/sw/qa/core/data/ooxml/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
 
-    testDir(OUString("Rich Text Format"),
+    testDir("Rich Text Format",
             getURLFromSrc("/sw/qa/core/data/rtf/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
 
-    testDir(OUString("HTML"),
+    testDir("HTML",
             getURLFromSrc("/sw/qa/core/data/html/"),
-            OUString(sHTML));
+            sHTML);
 
     testDir("T602Document",
             getURLFromSrc("/sw/qa/core/data/602/"),
@@ -190,7 +190,7 @@ void SwFiltersTest::testCVEs()
 
     testDir("HTML",
             getURLFromSrc("/sw/qa/core/exportdata/html/"),
-            OUString(sHTML),
+            sHTML,
             SfxFilterFlags::NONE,
             SotClipboardFormatId::NONE,
             0,

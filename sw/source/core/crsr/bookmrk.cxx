@@ -239,11 +239,11 @@ namespace sw { namespace mark
     { }
 
     UnoMark::UnoMark(const SwPaM& aPaM)
-        : MarkBase(aPaM, MarkBase::GenerateNewName(OUString("__UnoMark__")))
+        : MarkBase(aPaM, MarkBase::GenerateNewName("__UnoMark__"))
     { }
 
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
-        : MarkBase(aPaM, MarkBase::GenerateNewName(OUString("__DdeLink__")))
+        : MarkBase(aPaM, MarkBase::GenerateNewName("__DdeLink__"))
         , m_aRefObj(NULL)
     { }
 
@@ -341,7 +341,7 @@ namespace sw { namespace mark
     }
 
     Fieldmark::Fieldmark(const SwPaM& rPaM)
-        : MarkBase(rPaM, MarkBase::GenerateNewName(OUString("__Fieldmark__")))
+        : MarkBase(rPaM, MarkBase::GenerateNewName("__Fieldmark__"))
     {
         if(!IsExpanded())
             SetOtherMarkPos(GetMarkPos());

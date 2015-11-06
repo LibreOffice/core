@@ -928,7 +928,7 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
 SwTextShell::SwTextShell(SwView &_rView) :
     SwBaseShell(_rView), pPostItFieldMgr( 0 )
 {
-    SetName(OUString("Text"));
+    SetName("Text");
     SetHelpId(SW_TEXTSHELL);
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Text));
 }

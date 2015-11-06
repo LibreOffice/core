@@ -527,7 +527,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         bool bWeb = dynamic_cast< SwWebDocShell *>( this ) !=  nullptr;
                         const SfxFilter *pOwnFlt =
                                 SwDocShell::Factory().GetFilterContainer()->
-                                GetFilter4FilterName(OUString("writer8"));
+                                GetFilter4FilterName("writer8");
 
                         // make sure the default file format is also available
                         if(bWeb)
@@ -573,7 +573,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     bMerge = bool(nFlags & SfxTemplateFlags::MERGE_STYLES);
                     aOpt.SetMerge( !bMerge );
 
-                    SetError( LoadStylesFromFile( aFileName, aOpt, false ), OUString( OSL_LOG_PREFIX ));
+                    SetError( LoadStylesFromFile( aFileName, aOpt, false ), OSL_LOG_PREFIX);
                     if ( !GetError() )
                         rReq.Done();
                 }
@@ -594,7 +594,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     // 3 - file saved in non-HTML -> QueryBox to save as HTML
                     const SfxFilter* pHtmlFlt =
                                     SwIoSystem::GetFilterOfFormat(
-                                        OUString("HTML"),
+                                        "HTML",
                                         SwWebDocShell::Factory().GetFilterContainer() );
                     bool bLocalHasName = HasName();
                     if(bLocalHasName)
@@ -925,7 +925,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         // for HTML there is only one filter!!
                         pFlt = SwIoSystem::GetFilterOfFormat(
-                                OUString("HTML"),
+                                "HTML",
                                 SwWebDocShell::Factory().GetFilterContainer() );
                         nStrId = STR_LOAD_HTML_DOC;
                     }
@@ -933,7 +933,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         // for Global-documents we now only offer the current one.
                         pFlt = SwGlobalDocShell::Factory().GetFilterContainer()->
-                                    GetFilter4Extension( OUString("odm")  );
+                                    GetFilter4Extension( "odm"  );
                         nStrId = STR_LOAD_GLOBAL_DOC;
                     }
 

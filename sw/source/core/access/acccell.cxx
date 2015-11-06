@@ -404,11 +404,11 @@ static OUString ReplaceOneChar(const OUString& oldOUString, const OUString& repl
 
 static OUString ReplaceFourChar(const OUString& oldOUString)
 {
-    OUString aRet = ReplaceOneChar(oldOUString,OUString("\\"),OUString("\\\\"));
-    aRet = ReplaceOneChar(aRet,OUString(";"),OUString("\\;"));
-    aRet = ReplaceOneChar(aRet,OUString("="),OUString("\\="));
-    aRet = ReplaceOneChar(aRet,OUString(","),OUString("\\,"));
-    aRet = ReplaceOneChar(aRet,OUString(":"),OUString("\\:"));
+    OUString aRet = ReplaceOneChar(oldOUString,"\\","\\\\");
+    aRet = ReplaceOneChar(aRet,";","\\;");
+    aRet = ReplaceOneChar(aRet,"=","\\=");
+    aRet = ReplaceOneChar(aRet,",","\\,");
+    aRet = ReplaceOneChar(aRet,":","\\:");
     return aRet;
 }
 

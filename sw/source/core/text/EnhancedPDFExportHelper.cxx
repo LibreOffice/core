@@ -954,12 +954,12 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     const bool bNewItemTag = bNewListTag || pTextNd->IsCountedInList(); // If the text node is not counted, we do not start a new list item:
 
     if ( bNewListTag )
-        BeginTag( vcl::PDFWriter::List, OUString(aListString) );
+        BeginTag( vcl::PDFWriter::List, aListString );
 
     if ( bNewItemTag )
     {
-        BeginTag( vcl::PDFWriter::ListItem, OUString(aListItemString) );
-        BeginTag( vcl::PDFWriter::LIBody, OUString(aListBodyString) );
+        BeginTag( vcl::PDFWriter::ListItem, aListItemString );
+        BeginTag( vcl::PDFWriter::LIBody, aListBodyString );
     }
 }
 
@@ -1155,7 +1155,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( pTOXBase && TOX_INDEX != pTOXBase->GetType() )
                         {
                             // Special case: Open additional TOCI tag:
-                            BeginTag( vcl::PDFWriter::TOCI, OUString(aTOCIString) );
+                            BeginTag( vcl::PDFWriter::TOCI, aTOCIString );
                         }
                     }
                 }

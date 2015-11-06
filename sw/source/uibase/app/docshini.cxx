@@ -567,7 +567,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         UpdateFontList();
         InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : 0);
 
-        SetError( nErr, OUString( OSL_LOG_PREFIX ) );
+        SetError( nErr, OSL_LOG_PREFIX );
         bRet = !IsError( nErr );
 
         if (bRet && !m_pDoc->IsInLoadAsynchron() &&
@@ -616,7 +616,7 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
             OSL_FAIL("Code removed!");
         }
 
-        SetError( nErr, OUString( OSL_LOG_PREFIX ) );
+        SetError( nErr, OSL_LOG_PREFIX );
         bRet = !IsError( nErr );
 
     } while( false );

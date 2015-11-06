@@ -2074,7 +2074,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
                                     // Additional paragraph containing a space to
                                     // assure that by WW created RTF from written WW8
                                     // does not crash WW.
-                                    rWrt.WriteStringAsPara( OUString(" ") );
+                                    rWrt.WriteStringAsPara( " " );
                                 }
                             }
                         }

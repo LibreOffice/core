@@ -1913,7 +1913,7 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
     SwWrtShell& rWrtSh = rView.GetWrtShell();
 
     SetPool(&rWrtSh.GetAttrPool());
-    SetName(OUString("Base"));
+    SetName("Base");
     rWrtSh.SetGrfArrivedLnk( LINK( this, SwBaseShell, GraphicArrivedHdl));
 }
 

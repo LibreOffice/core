@@ -290,7 +290,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
         aStream.SetEndian( SvStreamEndian::LITTLE );
 #endif
         WriterRef xWrt;
-        SwReaderWriter::GetWriter( OUString(FILTER_TEXT), OUString(), xWrt );
+        SwReaderWriter::GetWriter( FILTER_TEXT, OUString(), xWrt );
         if( xWrt.Is() )
         {
             // write selected areas into a ASCII document

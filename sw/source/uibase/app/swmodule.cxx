@@ -169,7 +169,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     m_pDragDrop( 0 ),
     m_pXSelection( 0 )
 {
-    SetName( OUString("StarWriter") );
+    SetName( "StarWriter" );
     pSwResMgr = GetResMgr();
     SvxErrorHandler::ensure();
     m_pErrorHandler = new SfxErrorHandler( RID_SW_ERRHDL,

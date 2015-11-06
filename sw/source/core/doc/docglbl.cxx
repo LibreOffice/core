@@ -202,11 +202,11 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     switch( eDocType )
     {
     case SPLITDOC_TO_HTML:
-        pFilter = SwIoSystem::GetFilterOfFormat(OUString("HTML"));
+        pFilter = SwIoSystem::GetFilterOfFormat("HTML");
         break;
 
     default:
-        pFilter = SwIoSystem::GetFilterOfFormat(OUString(FILTER_XML));
+        pFilter = SwIoSystem::GetFilterOfFormat(FILTER_XML);
         eDocType = SPLITDOC_TO_GLOBALDOC;
         break;
     }

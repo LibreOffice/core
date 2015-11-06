@@ -274,7 +274,7 @@ void SwListShell::GetState(SfxItemSet &rSet)
 SwListShell::SwListShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
-    SetName(OUString("List"));
+    SetName("List");
     SetHelpId(SW_LISTSHELL);
 }
 

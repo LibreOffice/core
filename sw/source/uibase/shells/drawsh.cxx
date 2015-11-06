@@ -537,7 +537,7 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
     SwDrawBaseShell(_rView)
 {
     SetHelpId(SW_DRAWSHELL);
-    SetName(OUString("Draw"));
+    SetName("Draw");
 
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Draw));
 }

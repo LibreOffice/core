@@ -82,7 +82,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage>& rSrc1
     //      0x2c, 0x30 scaling x,y in per thousand
     //      0x34, 0x38, 0x3c, 0x40 Crop Left, Top, Right, Bot in tw
 
-    tools::SvRef<SotStorageStream> xSrc3 = rSrc1->OpenSotStream( OUString("\3PIC"),
+    tools::SvRef<SotStorageStream> xSrc3 = rSrc1->OpenSotStream( "\3PIC",
         STREAM_STD_READ | StreamMode::NOCREATE);
     SotStorageStream* pS = xSrc3;
     pS->SetEndian( SvStreamEndian::LITTLE );
@@ -127,7 +127,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage>& rSrc1
 static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     tools::SvRef<SotStorage>& rSrc1)
 {
-    tools::SvRef<SotStorageStream> xSrc2 = rSrc1->OpenSotStream( OUString("\3META"),
+    tools::SvRef<SotStorageStream> xSrc2 = rSrc1->OpenSotStream( "\3META",
         STREAM_STD_READ | StreamMode::NOCREATE);
     SotStorageStream* pSt = xSrc2;
     pSt->SetEndian( SvStreamEndian::LITTLE );
@@ -181,7 +181,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 static bool SwWw6ReadMacPICTStream(Graphic& rGraph, tools::SvRef<SotStorage>& rSrc1)
 {
     // 03-META-stream does not exist. Maybe a 03-PICT?
-    tools::SvRef<SotStorageStream> xSrc4 = rSrc1->OpenSotStream(OUString("\3PICT"));
+    tools::SvRef<SotStorageStream> xSrc4 = rSrc1->OpenSotStream("\3PICT");
     SotStorageStream* pStp = xSrc4;
     pStp->SetEndian( SvStreamEndian::LITTLE );
     sal_uInt8 aTestA[10];        // Does the 01Ole-stream even exist?
@@ -423,7 +423,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
             {
-                tools::SvRef<SotStorageStream> xObjInfoSrc = xSrc1->OpenSotStream(OUString("\3ObjInfo"),
+                tools::SvRef<SotStorageStream> xObjInfoSrc = xSrc1->OpenSotStream("\3ObjInfo",
                     STREAM_STD_READ | StreamMode::NOCREATE );
                 if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                 {

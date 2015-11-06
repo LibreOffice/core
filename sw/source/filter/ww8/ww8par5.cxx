@@ -1846,7 +1846,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, OUString& rStr )
     }
     else
     {
-        m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, OUString("###"));
+        m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, "###");
     }
 
     return FLD_OK;

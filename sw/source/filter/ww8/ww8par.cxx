@@ -4883,7 +4883,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         aBasicImporter.import( m_pDocShell->GetMedium()->GetInputStream() );
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
-        tools::SvRef<SotStorageStream> refMainStream = rRoot->OpenSotStream( OUString( "WordDocument" ));
+        tools::SvRef<SotStorageStream> refMainStream = rRoot->OpenSotStream( "WordDocument");
         refMainStream->SetEndian(SvStreamEndian::LITTLE);
         WW8Fib aWwFib( *refMainStream, 8 );
         tools::SvRef<SotStorageStream> xTableStream = rRoot->OpenSotStream(OUString::createFromAscii( aWwFib.fWhichTableStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
@@ -6102,7 +6102,7 @@ sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_u
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE( pStg, "Where is my Storage?" );
-    rRef = pStg->OpenSotStream( OUString("WordDocument"), StreamMode::READ | StreamMode::SHARE_DENYALL);
+    rRef = pStg->OpenSotStream( "WordDocument", StreamMode::READ | StreamMode::SHARE_DENYALL);
 
     if( rRef.Is() )
     {

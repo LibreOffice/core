@@ -495,7 +495,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                 //put a hard-break after the graphic to keep it separated
                 //from the caption text if the outer frame is resized
                 SwIndex aIdx(pTxtNode, bBefore ? nInsertPos : 1);
-                pTxtNode->InsertText(OUString("\n"), aIdx);
+                pTxtNode->InsertText("\n", aIdx);
             }
         }
 

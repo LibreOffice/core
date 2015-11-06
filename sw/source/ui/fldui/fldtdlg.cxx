@@ -78,8 +78,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pPa
         utl::OConfigurationTreeRoot aCfgRoot
             = utl::OConfigurationTreeRoot::createWithComponentContext(
                 ::comphelper::getProcessComponentContext(),
-                OUString(
-                        "/org.openoffice.Office.DataAccess/Policies/Features/Writer" ),
+                "/org.openoffice.Office.DataAccess/Policies/Features/Writer",
                 -1,
                 utl::OConfigurationTreeRoot::CM_READONLY);
 

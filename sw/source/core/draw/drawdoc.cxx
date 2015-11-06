@@ -120,7 +120,7 @@ SwDrawModel::~SwDrawModel()
 SdrPage* SwDrawModel::AllocPage(bool bMasterPage)
 {
     SwDPage* pPage = new SwDPage(*this, bMasterPage);
-    pPage->SetName(OUString("Controls"));
+    pPage->SetName("Controls");
     return pPage;
 }
 

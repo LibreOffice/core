@@ -1251,7 +1251,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
                           uno::Sequence< beans::StringPair >());
 
     // write the associated Images and rels for data file
-    writeDiagramRels(dataDom, xDataRelSeq, xDataOutputStream, OUString("OOXDiagramDataRels"), nAnchorId);
+    writeDiagramRels(dataDom, xDataRelSeq, xDataOutputStream, "OOXDiagramDataRels", nAnchorId);
 
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
@@ -1288,7 +1288,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
         // write the associated Images and rels for drawing file
         uno::Sequence< uno::Sequence< uno::Any > > xDrawingRelSeq;
         diagramDrawing[1] >>= xDrawingRelSeq;
-        writeDiagramRels(drawingDom, xDrawingRelSeq, xDrawingOutputStream, OUString("OOXDiagramDrawingRels"), nAnchorId);
+        writeDiagramRels(drawingDom, xDrawingRelSeq, xDrawingOutputStream, "OOXDiagramDrawingRels", nAnchorId);
     }
 }
 
