@@ -66,7 +66,7 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
         return ActivitiesFactory::createAnimateActivity(
             aParms,
             AnimationFactory::createNumberPropertyAnimation(
-                OUString("Rotate"),
+                "Rotate",
                 rShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
@@ -76,7 +76,7 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
         return ActivitiesFactory::createAnimateActivity(
             aParms,
             AnimationFactory::createNumberPropertyAnimation(
-                OUString("SkewX"),
+                "SkewX",
                 rShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
@@ -86,7 +86,7 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
         return ActivitiesFactory::createAnimateActivity(
             aParms,
             AnimationFactory::createNumberPropertyAnimation(
-                OUString("SkewY"),
+                "SkewY",
                 rShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),

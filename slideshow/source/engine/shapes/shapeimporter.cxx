@@ -290,7 +290,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // (Netscape)Plugin shape. This is a special object
         return createAppletShape( xCurrShape,
                                   mnAscendingPrio,
-                                  OUString( "com.sun.star.comp.sfx2.PluginObject" ),
+                                  "com.sun.star.comp.sfx2.PluginObject",
                                   aPropertyValues,
                                   SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
@@ -310,7 +310,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // (Java)Applet shape. This is a special object
         return createAppletShape( xCurrShape,
                                   mnAscendingPrio,
-                                  OUString( "com.sun.star.comp.sfx2.AppletObject" ),
+                                  "com.sun.star.comp.sfx2.AppletObject",
                                   aPropertyValues,
                                   SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );

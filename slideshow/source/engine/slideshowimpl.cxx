@@ -2161,8 +2161,7 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
     if( !xPropSet.is() ||
         !getPropertyValue( nChange,
                            xPropSet,
-                           OUString(
-                               "Change")) )
+                           "Change") )
     {
         OSL_TRACE(
             "queryAutomaticSlideTransition(): "
@@ -2174,8 +2173,7 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
     if( !xPropSet.is() ||
         !getPropertyValue( nAutomaticNextSlideTimeout,
                            xPropSet,
-                           OUString(
-                               "HighResDuration")) )
+                           "HighResDuration") )
     {
         OSL_TRACE(
             "queryAutomaticSlideTransition(): "

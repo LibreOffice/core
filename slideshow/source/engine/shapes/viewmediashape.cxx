@@ -247,7 +247,7 @@ namespace slideshow
             if( xPropSet.is() &&
                 getPropertyValue( xParentWindow,
                                   xPropSet,
-                                  OUString("Window" )) )
+                                  "Window") )
             {
                 const awt::Rectangle aRect( xParentWindow->getPosSize() );
 
@@ -372,19 +372,19 @@ namespace slideshow
                     bool bLoop( false );
                     getPropertyValue( bLoop,
                                       rxProps,
-                                      OUString( "Loop" ));
+                                      "Loop");
                     mxPlayer->setPlaybackLoop( bLoop );
 
                     bool bMute( false );
                     getPropertyValue( bMute,
                                       rxProps,
-                                      OUString( "Mute" ));
+                                      "Mute");
                     mxPlayer->setMute( bMute || !mbIsSoundEnabled);
 
                     sal_Int16 nVolumeDB(0);
                     getPropertyValue( nVolumeDB,
                                       rxProps,
-                                      OUString( "VolumeDB" ));
+                                      "VolumeDB");
                     mxPlayer->setVolumeDB( nVolumeDB );
 
                     if( mxPlayerWindow.is() )
@@ -392,7 +392,7 @@ namespace slideshow
                         media::ZoomLevel eZoom(media::ZoomLevel_FIT_TO_WINDOW);
                         getPropertyValue( eZoom,
                                           rxProps,
-                                          OUString( "Zoom" ));
+                                          "Zoom");
                         mxPlayerWindow->setZoomLevel( eZoom );
                     }
                 }
