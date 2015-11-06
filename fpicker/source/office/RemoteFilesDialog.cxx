@@ -305,7 +305,7 @@ void RemoteFilesDialog::dispose()
         sSize = sSize + OUString::number( aSize.Height() ) + "|";
 
         OUString sUserData = m_pFileView->GetConfigString();
-        aDlgOpt.SetUserItem( OUString( "UserData" ),
+        aDlgOpt.SetUserItem( "UserData",
                              makeAny( sSize + sUserData ) );
     }
 
@@ -438,7 +438,7 @@ void RemoteFilesDialog::InitSize()
     {
         SetWindowState( OUStringToOString( aDlgOpt.GetWindowState(), osl_getThreadTextEncoding() ) );
 
-        Any aUserData = aDlgOpt.GetUserItem( OUString( "UserData" ) );
+        Any aUserData = aDlgOpt.GetUserItem( "UserData" );
         OUString sCfgStr;
         if( aUserData >>= sCfgStr )
         {

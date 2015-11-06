@@ -76,12 +76,12 @@ PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, con
     mpImpl->SetDoubleClickHdl( LINK( this, PlacesListBox, DoubleClick ) ) ;
 
     mpAddBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
-    mpAddBtn->SetText( OUString( "+" ) );
+    mpAddBtn->SetText( "+" );
     mpAddBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
     mpAddBtn->Show();
 
     mpDelBtn.reset( VclPtr<ImageButton>::Create( this, 0 ) );
-    mpDelBtn->SetText( OUString( "-" ) );
+    mpDelBtn->SetText( "-" );
     mpDelBtn->SetPosSizePixel( Point( 0, 0 ), Size( 22, 22 ) );
     mpDelBtn->Show();
 }

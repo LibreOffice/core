@@ -515,7 +515,7 @@ void SvtFileDialog::dispose()
         SvtViewOptions aDlgOpt( E_DIALOG, _pImp->_aIniKey );
         aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(), osl_getThreadTextEncoding()));
         OUString sUserData = _pFileView->GetConfigString();
-        aDlgOpt.SetUserItem( OUString( "UserData" ),
+        aDlgOpt.SetUserItem( "UserData",
                              makeAny( sUserData ) );
     }
 
@@ -758,7 +758,7 @@ void SvtFileDialog::Init_Impl
     /// read our settings from the configuration
     m_aConfiguration = OConfigurationTreeRoot::createWithComponentContext(
         ::comphelper::getProcessComponentContext(),
-        OUString( "/org.openoffice.Office.UI/FilePicker" )
+        "/org.openoffice.Office.UI/FilePicker"
     );
 
     _pContainer->init(_pImp, _pFileView, _pSplitter, _pImp->_pBtnNewFolder, _pImp->_pEdFileName);
@@ -2043,7 +2043,7 @@ short SvtFileDialog::PrepareExecute()
         // if applicable set respectively create filter for all files
         if ( !bHasAll )
         {
-            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, OUString(FILEDIALOG_FILTER_ALL) );
+            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, FILEDIALOG_FILTER_ALL );
             _pImp->InsertFilterListEntry( pAllFilter );
             _pImp->SetCurFilter( pAllFilter, aAll );
         }
@@ -2295,7 +2295,7 @@ void SvtFileDialog::InitSize()
     {
         SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), osl_getThreadTextEncoding()));
 
-        Any aUserData = aDlgOpt.GetUserItem( OUString( "UserData" ));
+        Any aUserData = aDlgOpt.GetUserItem( "UserData");
         OUString sCfgStr;
         if ( aUserData >>= sCfgStr )
             _pFileView->SetConfigString( sCfgStr );

@@ -56,13 +56,13 @@ namespace svt
     {
         // the two properties we have
         registerProperty(
-            OUString( "HelpURL" ), PROPERTY_ID_HELPURL,
+            "HelpURL", PROPERTY_ID_HELPURL,
             PropertyAttribute::TRANSIENT,
             &m_sHelpURL, cppu::UnoType<decltype(m_sHelpURL)>::get()
         );
 
         registerProperty(
-            OUString( "Window" ), PROPERTY_ID_WINDOW,
+            "Window", PROPERTY_ID_WINDOW,
             PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY,
             &m_xWindow, cppu::UnoType<decltype(m_xWindow)>::get()
         );
