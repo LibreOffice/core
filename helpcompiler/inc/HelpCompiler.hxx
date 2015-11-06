@@ -231,7 +231,7 @@ public:
                 const std::string &in_module,
                 const std::string &in_lang,
                 bool in_bExtensionMode);
-    bool compile() throw (HelpProcessingException, BasicCodeTagger::TaggerException);
+    bool compile() throw (HelpProcessingException, BasicCodeTagger::TaggerException, std::exception);
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
     static void tagBasicCodeExamples(xmlDocPtr doc);
