@@ -24,6 +24,7 @@
 #if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
 #endif
+#include <o3tl/make_unique.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include <cstdio>
@@ -124,9 +125,9 @@ void FormulaGroupContext::ensureNumArray( ColArray& rColArray, size_t nArrayLen 
     double fNan;
     rtl::math::setNan(&fNan);
 
-    maNumArrays.push_back(
-        new sc::FormulaGroupContext::NumArrayType(nArrayLen, fNan));
-    rColArray.mpNumArray = &maNumArrays.back();
+    m_NumArrays.push_back(
+        o3tl::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen, fNan));
+    rColArray.mpNumArray = m_NumArrays.back().get();
 }
 
 FormulaGroupContext::FormulaGroupContext()

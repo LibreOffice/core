@@ -23,6 +23,7 @@
 #endif
 #include <svl/sharedstringpool.hxx>
 
+#include <memory>
 #include <set>
 #include <unordered_map>
 #include <vector>
@@ -57,7 +58,7 @@ struct FormulaGroupContext : boost::noncopyable
     typedef AlignedAllocator<double,256> DoubleAllocType;
     typedef std::vector<double, DoubleAllocType> NumArrayType;
     typedef std::vector<rtl_uString*> StrArrayType;
-    typedef boost::ptr_vector<NumArrayType> NumArrayStoreType;
+    typedef std::vector<std::unique_ptr<NumArrayType>> NumArrayStoreType;
     typedef boost::ptr_vector<StrArrayType> StrArrayStoreType;
 
     struct ColKey
@@ -87,7 +88,7 @@ struct FormulaGroupContext : boost::noncopyable
 
     typedef std::unordered_map<ColKey, ColArray, ColKey::Hash> ColArraysType;
 
-    NumArrayStoreType maNumArrays; /// manage life cycle of numeric arrays.
+    NumArrayStoreType m_NumArrays; /// manage life cycle of numeric arrays.
     StrArrayStoreType maStrArrays; /// manage life cycle of string arrays.
 
     ColArraysType maColArrays; /// keep track of longest array for each column.

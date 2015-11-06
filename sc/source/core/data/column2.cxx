@@ -47,8 +47,6 @@
 #include "scmatrix.hxx"
 #include <rowheightcontext.hxx>
 
-#include <math.h>
-
 #include <editeng/eeitem.hxx>
 
 #include <svx/algitem.hxx>
@@ -67,8 +65,12 @@
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 #include <algorithm>
 #include <memory>
+
+#include <math.h>
 
 // factor from font size to optimal cell height (text width)
 #define SC_ROT_BREAK_FACTOR     6
@@ -2491,9 +2493,9 @@ copyFirstFormulaBlock(
         {
             if (!pNumArray)
             {
-                rCxt.maNumArrays.push_back(
-                    new sc::FormulaGroupContext::NumArrayType(nArrayLen, fNan));
-                pNumArray = &rCxt.maNumArrays.back();
+                rCxt.m_NumArrays.push_back(
+                    o3tl::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen, fNan));
+                pNumArray = rCxt.m_NumArrays.back().get();
             }
 
             (*pNumArray)[nPos] = aRes.mfValue;
@@ -2575,8 +2577,9 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             // Allocate a new array and copy the values to it.
             sc::numeric_block::const_iterator it = sc::numeric_block::begin(*itBlk->data);
             sc::numeric_block::const_iterator itEnd = sc::numeric_block::end(*itBlk->data);
-            rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType(it, itEnd));
-            sc::FormulaGroupContext::NumArrayType& rArray = rCxt.maNumArrays.back();
+            rCxt.m_NumArrays.push_back(
+                o3tl::make_unique<sc::FormulaGroupContext::NumArrayType>(it, itEnd));
+            sc::FormulaGroupContext::NumArrayType& rArray = *rCxt.m_NumArrays.back();
             rArray.resize(nRow2+1, fNan); // allocate to the requested length.
 
             pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, NULL);
@@ -2671,8 +2674,9 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
         case sc::element_type_empty:
         {
             // Fill the whole length with NaN's.
-            rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType(nRow2+1, fNan));
-            sc::FormulaGroupContext::NumArrayType& rArray = rCxt.maNumArrays.back();
+            rCxt.m_NumArrays.push_back(
+                o3tl::make_unique<sc::FormulaGroupContext::NumArrayType>(nRow2+1, fNan));
+            sc::FormulaGroupContext::NumArrayType& rArray = *rCxt.m_NumArrays.back();
             pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, NULL);
             if (!pColArray)
                 // Failed to insert a new cached column array.
