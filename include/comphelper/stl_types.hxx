@@ -100,6 +100,29 @@ template<class T> struct UniquePtrValueLess
         }
 };
 
+/// by-value implementation of std::foo<std::unique_ptr<T>>::operator==
+template<template<typename, typename...> class C, typename T, typename... Etc>
+bool ContainerUniquePtrEquals(
+        C<std::unique_ptr<T>, Etc...> const& lhs,
+        C<std::unique_ptr<T>, Etc...> const& rhs)
+{
+    if (lhs.size() != rhs.size())
+    {
+        return false;
+    }
+    for (auto iter1 = lhs.begin(), iter2 = rhs.begin();
+         iter1 != lhs.end();
+         ++iter1, ++iter2)
+    {
+        if (!(**iter1 == **iter2))
+        {
+            return false;
+        }
+    }
+    return true;
+};
+
+
 /** STL-compliant structure for comparing Reference&lt; &lt;iface&gt; &gt; instances
 */
 template < class IAFCE >
