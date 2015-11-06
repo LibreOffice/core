@@ -1875,8 +1875,9 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 
     FilterConfigItem aConfigItem( const_cast<uno::Sequence< beans::PropertyValue >*>(pFilterData) );
     OUString aFilterName( pConfig->GetExportFilterName( nFormat ) );
+#ifndef DISABLE_DYNLOADING
     OUString aExternalFilterName(pConfig->GetExternalFilterName(nFormat, true));
-
+#endif
     bAbort              = false;
     sal_uInt16      nStatus = GRFILTER_OK;
     GraphicType eType;
