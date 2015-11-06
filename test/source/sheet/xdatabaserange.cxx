@@ -37,7 +37,7 @@ namespace apitest {
  */
 void XDatabaseRange::testDataArea()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange(init(OUString("DataArea")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange(init("DataArea"), UNO_QUERY_THROW);
 
     table::CellRangeAddress aCellAddress;
     aCellAddress.Sheet = 0;
@@ -57,14 +57,14 @@ void XDatabaseRange::testDataArea()
 
 void XDatabaseRange::testGetSubtotalDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange(init(OUString("SubtotalDescriptor")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange(init("SubtotalDescriptor"), UNO_QUERY_THROW);
     uno::Reference< sheet::XSubTotalDescriptor> xSubtotalDescr = xDBRange->getSubTotalDescriptor();
     CPPUNIT_ASSERT(xSubtotalDescr.is());
 }
 
 void XDatabaseRange::testGetSortDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange(init(OUString("SortDescriptor")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange(init("SortDescriptor"), UNO_QUERY_THROW);
     uno::Sequence< beans::PropertyValue > xSortDescr = xDBRange->getSortDescriptor();
     for (sal_Int32 i = 0; i < xSortDescr.getLength(); ++i)
     {
@@ -128,21 +128,21 @@ void XDatabaseRange::testGetSortDescriptor()
 
 void XDatabaseRange::testGetFilterDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange( init(OUString("FilterDescriptor")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange( init("FilterDescriptor"), UNO_QUERY_THROW);
     uno::Reference< uno::XInterface > xFilterDescr( xDBRange->getFilterDescriptor(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xFilterDescr.is());
 }
 
 void XDatabaseRange::testGetImportDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange( init(OUString("ImportDescriptor")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange( init("ImportDescriptor"), UNO_QUERY_THROW);
     uno::Sequence< beans::PropertyValue > xImportDescr = xDBRange->getImportDescriptor();
     (void) xImportDescr;
 }
 
 void XDatabaseRange::testRefresh()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange( init(OUString("Refresh")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange( init("Refresh"), UNO_QUERY_THROW);
 
     const sal_Int32 nCol = 0;
     OUString aHidden("IsVisible");
