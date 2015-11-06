@@ -38,17 +38,16 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILY_ITEM ) )
 
 {
-    sal_uIntPtr nMask = ReadLongRes();
+    const sal_Int32 nMask = ReadLongRes();
 
     if(nMask & RSC_SFX_STYLE_ITEM_LIST)
     {
-        sal_uIntPtr nCount = ReadLongRes();
-        for( sal_uIntPtr i = 0; i < nCount; i++ )
+        const sal_Int32 nCount = ReadLongRes();
+        for( sal_Int32 i = 0; i < nCount; ++i )
         {
             SfxFilterTupel *pTupel = new SfxFilterTupel;
             pTupel->aName = ReadStringRes();
-            long lFlags = ReadLongRes();
-            pTupel->nFlags = (sal_uInt16)lFlags;
+            pTupel->nFlags = static_cast<sal_uInt16>(ReadLongRes());
             aFilterList.push_back( pTupel );
         }
     }
@@ -67,7 +66,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     }
     if(nMask & RSC_SFX_STYLE_ITEM_STYLEFAMILY)
     {
-        nFamily = (sal_uInt16)ReadLongRes();
+        nFamily = static_cast<sal_uInt16>(ReadLongRes());
     }
     else
         nFamily = SFX_STYLE_FAMILY_PARA;
@@ -98,8 +97,8 @@ SfxStyleFamilyItem::~SfxStyleFamilyItem()
 SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
     Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( false ) )
 {
-    sal_uIntPtr nCount = ReadLongRes();
-    for( sal_uIntPtr i = 0; i < nCount; i++ )
+    const sal_Int32 nCount = ReadLongRes();
+    for( sal_Int32 i = 0; i < nCount; ++i )
     {
         const ResId aResId(static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr());
         SfxStyleFamilyItem *pItem = new SfxStyleFamilyItem(aResId);
