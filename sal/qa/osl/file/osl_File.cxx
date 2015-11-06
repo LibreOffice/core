@@ -491,29 +491,29 @@ namespace osl_FileBase
 
   void getAbsoluteFileURL::getAbsoluteFileURL_001_1()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/relative/file1") );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( "/relative/file1" );
     check_getAbsoluteFileURL( aUserDirectoryURL, "relative/file1",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_2()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/relative/file2") );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( "/relative/file2" );
     check_getAbsoluteFileURL( aUserDirectoryURL, "relative/./file2",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_3()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/file3") );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( "/file3" );
     check_getAbsoluteFileURL( aUserDirectoryURL, "relative/../file3",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_4()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/file4") );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( "/file4" );
     check_getAbsoluteFileURL( aUserDirectoryURL, "././relative/../file4",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_5()
   {
     rtl::OUString suAssume;
 #if ( defined UNX )
-    suAssume = aUserDirectoryURL.concat( rtl::OUString("/relative/") );
+    suAssume = aUserDirectoryURL.concat( "/relative/" );
 #else
     suAssume = aUserDirectoryURL.concat( rtl::OUString("/relative") );
 #endif
@@ -521,14 +521,14 @@ namespace osl_FileBase
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_6()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/.relative") );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( "/.relative" );
     check_getAbsoluteFileURL( aUserDirectoryURL, "./.relative",::osl::FileBase::E_None, suAssume );
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_7()
   {
     rtl::OUString suAssume;
 #if (defined UNX )
-    suAssume = aUserDirectoryURL.concat( rtl::OUString("/.a/") );
+    suAssume = aUserDirectoryURL.concat( "/.a/" );
 #else //windows
     suAssume = aUserDirectoryURL.concat( rtl::OUString("/.a") );
 #endif
@@ -536,7 +536,7 @@ namespace osl_FileBase
   }
   void getAbsoluteFileURL::getAbsoluteFileURL_001_8()
   {
-    rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/tmp/ok") );
+    rtl::OUString suAssume = aUserDirectoryURL.concat( "/tmp/ok" );
 #if ( defined UNX )
     check_getAbsoluteFileURL( aUserDirectoryURL, "tmp//ok",::osl::FileBase::E_None, suAssume );
 #else
@@ -558,7 +558,7 @@ namespace osl_FileBase
                 sal_Int32 fd = symlink( strSrcFileName.getStr(), strLinkFileName.getStr() );
         CPPUNIT_ASSERT( fd == 0 );
         rtl::OString sLnkURL = OUStringToOString( aLnkURL1, RTL_TEXTENCODING_ASCII_US );
-            rtl::OUString suAssume = aUserDirectoryURL.concat( rtl::OUString("/canonical.name") );
+            rtl::OUString suAssume = aUserDirectoryURL.concat( "/canonical.name" );
         check_getAbsoluteFileURL( aUserDirectoryURL, sLnkURL, ::osl::FileBase::E_None, suAssume );
         deleteTestFile( aCanURL1 );
                 fd = remove( strLinkFileName.getStr() );
@@ -577,7 +577,7 @@ namespace osl_FileBase
         ::rtl::OUString aUStrBase = aUserDirectoryURL + "/test1/dir1";
         createTestDirectory( aUStrBase );
 
-        ::rtl::OUString suAssume = aUserDirectoryURL.concat( ::rtl::OUString("/mytestfile") );
+        ::rtl::OUString suAssume = aUserDirectoryURL.concat( "/mytestfile" );
         check_getAbsoluteFileURL( aUStrBase, "../../mytestfile" , ::osl::FileBase::E_None, suAssume );
         deleteTestDirectory( aUStrBase );
         deleteTestDirectory( aUStrUpBase );

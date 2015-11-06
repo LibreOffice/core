@@ -250,7 +250,7 @@ static OUString & getIniFileName_Impl()
         resolvePathnameUrl(&fileName);
 #else
         if(getFromCommandLineArgs(
-               OUString("INIFILENAME"), &fileName))
+               "INIFILENAME", &fileName))
         {
             resolvePathnameUrl(&fileName);
         }
@@ -433,7 +433,7 @@ struct FundamentalIniData: private boost::noncopyable {
         ini =
             ((static_cast< Bootstrap_Impl * >(get_static_bootstrap_handle())->
               getValue(
-                  rtl::OUString("URE_BOOTSTRAP"),
+                  "URE_BOOTSTRAP",
                   &uri.pData, 0, LOOKUP_MODE_NORMAL, false, 0)) &&
              resolvePathnameUrl(&uri))
             ? rtl_bootstrap_args_open(uri.pData) : NULL;
