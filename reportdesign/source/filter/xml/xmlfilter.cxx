@@ -364,11 +364,11 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, S
 {
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
-    GetNamespaceMap().Add( OUString( sXML_np__rpt ),
+    GetNamespaceMap().Add( sXML_np__rpt,
                         GetXMLToken(XML_N_RPT),
                         XML_NAMESPACE_REPORT );
 
-    GetNamespaceMap().Add( OUString( sXML_np___rpt ),
+    GetNamespaceMap().Add( sXML_np___rpt,
                         GetXMLToken(XML_N_RPT_OASIS),
                         XML_NAMESPACE_REPORT );
 
@@ -642,7 +642,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                 const SvXMLStylesContext* pAutoStyles = GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext *>(pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,OUString("pm1"))));
+                    XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext *>(pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,"pm1")));
                     if ( pAutoStyle )
                     {
                         pAutoStyle->FillPropertySet(getReportDefinition().get());

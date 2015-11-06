@@ -92,7 +92,7 @@ void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
     switch( _nControl )
     {
         case ControlCharacter::LINE_BREAK:
-            m_pFixedContent->Characters(OUString("\n"));
+            m_pFixedContent->Characters("\n");
             break;
         default:
             OSL_FAIL("Not supported control character");

@@ -445,11 +445,11 @@ namespace
         // create an AWT font
         awt::FontDescriptor aAwtFont;
         lcl_initAwtFont( _rOriginalControlFont, _rItemSet, aAwtFont,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_POSTURE, ITEMID_WEIGHT);
-        lcl_pushBack( _out_rProperties, OUString("Font"), uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, "Font", uno::makeAny( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontAsian, _rItemSet, aAwtFont,ITEMID_FONT_ASIAN,ITEMID_FONTHEIGHT_ASIAN,ITEMID_POSTURE_ASIAN, ITEMID_WEIGHT_ASIAN);
-        lcl_pushBack( _out_rProperties, OUString("FontAsian"), uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, "FontAsian", uno::makeAny( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontComplex, _rItemSet, aAwtFont,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_POSTURE_COMPLEX, ITEMID_WEIGHT_COMPLEX);
-        lcl_pushBack( _out_rProperties, OUString("FontComplex"), uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, "FontComplex", uno::makeAny( aAwtFont ) );
 
         // properties which cannot be represented in an AWT font need to be preserved directly
         if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_SHADOWED,true,&pItem) && dynamic_cast< const SvxShadowedItem *>( pItem ) !=  nullptr)

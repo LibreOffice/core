@@ -63,7 +63,7 @@ ConditionField::ConditionField(Condition* pParent, Edit* pSubEdit, PushButton *p
 {
     m_pSubEdit->EnableRTL( false );
 
-    m_pFormula->SetText(OUString("..."));
+    m_pFormula->SetText("...");
     m_pFormula->SetClickHdl( LINK( this, ConditionField, OnFormula ) );
 }
 

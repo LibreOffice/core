@@ -311,7 +311,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     // new Observer
     m_pReportControllerObserver = new OXReportControllerObserver(*this);
     m_pReportControllerObserver->acquire();
-    registerProperty(OUString("ZoomValue"), PROPERTY_ID_ZOOMVALUE,
+    registerProperty("ZoomValue", PROPERTY_ID_ZOOMVALUE,
                      beans::PropertyAttribute::BOUND | beans::PropertyAttribute::TRANSIENT,
                      &m_nZoomValue, ::cppu::UnoType<sal_Int16>::get());
 
@@ -1649,7 +1649,7 @@ void OReportController::impl_initialize( )
 
     const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
 
-    rArguments.get_ensureType( OUString(PROPERTY_REPORTNAME), m_sName );
+    rArguments.get_ensureType( PROPERTY_REPORTNAME, m_sName );
     if ( m_sName.isEmpty() )
         rArguments.get_ensureType( "DocumentTitle", m_sName );
 

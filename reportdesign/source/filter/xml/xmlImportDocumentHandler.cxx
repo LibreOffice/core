@@ -287,7 +287,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         xNewAttribs = pList;
         pList->AppendAttributeList(_xAttrList);
-        pList->AddAttribute(OUString("table:cell-range-address"),OUString("local-table.$A$1:.$Z$65536"));
+        pList->AddAttribute("table:cell-range-address","local-table.$A$1:.$Z$65536");
 
     }
 

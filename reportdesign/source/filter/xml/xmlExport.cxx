@@ -1436,12 +1436,12 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                         static const char s_sCurrent[] = "current";
                         AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, s_sCurrent );
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, false, false);
-                        Characters(OUString("1"));
+                        Characters("1");
                     }
                     else if ( sToken == s_sPageCount )
                     {
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, false, false);
-                        Characters(OUString("1"));
+                        Characters("1");
                     }
                     else
                     {

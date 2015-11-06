@@ -612,8 +612,8 @@ void OReportDefinition::init()
         m_pImpl->m_pReportModel->SetScaleUnit( MAP_100TH_MM );
         SdrLayerAdmin& rAdmin = m_pImpl->m_pReportModel->GetLayerAdmin();
         rAdmin.NewStandardLayer(RPT_LAYER_FRONT);
-        rAdmin.NewLayer(OUString("back"), RPT_LAYER_BACK);
-        rAdmin.NewLayer(OUString("HiddenLayer"), RPT_LAYER_HIDDEN);
+        rAdmin.NewLayer("back", RPT_LAYER_BACK);
+        rAdmin.NewLayer("HiddenLayer", RPT_LAYER_HIDDEN);
 
         m_pImpl->m_pUndoManager = new ::dbaui::UndoManager( *this, m_aMutex );
         m_pImpl->m_pReportModel->SetSdrUndoManager( &m_pImpl->m_pUndoManager->GetSfxUndoManager() );
@@ -646,7 +646,7 @@ void SAL_CALL OReportDefinition::dispose() throw(uno::RuntimeException, std::exc
 
 void SAL_CALL OReportDefinition::disposing()
 {
-    notifyEvent(OUString("OnUnload"));
+    notifyEvent("OnUnload");
 
     uno::Reference< frame::XModel > xHoldAlive( this );
 
@@ -1252,7 +1252,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
 
     utl::MediaDescriptor aDescriptor( _aMediaDescriptor );
     fillArgs(aDescriptor);
-    aDescriptor.createItemIfMissing(OUString("Storage"),uno::makeAny(_xStorageToLoadFrom));
+    aDescriptor.createItemIfMissing("Storage",uno::makeAny(_xStorageToLoadFrom));
 
     uno::Sequence< uno::Any > aDelegatorArguments(_aMediaDescriptor.getLength());
     uno::Any* pIter = aDelegatorArguments.getArray();
@@ -1821,7 +1821,7 @@ void SAL_CALL OReportDefinition::setModified( sal_Bool _bModified ) throw (beans
         lang::EventObject aEvent(*this);
         aGuard.clear();
         m_pImpl->m_aModifyListeners.notifyEach(&util::XModifyListener::modified,aEvent);
-        notifyEvent(OUString("OnModifyChanged"));
+        notifyEvent("OnModifyChanged");
     }
 }
 
@@ -2548,7 +2548,7 @@ uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHel
         m_pImpl->m_xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
-        pHelper->setUntitledPrefix (OUString(" : "));
+        pHelper->setUntitledPrefix (" : ");
     }
 
     return m_pImpl->m_xNumberedControllers;

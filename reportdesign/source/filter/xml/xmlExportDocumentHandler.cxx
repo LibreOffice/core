@@ -177,7 +177,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         m_xDelegatee->startElement(sTableCalc,NULL);
         pList = new SvXMLAttributeList();
         uno::Reference< xml::sax::XAttributeList > xNullAttr = pList;
-        pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),OUString("1899-12-30"));
+        pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),"1899-12-30");
 
         const OUString sNullDate = lcl_createAttribute(XML_NP_TABLE,XML_NULL_DATE);
         m_xDelegatee->startElement(sNullDate,xNullAttr);
@@ -211,7 +211,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     else if ( _sName == "chart:plot-area" )
     {
         SvXMLAttributeList* pList = SvXMLAttributeList::getImplementation(xAttribs);
-        pList->RemoveAttribute(OUString("table:cell-range-address"));
+        pList->RemoveAttribute("table:cell-range-address");
     }
     else if ( _sName == "chart:categories" )
     {
