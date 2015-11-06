@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
 #include <cassert>
 #include <limits>
 #include <stack>
@@ -46,6 +47,36 @@ SourceLocation getMemberLocation(Expr const * expr) {
     MemberExpr const * e2 = e1 == nullptr
         ? nullptr : dyn_cast<MemberExpr>(e1->getCallee());
     return e2 == nullptr ? expr->getExprLoc()/*TODO*/ : e2->getMemberLoc();
+}
+
+bool isLhsOfAssignment(FunctionDecl const * decl, unsigned parameter) {
+    if (parameter != 0) {
+        return false;
+    }
+    auto oo = decl->getOverloadedOperator();
+    return oo == OO_Equal
+        || (oo >= OO_PlusEqual && oo <= OO_GreaterGreaterEqual);
+}
+
+bool hasOverloads(FunctionDecl const * decl, unsigned arguments) {
+    int n = 0;
+    auto ctx = decl->getDeclContext();
+    if (ctx->getDeclKind() == Decl::LinkageSpec) {
+        ctx = ctx->getParent();
+    }
+    auto res = ctx->lookup(decl->getDeclName());
+    for (auto d = compat::begin(res); d != compat::end(res); ++d) {
+        FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
+        if (f != nullptr && f->getMinRequiredArguments() <= arguments
+            && f->getNumParams() >= arguments)
+        {
+            ++n;
+            if (n == 2) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 class StringConstant:
@@ -104,9 +135,8 @@ private:
         TreatEmpty treatEmpty);
 
     void handleOUStringCtor(
-        CallExpr const * expr, unsigned arg, std::string const & qname);
-    void handleOUStringCtor2(
-        CallExpr const * expr, unsigned arg, std::string const & qname);
+        CallExpr const * expr, unsigned arg, std::string const & qname,
+        bool explicitFunctionalCastNotation);
 
     std::stack<Expr const *> calls_;
 };
@@ -195,6 +225,35 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         return true;
     }
     std::string qname(fdecl->getQualifiedNameAsString());
+    for (unsigned i = 0; i != fdecl->getNumParams(); ++i) {
+        auto t = fdecl->getParamDecl(i)->getType();
+        if (t->isLValueReferenceType()
+            && t->getAs<SubstTemplateTypeParmType>() == nullptr)
+        {
+            t = t->getAs<LValueReferenceType>()->getPointeeType();
+            if (t.isConstQualified() && !t.isVolatileQualified()
+                && t->isClassType()
+                && t->getAs<SubstTemplateTypeParmType>() == nullptr)
+            {
+                auto td = t->getAsTagDecl();
+                auto id = td->getIdentifier();
+                if (id != nullptr && id->isStr("OUString")) {
+                    auto nd = dyn_cast<NamespaceDecl>(td->getParent());
+                    if (nd != nullptr) {
+                        id = nd->getIdentifier();
+                        if (id != nullptr && id->isStr("rtl")) {
+                            //TODO: check rtl is outermost namespace
+                            if (!(isLhsOfAssignment(fdecl, i)
+                                  || hasOverloads(fdecl, expr->getNumArgs())))
+                            {
+                                handleOUStringCtor(expr, i, qname, true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     //TODO: u.compareToAscii("foo") -> u.???("foo")
     //TODO: u.compareToIgnoreAsciiCaseAscii("foo") -> u.???("foo")
     if (qname == "rtl::OUString::createFromAscii" && fdecl->getNumParams() == 1)
@@ -305,69 +364,69 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     if (qname == "rtl::OUString::reverseCompareTo"
         && fdecl->getNumParams() == 1)
     {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::equalsIgnoreAsciiCase"
         && fdecl->getNumParams() == 1)
     {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::match" && fdecl->getNumParams() == 2) {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::matchIgnoreAsciiCase"
         && fdecl->getNumParams() == 2)
     {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::startsWith" && fdecl->getNumParams() == 2) {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::startsWithIgnoreAsciiCase"
         && fdecl->getNumParams() == 2)
     {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::endsWith" && fdecl->getNumParams() == 2) {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::endsWithIgnoreAsciiCase"
         && fdecl->getNumParams() == 2)
     {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::indexOf" && fdecl->getNumParams() == 2) {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::lastIndexOf" && fdecl->getNumParams() == 1) {
-        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 0, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::replaceFirst" && fdecl->getNumParams() == 3) {
-        handleOUStringCtor(expr, 0, qname);
-        handleOUStringCtor(expr, 1, qname);
+        handleOUStringCtor(expr, 0, qname, false);
+        handleOUStringCtor(expr, 1, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::replaceAll"
         && (fdecl->getNumParams() == 2 || fdecl->getNumParams() == 3))
     {
-        handleOUStringCtor(expr, 0, qname);
-        handleOUStringCtor(expr, 1, qname);
+        handleOUStringCtor(expr, 0, qname, false);
+        handleOUStringCtor(expr, 1, qname, false);
         return true;
     }
     if (qname == "rtl::OUString::operator+=" && fdecl->getNumParams() == 1) {
         handleOUStringCtor(
             expr, dyn_cast<CXXOperatorCallExpr>(expr) == nullptr ? 0 : 1,
-            qname);
+            qname, false);
         return true;
     }
     if (qname == "rtl::OUString::equals" && fdecl->getNumParams() == 1) {
@@ -548,12 +607,6 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             expr, 0, 1, qname, "rtl::OUStringBuffer::append",
             TreatEmpty::Error);
         return true;
-    }
-    // For places where we are calling a method with a 'const OUString&' param
-    for (unsigned i=0; i < fdecl->getNumParams(); ++i)
-    {
-        if (fdecl->getParamDecl(i)->getType().getAsString() == "const ::rtl::OUString &")
-            handleOUStringCtor2(expr, i, qname);
     }
     return true;
 }
@@ -1226,11 +1279,16 @@ void StringConstant::handleCharLen(
 }
 
 void StringConstant::handleOUStringCtor(
-    CallExpr const * expr, unsigned arg, std::string const & qname)
+    CallExpr const * expr, unsigned arg, std::string const & qname,
+    bool explicitFunctionalCastNotation)
 {
     auto e0 = expr->getArg(arg)->IgnoreParenImpCasts();
     auto e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
-    if (e1 != nullptr) {
+    if (e1 == nullptr) {
+        if (explicitFunctionalCastNotation) {
+            return;
+        }
+    } else {
         e0 = e1->getSubExpr()->IgnoreParenImpCasts();
     }
     auto e2 = dyn_cast<CXXBindTemporaryExpr>(e0);
@@ -1261,13 +1319,18 @@ void StringConstant::handleOUStringCtor(
         && e3->getArg(0)->IgnoreParenImpCasts()->isIntegerConstantExpr(
             res, compiler.getASTContext()))
     {
-        if (res.getZExtValue() <= 127) {
-            report(
-                DiagnosticsEngine::Warning,
-                ("in call of %0, replace OUString constructed from an ASCII"
-                 " char constant with a string literal"),
-                e3->getExprLoc())
-                << qname << expr->getSourceRange();
+        // It may not be easy to rewrite OUString(c), esp. given there is no
+        // OUString ctor taking an OUStringLiteral1 arg, so don't warn there:
+        if (!explicitFunctionalCastNotation) {
+            uint64_t n = res.getZExtValue();
+            if (n != 0 && n <= 127) {
+                report(
+                    DiagnosticsEngine::Warning,
+                    ("in call of %0, replace OUString constructed from an ASCII"
+                     " char constant with a string literal"),
+                    e3->getExprLoc())
+                    << qname << expr->getSourceRange();
+            }
         }
         return;
     }
@@ -1284,39 +1347,71 @@ void StringConstant::handleOUStringCtor(
         return;
     }
     //TODO: non, emb, trm
-    report(
-        DiagnosticsEngine::Warning,
-        ("in call of %0, replace OUString constructed from a string literal"
-         " directly with the string literal"),
-        e3->getExprLoc())
-        << qname << expr->getSourceRange();
-}
-
-// For places where we are calling a method with an 'const OUString&' param
-//
-void StringConstant::handleOUStringCtor2(
-    CallExpr const * expr, unsigned arg, std::string const & qname)
-{
-    auto e0 = expr->getArg(arg)->IgnoreParenImpCasts();
-    auto e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
-    if (e1 == nullptr) {
-        return;
-    }
-    e0 = e1->getSubExpr()->IgnoreParenImpCasts();
-    auto e2 = dyn_cast<CXXBindTemporaryExpr>(e0);
-    if (e2 == nullptr) {
-        return;
-    }
-    auto e3 = dyn_cast<CXXConstructExpr>(
-        e2->getSubExpr()->IgnoreParenImpCasts());
-    if (e3 == nullptr) {
-        return;
-    }
-    if (e3->getNumArgs() == 1)
-    {
-        std::string s = e3->getArg(0)->getType().getAsString();
-        if (s == "sal_Unicode" || s == "char")
-            return;
+    if (rewriter != nullptr) {
+        auto loc1 = e3->getLocStart();
+        auto range = e3->getParenOrBraceRange();
+        if (loc1.isFileID() && range.getBegin().isFileID()
+            && range.getEnd().isFileID())
+        {
+            auto loc2 = range.getBegin();
+            for (bool first = true;; first = false) {
+                unsigned n = Lexer::MeasureTokenLength(
+                    loc2, compiler.getSourceManager(), compiler.getLangOpts());
+                if (!first) {
+                    StringRef s(
+                        compiler.getSourceManager().getCharacterData(loc2), n);
+                    while (s.startswith("\\\n")) {
+                        s = s.drop_front(2);
+                        while (!s.empty()
+                               && (s.front() == ' ' || s.front() == '\t'
+                                   || s.front() == '\n' || s.front() == '\v'
+                                   || s.front() == '\f'))
+                        {
+                            s = s.drop_front(1);
+                        }
+                    }
+                    if (!(s.empty() || s.startswith("/*") || s.startswith("//")
+                          || s == "\\"))
+                    {
+                        break;
+                    }
+                }
+                loc2 = loc2.getLocWithOffset(std::max<unsigned>(n, 1));
+            }
+            auto loc3 = range.getEnd();
+            for (;;) {
+                auto l = Lexer::GetBeginningOfToken(
+                    loc3.getLocWithOffset(-1), compiler.getSourceManager(),
+                    compiler.getLangOpts());
+                unsigned n = Lexer::MeasureTokenLength(
+                    l, compiler.getSourceManager(), compiler.getLangOpts());
+                StringRef s(compiler.getSourceManager().getCharacterData(l), n);
+                while (s.startswith("\\\n")) {
+                    s = s.drop_front(2);
+                    while (!s.empty()
+                           && (s.front() == ' ' || s.front() == '\t'
+                               || s.front() == '\n' || s.front() == '\v'
+                               || s.front() == '\f'))
+                    {
+                        s = s.drop_front(1);
+                    }
+                }
+                if (!(s.empty() || s.startswith("/*") || s.startswith("//")
+                      || s == "\\"))
+                {
+                    break;
+                }
+                loc3 = l;
+            }
+            if (removeText(CharSourceRange(SourceRange(loc1, loc2), false))) {
+                if (removeText(SourceRange(loc3, range.getEnd()))) {
+                    return;
+                }
+                report(DiagnosticsEngine::Fatal, "Corrupt rewrite", loc3)
+                    << expr->getSourceRange();
+                return;
+            }
+        }
     }
     report(
         DiagnosticsEngine::Warning,
