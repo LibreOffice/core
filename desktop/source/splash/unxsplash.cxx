@@ -163,9 +163,7 @@ OUString UnxSplash_getImplementationName()
 
 uno::Sequence< OUString > UnxSplash_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( "com.sun.star.office.PipeSplashScreen" );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence< OUString > { "com.sun.star.office.PipeSplashScreen" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

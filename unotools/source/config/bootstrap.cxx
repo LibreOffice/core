@@ -395,9 +395,7 @@ Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap& _rData, Bootstrap::Im
 static
 Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rVersionFile)
 {
-    OUString const csVersionFileItem(BOOTSTRAP_ITEM_VERSIONFILE);
-
-    _rData.getFrom(csVersionFileItem,_rVersionFile.path);
+    _rData.getFrom(BOOTSTRAP_ITEM_VERSIONFILE, _rVersionFile.path);
 
     return updateStatus(_rVersionFile);
 }

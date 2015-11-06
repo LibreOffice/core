@@ -159,18 +159,14 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             uno::Sequence < beans::PropertyValue > aProperties(3);
             beans::PropertyValue *pValues = aProperties.getArray();
 
-            OUString aType(STAR_BASIC );
-            OUString aLib  = pMacro->GetLibName();
-            OUString aMacro = pMacro->GetMacName();
-
             pValues[ 0 ].Name = PROP_EVENT_TYPE;
-            pValues[ 0 ].Value <<= aType;
+            pValues[ 0 ].Value <<= OUString("STAR_BASIC");
 
             pValues[ 1 ].Name = PROP_LIBRARY;
-            pValues[ 1 ].Value <<= aLib;
+            pValues[ 1 ].Value <<= pMacro->GetLibName();
 
             pValues[ 2 ].Name = PROP_MACRO_NAME;
-            pValues[ 2 ].Value <<= aMacro;
+            pValues[ 2 ].Value <<= pMacro->GetMacName();
 
             aEventData <<= aProperties;
         }
@@ -179,14 +175,11 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             uno::Sequence < beans::PropertyValue > aProperties(2);
             beans::PropertyValue *pValues = aProperties.getArray();
 
-            OUString aLib   = pMacro->GetLibName();
-            OUString aMacro = pMacro->GetMacName();
-
             pValues[ 0 ].Name = PROP_EVENT_TYPE;
-            pValues[ 0 ].Value <<= aLib;
+            pValues[ 0 ].Value <<= pMacro->GetLibName();
 
             pValues[ 1 ].Name = PROP_SCRIPT;
-            pValues[ 1 ].Value <<= aMacro;
+            pValues[ 1 ].Value <<= pMacro->GetMacName();
 
             aEventData <<= aProperties;
         }
@@ -195,13 +188,11 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             uno::Sequence < beans::PropertyValue > aProperties(2);
             beans::PropertyValue *pValues = aProperties.getArray();
 
-            OUString aMacro  = pMacro->GetMacName();
-
             pValues[ 0 ].Name = PROP_EVENT_TYPE;
             pValues[ 0 ].Value <<= OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
 
             pValues[ 1 ].Name = PROP_MACRO_NAME;
-            pValues[ 1 ].Value <<= aMacro;
+            pValues[ 1 ].Value <<= pMacro->GetMacName();
 
             aEventData <<= aProperties;
         }

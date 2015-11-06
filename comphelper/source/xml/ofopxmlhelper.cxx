@@ -128,10 +128,6 @@ void WriteRelationsInfoSequence(
 
     OUString aRelListElement( "Relationships" );
     OUString aRelElement( "Relationship" );
-    OUString aIDAttr( "Id" );
-    OUString aTypeAttr( "Type" );
-    OUString aTargetModeAttr( "TargetMode" );
-    OUString aTargetAttr( "Target" );
     OUString aCDATAString( "CDATA" );
     OUString aWhiteSpace( " " );
 
@@ -152,10 +148,10 @@ void WriteRelationsInfoSequence(
         uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
         for( sal_Int32 nSecInd = 0; nSecInd < aSequence[nInd].getLength(); nSecInd++ )
         {
-            if ( aSequence[nInd][nSecInd].First.equals( aIDAttr )
-              || aSequence[nInd][nSecInd].First.equals( aTypeAttr )
-              || aSequence[nInd][nSecInd].First.equals( aTargetModeAttr )
-              || aSequence[nInd][nSecInd].First.equals( aTargetAttr ) )
+            if ( aSequence[nInd][nSecInd].First == "Id"
+              || aSequence[nInd][nSecInd].First == "Type"
+              || aSequence[nInd][nSecInd].First == "TargetMode"
+              || aSequence[nInd][nSecInd].First == "Target" )
             {
                 pAttrList->AddAttribute( aSequence[nInd][nSecInd].First, aCDATAString, aSequence[nInd][nSecInd].Second );
             }
@@ -194,8 +190,6 @@ void WriteContentSequence(
     OUString aTypesElement( "Types" );
     OUString aDefaultElement( "Default" );
     OUString aOverrideElement( "Override" );
-    OUString aExtensionAttr( "Extension" );
-    OUString aPartNameAttr( "PartName" );
     OUString aContentTypeAttr( "ContentType" );
     OUString aCDATAString( "CDATA" );
     OUString aWhiteSpace( " " );
@@ -215,7 +209,7 @@ void WriteContentSequence(
     {
         AttributeList *pAttrList = new AttributeList;
         uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
-        pAttrList->AddAttribute( aExtensionAttr, aCDATAString, aDefaultsSequence[nInd].First );
+        pAttrList->AddAttribute( "Extension", aCDATAString, aDefaultsSequence[nInd].First );
         pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, aDefaultsSequence[nInd].Second );
 
         xWriter->startElement( aDefaultElement, xAttrList );
@@ -227,7 +221,7 @@ void WriteContentSequence(
     {
         AttributeList *pAttrList = new AttributeList;
         uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
-        pAttrList->AddAttribute( aPartNameAttr, aCDATAString, aOverridesSequence[nInd].First );
+        pAttrList->AddAttribute( "PartName", aCDATAString, aOverridesSequence[nInd].First );
         pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, aOverridesSequence[nInd].Second );
 
         xWriter->startElement( aOverrideElement, xAttrList );

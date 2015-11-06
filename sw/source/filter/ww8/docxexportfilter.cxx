@@ -98,9 +98,7 @@ OUString DocxExportFilter::getImplementationName() throw (css::uno::RuntimeExcep
 
 uno::Sequence< OUString > SAL_CALL DocxExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( "com.sun.star.document.ExportFilter" );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence< OUString > { "com.sun.star.document.ExportFilter" };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL DocxExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )

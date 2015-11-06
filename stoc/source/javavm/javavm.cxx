@@ -201,8 +201,7 @@ OUString serviceGetImplementationName()
 
 css::uno::Sequence< OUString > serviceGetSupportedServiceNames()
 {
-    OUString aServiceName("com.sun.star.java.JavaVirtualMachine");
-    return css::uno::Sequence< OUString >(&aServiceName, 1);
+    return css::uno::Sequence< OUString > { "com.sun.star.java.JavaVirtualMachine" };
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL serviceCreateInstance(

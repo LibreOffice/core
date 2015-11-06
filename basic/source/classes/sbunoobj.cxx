@@ -346,9 +346,8 @@ Any convertAny( const Any& rVal, const Type& aDestType )
     }
     catch( const CannotConvertException& e2 )
     {
-        OUString aCannotConvertExceptionName( "com.sun.star.lang.IllegalArgumentException");
         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-                          implGetExceptionMsg( e2, aCannotConvertExceptionName ) );
+                          implGetExceptionMsg( e2, "com.sun.star.lang.IllegalArgumentException" ) );
         return aConvertedVal;
     }
     return aConvertedVal;
@@ -4283,9 +4282,8 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     }
     catch( const NoSuchElementException& e1 )
     {
-        OUString aNoSuchElementExceptionName( "com.sun.star.container.NoSuchElementException"  );
         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-            implGetExceptionMsg( e1, aNoSuchElementExceptionName ) );
+            implGetExceptionMsg( e1, "com.sun.star.container.NoSuchElementException" ) );
         return;
     }
     Reference< XTypeDescription > xTypeDesc;

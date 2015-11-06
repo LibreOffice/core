@@ -208,7 +208,6 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     sal_uInt64 nCount = pInputStream->Write(pBuf, nBytesRead);
     aTempInput.CloseStream();
 
-    OUString fileName("pstoedit" EXESUFFIX);
     //fdo#64161 pstoedit under non-windows uses libEMF to output the EMF, but
     //libEMF cannot calculate the bounding box of text, so the overall bounding
     //box is not increased to include that of any text in the eps
@@ -231,7 +230,8 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     oslFileHandle pIn = NULL;
     oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
-        oslProcessError eErr = runProcessWithPathSearch(fileName,
+        oslProcessError eErr = runProcessWithPathSearch(
+            "pstoedit" EXESUFFIX,
             args, sizeof(args)/sizeof(rtl_uString *),
             &aProcess, &pIn, &pOut, &pErr);
 
@@ -292,7 +292,7 @@ static void WriteFileInThread(void *wData)
 }
 
 static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
-    Graphic &rGraphic, OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
+    Graphic &rGraphic, const OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
 {
     oslProcess aProcess;
     oslFileHandle pIn = NULL;
@@ -344,7 +344,6 @@ static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
 static bool RenderAsBMPThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Graphic &rGraphic)
 {
-    OUString fileName("convert" EXESUFFIX);
     // density in pixel/inch
     OUString arg1("-density");
     // since the preview is also used for PDF-Export & printing on non-PS-printers,
@@ -358,18 +357,15 @@ static bool RenderAsBMPThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData
     };
-    return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
+    return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic,
+        ("convert" EXESUFFIX),
+        args,
         sizeof(args)/sizeof(rtl_uString *));
 }
 
 static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Graphic &rGraphic)
 {
-#ifdef WNT
-    OUString fileName("gswin32c" EXESUFFIX);
-#else
-    OUString fileName("gs" EXESUFFIX);
-#endif
     OUString arg1("-q");
     OUString arg2("-dBATCH");
     OUString arg3("-dNOPAUSE");
@@ -387,7 +383,13 @@ static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         arg6.pData, arg7.pData, arg8.pData, arg9.pData, arg10.pData,
         arg11.pData
     };
-    return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
+    return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic,
+#ifdef WNT
+        "gswin32c" EXESUFFIX,
+#else
+        "gs" EXESUFFIX,
+#endif
+        args,
         sizeof(args)/sizeof(rtl_uString *));
 }
 

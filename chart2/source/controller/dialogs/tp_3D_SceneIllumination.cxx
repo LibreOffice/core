@@ -133,16 +133,13 @@ namespace
         ::chart::LightSource aResult;
         if( 0 <= nIndex && nIndex < 8 )
         {
-            OUString aColorPropertyPrefix("D3DSceneLightColor");
-            OUString aDirectionPropertyPrefix("D3DSceneLightDirection");
-            OUString aEnabledPropertyPrefix("D3DSceneLightOn");
             OUString aIndex( OUString::number( nIndex + 1 ));
 
             try
             {
-                xSceneProperties->getPropertyValue( aColorPropertyPrefix + aIndex ) >>= aResult.nDiffuseColor;
-                xSceneProperties->getPropertyValue( aDirectionPropertyPrefix + aIndex ) >>= aResult.aDirection;
-                xSceneProperties->getPropertyValue( aEnabledPropertyPrefix + aIndex ) >>= aResult.bIsEnabled;
+                xSceneProperties->getPropertyValue( "D3DSceneLightColor" + aIndex ) >>= aResult.nDiffuseColor;
+                xSceneProperties->getPropertyValue( "D3DSceneLightDirection" + aIndex ) >>= aResult.aDirection;
+                xSceneProperties->getPropertyValue( "D3DSceneLightOn" + aIndex ) >>= aResult.bIsEnabled;
             }
             catch( const uno::Exception & ex )
             {
@@ -161,18 +158,15 @@ namespace
     {
         if( 0 <= nIndex && nIndex < 8 )
         {
-            OUString aColorPropertyPrefix("D3DSceneLightColor");
-            OUString aDirectionPropertyPrefix("D3DSceneLightDirection");
-            OUString aEnabledPropertyPrefix("D3DSceneLightOn");
             OUString aIndex( OUString::number( nIndex + 1 ));
 
             try
             {
-                xSceneProperties->setPropertyValue( aColorPropertyPrefix + aIndex,
+                xSceneProperties->setPropertyValue( "D3DSceneLightColor" + aIndex,
                                                     uno::makeAny( rLightSource.nDiffuseColor ));
-                xSceneProperties->setPropertyValue( aDirectionPropertyPrefix + aIndex,
+                xSceneProperties->setPropertyValue( "D3DSceneLightDirection" + aIndex,
                                                     uno::makeAny( rLightSource.aDirection ));
-                xSceneProperties->setPropertyValue( aEnabledPropertyPrefix + aIndex,
+                xSceneProperties->setPropertyValue( "D3DSceneLightOn" + aIndex,
                                                     uno::makeAny( rLightSource.bIsEnabled ));
             }
             catch( const uno::Exception & ex )

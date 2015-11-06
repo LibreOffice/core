@@ -87,8 +87,7 @@ static void apply_table_style( SdrTableObj* pObj, SdrModel* pModel, const OUStri
         Reference< XNameAccess > xPool( dynamic_cast< XNameAccess* >( pModel->GetStyleSheetPool() ) );
         if( xPool.is() ) try
         {
-            const OUString sFamilyName("table" );
-            Reference< XNameContainer > xTableFamily( xPool->getByName( sFamilyName ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xTableFamily( xPool->getByName( "table" ), UNO_QUERY_THROW );
             OUString aStdName( "default" );
             if( !sTableStyle.isEmpty() )
                 aStdName = sTableStyle;

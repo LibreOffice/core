@@ -36,10 +36,9 @@ SAL_CALL exportLibraryContainer(
 {
     xOut->startDocument();
 
-    OUString aDocTypeStr(
+    xOut->unknown(
         "<!DOCTYPE library:libraries PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
         " \"libraries.dtd\">" );
-    xOut->unknown( aDocTypeStr );
     xOut->ignorableWhitespace( OUString() );
 
     OUString aLibrariesName( XMLNS_LIBRARY_PREFIX ":libraries" );
@@ -60,8 +59,7 @@ SAL_CALL exportLibraryContainer(
     {
         LibDescriptor& rLib = pLibArray->mpLibs[i];
 
-        OUString aLibraryName( XMLNS_LIBRARY_PREFIX ":library" );
-        XMLElement* pLibElement = new XMLElement( aLibraryName );
+        XMLElement* pLibElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":library" );
         Reference< xml::sax::XAttributeList > xLibElementAttribs;
         xLibElementAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
 
@@ -96,14 +94,12 @@ SAL_CALL exportLibrary(
 {
     xOut->startDocument();
 
-    OUString aDocTypeStr(
+    xOut->unknown(
         "<!DOCTYPE library:library PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
         " \"library.dtd\">" );
-    xOut->unknown( aDocTypeStr );
     xOut->ignorableWhitespace( OUString() );
 
-    OUString aLibraryName( XMLNS_LIBRARY_PREFIX ":library" );
-    XMLElement* pLibElement = new XMLElement( aLibraryName );
+    XMLElement* pLibElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":library" );
     Reference< xml::sax::XAttributeList > xAttributes( pLibElement );
 
     pLibElement->addAttribute( "xmlns:" XMLNS_LIBRARY_PREFIX, XMLNS_LIBRARY_URI );

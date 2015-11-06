@@ -862,7 +862,7 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
 static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
                          const char *name, int no = 0 )
 {
-    OUString sExt( ".odt" );
+    const OUString sExt( ".odt" );
     OUString basename = OUString::createFromAscii( name );
     if (no > 0)
         basename += OUString::number(no) + "-";

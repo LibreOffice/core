@@ -1384,10 +1384,9 @@ void SAL_CALL exportDialogModel(
 
     xOut->startDocument();
 
-    OUString aDocTypeStr(
+    xOut->unknown(
         "<!DOCTYPE dlg:window PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
         " \"dialog.dtd\">" );
-    xOut->unknown( aDocTypeStr );
     xOut->ignorableWhitespace( OUString() );
 
     OUString aWindowName( XMLNS_DIALOGS_PREFIX ":window" );

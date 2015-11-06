@@ -138,8 +138,6 @@ namespace SwLangHelper
                 const OUString aSelectionLangPrefix("Current_");
                 const OUString aParagraphLangPrefix("Paragraph_");
                 const OUString aDocumentLangPrefix("Default_");
-                const OUString aStrNone("LANGUAGE_NONE");
-                const OUString aStrResetLangs("RESET_LANGUAGES");
 
                 sal_Int32 nPos = 0;
                 bool bForSelection = true;
@@ -181,9 +179,9 @@ namespace SwLangHelper
                     rSh.ExtendedSelectAll();
                 }
 
-                if (aNewLangText == aStrNone)
+                if (aNewLangText == "LANGUAGE_NONE")
                     SwLangHelper::SetLanguage_None( rSh, pOLV, aSelection, bForSelection, aEditAttr );
-                else if (aNewLangText == aStrResetLangs)
+                else if (aNewLangText == "RESET_LANGUAGES")
                     SwLangHelper::ResetLanguages( rSh, pOLV, aSelection, bForSelection );
                 else
                     SwLangHelper::SetLanguage( rSh, pOLV, aSelection, aNewLangText, bForSelection, aEditAttr );

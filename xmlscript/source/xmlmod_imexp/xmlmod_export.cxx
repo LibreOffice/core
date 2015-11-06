@@ -33,10 +33,9 @@ SAL_CALL exportScriptModule(
 {
     xOut->startDocument();
 
-    OUString aDocTypeStr(
+    xOut->unknown(
         "<!DOCTYPE script:module PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
         " \"module.dtd\">");
-    xOut->unknown( aDocTypeStr );
     xOut->ignorableWhitespace( OUString() );
 
     OUString aModuleName( XMLNS_SCRIPT_PREFIX ":module" );

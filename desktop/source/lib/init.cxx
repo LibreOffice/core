@@ -1100,9 +1100,8 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
         return false;
     }
 
-    OUString aCommand(".uno:Paste");
     uno::Sequence<beans::PropertyValue> aPropertyValues;
-    if (!comphelper::dispatchCommand(aCommand, aPropertyValues))
+    if (!comphelper::dispatchCommand(".uno:Paste", aPropertyValues))
     {
         gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
         return false;

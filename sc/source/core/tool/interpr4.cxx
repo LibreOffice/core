@@ -2849,8 +2849,7 @@ static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPa
         xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( pDok->GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
         if ( xVBARange.is() )
         {
-            OUString sDummy("A-Range");
-            SbxObjectRef aObj = GetSbUnoObject( sDummy, uno::Any( xVBARange ) );
+            SbxObjectRef aObj = GetSbUnoObject( "A-Range", uno::Any( xVBARange ) );
             SetSbUnoObjectDfltPropName( aObj );
             bOk = pPar->PutObject( aObj );
         }

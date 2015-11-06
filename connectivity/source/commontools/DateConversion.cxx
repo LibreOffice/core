@@ -83,13 +83,12 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
                         sal_Int32 nIndex = (sal_Int32)-1;
                         const OUString sQuot("\'");
-                        const OUString sQuotToReplace("\'\'");
                         do
                         {
                             nIndex += 2;
                             nIndex = aTemp.indexOf(sQuot,nIndex);
                             if(nIndex != -1)
-                                aTemp = aTemp.replaceAt(nIndex,sQuot.getLength(),sQuotToReplace);
+                                aTemp = aTemp.replaceAt(nIndex,sQuot.getLength(), "\'\'");
                         } while (nIndex != -1);
 
                         aRet.append(aTemp);

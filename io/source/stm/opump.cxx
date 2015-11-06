@@ -467,9 +467,7 @@ OUString OPumpImpl_getImplementationName()
 
 Sequence<OUString> OPumpImpl_getSupportedServiceNames()
 {
-    OUString s("com.sun.star.io.Pump");
-    Sequence< OUString > seq( &s , 1 );
-    return seq;
+    return Sequence< OUString > { "com.sun.star.io.Pump" };
 }
 
 }

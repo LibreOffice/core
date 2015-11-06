@@ -867,7 +867,6 @@ static sal_Int32 calcMaxParaDepth( Reference< XShape > xTargetShape )
         if( xText.is() )
         {
             Reference< XPropertySet > xParaSet;
-            const OUString strNumberingLevel( "NumberingLevel" );
 
             Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
             while( xEnumeration->hasMoreElements() )
@@ -876,7 +875,7 @@ static sal_Int32 calcMaxParaDepth( Reference< XShape > xTargetShape )
                 if( xParaSet.is() )
                 {
                     sal_Int32 nParaDepth = 0;
-                    xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
+                    xParaSet->getPropertyValue( "NumberingLevel" ) >>= nParaDepth;
 
                     if( nParaDepth > nMaxParaDepth )
                         nMaxParaDepth = nParaDepth;
@@ -1027,15 +1026,13 @@ static bool hasVisibleShape( const Reference< XShape >& xShape )
         if( sShapeType == "com.sun.star.presentation.TitleTextShape" || sShapeType == "com.sun.star.presentation.OutlinerShape" ||
             sShapeType == "com.sun.star.presentation.SubtitleShape" || sShapeType == "com.sun.star.drawing.TextShape" )
         {
-            const OUString sFillStyle( "FillStyle" );
-            const OUString sLineStyle( "LineStyle" );
             Reference< XPropertySet > xSet( xShape, UNO_QUERY_THROW );
 
             FillStyle eFillStyle;
-            xSet->getPropertyValue( sFillStyle ) >>= eFillStyle;
+            xSet->getPropertyValue( "FillStyle" ) >>= eFillStyle;
 
             css::drawing::LineStyle eLineStyle;
-            xSet->getPropertyValue( sLineStyle ) >>= eLineStyle;
+            xSet->getPropertyValue( "LineStyle" ) >>= eLineStyle;
 
             return eFillStyle != FillStyle_NONE || eLineStyle != css::drawing::LineStyle_NONE;
         }

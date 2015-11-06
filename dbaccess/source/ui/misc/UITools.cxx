@@ -1273,9 +1273,9 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     }
     if ( !pTypeInfo )
     {
-        OUString sCreate("x"),sTypeName;
+        OUString sTypeName;
         bool bForce = true;
-        pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,sTypeName,sCreate,50,0,false,bForce);
+        pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,sTypeName,"x",50,0,false,bForce);
     }
     OSL_ENSURE(pTypeInfo,"Wrong DataType supplied!");
     return pTypeInfo;

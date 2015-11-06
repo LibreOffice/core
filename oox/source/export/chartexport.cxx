@@ -3558,7 +3558,6 @@ Reference< chart2::data::XDataSequence>  getLabeledSequence(
         const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aSequences,
         bool bPositive )
 {
-    const OUString aRolePrefix( "error-bars" );
     OUString aDirection;
     if(bPositive)
         aDirection = "positive";
@@ -3573,7 +3572,7 @@ Reference< chart2::data::XDataSequence>  getLabeledSequence(
             uno::Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
             OUString aRole;
             if( ( xSeqProp->getPropertyValue( "Role" ) >>= aRole ) &&
-                    aRole.match( aRolePrefix ) && aRole.indexOf(aDirection) >= 0 )
+                    aRole.match( "error-bars" ) && aRole.indexOf(aDirection) >= 0 )
             {
                 return xSequence;
             }

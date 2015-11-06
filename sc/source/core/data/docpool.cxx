@@ -710,7 +710,6 @@ static bool lcl_HFPresentation
     SfxItemIter aIter( rSet );
     pItem = aIter.FirstItem();
     OUString aText;
-    OUString aDel(" + ");
 
     while( pItem )
     {
@@ -776,7 +775,7 @@ static bool lcl_HFPresentation
 
         if ( aText.getLength() )
         {
-            rText = rText + aText + aDel;
+            rText = rText + aText + " + ";
         }
 
         pItem = aIter.NextItem();

@@ -58,11 +58,10 @@ void CreateTableRows( uno::Reference< XTableRows > xTableRows, const std::vector
         xTableRows->insertByIndex( 0, rvTableRows.size() - 1 );
     std::vector< TableRow >::const_iterator aTableRowIter( rvTableRows.begin() );
     uno::Reference< container::XIndexAccess > xIndexAccess( xTableRows, UNO_QUERY_THROW );
-    const OUString sHeight("Height");
     for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
     {
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( sHeight, Any( static_cast< sal_Int32 >( aTableRowIter->getHeight() / 360 ) ) );
+        xPropSet->setPropertyValue( "Height", Any( static_cast< sal_Int32 >( aTableRowIter->getHeight() / 360 ) ) );
         ++aTableRowIter;
     }
 }
@@ -73,11 +72,10 @@ void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::ve
         xTableColumns->insertByIndex( 0, rvTableGrid.size() - 1 );
     std::vector< sal_Int32 >::const_iterator aTableGridIter( rvTableGrid.begin() );
     uno::Reference< container::XIndexAccess > xIndexAccess( xTableColumns, UNO_QUERY_THROW );
-    const OUString sWidth("Width");
     for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
     {
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( sWidth, Any( static_cast< sal_Int32 >( *aTableGridIter++ / 360 ) ) );
+        xPropSet->setPropertyValue( "Width", Any( static_cast< sal_Int32 >( *aTableGridIter++ / 360 ) ) );
     }
 }
 

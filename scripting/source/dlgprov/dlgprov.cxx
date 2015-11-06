@@ -136,9 +136,8 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
     {
         Reference< container::XNameContainer > xDialogModel(  lcl_createControlModel(i_xContext) );
 
-        OUString aDlgSrcUrlPropName( "DialogSourceURL"  );
         Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
-        xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURL );
+        xDlgPropSet->setPropertyValue( "DialogSourceURL", aDialogSourceURL );
 
         // #TODO we really need to detect the source of the Dialog, is it
         // the dialog. E.g. if the dialog was created from basic ( then we just

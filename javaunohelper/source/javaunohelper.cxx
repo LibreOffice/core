@@ -72,8 +72,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
         lib.release();
 
         // ========================= LATEST VERSION =========================
-        OUString aGetEnvName( COMPONENT_GETENV );
-        oslGenericFunction pSym = lib.getFunctionSymbol(aGetEnvName);
+        oslGenericFunction pSym = lib.getFunctionSymbol(COMPONENT_GETENV);
         if (pSym)
         {
             Environment java_env, loader_env;
@@ -94,8 +93,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             uno_getEnvironment(
                 reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 
-            OUString aWriteInfoName( COMPONENT_WRITEINFO );
-            pSym = lib.getFunctionSymbol(aWriteInfoName);
+            pSym = lib.getFunctionSymbol(COMPONENT_WRITEINFO);
             if (pSym)
             {
                 if (loader_env.is() && java_env.is())
@@ -164,8 +162,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
         lib.release();
 
         // ========================= LATEST VERSION =========================
-        OUString aGetEnvName( COMPONENT_GETENV );
-        oslGenericFunction pSym = lib.getFunctionSymbol(aGetEnvName);
+        oslGenericFunction pSym = lib.getFunctionSymbol(COMPONENT_GETENV);
         if (pSym)
         {
             Environment java_env, loader_env;
@@ -187,8 +184,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             uno_getEnvironment(
                 reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 
-            OUString aGetFactoryName( COMPONENT_GETFACTORY );
-            pSym = lib.getFunctionSymbol(aGetFactoryName);
+            pSym = lib.getFunctionSymbol(COMPONENT_GETFACTORY);
             if (pSym)
             {
                 if (loader_env.is() && java_env.is())

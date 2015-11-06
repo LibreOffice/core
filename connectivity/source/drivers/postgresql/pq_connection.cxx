@@ -137,8 +137,7 @@ OUString    ConnectionGetImplementationName()
 }
 com::sun::star::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
 {
-    OUString serv( "com.sun.star.sdbc.Connection" );
-    return Sequence< OUString> (&serv,1);
+    return Sequence< OUString > { "com.sun.star.sdbc.Connection" };
 }
 
 static sal_Int32 readLogLevelFromConfiguration()

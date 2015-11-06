@@ -3488,8 +3488,6 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, Reference< container::
     if ( pDoc )
     {
         SfxModule*    pModule( pDoc->GetFactory().GetModule() );
-        OUString aSlotCmd( "slot:" );
-        OUString aUnoCmd( ".uno:" );
         Sequence< beans::PropertyValue > aSeqPropValue;
 
         for ( sal_Int32 i = 0; i < rToolbarDefinition->getCount(); i++ )
@@ -3500,7 +3498,7 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, Reference< container::
             if ( rToolbarDefinition->getByIndex( i ) >>= aSeqPropValue )
             {
                 GetCommandFromSequence( aCommand, nIndex, aSeqPropValue );
-                if ( nIndex >= 0 && ( aCommand.startsWith( aSlotCmd ) ))
+                if ( nIndex >= 0 && aCommand.startsWith( "slot:" ) )
                 {
                     OUString aSlot( aCommand.copy( 5 ));
 
@@ -3508,7 +3506,7 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, Reference< container::
                     const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( sal_uInt16( aSlot.toInt32() ));
                     if ( pSlot )
                     {
-                        OUStringBuffer aStrBuf( aUnoCmd );
+                        OUStringBuffer aStrBuf( ".uno:"  );
                         aStrBuf.appendAscii( pSlot->GetUnoName() );
 
                         aCommand = aStrBuf.makeStringAndClear();

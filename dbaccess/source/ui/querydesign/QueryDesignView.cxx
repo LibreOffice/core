@@ -295,7 +295,6 @@ namespace
             {
                 const Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
                 const OUString aQuote = xMetaData->getIdentifierQuoteString();
-                const OUString sEqual(" = ");
 
                 for(;aIter != aEnd;++aIter)
                 {
@@ -304,7 +303,7 @@ namespace
                         aCondition.append(C_AND);
                     aCondition.append(quoteTableAlias(true,pData->GetAliasName(JTCS_FROM),aQuote));
                     aCondition.append(::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) ));
-                    aCondition.append(sEqual);
+                    aCondition.append(" = ");
                     aCondition.append(quoteTableAlias(true,pData->GetAliasName(JTCS_TO),aQuote));
                     aCondition.append(::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_TO) ));
                 }
@@ -2100,14 +2099,13 @@ namespace
     {
         SqlParseError eErrorCode = eOk;
         bool bFirstField = true;
-        OUString sAsterisk("*");
         OJoinTableView::OTableWindowMap::iterator aIter = _pTabList->begin();
         OJoinTableView::OTableWindowMap::iterator aEnd = _pTabList->end();
         for(;aIter != aEnd && eOk == eErrorCode ;++aIter)
         {
             OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second.get());
             OTableFieldDescRef  aInfo = new OTableFieldDesc();
-            if (pTabWin->ExistsField( sAsterisk, aInfo ))
+            if (pTabWin->ExistsField( "*", aInfo ))
             {
                 eErrorCode = _pView->InsertField(aInfo, true, bFirstField);
                 bFirstField = false;

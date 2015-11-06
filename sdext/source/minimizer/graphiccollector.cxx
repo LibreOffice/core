@@ -62,9 +62,9 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
 void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
 {
     const OUString aGraphicURL( rUser.maGraphicURL );
-    const OUString sPackageURL( "vnd.sun.star.GraphicObject:" );
 
-    if ( rGraphicSettings.mbEmbedLinkedGraphics || (aGraphicURL.isEmpty() || aGraphicURL.match( sPackageURL ) ) )
+    if ( rGraphicSettings.mbEmbedLinkedGraphics ||
+         aGraphicURL.isEmpty() || aGraphicURL.match( "vnd.sun.star.GraphicObject:" ) )
     {
         std::vector< GraphicCollector::GraphicEntity >::iterator aIter( rGraphicEntities.begin() );
         while( aIter != rGraphicEntities.end() )
@@ -221,18 +221,16 @@ void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxMSF, cons
     {
         try
         {
-            const OUString sGraphicObjectShape( "com.sun.star.drawing.GraphicObjectShape"  );
-            const OUString sGroupShape( "com.sun.star.drawing.GroupShape"  );
             Reference< XShape > xShape( rxShapes->getByIndex( i ), UNO_QUERY_THROW );
             const OUString sShapeType( xShape->getShapeType() );
-            if ( sShapeType == sGroupShape )
+            if ( sShapeType == "com.sun.star.drawing.GroupShape" )
             {
                 Reference< XShapes > xShapes( xShape, UNO_QUERY_THROW );
                 ImpCollectGraphicObjects( rxMSF, xShapes, rGraphicSettings, rGraphicEntities );
                 continue;
             }
 
-            if ( sShapeType == sGraphicObjectShape )
+            if ( sShapeType == "com.sun.star.drawing.GraphicObjectShape" )
                 ImpAddGraphicEntity( rxMSF, xShape, rGraphicSettings, rGraphicEntities );
 
             // now check for a fillstyle
@@ -343,18 +341,16 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const 
     {
         try
         {
-            const OUString sGraphicObjectShape( "com.sun.star.drawing.GraphicObjectShape"  );
-            const OUString sGroupShape( "com.sun.star.drawing.GroupShape"  );
             Reference< XShape > xShape( rxShapes->getByIndex( i ), UNO_QUERY_THROW );
             const OUString sShapeType( xShape->getShapeType() );
-            if ( sShapeType == sGroupShape )
+            if ( sShapeType == "com.sun.star.drawing.GroupShape" )
             {
                 Reference< XShapes > xShapes( xShape, UNO_QUERY_THROW );
                 ImpCountGraphicObjects( rxMSF, xShapes, rGraphicSettings, rnGraphics );
                 continue;
             }
 
-            if ( sShapeType == sGraphicObjectShape )
+            if ( sShapeType == "com.sun.star.drawing.GraphicObjectShape" )
             {
                 rnGraphics++;
             }

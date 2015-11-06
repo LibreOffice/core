@@ -184,15 +184,12 @@ void XMLMetaExportComponent::_ExportContent() {}
 uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames()
     throw()
 {
-    const OUString aServiceName(
-         "com.sun.star.document.XMLOasisMetaExporter"  );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence< OUString > { "com.sun.star.document.XMLOasisMetaExporter" };
 }
 
 OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw()
 {
-    return OUString(  "XMLMetaExportComponent"  );
+    return OUString( "XMLMetaExportComponent" );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(
@@ -205,15 +202,12 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
 uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
     throw()
 {
-    const OUString aServiceName(
-         "com.sun.star.document.XMLMetaExporter"  );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence< OUString > { "com.sun.star.document.XMLMetaExporter" };
 }
 
 OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw()
 {
-    return OUString(  "XMLMetaExportOOo"  );
+    return OUString( "XMLMetaExportOOo" );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(

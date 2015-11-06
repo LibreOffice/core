@@ -231,18 +231,18 @@ static bool is_tde_desktop( Display* pDisplay )
     return false;
 }
 
-static bool is_kde_desktop( Display* pDisplay )
+static bool is_kde3_desktop( Display* pDisplay )
 {
-    if ( NULL != getenv( "KDE_FULL_SESSION" ) )
+    static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
+    static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
+    if ( pFullVersion )
     {
-        const char *pVer = getenv( "KDE_SESSION_VERSION" );
-        if ( !pVer || pVer[0] == '0' )
+        if ( !pSessionVersion || pSessionVersion[0] == '0' )
         {
             return true; // does not exist => KDE3
         }
 
-        OUString aVer( "3" );
-        if ( aVer.equalsIgnoreAsciiCaseAscii( pVer ) )
+        if ( strcmp(pSessionVersion, "3" ) == 0 )
         {
             return true;
         }
@@ -256,14 +256,10 @@ static bool is_kde_desktop( Display* pDisplay )
 
 static bool is_kde4_desktop( Display* pDisplay )
 {
-    if ( NULL != getenv( "KDE_FULL_SESSION" ) )
-    {
-        OUString aVer( "4" );
-
-        const char *pVer = getenv( "KDE_SESSION_VERSION" );
-        if ( pVer && aVer.equalsIgnoreAsciiCaseAscii( pVer ) )
-            return true;
-    }
+    static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
+    static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
+    if ( pFullVersion && pSessionVersion && strcmp(pSessionVersion, "4") == 0 )
+        return true;
 
     if ( KDEVersion( pDisplay ) == 4 )
         return true;
@@ -273,14 +269,10 @@ static bool is_kde4_desktop( Display* pDisplay )
 
 static bool is_kde5_desktop( Display* pDisplay )
 {
-    if ( NULL != getenv( "KDE_FULL_SESSION" ) )
-    {
-        OUString aVer( "5" );
-
-        const char *pVer = getenv( "KDE_SESSION_VERSION" );
-        if ( pVer && aVer.equalsIgnoreAsciiCaseAscii( pVer ) )
-            return true;
-    }
+    static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
+    static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
+    if ( pFullVersion && pSessionVersion && strcmp(pSessionVersion, "5") )
+        return true;
 
     if ( KDEVersion( pDisplay ) == 5 )
         return true;
@@ -400,7 +392,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             ret = DESKTOP_KDE4;
         else if ( is_gnome_desktop( pDisplay ) )
             ret = DESKTOP_GNOME;
-        else if ( is_kde_desktop( pDisplay ) )
+        else if ( is_kde3_desktop( pDisplay ) )
             ret = DESKTOP_KDE3;
         else if ( is_tde_desktop( pDisplay ) )
             ret = DESKTOP_TDE;

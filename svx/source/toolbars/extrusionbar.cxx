@@ -449,20 +449,17 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
             if((nDirection >= 0) && (nDirection < 9))
             {
-                const OUString sFirstLightDirection( "FirstLightDirection" );
-                const OUString sSecondLightDirection( "SecondLightDirection" );
-
                 const Direction3D * pLighting1Defaults;
                 const Direction3D * pLighting2Defaults;
 
                 getLightingDirectionDefaults( &pLighting1Defaults, &pLighting2Defaults );
 
                 css::beans::PropertyValue aPropValue;
-                aPropValue.Name = sFirstLightDirection;
+                aPropValue.Name = "FirstLightDirection";
                 aPropValue.Value <<= pLighting1Defaults[nDirection];
                 rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
-                aPropValue.Name = sSecondLightDirection;
+                aPropValue.Name = "SecondLightDirection";
                 aPropValue.Value <<= pLighting2Defaults[nDirection];
                 rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
             }

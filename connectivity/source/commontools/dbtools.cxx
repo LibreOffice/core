@@ -943,8 +943,6 @@ try
     Property* pOldProps = aOldProperties.getArray();
     Property* pNewProps = aNewProperties.getArray();
 
-    OUString sPropDefaultControl("DefaultControl");
-    OUString sPropLabelControl("LabelControl");
     OUString sPropFormatsSupplier("FormatsSupplier");
     OUString sPropCurrencySymbol("CurrencySymbol");
     OUString sPropDecimals("Decimals");
@@ -962,9 +960,7 @@ try
 
     for (sal_Int32 i=0; i<aOldProperties.getLength(); ++i)
     {
-        if  (   (!pOldProps[i].Name.equals(sPropDefaultControl))
-            &&  (!pOldProps[i].Name.equals(sPropLabelControl))
-            )
+        if ( pOldProps[i].Name != "DefaultControl" && pOldProps[i].Name != "LabelControl" )
         {
             // binary search
             Property* pResult = ::std::lower_bound(

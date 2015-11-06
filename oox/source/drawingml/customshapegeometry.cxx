@@ -146,76 +146,40 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
         }
         break;
         case EnhancedCustomShapeParameterType::LEFT :
-        {
-            const OUString sLeft( "left" );
-            aRet = sLeft;
-        }
+            aRet = "left";
         break;
         case EnhancedCustomShapeParameterType::TOP :
-        {
-            const OUString sTop( "top" );
-            aRet = sTop;
-        }
+            aRet = "top";
         break;
         case EnhancedCustomShapeParameterType::RIGHT :
-        {
-            const OUString sRight( "right" );
-            aRet = sRight;
-        }
+            aRet = "right";
         break;
         case EnhancedCustomShapeParameterType::BOTTOM :
-        {
-            const OUString sBottom( "bottom" );
-            aRet = sBottom;
-        }
+            aRet = "bottom";
         break;
         case EnhancedCustomShapeParameterType::XSTRETCH :
-        {
-            const OUString sXStretch( "xstretch" );
-            aRet = sXStretch;
-        }
+            aRet = "xstretch";
         break;
         case EnhancedCustomShapeParameterType::YSTRETCH :
-        {
-            const OUString sYStretch( "ystretch" );
-            aRet = sYStretch;
-        }
+            aRet = "ystretch";
         break;
         case EnhancedCustomShapeParameterType::HASSTROKE :
-        {
-            const OUString sHasStroke( "hasstroke" );
-            aRet = sHasStroke;
-        }
+            aRet = "hasstroke";
         break;
         case EnhancedCustomShapeParameterType::HASFILL :
-        {
-            const OUString sHasFill( "hasfill"  );
-            aRet = sHasFill;
-        }
+            aRet = "hasfill";
         break;
         case EnhancedCustomShapeParameterType::WIDTH :
-        {
-            const OUString sWidth( "width"  );
-            aRet = sWidth;
-        }
+            aRet = "width";
         break;
         case EnhancedCustomShapeParameterType::HEIGHT :
-        {
-            const OUString sHeight( "height"  );
-            aRet = sHeight;
-        }
+            aRet = "height";
         break;
         case EnhancedCustomShapeParameterType::LOGWIDTH :
-        {
-            const OUString sLogWidth( "logwidth"  );
-            aRet = sLogWidth;
-        }
+            aRet = "logwidth";
         break;
         case EnhancedCustomShapeParameterType::LOGHEIGHT :
-        {
-            const OUString sLogHeight( "logheight"  );
-            aRet = sLogHeight;
-        }
+            aRet = "logheight";
         break;
     }
     return aRet;

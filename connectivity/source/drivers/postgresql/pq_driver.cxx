@@ -76,15 +76,7 @@ OUString DriverGetImplementationName()
 
 Sequence< OUString > DriverGetSupportedServiceNames()
 {
-    static Sequence< OUString > *p;
-    if( ! p )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        OUString tmp( "com.sun.star.sdbc.Driver" );
-        static Sequence< OUString > instance( &tmp,1 );
-        p = &instance;
-    }
-    return *p;
+    return Sequence< OUString > { "com.sun.star.sdbc.Driver" };
 }
 
 Reference< XConnection > Driver::connect(

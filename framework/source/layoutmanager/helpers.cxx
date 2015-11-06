@@ -300,18 +300,13 @@ bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFrame )
 
 void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName, bool bVisible )
 {
-    const OUString aDockWinPrefixCommand( "DockingWindow" );
-
     sal_Int32 nID    = rDockingWindowName.toInt32();
     sal_Int32 nIndex = nID - DOCKWIN_ID_BASE;
 
     css::uno::Reference< css::frame::XDispatchProvider > xProvider(rFrame, css::uno::UNO_QUERY);
     if ( nIndex >= 0 && xProvider.is() )
     {
-        OUString aDockWinCommand( ".uno:" );
-        OUString aDockWinArgName( aDockWinPrefixCommand );
-
-        aDockWinArgName += OUString::number( nIndex );
+        OUString aDockWinArgName = "DockingWindow" + OUString::number( nIndex );
 
         css::uno::Sequence< css::beans::PropertyValue > aArgs(1);
         aArgs[0].Name  = aDockWinArgName;
@@ -319,7 +314,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComp
 
         css::uno::Reference< css::frame::XDispatchHelper > xDispatcher = css::frame::DispatchHelper::create( rxContext );
 
-        aDockWinCommand = aDockWinCommand + aDockWinArgName;
+        OUString aDockWinCommand = ".uno:" + aDockWinArgName;
         xDispatcher->executeDispatch(
             xProvider,
             aDockWinCommand,

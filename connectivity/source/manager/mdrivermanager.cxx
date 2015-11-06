@@ -180,28 +180,24 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         _rPrecedence.realloc( 0 );
         try
         {
-            // some strings we need
-            const OUString sDriverManagerConfigLocation(  "org.openoffice.Office.DataAccess/DriverManager" );
-            const OUString sDriverPreferenceLocation(  "DriverPrecedence" );
-            const OUString sNodePathArgumentName(  "nodepath" );
-            const OUString sNodeAccessServiceName(  "com.sun.star.configuration.ConfigurationAccess" );
-
             // create a configuration provider
             Reference< XMultiServiceFactory > xConfigurationProvider(
                 com::sun::star::configuration::theDefaultProvider::get( _rContext ) );
 
             // one argument for creating the node access: the path to the configuration node
             Sequence< Any > aCreationArgs(1);
-            aCreationArgs[0] <<= NamedValue( sNodePathArgumentName, makeAny( sDriverManagerConfigLocation ) );
+            aCreationArgs[0] <<= NamedValue( "nodepath", makeAny( OUString("org.openoffice.Office.DataAccess/DriverManager") ) );
 
             // create the node access
-            Reference< XNameAccess > xDriverManagerNode(xConfigurationProvider->createInstanceWithArguments(sNodeAccessServiceName, aCreationArgs), UNO_QUERY);
+            Reference< XNameAccess > xDriverManagerNode(
+                xConfigurationProvider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aCreationArgs),
+                UNO_QUERY);
 
             OSL_ENSURE(xDriverManagerNode.is(), "lcl_getDriverPrecedence: could not open my configuration node!");
             if (xDriverManagerNode.is())
             {
                 // obtain the preference list
-                Any aPreferences = xDriverManagerNode->getByName(sDriverPreferenceLocation);
+                Any aPreferences = xDriverManagerNode->getByName("DriverPrecedence");
                 bool bSuccess = aPreferences >>= _rPrecedence;
                 OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "lcl_getDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
             }
