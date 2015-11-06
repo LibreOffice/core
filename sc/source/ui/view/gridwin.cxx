@@ -5795,7 +5795,7 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
     // GridWindows stores a shown cell cursor in mpOOCursors, hence
     // we can use that to determine whether we would want to be showing
     // one (client-side) for tiled rendering too.
-    if (!pDrawLayer->isTiledRendering() || !mpOOCursors.get())
+    if (!mpOOCursors.get())
     {
         return OString("EMPTY");
     }
