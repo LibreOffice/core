@@ -317,6 +317,9 @@ SAL_IMPLEMENT_MAIN()
             << "ERROR: Bad format of <" << e.getUri() << ">, \""
             << e.getDetail() << "\"\n";
         return EXIT_FAILURE;
+    } catch (std::exception & e) {
+        std::cerr << "ERROR: " << e.what() << "\n";
+        return EXIT_FAILURE;
     }
 
     return 0;
