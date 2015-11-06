@@ -51,7 +51,7 @@ protected:
     css::uno::Reference< css::xml::sax::XDocumentHandler > mxHandler;
 
     bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 public:
     explicit LotusWordProImportFilter( const css::uno::Reference< css::uno::XComponentContext > &rxContext)
