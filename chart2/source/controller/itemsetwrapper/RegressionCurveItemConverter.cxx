@@ -177,7 +177,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
         case SCHATTR_REGRESSION_DEGREE:
         {
             uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, OUString("PolynomialDegree"));
+            bChanged = lclConvertToPropertySet<sal_Int32, SfxInt32Item>(rItemSet, nWhichId, xProperties, "PolynomialDegree");
         }
         break;
 
