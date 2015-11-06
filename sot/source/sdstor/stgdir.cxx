@@ -730,7 +730,7 @@ StgDirStrm::StgDirStrm( StgIo& r )
     {
         StgEntry aRoot;
         aRoot.Init();
-        aRoot.SetName( OUString("Root Entry") );
+        aRoot.SetName( "Root Entry" );
         aRoot.SetType( STG_ROOT );
         m_pRoot = new StgDirEntry( aRoot );
         m_pRoot->SetDirty();

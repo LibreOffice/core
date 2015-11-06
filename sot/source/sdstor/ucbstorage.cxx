@@ -1116,7 +1116,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 aArg.Data = xStream;
                 aArg.ReplaceExisting = true;
                 aAny <<= aArg;
-                m_pContent->executeCommand( OUString("insert"), aAny );
+                m_pContent->executeCommand( "insert", aAny );
 
                 // wrapper now controls lifetime of temporary file
                 m_aTempURL.clear();
@@ -1665,8 +1665,8 @@ void UCBStorage_Impl::Init()
                 if ( m_nError == ERRCODE_NONE )
                 {
                     // read the manifest.xml file
-                    aObj.Append( OUString( "META-INF" ) );
-                    aObj.Append( OUString( "manifest.xml" ) );
+                    aObj.Append( "META-INF" );
+                    aObj.Append( "manifest.xml" );
 
                     // create input stream
                     std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ ));
@@ -2132,7 +2132,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // first remove all open stream handles
                         if (pContent && (!pElement->m_xStream.Is() || pElement->m_xStream->Clear()))
                         {
-                            pContent->executeCommand( OUString("delete"), makeAny( true ) );
+                            pContent->executeCommand( "delete", makeAny( true ) );
                             nRet = COMMIT_RESULT_SUCCESS;
                         }
                         else
@@ -2241,7 +2241,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // write a manifest file
                         // first create a subfolder "META-inf"
                         Content aNewSubFolder;
-                        bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, OUString("META-INF"), aNewSubFolder );
+                        bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, "META-INF", aNewSubFolder );
                         if ( bRet )
                         {
                             // create a stream to write the manifest file - use a temp file
@@ -2268,7 +2268,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             xWriter = NULL;
                             xOutputStream = NULL;
                             pTempFile.reset();
-                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, OUString("manifest.xml"), NameClash::OVERWRITE );
+                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, "manifest.xml", NameClash::OVERWRITE );
                         }
                     }
                     else
@@ -2279,7 +2279,7 @@ sal_Int16 UCBStorage_Impl::Commit()
 #endif
                         // force writing
                         Any aAny;
-                        m_pContent->executeCommand( OUString("flush"), aAny );
+                        m_pContent->executeCommand( "flush", aAny );
                         if ( m_pSource != 0 )
                         {
                             std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ ));
