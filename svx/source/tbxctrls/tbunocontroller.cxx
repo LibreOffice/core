@@ -278,7 +278,7 @@ FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::X
                            OUString( ".uno:FontHeight" ) ),
    m_pBox( NULL )
 {
-    addStatusListener( OUString( ".uno:CharFontName" ));
+    addStatusListener( ".uno:CharFontName");
 }
 
 FontHeightToolBoxControl::~FontHeightToolBoxControl()

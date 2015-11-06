@@ -554,7 +554,7 @@ IMPL_LINK_NOARG_TYPED(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, vo
         aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
         aArgs[0].Value <<= (sal_Int32)nCharacterSpacing;
 
-        mrController.dispatchCommand( OUString( ".uno:FontworkCharacterSpacingDialog" ), aArgs );
+        mrController.dispatchCommand( ".uno:FontworkCharacterSpacingDialog", aArgs );
     }
     else if ( nSelection == 6 ) // KernCharacterPairs
     {

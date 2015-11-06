@@ -240,7 +240,7 @@ void LinePropertyPanelBase::Initialize()
     FillLineStyleList();
     SelectLineStyle();
     mpLBStyle->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeLineStyleHdl ) );
-    mpLBStyle->SetAccessibleName(OUString( "Style"));
+    mpLBStyle->SetAccessibleName("Style");
     mpLBStyle->AdaptDropDownLineCountToMaximum();
 
     const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
@@ -254,24 +254,24 @@ void LinePropertyPanelBase::Initialize()
     SelectEndStyle(true);
     SelectEndStyle(false);
     mpLBStart->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeStartHdl ) );
-    mpLBStart->SetAccessibleName(OUString("Beginning Style")); //wj acc
+    mpLBStart->SetAccessibleName("Beginning Style"); //wj acc
     mpLBStart->AdaptDropDownLineCountToMaximum();
     mpLBEnd->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeEndHdl ) );
-    mpLBEnd->SetAccessibleName(OUString("Ending Style"));  //wj acc
+    mpLBEnd->SetAccessibleName("Ending Style");  //wj acc
     mpLBEnd->AdaptDropDownLineCountToMaximum();
 
     mpMFTransparent->SetModifyHdl(LINK(this, LinePropertyPanelBase, ChangeTransparentHdl));
-    mpMFTransparent->SetAccessibleName(OUString("Transparency"));  //wj acc
+    mpMFTransparent->SetAccessibleName("Transparency");  //wj acc
 
     mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
     mpMFTransparent->SetAccessibleRelationLabeledBy(mpFTTransparency);
     mpLBEnd->SetAccessibleRelationLabeledBy(mpLBEnd);
 
     mpLBEdgeStyle->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeEdgeStyleHdl ) );
-    mpLBEdgeStyle->SetAccessibleName(OUString("Corner Style"));
+    mpLBEdgeStyle->SetAccessibleName("Corner Style");
 
     mpLBCapStyle->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeCapStyleHdl ) );
-    mpLBCapStyle->SetAccessibleName(OUString("Cap Style"));
+    mpLBCapStyle->SetAccessibleName("Cap Style");
 }
 
 void LinePropertyPanelBase::DataChanged(const DataChangedEvent& /*rEvent*/)

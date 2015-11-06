@@ -247,25 +247,25 @@ void _SdrItemBrowserControl::ImpCtor()
 
     InsertDataColumn(
         ITEMBROWSER_WHICHCOL_ID,
-        OUString("Which"),
-        GetTextWidth(OUString(" Which ")) + 2);
+        "Which",
+        GetTextWidth(" Which ") + 2);
     InsertDataColumn(
         ITEMBROWSER_STATECOL_ID,
-        OUString("State"),
-        std::max(GetTextWidth(OUString(" State ")) + 2 ,
-            GetTextWidth(OUString("DontCare")) + 2));
+        "State",
+        std::max(GetTextWidth(" State ") + 2 ,
+            GetTextWidth("DontCare") + 2));
     InsertDataColumn(
         ITEMBROWSER_TYPECOL_ID ,
-        OUString("Type"),
-        GetTextWidth(OUString(" Type_ ")) + 2);
+        "Type",
+        GetTextWidth(" Type_ ") + 2);
     InsertDataColumn(
         ITEMBROWSER_NAMECOL_ID ,
-        OUString("Name"),
+        "Name",
         150);
     InsertDataColumn(
         ITEMBROWSER_VALUECOL_ID,
-        OUString("Value"),
-        GetTextWidth(OUString("12345678901234567890")));
+        "Value",
+        GetTextWidth("12345678901234567890"));
     SetDataRowHeight(
         GetTextHeight());
 
@@ -1046,7 +1046,7 @@ _SdrItemBrowserWindow::_SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits
     aBrowse(VclPtr<_SdrItemBrowserControl>::Create(this))
 {
     SetOutputSizePixel(aBrowse->GetSizePixel());
-    SetText(OUString("Joe's ItemBrowser"));
+    SetText("Joe's ItemBrowser");
     aBrowse->Show();
 }
 

@@ -159,7 +159,7 @@ namespace svx
             ::utl::OConfigurationTreeRoot aConfig(
                 ::utl::OConfigurationTreeRoot::createWithComponentContext(
                     m_xContext,
-                    OUString( "/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument" )
+                    "/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument"
             ) );
             OUString sDatabaseFilter;
             OSL_VERIFY( aConfig.getNodeValue( "ooSetupFactoryActualFilter" ) >>= sDatabaseFilter );

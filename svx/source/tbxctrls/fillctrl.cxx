@@ -67,14 +67,14 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     , mnLastPosHatch(0)
     , mnLastPosBitmap(0)
 {
-    addStatusListener( OUString( ".uno:FillColor" ));
-    addStatusListener( OUString( ".uno:FillGradient" ));
-    addStatusListener( OUString( ".uno:FillHatch" ));
-    addStatusListener( OUString( ".uno:FillBitmap" ));
-    addStatusListener( OUString( ".uno:ColorTableState" ));
-    addStatusListener( OUString( ".uno:GradientListState" ));
-    addStatusListener( OUString( ".uno:HatchListState" ));
-    addStatusListener( OUString( ".uno:BitmapListState" ));
+    addStatusListener( ".uno:FillColor");
+    addStatusListener( ".uno:FillGradient");
+    addStatusListener( ".uno:FillHatch");
+    addStatusListener( ".uno:FillBitmap");
+    addStatusListener( ".uno:ColorTableState");
+    addStatusListener( ".uno:GradientListState");
+    addStatusListener( ".uno:HatchListState");
+    addStatusListener( ".uno:BitmapListState");
 }
 
 SvxFillToolBoxControl::~SvxFillToolBoxControl()

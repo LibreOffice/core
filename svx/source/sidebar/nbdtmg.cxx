@@ -772,7 +772,7 @@ MixBulletsTypeMgr::MixBulletsTypeMgr()
     }
     //Initial the first time to store the default value. Then do it again for customized value
     Init();
-    ImplLoad(OUString("standard.sya"));
+    ImplLoad("standard.sya");
 }
 
 class theMixBulletsTypeMgr : public rtl::Static<MixBulletsTypeMgr, theMixBulletsTypeMgr> {};
@@ -815,7 +815,7 @@ MixBulletsTypeMgr::MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr):
             }
         }
     }
-    ImplLoad(OUString("standard.sya"));
+    ImplLoad("standard.sya");
 }
 void MixBulletsTypeMgr::Init()
 {
@@ -1126,7 +1126,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
             pEntry->sDescription = GetDescription(nIndex,true);
         }
     }
-    ImplStore(OUString("standard.sya"));
+    ImplStore("standard.sya");
     return true;
 }
 
@@ -1262,7 +1262,7 @@ NumberingTypeMgr::NumberingTypeMgr()
     pNumberSettingsArr = new NumberSettingsArr_Impl;
     //Initial the first time to store the default value. Then do it again for customized value
     Init();
-    ImplLoad(OUString("standard.syb"));
+    ImplLoad("standard.syb");
 }
 
 NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& rTypeMgr)
@@ -1270,7 +1270,7 @@ NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& rTypeMgr)
     , pNumberSettingsArr (new NumberSettingsArr_Impl)
     , pDefaultNumberSettingsArr(NULL)
 {
-    ImplLoad(OUString("standard.syb"));
+    ImplLoad("standard.syb");
 }
 
 NumberingTypeMgr::~NumberingTypeMgr()
@@ -1395,7 +1395,7 @@ bool NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
     } else {
         _pSet->sDescription = GetDescription(nIndex,true);
     }
-    ImplStore(OUString("standard.syb"));
+    ImplStore("standard.syb");
     return true;
 }
 
@@ -1473,7 +1473,7 @@ OutlineTypeMgr::OutlineTypeMgr()
     }
     //Initial the first time to store the default value. Then do it again for customized value
     Init();
-    ImplLoad(OUString("standard.syc"));
+    ImplLoad("standard.syc");
 }
 
 OutlineTypeMgr::OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr)
@@ -1486,7 +1486,7 @@ OutlineTypeMgr::OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr)
     }
     //Initial the first time to store the default value. Then do it again for customized value
     Init();
-    ImplLoad(OUString("standard.syc"));
+    ImplLoad("standard.syc");
 }
 
 class theOutlineTypeMgr : public rtl::Static<OutlineTypeMgr, theOutlineTypeMgr> {};
@@ -1685,7 +1685,7 @@ bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     } else {
         pItemArr->sDescription = GetDescription(nIndex,true);
     }
-    ImplStore(OUString("standard.syc"));
+    ImplStore("standard.syc");
     return true;
 }
 

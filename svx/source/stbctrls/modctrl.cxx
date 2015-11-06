@@ -165,7 +165,7 @@ void SvxModifyControl::Click()
         return;
 
     Sequence<PropertyValue> aArgs;
-    execute(OUString(".uno:Save"), aArgs);
+    execute(".uno:Save", aArgs);
 }
 
 

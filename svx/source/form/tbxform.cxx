@@ -76,7 +76,7 @@ void SvxFmAbsRecWin::FirePosition( bool _bForce )
         aArgs[0].Name = "Position";
         aPositionParam.QueryValue( a );
         aArgs[0].Value = a;
-        m_pController->Dispatch( OUString( ".uno:AbsoluteRecord" ),
+        m_pController->Dispatch( ".uno:AbsoluteRecord",
                                  aArgs );
         m_pController->updateStatus();
 

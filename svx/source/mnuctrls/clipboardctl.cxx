@@ -47,7 +47,7 @@ SvxClipBoardControl::SvxClipBoardControl(
     pPopup( 0 ),
     bDisabled( false )
 {
-    addStatusListener( OUString( ".uno:ClipboardFormatItems" ));
+    addStatusListener( ".uno:ClipboardFormatItems");
     ToolBox& rBox = GetToolBox();
     rBox.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rBox.GetItemBits( nId ) );
     rBox.Invalidate();
@@ -98,7 +98,7 @@ VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
         aArgs[0].Name = "SelectedFormat";
         aItem.QueryValue( a );
         aArgs[0].Value = a;
-        Dispatch( OUString( ".uno:ClipboardFormatItems" ),
+        Dispatch( ".uno:ClipboardFormatItems",
                   aArgs );
     }
 

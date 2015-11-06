@@ -575,7 +575,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
-    SetShapeType( OUString(  "com.sun.star.drawing.AppletShape"  ) );
+    SetShapeType( "com.sun.star.drawing.AppletShape" );
 }
 
 SvxAppletShape::~SvxAppletShape() throw()
@@ -587,7 +587,7 @@ void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
     createObject(aAppletClassId);
-    SetShapeType( OUString(  "com.sun.star.drawing.AppletShape"  ) );
+    SetShapeType( "com.sun.star.drawing.AppletShape" );
 }
 
 void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
@@ -648,7 +648,7 @@ bool SvxAppletShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    SetShapeType( OUString(  "com.sun.star.drawing.PluginShape"  ) );
+    SetShapeType( "com.sun.star.drawing.PluginShape" );
 }
 
 SvxPluginShape::~SvxPluginShape() throw()
@@ -660,7 +660,7 @@ void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
     createObject(aPluginClassId);
-    SetShapeType( OUString(  "com.sun.star.drawing.PluginShape"  ) );
+    SetShapeType( "com.sun.star.drawing.PluginShape" );
 }
 
 void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
@@ -721,7 +721,7 @@ bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_FRAME), getSvxMapProvider().GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
-    SetShapeType( OUString(  "com.sun.star.drawing.FrameShape"  ) );
+    SetShapeType( "com.sun.star.drawing.FrameShape" );
 }
 
 SvxFrameShape::~SvxFrameShape() throw()
@@ -733,7 +733,7 @@ void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw (u
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
     createObject(aIFrameClassId);
-    SetShapeType( OUString(  "com.sun.star.drawing.FrameShape"  ) );
+    SetShapeType( "com.sun.star.drawing.FrameShape" );
 }
 
 void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
@@ -797,7 +797,7 @@ SvxMediaShape::SvxMediaShape( SdrObject* pObj, OUString const & referer ) throw(
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) ),
     referer_(referer)
 {
-    SetShapeType( OUString(  "com.sun.star.drawing.MediaShape"  ) );
+    SetShapeType( "com.sun.star.drawing.MediaShape" );
 }
 
 

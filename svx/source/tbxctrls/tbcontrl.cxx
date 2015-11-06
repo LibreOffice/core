@@ -191,7 +191,7 @@ private:
     {
         Sequence< PropertyValue > aArgs;
         SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                                         OUString( ".uno:CharEndPreviewFontName" ),
+                                         ".uno:CharEndPreviewFontName",
                                          aArgs );
     }
     DECL_DLLPRIVATE_LINK_TYPED( CheckAndMarkUnknownFont, VclWindowEvent&, void );
@@ -385,13 +385,13 @@ IMPL_LINK_TYPED( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
         case RID_SVX_UPDATE_STYLE:
         {
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                OUString( ".uno:StyleUpdateByExample" ), aArgs );
+                ".uno:StyleUpdateByExample", aArgs );
             break;
         }
         case RID_SVX_MODIFY_STYLE:
         {
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                OUString( ".uno:EditStyle" ), aArgs );
+                ".uno:EditStyle", aArgs );
             break;
         }
     }
@@ -415,7 +415,7 @@ void SvxStyleBox_Impl::Select()
                 bClear = true;
                 //not only apply default style but also call 'ClearFormatting'
                 Sequence< PropertyValue > aEmptyVals;
-                SfxToolBoxControl::Dispatch( m_xDispatchProvider, OUString(".uno:ResetAttributes"),
+                SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ResetAttributes",
                     aEmptyVals);
             }
             else if( aSearchEntry == aMoreKey && GetSelectEntryPos() == ( GetEntryCount() - 1 ) )
@@ -470,7 +470,7 @@ void SvxStyleBox_Impl::Select()
             if( bCreateNew )
             {
                 aArgs[0].Name   = "Param";
-                SfxToolBoxControl::Dispatch( m_xDispatchProvider, OUString(".uno:StyleNewByExample"), aArgs);
+                SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:StyleNewByExample", aArgs);
             }
             else
             {
@@ -1152,7 +1152,7 @@ void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         aFontItem.QueryValue( aArgs[0].Value );
         aArgs[0].Name   = "CharPreviewFontName";
         SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-            OUString( ".uno:CharPreviewFontName" ),
+            ".uno:CharPreviewFontName",
                 aArgs );
     }
 }
@@ -1192,7 +1192,7 @@ void SvxFontNameBox_Impl::Select()
         {
             aArgs[0].Name   = "CharFontName";
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                                         OUString( ".uno:CharFontName" ),
+                                         ".uno:CharFontName",
                                          aArgs );
         }
     }
@@ -1207,7 +1207,7 @@ void SvxFontNameBox_Impl::Select()
         {
             aArgs[0].Name   = "CharPreviewFontName";
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                                         OUString( ".uno:CharPreviewFontName" ),
+                                         ".uno:CharPreviewFontName",
                                          aArgs );
         }
     }
@@ -1575,7 +1575,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
     bParagraphMode(false)
 {
     BindListener();
-    AddStatusListener(OUString(".uno:BorderReducedMode"));
+    AddStatusListener(".uno:BorderReducedMode");
     aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
     if( pParentWindow->GetDPIScaleFactor() > 1 )
@@ -1776,7 +1776,7 @@ IMPL_LINK_NOARG_TYPED(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     aFrameSet->SetNoSelection();
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                 OUString( ".uno:SetBorderStyle" ),
+                                 ".uno:SetBorderStyle",
                                  aArgs );
 }
 
@@ -1921,7 +1921,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
     aArgs[0].Value = a;
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                 OUString( ".uno:LineStyle" ),
+                                 ".uno:LineStyle",
                                  aArgs );
 }
 
@@ -2548,51 +2548,51 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     switch( nSlotId )
     {
         case SID_ATTR_CHAR_COLOR:
-            addStatusListener( OUString( ".uno:Color" ));
+            addStatusListener( ".uno:Color");
             mPaletteManager.SetLastColor( COL_RED );
             bSidebarType = false;
             break;
 
         case SID_ATTR_CHAR_COLOR2:
-            addStatusListener( OUString( ".uno:CharColorExt" ));
+            addStatusListener( ".uno:CharColorExt");
             mPaletteManager.SetLastColor( COL_RED );
             bSidebarType = false;
             break;
 
         case SID_BACKGROUND_COLOR:
-            addStatusListener( OUString( ".uno:BackgroundColor" ));
+            addStatusListener( ".uno:BackgroundColor");
             mPaletteManager.SetLastColor( COL_YELLOW );
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
-            addStatusListener( OUString( ".uno:CharBackgroundExt" ));
+            addStatusListener( ".uno:CharBackgroundExt");
             mPaletteManager.SetLastColor( COL_YELLOW );
             bSidebarType = false;
             break;
 
         case SID_ATTR_CHAR_BACK_COLOR:
-            addStatusListener( OUString( ".uno:CharBackColor" ));
+            addStatusListener( ".uno:CharBackColor");
             mPaletteManager.SetLastColor( COL_YELLOW );
             break;
 
         case SID_FRAME_LINECOLOR:
-            addStatusListener( OUString( ".uno:FrameLineColor" ));
-            addStatusListener( OUString( ".uno:BorderTLBR" ));
-            addStatusListener( OUString( ".uno:BorderBLTR" ));
+            addStatusListener( ".uno:FrameLineColor");
+            addStatusListener( ".uno:BorderTLBR");
+            addStatusListener( ".uno:BorderBLTR");
             mPaletteManager.SetLastColor( COL_BLUE );
             break;
 
         case SID_EXTRUSION_3D_COLOR:
-            addStatusListener( OUString( ".uno:Extrusion3DColor"));
+            addStatusListener( ".uno:Extrusion3DColor");
             break;
 
         case SID_ATTR_LINE_COLOR:
-            addStatusListener( OUString( ".uno:XLineColor" ));
+            addStatusListener( ".uno:XLineColor");
             mPaletteManager.SetLastColor( COL_BLACK );
             break;
 
         case SID_ATTR_FILL_COLOR:
-            addStatusListener( OUString( ".uno:FillColor" ));
+            addStatusListener( ".uno:FillColor");
             mPaletteManager.SetLastColor( COL_DEFAULT_SHAPE_FILLING );
             break;
     }

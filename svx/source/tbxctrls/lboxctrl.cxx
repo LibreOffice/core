@@ -270,9 +270,9 @@ VclPtr<SfxPopupWindow> SvxUndoRedoControl::CreatePopupWindow()
     DBG_ASSERT(( SID_UNDO == GetSlotId() || SID_REDO == GetSlotId() ), "mismatching ids" );
 
     if ( m_aCommandURL == ".uno:Undo" )
-        updateStatus( OUString( ".uno:GetUndoStrings" ));
+        updateStatus( ".uno:GetUndoStrings");
     else
-        updateStatus( OUString( ".uno:GetRedoStrings" ));
+        updateStatus( ".uno:GetRedoStrings");
 
     ToolBox& rBox = GetToolBox();
 

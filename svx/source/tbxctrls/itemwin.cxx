@@ -122,7 +122,7 @@ void SvxLineBox::Select()
                     aLineDashItem.QueryValue ( a );
                     aArgs[0].Value = a;
                     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                                 OUString( ".uno:LineDash" ),
+                                                 ".uno:LineDash",
                                                  aArgs );
                 }
             }
@@ -136,7 +136,7 @@ void SvxLineBox::Select()
         aLineStyleItem.QueryValue ( a );
         aArgs[0].Value = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                     OUString( ".uno:XLineStyle" ),
+                                     ".uno:XLineStyle",
                                      aArgs );
 
         nCurPos = GetSelectEntryPos();
@@ -253,7 +253,7 @@ SvxMetricField::SvxMetricField(
     , ePoolUnit(SFX_MAPUNIT_CM)
     , mxFrame(rFrame)
 {
-    Size aSize(GetTextWidth( OUString("99,99mm") ),GetTextHeight());
+    Size aSize(GetTextWidth( "99,99mm" ),GetTextHeight());
     aSize.Width() += 20;
     aSize.Height() += 6;
     SetSizePixel( aSize );
@@ -297,7 +297,7 @@ void SvxMetricField::Modify()
     aLineWidthItem.QueryValue( a );
     aArgs[0].Value = a;
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                 OUString( ".uno:LineWidth" ),
+                                 ".uno:LineWidth",
                                  aArgs );
 }
 

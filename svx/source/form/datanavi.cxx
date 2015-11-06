@@ -3409,7 +3409,7 @@ namespace svxform
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
         INetURLObject aFile( SvtPathOptions().GetWorkPath() );
 
-        aDlg.AddFilter( m_sAllFilterName, OUString(FILEDIALOG_FILTER_ALL) );
+        aDlg.AddFilter( m_sAllFilterName, FILEDIALOG_FILTER_ALL );
         OUString sFilterName( "XML" );
         aDlg.AddFilter( sFilterName, "*.xml" );
         aDlg.SetCurrentFilter( sFilterName );

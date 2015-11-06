@@ -215,7 +215,7 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
 {
     m_pImpl->acquire();
     SetPool( &SfxGetpApp()->GetPool() );
-    SetName( OUString("Form") );
+    SetName( "Form" );
 
     SetView(m_pFormView);
 }
@@ -763,7 +763,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
 
             if ( nRecord != -1 )
-                rController->execute( nSlot, OUString( "Position" ), makeAny( (sal_Int32)nRecord ) );
+                rController->execute( nSlot, "Position", makeAny( (sal_Int32)nRecord ) );
 
             rReq.Done();
         }   break;

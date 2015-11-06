@@ -108,7 +108,7 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
     maCommand( rCmd ),
     mxFrame( rFrame )
 {
-    Size aSize( GetTextWidth( OUString("-100 %") ), GetTextHeight() );
+    Size aSize( GetTextWidth( "-100 %" ), GetTextHeight() );
 
     aSize.Width() += 20, aSize.Height() += 6;
     SetSizePixel( aSize );
@@ -359,7 +359,7 @@ void ImplGrafModeControl::Select()
 
         SfxToolBoxControl::Dispatch(
             Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-            OUString( ".uno:GrafMode" ),
+            ".uno:GrafMode",
             aArgs );
     }
 }

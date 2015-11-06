@@ -58,12 +58,12 @@ namespace svx
         static SotClipboardFormatId s_nFormFormat = static_cast<SotClipboardFormatId>(-1);
         if ( _bExtractForm && static_cast<SotClipboardFormatId>(-1) == s_nFormFormat )
         {
-            s_nFormFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"dbaccess.FormComponentDescriptorTransfer\"" ));
+            s_nFormFormat = SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"dbaccess.FormComponentDescriptorTransfer\"");
             OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nFormFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
         }
         else if ( !_bExtractForm && static_cast<SotClipboardFormatId>(-1) == s_nReportFormat)
         {
-            s_nReportFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"dbaccess.ReportComponentDescriptorTransfer\""));
+            s_nReportFormat = SotExchange::RegisterFormatName("application/x-openoffice;windows_formatname=\"dbaccess.ReportComponentDescriptorTransfer\"");
             OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nReportFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
         }
         return _bExtractForm ? s_nFormFormat : s_nReportFormat;

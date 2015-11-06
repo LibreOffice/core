@@ -101,7 +101,7 @@ public:
 void Main()
 {
     ScopedVclPtrInstance< MyWin > aMainWin( nullptr, WB_STDWORK );
-    aMainWin->SetText( OUString( "SvxPixelCtl" ) );
+    aMainWin->SetText( "SvxPixelCtl" );
     aMainWin->Show();
 
     Application::Execute();

@@ -177,7 +177,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
         {
             aFont.SetSize(Size(0, aParaPrtArea.GetHeight() - 2));
             SetFont(aFont);
-            aParaPrtArea.SetSize(Size(GetTextWidth(OUString(DEMOTEXT)), GetTextHeight()));
+            aParaPrtArea.SetSize(Size(GetTextWidth(DEMOTEXT), GetTextHeight()));
         }
         else
         {
@@ -223,7 +223,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     }
     else
     {
-        sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(OUString(DEMOTEXT));
+        sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(DEMOTEXT);
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
         aDrawObj.SetSize(Size(std::max(5L, (long)nFreeWidth / 3L), std::max(5L, aFrmSize.Height() * 3L)));

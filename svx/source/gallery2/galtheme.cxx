@@ -248,10 +248,10 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
     sal_Char const* pExt = NULL;
     bool            bExists;
 
-    aDir.Append( OUString("dragdrop") );
+    aDir.Append( "dragdrop" );
     CreateDir( aDir );
 
-    aInfoFileURL.Append( OUString("sdddndx1") );
+    aInfoFileURL.Append( "sdddndx1" );
 
     // read next possible number
     if( FileExists( aInfoFileURL ) )

@@ -108,7 +108,7 @@ void CompressGraphicsDialog::Initialize()
     get(m_pBtnCalculate,        "calculate");
     get(m_pInterpolationCombo,  "interpolation-method-combo");
 
-    m_pInterpolationCombo->SelectEntry( OUString("Lanczos") );
+    m_pInterpolationCombo->SelectEntry( "Lanczos" );
 
     m_pMFNewWidth->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewWidthModifiedHdl ));
     m_pMFNewHeight->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewHeightModifiedHdl ));
@@ -283,7 +283,7 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     OUString aGraphicFormatName = m_pLosslessRB->IsChecked() ? OUString( "png" ) : OUString( "jpg" );
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aGraphicFormatName );
-    rFilter.ExportGraphic( aScaledGraphic, OUString( "none" ), aStream, nFilterFormat, &aFilterData );
+    rFilter.ExportGraphic( aScaledGraphic, "none", aStream, nFilterFormat, &aFilterData );
 }
 
 IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewWidthModifiedHdl, Edit&, void )

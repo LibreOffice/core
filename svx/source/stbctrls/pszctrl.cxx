@@ -182,9 +182,9 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
         pImp->aSizeImage = Image(b);
     }
 
-    addStatusListener( OUString( STR_POSITION ));         // SID_ATTR_POSITION
-    addStatusListener( OUString( STR_TABLECELL ));   // SID_TABLE_CELL
-    addStatusListener( OUString( STR_FUNC ));    // SID_PSZ_FUNCTION
+    addStatusListener( STR_POSITION);         // SID_ATTR_POSITION
+    addStatusListener( STR_TABLECELL);   // SID_TABLE_CELL
+    addStatusListener( STR_FUNC);    // SID_PSZ_FUNCTION
 }
 
 
@@ -332,7 +332,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 aItem.QueryValue( a );
                 aArgs[0].Value = a;
 
-                execute( OUString( ".uno:StatusBarFunc" ), aArgs );
+                execute( ".uno:StatusBarFunc", aArgs );
 //              GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SfxCallMode::RECORD, &aItem, 0L );
             }
         }

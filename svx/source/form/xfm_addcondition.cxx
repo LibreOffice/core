@@ -68,7 +68,7 @@ namespace svxform
         :OAddConditionDialogBase( _rxORB )
     {
         registerProperty(
-            OUString( "Binding"  ),
+            "Binding",
             PROPERTY_ID_BINDING,
             PropertyAttribute::TRANSIENT,
             &m_xBinding,
@@ -76,7 +76,7 @@ namespace svxform
         );
 
         registerProperty(
-            OUString( "FacetName"  ),
+            "FacetName",
             PROPERTY_ID_FACET_NAME,
             PropertyAttribute::TRANSIENT,
             &m_sFacetName,
@@ -84,7 +84,7 @@ namespace svxform
         );
 
         registerProperty(
-            OUString( "ConditionValue"  ),
+            "ConditionValue",
             PROPERTY_ID_CONDITION_VALUE,
             PropertyAttribute::TRANSIENT,
             &m_sConditionValue,
@@ -92,7 +92,7 @@ namespace svxform
         );
 
         registerProperty(
-            OUString( "FormModel"  ),
+            "FormModel",
             PROPERTY_ID_FORM_MODEL,
             PropertyAttribute::TRANSIENT,
             &m_xWorkModel,

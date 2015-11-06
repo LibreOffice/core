@@ -58,8 +58,8 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
     pDashItem       ( NULL ),
     bUpdate         ( false )
 {
-    addStatusListener( OUString( ".uno:LineDash" ));
-    addStatusListener( OUString( ".uno:DashListState" ));
+    addStatusListener( ".uno:LineDash");
+    addStatusListener( ".uno:DashListState");
 }
 
 
@@ -192,7 +192,7 @@ SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
     sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    addStatusListener( OUString( ".uno:MetricUnit" ));
+    addStatusListener( ".uno:MetricUnit");
 }
 
 
@@ -314,7 +314,7 @@ void SvxLineEndWindow::implInit()
     // ValueSet fill with entries of LineEndList
     FillValueSet();
 
-    AddStatusListener( OUString( ".uno:LineEndListState" ));
+    AddStatusListener( ".uno:LineEndListState");
 
     //ChangeHelpId( HID_POPUP_LINEENDSTYLE );
     aLineEndSet->Show();
@@ -381,7 +381,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndWindow, SelectHdl, ValueSet*, void)
     aLineEndSet->SetNoSelection();
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                 OUString( ".uno:LineEndStyle" ),
+                                 ".uno:LineEndStyle",
                                  aArgs );
 }
 
