@@ -63,7 +63,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
 
     VclPtr<SwMailMergeWizard>  m_pWizard;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  m_xViewProperties;
+    css::uno::Reference< css::beans::XPropertySet >  m_xViewProperties;
 
     DECL_LINK_TYPED(PreviewLoadedHdl_Impl, SwOneExampleFrame&, void);
     DECL_LINK_TYPED(ZoomHdl_Impl, ListBox&, void);

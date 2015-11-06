@@ -182,17 +182,17 @@ public:
     SwVbaProjectNameProvider()
     {
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception ) override
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception ) override
     {
         return ( mTemplateToProject.find( aName ) != mTemplateToProject.end() );
     }
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
         return uno::makeAny( mTemplateToProject.find( aName )->second );
     }
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException, std::exception) override
     {
         uno::Sequence< OUString > aElements( mTemplateToProject.size() );
         StringHashMap::iterator it_end = mTemplateToProject.end();
@@ -202,7 +202,7 @@ public:
         return aElements;
     }
 
-    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::ElementExistException, com::sun::star::lang::WrappedTargetException, std::exception ) override
+    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw ( css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, std::exception ) override
     {
 
         OUString sProjectName;
@@ -212,24 +212,24 @@ public:
         mTemplateToProject[ aName ] = sProjectName;
     }
 
-    virtual void SAL_CALL removeByName( const OUString& Name ) throw ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, std::exception ) override
+    virtual void SAL_CALL removeByName( const OUString& Name ) throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, std::exception ) override
     {
         if ( !hasByName( Name ) )
             throw container::NoSuchElementException();
         mTemplateToProject.erase( Name );
     }
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, std::exception ) override
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw ( css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, std::exception ) override
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
         insertByName( aName, aElement ); // insert will overwrite
     }
     // XElemenAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override
     {
         return ::cppu::UnoType<OUString>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception ) override
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception ) override
     {
 
         return ( !mTemplateToProject.empty() );
@@ -246,7 +246,7 @@ public:
         // #FIXME #TODO is the code name for ThisDocument read anywhere?
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception ) override
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception ) override
     {
         // #FIXME #TODO we really need to be checking against the codename for
         // ThisDocument
@@ -255,7 +255,7 @@ public:
         return sal_False;
     }
 
-    ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override
+    css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
     {
         if ( !hasByName( aName ) )
              throw container::NoSuchElementException();
@@ -267,14 +267,14 @@ public:
             "Creating Object ( ooo.vba.word.Document ) 0x" << xDocObj.get());
         return  uno::makeAny( xDocObj );
     }
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException, std::exception) override
     {
         uno::Sequence< OUString > aNames;
         return aNames;
     }
     // XElemenAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override { return uno::Type(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception ) override { return sal_True; }
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override { return uno::Type(); }
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception ) override { return sal_True; }
 
 };
 

@@ -54,13 +54,13 @@ class XMLRedlineImportHelper
     bool bIgnoreRedlines;
 
     // save information for saving and reconstruction of the redline mode
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xModelPropertySet;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xImportInfoPropertySet;
+    css::uno::Reference<
+        css::beans::XPropertySet> xModelPropertySet;
+    css::uno::Reference<
+        css::beans::XPropertySet> xImportInfoPropertySet;
     bool bShowChanges;
     bool bRecordChanges;
-    ::com::sun::star::uno::Sequence<sal_Int8> aProtectionKey;
+    css::uno::Sequence<sal_Int8> aProtectionKey;
 
 public:
 
@@ -69,10 +69,10 @@ public:
 
         // property sets of model + import info for saving + restoring the
         // redline mode
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rImportInfoSet );
+        const css::uno::Reference<
+            css::beans::XPropertySet> & rModel,
+        const css::uno::Reference<
+            css::beans::XPropertySet> & rImportInfoSet );
     virtual ~XMLRedlineImportHelper();
 
     // create a redline object
@@ -83,15 +83,15 @@ public:
         const OUString& rId,         // use to identify this redline
         const OUString& rAuthor,     // name of the author
         const OUString& rComment,    // redline comment
-        const ::com::sun::star::util::DateTime& rDateTime, // date+time
+        const css::util::DateTime& rDateTime, // date+time
         bool bMergeLastParagraph);      // merge last paragraph?
 
     // create a text section for the redline, and return an
     // XText/XTextCursor that may be used to write into it.
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextCursor> CreateRedlineTextSection(
-            ::com::sun::star::uno::Reference<   // needed to get the document
-                    ::com::sun::star::text::XTextCursor> xOldCursor,
+    css::uno::Reference<
+        css::text::XTextCursor> CreateRedlineTextSection(
+            css::uno::Reference<   // needed to get the document
+                    css::text::XTextCursor> xOldCursor,
             const OUString& rId);    // ID used to RedlineAdd() call
 
     // Set start or end position for a redline in the text body.
@@ -99,8 +99,8 @@ public:
     void SetCursor(
         const OUString& rId,     // ID used in RedlineAdd() call
         bool bStart,                // start or end Range
-        ::com::sun::star::uno::Reference<   // the actual XTextRange
-            ::com::sun::star::text::XTextRange> & rRange,
+        css::uno::Reference<   // the actual XTextRange
+            css::text::XTextRange> & rRange,
         // text range is (from an XML view) outside of a paragraph
         // (i.e. before a table)
         bool bIsOusideOfParagraph);
@@ -117,8 +117,8 @@ public:
          const OUString& rId,        // ID used in RedlineAdd() call
         bool bStart,
         // XTextRange _inside_ a table/section
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextRange> & rRange);
+        css::uno::Reference<
+            css::text::XTextRange> & rRange);
 
     // set redline mode: show changes
     void SetShowChanges( bool bShowChanges );
@@ -128,7 +128,7 @@ public:
 
     // set redline protection key
     void SetProtectionKey(
-        const ::com::sun::star::uno::Sequence<sal_Int8> & rKey );
+        const css::uno::Sequence<sal_Int8> & rKey );
 
 private:
 

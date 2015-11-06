@@ -147,7 +147,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 
     bool SplitTextToColArr( const OUString& rText, DB_Columns& rColArr, bool bInsField );
         using SfxModalDialog::Notify;
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual void            ImplCommit() override;
     void                    Load();
 
@@ -156,17 +156,17 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 
 public:
     SwInsertDBColAutoPilot( SwView& rView,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
-        com::sun::star::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier>,
+        css::uno::Reference< css::sdbc::XDataSource> rxSource,
+        css::uno::Reference<css::sdbcx::XColumnsSupplier>,
         const SwDBData& rData  );
 
     virtual ~SwInsertDBColAutoPilot();
     virtual void dispose() override;
 
-    void DataToDoc( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rSelection,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet);
+    void DataToDoc( const css::uno::Sequence< css::uno::Any >& rSelection,
+        css::uno::Reference< css::sdbc::XDataSource> rxSource,
+        css::uno::Reference< css::sdbc::XConnection> xConnection,
+        css::uno::Reference< css::sdbc::XResultSet > xResultSet);
 
 };
 

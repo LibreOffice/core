@@ -27,7 +27,7 @@
 #include <unomid.h>
 
 using namespace ::utl;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 {
@@ -124,6 +124,6 @@ void SwNavigationConfig::ImplCommit()
     PutProperties(aNames, aValues);
 }
 
-void SwNavigationConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwNavigationConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

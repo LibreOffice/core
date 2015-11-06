@@ -47,8 +47,8 @@ public:
                                     OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const override;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     SwPageFootnoteInfo& GetPageFootnoteInfo()             { return aFootnoteInfo; }
     const SwPageFootnoteInfo& GetPageFootnoteInfo() const { return aFootnoteInfo; }
@@ -80,8 +80,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     const SwNumRule* GetNumRule() const         { return pRule; }
           SwNumRule* GetNumRule()               { return pRule; }

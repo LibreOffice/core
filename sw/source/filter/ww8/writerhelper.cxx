@@ -334,11 +334,11 @@ namespace sw
                 OSL_ENSURE( !mrPers.GetEmbeddedObjectContainer().HasEmbeddedObject( mxIPRef ), "Object in adaptor is inserted?!" );
                 try
                 {
-                    uno::Reference < com::sun::star::util::XCloseable > xClose( mxIPRef, uno::UNO_QUERY );
+                    uno::Reference < css::util::XCloseable > xClose( mxIPRef, uno::UNO_QUERY );
                     if ( xClose.is() )
                         xClose->close(sal_True);
                 }
-                catch ( const com::sun::star::util::CloseVetoException& )
+                catch ( const css::util::CloseVetoException& )
                 {
                 }
 

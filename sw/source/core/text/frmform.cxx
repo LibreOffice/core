@@ -490,10 +490,10 @@ void SwTextFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
         Shrink( -nChgHght );
 }
 
-com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTextFrm::GetTabStopInfo( SwTwips CurrentPos )
+css::uno::Sequence< css::style::TabStop > SwTextFrm::GetTabStopInfo( SwTwips CurrentPos )
 {
-    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > tabs(1);
-    ::com::sun::star::style::TabStop ts;
+    css::uno::Sequence< css::style::TabStop > tabs(1);
+    css::style::TabStop ts;
 
     SwTextFormatInfo     aInf( getRootFrm()->GetCurrShell()->GetOut(), this );
     SwTextFormatter      aLine( this, &aInf );
@@ -508,7 +508,7 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTextFrm::Get
 
     if( !pTS )
     {
-        return com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >();
+        return css::uno::Sequence< css::style::TabStop >();
     }
 
     // copy tab stop information into a Sequence, which only contains one element.
@@ -517,11 +517,11 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTextFrm::Get
     ts.FillChar = pTS->GetFill();
     switch( pTS->GetAdjustment() )
     {
-    case SVX_TAB_ADJUST_LEFT   : ts.Alignment = ::com::sun::star::style::TabAlign_LEFT; break;
-    case SVX_TAB_ADJUST_CENTER : ts.Alignment = ::com::sun::star::style::TabAlign_CENTER; break;
-    case SVX_TAB_ADJUST_RIGHT  : ts.Alignment = ::com::sun::star::style::TabAlign_RIGHT; break;
-    case SVX_TAB_ADJUST_DECIMAL: ts.Alignment = ::com::sun::star::style::TabAlign_DECIMAL; break;
-    case SVX_TAB_ADJUST_DEFAULT: ts.Alignment = ::com::sun::star::style::TabAlign_DEFAULT; break;
+    case SVX_TAB_ADJUST_LEFT   : ts.Alignment = css::style::TabAlign_LEFT; break;
+    case SVX_TAB_ADJUST_CENTER : ts.Alignment = css::style::TabAlign_CENTER; break;
+    case SVX_TAB_ADJUST_RIGHT  : ts.Alignment = css::style::TabAlign_RIGHT; break;
+    case SVX_TAB_ADJUST_DECIMAL: ts.Alignment = css::style::TabAlign_DECIMAL; break;
+    case SVX_TAB_ADJUST_DEFAULT: ts.Alignment = css::style::TabAlign_DEFAULT; break;
     default: break; // prevent warning
     }
 

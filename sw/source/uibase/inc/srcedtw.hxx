@@ -77,7 +77,7 @@ private:
 
     rtl::Reference< ChangesListener > listener_;
     osl::Mutex mutex_;
-    com::sun::star::uno::Reference< com::sun::star::beans::XMultiPropertySet >
+    css::uno::Reference< css::beans::XMultiPropertySet >
         notifier_;
 
     long            nCurTextWidth;

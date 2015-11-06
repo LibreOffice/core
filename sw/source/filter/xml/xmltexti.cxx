@@ -62,11 +62,11 @@
 #include <svl/urihelper.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::beans;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::text;
+using namespace css::frame;
+using namespace css::beans;
 using namespace xml::sax;
 
 struct XMLServiceMapEntry_Impl

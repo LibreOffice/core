@@ -30,7 +30,7 @@ class SwTextAttr;
 
 class SwAccessibleHyperlink :
         public ::cppu::WeakImplHelper<
-        ::com::sun::star::accessibility::XAccessibleHyperlink >
+        css::accessibility::XAccessibleHyperlink >
 {
     friend class SwAccessibleParagraph;
     friend class SwAccessibleHyperTextData;
@@ -49,35 +49,35 @@ class SwAccessibleHyperlink :
 public:
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL doAccessibleAction( sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getAccessibleActionDescription(
                 sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL
+        throw (css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<
+            css::accessibility::XAccessibleKeyBinding > SAL_CALL
                getAccessibleActionKeyBinding( sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleHyperlink
-    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleActionAnchor(
+    virtual css::uno::Any SAL_CALL getAccessibleActionAnchor(
                 sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleActionObject(
+        throw (css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getAccessibleActionObject(
             sal_Int32 nIndex )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getStartIndex()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getEndIndex()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isValid(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 };
 
 #endif

@@ -667,7 +667,7 @@ sal_Int32 SwAccessiblePortionData::FillSpecialPos(
     return nModelPos;
 }
 
-bool SwAccessiblePortionData::FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos )
+bool SwAccessiblePortionData::FillBoundaryIFDateField( css::i18n::Boundary& rBound, const sal_Int32 nPos )
 {
     if( aFieldPosition.size() < 2 )
         return false;

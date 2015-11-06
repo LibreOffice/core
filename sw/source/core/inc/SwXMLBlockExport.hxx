@@ -31,10 +31,10 @@ private:
 
 public:
     SwXMLBlockListExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
         SwXMLTextBlocks & rBlocks,
         const OUString &rFileName,
-        com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+        css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SwXMLBlockListExport() {}
     sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass) override;
@@ -50,10 +50,10 @@ private:
 
 public:
     SwXMLTextBlockExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
         SwXMLTextBlocks & rBlocks,
         const OUString &rFileName,
-        com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+        css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SwXMLTextBlockExport() {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum /*eClass*/) override {return 0;}

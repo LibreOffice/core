@@ -26,11 +26,11 @@
 #include <unomid.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
+using namespace css::uno;
+using namespace css::frame;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::util;
 
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(vcl::Window* pParent, uno::Sequence< beans::PropertyValue>& rValues ) :
     SfxModalDialog(pParent, "TablePreviewDialog", "modules/swriter/ui/tablepreviewdialog.ui")

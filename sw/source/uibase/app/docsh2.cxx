@@ -127,9 +127,9 @@
 
 #include <memory>
 
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace css::ui::dialogs;
+using namespace css::lang;
+using namespace css::uno;
 using namespace ::com::sun::star;
 using namespace ::sfx2;
 
@@ -216,7 +216,7 @@ void SwDocShell::DoFlushDocInfo()
 
 static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
-    using namespace com::sun::star::script::vba::VBAEventId;
+    using namespace css::script::vba::VBAEventId;
     if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
         uno::Sequence< uno::Any > aArgs;
@@ -327,7 +327,7 @@ bool SwDocShell::PrepareClose( bool bUI )
             m_pDoc->GetVbaEventProcessor();
         if( xVbaEvents.is() )
         {
-            using namespace com::sun::star::script::vba::VBAEventId;
+            using namespace css::script::vba::VBAEventId;
             uno::Sequence< uno::Any > aArgs;
             xVbaEvents->processVbaEvent( DOCUMENT_CLOSE, aArgs );
         }
@@ -810,7 +810,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         TransferDataContainer* pClipCntnr =
                                                     new TransferDataContainer;
-                        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
+                        css::uno::Reference< css::datatransfer::XTransferable >
                                                         xRef( pClipCntnr );
 
                         pClipCntnr->CopyAnyData( SotClipboardFormatId::RTF, static_cast<sal_Char const *>(

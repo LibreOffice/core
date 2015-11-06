@@ -35,9 +35,9 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::lang;
+using namespace css::ui::dialogs;
+using namespace css::document;
+using namespace css::lang;
 
 #define FILTER_OPTIONS_NAME             "FilterOptions"
 
@@ -155,9 +155,9 @@ uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()
     return uno::Sequence< OUString> (&sService, 1);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_FilterOptionsDialog_get_implementation(::com::sun::star::uno::XComponentContext*,
-                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*,
+                                css::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
 

@@ -49,7 +49,7 @@ class SwRetrievedInputStreamDataManager
         struct tData
         {
             std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
-            com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
+            css::uno::Reference<css::io::XInputStream> mxInputStream;
             bool mbIsStreamReadOnly;
 
             tData()
@@ -68,7 +68,7 @@ class SwRetrievedInputStreamDataManager
         tDataKey ReserveData( std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer );
 
         void PushData( const tDataKey nDataKey,
-                       com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
+                       css::uno::Reference<css::io::XInputStream> xInputStream,
                        const bool bIsStreamReadOnly );
 
         bool PopData( const tDataKey nDataKey,

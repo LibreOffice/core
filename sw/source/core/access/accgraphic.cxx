@@ -72,7 +72,7 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
 
 //  Return this object's role.
 sal_Int16 SAL_CALL SwAccessibleGraphic::getAccessibleRole()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

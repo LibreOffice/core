@@ -32,37 +32,37 @@ protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
                 sal_uInt16 nPrefix, const OUString& rLocalName,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                const css::uno::Reference<
+                    css::xml::sax::XAttributeList > & xAttrList ) override;
 
 public:
     SwXMLTextImportHelper(
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::frame::XModel>& rModel,
+            const css::uno::Reference <
+                css::frame::XModel>& rModel,
             SvXMLImport& rImport,
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::beans::XPropertySet>& rInfoSet,
+            const css::uno::Reference <
+                css::beans::XPropertySet>& rInfoSet,
             bool bInsertM, bool bStylesOnlyM, bool bProgress,
             bool bBlockM, bool bOrganizerM,
             bool bPreserveRedlineMode );
     virtual ~SwXMLTextImportHelper();
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>
+    virtual css::uno::Reference<
+        css::beans::XPropertySet>
             createAndInsertOLEObject( SvXMLImport& rImport,
                                       const OUString& rHRef,
                                       const OUString& rStyleName,
                                       const OUString& rTableName,
                                          sal_Int32 nWidth, sal_Int32 nHeight ) override;
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>
+    virtual css::uno::Reference<
+        css::beans::XPropertySet>
             createAndInsertOOoLink( SvXMLImport& rImport,
                                       const OUString& rHRef,
                                       const OUString& rStyleName,
                                       const OUString& rTableName,
                                          sal_Int32 nWidth, sal_Int32 nHeight ) override;
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>
+    virtual css::uno::Reference<
+        css::beans::XPropertySet>
         createAndInsertApplet(
             const OUString &rName,
             const OUString &rCode,
@@ -70,15 +70,15 @@ public:
             const OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>
+    virtual css::uno::Reference<
+        css::beans::XPropertySet>
         createAndInsertPlugin(
             const OUString &rMimeType,
             const OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>
+    virtual css::uno::Reference<
+        css::beans::XPropertySet>
         createAndInsertFloatingFrame(
             const OUString &rName,
             const OUString &rHRef,
@@ -86,7 +86,7 @@ public:
             sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
     virtual void endAppletOrPlugin(
-        const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &rPropSet,
+        const css::uno::Reference < css::beans::XPropertySet > &rPropSet,
         ::std::map < const OUString, OUString > &rParamMap) override;
 
     virtual bool IsInHeaderFooter() const override;
@@ -98,12 +98,12 @@ public:
         const OUString& rId,         /// use to identify this redline
         const OUString& rAuthor,     /// name of the author
         const OUString& rComment,    /// redline comment
-        const ::com::sun::star::util::DateTime& rDateTime,  /// date+time
+        const css::util::DateTime& rDateTime,  /// date+time
         bool bMergeLastPara) override;           /// merge last paragraph
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextCursor> RedlineCreateText(
-            ::com::sun::star::uno::Reference<   /// needed to get the document
-                    ::com::sun::star::text::XTextCursor> & rOldCursor,
+    virtual css::uno::Reference<
+        css::text::XTextCursor> RedlineCreateText(
+            css::uno::Reference<   /// needed to get the document
+                    css::text::XTextCursor> & rOldCursor,
             const OUString& rId) override;    /// ID used to RedlineAdd() call
     virtual void RedlineSetCursor(
         const OUString& rId,         /// ID used to RedlineAdd() call
@@ -113,7 +113,7 @@ public:
     virtual void SetShowChanges( bool bShowChanges ) override;
     virtual void SetRecordChanges( bool bRecordChanges ) override;
     virtual void SetChangesProtectionKey(
-        const ::com::sun::star::uno::Sequence<sal_Int8> & rKey ) override;
+        const css::uno::Sequence<sal_Int8> & rKey ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTI_HXX

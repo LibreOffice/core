@@ -47,14 +47,14 @@ using namespace com::sun::star;
 namespace SWUnoHelper
 {
 
-sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rVal )
+sal_Int32 GetEnumAsInt32( const css::uno::Any& rVal )
 {
     sal_Int32 eVal;
     try
     {
         eVal = comphelper::getEnumAsINT32( rVal );
     }
-    catch( ::com::sun::star::uno::Exception & )
+    catch( css::uno::Exception & )
     {
         eVal = 0;
         OSL_FAIL( "can't get EnumAsInt32" );
@@ -69,13 +69,12 @@ bool UCB_DeleteFile( const OUString& rURL )
     try
     {
         ucbhelper::Content aTempContent( rURL,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
-        aTempContent.executeCommand("delete",
-                        ::com::sun::star::uno::makeAny( true ) );
+        aTempContent.executeCommand("delete", css::uno::makeAny( true ) );
         bRemoved = true;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         bRemoved = false;
         OSL_FAIL( "Exeception from executeCommand( delete )" );
@@ -94,19 +93,19 @@ bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, bool bCopyIsMo
         const OUString sMainURL( aURL.GetMainURL(INetURLObject::NO_DECODE) );
 
         ucbhelper::Content aTempContent( sMainURL,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
 
-        ::com::sun::star::uno::Any aAny;
-        ::com::sun::star::ucb::TransferInfo aInfo;
-        aInfo.NameClash = ::com::sun::star::ucb::NameClash::ERROR;
+        css::uno::Any aAny;
+        css::ucb::TransferInfo aInfo;
+        aInfo.NameClash = css::ucb::NameClash::ERROR;
         aInfo.NewTitle = sName;
         aInfo.SourceURL = rURL;
         aInfo.MoveData = bCopyIsMove;
         aAny <<= aInfo;
         aTempContent.executeCommand( "transfer", aAny );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         OSL_FAIL( "Exeception from executeCommand( transfer )" );
         bCopyCompleted = false;
@@ -121,20 +120,20 @@ bool UCB_IsCaseSensitiveFileName( const OUString& rURL )
     {
         INetURLObject aTempObj( rURL );
         aTempObj.SetBase( aTempObj.GetBase().toAsciiLowerCase() );
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier > xRef1 = new
+        css::uno::Reference< css::ucb::XContentIdentifier > xRef1 = new
                 ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
         aTempObj.SetBase(aTempObj.GetBase().toAsciiUpperCase());
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier > xRef2 = new
+        css::uno::Reference< css::ucb::XContentIdentifier > xRef2 = new
                 ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XUniversalContentBroker > xUcb =
-              com::sun::star::ucb::UniversalContentBroker::create(comphelper::getProcessComponentContext());
+        css::uno::Reference< css::ucb::XUniversalContentBroker > xUcb =
+              css::ucb::UniversalContentBroker::create(comphelper::getProcessComponentContext());
 
         sal_Int32 nCompare = xUcb->compareContentIds( xRef1, xRef2 );
         bCaseSensitive = 0 != nCompare;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         bCaseSensitive = false;
         OSL_FAIL( "Exeception from compareContentIds()" );
@@ -147,12 +146,12 @@ bool UCB_IsReadOnlyFileName( const OUString& rURL )
     bool bIsReadOnly = false;
     try
     {
-        ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue("IsReadOnly");
+        ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        css::uno::Any aAny = aCnt.getPropertyValue("IsReadOnly");
         if(aAny.hasValue())
             bIsReadOnly = *static_cast<sal_Bool const *>(aAny.getValue());
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         bIsReadOnly = false;
     }
@@ -164,10 +163,10 @@ bool UCB_IsFile( const OUString& rURL )
     bool bExists = false;
     try
     {
-        ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         bExists = aContent.isDocument();
     }
-    catch (::com::sun::star::uno::Exception &)
+    catch (css::uno::Exception &)
     {
     }
     return bExists;
@@ -178,10 +177,10 @@ bool UCB_IsDirectory( const OUString& rURL )
     bool bExists = false;
     try
     {
-        ::ucbhelper::Content aContent( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         bExists = aContent.isFolder();
     }
-    catch (::com::sun::star::uno::Exception &)
+    catch (css::uno::Exception &)
     {
     }
     return bExists;
@@ -200,11 +199,11 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
     bool bOk = false;
     try
     {
-        ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
+        ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        css::uno::Reference< css::sdbc::XResultSet > xResultSet;
 
         const sal_Int32 nSeqSize = pDateTimeList ? 2 : 1;
-        ::com::sun::star::uno::Sequence < OUString > aProps( nSeqSize );
+        css::uno::Sequence < OUString > aProps( nSeqSize );
         OUString* pProps = aProps.getArray();
         pProps[ 0 ] = "Title";
         if( pDateTimeList )
@@ -214,14 +213,14 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
         {
             xResultSet = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
             OSL_FAIL( "create cursor failed!" );
         }
 
         if( xResultSet.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow > xRow( xResultSet, ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::sdbc::XRow > xRow( xResultSet, css::uno::UNO_QUERY );
             const sal_Int32 nExtLen = pExtension ? pExtension->getLength() : 0;
             try
             {
@@ -237,7 +236,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
 
                             if( pDateTimeList )
                             {
-                                ::com::sun::star::util::DateTime aStamp = xRow->getTimestamp(2);
+                                css::util::DateTime aStamp = xRow->getTimestamp(2);
                                 ::DateTime* pDateTime = new ::DateTime(
                                         ::Date( aStamp.Day,
                                                 aStamp.Month,
@@ -254,13 +253,13 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
                 }
                 bOk = true;
             }
-            catch( ::com::sun::star::uno::Exception& )
+            catch( css::uno::Exception& )
             {
                 OSL_FAIL( "Exception caught!" );
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
         OSL_FAIL( "Exception caught!" );
         bOk = false;

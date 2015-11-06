@@ -44,7 +44,7 @@ IndexEntrySupplierWrapper::~IndexEntrySupplierWrapper()
 
 OUString IndexEntrySupplierWrapper::GetIndexKey( const OUString& rText,
                                                  const OUString& rTextReading,
-                                                 const ::com::sun::star::lang::Locale& rLocale ) const
+                                                 const css::lang::Locale& rLocale ) const
 {
     OUString sRet;
     try {
@@ -70,8 +70,7 @@ OUString IndexEntrySupplierWrapper::GetFollowingText( bool bMorePages ) const
     return sRet;
 }
 
-::com::sun::star::uno::Sequence< OUString >
-IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Locale& rLcl ) const
+css::uno::Sequence< OUString > IndexEntrySupplierWrapper::GetAlgorithmList( const css::lang::Locale& rLcl ) const
 {
     uno::Sequence< OUString > sRet;
 
@@ -86,7 +85,7 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Local
 }
 
 bool IndexEntrySupplierWrapper::LoadAlgorithm(
-        const ::com::sun::star::lang::Locale& rLcl,
+        const css::lang::Locale& rLcl,
         const OUString& sSortAlgorithm, long nOptions ) const
 {
     bool bRet = false;
@@ -102,9 +101,9 @@ bool IndexEntrySupplierWrapper::LoadAlgorithm(
 
 sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
             const OUString& rText1, const OUString& rTextReading1,
-            const ::com::sun::star::lang::Locale& rLocale1,
+            const css::lang::Locale& rLocale1,
             const OUString& rText2, const OUString& rTextReading2,
-            const ::com::sun::star::lang::Locale& rLocale2 ) const
+            const css::lang::Locale& rLocale2 ) const
 {
     sal_Int16 nRet = 0;
     try {

@@ -113,7 +113,7 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleHeaderFooter::getImplementationId()
 }
 
 sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XAccessible > xParent =  getAccessibleParent();
     if (xParent.is())

@@ -28,7 +28,7 @@ class SwTextFormatInfo;
 
 class SwTextGuess
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord >  xHyphWord;
+    css::uno::Reference< css::linguistic2::XHyphenatedWord >  xHyphWord;
     SwHangingPortion *pHanging; // for hanging punctuation
     sal_Int32 nCutPos;         // this character doesn't fit
     sal_Int32 nBreakStart;     // start index of word containing line break
@@ -54,7 +54,7 @@ public:
     inline sal_Int32 BreakStart() const { return nBreakStart; }
     inline sal_Int32 BreakPos() const {return nBreakPos; }
     inline sal_Int32 FieldDiff() const {return nFieldDiff; }
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord > HyphWord() const
+    inline css::uno::Reference< css::linguistic2::XHyphenatedWord > HyphWord() const
         { return xHyphWord; }
 };
 

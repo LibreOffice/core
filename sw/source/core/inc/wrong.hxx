@@ -54,7 +54,7 @@ class SwWrongArea
 {
 public:
     OUString maType;
-    com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > mxPropertyBag;
+    css::uno::Reference< css::container::XStringKeyMap > mxPropertyBag;
     sal_Int32 mnPos;
     sal_Int32 mnLen;
     SwWrongList* mpSubList;
@@ -64,12 +64,12 @@ public:
 
     SwWrongArea( const OUString& rType,
                  WrongListType listType,
-                 com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                 css::uno::Reference< css::container::XStringKeyMap > xPropertyBag,
                  sal_Int32 nPos,
                  sal_Int32 nLen);
 
     SwWrongArea( const OUString& rType,
-                 com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                 css::uno::Reference< css::container::XStringKeyMap > xPropertyBag,
                  sal_Int32 nPos,
                  sal_Int32 nLen,
                  SwWrongList* pSubList);
@@ -77,15 +77,15 @@ private:
 
     SwWrongArea() : mnPos(0), mnLen(0), mpSubList(NULL), mColor(0,0,0), mLineType(WRONGAREA_WAVE) {}
 
-    static Color getSmartColor ( com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag)
+    static Color getSmartColor ( css::uno::Reference< css::container::XStringKeyMap > xPropertyBag)
     {
         try
         {
             if (xPropertyBag.is())
             {
                 const OUString colorKey("LineColor");
-                com::sun::star::uno::Any aLineColor = xPropertyBag->getValue(colorKey).get< com::sun::star::uno::Any>();
-                com::sun::star::util::Color lineColor = 0;
+                css::uno::Any aLineColor = xPropertyBag->getValue(colorKey).get< css::uno::Any>();
+                css::util::Color lineColor = 0;
 
                 if (aLineColor >>= lineColor)
                 {
@@ -93,44 +93,44 @@ private:
                 }
             }
         }
-        catch(const ::com::sun::star::container::NoSuchElementException&)
+        catch(const css::container::NoSuchElementException&)
         {
         }
-        catch(const ::com::sun::star::uno::RuntimeException&)
+        catch(const css::uno::RuntimeException&)
         {
         }
 
         return SwViewOption::GetSmarttagColor( );
     }
 
-    static WrongAreaLineType getSmartLineType( com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
+    static WrongAreaLineType getSmartLineType( css::uno::Reference< css::container::XStringKeyMap > xPropertyBag )
     {
         try
         {
             if (xPropertyBag.is())
             {
                 const OUString typeKey("LineType");
-                com::sun::star::uno::Any aLineType = xPropertyBag->getValue(typeKey).get< com::sun::star::uno::Any>();
+                css::uno::Any aLineType = xPropertyBag->getValue(typeKey).get< css::uno::Any>();
                 ::sal_Int16 lineType = 0;
 
                 if (!(aLineType >>= lineType))
                 {
                     return WRONGAREA_DASHED;
                 }
-                if (::com::sun::star::awt::FontUnderline::WAVE == lineType)
+                if (css::awt::FontUnderline::WAVE == lineType)
                 {
                     return WRONGAREA_WAVE;
                 }
-                if (::com::sun::star::awt::FontUnderline::SMALLWAVE == lineType)
+                if (css::awt::FontUnderline::SMALLWAVE == lineType)
                 {
                     return WRONGAREA_WAVE; //Code draws wave height based on space that fits.
                 }
             }
         }
-        catch(const ::com::sun::star::container::NoSuchElementException&)
+        catch(const css::container::NoSuchElementException&)
         {
         }
-        catch(const ::com::sun::star::uno::RuntimeException&)
+        catch(const css::uno::RuntimeException&)
         {
         }
 
@@ -138,7 +138,7 @@ private:
     }
 
     static Color getWrongAreaColor(WrongListType listType,
-                            com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
+                            css::uno::Reference< css::container::XStringKeyMap > xPropertyBag )
     {
         if (WRONGLIST_SPELL == listType)
         {
@@ -157,7 +157,7 @@ private:
     }
 
     static WrongAreaLineType getWrongAreaLineType(WrongListType listType,
-                                           com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
+                                           css::uno::Reference< css::container::XStringKeyMap > xPropertyBag )
     {
         if (WRONGLIST_SPELL == listType)
         {
@@ -241,7 +241,7 @@ public:
     inline sal_uInt16 Count() const { return (sal_uInt16)maList.size(); }
 
     inline void Insert( const OUString& rType,
-                        com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                        css::uno::Reference< css::container::XStringKeyMap > xPropertyBag,
                         sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere )
     {
         std::vector<SwWrongArea>::iterator i = maList.begin();
@@ -254,7 +254,7 @@ public:
     }
 
     void Insert( const OUString& rType,
-                 com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                 css::uno::Reference< css::container::XStringKeyMap > xPropertyBag,
                  sal_Int32 nNewPos, sal_Int32 nNewLen );
 
     inline SwWrongList* SubList( sal_uInt16 nIdx ) const

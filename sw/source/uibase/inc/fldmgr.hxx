@@ -73,9 +73,9 @@ struct SwInsertField_Data
     SwWrtShell* m_pSh;
     sal_Unicode m_cSeparator;
     bool m_bIsAutomaticLanguage;
-    ::com::sun::star::uno::Any m_aDBDataSource;
-    ::com::sun::star::uno::Any m_aDBConnection;
-    ::com::sun::star::uno::Any m_aDBColumn;
+    css::uno::Any m_aDBDataSource;
+    css::uno::Any m_aDBConnection;
+    css::uno::Any m_aDBColumn;
     VclPtr<vcl::Window> m_pParent; // parent dialog used for SwWrtShell::StartInputFieldDlg()
 
     SwInsertField_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
@@ -115,9 +115,9 @@ private:
 
     SAL_DLLPRIVATE sal_uInt16            GetCurrLanguage() const;
 
-    com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
-    com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> xNumberingInfo;
-    SAL_DLLPRIVATE com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> GetNumberingInfo()const;
+    css::uno::Reference<css::container::XNameAccess> xDBContext;
+    css::uno::Reference<css::text::XNumberingTypeInfo> xNumberingInfo;
+    SAL_DLLPRIVATE css::uno::Reference<css::text::XNumberingTypeInfo> GetNumberingInfo()const;
 
 public:
     explicit SwFieldMgr(SwWrtShell* pSh = 0);

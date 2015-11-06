@@ -809,7 +809,7 @@ namespace sw
         class DrawingOLEAdaptor
         {
         private:
-            com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxIPRef;
+            css::uno::Reference < css::embed::XEmbeddedObject > mxIPRef;
             SfxObjectShell& mrPers;
             const Graphic* mpGraphic;
         public:

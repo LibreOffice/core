@@ -486,7 +486,7 @@ public:
 class SwTextFormatInfo : public SwTextPaintInfo
 {
     // temporary arguments for hyphenation
-    com::sun::star::beans::PropertyValues   aHyphVals;
+    css::beans::PropertyValues   aHyphVals;
 
     SwLineLayout    *pRoot;       // The Root of the current line (pCurr)
     SwLinePortion   *pLast;       // The last Portion
@@ -663,10 +663,9 @@ public:
     inline void SetUnderScorePos( sal_Int32 nNew ) { nUnderScorePos = nNew; }
 
     // Calls HyphenateWord() of Hyphenator
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenatedWord >
+    css::uno::Reference< css::linguistic2::XHyphenatedWord >
                 HyphWord( const OUString &rText, const sal_Int32 nMinTrail );
-    const com::sun::star::beans::PropertyValues &
+    const css::beans::PropertyValues &
                 GetHyphValues() const;
 
     bool CheckFootnotePortion( SwLineLayout* pCurr )

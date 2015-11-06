@@ -41,7 +41,7 @@
 #endif
 
 using namespace utl;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 
@@ -264,7 +264,7 @@ void SwEnvCfgItem::ImplCommit()
     PutProperties(aNames, aValues);
 }
 
-void SwEnvCfgItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwEnvCfgItem::Notify( const css::uno::Sequence< OUString >& ) {}
 
 Sequence<OUString> SwEnvCfgItem::GetPropertyNames()
 {

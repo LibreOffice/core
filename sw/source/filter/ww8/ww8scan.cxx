@@ -49,7 +49,7 @@
 #include <stdio.h>
 #endif
 
-using namespace ::com::sun::star::lang;
+using namespace css::lang;
 
 //-begin
 namespace SL
@@ -6103,7 +6103,7 @@ rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale)
             value was the nLocale. If value is < 999, then it is the nLocale,
             otherwise it is the lid.
         */
-        ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(nLidLocale));
+        css::lang::Locale aLocale(LanguageTag::convertToLocale(nLidLocale));
         return msfilter::util::getBestTextEncodingFromLocale(aLocale);
     }
     return rtl_getTextEncodingFromWindowsCharset(static_cast<sal_uInt8>(chs));

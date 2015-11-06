@@ -39,7 +39,7 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace css::uno;
 
 #define GLOB_NAME_CALC      0
 #define GLOB_NAME_IMPRESS   1
@@ -290,7 +290,7 @@ static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
     return nRet;
 }
 
-void SwRevisionConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwRevisionConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void SwRevisionConfig::ImplCommit()
 {
@@ -629,7 +629,7 @@ static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nPro
     }
 }
 
-void SwInsertConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwInsertConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void SwInsertConfig::ImplCommit()
 {
@@ -1130,7 +1130,7 @@ SwTableConfig::~SwTableConfig()
 {
 }
 
-void SwTableConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwTableConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void SwTableConfig::ImplCommit()
 {
@@ -1229,7 +1229,7 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
     return aNames;
 }
 
-void SwMiscConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwMiscConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void SwMiscConfig::ImplCommit()
 {

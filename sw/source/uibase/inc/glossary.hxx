@@ -104,7 +104,7 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     OUString        sReadonlyPath;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextContainer2 > m_xAutoText;
+    css::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
     SwOneExampleFrame*  pExampleFrame;
 
     SwGlossaryHdl*  pGlossaryHdl;

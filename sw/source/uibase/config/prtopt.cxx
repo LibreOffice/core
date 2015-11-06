@@ -26,7 +26,7 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace css::uno;
 
 // Ctor
 Sequence<OUString> SwPrintOptions::GetPropertyNames()
@@ -125,7 +125,7 @@ SwPrintOptions::~SwPrintOptions()
 {
 }
 
-void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwPrintOptions::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void SwPrintOptions::ImplCommit()
 {

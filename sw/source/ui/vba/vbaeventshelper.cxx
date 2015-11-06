@@ -23,13 +23,13 @@
 #include <vbahelper/helperdecl.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::script::vba::VBAEventId;
+using namespace css::script::vba::VBAEventId;
 using namespace ::ooo::vba;
 
 SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< css::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext > const& xContext ) :
     VbaEventsHelperBase( aArgs, xContext )
 {
-    using namespace ::com::sun::star::script::ModuleType;
+    using namespace css::script::ModuleType;
     registerEventHandler( DOCUMENT_NEW,     DOCUMENT,   "Document_New" );
     registerEventHandler( AUTO_NEW,         NORMAL,     "AutoNew" );
     registerEventHandler( DOCUMENT_OPEN,    DOCUMENT,   "Document_Open" );

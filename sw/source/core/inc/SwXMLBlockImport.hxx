@@ -45,7 +45,7 @@ protected:
 
 public:
     SwXMLBlockListImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
         SwXMLTextBlocks &rBlocks );
 
     SwXMLTextBlocks& getBlockList()
@@ -68,13 +68,13 @@ public:
     bool bTextOnly;
     OUString &m_rText;
     SwXMLTextBlockImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString &rNewText, bool bNewTextOnly );
 
     virtual ~SwXMLTextBlockImport()
         throw();
     virtual void SAL_CALL endDocument()
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 };
 
 enum SwXMLTextBlockToken : sal_Int32

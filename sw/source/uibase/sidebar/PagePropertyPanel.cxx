@@ -83,15 +83,15 @@ namespace sw { namespace sidebar {
 
 VclPtr<vcl::Window> PagePropertyPanel::Create (
     vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
+    const css::uno::Reference< css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", NULL, 0);
+        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", NULL, 1);
+        throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
+        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
 
     return VclPtr<PagePropertyPanel>::Create( pParent,
                                               rxFrame,
@@ -100,7 +100,7 @@ VclPtr<vcl::Window> PagePropertyPanel::Create (
 
 PagePropertyPanel::PagePropertyPanel(
             vcl::Window* pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
+            const css::uno::Reference< css::frame::XFrame>& rxFrame,
             SfxBindings* pBindings)
     : PanelLayout(pParent, "PagePropertyPanel", "modules/swriter/ui/sidebarpage.ui", rxFrame)
     , mpBindings(pBindings)

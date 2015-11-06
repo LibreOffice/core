@@ -50,7 +50,7 @@
 #include "xmlitem.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 extern SvXMLItemMapEntry aXMLTableItemMap[];
 extern SvXMLItemMapEntry aXMLTableColItemMap[];

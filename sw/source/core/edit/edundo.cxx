@@ -131,7 +131,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
                 bRet = GetDoc()->GetIDocumentUndoRedo().Undo()
                     || bRet;
             }
-        } catch (const ::com::sun::star::uno::Exception & e) {
+        } catch (const css::uno::Exception & e) {
             SAL_WARN("sw.core",
                     "SwEditShell::Undo(): exception caught: " << e.Message);
         }
@@ -187,7 +187,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
                 bRet = GetDoc()->GetIDocumentUndoRedo().Redo()
                     || bRet;
             }
-        } catch (const ::com::sun::star::uno::Exception & e) {
+        } catch (const css::uno::Exception & e) {
             SAL_WARN("sw.core",
                     "SwEditShell::Redo(): exception caught: " << e.Message);
         }
@@ -217,7 +217,7 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
         ::sw::RepeatContext context(*GetDoc(), *GetCrsr());
         bRet = GetDoc()->GetIDocumentUndoRedo().Repeat( context, nCount )
             || bRet;
-    } catch (const ::com::sun::star::uno::Exception & e) {
+    } catch (const css::uno::Exception & e) {
         SAL_WARN("sw.core",
                 "SwEditShell::Repeat(): exception caught: " << e.Message);
     }

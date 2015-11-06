@@ -48,7 +48,7 @@ class ThreadManager
 {
     public:
 
-        explicit ThreadManager( ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager >& rThreadJoiner );
+        explicit ThreadManager( css::uno::Reference< css::util::XJobManager >& rThreadJoiner );
         virtual ~ThreadManager();
 
         std::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();
@@ -99,7 +99,7 @@ class ThreadManager
         {
             oslInterlockedCount nThreadID;
             ::rtl::Reference< ObservableThread > pThread;
-            com::sun::star::uno::Reference< com::sun::star::util::XCancellable > aJob;
+            css::uno::Reference< css::util::XCancellable > aJob;
 
             tThreadData()
                 : nThreadID( 0 ),
@@ -114,7 +114,7 @@ class ThreadManager
 
         osl::Mutex maMutex;
 
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::util::XJobManager > mrThreadJoiner;
+        css::uno::WeakReference< css::util::XJobManager > mrThreadJoiner;
 
         std::shared_ptr< ThreadListener > mpThreadListener;
 

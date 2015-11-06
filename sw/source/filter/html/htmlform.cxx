@@ -77,9 +77,9 @@
 #include "htmlform.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::form;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::form;
 
 const sal_uInt16 TABINDEX_MIN = 0;
 const sal_uInt16 TABINDEX_MAX = 32767;

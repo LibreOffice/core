@@ -45,7 +45,7 @@ namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
 } } } }
 
-using namespace ::com::sun::star::util;
+using namespace css::util;
 
 static long nStartDragX = 0, nStartDragY = 0;
 static bool  bStartDrag = false;

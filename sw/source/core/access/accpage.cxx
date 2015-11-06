@@ -167,7 +167,7 @@ Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
 OUString SwAccessiblePage::getAccessibleDescription( )
     throw( RuntimeException, std::exception )
 {
-    CHECK_FOR_DEFUNC( ::com::sun::star::accessibility::XAccessibleContext );
+    CHECK_FOR_DEFUNC( css::accessibility::XAccessibleContext );
 
     OUString sArg( GetFormattedPageNumber() );
     return GetResource( STR_ACCESS_PAGE_DESC, &sArg );

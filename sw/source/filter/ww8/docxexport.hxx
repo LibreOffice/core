@@ -162,19 +162,19 @@ public:
                     const OUString &rHelp,
                     const OUString &ToolTip,
                     const OUString &rSelected,
-                    com::sun::star::uno::Sequence<OUString> &rListItems) override;
+                    css::uno::Sequence<OUString> &rListItems) override;
 
     virtual void DoFormText(const SwInputField * pField) override;
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) override;
 
     /// Returns the relationd id
-    OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr m_pSerializer );
+    OString OutputChart( css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr m_pSerializer );
     OString WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaType, const OUString& sRelationType, const OUString& sFileExtension );
     static bool lcl_CopyStream( css::uno::Reference< css::io::XInputStream> xIn, css::uno::Reference< css::io::XOutputStream > xOut );
 
     /// Writes the shape using drawingML syntax.
-    void OutputDML( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
+    void OutputDML( css::uno::Reference< css::drawing::XShape >& xShape );
 
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
 

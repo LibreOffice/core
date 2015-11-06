@@ -84,28 +84,28 @@ public:
     ~SwTOXInternational();
 
     sal_Int32 Compare( const TextAndReading& rTaR1,
-                       const ::com::sun::star::lang::Locale& rLocale1,
+                       const css::lang::Locale& rLocale1,
                        const TextAndReading& rTaR2,
-                       const ::com::sun::star::lang::Locale& rLocale2 ) const;
+                       const css::lang::Locale& rLocale2 ) const;
 
     inline bool IsEqual( const TextAndReading& rTaR1,
-                         const ::com::sun::star::lang::Locale& rLocale1,
+                         const css::lang::Locale& rLocale1,
                          const TextAndReading& rTaR2,
-                         const ::com::sun::star::lang::Locale& rLocale2 ) const
+                         const css::lang::Locale& rLocale2 ) const
     {
         return 0 == Compare( rTaR1, rLocale1, rTaR2, rLocale2 );
     }
 
     inline bool IsLess( const TextAndReading& rTaR1,
-                        const ::com::sun::star::lang::Locale& rLocale1,
+                        const css::lang::Locale& rLocale1,
                         const TextAndReading& rTaR2,
-                        const ::com::sun::star::lang::Locale& rLocale2 ) const
+                        const css::lang::Locale& rLocale2 ) const
     {
         return -1 == Compare( rTaR1, rLocale1, rTaR2, rLocale2 );
     }
 
     OUString GetIndexKey( const TextAndReading& rTaR,
-                        const ::com::sun::star::lang::Locale& rLcl ) const;
+                        const css::lang::Locale& rLcl ) const;
 
     OUString GetFollowingText( bool bMorePages ) const;
 
@@ -119,7 +119,7 @@ public:
 struct SwTOXSortTabBase
 {
     std::vector<SwTOXSource>       aTOXSources;
-    ::com::sun::star::lang::Locale aLocale;
+    css::lang::Locale aLocale;
     const SwTextNode* pTOXNd;
     const SwTextTOXMark* pTextMark;
     const SwTOXInternational* pTOXIntl;
@@ -132,7 +132,7 @@ struct SwTOXSortTabBase
                       const SwContentNode* pTOXSrc,
                       const SwTextTOXMark* pTextMark,
                       const SwTOXInternational* pIntl,
-                      const ::com::sun::star::lang::Locale* pLocale = NULL );
+                      const css::lang::Locale* pLocale = NULL );
     virtual ~SwTOXSortTabBase() {}
 
     sal_uInt16  GetType() const         { return nType; }
@@ -146,7 +146,7 @@ struct SwTOXSortTabBase
     virtual OUString  GetURL() const;
 
     inline TextAndReading GetText() const;
-    inline const ::com::sun::star::lang::Locale& GetLocale() const;
+    inline const css::lang::Locale& GetLocale() const;
 
 private:
     mutable bool bValidText;
@@ -167,7 +167,7 @@ inline TextAndReading SwTOXSortTabBase::GetText() const
     return m_aSort;
 }
 
-inline const ::com::sun::star::lang::Locale& SwTOXSortTabBase::GetLocale() const
+inline const css::lang::Locale& SwTOXSortTabBase::GetLocale() const
 {
     return aLocale;
 }
@@ -179,7 +179,7 @@ struct SwTOXIndex : public SwTOXSortTabBase
 {
     SwTOXIndex( const SwTextNode&, const SwTextTOXMark*, sal_uInt16 nOptions, sal_uInt8 nKeyLevel,
                 const SwTOXInternational& rIntl,
-                const ::com::sun::star::lang::Locale& rLocale );
+                const css::lang::Locale& rLocale );
     virtual ~SwTOXIndex() {}
 
     virtual void    FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const override;
@@ -197,7 +197,7 @@ struct SwTOXCustom : public SwTOXSortTabBase
 {
     SwTOXCustom( const TextAndReading& rKey, sal_uInt16 nLevel,
                  const SwTOXInternational& rIntl,
-                 const ::com::sun::star::lang::Locale& rLocale );
+                 const css::lang::Locale& rLocale );
     virtual ~SwTOXCustom() {}
 
     virtual sal_uInt16 GetLevel() const override;

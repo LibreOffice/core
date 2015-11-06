@@ -383,8 +383,8 @@ void AbstractSwRenameXNamedDlg_Impl::SetForbiddenChars( const OUString& rSet )
 }
 
 void    AbstractSwRenameXNamedDlg_Impl::SetAlternativeAccess(
-             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xSecond,
-             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xThird )
+             css::uno::Reference< css::container::XNameAccess > & xSecond,
+             css::uno::Reference< css::container::XNameAccess > & xThird )
 {
     pDlg->SetAlternativeAccess( xSecond, xThird);
 }
@@ -486,7 +486,7 @@ const OUString& AbstractMailMergeDlg_Impl::GetSaveFilter() const
     return pDlg->GetSaveFilter();
 }
 
-const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > AbstractMailMergeDlg_Impl::GetSelection() const
+const css::uno::Sequence< css::uno::Any > AbstractMailMergeDlg_Impl::GetSelection() const
 {
     return pDlg->GetSelection();
 }
@@ -636,7 +636,7 @@ AbstractSwInsertAbstractDlg * SwAbstractDialogFactory_Impl::CreateSwInsertAbstra
 
 SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rSet,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&,
+                                    const css::uno::Reference< css::frame::XFrame >&,
                                                                         sal_uInt32 nResId
                                                                 )
 {
@@ -905,8 +905,8 @@ SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg ( SwView
 }
 
 AbstractSwRenameXNamedDlg * SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(vcl::Window* pParent,
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess)
+    css::uno::Reference< css::container::XNamed > & xNamed,
+    css::uno::Reference< css::container::XNameAccess > & xNameAccess)
 {
     VclPtr<SwRenameXNamedDlg> pDlg = VclPtr<SwRenameXNamedDlg>::Create( pParent,xNamed, xNameAccess);
     return new AbstractSwRenameXNamedDlg_Impl( pDlg );

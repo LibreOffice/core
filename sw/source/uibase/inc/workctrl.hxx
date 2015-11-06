@@ -121,7 +121,7 @@ protected:
         virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 public:
-        SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window *pParent );
+        SwScrollNaviPopup( sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window *pParent );
         virtual ~SwScrollNaviPopup();
     virtual void dispose() override;
 

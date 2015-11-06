@@ -1953,7 +1953,7 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrm *pCnt, IdleJobType eJob )
                         bAllValid = false;
                     if ( aRepaint.HasArea() )
                         pImp->GetShell()->InvalidateWindows( aRepaint );
-                } catch( const ::com::sun::star::uno::RuntimeException& e) {
+                } catch( const css::uno::RuntimeException& e) {
                     // #i122885# handle smarttag problems gracefully and provide diagnostics
                     SAL_WARN( "sw.core", "SMART_TAGS Exception:" << e.Message);
                 }

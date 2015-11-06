@@ -819,7 +819,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
             const short nScriptType = ScriptTypeDetector::getCTLScriptType( rText, nSearchStt );
             sal_Int32 nNextCTLScriptStart = nSearchStt;
             short nCurrentScriptType = nScriptType;
-            while( com::sun::star::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
+            while( css::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
             {
                 nNextCTLScriptStart = ScriptTypeDetector::endOfCTLScriptType( rText, nNextCTLScriptStart );
                 if( nNextCTLScriptStart >= rText.getLength() || nNextCTLScriptStart >= nChg )

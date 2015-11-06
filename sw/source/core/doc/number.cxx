@@ -1318,13 +1318,13 @@ namespace numfunc
             void SetToDefault();
 
             /** returns sequence of configuration property names */
-            static com::sun::star::uno::Sequence<OUString> GetPropNames();
+            static css::uno::Sequence<OUString> GetPropNames();
 
             /** loads configuration properties and applies values to internal data */
             void LoadConfig();
 
             /** catches notification about changed configuration data */
-            virtual void Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) override;
+            virtual void Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
             virtual void ImplCommit() override;
 
             // configuration data
@@ -1357,9 +1357,9 @@ namespace numfunc
         mbChangeIndentOnTabAtFirstPosOfFirstListItem = true;
     }
 
-    com::sun::star::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames()
+    css::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames()
     {
-        com::sun::star::uno::Sequence<OUString> aPropNames(1);
+        css::uno::Sequence<OUString> aPropNames(1);
         OUString* pNames = aPropNames.getArray();
         pNames[0] = "ChangeIndentOnTabAtFirstPosOfFirstListItem";
 
@@ -1370,10 +1370,9 @@ namespace numfunc
 
     void SwNumberingUIBehaviorConfig::LoadConfig()
     {
-        com::sun::star::uno::Sequence<OUString> aPropNames = GetPropNames();
-        com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues =
-                                                    GetProperties( aPropNames );
-        const com::sun::star::uno::Any* pValues = aValues.getConstArray();
+        css::uno::Sequence<OUString> aPropNames = GetPropNames();
+        css::uno::Sequence<css::uno::Any> aValues = GetProperties( aPropNames );
+        const css::uno::Any* pValues = aValues.getConstArray();
         OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
                 "<SwNumberingUIBehaviorConfig::LoadConfig()> - GetProperties failed");
         if ( aValues.getLength() == aPropNames.getLength() )
@@ -1399,7 +1398,7 @@ namespace numfunc
         }
     }
 
-    void SwNumberingUIBehaviorConfig::Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames )
+    void SwNumberingUIBehaviorConfig::Notify( const css::uno::Sequence<OUString>& aPropertyNames )
     {
         (void) aPropertyNames;
         SetToDefault();

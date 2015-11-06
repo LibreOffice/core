@@ -188,7 +188,7 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent()
             if( xAcc->getAccessibleChild( i ) == xThis )
                 return i;
         }
-        catch(const ::com::sun::star::lang::IndexOutOfBoundsException &)
+        catch(const css::lang::IndexOutOfBoundsException &)
         {
             return -1L;
         }
@@ -203,7 +203,7 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription()
 }
 
 OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -252,7 +252,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
 
         return aBox;
     }
-    catch(const ::com::sun::star::lang::IndexOutOfBoundsException &)
+    catch(const css::lang::IndexOutOfBoundsException &)
     {
         return awt::Rectangle();
     }
@@ -273,7 +273,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     return aLoc;
 }
 
-::com::sun::star::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
+css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -288,7 +288,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     return aLoc;
 }
 
-::com::sun::star::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
+css::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
         throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -548,8 +548,8 @@ void SwAccessibleDocument::deselectAccessibleChild(
 }
 
 uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException,
+    throw (css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard g;
@@ -781,15 +781,15 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 }
 
 sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return SW_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-        SAL_CALL SwAccessibleDocument::getAccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
-        throw (::com::sun::star::uno::RuntimeException,
+css::uno::Sequence< css::uno::Any >
+        SAL_CALL SwAccessibleDocument::getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType)
+        throw (css::uno::RuntimeException,
                std::exception)
 {
     SolarMutexGuard g;
@@ -804,7 +804,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
 
     if ( nType == FORSPELLCHECKFLOWTO )
     {
-        uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+        uno::Reference< css::drawing::XShape > xShape;
         rAny >>= xShape;
         if( xShape.is() )
         {
@@ -836,7 +836,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
                             }
                         }
                     }
-                    catch ( const com::sun::star::lang::IndexOutOfBoundsException& )
+                    catch ( const css::lang::IndexOutOfBoundsException& )
                     {
                         return uno::Sequence< uno::Any >();
                     }

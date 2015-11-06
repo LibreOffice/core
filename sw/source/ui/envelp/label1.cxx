@@ -461,7 +461,7 @@ void SwLabPage::InitDatabaseBox()
     if( GetDBManager() )
     {
         m_pDatabaseLB->Clear();
-        ::com::sun::star::uno::Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
+        css::uno::Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
             m_pDatabaseLB->InsertEntry(pDataNames[i]);

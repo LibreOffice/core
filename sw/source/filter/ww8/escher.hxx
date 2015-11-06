@@ -102,7 +102,7 @@ protected:
         EscherPropertyContainer& rPropOpt);
     void WriteOLEPicture(EscherPropertyContainer &rPropOpt,
         sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
-        sal_uInt32 nShapeId, const com::sun::star::awt::Rectangle* pVisArea );
+        sal_uInt32 nShapeId, const css::awt::Rectangle* pVisArea );
     static void WriteGrfAttr(const SwNoTextNode& rNd,EscherPropertyContainer& rPropOpt);
 
     sal_Int32 DrawModelToEmu(sal_Int32 nVal) const
@@ -157,8 +157,8 @@ private:
         EscherPropertyContainer& rPropOpt) override;
 
     virtual sal_uInt32 QueryTextID(
-        const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &,sal_uInt32) override;
+        const css::uno::Reference<
+        css::drawing::XShape > &,sal_uInt32) override;
     virtual void SetPicId(const SdrObject &rSdrObj, sal_uInt32 nShapeId,
         EscherPropertyContainer &rPropOpt) override;
 public:
@@ -169,8 +169,8 @@ public:
 
     virtual void WriteFrmExtraData(const SwFrameFormat& rFormat) override;
 
-    EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &, const Rectangle*) override {return &aHostData;}
+    EscherExHostAppData* StartShape(const css::uno::Reference<
+        css::drawing::XShape > &, const Rectangle*) override {return &aHostData;}
 private:
     SwEscherEx(const SwEscherEx&) = delete;
     SwEscherEx &operator=(const SwEscherEx&) = delete;

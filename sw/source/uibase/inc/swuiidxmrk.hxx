@@ -96,7 +96,7 @@ class SwIndexMarkPane
     bool            bPhoneticED2_ChangedByUser;
     LanguageType    nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
     bool            bIsPhoneticReadingEnabled; //this value states whether phonetic reading is enabled in principle dependent of global cjk settings and language of current entry
-    com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier >
+    css::uno::Reference< css::i18n::XExtendedIndexEntrySupplier >
                     xExtendedIndexEntrySupplier;
 
     SwTOXMgr*       pTOXMgr;
@@ -206,7 +206,7 @@ class SwAuthorMarkPane
 
     OUString        m_sCreatedEntry[AUTH_FIELD_END];
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xBibAccess;
+    css::uno::Reference< css::container::XNameAccess >    xBibAccess;
 
     DECL_LINK_TYPED(InsertHdl, Button*, void);
     DECL_LINK_TYPED(CloseHdl, Button*, void);

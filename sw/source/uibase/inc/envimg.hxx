@@ -63,8 +63,8 @@ public:
     virtual bool operator ==(const SfxPoolItem& rItem) const override;
 
     virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const override;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };
 
 class SwEnvCfgItem : public utl::ConfigItem
@@ -72,7 +72,7 @@ class SwEnvCfgItem : public utl::ConfigItem
 private:
     SwEnvItem aEnvItem;
 
-    static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    static css::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
 
@@ -82,7 +82,7 @@ public:
 
     SwEnvItem& GetItem() {return aEnvItem;}
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

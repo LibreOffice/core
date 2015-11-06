@@ -50,10 +50,10 @@
 
 using namespace comphelper;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::i18n;
 
 enum SwDocumentSettingsPropertyHandles
 {

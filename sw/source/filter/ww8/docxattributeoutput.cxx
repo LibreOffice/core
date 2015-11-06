@@ -138,7 +138,7 @@ using namespace nsSwDocInfoSubType;
 using namespace nsFieldFlags;
 using namespace sw::util;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::drawing;
+using namespace css::drawing;
 
 static const sal_Int32 Tag_StartParagraph_1 = 1;
 static const sal_Int32 Tag_StartParagraph_2 = 2;
@@ -304,7 +304,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
         if (const SfxPoolItem* pItem = pSet->GetItem(RES_PARATR_GRABBAG))
         {
             const SfxGrabBagItem& rParaGrabBag = static_cast<const SfxGrabBagItem&>(*pItem);
-            const std::map<OUString, com::sun::star::uno::Any>& rMap = rParaGrabBag.GetGrabBag();
+            const std::map<OUString, css::uno::Any>& rMap = rParaGrabBag.GetGrabBag();
             bEndParaSdt = m_bStartedParaSdt && rMap.find("ParaSdtEndBefore") != rMap.end();
         }
     }
@@ -3240,7 +3240,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             FSEND );
 
     // Look for the table style property in the table grab bag
-    std::map<OUString, com::sun::star::uno::Any> aGrabBag =
+    std::map<OUString, css::uno::Any> aGrabBag =
             pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
 
     // We should clear the TableStyle map. In case of Table inside multiple tables it contains the
@@ -3249,7 +3249,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
         m_aTableStyleConf.clear();
 
     // Extract properties from grab bag
-    std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement;
+    std::map<OUString, css::uno::Any>::iterator aGrabBagElement;
     for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
     {
         if( aGrabBagElement->first == "TableStyleName")
@@ -3467,11 +3467,11 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     Color aColor = pColorProp ? pColorProp->GetColor() : COL_AUTO;
     OString sColor = msfilter::util::ConvertColor( aColor );
 
-    std::map<OUString, com::sun::star::uno::Any> aGrabBag =
+    std::map<OUString, css::uno::Any> aGrabBag =
             pFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
 
     OString sOriginalColor;
-    std::map<OUString, com::sun::star::uno::Any>::iterator aGrabBagElement = aGrabBag.find("originalColor");
+    std::map<OUString, css::uno::Any>::iterator aGrabBagElement = aGrabBag.find("originalColor");
     if( aGrabBagElement != aGrabBag.end() )
         sOriginalColor = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
 
@@ -4108,7 +4108,7 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
     xPropSet->getPropertyValue("GraphicURL") >>= sUrl;
     Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( sUrl ).GetPrefSize() );
 
-    ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+    css::text::GraphicCrop aGraphicCropStruct;
     xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
     const MapMode aMap100mm( MAP_100TH_MM );
@@ -5885,7 +5885,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
         osl::File file( fontUrl );
         if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )
             return;
-        uno::Reference< com::sun::star::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
+        uno::Reference< css::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
             "word/fonts/font" + OUString::number(m_nextFontId) + ".odttf",
             "application/vnd.openxmlformats-officedocument.obfuscatedFont" );
         // Not much point in trying hard with the obfuscation key, whoever reads the spec can read the font anyway,
@@ -8069,8 +8069,8 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
 
 void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
 {
-    const std::map<OUString, com::sun::star::uno::Any>& rMap = rItem.GetGrabBag();
-    for (std::map<OUString, com::sun::star::uno::Any>::const_iterator i = rMap.begin(); i != rMap.end(); ++i)
+    const std::map<OUString, css::uno::Any>& rMap = rItem.GetGrabBag();
+    for (std::map<OUString, css::uno::Any>::const_iterator i = rMap.begin(); i != rMap.end(); ++i)
     {
         if (i->first == "MirrorIndents")
             m_pSerializer->singleElementNS(XML_w, XML_mirrorIndents, FSEND);
@@ -8264,7 +8264,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
 
 void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
 {
-    const std::map< OUString, com::sun::star::uno::Any >& rMap = rItem.GetGrabBag();
+    const std::map< OUString, css::uno::Any >& rMap = rItem.GetGrabBag();
 
     // get original values of theme-derived properties to check if they have changed during the edition
     bool bWriteCSTheme = true;
@@ -8272,7 +8272,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     bool bWriteEastAsiaTheme = true;
     bool bWriteThemeFontColor = true;
     OUString sOriginalValue;
-    for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
+    for ( std::map< OUString, css::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
     {
         if ( m_pFontsAttrList.is() && i->first == "CharThemeFontNameCs" )
         {
@@ -8302,7 +8302,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
 
     // save theme attributes back to the run properties
     OUString str;
-    for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
+    for ( std::map< OUString, css::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
     {
         if ( i->first == "CharThemeNameAscii" && bWriteAsciiTheme )
         {

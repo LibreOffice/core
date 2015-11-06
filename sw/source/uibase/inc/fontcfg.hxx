@@ -58,7 +58,7 @@ class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
     OUString    sDefaultFonts[DEF_FONT_COUNT];
     sal_Int32   nDefaultFontHeight[DEF_FONT_COUNT];
 
-    SAL_DLLPRIVATE com::sun::star::uno::Sequence<OUString>    GetPropertyNames();
+    SAL_DLLPRIVATE css::uno::Sequence<OUString>    GetPropertyNames();
 
     void ChangeString(sal_uInt16 nFontType, const OUString& rSet)
         {
@@ -77,7 +77,7 @@ public:
     SwStdFontConfig();
     virtual ~SwStdFontConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     const OUString&   GetFontStandard(sal_uInt8 nFontGroup) const {return sDefaultFonts[FONT_STANDARD + FONT_PER_GROUP * nFontGroup];}
     const OUString&   GetFontOutline(sal_uInt8 nFontGroup)  const {return sDefaultFonts[FONT_OUTLINE + FONT_PER_GROUP * nFontGroup];}

@@ -126,9 +126,9 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::i18n;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::i18n;
 
 #define SwAnnotationShell
 
@@ -1401,7 +1401,7 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
     if (!pOLV)
         return;
 
-    using namespace ::com::sun::star::i18n;
+    using namespace css::i18n;
 
     sal_uInt32 nMode = 0;
 

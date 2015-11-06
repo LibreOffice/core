@@ -65,7 +65,7 @@ typedef void (*GoSection)( SwPosition* );
 typedef bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
 typedef const SwTextAttr* (*GetHint)( const SwpHints&, sal_uInt16&, sal_Int32 );
 typedef bool (utl::TextSearch:: *SearchText)( const OUString&, sal_Int32*,
-                    sal_Int32*, ::com::sun::star::util::SearchResult* );
+                    sal_Int32*, css::util::SearchResult* );
 typedef void (*MvSection)( SwNodeIndex * );
 
 struct SwMoveFnCollection
