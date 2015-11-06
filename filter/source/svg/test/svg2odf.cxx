@@ -72,27 +72,28 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return 1;
     }
 
-    OUString aBaseURL, aTmpURL, aSrcURL, aDstURL, aIniUrl;
-
-    osl_getProcessWorkingDir(&aBaseURL.pData);
-    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[1]).pData,
-                                  &aTmpURL.pData );
-    osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aSrcURL.pData);
-
-    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[2]).pData,
-                                  &aTmpURL.pData );
-    osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aDstURL.pData);
-
-    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[3]).pData,
-                                &aTmpURL.pData );
-    osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aIniUrl.pData);
-
-    // bootstrap UNO
-    uno::Reference< lang::XMultiServiceFactory > xFactory;
-    uno::Reference< uno::XComponentContext > xCtx;
     int nRet = 1;
+
     try
     {
+        OUString aBaseURL, aTmpURL, aSrcURL, aDstURL, aIniUrl;
+
+        osl_getProcessWorkingDir(&aBaseURL.pData);
+        osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[1]).pData,
+                                      &aTmpURL.pData );
+        osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aSrcURL.pData);
+
+        osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[2]).pData,
+                                      &aTmpURL.pData );
+        osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aDstURL.pData);
+
+        osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[3]).pData,
+                                    &aTmpURL.pData );
+        osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aIniUrl.pData);
+
+        // bootstrap UNO
+        uno::Reference< lang::XMultiServiceFactory > xFactory;
+        uno::Reference< uno::XComponentContext > xCtx;
         xCtx = ::cppu::defaultBootstrap_InitialComponentContext(aIniUrl);
         xFactory.set(xCtx->getServiceManager(), uno::UNO_QUERY);
         if (!xFactory.is())
