@@ -694,7 +694,7 @@ ScRangeName::ScRangeName(const ScRangeName& r)
             OSL_FAIL( "ScRangeName copy-ctor: maIndexToData size doesn't fit");
             maIndexToData.resize(nPos+1, NULL);
         }
-        maIndexToData[nPos] = const_cast<ScRangeData*>(itr.second.get());
+        maIndexToData[nPos] = itr.second.get();
     }
 }
 
