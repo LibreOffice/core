@@ -235,7 +235,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 1 ),
                                        FWK_RESSTR(STR_CLEAR_RECENT_FILES) );
             pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 1 ),
-                                           OUString( CMD_CLEAR_LIST ) );
+                                           CMD_CLEAR_LIST );
             pVCLPopupMenu->SetHelpText( sal_uInt16( nCount + 1 ),
                                         FWK_RESSTR(STR_CLEAR_RECENT_FILES_HELP) );
 
@@ -245,7 +245,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 2 ),
                                            FWK_RESSTR(STR_OPEN_REMOTE) );
                 pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 2 ),
-                                               OUString( CMD_OPEN_REMOTE ) );
+                                               CMD_OPEN_REMOTE );
             }
         }
         else

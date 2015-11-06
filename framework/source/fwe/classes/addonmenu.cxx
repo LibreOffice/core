@@ -169,7 +169,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
         PopupMenu* pHelpMenu = pMergeMenuBar->GetPopupMenu( SID_HELPMENU );
         if ( !pHelpMenu )
         {
-            sal_uInt16 nId = FindMenuId(pMergeMenuBar, OUString(".uno:HelpMenu"));
+            sal_uInt16 nId = FindMenuId(pMergeMenuBar, ".uno:HelpMenu");
             if ( nId != USHRT_MAX )
                 pHelpMenu = pMergeMenuBar->GetPopupMenu( nId );
         }
@@ -183,7 +183,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
             AddonsOptions aOptions;
 
             // try to detect the about menu item with the command URL
-            sal_uInt16 nId = FindMenuId(pHelpMenu, OUString(".uno:About"));
+            sal_uInt16 nId = FindMenuId(pHelpMenu, ".uno:About");
             sal_uInt16 nInsPos = pHelpMenu->GetItemPos( nId );
 
             const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();

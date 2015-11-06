@@ -125,7 +125,7 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
         {
             ::comphelper::SequenceAsHashMap lArgs(lArguments);
             m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
-                OUString("DocumentRoot"),
+                "DocumentRoot",
                 css::uno::Reference< css::embed::XStorage >());
         }
     }

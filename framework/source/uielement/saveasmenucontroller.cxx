@@ -117,7 +117,7 @@ void SaveAsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
         pVCLPopupMenu->InsertItem( sal_uInt16( 1 ),
                                    FWK_RESSTR( STR_REMOTE_FILE ) );
         pVCLPopupMenu->SetItemCommand( sal_uInt16( 1 ),
-                                       OUString( CMD_SAVE_REMOTE ) );
+                                       CMD_SAVE_REMOTE );
     }
 }
 

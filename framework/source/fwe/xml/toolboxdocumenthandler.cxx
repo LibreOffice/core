@@ -699,13 +699,13 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
-    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_TOOLBAR ),
+    pList->AddAttribute( ATTRIBUTE_XMLNS_TOOLBAR,
                          m_aAttributeType,
-                         OUString( XMLNS_TOOLBAR ) );
+                         XMLNS_TOOLBAR );
 
-    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_XLINK ),
+    pList->AddAttribute( ATTRIBUTE_XMLNS_XLINK,
                          m_aAttributeType,
-                         OUString( XMLNS_XLINK ) );
+                         XMLNS_XLINK );
 
     if ( !aUIName.isEmpty() )
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_UINAME,
@@ -785,7 +785,7 @@ throw ( SAXException, RuntimeException )
     {
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_VISIBLE,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_BOOLEAN_FALSE ) );
+                             ATTRIBUTE_BOOLEAN_FALSE );
     }
 
     if ( !rHelpURL.isEmpty() )
@@ -812,7 +812,7 @@ throw ( SAXException, RuntimeException )
             if ( nStyle & pStyle->nBit )
             {
                 if ( !aValue.isEmpty() )
-                    aValue = aValue.concat( OUString( " " ) );
+                    aValue = aValue.concat( " " );
                 aValue += OUString::createFromAscii( pStyle->attrName );
             }
         }

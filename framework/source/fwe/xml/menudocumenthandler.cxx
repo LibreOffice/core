@@ -772,14 +772,14 @@ throw ( SAXException, RuntimeException )
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
-    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_MENU ),
+    pList->AddAttribute( ATTRIBUTE_XMLNS_MENU,
                          m_aAttributeType,
-                         OUString( XMLNS_MENU ) );
+                         XMLNS_MENU );
 
     if ( m_bIsMenuBar ) //FIXME
-        pList->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
+        pList->AddAttribute( ATTRIBUTE_NS_ID,
                              m_aAttributeType,
-                             OUString( "menubar" ) );
+                             "menubar" );
 
     OUString aRootElement;
     if ( m_bIsMenuBar )
@@ -831,12 +831,12 @@ throw ( SAXException, RuntimeException )
                     ::comphelper::AttributeList* pListMenu = new ::comphelper::AttributeList;
                     Reference< XAttributeList > xListMenu( static_cast<XAttributeList *>(pListMenu) , UNO_QUERY );
 
-                    pListMenu->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
+                    pListMenu->AddAttribute( ATTRIBUTE_NS_ID,
                                             m_aAttributeType,
                                             aCommandURL );
 
                     if ( aCommandURL.copy( CMD_PROTOCOL_SIZE ) != CMD_PROTOCOL )
-                        pListMenu->AddAttribute( OUString( ATTRIBUTE_NS_LABEL ),
+                        pListMenu->AddAttribute( ATTRIBUTE_NS_LABEL,
                                                  m_aAttributeType,
                                                  aLabel );
 
@@ -882,20 +882,20 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
-    pList->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
+    pList->AddAttribute( ATTRIBUTE_NS_ID,
                                 m_aAttributeType,
                                 aCommandURL );
 
     if ( !aHelpURL.isEmpty() )
     {
-        pList->AddAttribute( OUString( ATTRIBUTE_NS_HELPID ),
+        pList->AddAttribute( ATTRIBUTE_NS_HELPID,
                              m_aAttributeType,
                              aHelpURL );
     }
 
     if ( !aLabel.isEmpty() && aCommandURL.copy( CMD_PROTOCOL_SIZE ) != CMD_PROTOCOL )
     {
-        pList->AddAttribute( OUString( ATTRIBUTE_NS_LABEL ),
+        pList->AddAttribute( ATTRIBUTE_NS_LABEL,
                                 m_aAttributeType,
                                 aLabel );
     }
@@ -909,11 +909,11 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
             if ( nStyle & pStyle->nBit )
             {
                 if ( !aValue.isEmpty() )
-                    aValue = aValue.concat( OUString( "+" ) );
+                    aValue = aValue.concat( "+" );
                 aValue += OUString::createFromAscii( pStyle->attrName );
             }
         }
-        pList->AddAttribute( OUString( ATTRIBUTE_NS_STYLE ),
+        pList->AddAttribute( ATTRIBUTE_NS_STYLE,
                                 m_aAttributeType,
                                 aValue );
     }

@@ -1236,7 +1236,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     // Set $(prog), $(progpath), $(progurl)
     INetURLObject aProgObj(
         m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL] );
-    if ( !aProgObj.HasError() && aProgObj.insertName( OUString(LIBO_BIN_FOLDER) ) )
+    if ( !aProgObj.HasError() && aProgObj.insertName( LIBO_BIN_FOLDER ) )
     {
         m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ] = aProgObj.GetMainURL(INetURLObject::NO_DECODE);
         m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGURL ]  = m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ];

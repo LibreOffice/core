@@ -115,7 +115,7 @@ void FwkTabPage::CreateDialog()
             }
         }
 
-        CallMethod( OUString(INITIALIZE_METHOD) );
+        CallMethod( INITIALIZE_METHOD );
     }
     catch ( const lang::IllegalArgumentException& )
     {

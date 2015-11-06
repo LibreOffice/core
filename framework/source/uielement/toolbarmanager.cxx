@@ -217,7 +217,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
     sal_uInt16 nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
-    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, OUString("CreateDialog")))
+    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "CreateDialog"))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
 
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
@@ -1111,7 +1111,7 @@ void ToolBarManager::AddImageOrientationListener()
         m_xImageOrientationListener.set( static_cast< ::cppu::OWeakObject *>(
                                         pImageOrientation ), UNO_QUERY );
         pImageOrientation->addStatusListener(
-            OUString( ".uno:ImageOrientation" ));
+            ".uno:ImageOrientation");
         pImageOrientation->bindListener();
     }
 }

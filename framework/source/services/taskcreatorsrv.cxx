@@ -138,15 +138,15 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 {
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
-    css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_PARENTFRAME)                  , css::uno::Reference< css::frame::XFrame >());
-    OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_FRAMENAME)                    , OUString()                          );
-    bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_MAKEVISIBLE)                  , false );
-    bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CREATETOPWINDOW)              , true );
+    css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(ARGUMENT_PARENTFRAME                  , css::uno::Reference< css::frame::XFrame >());
+    OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(ARGUMENT_FRAMENAME                    , OUString()                          );
+    bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(ARGUMENT_MAKEVISIBLE                  , false );
+    bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(ARGUMENT_CREATETOPWINDOW              , true );
     // only possize=[0,0,0,0] triggers default handling of vcl !
-    css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_POSSIZE)                      , css::awt::Rectangle(0, 0, 0, 0)            );
-    css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CONTAINERWINDOW)              , css::uno::Reference< css::awt::XWindow >() );
-    bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , false );
-    bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , true );
+    css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(ARGUMENT_POSSIZE                      , css::awt::Rectangle(0, 0, 0, 0)            );
+    css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(ARGUMENT_CONTAINERWINDOW              , css::uno::Reference< css::awt::XWindow >() );
+    bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE , false );
+    bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(ARGUMENT_ENABLE_TITLEBARUPDATE        , true );
 
     // We use FrameName property to set it as API name of the new created frame later.
     // But those frame names must be different from the set of special target names as e.g. _blank, _self etcpp !

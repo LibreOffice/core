@@ -876,7 +876,7 @@ bool LoadEnv::impl_handleContent()
     while(xSet->hasMoreElements())
     {
         ::comphelper::SequenceAsHashMap lProps   (xSet->nextElement());
-        OUString                 sHandler = lProps.getUnpackedValueOrDefault(OUString(PROP_NAME), OUString());
+        OUString                 sHandler = lProps.getUnpackedValueOrDefault(PROP_NAME, OUString());
 
         css::uno::Reference< css::frame::XNotifyingDispatch > xHandler;
         try
@@ -920,9 +920,9 @@ bool LoadEnv::impl_furtherDocsAllowed()
     {
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 xContext,
-                                OUString("org.openoffice.Office.Common/"),
-                                OUString("Misc"),
-                                OUString("MaxOpenDocuments"),
+                                "org.openoffice.Office.Common/",
+                                "Misc",
+                                "MaxOpenDocuments",
                                 ::comphelper::ConfigurationHelper::E_READONLY);
 
         // NIL means: count of allowed documents = infinite !
@@ -1167,7 +1167,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
             // try everyone ...
             // Ignore any loader, which makes trouble :-)
             ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
-            OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(OUString(PROP_NAME), OUString());
+            OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(PROP_NAME, OUString());
             css::uno::Reference< css::uno::XInterface > xLoader;
 
             xLoader = xLoaderFactory->createInstance(sLoader);
@@ -1639,9 +1639,9 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
             css::uno::Any const a =
                 ::comphelper::ConfigurationHelper::readDirectKey(
                   xContext,
-                  OUString("org.openoffice.Office.Common/View"),
-                  OUString("NewDocumentHandling"),
-                  OUString("ForceFocusAndToFront"),
+                  "org.openoffice.Office.Common/View",
+                  "NewDocumentHandling",
+                  "ForceFocusAndToFront",
                   ::comphelper::ConfigurationHelper::E_READONLY);
             a >>= bForceFrontAndFocus;
         }

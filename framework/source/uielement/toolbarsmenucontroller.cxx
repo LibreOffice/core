@@ -473,11 +473,11 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             if ( m_aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" ||
                  m_aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" )
-                addCommand( m_xPopupMenu, OUString( CMD_COLORBAR ), aEmptyString );
+                addCommand( m_xPopupMenu, CMD_COLORBAR, aEmptyString );
             else if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
-                addCommand( m_xPopupMenu, OUString( CMD_INPUTLINEBAR ), aEmptyString );
+                addCommand( m_xPopupMenu, CMD_INPUTLINEBAR, aEmptyString );
             else
-                addCommand( m_xPopupMenu, OUString( CMD_FORMULABAR ), aEmptyString );
+                addCommand( m_xPopupMenu, CMD_FORMULABAR, aEmptyString );
         }
 
         bool          bAddCommand( true );
@@ -487,7 +487,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         if ( aCmdOptions.HasEntries( SvtCommandOptions::CMDOPTION_DISABLED ))
         {
             if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
-                                     OUString( CONFIGURE_TOOLBARS_CMD )))
+                                     CONFIGURE_TOOLBARS_CMD))
                 bAddCommand = false;
         }
 

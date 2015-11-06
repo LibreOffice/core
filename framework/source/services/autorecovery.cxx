@@ -1776,13 +1776,13 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
         ::comphelper::ConfigurationHelper::readDirectKey(m_xContext,
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
-                                                         OUString(CFG_ENTRY_MINSPACE_DOCSAVE),
+                                                         CFG_ENTRY_MINSPACE_DOCSAVE,
                                                          ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceDocSave;
 
         ::comphelper::ConfigurationHelper::readDirectKey(m_xContext,
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
-                                                         OUString(CFG_ENTRY_MINSPACE_CONFIGSAVE),
+                                                         CFG_ENTRY_MINSPACE_CONFIGSAVE,
                                                          ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceConfigSave;
     }
     catch(const css::uno::Exception&)
@@ -1954,7 +1954,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         if (! xCFG.is())
         {
             // open module config on demand and cache the update access
-            xCFG.set( ::comphelper::ConfigurationHelper::openConfig(m_xContext, OUString(CFG_PACKAGE_MODULES),
+            xCFG.set( ::comphelper::ConfigurationHelper::openConfig(m_xContext, CFG_PACKAGE_MODULES,
                            ::comphelper::ConfigurationHelper::E_STANDARD),
                       css::uno::UNO_QUERY_THROW);
 
@@ -1978,9 +1978,9 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
                     "com.sun.star.document.TypeDetection", m_xContext), css::uno::UNO_QUERY_THROW);
 
         ::comphelper::SequenceAsHashMap       lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
-        OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(OUString(FILTER_PROP_TYPE), OUString());
+        OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(FILTER_PROP_TYPE, OUString());
         ::comphelper::SequenceAsHashMap       lTypeProps          (xTypeCFG->getByName(sTypeRegistration));
-        css::uno::Sequence< OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(OUString(TYPE_PROP_EXTENSIONS), css::uno::Sequence< OUString >());
+        css::uno::Sequence< OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(TYPE_PROP_EXTENSIONS, css::uno::Sequence< OUString >());
         if (lExtensions.getLength())
         {
             rInfo.Extension = "." + lExtensions[0];
@@ -3714,9 +3714,9 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // documents exists and was saved.
     ::comphelper::ConfigurationHelper::writeDirectKey(
         m_xContext,
-        OUString(CFG_PACKAGE_RECOVERY),
-        OUString(CFG_PATH_RECOVERYINFO),
-        OUString(CFG_ENTRY_CRASHED),
+        CFG_PACKAGE_RECOVERY,
+        CFG_PATH_RECOVERYINFO,
+        CFG_ENTRY_CRASHED,
         css::uno::makeAny(sal_True),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
@@ -3774,9 +3774,9 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
     // Reset the configuration hint "we was crashed"!
     ::comphelper::ConfigurationHelper::writeDirectKey(
         m_xContext,
-        OUString(CFG_PACKAGE_RECOVERY),
-        OUString(CFG_PATH_RECOVERYINFO),
-        OUString(CFG_ENTRY_CRASHED),
+        CFG_PACKAGE_RECOVERY,
+        CFG_PATH_RECOVERYINFO,
+        CFG_ENTRY_CRASHED,
         css::uno::makeAny(sal_False),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 }
@@ -3839,9 +3839,9 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
     // the on next startup we know what's happen last time
     ::comphelper::ConfigurationHelper::writeDirectKey(
         m_xContext,
-        OUString(CFG_PACKAGE_RECOVERY),
-        OUString(CFG_PATH_RECOVERYINFO),
-        OUString(CFG_ENTRY_SESSIONDATA),
+        CFG_PACKAGE_RECOVERY,
+        CFG_PATH_RECOVERYINFO,
+        CFG_ENTRY_SESSIONDATA,
         css::uno::makeAny(sal_True),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
@@ -3874,9 +3874,9 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
     SAL_INFO("fwk.autorecovery", "... reset config key 'SessionData'");
     ::comphelper::ConfigurationHelper::writeDirectKey(
         m_xContext,
-        OUString(CFG_PACKAGE_RECOVERY),
-        OUString(CFG_PATH_RECOVERYINFO),
-        OUString(CFG_ENTRY_SESSIONDATA),
+        CFG_PACKAGE_RECOVERY,
+        CFG_PATH_RECOVERYINFO,
+        CFG_ENTRY_SESSIONDATA,
         css::uno::makeAny(sal_False),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
@@ -4007,9 +4007,9 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                     bool bSessionData  = false;
                     ::comphelper::ConfigurationHelper::readDirectKey(
                                                     m_xContext,
-                                                    OUString(CFG_PACKAGE_RECOVERY),
-                                                    OUString(CFG_PATH_RECOVERYINFO),
-                                                    OUString(CFG_ENTRY_SESSIONDATA),
+                                                    CFG_PACKAGE_RECOVERY,
+                                                    CFG_PATH_RECOVERYINFO,
+                                                    CFG_ENTRY_SESSIONDATA,
                                                     ::comphelper::ConfigurationHelper::E_READONLY) >>= bSessionData;
 
                     bool bRecoveryData = m_lDocCache.size() > 0;
@@ -4026,18 +4026,18 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
         case AUTORECOVERY_PROPHANDLE_CRASHED :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xContext,
-                            OUString(CFG_PACKAGE_RECOVERY),
-                            OUString(CFG_PATH_RECOVERYINFO),
-                            OUString(CFG_ENTRY_CRASHED),
+                            CFG_PACKAGE_RECOVERY,
+                            CFG_PATH_RECOVERYINFO,
+                            CFG_ENTRY_CRASHED,
                             ::comphelper::ConfigurationHelper::E_READONLY);
                 break;
 
         case AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xContext,
-                            OUString(CFG_PACKAGE_RECOVERY),
-                            OUString(CFG_PATH_RECOVERYINFO),
-                            OUString(CFG_ENTRY_SESSIONDATA),
+                            CFG_PACKAGE_RECOVERY,
+                            CFG_PATH_RECOVERYINFO,
+                            CFG_ENTRY_SESSIONDATA,
                             ::comphelper::ConfigurationHelper::E_READONLY);
                 break;
     }
@@ -4337,7 +4337,7 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
     try
     {
         ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
-        aContent.executeCommand(OUString("delete"), css::uno::makeAny(sal_True));
+        aContent.executeCommand("delete", css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)
     {

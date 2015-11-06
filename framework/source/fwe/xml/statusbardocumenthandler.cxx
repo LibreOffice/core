@@ -516,13 +516,13 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
-    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_STATUSBAR ),
+    pList->AddAttribute( ATTRIBUTE_XMLNS_STATUSBAR,
                          m_aAttributeType,
-                         OUString( XMLNS_STATUSBAR ) );
+                         XMLNS_STATUSBAR );
 
-    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_XLINK ),
+    pList->AddAttribute( ATTRIBUTE_XMLNS_XLINK,
                          m_aAttributeType,
-                         OUString( XMLNS_XLINK ) );
+                         XMLNS_XLINK );
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBAR, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
@@ -587,19 +587,19 @@ throw ( SAXException, RuntimeException )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_ALIGN,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_ALIGN_RIGHT ) );
+                             ATTRIBUTE_ALIGN_RIGHT );
     }
     else if ( nStyle & ItemStyle::ALIGN_CENTER )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_ALIGN,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_ALIGN_CENTER ) );
+                             ATTRIBUTE_ALIGN_CENTER );
     }
     else
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_ALIGN,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_ALIGN_LEFT ) );
+                             ATTRIBUTE_ALIGN_LEFT );
     }
 
     // style ( SIB_IN is default )
@@ -607,13 +607,13 @@ throw ( SAXException, RuntimeException )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_STYLE,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_STYLE_FLAT ) );
+                             ATTRIBUTE_STYLE_FLAT );
     }
     else if ( nStyle & ItemStyle::DRAW_OUT3D )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_STYLE,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_STYLE_OUT ) );
+                             ATTRIBUTE_STYLE_OUT );
     }
 
     // autosize (default sal_False)
@@ -621,7 +621,7 @@ throw ( SAXException, RuntimeException )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_AUTOSIZE,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_BOOLEAN_TRUE ) );
+                             ATTRIBUTE_BOOLEAN_TRUE );
     }
 
     // ownerdraw (default sal_False)
@@ -629,7 +629,7 @@ throw ( SAXException, RuntimeException )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_OWNERDRAW,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_BOOLEAN_TRUE ) );
+                             ATTRIBUTE_BOOLEAN_TRUE );
     }
 
     // width (default 0)

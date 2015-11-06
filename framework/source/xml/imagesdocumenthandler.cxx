@@ -631,13 +631,13 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
 
-    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_IMAGE),
+    pList->AddAttribute( ATTRIBUTE_XMLNS_IMAGE,
                          m_aAttributeType,
-                         OUString( XMLNS_IMAGE ) );
+                         XMLNS_IMAGE );
 
-    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_XLINK ),
+    pList->AddAttribute( ATTRIBUTE_XMLNS_XLINK,
                          m_aAttributeType,
-                         OUString( XMLNS_XLINK ) );
+                         XMLNS_XLINK );
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGESCONTAINER, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
@@ -685,7 +685,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     {
         pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKMODE,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_MASKMODE_BITMAP ) );
+                             ATTRIBUTE_MASKMODE_BITMAP );
 
         pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKURL,
                              m_aAttributeType,
@@ -712,7 +712,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
 
         pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKMODE,
                              m_aAttributeType,
-                             OUString( ATTRIBUTE_MASKMODE_COLOR ) );
+                             ATTRIBUTE_MASKMODE_COLOR );
     }
 
     if ( !pImageList->aHighContrastURL.isEmpty() )

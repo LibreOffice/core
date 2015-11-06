@@ -303,7 +303,7 @@ void ComplexToolbarController::notifyFocusGet()
 {
     // send focus get notification
     uno::Sequence< beans::NamedValue > aInfo;
-    addNotifyInfo( OUString( "FocusSet" ),
+    addNotifyInfo( "FocusSet",
                     getDispatchFromCommand( m_aCommandURL ),
                     aInfo );
 }
@@ -312,7 +312,7 @@ void ComplexToolbarController::notifyFocusLost()
 {
     // send focus lost notification
     uno::Sequence< beans::NamedValue > aInfo;
-    addNotifyInfo( OUString( "FocusLost" ),
+    addNotifyInfo( "FocusLost",
                     getDispatchFromCommand( m_aCommandURL ),
                     aInfo );
 }
@@ -321,7 +321,7 @@ void ComplexToolbarController::notifyTextChanged( const OUString& aText )
 {
     // send text changed notification
     uno::Sequence< beans::NamedValue > aInfo { { "Text", css::uno::makeAny(aText) } };
-    addNotifyInfo( OUString( "TextChanged" ),
+    addNotifyInfo( "TextChanged",
                    getDispatchFromCommand( m_aCommandURL ),
                    aInfo );
 }
