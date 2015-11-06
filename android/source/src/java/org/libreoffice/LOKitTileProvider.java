@@ -397,10 +397,11 @@ public class LOKitTileProvider implements TileProvider {
         }
     }
 
-    private void mouseButton(int type, PointF inDocument, int numberOfClicks) {
+    private void mouseButton(int type, PointF inDocument, int numberOfClicks, float zoomFactor) {
         int x = (int) pixelToTwip(inDocument.x, mDPI);
         int y = (int) pixelToTwip(inDocument.y, mDPI);
 
+        mDocument.setClientZoom(TILE_SIZE, TILE_SIZE, (int) (mTileWidth / zoomFactor), (int) (mTileHeight / zoomFactor));
         mDocument.postMouseEvent(type, x, y, numberOfClicks, Document.MOUSE_BUTTON_LEFT, Document.KEYBOARD_MODIFIER_NONE);
     }
 
@@ -408,16 +409,16 @@ public class LOKitTileProvider implements TileProvider {
      * @see TileProvider#mouseButtonDown(android.graphics.PointF, int)
      */
     @Override
-    public void mouseButtonDown(PointF documentCoordinate, int numberOfClicks) {
-        mouseButton(Document.MOUSE_EVENT_BUTTON_DOWN, documentCoordinate, numberOfClicks);
+    public void mouseButtonDown(PointF documentCoordinate, int numberOfClicks, float zoomFactor) {
+        mouseButton(Document.MOUSE_EVENT_BUTTON_DOWN, documentCoordinate, numberOfClicks, zoomFactor);
     }
 
     /**
      * @see TileProvider#mouseButtonUp(android.graphics.PointF, int)
      */
     @Override
-    public void mouseButtonUp(PointF documentCoordinate, int numberOfClicks) {
-        mouseButton(Document.MOUSE_EVENT_BUTTON_UP, documentCoordinate, numberOfClicks);
+    public void mouseButtonUp(PointF documentCoordinate, int numberOfClicks, float zoomFactor) {
+        mouseButton(Document.MOUSE_EVENT_BUTTON_UP, documentCoordinate, numberOfClicks, zoomFactor);
     }
 
     @Override

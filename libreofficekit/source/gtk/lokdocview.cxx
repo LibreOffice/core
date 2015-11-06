@@ -1495,6 +1495,23 @@ setGraphicSelectionInThread(gpointer data)
 }
 
 static void
+setClientZoomInThread(gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+
+    if (!priv->m_pDocument)
+        return;
+    priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
+                                             pLOEvent->m_nTilePixelWidth,
+                                             pLOEvent->m_nTilePixelHeight,
+                                             pLOEvent->m_nTileTwipWidth,
+                                             pLOEvent->m_nTileTwipHeight);
+}
+
+static void
 postMouseEventInThread(gpointer data)
 {
     GTask* task = G_TASK(data);
@@ -1709,6 +1726,9 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
         break;
     case LOK_SET_GRAPHIC_SELECTION:
         setGraphicSelectionInThread(task);
+        break;
+    case LOK_SET_CLIENT_ZOOM:
+        setClientZoomInThread(task);
         break;
     }
 
@@ -2290,6 +2310,7 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+    GError* error = NULL;
 
     priv->m_fZoom = fZoom;
     long nDocumentWidthPixels = twipToPixel(priv->m_nDocumentWidthTwips, fZoom);
@@ -2302,6 +2323,23 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                 nDocumentWidthPixels,
                                 nDocumentHeightPixels);
+
+    // Update the client's view size
+    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    LOEvent* pLOEvent = new LOEvent(LOK_SET_CLIENT_ZOOM);
+    pLOEvent->m_nTilePixelWidth = nTileSizePixels;
+    pLOEvent->m_nTilePixelHeight = nTileSizePixels;
+    pLOEvent->m_nTileTwipWidth = pixelToTwip(nTileSizePixels, fZoom);
+    pLOEvent->m_nTileTwipHeight = pixelToTwip(nTileSizePixels, fZoom);
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+
+    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    if (error != NULL)
+    {
+        g_warning("Unable to call LOK_SET_CLIENT_ZOOM: %s", error->message);
+        g_clear_error(&error);
+    }
+    g_object_unref(task);
 }
 
 SAL_DLLPUBLIC_EXPORT float

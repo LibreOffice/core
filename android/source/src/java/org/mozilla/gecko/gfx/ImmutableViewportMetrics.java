@@ -106,6 +106,10 @@ public class ImmutableViewportMetrics {
         return new RectF(cssPageRectLeft, cssPageRectTop, cssPageRectRight, cssPageRectBottom);
     }
 
+    public float getZoomFactor() {
+        return zoomFactor;
+    }
+
     /*
      * Returns the viewport metrics that represent a linear transition between "this" and "to" at
      * time "t", which is on the scale [0, 1). This function interpolates all values stored in
