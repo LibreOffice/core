@@ -28,7 +28,6 @@
 #include <unordered_map>
 #include <vector>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScDocument;
 class ScTokenArray;
@@ -59,7 +58,7 @@ struct FormulaGroupContext : boost::noncopyable
     typedef std::vector<double, DoubleAllocType> NumArrayType;
     typedef std::vector<rtl_uString*> StrArrayType;
     typedef std::vector<std::unique_ptr<NumArrayType>> NumArrayStoreType;
-    typedef boost::ptr_vector<StrArrayType> StrArrayStoreType;
+    typedef std::vector<std::unique_ptr<StrArrayType>> StrArrayStoreType;
 
     struct ColKey
     {
@@ -89,7 +88,7 @@ struct FormulaGroupContext : boost::noncopyable
     typedef std::unordered_map<ColKey, ColArray, ColKey::Hash> ColArraysType;
 
     NumArrayStoreType m_NumArrays; /// manage life cycle of numeric arrays.
-    StrArrayStoreType maStrArrays; /// manage life cycle of string arrays.
+    StrArrayStoreType m_StrArrays; /// manage life cycle of string arrays.
 
     ColArraysType maColArrays; /// keep track of longest array for each column.
 

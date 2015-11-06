@@ -112,9 +112,9 @@ void FormulaGroupContext::ensureStrArray( ColArray& rColArray, size_t nArrayLen 
     if (rColArray.mpStrArray)
         return;
 
-    maStrArrays.push_back(
-        new sc::FormulaGroupContext::StrArrayType(nArrayLen, NULL));
-    rColArray.mpStrArray = &maStrArrays.back();
+    m_StrArrays.push_back(
+        o3tl::make_unique<sc::FormulaGroupContext::StrArrayType>(nArrayLen, nullptr));
+    rColArray.mpStrArray = m_StrArrays.back().get();
 }
 
 void FormulaGroupContext::ensureNumArray( ColArray& rColArray, size_t nArrayLen )

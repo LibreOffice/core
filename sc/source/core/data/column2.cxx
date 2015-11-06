@@ -2504,9 +2504,9 @@ copyFirstFormulaBlock(
         {
             if (!pStrArray)
             {
-                rCxt.maStrArrays.push_back(
-                    new sc::FormulaGroupContext::StrArrayType(nArrayLen, NULL));
-                pStrArray = &rCxt.maStrArrays.back();
+                rCxt.m_StrArrays.push_back(
+                    o3tl::make_unique<sc::FormulaGroupContext::StrArrayType>(nArrayLen, nullptr));
+                pStrArray = rCxt.m_StrArrays.back().get();
             }
 
             (*pStrArray)[nPos] = aRes.maString.getDataIgnoreCase();
@@ -2602,8 +2602,9 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
         case sc::element_type_string:
         case sc::element_type_edittext:
         {
-            rCxt.maStrArrays.push_back(new sc::FormulaGroupContext::StrArrayType(nRow2+1, NULL));
-            sc::FormulaGroupContext::StrArrayType& rArray = rCxt.maStrArrays.back();
+            rCxt.m_StrArrays.push_back(
+                o3tl::make_unique<sc::FormulaGroupContext::StrArrayType>(nRow2+1, nullptr));
+            sc::FormulaGroupContext::StrArrayType& rArray = *rCxt.m_StrArrays.back();
             pColArray = rCxt.setCachedColArray(nTab, nCol, NULL, &rArray);
             if (!pColArray)
                 // Failed to insert a new cached column array.
