@@ -1442,7 +1442,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(R
 // helper functions
 
 oslGenericFunction SAL_CALL LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, const sal_Char* pFunction )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
 

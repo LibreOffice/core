@@ -128,7 +128,7 @@ private:
     css::i18n::Calendar2 ref_cal;
     OUString ref_name;
 
-    oslGenericFunction SAL_CALL getFunctionSymbol( const css::lang::Locale& rLocale, const sal_Char* pFunction ) throw( css::uno::RuntimeException );
+    oslGenericFunction SAL_CALL getFunctionSymbol( const css::lang::Locale& rLocale, const sal_Char* pFunction ) throw( css::uno::RuntimeException, std::exception );
     sal_Unicode ** SAL_CALL getIndexArray(const css::lang::Locale& rLocale, sal_Int16& indexCount);
     sal_Unicode ** SAL_CALL getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, const OUString& rAlgorithm);
     css::uno::Sequence< css::i18n::CalendarItem2 > &
