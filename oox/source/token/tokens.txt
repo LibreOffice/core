@@ -1403,6 +1403,7 @@ control2
 controls
 convMailMergeEsc
 convex
+conveyor
 coolSlant
 coordorigin
 coordsize
@@ -1926,6 +1927,7 @@ documentType
 dodecagon
 dodgerBlue
 donut
+doors
 dos
 dot
 dotDash
@@ -2183,6 +2185,7 @@ fans
 fast
 fax
 fc
+ferris
 ffData
 fgClr
 fgColor
@@ -2264,6 +2267,7 @@ fitpath
 fitshape
 fixed
 fixedVal
+flash
 flat
 flatBorders
 flatTx
@@ -2320,6 +2324,7 @@ flowersRoses
 flowersTeacup
 flowersTiny
 fltVal
+flythrough
 fmla
 fmt
 fmtId
@@ -2459,6 +2464,7 @@ ghostCol
 ghostRow
 ghostWhite
 gingerbreadMan
+glitter
 glossaryDocument
 glow
 goal
@@ -2687,6 +2693,7 @@ hlinkMouseOver
 hold
 holeSize
 holly
+honeycomb
 homePlate
 honeydew
 horizontal
@@ -2867,6 +2874,7 @@ irohaFullWidth
 irregularSeal1
 irregularSeal2
 is
+isInverted
 isLgl
 isNarration
 isPhoto
@@ -3437,6 +3445,7 @@ months
 moon
 moons
 morning
+morph
 mosaic
 moveFrom
 moveFromRangeEnd
@@ -3788,6 +3797,7 @@ overrideClrMapping
 overwriteClear
 owners
 p
+p14
 pBdr
 pLen
 pPos
@@ -3821,6 +3831,7 @@ paleTurquoise
 paleVioletRed
 palmsBlack
 palmsColor
+pan
 pane
 panose
 panose1
@@ -4083,6 +4094,7 @@ printTwoOnOne
 printer
 printerSettings
 priority
+prism
 prnPr
 prnWhat
 product
@@ -4110,6 +4122,7 @@ prstDash
 prstGeom
 prstMaterial
 prstShdw
+prstTrans
 prstTxWarp
 pt
 ptCount
@@ -4290,6 +4303,7 @@ result
 rev
 revDir
 revPos
+reveal
 reverse
 reverseDiagStripe
 reviewed
@@ -4319,6 +4333,7 @@ rightMargin
 rightToLeft
 rightVertical
 rings
+ripple
 ris
 rm
 rnd
@@ -4688,6 +4703,7 @@ showsigndate
 shp
 shpTxLTRAlignCh
 shpTxRTLAlignCh
+shred
 shrinkToFit
 si
 sib
@@ -5647,6 +5663,7 @@ vocabulary
 vol
 volType
 volTypes
+vortex
 vstream
 vt
 w
@@ -5660,6 +5677,7 @@ wOff
 wR
 warmMatte
 warning
+warp
 watermarks
 wavAudioFile
 wave
@@ -5702,6 +5720,7 @@ weight
 wgp
 wheat
 wheel
+wheelReverse
 whenNotActive
 white
 whiteFlowers

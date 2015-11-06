@@ -70,11 +70,15 @@ dcTerms                 http://purl.org/dc/terms/
 xm                      http://schemas.microsoft.com/office/excel/2006/main
 mce                     http://schemas.openxmlformats.org/markup-compatibility/2006
 mceTest                 http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2
+
+# MSO 2010 extensions -----------------------------------------------------------------------
+
 wps                     http://schemas.microsoft.com/office/word/2010/wordprocessingShape
 wpg                     http://schemas.microsoft.com/office/word/2010/wordprocessingGroup
 wp14                    http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing
 w14                     http://schemas.microsoft.com/office/word/2010/wordml
 a14                     http://schemas.microsoft.com/office/drawing/2010/main
+p14                     http://schemas.microsoft.com/office/powerpoint/2010/main
 
 # extlst namespaces
 
