@@ -4400,8 +4400,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_ICON_SET, true, true);
                         if(!mrIconSet.GetIconSetData()->mbShowValue)
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
-                        for(ScIconSetFormat::const_iterator it = mrIconSet.begin();
-                                it != mrIconSet.end(); ++it)
+                        for (auto const& it : mrIconSet)
                         {
                             if(it->GetType() == COLORSCALE_FORMULA)
                             {

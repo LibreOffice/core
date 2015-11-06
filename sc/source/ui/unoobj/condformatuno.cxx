@@ -1596,7 +1596,7 @@ void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEnt
     if (!bFound)
         throw lang::IllegalArgumentException();
 
-    pData->maEntries[nPos].SetType(eType);
+    pData->m_Entries[nPos]->SetType(eType);
     switch (eType)
     {
         case COLORSCALE_FORMULA:
@@ -1605,7 +1605,7 @@ void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEnt
         default:
         {
             double nVal = xEntry->getFormula().toDouble();
-            pData->maEntries[nPos].SetValue(nVal);
+            pData->m_Entries[nPos]->SetValue(nVal);
         }
         break;
     }
@@ -1786,10 +1786,10 @@ ScIconSetEntryObj::~ScIconSetEntryObj()
 ScColorScaleEntry* ScIconSetEntryObj::getCoreObject()
 {
     ScIconSetFormat* pFormat = mxParent->getCoreObject();
-    if (pFormat->GetIconSetData()->maEntries.size() <= mnPos)
+    if (pFormat->GetIconSetData()->m_Entries.size() <= mnPos)
         throw lang::IllegalArgumentException();
 
-    return &pFormat->GetIconSetData()->maEntries[mnPos];
+    return pFormat->GetIconSetData()->m_Entries[mnPos].get();
 }
 
 sal_Int32 ScIconSetEntryObj::getType()

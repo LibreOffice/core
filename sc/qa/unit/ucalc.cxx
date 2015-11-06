@@ -70,6 +70,7 @@
 
 #include <formula/IFunctionDescription.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -5946,9 +5947,9 @@ void Test::testIconSet()
 
     ScIconSetFormat* pEntry = new ScIconSetFormat(m_pDoc);
     ScIconSetFormatData* pData = new ScIconSetFormatData;
-    pData->maEntries.push_back(new ScColorScaleEntry(0, COL_BLUE));
-    pData->maEntries.push_back(new ScColorScaleEntry(1, COL_GREEN));
-    pData->maEntries.push_back(new ScColorScaleEntry(2, COL_RED));
+    pData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(0, COL_BLUE));
+    pData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(1, COL_GREEN));
+    pData->m_Entries.push_back(o3tl::make_unique<ScColorScaleEntry>(2, COL_RED));
     pEntry->SetIconSetData(pData);
 
     m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);

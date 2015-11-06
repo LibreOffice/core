@@ -390,7 +390,7 @@ SvXMLImportContext* ScXMLIconSetFormatContext::CreateChildContext( sal_uInt16 nP
             {
                 ScColorScaleEntry* pEntry(0);
                 pContext = new ScXMLFormattingEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
-                mpFormatData->maEntries.push_back(pEntry);
+                mpFormatData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(pEntry));
             }
             break;
         default:

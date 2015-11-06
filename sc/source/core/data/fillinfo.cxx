@@ -42,6 +42,8 @@
 #include "cellvalue.hxx"
 #include "mtvcellfunc.hxx"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 const sal_uInt16 ROWINFO_MAX = 1024;
 
 enum FillInfoLinePos

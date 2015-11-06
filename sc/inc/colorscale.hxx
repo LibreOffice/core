@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SC_INC_COLORSCALE_HXX
 #define INCLUDED_SC_INC_COLORSCALE_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <formula/grammar.hxx>
 #include <tools/color.hxx>
 #include "rangelst.hxx"
@@ -334,7 +333,8 @@ struct ScIconSetFormatData
      * Specifies whether the icons should be shown in reverse order
      */
     bool mbReverse;
-    boost::ptr_vector<ScColorScaleEntry> maEntries;
+    typedef std::vector<std::unique_ptr<ScColorScaleEntry>> Entries_t;
+    Entries_t m_Entries;
     bool mbCustom;
     // the std::pair points to exactly one image
     // std..pair::second == -1 means no image
@@ -346,6 +346,9 @@ struct ScIconSetFormatData
         mbReverse(false),
         mbCustom(false)
         {}
+
+    ScIconSetFormatData(ScIconSetFormatData const&);
+    ScIconSetFormatData& operator=(ScIconSetFormatData const&) = delete; //TODO?
 };
 
 class SC_DLLPUBLIC ScIconSetFormat : public ScColorFormat
@@ -374,8 +377,8 @@ public:
     static ScIconSetMap* getIconSetMap();
     static BitmapEx& getBitmap( ScIconSetType eType, sal_Int32 nIndex );
 
-    typedef boost::ptr_vector<ScColorScaleEntry>::iterator iterator;
-    typedef boost::ptr_vector<ScColorScaleEntry>::const_iterator const_iterator;
+    typedef ScIconSetFormatData::Entries_t::iterator iterator;
+    typedef ScIconSetFormatData::Entries_t::const_iterator const_iterator;
 
     iterator begin();
     const_iterator begin() const;

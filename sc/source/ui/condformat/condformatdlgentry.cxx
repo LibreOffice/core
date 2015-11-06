@@ -1523,10 +1523,11 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
         sal_Int32 nType = static_cast<sal_Int32>(eType);
         maLbIconSetType->SelectEntryPos(nType);
 
-        for(size_t i = 0, n = pIconSetFormatData->maEntries.size();
+        for (size_t i = 0, n = pIconSetFormatData->m_Entries.size();
                 i < n; ++i)
         {
-            maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create( this, eType, pDoc, i, &pIconSetFormatData->maEntries[i] ) );
+            maEntries.push_back( VclPtr<ScIconSetFrmtDataEntry>::Create(
+                this, eType, pDoc, i, pIconSetFormatData->m_Entries[i].get()));
             Point aPos = maEntries[0]->GetPosPixel();
             aPos.Y() += maEntries[0]->GetSizePixel().Height() * i * 1.2;
             maEntries[i]->SetPosPixel( aPos );
@@ -1625,7 +1626,7 @@ ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
     for(ScIconSetFrmtDataEntriesType::const_iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
-        pData->maEntries.push_back((*itr)->CreateEntry(mpDoc, maPos));
+        pData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>((*itr)->CreateEntry(mpDoc, maPos)));
     }
     pFormat->SetIconSetData(pData);
 

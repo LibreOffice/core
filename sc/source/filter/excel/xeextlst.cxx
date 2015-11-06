@@ -217,7 +217,7 @@ XclExpExtIconSet::XclExpExtIconSet(const XclExpRoot& rRoot, const ScIconSetForma
     XclExpRoot(rRoot)
 {
     const ScIconSetFormatData& rData = *rFormat.GetIconSetData();
-    for (auto itr = rData.maEntries.begin(); itr != rData.maEntries.end(); ++itr)
+    for (auto const& itr : rData.m_Entries)
     {
         maCfvos.AppendNewRecord(new XclExpExtCfvo(*this, *itr, rPos, false));
     }

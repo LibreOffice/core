@@ -1387,8 +1387,7 @@ XclExpIconSet::XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rF
 {
     const ScRange* pRange = rFormat.GetRange().front();
     ScAddress aAddr = pRange->aStart;
-    for(ScIconSetFormat::const_iterator itr = rFormat.begin();
-            itr != rFormat.end(); ++itr)
+    for (auto const& itr : rFormat)
     {
         // exact position is not important, we allow only absolute refs
 
