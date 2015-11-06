@@ -279,7 +279,7 @@ void HelpLinker::initIndexerPreProcessor()
 /**
 *
 */
-void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerException)
+void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerException, std::exception)
 {
 
     if( bExtensionMode )
