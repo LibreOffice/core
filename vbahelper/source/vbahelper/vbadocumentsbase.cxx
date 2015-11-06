@@ -123,7 +123,7 @@ class DocumentsAccessImpl : public DocumentsAccessImpl_BASE
     NameIndexHash namesToIndices;
     VbaDocumentsBase::DOCUMENT_TYPE meDocType;
 public:
-    DocumentsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) throw (uno::RuntimeException) :m_xContext( xContext ), meDocType( eDocType )
+    DocumentsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) throw (uno::RuntimeException, std::exception) :m_xContext( xContext ), meDocType( eDocType )
     {
         uno::Reference< container::XEnumeration > xEnum = new DocumentsEnumImpl( m_xContext );
         sal_Int32 nIndex=0;
