@@ -68,6 +68,7 @@ public:
     void testSaveAsCalc();
     void testPasteWriter();
     void testRowColumnHeaders();
+    void testCellCursor();
     void testCommandResult();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testRowColumnHeaders);
+    CPPUNIT_TEST(testCellCursor);
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST_SUITE_END();
 
@@ -433,6 +435,24 @@ void DesktopLOKTest::testRowColumnHeaders()
         }
         nPrevious = nSize;
     }
+}
+
+void DesktopLOKTest::testCellCursor()
+{
+    LibLODocument_Impl* pDocument = loadDoc("search.ods");
+
+    boost::property_tree::ptree aTree;
+
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:CellCursor?tileWidth=1&tileHeight=1&outputWidth=1&outputHeight=1");
+
+    std::stringstream aStream(pJSON);
+    free(pJSON);
+    CPPUNIT_ASSERT(!aStream.str().empty());
+
+    boost::property_tree::read_json(aStream, aTree);
+
+    OString aRectangle(aTree.get<std::string>("commandValues").c_str());
+    CPPUNIT_ASSERT_EQUAL(aRectangle, OString("0, 0, 1278, 254"));
 }
 
 void DesktopLOKTest::testCommandResult()
