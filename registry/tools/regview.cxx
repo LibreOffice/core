@@ -34,71 +34,79 @@ int main( int argc, char * argv[] )
 int __cdecl main( int argc, char * argv[] )
 #endif
 {
-    RegHandle       hReg;
-    RegKeyHandle    hRootKey, hKey;
-
-    if (argc < 2 || argc > 3)
+    try
     {
-        fprintf(stderr, "using: regview registryfile [keyName]\n");
-        exit(1);
-    }
+        RegHandle       hReg;
+        RegKeyHandle    hRootKey, hKey;
 
-    OUString regName( convertToFileUrl(argv[1], strlen(argv[1])) );
-    if (reg_openRegistry(regName.pData, &hReg, RegAccessMode::READONLY) != RegError::NO_ERROR)
-    {
-        fprintf(stderr, "open registry \"%s\" failed\n", argv[1]);
-        exit(1);
-    }
-
-    if (reg_openRootKey(hReg, &hRootKey) == RegError::NO_ERROR)
-    {
-        if (argc == 3)
+        if (argc < 2 || argc > 3)
         {
-            OUString keyName( OUString::createFromAscii(argv[2]) );
-            if (reg_openKey(hRootKey, keyName.pData, &hKey) == RegError::NO_ERROR)
-            {
-                if (reg_dumpRegistry(hKey) != RegError::NO_ERROR)
-                {
-                    fprintf(stderr, "dumping registry \"%s\" failed\n", argv[1]);
-                }
+            fprintf(stderr, "using: regview registryfile [keyName]\n");
+            exit(1);
+        }
 
-                if (reg_closeKey(hKey) != RegError::NO_ERROR)
+        OUString regName( convertToFileUrl(argv[1], strlen(argv[1])) );
+        if (reg_openRegistry(regName.pData, &hReg, RegAccessMode::READONLY) != RegError::NO_ERROR)
+        {
+            fprintf(stderr, "open registry \"%s\" failed\n", argv[1]);
+            exit(1);
+        }
+
+        if (reg_openRootKey(hReg, &hRootKey) == RegError::NO_ERROR)
+        {
+            if (argc == 3)
+            {
+                OUString keyName( OUString::createFromAscii(argv[2]) );
+                if (reg_openKey(hRootKey, keyName.pData, &hKey) == RegError::NO_ERROR)
                 {
-                    fprintf(stderr, "closing key \"%s\" of registry \"%s\" failed\n",
+                    if (reg_dumpRegistry(hKey) != RegError::NO_ERROR)
+                    {
+                        fprintf(stderr, "dumping registry \"%s\" failed\n", argv[1]);
+                    }
+
+                    if (reg_closeKey(hKey) != RegError::NO_ERROR)
+                    {
+                        fprintf(stderr, "closing key \"%s\" of registry \"%s\" failed\n",
+                                argv[2], argv[1]);
+                    }
+                }
+                else
+                {
+                    fprintf(stderr, "key \"%s\" not exists in registry \"%s\"\n",
                             argv[2], argv[1]);
                 }
             }
             else
             {
-                fprintf(stderr, "key \"%s\" not exists in registry \"%s\"\n",
-                        argv[2], argv[1]);
+                if (reg_dumpRegistry(hRootKey) != RegError::NO_ERROR)
+                {
+                    fprintf(stderr, "dumping registry \"%s\" failed\n", argv[1]);
+                }
+            }
+
+            if (reg_closeKey(hRootKey) != RegError::NO_ERROR)
+            {
+                fprintf(stderr, "closing root key of registry \"%s\" failed\n", argv[1]);
             }
         }
         else
         {
-            if (reg_dumpRegistry(hRootKey) != RegError::NO_ERROR)
-            {
-                fprintf(stderr, "dumping registry \"%s\" failed\n", argv[1]);
-            }
+            fprintf(stderr, "open root key of registry \"%s\" failed\n", argv[1]);
         }
 
-        if (reg_closeKey(hRootKey) != RegError::NO_ERROR)
+        if (reg_closeRegistry(hReg) != RegError::NO_ERROR)
         {
-            fprintf(stderr, "closing root key of registry \"%s\" failed\n", argv[1]);
+            fprintf(stderr, "closing registry \"%s\" failed\n", argv[1]);
+            exit(1);
         }
-    }
-    else
-    {
-        fprintf(stderr, "open root key of registry \"%s\" failed\n", argv[1]);
-    }
 
-    if (reg_closeRegistry(hReg) != RegError::NO_ERROR)
-    {
-        fprintf(stderr, "closing registry \"%s\" failed\n", argv[1]);
-        exit(1);
+        return 0;
     }
-
-    return 0;
+    catch (std::exception& e)
+    {
+        fprintf(stderr, "failure: \"%s\"\n", e.what());
+        return 1;
+    }
 }
 
 
