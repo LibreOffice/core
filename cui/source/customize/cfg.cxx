@@ -4985,7 +4985,7 @@ IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, ImportHdl, Button *, void)
     }
 
     aImportDialog.SetCurrentFilter(
-        OUString("PNG - Portable Network Graphic"));
+        "PNG - Portable Network Graphic");
 
     if ( ERRCODE_NONE == aImportDialog.Execute() )
     {

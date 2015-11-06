@@ -891,7 +891,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickSaveHdl_Impl, Button*, void)
         aFile.Append( m_pBitmapList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( OUString("sob") );
+            aFile.SetExtension( "sob" );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );

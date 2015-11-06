@@ -107,14 +107,14 @@ public:
             rBar.LogicToPixel(Size(15, 0), MAP_APPFONT).Width());
         long nVersionWidth = 12 +
             std::max(rBar.GetTextWidth(rBar.GetItemText(3)),
-            GetTextWidth(OUString("0.0.0_00-icedtea")));
+            GetTextWidth("0.0.0_00-icedtea"));
         long nFeatureWidth = 12 +
             std::max(rBar.GetTextWidth(rBar.GetItemText(4)),
             GetTextWidth(m_sAccessibilityText));
         long nVendorWidth =
             std::max(GetSizePixel().Width() - (nCheckWidth + nVersionWidth + nFeatureWidth),
             6 + std::max(rBar.GetTextWidth(rBar.GetItemText(2)),
-            GetTextWidth(OUString("Sun Microsystems Inc."))));
+            GetTextWidth("Sun Microsystems Inc.")));
         long aStaticTabs[]= { 4, 0, 0, 0, 0, 0 };
         aStaticTabs[2] = nCheckWidth;
         aStaticTabs[3] = aStaticTabs[2] + nVendorWidth;
@@ -975,7 +975,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
 {
     sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
-    aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), OUString("*.jar;*.zip") );
+    aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), "*.jar;*.zip" );
     OUString sFolder;
     if ( m_pPathList->GetSelectEntryCount() > 0 )
     {

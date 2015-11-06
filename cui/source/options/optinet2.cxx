@@ -1075,7 +1075,7 @@ IMPL_LINK_TYPED(  SvxEMailTabPage, FileDialogHdl_Impl, Button*, pButton, void )
         OUString sUrl;
         osl::FileBase::getFileURLFromSystemPath(sPath, sUrl);
         aHelper.SetDisplayDirectory(sUrl);
-        aHelper.AddFilter( m_sDefaultFilterName, OUString("*"));
+        aHelper.AddFilter( m_sDefaultFilterName, "*");
 
         if ( ERRCODE_NONE == aHelper.Execute() )
         {

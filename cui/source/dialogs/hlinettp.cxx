@@ -136,7 +136,7 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
 
 void SvxHyperlinkInternetTp::setAnonymousFTPUser()
 {
-    m_pEdLogin->SetText(OUString(sAnonymous));
+    m_pEdLogin->SetText(sAnonymous);
     SvAddressParser aAddress( SvtUserOptions().GetEmail() );
     m_pEdPassword->SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : OUString() );
 

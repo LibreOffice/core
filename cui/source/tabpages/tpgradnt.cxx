@@ -766,7 +766,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickSaveHdl_Impl, Button*, void)
         aFile.Append( m_pGradientList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( OUString("sog") );
+            aFile.SetExtension( "sog" );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );

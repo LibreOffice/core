@@ -790,7 +790,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickSaveHdl_Impl, Button*, void)
         aFile.Append( m_pHatchingList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( OUString("soh") );
+            aFile.SetExtension( "soh" );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );

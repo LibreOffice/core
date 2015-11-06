@@ -1417,8 +1417,8 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& r
     m_pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0 );
 
     m_pFileDlg->SetTitle( rTitle );
-    m_pFileDlg->AddFilter( aFilterAllStr, OUString(FILEDIALOG_FILTER_ALL) );
-    m_pFileDlg->AddFilter( aFilterCfgStr, OUString("*.cfg") );
+    m_pFileDlg->AddFilter( aFilterAllStr, FILEDIALOG_FILTER_ALL );
+    m_pFileDlg->AddFilter( aFilterCfgStr, "*.cfg" );
     m_pFileDlg->SetCurrentFilter( aFilterCfgStr );
 
     Link<sfx2::FileDialogHelper*,void> aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )

@@ -1611,7 +1611,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                         AddTabPage( nPageId, rTextArray.GetString(i), nGroup );
                 }
 #ifdef DBG_UTIL
-                AddTabPage( RID_SW_TP_OPTTEST_PAGE, OUString("Internal Test"), nGroup );
+                AddTabPage( RID_SW_TP_OPTTEST_PAGE, "Internal Test", nGroup );
 #endif
             }
 
@@ -1627,7 +1627,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                         AddTabPage( nPageId, rHTMLArray.GetString(i), nGroup );
                 }
 #ifdef DBG_UTIL
-                AddTabPage( RID_SW_TP_OPTTEST_PAGE, OUString("Internal Test"), nGroup );
+                AddTabPage( RID_SW_TP_OPTTEST_PAGE, "Internal Test", nGroup );
 #endif
             }
         }

@@ -841,7 +841,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
         aFile.Append( pDashList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( OUString("sod") );
+            aFile.SetExtension( "sod" );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
