@@ -307,7 +307,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     bool bForceLastEntry(false);
     checkConfigFlag( bForceLastEntry,
                      m_bCacheHasForcedLastImpl,
-                     OUString("ForceSafeServiceImpl") );
+                     "ForceSafeServiceImpl" );
 
     // tdf#93870 - force VCL canvas in OpenGL mode for now.
     if( OpenGLWrapper::isVCLOpenGLEnabled() )
@@ -317,13 +317,13 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     bool bUseAAEntry(true);
     checkConfigFlag( bUseAAEntry,
                      m_bCacheHasUseAAEntry,
-                     OUString("UseAntialiasingCanvas") );
+                     "UseAntialiasingCanvas" );
 
     // use accelerated canvas, if config flag set (or not existing)
     bool bUseAcceleratedEntry(true);
     checkConfigFlag( bUseAcceleratedEntry,
                      m_bCacheHasUseAcceleratedEntry,
-                     OUString("UseAcceleratedCanvas") );
+                     "UseAcceleratedCanvas" );
 
     // try to reuse last working implementation for given service name
     const CacheVector::iterator aEnd(m_aCachedImplementations.end());
