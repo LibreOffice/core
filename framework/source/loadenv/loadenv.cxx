@@ -1713,7 +1713,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
             xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, xContext),
             css::uno::UNO_QUERY_THROW);
         ::comphelper::SequenceAsHashMap lProps (xFilterCfg->getByName(sFilter));
-        OUString                 sModule = lProps.getUnpackedValueOrDefault(FILTER_PROPNAME_DOCUMENTSERVICE, OUString());
+        OUString                 sModule = lProps.getUnpackedValueOrDefault(FILTER_PROPNAME_ASCII_DOCUMENTSERVICE, OUString());
 
         // get access to the configuration of this office module
         css::uno::Reference< css::container::XNameAccess > xModuleCfg(::comphelper::ConfigurationHelper::openConfig(
@@ -1726,7 +1726,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         // and apply it on the window.
         // Do nothing, if no configuration entry exists!
         OUString sWindowState;
-        ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES) >>= sWindowState;
+        ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES) >>= sWindowState;
         if (!sWindowState.isEmpty())
         {
             // SOLAR SAFE ->
