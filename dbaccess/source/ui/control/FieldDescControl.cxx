@@ -1659,7 +1659,7 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
             if ( !bTextFormat )
             {
                 Locale aLocale;
-                ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,OUString("Locale")) >>= aLocale;
+                ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,"Locale") >>= aLocale;
 
                 sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(xNumberFormatter,nFormatKey);
                 if(     (nNumberFormat & css::util::NumberFormat::DATE)    == css::util::NumberFormat::DATE

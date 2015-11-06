@@ -245,7 +245,7 @@ bool OGenericUnoController::Construct(vcl::Window* /*pParent*/)
     {
         SAL_WARN("dbaccess.ui","OGenericUnoController::Construct: could not create (or start listening at) the database context!");
         // at least notify the user. Though the whole component does not make any sense without the database context ...
-        ShowServiceNotAvailableError(getView(), OUString("com.sun.star.sdb.DatabaseContext"), true);
+        ShowServiceNotAvailableError(getView(), "com.sun.star.sdb.DatabaseContext", true);
     }
 
     return true;

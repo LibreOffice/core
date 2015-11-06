@@ -243,7 +243,7 @@ OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
     m_pTypeControl->Show();
     m_pTypeControl->Init();
 
-    m_pAutoEt->SetText(OUString("10"));
+    m_pAutoEt->SetText("10");
     m_pAutoEt->SetDecimalDigits(0);
     m_pAutoPb->SetClickHdl(LINK(this,OWizTypeSelect,ButtonClickHdl));
     m_pColumnNames->EnableMultiSelection(true);

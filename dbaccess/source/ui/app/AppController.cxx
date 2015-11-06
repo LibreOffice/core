@@ -1314,7 +1314,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 {
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
-                        openDialog(OUString("com.sun.star.sdb.UserAdministrationDialog"));
+                        openDialog("com.sun.star.sdb.UserAdministrationDialog");
                 }
                 break;
             case SID_DB_APP_TABLEFILTER:
@@ -1329,11 +1329,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 askToReconnect();
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
-                openDialog(OUString("com.sun.star.sdb.AdvancedDatabaseSettingsDialog"));
+                openDialog("com.sun.star.sdb.AdvancedDatabaseSettingsDialog");
                 askToReconnect();
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
-                openDialog(OUString("com.sun.star.sdb.DataSourceTypeChangeDialog"));
+                openDialog("com.sun.star.sdb.DataSourceTypeChangeDialog");
                 askToReconnect();
                 break;
             case ID_DIRECT_SQL:
@@ -2694,7 +2694,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
             ::comphelper::NamedValueCollection aLayoutInfo( m_xDataSource->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) );
             if ( aLayoutInfo.has( OUString(INFO_PREVIEW) ) )
             {
-                const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( OUString(INFO_PREVIEW), (sal_Int32)0 ) );
+                const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( INFO_PREVIEW, (sal_Int32)0 ) );
                 m_ePreviewMode = static_cast< PreviewMode >( nPreviewMode );
                 if ( getView() )
                     getContainer()->switchPreview( m_ePreviewMode );

@@ -1703,7 +1703,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
             else if ( nId == ID_TREE_EDIT_DATABASE )
             {
                 ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext( getORB(),
-                    OUString( "/org.openoffice.Office.DataAccess/Policies/Features/Common" ) ) );
+                    "/org.openoffice.Office.DataAccess/Policies/Features/Common" ) );
                 bool bHaveEditDatabase( true );
                 OSL_VERIFY( aConfig.getNodeValue( "EditDatabaseFromDataSourceView" ) >>= bHaveEditDatabase );
                 aReturn.bEnabled = getORB().is() && ( pDataSourceEntry != NULL ) && bHaveEditDatabase;
@@ -3094,21 +3094,21 @@ void SbaTableQueryBrowser::impl_initialize()
 
     const NamedValueCollection& rArguments( getInitParams() );
 
-    rArguments.get_ensureType( OUString(PROPERTY_DATASOURCENAME), sInitialDataSourceName );
-    rArguments.get_ensureType( OUString(PROPERTY_COMMAND_TYPE), nInitialDisplayCommandType );
-    rArguments.get_ensureType( OUString(PROPERTY_COMMAND), sInitialCommand );
-    rArguments.get_ensureType( OUString(PROPERTY_ACTIVE_CONNECTION), xForeignConnection );
-    rArguments.get_ensureType( OUString(PROPERTY_UPDATE_CATALOGNAME), aCatalogName );
-    rArguments.get_ensureType( OUString(PROPERTY_UPDATE_SCHEMANAME), aSchemaName );
-    rArguments.get_ensureType( OUString(PROPERTY_UPDATE_TABLENAME), aTableName );
-    rArguments.get_ensureType( OUString(PROPERTY_ESCAPE_PROCESSING), bEscapeProcessing );
+    rArguments.get_ensureType( PROPERTY_DATASOURCENAME, sInitialDataSourceName );
+    rArguments.get_ensureType( PROPERTY_COMMAND_TYPE, nInitialDisplayCommandType );
+    rArguments.get_ensureType( PROPERTY_COMMAND, sInitialCommand );
+    rArguments.get_ensureType( PROPERTY_ACTIVE_CONNECTION, xForeignConnection );
+    rArguments.get_ensureType( PROPERTY_UPDATE_CATALOGNAME, aCatalogName );
+    rArguments.get_ensureType( PROPERTY_UPDATE_SCHEMANAME, aSchemaName );
+    rArguments.get_ensureType( PROPERTY_UPDATE_TABLENAME, aTableName );
+    rArguments.get_ensureType( PROPERTY_ESCAPE_PROCESSING, bEscapeProcessing );
     rArguments.get_ensureType( "Frame", xFrame );
-    rArguments.get_ensureType( OUString(PROPERTY_SHOWMENU), m_bShowMenu );
+    rArguments.get_ensureType( PROPERTY_SHOWMENU, m_bShowMenu );
 
     // disable the browser if either of ShowTreeViewButton (compatibility name) or EnableBrowser
     // is present and set to FALSE
     bool bDisableBrowser =  !rArguments.getOrDefault( "ShowTreeViewButton", sal_True )   // compatibility name
-                            ||  !rArguments.getOrDefault( OUString(PROPERTY_ENABLE_BROWSER), sal_True );
+                            ||  !rArguments.getOrDefault( PROPERTY_ENABLE_BROWSER, sal_True );
     OSL_ENSURE( !rArguments.has( "ShowTreeViewButton" ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeViewButton is superseded by EnableBrowser!" );
     m_bEnableBrowser = !bDisableBrowser;
@@ -3116,7 +3116,7 @@ void SbaTableQueryBrowser::impl_initialize()
     // hide the tree view it is disabled in general, or if the settings tell to hide it initially
     bool bHideTreeView =    ( !m_bEnableBrowser )
                             ||  !rArguments.getOrDefault( "ShowTreeView", sal_True )  // compatibility name
-                            ||  !rArguments.getOrDefault( OUString(PROPERTY_SHOW_BROWSER), sal_True );
+                            ||  !rArguments.getOrDefault( PROPERTY_SHOW_BROWSER, sal_True );
     OSL_ENSURE( !rArguments.has( "ShowTreeView" ),
         "SbaTableQueryBrowser::impl_initialize: ShowTreeView is superseded by ShowBrowser!" );
 

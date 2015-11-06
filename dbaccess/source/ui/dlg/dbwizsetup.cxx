@@ -321,7 +321,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     {
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pGeneralPage->GetSelectedType() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( OUString("sdbc:dbase:") );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( "sdbc:dbase:" );
         OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
         activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), true );
 
@@ -506,16 +506,16 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(OUString("sdbc:mysql:odbc:"))));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:odbc:")));
             pPage = OConnectionTabPageSetup::CreateODBCTabPage( this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(OUString("sdbc:mysql:jdbc:"))));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:jdbc:")));
             pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( this, *m_pOutSet);
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(OUString("sdbc:mysql:mysqlc:"))));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix("sdbc:mysql:mysqlc:")));
             pPage = MySQLNativeSetupPage::Create( this, *m_pOutSet);
             break;
 

@@ -188,7 +188,7 @@ namespace dbaui
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rObjectName );
 
         const bool bIncludeQueryName = !_rObjectName.isEmpty();
-        const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( OUString(PROPERTY_GRAPHICAL_DESIGN), sal_True );
+        const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( PROPERTY_GRAPHICAL_DESIGN, sal_True );
         const bool bEditViewAsSQLCommand = ( m_nCommandType == CommandType::TABLE ) && !bGraphicalDesign;
 
         i_rDispatchArgs.put( OUString(PROPERTY_COMMAND_TYPE), m_nCommandType );

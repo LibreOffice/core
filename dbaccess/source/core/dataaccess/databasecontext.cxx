@@ -251,7 +251,7 @@ Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exc
 Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
 {
     ::comphelper::NamedValueCollection aArgs( _rArguments );
-    OUString sURL = aArgs.getOrDefault( OUString(INFO_POOLURL), OUString() );
+    OUString sURL = aArgs.getOrDefault( INFO_POOLURL, OUString() );
 
     Reference< XInterface > xDataSource;
     if ( !sURL.isEmpty() )

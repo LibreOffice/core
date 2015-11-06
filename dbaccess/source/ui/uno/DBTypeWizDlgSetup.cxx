@@ -49,10 +49,10 @@ ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XComponentContext 
     ,m_bOpenDatabase(true)
     ,m_bStartTableWizard(false)
 {
-    registerProperty(OUString("OpenDatabase"), 3, PropertyAttribute::TRANSIENT,
+    registerProperty("OpenDatabase", 3, PropertyAttribute::TRANSIENT,
         &m_bOpenDatabase, cppu::UnoType<bool>::get());
 
-    registerProperty(OUString("StartTableWizard"), 4, PropertyAttribute::TRANSIENT,
+    registerProperty("StartTableWizard", 4, PropertyAttribute::TRANSIENT,
         &m_bStartTableWizard, cppu::UnoType<bool>::get());
 }
 

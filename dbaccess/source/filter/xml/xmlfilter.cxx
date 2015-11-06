@@ -210,11 +210,11 @@ ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
 
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
-    GetNamespaceMap().Add( OUString ( sXML_np__db ),
+    GetNamespaceMap().Add( sXML_np__db,
                         GetXMLToken(XML_N_DB),
                         XML_NAMESPACE_DB );
 
-    GetNamespaceMap().Add( OUString ( sXML_np___db ),
+    GetNamespaceMap().Add( sXML_np___db,
                         GetXMLToken(XML_N_DB_OASIS),
                         XML_NAMESPACE_DB );
 }

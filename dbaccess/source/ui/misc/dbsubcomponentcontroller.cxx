@@ -187,7 +187,7 @@ namespace dbaui
         const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
 
         Reference< XConnection > xConnection;
-        xConnection = rArguments.getOrDefault( OUString(PROPERTY_ACTIVE_CONNECTION), xConnection );
+        xConnection = rArguments.getOrDefault( PROPERTY_ACTIVE_CONNECTION, xConnection );
 
         if ( !xConnection.is() )
             ::dbtools::isEmbeddedInDatabase( getModel(), xConnection );

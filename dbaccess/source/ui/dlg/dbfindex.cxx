@@ -481,7 +481,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
         try
         {
             ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aContent.executeCommand( OUString("delete"), makeAny( true ) );
+            aContent.executeCommand( "delete", makeAny( true ) );
         }
         catch (const Exception& e )
         {

@@ -1542,7 +1542,7 @@ namespace
                     for(;aIter != aTabEnd;++aIter)
                     {
                         OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second.get());
-                        if (pTabWin->ExistsField( OUString("*"), aDragLeft ))
+                        if (pTabWin->ExistsField( "*", aDragLeft ))
                         {
                             aDragLeft->SetAlias(OUString());
                             aDragLeft->SetTable(OUString());
@@ -2203,7 +2203,7 @@ namespace
                                 for(;aIter != aEnd;++aIter)
                                 {
                                     OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second.get());
-                                    if (pTabWin->ExistsField( OUString("*"), aInfo ))
+                                    if (pTabWin->ExistsField( "*", aInfo ))
                                     {
                                         aInfo->SetAlias(OUString());
                                         aInfo->SetTable(OUString());
@@ -2726,7 +2726,7 @@ SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, bo
 
 sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
 {
-    static sal_Int32 s_nDefaultWidth = GetTextWidth(OUString("0")) * 15;
+    static sal_Int32 s_nDefaultWidth = GetTextWidth("0") * 15;
     sal_Int32 nWidth = static_cast<OQueryController&>(getController()).getColWidth(_nColPos);
     if ( !nWidth )
         nWidth = s_nDefaultWidth;

@@ -219,7 +219,7 @@ namespace dbaui
 
                 ::comphelper::SequenceAsHashMap aFilterProperties( aProps );
                 OUString sDocumentService = aFilterProperties.getUnpackedValueOrDefault(
-                    OUString( "DocumentService" ), OUString() );
+                    "DocumentService", OUString() );
                 if ( sDocumentService.equalsAscii( _pAsciiModuleName ) )
                 {
                     // yes, it's a Base document

@@ -765,7 +765,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
 
         if(!sMaxStmt.isEmpty())
         {
-            sMaxStmt = sMaxStmt.replaceAt(sMaxStmt.getLength()-1,1,OUString(" "));
+            sMaxStmt = sMaxStmt.replaceAt(sMaxStmt.getLength()-1,1," ");
             OUString sStmt = "SELECT " + sMaxStmt + "FROM ";
             OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);

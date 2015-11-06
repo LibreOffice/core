@@ -512,13 +512,13 @@ namespace dbaui
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( OUString( "sdbc:dbase:" ) );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( "sdbc:dbase:" );
         bool bHideCreateNew = ( nCreateNewDBIndex == -1 );
 
         // also, if our application policies tell us to hide the option, do it
         ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext(
             ::comphelper::getProcessComponentContext(),
-            OUString( "/org.openoffice.Office.DataAccess/Policies/Features/Base" )
+            "/org.openoffice.Office.DataAccess/Policies/Features/Base"
         ) );
         bool bAllowCreateLocalDatabase( true );
         OSL_VERIFY( aConfig.getNodeValue( "CreateLocalDatabase" ) >>= bAllowCreateLocalDatabase );
@@ -619,7 +619,7 @@ namespace dbaui
     {
         // Sets jdbc as the default selected databse on startup.
         if (m_pRB_CreateDatabase->IsChecked() )
-            return m_pCollection->getTypeDisplayName( OUString( "jdbc:" ) );
+            return m_pCollection->getTypeDisplayName( "jdbc:" );
 
         return OGeneralPage::getDatasourceName( _rSet );
     }

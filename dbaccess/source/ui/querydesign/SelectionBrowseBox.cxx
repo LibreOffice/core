@@ -801,7 +801,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
                     if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
                         bError = fillColumnRef( pColumnRef->getChild(3), xConnection, aSelEntry, _bListAction );
                     else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
-                        bError = fillColumnRef( OUString("*"), OUString(), xMetaData, aSelEntry, _bListAction );
+                        bError = fillColumnRef( "*", OUString(), xMetaData, aSelEntry, _bListAction );
                     else
                     {
                         nFunctionType |= FKT_NUMERIC;

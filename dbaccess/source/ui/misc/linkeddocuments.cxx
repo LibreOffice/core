@@ -358,7 +358,7 @@ namespace dbaui
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
                 // more like a hack, insert an empty message
-                aInfo.prepend(OUString(" \n"));
+                aInfo.prepend(" \n");
 
                 OUString sMessage = ModuleRes(STR_COULDNOTOPEN_LINKEDDOC);
                 sMessage = sMessage.replaceFirst("$file$",_rLinkName);

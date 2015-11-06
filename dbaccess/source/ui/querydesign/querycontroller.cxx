@@ -884,8 +884,8 @@ void OQueryController::impl_initialize()
     }
 
     // non-legacy parameters which overwrite the legacy parameters
-    rArguments.get_ensureType( OUString(PROPERTY_COMMAND), sCommand );
-    rArguments.get_ensureType( OUString(PROPERTY_COMMAND_TYPE), m_nCommandType );
+    rArguments.get_ensureType( PROPERTY_COMMAND, sCommand );
+    rArguments.get_ensureType( PROPERTY_COMMAND_TYPE, m_nCommandType );
 
     // translate Command/Type into proper members
     // TODO/Later: all this (including those members) should be hidden behind some abstract interface,
@@ -909,17 +909,17 @@ void OQueryController::impl_initialize()
 
     // more legacy parameters
     bool bGraphicalDesign( true );
-    if ( rArguments.get_ensureType( OUString(PROPERTY_QUERYDESIGNVIEW), bGraphicalDesign ) )
+    if ( rArguments.get_ensureType( PROPERTY_QUERYDESIGNVIEW, bGraphicalDesign ) )
     {
         OSL_FAIL( "OQueryController::impl_initialize: QueryDesignView is regognized for compatibility only!" );
         m_bGraphicalDesign = bGraphicalDesign;
     }
 
     // more non-legacy
-    rArguments.get_ensureType( OUString(PROPERTY_GRAPHICAL_DESIGN), m_bGraphicalDesign );
+    rArguments.get_ensureType( PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
 
     bool bEscapeProcessing( true );
-    if ( rArguments.get_ensureType( OUString(PROPERTY_ESCAPE_PROCESSING), bEscapeProcessing ) )
+    if ( rArguments.get_ensureType( PROPERTY_ESCAPE_PROCESSING, bEscapeProcessing ) )
     {
         setEscapeProcessing_fireEvent( bEscapeProcessing );
 
@@ -938,11 +938,11 @@ void OQueryController::impl_initialize()
         ::comphelper::NamedValueCollection aCurrentQueryDesign( aCurrentQueryDesignProps );
         if ( aCurrentQueryDesign.has( OUString(PROPERTY_GRAPHICAL_DESIGN) ) )
         {
-            aCurrentQueryDesign.get_ensureType( OUString(PROPERTY_GRAPHICAL_DESIGN), m_bGraphicalDesign );
+            aCurrentQueryDesign.get_ensureType( PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
         }
         if ( aCurrentQueryDesign.has( OUString(PROPERTY_ESCAPE_PROCESSING) ) )
         {
-            aCurrentQueryDesign.get_ensureType( OUString(PROPERTY_ESCAPE_PROCESSING), m_bEscapeProcessing );
+            aCurrentQueryDesign.get_ensureType( PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
         }
         if ( aCurrentQueryDesign.has( "Statement" ) )
         {
@@ -1967,7 +1967,7 @@ bool OQueryController::allowQueries() const
         return false;
 
     const NamedValueCollection& rArguments( getInitParams() );
-    sal_Int32 nCommandType = rArguments.getOrDefault( OUString(PROPERTY_COMMAND_TYPE), (sal_Int32)CommandType::QUERY );
+    sal_Int32 nCommandType = rArguments.getOrDefault( PROPERTY_COMMAND_TYPE, (sal_Int32)CommandType::QUERY );
     bool bCreatingView = ( nCommandType == CommandType::TABLE );
     return !bCreatingView;
 }

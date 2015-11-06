@@ -900,7 +900,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
 
 const SfxFilter* getStandardDatabaseFilter()
 {
-    const SfxFilter* pFilter = SfxFilter::GetFilterByName(OUString("StarOffice XML (Base)"));
+    const SfxFilter* pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
     OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
     return pFilter;
 }

@@ -501,7 +501,7 @@ void OTableController::impl_initialize()
 
         const NamedValueCollection& rArguments( getInitParams() );
 
-        rArguments.get_ensureType( OUString(PROPERTY_CURRENTTABLE), m_sName );
+        rArguments.get_ensureType( PROPERTY_CURRENTTABLE, m_sName );
 
         // read autoincrement value set in the datasource
         ::dbaui::fillAutoIncrementValue(getDataSource(),m_bAllowAutoIncrementValue,m_sAutoIncrementValue);
@@ -959,7 +959,7 @@ bool OTableController::checkColumns(bool _bNew)
             pActFieldDescr->SetAutoIncrement(false);
             pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
-            pActFieldDescr->SetName( createUniqueName(OUString("ID") ));
+            pActFieldDescr->SetName( createUniqueName("ID" ));
             pActFieldDescr->SetPrimaryKey( true );
             m_vRowList.insert(m_vRowList.begin(),pNewRow);
 

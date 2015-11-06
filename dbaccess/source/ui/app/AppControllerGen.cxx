@@ -160,7 +160,7 @@ void OApplicationController::pasteFormat(SotClipboardFormatId _nFormatId)
 
 void OApplicationController::openDataSourceAdminDialog()
 {
-    openDialog( OUString( "com.sun.star.sdb.DatasourceAdministrationDialog" ) );
+    openDialog( "com.sun.star.sdb.DatasourceAdministrationDialog" );
 }
 
 void OApplicationController::openDialog( const OUString& _sServiceName )
@@ -225,7 +225,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
 
 void OApplicationController::openTableFilterDialog()
 {
-    openDialog( OUString( "com.sun.star.sdb.TableFilterDialog" ) );
+    openDialog( "com.sun.star.sdb.TableFilterDialog" );
 }
 
 void OApplicationController::refreshTables()
