@@ -6564,7 +6564,7 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
 
 bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile & rMtf )
 {
-    tools::SvRef<SotStorageStream> xStm = pStor->OpenSotStream(OUString(SVEXT_PERSIST_STREAM));
+    tools::SvRef<SotStorageStream> xStm = pStor->OpenSotStream(SVEXT_PERSIST_STREAM);
     xStm->SetVersion( pStor->GetVersion() );
     xStm->SetBufferSize( 8192 );
 
@@ -6705,7 +6705,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                     const GDIMetaFile * pMtf, const tools::SvRef<SotStorage>& rDest )
 {
     bool bMtfRead = false;
-    tools::SvRef<SotStorageStream> xOle10Stm = rDest->OpenSotStream( OUString("\1Ole10Native"),
+    tools::SvRef<SotStorageStream> xOle10Stm = rDest->OpenSotStream( "\1Ole10Native",
                                                     StreamMode::WRITE| StreamMode::SHARE_DENYALL );
     if( xOle10Stm->GetError() )
         return false;
@@ -6946,7 +6946,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         if ( pName )
         {
             // TODO/LATER: perhaps we need to retrieve VisArea and Metafile from the storage also
-            tools::SvRef<SotStorageStream> xStr = rSrcStg.OpenSotStream( OUString( "package_stream" ), STREAM_STD_READ );
+            tools::SvRef<SotStorageStream> xStr = rSrcStg.OpenSotStream( "package_stream", STREAM_STD_READ );
             xStr->ReadStream( *xMemStream );
         }
         else
@@ -7090,13 +7090,13 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             {
                 {
                     sal_uInt8 aTestA[10];   // exist the \1CompObj-Stream ?
-                    tools::SvRef<SotStorageStream> xSrcTst = xObjStg->OpenSotStream( OUString( "\1CompObj" ) );
+                    tools::SvRef<SotStorageStream> xSrcTst = xObjStg->OpenSotStream( "\1CompObj" );
                     bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
                                     xSrcTst->Read( aTestA, sizeof( aTestA ) );
                     if( !bValidStorage )
                     {
                         // or the \1Ole-Stream ?
-                        xSrcTst = xObjStg->OpenSotStream( OUString( "\1Ole" ) );
+                        xSrcTst = xObjStg->OpenSotStream( "\1Ole" );
                         bValidStorage = xSrcTst.Is() && sizeof(aTestA) ==
                                         xSrcTst->Read(aTestA, sizeof(aTestA));
                     }
@@ -7112,7 +7112,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         // TODO/LATER: should the caller be notified if the aspect changes in future?
 
                         tools::SvRef<SotStorageStream> xObjInfoSrc = xObjStg->OpenSotStream(
-                            OUString( "\3ObjInfo" ), STREAM_STD_READ | StreamMode::NOCREATE );
+                            "\3ObjInfo", STREAM_STD_READ | StreamMode::NOCREATE );
                         if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                         {
                             sal_uInt8 nByte = 0;

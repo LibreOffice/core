@@ -435,7 +435,7 @@ void EscherPropertyContainer::CreateGradientProperties(
 
     // Transparency gradient: Means the third setting in transparency page is set
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
-        aAny, rXPropSet, OUString( "FillTransparenceGradient" ) ) )
+        aAny, rXPropSet, "FillTransparenceGradient" ) )
     {
         pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
 
@@ -451,7 +451,7 @@ void EscherPropertyContainer::CreateGradientProperties(
             if ( eFS == css::drawing::FillStyle_SOLID)
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue(
-                    aAnyTemp, rXPropSet, OUString( "FillColor" ) ) )
+                    aAnyTemp, rXPropSet, "FillColor" ) )
                 {
                     const_cast<css::awt::Gradient *>(pGradient)->StartColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
                     const_cast<css::awt::Gradient *>(pGradient)->EndColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
@@ -461,7 +461,7 @@ void EscherPropertyContainer::CreateGradientProperties(
             else if( eFS == css::drawing::FillStyle_GRADIENT )
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue(
-                    aAny, rXPropSet, OUString( "FillGradient" ) ) )
+                    aAny, rXPropSet, "FillGradient" ) )
                     pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
             }
         }
@@ -469,7 +469,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     }
     // Not transparency gradient
     else if ( EscherPropertyValueHelper::GetPropertyValue(
-        aAny, rXPropSet, OUString( "FillGradient" ) ) )
+        aAny, rXPropSet, "FillGradient" ) )
     {
         pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
     }
@@ -538,7 +538,7 @@ void EscherPropertyContainer::CreateGradientProperties(
 
     // Transparency gradient
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
-        aAny, rXPropSet, OUString( "FillTransparenceGradient" ) ) )
+        aAny, rXPropSet, "FillTransparenceGradient" ) )
     {
         pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
         if ( pGradient )
@@ -597,14 +597,14 @@ void EscherPropertyContainer::CreateFillProperties(
 
             case css::drawing::FillStyle_BITMAP :
             {
-                CreateGraphicProperties( rXPropSet, OUString( "FillBitmapURL" ), true );
+                CreateGraphicProperties( rXPropSet, "FillBitmapURL", true );
                 AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
                 AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor  );
             }
             break;
             case css::drawing::FillStyle_HATCH :
             {
-                CreateGraphicProperties( rXPropSet, OUString( "FillHatch" ), true );
+                CreateGraphicProperties( rXPropSet, "FillHatch", true );
             }
             break;
             case css::drawing::FillStyle_SOLID :
@@ -620,7 +620,7 @@ void EscherPropertyContainer::CreateFillProperties(
                         AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
 
                     if ( EscherPropertyValueHelper::GetPropertyValue(
-                            aAny, rXPropSet, OUString( "FillColor" ) ) )
+                            aAny, rXPropSet, "FillColor" ) )
                     {
                         sal_uInt32 nFillColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
                         nFillBackColor = nFillColor ^ 0xffffff;
@@ -638,7 +638,7 @@ void EscherPropertyContainer::CreateFillProperties(
         if ( eFS != css::drawing::FillStyle_NONE )
         {
             sal_uInt16 nTransparency = ( EscherPropertyValueHelper::GetPropertyValue(
-                aAny, rXPropSet, OUString( "FillTransparence" ), true ) )
+                aAny, rXPropSet, "FillTransparence", true ) )
                 ? *static_cast<sal_Int16 const *>(aAny.getValue()) : 0;
             if (  nTransparency )
                 AddOpt( ESCHER_Prop_fillOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
@@ -668,22 +668,22 @@ void EscherPropertyContainer::CreateTextProperties(
     bool bWordWrap          ( false );
     bool bAutoGrowSize      ( false );
 
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextWritingMode" ), true ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextWritingMode", true ) )
         aAny >>= eWM;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextVerticalAdjust" ), true ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextVerticalAdjust", true ) )
         aAny >>= eVA;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextHorizontalAdjust" ), true ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextHorizontalAdjust", true ) )
         aAny >>= eHA;
     if ( bIsCustomShape )
     {
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextWordWrap" ) ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextWordWrap" ) )
             aAny >>= bWordWrap;
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextAutoGrowHeight" ), true ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextAutoGrowHeight", true ) )
             aAny >>= bAutoGrowSize;
     }
     else if ( bIsTextFrame )
     {
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextAutoGrowWidth" ), true ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextAutoGrowWidth", true ) )
             aAny >>= bAutoGrowWidth;
 
 // i63936 not setting autogrowheight, because otherwise
@@ -692,13 +692,13 @@ void EscherPropertyContainer::CreateTextProperties(
 //      if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextAutoGrowHeight", sal_True ) )
 //          aAny >>= bAutoGrowHeight;
     }
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextLeftDistance" ) ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextLeftDistance" ) )
         aAny >>= nLeft;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextUpperDistance" ) ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextUpperDistance" ) )
         aAny >>= nTop;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextRightDistance" ) ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextRightDistance" ) )
         aAny >>= nRight;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "TextLowerDistance" ) ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextLowerDistance" ) )
         aAny >>= nBottom;
 
     ESCHER_AnchorText eAnchor = ESCHER_AnchorTop;
@@ -824,7 +824,7 @@ void EscherPropertyContainer::CreateTextProperties(
     if (bIsTextFrame && !bIsCustomShape)
     {
         sal_uInt16 nAngle = EscherPropertyValueHelper::GetPropertyValue(
-            aAny, rXPropSet, OUString( "RotateAngle" ), true ) ?
+            aAny, rXPropSet, "RotateAngle", true ) ?
                 (sal_uInt16)( ( *static_cast<sal_Int32 const *>(aAny.getValue()) ) + 5 ) / 10 : 0;
         if (nAngle==900)
         {
@@ -950,7 +950,7 @@ void EscherPropertyContainer::CreateLineProperties(
     sal_Int32 nArrowWidth;
 
     bool bSwapLineEnds = false;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "CircleKind" ), true ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "CircleKind", true ) )
     {
         css::drawing::CircleKind  eCircleKind;
         if ( aAny >>= eCircleKind )
@@ -975,7 +975,7 @@ void EscherPropertyContainer::CreateLineProperties(
     }
 
     // support LineCaps
-    if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, OUString( "LineCap" )))
+    if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, "LineCap"))
     {
         css::drawing::LineCap aLineCap(css::drawing::LineCap_BUTT);
 
@@ -1002,7 +1002,7 @@ void EscherPropertyContainer::CreateLineProperties(
         }
     }
 
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineStyle" ) ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineStyle" ) )
     {
         css::drawing::LineStyle eLS;
         if ( aAny >>= eLS )
@@ -1015,7 +1015,7 @@ void EscherPropertyContainer::CreateLineProperties(
 
                 case css::drawing::LineStyle_DASH :
                 {
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineDash" ) ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineDash" ) )
                     {
                         ESCHER_LineDashing eDash = ESCHER_LineSolid;
                         css::drawing::LineDash const * pLineDash = static_cast<css::drawing::LineDash const *>(aAny.getValue());
@@ -1070,7 +1070,7 @@ void EscherPropertyContainer::CreateLineProperties(
                 break;
             }
         }
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineColor" ) ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineColor" ) )
         {
             sal_uInt32 nLineColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
             AddOpt( ESCHER_Prop_lineColor, nLineColor );
@@ -1078,13 +1078,13 @@ void EscherPropertyContainer::CreateLineProperties(
         }
     }
 
-    sal_uInt32 nLineSize = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineWidth" ) ) )
+    sal_uInt32 nLineSize = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineWidth" ) )
         ? *static_cast<sal_uInt32 const *>(aAny.getValue()) : 0;
     if ( nLineSize > 1 )
         AddOpt( ESCHER_Prop_lineWidth, nLineSize * 360 );       // 100TH MM -> PT , 1PT = 12700 EMU
 
     ESCHER_LineJoin eLineJoin = ESCHER_LineJoinMiter;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "LineJoint" ), true ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineJoint", true ) )
     {
         css::drawing::LineJoint eLJ;
         if ( aAny >>= eLJ )
@@ -1144,11 +1144,11 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const css::uno::Refer
     sal_Int16 nLuminance = 0;
     sal_Int32 nContrast = 0;
 
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "GraphicColorMode" ) ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "GraphicColorMode" ) )
         aAny >>= eColorMode;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "AdjustLuminance" ) ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "AdjustLuminance" ) )
         aAny >>= nLuminance;
-    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "AdjustContrast" ) ) )
+    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "AdjustContrast" ) )
     {
         sal_Int16 nC = sal_Int16();
         aAny >>= nC;
@@ -1200,7 +1200,7 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const css::uno::Refer
             Size aCropSize(lcl_SizeToEmu(aPrefSize, aPrefMapMode));
             if ( aCropSize.Width() && aCropSize.Height() )
             {
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "GraphicCrop" ) ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "GraphicCrop" ) )
                 {
                     css::text::GraphicCrop aGraphCrop;
                     if ( aAny >>= aGraphCrop )
@@ -1240,12 +1240,12 @@ bool EscherPropertyContainer::CreateShapeProperties( const css::uno::Reference< 
         bool bVal = false;
         css::uno::Any aAny;
         sal_uInt32 nShapeAttr = 0;
-        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, OUString("Visible"), true) && (aAny >>= bVal))
+        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Visible", true) && (aAny >>= bVal))
         {
             if ( !bVal )
                 nShapeAttr |= 0x20002;  // set fHidden = true
         }
-        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, OUString( "Printable"), true) && (aAny >>= bVal))
+        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Printable", true) && (aAny >>= bVal))
         {
             if ( !bVal )
                 nShapeAttr |= 0x10000;  // set fPrint = false;
@@ -1290,7 +1290,7 @@ bool EscherPropertyContainer::CreateGraphicProperties( const css::uno::Reference
         {
             css::uno::Any aAny;
             std::unique_ptr< css::awt::Rectangle> pVisArea;
-            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString("VisibleArea" ) ) )
+            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "VisibleArea" ) )
             {
                 pVisArea.reset(new css::awt::Rectangle);
                 aAny >>= (*pVisArea);
@@ -1496,12 +1496,12 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             if ( aAny >>= aHatch )
             {
                 Color aBackColor;
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "FillColor" ) ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillColor" ) )
                 {
                     aBackColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()), false );
                 }
                 bool bFillBackground = false;
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "FillBackground" ), true ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBackground", true ) )
                 {
                     aAny >>= bFillBackground;
                 }
@@ -1514,44 +1514,44 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             }
         }
 
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "IsMirrored" ), true ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "IsMirrored", true ) )
             aAny >>= bMirrored;
 
         // #121074# transparency of graphic is not supported in MS formats, get and apply it
         // in the GetTransformedGraphic call in GetBlibID
-        if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, OUString("Transparency")))
+        if(EscherPropertyValueHelper::GetPropertyValue(aAny, rXPropSet, "Transparency"))
         {
             aAny >>= nTransparency;
         }
 
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString("AdjustRed") ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "AdjustRed" ) )
         {
             aAny >>= nRed;
         }
 
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString("AdjustGreen" ) ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "AdjustGreen" ) )
         {
             aAny >>= nGreen;
         }
 
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString("AdjustBlue" ) ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "AdjustBlue" ) )
         {
             aAny >>= nBlue;
         }
 
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "Gamma" ) ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "Gamma" ) )
         {
             aAny >>= fGamma;
         }
 
         if ( bCreateFillBitmap && bFillBitmapModeAllowed )
         {
-            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "FillBitmapMode" ), true ) )
+            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBitmapMode", true ) )
                 aAny >>= eBitmapMode;
         }
         else
         {
-            nAngle = bRotate && EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "RotateAngle" ), true )
+            nAngle = bRotate && EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "RotateAngle", true )
                 ? (sal_uInt16)( ( *static_cast<sal_Int32 const *>(aAny.getValue()) ) + 5 ) / 10
                 : 0;
         }
@@ -2343,20 +2343,20 @@ bool EscherPropertyContainer::CreateShadowProperties(
     sal_uInt32 nShadowFlags = 0x20000;
     if ( ( nLineFlags & 8 ) || ( nFillFlags & 0x10 ) || bGraphic )
     {
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "Shadow" ), true ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "Shadow", true ) )
         {
             if ( aAny >>= bHasShadow )
             {
                 if ( bHasShadow )
                 {
                     nShadowFlags |= 2;
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowColor" ) ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowColor" ) )
                         AddOpt( ESCHER_Prop_shadowColor, ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) ) );
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowXDistance" ) ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowXDistance" ) )
                         AddOpt( ESCHER_Prop_shadowOffsetX, *static_cast<sal_Int32 const *>(aAny.getValue()) * 360 );
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowYDistance" ) ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowYDistance" ) )
                         AddOpt( ESCHER_Prop_shadowOffsetY, *static_cast<sal_Int32 const *>(aAny.getValue()) * 360 );
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, OUString( "ShadowTransparence" ) ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowTransparence" ) )
                         AddOpt( ESCHER_Prop_shadowOpacity,  0x10000 - (((sal_uInt32)*static_cast<sal_uInt16 const *>(aAny.getValue())) * 655 ) );
                 }
             }
@@ -2974,7 +2974,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     {
                                         nLightFaceFlags |= 2;
                                         uno::Any aFillColor2;
-                                        if ( EscherPropertyValueHelper::GetPropertyValue( aFillColor2, aXPropSet, OUString( "FillColor2" ), true ) )
+                                        if ( EscherPropertyValueHelper::GetPropertyValue( aFillColor2, aXPropSet, "FillColor2", true ) )
                                         {
                                             sal_uInt32 nFillColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aFillColor2.getValue()) );
                                             AddOpt( DFF_Prop_c3DExtrusionColor, nFillColor );
@@ -3417,7 +3417,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 aFontName = "Arial Black";
                             AddOpt( DFF_Prop_gtextFont, aFontName );
 
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "CharScaleWidth" ), true ) )
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharScaleWidth", true ) )
                             {
                                 sal_Int16 nCharScaleWidth = 100;
                                 if ( aAny >>= nCharScaleWidth )
@@ -3429,7 +3429,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     }
                                 }
                             }
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "CharHeight" ), true ) )
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharHeight", true ) )
                             {
                                 float fCharHeight = 0.0;
                                 if ( aAny >>= fCharHeight )
@@ -3438,7 +3438,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     AddOpt(ESCHER_Prop_gtextSize, nTextSize);
                                 }
                             }
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "CharKerning" ), true ) )
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharKerning", true ) )
                             {
                                 sal_Int16 nCharKerning = sal_Int16();
                                 if ( aAny >>= nCharKerning )
@@ -3450,7 +3450,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nTextPathFlags &=~0x1000;
                                 }
                             }
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "CharPosture" ), true ) )
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharPosture", true ) )
                             {
                                 awt::FontSlant eFontSlant;
                                 if ( aAny >>= eFontSlant )
@@ -3462,7 +3462,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nTextPathFlags &=~0x10;
                                 }
                             }
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "CharWeight" ), true ) )
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharWeight", true ) )
                             {
                                 float fFontWidth = 0;
                                 if ( aAny >>= fFontWidth )
@@ -4320,7 +4320,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     const char* pString = "MSOFFICE9.0";
                     aGIFStream.Write( pString, strlen(pString) );
                     nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aGIFStream,
-                        rFilter.GetExportFormatNumberForShortName( OUString( "GIF" ) ) );
+                        rFilter.GetExportFormatNumberForShortName( "GIF" ) );
                     css::uno::Sequence< css::beans::PropertyValue > aFilterData( 1 );
                     css::uno::Sequence< css::beans::PropertyValue > aAdditionalChunkSequence( 1 );
                     sal_uInt32 nGIFSreamLen = aGIFStream.Tell();
@@ -4336,7 +4336,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     aFilterProp.Value <<= aAdditionalChunkSequence;
                     aFilterData[ 0 ] = aFilterProp;
                     nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aStream,
-                        rFilter.GetExportFormatNumberForShortName( OUString( "PNG" ) ), &aFilterData );
+                        rFilter.GetExportFormatNumberForShortName( "PNG" ), &aFilterData );
                 }
                 if ( nErrCode == ERRCODE_NONE )
                 {
@@ -4728,7 +4728,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             aPoly[ 2 ] = Point( aCenter.X(), aRect.Bottom() );
             aPoly[ 3 ] = Point( aRect.Right(), aCenter.Y() );
 
-            sal_Int32 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny, aPropertySet, OUString( "RotateAngle" ), true ) )
+            sal_Int32 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny, aPropertySet, "RotateAngle", true ) )
                     ? *static_cast<sal_Int32 const *>(aAny.getValue()) : 0;
             if ( nAngle )
                 aPoly.Rotate( aRect.TopLeft(), (sal_uInt16)( ( nAngle + 5 ) / 10 ) );

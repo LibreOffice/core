@@ -487,7 +487,7 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
             if ( aMacroInf.mbFound )
                 aProp.Value = CustomToolBarImportHelper::createCommandFromMacro( aMacroInf.msResolvedMacro );
             else
-                aProp.Value <<= OUString( "UnResolvedMacro[" ).concat( extraInfo.getOnAction() ).concat( OUString( "]" ) );
+                aProp.Value <<= OUString( "UnResolvedMacro[" ).concat( extraInfo.getOnAction() ).concat( "]" );
             sControlData.push_back( aProp );
         }
 

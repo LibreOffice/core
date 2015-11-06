@@ -65,9 +65,9 @@ ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFi
     maCBUseNativeDecoration->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 41 ) ),
                                              Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 
-    maCBTinyProfile->Check( maConfigItem.ReadBool( OUString( SVG_PROP_TINYPROFILE ), false ) );
-    maCBEmbedFonts->Check( maConfigItem.ReadBool( OUString( SVG_PROP_EMBEDFONTS ), true ) );
-    maCBUseNativeDecoration->Check( maConfigItem.ReadBool( OUString( SVG_PROP_NATIVEDECORATION ), true ) );
+    maCBTinyProfile->Check( maConfigItem.ReadBool( SVG_PROP_TINYPROFILE, false ) );
+    maCBEmbedFonts->Check( maConfigItem.ReadBool( SVG_PROP_EMBEDFONTS, true ) );
+    maCBUseNativeDecoration->Check( maConfigItem.ReadBool( SVG_PROP_NATIVEDECORATION, true ) );
 
     maBTOK->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 57 ) ),
                             Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
@@ -114,9 +114,9 @@ void ImpSVGDialog::dispose()
 
 Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 {
-    maConfigItem.WriteBool( OUString( SVG_PROP_TINYPROFILE ), maCBTinyProfile->IsChecked() );
-    maConfigItem.WriteBool( OUString( SVG_PROP_EMBEDFONTS ), maCBEmbedFonts->IsChecked() );
-    maConfigItem.WriteBool( OUString( SVG_PROP_NATIVEDECORATION ), maCBUseNativeDecoration->IsChecked() );
+    maConfigItem.WriteBool( SVG_PROP_TINYPROFILE, maCBTinyProfile->IsChecked() );
+    maConfigItem.WriteBool( SVG_PROP_EMBEDFONTS, maCBEmbedFonts->IsChecked() );
+    maConfigItem.WriteBool( SVG_PROP_NATIVEDECORATION, maCBUseNativeDecoration->IsChecked() );
 
     return( maConfigItem.GetFilterData() );
 }

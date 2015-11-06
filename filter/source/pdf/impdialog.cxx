@@ -1714,7 +1714,7 @@ IMPL_LINK_NOARG_TYPED( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, v
 
 IMPL_LINK_NOARG_TYPED( ImpPDFTabSigningPage, ClickmaPbSignCertClear, Button*, void )
 {
-    mpEdSignCert->SetText(OUString(""));
+    mpEdSignCert->SetText("");
     maSignCertificate.clear();
     mpPbSignCertClear->Enable( false );
     mpEdSignLocation->Enable( false );

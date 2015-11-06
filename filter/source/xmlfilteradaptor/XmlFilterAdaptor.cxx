@@ -144,8 +144,8 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
             if(!comphelper::isFileUrl(msTemplateName))
             {
                 SvtPathOptions aOptions;
-                OUString PathString = aOptions.SubstituteVariable(OUString("$(progurl)"));
-                PathString = PathString.concat(OUString( "/" ));
+                OUString PathString = aOptions.SubstituteVariable("$(progurl)");
+                PathString = PathString.concat("/");
                 msTemplateName=PathString.concat(msTemplateName);
             }
 
@@ -332,11 +332,11 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
     {
         comphelper::SequenceAsHashMap aMap(aAnySeq);
         msFilterName = aMap.getUnpackedValueOrDefault(
-            OUString( "Type" ), OUString());
+            "Type", OUString());
         msUserData = aMap.getUnpackedValueOrDefault(
-            OUString( "UserData" ), Sequence< OUString >());
+            "UserData", Sequence< OUString >());
         msTemplateName = aMap.getUnpackedValueOrDefault(
-            OUString( "TemplateName" ), OUString());
+            "TemplateName", OUString());
     }
 }
 OUString XmlFilterAdaptor_getImplementationName ()
