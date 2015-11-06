@@ -58,13 +58,13 @@
 
 #define SELF_TARGET         "_self"
 #define IMAP_ALL_FILTER     OUString("<Alle>")
-#define IMAP_CERN_FILTER    OUString("MAP - CERN")
-#define IMAP_NCSA_FILTER    OUString("MAP - NCSA")
-#define IMAP_BINARY_FILTER  OUString("SIP - StarView ImageMap")
-#define IMAP_ALL_TYPE       OUString("*.*")
-#define IMAP_BINARY_TYPE    OUString("*.sip")
-#define IMAP_CERN_TYPE      OUString("*.map")
-#define IMAP_NCSA_TYPE      OUString("*.map")
+#define IMAP_CERN_FILTER    "MAP - CERN"
+#define IMAP_NCSA_FILTER    "MAP - NCSA"
+#define IMAP_BINARY_FILTER  "SIP - StarView ImageMap"
+#define IMAP_ALL_TYPE       "*.*"
+#define IMAP_BINARY_TYPE    "*.sip"
+#define IMAP_CERN_TYPE      "*.map"
+#define IMAP_NCSA_TYPE      "*.map"
 
 SFX_IMPL_MODELESSDIALOG_WITHID( SvxIMapDlgChildWindow, SID_IMAP );
 
