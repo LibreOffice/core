@@ -1529,7 +1529,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         for (nX = nPosX; nX < nWhereX && (bAllowNeg || bIsTiledRendering || nScrPosX <= aScrSize.Width()); nX++)
         {
             if ( nX > MAXCOL )
-                nScrPosX = 65535;
+                nScrPosX = 0x7FFFFFFF;
             else
             {
                 nTSize = pDoc->GetColWidth( nX, nTabNo );
@@ -1560,7 +1560,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         for (nY = nPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
         {
             if ( nY > MAXROW )
-                nScrPosY = 65535;
+                nScrPosY = 0x7FFFFFFF;
             else
             {
                 nTSize = pDoc->GetRowHeight( nY, nTabNo );
@@ -1596,14 +1596,6 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     {
         //  mirror horizontal position
         nScrPosX = aScrSize.Width() - 1 - nScrPosX;
-    }
-
-    if (!bIsTiledRendering)
-    {
-        if (nScrPosX > 32767)
-            nScrPosX = 32767;
-        if (nScrPosY > 32767)
-            nScrPosY = 32767;
     }
 
     return Point( nScrPosX, nScrPosY );
