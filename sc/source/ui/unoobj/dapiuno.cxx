@@ -1495,7 +1495,7 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
                 if (aSrcName == maFieldId.maFieldName)
                 {
                     if( nFoundIdx == maFieldId.mnFieldIdx )
-                        return const_cast<ScDPSaveDimension*>(it.get());
+                        return it.get();
                     ++nFoundIdx;
                 }
             }
@@ -2071,7 +2071,7 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
                 if ( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
                 {
                     if ( it->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
-                        pNewDim = const_cast<ScDPSaveDimension*>(it.get()); // use this one
+                        pNewDim = it.get();     // use this one
                     else
                         ++nFound;               // count existing non-hidden occurrences
                 }

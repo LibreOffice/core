@@ -723,7 +723,7 @@ void ScXMLExportDataPilot::WriteDimensions(ScDPSaveData* pDPSave)
     const ScDPSaveData::DimsType& rDimensions = pDPSave->GetDimensions();
     for (auto const& iter : rDimensions)
     {
-        WriteDimension(const_cast<ScDPSaveDimension*>(iter.get()),
+        WriteDimension(iter.get(),
                 pDPSave->GetExistingDimensionData());
     }
 }
