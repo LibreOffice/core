@@ -604,7 +604,8 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
         return;
 
     // update the aLogicMode in ScViewData to something predictable
-    pViewData->SetZoom(Fraction(1, 1), Fraction(1, 1), true);
+    pViewData->SetZoom(Fraction(nTilePixelWidth * TWIPS_PER_PIXEL, nTileTwipWidth),
+                       Fraction(nTilePixelHeight * TWIPS_PER_PIXEL, nTileTwipHeight), true);
 
     // Calc operates in pixels...
     MouseEvent aEvent(Point(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY()), nCount,
@@ -872,6 +873,14 @@ bool ScModelObj::isMimeTypeSupported()
     return EditEngine::HasValidData(aDataHelper.GetTransferable());
 }
 
+void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_)
+{
+    nTilePixelWidth = nTilePixelWidth_;
+    nTilePixelHeight = nTilePixelHeight_;
+    nTileTwipWidth = nTileTwipWidth_;
+    nTileTwipHeight = nTileTwipHeight_;
+}
+
 OUString ScModelObj::getRowColumnHeaders(const Rectangle& rRectangle)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -930,6 +939,13 @@ void ScModelObj::initializeForTiledRendering()
     // tdf#93154: in tiled rendering LO doesn't always detect changes
     SvtMiscOptions aMiscOpt;
     aMiscOpt.SetSaveAlwaysAllowed(true);
+
+    // default tile size in pixels
+    nTilePixelWidth = 256;
+    nTilePixelHeight = 256;
+    // the default zoom level will be 1
+    nTileTwipWidth = nTilePixelWidth * TWIPS_PER_PIXEL;
+    nTileTwipHeight = nTilePixelHeight * TWIPS_PER_PIXEL;
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
