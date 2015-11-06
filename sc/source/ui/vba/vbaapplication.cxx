@@ -860,7 +860,7 @@ static uno::Reference< util::XPathSettings > lcl_getPathSettingsService( const u
     return xPathSettings;
 }
 
-OUString ScVbaApplication::getOfficePath( const OUString& _sPathType ) throw (uno::RuntimeException)
+OUString ScVbaApplication::getOfficePath( const OUString& _sPathType ) throw (uno::RuntimeException, std::exception)
 {
     OUString sRetPath;
     uno::Reference< util::XPathSettings > xProps = lcl_getPathSettingsService( mxContext );
