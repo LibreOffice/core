@@ -98,10 +98,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             << "ERROR: Bad format of <" << e.getUri() << ">, \""
             << e.getDetail() << "\"\n";
         return EXIT_FAILURE;
-    } catch (IllegalArgument & e) {
+    } catch (IllegalArgument& e) {
         std::cerr << "Illegal option " << e.m_message << '\n';
         return EXIT_FAILURE;
+    } catch (std::exception& e) {
+        std::cerr << "Failure " << e.what() << '\n';
+        return EXIT_FAILURE;
     }
+
     return EXIT_SUCCESS;
 }
 
