@@ -47,6 +47,7 @@
 #include "cellvalue.hxx"
 #include "attrib.hxx"
 #include "dpshttab.hxx"
+#include "tabvwsh.hxx"
 #include <scopetools.hxx>
 #include <columnspanset.hxx>
 #include <tokenstringcontext.hxx>
@@ -62,6 +63,7 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
@@ -82,6 +84,7 @@ public:
     void testTdf36933();
     void testTdf43700();
     void testTdf43534();
+    void testTdf91979();
     // void testTdf40110();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
@@ -89,6 +92,7 @@ public:
     CPPUNIT_TEST(testTdf36933);
     CPPUNIT_TEST(testTdf43700);
     CPPUNIT_TEST(testTdf43534);
+    CPPUNIT_TEST(testTdf91979);
     // CPPUNIT_TEST(testTdf40110);
     CPPUNIT_TEST_SUITE_END();
 private:
@@ -163,6 +167,45 @@ void ScFiltersTest::testTdf43534()
     //hard recalc should have updated to the correct result
     createCSVPath("fdo43534test.", aCSVFileName);
     // testFile(aCSVFileName, rDoc, 0);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf91979()
+{
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    Sequence < beans::PropertyValue > args(1);
+    args[0].Name = "Hidden";
+    args[0].Value <<= sal_True;
+
+    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
+        "private:factory/scalc",
+        "_blank",
+        0,
+        args);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh != NULL);
+
+    // Get the document controller
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell != NULL);
+    auto& aViewData = pViewShell->GetViewData();
+    auto* pDoc = aViewData.GetDocument();
+
+    // Check coordinates of a distant cell
+    Point aPos = aViewData.GetScrPos(MAXCOL - 1, 10000, SC_SPLIT_TOPLEFT, true);
+    int nColWidth = aViewData.ToPixel(pDoc->GetColWidth(0, 0), aViewData.GetPPTX());
+    int nRowHeight = aViewData.ToPixel(pDoc->GetRowHeight(0, 0), aViewData.GetPPTY());
+    CPPUNIT_ASSERT(aPos.getX() == (MAXCOL - 1) * nColWidth);
+    CPPUNIT_ASSERT(aPos.getY() == 10000 * nRowHeight);
 
     xDocSh->DoClose();
 }
