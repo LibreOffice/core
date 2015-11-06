@@ -263,7 +263,11 @@ static void doc_setGraphicSelection (LibreOfficeKitDocument* pThis,
                                   int nY);
 static void doc_resetSelection (LibreOfficeKitDocument* pThis);
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand);
-
+static void doc_setClientView(LibreOfficeKitDocument* pThis,
+                                    int nTilePixelWidth,
+                                    int nTilePixelHeight,
+                                    int nTileTwipWidth,
+                                    int nTileTwipHeight);
 static int doc_createView(LibreOfficeKitDocument* pThis);
 static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
 static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
@@ -303,6 +307,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
         m_pDocumentClass->resetSelection = doc_resetSelection;
         m_pDocumentClass->getCommandValues = doc_getCommandValues;
+        m_pDocumentClass->setClientView = doc_setClientView;
 
         m_pDocumentClass->createView = doc_createView;
         m_pDocumentClass->destroyView = doc_destroyView;
@@ -1330,6 +1335,19 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         gImpl->maLastExceptionMsg = "Unknown command, no values returned";
         return NULL;
     }
+}
+
+static void doc_setClientView(LibreOfficeKitDocument* pThis, int nTilePixelWidth, int nTilePixelHeight,
+        int nTileTwipWidth, int nTileTwipHeight)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    pDoc->setClientView(nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
 }
 
 static int doc_createView(LibreOfficeKitDocument* /*pThis*/)
