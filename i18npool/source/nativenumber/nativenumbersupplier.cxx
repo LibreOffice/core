@@ -59,6 +59,8 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh);
 
+OUString SAL_CALL getCyrillicNativeNumberString(const OUString& aNumberString);
+
 OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, bool useOffset, sal_Int16 number ) throw(RuntimeException)
 {
@@ -458,7 +460,8 @@ static const sal_Char *natnum1Locales[] = {
     "mn",
     "ne",
     "dz",
-    "fa"
+    "fa",
+    "cu"
 };
 static sal_Int16 nbOfLocale = SAL_N_ELEMENTS(natnum1Locales);
 
@@ -489,7 +492,8 @@ static const sal_Int16 natnum1[] = {
     NumberChar_mn,
     NumberChar_ne,
     NumberChar_dz,
-    NumberChar_EastIndic_ar
+    NumberChar_EastIndic_ar,
+    NumberChar_cu
 };
 static const sal_Int16 sizeof_natnum1 = SAL_N_ELEMENTS(natnum1);
 
@@ -592,6 +596,8 @@ OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUStr
         else if (num == NumberChar_he)
             return getHebrewNativeNumberString(aNumberString,
                     nNativeNumberMode == NativeNumberMode::NATNUM2);
+        else if (num == NumberChar_cu)
+            return getCyrillicNativeNumberString(aNumberString);
         else
             return AsciiToNativeChar(aNumberString, 0, aNumberString.getLength(), offset, useOffset, num);
     }
@@ -892,6 +898,127 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, boo
         OUStringBuffer output(count*2 + 2 + len - i);
 
         makeHebrewNumber(value, output, true, useGeresh);
+
+        if (i < len)
+            output.append(aNumberString.copy(i));
+
+        return output.makeStringAndClear();
+    }
+    else
+        return aNumberString;
+}
+
+// Support for Cyrillic Numerals
+// See UTN 41 for implementation information
+// http://www.unicode.org/notes/tn41/
+
+static sal_Unicode cyrillicThousandsMark = 0x0482;
+static sal_Unicode cyrillicTitlo = 0x0483;
+static sal_Unicode cyrillicTen = 0x0456;
+
+struct CyrillicNumberChar {
+    sal_Unicode code;
+    sal_Int16 value;
+} CyrillicNumberCharArray[] = {
+    { 0x0446, 900 },
+    { 0x047f, 800 },
+    { 0x0471, 700 },
+    { 0x0445, 600 },
+    { 0x0444, 500 },
+    { 0x0443, 400 },
+    { 0x0442, 300 },
+    { 0x0441, 200 },
+    { 0x0440, 100 },
+    { 0x0447, 90 },
+    { 0x043f, 80 },
+    { 0x047b, 70 },
+    { 0x046f, 60 },
+    { 0x043d, 50 },
+    { 0x043c, 40 },
+    { 0x043b, 30 },
+    { 0x043a, 20 },
+    { 0x0456, 10 },
+    { 0x0473, 9 },
+    { 0x0438, 8 },
+    { 0x0437, 7 },
+    { 0x0455, 6 },
+    { 0x0454, 5 },
+    { 0x0434, 4 },
+    { 0x0433, 3 },
+    { 0x0432, 2 },
+    { 0x0430, 1 }
+};
+
+static sal_Int16 nbOfCyrillicNumberChar = sizeof(CyrillicNumberCharArray)/sizeof(CyrillicNumberChar);
+
+void makeCyrillicNumber(sal_Int64 value, OUStringBuffer& output, bool addTitlo)
+{
+    sal_Int16 num = sal::static_int_cast<sal_Int16>(value % 1000);
+    if (value >= 1000) {
+        output.append(cyrillicThousandsMark);
+        makeCyrillicNumber(value / 1000, output, false);
+        if (value >= 10000 && (value - 10000) % 1000 != 0) {
+            output.append(" ");
+        }
+        if (value % 1000 == 0)
+            addTitlo = false;
+    }
+
+    for (sal_Int32 j = 0; num > 0 && j < nbOfCyrillicNumberChar; j++) {
+        if (num < 20 && num > 10) {
+            num -= 10;
+            makeCyrillicNumber(num, output, false);
+            output.append(cyrillicTen);
+            break;
+        }
+
+        if (CyrillicNumberCharArray[j].value <= num) {
+            output.append(CyrillicNumberCharArray[j].code);
+            num = sal::static_int_cast<sal_Int16>( num - CyrillicNumberCharArray[j].value );
+        }
+    }
+
+    if (addTitlo) {
+        if (output.getLength() == 1) {
+            output.append(cyrillicTitlo);
+        } else if (output.getLength() == 2) {
+            if (value > 800 && value < 900) {
+                output.append(cyrillicTitlo);
+            } else {
+                output.insert(1, cyrillicTitlo);
+            }
+        } else if (output.getLength() > 2) {
+            if (output.indexOf(" ") == output.getLength() - 2) {
+                output.append(cyrillicTitlo);
+            } else {
+                output.insert(output.getLength() - 1, cyrillicTitlo);
+            }
+        }
+    }
+}
+
+OUString SAL_CALL getCyrillicNativeNumberString(const OUString& aNumberString)
+{
+    sal_Int64 value = 0;
+    sal_Int32 i, count = 0, len = aNumberString.getLength();
+    const sal_Unicode *src = aNumberString.getStr();
+
+    for (i = 0; i < len; i++) {
+        sal_Unicode ch = src[i];
+        if (isNumber(ch)) {
+            if (++count >= 8) // Number is too long, could not be handled.
+                return aNumberString;
+            value = value * 10 + (ch - NUMBER_ZERO);
+        }
+        else if (isSeparator(ch) && count > 0) continue;
+        else if (isMinus(ch) && count == 0) continue;
+        else break;
+    }
+
+    if (value > 0) {
+        OUStringBuffer output(count*2 + 2 + len - i);
+
+        makeCyrillicNumber(value, output, true);
 
         if (i < len)
             output.append(aNumberString.copy(i));
