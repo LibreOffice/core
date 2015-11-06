@@ -133,28 +133,27 @@ bool Rectangle::IsInside( const Point& rPoint ) const
     if ( IsEmpty() )
         return false;
 
-    bool bRet = true;
     if ( nLeft <= nRight )
     {
         if ( (rPoint.X() < nLeft) || (rPoint.X() > nRight) )
-            bRet = false;
+            return false;
     }
     else
     {
         if ( (rPoint.X() > nLeft) || (rPoint.X() < nRight) )
-            bRet = false;
+            return false;
     }
     if ( nTop <= nBottom )
     {
         if ( (rPoint.Y() < nTop) || (rPoint.Y() > nBottom) )
-            bRet = false;
+            return false;
     }
     else
     {
         if ( (rPoint.Y() > nTop) || (rPoint.Y() < nBottom) )
-            bRet = false;
+            return false;
     }
-    return bRet;
+    return true;
 }
 
 bool Rectangle::IsInside( const Rectangle& rRect ) const
