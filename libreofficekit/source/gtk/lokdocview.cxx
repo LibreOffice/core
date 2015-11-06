@@ -337,7 +337,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
         return FALSE;
     }
 
-    priv->m_nKeyModifier = 0;
+    priv->m_nKeyModifier &= KEY_MOD2;
     switch (pEvent->keyval)
     {
     case GDK_KEY_BackSpace:
@@ -381,6 +381,8 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     case GDK_KEY_Alt_R:
         if (pEvent->type == GDK_KEY_PRESS)
             priv->m_nKeyModifier |= KEY_MOD2;
+        else
+            priv->m_nKeyModifier &= ~KEY_MOD2;
         break;
     default:
         if (pEvent->keyval >= GDK_KEY_F1 && pEvent->keyval <= GDK_KEY_F26)
@@ -394,6 +396,25 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     // css::awt::KeyModifier is needed in postKeyEvent().
     if (pEvent->state & GDK_SHIFT_MASK)
         nKeyCode |= KEY_SHIFT;
+
+    if (pEvent->state & GDK_CONTROL_MASK)
+        nKeyCode |= KEY_MOD1;
+
+    if (priv->m_nKeyModifier & KEY_MOD2)
+        nKeyCode |= KEY_MOD2;
+
+    if (nKeyCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)) {
+        if (pEvent->keyval >= GDK_KEY_a && pEvent->keyval <= GDK_KEY_z)
+        {
+            nKeyCode |= 512 + (pEvent->keyval - GDK_KEY_a);
+        }
+        else if (pEvent->keyval >= GDK_KEY_A && pEvent->keyval <= GDK_KEY_Z) {
+                nKeyCode |= 512 + (pEvent->keyval - GDK_KEY_A);
+        }
+        else if (pEvent->keyval >= GDK_KEY_0 && pEvent->keyval <= GDK_KEY_9) {
+                nKeyCode |= 256 + (pEvent->keyval - GDK_KEY_0);
+        }
+    }
 
     if (pEvent->type == GDK_KEY_RELEASE)
     {
