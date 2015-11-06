@@ -496,7 +496,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
 
 
     // If there is no Manager Stream, no further actions are necessary
-    if ( rStorage.IsStream( OUString(szManagerStream) ) )
+    if ( rStorage.IsStream( szManagerStream ) )
     {
         LoadBasicManager( rStorage, rBaseURL );
         // StdLib contains Parent:
@@ -514,8 +514,8 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
 
             rStdLibInfo.SetLib( pStdLib );
             StarBASICRef xStdLib = rStdLibInfo.GetLib();
-            xStdLib->SetName( OUString(szStdLibName) );
-            rStdLibInfo.SetLibName( OUString(szStdLibName) );
+            xStdLib->SetName( szStdLibName );
+            rStdLibInfo.SetLibName( szStdLibName );
             xStdLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
             xStdLib->SetModified( false );
         }
@@ -539,11 +539,11 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
 
         // #91626 Save all stream data to save it unmodified if basic isn't modified
         // in an 6.0+ office. So also the old basic dialogs can be saved.
-        tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( OUString(szManagerStream), eStreamReadMode );
+        tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szManagerStream, eStreamReadMode );
         mpImpl->mpManagerStream = new SvMemoryStream();
         static_cast<SvStream*>(&xManagerStream)->ReadStream( *mpImpl->mpManagerStream );
 
-        tools::SvRef<SotStorage> xBasicStorage = rStorage.OpenSotStorage( OUString(szBasicStorage), eStorageReadMode, false );
+        tools::SvRef<SotStorage> xBasicStorage = rStorage.OpenSotStorage( szBasicStorage, eStorageReadMode, false );
         if( xBasicStorage.Is() && !xBasicStorage->GetError() )
         {
             sal_uInt16 nLibs = GetLibCount();
@@ -560,7 +560,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
     else
     {
         ImpCreateStdLib( pParentFromStdLib );
-        if ( rStorage.IsStream( OUString(szOldManagerStream) ) )
+        if ( rStorage.IsStream( szOldManagerStream ) )
             LoadOldBasicManager( rStorage );
     }
 }
@@ -688,8 +688,8 @@ BasicManager::BasicManager( StarBASIC* pSLib, OUString* pLibPath, bool bDocMgr )
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     pStdLibInfo->SetLib( pSLib );
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
-    xStdLib->SetName(OUString(szStdLibName));
-    pStdLibInfo->SetLibName(OUString(szStdLibName) );
+    xStdLib->SetName(szStdLibName);
+    pStdLibInfo->SetLibName(szStdLibName );
     pSLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
 
     // Save is only necessary if basic has changed
@@ -707,8 +707,8 @@ void BasicManager::ImpMgrNotLoaded( const OUString& rStorageName )
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     pStdLibInfo->SetLib( new StarBASIC( NULL, mbDocMgr ) );
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
-    xStdLib->SetName( OUString(szStdLibName) );
-    pStdLibInfo->SetLibName( OUString(szStdLibName) );
+    xStdLib->SetName( szStdLibName );
+    pStdLibInfo->SetLibName( szStdLibName );
     xStdLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
     xStdLib->SetModified( false );
 }
@@ -719,14 +719,14 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     StarBASIC* pStdLib = new StarBASIC( pParentFromStdLib, mbDocMgr );
     pStdLibInfo->SetLib( pStdLib );
-    pStdLib->SetName( OUString(szStdLibName) );
-    pStdLibInfo->SetLibName( OUString(szStdLibName) );
+    pStdLib->SetName( szStdLibName );
+    pStdLibInfo->SetLibName( szStdLibName );
     pStdLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
 }
 
 void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL, bool bLoadLibs )
 {
-    tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( OUString(szManagerStream), eStreamReadMode );
+    tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szManagerStream, eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
     // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
@@ -818,7 +818,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
 
 void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 {
-    tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( OUString(szOldManagerStream), eStreamReadMode );
+    tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szOldManagerStream, eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.getLength(), "No Storage Name!" );
@@ -976,7 +976,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     {
         xStorage = new SotStorage( false, aStorageName, eStorageReadMode );
     }
-    tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage( OUString(szBasicStorage), eStorageReadMode, false );
+    tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage( szBasicStorage, eStorageReadMode, false );
 
     if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
     {
@@ -1172,7 +1172,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
         else
         {
             pLibInfo->GetLib()->SetModified( true ); // Must be saved after Add!
-            pLibInfo->SetStorageName( OUString(szImbedded) ); // Save in BasicManager-Storage
+            pLibInfo->SetStorageName( szImbedded ); // Save in BasicManager-Storage
         }
     }
     else
@@ -1238,10 +1238,10 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
             SAL_WARN("basic", "BasicManager::RemoveLib: Caught exception: " << e.Message);
         }
 
-        if (xStorage.Is() && xStorage->IsStorage(OUString(szBasicStorage)))
+        if (xStorage.Is() && xStorage->IsStorage(szBasicStorage))
         {
             tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage
-                            ( OUString(szBasicStorage), STREAM_STD_READWRITE, false );
+                            ( szBasicStorage, STREAM_STD_READWRITE, false );
 
             if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
             {
@@ -1260,7 +1260,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
                 if ( aInfoList.empty() )
                 {
                     xBasicStorage.Clear();
-                    xStorage->Remove( OUString(szBasicStorage) );
+                    xStorage->Remove( szBasicStorage );
                     xStorage->Commit();
                     // If no further Streams or SubStorages available,
                     // delete the Storage, too.

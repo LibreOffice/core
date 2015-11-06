@@ -37,7 +37,7 @@ class MacroSnippet
     }
     void MakeModule( const OUString& sSource )
     {
-        mpMod = mpBasic->MakeModule( OUString( "TestModule" ), sSource );
+        mpMod = mpBasic->MakeModule( "TestModule", sSource );
     }
     public:
     struct ErrorDetail
@@ -93,7 +93,7 @@ class MacroSnippet
         SbxVariableRef pReturn = NULL;
         if ( !Compile() )
             return pReturn;
-        SbMethod* pMeth = mpMod ? static_cast<SbMethod*>(mpMod->Find( OUString("doUnitTest"),  SbxCLASS_METHOD )) : NULL;
+        SbMethod* pMeth = mpMod ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxCLASS_METHOD )) : NULL;
         if ( pMeth )
         {
             if ( rArgs.getLength() )

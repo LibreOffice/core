@@ -990,25 +990,25 @@ static void SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
 void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
 {
     // delete the return value of CreateUnoService
-    SbxVariable* pVar = pBasic->GetRtl()->Find( OUString("CreateUnoService"), SbxCLASS_METHOD );
+    SbxVariable* pVar = pBasic->GetRtl()->Find( "CreateUnoService", SbxCLASS_METHOD );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete the return value of CreateUnoDialog
-    pVar = pBasic->GetRtl()->Find( OUString("CreateUnoDialog"), SbxCLASS_METHOD );
+    pVar = pBasic->GetRtl()->Find( "CreateUnoDialog", SbxCLASS_METHOD );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete the return value of CDec
-    pVar = pBasic->GetRtl()->Find( OUString("CDec"), SbxCLASS_METHOD );
+    pVar = pBasic->GetRtl()->Find( "CDec", SbxCLASS_METHOD );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete return value of CreateObject
-    pVar = pBasic->GetRtl()->Find( OUString("CreateObject"), SbxCLASS_METHOD );
+    pVar = pBasic->GetRtl()->Find( "CreateObject", SbxCLASS_METHOD );
     if( pVar )
     {
         pVar->SbxValue::Clear();
@@ -2551,25 +2551,25 @@ void SbUserFormModule::triggerInitializeEvent()
     if ( mbInit )
         return;
     SAL_INFO("basic", "**** SbUserFormModule::triggerInitializeEvent");
-    triggerMethod(OUString("Userform_Initialize"));
+    triggerMethod("Userform_Initialize");
     mbInit = true;
 }
 
 void SbUserFormModule::triggerTerminateEvent()
 {
     SAL_INFO("basic", "**** SbUserFormModule::triggerTerminateEvent");
-    triggerMethod(OUString( "Userform_Terminate" ));
+    triggerMethod("Userform_Terminate");
     mbInit=false;
 }
 
 void SbUserFormModule::triggerLayoutEvent()
 {
-    triggerMethod(OUString( "Userform_Layout" ));
+    triggerMethod("Userform_Layout");
 }
 
 void SbUserFormModule::triggerResizeEvent()
 {
-    triggerMethod(OUString("Userform_Resize"));
+    triggerMethod("Userform_Resize");
 }
 
 SbUserFormModuleInstance* SbUserFormModule::CreateInstance()

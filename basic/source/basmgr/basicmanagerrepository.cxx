@@ -266,12 +266,12 @@ namespace basic
         OUString aAppBasicDir( aPathCFG.GetBasicPath() );
         if ( aAppBasicDir.isEmpty() )
         {
-            aPathCFG.SetBasicPath(OUString("$(prog)"));
+            aPathCFG.SetBasicPath("$(prog)");
         }
 
         // Create basic and load it
         // AppBasicDir is now a PATH
-        INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable(OUString("$(progurl)")) );
+        INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable("$(progurl)") );
         aAppBasic.insertName( Application::GetAppName() );
 
         BasicManager* pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );

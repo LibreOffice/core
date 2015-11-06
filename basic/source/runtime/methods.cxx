@@ -4455,7 +4455,7 @@ RTLFUNC(Load)
         }
         else if (SbxObject* pSbxObj = dynamic_cast<SbxObject*>(pObj))
         {
-            SbxVariable* pVar = pSbxObj->Find(OUString("Load"), SbxCLASS_METHOD);
+            SbxVariable* pVar = pSbxObj->Find("Load", SbxCLASS_METHOD);
             if( pVar )
             {
                 pVar->GetInteger();
@@ -4486,7 +4486,7 @@ RTLFUNC(Unload)
         }
         else if (SbxObject *pSbxObj = dynamic_cast<SbxObject*>(pObj))
         {
-            SbxVariable* pVar = pSbxObj->Find(OUString("Unload"), SbxCLASS_METHOD);
+            SbxVariable* pVar = pSbxObj->Find("Unload", SbxCLASS_METHOD);
             if( pVar )
             {
                 pVar->GetInteger();

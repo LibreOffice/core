@@ -820,7 +820,7 @@ void SbClassModuleObject::triggerInitializeEvent()
     mbInitializeEventDone = true;
 
     // Search method
-    SbxVariable* pMeth = SbxObject::Find(OUString("Class_Initialize"), SbxCLASS_METHOD);
+    SbxVariable* pMeth = SbxObject::Find("Class_Initialize", SbxCLASS_METHOD);
     if( pMeth )
     {
         SbxValues aVals;
@@ -835,7 +835,7 @@ void SbClassModuleObject::triggerTerminateEvent()
         return;
     }
     // Search method
-    SbxVariable* pMeth = SbxObject::Find(OUString("Class_Terminate"), SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbxObject::Find("Class_Terminate", SbxCLASS_METHOD );
     if( pMeth )
     {
         SbxValues aVals;
@@ -1936,12 +1936,12 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         }
     }
     // HACK for SFX-Bullshit!
-    SbxVariable* p = Find( OUString("FALSE"), SbxCLASS_PROPERTY );
+    SbxVariable* p = Find( "FALSE", SbxCLASS_PROPERTY );
     if( p )
     {
         Remove( p );
     }
-    p = Find( OUString("TRUE"), SbxCLASS_PROPERTY );
+    p = Find( "TRUE", SbxCLASS_PROPERTY );
     if( p )
     {
         Remove( p );
@@ -2100,15 +2100,15 @@ void BasicCollection::Initialize()
     if ( !xAddInfo.Is() )
     {
         xAddInfo = new SbxInfo;
-        xAddInfo->AddParam(  OUString( "Item" ), SbxVARIANT );
-        xAddInfo->AddParam(  OUString( "Key" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
-        xAddInfo->AddParam(  OUString( "Before" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
-        xAddInfo->AddParam(  OUString( "After" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
+        xAddInfo->AddParam(  "Item", SbxVARIANT );
+        xAddInfo->AddParam(  "Key", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
+        xAddInfo->AddParam(  "Before", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
+        xAddInfo->AddParam(  "After", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
     }
     if ( !xItemInfo.Is() )
     {
         xItemInfo = new SbxInfo;
-        xItemInfo->AddParam(  OUString( "Index" ), SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional);
+        xItemInfo->AddParam(  "Index", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional);
     }
 }
 

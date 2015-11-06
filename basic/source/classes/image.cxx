@@ -333,8 +333,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 
                     }
 
-                    pType->Remove( OUString("Name"), SbxCLASS_DONTCARE );
-                    pType->Remove( OUString("Parent"), SbxCLASS_DONTCARE );
+                    pType->Remove( "Name", SbxCLASS_DONTCARE );
+                    pType->Remove( "Parent", SbxCLASS_DONTCARE );
 
                     AddType(pType);
                 }

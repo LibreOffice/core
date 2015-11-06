@@ -332,7 +332,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
 {
     css::uno::Reference< css::container::XNameContainer > aRetDlgLib;
 
-    SbxVariable* pDlgLibContVar = pBasic->Find(OUString("DialogLibraries"), SbxCLASS_OBJECT);
+    SbxVariable* pDlgLibContVar = pBasic->Find("DialogLibraries", SbxCLASS_OBJECT);
     if( pDlgLibContVar && 0 != dynamic_cast<const SbUnoObject*>( pDlgLibContVar) )
     {
         SbUnoObject* pDlgLibContUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pDlgLibContVar));

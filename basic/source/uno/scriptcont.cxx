@@ -521,7 +521,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
                 }
                 else
                 {
-                    aElementInetObj.setExtension( OUString( "pba" ) );
+                    aElementInetObj.setExtension( "pba" );
                 }
                 OUString aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
@@ -732,7 +732,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                 aElementInetObj.insertName( aElementName, false,
                                             INetURLObject::LAST_SEGMENT, true,
                                             INetURLObject::ENCODE_ALL );
-                aElementInetObj.setExtension( OUString( "pba" ) );
+                aElementInetObj.setExtension( "pba" );
                 OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
@@ -1029,7 +1029,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, false,
                     INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
-                aElementInetObj.setExtension( OUString( "pba" ) );
+                aElementInetObj.setExtension( "pba" );
                 OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 uno::Reference< embed::XStorage > xElementRootStorage;

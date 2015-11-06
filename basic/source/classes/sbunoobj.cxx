@@ -2329,8 +2329,8 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     static Reference< XIntrospection > xIntrospection;
 
     // beat out again the default properties of Sbx
-    Remove( OUString("Name"), SbxCLASS_DONTCARE );
-    Remove( OUString("Parent"), SbxCLASS_DONTCARE );
+    Remove( "Name", SbxCLASS_DONTCARE );
+    Remove( "Parent", SbxCLASS_DONTCARE );
 
     // check the type of the objects
     TypeClass eType = aUnoObj_.getValueType().getTypeClass();
@@ -3300,7 +3300,7 @@ void VBAConstantHelper::init()
     {
         Sequence< TypeClass > types(1);
         types[ 0 ] = TypeClass_CONSTANTS;
-        Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( OUString(defaultNameSpace), types, TypeDescriptionSearchDepth_INFINITE  );
+        Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( defaultNameSpace, types, TypeDescriptionSearchDepth_INFINITE  );
 
         if ( !xEnum.is())
         {
@@ -4742,7 +4742,7 @@ bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal )
         // Only for native COM objects
         if( pUnoObj->isNativeCOMObject() )
         {
-            SbxVariableRef pMeth = pObj->Find( OUString( "toString"  ), SbxCLASS_METHOD );
+            SbxVariableRef pMeth = pObj->Find( "toString", SbxCLASS_METHOD );
             if ( pMeth.Is() )
             {
                 SbxValues aRes;

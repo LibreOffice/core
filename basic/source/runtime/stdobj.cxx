@@ -722,8 +722,8 @@ SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
         }
 
     // #i92642: Remove default properties
-    Remove( OUString("Name"), SbxCLASS_DONTCARE );
-    Remove( OUString("Parent"), SbxCLASS_DONTCARE );
+    Remove( "Name", SbxCLASS_DONTCARE );
+    Remove( "Parent", SbxCLASS_DONTCARE );
 
     SetParent( pb );
 

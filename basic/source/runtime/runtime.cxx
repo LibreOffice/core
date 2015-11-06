@@ -2812,7 +2812,7 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     sal_Int32 iComma = aStr.indexOf((sal_Unicode)',');
     if( iComma >= 0 )
     {
-        aStr = aStr.replaceAt(iComma, 1, OUString("."));
+        aStr = aStr.replaceAt(iComma, 1, ".");
     }
     double n = ::rtl::math::stringToDouble( aStr, '.', ',' );
 
@@ -3631,7 +3631,7 @@ SbxBase* SbiRuntime::FindElementExtern( const OUString& rName )
                     {
                         // Parameter is missing
                         pElem = new SbxVariable( SbxSTRING );
-                        pElem->PutString( OUString("<missing parameter>"));
+                        pElem->PutString( "<missing parameter>");
                     }
                     else
                     {
