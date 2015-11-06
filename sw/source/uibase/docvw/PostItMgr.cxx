@@ -855,10 +855,17 @@ void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const Rectangle& /*rRe
         if (!pPostIt)
             continue;
 
-        Point aPoint(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
+        rRenderContext.Push(PushFlags::MAPMODE);
+        Point aOffset(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
+        MapMode aMapMode(rRenderContext.GetMapMode());
+        aMapMode.SetOrigin(aMapMode.GetOrigin() + aOffset);
+        rRenderContext.SetMapMode(aMapMode);
         Size aSize(pPostIt->PixelToLogic(pPostIt->GetSizePixel()));
-        Rectangle aRectangle(aPoint, aSize);
+        Rectangle aRectangle(Point(0, 0), aSize);
+
         pPostIt->PaintTile(rRenderContext, aRectangle);
+
+        rRenderContext.Pop();
     }
 }
 

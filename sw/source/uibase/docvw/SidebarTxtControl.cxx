@@ -53,7 +53,6 @@
 #include <shellres.hxx>
 #include <SwRewriter.hxx>
 #include <boost/scoped_ptr.hpp>
-#include <comphelper/lok.hxx>
 
 namespace sw { namespace sidebarwindows {
 
@@ -152,37 +151,25 @@ void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& 
     }
 }
 
-void SidebarTextControl::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
-{
-    Paint(rRenderContext, rRect);
-}
-
 void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Point aPoint(0, 0);
-    if (comphelper::LibreOfficeKit::isActive())
-        aPoint = rRect.TopLeft();
-
     if (!rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         if (mrSidebarWin.IsMouseOverSidebarWin() || HasFocus())
         {
-            rRenderContext.DrawGradient(Rectangle(aPoint, rRenderContext.PixelToLogic(GetSizePixel())),
+            rRenderContext.DrawGradient(Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
                                         Gradient(GradientStyle_LINEAR, mrSidebarWin.ColorDark(), mrSidebarWin.ColorDark()));
         }
         else
         {
-            rRenderContext.DrawGradient(Rectangle(aPoint, rRenderContext.PixelToLogic(GetSizePixel())),
+            rRenderContext.DrawGradient(Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
                            Gradient(GradientStyle_LINEAR, mrSidebarWin.ColorLight(), mrSidebarWin.ColorDark()));
         }
     }
 
     if (GetTextView())
     {
-        if (comphelper::LibreOfficeKit::isActive())
-            GetTextView()->GetOutliner()->Draw(&rRenderContext, rRect);
-        else
-            GetTextView()->Paint(rRect, &rRenderContext);
+        GetTextView()->Paint(rRect, &rRenderContext);
     }
 
     if (mrSidebarWin.GetLayoutStatus() == SwPostItHelper::DELETED)

@@ -69,7 +69,6 @@ class SidebarTextControl : public Control
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
         virtual void Draw(OutputDevice* pDev, const Point&, const Size&, sal_uLong) SAL_OVERRIDE;
-        void PaintTile(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
 };
 
 } } // end of namespace sw::sidebarwindows
