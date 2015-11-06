@@ -238,8 +238,8 @@ namespace frm
     Any OSpinButtonModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
-            OUString( "SpinValueMin" ),
-            OUString( "SpinValueMax" ) );
+            "SpinValueMin",
+            "SpinValueMax" );
     }
 
 

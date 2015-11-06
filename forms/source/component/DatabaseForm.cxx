@@ -1062,7 +1062,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
     aContentDisp.append('\"');
     pChild->SetContentDisposition(aContentDisp.makeStringAndClear());
     pChild->SetContentType( aContentType );
-    pChild->SetContentTransferEncoding(OUString("8bit"));
+    pChild->SetContentTransferEncoding("8bit");
 
 
     // Body
