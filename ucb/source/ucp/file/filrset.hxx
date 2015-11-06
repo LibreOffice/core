@@ -622,8 +622,9 @@ class XResultSet_impl : public Notifier,
 
         // Methods
         bool SAL_CALL OneMore()
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException );
+            throw( css::sdbc::SQLException,
+                   css::uno::RuntimeException,
+                   std::exception );
 
         void rowCountChanged();
         void isFinalChanged();

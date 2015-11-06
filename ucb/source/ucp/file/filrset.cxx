@@ -217,7 +217,8 @@ bool SAL_CALL
 XResultSet_impl::OneMore(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           uno::RuntimeException,
+           std::exception )
 {
     if( ! m_nIsOpen )
         return false;
