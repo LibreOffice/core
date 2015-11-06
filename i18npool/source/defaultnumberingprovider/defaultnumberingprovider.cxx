@@ -1006,8 +1006,8 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
     Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
     sal_Int16* pArray = aRet.getArray();
 
-    bool cjkEnabled = isScriptFlagEnabled(OUString("CJK/CJKFont"));
-    bool ctlEnabled = isScriptFlagEnabled(OUString("CTL/CTLFont"));
+    bool cjkEnabled = isScriptFlagEnabled("CJK/CJKFont");
+    bool ctlEnabled = isScriptFlagEnabled("CTL/CTLFont");
 
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
         if ( (aSupportedTypes[i].langOption & LANG_ALL) ||

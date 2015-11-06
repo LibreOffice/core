@@ -202,7 +202,7 @@ Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const css::lang::Loc
 {
     // Since this class could be called by service name 'hanja_yoil', we have to
     // rename uniqueID to get right calendar defined in locale data.
-    Calendar_gregorian::loadCalendar(OUString("hanja"), rLocale);
+    Calendar_gregorian::loadCalendar("hanja", rLocale);
 }
 
 static const Era gengou_eraArray[] = {

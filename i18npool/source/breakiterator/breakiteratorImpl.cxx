@@ -591,7 +591,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
                  // load service with name <base>_<lang>
                  createLocaleSpecificBreakIterator(rLocale.Language)) ||
                 // load default service with name <base>_Unicode
-                createLocaleSpecificBreakIterator(OUString("Unicode"))) {
+                createLocaleSpecificBreakIterator("Unicode")) {
             lookupTable.push_back( new lookupTableItem(aLocale, xBI) );
             return xBI;
         }

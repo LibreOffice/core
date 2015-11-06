@@ -1474,7 +1474,7 @@ oslGenericFunction SAL_CALL LocaleDataImpl::getFunctionSymbol( const Locale& rLo
     if (!pSymbol)
     {
         // load default function with name <func>_en_US
-        pSymbol = rLookupTable.getFunctionSymbolByName(OUString("en_US"), pFunction, &pCachedItem);
+        pSymbol = rLookupTable.getFunctionSymbolByName("en_US", pFunction, &pCachedItem);
     }
 
     if (!pSymbol)

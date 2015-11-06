@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 CharacterClassificationImpl::CharacterClassificationImpl(
         const Reference < uno::XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
-    if (createLocaleSpecificCharacterClassification(OUString("Unicode"), Locale()))
+    if (createLocaleSpecificCharacterClassification("Unicode", Locale()))
         xUCI = cachedItem->xCI;
 }
 

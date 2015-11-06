@@ -1632,7 +1632,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && daysNode == NULL) {
-            of.writeParameter("dayRef", OUString("ref"), i);
+            of.writeParameter("dayRef", "ref", i);
             of.writeParameter("dayRefName", ref_name, i);
             nbOfDays[i] = 0;
         } else {
@@ -1665,7 +1665,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && monthsNode == NULL) {
-            of.writeParameter("monthRef", OUString("ref"), i);
+            of.writeParameter("monthRef", "ref", i);
             of.writeParameter("monthRefName", ref_name, i);
             nbOfMonths[i] = 0;
         } else {
@@ -1701,7 +1701,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && genitiveMonthsNode == NULL) {
-            of.writeParameter("genitiveMonthRef", OUString("ref"), i);
+            of.writeParameter("genitiveMonthRef", "ref", i);
             of.writeParameter("genitiveMonthRefName", ref_name, i);
             nbOfGenitiveMonths[i] = 0;
         } else {
@@ -1738,7 +1738,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && partitiveMonthsNode == NULL) {
-            of.writeParameter("partitiveMonthRef", OUString("ref"), i);
+            of.writeParameter("partitiveMonthRef", "ref", i);
             of.writeParameter("partitiveMonthRefName", ref_name, i);
             nbOfPartitiveMonths[i] = 0;
         } else {
@@ -1771,7 +1771,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && erasNode == NULL) {
-            of.writeParameter("eraRef", OUString("ref"), i);
+            of.writeParameter("eraRef", "ref", i);
             of.writeParameter("eraRefName", ref_name, i);
             nbOfEras[i] = 0;
         } else {
