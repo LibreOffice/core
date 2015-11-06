@@ -2053,7 +2053,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 OUString aMime( "text/xml" );
                 uno::Any aAny;
                 aAny <<= aMime;
-                xStrm->SetProperty( OUString("MediaType"), aAny );
+                xStrm->SetProperty( "MediaType", aAny );
 
 
                 uno::Reference< uno::XComponentContext > xContext =
@@ -2325,7 +2325,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         aDest = INetURLObject ( sUserAutoCorrFile );
         if ( SotStorage::IsOLEStorage ( sShareAutoCorrFile ) )
         {
-            aDest.SetExtension ( OUString("bak") );
+            aDest.SetExtension ( "bak" );
             bConvert = true;
         }
         bCopy = true;
@@ -2334,7 +2334,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     {
         aSource = INetURLObject ( sUserAutoCorrFile );
         aDest = INetURLObject ( sUserAutoCorrFile );
-        aDest.SetExtension ( OUString("bak") );
+        aDest.SetExtension ( "bak" );
         bCopy = bConvert = true;
     }
     if (bCopy)
@@ -2353,7 +2353,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             aInfo.SourceURL = aSource.GetMainURL( INetURLObject::DECODE_TO_IURI );
             aInfo.MoveData  = sal_False;
             aAny <<= aInfo;
-            aNewContent.executeCommand( OUString (  "transfer"  ), aAny);
+            aNewContent.executeCommand( "transfer", aAny);
         }
         catch (...)
         {
@@ -2398,7 +2398,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             try
             {
                 ::ucbhelper::Content aContent ( aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ), uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                aContent.executeCommand ( OUString( "delete" ), makeAny ( true ) );
+                aContent.executeCommand ( "delete", makeAny ( true ) );
             }
             catch (...)
             {

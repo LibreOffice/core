@@ -170,7 +170,7 @@ void EditHTMLParser::NextToken( int nToken )
     {
         if ( bInPara )
         {
-            ImpInsertText( OUString( " " ) );
+            ImpInsertText( " " );
         }
     }
     break;
