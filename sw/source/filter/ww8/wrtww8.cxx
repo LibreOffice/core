@@ -316,7 +316,7 @@ void WW8_WrtBookmarks::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
 
 // Names of the storage streams
 #define sMainStream OUString("WordDocument")
-#define sCompObj OUString("\1CompObj")
+#define sCompObj "\1CompObj"
 
 static void WriteDop( WW8Export& rWrt )
 {
