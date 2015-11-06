@@ -886,7 +886,7 @@ Sequence< ContentInfo > Content::queryCreatableContentsInfo()
     // First, try it using "CreatableContentsInfo" property -> the "new" way.
     Sequence< ContentInfo > aInfo;
     if ( getPropertyValue(
-             OUString("CreatableContentsInfo") )
+             "CreatableContentsInfo" )
          >>= aInfo )
         return aInfo;
 
@@ -967,7 +967,7 @@ bool Content::insertNewContent( const OUString& rContentType,
     Content aNewContent(
         xNew, m_xImpl->getEnvironment(), m_xImpl->getComponentContext() );
     aNewContent.setPropertyValues( rPropertyNames, rPropertyValues );
-    aNewContent.executeCommand( OUString("insert"),
+    aNewContent.executeCommand( "insert",
                                 makeAny(
                                     InsertCommandArgument(
                                         rData.is() ? rData : new EmptyInputStream,
