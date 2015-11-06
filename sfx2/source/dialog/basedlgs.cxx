@@ -43,7 +43,7 @@
 
 using namespace ::com::sun::star::uno;
 
-#define USERITEM_NAME OUString("UserItem")
+#define USERITEM_NAME "UserItem"
 
 SingleTabDlgImpl::SingleTabDlgImpl()
         : m_pSfxPage(NULL)

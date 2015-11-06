@@ -110,7 +110,7 @@ using namespace ::cppu;
 
 #define IODLG_CONFIGNAME        OUString("FilePicker_Save")
 #define IMPGRF_CONFIGNAME       OUString("FilePicker_Graph")
-#define USERITEM_NAME           OUString("UserItem")
+#define USERITEM_NAME           "UserItem"
 
 namespace sfx2
 {
