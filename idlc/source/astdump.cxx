@@ -303,7 +303,7 @@ bool AstService::dump(RegistryKey& rKey)
     if (m_defaultConstructor) {
         writer.setMethodData(
             constructorIndex++, emptyStr, RTMethodMode::TWOWAY,
-            emptyStr, OUString("void"),
+            emptyStr, "void",
             0, 0);
     }
     sal_uInt32 size;
@@ -395,7 +395,7 @@ void AstAttribute::dumpExceptions(
         writer.setMethodData(
             idx, documentation, flags,
             OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
-            OUString("void"), 0,
+            "void", 0,
             static_cast< sal_uInt16 >(exceptions.size()));
         sal_uInt16 exceptionIndex = 0;
         for (DeclList::const_iterator i(exceptions.begin());
