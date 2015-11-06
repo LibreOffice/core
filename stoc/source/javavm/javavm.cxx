@@ -490,7 +490,7 @@ static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
 #endif
 
     if (!strcmp(TIMEZONE, p))
-        pjvm->pushProp(OUString("user.timezone=ECT"));
+        pjvm->pushProp("user.timezone=ECT");
 }
 
 void initVMConfiguration(
