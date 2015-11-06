@@ -408,7 +408,7 @@ void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::X
                     "The object waits for saveCompleted() call!",
                     static_cast< ::cppu::OWeakObject* >(this) );
 
-    PostEvent_Impl( OUString( "OnSaveAs" ) );
+    PostEvent_Impl( "OnSaveAs" );
 
     m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
 
@@ -443,7 +443,7 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         m_xParentStorage = m_xNewParentStorage;
         m_aEntryName = m_aNewEntryName;
 
-        PostEvent_Impl( OUString( "OnSaveAsDone" ) );
+        PostEvent_Impl( "OnSaveAsDone" );
     }
 
     m_xNewParentStorage.clear();

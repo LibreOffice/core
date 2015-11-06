@@ -1637,13 +1637,13 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     aGuard.clear();
     if ( bUseNew )
     {
-        MakeEventListenerNotification_Impl( OUString( "OnSaveAsDone" ));
+        MakeEventListenerNotification_Impl( "OnSaveAsDone");
 
         // the object can be changed only on windows
         // the notification should be done only if the object is not in loaded state
         if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
         {
-            MakeEventListenerNotification_Impl( OUString( "OnVisAreaChanged" ));
+            MakeEventListenerNotification_Impl( "OnVisAreaChanged");
         }
     }
 }
@@ -1821,12 +1821,12 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
     aGuard.clear();
 
-    MakeEventListenerNotification_Impl( OUString( "OnSaveDone" ));
+    MakeEventListenerNotification_Impl( "OnSaveDone");
 
     // the object can be changed only on Windows
     // the notification should be done only if the object is not in loaded state
     if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
-        MakeEventListenerNotification_Impl( OUString( "OnVisAreaChanged" ));
+        MakeEventListenerNotification_Impl( "OnVisAreaChanged");
 }
 
 

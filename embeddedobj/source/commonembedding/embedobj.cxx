@@ -480,7 +480,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 
         // let the object window be shown
         if ( nNewState == embed::EmbedStates::UI_ACTIVE || nNewState == embed::EmbedStates::INPLACE_ACTIVE )
-            PostEvent_Impl( OUString( "OnVisAreaChanged" ) );
+            PostEvent_Impl( "OnVisAreaChanged" );
     }
 }
 
@@ -626,7 +626,7 @@ void SAL_CALL OCommonEmbeddedObject::update()
         throw embed::WrongStateException( "The object has no persistence!",
                                           static_cast< ::cppu::OWeakObject* >(this) );
 
-    PostEvent_Impl( OUString( "OnVisAreaChanged" ) );
+    PostEvent_Impl( "OnVisAreaChanged" );
 }
 
 

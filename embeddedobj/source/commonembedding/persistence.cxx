@@ -1355,7 +1355,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
         SAL_WARN( "embeddedobj.common", "Can not retrieve own storage media type!" );
     }
 
-    PostEvent_Impl( OUString( "OnSaveAs" ) );
+    PostEvent_Impl( "OnSaveAs" );
 
     bool bTryOptimization = false;
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
@@ -1478,7 +1478,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         if ( xModif.is() )
             xModif->setModified( sal_False );
 
-        PostEvent_Impl( OUString( "OnSaveAsDone" ));
+        PostEvent_Impl( "OnSaveAsDone");
     }
     else
     {
@@ -1588,7 +1588,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
     if ( m_nObjectState == embed::EmbedStates::LOADED )
         return;
 
-    PostEvent_Impl( OUString( "OnSave" ) );
+    PostEvent_Impl( "OnSave" );
 
     SAL_WARN_IF( !m_pDocHolder->GetComponent().is(), "embeddedobj.common", "If an object is activated or in running state it must have a document!" );
     if ( !m_pDocHolder->GetComponent().is() )
@@ -1647,7 +1647,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
     if ( xModif.is() )
         xModif->setModified( sal_False );
 
-    PostEvent_Impl( OUString( "OnSaveDone" ) );
+    PostEvent_Impl( "OnSaveDone" );
 }
 
 
