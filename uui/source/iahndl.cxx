@@ -363,7 +363,7 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
     // the base registration node for "typed" interaction handlers
     const ::utl::OConfigurationTreeRoot aConfigRoot( ::utl::OConfigurationTreeRoot::createWithComponentContext(
         m_xContext,
-        OUString( "/org.openoffice.Interaction/InteractionHandlers" ),
+        "/org.openoffice.Interaction/InteractionHandlers",
         -1,
         ::utl::OConfigurationTreeRoot::CM_READONLY
     ) );
