@@ -181,22 +181,14 @@ public class SwXTextDocument extends TestCase {
         log.println("creating a second textdocument");
         xSecondTextDoc = WriterTools.createTextDoc(Param.getMSF());
 
-        if (xTextDoc != null) {
-            log.println("Creating instance...");
+        XText oText2 = xTextDoc.getText();
+        XTextCursor oTextCursor = oText2.createTextCursor();
 
-            XText oText2 = xTextDoc.getText();
-            XTextCursor oTextCursor = oText2.createTextCursor();
-
-            for (int i = 0; i < 11; i++) {
-                oText2.insertString(oTextCursor, "xTextDoc ", false);
-            }
-
-            tEnv = new TestEnvironment(xTextDoc);
-        } else {
-            log.println("Failed to create instance.");
-
-            return tEnv;
+        for (int i = 0; i < 11; i++) {
+            oText2.insertString(oTextCursor, "xTextDoc ", false);
         }
+
+        tEnv = new TestEnvironment(xTextDoc);
 
         XModel model1 = UnoRuntime.queryInterface(XModel.class, xTextDoc);
         XModel model2 = UnoRuntime.queryInterface(XModel.class, xSecondTextDoc);
