@@ -198,12 +198,12 @@ static Reference< XInterface > loadComponent(
         if (aExt == "dll" || aExt == "exe" || aExt == "dylib" || aExt == "so")
         {
             createInstance(
-                xLoader, xContext, OUString("com.sun.star.loader.SharedLibrary") );
+                xLoader, xContext, "com.sun.star.loader.SharedLibrary" );
         }
         else if (aExt == "jar" || aExt == "class")
         {
             createInstance(
-                xLoader, xContext, OUString("com.sun.star.loader.Java") );
+                xLoader, xContext, "com.sun.star.loader.Java" );
         }
         else
         {
@@ -502,7 +502,7 @@ SAL_IMPLEMENT_MAIN()
                 Reference< XBridgeFactory > xBridgeFactory;
                 createInstance(
                     xBridgeFactory, xContext,
-                    OUString("com.sun.star.bridge.BridgeFactory") );
+                    "com.sun.star.bridge.BridgeFactory" );
 
                 // bridge
                 Reference< XBridge > xBridge( xBridgeFactory->createBridge(
