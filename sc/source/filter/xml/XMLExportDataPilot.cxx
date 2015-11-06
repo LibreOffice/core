@@ -720,10 +720,12 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
 
 void ScXMLExportDataPilot::WriteDimensions(ScDPSaveData* pDPSave)
 {
-    const boost::ptr_vector<ScDPSaveDimension> &rDimensions = pDPSave->GetDimensions();
-    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
-    for (iter = rDimensions.begin(); iter != rDimensions.end(); ++iter)
-        WriteDimension(const_cast<ScDPSaveDimension*>(&(*iter)), pDPSave->GetExistingDimensionData());
+    const ScDPSaveData::DimsType& rDimensions = pDPSave->GetDimensions();
+    for (auto const& iter : rDimensions)
+    {
+        WriteDimension(const_cast<ScDPSaveDimension*>(iter.get()),
+                pDPSave->GetExistingDimensionData());
+    }
 }
 
 void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const OUString* pGrandTotal)

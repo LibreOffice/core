@@ -22,8 +22,7 @@
 
 #include <list>
 #include <memory>
-
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -241,10 +240,10 @@ class ScDPSaveData
     typedef std::unordered_map<OUString, size_t, OUStringHash> DupNameCountType;
 public:
     typedef std::unordered_map<OUString, size_t, OUStringHash> DimOrderType;
-    typedef boost::ptr_vector<ScDPSaveDimension> DimsType;
+    typedef std::vector<std::unique_ptr<ScDPSaveDimension>> DimsType;
 
 private:
-    DimsType aDimList;
+    DimsType m_DimList;
     DupNameCountType maDupNameCounts; /// keep track of number of duplicates in each name.
     ScDPDimensionSaveData* pDimensionData; // settings that create new dimensions
     sal_uInt16 nColumnGrandMode;
@@ -273,7 +272,7 @@ public:
     SC_DLLPUBLIC void SetGrandTotalName(const OUString& rName);
     SC_DLLPUBLIC const OUString* GetGrandTotalName() const;
 
-    const DimsType& GetDimensions() const { return aDimList;}
+    const DimsType& GetDimensions() const { return m_DimList; }
 
     /**
      * Get sort order map to sort row and column dimensions in order of

@@ -451,7 +451,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
     for (size_t i = 0, n = rDims.size(); i < n; ++i)
     {
-        const ScDPSaveDimension& rDim = rDims[i];
+        const ScDPSaveDimension& rDim = *rDims[i];
 
         long nPos = -1; // position in cache
         if (rDim.IsDataLayout())

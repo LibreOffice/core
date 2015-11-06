@@ -1205,19 +1205,22 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
             for( sal_uInt16 nFieldIdx = 0, nFieldCount = mrPCache.GetFieldCount(); nFieldIdx < nFieldCount; ++nFieldIdx )
                 maFieldList.AppendNewRecord( new XclExpPTField( *this, nFieldIdx ) );
 
-            boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
             const ScDPSaveData::DimsType& rDimList = pSaveData->GetDimensions();
 
             /*  2)  First process all data dimensions, they are needed for extended
                     settings of row/column/page fields (sorting/auto show). */
-            for (iter = rDimList.begin(); iter != rDimList.end(); ++iter)
+            for (auto const& iter : rDimList)
+            {
                 if (iter->GetOrientation() == DataPilotFieldOrientation_DATA)
                     SetDataFieldPropertiesFromDim(*iter);
+            }
 
             /*  3)  Row/column/page/hidden fields. */
-            for (iter = rDimList.begin(); iter != rDimList.end(); ++iter)
+            for (auto const& iter : rDimList)
+            {
                 if (iter->GetOrientation() != DataPilotFieldOrientation_DATA)
                     SetFieldPropertiesFromDim(*iter);
+            }
 
             // Finalize -------------------------------------------------------
 

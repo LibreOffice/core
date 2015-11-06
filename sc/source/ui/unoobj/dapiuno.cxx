@@ -1486,8 +1486,7 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
             const ScDPSaveData::DimsType& rDims = pSaveData->GetDimensions();
 
             sal_Int32 nFoundIdx = 0;
-            ScDPSaveData::DimsType::const_iterator it;
-            for (it = rDims.begin(); it != rDims.end(); ++it)
+            for (auto const& it : rDims)
             {
                 if (it->IsDataLayout())
                     continue;
@@ -1496,7 +1495,7 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
                 if (aSrcName == maFieldId.maFieldName)
                 {
                     if( nFoundIdx == maFieldId.mnFieldIdx )
-                        return const_cast<ScDPSaveDimension*>(&(*it));
+                        return const_cast<ScDPSaveDimension*>(it.get());
                     ++nFoundIdx;
                 }
             }
@@ -1769,9 +1768,8 @@ Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
         Sequence< OUString > aSeq( lcl_GetFieldCount( pDPObj->GetSource(), maOrient ) );
         OUString* pAry = aSeq.getArray();
 
-        const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pDPObj->GetSaveData()->GetDimensions();
-        boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
-        for (it = rDimensions.begin(); it != rDimensions.end(); ++it)
+        const ScDPSaveData::DimsType& rDimensions = pDPObj->GetSaveData()->GetDimensions();
+        for (auto const& it : rDimensions)
         {
             if(maOrient.hasValue() && (it->GetOrientation() == maOrient.get< DataPilotFieldOrientation >()))
             {
@@ -2067,14 +2065,13 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
             // look for existing duplicate with orientation "hidden"
 
             sal_Int32 nFound = 0;
-            const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pSaveData->GetDimensions();
-            boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
-            for ( it = rDimensions.begin(); it != rDimensions.end() && !pNewDim; ++it )
+            const ScDPSaveData::DimsType& rDimensions = pSaveData->GetDimensions();
+            for (auto const& it : rDimensions)
             {
                 if ( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
                 {
                     if ( it->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
-                        pNewDim = const_cast<ScDPSaveDimension*>(&(*it));      // use this one
+                        pNewDim = const_cast<ScDPSaveDimension*>(it.get()); // use this one
                     else
                         ++nFound;               // count existing non-hidden occurrences
                 }
