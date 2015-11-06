@@ -235,7 +235,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
                 && t->isClassType()
                 && t->getAs<SubstTemplateTypeParmType>() == nullptr)
             {
-                auto td = t->getAsTagDecl();
+                auto td = compat::getAsTagDecl(*t);
                 auto id = td->getIdentifier();
                 if (id != nullptr && id->isStr("OUString")) {
                     auto nd = dyn_cast<NamespaceDecl>(td->getParent());
