@@ -1598,14 +1598,6 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         nScrPosX = aScrSize.Width() - 1 - nScrPosX;
     }
 
-    if (!bIsTiledRendering)
-    {
-        if (nScrPosX > 32767)
-            nScrPosX = 32767;
-        if (nScrPosY > 32767)
-            nScrPosY = 32767;
-    }
-
     return Point( nScrPosX, nScrPosY );
 }
 
