@@ -86,83 +86,92 @@ int main( int argc, char * argv[] )
 int __cdecl main( int argc, char * argv[] )
 #endif
 {
-    Options_Impl options(argv[0]);
-
-    std::vector< std::string > args;
-    for (int i = 1; i < argc; i++)
+    try
     {
-        if (!Options::checkArgument(args, argv[i], strlen(argv[i])))
+        Options_Impl options(argv[0]);
+
+        std::vector< std::string > args;
+        for (int i = 1; i < argc; i++)
+        {
+            if (!Options::checkArgument(args, argv[i], strlen(argv[i])))
+            {
+                options.printUsage();
+                return 1;
+            }
+        }
+        if (!options.initOptions(args))
+        {
+            return 1;
+        }
+        if (args.size() < 3)
         {
             options.printUsage();
             return 1;
         }
-    }
-    if (!options.initOptions(args))
-    {
-        return 1;
-    }
-    if (args.size() < 3)
-    {
-        options.printUsage();
-        return 1;
-    }
 
-    Registry reg;
-    OUString regName( convertToFileUrl(args[0].c_str(), args[0].size()) );
-    if (reg.open(regName, RegAccessMode::READWRITE) != RegError::NO_ERROR)
-    {
-        if (reg.create(regName) != RegError::NO_ERROR)
+        Registry reg;
+        OUString regName( convertToFileUrl(args[0].c_str(), args[0].size()) );
+        if (reg.open(regName, RegAccessMode::READWRITE) != RegError::NO_ERROR)
+        {
+            if (reg.create(regName) != RegError::NO_ERROR)
+            {
+                if (options.isVerbose())
+                    fprintf(stderr, "open registry \"%s\" failed\n", args[0].c_str());
+                return -1;
+            }
+        }
+
+        RegistryKey rootKey;
+        if (reg.openRootKey(rootKey) != RegError::NO_ERROR)
         {
             if (options.isVerbose())
-                fprintf(stderr, "open registry \"%s\" failed\n", args[0].c_str());
-            return -1;
+                fprintf(stderr, "open root key of registry \"%s\" failed\n", args[0].c_str());
+            return -4;
         }
-    }
 
-    RegistryKey rootKey;
-    if (reg.openRootKey(rootKey) != RegError::NO_ERROR)
-    {
-        if (options.isVerbose())
-            fprintf(stderr, "open root key of registry \"%s\" failed\n", args[0].c_str());
-        return -4;
-    }
-
-    OUString mergeKeyName( OUString::createFromAscii(args[1].c_str()) );
-    for (size_t i = 2; i < args.size(); i++)
-    {
-        OUString targetRegName( convertToFileUrl(args[i].c_str(), args[i].size()) );
-        RegError _ret = reg.mergeKey(rootKey, mergeKeyName, targetRegName, false, options.isVerbose());
-        if (_ret != RegError::NO_ERROR)
+        OUString mergeKeyName( OUString::createFromAscii(args[1].c_str()) );
+        for (size_t i = 2; i < args.size(); i++)
         {
-            if (_ret == RegError::MERGE_CONFLICT)
+            OUString targetRegName( convertToFileUrl(args[i].c_str(), args[i].size()) );
+            RegError _ret = reg.mergeKey(rootKey, mergeKeyName, targetRegName, false, options.isVerbose());
+            if (_ret != RegError::NO_ERROR)
+            {
+                if (_ret == RegError::MERGE_CONFLICT)
+                {
+                    if (options.isVerbose())
+                        fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
+                                args[i].c_str(), args[1].c_str(), args[0].c_str());
+                }
+                else
+                {
+                    if (options.isVerbose())
+                        fprintf(stderr, "ERROR: merging registry \"%s\" under key \"%s\" in registry \"%s\" failed.\n",
+                                args[i].c_str(), args[1].c_str(), args[0].c_str());
+                    return -2;
+                }
+            }
+            else
             {
                 if (options.isVerbose())
                     fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
                             args[i].c_str(), args[1].c_str(), args[0].c_str());
             }
-            else
-            {
-                if (options.isVerbose())
-                    fprintf(stderr, "ERROR: merging registry \"%s\" under key \"%s\" in registry \"%s\" failed.\n",
-                            args[i].c_str(), args[1].c_str(), args[0].c_str());
-                return -2;
-            }
         }
-        else
+
+        rootKey.releaseKey();
+        if (reg.close() != RegError::NO_ERROR)
         {
             if (options.isVerbose())
-                fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
-                        args[i].c_str(), args[1].c_str(), args[0].c_str());
+                fprintf(stderr, "closing registry \"%s\" failed\n", args[0].c_str());
+            return -5;
         }
     }
-
-    rootKey.releaseKey();
-    if (reg.close() != RegError::NO_ERROR)
+    catch (const std::exception &e)
     {
-        if (options.isVerbose())
-            fprintf(stderr, "closing registry \"%s\" failed\n", args[0].c_str());
+        SAL_WARN("registry", "Fatal exception: " << e.what());
         return -5;
     }
+
 
     return 0;
 }
