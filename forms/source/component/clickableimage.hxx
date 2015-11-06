@@ -120,7 +120,7 @@ namespace frm
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         // OPropertyChangeListener
-        virtual void _propertyChanged(const css::beans::PropertyChangeEvent&) throw(css::uno::RuntimeException) override;
+        virtual void _propertyChanged(const css::beans::PropertyChangeEvent&) throw(css::uno::RuntimeException, std::exception) override;
 
         // XPropertyState
         virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;

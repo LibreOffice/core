@@ -835,7 +835,7 @@ namespace frm
 
 
     void OClickableImageBaseModel::_propertyChanged( const PropertyChangeEvent& rEvt )
-        throw( RuntimeException )
+        throw( RuntimeException, std::exception )
     {
         // If a URL was set, it needs to be passed onto the ImageProducer.
         ::osl::MutexGuard aGuard(m_aMutex);
