@@ -66,12 +66,12 @@ void test::oustring::Compare::compareToIgnoreAsciiCase()
 {
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(0),
-        rtl::OUString("abc").compareToIgnoreAsciiCase(rtl::OUString("ABC")));
+        rtl::OUString("abc").compareToIgnoreAsciiCase("ABC"));
     CPPUNIT_ASSERT(
-        rtl::OUString("ABC").compareToIgnoreAsciiCase(rtl::OUString("abcdef"))
+        rtl::OUString("ABC").compareToIgnoreAsciiCase("abcdef")
         < 0);
     CPPUNIT_ASSERT(
-        rtl::OUString("A").compareToIgnoreAsciiCase(rtl::OUString("_")) > 0);
+        rtl::OUString("A").compareToIgnoreAsciiCase("_") > 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
