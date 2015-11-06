@@ -161,7 +161,7 @@ void OutlineViewShell::Construct(DrawDocShell* )
 
     pLastPage = GetActualPage();
 
-    SetName( OUString( "OutlineViewShell" ) );
+    SetName( "OutlineViewShell" );
 
     SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
     GetActiveWindow()->SetHelpId( HID_SDOUTLINEVIEWSHELL );

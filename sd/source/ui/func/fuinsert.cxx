@@ -385,15 +385,15 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             {
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
-                    pOleObj->SetProgName( OUString( "StarChart" ));
+                    pOleObj->SetProgName( "StarChart");
                 }
                 else if (nSlotId == SID_ATTR_TABLE)
                 {
-                    pOleObj->SetProgName( OUString( "StarCalc" ) );
+                    pOleObj->SetProgName( "StarCalc" );
                 }
                 else if (nSlotId == SID_INSERT_MATH)
                 {
-                    pOleObj->SetProgName( OUString( "StarMath" ) );
+                    pOleObj->SetProgName( "StarMath" );
                 }
 
                 pOleObj->SetLogicRect(aRect);

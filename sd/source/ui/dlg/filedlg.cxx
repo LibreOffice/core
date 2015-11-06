@@ -284,20 +284,20 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
 {
     OUString aDescr;
     aDescr = SD_RESSTR(STR_ALL_FILES);
-    mpImpl->AddFilter( aDescr, OUString("*.*"));
+    mpImpl->AddFilter( aDescr, "*.*");
 
     // setup filter
 #if defined UNX
     aDescr = SD_RESSTR(STR_AU_FILE);
-    mpImpl->AddFilter( aDescr, OUString("*.au;*.snd" ));
+    mpImpl->AddFilter( aDescr, "*.au;*.snd");
     aDescr = SD_RESSTR(STR_VOC_FILE);
-    mpImpl->AddFilter( aDescr, OUString("*.voc" ));
+    mpImpl->AddFilter( aDescr, "*.voc");
     aDescr = SD_RESSTR(STR_WAV_FILE);
-    mpImpl->AddFilter( aDescr, OUString("*.wav" ));
+    mpImpl->AddFilter( aDescr, "*.wav");
     aDescr = SD_RESSTR(STR_AIFF_FILE);
-    mpImpl->AddFilter( aDescr, OUString("*.aiff" ));
+    mpImpl->AddFilter( aDescr, "*.aiff");
     aDescr = SD_RESSTR(STR_SVX_FILE);
-    mpImpl->AddFilter( aDescr, OUString("*.svx" ));
+    mpImpl->AddFilter( aDescr, "*.svx");
 #else
     aDescr = SD_RESSTR(STR_WAV_FILE);
     mpImpl->AddFilter( aDescr, OUString("*.wav;*.mp3;*.ogg" ));

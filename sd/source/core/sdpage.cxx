@@ -325,7 +325,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         case PRESOBJ_CHART:
         {
             pSdrObj = new SdrOle2Obj();
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( OUString( "StarChart" ) );
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarChart" );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_CHART ) );
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
@@ -335,7 +335,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         case PRESOBJ_ORGCHART:
         {
             pSdrObj = new SdrOle2Obj();
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( OUString( "StarOrg" ) );
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarOrg" );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_ORGCHART ) );
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
@@ -346,7 +346,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         case PRESOBJ_CALC:
         {
             pSdrObj = new SdrOle2Obj();
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( OUString( "StarCalc" ) );
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarCalc" );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_TABLE ) );
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);

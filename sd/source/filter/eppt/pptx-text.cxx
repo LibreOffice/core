@@ -116,7 +116,7 @@ PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRang
         }
         bool bSymbol = false;
 
-        if ( bPropSetsValid && ImplGetPropertyValue( OUString( "CharFontCharSet" ), false ) )
+        if ( bPropSetsValid && ImplGetPropertyValue( "CharFontCharSet", false ) )
         {
             sal_Int16 nCharset = 0;
             mAny >>= nCharset;
@@ -226,7 +226,7 @@ void PortionObj::Write( SvStream* pStrm, bool bLast )
 void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue )
 {
 
-    bool bOk = ImplGetPropertyValue( OUString( "CharFontName" ), bGetPropStateValue );
+    bool bOk = ImplGetPropertyValue( "CharFontName", bGetPropStateValue );
     meFontName = ePropState;
     if ( bOk )
     {
@@ -236,11 +236,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         if ( mnFont == nCount )
         {
             FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-            if ( ImplGetPropertyValue( OUString( "CharFontCharSet" ), false ) )
+            if ( ImplGetPropertyValue( "CharFontCharSet", false ) )
                 mAny >>= rFontDesc.CharSet;
-            if ( ImplGetPropertyValue( OUString( "CharFontFamily" ), false ) )
+            if ( ImplGetPropertyValue( "CharFontFamily", false ) )
                 mAny >>= rFontDesc.Family;
-            if ( ImplGetPropertyValue( OUString( "CharFontPitch" ), false ) )
+            if ( ImplGetPropertyValue( "CharFontPitch", false ) )
                 mAny >>= rFontDesc.Pitch;
         }
     }
@@ -253,7 +253,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     }
     if ( nScriptType != css::i18n::ScriptType::COMPLEX )
     {
-        bOk = ImplGetPropertyValue( OUString( "CharFontNameAsian" ), bGetPropStateValue );
+        bOk = ImplGetPropertyValue( "CharFontNameAsian", bGetPropStateValue );
         meAsianOrComplexFont = ePropState;
         if ( bOk )
         {
@@ -263,18 +263,18 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-                if ( ImplGetPropertyValue( OUString( "CharFontCharSetAsian" ), false ) )
+                if ( ImplGetPropertyValue( "CharFontCharSetAsian", false ) )
                     mAny >>= rFontDesc.CharSet;
-                if ( ImplGetPropertyValue( OUString( "CharFontFamilyAsian" ), false ) )
+                if ( ImplGetPropertyValue( "CharFontFamilyAsian", false ) )
                     mAny >>= rFontDesc.Family;
-                if ( ImplGetPropertyValue( OUString( "CharFontPitchAsian" ), false ) )
+                if ( ImplGetPropertyValue( "CharFontPitchAsian", false ) )
                     mAny >>= rFontDesc.Pitch;
             }
         }
     }
     else
     {
-        bOk = ImplGetPropertyValue( OUString( "CharFontNameComplex" ), bGetPropStateValue );
+        bOk = ImplGetPropertyValue( "CharFontNameComplex", bGetPropStateValue );
         meAsianOrComplexFont = ePropState;
         if ( bOk )
         {
@@ -284,11 +284,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-                if ( ImplGetPropertyValue( OUString( "CharFontCharSetComplex" ), false ) )
+                if ( ImplGetPropertyValue( "CharFontCharSetComplex", false ) )
                     mAny >>= rFontDesc.CharSet;
-                if ( ImplGetPropertyValue( OUString( "CharFontFamilyComplex" ), false ) )
+                if ( ImplGetPropertyValue( "CharFontFamilyComplex", false ) )
                     mAny >>= rFontDesc.Family;
-                if ( ImplGetPropertyValue( OUString( "CharFontPitchComplex" ), false ) )
+                if ( ImplGetPropertyValue( "CharFontPitchComplex", false ) )
                     mAny >>= rFontDesc.Pitch;
             }
         }
@@ -369,7 +369,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         }
     }
 
-    if ( ImplGetPropertyValue( OUString( "CharUnderline" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "CharUnderline", bGetPropStateValue ) )
     {
         sal_Int16 nVal(0);
         mAny >>= nVal;
@@ -384,7 +384,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     if ( ePropState == css::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 4;
 
-    if ( ImplGetPropertyValue( OUString( "CharShadowed" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "CharShadowed", bGetPropStateValue ) )
     {
         bool bBool(false);
         mAny >>= bBool;
@@ -394,7 +394,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     if ( ePropState == css::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 16;
 
-    if ( ImplGetPropertyValue( OUString( "CharRelief" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "CharRelief", bGetPropStateValue ) )
     {
         sal_Int16 nVal(0);
         mAny >>= nVal;
@@ -404,7 +404,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     if ( ePropState == css::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 512;
 
-    if ( ImplGetPropertyValue( OUString( "CharColor" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "CharColor", bGetPropStateValue ) )
     {
         sal_uInt32 nSOColor = *( static_cast<sal_uInt32 const *>(mAny.getValue()) );
         mnCharColor = nSOColor & 0xff00ff00;                            // green and hibyte
@@ -414,7 +414,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     meCharColor = ePropState;
 
     mnCharEscapement = 0;
-    if ( ImplGetPropertyValue( OUString( "CharEscapement" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "CharEscapement", bGetPropStateValue ) )
     {
         mAny >>= mnCharEscapement;
         if ( mnCharEscapement > 100 )
@@ -492,7 +492,7 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
     sal_uInt32 nRetValue = 0;
     sal_Int32 nFormat;
     css::uno::Any aAny;
-    if ( GetPropertyValue( aAny, rXPropSet, OUString( "TextPortionType" ), true ) )
+    if ( GetPropertyValue( aAny, rXPropSet, "TextPortionType", true ) )
     {
         OUString  aTextFieldType( *static_cast<OUString const *>(aAny.getValue()) );
         if ( aTextFieldType == "TextField" )
@@ -510,13 +510,13 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
                             OUString aFieldKind( aXTextField->getPresentation( sal_True ) );
                             if ( aFieldKind == "Date" )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), true ) )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, "IsFix", true ) )
                                 {
                                     bool bBool = false;
                                     aAny >>= bBool;
                                     if ( !bBool )  // Fixed DateFields does not exist in PPT
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "Format" ), true ) )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, "Format", true ) )
                                         {
                                             nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
                                             switch ( nFormat )
@@ -538,7 +538,7 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
                             }
                             else if ( aFieldKind == "URL" )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "URL" ), true ) )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, "URL", true ) )
                                     rURL = *static_cast<OUString const *>(aAny.getValue());
                                 nRetValue = 4 << 28;
                             }
@@ -552,13 +552,13 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
                             }
                             else if ( aFieldKind == "Time" )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), true ) )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, "IsFix", true ) )
                                 {
                                     bool bBool = false;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), true ) )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, "IsFix", true ) )
                                         {
                                             nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
                                             nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
@@ -576,13 +576,13 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
                             }
                             else if ( aFieldKind == "ExtTime" )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), true ) )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, "IsFix", true ) )
                                 {
                                     bool bBool = false;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "Format" ), true ) )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, "Format", true ) )
                                         {
                                             nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
                                             switch ( nFormat )
@@ -781,23 +781,23 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
 void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int16 nNumberingDepth, bool bIsBullet, bool bGetPropStateValue )
 {
     css::uno::Any aAny;
-    if ( GetPropertyValue( aAny, mXPropSet, OUString( "ParaLeftMargin" ) ) )
+    if ( GetPropertyValue( aAny, mXPropSet, "ParaLeftMargin" ) )
     {
         sal_Int32 nVal(0);
         if ( aAny >>= nVal )
             nTextOfs = static_cast< sal_Int16 >( nVal / ( 2540.0 / 576 ) + 0.5 ) ;
     }
-    if ( GetPropertyValue( aAny, mXPropSet, OUString( "ParaFirstLineIndent" ) ) )
+    if ( GetPropertyValue( aAny, mXPropSet, "ParaFirstLineIndent" ) )
     {
         if ( aAny >>= nBulletOfs )
             nBulletOfs = static_cast< sal_Int32 >( nBulletOfs / ( 2540.0 / 576 ) + 0.5 );
     }
-    if ( GetPropertyValue( aAny, mXPropSet, OUString( "NumberingIsNumber" ) ) )
+    if ( GetPropertyValue( aAny, mXPropSet, "NumberingIsNumber" ) )
         aAny >>= bNumberingIsNumber;
 
     css::uno::Reference< css::container::XIndexReplace > aXIndexReplace;
 
-    if ( bIsBullet && ImplGetPropertyValue( OUString( "NumberingRules" ), bGetPropStateValue ) )
+    if ( bIsBullet && ImplGetPropertyValue( "NumberingRules", bGetPropStateValue ) )
     {
         if ( ( mAny >>= aXIndexReplace ) && nNumberingDepth < aXIndexReplace->getCount() )
         {
@@ -1120,10 +1120,10 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     }
     ImplGetNumberingLevel( pBuProv, nDepth, mbIsBullet, bGetPropStateValue );
 
-    if ( ImplGetPropertyValue( OUString( "ParaTabStops" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "ParaTabStops", bGetPropStateValue ) )
         maTabStop = *static_cast<css::uno::Sequence< css::style::TabStop> const *>(mAny.getValue());
     sal_Int16 eTextAdjust( css::style::ParagraphAdjust_LEFT );
-    if ( GetPropertyValue( aAny, mXPropSet, OUString( "ParaAdjust" ), bGetPropStateValue ) )
+    if ( GetPropertyValue( aAny, mXPropSet, "ParaAdjust", bGetPropStateValue ) )
         aAny >>= eTextAdjust;
     switch ( (css::style::ParagraphAdjust)eTextAdjust )
     {
@@ -1143,7 +1143,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     }
     meTextAdjust = ePropState;
 
-    if ( ImplGetPropertyValue( OUString( "ParaLineSpacing" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "ParaLineSpacing", bGetPropStateValue ) )
     {
         css::style::LineSpacing aLineSpacing
             = *static_cast<css::style::LineSpacing const *>(mAny.getValue());
@@ -1167,30 +1167,30 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     }
     meLineSpacing = ePropState;
 
-    if ( ImplGetPropertyValue( OUString( "ParaBottomMargin" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "ParaBottomMargin", bGetPropStateValue ) )
     {
         double fSpacing = *static_cast<sal_uInt32 const *>(mAny.getValue()) + ( 2540.0 / 576.0 ) - 1;
         mnLineSpacingBottom = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingBottom = ePropState;
 
-    if ( ImplGetPropertyValue( OUString( "ParaTopMargin" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "ParaTopMargin", bGetPropStateValue ) )
     {
         double fSpacing = *static_cast<sal_uInt32 const *>(mAny.getValue()) + ( 2540.0 / 576.0 ) - 1;
         mnLineSpacingTop = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingTop = ePropState;
 
-    if ( ImplGetPropertyValue( OUString( "ParaIsForbiddenRules" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "ParaIsForbiddenRules", bGetPropStateValue ) )
         mAny >>= mbForbiddenRules;
     meForbiddenRules = ePropState;
 
-    if ( ImplGetPropertyValue( OUString( "ParaIsHangingPunctuation" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "ParaIsHangingPunctuation", bGetPropStateValue ) )
         mAny >>= mbParagraphPunctation;
     meParagraphPunctation = ePropState;
 
     mnBiDi = 0;
-    if ( ImplGetPropertyValue( OUString( "WritingMode" ), bGetPropStateValue ) )
+    if ( ImplGetPropertyValue( "WritingMode", bGetPropStateValue ) )
     {
         sal_Int16 nWritingMode = 0;
         mAny >>= nWritingMode;

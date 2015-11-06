@@ -141,7 +141,7 @@ SdPublishingDesign::SdPublishingDesign()
     m_eFormat = FORMAT_PNG;
 
     FilterConfigItem aFilterConfigItem("Office.Common/Filter/Graphic/Export/JPG");
-    sal_Int32 nCompression = aFilterConfigItem.ReadInt32( OUString( KEY_QUALITY ), 75 );
+    sal_Int32 nCompression = aFilterConfigItem.ReadInt32( KEY_QUALITY, 75 );
     m_aCompression = OUString::number(nCompression) + "%";
 
     SvtUserOptions aUserOptions;
@@ -434,7 +434,7 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
     pPage2_ASP->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
     pPage2_PERL->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
     pPage2_Index->SetText("index" + SD_RESSTR(STR_HTMLEXP_DEFAULT_EXTENSION));
-    pPage2_CGI->SetText( OUString( "/cgi-bin/" ) );
+    pPage2_CGI->SetText( "/cgi-bin/" );
 
     pPage3_Png->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Gif->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
@@ -460,10 +460,10 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
 
     pPage6_DocColors->Check();
 
-    pPage3_Quality->InsertEntry( OUString( "25%" ) );
-    pPage3_Quality->InsertEntry( OUString( "50%" ) );
-    pPage3_Quality->InsertEntry( OUString( "75%" ) );
-    pPage3_Quality->InsertEntry( OUString( "100%" ) );
+    pPage3_Quality->InsertEntry( "25%" );
+    pPage3_Quality->InsertEntry( "50%" );
+    pPage3_Quality->InsertEntry( "75%" );
+    pPage3_Quality->InsertEntry( "100%" );
 
     pPage5_Buttons->SetColCount();
     pPage5_Buttons->SetLineCount( 4 );
@@ -1520,7 +1520,7 @@ bool SdPublishingDlg::Load()
     m_bDesignListDirty = false;
 
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
-    aURL.Append( OUString( "designs.sod" ) );
+    aURL.Append( "designs.sod" );
 
     // check if file exists, SfxMedium shows an errorbox else
     {
@@ -1570,7 +1570,7 @@ bool SdPublishingDlg::Load()
 bool SdPublishingDlg::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
-    aURL.Append( OUString( "designs.sod" ) );
+    aURL.Append( "designs.sod" );
     SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC );
 
     SvStream* pStream = aMedium.GetOutStream();

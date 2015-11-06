@@ -324,7 +324,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
 
         pEditEngine->EnableUndo (true);
         pEditEngine->SetDefTab (sal_uInt16(
-            Application::GetDefaultDevice()->GetTextWidth(OUString("XXXX"))));
+            Application::GetDefaultDevice()->GetTextWidth("XXXX")));
 
         pEditEngine->SetControlWord(
                 EEControlBits(pEditEngine->GetControlWord() | EEControlBits::AUTOINDENTING) &

@@ -107,7 +107,7 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
     {
         bool bIsDark = false;
         css::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), true ) )
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, "IsBackgroundDark", true ) )
             aAny >>= bIsDark;
         nFontColor = bIsDark ? 0xffffff : 0x000000;
     }
@@ -350,7 +350,7 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
     {
         bool bIsDark = false;
         css::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), true ) )
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, "IsBackgroundDark", true ) )
             aAny >>= bIsDark;
         nBulletColor = bIsDark ? 0xffffff : 0x000000;
     }

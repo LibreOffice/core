@@ -190,10 +190,10 @@ void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& r
         return;
 
     sal_Int32 nWidth = 21000;
-    if ( ImplGetPropertyValue( mXPagePropSet, OUString(  "Width" ) ) )
+    if ( ImplGetPropertyValue( mXPagePropSet, "Width" ) )
         mAny >>= nWidth;
     sal_Int32 nHeight = 29700;
-    if ( ImplGetPropertyValue( mXPagePropSet, OUString( "Height" ) ) )
+    if ( ImplGetPropertyValue( mXPagePropSet, "Height" ) )
         mAny >>= nHeight;
 
     maNotesPageSize = MapSize( awt::Size( nWidth, nHeight ) );
@@ -202,10 +202,10 @@ void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& r
         return;
 
     nWidth = 28000;
-    if ( ImplGetPropertyValue( mXPagePropSet, OUString( "Width" ) ) )
+    if ( ImplGetPropertyValue( mXPagePropSet, "Width" ) )
         mAny >>= nWidth;
     nHeight = 21000;
-    if ( ImplGetPropertyValue( mXPagePropSet, OUString( "Height" ) ) )
+    if ( ImplGetPropertyValue( mXPagePropSet, "Height" ) )
         mAny >>= nHeight;
     maDestPageSize = MapSize( awt::Size( nWidth, nHeight ) );
     maPageSize = awt::Size(nWidth, nHeight);
@@ -327,7 +327,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
         if ( !mXPagePropSet.is() )
             break;
 
-        if (GetPropertyValue( aAny, mXPagePropSet, OUString("IsBackgroundDark") ) )
+        if (GetPropertyValue( aAny, mXPagePropSet, "IsBackgroundDark" ) )
             aAny >>= mbIsBackgroundDark;
 
         mXShapes.set( mXDrawPage, UNO_QUERY );
@@ -336,7 +336,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 
         /* try to get the "real" background PropertySet. If the normal page is not supporting this property, it is
            taken the property from the master */
-        bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, OUString( "Background" ), true );
+        bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, "Background", true );
         if ( bHasBackground )
             bHasBackground = ( aAny >>= mXBackgroundPropSet );
         if ( !bHasBackground )
@@ -352,7 +352,7 @@ bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                     aXMasterPagePropSet.set( aXMasterDrawPage, UNO_QUERY );
                     if ( aXMasterPagePropSet.is() )
                     {
-                        bool bBackground = GetPropertyValue( aAny, aXMasterPagePropSet, OUString( "Background" ) );
+                        bool bBackground = GetPropertyValue( aAny, aXMasterPagePropSet, "Background" );
                         if ( bBackground )
                         {
                             aAny >>= mXBackgroundPropSet;
@@ -377,7 +377,7 @@ bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
     SetCurrentStyleSheet( nMasterNum );
 
     Reference< XPropertySet > aXBackgroundPropSet;
-    bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, OUString( "Background" ) );
+    bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, "Background" );
     if ( bHasBackground )
         bHasBackground = ( aAny >>= aXBackgroundPropSet );
 
@@ -396,7 +396,7 @@ bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
         }
     }
 */
-    if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "IsBackgroundObjectsVisible" ) ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, "IsBackgroundObjectsVisible" ) )
     {
         bool bBackgroundObjectsVisible = false;
         if ( aAny >>= bBackgroundObjectsVisible )
@@ -428,7 +428,7 @@ bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
         return false;
     SetCurrentStyleSheet( nPageNum );
 
-    if ( !ImplGetPropertyValue( mXPagePropSet, OUString( "Background" ) ) )                // load background shape
+    if ( !ImplGetPropertyValue( mXPagePropSet, "Background" ) )                // load background shape
         return false;
     css::uno::Reference< css::beans::XPropertySet > aXBackgroundPropSet;
     if ( !( mAny >>= aXBackgroundPropSet ) )
@@ -443,7 +443,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const css::uno::Reference< css::beans:
 {
     css::uno::Any aAny;
     sal_Int32 nLayout = 20;
-    if ( GetPropertyValue( aAny, rXPropSet, OUString( "Layout" ), true ) )
+    if ( GetPropertyValue( aAny, rXPropSet, "Layout", true ) )
         aAny >>= nLayout;
 
     DBG(printf("GetLayoutOffset %" SAL_PRIdINT32 "\n", nLayout));
@@ -493,7 +493,7 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
             css::uno::Reference< css::beans::XPropertySet > aXPropertySet( aXDrawPage, css::uno::UNO_QUERY );
             if ( aXPropertySet.is() )
             {
-                if ( ImplGetPropertyValue( aXPropertySet, OUString( "Number" ) ) )
+                if ( ImplGetPropertyValue( aXPropertySet, "Number" ) )
                     nRetValue |= *static_cast<sal_Int16 const *>(mAny.getValue());
                 if ( nRetValue & 0xffff )           // avoid overflow
                     nRetValue--;
@@ -536,7 +536,7 @@ bool PPTWriterBase::GetStyleSheets()
         Reference< XPropertySet >
             aXPropSet( mXModel, UNO_QUERY );
 
-        sal_uInt16 nDefaultTab = ( aXPropSet.is() && ImplGetPropertyValue( aXPropSet, OUString( "TabStop" ) ) )
+        sal_uInt16 nDefaultTab = ( aXPropSet.is() && ImplGetPropertyValue( aXPropSet, "TabStop" ) )
             ? (sal_uInt16)( *static_cast<sal_Int32 const *>(mAny.getValue()) / 4.40972 )
             : 1250;
 
@@ -740,14 +740,14 @@ bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
         mType = aTypeBuffer.makeStringAndClear();
 
         mbPresObj = mbEmptyPresObj = false;
-        if ( ImplGetPropertyValue( OUString( "IsPresentationObject" ) ) )
+        if ( ImplGetPropertyValue( "IsPresentationObject" ) )
             mAny >>= mbPresObj;
 
-        if ( mbPresObj && ImplGetPropertyValue( OUString( "IsEmptyPresentationObject" ) ) )
+        if ( mbPresObj && ImplGetPropertyValue( "IsEmptyPresentationObject" ) )
             mAny >>= mbEmptyPresObj;
 
         mnAngle = ( PropValue::GetPropertyValue( aAny,
-            mXPropSet, OUString( "RotateAngle" ), true ) )
+            mXPropSet, "RotateAngle", true ) )
                 ? *static_cast<sal_Int32 const *>(aAny.getValue())
                 : 0;
 

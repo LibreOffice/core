@@ -80,25 +80,25 @@ bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
 void SdFiltersTest::testCVEs()
 {
 #ifndef DISABLE_CVE_TESTS
-    testDir(OUString("MS PowerPoint 97"),
+    testDir("MS PowerPoint 97",
             getURLFromSrc("/sd/qa/unit/data/ppt/"),
-            OUString("sdfilt"));
+            "sdfilt");
 
-    testDir(OUString("Impress Office Open XML"),
+    testDir("Impress Office Open XML",
             getURLFromSrc("/sd/qa/unit/data/pptx/"),
-            OUString(""),  (SfxFilterFlags::IMPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER));
+            "",  (SfxFilterFlags::IMPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER));
 
-    testDir(OUString("impress8"),
+    testDir("impress8",
             getURLFromSrc("/sd/qa/unit/data/odp/"),
-            OUString("sdfilt"));
+            "sdfilt");
 
-    testDir(OUString("draw8"),
+    testDir("draw8",
             getURLFromSrc("/sd/qa/unit/data/odg/"),
-            OUString("sdfilt"));
+            "sdfilt");
 
-    testDir(OUString("CGM - Computer Graphics Metafile"),
+    testDir("CGM - Computer Graphics Metafile",
             getURLFromSrc("/sd/qa/unit/data/cgm/"),
-            OUString("icg"));
+            "icg");
 #endif
 }
 

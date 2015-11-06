@@ -2871,7 +2871,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
     INetURLObject   aURL( SvtPathOptions().GetConfigPath() );
     OUStringBuffer aScriptBuf;
 
-    aURL.Append( OUString("webcast") );
+    aURL.Append( "webcast" );
     aURL.Append( rSource );
 
     meEC.SetContext( STR_HTMLEXP_ERROR_OPEN_FILE, rSource );

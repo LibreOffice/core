@@ -89,13 +89,13 @@ bool SdPPTFilter::Import()
             xDualStorage = pStorage->OpenSotStorage( sDualStorage, STREAM_STD_READ );
             pStorage = xDualStorage;
         }
-        SvStream* pDocStream = pStorage->OpenSotStream( OUString("PowerPoint Document") , STREAM_STD_READ );
+        SvStream* pDocStream = pStorage->OpenSotStream( "PowerPoint Document" , STREAM_STD_READ );
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
             pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
-            if ( pStorage->IsStream( OUString("EncryptedSummary" ) ) )
+            if ( pStorage->IsStream( "EncryptedSummary" ) )
                 mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, OSL_LOG_PREFIX );
             else
             {

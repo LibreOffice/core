@@ -114,7 +114,7 @@ TextObjectBar::TextObjectBar (
         }
     }
 
-    SetName( OUString( "TextObjectBar" ));
+    SetName( "TextObjectBar");
 
     // SetHelpId( SD_IF_SDDRAWTEXTOBJECTBAR );
 }

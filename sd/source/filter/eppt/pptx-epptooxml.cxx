@@ -2111,7 +2111,7 @@ bool PowerPointExport::WriteNotesMaster()
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
     Reference< XPropertySet > aXBackgroundPropSet;
-    if( ImplGetPropertyValue( mXPagePropSet, OUString( "Background" ) ) &&
+    if( ImplGetPropertyValue( mXPagePropSet, "Background" ) &&
             ( mAny >>= aXBackgroundPropSet ) )
         ImplWriteBackground( pFS, aXBackgroundPropSet );
 

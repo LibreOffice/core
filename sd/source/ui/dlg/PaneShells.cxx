@@ -48,7 +48,7 @@ TYPEINIT1(LeftImpressPaneShell, SfxShell);
 LeftImpressPaneShell::LeftImpressPaneShell()
     : SfxShell()
 {
-    SetName(OUString("LeftImpressPane"));
+    SetName("LeftImpressPane");
 }
 
 LeftImpressPaneShell::~LeftImpressPaneShell()
@@ -74,7 +74,7 @@ TYPEINIT1(LeftDrawPaneShell, SfxShell);
 LeftDrawPaneShell::LeftDrawPaneShell()
     : SfxShell()
 {
-    SetName(OUString("LeftDrawPane"));
+    SetName("LeftDrawPane");
 }
 
 LeftDrawPaneShell::~LeftDrawPaneShell()
