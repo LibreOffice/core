@@ -917,8 +917,6 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
     if( !xErrorBarDataSource.is())
         return aResult;
 
-    const OUString aRolePrefix(  "error-bars-" );
-
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
         xErrorBarDataSource->getDataSequences());
     for( sal_Int32 nI=0; nI< aSequences.getLength(); ++nI )
@@ -931,7 +929,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
                 Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
                 OUString aRole;
                 if( ( xSeqProp->getPropertyValue( "Role" ) >>= aRole ) &&
-                    aRole.match( aRolePrefix ))
+                    aRole.match( "error-bars-" ))
                 {
                     aResult.push_back( xSequence );
                 }
@@ -3720,9 +3718,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
 
 Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLExporter"  );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLExporter" };
 }
 
 OUString SAL_CALL SchXMLExport_getImplementationName() throw()
@@ -3739,9 +3735,7 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const Referenc
 // Oasis format
 Sequence< OUString > SAL_CALL SchXMLExport_Oasis_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisExporter"  );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisExporter" };
 }
 
 OUString SAL_CALL SchXMLExport_Oasis_getImplementationName() throw()
@@ -3761,9 +3755,7 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_createInstance(const Re
 
 Sequence< OUString > SAL_CALL SchXMLExport_Styles_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLStylesExporter" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLStylesExporter" };
 }
 
 OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw()
@@ -3779,14 +3771,12 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const R
 // Oasis format
 Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisStylesExporter" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisStylesExporter" };
 }
 
 OUString SAL_CALL SchXMLExport_Oasis_Styles_getImplementationName() throw()
 {
-    return OUString(  "SchXMLExport.Oasis.Styles" );
+    return OUString( "SchXMLExport.Oasis.Styles" );
 }
 
 Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
@@ -3796,9 +3786,7 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Styles_createInstance(c
 
 Sequence< OUString > SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLContentExporter" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLContentExporter" };
 }
 
 OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw()
@@ -3814,9 +3802,7 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const 
 // Oasis format
 Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisContentExporter" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisContentExporter" };
 }
 
 OUString SAL_CALL SchXMLExport_Oasis_Content_getImplementationName() throw()
@@ -3832,9 +3818,7 @@ Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Content_createInstance(
 // Oasis format
 Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisMetaExporter" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisMetaExporter" };
 }
 
 OUString SAL_CALL SchXMLExport_Oasis_Meta_getImplementationName() throw()

@@ -495,14 +495,13 @@ namespace
 {
     static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
     {
-        const OUString sConfigName( "/org.openoffice.Office.Common/Forms/PropertyBrowser/" );
-        const OUString sPropertyName( "DirectHelp" );
-
         ::utl::OConfigurationTreeRoot aConfiguration(
-            ::utl::OConfigurationTreeRoot::createWithComponentContext( _rxContext, sConfigName ) );
+            ::utl::OConfigurationTreeRoot::createWithComponentContext(
+                _rxContext,
+                "/org.openoffice.Office.Common/Forms/PropertyBrowser/" ) );
 
         bool bEnabled = false;
-        OSL_VERIFY( aConfiguration.getNodeValue( sPropertyName ) >>= bEnabled );
+        OSL_VERIFY( aConfiguration.getNodeValue( "DirectHelp" ) >>= bEnabled );
         return bEnabled;
     }
 }

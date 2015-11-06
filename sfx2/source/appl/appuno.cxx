@@ -884,15 +884,13 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     else
     {
         // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
-        OUString sSlotName( "OptionsTreeDialog" );
-        OUString sPropName( "OptionsPageURL" );
-        if ( sSlotName == OUString( pSlot->pUnoName, strlen(pSlot->pUnoName), RTL_TEXTENCODING_UTF8 ) )
+        if ( "OptionsTreeDialog" == OUString( pSlot->pUnoName, strlen(pSlot->pUnoName), RTL_TEXTENCODING_UTF8 ) )
         {
             for ( sal_Int32 n = 0; n < nCount; ++n )
             {
                 const PropertyValue& rProp = pPropsVal[n];
                 OUString sName( rProp.Name );
-                if ( sName == sPropName )
+                if ( sName == "OptionsPageURL" )
                 {
                     OUString sURL;
                     if ( rProp.Value >>= sURL )

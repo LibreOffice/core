@@ -346,18 +346,13 @@ void GenericDragSource::initialize( const Sequence< Any >& ) throw( Exception, s
 
 Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
 {
-    #if defined UNX
-    OUString aServiceName(
-    #if ! defined MACOSX
-    "com.sun.star.datatransfer.dnd.X11DragSource"
-    #else
-    "com.sun.star.datatransfer.dnd.OleDragSource"
-    #endif
-                                                               );
-    return Sequence< OUString >(&aServiceName, 1);
-    #else
+#if defined MACOSX
+    return Sequence< OUString > { "com.sun.star.datatransfer.dnd.OleDragSource" };
+#elif defined UNX
+    return Sequence< OUString > { "com.sun.star.datatransfer.dnd.X11DragSource" };
+#else
     return GenericDragSource::getSupportedServiceNames_static();
-    #endif
+#endif
 }
 
 OUString SAL_CALL DragSource_getImplementationName()
@@ -470,18 +465,13 @@ void GenericDropTarget::setDefaultActions( sal_Int8) throw(std::exception)
 
 Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames()
 {
-    #if defined UNX
-    OUString aServiceName(
-    #if ! defined MACOSX
-    "com.sun.star.datatransfer.dnd.X11DropTarget"
-    #else
-    "com.sun.star.datatransfer.dnd.OleDropTarget"
-    #endif
-                                                               );
-    return Sequence< OUString >(&aServiceName, 1);
-    #else
+#if defined MACOSX
+    return Sequence< OUString > {  "com.sun.star.datatransfer.dnd.OleDropTarget" };
+#elif defined UNX
+    return Sequence< OUString > { "com.sun.star.datatransfer.dnd.X11DropTarget" };
+#else
     return GenericDropTarget::getSupportedServiceNames_static();
-    #endif
+#endif
 }
 
 OUString SAL_CALL DropTarget_getImplementationName()

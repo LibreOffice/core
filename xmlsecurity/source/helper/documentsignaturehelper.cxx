@@ -80,10 +80,6 @@ void ImplFillElementList(
     const OUString& rRootStorageName, const bool bRecursive,
     const DocumentSignatureAlgorithm mode)
 {
-    OUString aMetaInfName(  "META-INF"  );
-    OUString sMimeTypeName ("mimetype");
-    OUString aSep(  "/"  );
-
     Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
     Sequence< OUString > aElements = xElements->getElementNames();
     sal_Int32 nElements = aElements.getLength();
@@ -92,8 +88,7 @@ void ImplFillElementList(
     for ( sal_Int32 n = 0; n < nElements; n++ )
     {
         if (mode != OOo3_2Document
-            && (pNames[n] == aMetaInfName
-            || pNames[n] == sMimeTypeName))
+            && (pNames[n] == "META-INF" || pNames[n] == "mimetype"))
         {
             continue;
         }
@@ -117,7 +112,7 @@ void ImplFillElementList(
             else if ( bRecursive && rxStore->isStorageElement( pNames[n] ) )
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], css::embed::ElementModes::READ );
-                OUString aFullRootName( rRootStorageName + sEncName + aSep );
+                OUString aFullRootName( rRootStorageName + sEncName + "/"  );
                 ImplFillElementList(rList, xSubStore, aFullRootName, bRecursive, mode);
             }
         }

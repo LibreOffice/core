@@ -476,8 +476,7 @@ OUString getImplementationName() {
 }
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {
-    OUString name("com.sun.star.configuration.ConfigurationProvider");
-    return css::uno::Sequence< OUString >(&name, 1);
+    return css::uno::Sequence< OUString > { "com.sun.star.configuration.ConfigurationProvider" };
 }
 
 css::uno::Reference< css::lang::XSingleComponentFactory >

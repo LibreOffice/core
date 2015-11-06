@@ -296,9 +296,6 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
             aName += ".";
             aName += pMethod->GetName();
 
-            // language
-            OUString aLanguage("Basic");
-
             // location
             OUString aLocation;
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
@@ -348,7 +345,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
                 aScriptURL = "vnd.sun.star.script:" ;
                 aScriptURL += aName;
                 aScriptURL += "?language=" ;
-                aScriptURL += aLanguage;
+                aScriptURL += "Basic";
                 aScriptURL += "&location=" ;
                 aScriptURL += aLocation;
             }

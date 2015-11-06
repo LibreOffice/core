@@ -477,9 +477,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
             if( !bDecoration )
             {
                 xDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
-
-                OUString aTitlePropName("Title");
-                xDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( OUString() ) );
+                xDlgModPropSet->setPropertyValue( "Title", makeAny( OUString() ) );
             }
         }
         catch(const UnknownPropertyException& )

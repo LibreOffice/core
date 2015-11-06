@@ -1156,7 +1156,6 @@ static bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rNam
         xCNSupplier(rExport.GetModel(), UNO_QUERY);
 
     OUString sOutlineName;
-    OUString sName("Name");
 
     if (xCNSupplier.is())
     {
@@ -1165,7 +1164,7 @@ static bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rNam
         DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
         if (xNumRule.is())
         {
-            xNumRule->getPropertyValue(sName) >>= sOutlineName;
+            xNumRule->getPropertyValue("Name") >>= sOutlineName;
         }
     }
 

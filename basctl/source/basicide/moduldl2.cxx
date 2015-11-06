@@ -1481,13 +1481,11 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
 
     // create library name
     OUString aLibName;
-    OUString aLibStdName( "Library" );
-    //String aLibStdName( IDEResId( RID_STR_STDLIBNAME ) );
     bool bValid = false;
     sal_Int32 i = 1;
     while ( !bValid )
     {
-        aLibName = aLibStdName + OUString::number( i );
+        aLibName = "Library" + OUString::number( i );
         if ( !rDocument.hasLibrary( E_SCRIPTS, aLibName ) && !rDocument.hasLibrary( E_DIALOGS, aLibName ) )
             bValid = true;
         i++;

@@ -1055,8 +1055,7 @@ static bool loadEnv(OUString const  & cLibStem,
     if (!bMod)
         return false;
 
-    OUString aSymbolName(UNO_INIT_ENVIRONMENT);
-    uno_initEnvironmentFunc fpInit = reinterpret_cast<uno_initEnvironmentFunc>(aMod.getSymbol(aSymbolName));
+    uno_initEnvironmentFunc fpInit = reinterpret_cast<uno_initEnvironmentFunc>(aMod.getSymbol(UNO_INIT_ENVIRONMENT));
 
     if (!fpInit)
         return false;

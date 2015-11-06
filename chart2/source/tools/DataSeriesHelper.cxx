@@ -390,7 +390,6 @@ void setStackModeAtSeries(
     if( eStackMode == StackMode_AMBIGUOUS )
         return;
 
-    const OUString aPropName( "StackingDirection" );
     const uno::Any aPropValue = uno::makeAny(
         ( (eStackMode == StackMode_Y_STACKED) ||
           (eStackMode == StackMode_Y_STACKED_PERCENT) )
@@ -407,7 +406,7 @@ void setStackModeAtSeries(
             Reference< beans::XPropertySet > xProp( aSeries[i], uno::UNO_QUERY );
             if( xProp.is() )
             {
-                xProp->setPropertyValue( aPropName, aPropValue );
+                xProp->setPropertyValue( "StackingDirection", aPropValue );
 
                 sal_Int32 nAxisIndex;
                 xProp->getPropertyValue( "AttachedAxisIndex" ) >>= nAxisIndex;

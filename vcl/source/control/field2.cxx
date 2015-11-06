@@ -2125,15 +2125,13 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
             return false;
 
         OUString aUpperCaseStr = aStr.toString().toAsciiUpperCase();
-        OUString aAM(rLocaleDataWrapper.getTimeAM().toAsciiUpperCase());
-        OUString aPM(rLocaleDataWrapper.getTimePM().toAsciiUpperCase());
-        OUString aAM2("AM");  // aAM is localized
-        OUString aPM2("PM");  // aPM is localized
+        OUString aAMlocalised(rLocaleDataWrapper.getTimeAM().toAsciiUpperCase());
+        OUString aPMlocalised(rLocaleDataWrapper.getTimePM().toAsciiUpperCase());
 
-        if ( (nHour < 12) && ( ( aUpperCaseStr.indexOf( aPM ) >= 0 ) || ( aUpperCaseStr.indexOf( aPM2 ) >= 0 ) ) )
+        if ( (nHour < 12) && ( ( aUpperCaseStr.indexOf( "PM" ) >= 0 ) || ( aUpperCaseStr.indexOf( aPMlocalised ) >= 0 ) ) )
             nHour += 12;
 
-        if ( (nHour == 12) && ( ( aUpperCaseStr.indexOf( aAM ) >= 0 ) || ( aUpperCaseStr.indexOf( aAM2 ) >= 0 ) ) )
+        if ( (nHour == 12) && ( ( aUpperCaseStr.indexOf( "AM" ) >= 0 ) || ( aUpperCaseStr.indexOf( aAMlocalised ) >= 0 ) ) )
             nHour = 0;
 
         aTime = tools::Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,

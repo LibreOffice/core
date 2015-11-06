@@ -2729,9 +2729,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 #define SERVICE( classname, servicename, implementationname, draw, flags )\
 uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw()\
 {\
-    const OUString aServiceName( servicename );\
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );\
-    return aSeq;\
+    return uno::Sequence< OUString > { servicename };\
 }\
 OUString SAL_CALL classname##_getImplementationName() throw()\
 {\

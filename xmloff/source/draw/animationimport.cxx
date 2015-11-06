@@ -90,9 +90,7 @@ using ::com::sun::star::lang::XInitialization;
 
 Sequence< OUString > SAL_CALL AnimationsImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( "com.sun.star.comp.Xmloff.AnimationsImport" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Xmloff.AnimationsImport" };
 }
 
 OUString SAL_CALL AnimationsImport_getImplementationName() throw()

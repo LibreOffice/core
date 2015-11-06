@@ -47,8 +47,7 @@ const sal_Int32 UID_UNKNOWN = -1;
 
 Sequence< OUString > getSupportedServiceNames_DocumentHandlerImpl()
 {
-    OUString name( "com.sun.star.xml.input.SaxDocumentHandler" );
-    return Sequence< OUString >( &name, 1 );
+    return Sequence< OUString > { "com.sun.star.xml.input.SaxDocumentHandler" };
 }
 
 OUString getImplementationName_DocumentHandlerImpl()

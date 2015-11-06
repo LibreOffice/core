@@ -70,9 +70,7 @@ namespace svgio
     {
         uno::Sequence< OUString > XSvgParser_getSupportedServiceNames()
         {
-            OUString aServiceName("com.sun.star.graphic.SvgTools" );
-            uno::Sequence< OUString > aServiceNames( &aServiceName, 1 );
-            return aServiceNames;
+            return uno::Sequence< OUString > { "com.sun.star.graphic.SvgTools" };
         }
 
         OUString XSvgParser_getImplementationName()

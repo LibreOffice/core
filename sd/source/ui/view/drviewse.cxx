@@ -1757,10 +1757,9 @@ namespace slideshowhelp
                 //show settings if any were set
                 Sequence< PropertyValue > aArguments(1);
                 PropertyValue aPage;
-                OUString sValue("0");
 
                 aPage.Name = "FirstPage";
-                aPage.Value <<= sValue;
+                aPage.Value <<= OUString("0");
 
                 aArguments[0] = aPage;
 

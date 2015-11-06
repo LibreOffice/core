@@ -834,9 +834,10 @@ namespace connectivity
                 // arguments for creating the config access
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
-                OUString sNodePath("/org.openoffice.Setup/L10N" );
-                aArguments[0] <<= PropertyValue( OUString("nodepath"), 0,
-                    makeAny( sNodePath ), PropertyState_DIRECT_VALUE
+                aArguments[0] <<= PropertyValue(
+                    OUString("nodepath"), 0,
+                    makeAny( OUString("/org.openoffice.Setup/L10N" ) ),
+                    PropertyState_DIRECT_VALUE
                 );
                 // the depth: -1 means unlimited
                 aArguments[1] <<= PropertyValue(

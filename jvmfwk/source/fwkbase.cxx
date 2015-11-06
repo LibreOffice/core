@@ -293,9 +293,7 @@ OString BootParams::getClasspath()
 OUString BootParams::getVendorSettings()
 {
     OUString sVendor;
-    OUString sName(
-        UNO_JAVA_JFW_VENDOR_SETTINGS);
-    if (Bootstrap::get()->getFrom(sName ,sVendor))
+    if (Bootstrap::get()->getFrom(UNO_JAVA_JFW_VENDOR_SETTINGS, sVendor))
     {
         //check the value of the bootstrap variable
         jfw::FileStatus s = checkFileURL(sVendor);
@@ -407,17 +405,13 @@ JFW_MODE getMode()
         bool bDirectMode = true;
         OUString sValue;
         const rtl::Bootstrap * aBoot = Bootstrap::get();
-        OUString sJREHome(UNO_JAVA_JFW_JREHOME);
-        if (!aBoot->getFrom(sJREHome, sValue))
+        if (!aBoot->getFrom(UNO_JAVA_JFW_JREHOME, sValue))
         {
-            OUString sEnvJRE(UNO_JAVA_JFW_ENV_JREHOME);
-            if (!aBoot->getFrom(sEnvJRE, sValue))
+            if (!aBoot->getFrom(UNO_JAVA_JFW_ENV_JREHOME, sValue))
             {
-                OUString sClasspath(UNO_JAVA_JFW_CLASSPATH);
-                if (!aBoot->getFrom(sClasspath, sValue))
+                if (!aBoot->getFrom(UNO_JAVA_JFW_CLASSPATH, sValue))
                 {
-                    OUString sEnvClasspath(UNO_JAVA_JFW_ENV_CLASSPATH);
-                    if (!aBoot->getFrom(sEnvClasspath, sValue))
+                    if (!aBoot->getFrom(UNO_JAVA_JFW_ENV_CLASSPATH, sValue))
                     {
                         OUString sParams = UNO_JAVA_JFW_PARAMETER +
                             OUString::number(1);

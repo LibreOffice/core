@@ -371,7 +371,6 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
     {
         aRet.realloc(nMaxCategoryCount);
         aOuterEnd = aComplexCatsPerIndex.end();
-        OUString aSpace(" ");
         for(sal_Int32 nN=0; nN<nMaxCategoryCount; nN++)
         {
             OUString aText;
@@ -383,7 +382,7 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
                     if( !aAddText.isEmpty() )
                     {
                         if(!aText.isEmpty())
-                            aText += aSpace;
+                            aText += " ";
                         aText += aAddText;
                     }
                 }

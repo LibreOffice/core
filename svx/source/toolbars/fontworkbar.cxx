@@ -141,9 +141,8 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
         {
-            const OUString sType( "Type" );
             const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
-            const Any* pAny = aGeometryItem.GetPropertyValueByName( sType );
+            const Any* pAny = aGeometryItem.GetPropertyValueByName( "Type" );
             if( pAny )
             {
                 OUString aType;

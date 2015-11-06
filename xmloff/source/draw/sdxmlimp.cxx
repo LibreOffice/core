@@ -254,13 +254,11 @@ SvXMLImportContext *SdXMLFlatDocContext_Impl::CreateChildContext(
 #define SERVICE(classname,servicename,implementationname,draw,flags)\
 uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw()\
 {\
-    const OUString aServiceName(  servicename  );\
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );\
-    return aSeq;\
+    return uno::Sequence< OUString > { servicename };\
 }\
 OUString SAL_CALL classname##_getImplementationName() throw()\
 {\
-    return OUString(  implementationname  );\
+    return OUString( implementationname );\
 }\
 uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
 {\

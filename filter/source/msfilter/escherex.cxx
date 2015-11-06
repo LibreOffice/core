@@ -2472,10 +2472,9 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
     if ( pCustoShape )
     {
         uno::Sequence< OUString > sEquationSource;
-        const OUString sEquations( "Equations"  );
         const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
             pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sEquations );
+        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "Equations" );
         if ( pAny )
             *pAny >>= sEquationSource;
         sal_Int32 nEquationSourceCount = sEquationSource.getLength();

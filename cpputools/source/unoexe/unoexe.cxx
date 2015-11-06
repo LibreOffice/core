@@ -140,10 +140,9 @@ static bool readOption( OUString * pValue, const sal_Char * pOpt,
 static bool readOption( bool * pbOpt, const sal_Char * pOpt,
                         sal_uInt32 * pnIndex, const OUString & aArg)
 {
-    const OUString dashdash("--");
     OUString aOpt = OUString::createFromAscii(pOpt);
 
-    if(aArg.startsWith(dashdash) && aOpt.equals(aArg.copy(2)))
+    if(aArg.startsWith("--") && aOpt.equals(aArg.copy(2)))
     {
         ++(*pnIndex);
         *pbOpt = true;
@@ -408,8 +407,7 @@ SAL_IMPLEMENT_MAIN()
 
             rtl_getAppCommandArg(nPos, &arg.pData);
 
-            const OUString dashdash("--");
-            if (dashdash == arg)
+            if (arg == "--")
             {
                 ++nPos;
                 break;

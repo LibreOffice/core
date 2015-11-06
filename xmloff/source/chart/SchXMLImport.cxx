@@ -658,9 +658,7 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
 
 Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisImporter"  );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisImporter" };
 }
 
 OUString SAL_CALL SchXMLImport_getImplementationName() throw()
@@ -677,14 +675,12 @@ Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Referenc
 
 Sequence< OUString > SAL_CALL SchXMLImport_Styles_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisStylesImporter"  );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisStylesImporter" };
 }
 
 OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
 {
-    return OUString(  "SchXMLImport.Styles"  );
+    return OUString( "SchXMLImport.Styles" );
 }
 
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
@@ -694,9 +690,7 @@ Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const R
 
 Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisContentImporter"  );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisContentImporter" };
 }
 
 OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
@@ -711,9 +705,7 @@ Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const 
 
 Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisMetaImporter"  );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisMetaImporter" };
 }
 
 OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()

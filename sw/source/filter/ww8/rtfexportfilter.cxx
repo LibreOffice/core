@@ -107,9 +107,7 @@ OUString RtfExport_getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName("com.sun.star.document.ExportFilter");
-    const uno::Sequence< OUString > aSeq(&aServiceName, 1);
-    return aSeq;
+    return uno::Sequence< OUString > { "com.sun.star.document.ExportFilter" };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::Reference< uno::XComponentContext >& xCtx) throw(uno::Exception)

@@ -853,13 +853,12 @@ static bool IsVers2OrNewer( const OUString& rFileURL, sal_uInt16& nLng, bool& bN
 {
     if (rFileURL.isEmpty())
         return false;
-    OUString aDIC("dic");
     OUString aExt;
     sal_Int32 nPos = rFileURL.lastIndexOf( '.' );
     if (-1 != nPos)
         aExt = rFileURL.copy( nPos + 1 ).toAsciiLowerCase();
 
-    if (aDIC != aExt)
+    if (aExt != "dic")
         return false;
 
     // get stream to be used

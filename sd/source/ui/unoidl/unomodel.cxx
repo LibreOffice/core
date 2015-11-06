@@ -1638,11 +1638,7 @@ void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDF
 
 void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
-    const OUString sGroup   ( "com.sun.star.drawing.GroupShape");
-    const OUString sOnClick ( "OnClick" );
-    const OUString sBookmark( "Bookmark" );
-
-    if ( xShape->getShapeType().equals( sGroup ) )
+    if ( xShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
     {
         uno::Reference< container::XIndexAccess > xIndexAccess( xShape, uno::UNO_QUERY );
         if ( xIndexAccess.is() )
@@ -1670,7 +1666,7 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
             Rectangle   aLinkRect( Point( aShapePos.X, aShapePos.Y ), Size( aShapeSize.Width, aShapeSize.Height ) );
 
             presentation::ClickAction eCa;
-            uno::Any aAny( xShapePropSet->getPropertyValue( sOnClick ) );
+            uno::Any aAny( xShapePropSet->getPropertyValue( "OnClick" ) );
             if ( aAny >>= eCa )
             {
                 switch ( eCa )
@@ -1717,7 +1713,7 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
                     case presentation::ClickAction_DOCUMENT :
                     {
                         OUString aBookmark;
-                        xShapePropSet->getPropertyValue( sBookmark ) >>= aBookmark;
+                        xShapePropSet->getPropertyValue( "Bookmark" ) >>= aBookmark;
                         if( !aBookmark.isEmpty() )
                         {
                             switch( eCa )

@@ -1038,12 +1038,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
     //find java.vendor property
     typedef vector<pair<OUString, OUString> >::const_iterator c_ip;
-    OUString sVendor("java.vendor");
     OUString sVendorName;
 
     for (c_ip i = props.begin(); i != props.end(); ++i)
     {
-        if (sVendor.equals(i->first))
+        if (i->first == "java.vendor")
         {
             sVendorName = i->second;
             break;
@@ -1254,10 +1253,9 @@ void addJavaInfosDirScan(
 
 
 
-    OUString usFile("file:///");
     for( int ii = 0; ii < cSearchPaths; ii ++)
     {
-        OUString usDir1(usFile + arPaths[ii]);
+        OUString usDir1("file:///" + arPaths[ii]);
         DirectoryItem item;
         if(DirectoryItem::get(usDir1, item) == File::E_None)
         {

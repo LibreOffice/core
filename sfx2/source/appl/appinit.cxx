@@ -185,8 +185,7 @@ OUString GetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
         aMod.loadRelative(&thisModule, SVLIBRARY("cui"));
 
         // get symbol
-        OUString aSymbol( "GetSpecialCharsForEdit"  );
-        pfunc_getSpecialCharsForEdit = reinterpret_cast<PFunc_getSpecialCharsForEdit>(aMod.getFunctionSymbol(aSymbol));
+        pfunc_getSpecialCharsForEdit = reinterpret_cast<PFunc_getSpecialCharsForEdit>(aMod.getFunctionSymbol("GetSpecialCharsForEdit"));
         DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
         aMod.release();
 #else

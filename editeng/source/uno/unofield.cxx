@@ -885,10 +885,9 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUSt
 
     // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
     // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
-    const OUString aTextFieldPrexit2( "com.sun.star.text.TextField." );
 
     if( (ServiceSpecifier.startsWith( aTextFieldPrexit )) ||
-        (ServiceSpecifier.startsWith( aTextFieldPrexit2 )) )
+        (ServiceSpecifier.startsWith( "com.sun.star.text.TextField." )) )
     {
         OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
 

@@ -146,17 +146,16 @@ lcl_initGenerator(SvXMLImport & rImport,
         xPath->registerNS(GetXMLToken(XML_NP_OFFICE),GetXMLToken(XML_N_OFFICE));
         xPath->registerNS(GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META));
 
-        OUString const expr( "string(/office:document-meta/office:meta/meta:generator)");
         uno::Reference< xml::xpath::XXPathObject > const xObj(
-            xPath->eval(xDoc.get(), expr), uno::UNO_SET_THROW);
+            xPath->eval(xDoc.get(), "string(/office:document-meta/office:meta/meta:generator)"),
+            uno::UNO_SET_THROW);
         OUString const value(xObj->getString());
         SvXMLMetaDocumentContext::setBuildId(value, rImport.getImportInfo());
     } catch (const uno::RuntimeException&) {
         throw;
     } catch (const uno::Exception& e) {
         throw lang::WrappedTargetRuntimeException(
-            OUString(
-                                "SvXMLMetaDocumentContext::initGenerator: exception"),
+            "SvXMLMetaDocumentContext::initGenerator: exception",
             rImport, makeAny(e));
     }
 }

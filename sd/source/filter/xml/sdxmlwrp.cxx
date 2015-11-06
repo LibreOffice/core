@@ -375,8 +375,7 @@ sal_Int32 ReadThroughComponent(
     DBG_ASSERT( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        OUString sPropName( "StreamName" );
-        xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+        xInfoSet->setPropertyValue( "StreamName", makeAny( sStreamName ) );
     }
 
     try
