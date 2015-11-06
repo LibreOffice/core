@@ -775,14 +775,11 @@ BaseContent::getPropertySetInfo(
     return m_pMyShell->info_p( m_aUncPath );
 }
 
-
-
-
 Reference< sdbc::XRow > SAL_CALL
 BaseContent::getPropertyValues(
     sal_Int32 nMyCommandIdentifier,
     const Sequence< beans::Property >& PropertySet )
-    throw( RuntimeException )
+    throw( RuntimeException, std::exception )
 {
     sal_Int32 nProps = PropertySet.getLength();
     if ( !nProps )

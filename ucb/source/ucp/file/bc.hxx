@@ -302,7 +302,7 @@ namespace fileaccess {
         getPropertyValues(
             sal_Int32 nMyCommandIdentifier,
             const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& PropertySet )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( css::uno::RuntimeException, std::exception );
 
         com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
         setPropertyValues(
