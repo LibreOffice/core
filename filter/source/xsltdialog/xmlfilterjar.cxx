@@ -113,7 +113,7 @@ static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleSe
     }
 }
 
-void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( Exception )
+void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( Exception, std::exception )
 {
     if( !rSourceFile.isEmpty() &&
         !rSourceFile.startsWith("http:") &&
