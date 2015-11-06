@@ -1954,113 +1954,121 @@ int main( int argc, char * argv[] )
 int _cdecl main( int argc, char * argv[] )
 #endif
 {
-    std::vector< std::string > args;
-
-    Options_Impl options(argv[0]);
-    for (int i = 1; i < argc; i++)
+    try
     {
-        if (!Options::checkArgument(args, argv[i], strlen(argv[i])))
+        std::vector< std::string > args;
+
+        Options_Impl options(argv[0]);
+        for (int i = 1; i < argc; i++)
         {
-            // failure.
-            options.printUsage();
+            if (!Options::checkArgument(args, argv[i], strlen(argv[i])))
+            {
+                // failure.
+                options.printUsage();
+                return 1;
+            }
+        }
+        if (!options.initOptions(args))
+        {
             return 1;
         }
-    }
-    if (!options.initOptions(args))
-    {
-        return 1;
-    }
 
-    OUString regName1( convertToFileUrl(options.getRegName1().c_str(), options.getRegName1().size()) );
-    OUString regName2( convertToFileUrl(options.getRegName2().c_str(), options.getRegName2().size()) );
+        OUString regName1( convertToFileUrl(options.getRegName1().c_str(), options.getRegName1().size()) );
+        OUString regName2( convertToFileUrl(options.getRegName2().c_str(), options.getRegName2().size()) );
 
-    Registry reg1, reg2;
-    if ( reg1.open(regName1, RegAccessMode::READONLY) != RegError::NO_ERROR )
-    {
-        fprintf(stdout, "%s: open registry \"%s\" failed\n",
-                options.getProgramName().c_str(), options.getRegName1().c_str());
-        return 2;
-    }
-    if ( reg2.open(regName2, RegAccessMode::READONLY) != RegError::NO_ERROR )
-    {
-        fprintf(stdout, "%s: open registry \"%s\" failed\n",
-                options.getProgramName().c_str(), options.getRegName2().c_str());
-        return 3;
-    }
-
-    RegistryKey key1, key2;
-    if ( reg1.openRootKey(key1) != RegError::NO_ERROR )
-    {
-        fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
-                options.getProgramName().c_str(), options.getRegName1().c_str());
-        return 4;
-    }
-    if ( reg2.openRootKey(key2) != RegError::NO_ERROR )
-    {
-        fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
-                options.getProgramName().c_str(), options.getRegName2().c_str());
-        return 5;
-    }
-
-    if ( options.isStartKeyValid() )
-    {
-        if ( options.matchedWithExcludeKey( options.getStartKey() ) )
+        Registry reg1, reg2;
+        if ( reg1.open(regName1, RegAccessMode::READONLY) != RegError::NO_ERROR )
         {
-            fprintf(stdout, "%s: start key is equal to one of the exclude keys\n",
-                    options.getProgramName().c_str());
-            return 6;
-        }
-        RegistryKey sk1, sk2;
-        if ( key1.openKey(options.getStartKey(), sk1) != RegError::NO_ERROR )
-        {
-            fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
+            fprintf(stdout, "%s: open registry \"%s\" failed\n",
                     options.getProgramName().c_str(), options.getRegName1().c_str());
-            return 7;
+            return 2;
         }
-        if ( key2.openKey(options.getStartKey(), sk2) != RegError::NO_ERROR )
+        if ( reg2.open(regName2, RegAccessMode::READONLY) != RegError::NO_ERROR )
         {
-            fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
+            fprintf(stdout, "%s: open registry \"%s\" failed\n",
                     options.getProgramName().c_str(), options.getRegName2().c_str());
-            return 8;
+            return 3;
         }
 
-        key1 = sk1;
-        key2 = sk2;
-    }
-
-    sal_uInt32 nError = compareKeys(options, key1, key2);
-    if ( nError )
-    {
-        if ( options.unoTypeCheck() )
+        RegistryKey key1, key2;
+        if ( reg1.openRootKey(key1) != RegError::NO_ERROR )
         {
-            fprintf(stdout, "%s: registries are incompatible: %lu differences!\n",
-                    options.getProgramName().c_str(),
-                    sal::static_int_cast< unsigned long >(nError));
+            fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
+                    options.getProgramName().c_str(), options.getRegName1().c_str());
+            return 4;
         }
-        else
+        if ( reg2.openRootKey(key2) != RegError::NO_ERROR )
         {
-            fprintf(stdout, "%s: registries contain %lu differences!\n",
-                    options.getProgramName().c_str(),
-                    sal::static_int_cast< unsigned long >(nError));
+            fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
+                    options.getProgramName().c_str(), options.getRegName2().c_str());
+            return 5;
         }
-    }
 
-    key1.releaseKey();
-    key2.releaseKey();
-    if ( reg1.close() != RegError::NO_ERROR )
-    {
-        fprintf(stdout, "%s: closing registry \"%s\" failed\n",
-                options.getProgramName().c_str(), options.getRegName1().c_str());
-        return 9;
-    }
-    if ( reg2.close() != RegError::NO_ERROR )
-    {
-        fprintf(stdout, "%s: closing registry \"%s\" failed\n",
-                options.getProgramName().c_str(), options.getRegName2().c_str());
-        return 10;
-    }
+        if ( options.isStartKeyValid() )
+        {
+            if ( options.matchedWithExcludeKey( options.getStartKey() ) )
+            {
+                fprintf(stdout, "%s: start key is equal to one of the exclude keys\n",
+                        options.getProgramName().c_str());
+                return 6;
+            }
+            RegistryKey sk1, sk2;
+            if ( key1.openKey(options.getStartKey(), sk1) != RegError::NO_ERROR )
+            {
+                fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
+                        options.getProgramName().c_str(), options.getRegName1().c_str());
+                return 7;
+            }
+            if ( key2.openKey(options.getStartKey(), sk2) != RegError::NO_ERROR )
+            {
+                fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
+                        options.getProgramName().c_str(), options.getRegName2().c_str());
+                return 8;
+            }
 
-    return ((nError > 0) ? 11 : 0);
+            key1 = sk1;
+            key2 = sk2;
+        }
+
+        sal_uInt32 nError = compareKeys(options, key1, key2);
+        if ( nError )
+        {
+            if ( options.unoTypeCheck() )
+            {
+                fprintf(stdout, "%s: registries are incompatible: %lu differences!\n",
+                        options.getProgramName().c_str(),
+                        sal::static_int_cast< unsigned long >(nError));
+            }
+            else
+            {
+                fprintf(stdout, "%s: registries contain %lu differences!\n",
+                        options.getProgramName().c_str(),
+                        sal::static_int_cast< unsigned long >(nError));
+            }
+        }
+
+        key1.releaseKey();
+        key2.releaseKey();
+        if ( reg1.close() != RegError::NO_ERROR )
+        {
+            fprintf(stdout, "%s: closing registry \"%s\" failed\n",
+                    options.getProgramName().c_str(), options.getRegName1().c_str());
+            return 9;
+        }
+        if ( reg2.close() != RegError::NO_ERROR )
+        {
+            fprintf(stdout, "%s: closing registry \"%s\" failed\n",
+                    options.getProgramName().c_str(), options.getRegName2().c_str());
+            return 10;
+        }
+
+        return ((nError > 0) ? 11 : 0);
+    }
+    catch (std::exception& e)
+    {
+        fprintf(stdout, ("WARNING: \"%s\"\n"), e.what());
+        return 11;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
