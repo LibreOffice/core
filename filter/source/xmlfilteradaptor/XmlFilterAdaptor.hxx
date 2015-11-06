@@ -65,7 +65,7 @@ protected:
         throw (css::uno::RuntimeException);
 
     bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 
 

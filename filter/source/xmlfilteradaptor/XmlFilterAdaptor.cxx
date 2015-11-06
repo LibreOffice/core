@@ -65,7 +65,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
 bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     OUString udConvertClass=msUserData[0];
     OUString udImport =msUserData[2];
