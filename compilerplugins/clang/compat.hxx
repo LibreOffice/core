@@ -255,6 +255,16 @@ inline bool isMacroBodyExpansion(clang::CompilerInstance& compiler, clang::Sourc
 #endif
 }
 
+inline auto getAsTagDecl(clang::Type const& t) -> clang::TagDecl *
+{
+#if (__clang_major__ == 3 && __clang_minor__ > 5) || __clang_major__ > 3
+    // TODO not sure if it works with clang 3.6, trunk is known to work
+    return t.getAsTagDecl();
+#else
+    return t.getAs<clang::TagType>()->getDecl();
+#endif
+}
+
 }
 
 #endif
