@@ -94,7 +94,8 @@ template<> struct assertion_traits<Color>
 
 CPPUNIT_NS_END
 
-using namespace ::com::sun::star;
+using namespace css;
+using namespace css::animations;
 
 class SdExportTest : public SdModelTestBase
 {
@@ -1349,7 +1350,7 @@ void SdExportTest::testTdf80224()
 
 bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> xDoc, sal_Int32 nSlideNumber,
                            sal_Int16 nExpectedTransitionType, sal_Int16 nExpectedTransitionSubType,
-                           bool bExpectedDirection = false)
+                           bool bExpectedDirection = true)
 {
     sal_Int32 nSlideIndex = nSlideNumber - 1;
 
@@ -1357,31 +1358,34 @@ bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> xDoc, sal
 
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(nSlideIndex), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
-    uno::Any aAny;
 
-    aAny = xPropSet->getPropertyValue(OUString("TransitionType"));
     sal_Int16 nTransitionType = 0;
-    if ((aAny >>= nTransitionType) == false)
-        return false;
+    xPropSet->getPropertyValue("TransitionType") >>= nTransitionType;
+
     if (nExpectedTransitionType != nTransitionType)
-        return false;
-
-    aAny = xPropSet->getPropertyValue(OUString("TransitionSubtype"));
-    sal_Int16 nTransitionSubtype = 0;
-    if ((aAny >>= nTransitionSubtype) == false)
-        return false;
-    if (nExpectedTransitionSubType != nTransitionSubtype)
-        return false;
-
-    if (xPropSet->getPropertySetInfo()->hasPropertyByName(OUString("TransitionDirection")))
     {
-        aAny = xPropSet->getPropertyValue(OUString("TransitionDirection"));
-        bool bDirection = false;
-        if ((aAny >>= bDirection) == false)
-            return false;
-        if (bExpectedDirection != bDirection)
-            return false;
+        std::cerr << "Transition type: " << nTransitionType << " " << nExpectedTransitionType << std::endl;
+        return false;
     }
+
+    sal_Int16 nTransitionSubtype = 0;
+    xPropSet->getPropertyValue("TransitionSubtype") >>= nTransitionSubtype;
+    if (nExpectedTransitionSubType != nTransitionSubtype)
+    {
+        std::cerr << "Transition Subtype: " << nTransitionSubtype << " " << nExpectedTransitionSubType << std::endl;
+        return false;
+    }
+
+    bool bDirection = false;
+    xPropSet->getPropertyValue("TransitionDirection") >>= bDirection;
+
+    if (bExpectedDirection != bDirection)
+    {
+        std::cerr << "Transition Direction: " << (bExpectedDirection ? "normal" : "reversed")
+                  << " "                      << (bDirection ? "normal" : "reversed") << std::endl;
+        return false;
+    }
+
     return true;
 }
 
@@ -1392,14 +1396,17 @@ void SdExportTest::testExportTransitionsPPTX()
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
 
     // WIPE TRANSITIONS
-    checkTransitionOnPage(xDoc, 01, css::animations::TransitionType::BARWIPE, css::animations::TransitionSubType::TOPTOBOTTOM, true);
-    checkTransitionOnPage(xDoc, 02, css::animations::TransitionType::BARWIPE, css::animations::TransitionSubType::LEFTTORIGHT, false);
-    checkTransitionOnPage(xDoc, 03, css::animations::TransitionType::BARWIPE, css::animations::TransitionSubType::LEFTTORIGHT, true);
-    checkTransitionOnPage(xDoc, 04, css::animations::TransitionType::BARWIPE, css::animations::TransitionSubType::TOPTOBOTTOM, false);
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 01, TransitionType::BARWIPE, TransitionSubType::TOPTOBOTTOM, false));
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 02, TransitionType::BARWIPE, TransitionSubType::LEFTTORIGHT, true));
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 03, TransitionType::BARWIPE, TransitionSubType::LEFTTORIGHT, false));
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 04, TransitionType::BARWIPE, TransitionSubType::TOPTOBOTTOM, true));
 
-    checkTransitionOnPage(xDoc, 71, css::animations::TransitionType::ZOOM, css::animations::TransitionSubType::ROTATEIN);
-    checkTransitionOnPage(xDoc, 41, css::animations::TransitionType::PUSHWIPE, css::animations::TransitionSubType::COMBHORIZONTAL);
-    checkTransitionOnPage(xDoc, 42, css::animations::TransitionType::PUSHWIPE, css::animations::TransitionSubType::COMBVERTICAL);
+    // COMB
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 41, TransitionType::PUSHWIPE, TransitionSubType::COMBHORIZONTAL));
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 42, TransitionType::PUSHWIPE, TransitionSubType::COMBVERTICAL));
+
+    // NEWSFLASH
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 71, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
