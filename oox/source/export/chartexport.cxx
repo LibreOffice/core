@@ -279,7 +279,7 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format
     Reference< chart2::data::XLabeledDataSequence > xXValues(
-        lcl_getDataSequenceByRole( aSeriesSeqVector, OUString("values-x") ) );
+        lcl_getDataSequenceByRole( aSeriesSeqVector, "values-x" ) );
     if( xXValues.is() )
         aLabeledSeqVector.push_back( xXValues );
 
@@ -2126,7 +2126,7 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
                         || (eChartType == chart::TYPEID_BUBBLE) )
                     {
                         // export xVal
-                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString("values-x") ) );
+                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, "values-x" ) );
                         if( xSequence.is() )
                         {
                             Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
@@ -2138,7 +2138,7 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
                     if( eChartType == chart::TYPEID_BUBBLE )
                     {
                         // export yVal
-                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString("values-y") ) );
+                        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, "values-y" ) );
                         if( xSequence.is() )
                         {
                             Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );

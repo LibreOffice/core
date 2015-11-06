@@ -60,7 +60,7 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
 
         case MCE_TOKEN( Choice ):
             {
-                OUString aRequires = rAttribs.getString( ( XML_Requires ), OUString("none") );
+                OUString aRequires = rAttribs.getString( ( XML_Requires ), "none" );
                 if (!getFilter().hasNamespaceURL(aRequires))
                     // Check to see if we have this namespace defined first,
                     // because calling getNamespaceURL() would throw if the

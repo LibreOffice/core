@@ -527,13 +527,13 @@ bool MSConvertOCXControls::ReadOCXStorage( tools::SvRef<SotStorage>& xOleStg,
 {
     if ( xOleStg.Is() )
     {
-        tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream( OUString("\3OCXNAME"));
+        tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream( "\3OCXNAME");
         BinaryXInputStream aNameStream( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pNameStream ) ), true );
 
-        tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream( OUString("contents"));
+        tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream( "contents");
         BinaryXInputStream aInStrm(  Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pContents ) ), true );
 
-        tools::SvRef<SotStorageStream> pClsStrm = xOleStg->OpenSotStream(OUString("\1CompObj"));
+        tools::SvRef<SotStorageStream> pClsStrm = xOleStg->OpenSotStream("\1CompObj");
         BinaryXInputStream aClsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper(*pClsStrm ) ), true );
         aClsStrm.skip(12);
 
@@ -588,17 +588,17 @@ bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, t
     rName = exportHelper.getTypeName();
     xOleStg->SetClass( aName, SotClipboardFormatId::EMBEDDED_OBJ_OLE, sFullName);
     {
-        tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream(OUString("\3OCXNAME"));
+        tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream("\3OCXNAME");
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pNameStream );
         exportHelper.exportName( xOut );
     }
     {
-        tools::SvRef<SotStorageStream> pObjStream = xOleStg->OpenSotStream(OUString("\1CompObj"));
+        tools::SvRef<SotStorageStream> pObjStream = xOleStg->OpenSotStream("\1CompObj");
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pObjStream );
         exportHelper.exportCompObj( xOut );
     }
     {
-        tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream(OUString("contents"));
+        tools::SvRef<SotStorageStream> pContents = xOleStg->OpenSotStream("contents");
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pContents );
         exportHelper.exportControl( xOut, rSize );
     }
