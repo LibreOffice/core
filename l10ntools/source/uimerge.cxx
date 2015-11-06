@@ -182,26 +182,33 @@ bool Merge(
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     int nRetValue = 0;
-
-    common::HandledArgs aArgs;
-    if ( !common::handleArguments(argc, argv, aArgs) )
+    try
     {
-        common::writeUsage("uiex","*.ui");
+
+        common::HandledArgs aArgs;
+        if ( !common::handleArguments(argc, argv, aArgs) )
+        {
+            common::writeUsage("uiex","*.ui");
+            return 1;
+        }
+
+        sInputFileName = aArgs.m_sInputFile;
+        sOutputFile = aArgs.m_sOutputFile;
+
+        if (!aArgs.m_bMergeMode)
+        {
+            nRetValue = extractTranslations();
+        }
+        else
+        {
+            Merge(aArgs.m_sMergeSrc, sInputFileName, sOutputFile, aArgs.m_sLanguage);
+        }
+    }
+    catch (std::exception& e)
+    {
+        fprintf(stderr, "exception: %s\n", e.what());
         return 1;
     }
-
-    sInputFileName = aArgs.m_sInputFile;
-    sOutputFile = aArgs.m_sOutputFile;
-
-    if (!aArgs.m_bMergeMode)
-    {
-        nRetValue = extractTranslations();
-    }
-    else
-    {
-        Merge(aArgs.m_sMergeSrc, sInputFileName, sOutputFile, aArgs.m_sLanguage);
-    }
-
     return nRetValue;
 }
 
