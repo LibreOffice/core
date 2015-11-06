@@ -1680,7 +1680,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pSpellDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( OUString(SN_SPELLCHECKER) );
+                SaveCfgSvcs( SN_SPELLCHECKER );
 
                 if (pListenerHelper  &&  bChanged)
                     pListenerHelper->AddLngSvcEvt(
@@ -1697,7 +1697,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pGrammarDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( OUString(SN_GRAMMARCHECKER) );
+                SaveCfgSvcs( SN_GRAMMARCHECKER );
 
                 if (pListenerHelper  &&  bChanged)
                     pListenerHelper->AddLngSvcEvt(
@@ -1713,7 +1713,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pHyphDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( OUString(SN_HYPHENATOR) );
+                SaveCfgSvcs( SN_HYPHENATOR );
 
                 if (pListenerHelper  &&  bChanged)
                     pListenerHelper->AddLngSvcEvt(
@@ -1729,7 +1729,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pThesDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( OUString(SN_THESAURUS) );
+                SaveCfgSvcs( SN_THESAURUS );
             }
         }
     }

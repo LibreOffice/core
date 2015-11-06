@@ -400,7 +400,7 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
     if (!pNameContainer)
     {
         pNameContainer = new ConvDicNameContainer;
-        pNameContainer->AddConvDics( GetDictionaryWriteablePath(), OUString(CONV_DIC_EXT)  );
+        pNameContainer->AddConvDics( GetDictionaryWriteablePath(), CONV_DIC_EXT  );
         xNameContainer = pNameContainer;
 
         // access list of text conversion dictionaries to activate
