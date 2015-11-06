@@ -246,6 +246,12 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
     for (sal_uInt16 i = 0; i < GetChildCount(); ++i)
     {
         vcl::Window* pChild = GetChild(i);
+
+        // This would at the moment just draw a gray rectangle at the top right
+        // corner, need to sort out later.
+        if (pChild == mpVScrollbar.get())
+            continue;
+
         rRenderContext.Push(PushFlags::MAPMODE);
         Point aOffset(PixelToLogic(pChild->GetPosPixel()));
         MapMode aMapMode(rRenderContext.GetMapMode());
