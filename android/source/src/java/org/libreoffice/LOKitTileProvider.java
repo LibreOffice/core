@@ -401,6 +401,7 @@ public class LOKitTileProvider implements TileProvider {
         int x = (int) pixelToTwip(inDocument.x, mDPI);
         int y = (int) pixelToTwip(inDocument.y, mDPI);
 
+        mDocument.setClientZoom(TILE_SIZE, TILE_SIZE, mTileWidth, mTileHeight);
         mDocument.postMouseEvent(type, x, y, numberOfClicks, Document.MOUSE_BUTTON_LEFT, Document.KEYBOARD_MODIFIER_NONE);
     }
 
