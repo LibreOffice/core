@@ -1042,7 +1042,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     if( rEntity.maNamespaceCount.empty() )
     {
         rEntity.maNamespaceCount.push(0);
-        DefineNamespace( OString("xml"), OUString( "http://www.w3.org/XML/1998/namespace" ));
+        DefineNamespace( OString("xml"), "http://www.w3.org/XML/1998/namespace");
     }
     else
     {
