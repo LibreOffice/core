@@ -75,8 +75,8 @@ public class _XMultiPropertyStates extends MultiMethodTest {
         boolean result = false;
         try {
             Object[] defaults = oObj.getPropertyDefaults(names);
-            result = (defaults != null) && defaults.length == names.length;
             log.println("Number of default values: " + defaults.length);
+            result = defaults.length == names.length;
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("some properties seem to be unknown: " + e.toString());
         } catch (com.sun.star.lang.WrappedTargetException e) {
