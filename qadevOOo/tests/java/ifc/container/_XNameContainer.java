@@ -97,10 +97,7 @@ public class _XNameContainer extends MultiMethodTest {
 
         log.println("get ObjRelation(\"INSTANCE" + Index +"\")");
         Object oInstance = tEnv.getObjRelation("INSTANCE"+ Index);
-        if (oInstance == null) {
-            log.println("ObjRelation(\"INSTANCE" + Index +"\") Object n.a.");
-        }
-
+        log.println("ObjRelation(\"INSTANCE" + Index +"\") Object n.a.");
 
         log.println("testing insertByName(\""+Name+"\")...");
         try {
