@@ -53,7 +53,7 @@ void OfficeConnection::setUp() {
             OUString("soffice"),
             &argSoffice));
     if (argSoffice.match("path:")) {
-        desc = "pipe,name=" + uniquePipeName(OUString("oootest"));
+        desc = "pipe,name=" + uniquePipeName("oootest");
         OUString noquickArg("--quickstart=no");
         OUString norestoreArg("--norestore");
         OUString nologoArg("--nologo");
@@ -74,7 +74,7 @@ void OfficeConnection::setUp() {
             jreArg.pData, classpathArg.pData };
         rtl_uString ** envs = 0;
         OUString argEnv;
-        if (detail::getArgument(OUString("env"), &argEnv))
+        if (detail::getArgument("env", &argEnv))
         {
             envs = &argEnv.pData;
         }
