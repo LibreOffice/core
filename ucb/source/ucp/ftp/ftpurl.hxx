@@ -122,7 +122,7 @@ namespace ftp {
 
         // returns a pointer to an open tempfile,
         // sought to the beginning of.
-        oslFileHandle open() throw(curl_exception);
+        oslFileHandle open() throw(curl_exception, std::exception);
 
         FTPDirentry direntry() const
             throw(curl_exception, malformed_exception, std::exception);

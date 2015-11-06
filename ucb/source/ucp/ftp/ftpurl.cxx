@@ -387,7 +387,7 @@ namespace ftp {
                      urlParAscii.getStr());
 
 oslFileHandle FTPURL::open()
-    throw(curl_exception)
+    throw(curl_exception, std::exception)
 {
     if(m_aPathSegmentVec.empty())
         throw curl_exception(CURLE_FTP_COULDNT_RETR_FILE);
