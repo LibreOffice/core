@@ -436,7 +436,7 @@ void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropert
       </p:grpSpPr>"
 
 #define GETA(propName) \
-    ImplGetPropertyValue( mXPagePropSet, OUString( #propName ) )
+    ImplGetPropertyValue( mXPagePropSet, #propName )
 
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
