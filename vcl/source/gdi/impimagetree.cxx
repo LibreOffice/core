@@ -213,7 +213,7 @@ bool ImplImageTree::loadImage(OUString const & name, OUString const & style, Bit
 bool ImplImageTree::loadDefaultImage(OUString const & style, BitmapEx& bitmap)
 {
     return doLoadImage(
-        OUString("res/grafikde.png"),
+        "res/grafikde.png",
         style, bitmap, false);
 }
 

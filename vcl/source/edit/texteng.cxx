@@ -194,10 +194,10 @@ void TextEngine::SetFont( const vcl::Font& rFont )
         maFont.SetAlign( ALIGN_TOP );
         mpRefDev->SetFont( maFont);
         Size aTextSize;
-        aTextSize.Width() = mpRefDev->GetTextWidth(OUString("    "));
+        aTextSize.Width() = mpRefDev->GetTextWidth("    ");
         aTextSize.Height() = mpRefDev->GetTextHeight();
         if ( !aTextSize.Width() )
-            aTextSize.Width() = mpRefDev->GetTextWidth(OUString("XXXX"));
+            aTextSize.Width() = mpRefDev->GetTextWidth("XXXX");
 
         mnDefTab = aTextSize.Width();
         if ( !mnDefTab )

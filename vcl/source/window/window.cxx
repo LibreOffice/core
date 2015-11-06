@@ -2039,7 +2039,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
                 if( !aStrHelpId.isEmpty() )
                     pHelp->Start( aStrHelpId, this );
                 else
-                    pHelp->Start( OUString( OOO_HELP_INDEX  ), this );
+                    pHelp->Start( OOO_HELP_INDEX, this );
             }
         }
     }

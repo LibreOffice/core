@@ -2477,8 +2477,8 @@ bool MiscSettings::GetDisablePrinting() const
     {
         OUString aEnable =
             vcl::SettingsConfigItem::get()->
-            getValue( OUString( "DesktopManagement"  ),
-                      OUString( "DisablePrinting"  ) );
+            getValue( "DesktopManagement",
+                      "DisablePrinting" );
         mxData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
@@ -2543,8 +2543,8 @@ bool MiscSettings::GetEnableATToolSupport() const
         {
             OUString aEnable =
                 vcl::SettingsConfigItem::get()->
-                getValue( OUString( "Accessibility"  ),
-                          OUString( "EnableATToolSupport"  ) );
+                getValue( "Accessibility",
+                          "EnableATToolSupport" );
             mxData->mnEnableATT = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
         }
         else
@@ -2885,7 +2885,7 @@ namespace
             nUIMirroring = 0; // ask configuration only once
             utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
                 comphelper::getProcessComponentContext(),
-                OUString("org.openoffice.Office.Common/I18N/CTL") );    // note: case sensitive !
+                "org.openoffice.Office.Common/I18N/CTL" );    // note: case sensitive !
             if ( aNode.isValid() )
             {
                 bool bTmp = bool();

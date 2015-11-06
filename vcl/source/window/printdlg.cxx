@@ -79,8 +79,8 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     maHorzDim->Show();
     maVertDim->Show();
 
-    maHorzDim->SetText( OUString( "2.0in" ) );
-    maVertDim->SetText( OUString( "2.0in" ) );
+    maHorzDim->SetText( "2.0in" );
+    maVertDim->SetText( "2.0in" );
 }
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
@@ -504,8 +504,8 @@ void PrintDialog::JobTabPage::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     OUString aValue;
 
-    aValue = pItem->getValue( OUString( "PrintDialog"  ),
-                              OUString( "CollateBox"  ) );
+    aValue = pItem->getValue( "PrintDialog",
+                              "CollateBox" );
     if( aValue.equalsIgnoreAsciiCase("alwaysoff") )
     {
         mnCollateUIMode = 1;
@@ -515,8 +515,8 @@ void PrintDialog::JobTabPage::readFromSettings()
     else
     {
         mnCollateUIMode = 0;
-        aValue = pItem->getValue( OUString( "PrintDialog"  ),
-                                  OUString( "Collate"  ) );
+        aValue = pItem->getValue( "PrintDialog",
+                                  "Collate" );
         mpCollateBox->Check( aValue.equalsIgnoreAsciiCase("true") );
     }
 }
@@ -524,11 +524,11 @@ void PrintDialog::JobTabPage::readFromSettings()
 void PrintDialog::JobTabPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( OUString( "PrintDialog"  ),
-                     OUString( "CopyCount"  ),
+    pItem->setValue( "PrintDialog",
+                     "CopyCount",
                      mpCopyCountField->GetText() );
-    pItem->setValue( OUString( "PrintDialog"  ),
-                     OUString( "Collate"  ),
+    pItem->setValue( "PrintDialog",
+                     "Collate",
                      mpCollateBox->IsChecked() ? OUString("true") :
                                                  OUString("false") );
 }
@@ -544,8 +544,8 @@ void PrintDialog::OutputOptPage::readFromSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     OUString aValue;
-    aValue = pItem->getValue( OUString( "PrintDialog"  ),
-                              OUString( "CollateSingleJobs"  ) );
+    aValue = pItem->getValue( "PrintDialog",
+                              "CollateSingleJobs" );
     if ( aValue.equalsIgnoreAsciiCase("true") )
     {
         mpCollateSingleJobsBox->Check();
@@ -559,12 +559,12 @@ void PrintDialog::OutputOptPage::readFromSettings()
 void PrintDialog::OutputOptPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( OUString( "PrintDialog"  ),
-                     OUString( "ToFile"  ),
+    pItem->setValue( "PrintDialog",
+                     "ToFile",
                      mpToFileBox->IsChecked() ? OUString("true")
                                              : OUString("false") );
-    pItem->setValue( OUString( "PrintDialog"  ),
-                     OUString( "CollateSingleJobs"  ),
+    pItem->setValue( "PrintDialog",
+                     "CollateSingleJobs",
                      mpCollateSingleJobsBox->IsChecked() ? OUString("true") :
                                                 OUString("false") );
 }
@@ -623,8 +623,8 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     {
         // fall back to last printer
         SettingsConfigItem* pItem = SettingsConfigItem::get();
-        OUString aValue( pItem->getValue( OUString( "PrintDialog"  ),
-                                        OUString( "LastPrinter"  ) ) );
+        OUString aValue( pItem->getValue( "PrintDialog",
+                                        "LastPrinter" ) );
         if( maJobPage.mpPrinters->GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
         {
             maJobPage.mpPrinters->SelectEntry( aValue );
@@ -707,7 +707,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     // setup dependencies
     checkControlDependencies();
 
-    if ( maPController->getBoolProperty( OUString( "HideHelpButton" ), false ) )
+    if ( maPController->getBoolProperty( "HideHelpButton", false ) )
         mpHelpButton->Hide();
     // set initial focus to "Number of copies"
     maJobPage.mpCopyCountField->GrabFocus();
@@ -744,8 +744,8 @@ void PrintDialog::readFromSettings()
 
     // read last selected tab page; if it exists, activate it
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    OUString aValue = pItem->getValue( OUString( "PrintDialog"  ),
-                                            OUString( "LastPage"  ) );
+    OUString aValue = pItem->getValue( "PrintDialog",
+                                            "LastPage" );
     sal_uInt16 nCount = mpTabCtrl->GetPageCount();
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
@@ -759,8 +759,8 @@ void PrintDialog::readFromSettings()
     mpOKButton->SetText( maOptionsPage.mpToFileBox->IsChecked() ? maPrintToFileText : maPrintText );
 
     // persistent window state
-    OUString aWinState( pItem->getValue( OUString( "PrintDialog"  ),
-                                              OUString( "WindowState"  ) ) );
+    OUString aWinState( pItem->getValue( "PrintDialog",
+                                              "WindowState" ) );
     if( !aWinState.isEmpty() )
         SetWindowState( OUStringToOString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
@@ -778,15 +778,15 @@ void PrintDialog::storeToSettings()
 
     // store last selected printer
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( OUString( "PrintDialog"  ),
-                     OUString( "LastPrinter"  ),
+    pItem->setValue( "PrintDialog",
+                     "LastPrinter",
                      maJobPage.mpPrinters->GetSelectEntry() );
 
-    pItem->setValue( OUString( "PrintDialog"  ),
-                     OUString( "LastPage"  ),
+    pItem->setValue( "PrintDialog",
+                     "LastPage",
                      mpTabCtrl->GetPageText( mpTabCtrl->GetCurPageId() ) );
-    pItem->setValue( OUString( "PrintDialog"  ),
-                     OUString( "WindowState"  ),
+    pItem->setValue( "PrintDialog",
+                     "WindowState",
                      OStringToOUString( GetWindowState(), RTL_TEXTENCODING_UTF8 )
                      );
     pItem->Commit();
@@ -1564,7 +1564,7 @@ IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
-            pHelp->Start( OUString("vcl/ui/printdialog"), mpOKButton );
+            pHelp->Start( "vcl/ui/printdialog", mpOKButton );
         }
     }
     else if( pButton == mpForwardBtn )
@@ -1585,7 +1585,7 @@ IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
     {
         bool bChecked = maOptionsPage.mpPapersizeFromSetup->IsChecked();
         maPController->setPapersizeFromSetup( bChecked );
-        maPController->setValue( OUString( "PapersizeFromSetup"  ),
+        maPController->setValue( "PapersizeFromSetup",
                                  makeAny( bChecked ) );
         preparePreview( true, true );
     }
@@ -1617,7 +1617,7 @@ IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
     }
     else if( pButton == maJobPage.mpCollateBox )
     {
-        maPController->setValue( OUString( "Collate"  ),
+        maPController->setValue( "Collate",
                                  makeAny( isCollate() ) );
         checkControlDependencies();
     }
@@ -1625,7 +1625,7 @@ IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
     {
         bool bChecked = maJobPage.mpReverseOrderBox->IsChecked();
         maPController->setReversePrint( bChecked );
-        maPController->setValue( OUString( "PrintReverse"  ),
+        maPController->setValue( "PrintReverse",
                                  makeAny( bChecked ) );
         preparePreview( true, true );
     }
@@ -1662,9 +1662,9 @@ IMPL_LINK_TYPED( PrintDialog, ModifyHdl, Edit&, rEdit, void )
     }
     else if( &rEdit == maJobPage.mpCopyCountField )
     {
-        maPController->setValue( OUString( "CopyCount"  ),
+        maPController->setValue( "CopyCount",
                                makeAny( sal_Int32(maJobPage.mpCopyCountField->GetValue()) ) );
-        maPController->setValue( OUString( "Collate"  ),
+        maPController->setValue( "Collate",
                                makeAny( isCollate() ) );
     }
 }

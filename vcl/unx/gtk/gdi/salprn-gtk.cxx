@@ -1083,9 +1083,9 @@ GtkPrintDialog::impl_readFromSettings()
 
     const OUString aPrintDialogStr("PrintDialog");
     const OUString aCopyCount(pItem->getValue(aPrintDialogStr,
-                OUString("CopyCount")));
+                "CopyCount"));
     const OUString aCollate(pItem->getValue(aPrintDialogStr,
-                OUString("Collate")));
+                "Collate"));
 
     bool bChanged(false);
 
@@ -1120,10 +1120,10 @@ const
 
     const OUString aPrintDialogStr("PrintDialog");
     pItem->setValue(aPrintDialogStr,
-            OUString("CopyCount"),
+            "CopyCount",
             OUString::number(m_xWrapper->print_settings_get_n_copies(pSettings)));
     pItem->setValue(aPrintDialogStr,
-            OUString("Collate"),
+            "Collate",
             m_xWrapper->print_settings_get_collate(pSettings)
                 ? OUString("true")
                 : OUString("false"))

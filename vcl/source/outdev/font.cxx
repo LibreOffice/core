@@ -1383,7 +1383,7 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection* pFon
         //sufficient heavy-weight code that's likely to undo the value of the
         //optimization
         if (nFallbackLevel == 1)
-            pFallbackData = pFontCollection->FindFontFamily(OUString("EUDC"));
+            pFallbackData = pFontCollection->FindFontFamily("EUDC");
         if (!pFallbackData)
             pFallbackData = pFontCollection->GetGlyphFallbackFont(rFontSelData, rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates

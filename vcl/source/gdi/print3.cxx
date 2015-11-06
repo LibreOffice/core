@@ -309,7 +309,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                 "vcl/ui/errornoprinterdialog.ui");
             aBox->Execute();
         }
-        xController->setValue( OUString( "IsDirect" ),
+        xController->setValue( "IsDirect",
                                makeAny( false ) );
     }
 
@@ -356,7 +356,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             if( pContentVal )
             {
                 pContentVal->Value = makeAny( sal_Int32( 1 ) );
-                xController->setValue(OUString("PageRange"), pPagesVal->Value);
+                xController->setValue("PageRange", pPagesVal->Value);
             }
         }
     }
@@ -385,7 +385,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                             aBuf.append( "-" );
                             aBuf.append( nPages );
                         }
-                        xController->setValue(OUString("PageRange"), makeAny(aBuf.makeStringAndClear()));
+                        xController->setValue("PageRange", makeAny(aBuf.makeStringAndClear()));
                     }
                 }
             }
@@ -409,33 +409,33 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     }
 
     // setup NUp printing from properties
-    sal_Int32 nRows = xController->getIntProperty(OUString("NUpRows"), 1);
-    sal_Int32 nCols = xController->getIntProperty(OUString("NUpColumns"), 1);
+    sal_Int32 nRows = xController->getIntProperty("NUpRows", 1);
+    sal_Int32 nCols = xController->getIntProperty("NUpColumns", 1);
     if( nRows > 1 || nCols > 1 )
     {
         PrinterController::MultiPageSetup aMPS;
         aMPS.nRows         = nRows > 1 ? nRows : 1;
         aMPS.nColumns      = nCols > 1 ? nCols : 1;
-        sal_Int32 nValue = xController->getIntProperty(OUString("NUpPageMarginLeft"), aMPS.nLeftMargin);
+        sal_Int32 nValue = xController->getIntProperty("NUpPageMarginLeft", aMPS.nLeftMargin);
         if( nValue >= 0 )
             aMPS.nLeftMargin = nValue;
-        nValue = xController->getIntProperty(OUString("NUpPageMarginRight"), aMPS.nRightMargin);
+        nValue = xController->getIntProperty("NUpPageMarginRight", aMPS.nRightMargin);
         if( nValue >= 0 )
             aMPS.nRightMargin = nValue;
-        nValue = xController->getIntProperty( OUString( "NUpPageMarginTop" ), aMPS.nTopMargin );
+        nValue = xController->getIntProperty( "NUpPageMarginTop", aMPS.nTopMargin );
         if( nValue >= 0 )
             aMPS.nTopMargin = nValue;
-        nValue = xController->getIntProperty( OUString( "NUpPageMarginBottom" ), aMPS.nBottomMargin );
+        nValue = xController->getIntProperty( "NUpPageMarginBottom", aMPS.nBottomMargin );
         if( nValue >= 0 )
             aMPS.nBottomMargin = nValue;
-        nValue = xController->getIntProperty( OUString( "NUpHorizontalSpacing" ), aMPS.nHorizontalSpacing );
+        nValue = xController->getIntProperty( "NUpHorizontalSpacing", aMPS.nHorizontalSpacing );
         if( nValue >= 0 )
             aMPS.nHorizontalSpacing = nValue;
-        nValue = xController->getIntProperty( OUString( "NUpVerticalSpacing" ), aMPS.nVerticalSpacing );
+        nValue = xController->getIntProperty( "NUpVerticalSpacing", aMPS.nVerticalSpacing );
         if( nValue >= 0 )
             aMPS.nVerticalSpacing = nValue;
-        aMPS.bDrawBorder = xController->getBoolProperty( OUString( "NUpDrawBorder" ), aMPS.bDrawBorder );
-        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(xController->getIntProperty( OUString( "NUpSubPageOrder" ), aMPS.nOrder ));
+        aMPS.bDrawBorder = xController->getBoolProperty( "NUpDrawBorder", aMPS.bDrawBorder );
+        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(xController->getIntProperty( "NUpSubPageOrder", aMPS.nOrder ));
         aMPS.aPaperSize = xController->getPrinter()->PixelToLogic( xController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
         PropertyValue* pPgSizeVal = xController->getValue( OUString( "NUpPaperSize" ) );
         awt::Size aSizeVal;
@@ -485,12 +485,12 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                     xController->abortJob();
                     return false;
                 }
-                xController->setValue( OUString( "LocalFileName" ),
+                xController->setValue( "LocalFileName",
                                        makeAny( aFile ) );
             }
             else if( aDlg->isSingleJobs() )
             {
-                xController->setValue( OUString( "PrintCollateAsSingleJobs" ),
+                xController->setValue( "PrintCollateAsSingleJobs",
                                        makeAny( true ) );
             }
         }
@@ -751,8 +751,8 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
     if (i_xController->isShowDialogs() && !i_xController->isDirectPrint())
     {
         SettingsConfigItem* pItem = SettingsConfigItem::get();
-        pItem->setValue( OUString( "PrintDialog" ),
-                         OUString( "LastPrinterUsed" ),
+        pItem->setValue( "PrintDialog",
+                         "LastPrinterUsed",
                          GetName()
                          );
     }
@@ -783,7 +783,7 @@ const VclPtr<Printer>& PrinterController::getPrinter() const
 void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 {
     mpImplData->mxPrinter = i_rPrinter;
-    setValue( OUString( "Name" ),
+    setValue( "Name",
               makeAny( OUString( i_rPrinter->GetName() ) ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mxPrinter->GetPaperBin();
     mpImplData->mxPrinter->Push();
@@ -1731,13 +1731,13 @@ void PrinterController::pushPropertiesToPrinter()
 
 bool PrinterController::isShowDialogs() const
 {
-    bool bApi = getBoolProperty( OUString( "IsApi" ), false );
+    bool bApi = getBoolProperty( "IsApi", false );
     return ! bApi && ! Application::IsHeadlessModeEnabled();
 }
 
 bool PrinterController::isDirectPrint() const
 {
-    bool bDirect = getBoolProperty( OUString( "IsDirect" ), false );
+    bool bDirect = getBoolProperty( "IsDirect", false );
     return bDirect;
 }
 

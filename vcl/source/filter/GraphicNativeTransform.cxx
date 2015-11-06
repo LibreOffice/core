@@ -76,11 +76,11 @@ bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
     }
     else if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_PNG )
     {
-        return rotateGeneric(aRotation, OUString("png"));
+        return rotateGeneric(aRotation, "png");
     }
     else if ( aLink.GetType() == GFX_LINK_TYPE_NATIVE_GIF )
     {
-        return rotateGeneric(aRotation, OUString("gif"));
+        return rotateGeneric(aRotation, "gif");
     }
     else if ( aLink.GetType() == GFX_LINK_TYPE_NONE )
     {
@@ -127,7 +127,7 @@ bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, const OUString&
 
     BitmapEx aBitmap = mrGraphic.GetBitmapEx();
     aBitmap.Rotate(aRotation, COL_BLACK);
-    rFilter.ExportGraphic( aBitmap, OUString( "none" ), aStream, nFilterFormat, &aFilterData );
+    rFilter.ExportGraphic( aBitmap, "none", aStream, nFilterFormat, &aFilterData );
 
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
 
@@ -145,7 +145,7 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
     if (aBitmap.GetSizePixel().Width()  % 16 != 0 ||
         aBitmap.GetSizePixel().Height() % 16 != 0 )
     {
-        rotateGeneric(aRotation, OUString("png"));
+        rotateGeneric(aRotation, "png");
     }
     else
     {

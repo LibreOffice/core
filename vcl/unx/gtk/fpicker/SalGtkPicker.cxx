@@ -211,7 +211,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory 
 
     OString aTxt = unicodetouri(aDirectory);
     if( aTxt.isEmpty() ){
-      aTxt = unicodetouri(OUString("file:///."));
+      aTxt = unicodetouri("file:///.");
     }
 
     if( aTxt.endsWith("/") )

@@ -89,7 +89,7 @@ public:
         try
         {
             mpWin = VclPtr<DemoMtfWin>::Create(maFileName);
-            mpWin->SetText(OUString("Display metafile"));
+            mpWin->SetText("Display metafile");
 
             mpWin->Show();
 

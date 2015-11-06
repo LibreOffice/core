@@ -841,7 +841,7 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, const INetURLObject& _aIni
     bool        bRet=false;        // return value
 
     INetURLObject aIniPath = _aIniPath;
-    aIniPath.Append(OUString("sgf.ini"));
+    aIniPath.Append("sgf.ini");
 
     pSgfFonts = new SgfFontLst;
 

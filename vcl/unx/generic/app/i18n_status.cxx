@@ -334,7 +334,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
         m_bShow( true ),
         m_bOn( bOn )
 {
-    SetText( OUString( "IME Status" ) );
+    SetText( "IME Status" );
 
     layout();
 

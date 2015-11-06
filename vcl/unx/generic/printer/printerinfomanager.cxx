@@ -194,7 +194,7 @@ void PrinterInfoManager::initialize()
     m_aGlobalDefaults = PrinterInfo();
 
     // need a parser for the PPDContext. generic printer should do.
-    m_aGlobalDefaults.m_pParser = PPDParser::getParser( OUString( "SGENPRT" ) );
+    m_aGlobalDefaults.m_pParser = PPDParser::getParser( "SGENPRT" );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
 
     if( ! m_aGlobalDefaults.m_pParser )
@@ -211,7 +211,7 @@ void PrinterInfoManager::initialize()
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
         INetURLObject aFile( *print_dir_it, INetProtocol::File, INetURLObject::ENCODE_ALL );
-        aFile.Append( OUString( PRINT_FILENAME ) );
+        aFile.Append( PRINT_FILENAME );
         Config aConfig( aFile.PathToFileName() );
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
         {
@@ -279,7 +279,7 @@ void PrinterInfoManager::initialize()
     {
         INetURLObject aDir( *print_dir_it, INetProtocol::File, INetURLObject::ENCODE_ALL );
         INetURLObject aFile( aDir );
-        aFile.Append( OUString( PRINT_FILENAME ) );
+        aFile.Append( PRINT_FILENAME );
 
         // check directory validity
         OUString aUniPath;

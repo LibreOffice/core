@@ -326,8 +326,8 @@ PrinterJob::StartJob (
     maJobTitle = rJobName;
 
     OUString aExt(".ps");
-    mpJobHeader  = CreateSpoolFile (OUString("psp_head"), aExt);
-    mpJobTrailer = CreateSpoolFile (OUString("psp_tail"), aExt);
+    mpJobHeader  = CreateSpoolFile ("psp_head", aExt);
+    mpJobTrailer = CreateSpoolFile ("psp_tail", aExt);
     if( ! (mpJobHeader && mpJobTrailer) ) // existing files are removed in destructor
         return false;
 
@@ -587,8 +587,8 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     OUString aPageNo = OUString::number ((sal_Int32)maPageList.size()+1); // sequential page number must start with 1
     OUString aExt    = aPageNo + ".ps";
 
-    osl::File* pPageHeader = CreateSpoolFile ( OUString("psp_pghead"), aExt);
-    osl::File* pPageBody   = CreateSpoolFile ( OUString("psp_pgbody"), aExt);
+    osl::File* pPageHeader = CreateSpoolFile ( "psp_pghead", aExt);
+    osl::File* pPageBody   = CreateSpoolFile ( "psp_pgbody", aExt);
 
     maHeaderList.push_back (pPageHeader);
     maPageList.push_back (pPageBody);

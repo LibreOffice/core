@@ -286,10 +286,10 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 
 #ifdef DBG_UTIL
         case EXC_RSCNOTLOADED:
-            Abort(OUString("Resource not loaded"));
+            Abort("Resource not loaded");
             break;
         default:
-            Abort(OUString("Unknown Error"));
+            Abort("Unknown Error");
             break;
 #else
         default:

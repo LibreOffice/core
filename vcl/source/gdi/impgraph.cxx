@@ -360,7 +360,7 @@ void ImpGraphic::ImplClear()
                                      ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                      comphelper::getProcessComponentContext() );
 
-                aCnt.executeCommand( OUString("delete"),
+                aCnt.executeCommand( "delete",
                                      ::com::sun::star::uno::makeAny( true ) );
             }
             catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1190,7 +1190,7 @@ bool ImpGraphic::ImplSwapOut()
                                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                             comphelper::getProcessComponentContext() );
 
-                        aCnt.executeCommand( OUString("delete"),
+                        aCnt.executeCommand( "delete",
                                             ::com::sun::star::uno::makeAny( true ) );
                     }
                     catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1288,7 +1288,7 @@ bool ImpGraphic::ImplSwapIn()
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                                  comphelper::getProcessComponentContext() );
 
-                            aCnt.executeCommand( OUString("delete"),
+                            aCnt.executeCommand( "delete",
                                                  ::com::sun::star::uno::makeAny( true ) );
                         }
                         catch( const ::com::sun::star::ucb::ContentCreationException& )

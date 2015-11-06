@@ -87,7 +87,7 @@ public:
 void Main()
 {
     ScopedVclPtrInstance< MyWin > aMainWin( nullptr, WB_APP | WB_STDWORK );
-    aMainWin->SetText(OUString("VCL - Workbench"));
+    aMainWin->SetText("VCL - Workbench");
     aMainWin->Show();
 
     Application::Execute();

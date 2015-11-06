@@ -244,7 +244,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
         bool bAutoHCMode = true;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
             comphelper::getProcessComponentContext(),
-            OUString("org.openoffice.Office.Common/Accessibility") );    // note: case sensitive !
+            "org.openoffice.Office.Common/Accessibility" );    // note: case sensitive !
         if ( aNode.isValid() )
         {
             ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString("AutoDetectSystemHC") );

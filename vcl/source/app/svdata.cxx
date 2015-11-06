@@ -136,7 +136,7 @@ vcl::Window* ImplGetDefaultWindow()
         {
             SAL_INFO( "vcl", "ImplGetDefaultWindow(): No AppWindow" );
             pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create( nullptr, WB_DEFAULTWIN );
-            pSVData->mpDefaultWin->SetText( OUString( "VCL ImplGetDefaultWindow"  ) );
+            pSVData->mpDefaultWin->SetText( "VCL ImplGetDefaultWindow" );
 
             // Add a reference to the default context so it never gets deleted
             rtl::Reference<OpenGLContext> pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();

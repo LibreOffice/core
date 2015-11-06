@@ -1783,7 +1783,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     m_aStructure[0].m_nParentElement    = 0;
 
     Font aFont;
-    aFont.SetName( OUString( "Times" ) );
+    aFont.SetName( "Times" );
     aFont.SetSize( Size( 0, 12 ) );
 
     GraphicsState aState;
@@ -2339,7 +2339,7 @@ void PDFWriterImpl::endPage()
 
         // reset the default font
         Font aFont;
-        aFont.SetName( OUString( "Times" ) );
+        aFont.SetName( "Times" );
         aFont.SetSize( Size( 0, 12 ) );
 
         m_aCurrentPDFState = m_aGraphicsStack.front();
@@ -4552,7 +4552,7 @@ we check in the following sequence:
                     else if( aFileExtension.equalsIgnoreAsciiCase( "ods" ) )
                         bChangeFileExtensionToPDF = true;
                     if( bChangeFileExtensionToPDF )
-                        aTargetURL.setExtension(OUString( "pdf"  ) );
+                        aTargetURL.setExtension("pdf" );
                 }
                 //check if extension is pdf, see if GoToR should be forced
                 bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase( "pdf" );

@@ -880,8 +880,8 @@ bool WMAdaptor::getWMshouldSwitchWorkspace() const
 
         pWMA->m_bWMshouldSwitchWorkspace = true;
         vcl::SettingsConfigItem* pItem = vcl::SettingsConfigItem::get();
-        OUString aSetting( pItem->getValue( OUString( "WM" ),
-                                                 OUString( "ShouldSwitchWorkspace" ) ) );
+        OUString aSetting( pItem->getValue( "WM",
+                                                 "ShouldSwitchWorkspace" ) );
         if( aSetting.isEmpty() )
         {
             if( m_aWMName == "awesome" )

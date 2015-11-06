@@ -67,7 +67,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( nullptr )
         {
-            SetText( OUString("OutDev grinding") );
+            SetText( "OutDev grinding" );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
