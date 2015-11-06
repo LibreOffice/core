@@ -413,6 +413,7 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rKeyCode(pEvt->GetKeyCode());
+
         // Subwindows of BackingWindow: Sidebar and Thumbnail view
         if( rKeyCode.GetCode() == KEY_F6 )
         {
@@ -438,28 +439,20 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
                 }
             }
         }
-    }
-    return Window::PreNotify( rNEvt );
-}
 
-bool BackingWindow::Notify( NotifyEvent& rNEvt )
-{
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
         // try the 'normal' accelerators (so that eg. Ctrl+Q works)
-        if( !mpAccExec )
+        if (!mpAccExec)
         {
             mpAccExec = svt::AcceleratorExecute::createAcceleratorHelper();
             mpAccExec->init( comphelper::getProcessComponentContext(), mxFrame);
         }
-        const KeyEvent* pEvt = rNEvt.GetKeyEvent();
-        const vcl::KeyCode& rKeyCode(pEvt->GetKeyCode());
+
         const OUString aCommand = mpAccExec->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode));
-        if((aCommand != "vnd.sun.star.findbar:FocusToFindbar") && pEvt && mpAccExec->execute(rKeyCode))
+        if ((aCommand != "vnd.sun.star.findbar:FocusToFindbar") && pEvt && mpAccExec->execute(rKeyCode))
             return true;
     }
 
-    return Window::Notify( rNEvt );
+    return Window::PreNotify( rNEvt );
 }
 
 void BackingWindow::GetFocus()

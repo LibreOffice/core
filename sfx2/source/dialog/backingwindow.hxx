@@ -123,7 +123,6 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     virtual void Resize() override;
     virtual bool PreNotify(NotifyEvent& rNEvt) override;
-    virtual bool Notify(NotifyEvent& rNEvt) override;
     virtual void GetFocus() override;
 
     virtual Size GetOptimalSize() const override;
