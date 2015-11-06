@@ -20,8 +20,10 @@
 #ifndef INCLUDED_SC_INC_DETDATA_HXX
 #define INCLUDED_SC_INC_DETDATA_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include "global.hxx"
+
+#include <memory>
+#include <vector>
 
 enum ScDetOpType
 {

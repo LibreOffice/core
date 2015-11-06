@@ -46,7 +46,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <vector>
 
 class ScDBData;
 class ScDocShell;
