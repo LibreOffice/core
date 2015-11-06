@@ -130,7 +130,7 @@ SAL_CALL exportLibrary(
             Reference< xml::sax::XAttributeList > xElementAttribs;
             xElementAttribs = static_cast< xml::sax::XAttributeList* >( pElement );
 
-            pElement->addAttribute( OUString( XMLNS_LIBRARY_PREFIX ":name" ),
+            pElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name",
                                         pElementNames[i] );
 
             pLibElement->addSubElement( pElement );

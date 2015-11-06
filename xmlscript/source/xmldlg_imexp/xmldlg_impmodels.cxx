@@ -208,7 +208,7 @@ void Page::endElement()
     }
 
     ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
-    ctx.importStringProperty( OUString( "Title" ), OUString( "title" ), _xAttributes );
+    ctx.importStringProperty( "Title", "title", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)

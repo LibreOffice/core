@@ -1026,13 +1026,13 @@ void ElementDescriptor::readImageScaleModeAttr( OUString const & rPropName, OUSt
             switch(nImageScaleMode)
             {
                 case ::awt::ImageScaleMode::NONE:
-                    addAttribute( rAttrName, OUString( "none") );
+                    addAttribute( rAttrName, "none" );
                     break;
                 case ::awt::ImageScaleMode::ISOTROPIC:
-                    addAttribute( rAttrName, OUString( "isotropic") );
+                    addAttribute( rAttrName, "isotropic" );
                     break;
                 case ::awt::ImageScaleMode::ANISOTROPIC:
-                    addAttribute( rAttrName, OUString( "anisotropic" ) );
+                    addAttribute( rAttrName, "anisotropic" );
                     break;
                 default:
                     OSL_ENSURE( false, "### illegal image scale mode value.");

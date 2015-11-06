@@ -1564,23 +1564,23 @@ void ImportContext::importEvents(
 void ImportContext::importScollableSettings(
     Reference< xml::input::XAttributes > const & _xAttributes )
 {
-    importLongProperty( OUString( "ScrollHeight" ),
-                        OUString( "scrollheight" ),
+    importLongProperty( "ScrollHeight",
+                        "scrollheight",
                         _xAttributes );
-    importLongProperty( OUString( "ScrollWidth" ),
-                        OUString( "scrollwidth" ),
+    importLongProperty( "ScrollWidth",
+                        "scrollwidth",
                         _xAttributes );
-    importLongProperty( OUString( "ScrollTop" ),
-                        OUString( "scrolltop" ),
+    importLongProperty( "ScrollTop",
+                        "scrolltop",
                         _xAttributes );
-    importLongProperty( OUString( "ScrollLeft" ),
-                        OUString( "scrollleft" ),
+    importLongProperty( "ScrollLeft",
+                        "scrollleft",
                         _xAttributes );
-    importBooleanProperty( OUString( "HScroll" ),
-                           OUString( "hscroll" ),
+    importBooleanProperty( "HScroll",
+                           "hscroll",
                            _xAttributes );
-    importBooleanProperty( OUString( "VScroll" ),
-                           OUString( "vscroll" ),
+    importBooleanProperty( "VScroll",
+                           "vscroll",
                            _xAttributes );
 }
 
