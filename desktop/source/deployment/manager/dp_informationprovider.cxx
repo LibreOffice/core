@@ -139,15 +139,15 @@ OUString SAL_CALL
 PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
     throw ( uno::RuntimeException, std::exception )
 {
-    OUString aLocationURL = getPackageLocation( OUString("user"), _sExtensionId );
+    OUString aLocationURL = getPackageLocation( "user", _sExtensionId );
 
     if ( aLocationURL.isEmpty() )
     {
-        aLocationURL = getPackageLocation( OUString("shared"), _sExtensionId );
+        aLocationURL = getPackageLocation( "shared", _sExtensionId );
     }
     if ( aLocationURL.isEmpty() )
     {
-        aLocationURL = getPackageLocation( OUString("bundled"), _sExtensionId );
+        aLocationURL = getPackageLocation( "bundled", _sExtensionId );
     }
     if ( !aLocationURL.isEmpty() )
     {

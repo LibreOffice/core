@@ -727,7 +727,7 @@ OUString    Desktop::CreateErrorMsgString(
         case ::utl::Bootstrap::MISSING_INSTALL_DIRECTORY:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_PATH_INVALID,
-                        OUString( "The installation path is not available." ) );
+                        "The installation path is not available." );
             bFileInfo = false;
         }
         break;
@@ -736,7 +736,7 @@ OUString    Desktop::CreateErrorMsgString(
         case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_MISSING,
-                        OUString( "The configuration file \"$1\" is missing." ) );
+                        "The configuration file \"$1\" is missing." );
         }
         break;
 
@@ -746,7 +746,7 @@ OUString    Desktop::CreateErrorMsgString(
          case ::utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_CORRUPT,
-                        OUString( "The configuration file \"$1\" is corrupt." ) );
+                        "The configuration file \"$1\" is corrupt." );
         }
         break;
 
@@ -754,7 +754,7 @@ OUString    Desktop::CreateErrorMsgString(
         case ::utl::Bootstrap::MISSING_VERSION_FILE:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_MISSING,
-                        OUString( "The configuration file \"$1\" is missing." ) );
+                        "The configuration file \"$1\" is missing." );
         }
         break;
 
@@ -762,7 +762,7 @@ OUString    Desktop::CreateErrorMsgString(
          case ::utl::Bootstrap::MISSING_VERSION_FILE_ENTRY:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_SUPPORT,
-                        OUString( "The main configuration file \"$1\" does not support the current version." ) );
+                        "The main configuration file \"$1\" does not support the current version." );
         }
         break;
 
@@ -770,7 +770,7 @@ OUString    Desktop::CreateErrorMsgString(
            case ::utl::Bootstrap::MISSING_USER_DIRECTORY:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_DIR_MISSING,
-                        OUString( "The configuration directory \"$1\" is missing." ) );
+                        "The configuration directory \"$1\" is missing." );
         }
         break;
 
@@ -778,7 +778,7 @@ OUString    Desktop::CreateErrorMsgString(
         case ::utl::Bootstrap::INVALID_BOOTSTRAP_DATA:
         {
             aMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
-                        OUString( "An internal failure occurred." ) );
+                        "An internal failure occurred." );
             bFileInfo = false;
         }
         break;
@@ -916,7 +916,7 @@ void Desktop::HandleBootstrapErrors(
             aErrorMsg = "The service manager is not available.";
         else
             aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_CFG_SERVICE,
-                            OUString( "The configuration service is not available." ) );
+                            "The configuration service is not available." );
 
         aDiagnosticMessage.append( aErrorMsg );
         aDiagnosticMessage.append( "\n" );
@@ -932,7 +932,7 @@ void Desktop::HandleBootstrapErrors(
         // we have to ask the user to start the setup on CD/installation directory manually!!
         OUString aStartSetupManually( GetMsgString(
             STR_ASK_START_SETUP_MANUALLY,
-            OUString( "Start setup application to repair the installation from CD, or the folder containing the installation packages." ),
+            "Start setup application to repair the installation from CD, or the folder containing the installation packages.",
             aBootstrapError == BE_UNO_SERVICEMANAGER ) );
 
         aDiagnosticMessage.append( aStartSetupManually );
@@ -960,7 +960,7 @@ void Desktop::HandleBootstrapErrors(
         OUStringBuffer aDiagnosticMessage( 100 );
         OUString aErrorMsg;
         aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_USERINSTALL_FAILED,
-            OUString( "User installation could not be completed" ) );
+            "User installation could not be completed" );
         aDiagnosticMessage.append( aErrorMsg );
         aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
         FatalError(aMessage);
@@ -973,7 +973,7 @@ void Desktop::HandleBootstrapErrors(
         aErrorMsg = GetMsgString(
             //@@@ FIXME: should use an own resource string => #i36213#
             STR_BOOTSTRAP_ERR_LANGUAGE_MISSING,
-            OUString( "Language could not be determined." ) );
+            "Language could not be determined." );
         aDiagnosticMessage.append( aErrorMsg );
         aMessage = MakeStartupErrorMessage(
             aDiagnosticMessage.makeStringAndClear() );
@@ -993,11 +993,11 @@ void Desktop::HandleBootstrapErrors(
         if ( aBootstrapError == BE_USERINSTALL_NOTENOUGHDISKSPACE )
             aErrorMsg = GetMsgString(
                 STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE,
-                OUString( "User installation could not be completed due to insufficient free disk space." ) );
+                "User installation could not be completed due to insufficient free disk space." );
         else
             aErrorMsg = GetMsgString(
                 STR_BOOSTRAP_ERR_NOACCESSRIGHTS,
-                OUString( "User installation could not be processed due to missing access rights." ) );
+                "User installation could not be processed due to missing access rights." );
 
         osl::File::getSystemPathFromFileURL( aUserInstallationURL, aUserInstallationPath );
 
@@ -1642,7 +1642,7 @@ int Desktop::Main()
         catch( ...)
         {
             OfficeIPCThread::SetDowning();
-            FatalError( OUString( "Caught Unknown Exception: Aborting!"));
+            FatalError( "Caught Unknown Exception: Aborting!");
         }
     }
     else

@@ -68,7 +68,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
-    Application::SetAppName( OUString("soffice") );
+    Application::SetAppName( "soffice" );
 #ifdef UNX
     // handle --version and --help already here, otherwise they would be handled
     // after VCL initialization that might fail if $DISPLAY is not set
