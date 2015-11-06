@@ -829,7 +829,11 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     OUString subject(
                         url.getBase(
                             INetURLObject::LAST_SEGMENT, false,
+#ifdef WNT
+                            INetURLObject::NO_DECODE)); // MAPISendMail does not accept Unicode
+#else
                             INetURLObject::DECODE_WITH_CHARSET));
+#endif
                     if (subject.isEmpty()) {
                         subject = maAttachedDocuments[0];
                     }
