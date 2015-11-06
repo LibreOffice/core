@@ -122,7 +122,7 @@ public:
      *   set the body represented by the handle to nullptr.
      */
     inline Reference<reference_type> &
-    SAL_CALL operator= (Reference<reference_type> && handle)
+    operator= (Reference<reference_type> && handle)
     {
         // self-movement guts ourself
         if (m_pBody)
