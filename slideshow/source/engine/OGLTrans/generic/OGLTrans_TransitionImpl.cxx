@@ -1659,20 +1659,11 @@ class VortexTransition : public ShaderTransition
 public:
     VortexTransition(const TransitionScene& rScene, const TransitionSettings& rSettings, int nNX, int nNY)
         : ShaderTransition(rScene, rSettings)
-        , mnTileCenterLocation(0)
-        , mnTileXIndexLocation(0)
-        , mnTileYIndexLocation(0)
-        , mnVertexIndexInTileLocation(0)
-        , mnTileCenterBuffer(0)
-        , mnTileXIndexBuffer(0)
-        , mnTileYIndexBuffer(0)
-        , mnVertexIndexInTileBuffer(0)
+        , mnTileInfoLocation(0)
+        , mnTileInfoBuffer(0)
         , maNumTiles(nNX,nNY)
     {
-        mvTileCenters.resize(6*maNumTiles.x*maNumTiles.y);
-        mvTileXIndexes.resize(6*maNumTiles.x*maNumTiles.y);
-        mvTileYIndexes.resize(6*maNumTiles.x*maNumTiles.y);
-        mvVertexIndexesInTiles.resize(6*maNumTiles.x*maNumTiles.y);
+        mvTileInfo.resize(6*maNumTiles.x*maNumTiles.y);
     }
 
 private:
@@ -1682,53 +1673,23 @@ private:
 
     virtual GLuint makeShader() override;
 
-    GLint mnTileCenterLocation;
-    GLint mnTileXIndexLocation;
-    GLint mnTileYIndexLocation;
-    GLint mnVertexIndexInTileLocation;
-    GLuint mnTileCenterBuffer;
-    GLuint mnTileXIndexBuffer;
-    GLuint mnTileYIndexBuffer;
-    GLuint mnVertexIndexInTileBuffer;
+    GLint mnTileInfoLocation;
+    GLuint mnTileInfoBuffer;
 
     glm::ivec2 maNumTiles;
 
-    std::vector<glm::vec2> mvTileCenters;
-    std::vector<GLint> mvTileXIndexes;
-    std::vector<GLint> mvTileYIndexes;
-    std::vector<GLint> mvVertexIndexesInTiles;
+    std::vector<GLfloat> mvTileInfo;
 };
 
 void VortexTransition::prepare( double, double, double, double, double )
 {
     glDisable(GL_CULL_FACE);
 
-    glBindBuffer(GL_ARRAY_BUFFER, mnTileCenterBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mnTileInfoBuffer);
     CHECK_GL_ERROR();
-    glEnableVertexAttribArray(mnTileCenterLocation);
+    glEnableVertexAttribArray(mnTileInfoLocation);
     CHECK_GL_ERROR();
-    glVertexAttribPointer(mnTileCenterLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    CHECK_GL_ERROR();
-
-    glBindBuffer(GL_ARRAY_BUFFER, mnTileXIndexBuffer);
-    CHECK_GL_ERROR();
-    glEnableVertexAttribArray(mnTileXIndexLocation);
-    CHECK_GL_ERROR();
-    glVertexAttribIPointer(mnTileXIndexLocation, 1, GL_INT, 0, 0);
-    CHECK_GL_ERROR();
-
-    glBindBuffer(GL_ARRAY_BUFFER, mnTileYIndexBuffer);
-    CHECK_GL_ERROR();
-    glEnableVertexAttribArray(mnTileYIndexLocation);
-    CHECK_GL_ERROR();
-    glVertexAttribIPointer(mnTileYIndexLocation, 1, GL_INT, 0, 0);
-    CHECK_GL_ERROR();
-
-    glBindBuffer(GL_ARRAY_BUFFER, mnVertexIndexInTileBuffer);
-    CHECK_GL_ERROR();
-    glEnableVertexAttribArray(mnVertexIndexInTileLocation);
-    CHECK_GL_ERROR();
-    glVertexAttribIPointer(mnVertexIndexInTileLocation, 1, GL_INT, 0, 0);
+    glVertexAttribPointer(mnTileInfoLocation, 1, GL_FLOAT, GL_FALSE, 0, 0);
     CHECK_GL_ERROR();
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -1746,13 +1707,7 @@ GLuint VortexTransition::makeShader()
 
     if (nProgram)
     {
-        mnTileCenterLocation = glGetAttribLocation(nProgram, "tileCenter");
-        CHECK_GL_ERROR();
-        mnTileXIndexLocation = glGetAttribLocation(nProgram, "tileXIndex");
-        CHECK_GL_ERROR();
-        mnTileYIndexLocation = glGetAttribLocation(nProgram, "tileYIndex");
-        CHECK_GL_ERROR();
-        mnVertexIndexInTileLocation = glGetAttribLocation(nProgram, "vertexIndexInTile");
+        mnTileInfoLocation = glGetAttribLocation(nProgram, "tileInfo");
         CHECK_GL_ERROR();
 
         glUseProgram(nProgram);
@@ -1765,14 +1720,12 @@ GLuint VortexTransition::makeShader()
         CHECK_GL_ERROR();
     }
 
-    glGenBuffers(1, &mnTileCenterBuffer);
+    glGenBuffers(1, &mnTileInfoBuffer);
     CHECK_GL_ERROR();
-    glGenBuffers(1, &mnTileXIndexBuffer);
-    CHECK_GL_ERROR();
-    glGenBuffers(1, &mnTileYIndexBuffer);
-    CHECK_GL_ERROR();
-    glGenBuffers(1, &mnVertexIndexInTileBuffer);
-    CHECK_GL_ERROR();
+
+    // We store the (x,y) indexes of the tile each vertex belongs to in a float, so they must fit.
+    assert(maNumTiles.x < 256);
+    assert(maNumTiles.y < 256);
 
     // Two triangles, i.e. six vertices, per tile
     {
@@ -1783,40 +1736,16 @@ GLuint VortexTransition::makeShader()
             {
                 for (int v = 0; v < 6; v++)
                 {
-                    // Note that Primitive::pushTriangle() has mapped the coordinates from the 0..1
-                    // passed to it (by makeVortex() in this case) to -1..1, and also reflected the Y
-                    // coordinates. Why the code can't use those from the start I don't
-                    // know... Confusing. Anyway, so here when we store the center of each rectangle
-                    // that the vertices belong to, we need to use the actual coordinates.
-                    mvTileCenters[n] = glm::vec2(2*((x+0.5)/maNumTiles.x) - 1, -2*((y+0.5)/maNumTiles.y) + 1);
-
-                    mvTileXIndexes[n] = x;
-                    mvTileYIndexes[n] = y;
-                    mvVertexIndexesInTiles[n] = v;
+                    mvTileInfo[n] = x + (y << 8) + (v << 16);
                     n++;
                 }
             }
         }
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, mnTileCenterBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mnTileInfoBuffer);
     CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, mvTileCenters.size()*sizeof(glm::vec2), mvTileCenters.data(), GL_STATIC_DRAW);
-    CHECK_GL_ERROR();
-
-    glBindBuffer(GL_ARRAY_BUFFER, mnTileXIndexBuffer);
-    CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, mvTileXIndexes.size()*sizeof(GLint), mvTileXIndexes.data(), GL_STATIC_DRAW);
-    CHECK_GL_ERROR();
-
-    glBindBuffer(GL_ARRAY_BUFFER, mnTileYIndexBuffer);
-    CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, mvTileYIndexes.size()*sizeof(GLint), mvTileYIndexes.data(), GL_STATIC_DRAW);
-    CHECK_GL_ERROR();
-
-    glBindBuffer(GL_ARRAY_BUFFER, mnVertexIndexInTileBuffer);
-    CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, mvVertexIndexesInTiles.size()*sizeof(GLint), mvVertexIndexesInTiles.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, mvTileInfo.size()*sizeof(GLfloat), mvTileInfo.data(), GL_STATIC_DRAW);
     CHECK_GL_ERROR();
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);

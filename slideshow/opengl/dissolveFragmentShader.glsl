@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#version 120
+
 uniform sampler2D leavingSlideTexture;
 uniform sampler2D enteringSlideTexture;
 uniform sampler2D permTexture;

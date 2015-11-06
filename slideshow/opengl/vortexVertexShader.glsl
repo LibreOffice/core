@@ -7,15 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#version 120
+
 #define M_PI 3.1415926535897932384626433832795
 
 uniform float time;
 uniform ivec2 numTiles;
 uniform sampler2D permTexture;
-attribute vec2 tileCenter;
-attribute int tileXIndex;
-attribute int tileYIndex;
-attribute int vertexIndexInTile;
+attribute float tileInfo;
 varying vec2 v_texturePosition;
 varying float v_textureSelect;
 
@@ -52,8 +51,16 @@ void main( void )
     // at time=0.5, when the tiles there (the rightmost ones) start
     // moving.
 
+    // In GLSL 1.20 we don't have any bitwise operators, sigh
+
+    int tileXIndex = int(mod(int(tileInfo), 256));
+    int tileYIndex = int(mod(int(tileInfo) / 256, 256));
+    int vertexIndexInTile = int(mod(int(tileInfo) / (256*256), 256));
+
     float startTime = float(tileXIndex)/(numTiles.x-1) * 0.5;
     float endTime = startTime + 0.5;
+
+    vec2 tileCenter = vec2(-1 + 1.5 * tileXIndex * (2.0/numTiles.x), -1 + 1.5 * tileYIndex * (2.0/numTiles.y));
 
     if (time <= startTime)
     {
@@ -86,7 +93,7 @@ void main( void )
         v.z += (fuzz < 0.5 ? -1 : 1) * tileCenter.x * sin(moveTime*M_PI);
 
         // Perturb z a bit randomly
-        v.z += ((((tileXIndex << 3) ^ tileYIndex) % 10) - 5) * (1 - abs(time-0.5)*2);
+        v.z += (fuzz - 0.5) * 5 * (1 - abs(time-0.5)*2);
 
         v_textureSelect = float(rotation > 0.5);
     }

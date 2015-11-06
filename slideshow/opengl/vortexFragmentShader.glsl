@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#version 120
+
 uniform sampler2D leavingSlideTexture;
 uniform sampler2D enteringSlideTexture;
 uniform float time;
