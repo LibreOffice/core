@@ -366,8 +366,10 @@ void SwTableFormula::_MakeFormula( const SwTable& rTable, OUString& rNewStr,
         // calculate the value of the box
         if ( pSttBox->getRowSpan() >= 1 )
         {
+            rNewStr += "(";
             rNewStr += pCalcPara->rCalc.GetStrResult(
                             pSttBox->GetValue( *pCalcPara ), false );
+            rNewStr += ")";
         }
     }
     else
