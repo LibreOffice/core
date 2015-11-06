@@ -34,6 +34,8 @@
 #include "dociter.hxx"
 #include "brdcst.hxx"
 
+#include <comphelper/stl_types.hxx>
+
 #include <memory>
 #include <utility>
 
@@ -1169,18 +1171,7 @@ size_t ScDBCollection::NamedDBs::size() const
 
 bool ScDBCollection::NamedDBs::operator== (const NamedDBs& r) const
 {
-    if (m_DBs.size() != r.m_DBs.size())
-    {
-        return false;
-    }
-    for (auto iter1 = m_DBs.begin(), iter2 = r.m_DBs.begin(); iter1 != m_DBs.end(); ++iter1, ++iter2)
-    {
-        if (**iter1 != **iter2)
-        {
-            return false;
-        }
-    }
-    return true;
+    return ::comphelper::ContainerUniquePtrEquals(m_DBs, r.m_DBs);
 }
 
 ScDBCollection::AnonDBs::iterator ScDBCollection::AnonDBs::begin()
@@ -1257,14 +1248,7 @@ bool ScDBCollection::AnonDBs::has( const ScDBData* p ) const
 
 bool ScDBCollection::AnonDBs::operator== (const AnonDBs& r) const
 {
-    if (m_DBs.size() != r.m_DBs.size())
-        return false;
-    for (auto iter1 = begin(), iter2 = r.begin(); iter1 != end(); ++iter1, ++iter2)
-    {
-        if (**iter1 != **iter2)
-            return false;
-    }
-    return true;
+    return ::comphelper::ContainerUniquePtrEquals(m_DBs, r.m_DBs);
 }
 
 ScDBCollection::AnonDBs::AnonDBs()
