@@ -104,17 +104,17 @@ namespace oox {
 namespace drawingml {
 
 #define GETA(propName) \
-    GetProperty( rXPropSet, OUString( #propName ) )
+    GetProperty( rXPropSet, #propName )
 
 #define GETAD(propName) \
-    ( GetPropertyAndState( rXPropSet, rXPropState, OUString( #propName ), eState ) && eState == beans::PropertyState_DIRECT_VALUE )
+    ( GetPropertyAndState( rXPropSet, rXPropState, #propName, eState ) && eState == beans::PropertyState_DIRECT_VALUE )
 
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
         mAny >>= variable;
 
 #define CGETAD(propName) \
-    (( bCheckDirect && GetPropertyAndState( rXPropSet, rXPropState, OUString( #propName ), eState ) && eState == beans::PropertyState_DIRECT_VALUE )||GetProperty( rXPropSet, OUString( #propName ) ))
+    (( bCheckDirect && GetPropertyAndState( rXPropSet, rXPropState, #propName, eState ) && eState == beans::PropertyState_DIRECT_VALUE )||GetProperty( rXPropSet, #propName ))
 
 // not thread safe
 int DrawingML::mnImageCounter = 1;

@@ -123,10 +123,10 @@ bool URLTransformer::isExternalURL(const OUString& /*rURL*/) const
 }
 
 #define GETA(propName) \
-    GetProperty( rXPropSet, OUString(#propName))
+    GetProperty( rXPropSet, #propName)
 
 #define GETAD(propName) \
-    ( GetPropertyAndState( rXPropSet, rXPropState, OUString(#propName), eState ) && eState == beans::PropertyState_DIRECT_VALUE )
+    ( GetPropertyAndState( rXPropSet, rXPropState, #propName, eState ) && eState == beans::PropertyState_DIRECT_VALUE )
 
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
