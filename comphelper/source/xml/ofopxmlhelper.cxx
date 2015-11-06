@@ -139,9 +139,9 @@ void WriteRelationsInfoSequence(
     AttributeList* pRootAttrList = new AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
-        OUString( "xmlns" ),
+        "xmlns",
         aCDATAString,
-        OUString( "http://schemas.openxmlformats.org/package/2006/relationships" ) );
+        "http://schemas.openxmlformats.org/package/2006/relationships" );
 
     xWriter->startDocument();
     xWriter->startElement( aRelListElement, xRootAttrList );
@@ -204,9 +204,9 @@ void WriteContentSequence(
     AttributeList* pRootAttrList = new AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
-        OUString( "xmlns" ),
+        "xmlns",
         aCDATAString,
-        OUString( "http://schemas.openxmlformats.org/package/2006/content-types" ) );
+        "http://schemas.openxmlformats.org/package/2006/content-types" );
 
     xWriter->startDocument();
     xWriter->startElement( aTypesElement, xRootAttrList );

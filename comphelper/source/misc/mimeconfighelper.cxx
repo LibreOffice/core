@@ -150,7 +150,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetObjConfigur
 
     if ( !m_xObjectConfig.is() )
         m_xObjectConfig = GetConfigurationByPath(
-                                         OUString( "/org.openoffice.Office.Embedding/Objects" ) );
+                                         "/org.openoffice.Office.Embedding/Objects" );
 
     return m_xObjectConfig;
 }
@@ -162,7 +162,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetVerbsConfig
 
     if ( !m_xVerbsConfig.is() )
         m_xVerbsConfig = GetConfigurationByPath(
-                                        OUString( "/org.openoffice.Office.Embedding/Verbs" ));
+                                        "/org.openoffice.Office.Embedding/Verbs");
 
     return m_xVerbsConfig;
 }
@@ -174,7 +174,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
 
     if ( !m_xMediaTypeConfig.is() )
         m_xMediaTypeConfig = GetConfigurationByPath(
-                    OUString( "/org.openoffice.Office.Embedding/MimeTypeClassIDRelations" ));
+                    "/org.openoffice.Office.Embedding/MimeTypeClassIDRelations");
 
     return m_xMediaTypeConfig;
 }
