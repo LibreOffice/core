@@ -453,19 +453,29 @@ void handleProjects(char * sSourceRoot, char const * sDestRoot)
 }
 }
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
-    if (argc != 3) {
-        cerr
-            << ("localize (c)2001 by Sun Microsystems\n\n"
-                "As part of the L10N framework, localize extracts en-US\n"
-                "strings for translation out of the toplevel modules defined\n"
-                "in projects array in l10ntools/source/localize.cxx.\n\n"
-                "Syntax: localize <source-root> <outfile>\n");
-        exit(EXIT_FAILURE);
-    }
-    try {
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+{
+    try
+    {
+        if (argc != 3)
+        {
+            cerr
+                << ("localize (c)2001 by Sun Microsystems\n\n"
+                    "As part of the L10N framework, localize extracts en-US\n"
+                    "strings for translation out of the toplevel modules defined\n"
+                    "in projects array in l10ntools/source/localize.cxx.\n\n"
+                    "Syntax: localize <source-root> <outfile>\n");
+            exit(EXIT_FAILURE);
+        }
         handleProjects(argv[1],argv[2]);
-    } catch (bool) { //TODO
+    }
+    catch (std::exception& e)
+    {
+        cerr << "exception: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+    catch (bool) //TODO
+    {
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
