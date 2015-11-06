@@ -962,8 +962,8 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             sScriptCode = sScriptCode.copy( nIndex + 1 );
         }
         OUString sMacroLoc = sProject;
-        sMacroLoc = sMacroLoc.concat(  OUString(".") );
-        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( OUString(".") );
+        sMacroLoc = sMacroLoc.concat(  "." );
+        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( "." );
 
         OSL_TRACE("sMacroLoc is %s", OUStringToOString( sMacroLoc, RTL_TEXTENCODING_UTF8 ).getStr() );
         for ( ; txInfo != txInfo_end; ++txInfo )

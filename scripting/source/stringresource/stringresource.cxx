@@ -1853,9 +1853,9 @@ OUString StringResourcePersistenceImpl::implGetPathForLocaleItem
     INetURLObject aInetObj( aLocation );
     aInetObj.insertName( aFileName, true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
     if( bDefaultFile )
-        aInetObj.setExtension( OUString( "default" ) );
+        aInetObj.setExtension( "default" );
     else
-        aInetObj.setExtension( OUString( "properties" ) );
+        aInetObj.setExtension( "properties" );
     OUString aCompleteFileName = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
     return aCompleteFileName;
 }

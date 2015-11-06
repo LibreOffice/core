@@ -135,7 +135,7 @@ namespace dlgprov
         if ( aScriptEvent.ScriptType == "VBAInterop" && mxListener.is() )
         {
             ScriptEvent aScriptEventCopy( aScriptEvent );
-            aScriptEventCopy.ScriptCode = msDialogLibName.concat( OUString( "."  ) ).concat( msDialogCodeName );
+            aScriptEventCopy.ScriptCode = msDialogLibName.concat( "." ).concat( msDialogCodeName );
             try
             {
                 mxListener->firing( aScriptEventCopy );
