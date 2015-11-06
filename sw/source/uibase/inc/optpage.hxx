@@ -125,53 +125,53 @@ public:
 class SwStdFontTabPage : public SfxTabPage
 {
     friend class VclPtr<SwStdFontTabPage>;
-    VclPtr<FixedText>       pLabelFT;
+    VclPtr<FixedText>       m_pLabelFT;
 
-    VclPtr<ComboBox>        pStandardBox;
-    VclPtr<FontSizeBox>     pStandardHeightLB;
-    VclPtr<ComboBox>        pTitleBox   ;
-    VclPtr<FontSizeBox>     pTitleHeightLB;
-    VclPtr<ComboBox>        pListBox    ;
-    VclPtr<FontSizeBox>     pListHeightLB;
-    VclPtr<ComboBox>        pLabelBox   ;
-    VclPtr<FontSizeBox>     pLabelHeightLB;
-    VclPtr<ComboBox>        pIdxBox     ;
-    VclPtr<FontSizeBox>     pIndexHeightLB;
-    VclPtr<PushButton>      pStandardPB;
+    VclPtr<ComboBox>        m_pStandardBox;
+    VclPtr<FontSizeBox>     m_pStandardHeightLB;
+    VclPtr<ComboBox>        m_pTitleBox   ;
+    VclPtr<FontSizeBox>     m_pTitleHeightLB;
+    VclPtr<ComboBox>        m_pListBox    ;
+    VclPtr<FontSizeBox>     m_pListHeightLB;
+    VclPtr<ComboBox>        m_pLabelBox   ;
+    VclPtr<FontSizeBox>     m_pLabelHeightLB;
+    VclPtr<ComboBox>        m_pIdxBox     ;
+    VclPtr<FontSizeBox>     m_pIndexHeightLB;
+    VclPtr<PushButton>      m_pStandardPB;
 
-    OUString sShellStd;
-    OUString sShellTitle;
-    OUString sShellList;
-    OUString sShellLabel;
-    OUString sShellIndex;
+    OUString m_sShellStd;
+    OUString m_sShellTitle;
+    OUString m_sShellList;
+    OUString m_sShellLabel;
+    OUString m_sShellIndex;
 
-    VclPtr<SfxPrinter> pPrt;
-    FontList* pFontList;
-    SwStdFontConfig* pFontConfig;
-    SwWrtShell* pWrtShell;
-    LanguageType eLanguage;
+    VclPtr<SfxPrinter> m_pPrt;
+    FontList* m_pFontList;
+    SwStdFontConfig* m_pFontConfig;
+    SwWrtShell* m_pWrtShell;
+    LanguageType m_eLanguage;
 
     // only defaults were there? they were signed with the boxes
-    bool    bListDefault    :1;
-    bool    bSetListDefault :1;
-    bool    bLabelDefault   :1;
-    bool    bSetLabelDefault :1;
-    bool    bIdxDefault     :1;
-    bool    bSetIdxDefault  :1;
-    bool    bDeletePrinter :1;
+    bool    m_bListDefault    :1;
+    bool    m_bSetListDefault :1;
+    bool    m_bLabelDefault   :1;
+    bool    m_bSetLabelDefault :1;
+    bool    m_bIdxDefault     :1;
+    bool    m_bSetIdxDefault  :1;
+    bool    m_bDeletePrinter :1;
 
-    bool    bListHeightDefault    :1;
-    bool    bSetListHeightDefault :1;
-    bool    bLabelHeightDefault   :1;
-    bool    bSetLabelHeightDefault :1;
-    bool    bIndexHeightDefault     :1;
-    bool    bSetIndexHeightDefault  :1;
+    bool    m_bListHeightDefault    :1;
+    bool    m_bSetListHeightDefault :1;
+    bool    m_bLabelHeightDefault   :1;
+    bool    m_bSetLabelHeightDefault :1;
+    bool    m_bIndexHeightDefault     :1;
+    bool    m_bSetIndexHeightDefault  :1;
 
-    sal_uInt8 nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
+    sal_uInt8 m_nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
-    OUString sScriptWestern;
-    OUString sScriptAsian;
-    OUString sScriptComplex;
+    OUString m_sScriptWestern;
+    OUString m_sScriptAsian;
+    OUString m_sScriptComplex;
 
     DECL_LINK_TYPED(StandardHdl, Button*, void );
     DECL_LINK_TYPED(ModifyHdl, Edit&, void );
@@ -190,7 +190,7 @@ public:
 
     void SetFontMode(sal_uInt8 nGroup)
     {
-        nFontGroup = nGroup;
+        m_nFontGroup = nGroup;
     }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };

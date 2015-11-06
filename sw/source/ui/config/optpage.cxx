@@ -536,70 +536,70 @@ void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
 SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
                                        const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptFontTabPage" , "modules/swriter/ui/optfonttabpage.ui" , &rSet),
-    pPrt(0),
-    pFontList(0),
-    pFontConfig(0),
-    pWrtShell(0),
-    eLanguage( GetAppLanguage() ),
+    m_pPrt(0),
+    m_pFontList(0),
+    m_pFontConfig(0),
+    m_pWrtShell(0),
+    m_eLanguage( GetAppLanguage() ),
 
-    bListDefault(false),
-    bSetListDefault(true),
-    bLabelDefault(false),
-    bSetLabelDefault(true),
-    bIdxDefault(false),
-    bSetIdxDefault(true),
-    bDeletePrinter(false),
+    m_bListDefault(false),
+    m_bSetListDefault(true),
+    m_bLabelDefault(false),
+    m_bSetLabelDefault(true),
+    m_bIdxDefault(false),
+    m_bSetIdxDefault(true),
+    m_bDeletePrinter(false),
 
-    bListHeightDefault    (false),
-    bSetListHeightDefault (false),
-    bLabelHeightDefault   (false),
-    bSetLabelHeightDefault(false),
-    bIndexHeightDefault     (false),
-    bSetIndexHeightDefault  (false),
+    m_bListHeightDefault    (false),
+    m_bSetListHeightDefault (false),
+    m_bLabelHeightDefault   (false),
+    m_bSetLabelHeightDefault(false),
+    m_bIndexHeightDefault     (false),
+    m_bSetIndexHeightDefault  (false),
 
-    nFontGroup(FONT_GROUP_DEFAULT),
+    m_nFontGroup(FONT_GROUP_DEFAULT),
 
-    sScriptWestern(SW_RES(ST_SCRIPT_WESTERN)),
-    sScriptAsian(SW_RES(ST_SCRIPT_ASIAN)),
-    sScriptComplex(SW_RES(ST_SCRIPT_CTL))
+    m_sScriptWestern(SW_RES(ST_SCRIPT_WESTERN)),
+    m_sScriptAsian(SW_RES(ST_SCRIPT_ASIAN)),
+    m_sScriptComplex(SW_RES(ST_SCRIPT_CTL))
 {
-    get(pLabelFT,"label1");
-    get(pStandardBox,"standardbox");
-    pStandardBox->SetStyle(pStandardBox->GetStyle() |  WB_SORT);
-    get(pStandardHeightLB,"standardheight");
-    get(pTitleBox,"titlebox");
-    pTitleBox->SetStyle(pTitleBox->GetStyle() |  WB_SORT);
-    get(pTitleHeightLB,"titleheight");
-    get(pListBox,"listbox");
-    pListBox->SetStyle(pListBox->GetStyle() |  WB_SORT);
-    get(pListHeightLB,"listheight");
-    get(pLabelBox,"labelbox");
-    pLabelBox->SetStyle(pLabelBox->GetStyle() |  WB_SORT);
-    get(pLabelHeightLB,"labelheight");
-    get(pIdxBox,"idxbox");
-    pIdxBox->SetStyle(pIdxBox->GetStyle() |  WB_SORT);
-    get(pIndexHeightLB,"indexheight");
+    get(m_pLabelFT,"label1");
+    get(m_pStandardBox,"standardbox");
+    m_pStandardBox->SetStyle(m_pStandardBox->GetStyle() |  WB_SORT);
+    get(m_pStandardHeightLB,"standardheight");
+    get(m_pTitleBox,"titlebox");
+    m_pTitleBox->SetStyle(m_pTitleBox->GetStyle() |  WB_SORT);
+    get(m_pTitleHeightLB,"titleheight");
+    get(m_pListBox,"listbox");
+    m_pListBox->SetStyle(m_pListBox->GetStyle() |  WB_SORT);
+    get(m_pListHeightLB,"listheight");
+    get(m_pLabelBox,"labelbox");
+    m_pLabelBox->SetStyle(m_pLabelBox->GetStyle() |  WB_SORT);
+    get(m_pLabelHeightLB,"labelheight");
+    get(m_pIdxBox,"idxbox");
+    m_pIdxBox->SetStyle(m_pIdxBox->GetStyle() |  WB_SORT);
+    get(m_pIndexHeightLB,"indexheight");
 
-    get(pStandardPB,"standard");
+    get(m_pStandardPB,"standard");
 
-    pStandardPB->SetClickHdl(LINK(this, SwStdFontTabPage, StandardHdl));
-    pStandardBox->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
-    pListBox    ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
-    pLabelBox   ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
-    pIdxBox     ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
+    m_pStandardPB->SetClickHdl(LINK(this, SwStdFontTabPage, StandardHdl));
+    m_pStandardBox->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
+    m_pListBox    ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
+    m_pLabelBox   ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
+    m_pIdxBox     ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
     Link<Control&,void> aFocusLink = LINK( this, SwStdFontTabPage, LoseFocusHdl);
-    pStandardBox->SetLoseFocusHdl( aFocusLink );
-    pTitleBox   ->SetLoseFocusHdl( aFocusLink );
-    pListBox    ->SetLoseFocusHdl( aFocusLink );
-    pLabelBox   ->SetLoseFocusHdl( aFocusLink );
-    pIdxBox     ->SetLoseFocusHdl( aFocusLink );
+    m_pStandardBox->SetLoseFocusHdl( aFocusLink );
+    m_pTitleBox   ->SetLoseFocusHdl( aFocusLink );
+    m_pListBox    ->SetLoseFocusHdl( aFocusLink );
+    m_pLabelBox   ->SetLoseFocusHdl( aFocusLink );
+    m_pIdxBox     ->SetLoseFocusHdl( aFocusLink );
 
     Link<Edit&,void> aModifyHeightLink( LINK( this, SwStdFontTabPage, ModifyHeightHdl));
-    pStandardHeightLB->SetModifyHdl( aModifyHeightLink );
-    pTitleHeightLB->   SetModifyHdl( aModifyHeightLink );
-    pListHeightLB->    SetModifyHdl( aModifyHeightLink );
-    pLabelHeightLB->   SetModifyHdl( aModifyHeightLink );
-    pIndexHeightLB->   SetModifyHdl( aModifyHeightLink );
+    m_pStandardHeightLB->SetModifyHdl( aModifyHeightLink );
+    m_pTitleHeightLB->   SetModifyHdl( aModifyHeightLink );
+    m_pListHeightLB->    SetModifyHdl( aModifyHeightLink );
+    m_pLabelHeightLB->   SetModifyHdl( aModifyHeightLink );
+    m_pIndexHeightLB->   SetModifyHdl( aModifyHeightLink );
 }
 
 SwStdFontTabPage::~SwStdFontTabPage()
@@ -609,21 +609,21 @@ SwStdFontTabPage::~SwStdFontTabPage()
 
 void SwStdFontTabPage::dispose()
 {
-    delete pFontList;
-    if (bDeletePrinter)
-        pPrt.disposeAndClear();
-    pLabelFT.clear();
-    pStandardBox.clear();
-    pStandardHeightLB.clear();
-    pTitleBox.clear();
-    pTitleHeightLB.clear();
-    pListBox.clear();
-    pListHeightLB.clear();
-    pLabelBox.clear();
-    pLabelHeightLB.clear();
-    pIdxBox.clear();
-    pIndexHeightLB.clear();
-    pStandardPB.clear();
+    delete m_pFontList;
+    if (m_bDeletePrinter)
+        m_pPrt.disposeAndClear();
+    m_pLabelFT.clear();
+    m_pStandardBox.clear();
+    m_pStandardHeightLB.clear();
+    m_pTitleBox.clear();
+    m_pTitleHeightLB.clear();
+    m_pListBox.clear();
+    m_pListHeightLB.clear();
+    m_pLabelBox.clear();
+    m_pLabelHeightLB.clear();
+    m_pIdxBox.clear();
+    m_pIndexHeightLB.clear();
+    m_pStandardPB.clear();
     SfxTabPage::dispose();
 }
 
@@ -658,127 +658,127 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
 {
     SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(false);
 
-    const OUString sStandard    = pStandardBox->GetText();
-    const OUString sTitle       = pTitleBox->GetText();
-    const OUString sList        = pListBox->GetText();
-    const OUString sLabel       = pLabelBox->GetText();
-    const OUString sIdx         = pIdxBox->GetText();
+    const OUString sStandard    = m_pStandardBox->GetText();
+    const OUString sTitle       = m_pTitleBox->GetText();
+    const OUString sList        = m_pListBox->GetText();
+    const OUString sLabel       = m_pLabelBox->GetText();
+    const OUString sIdx         = m_pIdxBox->GetText();
 
-    bool bStandardHeightChanged = pStandardHeightLB->IsValueChangedFromSaved();
-    bool bTitleHeightChanged = pTitleHeightLB->IsValueChangedFromSaved();
-    bool bListHeightChanged = pListHeightLB->IsValueChangedFromSaved() && (!bListHeightDefault || !bSetListHeightDefault );
-    bool bLabelHeightChanged = pLabelHeightLB->IsValueChangedFromSaved() && (!bLabelHeightDefault || !bSetLabelHeightDefault );
-    bool bIndexHeightChanged = pIndexHeightLB->IsValueChangedFromSaved() && (!bIndexHeightDefault || !bSetIndexHeightDefault );
+    bool bStandardHeightChanged = m_pStandardHeightLB->IsValueChangedFromSaved();
+    bool bTitleHeightChanged = m_pTitleHeightLB->IsValueChangedFromSaved();
+    bool bListHeightChanged = m_pListHeightLB->IsValueChangedFromSaved() && (!m_bListHeightDefault || !m_bSetListHeightDefault );
+    bool bLabelHeightChanged = m_pLabelHeightLB->IsValueChangedFromSaved() && (!m_bLabelHeightDefault || !m_bSetLabelHeightDefault );
+    bool bIndexHeightChanged = m_pIndexHeightLB->IsValueChangedFromSaved() && (!m_bIndexHeightDefault || !m_bSetIndexHeightDefault );
 
-    pFontConfig->SetFontStandard(sStandard, nFontGroup);
-    pFontConfig->SetFontOutline(sTitle, nFontGroup);
-    pFontConfig->SetFontList(sList, nFontGroup);
-    pFontConfig->SetFontCaption(sLabel, nFontGroup);
-    pFontConfig->SetFontIndex(sIdx, nFontGroup);
+    m_pFontConfig->SetFontStandard(sStandard, m_nFontGroup);
+    m_pFontConfig->SetFontOutline(sTitle, m_nFontGroup);
+    m_pFontConfig->SetFontList(sList, m_nFontGroup);
+    m_pFontConfig->SetFontCaption(sLabel, m_nFontGroup);
+    m_pFontConfig->SetFontIndex(sIdx, m_nFontGroup);
     if(bStandardHeightChanged)
     {
-        float fSize = (float)pStandardHeightLB->GetValue() / 10;
-        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_STANDARD, nFontGroup );
+        float fSize = (float)m_pStandardHeightLB->GetValue() / 10;
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_STANDARD, m_nFontGroup );
     }
     if(bTitleHeightChanged)
     {
-        float fSize = (float)pTitleHeightLB->GetValue() / 10;
-        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_OUTLINE, nFontGroup );
+        float fSize = (float)m_pTitleHeightLB->GetValue() / 10;
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_OUTLINE, m_nFontGroup );
     }
     if(bListHeightChanged)
     {
-        float fSize = (float)pListHeightLB->GetValue() / 10;
-        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_LIST, nFontGroup );
+        float fSize = (float)m_pListHeightLB->GetValue() / 10;
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_LIST, m_nFontGroup );
     }
     if(bLabelHeightChanged)
     {
-        float fSize = (float)pLabelHeightLB->GetValue() / 10;
-        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_CAPTION, nFontGroup );
+        float fSize = (float)m_pLabelHeightLB->GetValue() / 10;
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_CAPTION, m_nFontGroup );
     }
     if(bIndexHeightChanged)
     {
-        float fSize = (float)pIndexHeightLB->GetValue() / 10;
-        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_INDEX, nFontGroup );
+        float fSize = (float)m_pIndexHeightLB->GetValue() / 10;
+        m_pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_INDEX, m_nFontGroup );
     }
 
-    if(pWrtShell)
+    if(m_pWrtShell)
     {
-        pWrtShell->StartAllAction();
-        SfxPrinter* pPrinter = pWrtShell->getIDocumentDeviceAccess().getPrinter( false );
+        m_pWrtShell->StartAllAction();
+        SfxPrinter* pPrinter = m_pWrtShell->getIDocumentDeviceAccess().getPrinter( false );
         bool bMod = false;
         const sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
-            nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
-            FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT);
+            m_nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
+            FONT_GROUP_CJK == m_nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT);
         const sal_uInt16 nFontHeightWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
-            nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
-            FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE);
-        if(sStandard != sShellStd)
+            m_nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
+            FONT_GROUP_CJK == m_nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE);
+        if(sStandard != m_sShellStd)
         {
             vcl::Font aFont( sStandard, Size( 0, 10 ) );
             if( pPrinter )
                 aFont = pPrinter->GetFontMetric( aFont );
-            pWrtShell->SetDefault(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+            m_pWrtShell->SetDefault(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
                                   aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
-            SwTextFormatColl *pColl = pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+            SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFormatAttr(nFontWhich);
             bMod = true;
         }
         if(bStandardHeightChanged)
         {
-            float fSize = (float)pStandardHeightLB->GetValue() / 10;
-            pWrtShell->SetDefault(SvxFontHeightItem( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), 100, nFontHeightWhich ) );
-            SwTextFormatColl *pColl = pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+            float fSize = (float)m_pStandardHeightLB->GetValue() / 10;
+            m_pWrtShell->SetDefault(SvxFontHeightItem( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), 100, nFontHeightWhich ) );
+            SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFormatAttr(nFontHeightWhich);
             bMod = true;
         }
 
-        if(sTitle != sShellTitle )
+        if(sTitle != m_sShellTitle )
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_HEADLINE_BASE, pPrinter, sTitle, nFontWhich);
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_HEADLINE_BASE, pPrinter, sTitle, nFontWhich);
             bMod = true;
         }
         if(bTitleHeightChanged)
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_HEADLINE_BASE,
-                sal::static_int_cast< sal_uInt16, sal_Int64 >(pTitleHeightLB->GetValue()), nFontHeightWhich);
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_HEADLINE_BASE,
+                sal::static_int_cast< sal_uInt16, sal_Int64 >(m_pTitleHeightLB->GetValue()), nFontHeightWhich);
             bMod = true;
         }
-        if(sList != sShellList && (!bListDefault || !bSetListDefault ))
+        if(sList != m_sShellList && (!m_bListDefault || !m_bSetListDefault ))
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_NUMBUL_BASE, pPrinter, sList, nFontWhich);
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_NUMBUL_BASE, pPrinter, sList, nFontWhich);
             bMod = true;
         }
         if(bListHeightChanged)
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_NUMBUL_BASE,
-                sal::static_int_cast< sal_uInt16, sal_Int64 >(pListHeightLB->GetValue()), nFontHeightWhich);
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_NUMBUL_BASE,
+                sal::static_int_cast< sal_uInt16, sal_Int64 >(m_pListHeightLB->GetValue()), nFontHeightWhich);
             bMod = true;
         }
-        if(sLabel != sShellLabel && (!bLabelDefault || !bSetLabelDefault))
+        if(sLabel != m_sShellLabel && (!m_bLabelDefault || !m_bSetLabelDefault))
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_LABEL, pPrinter, sLabel, nFontWhich);
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_LABEL, pPrinter, sLabel, nFontWhich);
             bMod = true;
         }
         if(bLabelHeightChanged)
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_LABEL,
-                sal::static_int_cast< sal_uInt16, sal_Int64 >(pLabelHeightLB->GetValue()), nFontHeightWhich);
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_LABEL,
+                sal::static_int_cast< sal_uInt16, sal_Int64 >(m_pLabelHeightLB->GetValue()), nFontHeightWhich);
             bMod = true;
         }
-        if(sIdx != sShellIndex && (!bIdxDefault || !bSetIdxDefault))
+        if(sIdx != m_sShellIndex && (!m_bIdxDefault || !m_bSetIdxDefault))
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_REGISTER_BASE, pPrinter, sIdx, nFontWhich);
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_REGISTER_BASE, pPrinter, sIdx, nFontWhich);
             bMod = true;
         }
         if(bIndexHeightChanged)
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_REGISTER_BASE,
-                sal::static_int_cast< sal_uInt16, sal_Int64 >(pIndexHeightLB->GetValue()), nFontHeightWhich);
+            lcl_SetColl(m_pWrtShell, RES_POOLCOLL_REGISTER_BASE,
+                sal::static_int_cast< sal_uInt16, sal_Int64 >(m_pIndexHeightLB->GetValue()), nFontHeightWhich);
             bMod = true;
         }
         if ( bMod )
-            pWrtShell->SetModified();
-        pWrtShell->EndAllAction();
+            m_pWrtShell->SetModified();
+        m_pWrtShell->EndAllAction();
     }
     return false;
 }
@@ -786,29 +786,29 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
 void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
 {
     const SfxPoolItem* pLang;
-    const sal_uInt16 nLangSlot = nFontGroup == FONT_GROUP_DEFAULT  ? SID_ATTR_LANGUAGE :
-        FONT_GROUP_CJK == nFontGroup ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_CHAR_CTL_LANGUAGE;
+    const sal_uInt16 nLangSlot = m_nFontGroup == FONT_GROUP_DEFAULT  ? SID_ATTR_LANGUAGE :
+        FONT_GROUP_CJK == m_nFontGroup ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_CHAR_CTL_LANGUAGE;
 
     if( SfxItemState::SET == rSet->GetItemState(nLangSlot, false, &pLang))
-        eLanguage = static_cast<const SvxLanguageItem*>(pLang)->GetValue();
+        m_eLanguage = static_cast<const SvxLanguageItem*>(pLang)->GetValue();
 
-    OUString sToReplace = sScriptWestern;
-    if(FONT_GROUP_CJK == nFontGroup )
-        sToReplace = sScriptAsian;
-    else if(FONT_GROUP_CTL == nFontGroup )
-        sToReplace = sScriptComplex;
-    pLabelFT->SetText(pLabelFT->GetText().replaceFirst("%1", sToReplace));
+    OUString sToReplace = m_sScriptWestern;
+    if(FONT_GROUP_CJK == m_nFontGroup )
+        sToReplace = m_sScriptAsian;
+    else if(FONT_GROUP_CTL == m_nFontGroup )
+        sToReplace = m_sScriptComplex;
+    m_pLabelFT->SetText(m_pLabelFT->GetText().replaceFirst("%1", sToReplace));
 
     const SfxPoolItem* pItem;
 
-    if (bDeletePrinter)
+    if (m_bDeletePrinter)
     {
-        pPrt.disposeAndClear();
+        m_pPrt.disposeAndClear();
     }
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))
     {
-        pPrt = static_cast<SfxPrinter*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
+        m_pPrt = static_cast<SfxPrinter*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
     }
     else
     {
@@ -816,19 +816,19 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
-        pPrt = VclPtr<SfxPrinter>::Create(pPrinterSet);
+        m_pPrt = VclPtr<SfxPrinter>::Create(pPrinterSet);
     }
-    delete pFontList;
-    pFontList = new FontList( pPrt );
+    delete m_pFontList;
+    m_pFontList = new FontList( m_pPrt );
     // #i94536# prevent duplication of font entries when 'reset' button is pressed
-    if( !pStandardBox->GetEntryCount() )
+    if( !m_pStandardBox->GetEntryCount() )
     {
         // get the set of disctinct available family names
         std::set< OUString > aFontNames;
-        int nFontNames = pPrt->GetDevFontCount();
+        int nFontNames = m_pPrt->GetDevFontCount();
         for( int i = 0; i < nFontNames; i++ )
         {
-            vcl::FontInfo aInf( pPrt->GetDevFont( i ) );
+            vcl::FontInfo aInf( m_pPrt->GetDevFont( i ) );
             aFontNames.insert( aInf.GetName() );
         }
 
@@ -836,21 +836,21 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         for( std::set< OUString >::const_iterator it = aFontNames.begin();
              it != aFontNames.end(); ++it )
         {
-            pStandardBox->InsertEntry( *it );
-            pTitleBox->InsertEntry( *it );
-            pListBox->InsertEntry( *it );
-            pLabelBox->InsertEntry( *it );
-            pIdxBox->InsertEntry( *it );
+            m_pStandardBox->InsertEntry( *it );
+            m_pTitleBox->InsertEntry( *it );
+            m_pListBox->InsertEntry( *it );
+            m_pLabelBox->InsertEntry( *it );
+            m_pIdxBox->InsertEntry( *it );
         }
     }
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_STDFONTS, false, &pItem))
     {
-         pFontConfig = static_cast<SwStdFontConfig*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
+         m_pFontConfig = static_cast<SwStdFontConfig*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
     }
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
     {
-        pWrtShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
+        m_pWrtShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
     }
     OUString sStdBackup;
     OUString sOutBackup;
@@ -863,198 +863,198 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     sal_Int32 nLabelHeight = -1;
     sal_Int32 nIndexHeight = -1;
 
-    if(!pWrtShell)
+    if(!m_pWrtShell)
     {
-        sStdBackup = pFontConfig->GetFontStandard(nFontGroup);
-        sOutBackup = pFontConfig->GetFontOutline(nFontGroup);
-        sListBackup= pFontConfig->GetFontList(nFontGroup);
-        sCapBackup = pFontConfig->GetFontCaption(nFontGroup);
-        sIdxBackup = pFontConfig->GetFontIndex(nFontGroup);
-        nStandardHeight = pFontConfig->GetFontHeight( FONT_STANDARD, nFontGroup, eLanguage );
-        nTitleHeight =    pFontConfig->GetFontHeight( FONT_OUTLINE , nFontGroup, eLanguage );
-        nListHeight =     pFontConfig->GetFontHeight( FONT_LIST    , nFontGroup, eLanguage );
-        nLabelHeight =    pFontConfig->GetFontHeight( FONT_CAPTION , nFontGroup, eLanguage );
-        nIndexHeight =    pFontConfig->GetFontHeight( FONT_INDEX   , nFontGroup, eLanguage );
+        sStdBackup = m_pFontConfig->GetFontStandard(m_nFontGroup);
+        sOutBackup = m_pFontConfig->GetFontOutline(m_nFontGroup);
+        sListBackup= m_pFontConfig->GetFontList(m_nFontGroup);
+        sCapBackup = m_pFontConfig->GetFontCaption(m_nFontGroup);
+        sIdxBackup = m_pFontConfig->GetFontIndex(m_nFontGroup);
+        nStandardHeight = m_pFontConfig->GetFontHeight( FONT_STANDARD, m_nFontGroup, m_eLanguage );
+        nTitleHeight =    m_pFontConfig->GetFontHeight( FONT_OUTLINE , m_nFontGroup, m_eLanguage );
+        nListHeight =     m_pFontConfig->GetFontHeight( FONT_LIST    , m_nFontGroup, m_eLanguage );
+        nLabelHeight =    m_pFontConfig->GetFontHeight( FONT_CAPTION , m_nFontGroup, m_eLanguage );
+        nIndexHeight =    m_pFontConfig->GetFontHeight( FONT_INDEX   , m_nFontGroup, m_eLanguage );
         if( nStandardHeight <= 0)
-            nStandardHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_STANDARD + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nStandardHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_STANDARD + m_nFontGroup * FONT_PER_GROUP, m_eLanguage);
         if( nTitleHeight <= 0)
-            nTitleHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_OUTLINE + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nTitleHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_OUTLINE + m_nFontGroup * FONT_PER_GROUP, m_eLanguage);
         if( nListHeight <= 0)
-            nListHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_LIST + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nListHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_LIST + m_nFontGroup * FONT_PER_GROUP, m_eLanguage);
         if( nLabelHeight <= 0)
-            nLabelHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_CAPTION + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nLabelHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_CAPTION + m_nFontGroup * FONT_PER_GROUP, m_eLanguage);
         if( nIndexHeight <= 0)
-            nIndexHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_INDEX + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nIndexHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_INDEX + m_nFontGroup * FONT_PER_GROUP, m_eLanguage);
     }
     else
     {
-        SwTextFormatColl *pColl = pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
-        const SvxFontItem& rFont = !nFontGroup ? pColl->GetFont() :
-                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
-        sShellStd = sStdBackup =  rFont.GetFamilyName();
+        SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+        const SvxFontItem& rFont = !m_nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
+        m_sShellStd = sStdBackup =  rFont.GetFamilyName();
 
         const sal_uInt16 nFontHeightWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
-            nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
-            FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE );
+            m_nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
+            FONT_GROUP_CJK == m_nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE );
         const SvxFontHeightItem& rFontHeightStandard = static_cast<const SvxFontHeightItem& >(pColl->GetFormatAttr(nFontHeightWhich));
         nStandardHeight = (sal_Int32)rFontHeightStandard.GetHeight();
 
-        pColl = pWrtShell->GetTextCollFromPool(RES_POOLCOLL_HEADLINE_BASE);
-        const SvxFontItem& rFontHL = !nFontGroup ? pColl->GetFont() :
-                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
-        sShellTitle = sOutBackup = rFontHL.GetFamilyName();
+        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_HEADLINE_BASE);
+        const SvxFontItem& rFontHL = !m_nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
+        m_sShellTitle = sOutBackup = rFontHL.GetFamilyName();
 
         const SvxFontHeightItem& rFontHeightTitle = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr( nFontHeightWhich ));
         nTitleHeight = (sal_Int32)rFontHeightTitle.GetHeight();
 
         const sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
-            nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
-            FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT);
-        pColl = pWrtShell->GetTextCollFromPool(RES_POOLCOLL_NUMBUL_BASE);
-        const SvxFontItem& rFontLS = !nFontGroup ? pColl->GetFont() :
-                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
-        bListDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
-        sShellList = sListBackup = rFontLS.GetFamilyName();
+            m_nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :
+            FONT_GROUP_CJK == m_nFontGroup ? RES_CHRATR_CJK_FONT : RES_CHRATR_CTL_FONT);
+        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_NUMBUL_BASE);
+        const SvxFontItem& rFontLS = !m_nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
+        m_bListDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        m_sShellList = sListBackup = rFontLS.GetFamilyName();
 
         const SvxFontHeightItem& rFontHeightList = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
         nListHeight = (sal_Int32)rFontHeightList.GetHeight();
-        bListHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        m_bListHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
-        pColl = pWrtShell->GetTextCollFromPool(RES_POOLCOLL_LABEL);
-        bLabelDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
-        const SvxFontItem& rFontCP = !nFontGroup ? pColl->GetFont() :
-                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
-        sShellLabel = sCapBackup = rFontCP.GetFamilyName();
+        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_LABEL);
+        m_bLabelDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        const SvxFontItem& rFontCP = !m_nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
+        m_sShellLabel = sCapBackup = rFontCP.GetFamilyName();
         const SvxFontHeightItem& rFontHeightLabel = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
         nLabelHeight = (sal_Int32)rFontHeightLabel.GetHeight();
-        bLabelHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        m_bLabelHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
-        pColl = pWrtShell->GetTextCollFromPool(RES_POOLCOLL_REGISTER_BASE);
-        bIdxDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
-        const SvxFontItem& rFontIDX = !nFontGroup ? pColl->GetFont() :
-                FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
-        sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
+        pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_REGISTER_BASE);
+        m_bIdxDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        const SvxFontItem& rFontIDX = !m_nFontGroup ? pColl->GetFont() :
+                FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
+        m_sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
         const SvxFontHeightItem& rFontHeightIndex = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
         nIndexHeight = (sal_Int32)rFontHeightIndex.GetHeight();
-        bIndexHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        m_bIndexHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
     }
-    pStandardBox->SetText(sStdBackup );
-    pTitleBox->SetText(sOutBackup );
-    pListBox->SetText(sListBackup);
-    pLabelBox->SetText(sCapBackup );
-    pIdxBox->SetText(sIdxBackup );
+    m_pStandardBox->SetText(sStdBackup );
+    m_pTitleBox->SetText(sOutBackup );
+    m_pListBox->SetText(sListBackup);
+    m_pLabelBox->SetText(sCapBackup );
+    m_pIdxBox->SetText(sIdxBackup );
 
-    vcl::FontInfo aFontInfo( pFontList->Get(sStdBackup, sStdBackup) );
-    pStandardHeightLB->Fill( &aFontInfo, pFontList );
-    aFontInfo = pFontList->Get(sOutBackup, sOutBackup );
-    pTitleHeightLB->Fill( &aFontInfo, pFontList );
-    aFontInfo = pFontList->Get(sListBackup,sListBackup);
-    pListHeightLB->Fill( &aFontInfo, pFontList );
-    aFontInfo = pFontList->Get(sCapBackup, sCapBackup );
-    pLabelHeightLB->Fill( &aFontInfo, pFontList );
-    aFontInfo = pFontList->Get(sIdxBackup, sIdxBackup );
-    pIndexHeightLB->Fill( &aFontInfo, pFontList );
+    vcl::FontInfo aFontInfo( m_pFontList->Get(sStdBackup, sStdBackup) );
+    m_pStandardHeightLB->Fill( &aFontInfo, m_pFontList );
+    aFontInfo = m_pFontList->Get(sOutBackup, sOutBackup );
+    m_pTitleHeightLB->Fill( &aFontInfo, m_pFontList );
+    aFontInfo = m_pFontList->Get(sListBackup,sListBackup);
+    m_pListHeightLB->Fill( &aFontInfo, m_pFontList );
+    aFontInfo = m_pFontList->Get(sCapBackup, sCapBackup );
+    m_pLabelHeightLB->Fill( &aFontInfo, m_pFontList );
+    aFontInfo = m_pFontList->Get(sIdxBackup, sIdxBackup );
+    m_pIndexHeightLB->Fill( &aFontInfo, m_pFontList );
 
-    pStandardHeightLB->SetValue( CalcToPoint( nStandardHeight, SFX_MAPUNIT_TWIP, 10 ) );
-    pTitleHeightLB->   SetValue( CalcToPoint( nTitleHeight   , SFX_MAPUNIT_TWIP, 10 ) );
-    pListHeightLB->    SetValue( CalcToPoint( nListHeight    , SFX_MAPUNIT_TWIP, 10 ) );
-    pLabelHeightLB->   SetValue( CalcToPoint( nLabelHeight   , SFX_MAPUNIT_TWIP, 10 ));
-    pIndexHeightLB->   SetValue( CalcToPoint( nIndexHeight   , SFX_MAPUNIT_TWIP, 10 ));
+    m_pStandardHeightLB->SetValue( CalcToPoint( nStandardHeight, SFX_MAPUNIT_TWIP, 10 ) );
+    m_pTitleHeightLB->   SetValue( CalcToPoint( nTitleHeight   , SFX_MAPUNIT_TWIP, 10 ) );
+    m_pListHeightLB->    SetValue( CalcToPoint( nListHeight    , SFX_MAPUNIT_TWIP, 10 ) );
+    m_pLabelHeightLB->   SetValue( CalcToPoint( nLabelHeight   , SFX_MAPUNIT_TWIP, 10 ));
+    m_pIndexHeightLB->   SetValue( CalcToPoint( nIndexHeight   , SFX_MAPUNIT_TWIP, 10 ));
 
-    pStandardBox->SaveValue();
-    pTitleBox->SaveValue();
-    pListBox->SaveValue();
-    pLabelBox->SaveValue();
-    pIdxBox->SaveValue();
+    m_pStandardBox->SaveValue();
+    m_pTitleBox->SaveValue();
+    m_pListBox->SaveValue();
+    m_pLabelBox->SaveValue();
+    m_pIdxBox->SaveValue();
 
-    pStandardHeightLB->SaveValue();
-    pTitleHeightLB->SaveValue();
-    pListHeightLB->SaveValue();
-    pLabelHeightLB->SaveValue();
-    pIndexHeightLB->SaveValue();
+    m_pStandardHeightLB->SaveValue();
+    m_pTitleHeightLB->SaveValue();
+    m_pListHeightLB->SaveValue();
+    m_pLabelHeightLB->SaveValue();
+    m_pIndexHeightLB->SaveValue();
 }
 
 IMPL_LINK_NOARG_TYPED(SwStdFontTabPage, StandardHdl, Button*, void)
 {
-    sal_uInt8 nFontOffset = nFontGroup * FONT_PER_GROUP;
-    pStandardBox->SetText(SwStdFontConfig::GetDefaultFor(FONT_STANDARD + nFontOffset, eLanguage));
-    pTitleBox   ->SetText(SwStdFontConfig::GetDefaultFor(FONT_OUTLINE  + nFontOffset, eLanguage));
-    pListBox    ->SetText(SwStdFontConfig::GetDefaultFor(FONT_LIST     + nFontOffset, eLanguage));
-    pLabelBox   ->SetText(SwStdFontConfig::GetDefaultFor(FONT_CAPTION  + nFontOffset, eLanguage));
-    pIdxBox     ->SetText(SwStdFontConfig::GetDefaultFor(FONT_INDEX    + nFontOffset, eLanguage));
+    sal_uInt8 nFontOffset = m_nFontGroup * FONT_PER_GROUP;
+    m_pStandardBox->SetText(SwStdFontConfig::GetDefaultFor(FONT_STANDARD + nFontOffset, m_eLanguage));
+    m_pTitleBox   ->SetText(SwStdFontConfig::GetDefaultFor(FONT_OUTLINE  + nFontOffset, m_eLanguage));
+    m_pListBox    ->SetText(SwStdFontConfig::GetDefaultFor(FONT_LIST     + nFontOffset, m_eLanguage));
+    m_pLabelBox   ->SetText(SwStdFontConfig::GetDefaultFor(FONT_CAPTION  + nFontOffset, m_eLanguage));
+    m_pIdxBox     ->SetText(SwStdFontConfig::GetDefaultFor(FONT_INDEX    + nFontOffset, m_eLanguage));
 
-    pStandardBox->SaveValue();
-    pTitleBox->SaveValue();
-    pListBox->SaveValue();
-    pLabelBox->SaveValue();
-    pIdxBox->SaveValue();
+    m_pStandardBox->SaveValue();
+    m_pTitleBox->SaveValue();
+    m_pListBox->SaveValue();
+    m_pLabelBox->SaveValue();
+    m_pIdxBox->SaveValue();
 
-    pStandardHeightLB->SetValue( CalcToPoint(
-        SwStdFontConfig::GetDefaultHeightFor(FONT_STANDARD + nFontOffset, eLanguage),
+    m_pStandardHeightLB->SetValue( CalcToPoint(
+        SwStdFontConfig::GetDefaultHeightFor(FONT_STANDARD + nFontOffset, m_eLanguage),
             SFX_MAPUNIT_TWIP, 10 ) );
-    pTitleHeightLB   ->SetValue(CalcToPoint(
+    m_pTitleHeightLB   ->SetValue(CalcToPoint(
         SwStdFontConfig::GetDefaultHeightFor(FONT_OUTLINE  +
-            nFontOffset, eLanguage), SFX_MAPUNIT_TWIP, 10 ));
-    pListHeightLB    ->SetValue(CalcToPoint(
-        SwStdFontConfig::GetDefaultHeightFor(FONT_LIST + nFontOffset, eLanguage),
+            nFontOffset, m_eLanguage), SFX_MAPUNIT_TWIP, 10 ));
+    m_pListHeightLB    ->SetValue(CalcToPoint(
+        SwStdFontConfig::GetDefaultHeightFor(FONT_LIST + nFontOffset, m_eLanguage),
             SFX_MAPUNIT_TWIP, 10 ));
-    pLabelHeightLB   ->SetValue(CalcToPoint(
-        SwStdFontConfig::GetDefaultHeightFor(FONT_CAPTION  + nFontOffset, eLanguage),
+    m_pLabelHeightLB   ->SetValue(CalcToPoint(
+        SwStdFontConfig::GetDefaultHeightFor(FONT_CAPTION  + nFontOffset, m_eLanguage),
             SFX_MAPUNIT_TWIP, 10 ));
-    pIndexHeightLB   ->SetValue(CalcToPoint(
-        SwStdFontConfig::GetDefaultHeightFor(FONT_INDEX    + nFontOffset, eLanguage),
+    m_pIndexHeightLB   ->SetValue(CalcToPoint(
+        SwStdFontConfig::GetDefaultHeightFor(FONT_INDEX    + nFontOffset, m_eLanguage),
             SFX_MAPUNIT_TWIP, 10 ));
 }
 
 IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHdl, Edit&, rBox, void )
 {
-    if(&rBox == pStandardBox)
+    if(&rBox == m_pStandardBox)
     {
         const OUString sEntry = rBox.GetText();
-        if(bSetListDefault && bListDefault)
-            pListBox->SetText(sEntry);
-        if(bSetLabelDefault && bLabelDefault)
-            pLabelBox->SetText(sEntry);
-        if(bSetIdxDefault && bIdxDefault)
-            pIdxBox->SetText(sEntry);
+        if(m_bSetListDefault && m_bListDefault)
+            m_pListBox->SetText(sEntry);
+        if(m_bSetLabelDefault && m_bLabelDefault)
+            m_pLabelBox->SetText(sEntry);
+        if(m_bSetIdxDefault && m_bIdxDefault)
+            m_pIdxBox->SetText(sEntry);
     }
-    else if(&rBox == pListBox)
+    else if(&rBox == m_pListBox)
     {
-        bSetListDefault = false;
+        m_bSetListDefault = false;
     }
-    else if(&rBox == pLabelBox)
+    else if(&rBox == m_pLabelBox)
     {
-        bSetLabelDefault = false;
+        m_bSetLabelDefault = false;
     }
-    else if(&rBox == pIdxBox)
+    else if(&rBox == m_pIdxBox)
     {
-        bSetIdxDefault = false;
+        m_bSetIdxDefault = false;
     }
 }
 
 IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHeightHdl, Edit&, rBox, void )
 {
-    if(&rBox == pStandardHeightLB)
+    if(&rBox == m_pStandardHeightLB)
     {
         sal_Int64 nValue = static_cast<FontSizeBox&>(rBox).GetValue(FUNIT_TWIP);
-        if(bSetListHeightDefault && bListHeightDefault)
-            pListHeightLB->SetValue(nValue, FUNIT_TWIP);
-        if(bSetLabelHeightDefault && bLabelHeightDefault)
-            pLabelHeightLB->SetValue(nValue, FUNIT_TWIP);
-        if(bSetIndexHeightDefault && bIndexHeightDefault)
-            pIndexHeightLB->SetValue(nValue, FUNIT_TWIP);
+        if(m_bSetListHeightDefault && m_bListHeightDefault)
+            m_pListHeightLB->SetValue(nValue, FUNIT_TWIP);
+        if(m_bSetLabelHeightDefault && m_bLabelHeightDefault)
+            m_pLabelHeightLB->SetValue(nValue, FUNIT_TWIP);
+        if(m_bSetIndexHeightDefault && m_bIndexHeightDefault)
+            m_pIndexHeightLB->SetValue(nValue, FUNIT_TWIP);
     }
-    else if(&rBox == pListHeightLB)
+    else if(&rBox == m_pListHeightLB)
     {
-        bSetListHeightDefault = false;
+        m_bSetListHeightDefault = false;
     }
-    else if(&rBox == pLabelHeightLB)
+    else if(&rBox == m_pLabelHeightLB)
     {
-        bSetLabelHeightDefault = false;
+        m_bSetLabelHeightDefault = false;
     }
-    else if(&rBox == pIndexHeightLB)
+    else if(&rBox == m_pIndexHeightLB)
     {
-        bSetIndexHeightDefault = false;
+        m_bSetIndexHeightDefault = false;
     }
 }
 
@@ -1063,28 +1063,28 @@ IMPL_LINK_TYPED( SwStdFontTabPage, LoseFocusHdl, Control&, rControl, void )
     ComboBox* pBox = static_cast<ComboBox*>(&rControl);
     FontSizeBox* pHeightLB = 0;
     const OUString sEntry = pBox->GetText();
-    if(pBox == pStandardBox)
+    if(pBox == m_pStandardBox)
     {
-        pHeightLB = pStandardHeightLB;
+        pHeightLB = m_pStandardHeightLB;
     }
-    else if(pBox == pTitleBox)
+    else if(pBox == m_pTitleBox)
     {
-        pHeightLB = pTitleHeightLB;
+        pHeightLB = m_pTitleHeightLB;
     }
-    else if(pBox == pListBox)
+    else if(pBox == m_pListBox)
     {
-        pHeightLB = pListHeightLB;
+        pHeightLB = m_pListHeightLB;
     }
-    else if(pBox == pLabelBox)
+    else if(pBox == m_pLabelBox)
     {
-        pHeightLB = pLabelHeightLB;
+        pHeightLB = m_pLabelHeightLB;
     }
     else /*if(pBox == pIdxBox)*/
     {
-        pHeightLB = pIndexHeightLB;
+        pHeightLB = m_pIndexHeightLB;
     }
-    vcl::FontInfo aFontInfo( pFontList->Get(sEntry, sEntry) );
-    pHeightLB->Fill( &aFontInfo, pFontList );
+    vcl::FontInfo aFontInfo( m_pFontList->Get(sEntry, sEntry) );
+    pHeightLB->Fill( &aFontInfo, m_pFontList );
 }
 
 void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
