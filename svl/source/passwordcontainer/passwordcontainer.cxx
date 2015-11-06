@@ -200,7 +200,7 @@ PassMap StorageItem::getInfo()
 {
     PassMap aResult;
 
-    Sequence< OUString > aNodeNames     = ConfigItem::GetNodeNames( OUString("Store") );
+    Sequence< OUString > aNodeNames     = ConfigItem::GetNodeNames( "Store" );
     sal_Int32 aNodeCount = aNodeNames.getLength();
     Sequence< OUString > aPropNames( aNodeCount );
     sal_Int32 aNodeInd;
@@ -342,13 +342,13 @@ void StorageItem::remove( const OUString& aURL, const OUString& aName )
 
     sendSeq[0] = createIndex( forIndex );
 
-    ConfigItem::ClearNodeElements( OUString("Store"), sendSeq );
+    ConfigItem::ClearNodeElements( "Store", sendSeq );
 }
 
 
 void StorageItem::clear()
 {
-    ConfigItem::ClearNodeSet( OUString("Store") );
+    ConfigItem::ClearNodeSet( "Store" );
 }
 
 
@@ -371,7 +371,7 @@ void StorageItem::update( const OUString& aURL, const NamePassRecord& aRecord )
     sendSeq[0].Value <<= aRecord.GetPersPasswords();
 
     ConfigItem::SetModified();
-    ConfigItem::SetSetProperties( OUString("Store"), sendSeq );
+    ConfigItem::SetSetProperties( "Store", sendSeq );
 }
 
 

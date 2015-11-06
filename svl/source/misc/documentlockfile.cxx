@@ -115,7 +115,7 @@ bool DocumentLockFile::CreateOwnLockFile()
         aInsertArg.ReplaceExisting = sal_False;
         uno::Any aCmdArg;
         aCmdArg <<= aInsertArg;
-        aTargetContent.executeCommand( OUString( "insert"  ), aCmdArg );
+        aTargetContent.executeCommand( "insert", aCmdArg );
 
         // try to let the file be hidden if possible
         try {
@@ -209,7 +209,7 @@ void DocumentLockFile::RemoveFile()
 
     uno::Reference < css::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aCnt(m_aURL, xEnv, comphelper::getProcessComponentContext());
-    aCnt.executeCommand(OUString("delete"),
+    aCnt.executeCommand("delete",
         uno::makeAny(true));
 }
 

@@ -105,7 +105,7 @@ void ShareControlFile::OpenStream()
                 ucb::InsertCommandArgument aInsertArg;
                 aInsertArg.Data = xInput;
                 aInsertArg.ReplaceExisting = sal_False;
-                aContent.executeCommand( OUString("insert"), uno::makeAny( aInsertArg ) );
+                aContent.executeCommand( "insert", uno::makeAny( aInsertArg ) );
 
                 // try to let the file be hidden if possible
                 try {
