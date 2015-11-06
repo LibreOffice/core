@@ -366,45 +366,45 @@ static bool DeleteTmpFile_Impl(
 }
 
 SwXMailMerge::SwXMailMerge() :
-    aEvtListeners   ( GetMailMergeMutex() ),
-    aMergeListeners ( GetMailMergeMutex() ),
-    aPropListeners  ( GetMailMergeMutex() ),
-    pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_MAILMERGE ) ),
-    nDataCommandType(sdb::CommandType::TABLE),
-    nOutputType(MailMergeType::PRINTER),
-    bEscapeProcessing(true),     //!! allow to process properties like "Filter", "Order", ...
-    bSinglePrintJobs(false),
-    bFileNameFromColumn(false),
-    bSendAsHTML(false),
-    bSendAsAttachment(false),
-    bSaveAsSingleFile(false),
-    bDisposing(false),
+    m_aEvtListeners   ( GetMailMergeMutex() ),
+    m_aMergeListeners ( GetMailMergeMutex() ),
+    m_aPropListeners  ( GetMailMergeMutex() ),
+    m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_MAILMERGE ) ),
+    m_nDataCommandType(sdb::CommandType::TABLE),
+    m_nOutputType(MailMergeType::PRINTER),
+    m_bEscapeProcessing(true),     //!! allow to process properties like "Filter", "Order", ...
+    m_bSinglePrintJobs(false),
+    m_bFileNameFromColumn(false),
+    m_bSendAsHTML(false),
+    m_bSendAsAttachment(false),
+    m_bSaveAsSingleFile(false),
+    m_bDisposing(false),
     m_pMgr(0)
 {
     // create empty document
     // like in: SwModule::InsertEnv (appenv.cxx)
-    xDocSh = new SwDocShell( SfxObjectCreateMode::STANDARD );
-    xDocSh->DoInitNew();
-    SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
+    m_xDocSh = new SwDocShell( SfxObjectCreateMode::STANDARD );
+    m_xDocSh->DoInitNew();
+    SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *m_xDocSh, 0 );
     SwView *pView = static_cast<SwView*>( pFrame->GetViewShell() );
     pView->AttrChangedNotify( &pView->GetWrtShell() ); //So that SelectShell is called.
-    xModel = xDocSh->GetModel();
+    m_xModel = m_xDocSh->GetModel();
 }
 
 SwXMailMerge::~SwXMailMerge()
 {
-    if (!aTmpFileName.isEmpty())
-        DeleteTmpFile_Impl( xModel, xDocSh, aTmpFileName );
+    if (!m_aTmpFileName.isEmpty())
+        DeleteTmpFile_Impl( m_xModel, m_xDocSh, m_aTmpFileName );
     else    // there was no temporary file in use
     {
         //! we still need to close the model and doc shell manually
         //! because there is no automatism that will do that later.
         //! #120086#
-        if ( eVetoed == CloseModelAndDocSh( xModel, xDocSh ) )
+        if ( eVetoed == CloseModelAndDocSh( m_xModel, m_xDocSh ) )
             OSL_FAIL("ownership transferred to vetoing object!" );
 
-        xModel = 0;
-        xDocSh = 0; // destroy doc shell
+        m_xModel = 0;
+        m_xDocSh = 0; // destroy doc shell
     }
 }
 
@@ -438,23 +438,23 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // (use values from the service as default and override them with
     // the values that are provided as arguments)
 
-    uno::Sequence< uno::Any >           aCurSelection   = aSelection;
-    uno::Reference< sdbc::XResultSet >  xCurResultSet   = xResultSet;
-    uno::Reference< sdbc::XConnection > xCurConnection  = xConnection;
-    uno::Reference< frame::XModel >     xCurModel       = xModel;
-    OUString   aCurDataSourceName       = aDataSourceName;
-    OUString   aCurDataCommand          = aDataCommand;
-    OUString   aCurFilter               = aFilter;
-    OUString   aCurDocumentURL          = aDocumentURL;
-    OUString   aCurOutputURL            = aOutputURL;
-    OUString   aCurFileNamePrefix       = aFileNamePrefix;
-    sal_Int32  nCurDataCommandType      = nDataCommandType;
-    sal_Int16  nCurOutputType           = nOutputType;
-    bool   bCurEscapeProcessing     = bEscapeProcessing;
-    bool   bCurSinglePrintJobs      = bSinglePrintJobs;
-    bool   bCurFileNameFromColumn   = bFileNameFromColumn;
+    uno::Sequence< uno::Any >           aCurSelection   = m_aSelection;
+    uno::Reference< sdbc::XResultSet >  xCurResultSet   = m_xResultSet;
+    uno::Reference< sdbc::XConnection > xCurConnection  = m_xConnection;
+    uno::Reference< frame::XModel >     xCurModel       = m_xModel;
+    OUString   aCurDataSourceName       = m_aDataSourceName;
+    OUString   aCurDataCommand          = m_aDataCommand;
+    OUString   aCurFilter               = m_aFilter;
+    OUString   aCurDocumentURL          = m_aDocumentURL;
+    OUString   aCurOutputURL            = m_aOutputURL;
+    OUString   aCurFileNamePrefix       = m_aFileNamePrefix;
+    sal_Int32  nCurDataCommandType      = m_nDataCommandType;
+    sal_Int16  nCurOutputType           = m_nOutputType;
+    bool   bCurEscapeProcessing     = m_bEscapeProcessing;
+    bool   bCurSinglePrintJobs      = m_bSinglePrintJobs;
+    bool   bCurFileNameFromColumn   = m_bFileNameFromColumn;
 
-    SfxObjectShellRef xCurDocSh = xDocSh;   // the document
+    SfxObjectShellRef xCurDocSh = m_xDocSh;   // the document
 
     const beans::NamedValue *pArguments = rArguments.getConstArray();
     sal_Int32 nArgs = rArguments.getLength();
@@ -509,37 +509,37 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         else if (rName == UNO_NAME_FILE_NAME_FROM_COLUMN)
             bOK = rValue >>= bCurFileNameFromColumn;
         else if (rName == UNO_NAME_SUBJECT)
-            bOK = rValue >>= sSubject;
+            bOK = rValue >>= m_sSubject;
         else if (rName == UNO_NAME_ADDRESS_FROM_COLUMN)
-            bOK = rValue >>= sAddressFromColumn;
+            bOK = rValue >>= m_sAddressFromColumn;
         else if (rName == UNO_NAME_SEND_AS_HTML)
-            bOK = rValue >>= bSendAsHTML;
+            bOK = rValue >>= m_bSendAsHTML;
         else if (rName == UNO_NAME_MAIL_BODY)
-            bOK = rValue >>= sMailBody;
+            bOK = rValue >>= m_sMailBody;
         else if (rName == UNO_NAME_ATTACHMENT_NAME)
-            bOK = rValue >>= sAttachmentName;
+            bOK = rValue >>= m_sAttachmentName;
         else if (rName == UNO_NAME_ATTACHMENT_FILTER)
-            bOK = rValue >>= sAttachmentFilter;
+            bOK = rValue >>= m_sAttachmentFilter;
         else if (rName == UNO_NAME_COPIES_TO)
-            bOK = rValue >>= aCopiesTo;
+            bOK = rValue >>= m_aCopiesTo;
         else if (rName == UNO_NAME_BLIND_COPIES_TO)
-            bOK = rValue >>= aBlindCopiesTo;
+            bOK = rValue >>= m_aBlindCopiesTo;
         else if (rName == UNO_NAME_SEND_AS_ATTACHMENT)
-            bOK = rValue >>= bSendAsAttachment;
+            bOK = rValue >>= m_bSendAsAttachment;
         else if (rName == UNO_NAME_PRINT_OPTIONS)
-            bOK = rValue >>= aPrintSettings;
+            bOK = rValue >>= m_aPrintSettings;
         else if (rName == UNO_NAME_SAVE_AS_SINGLE_FILE)
-            bOK = rValue >>= bSaveAsSingleFile;
+            bOK = rValue >>= m_bSaveAsSingleFile;
         else if (rName == UNO_NAME_SAVE_FILTER)
-            bOK = rValue >>= sSaveFilter;
+            bOK = rValue >>= m_sSaveFilter;
         else if (rName == UNO_NAME_SAVE_FILTER_OPTIONS)
-            bOK = rValue >>= sSaveFilterOptions;
+            bOK = rValue >>= m_sSaveFilterOptions;
         else if (rName == UNO_NAME_SAVE_FILTER_DATA)
-            bOK = rValue >>= aSaveFilterData;
+            bOK = rValue >>= m_aSaveFilterData;
         else if (rName == UNO_NAME_IN_SERVER_PASSWORD)
-            bOK = rValue >>= sInServerPassword;
+            bOK = rValue >>= m_sInServerPassword;
         else if (rName == UNO_NAME_OUT_SERVER_PASSWORD)
-            bOK = rValue >>= sOutServerPassword;
+            bOK = rValue >>= m_sOutServerPassword;
         else
             throw UnknownPropertyException( "Property is unknown: " + rName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -690,7 +690,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             // #i25686# printing should not be done asynchronously to prevent dangling offices
             // when mail merge is called as command line macro
             aMergeDesc.bPrintAsync = false;
-            aMergeDesc.aPrintOptions = aPrintSettings;
+            aMergeDesc.aPrintOptions = m_aPrintSettings;
             aMergeDesc.bCreateSingleFile = false;
         }
         break;
@@ -740,24 +740,24 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             pMgr->SetSubject( aPath );
             if(MailMergeType::FILE == nCurOutputType)
             {
-                aMergeDesc.sSaveToFilter = sSaveFilter;
-                aMergeDesc.sSaveToFilterOptions = sSaveFilterOptions;
-                aMergeDesc.aSaveToFilterData = aSaveFilterData;
-                aMergeDesc.bCreateSingleFile = bSaveAsSingleFile;
+                aMergeDesc.sSaveToFilter = m_sSaveFilter;
+                aMergeDesc.sSaveToFilterOptions = m_sSaveFilterOptions;
+                aMergeDesc.aSaveToFilterData = m_aSaveFilterData;
+                aMergeDesc.bCreateSingleFile = m_bSaveAsSingleFile;
             }
             else
             {
-                pMgr->SetEMailColumn( sAddressFromColumn );
-                if(sAddressFromColumn.isEmpty())
+                pMgr->SetEMailColumn( m_sAddressFromColumn );
+                if(m_sAddressFromColumn.isEmpty())
                     throw RuntimeException("Mail address column not set.", static_cast < cppu::OWeakObject * > ( this ) );
-                aMergeDesc.sSaveToFilter     = sAttachmentFilter;
-                aMergeDesc.sSubject          = sSubject;
-                aMergeDesc.sMailBody         = sMailBody;
-                aMergeDesc.sAttachmentName   = sAttachmentName;
-                aMergeDesc.aCopiesTo         = aCopiesTo;
-                aMergeDesc.aBlindCopiesTo    = aBlindCopiesTo;
-                aMergeDesc.bSendAsHTML       = bSendAsHTML;
-                aMergeDesc.bSendAsAttachment = bSendAsAttachment;
+                aMergeDesc.sSaveToFilter     = m_sAttachmentFilter;
+                aMergeDesc.sSubject          = m_sSubject;
+                aMergeDesc.sMailBody         = m_sMailBody;
+                aMergeDesc.sAttachmentName   = m_sAttachmentName;
+                aMergeDesc.aCopiesTo         = m_aCopiesTo;
+                aMergeDesc.aBlindCopiesTo    = m_aBlindCopiesTo;
+                aMergeDesc.bSendAsHTML       = m_bSendAsHTML;
+                aMergeDesc.bSendAsAttachment = m_bSendAsAttachment;
 
                 aMergeDesc.bCreateSingleFile = false;
                 pMMConfigItem.reset(new SwMailMergeConfigItem);
@@ -765,7 +765,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 aMergeDesc.xSmtpServer = SwMailMergeHelper::ConnectToSmtpServer(
                         *pMMConfigItem,
                         xInService,
-                        sInServerPassword, sOutServerPassword );
+                        m_sInServerPassword, m_sOutServerPassword );
                 if( !aMergeDesc.xSmtpServer.is() || !aMergeDesc.xSmtpServer->isConnected())
                     throw RuntimeException("Failed to connect to mail server.", static_cast < cppu::OWeakObject * > ( this ) );
             }
@@ -779,7 +779,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             SwDocShell::Factory().GetFilterContainer() );
     OUString aExtension(comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(), '*'));
     utl::TempFile aTempFile( "SwMM", true, &aExtension );
-    aTmpFileName = aTempFile.GetURL();
+    m_aTmpFileName = aTempFile.GetURL();
 
     Reference< XStorable > xStorable( xCurModel, UNO_QUERY );
     bool bStoredAsTemporary = false;
@@ -787,7 +787,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     {
         try
         {
-            xStorable->storeAsURL( aTmpFileName, Sequence< PropertyValue >() );
+            xStorable->storeAsURL( m_aTmpFileName, Sequence< PropertyValue >() );
             bStoredAsTemporary = true;
         }
         catch (const Exception&)
@@ -808,10 +808,10 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 
-    if ( xCurModel.get() != xModel.get() )
+    if ( xCurModel.get() != m_xModel.get() )
     {   // in case it was a temporary model -> close it, and delete the file
-        DeleteTmpFile_Impl( xCurModel, xCurDocSh, aTmpFileName );
-        aTmpFileName.clear();
+        DeleteTmpFile_Impl( xCurModel, xCurDocSh, m_aTmpFileName );
+        m_aTmpFileName.clear();
     }
     // (in case it wasn't a temporary model, it will be closed in the dtor, at the latest)
 
@@ -843,7 +843,7 @@ void SAL_CALL SwXMailMerge::cancel() throw (com::sun::star::uno::RuntimeExceptio
 
 void SwXMailMerge::LaunchMailMergeEvent( const MailMergeEvent &rEvt ) const
 {
-    cppu::OInterfaceIteratorHelper aIt( const_cast<SwXMailMerge *>(this)->aMergeListeners );
+    cppu::OInterfaceIteratorHelper aIt( const_cast<SwXMailMerge *>(this)->m_aMergeListeners );
     while (aIt.hasMoreElements())
     {
         Reference< XMailMergeListener > xRef( aIt.next(), UNO_QUERY );
@@ -855,7 +855,7 @@ void SwXMailMerge::LaunchMailMergeEvent( const MailMergeEvent &rEvt ) const
 void SwXMailMerge::launchEvent( const PropertyChangeEvent &rEvt ) const
 {
     cppu::OInterfaceContainerHelper *pContainer =
-            aPropListeners.getContainer( rEvt.PropertyHandle );
+            m_aPropListeners.getContainer( rEvt.PropertyHandle );
     if (pContainer)
     {
         cppu::OInterfaceIteratorHelper aIt( *pContainer );
@@ -872,7 +872,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXMailMerge::getPropertySetI
     throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    static Reference< XPropertySetInfo > aRef = pPropSet->getPropertySetInfo();
+    static Reference< XPropertySetInfo > aRef = m_pPropSet->getPropertySetInfo();
     return aRef;
 }
 
@@ -882,7 +882,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry* pCur = pPropSet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pCur)
         throw UnknownPropertyException();
     else if (pCur->nFlags & PropertyAttribute::READONLY)
@@ -892,37 +892,37 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
         void *pData = NULL;
         switch (pCur->nWID)
         {
-            case WID_SELECTION :                pData = &aSelection;  break;
-            case WID_RESULT_SET :               pData = &xResultSet;  break;
-            case WID_CONNECTION :               pData = &xConnection;  break;
-            case WID_MODEL :                    pData = &xModel;  break;
-            case WID_DATA_SOURCE_NAME :         pData = &aDataSourceName;  break;
-            case WID_DATA_COMMAND :             pData = &aDataCommand;  break;
-            case WID_FILTER :                   pData = &aFilter;  break;
-            case WID_DOCUMENT_URL :             pData = &aDocumentURL;  break;
-            case WID_OUTPUT_URL :               pData = &aOutputURL;  break;
-            case WID_DATA_COMMAND_TYPE :        pData = &nDataCommandType;  break;
-            case WID_OUTPUT_TYPE :              pData = &nOutputType;  break;
-            case WID_ESCAPE_PROCESSING :        pData = &bEscapeProcessing;  break;
-            case WID_SINGLE_PRINT_JOBS :        pData = &bSinglePrintJobs;  break;
-            case WID_FILE_NAME_FROM_COLUMN :    pData = &bFileNameFromColumn;  break;
-            case WID_FILE_NAME_PREFIX :         pData = &aFileNamePrefix;  break;
-            case WID_MAIL_SUBJECT:              pData = &sSubject; break;
-            case WID_ADDRESS_FROM_COLUMN:       pData = &sAddressFromColumn; break;
-            case WID_SEND_AS_HTML:              pData = &bSendAsHTML; break;
-            case WID_SEND_AS_ATTACHMENT:        pData = &bSendAsAttachment; break;
-            case WID_MAIL_BODY:                 pData = &sMailBody; break;
-            case WID_ATTACHMENT_NAME:           pData = &sAttachmentName; break;
-            case WID_ATTACHMENT_FILTER:         pData = &sAttachmentFilter;break;
-            case WID_PRINT_OPTIONS:             pData = &aPrintSettings; break;
-            case WID_SAVE_AS_SINGLE_FILE:       pData = &bSaveAsSingleFile; break;
-            case WID_SAVE_FILTER:               pData = &sSaveFilter; break;
-            case WID_SAVE_FILTER_OPTIONS:       pData = &sSaveFilterOptions; break;
-            case WID_SAVE_FILTER_DATA:          pData = &aSaveFilterData; break;
-            case WID_COPIES_TO:                 pData = &aCopiesTo; break;
-            case WID_BLIND_COPIES_TO:           pData = &aBlindCopiesTo;break;
-            case WID_IN_SERVER_PASSWORD:        pData = &sInServerPassword; break;
-            case WID_OUT_SERVER_PASSWORD:       pData = &sOutServerPassword; break;
+            case WID_SELECTION :                pData = &m_aSelection;  break;
+            case WID_RESULT_SET :               pData = &m_xResultSet;  break;
+            case WID_CONNECTION :               pData = &m_xConnection;  break;
+            case WID_MODEL :                    pData = &m_xModel;  break;
+            case WID_DATA_SOURCE_NAME :         pData = &m_aDataSourceName;  break;
+            case WID_DATA_COMMAND :             pData = &m_aDataCommand;  break;
+            case WID_FILTER :                   pData = &m_aFilter;  break;
+            case WID_DOCUMENT_URL :             pData = &m_aDocumentURL;  break;
+            case WID_OUTPUT_URL :               pData = &m_aOutputURL;  break;
+            case WID_DATA_COMMAND_TYPE :        pData = &m_nDataCommandType;  break;
+            case WID_OUTPUT_TYPE :              pData = &m_nOutputType;  break;
+            case WID_ESCAPE_PROCESSING :        pData = &m_bEscapeProcessing;  break;
+            case WID_SINGLE_PRINT_JOBS :        pData = &m_bSinglePrintJobs;  break;
+            case WID_FILE_NAME_FROM_COLUMN :    pData = &m_bFileNameFromColumn;  break;
+            case WID_FILE_NAME_PREFIX :         pData = &m_aFileNamePrefix;  break;
+            case WID_MAIL_SUBJECT:              pData = &m_sSubject; break;
+            case WID_ADDRESS_FROM_COLUMN:       pData = &m_sAddressFromColumn; break;
+            case WID_SEND_AS_HTML:              pData = &m_bSendAsHTML; break;
+            case WID_SEND_AS_ATTACHMENT:        pData = &m_bSendAsAttachment; break;
+            case WID_MAIL_BODY:                 pData = &m_sMailBody; break;
+            case WID_ATTACHMENT_NAME:           pData = &m_sAttachmentName; break;
+            case WID_ATTACHMENT_FILTER:         pData = &m_sAttachmentFilter;break;
+            case WID_PRINT_OPTIONS:             pData = &m_aPrintSettings; break;
+            case WID_SAVE_AS_SINGLE_FILE:       pData = &m_bSaveAsSingleFile; break;
+            case WID_SAVE_FILTER:               pData = &m_sSaveFilter; break;
+            case WID_SAVE_FILTER_OPTIONS:       pData = &m_sSaveFilterOptions; break;
+            case WID_SAVE_FILTER_DATA:          pData = &m_aSaveFilterData; break;
+            case WID_COPIES_TO:                 pData = &m_aCopiesTo; break;
+            case WID_BLIND_COPIES_TO:           pData = &m_aBlindCopiesTo;break;
+            case WID_IN_SERVER_PASSWORD:        pData = &m_sInServerPassword; break;
+            case WID_OUT_SERVER_PASSWORD:       pData = &m_sOutServerPassword; break;
             default :
                 OSL_FAIL("unknown WID");
         }
@@ -932,30 +932,30 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
         bool bOK = true;
         if (aOld != rValue)
         {
-            if (pData == &aSelection)
-                bOK = rValue >>= aSelection;
-            else if (pData == &xResultSet)
-                bOK = rValue >>= xResultSet;
-            else if (pData == &xConnection)
-                bOK = rValue >>= xConnection;
-            else if (pData == &xModel)
-                bOK = rValue >>= xModel;
-            else if (pData == &aDataSourceName)
-                bOK = rValue >>= aDataSourceName;
-            else if (pData == &aDataCommand)
-                bOK = rValue >>= aDataCommand;
-            else if (pData == &aFilter)
-                bOK = rValue >>= aFilter;
-            else if (pData == &aDocumentURL)
+            if (pData == &m_aSelection)
+                bOK = rValue >>= m_aSelection;
+            else if (pData == &m_xResultSet)
+                bOK = rValue >>= m_xResultSet;
+            else if (pData == &m_xConnection)
+                bOK = rValue >>= m_xConnection;
+            else if (pData == &m_xModel)
+                bOK = rValue >>= m_xModel;
+            else if (pData == &m_aDataSourceName)
+                bOK = rValue >>= m_aDataSourceName;
+            else if (pData == &m_aDataCommand)
+                bOK = rValue >>= m_aDataCommand;
+            else if (pData == &m_aFilter)
+                bOK = rValue >>= m_aFilter;
+            else if (pData == &m_aDocumentURL)
             {
                 OUString aText;
                 bOK = rValue >>= aText;
                 if (!aText.isEmpty()
-                    && !LoadFromURL_impl( xModel, xDocSh, aText, true ))
+                    && !LoadFromURL_impl( m_xModel, m_xDocSh, aText, true ))
                     throw RuntimeException("Failed to create document from URL: " + aText, static_cast < cppu::OWeakObject * > ( this ) );
-                aDocumentURL = aText;
+                m_aDocumentURL = aText;
             }
-            else if (pData == &aOutputURL)
+            else if (pData == &m_aOutputURL)
             {
                 OUString aText;
                 bOK = rValue >>= aText;
@@ -966,52 +966,52 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                     if (UCB_IsReadOnlyFileName(aText))
                         throw IllegalArgumentException("URL is read-only: " + aText, static_cast < cppu::OWeakObject * > ( this ), 0 );
                 }
-                aOutputURL = aText;
+                m_aOutputURL = aText;
             }
-            else if (pData == &nDataCommandType)
-                bOK = rValue >>= nDataCommandType;
-            else if (pData == &nOutputType)
-                bOK = rValue >>= nOutputType;
-            else if (pData == &bEscapeProcessing)
-                bOK = rValue >>= bEscapeProcessing;
-            else if (pData == &bSinglePrintJobs)
-                bOK = rValue >>= bSinglePrintJobs;
-            else if (pData == &bFileNameFromColumn)
-                bOK = rValue >>= bFileNameFromColumn;
-            else if (pData == &aFileNamePrefix)
-                bOK = rValue >>= aFileNamePrefix;
-            else if (pData == &sSubject)
-                bOK = rValue >>= sSubject;
-            else if (pData == &sAddressFromColumn)
-                bOK = rValue >>= sAddressFromColumn;
-            else if (pData == &bSendAsHTML)
-                bOK = rValue >>= bSendAsHTML;
-            else if (pData == &bSendAsAttachment)
-                bOK = rValue >>= bSendAsAttachment;
-            else if (pData == &sMailBody)
-                bOK = rValue >>= sMailBody;
-            else if (pData == &sAttachmentName)
-                bOK = rValue >>= sAttachmentName;
-            else if (pData == &sAttachmentFilter)
-                bOK = rValue >>= sAttachmentFilter;
-            else if (pData == &aPrintSettings)
-                bOK = rValue >>= aPrintSettings;
-            else if (pData == &bSaveAsSingleFile)
-                bOK = rValue >>= bSaveAsSingleFile;
-            else if (pData == &sSaveFilter)
-                bOK = rValue >>= sSaveFilter;
-            else if (pData == &sSaveFilterOptions)
-                bOK = rValue >>= sSaveFilterOptions;
-            else if (pData == &aSaveFilterData)
-                bOK = rValue >>= aSaveFilterData;
-            else if (pData == &aCopiesTo)
-                bOK = rValue >>= aCopiesTo;
-            else if (pData == &aBlindCopiesTo)
-                bOK = rValue >>= aBlindCopiesTo;
-            else if(pData == &sInServerPassword)
-                bOK = rValue >>= sInServerPassword;
-            else if(pData == &sOutServerPassword)
-                bOK = rValue >>= sInServerPassword;
+            else if (pData == &m_nDataCommandType)
+                bOK = rValue >>= m_nDataCommandType;
+            else if (pData == &m_nOutputType)
+                bOK = rValue >>= m_nOutputType;
+            else if (pData == &m_bEscapeProcessing)
+                bOK = rValue >>= m_bEscapeProcessing;
+            else if (pData == &m_bSinglePrintJobs)
+                bOK = rValue >>= m_bSinglePrintJobs;
+            else if (pData == &m_bFileNameFromColumn)
+                bOK = rValue >>= m_bFileNameFromColumn;
+            else if (pData == &m_aFileNamePrefix)
+                bOK = rValue >>= m_aFileNamePrefix;
+            else if (pData == &m_sSubject)
+                bOK = rValue >>= m_sSubject;
+            else if (pData == &m_sAddressFromColumn)
+                bOK = rValue >>= m_sAddressFromColumn;
+            else if (pData == &m_bSendAsHTML)
+                bOK = rValue >>= m_bSendAsHTML;
+            else if (pData == &m_bSendAsAttachment)
+                bOK = rValue >>= m_bSendAsAttachment;
+            else if (pData == &m_sMailBody)
+                bOK = rValue >>= m_sMailBody;
+            else if (pData == &m_sAttachmentName)
+                bOK = rValue >>= m_sAttachmentName;
+            else if (pData == &m_sAttachmentFilter)
+                bOK = rValue >>= m_sAttachmentFilter;
+            else if (pData == &m_aPrintSettings)
+                bOK = rValue >>= m_aPrintSettings;
+            else if (pData == &m_bSaveAsSingleFile)
+                bOK = rValue >>= m_bSaveAsSingleFile;
+            else if (pData == &m_sSaveFilter)
+                bOK = rValue >>= m_sSaveFilter;
+            else if (pData == &m_sSaveFilterOptions)
+                bOK = rValue >>= m_sSaveFilterOptions;
+            else if (pData == &m_aSaveFilterData)
+                bOK = rValue >>= m_aSaveFilterData;
+            else if (pData == &m_aCopiesTo)
+                bOK = rValue >>= m_aCopiesTo;
+            else if (pData == &m_aBlindCopiesTo)
+                bOK = rValue >>= m_aBlindCopiesTo;
+            else if(pData == &m_sInServerPassword)
+                bOK = rValue >>= m_sInServerPassword;
+            else if(pData == &m_sOutServerPassword)
+                bOK = rValue >>= m_sInServerPassword;
             else {
                 OSL_FAIL("invalid pointer" );
             }
@@ -1038,44 +1038,44 @@ uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
 
     Any aRet;
 
-    const SfxItemPropertySimpleEntry* pCur = pPropSet->getPropertyMap().getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pCur)
         throw UnknownPropertyException();
     else
     {
         switch (pCur->nWID)
         {
-            case WID_SELECTION :                aRet <<= aSelection;  break;
-            case WID_RESULT_SET :               aRet <<= xResultSet;  break;
-            case WID_CONNECTION :               aRet <<= xConnection;  break;
-            case WID_MODEL :                    aRet <<= xModel;  break;
-            case WID_DATA_SOURCE_NAME :         aRet <<= aDataSourceName;  break;
-            case WID_DATA_COMMAND :             aRet <<= aDataCommand;  break;
-            case WID_FILTER :                   aRet <<= aFilter;  break;
-            case WID_DOCUMENT_URL :             aRet <<= aDocumentURL;  break;
-            case WID_OUTPUT_URL :               aRet <<= aOutputURL;  break;
-            case WID_DATA_COMMAND_TYPE :        aRet <<= nDataCommandType;  break;
-            case WID_OUTPUT_TYPE :              aRet <<= nOutputType;  break;
-            case WID_ESCAPE_PROCESSING :        aRet <<= bEscapeProcessing;  break;
-            case WID_SINGLE_PRINT_JOBS :        aRet <<= bSinglePrintJobs;  break;
-            case WID_FILE_NAME_FROM_COLUMN :    aRet <<= bFileNameFromColumn;  break;
-            case WID_FILE_NAME_PREFIX :         aRet <<= aFileNamePrefix;  break;
-            case WID_MAIL_SUBJECT:              aRet <<= sSubject; break;
-            case WID_ADDRESS_FROM_COLUMN:       aRet <<= sAddressFromColumn; break;
-            case WID_SEND_AS_HTML:              aRet <<= bSendAsHTML; break;
-            case WID_SEND_AS_ATTACHMENT:        aRet <<= bSendAsAttachment; break;
-            case WID_MAIL_BODY:                 aRet <<= sMailBody; break;
-            case WID_ATTACHMENT_NAME:           aRet <<= sAttachmentName; break;
-            case WID_ATTACHMENT_FILTER:         aRet <<= sAttachmentFilter;break;
-            case WID_PRINT_OPTIONS:             aRet <<= aPrintSettings; break;
-            case WID_SAVE_AS_SINGLE_FILE:       aRet <<= bSaveAsSingleFile; break;
-            case WID_SAVE_FILTER:               aRet <<= sSaveFilter; break;
-            case WID_SAVE_FILTER_OPTIONS:       aRet <<= sSaveFilterOptions; break;
-            case WID_SAVE_FILTER_DATA:          aRet <<= aSaveFilterData; break;
-            case WID_COPIES_TO:                 aRet <<= aCopiesTo; break;
-            case WID_BLIND_COPIES_TO:           aRet <<= aBlindCopiesTo;break;
-            case WID_IN_SERVER_PASSWORD:        aRet <<= sInServerPassword; break;
-            case WID_OUT_SERVER_PASSWORD:       aRet <<= sOutServerPassword; break;
+            case WID_SELECTION :                aRet <<= m_aSelection;  break;
+            case WID_RESULT_SET :               aRet <<= m_xResultSet;  break;
+            case WID_CONNECTION :               aRet <<= m_xConnection;  break;
+            case WID_MODEL :                    aRet <<= m_xModel;  break;
+            case WID_DATA_SOURCE_NAME :         aRet <<= m_aDataSourceName;  break;
+            case WID_DATA_COMMAND :             aRet <<= m_aDataCommand;  break;
+            case WID_FILTER :                   aRet <<= m_aFilter;  break;
+            case WID_DOCUMENT_URL :             aRet <<= m_aDocumentURL;  break;
+            case WID_OUTPUT_URL :               aRet <<= m_aOutputURL;  break;
+            case WID_DATA_COMMAND_TYPE :        aRet <<= m_nDataCommandType;  break;
+            case WID_OUTPUT_TYPE :              aRet <<= m_nOutputType;  break;
+            case WID_ESCAPE_PROCESSING :        aRet <<= m_bEscapeProcessing;  break;
+            case WID_SINGLE_PRINT_JOBS :        aRet <<= m_bSinglePrintJobs;  break;
+            case WID_FILE_NAME_FROM_COLUMN :    aRet <<= m_bFileNameFromColumn;  break;
+            case WID_FILE_NAME_PREFIX :         aRet <<= m_aFileNamePrefix;  break;
+            case WID_MAIL_SUBJECT:              aRet <<= m_sSubject; break;
+            case WID_ADDRESS_FROM_COLUMN:       aRet <<= m_sAddressFromColumn; break;
+            case WID_SEND_AS_HTML:              aRet <<= m_bSendAsHTML; break;
+            case WID_SEND_AS_ATTACHMENT:        aRet <<= m_bSendAsAttachment; break;
+            case WID_MAIL_BODY:                 aRet <<= m_sMailBody; break;
+            case WID_ATTACHMENT_NAME:           aRet <<= m_sAttachmentName; break;
+            case WID_ATTACHMENT_FILTER:         aRet <<= m_sAttachmentFilter;break;
+            case WID_PRINT_OPTIONS:             aRet <<= m_aPrintSettings; break;
+            case WID_SAVE_AS_SINGLE_FILE:       aRet <<= m_bSaveAsSingleFile; break;
+            case WID_SAVE_FILTER:               aRet <<= m_sSaveFilter; break;
+            case WID_SAVE_FILTER_OPTIONS:       aRet <<= m_sSaveFilterOptions; break;
+            case WID_SAVE_FILTER_DATA:          aRet <<= m_aSaveFilterData; break;
+            case WID_COPIES_TO:                 aRet <<= m_aCopiesTo; break;
+            case WID_BLIND_COPIES_TO:           aRet <<= m_aBlindCopiesTo;break;
+            case WID_IN_SERVER_PASSWORD:        aRet <<= m_sInServerPassword; break;
+            case WID_OUT_SERVER_PASSWORD:       aRet <<= m_sOutServerPassword; break;
             default :
                 OSL_FAIL("unknown WID");
         }
@@ -1090,11 +1090,11 @@ void SAL_CALL SwXMailMerge::addPropertyChangeListener(
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!bDisposing && rListener.is())
+    if (!m_bDisposing && rListener.is())
     {
-        const SfxItemPropertySimpleEntry* pCur = pPropSet->getPropertyMap().getByName( rPropertyName );
+        const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
         if (pCur)
-            aPropListeners.addInterface( pCur->nWID, rListener );
+            m_aPropListeners.addInterface( pCur->nWID, rListener );
         else
             throw UnknownPropertyException();
     }
@@ -1106,11 +1106,11 @@ void SAL_CALL SwXMailMerge::removePropertyChangeListener(
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!bDisposing && rListener.is())
+    if (!m_bDisposing && rListener.is())
     {
-        const SfxItemPropertySimpleEntry* pCur = pPropSet->getPropertyMap().getByName( rPropertyName );
+        const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
         if (pCur)
-            aPropListeners.removeInterface( pCur->nWID, rListener );
+            m_aPropListeners.removeInterface( pCur->nWID, rListener );
         else
             throw UnknownPropertyException();
     }
@@ -1139,14 +1139,14 @@ void SAL_CALL SwXMailMerge::dispose()
 {
     SolarMutexGuard aGuard;
 
-    if (!bDisposing)
+    if (!m_bDisposing)
     {
-        bDisposing = true;
+        m_bDisposing = true;
 
         EventObject aEvtObj( static_cast<XPropertySet *>(this) );
-        aEvtListeners.disposeAndClear( aEvtObj );
-        aMergeListeners.disposeAndClear( aEvtObj );
-        aPropListeners.disposeAndClear( aEvtObj );
+        m_aEvtListeners.disposeAndClear( aEvtObj );
+        m_aMergeListeners.disposeAndClear( aEvtObj );
+        m_aPropListeners.disposeAndClear( aEvtObj );
     }
 }
 
@@ -1155,8 +1155,8 @@ void SAL_CALL SwXMailMerge::addEventListener(
     throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!bDisposing && rxListener.is())
-        aEvtListeners.addInterface( rxListener );
+    if (!m_bDisposing && rxListener.is())
+        m_aEvtListeners.addInterface( rxListener );
 }
 
 void SAL_CALL SwXMailMerge::removeEventListener(
@@ -1164,8 +1164,8 @@ void SAL_CALL SwXMailMerge::removeEventListener(
     throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!bDisposing && rxListener.is())
-        aEvtListeners.removeInterface( rxListener );
+    if (!m_bDisposing && rxListener.is())
+        m_aEvtListeners.removeInterface( rxListener );
 }
 
 void SAL_CALL SwXMailMerge::addMailMergeEventListener(
@@ -1173,8 +1173,8 @@ void SAL_CALL SwXMailMerge::addMailMergeEventListener(
     throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!bDisposing && rxListener.is())
-        aMergeListeners.addInterface( rxListener );
+    if (!m_bDisposing && rxListener.is())
+        m_aMergeListeners.addInterface( rxListener );
 }
 
 void SAL_CALL SwXMailMerge::removeMailMergeEventListener(
@@ -1182,8 +1182,8 @@ void SAL_CALL SwXMailMerge::removeMailMergeEventListener(
     throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!bDisposing && rxListener.is())
-        aMergeListeners.removeInterface( rxListener );
+    if (!m_bDisposing && rxListener.is())
+        m_aMergeListeners.removeInterface( rxListener );
 }
 
 OUString SAL_CALL SwXMailMerge::getImplementationName()

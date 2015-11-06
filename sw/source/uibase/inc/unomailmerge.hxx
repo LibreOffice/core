@@ -75,53 +75,53 @@ class SwXMailMerge :
 {
     friend class MailMergeExecuteFinalizer;
 
-    cppu::OInterfaceContainerHelper     aEvtListeners;
-    cppu::OInterfaceContainerHelper     aMergeListeners;
-    OPropertyListenerContainerHelper    aPropListeners;
+    cppu::OInterfaceContainerHelper     m_aEvtListeners;
+    cppu::OInterfaceContainerHelper     m_aMergeListeners;
+    OPropertyListenerContainerHelper    m_aPropListeners;
 
-    const SfxItemPropertySet*   pPropSet;
+    const SfxItemPropertySet*   m_pPropSet;
 
-    SfxObjectShellRef xDocSh;   // the document
+    SfxObjectShellRef m_xDocSh;   // the document
 
-    OUString        aTmpFileName;
+    OUString        m_aTmpFileName;
 
     // properties of mail merge service
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any >           aSelection;
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >  xResultSet;
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > xConnection;
-    com::sun::star::uno::Reference< com::sun::star::frame::XModel >     xModel;
-    OUString   aDataSourceName;
-    OUString   aDataCommand;
-    OUString   aFilter;
-    OUString   aDocumentURL;
-    OUString   aOutputURL;
-    OUString   aFileNamePrefix;
-    sal_Int32       nDataCommandType;
-    sal_Int16       nOutputType;
-    bool        bEscapeProcessing;
-    bool        bSinglePrintJobs;
-    bool        bFileNameFromColumn;
+    com::sun::star::uno::Sequence< com::sun::star::uno::Any >           m_aSelection;
+    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >  m_xResultSet;
+    com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > m_xConnection;
+    com::sun::star::uno::Reference< com::sun::star::frame::XModel >     m_xModel;
+    OUString   m_aDataSourceName;
+    OUString   m_aDataCommand;
+    OUString   m_aFilter;
+    OUString   m_aDocumentURL;
+    OUString   m_aOutputURL;
+    OUString   m_aFileNamePrefix;
+    sal_Int32       m_nDataCommandType;
+    sal_Int16       m_nOutputType;
+    bool        m_bEscapeProcessing;
+    bool        m_bSinglePrintJobs;
+    bool        m_bFileNameFromColumn;
 
-    OUString                                         sInServerPassword;
-    OUString                                         sOutServerPassword;
-    OUString                                         sSubject;
-    OUString                                         sAddressFromColumn;
-    OUString                                         sMailBody;
-    OUString                                         sAttachmentName;
-    OUString                                         sAttachmentFilter;
-    com::sun::star::uno::Sequence< OUString >        aCopiesTo;
-    com::sun::star::uno::Sequence< OUString >        aBlindCopiesTo;
-    bool                                                bSendAsHTML;
-    bool                                                bSendAsAttachment;
+    OUString                                         m_sInServerPassword;
+    OUString                                         m_sOutServerPassword;
+    OUString                                         m_sSubject;
+    OUString                                         m_sAddressFromColumn;
+    OUString                                         m_sMailBody;
+    OUString                                         m_sAttachmentName;
+    OUString                                         m_sAttachmentFilter;
+    com::sun::star::uno::Sequence< OUString >        m_aCopiesTo;
+    com::sun::star::uno::Sequence< OUString >        m_aBlindCopiesTo;
+    bool                                                m_bSendAsHTML;
+    bool                                                m_bSendAsAttachment;
 
-    com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aPrintSettings;
+    com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintSettings;
 
-    bool                                                bSaveAsSingleFile;
-    OUString                                         sSaveFilter;
-    OUString                                         sSaveFilterOptions;
-    com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveFilterData;
+    bool                                                m_bSaveAsSingleFile;
+    OUString                                         m_sSaveFilter;
+    OUString                                         m_sSaveFilterOptions;
+    com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aSaveFilterData;
 
-    bool        bDisposing;
+    bool        m_bDisposing;
     SwDBManager     *m_pMgr;
 
     void    launchEvent( const com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
