@@ -980,27 +980,27 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
     if( !mpfnImport )
     {
 #ifndef DISABLE_DYNLOADING
-        if (maFormatName.equalsAscii("icd"))
+        if (maFormatName == "icd")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("icdGraphicImport"));
-        else if (maFormatName.equalsAscii("idx"))
+        else if (maFormatName == "idx")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("idxGraphicImport"));
-        else if (maFormatName.equalsAscii("ime"))
+        else if (maFormatName == "ime")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("imeGraphicImport"));
-        else if (maFormatName.equalsAscii("ipb"))
+        else if (maFormatName == "ipb")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipbGraphicImport"));
-        else if (maFormatName.equalsAscii("ipd"))
+        else if (maFormatName == "ipd")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipdGraphicImport"));
-        else if (maFormatName.equalsAscii("ips"))
+        else if (maFormatName == "ips")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipsGraphicImport"));
-        else if (maFormatName.equalsAscii("ipt"))
+        else if (maFormatName == "ipt")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("iptGraphicImport"));
-        else if (maFormatName.equalsAscii("ipx"))
+        else if (maFormatName == "ipx")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("ipxGraphicImport"));
-        else if (maFormatName.equalsAscii("ira"))
+        else if (maFormatName == "ira")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("iraGraphicImport"));
-        else if (maFormatName.equalsAscii("itg"))
+        else if (maFormatName == "itg")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("itgGraphicImport"));
-        else if (maFormatName.equalsAscii("iti"))
+        else if (maFormatName == "iti")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("itiGraphicImport"));
  #else
         if( maFiltername.equalsAscii( "icd" ) )
@@ -2119,25 +2119,25 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 
                 PFilterCall pFunc = NULL;
                 OUString tmpFilterName = aExternalFilterName;
-                if (tmpFilterName.equalsAscii("egi"))
+                if (tmpFilterName == "egi")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("egiGraphicExport"));
-                else if (tmpFilterName.equalsAscii("eme"))
+                else if (tmpFilterName == "eme")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("emeGraphicExport"));
-                else if (tmpFilterName.equalsAscii("epb"))
+                else if (tmpFilterName == "epb")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epbGraphicExport"));
-                else if (tmpFilterName.equalsAscii("epg"))
+                else if (tmpFilterName == "epg")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epgGraphicExport"));
-                else if (tmpFilterName.equalsAscii("epp"))
+                else if (tmpFilterName == "epp")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("eppGraphicExport"));
-                else if (tmpFilterName.equalsAscii("eps"))
+                else if (tmpFilterName == "eps")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epsGraphicExport"));
-                else if (tmpFilterName.equalsAscii("ept"))
+                else if (tmpFilterName == "ept")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("eptGraphicExport"));
-                else if (tmpFilterName.equalsAscii("era"))
+                else if (tmpFilterName == "era")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("eraGraphicExport"));
-                else if (tmpFilterName.equalsAscii("eti"))
+                else if (tmpFilterName == "eti")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("etiGraphicExport"));
-                else if (tmpFilterName.equalsAscii("exp"))
+                else if (tmpFilterName == "exp")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("expGraphicExport"));
                  // Execute dialog in DLL
  #else
