@@ -4621,11 +4621,11 @@ void Test::testFuncINDIRECT()
 void Test::testFuncINDIRECT2()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, OUString("foo")));
+                            m_pDoc->InsertTab (0, "foo"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (1, OUString("bar")));
+                            m_pDoc->InsertTab (1, "bar"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (2, OUString("baz")));
+                            m_pDoc->InsertTab (2, "baz"));
 
     ScAddress aStart;
     ScAddress aEnd;
