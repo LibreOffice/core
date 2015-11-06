@@ -93,7 +93,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     if ( aFind == m_pImpl->m_aColumnInfo.end() ) // we have to fill it
     {
         OUString sComposedName = ::dbtools::composeTableNameForSelect( xConnection, m_pTable );
-        collectColumnInformation(xConnection,sComposedName,OUString("*") ,m_pImpl->m_aColumnInfo);
+        collectColumnInformation(xConnection,sComposedName,"*" ,m_pImpl->m_aColumnInfo);
         aFind = m_pImpl->m_aColumnInfo.find(_rName);
     }
     if ( aFind != m_pImpl->m_aColumnInfo.end() )

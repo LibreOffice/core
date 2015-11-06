@@ -1298,8 +1298,8 @@ OUString composeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
 OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnection,
     const OUString& _rCatalog, const OUString& _rSchema, const OUString& _rName )
 {
-    bool bUseCatalogInSelect = isDataSourcePropertyEnabled( _rxConnection, OUString( "UseCatalogInSelect" ), true );
-    bool bUseSchemaInSelect = isDataSourcePropertyEnabled( _rxConnection, OUString( "UseSchemaInSelect" ), true );
+    bool bUseCatalogInSelect = isDataSourcePropertyEnabled( _rxConnection, "UseCatalogInSelect", true );
+    bool bUseSchemaInSelect = isDataSourcePropertyEnabled( _rxConnection, "UseSchemaInSelect", true );
 
     return impl_doComposeTableName(
         _rxConnection->getMetaData(),

@@ -981,12 +981,12 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                 sal_Int32 pos;
                 while ( (pos = matchString.indexOf ( WILDCARD )) != -1 )
                 {
-                    matchString = matchString.replaceAt( pos, 1, OUString(".*") );
+                    matchString = matchString.replaceAt( pos, 1, ".*" );
                 }
 
                 while ( (pos = matchString.indexOf( MATCHCHAR )) != -1 )
                 {
-                    matchString = matchString.replaceAt( pos, 1, OUString(".") );
+                    matchString = matchString.replaceAt( pos, 1, "." );
                 }
 
                 op = MQueryOp::RegExp;

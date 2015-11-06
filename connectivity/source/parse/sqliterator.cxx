@@ -936,7 +936,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     if (pSelectNode->getChild(2)->isRule() && SQL_ISPUNCTUATION(pSelectNode->getChild(2)->getChild(0),"*"))
     {
         // SELECT * ...
-        setSelectColumnName(m_aSelectColumns,OUString("*"), aEmptyString,aEmptyString);
+        setSelectColumnName(m_aSelectColumns,"*", aEmptyString,aEmptyString);
     }
     else if (SQL_ISRULE(pSelectNode->getChild(2),scalar_exp_commalist))
     {
@@ -956,7 +956,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 // All the table's columns
                 OUString aTableRange;
                 pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, NULL, false, false );
-                setSelectColumnName(m_aSelectColumns,OUString("*"), aEmptyString,aTableRange);
+                setSelectColumnName(m_aSelectColumns,"*", aEmptyString,aTableRange);
                 continue;
             }
             else if (SQL_ISRULE(pColumnRef,derived_column))

@@ -741,7 +741,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
     {
         OUString aStr = ConvertLikeToken(pParaNode, pEscNode, rParam.bInternational);
         rString.append(" ");
-        rString.append(SetQuotation(aStr,OUString("\'"),OUString("\'\'")));
+        rString.append(SetQuotation(aStr,"\'","\'\'"));
     }
     else
         pParaNode->impl_parseNodeToString_throw( rString, aNewParam, false );
@@ -1004,7 +1004,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode* pAppend, OSQLParseNode*& pLit
                             sal_Int16 nScale = 0;
                             try
                             {
-                                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, OUString("Decimals") );
+                                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, "Decimals" );
                                 aValue >>= nScale;
                             }
                             catch( Exception& )
@@ -1092,7 +1092,7 @@ OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
             sal_Int16 nScale = 0;
             try
             {
-                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, OUString("Decimals") );
+                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, "Decimals" );
                 aValue >>= nScale;
             }
             catch( Exception& )
@@ -2437,7 +2437,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
         case SQL_NODE_STRING:
             if (!rString.isEmpty())
                 rString.append(" ");
-            rString.append(SetQuotation(m_aNodeValue,OUString("\'"),OUString("\'\'")));
+            rString.append(SetQuotation(m_aNodeValue,"\'","\'\'"));
             break;
         case SQL_NODE_NAME:
             if (!rString.isEmpty())

@@ -203,7 +203,7 @@ namespace dbtools
                             ::comphelper::getNumberFormatProperty(
                                 m_xFormatter,
                                 nFormatKey,
-                                OUString( "Locale" )
+                                "Locale"
                             ) >>= aFormatLocale;
 
                             // valid locale
