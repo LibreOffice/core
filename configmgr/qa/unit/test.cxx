@@ -222,8 +222,8 @@ void Test::testKeyFetch()
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            OUString("/org.openoffice.System"),
-            OUString("L10N/Locale")) >>=
+            "/org.openoffice.System",
+            "L10N/Locale") >>=
         s);
 }
 
@@ -236,8 +236,8 @@ void Test::testKeySet()
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            OUString("/org.openoffice.System/L10N"),
-            OUString("Locale")) >>=
+            "/org.openoffice.System/L10N",
+            "Locale") >>=
         s);
     CPPUNIT_ASSERT( s == "com.sun.star.configuration.backend.LocaleBackend UILocale" );
 }
@@ -251,8 +251,8 @@ void Test::testKeyReset()
         OUString s;
         CPPUNIT_ASSERT(
             getKey(
-                OUString("/org.openoffice.System/L10N"),
-                OUString("Locale")) >>=
+                "/org.openoffice.System/L10N",
+                "Locale") >>=
             s);
         CPPUNIT_ASSERT( s == "com.sun.star.configuration.backend.LocaleBackend Locale" );
     }
@@ -263,9 +263,9 @@ void Test::testSetSetMemberName()
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
-                     ".uno:FontworkShapeType"),
-            OUString("Label")) >>=
+            "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                     ".uno:FontworkShapeType",
+            "Label") >>=
         s);
     CPPUNIT_ASSERT( s == "Fontwork Shape" );
 
@@ -285,9 +285,9 @@ void Test::testSetSetMemberName()
 
     CPPUNIT_ASSERT(
         getKey(
-            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
-                    ".uno:FontworkShapeType"),
-            OUString("Label")) >>=
+            "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                    ".uno:FontworkShapeType",
+            "Label") >>=
         s);
     CPPUNIT_ASSERT( s == "Fontwork Gallery..." );
 }
