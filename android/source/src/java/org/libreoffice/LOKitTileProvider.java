@@ -397,10 +397,11 @@ public class LOKitTileProvider implements TileProvider {
         }
     }
 
-    private void mouseButton(int type, PointF inDocument, int numberOfClicks) {
+    private void mouseButton(int type, PointF inDocument, int numberOfClicks, float zoomFactor) {
         int x = (int) pixelToTwip(inDocument.x, mDPI);
         int y = (int) pixelToTwip(inDocument.y, mDPI);
 
+        mDocument.setClientZoom(TILE_SIZE, TILE_SIZE, mTileWidth / zoomFactor, mTileHeight / zoomFactor);
         mDocument.postMouseEvent(type, x, y, numberOfClicks, Document.MOUSE_BUTTON_LEFT, Document.KEYBOARD_MODIFIER_NONE);
     }
 

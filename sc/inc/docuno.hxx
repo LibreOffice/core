@@ -405,6 +405,9 @@ public:
     /// @see vcl::ITiledRenderable::isMimeTypeSupported().
     virtual bool isMimeTypeSupported() override;
 
+    /// @see vcl::ITiledRenderable::setClientZoom().
+    virtual void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth, int nTileTwipHeight) override;
+
     /// @see vcl::ITiledRenderable::getRowColumnHeaders().
     virtual OUString getRowColumnHeaders(const Rectangle& rRectangle) override;
 
