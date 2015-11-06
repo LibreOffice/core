@@ -1755,9 +1755,9 @@ namespace xmloff
         // the label and the value
         const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
         const OUString sLabelAttribute = rMap.GetQNameByKey(
-            GetPrefix(), OUString("label"));
+            GetPrefix(), "label");
         const OUString sValueAttribute = rMap.GetQNameByKey(
-            GetPrefix(), OUString("value"));
+            GetPrefix(), "value");
 
         // the label attribute
         OUString sValue = _rxAttrList->getValueByName(sLabelAttribute);

@@ -954,7 +954,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     if( ! bCategoriesApplied )
     {
         SchXMLTools::CreateCategories(
-            xDataProv, xChartDoc, OUString("categories"),
+            xDataProv, xChartDoc, "categories",
             0 /* nCooSysIndex */, 0 /* nDimension */ );
     }
 

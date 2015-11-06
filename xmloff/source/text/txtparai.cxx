@@ -395,10 +395,10 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
     {
         if( IsXMLToken( sShow, XML_NEW ) )
             mpHint->SetTargetFrameName(
-                    OUString( "_blank"  ) );
+                    "_blank" );
         else if( IsXMLToken( sShow, XML_REPLACE ) )
             mpHint->SetTargetFrameName(
-                    OUString( "_self"  ) );
+                    "_self" );
     }
 
     if ( mpHint->GetHRef().isEmpty() )
@@ -883,7 +883,7 @@ void XMLMetaImportContext::InsertMeta(
         const uno::Reference<rdf::XMetadatable> xMeta(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString("com.sun.star.text.InContentMetadata"),
+                "com.sun.star.text.InContentMetadata",
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             uno::UNO_QUERY);
@@ -959,7 +959,7 @@ void XMLMetaFieldImportContext::InsertMeta(
         const Reference<XPropertySet> xPropertySet(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString("com.sun.star.text.textfield.MetadataField"),
+                "com.sun.star.text.textfield.MetadataField",
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             UNO_QUERY);
@@ -2108,7 +2108,7 @@ XMLParaContext::~XMLParaContext()
                         // borrow from XMLTextMarkImportContext
                         XMLTextMarkImportContext::CreateAndInsertMark(
                             GetImport(),
-                            OUString( "com.sun.star.text.ReferenceMark"),
+                            "com.sun.star.text.ReferenceMark",
                             rRefName,
                             xAttrCursor);
                     }

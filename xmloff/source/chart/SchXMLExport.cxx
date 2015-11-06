@@ -432,7 +432,7 @@ Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( c
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format
     Reference< chart2::data::XLabeledDataSequence > xXValues(
-        lcl_getDataSequenceByRole( aSeriesSeqVector, OUString( "values-x" ) ) );
+        lcl_getDataSequenceByRole( aSeriesSeqVector, "values-x" ) );
     if( xXValues.is() )
         aLabeledSeqVector.push_back( xXValues );
 
@@ -2768,7 +2768,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                             Reference< chart2::data::XDataSequence > xYValuesForBubbleChart;
                             if( bIsBubbleChart )
                             {
-                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString( "values-y" ) ) );
+                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, "values-y" ) );
                                 if( xSequence.is() )
                                 {
                                     xYValuesForBubbleChart = xSequence->getValues();
@@ -2778,7 +2778,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                             }
                             if( bIsScatterChart || bIsBubbleChart )
                             {
-                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, OUString( "values-x" ) ) );
+                                Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, "values-x" ) );
                                 if( xSequence.is() )
                                 {
                                     Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
@@ -3139,7 +3139,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 xSource->getDataSequences());
 
             sal_Int32 nSeriesLength =
-                lcl_getSequenceLengthByRole( aSeqCnt, OUString( "values-last" ));
+                lcl_getSequenceLengthByRole( aSeqCnt, "values-last");
 
             if( bExportContent )
             {
@@ -3151,7 +3151,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 if( bJapaneseCandleSticks )
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
-                        aSeqCnt, OUString( "values-first" ),  xNewDoc, m_aDataSequencesToExport ));
+                        aSeqCnt, "values-first",  xNewDoc, m_aDataSequencesToExport ));
                     if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
                     if( !aRanges.first.isEmpty())
@@ -3168,7 +3168,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 // low
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
-                        aSeqCnt, OUString( "values-min" ),  xNewDoc, m_aDataSequencesToExport ));
+                        aSeqCnt, "values-min",  xNewDoc, m_aDataSequencesToExport ));
                     if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
                     if( !aRanges.first.isEmpty())
@@ -3185,7 +3185,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 // high
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
-                        aSeqCnt, OUString( "values-max" ),  xNewDoc, m_aDataSequencesToExport ));
+                        aSeqCnt, "values-max",  xNewDoc, m_aDataSequencesToExport ));
                     if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
                     if( !aRanges.first.isEmpty())
@@ -3202,7 +3202,7 @@ void SchXMLExportHelper_Impl::exportCandleStickSeries(
                 // close
                 {
                     tLabelAndValueRange aRanges( lcl_getLabelAndValueRangeByRole(
-                        aSeqCnt, OUString( "values-last" ),  xNewDoc, m_aDataSequencesToExport ));
+                        aSeqCnt, "values-last",  xNewDoc, m_aDataSequencesToExport ));
                     if( !aRanges.second.isEmpty())
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, aRanges.second );
                     if( !aRanges.first.isEmpty())

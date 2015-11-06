@@ -567,7 +567,7 @@ void SchXMLAxisContext::CreateAxis()
                     }
 
                     m_rbAxisPositionAttributeImported = m_rbAxisPositionAttributeImported || SchXMLTools::getPropertyFromContext(
-                        OUString("CrossoverPosition"), pPropStyleContext, pStylesCtxt ).hasValue();
+                        "CrossoverPosition", pPropStyleContext, pStylesCtxt ).hasValue();
                 }
             }
         }

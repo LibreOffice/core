@@ -172,7 +172,7 @@ void lcl_setSymbolSizeIfNeeded( const uno::Reference< beans::XPropertySet >& xSe
 void lcl_resetSymbolSizeForPointsIfNecessary( const uno::Reference< beans::XPropertySet >& xPointProp, const SvXMLImport& rImport
     , const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
-    uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( OUString("SymbolSize"), pPropStyleContext, pStylesCtxt ) );
+    uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( "SymbolSize", pPropStyleContext, pStylesCtxt ) );
     if( !aASymbolSize.hasValue() )
         lcl_setSymbolSizeIfNeeded( xPointProp, rImport );
 }
@@ -481,7 +481,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
                 const XMLPropStyleContext* pPropStyleContext = dynamic_cast< const XMLPropStyleContext * >( pStyle );
 
-                uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( OUString("SymbolSize")
+                uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( "SymbolSize"
                     , pPropStyleContext, pStylesCtxt ) );
                 mbSymbolSizeIsMissingInFile = !aASymbolSize.hasValue();
             }

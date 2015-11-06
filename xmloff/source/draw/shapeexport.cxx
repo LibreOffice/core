@@ -1267,7 +1267,7 @@ void XMLShapeExport::ExportGraphicDefaults()
             uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance("com.sun.star.drawing.Defaults"), uno::UNO_QUERY );
             if( xDefaults.is() )
             {
-                aStEx->exportDefaultStyle( xDefaults, OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper );
+                aStEx->exportDefaultStyle( xDefaults, XML_STYLE_FAMILY_SD_GRAPHICS_NAME, xPropertySetMapper );
 
                 // write graphic family styles
                 aStEx->exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, false, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
@@ -1635,7 +1635,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
         OUString aEventQName(
             mrExport.GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_DOM, OUString(  "click"  ) ) );
+                    XML_NAMESPACE_DOM, "click" ) );
         mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
         mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_ACTION, eStrAction );
 
@@ -1725,10 +1725,10 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
                         mrExport.GetNamespaceMap().GetQNameByKey(
                             XML_NAMESPACE_OOO,
-                            OUString( "starbasic"  ) ) );
+                            "starbasic" ) );
             OUString aEventQName(
                 mrExport.GetNamespaceMap().GetQNameByKey(
-                        XML_NAMESPACE_DOM, OUString(  "click"  ) ) );
+                        XML_NAMESPACE_DOM, "click" ) );
             mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
 
             if( nFound & FOUND_LIBRARY )
@@ -1759,7 +1759,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
                          XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
                 OUString aEventQName(
                     mrExport.GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_DOM, OUString(  "click"  ) ) );
+                            XML_NAMESPACE_DOM, "click" ) );
                 mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStrMacro );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, "simple" );

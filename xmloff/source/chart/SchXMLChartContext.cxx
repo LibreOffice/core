@@ -957,27 +957,27 @@ void SchXMLChartContext::MergeSeriesForStockChart()
                 if( bHasJapaneseCandlestick )
                 {
                     // open values
-                    lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], OUString( "values-first" ));
+                    lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], "values-first");
                     aNewSeries[i] = aSeriesSeq[ nSeriesIndex ];
                     // low values
                     lcl_MoveDataToCandleStickSeries(
                         uno::Reference< chart2::data::XDataSource >( aSeriesSeq[ ++nSeriesIndex ], uno::UNO_QUERY_THROW ),
-                        aNewSeries[i], OUString( "values-min" ));
+                        aNewSeries[i], "values-min");
                 }
                 else
                 {
                     // low values
-                    lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], OUString( "values-min" ));
+                    lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], "values-min");
                     aNewSeries[i] = aSeriesSeq[ nSeriesIndex ];
                 }
                 // high values
                 lcl_MoveDataToCandleStickSeries(
                     uno::Reference< chart2::data::XDataSource >( aSeriesSeq[ ++nSeriesIndex ], uno::UNO_QUERY_THROW ),
-                    aNewSeries[i], OUString( "values-max" ));
+                    aNewSeries[i], "values-max");
                 // close values
                 lcl_MoveDataToCandleStickSeries(
                     uno::Reference< chart2::data::XDataSource >( aSeriesSeq[ ++nSeriesIndex ], uno::UNO_QUERY_THROW ),
-                    aNewSeries[i], OUString( "values-last" ));
+                    aNewSeries[i], "values-last");
             }
             xDSContainer->setDataSeries( aNewSeries );
         }

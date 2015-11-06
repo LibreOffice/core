@@ -227,7 +227,7 @@ void XMLEventOASISTransformerContext::StartElement(
                             GetXMLToken( XML_LANGUAGE ) ) );
 
                         pMutableAttrList->SetValueByIndex( idx,
-                            OUString("StarBasic") );
+                            "StarBasic" );
 
                         OUString aLocQName(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -279,7 +279,7 @@ void XMLEventOASISTransformerContext::StartElement(
                     GetXMLToken( XML_LANGUAGE ) ) );
 
                     pMutableAttrList->SetValueByIndex( idx,
-                    OUString("StarBasic") );
+                    "StarBasic" );
 
                     OUString aLocQName(
                     GetTransformer().GetNamespaceMap().GetQNameByKey(

@@ -106,8 +106,8 @@ void XMLChartStyleContext::FillPropertySet(
         DBG_ASSERT( false, "unknown property exception -> shape style not completely imported for chart style" );
     }
 
-    lcl_NumberFormatStyleToProperty( msDataStyleName, OUString( "NumberFormat" ), mrStyles, rPropSet );
-    lcl_NumberFormatStyleToProperty( msPercentageDataStyleName, OUString( "PercentageNumberFormat" ), mrStyles, rPropSet );
+    lcl_NumberFormatStyleToProperty( msDataStyleName, "NumberFormat", mrStyles, rPropSet );
+    lcl_NumberFormatStyleToProperty( msPercentageDataStyleName, "PercentageNumberFormat", mrStyles, rPropSet );
 }
 
 SvXMLImportContext *XMLChartStyleContext::CreateChildContext(

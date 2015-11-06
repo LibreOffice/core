@@ -1144,8 +1144,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
 
         // create and prepare field master first
         if (CreateField(xMaster,
-                        OUString(
-                            sAPI_fieldmaster_database)))
+                        sAPI_fieldmaster_database))
         {
             Any aAny;
             aAny <<= sColumnName;
@@ -1157,8 +1156,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
             // create field
             Reference<XPropertySet> xField;
             if (CreateField(xField,
-                            OUString(
-                                sAPI_database)))
+                            sAPI_database))
             {
                 // attach field master
                 Reference<XDependentTextField> xDepField(xField, UNO_QUERY);

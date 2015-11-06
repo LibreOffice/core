@@ -354,7 +354,7 @@ namespace xmloff
             // later on imported, it overwrites anything which has previously been imported for
             // CharStrikeout.
             // #i27729#
-            exportedProperty( OUString( "CharCrossedOut" ) );
+            exportedProperty( "CharCrossedOut" );
         }
 
         if ( m_eType == LISTBOX )

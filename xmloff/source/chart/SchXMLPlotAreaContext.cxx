@@ -322,7 +322,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     //lines on/off
                     //this old property is not supported fully anymore with the new chart, so we need to get the information a little bit different from similar properties
                     mrSeriesDefaultsAndStyles.maLinesOnProperty = SchXMLTools::getPropertyFromContext(
-                        OUString("Lines"), pPropStyleContext, pStylesCtxt );
+                        "Lines", pPropStyleContext, pStylesCtxt );
 
                     //handle automatic position and size
                     m_aOuterPositioning.readAutomaticPositioningProperties( pPropStyleContext, pStylesCtxt );
@@ -736,9 +736,9 @@ void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropS
     {
         //handle automatic position and size
         SchXMLTools::getPropertyFromContext(
-            OUString("AutomaticSize"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoSize;
+            "AutomaticSize", pPropStyleContext, pStylesCtxt ) >>= m_bAutoSize;
         SchXMLTools::getPropertyFromContext(
-            OUString("AutomaticPosition"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoPosition;
+            "AutomaticPosition", pPropStyleContext, pStylesCtxt ) >>= m_bAutoPosition;
     }
 }
 

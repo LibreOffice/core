@@ -1964,7 +1964,7 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
         {
             if (!bValid)
             {
-                SetServiceName(OUString(sAPI_docinfo_custom ) );
+                SetServiceName(sAPI_docinfo_custom );
                 aName = sAttrValue;
                 bValid = true;
             }
