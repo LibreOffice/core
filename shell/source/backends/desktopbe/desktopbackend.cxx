@@ -212,18 +212,15 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
     if ( desktop == "GNOME" ) {
         backend = createBackend(
             context,
-            OUString(
-                    "com.sun.star.configuration.backend.GconfBackend"));
+            "com.sun.star.configuration.backend.GconfBackend");
     } else if ( desktop == "KDE" ) {
         backend = createBackend(
             context,
-            OUString(
-                    "com.sun.star.configuration.backend.KDEBackend"));
+            "com.sun.star.configuration.backend.KDEBackend");
     } else if ( desktop == "KDE4" ) {
         backend = createBackend(
             context,
-            OUString(
-                    "com.sun.star.configuration.backend.KDE4Backend"));
+            "com.sun.star.configuration.backend.KDE4Backend");
     }
     return backend.is()
         ? backend : static_cast< cppu::OWeakObject * >(new Default);
