@@ -50,7 +50,7 @@ public class _XDrawPageSummarizer extends MultiMethodTest {
         XDrawPages oDrawPages = (XDrawPages) tEnv.getObjRelation("DrawPages");
         if ( oDrawPages == null ) {
             // SKIPPED.FAILED - the ObjectRelation is not available
-            Status.failed( "ObjectRelation('DrawPages') XDrawPages n.a." );
+            throw new StatusException(Status.failed( "ObjectRelation('DrawPages') XDrawPages n.a." ));
             return;
         }
         log.println("testing summarize() ... ");

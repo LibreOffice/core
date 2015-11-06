@@ -51,7 +51,7 @@ public class _XDrawPageExpander extends MultiMethodTest {
         XDrawPage oDrawPage = (XDrawPage) tEnv.getObjRelation("DrawPage");
         if ( oDrawPage == null ) {
             // SKIPPED.FAILED - the ObjectRelation is not available
-            Status.failed( "ObjectRelation('DrawPages') XDrawPages n.a.");
+            throw new StatusException(Status.failed( "ObjectRelation('DrawPages') XDrawPages n.a."));
             return;
         }
         log.println("testing expand() ... ");
