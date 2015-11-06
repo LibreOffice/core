@@ -33,7 +33,6 @@
 #include <utility>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 
 #define DEBUG_MATRIX 0
 
