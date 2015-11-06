@@ -1668,7 +1668,7 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event ) throw(
 }
 
 // XPropertiesChangeListener
-void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException)
+void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException, std::exception)
 {
     if( !isDesignMode() && !mbCreatingCompatiblePeer )
     {

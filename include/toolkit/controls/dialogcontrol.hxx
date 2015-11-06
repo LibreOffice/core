@@ -164,7 +164,7 @@ public:
 
 protected:
     virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;
-    virtual void ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) throw(css::uno::RuntimeException) override;
+    virtual void ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) throw(css::uno::RuntimeException, std::exception) override;
 protected:
 };
 

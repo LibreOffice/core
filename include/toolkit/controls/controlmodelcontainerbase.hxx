@@ -261,7 +261,7 @@ public:
     // to implement this, certainly Dialog does, lets see about others
     virtual void SAL_CALL modified( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception) override {}
 protected:
-    virtual void ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) throw(css::uno::RuntimeException) override;
+    virtual void ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void removingControl( const css::uno::Reference< css::awt::XControl >& _rxControl ) override;
     virtual void addingControl( const css::uno::Reference< css::awt::XControl >& _rxControl ) override;
 };

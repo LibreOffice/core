@@ -650,7 +650,7 @@ throw (RuntimeException, std::exception)
     ImplUpdateResourceResolver();
 }
 
-void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException)
+void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException, std::exception)
 {
     sal_Int32 nLen = rEvents.getLength();
     for( sal_Int32 i = 0; i < nLen; i++ )
