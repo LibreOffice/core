@@ -1152,6 +1152,9 @@ SAL_IMPLEMENT_MAIN() {
             << "Bad input <" << e1.getUri() << ">: " << e1.getDetail()
             << std::endl;
         std::exit(EXIT_FAILURE);
+    } catch (std::exception & e1) {
+        std::cerr << "Failure: " << e1.what() << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 }
 
