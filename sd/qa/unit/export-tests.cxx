@@ -1408,6 +1408,11 @@ void SdExportTest::testExportTransitionsPPTX()
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 41, TransitionType::PUSHWIPE, TransitionSubType::COMBHORIZONTAL));
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 42, TransitionType::PUSHWIPE, TransitionSubType::COMBVERTICAL));
 
+    // OUTSIDE TURNING CUBE
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 57, TransitionType::MISCSHAPEWIPE, TransitionSubType::CORNERSOUT));
+    // INSIDE TURNING CUBE
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 60, TransitionType::MISCSHAPEWIPE, TransitionSubType::CORNERSIN));
+
     // NEWSFLASH
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 71, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
 }
