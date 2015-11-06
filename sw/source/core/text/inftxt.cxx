@@ -1324,9 +1324,9 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
 
 const PropertyValues & SwTextFormatInfo::GetHyphValues() const
 {
-    OSL_ENSURE( 2 == aHyphVals.getLength(),
+    OSL_ENSURE( 2 == m_aHyphVals.getLength(),
             "hyphenation values not yet initialized" );
-    return aHyphVals;
+    return m_aHyphVals;
 }
 
 bool SwTextFormatInfo::InitHyph( const bool bAutoHyphen )
@@ -1338,11 +1338,11 @@ bool SwTextFormatInfo::InitHyph( const bool bAutoHyphen )
     const SvxHyphenZoneItem &rAttr = rAttrSet.GetHyphenZone();
     MaxHyph() = rAttr.GetMaxHyphens();
     const bool bAuto = bAutoHyphen || rAttr.IsHyphen();
-    if( bAuto || bInterHyph )
+    if( bAuto || m_bInterHyph )
     {
         const sal_Int16 nMinimalLeading  = std::max(rAttr.GetMinLead(), sal_uInt8(2));
         const sal_Int16 nMinimalTrailing = rAttr.GetMinTrail();
-        lcl_InitHyphValues( aHyphVals, nMinimalLeading, nMinimalTrailing);
+        lcl_InitHyphValues( m_aHyphVals, nMinimalLeading, nMinimalTrailing);
     }
     return bAuto;
 }
@@ -1352,28 +1352,28 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
 {
     CtorInitTextPaintInfo( pRenderContext, pNewFrm, SwRect() );
 
-    bQuick = bNewQuick;
-    bInterHyph = bNewInterHyph;
+    m_bQuick = bNewQuick;
+    m_bInterHyph = bNewInterHyph;
 
     //! needs to be done in this order
-    nMinLeading     = 2;
-    nMinTrailing    = 2;
-    nMinWordLength  = 0;
-    bAutoHyph = InitHyph();
+    m_nMinLeading     = 2;
+    m_nMinTrailing    = 2;
+    m_nMinWordLength  = 0;
+    m_bAutoHyph = InitHyph();
 
-    bIgnoreFly = false;
-    bFakeLineStart = false;
-    bShift = false;
-    bDropInit = false;
-    bTestFormat = bTst;
-    nLeft = 0;
-    nRight = 0;
-    nFirst = 0;
-    nRealWidth = 0;
-    nForcedLeftMargin = 0;
-    pRest = 0;
-    nLineHeight = 0;
-    nLineNetHeight = 0;
+    m_bIgnoreFly = false;
+    m_bFakeLineStart = false;
+    m_bShift = false;
+    m_bDropInit = false;
+    m_bTestFormat = bTst;
+    m_nLeft = 0;
+    m_nRight = 0;
+    m_nFirst = 0;
+    m_nRealWidth = 0;
+    m_nForcedLeftMargin = 0;
+    m_pRest = 0;
+    m_nLineHeight = 0;
+    m_nLineNetHeight = 0;
     SetLineStart(0);
 
     SvtCTLOptions::TextNumerals const nTextNumerals(
@@ -1400,7 +1400,7 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
  */
 bool SwTextFormatInfo::IsHyphenate() const
 {
-    if( !bInterHyph && !bAutoHyph )
+    if( !m_bInterHyph && !m_bAutoHyph )
         return false;
 
     LanguageType eTmp = GetFont()->GetLanguage();
@@ -1411,7 +1411,7 @@ bool SwTextFormatInfo::IsHyphenate() const
     if (!xHyph.is())
         return false;
 
-    if (bInterHyph)
+    if (m_bInterHyph)
         SvxSpellWrapper::CheckHyphLang( xHyph, eTmp );
 
     return xHyph->hasLocale( g_pBreakIt->GetLocale(eTmp) );
@@ -1430,8 +1430,8 @@ void SwTextFormatInfo::Init()
 {
     // Not initialized: pRest, nLeft, nRight, nFirst, nRealWidth
     X(0);
-    bArrowDone = bFull = bFootnoteDone = bErgoDone = bNumDone = bNoEndHyph =
-        bNoMidHyph = bStop = bNewLine = bUnderflow = bTabOverflow = false;
+    m_bArrowDone = m_bFull = m_bFootnoteDone = m_bErgoDone = m_bNumDone = m_bNoEndHyph =
+        m_bNoMidHyph = m_bStop = m_bNewLine = m_bUnderflow = m_bTabOverflow = false;
 
     // generally we do not allow number portions in follows, except...
     if ( GetTextFrm()->IsFollow() )
@@ -1442,22 +1442,22 @@ void SwTextFormatInfo::Init()
 
         // there is a master for this follow and the master does not have
         // any contents (especially it does not have a number portion)
-        bNumDone = ! pTmpPara ||
+        m_bNumDone = ! pTmpPara ||
                    ! static_cast<const SwParaPortion*>(pTmpPara)->GetFirstPortion()->IsFlyPortion();
     }
 
-    pRoot = 0;
-    pLast = 0;
-    pFly = 0;
-    pLastField = 0;
-    pLastTab = 0;
-    pUnderflow = 0;
-    cTabDecimal = 0;
-    nWidth = nRealWidth;
-    nForcedLeftMargin = 0;
-    nSoftHyphPos = 0;
-    nUnderScorePos = COMPLETE_STRING;
-    cHookChar = 0;
+    m_pRoot = 0;
+    m_pLast = 0;
+    m_pFly = 0;
+    m_pLastField = 0;
+    m_pLastTab = 0;
+    m_pUnderflow = 0;
+    m_cTabDecimal = 0;
+    m_nWidth = m_nRealWidth;
+    m_nForcedLeftMargin = 0;
+    m_nSoftHyphPos = 0;
+    m_nUnderScorePos = COMPLETE_STRING;
+    m_cHookChar = 0;
     SetIdx(0);
     SetLen( GetText().getLength() );
     SetPaintOfst(0);
@@ -1479,53 +1479,53 @@ SwTextFormatInfo::SwTextFormatInfo(OutputDevice* pRenderContext, SwTextFrm *pFra
  */
 SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
     SwLineLayout& rLay, SwTwips nActWidth ) : SwTextPaintInfo( rInf ),
-    bTabOverflow( false )
+    m_bTabOverflow( false )
 {
-    pRoot = &rLay;
-    pLast = &rLay;
-    pFly = NULL;
-    pLastField = NULL;
-    pUnderflow = NULL;
-    pRest = NULL;
-    pLastTab = NULL;
+    m_pRoot = &rLay;
+    m_pLast = &rLay;
+    m_pFly = NULL;
+    m_pLastField = NULL;
+    m_pUnderflow = NULL;
+    m_pRest = NULL;
+    m_pLastTab = NULL;
 
-    nSoftHyphPos = 0;
-    nUnderScorePos = COMPLETE_STRING;
-    nLineStart = rInf.GetIdx();
-    nLeft = rInf.nLeft;
-    nRight = rInf.nRight;
-    nFirst = rInf.nLeft;
-    nRealWidth = sal_uInt16(nActWidth);
-    nWidth = nRealWidth;
-    nLineHeight = 0;
-    nLineNetHeight = 0;
-    nForcedLeftMargin = 0;
+    m_nSoftHyphPos = 0;
+    m_nUnderScorePos = COMPLETE_STRING;
+    m_nLineStart = rInf.GetIdx();
+    m_nLeft = rInf.m_nLeft;
+    m_nRight = rInf.m_nRight;
+    m_nFirst = rInf.m_nLeft;
+    m_nRealWidth = sal_uInt16(nActWidth);
+    m_nWidth = m_nRealWidth;
+    m_nLineHeight = 0;
+    m_nLineNetHeight = 0;
+    m_nForcedLeftMargin = 0;
 
-    nMinLeading = 0;
-    nMinTrailing = 0;
-    nMinWordLength = 0;
-    bFull = false;
-    bFootnoteDone = true;
-    bErgoDone = true;
-    bNumDone = true;
-    bArrowDone = true;
-    bStop = false;
-    bNewLine = true;
-    bShift = false;
-    bUnderflow = false;
-    bInterHyph = false;
-    bAutoHyph = false;
-    bDropInit = false;
-    bQuick  = rInf.bQuick;
-    bNoEndHyph = false;
-    bNoMidHyph = false;
-    bIgnoreFly = false;
-    bFakeLineStart = false;
+    m_nMinLeading = 0;
+    m_nMinTrailing = 0;
+    m_nMinWordLength = 0;
+    m_bFull = false;
+    m_bFootnoteDone = true;
+    m_bErgoDone = true;
+    m_bNumDone = true;
+    m_bArrowDone = true;
+    m_bStop = false;
+    m_bNewLine = true;
+    m_bShift = false;
+    m_bUnderflow = false;
+    m_bInterHyph = false;
+    m_bAutoHyph = false;
+    m_bDropInit = false;
+    m_bQuick  = rInf.m_bQuick;
+    m_bNoEndHyph = false;
+    m_bNoMidHyph = false;
+    m_bIgnoreFly = false;
+    m_bFakeLineStart = false;
 
-    cTabDecimal = 0;
-    cHookChar = 0;
-    nMaxHyph = 0;
-    bTestFormat = rInf.bTestFormat;
+    m_cTabDecimal = 0;
+    m_cHookChar = 0;
+    m_nMaxHyph = 0;
+    m_bTestFormat = rInf.m_bTestFormat;
     SetMulti( true );
     SetFirstMulti( rInf.IsFirstMulti() );
 }
@@ -1548,7 +1548,7 @@ bool SwTextFormatInfo::_CheckFootnotePortion( SwLineLayout* pCurr )
 sal_Int32 SwTextFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
                                             const sal_Int32 nEnd )
 {
-    cHookChar = 0;
+    m_cHookChar = 0;
     sal_Int32 i = nStart;
 
     // Used for decimal tab handling:
@@ -1579,12 +1579,12 @@ sal_Int32 SwTextFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
         case CH_BREAK:
         case CHAR_ZWSP :
         case CHAR_ZWNBSP :
-            cHookChar = cPos;
+            m_cHookChar = cPos;
             return i;
 
         case CHAR_UNDERSCORE:
-            if ( COMPLETE_STRING == nUnderScorePos )
-                nUnderScorePos = i;
+            if ( COMPLETE_STRING == m_nUnderScorePos )
+                m_nUnderScorePos = i;
             break;
 
         default:
@@ -1595,7 +1595,7 @@ sal_Int32 SwTextFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
                     OSL_ENSURE( cPos, "Unexpected end of string" );
                     if( cPos ) // robust
                     {
-                        cHookChar = cPos;
+                        m_cHookChar = cPos;
                         return i;
                     }
                 }
@@ -1613,7 +1613,7 @@ sal_Int32 SwTextFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
                     {
                         if ( bNumFound )
                         {
-                            cHookChar = cPos;
+                            m_cHookChar = cPos;
                             SetTabDecimal( cPos );
                             return i;
                         }
@@ -1630,8 +1630,8 @@ sal_Int32 SwTextFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
         const sal_Unicode cPos = GetChar( i );
         if ( cPos != cTabDec && cPos != cThousandSep && cPos !=cThousandSep2 && ( 0x2F >= cPos || cPos >= 0x3A ) )
         {
-            cHookChar = GetChar( i );
-            SetTabDecimal( cHookChar );
+            m_cHookChar = GetChar( i );
+            SetTabDecimal( m_cHookChar );
         }
     }
 
@@ -1814,10 +1814,10 @@ SwFontSave::~SwFontSave()
 
 bool SwTextFormatInfo::ChgHyph( const bool bNew )
 {
-    const bool bOld = bAutoHyph;
-    if( bAutoHyph != bNew )
+    const bool bOld = m_bAutoHyph;
+    if( m_bAutoHyph != bNew )
     {
-        bAutoHyph = bNew;
+        m_bAutoHyph = bNew;
         InitHyph( bNew );
         // Set language in the Hyphenator
         if( m_pFnt )
