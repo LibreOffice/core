@@ -125,7 +125,6 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
