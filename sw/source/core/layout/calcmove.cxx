@@ -726,6 +726,7 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
                     pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), this );
                     pAttrs = pAccess->Get();
                 }
+                assert(pAttrs);
                 // In BrowseView, we use fixed settings
                 SwViewShell *pSh = getRootFrm()->GetCurrShell();
                 if ( pSh && pSh->GetViewOptions()->getBrowseMode() )
