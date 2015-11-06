@@ -321,6 +321,11 @@ int GalApp::Main()
         SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
         return EXIT_FAILURE;
     }
+    catch (const std::exception &e)
+    {
+        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        return 1;
+    }
 
     return EXIT_SUCCESS;
 }
