@@ -504,7 +504,7 @@ SotClipboardFormatId LinkManager::RegisterStatusInfoId()
     if( nFormat == SotClipboardFormatId::NONE )
     {
         nFormat = SotExchange::RegisterFormatName(
-                    OUString("StatusInfo from SvxInternalLink"));
+                    "StatusInfo from SvxInternalLink");
     }
     return nFormat;
 }

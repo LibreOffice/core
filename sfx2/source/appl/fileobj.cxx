@@ -377,7 +377,7 @@ OUString impl_getFilter( const OUString& _rURL )
                          * property value (since? expected?) */
                         ::comphelper::SequenceAsHashMap lTypeProps( xTypeCont->getByName( sType ) );
                         sFilter = lTypeProps.getUnpackedValueOrDefault(
-                                OUString("PreferredFilter"), OUString() );
+                                "PreferredFilter", OUString() );
                     }
                 }
             }

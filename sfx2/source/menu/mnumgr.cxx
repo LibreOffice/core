@@ -192,7 +192,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         pThesSubMenu->InsertSeparator();
         const OUString sThesaurus( SfxResId(STR_MENU_THESAURUS).toString() );
         pThesSubMenu->InsertItem( 100, sThesaurus );
-        pThesSubMenu->SetItemCommand( 100, OUString(".uno:ThesaurusDialog") );
+        pThesSubMenu->SetItemCommand( 100, ".uno:ThesaurusDialog" );
 
         pSVMenu->InsertSeparator();
         const OUString sSynonyms( SfxResId(STR_MENU_SYNONYMS).toString() );

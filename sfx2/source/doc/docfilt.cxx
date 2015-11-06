@@ -141,26 +141,26 @@ const SfxFilter* SfxFilter::GetFilterByName( const OUString& rName )
 OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
 {
     const char* pType=0;
-    if ( rStg.IsStream( OUString("WordDocument") ) )
+    if ( rStg.IsStream( "WordDocument" ) )
     {
-        if ( rStg.IsStream( OUString("0Table") ) || rStg.IsStream( OUString("1Table") ) )
+        if ( rStg.IsStream( "0Table" ) || rStg.IsStream( "1Table" ) )
             pType = "writer_MS_Word_97";
         else
             pType = "writer_MS_Word_95";
     }
-    else if ( rStg.IsStream( OUString("Book") ) )
+    else if ( rStg.IsStream( "Book" ) )
     {
         pType = "calc_MS_Excel_95";
     }
-    else if ( rStg.IsStream( OUString("Workbook" ) ) )
+    else if ( rStg.IsStream( "Workbook" ) )
     {
         pType = "calc_MS_Excel_97";
     }
-    else if ( rStg.IsStream( OUString("PowerPoint Document") ) )
+    else if ( rStg.IsStream( "PowerPoint Document" ) )
     {
         pType = "impress_MS_PowerPoint_97";
     }
-    else if ( rStg.IsStream( OUString("Equation Native") ) )
+    else if ( rStg.IsStream( "Equation Native" ) )
     {
         pType = "math_MathType_3x";
     }

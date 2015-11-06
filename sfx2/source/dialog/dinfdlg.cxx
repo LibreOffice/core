@@ -795,7 +795,7 @@ SfxDocumentPage::SfxDocumentPage(vcl::Window* pParent, const SfxItemSet& rItemSe
     // on the main list enable/disable the pushbutton accordingly
     SvtCommandOptions aCmdOptions;
     if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
-                             OUString( DOCUMENT_SIGNATURE_MENU_CMD ) ) )
+                             DOCUMENT_SIGNATURE_MENU_CMD ) )
         m_pSignatureBtn->Disable();
 }
 

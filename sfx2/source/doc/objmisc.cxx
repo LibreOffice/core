@@ -257,7 +257,7 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
 void SfxObjectShell::ResetError()
 {
     if( pImp->lErr != ERRCODE_NONE )
-        AddLog( OUString( OSL_LOG_PREFIX "Resetting Error."  ) );
+        AddLog( OSL_LOG_PREFIX "Resetting Error." );
 
     pImp->lErr=0;
     SfxMedium * pMed = GetMedium();
@@ -1356,7 +1356,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
             }
             else
             {
-                SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
+                SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
             }
         }
         else

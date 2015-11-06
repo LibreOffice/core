@@ -354,11 +354,11 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
     {
         ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
         OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-            OUString("Name"),
+            "Name",
             OUString() );
 
         sal_Int32 nFilterFlags = aFilterPropsHM.getUnpackedValueOrDefault(
-            OUString("Flags"),
+            "Flags",
             sal_Int32( 0 ) );
 
         if ( nFilterFlags & nFlags )
@@ -577,7 +577,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             if ( nId == SID_MAIL_SENDDOC )
                 eResult = aModel.SaveAndSend( xFrame, OUString() );
             else if ( nId == SID_MAIL_SENDDOCASPDF )
-                eResult = aModel.SaveAndSend( xFrame, OUString( "pdf_Portable_Document_Format" ));
+                eResult = aModel.SaveAndSend( xFrame, "pdf_Portable_Document_Format");
             else if ( nId == SID_MAIL_SENDDOCASMS )
             {
                 aDocType = impl_searchFormatTypeForApp(xFrame, E_MS_DOC);
@@ -682,7 +682,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 {
                     // Draw/Impress uses a different type. 2nd chance try to use alternative type name
                     aFilterName = impl_retrieveFilterNameFromTypeAndModule(
-                        xContainerQuery, OUString( HTML_GRAPHIC_TYPE ), aModule, nFilterFlags );
+                        xContainerQuery, HTML_GRAPHIC_TYPE, aModule, nFilterFlags );
                 }
 
                 // No filter found => error
@@ -855,7 +855,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 
                             OUStringBuffer aBuffer( 60 );
                             aBuffer.append( RetrieveLabelFromCommand(
-                                OUString( ".uno:PrintDefault" ),
+                                ".uno:PrintDefault",
                                 xFrame ));
                             aBuffer.append( " (" );
                             aBuffer.append( aPrinterName );

@@ -375,7 +375,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
                 ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
                 if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
                 {
-                    SetError( ERRCODE_ABORT, OUString( OSL_LOG_PREFIX  ) );
+                    SetError( ERRCODE_ABORT, OSL_LOG_PREFIX );
                 }
             }
             catch ( const uno::Exception& )
@@ -746,7 +746,7 @@ void SfxMedium::StorageBackup_Impl()
     {
         DoInternalBackup_Impl( aOriginalContent );
         if( pImp->m_aBackupURL.isEmpty() )
-            SetError( ERRCODE_SFX_CANTCREATEBACKUP, OUString( OSL_LOG_PREFIX  ) );
+            SetError( ERRCODE_SFX_CANTCREATEBACKUP, OSL_LOG_PREFIX );
     }
 }
 
@@ -878,7 +878,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool b
         ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
         if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
         {
-            SetError( ERRCODE_ABORT, OUString( OSL_LOG_PREFIX  ) );
+            SetError( ERRCODE_ABORT, OSL_LOG_PREFIX );
         }
         else if ( uno::Reference< task::XInteractionDisapprove >( xSelected.get(), uno::UNO_QUERY ).is() )
         {
@@ -917,7 +917,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const LockFileEntry& aData, bool b
             GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         }
         else
-            SetError( ERRCODE_IO_ACCESSDENIED, OUString( OSL_LOG_PREFIX  ) );
+            SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
 
     }
 
@@ -1038,7 +1038,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                 const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImp->m_pSet, SID_DOC_READONLY, false);
 
                 if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
-                    SetError( ERRCODE_IO_ACCESSDENIED, OUString( OSL_LOG_PREFIX  ) );
+                    SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
                 else
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
             }
@@ -1272,7 +1272,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
             const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImp->m_pSet, SID_DOC_READONLY, false);
 
             if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
-                SetError( ERRCODE_IO_ACCESSDENIED, OUString( OSL_LOG_PREFIX  ) );
+                SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
             else
                 GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         }
@@ -1623,13 +1623,13 @@ bool SfxMedium::StorageCommit_Impl()
                         }
 
                         if ( !GetError() )
-                            SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
+                            SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
                     }
                 }
                 catch ( const uno::Exception& )
                 {
                     //TODO/LATER: improve error handling
-                    SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
+                    SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
                 }
             }
         }
@@ -1815,7 +1815,7 @@ bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet& aTargetSet 
 
                     Any aCmdArg;
                     aCmdArg <<= aInsertArg;
-                    aTargetContent.executeCommand( OUString( "insert"  ),
+                    aTargetContent.executeCommand( "insert",
                                                     aCmdArg );
 
                     if ( xSeek.is() )
@@ -1906,7 +1906,7 @@ void SfxMedium::Transfer_Impl()
             else
             {
                 SAL_WARN( "sfx.doc", "Illegal Output stream parameter!" );
-                SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
+                SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
             }
 
             // free the reference
@@ -2019,7 +2019,7 @@ void SfxMedium::Transfer_Impl()
             OUString aFileName;
             Any aAny = aDestContent.getPropertyValue("Title");
             aAny >>= aFileName;
-            aAny = aDestContent.getPropertyValue( OUString("ObjectId" ) );
+            aAny = aDestContent.getPropertyValue( "ObjectId" );
             OUString sObjectId;
             aAny >>= sObjectId;
             if ( aFileName.isEmpty() )
@@ -2449,7 +2449,7 @@ void SfxMedium::GetMedium_Impl()
 
         //TODO/MBA: ErrorHandling - how to transport error from MediaDescriptor
         if ( !GetError() && !pImp->xStream.is() && !pImp->xInputStream.is() )
-            SetError( ERRCODE_IO_ACCESSDENIED, OUString( OSL_LOG_PREFIX  ) );
+            SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
 
         if ( !GetError() )
         {
@@ -3398,7 +3398,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
     OUString aTmpURL = pImp->pTempFile->GetURL();
     if ( pImp->m_aName.isEmpty() || aTmpURL.isEmpty() )
     {
-        SetError( ERRCODE_IO_CANTWRITE, OUString( OSL_LOG_PREFIX  ) );
+        SetError( ERRCODE_IO_CANTWRITE, OSL_LOG_PREFIX );
         return;
     }
 
@@ -3476,7 +3476,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
 
         if ( !bTransferSuccess )
         {
-            SetError( ERRCODE_IO_CANTWRITE, OUString( OSL_LOG_PREFIX  ) );
+            SetError( ERRCODE_IO_CANTWRITE, OSL_LOG_PREFIX );
             return;
         }
     }
@@ -3496,7 +3496,7 @@ void SfxMedium::CreateTempFileNoCopy()
     pImp->m_aName = pImp->pTempFile->GetFileName();
     if ( pImp->m_aName.isEmpty() )
     {
-        SetError( ERRCODE_IO_CANTWRITE, OUString( OSL_LOG_PREFIX  ) );
+        SetError( ERRCODE_IO_CANTWRITE, OSL_LOG_PREFIX );
         return;
     }
 

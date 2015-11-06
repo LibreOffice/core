@@ -471,7 +471,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start( OUString(".uno:HelpIndex"), NULL ); // show start page
+                pHelp->Start( ".uno:HelpIndex", NULL ); // show start page
                 bDone = true;
             }
             break;
@@ -1067,7 +1067,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                 pView = lcl_getBasicIDEViewFrame( pBasicIDE );
                 if ( pView )
-                    pView->SetName( OUString( "BASIC:1" ) );
+                    pView->SetName( "BASIC:1" );
             }
 
             if ( pView )

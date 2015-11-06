@@ -53,7 +53,7 @@ sal_uInt32 LoadOlePropertySet(
     // load the property set
     SfxOlePropertySet aGlobSet;
     ErrCode nGlobError = aGlobSet.LoadPropertySet(i_pStorage,
-        OUString( STREAM_SUMMARYINFO  ) );
+        STREAM_SUMMARYINFO );
 
     // global section
     SfxOleSectionRef xGlobSect = aGlobSet.GetSection( SECTION_GLOBAL );
@@ -138,7 +138,7 @@ sal_uInt32 LoadOlePropertySet(
     // load the property set
     SfxOlePropertySet aDocSet;
     ErrCode nDocError = aDocSet.LoadPropertySet(i_pStorage,
-        OUString( STREAM_DOCSUMMARYINFO  ) );
+        STREAM_DOCSUMMARYINFO );
 
     // custom properties
     SfxOleSectionRef xCustomSect = aDocSet.GetSection( SECTION_CUSTOM );
@@ -240,7 +240,7 @@ bool SaveOlePropertySet(
 
     // save the property set
     ErrCode nGlobError = aGlobSet.SavePropertySet(i_pStorage,
-        OUString(STREAM_SUMMARYINFO));
+        STREAM_SUMMARYINFO);
 
     // *** custom properties into stream "005DocumentSummaryInformation" ***
 
@@ -257,7 +257,7 @@ bool SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pGuid );
         rCustomSect.SetPropertyName( nPropId,
-            OUString("_PID_GUID") );
+            "_PID_GUID" );
     }
 
     // write hyperlinks
@@ -265,7 +265,7 @@ bool SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pHyperlinks );
         rCustomSect.SetPropertyName( nPropId,
-            OUString("_PID_HLINKS") );
+            "_PID_HLINKS" );
     }
 
     uno::Reference<beans::XPropertySet> xUserDefinedProps(
@@ -299,7 +299,7 @@ bool SaveOlePropertySet(
 
     // save the property set
     ErrCode nDocError = aDocSet.SavePropertySet(i_pStorage,
-        OUString( STREAM_DOCSUMMARYINFO  ) );
+        STREAM_DOCSUMMARYINFO );
 
     // return code
     return (nGlobError == ERRCODE_NONE) && (nDocError == ERRCODE_NONE);

@@ -1088,7 +1088,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     std::set< OUString > StgFiles;
     collectFilesFromStorage(i_xStorage,
-        OUString(""), StgFiles);
+        "", StgFiles);
 
     std::vector< OUString > MfstMetadataFiles;
 

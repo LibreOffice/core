@@ -182,7 +182,7 @@ SfxApplication* SfxApplication::GetOrCreate()
 SfxApplication::SfxApplication()
     : pAppData_Impl( 0 )
 {
-    SetName( OUString("StarOffice") );
+    SetName( "StarOffice" );
     if (!utl::ConfigManager::IsAvoidConfig())
         SvtViewOptions::AcquireOptions();
 

@@ -353,7 +353,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 {
                     ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
                     aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                OUString("Name"),
+                                                "Name",
                                                 OUString() );
                 }
 
@@ -362,7 +362,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     // Retrieve filter from media descriptor
                     ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
                     OUString aOrgFilterName = aMediaDescrPropsHM.getUnpackedValueOrDefault(
-                                    OUString( "FilterName" ),
+                                    "FilterName",
                                     OUString() );
                     if ( aOrgFilterName == aFilterName )
                     {
@@ -380,7 +380,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     // Retrieve filter from media descriptor
                     ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
                     aFilterName = aMediaDescrPropsHM.getUnpackedValueOrDefault(
-                                    OUString( "FilterName" ),
+                                    "FilterName",
                                     OUString() );
                 }
 
@@ -391,7 +391,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         ::comphelper::SequenceAsHashMap aFilterPropsHM( xModuleManager->getByName( aModule ) );
                         aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                    OUString("ooSetupFactoryDefaultFilter"),
+                                                    "ooSetupFactoryDefaultFilter",
                                                     OUString() );
                         css::uno::Reference< css::container::XNameAccess > xNameAccess(
                             xContainerQuery, css::uno::UNO_QUERY );
@@ -399,7 +399,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         {
                             ::comphelper::SequenceAsHashMap aFilterPropsHM2( xNameAccess->getByName( aFilterName ) );
                             aTypeName = aFilterPropsHM2.getUnpackedValueOrDefault(
-                                                        OUString("Type"),
+                                                        "Type",
                                                         OUString() );
                         }
                     }
@@ -437,7 +437,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         ::comphelper::SequenceAsHashMap aTypeNamePropsHM( xTypeDetection->getByName( aTypeName ) );
                         uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
-                                                        OUString("Extensions"),
+                                                        "Extensions",
                                                         ::uno::Sequence< OUString >() );
                         if ( aExtensions.getLength() )
                             aExtension = aExtensions[0];

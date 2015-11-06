@@ -1831,7 +1831,7 @@ SfxDocumentMetaData::resetUserData(const OUString & the_value)
         dateTimeToText(css::util::DateTime()));
     bModified |= setMetaText("meta:editing-duration", durationToText(0));
     bModified |= setMetaText("meta:editing-cycles",
-        OUString("1"));
+        "1");
 
     if (bModified) {
         g.clear();

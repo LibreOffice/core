@@ -469,7 +469,7 @@ IMPL_LINK_TYPED( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused
                 }
 
                 if ( 1 == nFiles )
-                    OpenURL( sFiles[0], OUString( "_default"  ), aArgs );
+                    OpenURL( sFiles[0], "_default", aArgs );
                 else
                 {
                     OUString    aBaseDirURL = sFiles[0];
@@ -481,7 +481,7 @@ IMPL_LINK_TYPED( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused
                     {
                         OUString    aURL = aBaseDirURL;
                         aURL += sFiles[iFiles];
-                        OpenURL( aURL, OUString( "_default"  ), aArgs );
+                        OpenURL( aURL, "_default", aArgs );
                     }
                 }
             }

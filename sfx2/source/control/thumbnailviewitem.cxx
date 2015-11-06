@@ -340,7 +340,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
         if (bTooLong && (nLineLength + nLineStart) < rText.getLength())
         {
             // Add the '...' to the last line to show, even though it may require to shorten the line
-            double nDotsWidth = aTextDev.getTextWidth(OUString("..."),0,3);
+            double nDotsWidth = aTextDev.getTextWidth("...",0,3);
 
             sal_Int32 nLength = nLineLength - 1;
             while ( nDotsWidth + aTextDev.getTextWidth(aText, nLineStart, nLength) > maDrawArea.getWidth() && nLength > 0)

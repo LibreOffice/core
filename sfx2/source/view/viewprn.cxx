@@ -159,10 +159,10 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
     }
 
     // set some job parameters
-    setValue( OUString( "IsApi"  ), makeAny( i_bApi ) );
-    setValue( OUString( "IsDirect"  ), makeAny( i_bDirect ) );
-    setValue( OUString( "IsPrinter"  ), makeAny( sal_True ) );
-    setValue( OUString( "View"  ), i_rViewProp );
+    setValue( "IsApi", makeAny( i_bApi ) );
+    setValue( "IsDirect", makeAny( i_bDirect ) );
+    setValue( "IsPrinter", makeAny( sal_True ) );
+    setValue( "View", i_rViewProp );
 }
 
 void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
@@ -607,7 +607,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
     pImp->m_xPrinterController = xNewController;
 
     SfxObjectShell *pObjShell = GetObjectShell();
-    xNewController->setValue( OUString( "JobName"  ),
+    xNewController->setValue( "JobName",
                         makeAny( OUString( pObjShell->GetTitle() ) ) );
     xNewController->setPrinterModified( mbPrinterSettingsModified );
 }

@@ -851,7 +851,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
     // add "All" filter
     aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString(),
-                        OUString(FILEDIALOG_FILTER_ALL) );
+                        FILEDIALOG_FILTER_ALL );
 
     // add template filter
     OUString sFilterExt;

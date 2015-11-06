@@ -63,7 +63,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SfxURLToolBoxControl_Impl,SfxStringItem)
 SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
     : SfxToolBoxControl( nSlotId, nId, rBox )
 {
-    addStatusListener( OUString( ".uno:CurrentURL" ));
+    addStatusListener( ".uno:CurrentURL");
 }
 
 SfxURLToolBoxControl_Impl::~SfxURLToolBoxControl_Impl()

@@ -681,7 +681,7 @@ bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
                 uno::Reference< container::XNameAccess > xTypeDetection( mxType, uno::UNO_QUERY_THROW );
                 SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aDocType ) );
                 aType = aTypeProps.getUnpackedValueOrDefault(
-                            OUString("MediaType"),
+                            "MediaType",
                             OUString() );
             }
             catch( uno::Exception& )
@@ -1212,7 +1212,7 @@ void SfxDocTplService_Impl::doUpdate()
                 Content aGroup;
                 if ( Content::create( pGroup->getHierarchyURL(), maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
                     setProperty( aGroup,
-                                 OUString( TARGET_DIR_URL  ),
+                                 TARGET_DIR_URL,
                                  makeAny( pGroup->getTargetURL() ) );
 
                 size_t nCount = pGroup->count();
@@ -1253,7 +1253,7 @@ void SfxDocTplService_Impl::doUpdate()
 uno::Sequence< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplateDir_Impl( const OUString& aUserPath )
 {
     INetURLObject aLocObj( aUserPath );
-    aLocObj.insertName( OUString( "groupuinames.xml"  ), false,
+    aLocObj.insertName( "groupuinames.xml", false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
     Content aLocContent;
@@ -1377,9 +1377,9 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUs
         Content aSourceContent( aTempURL, maCmdEnv, comphelper::getProcessComponentContext() );
         aTargetContent.transferContent( aSourceContent,
                                         InsertOperation_COPY,
-                                        OUString( "groupuinames.xml"  ),
+                                        "groupuinames.xml",
                                         ucb::NameClash::OVERWRITE,
-                                        OUString( "text/xml" ) );
+                                        "text/xml" );
         bResult = true;
     }
     catch ( uno::Exception& )
@@ -1409,7 +1409,7 @@ OUString SfxDocTplService_Impl::CreateNewGroupFsys( const OUString& rGroupName, 
                                                 aResultURL,
                                                 aNewFolder )
           && !CreateNewUniqueFolderWithPrefix( aTargetPath,
-                                                OUString( "UserGroup"  ),
+                                                "UserGroup",
                                                 aNewFolderName,
                                                 aResultURL,
                                                 aNewFolder ) )
@@ -1487,7 +1487,7 @@ bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
                                             aNewFolderURL,
                                             aNewFolder )
       && !CreateNewUniqueFolderWithPrefix( aUserPath,
-                                            OUString( "UserGroup"  ),
+                                            "UserGroup",
                                             aNewFolderName,
                                             aNewFolderURL,
                                             aNewFolder ) )
@@ -1871,7 +1871,7 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, rTemplateName, aExt );
         if ( aNewTemplateTargetURL.isEmpty() )
         {
-            aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, OUString( "UserTemplate"  ), aExt );
+            aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, "UserTemplate", aExt );
 
             if ( aNewTemplateTargetURL.isEmpty() )
                 throw uno::RuntimeException();
@@ -2628,7 +2628,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
     // when scanning the file system, we have to add the 'standard' group, too
     if ( ! bHierarchy )
     {
-        OUString aUIStdTitle = getLongName( OUString( STANDARD_FOLDER  ) );
+        OUString aUIStdTitle = getLongName( STANDARD_FOLDER );
         addFsysGroup( rList, OUString(), aUIStdTitle, aTargetURL, bWriteableContent );
     }
 

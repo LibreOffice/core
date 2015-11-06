@@ -503,7 +503,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
     uno::Sequence< beans::PropertyValue > aProps;
 
     OUString aFilterName = GetModuleProps().getUnpackedValueOrDefault(
-                                                                OUString("ooSetupFactoryDefaultFilter"),
+                                                                "ooSetupFactoryDefaultFilter",
                                                                 OUString() );
 
     m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aProps;
@@ -729,7 +729,7 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
 
     // check that the old filter is acceptable
     OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    OUString(aFilterNameString),
+                                                    aFilterNameString,
                                                     OUString() );
     sal_Int8 nResult = CheckFilter( aOldFilterName );
 
@@ -779,7 +779,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
         OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault("UIName",
                                                                                 OUString() );
         OUString aPreusedFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    OUString("PreusedFilterName"),
+                                                    "PreusedFilterName",
                                                     OUString() );
 
         OUString aDefType = aDefFiltPropsHM.getUnpackedValueOrDefault( "Type", OUString() );
@@ -811,7 +811,7 @@ bool ModelData_Impl::CheckFilterOptionsDialogExistence()
         {
             ::comphelper::SequenceAsHashMap aPropsHM( pProps );
             OUString aUIServName = aPropsHM.getUnpackedValueOrDefault(
-                                            OUString("UIComponent"),
+                                            "UIComponent",
                                             OUString() );
             if ( !aUIServName.isEmpty() )
                 return true;
@@ -898,7 +898,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             // this is a PDF export
             // the filter options has been shown already
             OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                                        OUString("UIName"),
+                                                        "UIName",
                                                         OUString() );
 
             pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, OUString( "pdf" ), rStandardDir, rBlackList ));
@@ -950,11 +950,11 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     {
         // it is export, set the preselected filter
         OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                        OUString("UIName"),
+                                        "UIName",
                                         OUString() );
         pFileDlg->SetCurrentFilter( aFilterUIName );
         aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                        OUString("Type"),
+                                        "Type",
                                         OUString() );
     }
     // it is no export, bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
@@ -975,18 +975,18 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         {
             // the suggested type will be changed, the extension should be adjusted
             aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                            OUString("Type"),
+                                            "Type",
                                             OUString() );
 
             OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                            OUString("UIName"),
+                                            "UIName",
                                             OUString() );
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else
         {
             pFileDlg->SetCurrentFilter( aOldFiltPropsHM.getUnpackedValueOrDefault(
-                                                        OUString("UIName"),
+                                                        "UIName",
                                                         OUString() ) );
         }
     }
@@ -1191,7 +1191,7 @@ OUString ModelData_Impl::GetRecommendedExtension( const OUString& aTypeName )
        {
            ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
            uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
-                                           OUString("Extensions"),
+                                           "Extensions",
                                            ::uno::Sequence< OUString >() );
            if ( aExtensions.getLength() )
                return aExtensions[0];
@@ -1473,7 +1473,7 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
 
     ::comphelper::SequenceAsHashMap aFilterPropsHM( aFilterProps );
     OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                                    OUString("Name"),
+                                                                    "Name",
                                                                     OUString() );
 
     const OUString sFilterNameString(aFilterNameString);
@@ -1744,7 +1744,7 @@ bool SfxStoringHelper::CheckFilterOptionsAppearence(
                {
                 ::comphelper::SequenceAsHashMap aPropsHM( aProps );
                    OUString aServiceName = aPropsHM.getUnpackedValueOrDefault(
-                                                    OUString("UIComponent"),
+                                                    "UIComponent",
                                                     OUString() );
                 if( !aServiceName.isEmpty() )
                        bUseFilterOptions = true;

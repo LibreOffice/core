@@ -855,7 +855,7 @@ IMPL_LINK_TYPED( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString, bool )
 {
     const SfxFilter* pFilter = GetFilter4Extension( *pString );
     if (pFilter && !pFilter->GetWildcard().Matches( OUString() ) &&
-        !pFilter->GetWildcard().Matches(OUString("*.*")) &&
+        !pFilter->GetWildcard().Matches("*.*") &&
         !pFilter->GetWildcard().Matches(OUString('*'))
        )
     {

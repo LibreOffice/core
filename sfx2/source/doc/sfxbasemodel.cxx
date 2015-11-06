@@ -1527,7 +1527,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeSelf"  ) );
+        m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "storeSelf" );
         SfxSaveGuard aSaveGuard(this, m_pData, false);
 
         bool bCheckIn = false;
@@ -1540,7 +1540,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
               && aSeqArgs[nInd].Name != "FailOnWarning"
               && aSeqArgs[nInd].Name != "CheckIn" )
             {
-                m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "unexpected parameter for storeSelf, might be no problem if SaveAs is executed."  ) );
+                m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "unexpected parameter for storeSelf, might be no problem if SaveAs is executed." );
                 m_pData->m_pObjectShell->StoreLog();
 
                 OUString aMessage( "Unexpected MediaDescriptor parameter: "  );
@@ -1614,14 +1614,14 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
         if ( bRet )
         {
-            m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "successful saving."  ) );
+            m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "successful saving." );
             m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
 
             SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCDONE), m_pData->m_pObjectShell ) );
         }
         else
         {
-            m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "Storing failed!"  ) );
+            m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "Storing failed!" );
             m_pData->m_pObjectShell->StoreLog();
 
             // write the contents of the logger to the file
@@ -1656,7 +1656,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeAsURL"  ) );
+        m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "storeAsURL" );
         SfxSaveGuard aSaveGuard(this, m_pData, false);
 
         impl_store( rURL, rArgs, false );
@@ -1697,7 +1697,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeToURL"  ) );
+        m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "storeToURL" );
         SfxSaveGuard aSaveGuard(this, m_pData, false);
         impl_store( rURL, rArgs, true );
     }
@@ -2977,7 +2977,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                             // TODO/LATER: need a new interaction for this case
                             if ( m_pData->m_pObjectShell->IsDocShared() )
                             {
-                                m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "Can't store shared document!" ) );
+                                m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "Can't store shared document!" );
                                 m_pData->m_pObjectShell->StoreLog();
 
                                 uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault("EncryptionData", uno::Sequence< beans::NamedValue >() );
@@ -3022,7 +3022,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
 
         if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
         {
-            m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "Misuse of CopyStreamIfPossible!"  ) );
+            m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "Misuse of CopyStreamIfPossible!" );
             m_pData->m_pObjectShell->StoreLog();
 
             throw frame::IllegalArgumentIOException(
@@ -3081,7 +3081,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetErrorCode();
         if ( !bRet && !nErrCode )
         {
-            m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "Storing has failed, no error is set!"  ) );
+            m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "Storing has failed, no error is set!" );
             nErrCode = ERRCODE_IO_CANTWRITE;
         }
         m_pData->m_pObjectShell->ResetError();
@@ -3102,7 +3102,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                 }
             }
 
-            m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "Storing succeeded!"  ) );
+            m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "Storing succeeded!" );
             if ( !bSaveTo )
             {
                 m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
@@ -3121,7 +3121,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         else
         {
             // let the logring be stored to the related file
-            m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "Storing failed!"  ) );
+            m_pData->m_pObjectShell->AddLog( OSL_LOG_PREFIX "Storing failed!" );
             m_pData->m_pObjectShell->StoreLog();
 
             m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
@@ -3953,7 +3953,7 @@ Reference< frame::XUntitledNumbers > SfxBaseModel::impl_getUntitledHelper ()
         m_pData->m_xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
-        pHelper->setUntitledPrefix (OUString(" : "));
+        pHelper->setUntitledPrefix (" : ");
     }
 
     return m_pData->m_xNumberedControllers;

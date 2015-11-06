@@ -66,7 +66,7 @@ GFileMonitor* pMonitor = NULL;
 static void open_url_cb( GtkWidget *, gpointer data )
 {
     ShutdownIcon::OpenURL( *static_cast<OUString *>(data),
-                           OUString( "_default" ) );
+                           "_default" );
 }
 
 static void open_file_cb( GtkWidget * )

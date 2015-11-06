@@ -874,7 +874,7 @@ namespace sfx2
         {
             ::comphelper::SequenceAsHashMap lFilterProps (xFilterList->nextElement());
             OUString                 sFilterName  = lFilterProps.getUnpackedValueOrDefault(
-                                                             OUString("Name"),
+                                                             "Name",
                                                              OUString());
             if (!sFilterName.isEmpty())
                 m_lFilters.push_back(sFilterName);

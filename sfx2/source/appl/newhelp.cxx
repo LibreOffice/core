@@ -382,7 +382,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                     else
                     {
                         pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
-                        Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, OUString("TargetURL"  ) ) );
+                        Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, "TargetURL" ) );
                         OUString aTargetURL;
                         if ( aAny >>= aTargetURL )
                             pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, false ) );
