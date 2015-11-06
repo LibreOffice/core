@@ -558,7 +558,7 @@ uno::Any SAL_CALL Content::execute(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
-                OUString( "Cannot remove persistent data!" ),
+                "Cannot remove persistent data!",
                 this );
             // Unreachable
         }
@@ -1382,7 +1382,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     ucb::IOErrorCode_CANT_WRITE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     xEnv,
-                    OUString( "Cannot store persistent data!" ),
+                    "Cannot store persistent data!",
                     this );
                 // Unreachable
             }
@@ -1459,7 +1459,7 @@ uno::Any Content::open(
                     m_eState == PERSISTENT
                         ? xEnv
                         : uno::Reference< ucb::XCommandEnvironment >(),
-                    OUString( "Got no data stream!" ),
+                    "Got no data stream!",
                     this );
                 // Unreachable
             }
@@ -1493,7 +1493,7 @@ uno::Any Content::open(
                         m_eState == PERSISTENT
                             ? xEnv
                             : uno::Reference< ucb::XCommandEnvironment >(),
-                        OUString("Got no data stream!"),
+                        "Got no data stream!",
                         this );
                     // Unreachable
                 }
@@ -1554,7 +1554,7 @@ uno::Any Content::open(
                                 ? xEnv
                                 : uno::Reference<
                                       ucb::XCommandEnvironment >(),
-                            OUString( "Got no data stream!" ),
+                            "Got no data stream!",
                             this );
                         // Unreachable
                     }
@@ -1737,7 +1737,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString("Cannot store persistent data!"),
+            "Cannot store persistent data!",
             this );
         // Unreachable
     }
@@ -1996,7 +1996,7 @@ void Content::transfer(
                 ucb::IOErrorCode_RECURSIVE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                OUString( "Target is equal to or is a child of source!" ),
+                "Target is equal to or is a child of source!",
                 this );
             // Unreachable
         }
@@ -2078,7 +2078,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString( "Cannot copy data!"  ),
+            "Cannot copy data!",
             this );
         // Unreachable
     }
@@ -2110,7 +2110,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString( "Cannot copy additional properties!"  ),
+            "Cannot copy additional properties!",
             this );
         // Unreachable
     }
@@ -2148,7 +2148,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString( "Cannot instanciate target object!" ),
+            "Cannot instanciate target object!",
             this );
         // Unreachable
     }
@@ -2190,7 +2190,7 @@ void Content::transfer(
                 ucb::IOErrorCode_CANT_READ,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                OUString( "Cannot instanciate target object!" ),
+                "Cannot instanciate target object!",
                 this );
             // Unreachable
         }
@@ -2212,7 +2212,7 @@ void Content::transfer(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                OUString( "Cannot remove persistent data of source object!" ),
+                "Cannot remove persistent data of source object!",
                 this );
             // Unreachable
         }
@@ -2231,7 +2231,7 @@ void Content::transfer(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                OUString( "Cannot remove additional properties of source object!" ),
+                "Cannot remove additional properties of source object!",
                 this );
             // Unreachable
         }

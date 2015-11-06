@@ -544,7 +544,7 @@ uno::Reference< ucb::XContent > createNew(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            OUString("Target is no XCommandProcessor!"),
+            "Target is no XCommandProcessor!",
             rContext.xProcessor );
         // Unreachable
     }
@@ -595,7 +595,7 @@ uno::Reference< ucb::XContent > createNew(
                 ucb::IOErrorCode_CANT_CREATE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 rContext.xOrigEnv,
-                OUString("Target is no XContentCreator!"),
+                "Target is no XContentCreator!",
                 rContext.xProcessor );
             // Unreachable
         }
@@ -616,7 +616,7 @@ uno::Reference< ucb::XContent > createNew(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            OUString("No types creatable!"),
+            "No types creatable!",
             rContext.xProcessor );
         // Unreachable
     }
@@ -730,7 +730,7 @@ uno::Reference< ucb::XContent > createNew(
                     ucb::IOErrorCode_CANT_CREATE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    OUString( "createNewContent failed!" ),
+                    "createNewContent failed!",
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -769,7 +769,7 @@ void transferProperties(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            OUString( "Unable to get propertyset info from source object!" ),
+            "Unable to get propertyset info from source object!",
             rContext.xProcessor );
         // Unreachable
     }
@@ -797,7 +797,7 @@ void transferProperties(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            OUString( "Unable to get properties from source object!" ),
+            "Unable to get properties from source object!",
             rContext.xProcessor );
         // Unreachable
     }
@@ -1067,7 +1067,7 @@ void handleNameClashRename(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >( &aProps2, 1 ),
             rContext.xOrigEnv,
-            OUString( "Unable to get properties from new object!" ),
+            "Unable to get properties from new object!",
             rContext.xProcessor );
         // Unreachable
     }
@@ -1156,7 +1156,7 @@ void handleNameClashRename(
                             ucb::IOErrorCode_CANT_READ,
                             uno::Sequence< uno::Any >( &aProps2, 1 ),
                             rContext.xOrigEnv,
-                            OUString( "Got no data stream from source!" ),
+                            "Got no data stream from source!",
                             rContext.xProcessor );
                         // Unreachable
                     }
@@ -1261,7 +1261,7 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            OUString( "No matching content type at target!" ),
+            "No matching content type at target!",
             rContext.xProcessor );
         // Unreachable
     }
@@ -1288,7 +1288,7 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            OUString( "New content is not a XCommandProcessor!" ),
+            "New content is not a XCommandProcessor!",
             rContext.xProcessor );
         // Unreachable
     }
@@ -1309,7 +1309,7 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            OUString( "Source content is not a XCommandProcessor!" ),
+            "Source content is not a XCommandProcessor!",
             rContext.xProcessor );
         // Unreachable
     }
@@ -1565,7 +1565,7 @@ void globalTransfer_(
                     ucb::IOErrorCode_CANT_READ,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    OUString( "Unable to get properties from children of source!" ),
+                    "Unable to get properties from children of source!",
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -1586,7 +1586,7 @@ void globalTransfer_(
                     ucb::IOErrorCode_CANT_READ,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    OUString( "Unable to get children of source!" ),
+                    "Unable to get children of source!",
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -1729,7 +1729,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString( "Can't instanciate target object!" ),
+            "Can't instanciate target object!",
             this );
         // Unreachable
     }
@@ -1752,7 +1752,7 @@ void UniversalContentBroker::globalTransfer(
                 ucb::IOErrorCode_CANT_READ,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                OUString( "Target content is not a XCommandProcessor!" ),
+                "Target content is not a XCommandProcessor!",
                 this );
             // Unreachable
         }
@@ -1915,7 +1915,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString( "Can't instanciate source object!" ),
+            "Can't instanciate source object!",
             this );
         // Unreachable
     }
@@ -1934,7 +1934,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString( "Source content is not a XCommandProcessor!" ),
+            "Source content is not a XCommandProcessor!",
             this );
         // Unreachable
     }
@@ -1972,7 +1972,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps2, 1),
             xEnv,
-            OUString( "Unable to get properties from source object!" ),
+            "Unable to get properties from source object!",
             this );
         // Unreachable
     }
@@ -2060,7 +2060,7 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >( &aProps, 1 ),
             xEnv,
-            OUString( "Can't instanciate target object!" ),
+            "Can't instanciate target object!",
             this );
         // Unreachable
     }
@@ -2079,7 +2079,7 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >( &aProps, 1 ),
             xEnv,
-            OUString( "Target content is not a XCommandProcessor!" ),
+            "Target content is not a XCommandProcessor!",
             this );
         // Unreachable
     }

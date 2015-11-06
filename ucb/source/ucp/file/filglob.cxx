@@ -367,7 +367,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                OUString( "an error occurred during file opening"),
+                "an error occurred during file opening",
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_OPEN_FOR_DIRECTORYLISTING  ||
@@ -420,7 +420,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                OUString( "an error occurred during opening a directory"),
+                "an error occurred during opening a directory",
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NOTCONNECTED_FOR_WRITE          ||
@@ -435,7 +435,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                OUString( "an error occurred writing or reading from a file"),
+                "an error occurred writing or reading from a file",
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_NO_SPACE )
@@ -445,7 +445,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                OUString( "device full"),
+                "device full",
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_WRITE ||
@@ -497,7 +497,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                OUString( "an error occurred during opening a file"),
+                "an error occurred during opening a file",
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
@@ -535,7 +535,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                OUString( "there were problems with the filesize"),
+                "there were problems with the filesize",
                 xComProc);
         }
         else if(errorCode == TASKHANDLING_INPUTSTREAM_FOR_WRITE)
@@ -635,7 +635,7 @@ namespace fileaccess {
                 generateErrorArguments(getParentName(aUncPath)),
                 //TODO! ok to supply physical URL to getParentName()?
                 xEnv,
-                OUString( "a folder could not be created"),
+                "a folder could not be created",
                 xComProc  );
         }
         else if( errorCode == TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE  ||
@@ -686,7 +686,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                OUString( "a file status object could not be filled"),
+                "a file status object could not be filled",
                 xComProc  );
         }
         else if( errorCode == TASKHANDLING_DELETEFILE_FOR_REMOVE  ||
@@ -733,7 +733,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                OUString( "a file or directory could not be deleted"),
+                "a file or directory could not be deleted",
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCE         ||
@@ -783,7 +783,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                OUString( "accessing the root during transfer"),
+                "accessing the root during transfer",
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_INVALIDSCHEME )

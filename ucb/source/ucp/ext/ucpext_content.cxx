@@ -273,7 +273,7 @@ namespace ucb { namespace ucp { namespace ext
             {
                 const OUString sPhysicalContentURL( getPhysicalURL() );
                 ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment, m_xContext );
-                aRet = aRequestedContent.executeCommand( OUString(  "open"  ), makeAny( aOpenCommand ) );
+                aRet = aRequestedContent.executeCommand( "open", makeAny( aOpenCommand ) );
             }
         }
 

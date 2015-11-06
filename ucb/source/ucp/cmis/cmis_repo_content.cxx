@@ -216,7 +216,7 @@ namespace cmis
                                     ucb::IOErrorCode_ABORT,
                                     uno::Sequence< uno::Any >( 0 ),
                                     xEnv,
-                                    OUString( "Authentication cancelled" ) );
+                                    "Authentication cancelled" );
             }
         }
     }

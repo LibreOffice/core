@@ -203,7 +203,7 @@ Reference<XContent> SAL_CALL FTPContentProvider::queryContent(
                     this);
 
         if(!m_pProxyDecider->shouldUseProxy(
-            OUString("ftp"),
+            "ftp",
             aURL.host(),
             aURL.port().toInt32()))
         {

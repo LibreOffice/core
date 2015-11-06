@@ -309,7 +309,7 @@ void OFileAccess::kill( const OUString& FileURL )
     ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     try
     {
-        aCnt.executeCommand( OUString("delete" ), makeAny( true ) );
+        aCnt.executeCommand( "delete", makeAny( true ) );
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
@@ -594,7 +594,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 
     try
     {
-        aCnt.executeCommand( OUString("open" ), aCmdArg );
+        aCnt.executeCommand( "open", aCmdArg );
     }
     catch ( InteractiveIOException const & e )
     {
@@ -612,7 +612,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
             aInsertArg.ReplaceExisting = sal_False;
 
             aCmdArg <<= aInsertArg;
-            aCnt.executeCommand( OUString("insert" ), aCmdArg );
+            aCnt.executeCommand( "insert", aCmdArg );
 
             // Retry...
             return openFileReadWrite( FileURL );

@@ -159,28 +159,28 @@ ContentProvider::queryContent(
     {
         aURL = aURL.replaceAt( 0,
                                WEBDAV_URL_SCHEME_LENGTH,
-                               OUString( HTTP_URL_SCHEME ) );
+                               HTTP_URL_SCHEME );
         bNewId = true;
     }
     else if ( aScheme == WEBDAVS_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                WEBDAVS_URL_SCHEME_LENGTH,
-                               OUString( HTTPS_URL_SCHEME ) );
+                               HTTPS_URL_SCHEME );
         bNewId = true;
     }
     else if ( aScheme == DAV_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAV_URL_SCHEME_LENGTH,
-                               OUString( HTTP_URL_SCHEME ) );
+                               HTTP_URL_SCHEME );
         bNewId = true;
     }
     else if ( aScheme == DAVS_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAVS_URL_SCHEME_LENGTH,
-                               OUString( HTTPS_URL_SCHEME ) );
+                               HTTPS_URL_SCHEME );
         bNewId = true;
     }
 

@@ -1037,7 +1037,7 @@ Content::queryCreatableContentsInfo()
 
     beans::Property aProp;
     m_pProvider->getProperty(
-        OUString(  "Title"  ), aProp );
+        "Title", aProp );
 
     uno::Sequence< beans::Property > aDocProps( 1 );
     aDocProps.getArray()[ 0 ] = aProp;
@@ -1454,7 +1454,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             //xProps.reset(
             //    new ContentProperties( aUnescapedTitle ) );
             xProps->addProperty(
-                OUString(  "Title"  ),
+                "Title",
                 uno::makeAny( aUnescapedTitle ),
                 true );
         }
@@ -1464,16 +1464,16 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xProps.reset( new ContentProperties( aUnescapedTitle, false ) );
             else
                 xProps->addProperty(
-                    OUString(  "Title"  ),
+                    "Title",
                     uno::makeAny( aUnescapedTitle ),
                     true );
 
             xProps->addProperty(
-                OUString(  "IsFolder"  ),
+                "IsFolder",
                 uno::makeAny( false ),
                 true );
             xProps->addProperty(
-                OUString(  "IsDocument"  ),
+                "IsDocument",
                 uno::makeAny( true ),
                 true );
         }
@@ -1495,7 +1495,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             // Add BaseURI property, if requested.
             xProps->addProperty(
-                 OUString(  "BaseURI"  ),
+                 "BaseURI",
                  uno::makeAny( getBaseURI( xResAccess ) ),
                  true );
         }
@@ -1504,10 +1504,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             // Add CreatableContentsInfo property, if requested.
             bool bFolder = false;
             xProps->getValue(
-                OUString(  "IsFolder"  ) )
+                "IsFolder" )
                     >>= bFolder;
             xProps->addProperty(
-                OUString( "CreatableContentsInfo"  ),
+                "CreatableContentsInfo",
                 uno::makeAny( bFolder
                                   ? queryCreatableContentsInfo()
                                   : uno::Sequence< ucb::ContentInfo >() ),
@@ -2524,22 +2524,22 @@ void Content::transfer(
         if ( aScheme == WEBDAV_URL_SCHEME )
         {
             sourceURI.SetScheme(
-                OUString( HTTP_URL_SCHEME ) );
+                HTTP_URL_SCHEME );
         }
         else if ( aScheme == WEBDAVS_URL_SCHEME )
         {
             sourceURI.SetScheme(
-                OUString( HTTPS_URL_SCHEME ) );
+                HTTPS_URL_SCHEME );
         }
         else if ( aScheme == DAV_URL_SCHEME )
         {
             sourceURI.SetScheme(
-                OUString( HTTP_URL_SCHEME ) );
+                HTTP_URL_SCHEME );
         }
         else if ( aScheme == DAVS_URL_SCHEME )
         {
             sourceURI.SetScheme(
-                OUString( HTTPS_URL_SCHEME ) );
+                HTTPS_URL_SCHEME );
         }
         else
         {
@@ -2558,16 +2558,16 @@ void Content::transfer(
         aScheme = targetURI.GetScheme().toAsciiLowerCase();
         if ( aScheme == WEBDAV_URL_SCHEME )
             targetURI.SetScheme(
-                OUString( HTTP_URL_SCHEME ) );
+                HTTP_URL_SCHEME );
         else if ( aScheme == WEBDAVS_URL_SCHEME )
             targetURI.SetScheme(
-                OUString( HTTPS_URL_SCHEME ) );
+                HTTPS_URL_SCHEME );
         else if ( aScheme == DAV_URL_SCHEME )
             targetURI.SetScheme(
-                OUString( HTTP_URL_SCHEME ) );
+                HTTP_URL_SCHEME );
         else if ( aScheme == DAVS_URL_SCHEME )
             targetURI.SetScheme(
-                OUString( HTTPS_URL_SCHEME ) );
+                HTTPS_URL_SCHEME );
 
         // @@@ This implementation of 'transfer' only works
         //     if the source and target are located at same host.
@@ -3403,7 +3403,7 @@ Content::getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess )
     if ( m_xCachedProps.get() )
     {
         OUString aLocation;
-        m_xCachedProps->getValue( OUString( "Content-Location"  ) ) >>= aLocation;
+        m_xCachedProps->getValue( "Content-Location" ) >>= aLocation;
         if ( !aLocation.isEmpty() )
         {
             try

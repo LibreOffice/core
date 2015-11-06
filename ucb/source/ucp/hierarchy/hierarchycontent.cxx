@@ -494,7 +494,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
-                OUString( "Cannot remove persistent data!" ),
+                "Cannot remove persistent data!",
                 this );
             // Unreachable
         }
@@ -1361,7 +1361,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     ucb::IOErrorCode_CANT_WRITE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     xEnv,
-                    OUString( "Cannot store persistent data!" ),
+                    "Cannot store persistent data!",
                     this );
                 // Unreachable
             }
@@ -1509,7 +1509,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString("Cannot store persistent data!"),
+            "Cannot store persistent data!",
             this );
         // Unreachable
     }
@@ -1633,7 +1633,7 @@ void HierarchyContent::transfer(
                 ucb::IOErrorCode_RECURSIVE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                OUString( "Target is equal to or is a child of source!" ),
+                "Target is equal to or is a child of source!",
                 this );
             // Unreachable
         }
@@ -1672,7 +1672,7 @@ void HierarchyContent::transfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString( "Cannot instanciate source object!" ),
+            "Cannot instanciate source object!",
             this );
         // Unreachable
     }
@@ -1705,7 +1705,7 @@ void HierarchyContent::transfer(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            OUString( "XContentCreator::createNewContent failed!" ),
+            "XContentCreator::createNewContent failed!",
             this );
         // Unreachable
     }
@@ -1837,7 +1837,7 @@ void HierarchyContent::transfer(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                OUString( "Cannot remove persistent data of source object!" ),
+                "Cannot remove persistent data of source object!",
                 this );
             // Unreachable
         }

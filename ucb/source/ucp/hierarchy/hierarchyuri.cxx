@@ -100,7 +100,7 @@ void HierarchyUri::init() const
                 m_aUri = m_aUri.replaceAt(
                             HIERARCHY_URL_SCHEME_LENGTH + 2,
                             0,
-                            OUString( "/" DEFAULT_DATA_SOURCE_SERVICE "/"  ) );
+                            "/" DEFAULT_DATA_SOURCE_SERVICE "/" );
                 m_aService = DEFAULT_DATA_SOURCE_SERVICE;
 
                 nPos

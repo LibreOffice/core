@@ -407,7 +407,7 @@ namespace cmis
                         ucb::IOErrorCode_INVALID_DEVICE,
                         generateErrorArguments(m_aURL),
                         xEnv,
-                        OUString("error accessing a repository"));
+                        "error accessing a repository");
                 }
                 else
                 {
