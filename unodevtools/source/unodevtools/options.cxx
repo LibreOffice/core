@@ -88,12 +88,10 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
 bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
-    const OUString dashdash("--");
-    const OUString dash("-");
     OUString aOpt = OUString::createFromAscii(pOpt);
 
-    if((aArg.startsWith(dash) && aOpt.equalsIgnoreAsciiCase(aArg.copy(1))) ||
-       (aArg.startsWith(dashdash) && aOpt.equalsIgnoreAsciiCase(aArg.copy(2))) )
+    if((aArg.startsWith("-") && aOpt.equalsIgnoreAsciiCase(aArg.copy(1))) ||
+       (aArg.startsWith("--") && aOpt.equalsIgnoreAsciiCase(aArg.copy(2))) )
     {
         ++(*pnIndex);
         *pbOpt = sal_True;

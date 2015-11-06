@@ -48,7 +48,6 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (0 == s_type_XCurrentContext)
         {
-            OUString sTypeName("com.sun.star.uno.XCurrentContext");
             typelib_InterfaceTypeDescription * pTD = 0;
             typelib_TypeDescriptionReference * pMembers[1] = { 0 };
             OUString sMethodName0("com.sun.star.uno.XCurrentContext::getValueByName");
@@ -58,7 +57,7 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
                 sMethodName0.pData );
             typelib_typedescription_newInterface(
                 &pTD,
-                sTypeName.pData, 0, 0, 0, 0, 0,
+                OUString("com.sun.star.uno.XCurrentContext").pData, 0, 0, 0, 0, 0,
                 * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ),
                 1,
                 pMembers );
@@ -68,22 +67,18 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
 
             typelib_InterfaceMethodTypeDescription * pMethod = 0;
             typelib_Parameter_Init aParameters[1];
-            OUString sParamName0("Name");
-            OUString sParamType0("string");
-            aParameters[0].pParamName = sParamName0.pData;
+            aParameters[0].pParamName = OUString("Name").pData;
             aParameters[0].eTypeClass = typelib_TypeClass_STRING;
-            aParameters[0].pTypeName = sParamType0.pData;
+            aParameters[0].pTypeName = OUString("string").pData;
             aParameters[0].bIn = sal_True;
             aParameters[0].bOut = sal_False;
             rtl_uString * pExceptions[1];
-            OUString sExceptionName0("com.sun.star.uno.RuntimeException");
-            pExceptions[0] = sExceptionName0.pData;
-            OUString sReturnType0("any");
+            pExceptions[0] = OUString("com.sun.star.uno.RuntimeException").pData;
             typelib_typedescription_newInterfaceMethod(
                 &pMethod,
                 3, sal_False,
                 sMethodName0.pData,
-                typelib_TypeClass_ANY, sReturnType0.pData,
+                typelib_TypeClass_ANY, OUString("any").pData,
                 1, aParameters, 1, pExceptions );
             typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
             typelib_typedescription_release( &pMethod->aBase.aBase );

@@ -31,17 +31,16 @@ using ::rtl::OString;
 */
 inline ::rtl::OUString getDllURL()
 {
-#if ( defined WNT )        // lib in Unix and lib in Windows are not same in file name.
-    ::rtl::OUString libPath( "test_Module_DLL.dll" );
-#else
-    ::rtl::OUString libPath( "libtest_Module_DLL.so" );
-#endif
-
     ::rtl::OUString dirPath, dllPath;
     osl::Module::getUrlFromAddress(
         reinterpret_cast<oslGenericFunction>(&getDllURL), dirPath);
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
-    osl::FileBase::getAbsoluteFileURL( dirPath, libPath, dllPath );
+#if ( defined WNT )        // lib in Unix and lib in Windows are not same in file name.
+    osl::FileBase::getAbsoluteFileURL( dirPath, "test_Module_DLL.dll", dllPath );
+#else
+    osl::FileBase::getAbsoluteFileURL( dirPath, "libtest_Module_DLL.so", dllPath );
+#endif
+
 
     return dllPath;
 }

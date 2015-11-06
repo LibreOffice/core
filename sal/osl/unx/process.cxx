@@ -183,8 +183,7 @@ static void ChildStatusProc(void *pData)
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
                 OSL_TRACE("Failed to change uid and guid, errno=%d (%s)", errno, strerror(errno));
 
-            const rtl::OUString envVar("HOME");
-            osl_clearEnvironment(envVar.pData);
+            osl_clearEnvironment(OUString("HOME").pData);
         }
 
         if (data.m_pszDir)

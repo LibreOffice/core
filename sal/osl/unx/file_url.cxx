@@ -628,10 +628,9 @@ namespace osl { namespace detail {
     bool find_in_PATH(const rtl::OUString& file_path, rtl::OUString& result)
     {
         bool          bfound = false;
-        rtl::OUString path("PATH");
         rtl::OUString env_path;
 
-        if (osl_Process_E_None == osl_getEnvironment(path.pData, &env_path.pData))
+        if (osl_Process_E_None == osl_getEnvironment(OUString("PATH").pData, &env_path.pData))
             bfound = osl::searchPath(file_path, env_path, result);
 
         return bfound;
