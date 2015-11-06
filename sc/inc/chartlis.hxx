@@ -27,8 +27,8 @@
 #include "token.hxx"
 #include "externalrefmgr.hxx"
 
-#include <boost/ptr_container/ptr_map.hpp>
 #include <memory>
+#include <map>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -127,10 +127,10 @@ public:
 class SC_DLLPUBLIC ScChartListenerCollection
 {
 public:
-    typedef boost::ptr_map<OUString, ScChartListener> ListenersType;
+    typedef std::map<OUString, std::unique_ptr<ScChartListener>> ListenersType;
     typedef std::unordered_set<OUString, OUStringHash> StringSetType;
 private:
-    ListenersType maListeners;
+    ListenersType m_Listeners;
     enum UpdateStatus
     {
         SC_CLCUPDATE_NONE,
@@ -164,8 +164,8 @@ public:
 
     void removeByName(const OUString& rName);
 
-    const ListenersType& getListeners() const { return maListeners;}
-    ListenersType& getListeners() { return maListeners;}
+    const ListenersType& getListeners() const { return m_Listeners; }
+    ListenersType& getListeners() { return m_Listeners; }
     StringSetType& getNonOleObjectNames() { return maNonOleObjectNames;}
 
     /**

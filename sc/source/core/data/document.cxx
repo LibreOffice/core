@@ -3900,10 +3900,9 @@ void ScDocument::CalcAfterLoad( bool bStartListening )
     if (pChartListenerCollection)
     {
         const ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->getListeners();
-        ScChartListenerCollection::ListenersType::const_iterator it = rListeners.begin(), itEnd = rListeners.end();
-        for (; it != itEnd; ++it)
+        for (auto const& it : rListeners)
         {
-            const ScChartListener* p = it->second;
+            const ScChartListener *const p = it.second.get();
             InterpretDirtyCells(*p->GetRangeList());
         }
     }

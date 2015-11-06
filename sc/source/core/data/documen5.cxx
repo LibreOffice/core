@@ -487,10 +487,9 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         return;
 
     ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->getListeners();
-    ScChartListenerCollection::ListenersType::iterator it = rListeners.begin(), itEnd = rListeners.end();
-    for (; it != itEnd; ++it)
+    for (auto const& it : rListeners)
     {
-        ScChartListener* pChartListener = it->second;
+        ScChartListener *const pChartListener = it.second.get();
         ScRangeListRef aRLR( pChartListener->GetRangeList() );
         ScRangeListRef aNewRLR( new ScRangeList );
         bool bChanged = false;

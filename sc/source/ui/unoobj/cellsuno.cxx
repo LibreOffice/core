@@ -3341,10 +3341,9 @@ void ScCellRangesBase::ForceChartListener_Impl()
         return;
 
     ScChartListenerCollection::ListenersType& rListeners = pColl->getListeners();
-    ScChartListenerCollection::ListenersType::iterator it = rListeners.begin(), itEnd = rListeners.end();
-    for (; it != itEnd; ++it)
+    for (auto const& it : rListeners)
     {
-        ScChartListener* p = it->second;
+        ScChartListener *const p = it.second.get();
         OSL_ASSERT(p);
         if (p->GetUnoSource() == static_cast<chart::XChartData*>(this) && p->IsDirty())
             p->Update();
