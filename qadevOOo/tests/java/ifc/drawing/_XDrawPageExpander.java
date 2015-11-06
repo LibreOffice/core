@@ -19,6 +19,7 @@
 package ifc.drawing;
 
 import lib.MultiMethodTest;
+import lib.StatusException;
 import lib.Status;
 
 import com.sun.star.drawing.XDrawPage;
@@ -51,8 +52,7 @@ public class _XDrawPageExpander extends MultiMethodTest {
         XDrawPage oDrawPage = (XDrawPage) tEnv.getObjRelation("DrawPage");
         if ( oDrawPage == null ) {
             // SKIPPED.FAILED - the ObjectRelation is not available
-            Status.failed( "ObjectRelation('DrawPages') XDrawPages n.a.");
-            return;
+            throw new StatusException(Status.failed( "ObjectRelation('DrawPages') XDrawPages n.a."));
         }
         log.println("testing expand() ... ");
 

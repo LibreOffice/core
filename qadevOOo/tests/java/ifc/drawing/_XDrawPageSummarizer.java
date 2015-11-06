@@ -19,6 +19,7 @@
 package ifc.drawing;
 
 import lib.MultiMethodTest;
+import lib.StatusException;
 import lib.Status;
 
 import com.sun.star.drawing.XDrawPageSummarizer;
@@ -50,8 +51,7 @@ public class _XDrawPageSummarizer extends MultiMethodTest {
         XDrawPages oDrawPages = (XDrawPages) tEnv.getObjRelation("DrawPages");
         if ( oDrawPages == null ) {
             // SKIPPED.FAILED - the ObjectRelation is not available
-            Status.failed( "ObjectRelation('DrawPages') XDrawPages n.a." );
-            return;
+            throw new StatusException(Status.failed( "ObjectRelation('DrawPages') XDrawPages n.a." ));
         }
         log.println("testing summarize() ... ");
 
