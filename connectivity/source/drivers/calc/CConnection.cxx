@@ -63,7 +63,7 @@ OCalcConnection::~OCalcConnection()
 }
 
 void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
-    throw(SQLException, RuntimeException, DeploymentException)
+    throw(SQLException, RuntimeException, DeploymentException, std::exception)
 {
     //  open file
 

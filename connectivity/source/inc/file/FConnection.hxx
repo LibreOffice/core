@@ -81,7 +81,8 @@ namespace connectivity
             virtual void construct(const OUString& _rUrl, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo )
                 throw( css::sdbc::SQLException,
                        css::uno::RuntimeException,
-                       css::uno::DeploymentException);
+                       css::uno::DeploymentException,
+                       std::exception);
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;

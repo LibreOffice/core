@@ -53,7 +53,8 @@ namespace connectivity
                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo )
                 throw( css::sdbc::SQLException,
                        css::uno::RuntimeException,
-                       css::uno::DeploymentException) override;
+                       css::uno::DeploymentException,
+                       std::exception) override;
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();
