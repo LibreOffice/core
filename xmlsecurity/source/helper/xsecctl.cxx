@@ -734,13 +734,13 @@ void XSecController::exportSignature(
      */
     pAttributeList = new SvXMLAttributeList();
     pAttributeList->AddAttribute(
-        OUString(ATTR_XMLNS),
-        OUString(NS_XMLDSIG));
+        ATTR_XMLNS,
+        NS_XMLDSIG);
 
     if (!signatureInfo.ouSignatureId.isEmpty())
     {
         pAttributeList->AddAttribute(
-            OUString(ATTR_ID),
+            ATTR_ID,
             OUString(signatureInfo.ouSignatureId));
     }
 
@@ -754,16 +754,16 @@ void XSecController::exportSignature(
             /* Write CanonicalizationMethod element */
             pAttributeList = new SvXMLAttributeList();
             pAttributeList->AddAttribute(
-                OUString(ATTR_ALGORITHM),
-                OUString(ALGO_C14N));
+                ATTR_ALGORITHM,
+                ALGO_C14N);
             xDocumentHandler->startElement( tag_CanonicalizationMethod, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
             xDocumentHandler->endElement( tag_CanonicalizationMethod );
 
             /* Write SignatureMethod element */
             pAttributeList = new SvXMLAttributeList();
             pAttributeList->AddAttribute(
-                OUString(ATTR_ALGORITHM),
-                OUString(ALGO_RSASHA1));
+                ATTR_ALGORITHM,
+                ALGO_RSASHA1);
             xDocumentHandler->startElement( tag_SignatureMethod, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
             xDocumentHandler->endElement( tag_SignatureMethod );
 
@@ -782,7 +782,7 @@ void XSecController::exportSignature(
                  */
                 {
                     pAttributeList->AddAttribute(
-                        OUString(ATTR_URI),
+                        ATTR_URI,
                         refInfor.ouURI);
                 }
                 else
@@ -791,7 +791,7 @@ void XSecController::exportSignature(
                  */
                 {
                     pAttributeList->AddAttribute(
-                        OUString(ATTR_URI),
+                        ATTR_URI,
                         CHAR_FRAGMENT+refInfor.ouURI);
                 }
 
@@ -809,8 +809,8 @@ void XSecController::exportSignature(
                         {
                             pAttributeList = new SvXMLAttributeList();
                             pAttributeList->AddAttribute(
-                                OUString(ATTR_ALGORITHM),
-                                OUString(ALGO_C14N));
+                                ATTR_ALGORITHM,
+                                ALGO_C14N);
                             xDocumentHandler->startElement(
                                 tag_Transform,
                                 cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
@@ -822,8 +822,8 @@ void XSecController::exportSignature(
                     /* Write DigestMethod element */
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(
-                        OUString(ATTR_ALGORITHM),
-                        OUString(ALGO_XMLDSIGSHA1));
+                        ATTR_ALGORITHM,
+                        ALGO_XMLDSIGSHA1);
                     xDocumentHandler->startElement(
                         tag_DigestMethod,
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
@@ -906,10 +906,10 @@ void XSecController::exportSignature(
                 /* Write SignatureProperty element */
                 pAttributeList = new SvXMLAttributeList();
                 pAttributeList->AddAttribute(
-                    OUString(ATTR_ID),
+                    ATTR_ID,
                     signatureInfo.ouPropertyId);
                 pAttributeList->AddAttribute(
-                    OUString(ATTR_TARGET),
+                    ATTR_TARGET,
                     CHAR_FRAGMENT+signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
                     tag_SignatureProperty,
@@ -920,7 +920,7 @@ void XSecController::exportSignature(
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(
                         ATTR_XMLNS ":" NSTAG_DC,
-                        OUString(NS_DC));
+                        NS_DC);
 
                     xDocumentHandler->startElement(
                         NSTAG_DC ":" + tag_Date,
