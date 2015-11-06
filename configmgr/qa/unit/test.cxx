@@ -153,8 +153,8 @@ void RecursiveTest::test()
 {
     properties_.set(
         test_.createUpdateAccess(
-            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
-                     ".uno:WebHtml")),
+            "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                     ".uno:WebHtml"),
         css::uno::UNO_QUERY_THROW);
     properties_->addPropertyChangeListener("Label", this);
     step();
@@ -201,9 +201,9 @@ SimpleRecursiveTest::SimpleRecursiveTest(
 void SimpleRecursiveTest::step() const
 {
     test_.setKey(
-        OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
-                 ".uno:WebHtml"),
-        OUString("Label"),
+        "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                 ".uno:WebHtml",
+        "Label",
         css::uno::makeAny(OUString("step")));
 }
 
@@ -230,8 +230,8 @@ void Test::testKeyFetch()
 void Test::testKeySet()
 {
     setKey(
-        OUString("/org.openoffice.System/L10N"),
-        OUString("Locale"),
+        "/org.openoffice.System/L10N",
+        "Locale",
         css::uno::makeAny(OUString("com.sun.star.configuration.backend.LocaleBackend UILocale")));
     OUString s;
     CPPUNIT_ASSERT(
@@ -245,8 +245,8 @@ void Test::testKeySet()
 void Test::testKeyReset()
 {
     if (resetKey(
-            OUString("/org.openoffice.System/L10N"),
-            OUString("Locale")))
+            "/org.openoffice.System/L10N",
+            "Locale"))
     {
         OUString s;
         CPPUNIT_ASSERT(
@@ -271,8 +271,8 @@ void Test::testSetSetMemberName()
 
     css::uno::Reference< css::container::XNameAccess > access(
         createUpdateAccess(
-            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/"
-                     "Commands")),
+            "/org.openoffice.Office.UI.GenericCommands/UserInterface/"
+                     "Commands"),
         css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNamed > member;
     access->getByName(".uno:FontworkGalleryFloater") >>= member;
@@ -330,8 +330,8 @@ void Test::testReadCommands()
 {
     css::uno::Reference< css::container::XNameAccess > access(
         createViewAccess(
-            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/"
-                     "Commands")),
+            "/org.openoffice.Office.UI.GenericCommands/UserInterface/"
+                     "Commands"),
         css::uno::UNO_QUERY_THROW);
     css::uno::Sequence< OUString > names(access->getElementNames());
 
