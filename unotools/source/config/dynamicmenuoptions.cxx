@@ -43,9 +43,9 @@ using namespace ::com::sun::star::beans;
 #define ROOTNODE_MENUS                                  OUString("Office.Common/Menus/")
 #define PATHDELIMITER                                   "/"
 
-#define SETNODE_NEWMENU                                 OUString("New")
-#define SETNODE_WIZARDMENU                              OUString("Wizard")
-#define SETNODE_HELPBOOKMARKS                           OUString("HelpBookmarks")
+#define SETNODE_NEWMENU                                 "New"
+#define SETNODE_WIZARDMENU                              "Wizard"
+#define SETNODE_HELPBOOKMARKS                           "HelpBookmarks"
 
 #define PROPERTYNAME_URL                                DYNAMICMENU_PROPERTYNAME_URL
 #define PROPERTYNAME_TITLE                              DYNAMICMENU_PROPERTYNAME_TITLE
