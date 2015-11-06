@@ -59,7 +59,7 @@ public:
                         ::com::sun::star::lang::XMultiServiceFactory >& xFactory
                 , ::com::sun::star::uno::Reference<
                         ::com::sun::star::drawing::XShapes >& xLogicTargetForSeriesBehindAxis )
-                        throw (::com::sun::star::uno::RuntimeException);
+                        throw (css::uno::RuntimeException, std::exception);
 
     void setParticle( const OUString& rCooSysParticle );
 
