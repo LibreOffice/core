@@ -528,7 +528,7 @@ void PDFIProcessor::startPage( const geometry::RealSize2D& rSize )
     if( m_xStatusIndicator.is() )
     {
         if( nNextPageNr == 1 )
-            startIndicator( OUString( " " ) );
+            startIndicator( " " );
         m_xStatusIndicator->setValue( nNextPageNr );
     }
     m_pCurPage = ElementFactory::createPageElement(m_pDocument.get(), nNextPageNr);
@@ -550,7 +550,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     ElementTreeVisitorSharedPtr optimizingVisitor(
         rVisitorFactory.createOptimizingVisitor(*this));
     // FIXME: localization
-    startIndicator( OUString( " " ) );
+    startIndicator( " " );
     m_pDocument->visitedBy( *optimizingVisitor, std::list<Element*>::const_iterator());
 
 #if OSL_DEBUG_LEVEL > 1

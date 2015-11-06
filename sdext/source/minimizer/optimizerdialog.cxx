@@ -105,7 +105,7 @@ void OptimizerDialog::InitRoadmap()
         Sequence< OUString >   aNames( pNames, nCount );
         Sequence< Any >        aValues( pValues, nCount );
 
-        mxRoadmapControlModel = insertControlModel( OUString( "com.sun.star.awt.UnoControlRoadmapModel"  ),
+        mxRoadmapControlModel = insertControlModel( "com.sun.star.awt.UnoControlRoadmapModel",
                                                               "rdmNavi", aNames, aValues  );
 
         Reference< XPropertySet > xPropertySet( mxRoadmapControlModel, UNO_QUERY_THROW );
@@ -543,7 +543,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                                 aLocation = aLocation.copy( 0, nIndex );
 
                             // adding .mini
-                            aLocation = aLocation.concat( OUString(".mini") );
+                            aLocation = aLocation.concat( ".mini" );
                             aFileOpenDialog.setDefaultName( aLocation );
                         }
                     }

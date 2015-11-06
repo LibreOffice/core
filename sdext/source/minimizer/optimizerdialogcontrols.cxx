@@ -83,7 +83,7 @@ OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rCo
     Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
-    rOptimizerDialog.insertControlModel( OUString( "com.sun.star.awt.UnoControlFixedLineModel"  ),
+    rOptimizerDialog.insertControlModel( "com.sun.star.awt.UnoControlFixedLineModel",
         rControlName, aNames, aValues );
     return rControlName;
 }
@@ -860,7 +860,7 @@ void OptimizerDialog::InitPage4()
         Sequence< OUString >   aNames( pNames, nCount );
         Sequence< Any >             aValues( pValues, nCount );
 
-        Reference< XMultiPropertySet > xMultiPropertySet( insertControlModel( OUString( "com.sun.star.awt.UnoControlProgressBarModel"  ),
+        Reference< XMultiPropertySet > xMultiPropertySet( insertControlModel( "com.sun.star.awt.UnoControlProgressBarModel",
             "Progress", aNames, aValues ), UNO_QUERY );
     }
     Reference< XTextListener > xTextListener;

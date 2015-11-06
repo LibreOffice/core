@@ -508,7 +508,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
                 PresenterConfigurationAccess::READ_ONLY);
             bool bStartAlways (false);
             if (aConfiguration.GetConfigurationNode(
-                OUString("Presenter/StartAlways")) >>= bStartAlways)
+                "Presenter/StartAlways") >>= bStartAlways)
             {
                 if (bStartAlways)
                     return GetPresenterScreenFromScreen(nScreenNumber);
@@ -661,7 +661,7 @@ void PresenterScreen::SetupConfiguration (
         ProcessViewDescriptions(aConfiguration);
         OUString sLayoutName ("DefaultLayout");
         aConfiguration.GetConfigurationNode(
-            OUString("Presenter/CurrentLayout")) >>= sLayoutName;
+            "Presenter/CurrentLayout") >>= sLayoutName;
         ProcessLayout(aConfiguration, sLayoutName, rxContext, rxAnchorId);
     }
     catch (const RuntimeException&)
@@ -686,7 +686,7 @@ void PresenterScreen::ProcessLayout (
         OUString sParentLayout;
         PresenterConfigurationAccess::GetConfigurationNode(
             xLayoutNode,
-            OUString("ParentLayout")) >>= sParentLayout;
+            "ParentLayout") >>= sParentLayout;
         if (!sParentLayout.isEmpty())
         {
             // Prevent infinite recursion.
@@ -698,7 +698,7 @@ void PresenterScreen::ProcessLayout (
         Reference<container::XNameAccess> xList (
             PresenterConfigurationAccess::GetConfigurationNode(
                 xLayoutNode,
-                OUString("Layout")),
+                "Layout"),
             UNO_QUERY_THROW);
 
         ::std::vector<OUString> aProperties (6);

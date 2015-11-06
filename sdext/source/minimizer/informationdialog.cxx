@@ -298,13 +298,13 @@ void InformationDialog::InitDialog()
 
     css::uno::Reference< css::awt::XItemListener > xItemListener;
     InsertImage( *this,
-                 OUString( "aboutimage" ),
-                 OUString( "private:standardimage/query" ),
+                 "aboutimage",
+                 "private:standardimage/query",
                  5, 5, 25, 25, false );
-    InsertFixedText( *this, OUString("fixedtext"), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, true, 0 );
+    InsertFixedText( *this, "fixedtext", aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, true, 0 );
     if ( !maSaveAsURL.isEmpty() )
         InsertCheckBox(  *this, "OpenNewDocument", xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
-    InsertButton( *this, OUString("button"), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
+    InsertButton( *this, "button", mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
 
     bool bOpenNewDocument = mrbOpenNewDocument;
     setControlProperty( "OpenNewDocument", "State", Any( (sal_Int16)bOpenNewDocument ) );
