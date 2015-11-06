@@ -142,7 +142,7 @@ void SAL_CALL CMimeContentType::type()
     {
         if ( isInRange( m_nxtSym, sToken ) )
             m_MediaType += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString("/ ") ) )
+        else if ( isInRange( m_nxtSym, "/ " ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -151,7 +151,7 @@ void SAL_CALL CMimeContentType::type()
 
     // check FOLLOW( type )
     skipSpaces( );
-    acceptSym( OUString("/") );
+    acceptSym( "/" );
 
     subtype( );
 }
@@ -170,7 +170,7 @@ void SAL_CALL CMimeContentType::subtype()
     {
         if ( isInRange( m_nxtSym, sToken ) )
             m_MediaSubtype += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString("; ") ) )
+        else if ( isInRange( m_nxtSym, "; " ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -191,7 +191,7 @@ void SAL_CALL CMimeContentType::trailer()
         {
             getSym( );
             comment( );
-            acceptSym( OUString(")") );
+            acceptSym( ")" );
         }
         else if ( m_nxtSym == ";" )
         {
@@ -205,7 +205,7 @@ void SAL_CALL CMimeContentType::trailer()
             OUString pname = pName( );
 
             skipSpaces();
-            acceptSym( OUString("=") );
+            acceptSym( "=" );
 
             // get the parameter value
             skipSpaces( );
@@ -232,7 +232,7 @@ OUString SAL_CALL CMimeContentType::pName( )
     {
         if ( isInRange( m_nxtSym, sToken ) )
             pname += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString("= ") ) )
+        else if ( isInRange( m_nxtSym, "= " ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -315,7 +315,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
     {
         if ( isInRange( m_nxtSym, sToken ) )
             pvalue += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString("; ") ) )
+        else if ( isInRange( m_nxtSym, "; " ) )
             break;
         else
             throw IllegalArgumentException( );
