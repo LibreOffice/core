@@ -299,17 +299,18 @@ public class LOKitThread extends Thread {
 
         // to handle hyperlinks, enable single tap even in the Viewer
         boolean editing = LOKitShell.isEditingEnabled();
+        float zoomFactor = mViewportMetrics.getZoomFactor();
 
         if (touchType.equals("LongPress") && editing) {
             mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION);
-            mTileProvider.mouseButtonDown(documentCoordinate, 1);
-            mTileProvider.mouseButtonUp(documentCoordinate, 1);
-            mTileProvider.mouseButtonDown(documentCoordinate, 2);
-            mTileProvider.mouseButtonUp(documentCoordinate, 2);
+            mTileProvider.mouseButtonDown(documentCoordinate, 1, zoomFactor);
+            mTileProvider.mouseButtonUp(documentCoordinate, 1, zoomFactor);
+            mTileProvider.mouseButtonDown(documentCoordinate, 2, zoomFactor);
+            mTileProvider.mouseButtonUp(documentCoordinate, 2, zoomFactor);
         } else if (touchType.equals("SingleTap")) {
             mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION);
-            mTileProvider.mouseButtonDown(documentCoordinate, 1);
-            mTileProvider.mouseButtonUp(documentCoordinate, 1);
+            mTileProvider.mouseButtonDown(documentCoordinate, 1, zoomFactor);
+            mTileProvider.mouseButtonUp(documentCoordinate, 1, zoomFactor);
         } else if (touchType.equals("GraphicSelectionStart") && editing) {
             mTileProvider.setGraphicSelectionStart(documentCoordinate);
         } else if (touchType.equals("GraphicSelectionEnd") && editing) {

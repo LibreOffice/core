@@ -358,4 +358,12 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getC
 
     return pEnv->NewStringUTF(pValue);
 }
+
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setClientZoom
+    (JNIEnv* pEnv, jobject aObject, jint nTilePixelWidth, jint nTilePixelHeight, jint nTileTwipWidth, jint nTileTwipHeight)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    pDocument->pClass->setClientZoom(pDocument, nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
+
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

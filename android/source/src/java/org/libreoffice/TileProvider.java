@@ -88,7 +88,7 @@ public interface TileProvider {
      * @param documentCoordinate - coordinate relative to the document where the mouse button should be triggered
      * @param numberOfClicks     - number of clicks (1 - single click, 2 - double click)
      */
-    void mouseButtonDown(PointF documentCoordinate, int numberOfClicks);
+    void mouseButtonDown(PointF documentCoordinate, int numberOfClicks, float zoomFactor);
 
 
     /**
@@ -107,7 +107,7 @@ public interface TileProvider {
      * @param documentCoordinate - coordinate relative to the document where the mouse button should be triggered
      * @param numberOfClicks     - number of clicks (1 - single click, 2 - double click)
      */
-    void mouseButtonUp(PointF documentCoordinate, int numberOfClicks);
+    void mouseButtonUp(PointF documentCoordinate, int numberOfClicks, float zoomFactor);
 
     /**
      * Post a UNO command to LOK.

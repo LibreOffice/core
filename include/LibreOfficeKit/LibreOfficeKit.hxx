@@ -291,6 +291,23 @@ public:
     }
 
     /**
+     * Save the client's view so that we can compute the right zoom level
+     * for the mouse events. This only affects CALC.
+     * @param nTilePixelWidth - tile width in pixels
+     * @param nTilePixelHeight - tile height in pixels
+     * @param nTileTwipWidth - tile width in twips
+     * @param nTileTwipHeight - tile height in twips
+     */
+    inline void setClientZoom(
+            int nTilePixelWidth,
+            int nTilePixelHeight,
+            int nTileTwipWidth,
+            int nTileTwipHeight)
+    {
+        mpDoc->pClass->setClientZoom(mpDoc, nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
+    }
+
+    /**
      * Create a new view for an existing document.
      * By default a loaded document has 1 view.
      * @return the ID of the new view.
