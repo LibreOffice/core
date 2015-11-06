@@ -206,7 +206,7 @@ DlgEditor::DlgEditor (
 
     SdrLayerAdmin& rAdmin = pDlgEdModel->GetLayerAdmin();
     rAdmin.NewLayer( rAdmin.GetControlLayerName() );
-    rAdmin.NewLayer( OUString( "HiddenLayer" ) );
+    rAdmin.NewLayer( "HiddenLayer" );
 
     pDlgEdModel->InsertPage(pDlgEdPage);
 
@@ -227,7 +227,7 @@ DlgEditor::DlgEditor (
     pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
 
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
-    pDlgEdView->SetLayerVisible( OUString( "HiddenLayer" ), false );
+    pDlgEdView->SetLayerVisible( "HiddenLayer", false );
     pDlgEdView->SetMoveSnapOnlyTopLeft(true);
     pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 

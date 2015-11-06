@@ -174,7 +174,7 @@ void Shell::Init()
 
     GetExtraData()->ShellInCriticalSection() = true;
 
-    SetName( OUString( "BasicIDE" ) );
+    SetName( "BasicIDE" );
     SetHelpId( SVX_INTERFACE_BASIDE_VIEWSH );
 
     LibBoxControl::RegisterControl( SID_BASICIDE_LIBSELECTOR );

@@ -1428,7 +1428,7 @@ void LibPage::SetCurLib()
                     ImpInsertLibEntry( aLibName, i );
             }
 
-            SvTreeListEntry* pEntry_ = m_pLibBox->FindEntry( OUString( "Standard" ) );
+            SvTreeListEntry* pEntry_ = m_pLibBox->FindEntry( "Standard" );
             if ( !pEntry_ )
                 pEntry_ = m_pLibBox->GetEntry( 0 );
             m_pLibBox->SetCurEntry( pEntry_ );
