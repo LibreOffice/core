@@ -76,14 +76,14 @@
 #include <unordered_set>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::xforms;
+using namespace css::uno;
+using namespace css::text;
+using namespace css::lang;
+using namespace css::beans;
+using namespace css::container;
+using namespace css::i18n;
+using namespace css::drawing;
+using namespace css::xforms;
 using namespace ::xmloff::token;
 using namespace ::std;
 
@@ -1564,18 +1564,18 @@ const SwDoc* SwXMLImport::getDoc() const
     return const_cast< SwXMLImport* >( this )->getDoc();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisImporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, OUString("com.sun.star.comp.Writer.XMLOasisImporter"),
                 SvXMLImportFlags::ALL));
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, OUString("com.sun.star.comp.Writer.XMLOasisStylesImporter"),
                 SvXMLImportFlags::STYLES | SvXMLImportFlags::MASTERSTYLES | SvXMLImportFlags::AUTOSTYLES |
@@ -1583,27 +1583,27 @@ com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation(::com::sun::s
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, OUString("com.sun.star.comp.Writer.XMLOasisContentImporter"),
                 SvXMLImportFlags::CONTENT | SvXMLImportFlags::SCRIPTS | SvXMLImportFlags::AUTOSTYLES |
                 SvXMLImportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, OUString("com.sun.star.comp.Writer.XMLOasisMetaImporter"),
                 SvXMLImportFlags::META));
 }
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLImport(context, OUString("com.sun.star.comp.Writer.XMLOasisSettingsImporter"),
                 SvXMLImportFlags::SETTINGS));

@@ -59,10 +59,10 @@ class SwXMLTableContext : public XMLTextTableContext
     std::vector<ColumnWidthInfo> aColumnWidths;
     std::vector<OUString> *pColumnDefaultCellStyleNames;
 
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextCursor > xOldCursor;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextContent > xTextContent;
+    css::uno::Reference <
+        css::text::XTextCursor > xOldCursor;
+    css::uno::Reference <
+        css::text::XTextContent > xTextContent;
 
     SwXMLTableRows_Impl * m_pRows;
 
@@ -133,20 +133,20 @@ public:
 
     SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
                    const OUString& rLName,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                const css::uno::Reference<
+                    css::xml::sax::XAttributeList > & xAttrList );
     SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
                    const OUString& rLName,
-                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+                  const css::uno::Reference<
+                    css::xml::sax::XAttributeList > & xAttrList,
                 SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) override;
+                const css::uno::Reference<
+                    css::xml::sax::XAttributeList > & xAttrList ) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 

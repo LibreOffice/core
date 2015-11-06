@@ -484,8 +484,8 @@ public:
                           const bool bLowerBorder = false,
                           const bool bOnlyTextBackground = false ) const;
     void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrm*,
-                          const Color *pColor, const editeng::SvxBorderStyle =
-                ::com::sun::star::table::BorderLineStyle::SOLID ) const;
+                          const Color *pColor,
+                          const editeng::SvxBorderStyle = css::table::BorderLineStyle::SOLID ) const;
 
     drawinglayer::processor2d::BaseProcessor2D * CreateProcessor2D( ) const;
     void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSequence& rSequence ) const;

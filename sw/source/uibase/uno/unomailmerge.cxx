@@ -74,11 +74,11 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::text;
+using namespace css::frame;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::beans;
+using namespace css::text;
 using namespace SWUnoHelper;
 
 typedef ::utl::SharedUNOComponent< XInterface > SharedComponent;
@@ -832,7 +832,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         return makeAny( true );
 }
 
-void SAL_CALL SwXMailMerge::cancel() throw (com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SwXMailMerge::cancel() throw (css::uno::RuntimeException, std::exception)
 {
     // Cancel may be called from a second thread, so this protects from m_pMgr
     /// cleanup in the execute function.

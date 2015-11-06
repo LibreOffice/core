@@ -102,11 +102,9 @@ namespace sw {
 
             virtual ~MarkBase();
 
-            const ::com::sun::star::uno::WeakReference<
-                ::com::sun::star::text::XTextContent> & GetXBookmark() const
+            const css::uno::WeakReference< css::text::XTextContent> & GetXBookmark() const
                     { return m_wXBookmark; }
-            void SetXBookmark(::com::sun::star::uno::Reference<
-                        ::com::sun::star::text::XTextContent> const& xBkmk)
+            void SetXBookmark(css::uno::Reference< css::text::XTextContent> const& xBkmk)
                     { m_wXBookmark = xBkmk; }
 
         protected:
@@ -119,8 +117,7 @@ namespace sw {
             OUString m_aName;
             static OUString GenerateNewName(const OUString& rPrefix);
 
-            ::com::sun::star::uno::WeakReference<
-                ::com::sun::star::text::XTextContent> m_wXBookmark;
+            css::uno::WeakReference< css::text::XTextContent> m_wXBookmark;
         };
 
         class NavigatorReminder
@@ -188,8 +185,7 @@ namespace sw {
             virtual bool IsInClipboard() const override;
             virtual bool IsInUndo() const override;
             virtual bool IsInContent() const override;
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XMetadatable > MakeUnoObject() override;
+            virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
 
         private:
             vcl::KeyCode m_aCode;

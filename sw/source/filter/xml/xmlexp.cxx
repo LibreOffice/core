@@ -69,17 +69,17 @@
 #include <pausethreadstarting.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::xforms;
+using namespace css::frame;
+using namespace css::lang;
+using namespace css::xml::sax;
+using namespace css::uno;
+using namespace css::text;
+using namespace css::container;
+using namespace css::document;
+using namespace css::drawing;
+using namespace css::beans;
+using namespace css::i18n;
+using namespace css::xforms;
 using namespace ::xmloff::token;
 
 SwXMLExport::SwXMLExport(
@@ -542,85 +542,85 @@ const SwDoc* SwXMLExport::getDoc() const
     return const_cast< SwXMLExport* >( this )->getDoc();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLExporter"),
                 SvXMLExportFlags::ALL));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLStylesExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLStylesExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLStylesExporter"),
                 SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES |
                 SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLContentExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLContentExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLContentExporter"),
                 SvXMLExportFlags::SCRIPTS | SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES |
                 SvXMLExportFlags::FONTDECLS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLMetaExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLMetaExporter"),
                 SvXMLExportFlags::META));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLSettingsExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLSettingsExporter"),
                 SvXMLExportFlags::SETTINGS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLOasisExporter"),
                 SvXMLExportFlags::ALL | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLOasisStylesExporter"),
                 SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES |
                 SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLOasisContentExporter"),
                 SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS |
                 SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLOasisMetaExporter"),
                 SvXMLExportFlags::META | SvXMLExportFlags::OASIS));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLOasisSettingsExporter"),
                 SvXMLExportFlags::SETTINGS | SvXMLExportFlags::OASIS));

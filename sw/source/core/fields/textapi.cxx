@@ -43,9 +43,9 @@ static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
         {OUString("TextPortionType"),           WID_PORTIONTYPE,
             ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
         {OUString("TextUserDefinedAttributes"), EE_CHAR_XMLATTRIBS,
-            cppu::UnoType<com::sun::star::container::XNameContainer>::get(), 0, 0},
+            cppu::UnoType<css::container::XNameContainer>::get(), 0, 0},
         {OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS,
-            cppu::UnoType<com::sun::star::container::XNameContainer>::get(), 0, 0},
+            cppu::UnoType<css::container::XNameContainer>::get(), 0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aSvxTextPortionPropertySet( aSvxTextPortionPropertyMap, EditEngine::GetGlobalItemPool() );

@@ -46,8 +46,8 @@
 #include <helpid.h>
 #include <docvw.hrc>
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace css::lang;
+using namespace css::uno;
 using namespace ::com::sun::star;
 using namespace ::sfx2;
 
@@ -339,7 +339,7 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
 
     if( pClipCntnr )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRef( pClipCntnr );
+        css::uno::Reference< css::datatransfer::XTransferable > xRef( pClipCntnr );
         if( pClipCntnr->HasAnyData() )
             pClipCntnr->CopyToClipboard( pWin );
     }

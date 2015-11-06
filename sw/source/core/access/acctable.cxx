@@ -1700,7 +1700,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getBackground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     const SvxBrushItem &rBack = GetFrm()->GetAttrSet()->GetBackground();
     sal_uInt32 crBack = rBack.GetColor().GetColor();

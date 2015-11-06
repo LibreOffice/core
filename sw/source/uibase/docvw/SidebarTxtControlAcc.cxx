@@ -132,21 +132,21 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 
         virtual sal_Int32 SAL_CALL
                 getAccessibleChildCount()
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+                throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                 getAccessibleChild( sal_Int32 i )
-                throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
                 addAccessibleEventListener (
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                    const css::uno::Reference<
+                        css::accessibility::XAccessibleEventListener >& xListener)
+                throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL
                 removeAccessibleEventListener (
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                    const css::uno::Reference<
+                        css::accessibility::XAccessibleEventListener >& xListener)
+                throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
         virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
@@ -182,7 +182,7 @@ void SidebarTextControlAccessibleContext::defunc()
 }
 
 sal_Int32 SAL_CALL SidebarTextControlAccessibleContext::getAccessibleChildCount()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( maMutex );
 

@@ -39,11 +39,11 @@
 #include "xmlexp.hxx"
 #include <SwStyleNameMapper.hxx>
 
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::lang;
+using namespace css::beans;
+using namespace css::uno;
+using namespace css::text;
+using namespace css::drawing;
+using namespace css::lang;
 using namespace ::xmloff::token;
 
 void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFamily )

@@ -140,7 +140,7 @@ using namespace com::sun::star;
 TYPEINIT1( SwModule, SfxModule );
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 
 SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,

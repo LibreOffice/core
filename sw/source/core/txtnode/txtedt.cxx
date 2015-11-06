@@ -1462,7 +1462,7 @@ SwRect SwTextFrm::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActPos
             if ( nBegin < nEnd )
             {
                 const LanguageType aCurrLang = pNode->GetLang( nBegin );
-                const com::sun::star::lang::Locale aCurrLocale = g_pBreakIt->GetLocale( aCurrLang );
+                const css::lang::Locale aCurrLocale = g_pBreakIt->GetLocale( aCurrLang );
                 nBegin = g_pBreakIt->GetBreakIter()->beginOfSentence( rText, nBegin, aCurrLocale );
                 nEnd = g_pBreakIt->GetBreakIter()->endOfSentence(rText, nEnd, aCurrLocale);
                 if (nEnd > rText.getLength() || nEnd < 0)
@@ -1495,11 +1495,11 @@ SwRect SwTextFrm::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActPos
         uno::Reference<text::XTextMarkup> const xTextMarkup =
              new SwXTextMarkup(pNode, aConversionMap);
 
-        com::sun::star::uno::Reference< ::com::sun::star::frame::XController > xController = pNode->GetDoc()->GetDocShell()->GetController();
+        css::uno::Reference< css::frame::XController > xController = pNode->GetDoc()->GetDocShell()->GetController();
 
         SwPosition start(*pNode, nBegin);
         SwPosition end  (*pNode, nEnd);
-        Reference< ::com::sun::star::text::XTextRange > xRange = SwXTextRange::CreateXTextRange(*pNode->GetDoc(), start, &end);
+        Reference< css::text::XTextRange > xRange = SwXTextRange::CreateXTextRange(*pNode->GetDoc(), start, &end);
 
         rSmartTagMgr.RecognizeTextRange(xRange, xTextMarkup, xController);
 
@@ -1512,7 +1512,7 @@ SwRect SwTextFrm::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActPos
         do
         {
             const LanguageType nLang = aIter.GetLanguage();
-            const com::sun::star::lang::Locale aLocale = g_pBreakIt->GetLocale( nLang );
+            const css::lang::Locale aLocale = g_pBreakIt->GetLocale( nLang );
             nLangEnd = std::min<sal_Int32>( nEnd, aIter.GetChgPos() );
 
             const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nLangBegin );

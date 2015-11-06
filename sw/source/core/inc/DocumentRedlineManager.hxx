@@ -105,10 +105,10 @@ public:
         /*[in]*/const SwPaM& rPam,
         /*[in]*/const OUString& rComment) override;
 
-    virtual const ::com::sun::star::uno::Sequence <sal_Int8>& GetRedlinePassword() const override;
+    virtual const css::uno::Sequence <sal_Int8>& GetRedlinePassword() const override;
 
     virtual void SetRedlinePassword(
-        /*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword) override;
+        /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) override;
 
 
     //Non Interface methods;
@@ -134,7 +134,7 @@ private:
     bool mbReadlineChecked;    //< true: if the query was already shown
     sal_uInt16 mnAutoFormatRedlnCommentNo;  /**< SeqNo for conjoining of AutoFormat-Redlines.
                                          by the UI. Managed by SwAutoFormat! */
-    ::com::sun::star::uno::Sequence <sal_Int8 > maRedlinePasswd;
+    css::uno::Sequence <sal_Int8 > maRedlinePasswd;
 };
 
 }

@@ -165,7 +165,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* p
 {
     PushButton* pUserButton = GetUserButton();
     pUserButton->SetClickHdl(LINK(this, SwOutlineTabDialog, FormHdl));
-    pUserButton->SetAccessibleRole( com::sun::star::accessibility::AccessibleRole::BUTTON_MENU );
+    pUserButton->SetAccessibleRole( css::accessibility::AccessibleRole::BUTTON_MENU );
 
     pNumRule = new SwNumRule( *rSh.GetOutlineNumRule() );
     GetCancelButton().SetClickHdl(LINK(this, SwOutlineTabDialog, CancelHdl));

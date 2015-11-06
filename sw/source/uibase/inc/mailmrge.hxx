@@ -98,8 +98,8 @@ class SwMailMergeDlg : public SvxStandardDialog
     SwModuleOptions* pModOpt;
 
     DBManagerOptions nMergeType;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >       m_aSelection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 > m_xFrame;
+    css::uno::Sequence< css::uno::Any >       m_aSelection;
+    css::uno::Reference< css::frame::XFrame2 > m_xFrame;
 
     Size            m_aDialogSize;
     OUString m_sSaveFilter;
@@ -119,8 +119,8 @@ public:
         const OUString& rSourceName,
         const OUString& rTableName,
         sal_Int32 nCommandType,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0);
+        const css::uno::Reference< css::sdbc::XConnection>& xConnection,
+        css::uno::Sequence< css::uno::Any >* pSelection = 0);
     virtual ~SwMailMergeDlg();
     virtual void dispose() override;
 
@@ -132,8 +132,8 @@ public:
     OUString GetPath() const { return m_pPathED->GetText();}
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}
-    inline const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const { return m_aSelection; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
+    inline const css::uno::Sequence< css::uno::Any > GetSelection() const { return m_aSelection; }
+    css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const;
 
 };
 

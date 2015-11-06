@@ -178,7 +178,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, const sa
             if( SfxItemState::SET == rOrigSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
             {
                 SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
-                std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+                std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
                 auto aIterator = rMap.find("CharShadingMarker");
                 if( aIterator != rMap.end() )
                 {

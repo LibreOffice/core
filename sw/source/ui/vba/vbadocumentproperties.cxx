@@ -631,14 +631,14 @@ SwVbaBuiltInDocumentProperty::getServiceNames()
     }
     return aServiceNames;
 }
-typedef ::cppu::WeakImplHelper< com::sun::star::container::XIndexAccess
-        ,com::sun::star::container::XNameAccess
-        ,com::sun::star::container::XEnumerationAccess
+typedef ::cppu::WeakImplHelper< css::container::XIndexAccess
+        ,css::container::XNameAccess
+        ,css::container::XEnumerationAccess
         > PropertiesImpl_BASE;
 
 typedef std::unordered_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
 
-class DocPropEnumeration : public ::cppu::WeakImplHelper< com::sun::star::container::XEnumeration >
+class DocPropEnumeration : public ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
     DocProps mDocProps;
     DocProps::iterator mIt;

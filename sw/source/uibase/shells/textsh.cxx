@@ -876,7 +876,7 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
 
 void SwTextShell::ExecTransliteration( SfxRequest & rReq )
 {
-    using namespace ::com::sun::star::i18n;
+    using namespace css::i18n;
     sal_uInt32 nMode = 0;
 
     switch( rReq.GetSlot() )

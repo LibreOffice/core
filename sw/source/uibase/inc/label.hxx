@@ -73,7 +73,7 @@ public:
     Printer *GetPrt();
     inline void ReplaceGroup( const OUString &rMake );
     void UpdateGroup( const OUString &rMake ) {_ReplaceGroup( rMake );}
-    static void UpdateFieldInformation(::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,
+    static void UpdateFieldInformation(css::uno::Reference< css::frame::XModel>& xModel,
                                                                                 const SwLabItem& rItem);
     const OUString& GetBusinessCardStr() const {return m_sBusinessCardDlg;}
 

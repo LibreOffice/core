@@ -1229,7 +1229,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if( SfxItemState::SET == aCoreSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
                 {
                     SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
-                    std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+                    std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
                     auto aIterator = rMap.find("CharShadingMarker");
                     if( aIterator != rMap.end() )
                     {
@@ -1283,7 +1283,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     if( SfxItemState::SET == aCoreSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
                     {
                         SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
-                        std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+                        std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
                         auto aIterator = rMap.find("CharShadingMarker");
                         if( aIterator != rMap.end() )
                         {

@@ -53,7 +53,7 @@ void SwAsyncRetrieveInputStreamThread::threadFunction()
 {
     osl_setThreadName("SwAsyncRetrieveInputStreamThread");
 
-    com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > xProps( 2 );
+    css::uno::Sequence < css::beans::PropertyValue > xProps( 2 );
     xProps[0].Name = "URL";
     xProps[0].Value <<= mrLinkedURL;
     xProps[1].Name = "Referer";
@@ -62,11 +62,11 @@ void SwAsyncRetrieveInputStreamThread::threadFunction()
 
     aMedium.addInputStream();
 
-    com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream;
+    css::uno::Reference<css::io::XInputStream> xInputStream;
     aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
     if ( !xInputStream.is() )
     {
-        com::sun::star::uno::Reference<com::sun::star::io::XStream> xStream;
+        css::uno::Reference<css::io::XStream> xStream;
         aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= xStream;
         if ( xStream.is() )
         {

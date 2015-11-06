@@ -34,10 +34,10 @@ class SwDBTablePreviewDialog : public SfxModalDialog
     VclPtr<FixedText>      m_pDescriptionFI;
     VclPtr<vcl::Window>    m_pBeamerWIN;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >         m_xFrame;
+    css::uno::Reference< css::frame::XFrame2 >         m_xFrame;
 public:
     SwDBTablePreviewDialog(vcl::Window* pParent,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rValues  );
+            css::uno::Sequence< css::beans::PropertyValue>& rValues  );
     virtual ~SwDBTablePreviewDialog();
     virtual void dispose() override;
 

@@ -61,11 +61,11 @@
 using namespace osl;
 using namespace svt;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::view;
+using namespace css::uno;
+using namespace css::text;
+using namespace css::frame;
+using namespace css::lang;
+using namespace css::view;
 
 #define DEFAULT_LEFT_DISTANCE (MM50*5)  // 2,5 cm
 #define DEFAULT_TOP_DISTANCE  (MM50*11) // 5,5 cm

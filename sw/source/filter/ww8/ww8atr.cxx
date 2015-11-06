@@ -766,7 +766,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                         ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
                     aSet.Put( aLR );
                     OutputItemSet( aSet, bPapFormat, bChpFormat,
-                        com::sun::star::i18n::ScriptType::LATIN, m_bExportModeRTF);
+                        css::i18n::ScriptType::LATIN, m_bExportModeRTF);
                     bCallOutSet = false;
                 }
             }
@@ -5173,7 +5173,7 @@ void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
     // Check shading marker
     {
         const SfxGrabBagItem& aGrabBag = static_cast< const SfxGrabBagItem& >( GetExport().GetItem( RES_CHRATR_GRABBAG ) );
-        const std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+        const std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
         auto aIterator = rMap.find("CharShadingMarker");
         if( aIterator != rMap.end() )
         {

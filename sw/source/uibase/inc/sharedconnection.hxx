@@ -23,7 +23,7 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection >   SharedConnection;
+typedef ::utl::SharedUNOComponent< css::sdbc::XConnection >   SharedConnection;
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_SHAREDCONNECTION_HXX
 

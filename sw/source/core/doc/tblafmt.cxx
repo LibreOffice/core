@@ -289,7 +289,7 @@ SwBoxAutoFormat::SwBoxAutoFormat()
     aBackground( RES_BACKGROUND ),
     aAdjust( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ),
     m_aTextOrientation(FRMDIR_ENVIRONMENT, RES_FRAMEDIR),
-    m_aVerticalAlignment(0, com::sun::star::text::VertOrientation::NONE, com::sun::star::text::RelOrientation::FRAME),
+    m_aVerticalAlignment(0, css::text::VertOrientation::NONE, css::text::RelOrientation::FRAME),
     aHorJustify( SVX_HOR_JUSTIFY_STANDARD, 0),
     aVerJustify( SVX_VER_JUSTIFY_STANDARD, 0),
     aStacked( 0 ),

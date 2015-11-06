@@ -141,14 +141,14 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
 
 // XInterface
 
-com::sun::star::uno::Any SAL_CALL
-    SwAccessibleTextFrame::queryInterface (const com::sun::star::uno::Type & rType)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL
+    SwAccessibleTextFrame::queryInterface (const css::uno::Type & rType)
+    throw (css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aReturn = SwAccessibleContext::queryInterface (rType);
+    css::uno::Any aReturn = SwAccessibleContext::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
-            static_cast< ::com::sun::star::accessibility::XAccessibleSelection* >(this)
+            static_cast< css::accessibility::XAccessibleSelection* >(this)
             );
     return aReturn;
 }
@@ -189,7 +189,7 @@ sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int32 nC
     {
         if( xContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
         {
-            uno::Reference< ::com::sun::star::accessibility::XAccessibleText >
+            uno::Reference< css::accessibility::XAccessibleText >
                 xText(xAcc, uno::UNO_QUERY);
             if( xText.is() )
             {

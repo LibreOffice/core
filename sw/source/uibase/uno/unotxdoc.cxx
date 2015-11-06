@@ -152,13 +152,13 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::document;
+using namespace css::text;
+using namespace css::i18n;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::container;
+using namespace css::document;
 using ::osl::FileBase;
 
 #define SW_CREATE_DASH_TABLE            0x01
@@ -301,12 +301,12 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(Run
     }
 
     if ( !aRet.hasValue()
-        && rType != cppu::UnoType<com::sun::star::document::XDocumentEventBroadcaster>::get()
-        && rType != cppu::UnoType<com::sun::star::frame::XController>::get()
-        && rType != cppu::UnoType<com::sun::star::frame::XFrame>::get()
-        && rType != cppu::UnoType<com::sun::star::script::XInvocation>::get()
-        && rType != cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get()
-        && rType != cppu::UnoType<com::sun::star::awt::XWindow>::get())
+        && rType != cppu::UnoType<css::document::XDocumentEventBroadcaster>::get()
+        && rType != cppu::UnoType<css::frame::XController>::get()
+        && rType != cppu::UnoType<css::frame::XFrame>::get()
+        && rType != cppu::UnoType<css::script::XInvocation>::get()
+        && rType != cppu::UnoType<css::beans::XFastPropertySet>::get()
+        && rType != cppu::UnoType<css::awt::XWindow>::get())
     {
         GetNumberFormatter();
         if(xNumFormatAgg.is())

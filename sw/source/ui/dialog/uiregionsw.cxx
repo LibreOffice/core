@@ -404,7 +404,7 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
             if (aPasswdDlg->Execute())
             {
                 const OUString sNewPasswd( aPasswdDlg->GetPassword() );
-                ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
+                css::uno::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if (SvPasswordHelper::CompareHashPassword(
                         pRepr->GetSectionData().GetPassword(), sNewPasswd))
@@ -579,7 +579,7 @@ IMPL_LINK_TYPED( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox, void 
 
     m_pProtectCB->Enable();
     m_pFileCB->Enable();
-    ::com::sun::star::uno::Sequence <sal_Int8> aCurPasswd;
+    css::uno::Sequence <sal_Int8> aCurPasswd;
     if( 1 < pBox->GetSelectionCount() )
     {
         m_pHideCB->EnableTriState();

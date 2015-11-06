@@ -772,8 +772,8 @@ private:
                            SfxItemSet& rCSS1ItemSet,
                            SvxCSS1PropertyInfo& rCSS1PropInfo,
                            bool bHidden=false );
-                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  InsertControl( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & rFormComp,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rFCompPropSet,
+                        css::uno::Reference< css::drawing::XShape >  InsertControl( const css::uno::Reference< css::form::XFormComponent > & rFormComp,
+                        const css::uno::Reference< css::beans::XPropertySet > & rFCompPropSet,
                         const Size& rSize,
                         sal_Int16 eVertOri,
                         sal_Int16 eHoriOri,
@@ -784,7 +784,7 @@ private:
                         const std::vector<OUString>& rUnoMacroParamTable,
                         bool bSetPropSet = true,
                         bool bHidden = false );
-    void SetControlSize( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rShape, const Size& rTextSz,
+    void SetControlSize( const css::uno::Reference< css::drawing::XShape > & rShape, const Size& rTextSz,
                          bool bMinWidth, bool bMinHeight );
 
 public:
@@ -899,8 +899,8 @@ public:
     // for reading asynchronously from SvStream
     virtual void Continue( int nToken ) override;
 
-    virtual bool ParseMetaOptions( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::document::XDocumentProperties>&,
+    virtual bool ParseMetaOptions( const css::uno::Reference<
+                css::document::XDocumentProperties>&,
             SvKeyValueIterator* ) override;
 };
 

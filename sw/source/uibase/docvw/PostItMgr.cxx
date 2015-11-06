@@ -1978,7 +1978,7 @@ sal_uInt16 SwPostItMgr::Replace(SvxSearchItem* pItem)
     return aResult;
 }
 
-sal_uInt16 SwPostItMgr::FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bSrchForward)
+sal_uInt16 SwPostItMgr::FinishSearchReplace(const css::util::SearchOptions& rSearchOptions, bool bSrchForward)
 {
     SwSidebarWin* pWin = GetActiveSidebarWin();
     SvxSearchItem aItem(SID_SEARCH_ITEM );
@@ -1990,7 +1990,7 @@ sal_uInt16 SwPostItMgr::FinishSearchReplace(const ::com::sun::star::util::Search
     return aResult;
 }
 
-sal_uInt16 SwPostItMgr::SearchReplace(const SwFormatField &pField, const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bSrchForward)
+sal_uInt16 SwPostItMgr::SearchReplace(const SwFormatField &pField, const css::util::SearchOptions& rSearchOptions, bool bSrchForward)
 {
     sal_uInt16 aResult = 0;
     SwSidebarWin* pWin = GetSidebarWin(&pField);
@@ -2158,6 +2158,6 @@ void SwPostItMgr::GetAllSidebarWinForFrm( const SwFrm& rFrm,
 }
 
 void SwNoteProps::ImplCommit() {}
-void SwNoteProps::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwNoteProps::Notify( const css::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

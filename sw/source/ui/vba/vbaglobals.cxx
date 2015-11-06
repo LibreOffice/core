@@ -27,7 +27,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include "vbaapplication.hxx"
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css::uno;
 using namespace ::ooo::vba;
 
 SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )

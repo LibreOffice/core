@@ -58,7 +58,7 @@
 #include <rtl/bootstrap.hxx>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace css::uno;
 using namespace com::sun::star;
 
 SwRead ReadAscii = 0, ReadHTML = 0, ReadXML = 0;
@@ -267,7 +267,7 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
 }
 
 void SwFilterOptions::ImplCommit() {}
-void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwFilterOptions::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void StgReader::SetFltName( const OUString& rFltNm )
 {

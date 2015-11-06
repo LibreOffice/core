@@ -24,7 +24,7 @@
 /** Testing */
 namespace SwThreadJoiner
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager >& GetThreadJoiner();
+    css::uno::Reference< css::util::XJobManager >& GetThreadJoiner();
 
     void ReleaseThreadJoiner();
 }

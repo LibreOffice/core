@@ -65,12 +65,12 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::table;
-using namespace ::com::sun::star::xml::sax;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::text;
+using namespace css::frame;
+using namespace css::table;
+using namespace css::xml::sax;
 using namespace ::xmloff::token;
 
 enum SwXMLTableElemTokens

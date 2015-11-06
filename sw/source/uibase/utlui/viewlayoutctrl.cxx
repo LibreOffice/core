@@ -178,10 +178,10 @@ bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
     // commit state change
     SvxViewLayoutItem aViewLayout( nColumns, bBookMode );
 
-    ::com::sun::star::uno::Any a;
+    css::uno::Any a;
     aViewLayout.QueryValue( a );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name = "ViewLayout";
     aArgs[0].Value = a;
 

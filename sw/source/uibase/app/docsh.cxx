@@ -129,9 +129,9 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::script;
-using namespace ::com::sun::star::container;
+using namespace css::uno;
+using namespace css::script;
+using namespace css::container;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwDocShell, SfxObjectShell)
 
@@ -1217,7 +1217,7 @@ void SwDocShell::UpdateLinks()
 uno::Reference< frame::XController >
                                 SwDocShell::GetController()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > aRet;
+    css::uno::Reference< css::frame::XController > aRet;
     // #i82346# No view in page preview
     if ( GetView() )
         aRet = GetView()->GetController();
@@ -1319,7 +1319,7 @@ bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
     return bRes;
 }
 
-bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
+bool SwDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash )
 {
     bool bRes = false;
 

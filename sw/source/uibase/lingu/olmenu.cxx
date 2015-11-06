@@ -165,8 +165,8 @@ void SwSpellPopup::fillLangPopupMenu(
     }
 
     //6--all languages used in current document
-    uno::Reference< com::sun::star::frame::XModel > xModel;
-    uno::Reference< com::sun::star::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController(), uno::UNO_QUERY );
+    uno::Reference< css::frame::XModel > xModel;
+    uno::Reference< css::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController(), uno::UNO_QUERY );
     if ( xController.is() )
         xModel = xController->getModel();
     uno::Reference< document::XDocumentLanguages > xDocumentLanguages( xModel, uno::UNO_QUERY );
@@ -798,10 +798,10 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     {
         try
         {
-            uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
+            uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                css::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
             xSystemShellExecute->execute( m_sExplanationLink, OUString(),
-                    com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+                    css::system::SystemShellExecuteFlags::URIS_ONLY );
         }
         catch (const uno::Exception&)
         {

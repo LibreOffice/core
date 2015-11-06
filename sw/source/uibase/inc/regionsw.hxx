@@ -166,7 +166,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     OUString        m_sFilterName;
     OUString        m_sFilePasswd;
 
-    ::com::sun::star::uno::Sequence <sal_Int8 > m_aNewPasswd;
+    css::uno::Sequence <sal_Int8 > m_aNewPasswd;
     SwWrtShell*             m_pWrtSh;
     sfx2::DocumentInserter* m_pDocInserter;
     VclPtr<vcl::Window>     m_pOldDefDlgParent;

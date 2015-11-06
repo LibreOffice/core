@@ -38,7 +38,7 @@ class SidebarWinAccessible : public VCLXWindow
                                        const SwSidebarItem& rSidebarItem );
         virtual ~SidebarWinAccessible();
 
-        virtual com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessibleContext >
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                 CreateAccessibleContext() override;
 
         void ChangeSidebarItem( const SwSidebarItem& rSidebarItem );

@@ -44,7 +44,7 @@ class SwFieldDokInfPage : public SwFieldPage
     VclPtr<CheckBox>           m_pFixedCB;
 
     SvTreeListEntry*        pSelEntry;
-    com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > xCustomPropertySet;
+    css::uno::Reference < css::beans::XPropertySet > xCustomPropertySet;
 
     sal_Int32               nOldSel;
     sal_uLong               nOldFormat;

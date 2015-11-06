@@ -77,11 +77,11 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::lang;
+using namespace css::uno;
+using namespace css::text;
+using namespace css::container;
+using namespace css::document;
+using namespace css::lang;
 
 static void lcl_EnsureValidPam( SwPaM& rPam )
 {
@@ -616,7 +616,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(),
-          ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+          css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(

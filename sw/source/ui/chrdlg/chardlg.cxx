@@ -54,9 +54,9 @@
 #include <svx/flagsdef.hxx>
 #include <svx/dialogs.hrc>
 
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace css::ui::dialogs;
+using namespace css::lang;
+using namespace css::uno;
 using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,

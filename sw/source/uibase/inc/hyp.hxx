@@ -29,8 +29,8 @@ class SwView;
 class SwHyphWrapper : public SvxSpellWrapper {
 private:
     SwView* pView;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >  xHyph;
+    css::uno::Reference<
+        css::linguistic2::XHyphenator >  xHyph;
     sal_uInt16          nPageCount;     // page count for progress view
     sal_uInt16          nPageStart;     // 1st checked page
     bool            bInSelection : 1; // separating selected text
@@ -46,8 +46,8 @@ protected:
 
 public:
     SwHyphWrapper( SwView* pVw,
-                   ::com::sun::star::uno::Reference<
-                        ::com::sun::star::linguistic2::XHyphenator >  &rxHyph,
+                   css::uno::Reference<
+                        css::linguistic2::XHyphenator >  &rxHyph,
                    bool bStart, bool bOther, bool bSelect );
     virtual ~SwHyphWrapper();
 };

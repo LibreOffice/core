@@ -36,18 +36,18 @@ class SwRenameXNamedDlg : public ModalDialog
     TextFilter m_aTextFilter;
     VclPtr<OKButton> m_pOk;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > &   xNamed;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >   xSecondAccess;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >   xThirdAccess;
+    css::uno::Reference< css::container::XNamed > &   xNamed;
+    css::uno::Reference< css::container::XNameAccess > & xNameAccess;
+    css::uno::Reference< css::container::XNameAccess >   xSecondAccess;
+    css::uno::Reference< css::container::XNameAccess >   xThirdAccess;
 
     DECL_LINK_TYPED(OkHdl, Button*, void);
     DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 
 public:
     SwRenameXNamedDlg( vcl::Window* pParent,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess );
+                    css::uno::Reference< css::container::XNamed > & xNamed,
+                    css::uno::Reference< css::container::XNameAccess > & xNameAccess );
     virtual ~SwRenameXNamedDlg();
     virtual void dispose() override;
 
@@ -57,8 +57,8 @@ public:
     }
 
     void SetAlternativeAccess(
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xSecond,
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xThird )
+            css::uno::Reference< css::container::XNameAccess > & xSecond,
+            css::uno::Reference< css::container::XNameAccess > & xThird )
     {
         xSecondAccess = xSecond;
         xThirdAccess = xThird;

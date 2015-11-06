@@ -98,13 +98,13 @@
 
 using namespace ::dbtools;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::uno;
+using namespace css::beans;
+using namespace css::container;
+using namespace css::lang;
+using namespace css::sdb;
+using namespace css::sdbc;
+using namespace css::sdbcx;
+using namespace css::uno;
 
 const char cDBFieldStart  = '<';
 const char cDBFieldEnd    = '>';
@@ -1520,7 +1520,7 @@ static OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
     }
 }
 
-void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< OUString >&  ) {}
+void SwInsertDBColAutoPilot::Notify( const css::uno::Sequence< OUString >&  ) {}
 
 void SwInsertDBColAutoPilot::ImplCommit()
 {

@@ -533,7 +533,7 @@ namespace sw
                 }
             }
 
-            using namespace ::com::sun::star::i18n;
+            using namespace css::i18n;
 
             sal_uInt16 nScript = i18n::ScriptType::LATIN;
             if (!rText.isEmpty() && g_pBreakIt && g_pBreakIt->GetBreakIter().is())

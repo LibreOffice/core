@@ -32,7 +32,7 @@
 #include <string.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
+using namespace css::lang;
 
 // #i73788#
 #include <cppuhelper/implementationentry.hxx>
@@ -83,9 +83,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
 
 } // extern "C"
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-SwXMailMerge_get_implementation(::com::sun::star::uno::XComponentContext*,
-                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+SwXMailMerge_get_implementation(css::uno::XComponentContext*,
+                                css::uno::Sequence<css::uno::Any> const &)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
     SolarMutexGuard aGuard;

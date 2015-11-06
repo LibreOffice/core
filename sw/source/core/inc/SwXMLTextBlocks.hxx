@@ -43,15 +43,15 @@ protected:
 
     void ReadInfo();
     void WriteInfo();
-    void InitBlockMode ( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStorage );
+    void InitBlockMode ( const css::uno::Reference < css::embed::XStorage >& rStorage );
     void ResetBlockMode();
 
 public:
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xBlkRoot;
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xRoot;
+    css::uno::Reference < css::embed::XStorage > xBlkRoot;
+    css::uno::Reference < css::embed::XStorage > xRoot;
     short               nCurBlk;
     SwXMLTextBlocks( const OUString& rFile );
-    SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString& rFile );
+    SwXMLTextBlocks( const css::uno::Reference < css::embed::XStorage >&, const OUString& rFile );
     void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyText = false );
     virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false ) override;
     static OUString GeneratePackageName ( const OUString& rShort );

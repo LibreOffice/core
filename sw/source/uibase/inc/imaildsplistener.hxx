@@ -56,13 +56,13 @@ public:
         Called for every mail message that has been
         successfully delivered.
     */
-    virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher, ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> xMailMessage) = 0;
+    virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher, css::uno::Reference< css::mail::XMailMessage> xMailMessage) = 0;
 
     /**
         Called for every mail message whose delivery
         failed.
     */
-    virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher, ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) = 0;
+    virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher, css::uno::Reference< css::mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) = 0;
 };
 
 #endif // INCLUDED_IMAILDISPATCHERLISTENER_HXX

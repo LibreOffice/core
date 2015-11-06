@@ -420,7 +420,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
 
     case FIELD_PROP_LOCALE:
         {
-            com::sun::star::lang::Locale aLocale;
+            css::lang::Locale aLocale;
             if( (bRet = rAny >>= aLocale ))
                 SetLanguage( LanguageTag::convertToLanguageType( aLocale ));
         }

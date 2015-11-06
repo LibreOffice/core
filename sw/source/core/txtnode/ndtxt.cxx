@@ -3592,8 +3592,7 @@ void SwTextNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVa
 
     if (pOldValue && (RES_REMOVE_UNO_OBJECT == pOldValue->Which()))
     {   // invalidate cached uno object
-        SetXParagraph(::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextContent>(0));
+        SetXParagraph(css::uno::Reference<css::text::XTextContent>(0));
     }
 }
 

@@ -33,9 +33,9 @@ class SwView;
 
 class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper
 <
-    ::com::sun::star::frame::XDispatchProviderInterceptor,
-    ::com::sun::star::lang::XEventListener,
-    ::com::sun::star::lang::XUnoTunnel
+    css::frame::XDispatchProviderInterceptor,
+    css::lang::XEventListener,
+    css::lang::XUnoTunnel
 >
 {
     class DispatchMutexLock_Impl
@@ -52,13 +52,13 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper
 //    ::osl::Mutex                     m_aMutex;#102295# solar mutex has to be used currently
 
     // the component which's dispatches we're intercepting
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>   m_xIntercepted;
+    css::uno::Reference< css::frame::XDispatchProviderInterception>   m_xIntercepted;
 
     // chaining
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xSlaveDispatcher;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xMasterDispatcher;
+    css::uno::Reference< css::frame::XDispatchProvider>           m_xSlaveDispatcher;
+    css::uno::Reference< css::frame::XDispatchProvider>           m_xMasterDispatcher;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>                   m_xDispatch;
+    css::uno::Reference< css::frame::XDispatch>                   m_xDispatch;
 
     SwView* m_pView;
 
@@ -67,21 +67,21 @@ public:
     virtual ~SwXDispatchProviderInterceptor();
 
     //XDispatchProvider
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XDispatchProviderInterceptor
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewDispatchProvider ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSupplier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewDispatchProvider ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSupplier ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XUnoTunnel
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
     // view destroyed
     void    Invalidate();
@@ -89,14 +89,14 @@ public:
 
 struct StatusStruct_Impl
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener> xListener;
-    ::com::sun::star::util::URL                                                 aURL;
+    css::uno::Reference< css::frame::XStatusListener> xListener;
+    css::util::URL                                                 aURL;
 };
 typedef std::list< StatusStruct_Impl > StatusListenerList;
 class SwXDispatch : public cppu::WeakImplHelper
 <
-    ::com::sun::star::frame::XDispatch,
-    ::com::sun::star::view::XSelectionChangeListener
+    css::frame::XDispatch,
+    css::view::XSelectionChangeListener
 >
 {
     SwView*             m_pView;
@@ -107,17 +107,17 @@ public:
     SwXDispatch(SwView& rView);
     virtual ~SwXDispatch();
 
-    virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
-        throw (::com::sun::star::uno::RuntimeException,
+    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
+        throw (css::uno::RuntimeException,
                std::exception) override;
-    virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XSelectionChangeListener
-    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
     static const sal_Char* GetDBChangeURL();
 };

@@ -263,7 +263,7 @@ public:
     const SwView &GetView() const { return m_rView; }
           SwView &GetView()       { return m_rView; }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
     static inline long GetDDStartPosX() { return m_nDDStartPosX; }
     static inline long GetDDStartPosY() { return m_nDDStartPosY; }

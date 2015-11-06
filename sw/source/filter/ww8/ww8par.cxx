@@ -579,7 +579,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
     {
         tools::SvRef<SotStorage> xSrc = xSrcStg->OpenSotStorage( sStorageName );
         OSL_ENSURE(rReader.m_pFormImpl, "No Form Implementation!");
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+        css::uno::Reference< css::drawing::XShape > xShape;
         if ( (!(rReader.m_bIsHeader || rReader.m_bIsFooter)) &&
             rReader.m_pFormImpl->ReadOCXStream(xSrc,&xShape,true))
         {
@@ -995,7 +995,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                             fExtraTextRotation /= 100.0;
                             SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
                             const OUString sTextRotateAngle( "TextRotateAngle" );
-                            com::sun::star::beans::PropertyValue aPropVal;
+                            css::beans::PropertyValue aPropVal;
                             aPropVal.Name = sTextRotateAngle;
                             aPropVal.Value <<= fExtraTextRotation;
                             aGeometryItem.SetPropertyValue( aPropVal );
@@ -2755,7 +2755,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCharSetFromLanguage()
     */
     const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFormatAttr(RES_CHRATR_LANGUAGE));
     LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
-    ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
+    css::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
     return msfilter::util::getBestTextEncodingFromLocale(aLocale);
 }
 
@@ -2773,7 +2773,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCJKCharSetFromLanguage()
     */
     const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFormatAttr(RES_CHRATR_CJK_LANGUAGE));
     LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
-    ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
+    css::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
     return msfilter::util::getBestTextEncodingFromLocale(aLocale);
 }
 

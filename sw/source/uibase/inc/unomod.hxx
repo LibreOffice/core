@@ -34,18 +34,18 @@ class SwViewOption;
 class SwPrintData;
 class SwDoc;
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SwXModule_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+css::uno::Reference< css::uno::XInterface >  SAL_CALL SwXModule_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & );
 
 class SwXModule : public cppu::WeakImplHelper
 <
-    ::com::sun::star::view::XViewSettingsSupplier,
-    ::com::sun::star::view::XPrintSettingsSupplier,
-    ::com::sun::star::lang::XServiceInfo
+    css::view::XViewSettingsSupplier,
+    css::view::XPrintSettingsSupplier,
+    css::lang::XServiceInfo
 >
 {
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >     mxViewSettings;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >     mxPrintSettings;
+    css::uno::Reference< css::beans::XPropertySet >     mxViewSettings;
+    css::uno::Reference< css::beans::XPropertySet >     mxPrintSettings;
 
 protected:
     virtual ~SwXModule();
@@ -53,20 +53,20 @@ public:
     SwXModule();
 
     //XViewSettings
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  SAL_CALL getViewSettings()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getViewSettings()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //XPrintSettings
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  SAL_CALL getPrintSettings()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getPrintSettings()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 enum SwXPrintSettingsType
@@ -90,8 +90,8 @@ protected:
                css::lang::IllegalArgumentException,
                css::lang::WrappedTargetException,
                css::uno::RuntimeException) override;
-    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) override;
+    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const css::uno::Any &rValue )
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
     virtual void _postSetValues ()
         throw (css::beans::UnknownPropertyException,
                css::beans::PropertyVetoException,
@@ -106,10 +106,10 @@ protected:
                css::lang::WrappedTargetException,
                css::uno::RuntimeException) override;
 
-    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException ) override;
+    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue )
+        throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException ) override;
     virtual void _postGetValues ()
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) override;
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
 
     virtual ~SwXPrintSettings()
         throw();
@@ -118,11 +118,11 @@ public:
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 class SwXViewSettings : public comphelper::ChainableHelperNoState
@@ -146,7 +146,7 @@ protected:
                css::lang::IllegalArgumentException,
                css::lang::WrappedTargetException,
                css::uno::RuntimeException) override;
-    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
+    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const css::uno::Any &rValue )
         throw (css::beans::UnknownPropertyException,
                css::beans::PropertyVetoException,
                css::lang::IllegalArgumentException,
@@ -166,12 +166,12 @@ protected:
                css::lang::IllegalArgumentException,
                css::lang::WrappedTargetException,
                css::uno::RuntimeException) override;
-    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
+    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue )
         throw (css::beans::UnknownPropertyException,
                css::lang::WrappedTargetException,
                css::uno::RuntimeException) override;
     virtual void _postGetValues ()
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) override;
+        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
 
     virtual ~SwXViewSettings()
         throw();
@@ -179,9 +179,9 @@ public:
     SwXViewSettings(bool bWeb, SwView*  pView);
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
     bool    IsValid() const {return bObjectValid;}
     void    Invalidate() {bObjectValid = false;}

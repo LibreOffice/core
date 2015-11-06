@@ -96,7 +96,7 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
     VclPtr<RadioButton>        m_pDependentRB;
     VclPtr<Edit>               m_pCountryED;
 
-    com::sun::star::uno::Sequence< OUString>    m_aAddressBlocks;
+    css::uno::Sequence< OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
 
     DECL_LINK_TYPED(NewCustomizeHdl_Impl, Button*, void);
@@ -257,7 +257,7 @@ class SwAssignFieldsDialog : public SfxModalDialog
 
     SwMailMergeConfigItem&  m_rConfigItem;
 
-    ::com::sun::star::uno::Sequence< OUString > CreateAssignments();
+    css::uno::Sequence< OUString > CreateAssignments();
     DECL_LINK_TYPED(OkHdl_Impl, Button*, void);
     DECL_LINK_TYPED(AssignmentModifyHdl_Impl, LinkParamNone*, void);
 

@@ -1703,7 +1703,7 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> xSour
         uno::Reference< util::XNumberFormats > xDocNumberFormats = xDocNumFormatsSupplier->getNumberFormats();
         uno::Reference< util::XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, uno::UNO_QUERY);
 
-        com::sun::star::lang::Locale aLocale( LanguageTag( (LanguageType)nLanguage ).getLocale());
+        css::lang::Locale aLocale( LanguageTag( (LanguageType)nLanguage ).getLocale());
 
         //get the number formatter of the data source
         uno::Reference<beans::XPropertySet> xSourceProps(xSource, uno::UNO_QUERY);

@@ -44,8 +44,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <memory>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
+using namespace css::uno;
+using namespace css::lang;
 
 // STATIC DATA
 

@@ -49,10 +49,10 @@
 #include <view.hrc>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::scanner;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::datatransfer::clipboard;
+using namespace css::uno;
+using namespace css::scanner;
+using namespace css::lang;
+using namespace css::datatransfer::clipboard;
 
 SwView_Impl::SwView_Impl(SwView* pShell)
     : mxXTextView()
@@ -278,7 +278,7 @@ void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& /*rEventO
 {
 }
 
-void SAL_CALL SwClipboardChangeListener::changedContents( const ::com::sun::star::datatransfer::clipboard::ClipboardEvent& rEventObject )
+void SAL_CALL SwClipboardChangeListener::changedContents( const css::datatransfer::clipboard::ClipboardEvent& rEventObject )
     throw (RuntimeException, std::exception)
 
 {

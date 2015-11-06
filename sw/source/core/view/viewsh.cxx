@@ -2309,9 +2309,9 @@ bool SwViewShell::IsNewLayout() const
     return GetLayout()->IsNewLayout();
 }
 
-uno::Reference< ::com::sun::star::accessibility::XAccessible > SwViewShell::CreateAccessible()
+uno::Reference< css::accessibility::XAccessible > SwViewShell::CreateAccessible()
 {
-    uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
+    uno::Reference< css::accessibility::XAccessible > xAcc;
 
     // We require a layout and an XModel to be accessible.
     OSL_ENSURE( mpLayout, "no layout, no access" );
@@ -2323,8 +2323,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > SwViewShell::Crea
     return xAcc;
 }
 
-uno::Reference< ::com::sun::star::accessibility::XAccessible >
-SwViewShell::CreateAccessiblePreview()
+uno::Reference< css::accessibility::XAccessible > SwViewShell::CreateAccessiblePreview()
 {
     OSL_ENSURE( IsPreview(),
                 "Can't create accessible preview for non-preview SwViewShell" );

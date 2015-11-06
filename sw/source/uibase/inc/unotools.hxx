@@ -68,10 +68,10 @@ class SwView;
 
 class SW_DLLPUBLIC SwOneExampleFrame
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >         _xControl;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         _xModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    _xController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >     _xCursor;
+    css::uno::Reference< css::awt::XControl >         _xControl;
+    css::uno::Reference< css::frame::XModel >         _xModel;
+    css::uno::Reference< css::frame::XController >    _xController;
+    css::uno::Reference< css::text::XTextCursor >     _xCursor;
 
     VclPtr<SwFrmCtrlWindow> aTopWindow;
     Idle            aLoadedIdle;
@@ -102,9 +102,9 @@ public:
                     const OUString* pURL = 0);
     ~SwOneExampleFrame();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &       GetModel()      {return _xModel;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &  GetController() {return _xController;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > &   GetTextCursor() {return _xCursor;}
+    css::uno::Reference< css::frame::XModel > &       GetModel()      {return _xModel;}
+    css::uno::Reference< css::frame::XController > &  GetController() {return _xController;}
+    css::uno::Reference< css::text::XTextCursor > &   GetTextCursor() {return _xCursor;}
 
     void ClearDocument( bool bStartTimer = false );
 

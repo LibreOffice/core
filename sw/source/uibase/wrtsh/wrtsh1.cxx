@@ -594,8 +594,8 @@ void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& 
     try
     {
         sal_Int32 nState = xObj->getCurrentState();
-        if ( nState == ::com::sun::star::embed::EmbedStates::INPLACE_ACTIVE
-          || nState == ::com::sun::star::embed::EmbedStates::UI_ACTIVE )
+        if ( nState == css::embed::EmbedStates::INPLACE_ACTIVE
+          || nState == css::embed::EmbedStates::UI_ACTIVE )
         {
             SfxInPlaceClient* pCli =
                 GetView().FindIPClient( xObj.GetObject(), &(GetView().GetEditWin()) );

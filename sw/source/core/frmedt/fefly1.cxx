@@ -2053,7 +2053,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
         const SwFormatVertOrient &rVert = pFrameFormat->GetVertOrient();
         SwFormatVertOrient aVert( rVert );
         aVert.SetPos( -nBaseline );
-        aVert.SetVertOrient( com::sun::star::text::VertOrientation::NONE );
+        aVert.SetVertOrient( css::text::VertOrientation::NONE );
 
         pFrameFormat->LockModify();
         pFrameFormat->SetFormatAttr( aVert );

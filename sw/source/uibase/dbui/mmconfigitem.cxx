@@ -50,12 +50,12 @@
 
 using namespace utl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::beans;
+using namespace css::sdb;
+using namespace css::sdbc;
+using namespace css::sdbcx;
 
 const char* cAddressDataAssignments     = "AddressDataAssignments";
 const char* cDBColumnAssignments        = "DBColumnAssignments";
@@ -160,7 +160,7 @@ public:
     SwMailMergeConfigItem_Impl();
     virtual ~SwMailMergeConfigItem_Impl();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     const           Sequence< OUString>
                         GetAddressBlocks(bool bConvertToConfig = false) const;
     void                SetAddressBlocks(
@@ -492,7 +492,7 @@ const Sequence<OUString>& SwMailMergeConfigItem_Impl::GetPropertyNames()
     return aNames;
 }
 
-void SwMailMergeConfigItem_Impl::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void SwMailMergeConfigItem_Impl::Notify( const css::uno::Sequence< OUString >& ) {}
 
 void  SwMailMergeConfigItem_Impl::ImplCommit()
 {

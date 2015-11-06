@@ -73,11 +73,11 @@
 #include "access.hrc"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::ui::dialogs;
+using namespace css::lang;
+using namespace css::uno;
+using namespace css::text;
+using namespace css::ucb;
+using namespace css::ui::dialogs;
 using namespace ::ucbhelper;
 using namespace ::sfx2;
 

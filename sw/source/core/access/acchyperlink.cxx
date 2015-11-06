@@ -212,7 +212,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
                 if( ! xFactory.is() )
                     return sal_False;
-                uno::Reference< com::sun::star::frame::XDesktop > xDesktop( xFactory->createInstance( "com.sun.star.frame.Desktop" ),
+                uno::Reference< css::frame::XDesktop > xDesktop( xFactory->createInstance( "com.sun.star.frame.Desktop" ),
                     uno::UNO_QUERY );
                 if( !xDesktop.is() )
                     return sal_False;
@@ -220,12 +220,12 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
                 xComp = xDesktop->getCurrentComponent();
                 if( !xComp.is() )
                     return sal_False;
-                uno::Reference< com::sun::star::document::XLinkTargetSupplier >  xLTS(xComp, uno::UNO_QUERY);
+                uno::Reference< css::document::XLinkTargetSupplier >  xLTS(xComp, uno::UNO_QUERY);
                 if ( !xLTS.is())
                     return sal_False;
 
-                uno::Reference< ::com::sun::star::container::XNameAccess > xLinks = xLTS->getLinks();
-                uno::Reference< ::com::sun::star::container::XNameAccess > xSubLinks;
+                uno::Reference< css::container::XNameAccess > xLinks = xLTS->getLinks();
+                uno::Reference< css::container::XNameAccess > xSubLinks;
                 const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
                 const sal_uLong nLinks = aNames.getLength();
                 const OUString* pNames = aNames.getConstArray();

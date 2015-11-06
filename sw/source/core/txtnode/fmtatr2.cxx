@@ -714,8 +714,7 @@ bool Meta::IsInContent() const
     return pTextNode == nullptr || pTextNode->IsInContent();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
-Meta::MakeUnoObject()
+css::uno::Reference< css::rdf::XMetadatable > Meta::MakeUnoObject()
 {
     return SwXMeta::CreateXMeta(*this);
 }
