@@ -494,7 +494,7 @@ void ExtendedColorConfig_Impl::SetColorConfigValue(const OUString& _sName, const
 
 bool ExtendedColorConfig_Impl::AddScheme(const OUString& rScheme)
 {
-    if(ConfigItem::AddNode(OUString("ExtendedColorScheme/ColorSchemes"), rScheme))
+    if(ConfigItem::AddNode("ExtendedColorScheme/ColorSchemes", rScheme))
     {
         m_sLoadedScheme = rScheme;
         Commit();
@@ -507,7 +507,7 @@ bool ExtendedColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
     uno::Sequence< OUString > aElements(1);
     aElements.getArray()[0] = rScheme;
-    return ClearNodeElements(OUString("ExtendedColorScheme/ColorSchemes"), aElements);
+    return ClearNodeElements("ExtendedColorScheme/ColorSchemes", aElements);
 }
 
 void ExtendedColorConfig_Impl::SettingsChanged()

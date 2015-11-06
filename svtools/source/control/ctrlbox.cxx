@@ -651,7 +651,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     //this calculation and draw a bitmap of height
     //equal to normal text line and center the
     //line within that
-    long nMinWidth = GetTextWidth(OUString("----------"));
+    long nMinWidth = GetTextWidth("----------");
     Size aSize = CalcSubEditSize();
     aSize.Width() = std::max(nMinWidth, aSize.Width());
     aSize.Width() -= aTxtSize.Width();
@@ -710,7 +710,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
 
 void LineListBox::ImplInit()
 {
-    aTxtSize.Width()  = GetTextWidth( OUString( " " ) );
+    aTxtSize.Width()  = GetTextWidth( " " );
     aTxtSize.Height() = GetTextHeight();
     pLineList   = new ImpLineList();
     eUnit       = FUNIT_POINT;
@@ -871,7 +871,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
                     GetColorLine2( GetEntryCount( ) ),
                     GetColorDist( GetEntryCount( ) ),
                     pData->GetStyle(), aBmp );
-            ListBox::InsertEntry(OUString(" "), Image(aBmp));
+            ListBox::InsertEntry(" ", Image(aBmp));
             if ( n == nTypePos )
                 SelectEntryPos( GetEntryCount() - 1 );
         }

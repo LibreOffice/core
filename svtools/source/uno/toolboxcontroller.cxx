@@ -64,7 +64,7 @@ ToolboxController::ToolboxController(
     ,   m_aListenerContainer( m_aMutex )
 {
     OSL_ASSERT( m_xContext.is() );
-    registerProperty( OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE),
+    registerProperty( TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE,
         TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
         css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, cppu::UnoType<decltype(m_bSupportVisible)>::get());
@@ -86,7 +86,7 @@ ToolboxController::ToolboxController() :
     ,   m_nToolBoxId( SAL_MAX_UINT16 )
     ,   m_aListenerContainer( m_aMutex )
 {
-    registerProperty( OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE),
+    registerProperty( TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE,
         TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
         css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, cppu::UnoType<decltype(m_bSupportVisible)>::get());

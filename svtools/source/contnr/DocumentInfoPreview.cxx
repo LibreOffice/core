@@ -143,7 +143,7 @@ void ODocumentInfoPreview::insertEntry(
     OUString const & title, OUString const & value)
 {
     if (!m_pEditWin->GetText().isEmpty()) {
-        m_pEditWin->InsertText(OUString("\n\n"));
+        m_pEditWin->InsertText("\n\n");
     }
     OUString caption(title + ":\n");
     m_pEditWin->InsertText(caption);

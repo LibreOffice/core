@@ -946,7 +946,7 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
     try
     {
         ::ucbhelper::Content aCnt( rContent, mxCmdEnv, comphelper::getProcessComponentContext() );
-        aCnt.executeCommand( OUString( "delete" ), makeAny( true ) );
+        aCnt.executeCommand( "delete", makeAny( true ) );
     }
     catch( css::ucb::CommandAbortedException const & )
     {

@@ -567,7 +567,7 @@ namespace
 
         //If this is a known but uninstalled symbol font which we can remap to
         //OpenSymbol then toggle its charset to be a symbol font
-        if (ConvertChar::GetRecodeData(rName, OUString("OpenSymbol")))
+        if (ConvertChar::GetRecodeData(rName, "OpenSymbol"))
             aInfo.SetCharSet(RTL_TEXTENCODING_SYMBOL);
 
         return aInfo;

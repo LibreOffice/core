@@ -334,7 +334,7 @@ void ORoadmap::SetRoadmapComplete(bool _bComplete)
         }
     }
     else if (bWasComplete)
-        m_pImpl->InCompleteHyperLabel = InsertHyperLabel(m_pImpl->getItemCount(), OUString("..."), -1, true/*bEnabled*/, true/*bIncomplete*/ );
+        m_pImpl->InCompleteHyperLabel = InsertHyperLabel(m_pImpl->getItemCount(), "...", -1, true/*bEnabled*/, true/*bIncomplete*/ );
 }
 
 void ORoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
@@ -357,7 +357,7 @@ void ORoadmap::UpdatefollowingHyperLabels(ItemIndex _nIndex)
     {
         RoadmapItem* pOldItem = GetPreviousHyperLabel( m_pImpl->getItemCount() );
         m_pImpl->InCompleteHyperLabel->SetPosition( pOldItem );
-        m_pImpl->InCompleteHyperLabel->Update( m_pImpl->getItemCount(), OUString("...") );
+        m_pImpl->InCompleteHyperLabel->Update( m_pImpl->getItemCount(), "..." );
     }
 }
 
@@ -788,7 +788,7 @@ void RoadmapItem::ImplUpdatePosSize()
 {
     // calculate widths
     long nIDWidth = mpID->GetTextWidth( mpID->GetText() );
-    long nMaxIDWidth = mpID->GetTextWidth( OUString( "100." ) );
+    long nMaxIDWidth = mpID->GetTextWidth( "100." );
     nIDWidth = ::std::min( nIDWidth, nMaxIDWidth );
 
     // check how many space the description would need

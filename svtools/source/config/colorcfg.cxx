@@ -247,7 +247,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     }
     // fdo#71511: check if we are running in a11y autodetect
     {
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(comphelper::getProcessComponentContext(),OUString("org.openoffice.Office.Common/Accessibility") );
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(comphelper::getProcessComponentContext(),"org.openoffice.Office.Common/Accessibility" );
         if(aNode.isValid())
         {
             uno::Any aValue = aNode.getNodeValue(OUString("AutoDetectSystemHC"));

@@ -295,7 +295,7 @@ void AssignmentPersistentData::ImplCommit()
     AssignmentPersistentData::AssignmentPersistentData()
         :ConfigItem( OUString( "Office.DataAccess/AddressBook" ))
     {
-        Sequence< OUString > aStoredNames = GetNodeNames(OUString("Fields"));
+        Sequence< OUString > aStoredNames = GetNodeNames("Fields");
         const OUString* pStoredNames = aStoredNames.getConstArray();
         for (sal_Int32 i=0; i<aStoredNames.getLength(); ++i, ++pStoredNames)
             m_aStoredFields.insert(*pStoredNames);
@@ -1182,7 +1182,7 @@ void AssignmentPersistentData::ImplCommit()
         catch(const Exception&) { }
         if (!xAdminDialog.is())
         {
-            ShowServiceNotAvailableError(this, OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot"), true);
+            ShowServiceNotAvailableError(this, "com.sun.star.ui.dialogs.AddressBookSourcePilot", true);
             return;
         }
 
