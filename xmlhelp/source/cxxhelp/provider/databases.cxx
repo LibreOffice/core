@@ -1587,7 +1587,7 @@ OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
     ( Reference< deployment::XPackage > xPackage )
 {
     OUString aExpandedURL =
-        implGetFileFromPackage( OUString( ".key" ), xPackage );
+        implGetFileFromPackage( ".key", xPackage );
 
     return aExpandedURL;
 }
@@ -1658,7 +1658,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
     Reference< XHierarchicalNameAccess > xNA;
 
     OUString zipFile =
-        implGetFileFromPackage( OUString( ".jar" ), xPackage );
+        implGetFileFromPackage( ".jar", xPackage );
 
     try
     {
@@ -1784,7 +1784,7 @@ OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTe
 OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary, Reference< deployment::XPackage > xPackage )
 {
     OUString aIndexFolder =
-        implGetFileFromPackage( OUString( ".idxl" ), xPackage );
+        implGetFileFromPackage( ".idxl", xPackage );
 
     o_rbTemporary = false;
     if( !m_xSFA->isFolder( aIndexFolder ) )
@@ -1848,7 +1848,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
         aIndexer.indexDocuments();
 
                 if( bIsWriteAccess )
-                    aIndexFolder = implGetFileFromPackage( OUString( ".idxl" ), xPackage );
+                    aIndexFolder = implGetFileFromPackage( ".idxl", xPackage );
                 else
                     aIndexFolder = aZipDir + "/help.idxl";
             }

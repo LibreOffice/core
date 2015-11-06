@@ -496,7 +496,7 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
     for(i = tvDom->children.begin(); i!=tvDom->children.end(); ++i)
         if (!((*i)->isLeaf()) &&
             ((*i)->id.getLength() == p->id.getLength()) &&
-            (p->id.replaceAt((*i)->parent->id.getLength(), p->id.getLength()-(*i)->parent->id.getLength(), OUString("")) == (*i)->parent->id))      //prefix check
+            (p->id.replaceAt((*i)->parent->id.getLength(), p->id.getLength()-(*i)->parent->id.getLength(), "") == (*i)->parent->id))      //prefix check
         {
             h = true;
             c_int = (*i)->id.toInt32();
