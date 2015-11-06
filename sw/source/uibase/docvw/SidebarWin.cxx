@@ -262,6 +262,21 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
 
         rRenderContext.Pop();
     }
+
+    const drawinglayer::geometry::ViewInformation2D aViewInformation;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aViewInformation));
+
+    // drawinglayer sets the map mode to pixels, not needed here.
+    rRenderContext.Pop();
+    // Work in document-global twips.
+    rRenderContext.Pop();
+    if (mpAnchor)
+        pProcessor->process(mpAnchor->getOverlayObjectPrimitive2DSequence());
+    if (mpTextRangeOverlay)
+        pProcessor->process(mpTextRangeOverlay->getOverlayObjectPrimitive2DSequence());
+    rRenderContext.Push(PushFlags::NONE);
+    pProcessor.reset();
+    rRenderContext.Push(PushFlags::NONE);
 }
 
 void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags nInFlags)
