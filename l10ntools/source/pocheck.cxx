@@ -453,25 +453,33 @@ static void checkMathSymbolNames(const OString& aLanguage)
 
 int main()
 {
-    OString aLanguages(getenv("ALL_LANGS"));
-    if( aLanguages.isEmpty() )
+    try
     {
-        std::cerr << "Usage: bin/run pocheck\n";
+        OString aLanguages(getenv("ALL_LANGS"));
+        if( aLanguages.isEmpty() )
+        {
+            std::cerr << "Usage: bin/run pocheck\n";
+            return 1;
+        }
+        for(sal_Int32 i = 1;;++i) // skip en-US
+        {
+             OString aLanguage = aLanguages.getToken(i,' ');
+             if( aLanguage.isEmpty() )
+                 break;
+             if( aLanguage == "qtz" )
+                 continue;
+             checkStyleNames(aLanguage);
+             checkFunctionNames(aLanguage);
+             checkVerticalBar(aLanguage);
+             checkMathSymbolNames(aLanguage);
+        }
+        return 0;
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "pocheck: exception " << e.what() << std::endl;
         return 1;
     }
-    for(sal_Int32 i = 1;;++i) // skip en-US
-    {
-         OString aLanguage = aLanguages.getToken(i,' ');
-         if( aLanguage.isEmpty() )
-             break;
-         if( aLanguage == "qtz" )
-             continue;
-         checkStyleNames(aLanguage);
-         checkFunctionNames(aLanguage);
-         checkVerticalBar(aLanguage);
-         checkMathSymbolNames(aLanguage);
-    }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
