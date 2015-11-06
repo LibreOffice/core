@@ -44,7 +44,7 @@ public class _XEventsSupplier extends MultiMethodTest {
 
         XNameReplace xNR = oObj.getEvents();
         xNR.getElementNames();
-        tRes.tested("getEvents()",xNR != null);
+        tRes.tested("getEvents()", true);
     }
 
 }  // finish class _XEventSupplier
