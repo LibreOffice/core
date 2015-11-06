@@ -150,7 +150,7 @@ namespace io_acceptor
                 {
                     OUString aName(
                         aDesc.getParameter(
-                            OUString("name")));
+                            "name"));
 
                     m_pPipe = new PipeAcceptor(aName, sConnectionDescription);
 
@@ -172,18 +172,18 @@ namespace io_acceptor
                 {
                     OUString aHost;
                     if (aDesc.hasParameter(
-                            OUString("host")))
+                            "host"))
                         aHost = aDesc.getParameter(
-                            OUString("host"));
+                            "host");
                     else
                         aHost = "localhost";
                     sal_uInt16 nPort = static_cast< sal_uInt16 >(
                         aDesc.getParameter(
-                            OUString("port")).
+                            "port").
                         toInt32());
                     bool bTcpNoDelay
                         = aDesc.getParameter(
-                            OUString("tcpnodelay")).toInt32() != 0;
+                            "tcpnodelay").toInt32() != 0;
 
                     m_pSocket = new SocketAcceptor(
                         aHost, nPort, bTcpNoDelay, sConnectionDescription);
