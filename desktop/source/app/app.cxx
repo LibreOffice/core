@@ -1274,31 +1274,21 @@ struct ExecuteGlobals
 
 static ExecuteGlobals* pExecGlobals = NULL;
 
-#define PERSIST_MAX 100
-unsigned int persist_cnt;
 
 //This just calls Execute() for all normal uses of LibreOffice, but for
-//ui-testing if AFL_PERSISTENT is set then on exit it will pseudo-restart (up
-//to PERSIST_MAX times)
+//ui-testing if built with afl-clang-fast++ then on exit it will pseudo-restart
+//(up to 100 times)
 void Desktop::DoExecute()
 {
-try_again:
+#if !defined(__AFL_HAVE_MANUAL_CONTROL)
+    Execute();
+#else
+    while (__AFL_LOOP(1000))
     {
         Execute();
-        /* To signal successful completion of a run, we need to deliver
-           SIGSTOP to our own process, then loop to the very beginning
-           once we're resumed by the supervisor process. We do this only
-           if AFL_PERSISTENT is set to retain normal behavior when the
-           program is executed directly; and take note of PERSIST_MAX. */
-        if (getenv("AFL_PERSISTENT") && persist_cnt++ < PERSIST_MAX)
-        {
-            OpenDefault();
-#if defined UNX
-            raise(SIGSTOP);
-#endif
-            goto try_again;
-        }
+        OpenDefault();
     }
+#endif
 }
 
 int Desktop::Main()
