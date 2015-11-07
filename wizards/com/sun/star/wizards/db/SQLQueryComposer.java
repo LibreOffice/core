@@ -83,6 +83,10 @@ public class SQLQueryComposer
 
     public String getSelectClause(boolean _baddAliasFieldNames) throws SQLException
     {
+        // getFromClause() must be called first to populate composedCommandNames,
+        // but it's idempotent, so let's call it now in case the caller didn't already:
+        getFromClause();
+
         String sSelectBaseClause = "SELECT ";
         String sSelectClause = sSelectBaseClause;
         for (int i = 0; i < CurDBMetaData.FieldColumns.length; i++)
