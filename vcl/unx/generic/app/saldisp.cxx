@@ -52,6 +52,7 @@
 #include <vcl/settings.hxx>
 
 #include <unx/salunx.h>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include "unx/i18n_im.hxx"
 #include "unx/i18n_xkb.hxx"
@@ -1865,7 +1866,7 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 
         if( ret != GrabSuccess )
         {
-            DBG_ASSERT( true, "SalDisplay::CaptureMouse could not grab pointer\n");
+            SAL_WARN("vcl", "SalDisplay::CaptureMouse could not grab pointer: " << ret);
             return -1;
         }
     }
@@ -2744,9 +2745,9 @@ SalColor SalColormap::GetColor( Pixel nPixel ) const
     if( !m_aPalette.empty() && nPixel < m_nUsed )
         return m_aPalette[nPixel];
 
-    if( m_hColormap )
+    if( !m_hColormap )
     {
-        DBG_ASSERT( true, "SalColormap::GetColor() !hColormap_\n" );
+        SAL_WARN("vcl", "SalColormap::GetColor() !m_hColormap");
         return nPixel;
     }
 
