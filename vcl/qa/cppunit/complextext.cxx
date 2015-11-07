@@ -22,9 +22,15 @@ public:
 
     /// Play with font measuring etc.
     void testArabic();
+#if defined(WNT)
+    void testTdf95650(); // Windows-only issue
+#endif
 
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
     CPPUNIT_TEST(testArabic);
+#if defined(WNT)
+    CPPUNIT_TEST(testTdf95650);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -76,6 +82,26 @@ void VclComplexTextTest::testArabic()
 #endif
 #endif
 }
+
+#if defined(WNT)
+void VclComplexTextTest::testTdf95650()
+{
+    const sal_Unicode pTxt[] = {
+        0x0131, 0x0302, 0x0504, 0x4E44, 0x3031, 0x3030, 0x3531, 0x2D30,
+        0x3037, 0x0706, 0x0908, 0x0B0A, 0x0D0C, 0x0F0E, 0x072E, 0x100A,
+        0x0D11, 0x1312, 0x0105, 0x020A, 0x0512, 0x1403, 0x030C, 0x1528,
+        0x2931, 0x632E, 0x7074, 0x0D20, 0x0E0A, 0x100A, 0xF00D, 0x0D20,
+        0x030A, 0x0C0B, 0x20E0, 0x0A0D
+    };
+    OUString aTxt(pTxt, SAL_N_ELEMENTS(pTxt) - 1);
+    VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create(static_cast<vcl::Window *>(nullptr));
+    CPPUNIT_ASSERT(pWin);
+
+    OutputDevice *pOutDev = static_cast< OutputDevice * >(pWin.get());
+    // Check that the following executes without failing assertion
+    pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, 0, SalLayoutFlags::BiDiRtl, nullptr);
+}
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclComplexTextTest);
 
