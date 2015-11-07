@@ -31,6 +31,7 @@ class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
     OUString aStyle;
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
                      const OUString &rStyle,

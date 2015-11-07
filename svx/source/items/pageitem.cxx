@@ -33,6 +33,8 @@ using namespace ::com::sun::star;
 
 TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
 
+SfxPoolItem* SvxPageItem::CreateDefault() { return new   SvxPageItem(0);}
+
 SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 
     eNumType    ( SVX_ARABIC ),

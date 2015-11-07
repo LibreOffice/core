@@ -26,7 +26,7 @@
 #include <stringio.hxx>
 
 TYPEINIT1_FACTORY(SvxMacroItem, SfxPoolItem, new SvxMacroItem(0));
-
+SfxPoolItem* SvxMacroItem::CreateDefault() { return new SvxMacroItem(0); }
 
 
 SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLanguage)

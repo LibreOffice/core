@@ -22,6 +22,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1(SfxMacroInfoItem, SfxPoolItem);
+SfxPoolItem* SfxMacroInfoItem::CreateDefault() { DBG_ASSERT(false, "No SfxMacroInfItem factory available"); return 0; }
 
 
 

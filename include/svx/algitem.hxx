@@ -31,6 +31,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxOrientationItem: public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxOrientationItem(
         const SvxCellOrientation eOrientation /*= SVX_ORIENTATION_STANDARD*/,
@@ -75,6 +76,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxMarginItem: public SfxPoolItem
     sal_Int16       nBottomMargin;
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SvxMarginItem( const sal_uInt16 nId  );
     SvxMarginItem( sal_Int16 nLeft, sal_Int16 nTop /*= 0*/,
                    sal_Int16 nRight /*= 0*/, sal_Int16 nBottom /*= 0*/,

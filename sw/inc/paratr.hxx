@@ -60,6 +60,7 @@ class SW_DLLPUBLIC SwFormatDrop: public SfxPoolItem, public SwClient
     bool   bWholeWord;      ///< First word with initials.
 public:
     TYPEINFO_OVERRIDE(); ///< Already in base class SwClient.
+    static SfxPoolItem* CreateDefault();
 
     SwFormatDrop();
     virtual ~SwFormatDrop();
@@ -114,6 +115,7 @@ class SwRegisterItem : public SfxBoolItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     inline SwRegisterItem( const bool bRegister = false );
 
@@ -144,6 +146,7 @@ class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SwNumRuleItem()
         : SfxStringItem( RES_PARATR_NUMRULE, OUString() ) {}

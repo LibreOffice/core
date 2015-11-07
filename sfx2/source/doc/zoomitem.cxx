@@ -29,6 +29,8 @@
 
 TYPEINIT1_FACTORY(SvxZoomItem,SfxUInt16Item, new SvxZoomItem);
 
+SfxPoolItem* SvxZoomItem::CreateDefault() { return new SvxZoomItem; }
+
 #define ZOOM_PARAM_VALUE    "Value"
 #define ZOOM_PARAM_VALUESET "ValueSet"
 #define ZOOM_PARAM_TYPE     "Type"

@@ -592,8 +592,14 @@ void SvMetaType::WriteSfxItem(
     rOutStm.WriteCharPtr( aTypeName.getStr() ).WriteCharPtr( aVarName.getStr() )
            .WriteCharPtr( " = " ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
-    rOutStm.WriteCharPtr( "\tTYPE(" ).WriteCharPtr( rItemName.getStr() ).WriteCharPtr( "), " )
-           .WriteCharPtr( aAttrCount.getStr() );
+
+#if 0
+    createSfxPoolItem<SfxStringItem>, &typeid(SfxStringItem), 0
+    [](){return new SfxVoidItem(0);}, &typeid(SfxVoidItem), 0
+#endif
+    rOutStm.WriteCharPtr( "\tcreateSfxPoolItem<" ).WriteCharPtr( rItemName.getStr() )
+        .WriteCharPtr(">, &typeid(").WriteCharPtr( rItemName.getStr() ).WriteCharPtr( "), " );
+    rOutStm.WriteCharPtr( aAttrCount.getStr() );
     if( nAttrCount )
     {
         rOutStm.WriteCharPtr( ", { " );

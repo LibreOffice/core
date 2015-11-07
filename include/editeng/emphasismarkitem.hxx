@@ -36,6 +36,7 @@ class EDITENG_DLLPUBLIC SvxEmphasisMarkItem : public SfxUInt16Item
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= EMPHASISMARK_NONE*/,
                           const sal_uInt16 nId  );

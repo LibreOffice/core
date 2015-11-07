@@ -106,6 +106,8 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
 // STATIC DATA -----------------------------------------------------------
 TYPEINIT1_AUTOFACTORY(SfxDocumentInfoItem, SfxStringItem);
 
+SfxPoolItem* SfxDocumentInfoItem::CreateDefault() { return new SfxDocumentInfoItem; }
+
 const sal_uInt16 HI_NAME = 1;
 const sal_uInt16 HI_TYPE = 2;
 const sal_uInt16 HI_VALUE = 3;

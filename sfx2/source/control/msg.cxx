@@ -29,7 +29,7 @@ SfxSlotKind SfxSlot::GetKind() const
         return (SfxSlotKind) SFX_KIND_STANDARD;
     if ( nMasterSlotId && fnExec==0 && fnState==0 )
     {
-        if ( pType->Type() == TYPE(SfxBoolItem) )
+        if ( *pType->pType == typeid(SfxBoolItem) )
             return (SfxSlotKind) SFX_KIND_ENUM;
         else
         {

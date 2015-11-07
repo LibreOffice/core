@@ -25,6 +25,10 @@
 TYPEINIT1_AUTOFACTORY(SfxObjectShellItem,SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SfxObjectItem,SfxPoolItem)
 
+SfxPoolItem* SfxObjectShellItem::CreateDefault() { return new SfxObjectShellItem; }
+
+SfxPoolItem* SfxObjectItem::CreateDefault() { return new SfxObjectItem; }
+
 bool SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 {
      return dynamic_cast<const SfxObjectShellItem&>(rItem).pObjSh == pObjSh;

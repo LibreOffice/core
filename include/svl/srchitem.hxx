@@ -93,6 +93,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxSearchItem( const sal_uInt16 nId );
     SvxSearchItem( const SvxSearchItem& rItem );

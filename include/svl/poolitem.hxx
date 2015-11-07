@@ -253,6 +253,7 @@ class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
     SfxVoidItem & operator=( const SfxVoidItem& ) = delete;
 public:
                             TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             explicit SfxVoidItem( sal_uInt16 nWhich );
                             SfxVoidItem( sal_uInt16 nWhich, SvStream & );
                             SfxVoidItem( const SfxVoidItem& );

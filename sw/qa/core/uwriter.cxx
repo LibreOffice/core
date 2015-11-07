@@ -1508,7 +1508,7 @@ void SwDocTest::testClientModify()
         CPPUNIT_ASSERT_EQUAL(aClient2.m_nNotifyCount,1);
     }
     // test typed iteration
-    CPPUNIT_ASSERT(!aClient1.IsA(TYPE(OtherTestClient)));
+    CPPUNIT_ASSERT(typeid(aClient1) != typeid(OtherTestClient));
     {
         SwIterator<OtherTestClient,SwModify> aIter(aMod);
         for(OtherTestClient* pClient = aIter.First(); pClient ; pClient = aIter.Next())

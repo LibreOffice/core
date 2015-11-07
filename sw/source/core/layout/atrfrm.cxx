@@ -94,6 +94,8 @@ TYPEINIT2(SwFormatFooter,  SfxPoolItem, SwClient );
 TYPEINIT2(SwFormatPageDesc,  SfxPoolItem, SwClient );
 TYPEINIT1_AUTOFACTORY(SwFormatLineNumber, SfxPoolItem);
 
+SfxPoolItem* SwFormatLineNumber::CreateDefault() { return new SwFormatLineNumber; }
+
 static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
 {
     sal_Int16 nVal = text::RelOrientation::FRAME;

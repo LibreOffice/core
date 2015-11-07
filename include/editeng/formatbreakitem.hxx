@@ -37,6 +37,7 @@ class EDITENG_DLLPUBLIC SvxFormatBreakItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     inline SvxFormatBreakItem( const SvxBreak eBrk /*= SVX_BREAK_NONE*/,
                             const sal_uInt16 nWhich );

@@ -40,6 +40,7 @@ class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit inline SvxProtectItem( const sal_uInt16 nId  );
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );

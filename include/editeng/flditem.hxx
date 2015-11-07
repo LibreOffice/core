@@ -76,6 +76,7 @@ private:
 
 public:
             TYPEINFO_OVERRIDE();
+            static SfxPoolItem* CreateDefault();
 
             SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId  );
             SvxFieldItem( const SvxFieldItem& rItem );

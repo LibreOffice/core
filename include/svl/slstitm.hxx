@@ -35,6 +35,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SfxStringListItem();
     SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=NULL );

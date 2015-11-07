@@ -36,6 +36,7 @@ private:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit inline SvxPageModelItem( sal_uInt16 nWh  );
     inline SvxPageModelItem( const OUString& rModel, bool bA /*= false*/,

@@ -628,7 +628,7 @@ SvxFieldData* SvxPageTitleField::Clone() const
 
 bool SvxPageTitleField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxPageTitleField) );
+    return ( dynamic_cast< const SvxPageTitleField *>(&rCmp) != nullptr );
 }
 
 void SvxPageTitleField::Load( SvPersistStream & /*rStm*/ )
@@ -661,7 +661,7 @@ SvxFieldData* SvxPageField::Clone() const
 
 bool SvxPageField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxPageField) );
+    return ( dynamic_cast< const SvxPageField *>(&rCmp) != nullptr );
 }
 
 void SvxPageField::Load( SvPersistStream & /*rStm*/ )
@@ -689,7 +689,7 @@ SvxFieldData* SvxPagesField::Clone() const
 
 bool SvxPagesField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxPagesField) );
+    return ( dynamic_cast< const SvxPagesField *>(&rCmp) != nullptr);
 }
 
 void SvxPagesField::Load( SvPersistStream & /*rStm*/ )
@@ -711,7 +711,7 @@ SvxFieldData* SvxTimeField::Clone() const
 
 bool SvxTimeField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxTimeField) );
+    return ( dynamic_cast< const SvxTimeField *>(&rCmp) != nullptr);
 }
 
 void SvxTimeField::Load( SvPersistStream & /*rStm*/ )
@@ -738,7 +738,7 @@ SvxFieldData* SvxFileField::Clone() const
 
 bool SvxFileField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxFileField) );
+    return ( dynamic_cast< const SvxFileField *>(&rCmp) != nullptr );
 }
 
 void SvxFileField::Load( SvPersistStream & /*rStm*/ )
@@ -768,7 +768,7 @@ SvxFieldData* SvxTableField::Clone() const
 
 bool SvxTableField::operator==( const SvxFieldData& rCmp ) const
 {
-    if (rCmp.Type() != TYPE(SvxTableField))
+    if (dynamic_cast< const SvxTableField *>(&rCmp) != nullptr)
         return false;
 
     return mnTab == static_cast<const SvxTableField&>(rCmp).mnTab;
@@ -1214,7 +1214,7 @@ SvxFieldData* SvxHeaderField::Clone() const
 
 bool SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxHeaderField) );
+    return ( dynamic_cast< const SvxHeaderField *>(&rCmp) != nullptr );
 }
 
 void SvxHeaderField::Load( SvPersistStream & /*rStm*/ )
@@ -1237,7 +1237,7 @@ SvxFieldData* SvxFooterField::Clone() const
 
 bool SvxFooterField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxFooterField) );
+    return ( dynamic_cast< const SvxFooterField *>(&rCmp) != nullptr );
 }
 
 void SvxFooterField::Load( SvPersistStream & /*rStm*/ )
@@ -1259,7 +1259,7 @@ SvxFieldData* SvxDateTimeField::Clone() const
 
 bool SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxDateTimeField) );
+    return ( dynamic_cast< const SvxDateTimeField *>(&rCmp) != nullptr );
 }
 
 void SvxDateTimeField::Load( SvPersistStream & /*rStm*/ )

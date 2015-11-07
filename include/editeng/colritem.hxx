@@ -36,6 +36,7 @@ private:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxColorItem(const sal_uInt16 nId);
     SvxColorItem(const Color& aColor, const sal_uInt16 nId);
@@ -75,6 +76,7 @@ class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
 {
     public:
         TYPEINFO_OVERRIDE();
+        static SfxPoolItem* CreateDefault();
 
         SvxBackgroundColorItem(const sal_uInt16 nId);
         SvxBackgroundColorItem(const Color& rCol, const sal_uInt16 nId);

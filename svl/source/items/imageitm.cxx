@@ -23,6 +23,8 @@
 
 TYPEINIT1( SfxImageItem, SfxInt16Item );
 
+SfxPoolItem* SfxImageItem::CreateDefault() { return new SfxImageItem; }
+
 struct SfxImageItem_Impl
 {
     OUString aURL;

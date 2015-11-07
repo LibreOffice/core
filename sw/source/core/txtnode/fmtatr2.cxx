@@ -55,6 +55,8 @@ using namespace ::com::sun::star;
 TYPEINIT1_AUTOFACTORY(SwFormatINetFormat, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SwFormatAutoFormat, SfxPoolItem);
 
+SfxPoolItem* SwFormatINetFormat::CreateDefault() { return new SwFormatINetFormat; }
+
 SwFormatCharFormat::SwFormatCharFormat( SwCharFormat *pFormat )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
     SwClient(pFormat),

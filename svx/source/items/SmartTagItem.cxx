@@ -27,6 +27,8 @@ using namespace ::com::sun::star;
 
 TYPEINIT1(SvxSmartTagItem, SfxPoolItem);
 
+SfxPoolItem* SvxSmartTagItem::CreateDefault() { return 0; }
+
 SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
                                   const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                                   const css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,

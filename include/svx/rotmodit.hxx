@@ -38,6 +38,7 @@ class SVX_DLLPUBLIC SvxRotateModeItem: public SfxEnumItem
 {
 public:
                 TYPEINFO_OVERRIDE();
+                static SfxPoolItem* CreateDefault();
 
                 SvxRotateModeItem( SvxRotateMode eMode=SVX_ROTATE_MODE_STANDARD, sal_uInt16 nWhich=0);
                 SvxRotateModeItem( const SvxRotateModeItem& rItem );

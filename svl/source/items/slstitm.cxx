@@ -27,7 +27,7 @@
 #include <stringio.hxx>
 
 TYPEINIT1_AUTOFACTORY(SfxStringListItem, SfxPoolItem);
-
+SfxPoolItem* SfxStringListItem::CreateDefault() { return new SfxStringListItem; }
 class SfxImpStringList
 {
 public:

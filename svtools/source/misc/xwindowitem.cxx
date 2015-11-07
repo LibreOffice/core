@@ -29,7 +29,6 @@ using namespace ::com::sun::star;
 
 TYPEINIT1_FACTORY( XWindowItem, SfxPoolItem, new XWindowItem );
 
-
 XWindowItem::XWindowItem() :
     SfxPoolItem()
 {

@@ -302,7 +302,7 @@ public:
             return static_cast<TElementType*>(Sync());
         while(GetRightOfPos())
             m_pPosition = GetRightOfPos();
-        if(static_cast<SwClient*>(m_pPosition)->IsA(TYPE(TElementType)))
+        if(dynamic_cast<const TElementType *>(static_cast<SwClient*>(m_pPosition)) != nullptr)
             return static_cast<TElementType*>(Sync());
         return Previous();
     }
@@ -310,14 +310,14 @@ public:
     {
         if(!IsChanged())
             m_pPosition = GetRightOfPos();
-        while(m_pPosition && !static_cast<SwClient*>(m_pPosition)->IsA( TYPE(TElementType) ) )
+        while(m_pPosition && dynamic_cast<const TElementType *>(static_cast<SwClient*>(m_pPosition)) == nullptr)
             m_pPosition = GetRightOfPos();
         return static_cast<TElementType*>(Sync());
     }
     TElementType* Previous()
     {
         m_pPosition = GetLeftOfPos();
-        while(m_pPosition && !static_cast<SwClient*>(m_pPosition)->IsA( TYPE(TElementType) ) )
+        while(m_pPosition && dynamic_cast<const TElementType *>(static_cast<SwClient*>(m_pPosition)) == nullptr)
             m_pPosition = GetLeftOfPos();
         return static_cast<TElementType*>(Sync());
     }

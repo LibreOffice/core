@@ -24,6 +24,7 @@
 #include <vector>
 
 TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
+SfxPoolItem* SfxAllEnumItem::CreateDefault() { return new SfxAllEnumItem; }
 
 
 struct SfxAllEnumValue_Impl

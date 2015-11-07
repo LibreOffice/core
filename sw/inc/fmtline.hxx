@@ -36,6 +36,7 @@ public:
     virtual ~SwFormatLineNumber();
 
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;

@@ -40,6 +40,8 @@ TYPEINIT1(SvxChartKindErrorItem, SfxEnumItem);
 TYPEINIT1(SvxChartRegressItem, SfxEnumItem);
 TYPEINIT1_FACTORY(SvxDoubleItem, SfxPoolItem, new SvxDoubleItem(0.0, 0));
 
+SfxPoolItem* SvxDoubleItem::CreateDefault() { return new  SvxDoubleItem(0.0, 0);}
+
 SvxChartStyleItem::SvxChartStyleItem(SvxChartStyle eStyle, sal_uInt16 nId) :
     SfxEnumItem(nId, (sal_uInt16)eStyle)
 {

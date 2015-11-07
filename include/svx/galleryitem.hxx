@@ -46,6 +46,7 @@ class SVX_DLLPUBLIC SvxGalleryItem : public SfxPoolItem
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxGalleryItem();
     SvxGalleryItem( const SvxGalleryItem& );

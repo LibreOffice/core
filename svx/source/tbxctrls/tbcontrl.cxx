@@ -2804,13 +2804,13 @@ SfxToolBoxControl* SvxColorToolBoxControl::CreateImpl( sal_uInt16 nSlotId, sal_u
 void SvxColorToolBoxControl::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod)
 {
     if ( nSlotId == SID_ATTR_LINE_COLOR )
-        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(XLineColorItem), nSlotId ) );
+        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, typeid(XLineColorItem), nSlotId ) );
     else if ( nSlotId == SID_ATTR_FILL_COLOR )
-        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(XFillColorItem), nSlotId ) );
+        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, typeid(XFillColorItem), nSlotId ) );
     else if ( nSlotId == SID_ATTR_CHAR_BACK_COLOR )
-        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(SvxBackgroundColorItem), nSlotId ) );
+        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, typeid(SvxBackgroundColorItem), nSlotId ) );
     else
-        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(SvxColorItem), nSlotId ) );
+        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, typeid(SvxColorItem), nSlotId ) );
 }
 
 // class SvxFrameToolBoxControl --------------------------------------------

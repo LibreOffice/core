@@ -100,7 +100,7 @@ typedef void* (*TypeId)();
         TYPEINIT_END(sType)
 #define TYPEINIT3(sType, sSuper1, sSuper2, sSuper3) \
             TYPEINIT3_FACTORY(sType, sSuper1, sSuper2, sSuper3, 0)
-
+#ifdef WITH_OLD_RTTI
 #define TYPE(sType) (sType::StaticType())
 #define ISA(sType) IsA(sType::StaticType())
 #define ISOF(sType) IsOf(sType::StaticType())
@@ -127,5 +127,7 @@ typedef void* (*TypeId)();
         ( pObj && (pObj)->Type() == TYPE(T) )
 
 #endif
+
+#endif //WITH_OLD_RTTI
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

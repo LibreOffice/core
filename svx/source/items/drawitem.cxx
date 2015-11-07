@@ -30,6 +30,13 @@ TYPEINIT1_FACTORY( SvxBitmapListItem, SfxPoolItem , new  SvxBitmapListItem );
 TYPEINIT1_FACTORY( SvxDashListItem, SfxPoolItem , new  SvxDashListItem );
 TYPEINIT1_FACTORY( SvxLineEndListItem, SfxPoolItem , new  SvxLineEndListItem );
 
+SfxPoolItem* SvxColorListItem::CreateDefault() { return new  SvxColorListItem ;}
+SfxPoolItem* SvxGradientListItem::CreateDefault() { return new   SvxGradientListItem ;}
+SfxPoolItem* SvxHatchListItem::CreateDefault() { return new   SvxHatchListItem ;}
+SfxPoolItem* SvxBitmapListItem::CreateDefault() { return new   SvxBitmapListItem ;}
+SfxPoolItem* SvxDashListItem::CreateDefault() { return new   SvxDashListItem ;}
+SfxPoolItem* SvxLineEndListItem::CreateDefault() { return new   SvxLineEndListItem ;}
+
 SvxColorListItem::SvxColorListItem()
 {
 }

@@ -36,6 +36,7 @@ class EDITENG_DLLPUBLIC SvxWeightItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxWeightItem(  const FontWeight eWght /*= WEIGHT_NORMAL*/,
                     const sal_uInt16 nId  );

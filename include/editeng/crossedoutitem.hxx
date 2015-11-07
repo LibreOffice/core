@@ -35,6 +35,7 @@ class EDITENG_DLLPUBLIC SvxCrossedOutItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxCrossedOutItem( const FontStrikeout eSt /*= STRIKEOUT_NONE*/,
                        const sal_uInt16 nId  );

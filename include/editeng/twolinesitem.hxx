@@ -31,6 +31,7 @@ class EDITENG_DLLPUBLIC SvxTwoLinesItem : public SfxPoolItem
     bool bOn;
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SvxTwoLinesItem( bool bOn /*= true*/,
                      sal_Unicode nStartBracket /*= 0*/,
                      sal_Unicode nEndBracket /*= 0*/,

@@ -57,7 +57,7 @@ public:
     SwEnvItem(const SwEnvItem& rItem);
 
     TYPEINFO_OVERRIDE();
-
+    static SfxPoolItem* CreateDefault();
     SwEnvItem& operator =(const SwEnvItem& rItem);
 
     virtual bool operator ==(const SfxPoolItem& rItem) const override;

@@ -34,6 +34,7 @@ class EDITENG_DLLPUBLIC SvxParaGridItem : public SfxBoolItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxParaGridItem( const bool bSnapToGrid /*= true*/,
                      const sal_uInt16 nId  );

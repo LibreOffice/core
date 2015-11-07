@@ -201,6 +201,8 @@ void XOBitmap::Array2Bitmap()
 
 TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 
+SfxPoolItem* XFillBitmapItem::CreateDefault() { return new XFillBitmapItem; }
+
 XFillBitmapItem::XFillBitmapItem(const OUString& rName, const GraphicObject& rGraphicObject)
 :   NameOrIndex(XATTR_FILLBITMAP, rName),
     maGraphicObject(rGraphicObject)

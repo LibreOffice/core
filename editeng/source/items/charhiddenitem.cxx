@@ -23,6 +23,8 @@
 
 TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(false, 0));
 
+SfxPoolItem* SvxCharHiddenItem::CreateDefault() { return new  SvxCharHiddenItem(false, 0);}
+
 SvxCharHiddenItem::SvxCharHiddenItem( const bool bHidden, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bHidden )
 {

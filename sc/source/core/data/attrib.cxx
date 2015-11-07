@@ -51,6 +51,9 @@ TYPEINIT1(ScDoubleItem,         SfxPoolItem);
 TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 TYPEINIT1(ScCondFormatItem,    SfxPoolItem);
 
+SfxPoolItem* ScProtectionAttr::CreateDefault() { return new ScProtectionAttr; }
+SfxPoolItem* ScDoubleItem::CreateDefault() { return 0; }
+
 /**
  * General Help Function
  */

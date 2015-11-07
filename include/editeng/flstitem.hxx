@@ -43,6 +43,7 @@ private:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxFontListItem( const FontList* pFontLst,
                      const sal_uInt16 nId  );

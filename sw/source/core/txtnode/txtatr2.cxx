@@ -38,6 +38,7 @@
 TYPEINIT1(SwTextINetFormat,SwClient);
 TYPEINIT1(SwTextRuby,SwClient);
 
+
 SwTextCharFormat::SwTextCharFormat( SwFormatCharFormat& rAttr,
                     sal_Int32 nStt, sal_Int32 nEnde )
     : SwTextAttr( rAttr, nStt )

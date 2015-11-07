@@ -31,6 +31,7 @@ class SVX_DLLPUBLIC SvxViewLayoutItem: public SfxUInt16Item
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxViewLayoutItem( sal_uInt16 nColumns = 0, bool bBookMode = false, sal_uInt16 nWhich = SID_ATTR_VIEWLAYOUT );
     SvxViewLayoutItem( const SvxViewLayoutItem& );

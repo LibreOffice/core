@@ -822,6 +822,8 @@ class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
 
 public:
                             TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             SfxObjectShellItem() :
                                 SfxPoolItem( 0 ),
                                 pObjSh( 0 )

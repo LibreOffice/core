@@ -154,6 +154,23 @@ TYPEINIT1_FACTORY(SvxFormatKeepItem, SfxBoolItem, new SvxFormatKeepItem(false, 0
 TYPEINIT1_FACTORY(SvxLineItem, SfxPoolItem, new SvxLineItem(0));
 TYPEINIT1_FACTORY(SvxFrameDirectionItem, SfxUInt16Item, new SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, 0));
 
+SfxPoolItem* SvxPaperBinItem::CreateDefault() { return new  SvxPaperBinItem(0);}
+SfxPoolItem* SvxSizeItem::CreateDefault() { return new  SvxSizeItem(0);}
+SfxPoolItem* SvxLRSpaceItem::CreateDefault() { return new  SvxLRSpaceItem(0);}
+SfxPoolItem* SvxULSpaceItem::CreateDefault() { return new  SvxULSpaceItem(0);}
+SfxPoolItem* SvxPrintItem::CreateDefault() { return new  SvxPrintItem(0);}
+SfxPoolItem* SvxOpaqueItem::CreateDefault() { return new  SvxOpaqueItem(0);}
+SfxPoolItem* SvxProtectItem::CreateDefault() { return new  SvxProtectItem(0);}
+SfxPoolItem* SvxBrushItem::CreateDefault() { return new  SvxBrushItem(0);}
+SfxPoolItem* SvxShadowItem::CreateDefault() { return new  SvxShadowItem(0);}
+SfxPoolItem* SvxBoxItem::CreateDefault() { return new  SvxBoxItem(0);}
+SfxPoolItem* SvxBoxInfoItem::CreateDefault() { return new  SvxBoxInfoItem(0);}
+SfxPoolItem* SvxFormatBreakItem::CreateDefault() { return new  SvxFormatBreakItem(SVX_BREAK_NONE, 0);}
+SfxPoolItem* SvxFormatKeepItem::CreateDefault() { return new  SvxFormatKeepItem(false, 0);}
+SfxPoolItem* SvxLineItem::CreateDefault() { return new  SvxLineItem(0);}
+SfxPoolItem* SvxFrameDirectionItem::CreateDefault() { return new  SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, 0);}
+
+
 // class SvxPaperBinItem ------------------------------------------------
 
 SfxPoolItem* SvxPaperBinItem::Clone( SfxItemPool* ) const

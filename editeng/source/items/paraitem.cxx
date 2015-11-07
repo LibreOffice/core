@@ -67,6 +67,19 @@ TYPEINIT1_FACTORY(SvxForbiddenRuleItem, SfxBoolItem, new SvxForbiddenRuleItem(fa
 TYPEINIT1_FACTORY(SvxParaVertAlignItem, SfxUInt16Item, new SvxParaVertAlignItem(0, 0));
 TYPEINIT1_FACTORY(SvxParaGridItem, SfxBoolItem, new SvxParaGridItem(true, 0));
 
+SfxPoolItem* SvxLineSpacingItem::CreateDefault() { return new  SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0);}
+SfxPoolItem* SvxAdjustItem::CreateDefault() { return new  SvxAdjustItem(SVX_ADJUST_LEFT, 0);}
+SfxPoolItem* SvxWidowsItem::CreateDefault() { return new  SvxWidowsItem(0, 0);}
+SfxPoolItem* SvxOrphansItem::CreateDefault() { return new  SvxOrphansItem(0, 0);}
+SfxPoolItem* SvxHyphenZoneItem::CreateDefault() { return new  SvxHyphenZoneItem(false, 0);}
+SfxPoolItem* SvxTabStopItem::CreateDefault() { return new  SvxTabStopItem(0);}
+SfxPoolItem* SvxFormatSplitItem::CreateDefault() { return new  SvxFormatSplitItem(false, 0);}
+SfxPoolItem* SvxPageModelItem::CreateDefault() { return new  SvxPageModelItem(0);}
+SfxPoolItem* SvxScriptSpaceItem::CreateDefault() { return new  SvxScriptSpaceItem(false, 0);}
+SfxPoolItem* SvxHangingPunctuationItem::CreateDefault() { return new  SvxHangingPunctuationItem(false, 0);}
+SfxPoolItem* SvxForbiddenRuleItem::CreateDefault() { return new  SvxForbiddenRuleItem(false, 0);}
+SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(0, 0);}
+SfxPoolItem* SvxParaGridItem::CreateDefault() { return new  SvxParaGridItem(true, 0);}
 
 
 SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId )

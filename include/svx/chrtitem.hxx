@@ -284,6 +284,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxDoubleItem : public SfxPoolItem
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SvxDoubleItem(double fValue /*= 0.0*/, sal_uInt16 nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 

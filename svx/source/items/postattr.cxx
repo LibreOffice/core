@@ -28,6 +28,10 @@ TYPEINIT1_FACTORY(SvxPostItAuthorItem, SfxStringItem, new SvxPostItAuthorItem(0)
 TYPEINIT1_FACTORY(SvxPostItDateItem, SfxStringItem, new SvxPostItDateItem(0));
 TYPEINIT1_FACTORY(SvxPostItTextItem, SfxStringItem, new SvxPostItTextItem(0));
 
+SfxPoolItem* SvxPostItAuthorItem::CreateDefault() { return new SvxPostItAuthorItem(0); }
+SfxPoolItem* SvxPostItDateItem::CreateDefault() { return new SvxPostItDateItem(0); }
+SfxPoolItem* SvxPostItTextItem::CreateDefault() { return new SvxPostItTextItem(0); }
+
 SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 _nWhich )
 {
     SetWhich( _nWhich );

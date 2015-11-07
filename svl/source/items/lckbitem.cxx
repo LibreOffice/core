@@ -28,6 +28,8 @@
 
 TYPEINIT1_AUTOFACTORY(SfxLockBytesItem, SfxPoolItem);
 
+SfxPoolItem* SfxLockBytesItem::CreateDefault() { return new SfxLockBytesItem; }
+
 
 
 SfxLockBytesItem::SfxLockBytesItem()

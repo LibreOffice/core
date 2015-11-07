@@ -36,6 +36,7 @@ class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SfxMacroInfoItem( sal_uInt16 nWhich,
                     const BasicManager* pMgr,
                     const OUString &rLibName,

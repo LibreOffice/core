@@ -27,7 +27,6 @@ using namespace ::com::sun::star;
 TYPEINIT1_FACTORY(SvxB3DVectorItem, SfxPoolItem, new SvxB3DVectorItem);
 
 
-
 SvxB3DVectorItem::SvxB3DVectorItem()
 {
 }

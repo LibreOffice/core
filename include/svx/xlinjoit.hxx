@@ -33,6 +33,7 @@ class SVX_DLLPUBLIC XLineJointItem : public SfxEnumItem
 {
 public:
                             TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             XLineJointItem( css::drawing::LineJoint eLineJoint = css::drawing::LineJoint_ROUND );
                             XLineJointItem( SvStream& rIn );
 

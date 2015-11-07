@@ -68,6 +68,7 @@ class SVL_DLLPUBLIC SfxBoolItem
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SfxBoolItem(sal_uInt16 const nWhich = 0, bool const bValue = false)
         : SfxPoolItem(nWhich)

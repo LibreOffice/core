@@ -26,6 +26,7 @@
 
 TYPEINIT1_AUTOFACTORY(SfxScriptOrganizerItem, SfxStringItem);
 
+SfxPoolItem* SfxScriptOrganizerItem::CreateDefault() { return new SfxScriptOrganizerItem; }
 
 
 SfxScriptOrganizerItem::SfxScriptOrganizerItem() :

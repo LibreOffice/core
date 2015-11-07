@@ -488,7 +488,7 @@ static sal_uInt16 lcl_DocShellNr( ScDocument* pDoc )
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();
     while ( pShell )
     {
-        if ( pShell->Type() == TYPE(ScDocShell) )
+        if ( dynamic_cast<const ScDocShell *>(pShell) != nullptr )
         {
             if ( &static_cast<ScDocShell*>(pShell)->GetDocument() == pDoc )
                 return nShellCnt;

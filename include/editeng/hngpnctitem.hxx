@@ -33,6 +33,7 @@ class EDITENG_DLLPUBLIC SvxHangingPunctuationItem : public SfxBoolItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxHangingPunctuationItem( bool bOn /*= false*/, const sal_uInt16 nId  );
 

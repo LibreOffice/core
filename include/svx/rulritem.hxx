@@ -47,6 +47,7 @@ private:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId);
     SvxLongLRSpaceItem(const SvxLongLRSpaceItem &);
     SvxLongLRSpaceItem();
@@ -80,6 +81,7 @@ private:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SvxLongULSpaceItem(long lUpper, long lLower, sal_uInt16 nId);
     SvxLongULSpaceItem(const SvxLongULSpaceItem &);
     SvxLongULSpaceItem();
@@ -111,6 +113,7 @@ private:
     const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &) = delete;
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SvxPagePosSizeItem(const Point &rPos, long lWidth, long lHeight);
     SvxPagePosSizeItem(const SvxPagePosSizeItem &);
     SvxPagePosSizeItem();
@@ -180,6 +183,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     // right edge of the surrounding frame
     // nLeft, nRight each the distance to the surrounding frame
     SvxColumnItem(sal_uInt16 nAct = 0);
@@ -238,6 +242,7 @@ private:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SvxObjectItem(long nStartX, long nEndX,
                   long nStartY, long nEndY,
                   bool bLimits = false);

@@ -34,6 +34,9 @@
 TYPEINIT1_FACTORY( SvxHorJustifyItem, SfxEnumItem, new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, 0) );
 TYPEINIT1_FACTORY( SvxVerJustifyItem, SfxEnumItem, new SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, 0) );
 
+SfxPoolItem* SvxHorJustifyItem::CreateDefault() { return new  SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, 0) ;}
+SfxPoolItem* SvxVerJustifyItem::CreateDefault() { return new  SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, 0) ;}
+
 using namespace ::com::sun::star;
 
 

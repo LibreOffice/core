@@ -40,6 +40,7 @@ class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxFontItem(const sal_uInt16 nId);
     SvxFontItem(const FontFamily eFam, const OUString& rFamilyName,

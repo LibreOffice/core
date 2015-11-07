@@ -36,6 +36,8 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
+
                             SfxAllEnumItem();
     explicit                SfxAllEnumItem( sal_uInt16 nWhich);
                             SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal );

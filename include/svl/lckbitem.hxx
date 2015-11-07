@@ -30,6 +30,7 @@ class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
 
 public:
                             TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             SfxLockBytesItem();
                             SfxLockBytesItem( sal_uInt16 nWhich, SvStream & );
                             SfxLockBytesItem( const SfxLockBytesItem& );

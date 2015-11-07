@@ -36,6 +36,7 @@ class EDITENG_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxOpaqueItem( const sal_uInt16 nId , const bool bOpa = true );
     inline SvxOpaqueItem &operator=( const SvxOpaqueItem &rCpy );

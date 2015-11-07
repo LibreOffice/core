@@ -65,6 +65,7 @@ class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
 {
 public:
                             TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
 
     explicit                MediaItem( sal_uInt16 i_nWhich = 0,
                                        AVMediaSetMask nMaskSet = AVMediaSetMask::NONE );

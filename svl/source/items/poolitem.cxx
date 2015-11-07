@@ -200,6 +200,10 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
+SfxPoolItem* SfxVoidItem::CreateDefault()
+{
+    return new SfxVoidItem(0);
+}
 
 SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
     SfxPoolItem(which)

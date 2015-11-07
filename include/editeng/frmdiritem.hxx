@@ -36,6 +36,7 @@ class EDITENG_DLLPUBLIC SvxFrameDirectionItem : public SfxUInt16Item
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxFrameDirectionItem( SvxFrameDirection nValue /*= FRMDIR_HORI_LEFT_TOP*/,
                             sal_uInt16 nWhich  );

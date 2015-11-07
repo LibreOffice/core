@@ -63,6 +63,7 @@ using namespace com::sun::star::util;
 
 TYPEINIT1_FACTORY(SvxSearchItem, SfxPoolItem, new SvxSearchItem(0));
 
+SfxPoolItem* SvxSearchItem::CreateDefault() { return new  SvxSearchItem(0);}
 
 
 static Sequence< OUString > lcl_GetNotifyNames()

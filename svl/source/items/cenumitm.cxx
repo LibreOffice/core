@@ -147,6 +147,10 @@ void SfxEnumItem::SetValue(sal_uInt16 const nTheValue)
 }
 
 TYPEINIT1_AUTOFACTORY(SfxBoolItem, SfxPoolItem);
+SfxPoolItem* SfxBoolItem::CreateDefault()
+{
+    return new SfxBoolItem();
+}
 
 SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
     : SfxPoolItem(nWhich)

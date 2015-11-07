@@ -30,6 +30,7 @@ private:
 
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SfxScriptOrganizerItem();
     SfxScriptOrganizerItem( const SfxScriptOrganizerItem& );
     virtual ~SfxScriptOrganizerItem();

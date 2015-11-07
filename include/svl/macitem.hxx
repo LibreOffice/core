@@ -121,6 +121,7 @@ class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit inline SvxMacroItem ( const sal_uInt16 nId );
 

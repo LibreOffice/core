@@ -37,6 +37,7 @@ class EDITENG_DLLPUBLIC SvxPaperBinItem : public SfxByteItem
 {
 public:
     TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit inline SvxPaperBinItem( const sal_uInt16 nId ,
                             const sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS );
