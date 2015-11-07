@@ -142,6 +142,15 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         return new SoundActionContext ( *this, maSlideProperties );
     case PPT_TOKEN( extLst ): // CT_OfficeArtExtensionList
         return this;
+
+    case P14_TOKEN(prism):
+        if (!mbHasTransition)
+        {
+            mbHasTransition = true;
+            maTransition.setOoxTransitionType(aElementToken, sal_Int32(rAttribs.getBool(XML_isInverted, false)), 0);
+        }
+        return this;
+
     default:
         break;
     }

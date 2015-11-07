@@ -398,6 +398,13 @@ namespace oox { namespace ppt {
             mnTransitionType = TransitionType::ZOOM;
             mnTransitionSubType = TransitionSubType::DEFAULT;
             break;
+        case P14_TOKEN(prism):
+            mnTransitionType = TransitionType::MISCSHAPEWIPE;
+            if (param1)
+                mnTransitionSubType = TransitionSubType::CORNERSIN;
+            else
+                mnTransitionSubType = TransitionSubType::CORNERSOUT;
+            break;
         default:
             mnTransitionType = 0;
             break;
