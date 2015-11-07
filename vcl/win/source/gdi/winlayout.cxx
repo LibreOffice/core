@@ -967,8 +967,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             if (rArgs.mnMinCharPos >= rVisualItem.mnEndCharPos)
             {   // fdo#47553 adjust "guessed" min (maybe up to -8 off) to
                 // actual min so it can be used properly in GetNextGlyphs
-                assert(mnSubStringMin <= rVisualItem.mnEndCharPos);
-                mnSubStringMin = rVisualItem.mnEndCharPos;
+                if (mnSubStringMin < rVisualItem.mnEndCharPos)
+                    mnSubStringMin = rVisualItem.mnEndCharPos;
             }
             continue;
         }
