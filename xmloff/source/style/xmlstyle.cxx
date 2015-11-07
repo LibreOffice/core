@@ -139,7 +139,6 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-TYPEINIT1( SvXMLStyleContext, SvXMLImportContext );
 
 SvXMLStyleContext::SvXMLStyleContext(
         SvXMLImport& rImp, sal_uInt16 nPrfx,
@@ -358,7 +357,6 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
     return pStyle;
 }
 
-TYPEINIT1( SvXMLStylesContext, SvXMLImportContext );
 
 sal_uInt32 SvXMLStylesContext::GetStyleCount() const
 {

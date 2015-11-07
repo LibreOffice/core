@@ -75,7 +75,6 @@ class XMLTextMarkImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLTextMarkImportContext(
         SvXMLImport& rImport,

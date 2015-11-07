@@ -116,7 +116,6 @@ class XMLTextFrameTitleOrDescContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLTextFrameTitleOrDescContext_Impl( SvXMLImport& rImport,
                                          sal_uInt16 nPrfx,
@@ -127,7 +126,6 @@ public:
     virtual void Characters( const OUString& rText ) override;
 };
 
-TYPEINIT1( XMLTextFrameTitleOrDescContext_Impl, SvXMLImportContext );
 
 XMLTextFrameTitleOrDescContext_Impl::XMLTextFrameTitleOrDescContext_Impl(
         SvXMLImport& rImport,
@@ -152,7 +150,6 @@ class XMLTextFrameParam_Impl : public SvXMLImportContext
 {
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                   const OUString& rLName,
@@ -163,7 +160,6 @@ public:
     virtual ~XMLTextFrameParam_Impl();
 };
 
-TYPEINIT1( XMLTextFrameParam_Impl, SvXMLImportContext );
 
 XMLTextFrameParam_Impl::~XMLTextFrameParam_Impl()
 {
@@ -210,7 +206,6 @@ class XMLTextFrameContourContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                   const OUString& rLName,
@@ -221,7 +216,6 @@ public:
     virtual ~XMLTextFrameContourContext_Impl();
 };
 
-TYPEINIT1( XMLTextFrameContourContext_Impl, SvXMLImportContext );
 
 XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         SvXMLImport& rImport,
@@ -430,7 +424,6 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     bool CreateIfNotThere();
     const OUString& GetHRef() const { return sHRef; }
@@ -473,7 +466,6 @@ public:
         ::com::sun::star::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
 };
 
-TYPEINIT1( XMLTextFrameContext_Impl, SvXMLImportContext );
 
 void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
 {
@@ -1355,7 +1347,6 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
     }
 }
 
-TYPEINIT1( XMLTextFrameContext, SvXMLImportContext );
 
 bool XMLTextFrameContext::CreateIfNotThere( ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& rPropSet )

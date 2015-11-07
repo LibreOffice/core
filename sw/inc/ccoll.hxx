@@ -56,7 +56,6 @@ public:
     SwCondCollItem(sal_uInt16 nWhich = FN_COND_COLL);
     virtual ~SwCondCollItem();
 
-                                TYPEINFO_OVERRIDE();
 
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool                operator==( const SfxPoolItem& ) const override;

@@ -51,7 +51,6 @@ namespace rptui
 
         void collectControls(const css::uno::Reference< css::report::XSection >& _xSection);
     public:
-        TYPEINFO_OVERRIDE();
         OSectionUndo(   OReportModel& rMod
                         ,sal_uInt16 _nSlot
                         ,Action _eAction
@@ -75,7 +74,6 @@ namespace rptui
         OReportSectionUndo(const OReportSectionUndo&) = delete;
         void operator =(const OReportSectionUndo&) = delete;
     public:
-        TYPEINFO_OVERRIDE();
         //OReportSectionUndo(    const css::uno::Reference< css::report::XSection >& _xSection
         OReportSectionUndo( OReportModel& rMod
                             ,sal_uInt16 _nSlot
@@ -102,7 +100,6 @@ namespace rptui
         OGroupSectionUndo(const OGroupSectionUndo&) = delete;
         void operator =(const OGroupSectionUndo&) = delete;
     public:
-        TYPEINFO_OVERRIDE();
         //OGroupSectionUndo(     const css::uno::Reference< css::report::XSection >& _xSection
         OGroupSectionUndo(  OReportModel& rMod
                             ,sal_uInt16 _nSlot
@@ -128,7 +125,6 @@ namespace rptui
         void    implReInsert( );
         void    implReRemove( );
     public:
-        TYPEINFO_OVERRIDE();
         OGroupUndo(OReportModel& rMod
                     ,sal_uInt16 nCommentID
                     ,Action _eAction

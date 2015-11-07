@@ -423,7 +423,6 @@ public:
         return css::uno::Sequence< css::style::TabStop >();
     }
 
-    TYPEINFO_OVERRIDE(); // already in base class
 
     sal_uInt16 GetType() const { return mnFrmType; }
 

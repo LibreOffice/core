@@ -50,7 +50,7 @@ class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
     sal_uInt16 nMacroEvents;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxHyperlinkItem( sal_uInt16 _nWhich = SID_HYPERLINK_GETLINK ):
                 SfxPoolItem(_nWhich), pMacroTable(nullptr) { eType = HLINK_DEFAULT; nMacroEvents=0; };

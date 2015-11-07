@@ -58,7 +58,7 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
                   sal_uInt16 nVersion, sal_uInt16 nWhich  );
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxBrushItem( sal_uInt16 nWhich );
     SvxBrushItem( const Color& rColor, sal_uInt16 nWhich  );

@@ -55,7 +55,6 @@ class SdXMLDrawingPagePropertySetContext : public SvXMLPropertySetContext
 {
 public:
 
-    TYPEINFO_OVERRIDE();
 
     SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
@@ -74,7 +73,6 @@ public:
                                    const XMLPropertyState& rProp) override;
 };
 
-TYPEINIT1( SdXMLDrawingPagePropertySetContext, SvXMLPropertySetContext );
 
 SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -132,7 +130,6 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
 class SdXMLDrawingPageStyleContext : public XMLPropStyleContext
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXMLDrawingPageStyleContext(
         SvXMLImport& rImport,
@@ -156,7 +153,6 @@ public:
                 ::com::sun::star::beans::XPropertySet > & rPropSet ) override;
 };
 
-TYPEINIT1( SdXMLDrawingPageStyleContext, XMLPropStyleContext );
 
 SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
     SvXMLImport& rImport,
@@ -299,7 +295,6 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
     }
 }
 
-TYPEINIT1( SdXMLPageMasterStyleContext, SvXMLStyleContext );
 
 SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     SdXMLImport& rImport,
@@ -381,7 +376,6 @@ SdXMLPageMasterStyleContext::~SdXMLPageMasterStyleContext()
 {
 }
 
-TYPEINIT1( SdXMLPageMasterContext, SvXMLStyleContext );
 
 SdXMLPageMasterContext::SdXMLPageMasterContext(
     SdXMLImport& rImport,
@@ -448,7 +442,6 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
     return pContext;
 }
 
-TYPEINIT1( SdXMLPresentationPageLayoutContext, SvXMLStyleContext );
 
 SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
     SdXMLImport& rImport,
@@ -775,7 +768,6 @@ SdXMLPresentationPlaceholderContext::~SdXMLPresentationPlaceholderContext()
 {
 }
 
-TYPEINIT1( SdXMLMasterPageContext, SdXMLGenericPageContext );
 
 SdXMLMasterPageContext::SdXMLMasterPageContext(
     SdXMLImport& rImport,
@@ -944,7 +936,6 @@ SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
     return pContext;
 }
 
-TYPEINIT1( SdXMLStylesContext, SvXMLStyleContext );
 
 SdXMLStylesContext::SdXMLStylesContext(
     SdXMLImport& rImport,
@@ -1469,7 +1460,6 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
 }
 
 
-TYPEINIT1( SdXMLMasterStylesContext, SvXMLImportContext );
 
 SdXMLMasterStylesContext::SdXMLMasterStylesContext(
     SdXMLImport& rImport,

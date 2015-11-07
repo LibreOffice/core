@@ -87,7 +87,6 @@ SwFlyFreeFrm::~SwFlyFreeFrm()
 }
 
 // #i28701#
-TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
 /** Notifies the background (all ContentFrms that currently are overlapping).
  *
  * Additionally, the window is also directly invalidated (especially where
@@ -474,7 +473,6 @@ SwFlyLayFrm::SwFlyLayFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch )
 }
 
 // #i28701#
-TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
 
 void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {

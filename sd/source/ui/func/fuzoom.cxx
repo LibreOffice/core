@@ -40,7 +40,6 @@ sal_uInt16 SidArrayZoom[] = {
                     SID_ZOOM_IN,
                     0 };
 
-TYPEINIT1( FuZoom, FuPoor );
 
 FuZoom::FuZoom(
     ViewShell* pViewSh,

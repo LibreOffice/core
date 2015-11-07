@@ -30,7 +30,6 @@ protected:
 public:
     SFX_DECL_VIEWFACTORY(SwWebView);
     SFX_DECL_INTERFACE(SW_WEBVIEWSHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

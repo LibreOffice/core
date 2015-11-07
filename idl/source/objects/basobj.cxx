@@ -62,7 +62,6 @@ void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
         rOutStm.Seek( nPos );
 }
 
-TYPEINIT1( SvMetaObject, SvRttiBase );
 SvMetaObject::SvMetaObject()
 {
 }
@@ -158,13 +157,11 @@ bool SvMetaObject::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     return bOk;
 }
 
-TYPEINIT1( SvMetaReference, SvMetaObject );
 
 SvMetaReference::SvMetaReference()
 {
 }
 
-TYPEINIT1( SvMetaExtern, SvMetaReference );
 
 SvMetaExtern::SvMetaExtern()
     : pModule( nullptr )

@@ -23,7 +23,6 @@
 #include "strings.hrc"
 #include <svl/itemset.hxx>
 
-TYPEINIT1( SdBackgroundObjUndoAction, SdUndoAction );
 
 SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     SdDrawDocument& rDoc,

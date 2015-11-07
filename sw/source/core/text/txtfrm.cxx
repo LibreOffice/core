@@ -78,7 +78,6 @@
 #include <calbck.hxx>
 #include <ftnidx.hxx>
 
-TYPEINIT1( SwTextFrm, SwContentFrm );
 
 /// Switches width and height of the text frame
 void SwTextFrm::SwapWidthAndHeight()

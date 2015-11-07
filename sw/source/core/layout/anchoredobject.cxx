@@ -64,7 +64,6 @@ SwObjPositioningInProgress::~SwObjPositioningInProgress()
     }
 }
 
-TYPEINIT0(SwAnchoredObject);
 
 SwAnchoredObject::SwAnchoredObject() :
     mpDrawObj( nullptr ),

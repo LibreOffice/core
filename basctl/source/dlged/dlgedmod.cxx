@@ -23,8 +23,6 @@
 namespace basctl
 {
 
-TYPEINIT1(DlgEdModel,SdrModel);
-
 DlgEdModel::DlgEdModel()
     :SdrModel()
 {

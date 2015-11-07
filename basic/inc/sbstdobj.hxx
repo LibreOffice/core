@@ -48,7 +48,6 @@ protected:
     void    PropHeight( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SbStdPicture();
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
@@ -79,7 +78,6 @@ protected:
     void    PropName( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SbStdFont();
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
@@ -114,7 +112,6 @@ protected:
     static void    MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SbStdClipboard();
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;

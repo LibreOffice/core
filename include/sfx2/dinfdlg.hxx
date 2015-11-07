@@ -86,7 +86,7 @@ private:
     css::uno::Sequence< css::document::CmisProperty > m_aCmisProperties;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SfxDocumentInfoItem();
     SfxDocumentInfoItem( const OUString &rFileName,
         const css::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,

@@ -50,7 +50,6 @@ sdr::properties::BaseProperties* E3dSphereObj::CreateObjectSpecificProperties()
 
 
 
-TYPEINIT1(E3dSphereObj, E3dCompoundObject);
 
 
 // Build Sphere from polygon facets in latitude and longitude

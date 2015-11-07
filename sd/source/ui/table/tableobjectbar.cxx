@@ -74,7 +74,6 @@ void RegisterInterfaces(SfxModule* pMod)
 
 // - TableObjectBar -
 
-TYPEINIT1( TableObjectBar, SfxShell );
 
 SFX_IMPL_INTERFACE(TableObjectBar, SfxShell)
 

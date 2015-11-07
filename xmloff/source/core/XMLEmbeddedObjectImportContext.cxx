@@ -74,7 +74,6 @@ class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
         ::com::sun::star::xml::sax::XDocumentHandler > xHandler;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,
@@ -94,7 +93,6 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
-TYPEINIT1( XMLEmbeddedObjectImportContext_Impl, SvXMLImportContext );
 
 XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -138,7 +136,6 @@ void XMLEmbeddedObjectImportContext_Impl::Characters( const OUString& rChars )
     xHandler->characters( rChars );
 }
 
-TYPEINIT1( XMLEmbeddedObjectImportContext, SvXMLImportContext );
 
 bool XMLEmbeddedObjectImportContext::SetComponent(
         Reference< XComponent >& rComp )

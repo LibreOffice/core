@@ -25,7 +25,6 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 
-TYPEINIT1(E3dPolygonObj, E3dCompoundObject);
 
 
 // DrawContact section

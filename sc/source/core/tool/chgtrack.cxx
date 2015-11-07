@@ -35,7 +35,6 @@
 #include "refupdatecontext.hxx"
 #include <refupdat.hxx>
 
-#include <tools/rtti.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/itemset.hxx>
 #include <svl/isethint.hxx>

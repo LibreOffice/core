@@ -1171,7 +1171,6 @@ sal_Int64 SAL_CALL SwXFrame::getSomething( const ::uno::Sequence< sal_Int8 >& rI
     return 0;
 }
 
-TYPEINIT1(SwXFrame, SwClient);
 
 OUString SwXFrame::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
@@ -3748,7 +3747,6 @@ uno::Reference<container::XNameReplace> SAL_CALL
     return new SwFrameEventDescriptor( *this );
 }
 
-TYPEINIT1(SwXOLEListener, SwClient);
 
 SwXOLEListener::SwXOLEListener( SwFormat& rOLEFormat, uno::Reference< XModel > xOLE) :
     SwClient(&rOLEFormat),

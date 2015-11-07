@@ -42,7 +42,6 @@
 using namespace svx::sidebar;
 namespace sd {
 
-TYPEINIT1( FuOutlineBullet, FuPoor );
 
 FuOutlineBullet::FuOutlineBullet(ViewShell* pViewShell, ::sd::Window* pWindow,
                                  ::sd::View* pView, SdDrawDocument* pDoc,

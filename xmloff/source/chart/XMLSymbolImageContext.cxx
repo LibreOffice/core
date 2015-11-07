@@ -26,7 +26,6 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 
-TYPEINIT1( XMLSymbolImageContext, XMLElementPropertyContext );
 
 using namespace ::com::sun::star;
 

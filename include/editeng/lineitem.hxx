@@ -39,7 +39,7 @@ namespace editeng {
 class EDITENG_DLLPUBLIC SvxLineItem : public SfxPoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxLineItem( const sal_uInt16 nId );
     SvxLineItem( const SvxLineItem& rCpy );

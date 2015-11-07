@@ -66,7 +66,6 @@ void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-TYPEINIT1( XMLPropStyleContext, SvXMLStyleContext );
 
 //UUUU
 OldFillStyleDefinitionSet XMLPropStyleContext::maStandardSet;

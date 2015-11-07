@@ -52,7 +52,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 
-TYPEINIT1(DlgEdObj, SdrUnoObj);
 
 DlgEditor& DlgEdObj::GetDialogEditor ()
 {
@@ -1217,7 +1216,6 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
     }
 }
 
-TYPEINIT1(DlgEdForm, DlgEdObj);
 
 DlgEdForm::DlgEdForm (DlgEditor& rDlgEditor_) :
     rDlgEditor(rDlgEditor_)

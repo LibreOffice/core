@@ -97,15 +97,10 @@ void EDcr_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
         ppDcr[lIdx]=nullptr;
 }
 
-TYPEINIT0(ErrorInfo);
 ErrorInfo::~ErrorInfo()
 {
 }
 
-TYPEINIT1(DynamicErrorInfo, ErrorInfo);
-TYPEINIT1(StringErrorInfo, DynamicErrorInfo);
-TYPEINIT1(TwoStringErrorInfo, DynamicErrorInfo);
-TYPEINIT1(MessageInfo, DynamicErrorInfo);
 
 ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
 {

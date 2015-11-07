@@ -100,7 +100,6 @@ protected:
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm );
 public:
-            TYPEINFO_OVERRIDE();
             SvMetaObject();
 
     static void         WriteTab( SvStream & rOutStm, sal_uInt16 nTab );
@@ -147,7 +146,6 @@ class SvMetaReference : public SvMetaObject
 protected:
     tools::SvRef<SvMetaReference>  aRef;
 public:
-            TYPEINFO_OVERRIDE();
             SvMetaReference();
 
     const SvString &    GetName() const override
@@ -199,7 +197,6 @@ class SvMetaExtern : public SvMetaReference
     bool                    bReadUUId;
     bool                    bReadVersion;
 public:
-                        TYPEINFO_OVERRIDE();
                         SvMetaExtern();
 
     SvMetaModule *      GetModule() const;

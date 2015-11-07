@@ -78,7 +78,6 @@ protected:
 public:
     SwTextRuby( SwFormatRuby& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTextRuby();
-    TYPEINFO_OVERRIDE();
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 

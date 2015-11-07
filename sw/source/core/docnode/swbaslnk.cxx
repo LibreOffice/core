@@ -57,7 +57,6 @@ using namespace com::sun::star;
 
 static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size &rOrigGrfSize );
 
-TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
 
 static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {

@@ -41,7 +41,6 @@ class ScSimpleUndo: public SfxUndoAction
 public:
     typedef boost::ptr_map<SCTAB,sc::ColumnSpanSet> DataSpansType;
 
-                    TYPEINFO_OVERRIDE();
                     ScSimpleUndo( ScDocShell* pDocSh );
     virtual         ~ScSimpleUndo();
 
@@ -79,7 +78,6 @@ enum ScBlockUndoMode { SC_UNDO_SIMPLE, SC_UNDO_MANUALHEIGHT, SC_UNDO_AUTOHEIGHT 
 class ScBlockUndo: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
                                  ScBlockUndoMode eBlockMode );
     virtual         ~ScBlockUndo();
@@ -101,7 +99,6 @@ protected:
 class ScMultiBlockUndo: public ScSimpleUndo
 {
 public:
-    TYPEINFO_OVERRIDE();
     ScMultiBlockUndo(ScDocShell* pDocSh, const ScRangeList& rRanges,
                      ScBlockUndoMode eBlockMode);
     virtual ~ScMultiBlockUndo();
@@ -130,7 +127,6 @@ protected:
     SdrUndoAction*  mpDrawUndo;
 
 public:
-                    TYPEINFO_OVERRIDE();
                     ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo = nullptr );
     virtual         ~ScDBFuncUndo();
 
@@ -145,7 +141,6 @@ enum ScMoveUndoMode { SC_UNDO_REFFIRST, SC_UNDO_REFLAST };
 class ScMoveUndo: public ScSimpleUndo               // mit Referenzen
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScMoveUndo( ScDocShell* pDocSh,
                                 ScDocument* pRefDoc, ScRefUndoData* pRefData,
                                 ScMoveUndoMode eRefMode );
@@ -171,7 +166,6 @@ class ScUndoWrapper: public SfxUndoAction           // for manual merging of act
     SfxUndoAction*  pWrappedUndo;
 
 public:
-                            TYPEINFO_OVERRIDE();
                             ScUndoWrapper( SfxUndoAction* pUndo );
     virtual                 ~ScUndoWrapper();
 

@@ -33,7 +33,6 @@
 #include <swtblfmt.hxx>
 #include <fieldhint.hxx>
 
-TYPEINIT1( SwDDETable, SwTable );
 
 /// Ctor moves all lines/boxes from a SwTable into itself.
 /// Afterwards the SwTable is empty and must be deleted.

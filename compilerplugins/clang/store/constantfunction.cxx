@@ -418,13 +418,11 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
         return true;
     }
 
-    // can't mess with the TYPEINIT macros in include/tools/rtti.hxx or the LINK macros in include/tools/link.hxx
     std::string aImmediateMacro = "";
     if (compat::isMacroBodyExpansion(compiler, pFunctionDecl->getLocStart()) ) {
         StringRef name { Lexer::getImmediateMacroName(
                 pFunctionDecl->getLocStart(), compiler.getSourceManager(), compiler.getLangOpts()) };
         aImmediateMacro = name;
-        if (name == "TYPEINIT_FACTORY" || name == "TYPEINFO" || name == "TYPEINFO_OVERRIDE"
             || name.startswith("IMPL_LINK_") )
         {
             return true;

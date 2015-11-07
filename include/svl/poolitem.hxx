@@ -28,7 +28,7 @@
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <tools/debug.hxx>
-#include <tools/rtti.hxx>
+#include <tools/solar.h>
 
 class IntlWrapper;
 class SvStream;
@@ -161,7 +161,6 @@ protected:
                              SfxPoolItem( const SfxPoolItem& );
 
 public:
-                             TYPEINFO();
     virtual                  ~SfxPoolItem();
 
     void                     SetWhich( sal_uInt16 nId ) { m_nWhich = nId; }
@@ -252,7 +251,7 @@ class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
 {
     SfxVoidItem & operator=( const SfxVoidItem& ) = delete;
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             explicit SfxVoidItem( sal_uInt16 nWhich );
                             SfxVoidItem( sal_uInt16 nWhich, SvStream & );
                             SfxVoidItem( const SfxVoidItem& );
@@ -277,7 +276,6 @@ class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
     SfxSetItem & operator=( const SfxSetItem& ) = delete;
 
 public:
-                            TYPEINFO_OVERRIDE();
                             SfxSetItem( sal_uInt16 nWhich, SfxItemSet *pSet );
                             SfxSetItem( sal_uInt16 nWhich, const SfxItemSet &rSet );
                             SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = nullptr );

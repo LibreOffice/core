@@ -24,7 +24,6 @@
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 
-TYPEINIT1(SdPresentationLayoutUndoAction, SdUndoAction);
 
 SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
                             SdDrawDocument* pTheDoc,

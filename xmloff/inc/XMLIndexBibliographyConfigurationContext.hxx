@@ -66,7 +66,6 @@ class XMLIndexBibliographyConfigurationContext : public SvXMLStyleContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLIndexBibliographyConfigurationContext(
         SvXMLImport& rImport,

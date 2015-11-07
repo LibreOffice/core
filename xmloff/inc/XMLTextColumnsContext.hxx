@@ -48,7 +48,6 @@ class XMLTextColumnsContext :public XMLElementPropertyContext
     sal_Int32                nAutomaticDistance;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLTextColumnsContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,

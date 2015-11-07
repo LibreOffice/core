@@ -35,7 +35,7 @@ class SvxFontWidthItem : public SfxPoolItem
     sal_uInt16  nWidth;         // 0 = default
     sal_uInt16  nProp;          // default 100%
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxFontWidthItem(   const sal_uInt16 nSz /*= 0*/,
                         const sal_uInt16 nPropWidth /*= 100*/,

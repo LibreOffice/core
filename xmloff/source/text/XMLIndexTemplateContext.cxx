@@ -60,7 +60,6 @@ const sal_Char sAPI_TokenBibliographyDataField[] =
                                             "TokenBibliographyDataField";
 
 
-TYPEINIT1( XMLIndexTemplateContext, SvXMLImportContext);
 
 XMLIndexTemplateContext::XMLIndexTemplateContext(
     SvXMLImport& rImport,

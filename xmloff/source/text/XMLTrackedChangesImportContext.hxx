@@ -37,7 +37,6 @@ class XMLTrackedChangesImportContext : public SvXMLImportContext
 {
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLTrackedChangesImportContext(
         SvXMLImport& rImport,

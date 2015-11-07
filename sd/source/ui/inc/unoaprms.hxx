@@ -75,7 +75,6 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
     bool            bInfoCreated;
 
 public:
-    TYPEINFO_OVERRIDE();
     SdAnimationPrmsUndoAction(SdDrawDocument* pTheDoc, SdrObject* pObj,
                                   bool bCreated)
         : SdUndoAction(pTheDoc)

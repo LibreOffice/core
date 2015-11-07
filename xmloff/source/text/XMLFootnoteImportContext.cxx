@@ -45,7 +45,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-TYPEINIT1(XMLFootnoteImportContext, SvXMLImportContext);
 
 const sal_Char sAPI_service_footnote[] = "com.sun.star.text.Footnote";
 const sal_Char sAPI_service_endnote[] = "com.sun.star.text.Endnote";

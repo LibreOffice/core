@@ -8,7 +8,6 @@
 
 #include <config_features.h>
 
-#include <tools/rtti.hxx>
 #include <avmedia/mediaitem.hxx>
 
 #if !HAVE_FEATURE_AVMEDIA

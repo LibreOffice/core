@@ -153,7 +153,6 @@ protected:
 
 public:
     // #i26791#
-    TYPEINFO_OVERRIDE();
 
     // get client information
     virtual bool GetInfo( SfxPoolItem& ) const override;

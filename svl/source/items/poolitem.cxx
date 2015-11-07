@@ -22,12 +22,7 @@
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include <libxml/xmlwriter.h>
-
-TYPEINIT0(SfxPoolItem);
-TYPEINIT1(SfxVoidItem, SfxPoolItem);
-// @@@ TYPEINIT1(SfxInvalidItem, SfxPoolItem);
-TYPEINIT1(SfxSetItem, SfxPoolItem);
-// @@@ TYPEINIT1(SfxItemChangedHint, SfxHint);
+#include <typeinfo>
 
 
 #if OSL_DEBUG_LEVEL > 1
@@ -125,7 +120,7 @@ SfxPoolItem::~SfxPoolItem()
 
 bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    return rCmp.Type() == Type();
+    return typeid(rCmp)  == typeid(*this);
 }
 
 
@@ -199,6 +194,10 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("sfxPoolItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterEndElement(pWriter);
+}
+SfxPoolItem* SfxVoidItem::CreateDefault()
+{
+    return new SfxVoidItem(0);
 }
 
 SfxVoidItem::SfxVoidItem( sal_uInt16 which ):

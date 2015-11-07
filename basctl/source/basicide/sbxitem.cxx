@@ -21,7 +21,7 @@
 
 namespace basctl
 {
-
+SfxPoolItem* SbxItem::CreateDefault() { DBG_ASSERT(false, "No SbxItem factory available"); return 0; }
 SbxItem::SbxItem (
     sal_uInt16 nWhichItem,
     ScriptDocument const& rDocument,

@@ -48,7 +48,6 @@ protected:
     ScViewData* GetViewData()   { return pViewData; }
 
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_DRAW_SHELL)
 
 private:

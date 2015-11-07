@@ -34,7 +34,6 @@ class XMLOFF_DLLPUBLIC XMLBase64ImportContext : public SvXMLImportContext
     OUString sBase64CharsLeft;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLBase64ImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                             const OUString& rLName,

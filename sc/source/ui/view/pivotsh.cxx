@@ -43,7 +43,6 @@
 #include "scslots.hxx"
 #include <memory>
 
-TYPEINIT1( ScPivotShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScPivotShell, SfxShell)
 

@@ -135,14 +135,12 @@ OLocalExchange* OFilterExchangeHelper::createExchange() const
 }
 
 
-TYPEINIT0(FmFilterData);
 Image FmFilterData::GetImage() const
 {
     return Image();
 }
 
 
-TYPEINIT1(FmParentData, FmFilterData);
 
 FmParentData::~FmParentData()
 {
@@ -152,7 +150,6 @@ FmParentData::~FmParentData()
 }
 
 
-TYPEINIT1(FmFormItem, FmParentData);
 
 Image FmFormItem::GetImage() const
 {
@@ -161,7 +158,6 @@ Image FmFormItem::GetImage() const
 }
 
 
-TYPEINIT1(FmFilterItems, FmParentData);
 
 FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
 {
@@ -186,7 +182,6 @@ Image FmFilterItems::GetImage() const
 }
 
 
-TYPEINIT1(FmFilterItem, FmFilterData);
 
 FmFilterItem::FmFilterItem( FmFilterItems* pParent,
                             const OUString& aFieldName,
@@ -500,7 +495,6 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
     m_pModel->Insert( insertPos, pFilterItems );
 }
 
-TYPEINIT1(FmFilterModel, FmParentData);
 
 FmFilterModel::FmFilterModel()
               :FmParentData(nullptr, OUString())

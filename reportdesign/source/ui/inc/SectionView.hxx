@@ -41,7 +41,6 @@ private:
     OSectionView(const OSectionView&) = delete;
     void operator =(const OSectionView&) = delete;
 public:
-    TYPEINFO_OVERRIDE();
 
     OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor );
     virtual ~OSectionView();

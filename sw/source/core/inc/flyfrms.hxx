@@ -69,7 +69,6 @@ protected:
 
 public:
     // #i28701#
-    TYPEINFO_OVERRIDE();
 
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
@@ -126,7 +125,6 @@ class SwFlyLayFrm : public SwFlyFreeFrm
 {
 public:
     // #i28701#
-    TYPEINFO_OVERRIDE();
 
     SwFlyLayFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
@@ -153,7 +151,6 @@ protected:
 
 public:
     // #i28701#
-    TYPEINFO_OVERRIDE();
 
     SwFlyAtCntFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
@@ -191,7 +188,6 @@ protected:
 
 public:
     // #i28701#
-    TYPEINFO_OVERRIDE();
 
     SwFlyInCntFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 

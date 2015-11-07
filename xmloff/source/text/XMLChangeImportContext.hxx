@@ -45,7 +45,6 @@ class XMLChangeImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     /**
      * import a change mark

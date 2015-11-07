@@ -60,7 +60,6 @@ void BezierObjectBar::InitInterface_Impl()
 {
 }
 
-TYPEINIT1(BezierObjectBar, ::SfxShell);
 
 BezierObjectBar::BezierObjectBar(
     ViewShell* pSdViewShell,

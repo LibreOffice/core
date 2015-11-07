@@ -25,7 +25,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
-#include <tools/rtti.hxx>
 #include "ximpshap.hxx"
 
 // draw:g context (RECURSIVE)
@@ -61,7 +60,6 @@ protected:
     void SetNavigationOrder();
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXMLGenericPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,

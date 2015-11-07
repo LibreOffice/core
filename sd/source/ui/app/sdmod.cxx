@@ -54,7 +54,6 @@
 #include "cfgids.hxx"
 #include "tools/SdGlobalResourceContainer.hxx"
 
-TYPEINIT1( SdModule, SfxModule );
 
 #define SdModule
 #include "sdslots.hxx"

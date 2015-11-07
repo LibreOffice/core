@@ -34,7 +34,6 @@
 
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
-#include <tools/rtti.hxx>
 
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>

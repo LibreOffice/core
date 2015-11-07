@@ -69,12 +69,6 @@
 
 using namespace com::sun::star;
 
-TYPEINIT1( SwTable, SwClient );
-TYPEINIT1( SwTableBox, SwClient );
-TYPEINIT1( SwTableLine, SwClient );
-TYPEINIT1( SwTableFormat, SwFrameFormat );
-TYPEINIT1( SwTableBoxFormat, SwFrameFormat );
-TYPEINIT1( SwTableLineFormat, SwFrameFormat );
 
 #define COLFUZZY 20
 

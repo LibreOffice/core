@@ -26,7 +26,6 @@
 
 #include <comphelper/extract.hxx>
 
-TYPEINIT1(SfxEnumItemInterface, SfxPoolItem)
 
 // virtual
 bool SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
@@ -119,7 +118,6 @@ SfxEnumItem::SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
     rStream.ReadUInt16( m_nValue );
 }
 
-TYPEINIT1(SfxEnumItem, SfxEnumItemInterface)
 
 // virtual
 SvStream & SfxEnumItem::Store(SvStream & rStream, sal_uInt16) const
@@ -146,7 +144,10 @@ void SfxEnumItem::SetValue(sal_uInt16 const nTheValue)
     m_nValue = nTheValue;
 }
 
-TYPEINIT1_AUTOFACTORY(SfxBoolItem, SfxPoolItem);
+SfxPoolItem* SfxBoolItem::CreateDefault()
+{
+    return new SfxBoolItem();
+}
 
 SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
     : SfxPoolItem(nWhich)

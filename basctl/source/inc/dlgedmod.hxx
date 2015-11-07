@@ -38,7 +38,6 @@ private:
     void operator=(const DlgEdModel& rSrcModel) = delete;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     DlgEdModel();
     virtual ~DlgEdModel();

@@ -71,7 +71,6 @@ public:
 
 static const sal_Int32 InitialObjectContainerCapacity (64);
 
-TYPEINIT0(SdrObjList);
 
 SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList):
     maList(),
@@ -1195,7 +1194,6 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
 
 
 
-TYPEINIT1(SdrPage,SdrObjList);
 SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 :   SdrObjList(&rNewModel, this),
     mpViewContact(nullptr),

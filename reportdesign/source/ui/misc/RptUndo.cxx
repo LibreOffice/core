@@ -110,7 +110,6 @@ namespace
     }
 }
 
-TYPEINIT1( OSectionUndo,         OCommentUndoAction );
 
 OSectionUndo::OSectionUndo(OReportModel& _rMod
                            ,sal_uInt16 _nSlot
@@ -216,7 +215,6 @@ void OSectionUndo::Redo()
     }
 }
 
-TYPEINIT1( OReportSectionUndo,         OSectionUndo );
 
 OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                        ,::std::mem_fun_t< uno::Reference< report::XSection >
@@ -255,7 +253,6 @@ void OReportSectionUndo::implReRemove( )
     m_bInserted = false;
 }
 
-TYPEINIT1( OGroupSectionUndo,         OSectionUndo );
 
 OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                        ,::std::mem_fun_t< uno::Reference< report::XSection >
@@ -326,7 +323,6 @@ void OGroupSectionUndo::implReRemove( )
     m_bInserted = false;
 }
 
-TYPEINIT1( OGroupUndo,         OCommentUndoAction );
 
 OGroupUndo::OGroupUndo(OReportModel& _rMod
                        ,sal_uInt16 nCommentID

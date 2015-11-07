@@ -40,7 +40,6 @@ private:
     SwFormatAutoFormat & operator= (const SwFormatAutoFormat &) = delete;
 public:
 
-    TYPEINFO_OVERRIDE();
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

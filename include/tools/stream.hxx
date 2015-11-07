@@ -25,7 +25,6 @@
 #include <tools/lineend.hxx>
 #include <tools/errinf.hxx>
 #include <tools/ref.hxx>
-#include <tools/rtti.hxx>
 #include <rtl/string.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -112,7 +111,6 @@ protected:
     void close();
 
 public:
-    TYPEINFO();
 
     SvLockBytes() : m_pStream(nullptr), m_bOwner(false), m_bSync(false) {}
 
@@ -145,7 +143,6 @@ typedef tools::SvRef<SvLockBytes> SvLockBytesRef;
 class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     SvOpenLockBytes() : SvLockBytes(nullptr, false) {}
     SvOpenLockBytes(SvStream * pStream, bool bOwner):
@@ -164,7 +161,6 @@ class SvAsyncLockBytes: public SvOpenLockBytes
     bool m_bTerminated;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SvAsyncLockBytes(SvStream * pStream, bool bOwner):
         SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(false) {}

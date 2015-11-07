@@ -26,7 +26,8 @@
 #include <osl/diagnose.h>
 
 
-TYPEINIT1_FACTORY(SvxViewLayoutItem,SfxUInt16Item, new SvxViewLayoutItem);
+
+SfxPoolItem* SvxViewLayoutItem::CreateDefault() { return new SvxViewLayoutItem; }
 
 #define VIEWLAYOUT_PARAM_COLUMNS    "Columns"
 #define VIEWLAYOUT_PARAM_BOOKMODE   "BookMode"

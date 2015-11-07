@@ -103,7 +103,6 @@ protected:
     virtual bool StoreData( SvStream& ) const override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VALUE,1);
-    TYPEINFO_OVERRIDE();
     SbxValue();
     SbxValue( SbxDataType, void* = nullptr );
     SbxValue( const SbxValue& );
@@ -292,7 +291,6 @@ protected:
     virtual bool StoreData( SvStream& ) const override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VARIABLE,2);
-    TYPEINFO_OVERRIDE();
     SbxVariable();
     SbxVariable( SbxDataType, void* = nullptr );
     SbxVariable( const SbxVariable& );

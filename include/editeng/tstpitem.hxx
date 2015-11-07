@@ -101,7 +101,7 @@ class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem
     SvxTabStopArr maTabStops;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxTabStopItem( sal_uInt16 nWhich  );
     SvxTabStopItem( const sal_uInt16 nTabs,

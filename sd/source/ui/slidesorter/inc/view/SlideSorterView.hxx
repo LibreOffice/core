@@ -64,7 +64,6 @@ class SlideSorterView
       public ::boost::noncopyable
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     /** Create a new view for the slide sorter.
         @param rViewShell

@@ -28,7 +28,6 @@
 #include "sbxconv.hxx"
 #include "runtime.hxx"
 
-TYPEINIT1(SbxValue,SbxBase)
 
 ///////////////////////////// constructors
 

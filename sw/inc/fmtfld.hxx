@@ -57,7 +57,6 @@ protected:
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     /// Single argument constructors shall be explicit.
     explicit SwFormatField( const SwField &rField );

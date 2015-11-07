@@ -61,7 +61,6 @@ private:
      style::TabStop aTabStop;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SvxXMLTabStopContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const OUString& rLName,
@@ -76,7 +75,6 @@ public:
     const style::TabStop& getTabStop() const { return aTabStop; }
 };
 
-TYPEINIT1( SvxXMLTabStopContext_Impl, SvXMLImportContext );
 
 SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
                                SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -169,7 +167,6 @@ SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
-TYPEINIT1( SvxXMLTabStopImportContext, XMLElementPropertyContext );
 
 SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,

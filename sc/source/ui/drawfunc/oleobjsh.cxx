@@ -50,7 +50,6 @@ void ScOleObjectShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_OLE));
 }
 
-TYPEINIT1( ScOleObjectShell, ScDrawShell );
 
 ScOleObjectShell::ScOleObjectShell(ScViewData* pData) :
     ScDrawShell(pData)

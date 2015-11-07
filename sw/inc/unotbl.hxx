@@ -96,7 +96,6 @@ public:
     SwXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, size_t nPos = NOTFOUND);
     SwXCell(SwFrameFormat* pTableFormat, const SwStartNode& rStartNode); // XML import interface
 
-    TYPEINFO_OVERRIDE();
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -178,7 +177,6 @@ protected:
 public:
     SwXTextTableRow(SwFrameFormat* pFormat, SwTableLine* pLine);
 
-    TYPEINFO_OVERRIDE();
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -336,7 +334,6 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
-    TYPEINFO_OVERRIDE();
 
     //XTextTable
     virtual void SAL_CALL initialize( sal_Int32 nRows, sal_Int32 nColumns ) throw(css::uno::RuntimeException, std::exception) override;
@@ -474,7 +471,6 @@ public:
     virtual ~SwXCellRange() {};
     std::vector< css::uno::Reference< css::table::XCell > > GetCells();
 
-    TYPEINFO_OVERRIDE();
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -562,7 +558,6 @@ protected:
 public:
     SwXTableRows(SwFrameFormat& rFrameFormat);
 
-    TYPEINFO_OVERRIDE();
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException, std::exception ) override;
@@ -603,7 +598,6 @@ protected:
 public:
     SwXTableColumns(SwFrameFormat& rFrameFormat);
 
-    TYPEINFO_OVERRIDE();
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException, std::exception ) override;

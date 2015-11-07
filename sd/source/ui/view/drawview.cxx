@@ -72,7 +72,6 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-TYPEINIT1(DrawView, View);
 
 /**
  * Shows the first page of document at position 0,0. In the case

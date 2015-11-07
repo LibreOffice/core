@@ -134,8 +134,6 @@ static bool ImpIsEmptyURL( const OUString& rURL )
     return false;
 }
 
-TYPEINIT1( SvXMLShapeContext, SvXMLImportContext );
-TYPEINIT1( SdXMLShapeContext, SvXMLShapeContext );
 
 SdXMLShapeContext::SdXMLShapeContext(
     SvXMLImport& rImport,
@@ -1009,7 +1007,6 @@ void SdXMLShapeContext::onDemandRescueUsefulDataFromTemporary( const SvXMLImport
     }
 }
 
-TYPEINIT1( SdXMLRectShapeContext, SdXMLShapeContext );
 
 SdXMLRectShapeContext::SdXMLRectShapeContext(
     SvXMLImport& rImport,
@@ -1075,7 +1072,6 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
 }
 
-TYPEINIT1( SdXMLLineShapeContext, SdXMLShapeContext );
 
 SdXMLLineShapeContext::SdXMLLineShapeContext(
     SvXMLImport& rImport,
@@ -1191,7 +1187,6 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
 }
 
-TYPEINIT1( SdXMLEllipseShapeContext, SdXMLShapeContext );
 
 SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
     SvXMLImport& rImport,
@@ -1326,7 +1321,6 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-TYPEINIT1( SdXMLPolygonShapeContext, SdXMLShapeContext );
 
 SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
     SvXMLImport& rImport,
@@ -1435,7 +1429,6 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-TYPEINIT1( SdXMLPathShapeContext, SdXMLShapeContext );
 
 SdXMLPathShapeContext::SdXMLPathShapeContext(
     SvXMLImport& rImport,
@@ -1585,7 +1578,6 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
 }
 
-TYPEINIT1( SdXMLTextBoxShapeContext, SdXMLShapeContext );
 
 SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
     SvXMLImport& rImport,
@@ -1776,7 +1768,6 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-TYPEINIT1( SdXMLControlShapeContext, SdXMLShapeContext );
 
 SdXMLControlShapeContext::SdXMLControlShapeContext(
     SvXMLImport& rImport,
@@ -1841,7 +1832,6 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-TYPEINIT1( SdXMLConnectorShapeContext, SdXMLShapeContext );
 
 SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
     SvXMLImport& rImport,
@@ -2110,7 +2100,6 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
     }
 }
 
-TYPEINIT1( SdXMLMeasureShapeContext, SdXMLShapeContext );
 
 SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
     SvXMLImport& rImport,
@@ -2222,7 +2211,6 @@ void SdXMLMeasureShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-TYPEINIT1( SdXMLPageShapeContext, SdXMLShapeContext );
 
 SdXMLPageShapeContext::SdXMLPageShapeContext(
     SvXMLImport& rImport,
@@ -2310,7 +2298,6 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
 }
 
-TYPEINIT1( SdXMLCaptionShapeContext, SdXMLShapeContext );
 
 SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
     SvXMLImport& rImport,
@@ -2411,7 +2398,6 @@ void SdXMLCaptionShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-TYPEINIT1( SdXMLGraphicObjectShapeContext, SdXMLShapeContext );
 
 SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
     SvXMLImport& rImport,
@@ -2577,7 +2563,6 @@ SdXMLGraphicObjectShapeContext::~SdXMLGraphicObjectShapeContext()
 
 }
 
-TYPEINIT1( SdXMLChartShapeContext, SdXMLShapeContext );
 
 SdXMLChartShapeContext::SdXMLChartShapeContext(
     SvXMLImport& rImport,
@@ -2682,7 +2667,6 @@ SvXMLImportContext * SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPre
     return nullptr;
 }
 
-TYPEINIT1( SdXMLObjectShapeContext, SdXMLShapeContext );
 
 SdXMLObjectShapeContext::SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -2895,7 +2879,6 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
     return pContext;
 }
 
-TYPEINIT1( SdXMLAppletShapeContext, SdXMLShapeContext );
 
 SdXMLAppletShapeContext::SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -3057,7 +3040,6 @@ SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( sal_uInt16 p_n
     return SdXMLShapeContext::CreateChildContext( p_nPrefix, rLocalName, xAttrList );
 }
 
-TYPEINIT1( SdXMLPluginShapeContext, SdXMLShapeContext );
 
 SdXMLPluginShapeContext::SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -3335,7 +3317,6 @@ SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( sal_uInt16 p_n
     return SdXMLShapeContext::CreateChildContext( p_nPrefix, rLocalName, xAttrList );
 }
 
-TYPEINIT1( SdXMLFloatingFrameShapeContext, SdXMLShapeContext );
 
 SdXMLFloatingFrameShapeContext::SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -3429,7 +3410,6 @@ void SdXMLFloatingFrameShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-TYPEINIT1( SdXMLFrameShapeContext, SdXMLShapeContext );
 
 SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -3722,7 +3702,6 @@ void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix,
         SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-TYPEINIT1( SdXMLCustomShapeContext, SdXMLShapeContext );
 
 SdXMLCustomShapeContext::SdXMLCustomShapeContext(
     SvXMLImport& rImport,
@@ -3948,7 +3927,6 @@ SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
     return pContext;
 }
 
-TYPEINIT1( SdXMLTableShapeContext, SdXMLShapeContext );
 
 SdXMLTableShapeContext::SdXMLTableShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes )
 : SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false )

@@ -269,7 +269,6 @@ protected:
     virtual ~SdrPaintView();
 
 public:
-    TYPEINFO_OVERRIDE();
 
     virtual void ClearPageView();
     SdrModel* GetModel() const { return mpModel; }

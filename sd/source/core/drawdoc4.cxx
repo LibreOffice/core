@@ -48,7 +48,6 @@
 #include <svx/dialmgr.hxx>
 #include <editeng/bulletitem.hxx>
 #include <svx/xtable.hxx>
-#include <svx/sxmsuitm.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/xit.hxx>
@@ -489,7 +488,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineEndWidthItem(200));
     pISet->Put(XLineStyleItem(drawing::LineStyle_SOLID));
-    pISet->Put(makeSdrMeasureShowUnitItem(true));
+    pISet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
 
     // Generate presentation templates for default layout.
     OUString aPrefix = SD_RESSTR(STR_LAYOUT_DEFAULT_NAME);

@@ -33,7 +33,6 @@ class SwTableShell: public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_TABSHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

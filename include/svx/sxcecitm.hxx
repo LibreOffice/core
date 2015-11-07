@@ -32,7 +32,6 @@ enum SdrCaptionEscDir {SDRCAPT_ESCHORIZONTAL,SDRCAPT_ESCVERTICAL,SDRCAPT_ESCBEST
 
 class SVX_DLLPUBLIC SdrCaptionEscDirItem: public SfxEnumItem {
 public:
-    TYPEINFO_OVERRIDE();
     SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SDRCAPT_ESCHORIZONTAL): SfxEnumItem(SDRATTR_CAPTIONESCDIR,sal::static_int_cast< sal_uInt16 >(eDir)) {}
     SdrCaptionEscDirItem(SvStream& rIn)                              : SfxEnumItem(SDRATTR_CAPTIONESCDIR,rIn)  {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=nullptr) const override;
@@ -50,10 +49,12 @@ public:
 // sal_True=Linienaustrittsposition relativ
 // sal_False=Linienaustrittsposition absolut
 
-class SdrCaptionEscIsRelItem: public SdrYesNoItem {
+class SVX_DLLPUBLIC SdrCaptionEscIsRelItem: public SdrYesNoItem {
 public:
     SdrCaptionEscIsRelItem(bool bRel=true): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
     SdrCaptionEscIsRelItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_CAPTIONESCISREL,rIn)  {}
+    virtual ~SdrCaptionEscIsRelItem();
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
 };
 
 
@@ -63,10 +64,12 @@ public:
 // 10000 = 100.00% = rechts bzw. unten
 // nur wenn SdrCaptionEscIsRelItem=TRUE
 
-class SdrCaptionEscRelItem: public SfxInt32Item {
+class SVX_DLLPUBLIC SdrCaptionEscRelItem: public SfxInt32Item {
 public:
     SdrCaptionEscRelItem(long nEscRel=5000): SfxInt32Item(SDRATTR_CAPTIONESCREL,nEscRel) {}
     SdrCaptionEscRelItem(SvStream& rIn)    : SfxInt32Item(SDRATTR_CAPTIONESCREL,rIn)     {}
+    virtual ~SdrCaptionEscRelItem();
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
 };
 
 

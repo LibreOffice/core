@@ -38,7 +38,6 @@ class SVT_DLLPUBLIC XWindowItem : public SfxPoolItem
     XWindowItem & operator = ( const XWindowItem & ) = delete;
 
 public:
-    TYPEINFO_OVERRIDE();
     XWindowItem();
     XWindowItem( const XWindowItem &rItem );
     virtual ~XWindowItem();

@@ -34,7 +34,6 @@ namespace dbaui
         css::uno::Reference< css::beans::XPropertySet >   m_xSet;
 
     public:
-        TYPEINFO_OVERRIDE();
         OPropertySetItem(sal_Int16 nWhich);
         OPropertySetItem(sal_Int16 nWhich,
             const css::uno::Reference< css::beans::XPropertySet >& _rxSet);

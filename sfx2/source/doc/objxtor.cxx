@@ -39,7 +39,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
-#include <tools/rtti.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <basic/sbstar.hxx>
@@ -202,7 +201,6 @@ void SAL_CALL SfxModelListener_Impl::disposing( const css::lang::EventObject& _r
         mpDoc->DoClose();
 }
 
-TYPEINIT1(SfxObjectShell, SfxShell);
 
 
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )

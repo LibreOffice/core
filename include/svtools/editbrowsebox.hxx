@@ -23,7 +23,6 @@
 
 #include <svtools/svtdllapi.h>
 #include <tools/ref.hxx>
-#include <tools/rtti.hxx>
 #include <vcl/window.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
@@ -90,7 +89,6 @@ namespace svt
         bool                       bSuspended;     // <true> if the window is hidden and disabled
 
     public:
-        TYPEINFO();
 
         CellController(Control* pW);
         virtual ~CellController();
@@ -237,7 +235,6 @@ namespace svt
         bool                    m_bOwnImplementation;   // did we create m_pEditImplementation?
 
     public:
-        TYPEINFO_OVERRIDE();
         EditCellController( Edit* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
         virtual ~EditCellController( );
@@ -261,7 +258,6 @@ namespace svt
     class SVT_DLLPUBLIC SpinCellController : public CellController
     {
     public:
-        TYPEINFO_OVERRIDE();
         SpinCellController(SpinField* pSpinField);
         const SpinField& GetSpinWindow() const { return static_cast<const SpinField &>(GetWindow()); }
         SpinField& GetSpinWindow() { return static_cast<SpinField &>(GetWindow()); }
@@ -315,7 +311,6 @@ namespace svt
     class SVT_DLLPUBLIC CheckBoxCellController : public CellController
     {
     public:
-        TYPEINFO_OVERRIDE();
 
         CheckBoxCellController(CheckBoxControl* pWin);
         CheckBox& GetCheckBox() const;
@@ -349,7 +344,6 @@ namespace svt
     class SVT_DLLPUBLIC ComboBoxCellController : public CellController
     {
     public:
-        TYPEINFO_OVERRIDE();
 
         ComboBoxCellController(ComboBoxControl* pParent);
         ComboBoxControl& GetComboBox() const { return static_cast<ComboBoxControl &>(GetWindow()); }
@@ -383,7 +377,6 @@ namespace svt
     class SVT_DLLPUBLIC ListBoxCellController : public CellController
     {
     public:
-        TYPEINFO_OVERRIDE();
 
         ListBoxCellController(ListBoxControl* pParent);
         const ListBoxControl& GetListBox() const { return static_cast<const ListBoxControl &>(GetWindow()); }
@@ -404,7 +397,6 @@ namespace svt
     class SVT_DLLPUBLIC FormattedFieldCellController : public EditCellController
     {
     public:
-        TYPEINFO_OVERRIDE();
         FormattedFieldCellController( FormattedField* _pFormatted );
 
         virtual void CommitModifications() override;

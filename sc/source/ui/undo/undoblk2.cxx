@@ -30,7 +30,6 @@
 
 #include "undoolk.hxx"
 
-TYPEINIT1(ScUndoWidthOrHeight,      SfxUndoAction);
 
 /** Change column widths or row heights */
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,

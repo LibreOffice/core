@@ -153,7 +153,6 @@ protected:
     void lateInit(const SdPage& rSrcPage);
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdPage(SdDrawDocument& rNewDoc, bool bMasterPage=false);
     virtual ~SdPage();

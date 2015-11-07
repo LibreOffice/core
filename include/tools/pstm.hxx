@@ -22,7 +22,6 @@
 #include <tools/toolsdllapi.h>
 #include <tools/unqidx.hxx>
 #include <tools/ref.hxx>
-#include <tools/rtti.hxx>
 #include <tools/stream.hxx>
 #include <map>
 #include <unordered_map>
@@ -49,11 +48,9 @@ public:
 class TOOLS_DLLPUBLIC SvRttiBase : public SvRefBase
 {
 public:
-            TYPEINFO();
 };
 
 #define SV_DECL_PERSIST1( Class, Super1, CLASS_ID )                 \
-    TYPEINFO_OVERRIDE();                                            \
     static  sal_Int32  StaticClassId() { return CLASS_ID; }         \
     static  void *  CreateInstance( SvPersistBase ** ppBase );      \
     friend SvPersistStream& operator >> ( SvPersistStream & rStm,   \
@@ -80,7 +77,6 @@ public:
                     }
 
 #define SV_IMPL_PERSIST1( Class, Super1 )                           \
-    TYPEINIT1( Class, Super1 )                                      \
     PRV_SV_IMPL_PERSIST( Class )
 
 class SvPersistStream;

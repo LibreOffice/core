@@ -41,7 +41,6 @@
 #include <fieldhint.hxx>
 #include <svl/smplhint.hxx>
 
-TYPEINIT3(SwFormatField, SfxPoolItem, SwModify, SfxBroadcaster)
 
 // constructor for default item in attribute-pool
 SwFormatField::SwFormatField( sal_uInt16 nWhich )

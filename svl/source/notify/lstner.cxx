@@ -26,7 +26,6 @@
 #include <cassert>
 #include <deque>
 
-TYPEINIT0(SfxListener);
 
 typedef std::deque<SfxBroadcaster*> SfxBroadcasterArr_Impl;
 

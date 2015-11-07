@@ -152,7 +152,6 @@ protected:
     void    newObject( const css::uno::Reference< css::uno::XInterface >& _rxIFace );
 
 public:
-    TYPEINFO();
 
     FmEntryData( FmEntryData* pParentData, const css::uno::Reference< css::uno::XInterface >& _rIFace );
     FmEntryData( const FmEntryData& rEntryData );
@@ -240,7 +239,6 @@ class FmFormData : public FmEntryData
     css::uno::Reference< css::container::XContainer > m_xContainer;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     FmFormData(
         const css::uno::Reference< css::form::XForm >& _rxForm,
@@ -267,7 +265,6 @@ class FmControlData : public FmEntryData
     Image GetImage(const ImageList& ilNavigatorImages) const;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     FmControlData(
         const css::uno::Reference< css::form::XFormComponent >& _rxComponent,

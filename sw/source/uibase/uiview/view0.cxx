@@ -117,7 +117,6 @@ void SwView::InitInterface_Impl()
 #endif
 }
 
-TYPEINIT1(SwView,SfxViewShell)
 
 ShellModes  SwView::GetShellMode()
 {

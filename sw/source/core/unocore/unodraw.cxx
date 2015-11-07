@@ -878,7 +878,6 @@ SwDoc* SwXDrawPage::GetDoc()
     return pDoc;
 }
 
-TYPEINIT1(SwXShape, SwClient);
 
 namespace
 {

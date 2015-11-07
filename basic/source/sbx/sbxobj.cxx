@@ -27,9 +27,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include "sbxres.hxx"
 
-TYPEINIT1(SbxMethod,SbxVariable)
-TYPEINIT1(SbxProperty,SbxVariable)
-TYPEINIT2(SbxObject,SbxVariable,SfxListener)
 
 static OUString pNameProp;          // Name-Property
 static OUString pParentProp;        // Parent-Property

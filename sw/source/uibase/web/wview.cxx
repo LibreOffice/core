@@ -86,7 +86,6 @@ void SwWebView::InitInterface_Impl()
                                             RID_WEBTOOLS_TOOLBOX);
 }
 
-TYPEINIT1(SwWebView,SwView)
 
 SwWebView::SwWebView(SfxViewFrame* _pFrame, SfxViewShell* _pShell) :
     SwView(_pFrame, _pShell)

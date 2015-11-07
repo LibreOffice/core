@@ -1150,7 +1150,6 @@ sal_Int64 SAL_CALL SwXStyle::getSomething( const uno::Sequence< sal_Int8 >& rId 
     return 0;
 }
 
-TYPEINIT1(SwXStyle, SfxListener);
 
 OUString SwXStyle::getImplementationName() throw( uno::RuntimeException, std::exception )
 {

@@ -30,7 +30,7 @@ class SVL_DLLPUBLIC SfxPointItem: public SfxPoolItem
     Point                    aVal;
 
 public:
-                             TYPEINFO_OVERRIDE();
+                             static SfxPoolItem* CreateDefault();
                              SfxPointItem();
                              SfxPointItem( sal_uInt16 nWhich, const Point& rVal );
                              SfxPointItem( const SfxPointItem& );

@@ -29,7 +29,6 @@ class XMLShapePropertySetContext : public SvXMLPropertySetContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLShapePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,

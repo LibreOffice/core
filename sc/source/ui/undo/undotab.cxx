@@ -59,21 +59,6 @@ using ::std::unique_ptr;
 using ::std::vector;
 using std::shared_ptr;
 
-TYPEINIT1(ScUndoInsertTab,      SfxUndoAction);
-TYPEINIT1(ScUndoInsertTables,   SfxUndoAction);
-TYPEINIT1(ScUndoDeleteTab,      SfxUndoAction);
-TYPEINIT1(ScUndoRenameTab,      SfxUndoAction);
-TYPEINIT1(ScUndoMoveTab,        SfxUndoAction);
-TYPEINIT1(ScUndoCopyTab,        SfxUndoAction);
-TYPEINIT1(ScUndoMakeScenario,   SfxUndoAction);
-TYPEINIT1(ScUndoImportTab,      SfxUndoAction);
-TYPEINIT1(ScUndoRemoveLink,     SfxUndoAction);
-TYPEINIT1(ScUndoShowHideTab,    SfxUndoAction);
-TYPEINIT1(ScUndoPrintRange,     SfxUndoAction);
-TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
-TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
-TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
-TYPEINIT1(ScUndoTabColor,  SfxUndoAction);
 
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   SCTAB nTabNum,

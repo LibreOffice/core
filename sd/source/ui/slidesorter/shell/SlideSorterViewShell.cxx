@@ -88,7 +88,6 @@ void SlideSorterViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(SlideSorterViewShell, ViewShell);
 
 std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
     SfxViewFrame* pFrame,

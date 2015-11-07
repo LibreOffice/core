@@ -46,7 +46,6 @@ protected:
                                bool bTemplate = false ) const override;
 
 public:
-                        TYPEINFO_OVERRIDE();
 
                         SFX_DECL_OBJECTFACTORY();
                         SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH )

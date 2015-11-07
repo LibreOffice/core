@@ -47,7 +47,6 @@ class XMLIndexTOCSourceContext : public XMLIndexSourceBaseContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLIndexTOCSourceContext(
         SvXMLImport& rImport,

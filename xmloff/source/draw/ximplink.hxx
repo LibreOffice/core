@@ -24,7 +24,6 @@
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <tools/rtti.hxx>
 #include "ximpshap.hxx"
 
 // draw:a context
@@ -39,7 +38,6 @@ class SdXMLShapeLinkContext : public SvXMLShapeContext
     OUString msHyperlink;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,

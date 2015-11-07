@@ -45,7 +45,6 @@ class XMLSectionFootnoteConfigImport : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLSectionFootnoteConfigImport(
         SvXMLImport& rImport,

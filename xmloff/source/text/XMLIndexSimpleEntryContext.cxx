@@ -36,7 +36,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_STYLE_NAME;
 
-TYPEINIT1( XMLIndexSimpleEntryContext, SvXMLImportContext);
 
 XMLIndexSimpleEntryContext::XMLIndexSimpleEntryContext(
     SvXMLImport& rImport,

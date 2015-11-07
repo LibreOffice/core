@@ -33,7 +33,6 @@ namespace dbaui
         ::boost::optional< bool >   m_aValue;
 
     public:
-        TYPEINFO_OVERRIDE();
         explicit OptionalBoolItem( sal_Int16 nWhich );
         OptionalBoolItem( const OptionalBoolItem& _rSource );
 

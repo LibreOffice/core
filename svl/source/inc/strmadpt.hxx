@@ -31,7 +31,6 @@ class SvOutputStreamOpenLockBytes: public SvOpenLockBytes
     sal_uInt64                                     m_nPosition;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SvOutputStreamOpenLockBytes(
             const css::uno::Reference< css::io::XOutputStream > &  rTheOutputStream):

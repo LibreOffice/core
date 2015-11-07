@@ -236,7 +236,7 @@ namespace sw
         template<class T> const T & item_cast(const SfxPoolItem &rItem)
             throw(std::bad_cast)
         {
-            if (!rItem.IsA(STATICTYPE(T)))
+            if (dynamic_cast<const T *>(&rItem) == nullptr)
                 throw std::bad_cast();
             return static_cast<const T &>(rItem);
         }
@@ -261,9 +261,7 @@ namespace sw
         */
         template<class T> const T * item_cast(const SfxPoolItem *pItem)
         {
-            if (pItem && !pItem->IsA(STATICTYPE(T)))
-                pItem = nullptr;
-            return static_cast<const T *>(pItem);
+            return dynamic_cast<const T *>(pItem);
         }
 
         /** Extract a SfxPoolItem derived property from a SwContentNode

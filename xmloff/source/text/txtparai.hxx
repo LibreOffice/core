@@ -57,7 +57,6 @@ class XMLParaContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLParaContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
@@ -93,7 +92,6 @@ class XMLNumberedParaContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLNumberedParaContext( SvXMLImport& i_rImport,
             sal_uInt16 i_nPrefix,

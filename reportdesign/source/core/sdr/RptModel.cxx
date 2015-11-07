@@ -43,7 +43,6 @@ namespace rptui
 {
 using namespace reportdesign;
 using namespace com::sun::star;
-TYPEINIT1(OReportModel,SdrModel);
 
 
 

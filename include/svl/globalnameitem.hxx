@@ -20,7 +20,6 @@
 #define INCLUDED_SVL_GLOBALNAMEITEM_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/rtti.hxx>
 #include <tools/globname.hxx>
 #include <svl/poolitem.hxx>
 
@@ -29,7 +28,8 @@ class SVL_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
     SvGlobalName            m_aName;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             SfxGlobalNameItem();
                             SfxGlobalNameItem( sal_uInt16 nWhich, const SvGlobalName& );
                             virtual ~SfxGlobalNameItem();

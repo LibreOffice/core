@@ -85,7 +85,6 @@ struct SdParaAndPos
 
 // - OutlineView -
 
-TYPEINIT1( OutlineView, ::sd::View );
 
 OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineViewShell& rOutlineViewShell)
 : ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewShell)

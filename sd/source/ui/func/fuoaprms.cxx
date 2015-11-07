@@ -50,7 +50,6 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-TYPEINIT1( FuObjectAnimationParameters, FuPoor );
 
 #define ATTR_MISSING    0       ///< Attribute missing
 #define ATTR_MIXED      1       ///< Attribute ambiguous (on multi-selection)

@@ -124,7 +124,6 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
     void                        Deinitialize();
 
 public:
-                                TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXAPP)
 
 private:

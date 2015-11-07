@@ -81,7 +81,6 @@ sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
 
 
 
-TYPEINIT1(SdrAttrObj,SdrObject);
 
 SdrAttrObj::SdrAttrObj()
 {

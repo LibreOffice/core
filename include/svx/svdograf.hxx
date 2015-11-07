@@ -115,7 +115,6 @@ private:
     void onGraphicChanged();
 
 public:
-                            TYPEINFO_OVERRIDE();
 
                             SdrGrafObj();
                             SdrGrafObj(const Graphic& rGrf);

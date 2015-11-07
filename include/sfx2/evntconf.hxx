@@ -22,7 +22,6 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <tools/rtti.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <sfx2/event.hxx>
@@ -72,7 +71,6 @@ class SFX2_DLLPUBLIC SfxEventNamesItem : public SfxPoolItem
     SfxEventNamesList aEventsList;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SfxEventNamesItem ( const sal_uInt16 nId ) : SfxPoolItem( nId ) {}
 

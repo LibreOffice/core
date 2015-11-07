@@ -165,7 +165,6 @@ enum SvxChartRegress
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartStyleItem : public SfxEnumItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     SvxChartStyleItem(SvxChartStyle eStyle /*= CHSTYLE_2D_LINE*/,
                       sal_uInt16 nId );
     SvxChartStyleItem(SvStream& rIn, sal_uInt16 nId );
@@ -180,7 +179,6 @@ public:
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartRegressItem : public SfxEnumItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     SvxChartRegressItem(SvxChartRegress eRegress /*= CHREGRESS_LINEAR*/,
                         sal_uInt16 nId );
     SvxChartRegressItem(SvStream& rIn, sal_uInt16 nId );
@@ -197,7 +195,6 @@ public:
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartDataDescrItem : public SfxEnumItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     SvxChartDataDescrItem(SvStream& rIn,
                           sal_uInt16 nId );
 
@@ -210,7 +207,6 @@ public:
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartTextOrderItem : public SfxEnumItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= CHTXTORDER_SIDEBYSIDE*/,
                           sal_uInt16 nId );
     SvxChartTextOrderItem(SvStream& rIn,
@@ -230,7 +226,6 @@ public:
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartTextOrientItem : public SfxEnumItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     SvxChartTextOrientItem(SvStream& rIn,
                            sal_uInt16 nId );
 
@@ -243,7 +238,6 @@ public:
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartKindErrorItem : public SfxEnumItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     SvxChartKindErrorItem(SvxChartKindError /*eOrient = CHERROR_NONE*/,
                            sal_uInt16 nId );
     SvxChartKindErrorItem(SvStream& rIn,
@@ -262,7 +256,6 @@ public:
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartIndicateItem : public SfxEnumItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     SvxChartIndicateItem(SvxChartIndicate eOrient /*= CHINDICATE_NONE*/,
                            sal_uInt16 nId );
     SvxChartIndicateItem(SvStream& rIn,
@@ -283,7 +276,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxDoubleItem : public SfxPoolItem
     double fVal;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SvxDoubleItem(double fValue /*= 0.0*/, sal_uInt16 nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 

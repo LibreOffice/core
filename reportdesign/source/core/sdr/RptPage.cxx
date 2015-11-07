@@ -27,7 +27,6 @@
 namespace rptui
 {
 using namespace ::com::sun::star;
-TYPEINIT1( OReportPage, SdrPage );
 
 
 OReportPage::OReportPage( OReportModel& _rModel

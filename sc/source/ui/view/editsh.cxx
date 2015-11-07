@@ -82,7 +82,6 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1( ScEditShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell)
 

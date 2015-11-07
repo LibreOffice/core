@@ -23,7 +23,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 
-TYPEINIT1_AUTOFACTORY( SvxGalleryItem, SfxPoolItem );
+
+SfxPoolItem* SvxGalleryItem::CreateDefault() { return new SvxGalleryItem; }
 
 SvxGalleryItem::SvxGalleryItem()
     : m_nType( css::gallery::GalleryItemType::EMPTY )

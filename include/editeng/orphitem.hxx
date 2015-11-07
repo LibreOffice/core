@@ -34,7 +34,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxOrphansItem: public SfxByteItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxOrphansItem( const sal_uInt8 nL /*= 0*/, const sal_uInt16 nId  );
 

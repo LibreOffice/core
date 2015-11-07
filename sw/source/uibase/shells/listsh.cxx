@@ -58,7 +58,6 @@ void SwListShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_NUM_TOOLBOX);
 }
 
-TYPEINIT1(SwListShell,SwBaseShell)
 
 // #i35572# Functionality of Numbering/Bullet toolbar
 // for outline numbered paragraphs should match the functions for outlines

@@ -34,7 +34,6 @@
 #include <svx/xtable.hxx>
 #include <svx/xlnwtit.hxx>
 
-TYPEINIT1(E3dPolyScene, E3dScene);
 
 E3dPolyScene::E3dPolyScene()
 :   E3dScene()

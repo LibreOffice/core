@@ -31,16 +31,15 @@ class SdrCustomShapeAdjustmentValue
     friend class SdrCustomShapeAdjustmentItem;
 };
 
-class SdrCustomShapeAdjustmentItem : public SfxPoolItem
+class SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem : public SfxPoolItem
 {
             std::vector<SdrCustomShapeAdjustmentValue>  aAdjustmentValueList;
 
     public:
 
-            TYPEINFO_OVERRIDE();
-            SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem();
+            SdrCustomShapeAdjustmentItem();
             SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion );
-            SVX_DLLPUBLIC virtual ~SdrCustomShapeAdjustmentItem();
+            virtual ~SdrCustomShapeAdjustmentItem();
 
             virtual bool                operator==( const SfxPoolItem& ) const override;
             virtual bool GetPresentation(SfxItemPresentation ePresentation,
@@ -55,8 +54,8 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
             sal_uInt32                          GetCount() const { return aAdjustmentValueList.size(); };
-            SVX_DLLPUBLIC const SdrCustomShapeAdjustmentValue&  GetValue( sal_uInt32 nIndex ) const;
-            SVX_DLLPUBLIC void                              SetValue( sal_uInt32 nIndex,
+            const SdrCustomShapeAdjustmentValue&  GetValue( sal_uInt32 nIndex ) const;
+            void                              SetValue( sal_uInt32 nIndex,
                                                         const SdrCustomShapeAdjustmentValue& rVal );
 };
 

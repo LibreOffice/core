@@ -29,7 +29,6 @@ enum SdrCircKind {SDRCIRC_FULL,
 
 class SdrCircKindItem: public SfxEnumItem {
 public:
-    TYPEINFO_OVERRIDE();
     SdrCircKindItem(SdrCircKind eKind=SDRCIRC_FULL): SfxEnumItem(SDRATTR_CIRCKIND,sal::static_int_cast< sal_uInt16 >(eKind)) {}
     SdrCircKindItem(SvStream& rIn)                 : SfxEnumItem(SDRATTR_CIRCKIND,rIn)   {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;

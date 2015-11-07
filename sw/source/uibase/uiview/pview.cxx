@@ -99,7 +99,6 @@ void SwPagePreview::InitInterface_Impl()
                                             RID_PVIEW_TOOLBOX);
 }
 
-TYPEINIT1(SwPagePreview,SfxViewShell)
 
 #define SWVIEWFLAGS ( SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::HAS_PRINTOPTIONS )
 

@@ -216,7 +216,6 @@ private:
 
 //===== ViewShellBase =========================================================
 
-TYPEINIT1(ViewShellBase, SfxViewShell);
 
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ViewShellBase object has been constructed.

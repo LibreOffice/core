@@ -64,7 +64,6 @@ using namespace ::com::sun::star::lang;
 #define ITEMVALUE(ItemSet,Id,Cast)  static_cast<const Cast&>((ItemSet).Get(Id)).GetValue()
 #define TOOLBOX_NAME                OUString( "colorbar" )
 
-TYPEINIT1_AUTOFACTORY( TbxImageItem, SfxUInt16Item );
 
 TbxImageItem::TbxImageItem( sal_uInt16 _nWhich, sal_uInt16 nImage ) :
     SfxUInt16Item( _nWhich, nImage )

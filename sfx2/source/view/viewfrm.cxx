@@ -154,8 +154,6 @@ void SfxViewFrame::InitInterface_Impl()
 #endif
 }
 
-TYPEINIT2(SfxViewFrame,SfxShell,SfxListener);
-TYPEINIT1(SfxViewFrameItem, SfxPoolItem);
 
 namespace
 {

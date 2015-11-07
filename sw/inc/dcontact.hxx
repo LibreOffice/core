@@ -102,7 +102,6 @@ protected:
     void SetInDTOR();
 
 public:
-    TYPEINFO_OVERRIDE();
 
     /// For reader. Only the connection is created.
     SwContact( SwFrameFormat *pToRegisterIn );
@@ -195,7 +194,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     /// Creates DrawObject and registers it with the Model.
     SwFlyDrawContact( SwFlyFrameFormat* pToRegisterIn, SdrModel* pMod );
@@ -241,7 +239,6 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
    public:
-        TYPEINFO_OVERRIDE();
 
         SwDrawVirtObj( SdrObject&       _rNewObj,
                        SwDrawContact&   _rDrawContact );
@@ -388,7 +385,6 @@ class SwDrawContact : public SwContact
         virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
 
     public:
-        TYPEINFO_OVERRIDE();
 
         SwDrawContact( SwFrameFormat *pToRegisterIn, SdrObject *pObj );
         virtual ~SwDrawContact();

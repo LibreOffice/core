@@ -146,7 +146,6 @@ protected:
             }
 
 public:
-            TYPEINFO_OVERRIDE();
             SvMetaObject *  MakeClone() const;
             SvMetaSlot *Clone() const { return static_cast<SvMetaSlot *>(MakeClone()); }
 

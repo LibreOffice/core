@@ -19,7 +19,6 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
-#include <tools/rtti.hxx>
 #include <sot/exchange.hxx>
 #include <sot/filelist.hxx>
 #include <osl/diagnose.h>

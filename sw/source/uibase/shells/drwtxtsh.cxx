@@ -92,7 +92,6 @@ void SwDrawTextShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(SwDrawTextShell,SfxShell)
 
 void SwDrawTextShell::Init()
 {

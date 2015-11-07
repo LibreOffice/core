@@ -201,7 +201,6 @@ void FmFormShell::InitInterface_Impl()
                                             FM_UI_FEATURE_TB_FORMDESIGN);
 }
 
-TYPEINIT1(FmFormShell,SfxShell)
 
 FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             :SfxShell(_pParent)

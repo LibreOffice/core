@@ -488,7 +488,6 @@ private:
     std::shared_ptr< SvXMLImportContext > mpSlaveContext;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -509,7 +508,6 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
-TYPEINIT1( SdXMLNumberFormatMemberImportContext, SvXMLImportContext );
 
 SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent, SvXMLImportContext* pSlaveContext )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
@@ -578,7 +576,6 @@ void SdXMLNumberFormatMemberImportContext::Characters( const OUString& rChars )
     maText += rChars;
 }
 
-TYPEINIT1( SdXMLNumberFormatImportContext, SvXMLImportContext );
 
 SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
 :   SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),

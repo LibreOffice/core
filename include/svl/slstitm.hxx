@@ -22,7 +22,6 @@
 #include <vector>
 
 #include <svl/svldllapi.h>
-#include <tools/rtti.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
@@ -34,7 +33,7 @@ protected:
     SfxImpStringList*   pImp;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SfxStringListItem();
     SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=nullptr );

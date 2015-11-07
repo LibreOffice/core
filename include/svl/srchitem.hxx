@@ -92,7 +92,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
     virtual void    ImplCommit() override;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxSearchItem( const sal_uInt16 nId );
     SvxSearchItem( const SvxSearchItem& rItem );

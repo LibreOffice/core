@@ -32,7 +32,6 @@ class FuConstruct
     : public FuDraw
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     virtual void DoExecute( SfxRequest& rReq ) override;
 

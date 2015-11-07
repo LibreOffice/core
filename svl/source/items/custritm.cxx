@@ -24,7 +24,6 @@
 #include <tools/stream.hxx>
 #include <svl/custritm.hxx>
 
-TYPEINIT1_AUTOFACTORY(CntUnencodedStringItem, SfxPoolItem)
 
 // virtual
 bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const

@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_APPTYPES_HXX
 
 #include <vcl/dllapi.h>
-#include <tools/rtti.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #define EXC_RSCNOTLOADED   ((sal_uInt16)0x0100)

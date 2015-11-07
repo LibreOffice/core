@@ -139,7 +139,6 @@ void SwDocShell::InitInterface_Impl()
 {
 }
 
-TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
 
 SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), SfxObjectShellFlags::STD_NORMAL|SfxObjectShellFlags::HASMENU, "swriter"  )
 

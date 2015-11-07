@@ -32,7 +32,7 @@
 class SVX_DLLPUBLIC XFormTextShadowColorItem : public XColorItem
 {
 public:
-            TYPEINFO_OVERRIDE();
+            static SfxPoolItem* CreateDefault();
             XFormTextShadowColorItem() {}
             XFormTextShadowColorItem(const OUString& rName, const Color& rTheColor);
             XFormTextShadowColorItem(SvStream& rIn);

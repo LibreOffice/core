@@ -95,7 +95,6 @@ static const char szManagerStream[] = "BasicManager2";
 static const char szImbedded[] = "LIBIMBEDDED";
 static const char szCryptingKey[] = "CryptedBasic";
 
-TYPEINIT1( BasicManager, SfxBroadcaster );
 
 const StreamMode eStreamReadMode = StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL;
 const StreamMode eStorageReadMode = StreamMode::READ | StreamMode::SHARE_DENYWRITE;

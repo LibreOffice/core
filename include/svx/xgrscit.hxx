@@ -32,7 +32,7 @@
 class SVX_DLLPUBLIC XGradientStepCountItem: public SfxUInt16Item
 {
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             XGradientStepCountItem( sal_uInt16 nStepCount = 0 );
                             XGradientStepCountItem( SvStream& rIn );
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;

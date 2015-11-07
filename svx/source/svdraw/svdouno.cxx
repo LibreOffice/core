@@ -147,7 +147,6 @@ namespace
     }
 }
 
-TYPEINIT1(SdrUnoObj, SdrRectObj);
 
 SdrUnoObj::SdrUnoObj(const OUString& rModelName, bool _bOwnUnoControlModel)
 :   m_pImpl( new SdrUnoObjDataHolder ),

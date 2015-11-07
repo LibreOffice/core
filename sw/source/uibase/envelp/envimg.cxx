@@ -43,7 +43,8 @@
 using namespace utl;
 using namespace ::com::sun::star::uno;
 
-TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
+
+SfxPoolItem* SwEnvItem::CreateDefault() { return new SwEnvItem; }
 
 OUString MakeSender()
 {

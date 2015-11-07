@@ -82,7 +82,6 @@ sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrTextObj,SdrAttrObj);
 
 SdrTextObj::SdrTextObj()
 :   SdrAttrObj(),

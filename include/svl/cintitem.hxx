@@ -29,7 +29,6 @@ class SVL_DLLPUBLIC CntByteItem: public SfxPoolItem
     sal_uInt8 m_nValue;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     CntByteItem(sal_uInt16 which = 0, sal_uInt8 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue) {}
@@ -76,7 +75,6 @@ class SVL_DLLPUBLIC CntUInt16Item: public SfxPoolItem
     sal_uInt16 m_nValue;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     CntUInt16Item(sal_uInt16 which = 0, sal_uInt16 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
@@ -126,7 +124,6 @@ class SVL_DLLPUBLIC CntInt32Item: public SfxPoolItem
     sal_Int32 m_nValue;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     CntInt32Item(sal_uInt16 which = 0, sal_Int32 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
@@ -176,7 +173,6 @@ class SVL_DLLPUBLIC CntUInt32Item: public SfxPoolItem
     sal_uInt32 m_nValue;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     CntUInt32Item(sal_uInt16 which = 0, sal_uInt32 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)

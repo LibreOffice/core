@@ -44,7 +44,6 @@ class ScMarkData;
 class ScUndoInsertTab : public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoInsertTab(
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
@@ -72,7 +71,6 @@ private:
 class ScUndoInsertTables : public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoInsertTables(
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
@@ -100,7 +98,6 @@ private:
 class ScUndoDeleteTab: public ScMoveUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoDeleteTab(
                             ScDocShell* pNewDocShell,
                             const std::vector<SCTAB> &theTabs,      //SCTAB nNewTab,
@@ -126,7 +123,6 @@ private:
 class ScUndoRenameTab: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoRenameTab(
                             ScDocShell* pNewDocShell,
                             SCTAB nT,
@@ -152,7 +148,6 @@ private:
 class ScUndoMoveTab: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoMoveTab(
                         ScDocShell* pNewDocShell,
                         ::std::vector<SCTAB>* pOldTabs,
@@ -181,7 +176,6 @@ private:
 class ScUndoCopyTab: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoCopyTab(
                         ScDocShell* pNewDocShell,
                         ::std::vector<SCTAB>* pOldTabs,
@@ -209,7 +203,6 @@ private:
 class ScUndoTabColor: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoTabColor(
                             ScDocShell* pNewDocShell,
                             SCTAB nT,
@@ -236,7 +229,6 @@ private:
 class ScUndoMakeScenario: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoMakeScenario(
                             ScDocShell* pNewDocShell,
                             SCTAB nSrc, SCTAB nDest,
@@ -266,7 +258,6 @@ private:
 class ScUndoImportTab : public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoImportTab(
                             ScDocShell* pShell,
                             SCTAB nNewTab, SCTAB nNewCount );
@@ -291,7 +282,6 @@ private:
 class ScUndoRemoveLink : public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoRemoveLink(               // Call before delete!
                             ScDocShell* pShell,
                             const OUString& rDoc );
@@ -320,7 +310,6 @@ private:
 class ScUndoShowHideTab : public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoShowHideTab(
                             ScDocShell* pShell,
                             const std::vector<SCTAB>& newUndoTabs,
@@ -388,7 +377,6 @@ private:
 class ScUndoPrintRange : public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
                                         ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew );
     virtual         ~ScUndoPrintRange();
@@ -411,7 +399,6 @@ private:
 class ScUndoScenarioFlags: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoScenarioFlags(
                             ScDocShell* pNewDocShell, SCTAB nT,
                             const OUString& rON, const OUString& rNN,
@@ -443,7 +430,6 @@ private:
 class ScUndoRenameObject: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoRenameObject(
                             ScDocShell* pNewDocShell, const OUString& rPN,
                             const OUString& rON, const OUString& rNN );
@@ -468,7 +454,6 @@ private:
 class ScUndoLayoutRTL : public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, bool bNewRTL );
     virtual         ~ScUndoLayoutRTL();
 

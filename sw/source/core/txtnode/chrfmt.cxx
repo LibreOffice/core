@@ -22,7 +22,6 @@
 #include <charfmt.hxx>
 #include <docary.hxx>
 
-TYPEINIT1( SwCharFormat, SwFormat );  //rtti fuer SwCharFormat
 
 void SwCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {

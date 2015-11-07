@@ -93,7 +93,6 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
 
-    TYPEINFO_OVERRIDE();
 
     //XNamed
     virtual OUString SAL_CALL getName() throw( css::uno::RuntimeException, std::exception ) override;
@@ -360,7 +359,6 @@ class SwXOLEListener : public cppu::WeakImplHelper
 public:
     SwXOLEListener(SwFormat& rOLEFormat, css::uno::Reference< css::frame::XModel > xOLE);
     virtual ~SwXOLEListener();
-    TYPEINFO_OVERRIDE();
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;

@@ -31,7 +31,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_CHANGE_ID;
 
-TYPEINIT1( XMLChangeImportContext, SvXMLImportContext );
 
 XMLChangeImportContext::XMLChangeImportContext(
     SvXMLImport& rImport,

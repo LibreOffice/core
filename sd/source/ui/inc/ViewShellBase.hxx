@@ -62,7 +62,6 @@ class ViewShellBase
     : public SfxViewShell
 {
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDVIEWSHELLBASE)
 
 private:

@@ -32,7 +32,7 @@
 class SVX_DLLPUBLIC XLineCapItem : public SfxEnumItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     XLineCapItem(css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
     XLineCapItem(SvStream& rIn);
 

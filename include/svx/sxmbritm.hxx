@@ -29,10 +29,12 @@
 // TextUpsideDown, but easily operated)
 // laesst sich auch draggen, indem man den Masslinienabstand
 // (SdrMeasureLineDistItem) ueber die Bezugskante hinwegdraggt
-class SdrMeasureBelowRefEdgeItem: public SdrYesNoItem {
+class SVX_DLLPUBLIC SdrMeasureBelowRefEdgeItem: public SdrYesNoItem {
 public:
     SdrMeasureBelowRefEdgeItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASUREBELOWREFEDGE,bOn) {}
     SdrMeasureBelowRefEdgeItem(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASUREBELOWREFEDGE,rIn) {}
+    virtual ~SdrMeasureBelowRefEdgeItem();
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
 };
 
 #endif

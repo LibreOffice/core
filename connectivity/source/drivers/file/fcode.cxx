@@ -32,30 +32,7 @@ using namespace connectivity::file;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 
-TYPEINIT0(OCode);
-TYPEINIT1(OOperand, OCode);
-TYPEINIT1(OOperandRow, OOperand);
-TYPEINIT1(OOperandAttr, OOperandRow);
-TYPEINIT1(OOperandParam, OOperandRow);
-TYPEINIT1(OOperandValue, OOperand);
-TYPEINIT1(OOperandConst, OOperandValue);
-TYPEINIT1(OOperandResult, OOperandValue);
-TYPEINIT1(OStopOperand, OOperandValue);
 
-TYPEINIT1(OOperator, OCode);
-TYPEINIT1(OBoolOperator,OOperator);
-TYPEINIT1(OOp_NOT, OBoolOperator);
-TYPEINIT1(OOp_AND, OBoolOperator);
-TYPEINIT1(OOp_OR, OBoolOperator);
-TYPEINIT1(OOp_ISNULL, OBoolOperator);
-TYPEINIT1(OOp_ISNOTNULL, OOp_ISNULL);
-TYPEINIT1(OOp_LIKE, OBoolOperator);
-TYPEINIT1(OOp_NOTLIKE, OOp_LIKE);
-TYPEINIT1(OOp_COMPARE, OBoolOperator);
-TYPEINIT1(ONumOperator, OOperator);
-TYPEINIT1(ONthOperator, OOperator);
-TYPEINIT1(OBinaryOperator, OOperator);
-TYPEINIT1(OUnaryOperator, OOperator);
 
 OCode::OCode()
 {

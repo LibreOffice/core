@@ -68,8 +68,6 @@ void SwWebGlosDocShell::InitInterface_Impl()
 {
 }
 
-TYPEINIT1( SwGlosDocShell, SwDocShell );
-TYPEINIT1( SwWebGlosDocShell, SwWebDocShell );
 
 static void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
 {

@@ -57,7 +57,6 @@ static void ImplUnmarkObject( SdrObject* pObj )
 
 
 
-TYPEINIT1(SdrUndoAction,SfxUndoAction);
 
 SdrUndoAction::~SdrUndoAction() {}
 

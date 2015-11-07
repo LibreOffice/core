@@ -28,7 +28,7 @@
 class SVX_DLLPUBLIC XSecondaryFillColorItem : public XColorItem
 {
 public:
-            TYPEINFO_OVERRIDE();
+            static SfxPoolItem* CreateDefault();
             SVX_DLLPRIVATE XSecondaryFillColorItem() {}
             XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor);
             SVX_DLLPRIVATE XSecondaryFillColorItem(SvStream& rIn);

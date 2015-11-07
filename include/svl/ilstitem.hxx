@@ -30,8 +30,7 @@ class SVL_DLLPUBLIC SfxIntegerListItem : public SfxPoolItem
     css::uno::Sequence < sal_Int32 > m_aList;
 
 public:
-    TYPEINFO_OVERRIDE();
-
+    static SfxPoolItem* CreateDefault();
     SfxIntegerListItem();
     SfxIntegerListItem( sal_uInt16 nWhich, const ::std::vector < sal_Int32 >& rList );
     SfxIntegerListItem( sal_uInt16 nWhich, const css::uno::Sequence < sal_Int32 >& rList );

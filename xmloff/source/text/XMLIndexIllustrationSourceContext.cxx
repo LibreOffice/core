@@ -37,7 +37,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_TOKEN_INVALID;
 
-TYPEINIT1(XMLIndexIllustrationSourceContext, XMLIndexTableSourceContext);
 
 
 XMLIndexIllustrationSourceContext::XMLIndexIllustrationSourceContext(

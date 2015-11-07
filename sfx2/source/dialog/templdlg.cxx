@@ -181,8 +181,6 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 #define MAX_FILTER_ENTRIES          14
 
 
-TYPEINIT0(SfxCommonTemplateDialog_Impl);
-TYPEINIT1(SfxTemplateDialog_Impl,SfxCommonTemplateDialog_Impl);
 
 class SfxCommonTemplateDialog_Impl::DeletionWatcher : private boost::noncopyable
 {

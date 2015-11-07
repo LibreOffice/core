@@ -45,7 +45,6 @@ public:
 class SC_DLLPUBLIC ScTpDefaultsItem : public SfxPoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     ScTpDefaultsItem( sal_uInt16 nWhich,
                    const ScDefaultsOptions& rOpt );
     ScTpDefaultsItem( const ScTpDefaultsItem& rItem );

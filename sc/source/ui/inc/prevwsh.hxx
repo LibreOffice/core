@@ -75,7 +75,6 @@ protected:
     virtual void    ReadUserDataSequence (const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse = false ) override;
 
 public:
-                    TYPEINFO_OVERRIDE();
                     SFX_DECL_INTERFACE(SCID_PREVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScPreviewShell);
 

@@ -44,7 +44,6 @@ protected:
     SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream);
 
 public:
-    TYPEINFO_OVERRIDE();
 
     sal_uInt16 GetValue() const { return m_nValue; }
 
@@ -67,7 +66,7 @@ class SVL_DLLPUBLIC SfxBoolItem
     bool m_bValue;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SfxBoolItem(sal_uInt16 const nWhich = 0, bool const bValue = false)
         : SfxPoolItem(nWhich)

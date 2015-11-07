@@ -38,7 +38,6 @@
 
 using namespace com::sun::star;
 
-TYPEINIT1( SwFormat, SwClient );
 
 SwFormat::SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
               const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrm,

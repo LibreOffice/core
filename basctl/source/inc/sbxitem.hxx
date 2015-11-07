@@ -44,7 +44,7 @@ class SbxItem : public SfxPoolItem
     ItemType                m_eType;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, ItemType);
     SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType);
 

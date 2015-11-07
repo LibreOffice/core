@@ -24,7 +24,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
 
-TYPEINIT1( XMLTextTableContext, SvXMLImportContext );
 
 XMLTextTableContext::XMLTextTableContext(
         SvXMLImport& rImport,

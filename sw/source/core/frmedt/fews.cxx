@@ -52,7 +52,6 @@
 
 using namespace com::sun::star;
 
-TYPEINIT1(SwFEShell,SwEditShell)
 
 void SwFEShell::EndAllActionAndCall()
 {

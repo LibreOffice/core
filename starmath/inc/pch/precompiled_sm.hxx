@@ -166,7 +166,6 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/rtti.hxx>
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <ucbhelper/content.hxx>

@@ -31,7 +31,7 @@ class SVL_DLLPUBLIC SfxRectangleItem: public SfxPoolItem
     Rectangle                aVal;
 
 public:
-                             TYPEINFO_OVERRIDE();
+                             static SfxPoolItem* CreateDefault();
                              SfxRectangleItem();
                              SfxRectangleItem( sal_uInt16 nWhich, const Rectangle& rVal );
                              SfxRectangleItem( const SfxRectangleItem& );

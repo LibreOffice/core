@@ -25,7 +25,6 @@
 #include "strings.hrc"
 #include "sdresid.hxx"
 
-TYPEINIT1(SdLayerModifyUndoAction, SdUndoAction);
 
 SdLayerModifyUndoAction::SdLayerModifyUndoAction(
     SdDrawDocument* _pDoc, SdrLayer* pLayer,

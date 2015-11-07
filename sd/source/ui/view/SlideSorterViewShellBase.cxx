@@ -29,7 +29,6 @@ namespace sd {
 
 class DrawDocShell;
 
-TYPEINIT1(SlideSorterViewShellBase, ViewShellBase);
 
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new SlideSorterViewShellBase object has been constructed.

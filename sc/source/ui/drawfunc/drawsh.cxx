@@ -60,7 +60,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <memory>
 
-TYPEINIT1( ScDrawShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 

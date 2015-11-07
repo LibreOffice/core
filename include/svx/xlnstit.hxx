@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC XLineStartItem : public NameOrIndex
     basegfx::B2DPolyPolygon     maPolyPolygon;
 
 public:
-            TYPEINFO_OVERRIDE();
+            static SfxPoolItem* CreateDefault();
             XLineStartItem(sal_Int32 nIndex = -1);
             XLineStartItem(const OUString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineStartItem(SfxItemPool* pPool, const basegfx::B2DPolyPolygon& rPolyPolygon);

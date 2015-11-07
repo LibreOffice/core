@@ -133,7 +133,6 @@ void SwTextShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(FN_WORDCOUNT_DIALOG);
 }
 
-TYPEINIT1(SwTextShell,SwBaseShell)
 
 void SwTextShell::ExecInsert(SfxRequest &rReq)
 {

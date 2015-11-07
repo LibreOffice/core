@@ -158,7 +158,6 @@ public:
     /// but we implement this ourselves.
     SFX_DECL_INTERFACE(SW_DOCSHELL)
     SFX_DECL_OBJECTFACTORY()
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

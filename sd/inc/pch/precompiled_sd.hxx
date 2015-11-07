@@ -736,7 +736,6 @@
 #include <svx/sxciaitm.hxx>
 #include <svx/sxekitm.hxx>
 #include <svx/sxelditm.hxx>
-#include <svx/sxmsuitm.hxx>
 #include <svx/tabline.hxx>
 #include <svx/tbcontrl.hxx>
 #include <svx/unoapi.hxx>

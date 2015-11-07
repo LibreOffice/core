@@ -29,8 +29,6 @@
 #include "inputhdl.hxx"
 #include "globstr.hrc"
 
-TYPEINIT1(ScUndoModifyStyle, ScSimpleUndo);
-TYPEINIT1(ScUndoApplyPageStyle, ScSimpleUndo);
 
 //      modify style (cell or page style)
 

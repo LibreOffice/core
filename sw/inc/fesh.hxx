@@ -248,7 +248,6 @@ public:
 
     using SwEditShell::Insert;
 
-    TYPEINFO_OVERRIDE();
     SwFEShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = nullptr );
     SwFEShell( SwEditShell& rShell, vcl::Window *pWin );
     virtual ~SwFEShell();

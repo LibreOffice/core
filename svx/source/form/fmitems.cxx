@@ -25,7 +25,6 @@
 
 // class FmInterfaceItem
 
-TYPEINIT1(FmInterfaceItem, SfxPoolItem);
 
 
 bool FmInterfaceItem::operator==( const SfxPoolItem& rAttr ) const

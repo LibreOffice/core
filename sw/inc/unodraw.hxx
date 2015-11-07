@@ -227,7 +227,6 @@ protected:
 public:
     SwXShape(css::uno::Reference< css::uno::XInterface > & xShape);
 
-    TYPEINFO_OVERRIDE();
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;

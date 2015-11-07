@@ -72,7 +72,6 @@ void SwDrawBaseShell::InitInterface_Impl()
 {
 }
 
-TYPEINIT1(SwDrawBaseShell,SwBaseShell)
 
 SwDrawBaseShell::SwDrawBaseShell(SwView &_rView)
     : SwBaseShell(_rView)

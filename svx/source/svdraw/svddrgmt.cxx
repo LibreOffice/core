@@ -302,7 +302,6 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPointGlueDrag::create
 
 
 
-TYPEINIT0(SdrDragMethod);
 
 void SdrDragMethod::resetSdrDragEntries()
 {
@@ -965,7 +964,6 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
 
 
 
-TYPEINIT1(SdrDragMovHdl,SdrDragMethod);
 
 SdrDragMovHdl::SdrDragMovHdl(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView)
@@ -1181,7 +1179,6 @@ Pointer SdrDragMovHdl::GetSdrDragPointer() const
 
 
 
-TYPEINIT1(SdrDragObjOwn,SdrDragMethod);
 
 SdrDragObjOwn::SdrDragObjOwn(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
@@ -1488,7 +1485,6 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
 
 
 
-TYPEINIT1(SdrDragMove,SdrDragMethod);
 
 void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool /*bModify*/)
 {
@@ -1767,7 +1763,6 @@ Pointer SdrDragMove::GetSdrDragPointer() const
 
 
 
-TYPEINIT1(SdrDragResize,SdrDragMethod);
 
 SdrDragResize::SdrDragResize(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
@@ -2104,7 +2099,6 @@ Pointer SdrDragResize::GetSdrDragPointer() const
 
 
 
-TYPEINIT1(SdrDragRotate,SdrDragMethod);
 
 void SdrDragRotate::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
@@ -2241,7 +2235,6 @@ Pointer SdrDragRotate::GetSdrDragPointer() const
 
 
 
-TYPEINIT1(SdrDragShear,SdrDragMethod);
 
 SdrDragShear::SdrDragShear(SdrDragView& rNewView, bool bSlant1)
 :   SdrDragMethod(rNewView),
@@ -2523,7 +2516,6 @@ Pointer SdrDragShear::GetSdrDragPointer() const
 
 
 
-TYPEINIT1(SdrDragMirror,SdrDragMethod);
 
 void SdrDragMirror::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
@@ -2654,7 +2646,6 @@ Pointer SdrDragMirror::GetSdrDragPointer() const
 
 
 
-TYPEINIT1(SdrDragGradient, SdrDragMethod);
 
 SdrDragGradient::SdrDragGradient(SdrDragView& rNewView, bool bGrad)
 :   SdrDragMethod(rNewView),
@@ -2815,7 +2806,6 @@ Pointer SdrDragGradient::GetSdrDragPointer() const
 
 
 
-TYPEINIT1(SdrDragCrook,SdrDragMethod);
 
 SdrDragCrook::SdrDragCrook(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
@@ -3452,7 +3442,6 @@ Pointer SdrDragCrook::GetSdrDragPointer() const
 
 
 
-TYPEINIT1(SdrDragDistort,SdrDragMethod);
 
 SdrDragDistort::SdrDragDistort(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
@@ -3606,7 +3595,6 @@ void SdrDragDistort::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPol
 
 
 
-TYPEINIT1(SdrDragCrop,SdrDragObjOwn);
 
 SdrDragCrop::SdrDragCrop(SdrDragView& rNewView)
 :   SdrDragObjOwn(rNewView)

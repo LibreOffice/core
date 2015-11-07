@@ -64,7 +64,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuConstructRectangle, FuConstruct );
 
 FuConstructRectangle::FuConstructRectangle (
     ViewShell*  pViewSh,
