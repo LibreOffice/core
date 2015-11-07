@@ -775,6 +775,25 @@ bool showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFra
         && sModuleId != "com.sun.star.frame.StartModule";
 }
 
+bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
+{
+    return a->GetName().compareTo( b->GetName() ) < 0;
+}
+
+bool SvxConfigEntryModified( SvxConfigEntry* pEntry )
+{
+    SvxEntries* pEntries = pEntry->GetEntries();
+    if ( !pEntries )
+        return false;
+
+    for ( const auto& entry : *pEntries )
+    {
+        if ( entry->IsModified() || SvxConfigEntryModified( entry ) )
+            return true;
+    }
+    return false;
+}
+
 }
 
 /******************************************************************************
@@ -1071,7 +1090,7 @@ MenuSaveInData::SetEntries( SvxEntries* pNewEntries )
     pRootEntry->SetEntries( pNewEntries );
 }
 
-bool MenuSaveInData::LoadSubMenus(
+bool SaveInData::LoadSubMenus(
     const uno::Reference< container::XIndexAccess >& xMenuSettings,
     const OUString& rBaseTitle,
     SvxConfigEntry* pParentData )
@@ -1111,7 +1130,7 @@ bool MenuSaveInData::LoadSubMenus(
 
                 // If custom label not set retrieve it from the command
                 // to info service
-                if ( aLabel.equals( OUString() ) )
+                if ( aLabel.isEmpty() )
                 {
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
@@ -1257,7 +1276,7 @@ void MenuSaveInData::Apply(
     }
 }
 
-void MenuSaveInData::ApplyMenu(
+void SaveInData::ApplyMenu(
     uno::Reference< container::XIndexContainer >& rMenuBar,
     uno::Reference< lang::XSingleComponentFactory >& rFactory,
     SvxConfigEntry* pMenuData )
@@ -1282,13 +1301,14 @@ void MenuSaveInData::ApplyMenu(
 
             sal_Int32 nIndex = aPropValueSeq.getLength();
             aPropValueSeq.realloc( nIndex + 1 );
-            aPropValueSeq[nIndex].Name = m_aDescriptorContainer;
+            aPropValueSeq[nIndex].Name = ITEM_DESCRIPTOR_CONTAINER;
             aPropValueSeq[nIndex].Value <<= xSubMenuBar;
 
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), uno::makeAny( aPropValueSeq ));
 
             ApplyMenu( xSubMenuBar, rFactory, pEntry );
+            pEntry->SetModified( false );
         }
         else if ( pEntry->IsSeparator() )
         {
@@ -1303,6 +1323,7 @@ void MenuSaveInData::ApplyMenu(
                 rMenuBar->getCount(), uno::makeAny( aPropValueSeq ));
         }
     }
+    pMenuData->SetModified( false );
 }
 
 void
@@ -1322,6 +1343,177 @@ MenuSaveInData::Reset()
     {
         // will use default settings
     }
+}
+
+ContextMenuSaveInData::ContextMenuSaveInData(
+    const css::uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
+    const css::uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
+    const OUString& aModuleId, bool bIsDocConfig )
+    : SaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bIsDocConfig )
+{
+}
+
+ContextMenuSaveInData::~ContextMenuSaveInData()
+{
+}
+
+SvxEntries* ContextMenuSaveInData::GetEntries()
+{
+    if ( !m_pRootEntry )
+    {
+        typedef std::unordered_map< OUString, bool, OUStringHash, std::equal_to< OUString > > MenuInfo;
+        MenuInfo aMenuInfo;
+
+        m_pRootEntry.reset( new SvxConfigEntry( "ContextMenus", OUString(), true ) );
+        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aElementsInfo;
+        try
+        {
+            aElementsInfo = GetConfigManager()->getUIElementsInfo( css::ui::UIElementType::POPUPMENU );
+        }
+        catch ( const css::lang::IllegalArgumentException& )
+        {}
+
+        for ( const auto& aElement : aElementsInfo )
+        {
+            OUString aUrl;
+            for ( const auto& aElementProp : aElement )
+            {
+                if ( aElementProp.Name == ITEM_DESCRIPTOR_RESOURCEURL )
+                    aElementProp.Value >>= aUrl;
+            }
+
+            css::uno::Reference< css::container::XIndexAccess > xPopupMenu;
+            try
+            {
+                xPopupMenu = GetConfigManager()->getSettings( aUrl, sal_False );
+            }
+            catch ( const css::uno::Exception& )
+            {}
+
+            if ( xPopupMenu.is() )
+            {
+                OUString aMenuName = aUrl.copy( aUrl.lastIndexOf( '/' ) + 1 );
+
+                // insert into std::unordered_map to filter duplicates from the parent
+                aMenuInfo.insert( MenuInfo::value_type( aMenuName, true ) );
+
+                SvxConfigEntry* pEntry = new SvxConfigEntry( aMenuName, aUrl, true );
+                pEntry->SetMain();
+                m_pRootEntry->GetEntries()->push_back( pEntry );
+                LoadSubMenus( xPopupMenu, aMenuName, pEntry );
+            }
+        }
+
+        // Retrieve also the parent menus, to make it possible to configure module menus and save them into the document.
+        css::uno::Reference< css::ui::XUIConfigurationManager > xParentCfgMgr = GetParentConfigManager();
+        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aParentElementsInfo;
+        try
+        {
+            if ( xParentCfgMgr.is() )
+                aParentElementsInfo = xParentCfgMgr->getUIElementsInfo( css::ui::UIElementType::POPUPMENU );
+        }
+        catch ( const css::lang::IllegalArgumentException& )
+        {}
+
+        for ( const auto& aElement : aParentElementsInfo )
+        {
+            OUString aUrl, aMenuName;
+            for ( const auto& aElementProp : aElement )
+            {
+                if ( aElementProp.Name == ITEM_DESCRIPTOR_RESOURCEURL )
+                {
+                    aElementProp.Value >>= aUrl;
+                    aMenuName = aUrl.copy( aUrl.lastIndexOf( '/' ) + 1 );
+                }
+            }
+
+            css::uno::Reference< css::container::XIndexAccess > xPopupMenu;
+            try
+            {
+                if ( aMenuInfo.find( aMenuName ) == aMenuInfo.end() )
+                    xPopupMenu = xParentCfgMgr->getSettings( aUrl, sal_False );
+            }
+            catch ( const css::uno::Exception& )
+            {}
+
+            if ( xPopupMenu.is() )
+            {
+                SvxConfigEntry* pEntry = new SvxConfigEntry( aMenuName, aUrl, true, true );
+                pEntry->SetMain();
+                m_pRootEntry->GetEntries()->push_back( pEntry );
+                LoadSubMenus( xPopupMenu, aMenuName, pEntry );
+            }
+        }
+        std::sort( m_pRootEntry->GetEntries()->begin(), m_pRootEntry->GetEntries()->end(), EntrySort );
+    }
+    return m_pRootEntry->GetEntries();
+}
+
+void ContextMenuSaveInData::SetEntries( SvxEntries* pNewEntries )
+{
+    delete m_pRootEntry->GetEntries();
+    m_pRootEntry->SetEntries( pNewEntries );
+}
+
+bool ContextMenuSaveInData::HasURL( const OUString& rURL )
+{
+    SvxEntries* pEntries = GetEntries();
+    for ( const auto& pEntry : *pEntries )
+        if ( pEntry->GetCommand() == rURL )
+            return true;
+
+    return false;
+}
+
+bool ContextMenuSaveInData::HasSettings()
+{
+    return m_pRootEntry && m_pRootEntry->GetEntries()->size();
+}
+
+bool ContextMenuSaveInData::Apply()
+{
+    if ( !IsModified() )
+        return false;
+
+    SvxEntries* pEntries = GetEntries();
+    for ( const auto& pEntry : *pEntries )
+    {
+        if ( pEntry->IsModified() || SvxConfigEntryModified( pEntry ) )
+        {
+            css::uno::Reference< css::container::XIndexContainer > xIndexContainer( GetConfigManager()->createSettings(), css::uno::UNO_QUERY );
+            css::uno::Reference< css::lang::XSingleComponentFactory > xFactory( xIndexContainer, css::uno::UNO_QUERY );
+            ApplyMenu( xIndexContainer, xFactory, pEntry );
+
+            OUString aUrl = pEntry->GetCommand();
+            try
+            {
+                if ( GetConfigManager()->hasSettings( aUrl ) )
+                    GetConfigManager()->replaceSettings( aUrl, xIndexContainer );
+                else
+                    GetConfigManager()->insertSettings( aUrl, xIndexContainer );
+            }
+            catch ( const css::uno::Exception& )
+            {}
+        }
+    }
+    SetModified( false );
+    return PersistChanges( GetConfigManager() );
+}
+
+void ContextMenuSaveInData::Reset()
+{
+    SvxEntries* pEntries = GetEntries();
+    for ( const auto& pEntry : *pEntries )
+    {
+        try
+        {
+            GetConfigManager()->removeSettings( pEntry->GetCommand() );
+        }
+        catch ( const css::uno::Exception& )
+        {}
+    }
+    PersistChanges( GetConfigManager() );
+    m_pRootEntry.reset();
 }
 
 class PopupPainter : public SvLBoxString
@@ -2069,6 +2261,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntry(
         m_pContentsListBox->MakeVisible( pNewEntry );
 
         GetSaveInData()->SetModified();
+        GetTopLevelSelection()->SetModified();
     }
 
     return pNewEntry;
@@ -2196,6 +2389,7 @@ bool SvxConfigPage::MoveEntryData(
         pEntries->insert( ++iter, pSourceData );
 
         GetSaveInData()->SetModified();
+        GetTopLevelSelection()->SetModified();
 
         return true;
     }
@@ -2381,6 +2575,7 @@ bool SvxMenuConfigPage::DeleteSelectedContent()
         delete pMenuEntry;
 
         GetSaveInData()->SetModified();
+        pMenu->SetModified();
 
         return true;
     }
@@ -2589,8 +2784,10 @@ SaveInData* SvxMenuConfigPage::CreateSaveInData(
     const OUString& aModuleId,
     bool bDocConfig )
 {
-    return static_cast< SaveInData* >(
-        new MenuSaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig ));
+    if ( !m_bIsMenuBar )
+        return static_cast< SaveInData* >( new ContextMenuSaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig ) );
+
+    return static_cast< SaveInData* >( new MenuSaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig ) );
 }
 
 SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
@@ -2804,6 +3001,7 @@ SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
     , bIsUserDefined( false )
     , bIsMain( false )
     , bIsParentData( bParentData )
+    , bIsModified( false )
     , bIsVisible( true )
     , nStyle( 0 )
     , mpEntries( nullptr )
@@ -3666,11 +3864,6 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
     }
 
     return result;
-}
-
-bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
-{
-    return a->GetName().compareTo( b->GetName() ) < 0;
 }
 
 SvxEntries* ToolbarSaveInData::GetEntries()

@@ -95,6 +95,17 @@ private:
     static css::uno::Reference
         < css::ui::XImageManager >* xDefaultImgMgr;
 
+protected:
+
+    void ApplyMenu(
+        css::uno::Reference< css::container::XIndexContainer >& rMenuBar,
+        css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
+        SvxConfigEntry *pMenuData = nullptr );
+
+    bool LoadSubMenus(
+        const css::uno::Reference< css::container::XIndexAccess >& xMenuSettings,
+        const OUString& rBaseTitle, SvxConfigEntry* pParentData );
+
 public:
 
     SaveInData(
@@ -170,15 +181,6 @@ private:
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
         SvTreeListEntry *pParent = nullptr );
 
-    void        ApplyMenu(
-        css::uno::Reference< css::container::XIndexContainer >& rNewMenuBar,
-        css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
-        SvxConfigEntry *pMenuData = nullptr );
-
-    bool        LoadSubMenus(
-        const css::uno::Reference< css::container::XIndexAccess >& xMenuBarSettings,
-        const OUString& rBaseTitle, SvxConfigEntry* pParentData );
-
 public:
 
     MenuSaveInData(
@@ -198,6 +200,26 @@ public:
     bool                Apply() override;
 };
 
+class ContextMenuSaveInData : public SaveInData
+{
+private:
+    std::unique_ptr< SvxConfigEntry > m_pRootEntry;
+
+public:
+    ContextMenuSaveInData(
+        const css::uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
+        const css::uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
+        const OUString& aModuleId, bool bIsDocConfig );
+    virtual ~ContextMenuSaveInData();
+
+    SvxEntries* GetEntries() override;
+    void SetEntries( SvxEntries* pNewEntries ) override;
+    bool HasSettings() override;
+    bool HasURL( const OUString& rURL ) override;
+    void Reset() override;
+    bool Apply() override;
+};
+
 class SvxConfigEntry
 {
 private:
@@ -213,6 +235,7 @@ private:
     bool                        bIsUserDefined;
     bool                        bIsMain;
     bool                        bIsParentData;
+    bool                        bIsModified;
 
     /// toolbar specific properties
     bool                        bIsVisible;
@@ -238,6 +261,7 @@ public:
             bIsUserDefined( false ),
             bIsMain( false ),
             bIsParentData( false ),
+            bIsModified( false ),
             bIsVisible( true ),
             nStyle( 0 ),
             mpEntries( nullptr )
@@ -269,6 +293,9 @@ public:
 
     void    SetParentData( bool bValue = true ) { bIsParentData = bValue; }
     bool    IsParentData() { return bIsParentData; }
+
+    void    SetModified( bool bValue = true ) { bIsModified = bValue; }
+    bool    IsModified() { return bIsModified; }
 
     bool    IsMovable();
     bool    IsDeletable();
