@@ -24,7 +24,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/vclptr.hxx>
-#include <tools/rtti.hxx>
 #include <svtools/transfer.hxx>
 
 #include "callbacks.hxx"

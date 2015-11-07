@@ -68,7 +68,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuConstructCustomShape, FuConstruct );
 
 FuConstructCustomShape::FuConstructCustomShape (
         ViewShell*          pViewSh,

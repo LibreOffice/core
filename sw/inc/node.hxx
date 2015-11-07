@@ -379,7 +379,6 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    TYPEINFO_OVERRIDE();     /// Already contained in base class Client.
 
     /** MakeFrm will be called for a certain layout
        pSib is another SwFrm of the same layout (e.g. the SwRootFrm itself, a sibling, the parent) */

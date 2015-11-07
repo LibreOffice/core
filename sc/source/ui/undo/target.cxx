@@ -21,7 +21,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(ScTabViewTarget, SfxRepeatTarget);
 
 ScTabViewTarget::~ScTabViewTarget()
 {

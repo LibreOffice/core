@@ -22,7 +22,6 @@
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
 
-TYPEINIT1(SfxFlagItem, SfxPoolItem);
 
 
 

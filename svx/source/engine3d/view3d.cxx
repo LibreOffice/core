@@ -70,7 +70,6 @@ using namespace com::sun::star;
 
 #define ITEMVALUE(ItemSet,Id,Cast)  (static_cast<const Cast&>((ItemSet).Get(Id))).GetValue()
 
-TYPEINIT1(E3dView, SdrView);
 
 
 // Migrate Marking

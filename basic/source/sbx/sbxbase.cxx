@@ -30,7 +30,6 @@
 
 // AppData-Structure for SBX:
 
-TYPEINIT0(SbxBase)
 
 SbxAppData::SbxAppData()
     : eSbxError(ERRCODE_SBX_OK)

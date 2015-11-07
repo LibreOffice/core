@@ -288,7 +288,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
         pSlotPool = pMod->GetSlotPool();
     else
         pSlotPool = &SfxSlotPool::GetSlotPool();
-    TypeId aSlotType = pSlotPool->GetSlotType( nSlotId );
+    const std::type_info* aSlotType = pSlotPool->GetSlotType( nSlotId );
     if ( aSlotType )
     {
         SfxToolBoxControl *pCtrl;
@@ -303,7 +303,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
 
                 // search for a factory with the given slot id
                 for( nFactory = 0; nFactory < nCount; ++nFactory )
-                    if( (rFactories[nFactory].nTypeId == aSlotType) && (rFactories[nFactory].nSlotId == nSlotId) )
+                    if( (rFactories[nFactory].nTypeId == *aSlotType) && (rFactories[nFactory].nSlotId == nSlotId) )
                         break;
 
                 if( nFactory == nCount )
@@ -311,7 +311,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
                     // if no factory exists for the given slot id, see if we
                     // have a generic factory with the correct slot type and slot id == 0
                     for ( nFactory = 0; nFactory < nCount; ++nFactory )
-                        if( (rFactories[nFactory].nTypeId == aSlotType) && (rFactories[nFactory].nSlotId == 0) )
+                        if( (rFactories[nFactory].nTypeId == *aSlotType) && (rFactories[nFactory].nSlotId == 0) )
                             break;
                 }
 
@@ -329,7 +329,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
         const sal_uInt16 nCount = rFactories.size();
 
         for( nFactory = 0; nFactory < nCount; ++nFactory )
-            if( (rFactories[nFactory].nTypeId == aSlotType) && (rFactories[nFactory].nSlotId == nSlotId) )
+            if( (rFactories[nFactory].nTypeId == *aSlotType) && (rFactories[nFactory].nSlotId == nSlotId) )
                 break;
 
         if( nFactory == nCount )
@@ -337,7 +337,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
             // if no factory exists for the given slot id, see if we
             // have a generic factory with the correct slot type and slot id == 0
             for( nFactory = 0; nFactory < nCount; ++nFactory )
-                if( (rFactories[nFactory].nTypeId == aSlotType) && (rFactories[nFactory].nSlotId == 0) )
+                if( (rFactories[nFactory].nTypeId == *aSlotType) && (rFactories[nFactory].nSlotId == 0) )
                     break;
         }
 

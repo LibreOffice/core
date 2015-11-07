@@ -36,7 +36,6 @@ class XMLAutoMarkFileContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLAutoMarkFileContext(
         SvXMLImport& rImport,

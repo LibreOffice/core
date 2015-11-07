@@ -19,13 +19,13 @@
 #ifndef INCLUDED_SFX2_MSG_HXX
 #define INCLUDED_SFX2_MSG_HXX
 
-#include <tools/rtti.hxx>
 #include <sfx2/shell.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 #include <svl/itemset.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <functional>
 
 enum class SfxSlotMode {
     NONE            =    0x0000L, // exclusiv to VOLATILE, default
@@ -107,31 +107,34 @@ struct SfxTypeAttrib
     sal_uInt16                  nAID;
     const char* pName;
 };
-
+class SfxPoolItem;
+template<class T> SfxPoolItem* createSfxPoolItem()
+{
+    return T::CreateDefault();
+}
 struct SfxType
 {
-    TypeId          aTypeId;
+    std::function<SfxPoolItem* ()> createSfxPoolItemFunc;
+    const std::type_info*   pType;
     sal_uInt16          nAttribs;
     SfxTypeAttrib   aAttrib[1]; // variable length
 
-    const TypeId&   Type() const
-                    { return aTypeId; }
+    const std::type_info* Type() const{return pType;}
     SfxPoolItem*    CreateItem() const
-                    { return static_cast<SfxPoolItem*>(aTypeId()); }
+                    { return static_cast<SfxPoolItem*>(createSfxPoolItemFunc()); }
 };
 
 struct SfxType0
 {
-    TypeId          aTypeId;
+    std::function<SfxPoolItem* ()> createSfxPoolItemFunc;
+    const std::type_info*   pType;
     sal_uInt16          nAttribs;
-
-    const TypeId&   Type() const
-                    { return aTypeId; }
+    const std::type_info*    Type() const { return pType;}
 };
-
 #define SFX_DECL_TYPE(n)    struct SfxType##n                   \
                             {                                   \
-                                TypeId          aTypeId;        \
+                                std::function<SfxPoolItem* ()> createSfxPoolItemFunc; \
+                                const std::type_info* pType; \
                                 sal_uInt16          nAttribs;       \
                                 SfxTypeAttrib   aAttrib[n];     \
                             }
@@ -198,7 +201,7 @@ SFX_DECL_TYPE(22); // for SvxSearchItem
                  0, 0, DisableFlags, UnoName \
                }
 
-class SfxPoolItem;
+//class SfxPoolItem;
 
 struct SfxFormalArgument
 {
@@ -206,10 +209,10 @@ struct SfxFormalArgument
     const char*     pName;    // Name of the sParameters
     sal_uInt16      nSlotId;  // Slot-Id for identification of the Parameters
 
-    const TypeId&           Type() const
-                            { return pType->aTypeId; }
+//    const TypeId&           Type() const
+//                            { return pType->aTypeId; }
     SfxPoolItem*            CreateItem() const
-                            { return static_cast<SfxPoolItem*>(pType->aTypeId()); }
+                            { return pType->createSfxPoolItemFunc(); }
 };
 
 

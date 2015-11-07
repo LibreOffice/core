@@ -52,7 +52,6 @@ void SwBezierShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_BEZIER_TOOLBOX);
 }
 
-TYPEINIT1(SwBezierShell,SwBaseShell)
 
 SwBezierShell::SwBezierShell(SwView &_rView):
     SwBaseShell( _rView )

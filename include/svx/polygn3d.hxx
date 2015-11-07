@@ -43,7 +43,6 @@ public:
     void SetPolyNormals3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);
     void SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyPoly2D);
 
-    TYPEINFO_OVERRIDE();
 
     E3dPolygonObj(
         E3dDefaultAttributes& rDefault,

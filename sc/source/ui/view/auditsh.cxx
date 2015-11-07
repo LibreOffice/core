@@ -34,7 +34,6 @@
 #define ScAuditingShell
 #include "scslots.hxx"
 
-TYPEINIT1( ScAuditingShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell)
 

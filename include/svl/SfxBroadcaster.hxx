@@ -20,7 +20,6 @@
 #define INCLUDED_SVL_BRDCST_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/rtti.hxx>
 
 class SfxListener;
 class SfxHint;
@@ -40,7 +39,6 @@ protected:
     void                    Forward(SfxBroadcaster& rBC, const SfxHint& rHint);
 
 public:
-                            TYPEINFO();
 
                             SfxBroadcaster();
                             SfxBroadcaster( const SfxBroadcaster &rBC );

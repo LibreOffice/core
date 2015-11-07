@@ -92,8 +92,6 @@ public:
     }
 };
 
-TYPEINIT1(SwSectionFormat,SwFrameFormat );
-TYPEINIT1(SwSection,SwClient );
 
 SwSectionData::SwSectionData(SectionType const eType, OUString const& rName)
     : m_eType(eType)

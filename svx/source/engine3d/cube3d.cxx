@@ -34,7 +34,6 @@ sdr::contact::ViewContact* E3dCubeObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfE3dCube(*this);
 }
 
-TYPEINIT1(E3dCubeObj, E3dCompoundObject);
 
 E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize)
 :   E3dCompoundObject(rDefault)

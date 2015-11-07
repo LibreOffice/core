@@ -68,7 +68,6 @@ sdr::contact::ViewContact* SdrObjGroup::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrObjGroup,SdrObject);
 
 SdrObjGroup::SdrObjGroup()
 {

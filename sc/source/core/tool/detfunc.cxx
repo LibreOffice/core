@@ -742,7 +742,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
         while (pObject)
         {
             if ( pObject->GetLayer() == SC_LAYER_INTERN &&
-                    pObject->Type() == TYPE(SdrRectObj) )
+                    dynamic_cast< const SdrRectObj* >(pObject) != nullptr )
             {
                 aObjRect = static_cast<SdrRectObj*>(pObject)->GetLogicRect();
                 aObjRect.Justify();

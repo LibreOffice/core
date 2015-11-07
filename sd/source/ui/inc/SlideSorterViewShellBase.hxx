@@ -31,7 +31,6 @@ class SlideSorterViewShellBase
     : public ImpressViewShellBase
 {
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_VIEWFACTORY(SlideSorterViewShellBase);
 
     /** This constructor is used by the view factory of the SFX

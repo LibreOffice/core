@@ -21,7 +21,6 @@
 #include "unoaprms.hxx"
 #include "anminfo.hxx"
 
-TYPEINIT1(SdAnimationPrmsUndoAction, SdUndoAction);
 
 void SdAnimationPrmsUndoAction::Undo()
 {

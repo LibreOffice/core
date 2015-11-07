@@ -330,7 +330,6 @@ void SdrGrafObj::onGraphicChanged()
     }
 }
 
-TYPEINIT1(SdrGrafObj,SdrRectObj);
 
 SdrGrafObj::SdrGrafObj()
 :   SdrRectObj(),

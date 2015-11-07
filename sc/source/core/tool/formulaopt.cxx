@@ -25,7 +25,6 @@ using namespace com::sun::star::uno;
 namespace lang = ::com::sun::star::lang;
 using ::com::sun::star::i18n::LocaleDataItem;
 
-TYPEINIT1(ScTpFormulaItem, SfxPoolItem);
 
 ScFormulaOptions::ScFormulaOptions()
 {

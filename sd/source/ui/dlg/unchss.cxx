@@ -32,7 +32,6 @@
 #include "stlsheet.hxx"
 #include "glob.hrc"
 
-TYPEINIT1(StyleSheetUndoAction, SdUndoAction);
 
 StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
                                            SfxStyleSheet* pTheStyleSheet,

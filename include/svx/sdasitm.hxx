@@ -51,7 +51,6 @@ private:
 
     public:
 
-            TYPEINFO_OVERRIDE();
 
             SdrCustomShapeGeometryItem();
             SdrCustomShapeGeometryItem( const css::uno::Sequence< css::beans::PropertyValue >& );

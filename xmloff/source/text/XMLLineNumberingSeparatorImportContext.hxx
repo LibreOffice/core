@@ -40,7 +40,6 @@ class XMLLineNumberingSeparatorImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLLineNumberingSeparatorImportContext(
         SvXMLImport& rImport,

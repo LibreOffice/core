@@ -845,7 +845,6 @@ sdr::properties::BaseProperties* SdrObjCustomShape::CreateObjectSpecificProperti
     return new sdr::properties::CustomShapeProperties(*this);
 }
 
-TYPEINIT1(SdrObjCustomShape,SdrTextObj);
 SdrObjCustomShape::SdrObjCustomShape() :
     SdrTextObj(),
     fObjectRotation( 0.0 ),

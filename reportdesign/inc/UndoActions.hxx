@@ -155,7 +155,6 @@ namespace rptui
         ::dbaui::IController*   m_pController;
 
     public:
-        TYPEINFO_OVERRIDE();
         OCommentUndoAction( SdrModel& rMod
                             ,sal_uInt16 nCommentID);
         virtual ~OCommentUndoAction();

@@ -30,7 +30,6 @@
 
 class SVX_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
 public:
-    TYPEINFO_OVERRIDE();
     SdrOnOffItem(): SfxBoolItem() {}
     SdrOnOffItem(sal_uInt16 nId, bool bOn=false): SfxBoolItem(nId,bOn) {}
     SdrOnOffItem(sal_uInt16 nId, SvStream& rIn):  SfxBoolItem(nId,rIn) {}

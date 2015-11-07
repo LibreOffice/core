@@ -750,7 +750,6 @@ sdr::contact::ViewContact* SdrTableObj::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrTableObj,SdrTextObj);
 
 
 

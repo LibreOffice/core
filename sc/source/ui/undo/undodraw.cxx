@@ -23,7 +23,6 @@
 #include "docsh.hxx"
 #include "tabvwsh.hxx"
 
-TYPEINIT1(ScUndoDraw, SfxUndoAction);
 
 ScUndoDraw::ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh ) :
     pDrawUndo( pUndo ),

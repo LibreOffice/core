@@ -288,7 +288,6 @@ protected:
     virtual void SetZoomFactor( const Fraction &rX, const Fraction &rY ) override;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SmViewShell(SfxViewFrame *pFrame, SfxViewShell *pOldSh);
     virtual ~SmViewShell();

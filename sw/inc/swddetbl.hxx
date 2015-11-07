@@ -27,7 +27,6 @@ class SwDDETable : public SwTable
 {
     SwDepend aDepend;
 public:
-    TYPEINFO_OVERRIDE();
 
     // Ctor moves all lines/boxes from SwTable to it.
     // After that SwTable is empty and has to be deleted.

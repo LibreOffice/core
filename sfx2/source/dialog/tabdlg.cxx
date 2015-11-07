@@ -44,7 +44,6 @@ using namespace ::com::sun::star::uno;
 
 #define USERITEM_NAME           OUString("UserItem")
 
-TYPEINIT1(SfxTabDialogItem,SfxSetItem);
 
 struct TabPageImpl
 {

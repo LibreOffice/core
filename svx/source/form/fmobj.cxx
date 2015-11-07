@@ -55,7 +55,6 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 using namespace ::svxform;
 
-TYPEINIT1(FmFormObj, SdrUnoObj);
 
 FmFormObj::FmFormObj(const OUString& rModelName)
           :SdrUnoObj                ( rModelName    )

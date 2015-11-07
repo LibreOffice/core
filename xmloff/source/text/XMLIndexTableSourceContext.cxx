@@ -52,7 +52,6 @@ const sal_Char sAPI_LabelCategory[] = "LabelCategory";
 const sal_Char sAPI_LabelDisplayType[] = "LabelDisplayType";
 
 
-TYPEINIT1(XMLIndexTableSourceContext, XMLIndexSourceBaseContext);
 
 
 XMLIndexTableSourceContext::XMLIndexTableSourceContext(

@@ -32,7 +32,6 @@ using ::com::sun::star::uno::makeAny;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 
-TYPEINIT1( XMLReplacementImageContext, SvXMLImportContext );
 
 XMLReplacementImageContext::XMLReplacementImageContext(
         SvXMLImport& rImport,

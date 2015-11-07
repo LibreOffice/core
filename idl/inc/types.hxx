@@ -48,7 +48,6 @@ protected:
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm ) override;
 public:
-            TYPEINFO_OVERRIDE();
                         SvMetaAttribute();
                         SvMetaAttribute( SvMetaType * );
 
@@ -113,7 +112,6 @@ protected:
 
     bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 public:
-            TYPEINFO_OVERRIDE();
             SvMetaType();
             SvMetaType( const OString& rTypeName, char cParserChar,
                                 const OString& rCName );
@@ -176,7 +174,6 @@ class SvMetaTypeMemberList : public SvRefMemberList<SvMetaType *> {};
 class SvMetaTypeString : public SvMetaType
 {
 public:
-            TYPEINFO_OVERRIDE();
             SvMetaTypeString();
 };
 
@@ -185,7 +182,6 @@ class SvMetaTypeStringMemberList : public SvRefMemberList<SvMetaTypeString *> {}
 class SvMetaEnumValue : public SvMetaObject
 {
 public:
-    TYPEINFO_OVERRIDE();
     SvMetaEnumValue();
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
@@ -200,7 +196,6 @@ class SvMetaTypeEnum : public SvMetaType
 protected:
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 public:
-            TYPEINFO_OVERRIDE();
             SvMetaTypeEnum();
 
     sal_uLong           Count() const { return aEnumValueList.size(); }
@@ -216,7 +211,6 @@ class SvMetaTypeEnumMemberList : public SvRefMemberList<SvMetaTypeEnum *> {};
 class SvMetaTypevoid : public SvMetaType
 {
 public:
-            TYPEINFO_OVERRIDE();
             SvMetaTypevoid();
 };
 class SvMetaTypevoidMemberList : public SvRefMemberList<SvMetaTypevoid *> {};

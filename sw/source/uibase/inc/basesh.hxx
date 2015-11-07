@@ -70,7 +70,6 @@ public:
     virtual     ~SwBaseShell();
 
     SFX_DECL_INTERFACE(SW_BASESHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

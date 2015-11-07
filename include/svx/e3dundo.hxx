@@ -36,7 +36,6 @@ class SAL_WARN_UNUSED E3dUndoAction : public SdrUndoAction
         E3dObject *pMy3DObj;
 
     public:
-        TYPEINFO_OVERRIDE();
         E3dUndoAction (SdrModel  *pModel,
                        E3dObject *p3DObj) :
             SdrUndoAction (*pModel),
@@ -60,7 +59,6 @@ class SAL_WARN_UNUSED E3dRotateUndoAction : public E3dUndoAction
         basegfx::B3DHomMatrix aMyNewRotation;
 
     public:
-        TYPEINFO_OVERRIDE();
         E3dRotateUndoAction (SdrModel       *pModel,
                              E3dObject      *p3DObj,
                              const basegfx::B3DHomMatrix &aOldRotation,
@@ -93,7 +91,6 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED E3dAttributesUndoAction : public SdrUndoActi
     const SfxItemSet aOldSet;
 
  public:
-        TYPEINFO_OVERRIDE();
         E3dAttributesUndoAction( SdrModel &rModel,
             E3dObject* pInObject,
             const SfxItemSet& rNewSet,

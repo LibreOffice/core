@@ -36,7 +36,6 @@ namespace dbaui
         ::dbaccess::ODsnTypeCollection* m_pCollection;
 
     public:
-        TYPEINFO_OVERRIDE();
         DbuTypeCollectionItem(sal_Int16 nWhich = 0, ::dbaccess::ODsnTypeCollection* _pCollection = NULL);
         DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSource);
 

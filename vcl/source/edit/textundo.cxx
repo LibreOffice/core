@@ -29,12 +29,6 @@
 #include <svdata.hxx>
 #include <tools/resid.hxx>
 
-TYPEINIT1( TextUndo, SfxUndoAction );
-TYPEINIT1( TextUndoDelPara, TextUndo );
-TYPEINIT1( TextUndoConnectParas, TextUndo );
-TYPEINIT1( TextUndoSplitPara, TextUndo );
-TYPEINIT1( TextUndoInsertChars, TextUndo );
-TYPEINIT1( TextUndoRemoveChars, TextUndo );
 
 namespace
 {

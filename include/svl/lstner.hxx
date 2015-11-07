@@ -20,7 +20,6 @@
 #define INCLUDED_SVL_LSTNER_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/rtti.hxx>
 
 class SfxBroadcaster;
 class SfxHint;
@@ -34,7 +33,6 @@ private:
     const SfxListener&  operator=(const SfxListener &) = delete;
 
 public:
-    TYPEINFO();
 
                         SfxListener();
                         SfxListener( const SfxListener &rCopy );

@@ -40,8 +40,6 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1_AUTOFACTORY(SwCropGrf, SfxPoolItem)
-TYPEINIT1_AUTOFACTORY(SwGammaGrf, SfxPoolItem)
 
 SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
 {

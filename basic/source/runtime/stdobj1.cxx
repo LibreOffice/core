@@ -110,7 +110,6 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, bool bWrite )
 }
 
 
-TYPEINIT1( SbStdPicture, SbxObject );
 
 SbStdPicture::SbStdPicture() :
     SbxObject( OUString("Picture"))
@@ -224,7 +223,6 @@ void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, bool bWrite )
     }
 }
 
-TYPEINIT1( SbStdFont, SbxObject );
 
 SbStdFont::SbStdFont()
     : SbxObject( OUString("Font") )
@@ -392,7 +390,6 @@ void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool )
 }
 
 
-TYPEINIT1( SbStdClipboard, SbxObject );
 
 SbStdClipboard::SbStdClipboard() :
     SbxObject( OUString("Clipboard") )

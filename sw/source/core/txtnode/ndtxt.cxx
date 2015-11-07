@@ -95,7 +95,6 @@ using namespace ::com::sun::star;
 
 typedef std::vector<SwTextAttr*> SwpHts;
 
-TYPEINIT1( SwTextNode, SwContentNode )
 
 // unfortunately everyone can change Hints without ensuring order or the linking between them
 #ifdef DBG_UTIL
@@ -3600,7 +3599,7 @@ void SwTextNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVa
 SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
 {
     OSL_ENSURE( pNewColl,"ChgFormatColl: Collectionpointer has value 0." );
-    OSL_ENSURE( HAS_BASE( SwTextFormatColl, pNewColl ),
+    OSL_ENSURE( dynamic_cast<const SwTextFormatColl *>(pNewColl) != nullptr,
                 "ChgFormatColl: is not a Text Collection pointer." );
 
     SwTextFormatColl *pOldColl = GetTextColl();

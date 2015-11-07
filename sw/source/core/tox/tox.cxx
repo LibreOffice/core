@@ -91,7 +91,6 @@ static void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
 
 }
 
-TYPEINIT2( SwTOXMark, SfxPoolItem, SwClient );    // fuers rtti
 
 /// pool default constructor
 SwTOXMark::SwTOXMark()

@@ -26,7 +26,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuOutline, FuPoor );
 
 FuOutline::FuOutline (
     ViewShell* pViewShell,

@@ -129,7 +129,6 @@ const CommandStruct SwCondCollItem::aCmds[] =
     { PARA_IN_LIST,         9 }
 };
 
-TYPEINIT1_AUTOFACTORY(SwCondCollItem, SfxPoolItem)
 
 // Item for the transport of the condition table
 SwCondCollItem::SwCondCollItem(sal_uInt16 _nWhich ) :

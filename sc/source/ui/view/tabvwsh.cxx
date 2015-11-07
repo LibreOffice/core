@@ -47,7 +47,6 @@
 #define ScTabViewShell
 #include "scslots.hxx"
 
-TYPEINIT2(ScTabViewShell,SfxViewShell,SfxListener);
 
 SFX_IMPL_INTERFACE(ScTabViewShell, SfxViewShell)
 

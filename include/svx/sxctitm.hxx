@@ -30,7 +30,6 @@ enum SdrCaptionType   {SDRCAPT_TYPE1,SDRCAPT_TYPE2,SDRCAPT_TYPE3,SDRCAPT_TYPE4};
 
 class SVX_DLLPUBLIC SdrCaptionTypeItem: public SfxEnumItem {
 public:
-    TYPEINFO_OVERRIDE();
     SdrCaptionTypeItem(SdrCaptionType eStyle=SDRCAPT_TYPE3): SfxEnumItem(SDRATTR_CAPTIONTYPE,sal::static_int_cast< sal_uInt16 >(eStyle)) {}
     SdrCaptionTypeItem(SvStream& rIn)                      : SfxEnumItem(SDRATTR_CAPTIONTYPE,rIn)    {}
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool=NULL) const override;

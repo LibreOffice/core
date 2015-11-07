@@ -40,9 +40,6 @@ SvCreateInstancePersist SvClassManager::Get( sal_Int32 nClassId )
     return i == aAssocTable.end() ? 0 : i->second;
 }
 
-// SvRttiBase
-TYPEINIT0( SvRttiBase );
-
 /** Constructor
 
     @param rMgr       Stores factories for objects that can persisted

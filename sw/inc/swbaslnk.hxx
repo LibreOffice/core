@@ -35,7 +35,6 @@ protected:
     SwBaseLink() {}
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwContentNode* pNode = 0 )
         : ::sfx2::SvBaseLink( nMode, nFormat ), pContentNode( pNode ),

@@ -30,15 +30,6 @@
 using namespace dbaui;
 using namespace ::svt;
 
-TYPEINIT1( OCommentUndoAction,          SfxUndoAction );
-TYPEINIT1( OTableDesignUndoAct,         OCommentUndoAction );
-TYPEINIT1( OTableEditorUndoAct,         OTableDesignUndoAct );
-TYPEINIT1( OTableDesignCellUndoAct,     OTableDesignUndoAct );
-TYPEINIT1( OTableEditorTypeSelUndoAct,  OTableEditorUndoAct );
-TYPEINIT1( OTableEditorDelUndoAct,      OTableEditorUndoAct );
-TYPEINIT1( OTableEditorInsUndoAct,      OTableEditorUndoAct );
-TYPEINIT1( OTableEditorInsNewUndoAct,   OTableEditorUndoAct );
-TYPEINIT1( OPrimKeyUndoAct,             OTableEditorUndoAct );
 
 // class OTableDesignUndoAct
 OTableDesignUndoAct::OTableDesignUndoAct( OTableRowView* pOwner,sal_uInt16 nCommentID ) : OCommentUndoAction(nCommentID)

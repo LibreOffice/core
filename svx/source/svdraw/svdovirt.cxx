@@ -45,7 +45,6 @@ sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrVirtObj,SdrObject);
 
 SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
     rRefObj(rNewObj)

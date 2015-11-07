@@ -29,7 +29,6 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT0( SvXMLImportContext );
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
                               const OUString& rLName ) :
     mrImport( rImp ),

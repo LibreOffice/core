@@ -31,14 +31,8 @@
 using namespace ::com::sun::star;
 
 
-TYPEINIT1_FACTORY(SvxChartStyleItem, SfxEnumItem, new SvxChartStyleItem(CHSTYLE_2D_LINE, 0));
-TYPEINIT1(SvxChartDataDescrItem, SfxEnumItem);
-TYPEINIT1(SvxChartTextOrderItem, SfxEnumItem);
-TYPEINIT1(SvxChartTextOrientItem, SfxEnumItem);
-TYPEINIT1(SvxChartIndicateItem, SfxEnumItem);
-TYPEINIT1(SvxChartKindErrorItem, SfxEnumItem);
-TYPEINIT1(SvxChartRegressItem, SfxEnumItem);
-TYPEINIT1_FACTORY(SvxDoubleItem, SfxPoolItem, new SvxDoubleItem(0.0, 0));
+
+SfxPoolItem* SvxDoubleItem::CreateDefault() { return new  SvxDoubleItem(0.0, 0);}
 
 SvxChartStyleItem::SvxChartStyleItem(SvxChartStyle eStyle, sal_uInt16 nId) :
     SfxEnumItem(nId, (sal_uInt16)eStyle)

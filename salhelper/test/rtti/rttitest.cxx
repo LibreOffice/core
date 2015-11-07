@@ -19,7 +19,6 @@
 
 #include <stdio.h>
 #include <typeinfo>
-#include "samplelibrtti.hxx"
 
 int main()
 {

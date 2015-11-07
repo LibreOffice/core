@@ -59,7 +59,7 @@ class SW_DLLPUBLIC SwFormatDrop: public SfxPoolItem, public SwClient
     sal_uInt8  nChars;          ///< Character count.
     bool   bWholeWord;      ///< First word with initials.
 public:
-    TYPEINFO_OVERRIDE(); ///< Already in base class SwClient.
+    static SfxPoolItem* CreateDefault();
 
     SwFormatDrop();
     virtual ~SwFormatDrop();
@@ -113,7 +113,7 @@ public:
 class SwRegisterItem : public SfxBoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     inline SwRegisterItem( const bool bRegister = false );
 
@@ -143,7 +143,7 @@ inline SwRegisterItem& SwRegisterItem::operator=(
 class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SwNumRuleItem()
         : SfxStringItem( RES_PARATR_NUMRULE, OUString() ) {}
@@ -175,7 +175,6 @@ public:
 class SwParaConnectBorderItem : public SfxBoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     inline SwParaConnectBorderItem( const bool bConnect = true );
 

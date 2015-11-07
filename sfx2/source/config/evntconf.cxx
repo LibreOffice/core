@@ -49,7 +49,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-TYPEINIT1(SfxEventNamesItem, SfxPoolItem);
 
 using namespace com::sun::star;
 

@@ -52,7 +52,6 @@ const sal_Unicode CHAR_LRM          =   ((sal_Unicode)0x200E);
 const sal_Unicode CHAR_ZWSP         =   ((sal_Unicode)0x200B);
 const sal_Unicode CHAR_ZWNBSP       =   ((sal_Unicode)0x2060);
 
-TYPEINIT1( FuBullet, FuPoor );
 
 FuBullet::FuBullet (
     ViewShell* pViewSh,

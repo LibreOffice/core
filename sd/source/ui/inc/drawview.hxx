@@ -33,7 +33,6 @@ class DrawViewShell;
 class DrawView : public ::sd::View
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     DrawView (
         DrawDocShell* pDocSh,

@@ -25,7 +25,6 @@ class SwBezierShell: public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_BEZIERSHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

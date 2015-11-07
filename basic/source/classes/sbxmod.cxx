@@ -413,14 +413,6 @@ SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (Runt
     return pProperty;
 }
 
-TYPEINIT1(SbModule,SbxObject)
-TYPEINIT1(SbMethod,SbxMethod)
-TYPEINIT1(SbProperty,SbxProperty)
-TYPEINIT1(SbProcedureProperty,SbxProperty)
-TYPEINIT1(SbJScriptModule,SbModule)
-TYPEINIT1(SbJScriptMethod,SbMethod)
-TYPEINIT1(SbObjModule,SbModule)
-TYPEINIT1(SbUserFormModule,SbObjModule)
 
 uno::Reference< frame::XModel > getDocumentModel( StarBASIC* pb )
 {
@@ -649,7 +641,6 @@ SbIfaceMapperMethod::~SbIfaceMapperMethod()
 {
 }
 
-TYPEINIT1(SbIfaceMapperMethod,SbMethod)
 
 
 // From the code generator: remove invalid entries

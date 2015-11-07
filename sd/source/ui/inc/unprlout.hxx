@@ -37,7 +37,6 @@ class SdPresentationLayoutUndoAction : public SdUndoAction
     OUString        aComment;
 
 public:
-    TYPEINFO_OVERRIDE();
     SdPresentationLayoutUndoAction(SdDrawDocument* pTheDoc,
                          const OUString& aTheOldLayoutName,
                          const OUString& aTheNewLayoutName,

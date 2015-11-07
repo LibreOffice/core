@@ -59,7 +59,6 @@
 
 using namespace com::sun::star;
 
-TYPEINIT2(SwFormatCharFormat,SfxPoolItem,SwClient);
 
 // query the attribute descriptions
 void SwAttrSet::GetPresentation(

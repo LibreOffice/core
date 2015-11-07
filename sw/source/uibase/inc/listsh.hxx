@@ -25,7 +25,6 @@ class SwListShell: public SwBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_LISTSHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

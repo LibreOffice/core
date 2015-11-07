@@ -28,13 +28,11 @@
 #include <globals.hxx>
 #include <database.hxx>
 
-TYPEINIT1( SvClassElement, SvPersistBase );
 
 SvClassElement::SvClassElement()
 {
 };
 
-TYPEINIT1( SvMetaClass, SvMetaType );
 SvMetaClass::SvMetaClass()
     : aAutomation( true, false )
 {

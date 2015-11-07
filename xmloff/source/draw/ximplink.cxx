@@ -24,7 +24,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-TYPEINIT1( SdXMLShapeLinkContext, SvXMLImportContext );
 
 SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList>& xAttrList, uno::Reference< drawing::XShapes >& rShapes)
 : SvXMLShapeContext( rImport, nPrfx, rLocalName, false )

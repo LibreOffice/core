@@ -31,7 +31,6 @@ private:
     static void InitInterface_Impl();
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SwWebListShell(SwView &rView);
     virtual ~SwWebListShell();

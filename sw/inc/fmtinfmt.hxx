@@ -48,7 +48,7 @@ public:
     SwFormatINetFormat();                     ///< For TypeInfo.
     virtual ~SwFormatINetFormat();
 
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;

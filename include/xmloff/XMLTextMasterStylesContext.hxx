@@ -39,7 +39,6 @@ protected:
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const override;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLTextMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,

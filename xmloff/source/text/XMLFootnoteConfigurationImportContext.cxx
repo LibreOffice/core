@@ -62,7 +62,6 @@ class XMLFootnoteConfigHelper : public SvXMLImportContext
     bool bIsBegin;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLFootnoteConfigHelper(
         SvXMLImport& rImport,
@@ -76,7 +75,6 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
-TYPEINIT1( XMLFootnoteConfigHelper, SvXMLImportContext );
 
 XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
     SvXMLImport& rImport,
@@ -115,7 +113,6 @@ void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
 
 
 
-TYPEINIT1( XMLFootnoteConfigurationImportContext, SvXMLStyleContext );
 
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,

@@ -34,8 +34,6 @@ struct SbxVarEntry
     boost::optional<OUString> maAlias;
 };
 
-TYPEINIT1(SbxArray,SbxBase)
-TYPEINIT1(SbxDimArray,SbxArray)
 
 //  SbxArray
 

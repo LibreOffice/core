@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_INC_CALBCK_HXX
 #define INCLUDED_SW_INC_CALBCK_HXX
 
-#include <tools/rtti.hxx>
 #include "swdllapi.h"
 #include <boost/noncopyable.hpp>
 #include <ring.hxx>
@@ -131,8 +130,6 @@ public:
     const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
     SwModify* GetRegisteredIn() { return pRegisteredIn; }
 
-    // needed for class SwClientIter
-    TYPEINFO();
 
     // get information about attribute
     virtual bool GetInfo( SfxPoolItem& ) const { return true; }
@@ -302,7 +299,7 @@ public:
             return static_cast<TElementType*>(Sync());
         while(GetRightOfPos())
             m_pPosition = GetRightOfPos();
-        if(static_cast<SwClient*>(m_pPosition)->IsA(TYPE(TElementType)))
+        if(dynamic_cast<const TElementType *>(static_cast<SwClient*>(m_pPosition)) != nullptr)
             return static_cast<TElementType*>(Sync());
         return Previous();
     }
@@ -310,14 +307,14 @@ public:
     {
         if(!IsChanged())
             m_pPosition = GetRightOfPos();
-        while(m_pPosition && !static_cast<SwClient*>(m_pPosition)->IsA( TYPE(TElementType) ) )
+        while(m_pPosition && dynamic_cast<const TElementType *>(static_cast<SwClient*>(m_pPosition)) == nullptr)
             m_pPosition = GetRightOfPos();
         return static_cast<TElementType*>(Sync());
     }
     TElementType* Previous()
     {
         m_pPosition = GetLeftOfPos();
-        while(m_pPosition && !static_cast<SwClient*>(m_pPosition)->IsA( TYPE(TElementType) ) )
+        while(m_pPosition && dynamic_cast<const TElementType *>(static_cast<SwClient*>(m_pPosition)) == nullptr)
             m_pPosition = GetLeftOfPos();
         return static_cast<TElementType*>(Sync());
     }

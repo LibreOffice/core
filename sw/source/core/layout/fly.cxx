@@ -66,7 +66,6 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 
 SwFlyFrm::SwFlyFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
     SwLayoutFrm( pFormat, pSib ),

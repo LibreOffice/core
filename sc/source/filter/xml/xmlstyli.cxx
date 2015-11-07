@@ -435,7 +435,6 @@ void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
 
-TYPEINIT1( XMLTableStyleContext, XMLPropStyleContext );
 
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -924,7 +923,6 @@ sal_Int32 XMLTableStylesContext::GetIndex(const sal_Int16 nContextID)
         return -1;
 }
 
-TYPEINIT1( ScXMLMasterStylesContext, SvXMLStylesContext );
 
 bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
 {
@@ -976,7 +974,6 @@ void ScXMLMasterStylesContext::EndElement()
     FinishStyles(true);
 }
 
-TYPEINIT1( ScMasterPageContext, XMLTextMasterPageContext );
 
 ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,

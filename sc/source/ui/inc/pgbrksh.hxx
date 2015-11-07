@@ -30,7 +30,6 @@ class ScTabViewShell;
 class ScPageBreakShell : public SfxShell
 {
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_PAGEBREAK_SHELL)
 
 private:

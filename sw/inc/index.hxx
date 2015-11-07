@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_INDEX_HXX
 
 #include <sal/types.h>
-#include <tools/rtti.hxx>
 #include <swdllapi.h>
 
 #include <iostream>

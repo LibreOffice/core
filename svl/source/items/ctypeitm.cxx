@@ -33,7 +33,6 @@
 // class CntContentTypeItem Implementation.
 
 
-TYPEINIT1_AUTOFACTORY( CntContentTypeItem, CntUnencodedStringItem );
 
 #define CONTENT_TYPE_NOT_INIT ( (INetContentType)-1 )
 

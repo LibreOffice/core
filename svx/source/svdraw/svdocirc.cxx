@@ -106,7 +106,6 @@ sdr::contact::ViewContact* SdrCircObj::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrCircObj,SdrRectObj);
 
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
 {

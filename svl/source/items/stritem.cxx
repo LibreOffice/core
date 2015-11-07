@@ -24,7 +24,6 @@
 //  class SfxStringItem
 
 
-TYPEINIT1_AUTOFACTORY(SfxStringItem, CntUnencodedStringItem)
 
 // virtual
 SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
@@ -60,5 +59,8 @@ void SfxStringItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValue().toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
-
+SfxPoolItem* SfxStringItem::CreateDefault()
+{
+    return new SfxStringItem();
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

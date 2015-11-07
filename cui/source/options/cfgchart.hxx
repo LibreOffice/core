@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_CFGCHART_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_CFGCHART_HXX
 
-#include <tools/rtti.hxx>
 #include <unotools/configitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/xtable.hxx>
@@ -90,7 +89,6 @@ public:
 class SvxChartColorTableItem : public SfxPoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     SvxChartColorTableItem( sal_uInt16 nWhich, const SvxChartColorTable& );
     SvxChartColorTableItem( const SvxChartColorTableItem& );
 

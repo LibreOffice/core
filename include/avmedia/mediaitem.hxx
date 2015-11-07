@@ -20,7 +20,6 @@
 #ifndef INCLUDED_AVMEDIA_MEDIAITEM_HXX
 #define INCLUDED_AVMEDIA_MEDIAITEM_HXX
 
-#include <tools/rtti.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -64,7 +63,7 @@ enum class MediaState
 class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
 {
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
 
     explicit                MediaItem( sal_uInt16 i_nWhich = 0,
                                        AVMediaSetMask nMaskSet = AVMediaSetMask::NONE );

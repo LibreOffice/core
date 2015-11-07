@@ -42,7 +42,6 @@ protected:
                                const OUString& rLocalName,
                                const OUString& rValue ) override;
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLShapeStyleContext(
         SvXMLImport& rImport,

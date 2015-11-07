@@ -63,7 +63,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,

@@ -38,7 +38,6 @@ namespace sd {
 
 #define ITEMVALUE(ItemSet,Id,Cast) static_cast<const Cast&>((ItemSet).Get(Id)).GetValue()
 
-TYPEINIT1( FuSlideShowDlg, FuPoor );
 
 FuSlideShowDlg::FuSlideShowDlg (
     ViewShell* pViewSh,

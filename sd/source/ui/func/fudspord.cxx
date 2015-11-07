@@ -31,7 +31,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuDisplayOrder, FuPoor );
 
 FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
 : FuPoor(pViewSh, pWin, pView, pDoc, rReq)

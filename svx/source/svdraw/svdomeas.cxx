@@ -212,7 +212,6 @@ sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrMeasureObj,SdrTextObj);
 
 SdrMeasureObj::SdrMeasureObj():
     bTextDirty(false)

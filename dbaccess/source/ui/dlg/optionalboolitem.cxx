@@ -23,7 +23,6 @@ namespace dbaui
 {
 
     // OptionalBoolItem
-    TYPEINIT1( OptionalBoolItem, SfxPoolItem );
     OptionalBoolItem::OptionalBoolItem( sal_Int16 _nWhich )
         :SfxPoolItem( _nWhich )
         ,m_aValue()

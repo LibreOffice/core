@@ -25,7 +25,6 @@
 namespace basctl
 {
 
-TYPEINIT1( DlgEdPage, SdrPage );
 
 DlgEdPage::DlgEdPage(DlgEdModel& rModel, bool bMasterPage)
     : SdrPage(rModel, bMasterPage)

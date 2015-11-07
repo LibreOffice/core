@@ -96,14 +96,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::bridge;
 using namespace cppu;
 
-TYPEINIT1(SbUnoMethod,SbxMethod)
-TYPEINIT1(SbUnoProperty,SbxProperty)
-TYPEINIT1(SbUnoObject,SbxObject)
-TYPEINIT1(SbUnoStructRefObject,SbxObject)
-TYPEINIT1(SbUnoClass,SbxObject)
-TYPEINIT1(SbUnoService,SbxObject)
-TYPEINIT1(SbUnoServiceCtor,SbxMethod)
-TYPEINIT1(SbUnoSingleton,SbxObject)
 
 // Identifiers for creating the strings for dbg_Properties
 static char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
@@ -356,7 +348,6 @@ Any convertAny( const Any& rVal, const Type& aDestType )
 
 
 // #105565 Special Object to wrap a strongly typed Uno Any
-TYPEINIT1(SbUnoAnyObject,SbxObject)
 
 
 // TODO: source out later
@@ -2014,7 +2005,6 @@ OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
     return aRet.makeStringAndClear();
 }
 
-TYPEINIT1(AutomationNamedArgsSbxArray,SbxArray)
 
 // Implementation SbUnoObject
 void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

@@ -34,7 +34,6 @@ class SVX_DLLPUBLIC XLineEndItem : public NameOrIndex
     basegfx::B2DPolyPolygon         maPolyPolygon;
 
 public:
-            TYPEINFO_OVERRIDE();
             XLineEndItem(sal_Int32 nIndex = -1);
             XLineEndItem(const OUString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineEndItem(SfxItemPool* pPool, const basegfx::B2DPolyPolygon& rPolyPolygon);

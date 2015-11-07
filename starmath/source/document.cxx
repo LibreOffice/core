@@ -105,7 +105,6 @@ using namespace ::com::sun::star::uno;
 #define SmDocShell
 #include "smslots.hxx"
 
-TYPEINIT1( SmDocShell, SfxObjectShell );
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmDocShell, SfxObjectShell)
 

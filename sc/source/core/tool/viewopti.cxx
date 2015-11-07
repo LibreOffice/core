@@ -34,7 +34,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-TYPEINIT1(ScTpViewItem, SfxPoolItem);
 
 // class ScGridOptions
 

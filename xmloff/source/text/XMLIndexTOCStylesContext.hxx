@@ -56,7 +56,6 @@ class XMLIndexTOCStylesContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLIndexTOCStylesContext(
         SvXMLImport& rImport,

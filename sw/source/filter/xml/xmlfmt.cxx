@@ -202,7 +202,6 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLConditionContext_Impl();
 
-    TYPEINFO_OVERRIDE();
 
     bool IsValid() const { return 0 != nCondition; }
 
@@ -253,7 +252,6 @@ SwXMLConditionContext_Impl::~SwXMLConditionContext_Impl()
 {
 }
 
-TYPEINIT1( SwXMLConditionContext_Impl, XMLTextStyleContext );
 
 typedef std::vector<SwXMLConditionContext_Impl*> SwXMLConditions_Impl;
 
@@ -267,7 +265,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
@@ -284,7 +281,6 @@ public:
     virtual void Finish( bool bOverwrite ) override;
 };
 
-TYPEINIT1( SwXMLTextStyleContext_Impl, XMLTextStyleContext );
 
 uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
 {
@@ -443,7 +439,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     SwXMLItemSetStyleContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
@@ -547,7 +542,6 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
     return pContext;
 }
 
-TYPEINIT1( SwXMLItemSetStyleContext_Impl, SvXMLStyleContext );
 
 SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -730,7 +724,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     SwXMLStylesContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
@@ -744,7 +737,6 @@ public:
     virtual void EndElement() override;
 };
 
-TYPEINIT1( SwXMLStylesContext_Impl, SvXMLStylesContext );
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -912,7 +904,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     SwXMLMasterStylesContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
@@ -922,7 +913,6 @@ public:
     virtual void EndElement() override;
 };
 
-TYPEINIT1( SwXMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
 
 SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx,

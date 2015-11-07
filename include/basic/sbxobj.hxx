@@ -43,7 +43,6 @@ protected:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_OBJECT,1);
-    TYPEINFO_OVERRIDE();
     SbxObject( const OUString& rClassname );
     SbxObject( const SbxObject& );
     SbxObject& operator=( const SbxObject& );

@@ -29,7 +29,6 @@
 class SVX_DLLPUBLIC XLineColorItem : public XColorItem
 {
 public:
-            TYPEINFO_OVERRIDE();
             XLineColorItem() {}
             XLineColorItem(sal_Int32 nIndex, const Color& rTheColor);
             XLineColorItem(const OUString& rName, const Color& rTheColor);

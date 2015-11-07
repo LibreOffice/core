@@ -227,7 +227,6 @@ protected:
 public:
     SwXShape(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xShape);
 
-    TYPEINFO_OVERRIDE();
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;

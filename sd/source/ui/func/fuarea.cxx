@@ -37,7 +37,6 @@
 #include <memory>
 
 namespace sd {
-TYPEINIT1( FuArea, FuPoor );
 
 FuArea::FuArea( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq)
 : FuPoor(pViewSh, pWin, _pView, pDoc, rReq)

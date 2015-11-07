@@ -52,7 +52,6 @@ public:
     SwFormatPageDesc &operator=( const SwFormatPageDesc &rCpy );
     virtual ~SwFormatPageDesc();
 
-    TYPEINFO_OVERRIDE();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;

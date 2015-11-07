@@ -23,7 +23,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/rtti.hxx>
 #include <xmloff/xmltoken.hxx>
 
 class SvXMLNamespaceMap;

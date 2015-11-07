@@ -24,7 +24,6 @@
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <tools/rtti.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
@@ -41,7 +40,6 @@ protected:
     bool                        mbSetTransform;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXML3DObjectContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -65,7 +63,6 @@ class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
     bool                    mbMaxEdgeUsed;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXML3DCubeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -88,7 +85,6 @@ class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
     bool                    mbSizeUsed;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXML3DSphereObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -109,7 +105,6 @@ class SdXML3DPolygonBasedShapeContext : public SdXML3DObjectContext
     OUString               maViewBox;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXML3DPolygonBasedShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -127,7 +122,6 @@ public:
 class SdXML3DLatheObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXML3DLatheObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -145,7 +139,6 @@ public:
 class SdXML3DExtrudeObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXML3DExtrudeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,

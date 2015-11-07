@@ -45,7 +45,7 @@ class SVX_DLLPUBLIC SvxGalleryItem : public SfxPoolItem
     css::uno::Reference< css::graphic::XGraphic > m_xGraphic;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxGalleryItem();
     SvxGalleryItem( const SvxGalleryItem& );

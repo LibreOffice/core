@@ -84,7 +84,6 @@ using namespace com::sun::star;
 
 // List for 3D-Objects
 
-TYPEINIT1(E3dObjList, SdrObjList);
 
 E3dObjList::E3dObjList(SdrModel* pNewModel, SdrPage* pNewPage, E3dObjList* pNewUpList)
 :   SdrObjList(pNewModel, pNewPage, pNewUpList)
@@ -181,7 +180,6 @@ sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
 
 
 
-TYPEINIT1(E3dObject, SdrAttrObj);
 
 E3dObject::E3dObject()
 :   maSubList(),
@@ -776,7 +774,6 @@ sdr::properties::BaseProperties* E3dCompoundObject::CreateObjectSpecificProperti
 
 
 
-TYPEINIT1(E3dCompoundObject, E3dObject);
 
 E3dCompoundObject::E3dCompoundObject()
 :   E3dObject(),

@@ -1066,7 +1066,6 @@ class SwXMLDDETableContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     SwXMLDDETableContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName);
@@ -1083,7 +1082,6 @@ public:
     bool GetIsAutomaticUpdate() { return bIsAutomaticUpdate; }
 };
 
-TYPEINIT1( SwXMLDDETableContext_Impl, SvXMLImportContext );
 
 SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(
     SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName) :
@@ -1273,7 +1271,6 @@ SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
     return (*m_pRows)[nRow]->GetCell( nCol );
 }
 
-TYPEINIT1( SwXMLTableContext, XMLTextTableContext );
 
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         sal_uInt16 nPrfx,

@@ -454,7 +454,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
                     pAktCreate->SetMergedItemSet(maDefaultAttr);
                 }
 
-                if (mpModel && HAS_BASE(SdrCaptionObj,pAktCreate))
+                if (mpModel && dynamic_cast<const SdrCaptionObj *>(pAktCreate) != nullptr)
                 {
                     SfxItemSet aSet(mpModel->GetItemPool());
                     aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); // in case someone turns on Solid

@@ -31,7 +31,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuNavigation, FuPoor );
 
 FuNavigation::FuNavigation (
     ViewShell* pViewSh,

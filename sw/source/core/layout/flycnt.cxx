@@ -74,7 +74,6 @@ SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAn
 }
 
 // #i28701#
-TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
 
 void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {

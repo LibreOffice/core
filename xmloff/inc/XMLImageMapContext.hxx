@@ -45,7 +45,6 @@ class XMLImageMapContext : public SvXMLImportContext
         ::com::sun::star::beans::XPropertySet> xPropertySet;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLImageMapContext(
         SvXMLImport& rImport,

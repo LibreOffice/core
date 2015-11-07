@@ -44,7 +44,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/rtti.hxx>
 
 class DbCellControl;
 class Edit;
@@ -261,7 +260,6 @@ protected:
 
 
 public:
-    TYPEINFO();
     DbCellControl(DbGridColumn& _rColumn, bool _bText = true);
     virtual ~DbCellControl();
 
@@ -364,7 +362,6 @@ inline  void        DbCellControl::unlockValueProperty()
 class DbLimitedLengthField : public DbCellControl
 {
 public:
-    TYPEINFO_OVERRIDE();
 
 protected:
     DbLimitedLengthField( DbGridColumn& _rColumn );
@@ -392,7 +389,6 @@ protected:
     virtual ~DbTextField( );
 
 public:
-    TYPEINFO_OVERRIDE();
     DbTextField(DbGridColumn& _rColumn);
 
     ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit; }
@@ -423,7 +419,6 @@ protected:
 
 
 public:
-    TYPEINFO_OVERRIDE();
     DbFormattedField(DbGridColumn& _rColumn);
     virtual ~DbFormattedField();
 
@@ -446,7 +441,6 @@ protected:
 class DbCheckBox : public DbCellControl
 {
 public:
-    TYPEINFO_OVERRIDE();
     DbCheckBox(DbGridColumn& _rColumn);
 
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
@@ -468,7 +462,6 @@ class DbComboBox : public DbCellControl
 {
 
 public:
-    TYPEINFO_OVERRIDE();
     DbComboBox(DbGridColumn& _rColumn);
 
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
@@ -496,7 +489,6 @@ class DbListBox     :public DbCellControl
     css::uno::Sequence< OUString > m_aValueList;
 
 public:
-    TYPEINFO_OVERRIDE();
     DbListBox(DbGridColumn& _rColumn);
 
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
@@ -521,7 +513,6 @@ protected:
 class DbPatternField : public DbCellControl
 {
 public:
-    TYPEINFO_OVERRIDE();
     DbPatternField( DbGridColumn& _rColumn, const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) override;
@@ -551,7 +542,6 @@ private:
     sal_Int16   m_nStandardAlign;
 
 public:
-    TYPEINFO_OVERRIDE();
 
 protected:
     DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign = css::awt::TextAlign::RIGHT );
@@ -572,7 +562,6 @@ protected:
 class DbDateField : public DbSpinField
 {
 public:
-    TYPEINFO_OVERRIDE();
     DbDateField(DbGridColumn& _rColumn);
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
@@ -597,7 +586,6 @@ protected:
 class DbTimeField : public DbSpinField
 {
 public:
-    TYPEINFO_OVERRIDE();
     DbTimeField(DbGridColumn& _rColumn);
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
@@ -624,7 +612,6 @@ class DbCurrencyField : public DbSpinField
     sal_Int16  m_nScale;
 
 public:
-    TYPEINFO_OVERRIDE();
     DbCurrencyField(DbGridColumn& _rColumn);
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
@@ -651,7 +638,6 @@ protected:
 class DbNumericField : public DbSpinField
 {
 public:
-    TYPEINFO_OVERRIDE();
     DbNumericField(DbGridColumn& _rColumn);
     virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
@@ -686,7 +672,6 @@ class DbFilterField
     bool        m_bBound : 1;
 
 public:
-    TYPEINFO_OVERRIDE();
     DbFilterField(const css::uno::Reference< css::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);
     virtual ~DbFilterField();
 
@@ -742,7 +727,6 @@ protected:
     virtual ~FmXGridCell();
 
 public:
-    TYPEINFO();
     FmXGridCell( DbGridColumn* pColumn, DbCellControl* pControl );
     void init();
 
@@ -824,7 +808,6 @@ private:
 class FmXDataCell : public FmXGridCell
 {
 public:
-    TYPEINFO_OVERRIDE();
     FmXDataCell( DbGridColumn* pColumn, DbCellControl& _rControl )
         :FmXGridCell( pColumn, &_rControl )
     {
@@ -863,7 +846,6 @@ protected:
     bool    m_bFastPaint;
 
 public:
-    TYPEINFO_OVERRIDE();
     FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
     virtual void PaintFieldToCell(OutputDevice& rDev,
@@ -1089,7 +1071,6 @@ class FmXFilterCell :public FmXGridCell
 protected:
     virtual ~FmXFilterCell();
 public:
-    TYPEINFO_OVERRIDE();
     FmXFilterCell(DbGridColumn* pColumn = NULL, DbCellControl* pControl = NULL);
 
 

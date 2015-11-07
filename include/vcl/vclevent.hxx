@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_VCLEVENT_HXX
 
 #include <tools/link.hxx>
-#include <tools/rtti.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/impdel.hxx>
 #include <vcl/vclptr.hxx>
@@ -203,7 +202,6 @@ private:
 public:
     VclSimpleEvent( sal_uLong n ) { nId = n; }
     virtual ~VclSimpleEvent() {}
-    TYPEINFO();
 
     sal_uLong GetId() const { return nId; }
 };
@@ -217,7 +215,6 @@ private:
 public:
     VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = NULL );
     virtual ~VclWindowEvent();
-    TYPEINFO_OVERRIDE();
 
     vcl::Window* GetWindow() const { return pWindow; }
     void*   GetData() const { return pData; }
@@ -232,7 +229,6 @@ private:
 public:
     VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
     virtual ~VclMenuEvent() {}
-    TYPEINFO_OVERRIDE();
 
     Menu* GetMenu() const { return pMenu; }
     sal_uInt16 GetItemPos() const { return mnPos; }

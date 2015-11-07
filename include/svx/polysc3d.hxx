@@ -32,7 +32,6 @@
 class SVX_DLLPUBLIC E3dPolyScene : public E3dScene
 {
 public:
-    TYPEINFO_OVERRIDE();
     E3dPolyScene();
     E3dPolyScene(E3dDefaultAttributes& rDefault);
 

@@ -81,7 +81,6 @@ namespace sd {
 #define MAXHEIGHT 28350
 #define MAXWIDTH  28350
 
-TYPEINIT1( FuPage, FuPoor );
 
 void mergeItemSetsImpl( SfxItemSet& rTarget, const SfxItemSet& rSource )
 {

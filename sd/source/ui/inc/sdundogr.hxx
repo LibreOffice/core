@@ -30,7 +30,6 @@ class SD_DLLPUBLIC SdUndoGroup : public SdUndoAction
 {
     std::vector<SdUndoAction*>  aCtn;
 public:
-    TYPEINFO_OVERRIDE();
                    SdUndoGroup(SdDrawDocument* pSdDrawDocument)
                               : SdUndoAction(pSdDrawDocument),
                                 aCtn() {}

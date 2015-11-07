@@ -34,7 +34,6 @@ private:
     bool                    bEnabled;
 
 public:
-                            TYPEINFO_OVERRIDE();
 
                             XFillFloatTransparenceItem();
                             XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, bool bEnable = true );

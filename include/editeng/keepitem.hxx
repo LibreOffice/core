@@ -33,7 +33,7 @@
 class EDITENG_DLLPUBLIC SvxFormatKeepItem : public SfxBoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     inline SvxFormatKeepItem( const bool bKeep /*= false*/,
                            const sal_uInt16 _nWhich  );

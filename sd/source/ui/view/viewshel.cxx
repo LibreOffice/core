@@ -133,7 +133,6 @@ SfxViewFrame* ViewShell::GetViewFrame() const
 }
 
 /// declare SFX-Slotmap and standard interface
-TYPEINIT1(ViewShell, SfxShell);
 
 ViewShell::ViewShell( SfxViewFrame*, vcl::Window* pParentWindow, ViewShellBase& rViewShellBase, bool bAllowCenter)
 :   SfxShell(&rViewShellBase)

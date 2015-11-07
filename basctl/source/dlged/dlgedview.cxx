@@ -31,7 +31,6 @@
 namespace basctl
 {
 
-TYPEINIT1( DlgEdView, SdrView );
 
 DlgEdView::DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor) :
     SdrView(&rModel, &rOut),

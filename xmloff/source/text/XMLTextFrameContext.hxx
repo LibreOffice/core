@@ -64,7 +64,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLTextFrameContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,

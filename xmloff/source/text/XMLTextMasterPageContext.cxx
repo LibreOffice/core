@@ -58,7 +58,6 @@ Reference < XStyle > XMLTextMasterPageContext::Create()
 
     return xNewStyle;
 }
-TYPEINIT1( XMLTextMasterPageContext, SvXMLStyleContext );
 
 XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,

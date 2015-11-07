@@ -332,7 +332,6 @@ protected:
     virtual ~SdrTextObj();
 
 public:
-    TYPEINFO_OVERRIDE();
 
     bool IsInEditMode() const { return mbInEditMode; }
 

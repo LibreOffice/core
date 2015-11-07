@@ -27,7 +27,6 @@
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <tools/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/rtti.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 class SvXMLNamespaceMap;
@@ -55,7 +54,6 @@ protected:
     const SvXMLImport& GetImport() const { return mrImport; }
 
 public:
-    TYPEINFO();
 
     sal_uInt16 GetPrefix() const { return mnPrefix; }
     const OUString& GetLocalName() const { return maLocalName; }

@@ -61,7 +61,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 
-//  TYPEINIT1(OTableEditorCtrl, DBView);
 
 #define HANDLE_ID       0
 

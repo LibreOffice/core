@@ -87,11 +87,11 @@ typedef SfxMenuControl* (*SfxMenuControlCtor)( sal_uInt16 nId, Menu &, SfxBindin
 struct SfxMenuCtrlFactory
 {
     SfxMenuControlCtor  pCtor;
-    TypeId              nTypeId;
+    const std::type_info&   nTypeId;
     sal_uInt16              nSlotId;
 
     SfxMenuCtrlFactory( SfxMenuControlCtor pTheCtor,
-            TypeId nTheTypeId, sal_uInt16 nTheSlotId ):
+            const std::type_info& nTheTypeId, sal_uInt16 nTheSlotId ):
         pCtor(pTheCtor),
         nTypeId(nTheTypeId),
         nSlotId(nTheSlotId)
@@ -117,7 +117,7 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
                { return new Class(nId, rMenu, rBindings); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxMenuControl::RegisterMenuControl( pMod, new SfxMenuCtrlFactory( \
-                    Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
+                    Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
 
 #endif
 

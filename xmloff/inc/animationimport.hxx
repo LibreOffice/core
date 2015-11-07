@@ -38,7 +38,6 @@ class AnimationNodeContext : public SvXMLImportContext
     void init_node( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 public:
-    TYPEINFO_OVERRIDE();
 
     AnimationNodeContext(
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xParentNode,

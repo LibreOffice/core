@@ -93,7 +93,6 @@ BitmapEx* SwViewShell::mpReplaceBmp = NULL;
 
 bool bInSizeNotify = false;
 
-TYPEINIT0(SwViewShell);
 
 using namespace ::com::sun::star;
 

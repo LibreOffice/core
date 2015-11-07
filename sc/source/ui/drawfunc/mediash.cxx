@@ -44,7 +44,6 @@ void ScMediaShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_MEDIA));
 }
 
-TYPEINIT1( ScMediaShell, ScDrawShell );
 
 ScMediaShell::ScMediaShell(ScViewData* pData) :
     ScDrawShell(pData)

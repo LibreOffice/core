@@ -41,15 +41,9 @@
 
 using namespace com::sun::star;
 
-TYPEINIT1(ScMergeAttr,          SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(ScProtectionAttr,     SfxPoolItem);
-TYPEINIT1(ScRangeItem,          SfxPoolItem);
-TYPEINIT1(ScTableListItem,      SfxPoolItem);
-TYPEINIT1(ScPageHFItem,         SfxPoolItem);
-TYPEINIT1(ScViewObjectModeItem, SfxEnumItem);
-TYPEINIT1(ScDoubleItem,         SfxPoolItem);
-TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
-TYPEINIT1(ScCondFormatItem,    SfxPoolItem);
+
+SfxPoolItem* ScProtectionAttr::CreateDefault() { return new ScProtectionAttr; }
+SfxPoolItem* ScDoubleItem::CreateDefault() { DBG_ASSERT(false, "No ScDoubleItem factory available"); return 0; }
 
 /**
  * General Help Function
@@ -112,7 +106,7 @@ ScMergeAttr::~ScMergeAttr()
 
 bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
-    OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
+    OSL_ENSURE( Which() != rItem.Which() || typeid(*this) == typeid(rItem), "which ==, type !=" );
     return (Which() == rItem.Which())
              && (nColMerge == static_cast<const ScMergeAttr&>(rItem).nColMerge)
              && (nRowMerge == static_cast<const ScMergeAttr&>(rItem).nRowMerge);
@@ -331,7 +325,7 @@ bool ScProtectionAttr::GetPresentation
 
 bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
 {
-    OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
+    OSL_ENSURE( Which() != rItem.Which() || typeid(*this) == typeid(rItem), "which ==, type !=" );
     return (Which() == rItem.Which())
              && (bProtection == static_cast<const ScProtectionAttr&>(rItem).bProtection)
              && (bHideFormula == static_cast<const ScProtectionAttr&>(rItem).bHideFormula)

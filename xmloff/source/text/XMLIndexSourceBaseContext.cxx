@@ -145,7 +145,6 @@ static const SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 };
 
 
-TYPEINIT1( XMLIndexSourceBaseContext, SvXMLImportContext );
 
 XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
     SvXMLImport& rImport,

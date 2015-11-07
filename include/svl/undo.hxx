@@ -21,7 +21,6 @@
 
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/rtti.hxx>
 
 #include <limits>
 #include <memory>
@@ -31,7 +30,6 @@ struct MarkedUndoAction;
 class SVL_DLLPUBLIC SfxRepeatTarget
 {
 public:
-                        TYPEINFO();
     virtual             ~SfxRepeatTarget() = 0;
 };
 
@@ -52,7 +50,6 @@ private:
     SfxLinkUndoAction*      mpSfxLinkUndoAction;
 
 public:
-                            TYPEINFO();
                             SfxUndoAction();
     virtual                 ~SfxUndoAction();
 
@@ -139,7 +136,6 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
     Impl* mpImpl;
 
 public:
-                            TYPEINFO_OVERRIDE();
 
     SfxListUndoAction(
         const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, SfxUndoArray *pFather );
@@ -424,7 +420,6 @@ private:
     void LinkedSfxUndoActionDestructed(const SfxUndoAction& rCandidate);
 
 public:
-                            TYPEINFO_OVERRIDE();
                             SfxLinkUndoAction(::svl::IUndoManager *pManager);
                             virtual ~SfxLinkUndoAction();
 
