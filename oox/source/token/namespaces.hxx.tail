@@ -40,6 +40,7 @@ inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 #define O_TOKEN( token )        OOX_TOKEN( vmlOffice, token )
 #define PC_TOKEN( token )       OOX_TOKEN( packageContentTypes, token )
 #define PPT_TOKEN( token )      OOX_TOKEN( ppt, token )
+#define P14_TOKEN( token )      OOX_TOKEN( p14, token )
 #define PR_TOKEN( token )       OOX_TOKEN( packageRel, token )
 #define R_TOKEN( token )        OOX_TOKEN( officeRel, token )
 #define VML_TOKEN( token )      OOX_TOKEN( vml, token )
