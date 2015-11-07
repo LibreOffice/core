@@ -30,7 +30,6 @@ private:
     ScTabViewShell* pViewShell;
 
 public:
-                    TYPEINFO_OVERRIDE();
 
                     ScTabViewTarget( ScTabViewShell* pShell ) : pViewShell( pShell ) {}
     virtual         ~ScTabViewTarget();

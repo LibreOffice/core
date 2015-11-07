@@ -47,7 +47,6 @@ void SwWebDocShell::InitInterface_Impl()
 {
 }
 
-TYPEINIT1(SwWebDocShell, SwDocShell);
 
 SFX_IMPL_OBJECTFACTORY(SwWebDocShell, SvGlobalName(SO3_SWWEB_CLASSID), SfxObjectShellFlags::STD_NORMAL|SfxObjectShellFlags::HASMENU, "swriter/web" )
 

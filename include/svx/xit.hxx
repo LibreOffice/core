@@ -43,7 +43,6 @@ protected:
     void    Detach()    { nPalIndex = -1; }
 
 public:
-            TYPEINFO_OVERRIDE();
             NameOrIndex() { nPalIndex = -1; }
             NameOrIndex(sal_uInt16 nWhich, sal_Int32 nIndex);
             NameOrIndex(sal_uInt16 nWhich,

@@ -96,7 +96,6 @@ class SmModule : public SfxModule, utl::ConfigurationListener
     static void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START + 0)
 
 private:

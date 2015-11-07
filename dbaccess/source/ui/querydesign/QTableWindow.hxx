@@ -22,7 +22,6 @@
 #include "TableWindow.hxx"
 #include "QTableWindowData.hxx"
 #include "TableFieldDescription.hxx"
-#include <tools/rtti.hxx>
 
 namespace dbaui
 {

@@ -625,7 +625,6 @@ Any AnimationsImportHelperImpl::convertPath( const OUString& rValue )
     return makeAny( rValue );
 }
 
-TYPEINIT1( AnimationNodeContext, SvXMLImportContext );
 
 AnimationNodeContext::AnimationNodeContext(
         const Reference< XAnimationNode >& xParentNode,

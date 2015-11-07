@@ -459,7 +459,6 @@ uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrOb
 }
 
 
-TYPEINIT1(OCustomShape, SdrObjCustomShape);
 OCustomShape::OCustomShape(const uno::Reference< report::XReportComponent>& _xComponent
                            )
           :SdrObjCustomShape()
@@ -578,7 +577,6 @@ void OCustomShape::impl_setUnoShape( const uno::Reference< uno::XInterface >& rx
 
 
 
-TYPEINIT1(OUnoObject, SdrUnoObj);
 
 OUnoObject::OUnoObject(const OUString& _sComponentName
                        ,const OUString& rModelName
@@ -901,7 +899,6 @@ OUnoObject* OUnoObject::Clone() const
 
 // OOle2Obj
 
-TYPEINIT1(OOle2Obj, SdrOle2Obj);
 OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,sal_uInt16 _nType)
           :SdrOle2Obj()
           ,OObjectBase(_xComponent)

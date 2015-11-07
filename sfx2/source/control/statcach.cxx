@@ -412,7 +412,7 @@ void SfxStateCache::SetState_Impl
                     !IsInvalidItem(pState) && !IsInvalidItem(pLastItem);
         DBG_ASSERT( !bBothAvailable || pState != pLastItem, "setting state with own item" );
         if ( bBothAvailable )
-            bNotify = pState->Type() != pLastItem->Type() ||
+            bNotify = typeid(*pState) != typeid(*pLastItem) ||
                       *pState != *pLastItem;
         else
             bNotify = ( pState != pLastItem ) || ( eState != eLastState );

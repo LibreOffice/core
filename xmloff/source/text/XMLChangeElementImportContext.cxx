@@ -33,7 +33,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_P;
 using ::xmloff::token::XML_CHANGE_INFO;
 
-TYPEINIT1( XMLChangeElementImportContext, SvXMLImportContext );
 
 XMLChangeElementImportContext::XMLChangeElementImportContext(
     SvXMLImport& rImport,

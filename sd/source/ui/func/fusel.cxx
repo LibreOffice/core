@@ -77,7 +77,6 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-TYPEINIT1( FuSelection, FuDraw );
 
 FuSelection::FuSelection (
     ViewShell* pViewSh,

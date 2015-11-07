@@ -46,7 +46,6 @@ class SvClassElement : public SvRttiBase
     OString                aPrefix;
     SvMetaClassRef              xClass;
 public:
-            TYPEINFO_OVERRIDE();
             SvClassElement();
 
     void            SetPrefix( const OString& rPrefix )
@@ -98,7 +97,6 @@ protected:
     virtual void    ReadContextSvIdl( SvIdlDataBase &,
                                      SvTokenStream & rInStm ) override;
 public:
-            TYPEINFO_OVERRIDE();
             SvMetaClass();
 
     void                FillClasses( SvMetaClassList & rList );

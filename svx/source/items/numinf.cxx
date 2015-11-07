@@ -21,7 +21,6 @@
 
 
 
-TYPEINIT1(SvxNumberInfoItem, SfxPoolItem);
 
 #define INIT(pNum,eVal,nDouble,rStr)    \
     SfxPoolItem     ( nId ),            \

@@ -46,8 +46,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
 
-TYPEINIT1( OTableStyleContext, XMLPropStyleContext );
-TYPEINIT1( OTableStylesContext, SvXMLStylesContext );
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,

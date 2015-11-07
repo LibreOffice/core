@@ -31,7 +31,6 @@
 class SVX_DLLPUBLIC XLineStartWidthItem : public SfxMetricItem
 {
 public:
-            TYPEINFO_OVERRIDE();
             XLineStartWidthItem(long nWidth = LINE_START_WIDTH_DEFAULT);
             XLineStartWidthItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const override;

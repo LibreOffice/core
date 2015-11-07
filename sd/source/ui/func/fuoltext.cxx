@@ -81,7 +81,6 @@ static sal_uInt16 SidArray[] = {
                 SID_PARASPACE_DECREASE,
                 0 };
 
-TYPEINIT1( FuOutlineText, FuOutline );
 
 FuOutlineText::FuOutlineText(ViewShell* pViewShell, ::sd::Window* pWindow,
                              ::sd::View* pView, SdDrawDocument* pDoc,

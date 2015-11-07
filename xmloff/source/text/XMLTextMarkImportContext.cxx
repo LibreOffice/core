@@ -95,7 +95,6 @@ void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Refer
 }
 
 
-TYPEINIT1( XMLTextMarkImportContext, SvXMLImportContext);
 
 XMLTextMarkImportContext::XMLTextMarkImportContext(
     SvXMLImport& rImport,

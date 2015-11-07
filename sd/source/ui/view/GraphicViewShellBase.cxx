@@ -31,7 +31,6 @@
 
 namespace sd {
 
-TYPEINIT1(GraphicViewShellBase, ViewShellBase);
 
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new GraphicViewShellBase object has been constructed.

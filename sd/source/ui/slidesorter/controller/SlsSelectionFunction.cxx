@@ -311,7 +311,6 @@ private:
 
 //===== SelectionFunction =====================================================
 
-TYPEINIT1(SelectionFunction, FuPoor);
 
 SelectionFunction::SelectionFunction (
     SlideSorter& rSlideSorter,

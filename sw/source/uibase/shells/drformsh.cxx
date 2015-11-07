@@ -66,7 +66,6 @@ void SwDrawFormShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_TEXT_TOOLBOX);
 }
 
-TYPEINIT1(SwDrawFormShell, SwDrawBaseShell)
 
 void SwDrawFormShell::Execute(SfxRequest &rReq)
 {

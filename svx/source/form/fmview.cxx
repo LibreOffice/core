@@ -80,7 +80,6 @@ using namespace ::svx;
 
 
 
-TYPEINIT1(FmFormView, E3dView);
 
 
 FmFormView::FmFormView( FmFormModel* pModel, OutputDevice* pOut )

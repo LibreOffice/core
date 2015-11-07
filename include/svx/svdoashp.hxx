@@ -161,7 +161,6 @@ public:
     double GetObjectRotation() const { return fObjectRotation;}
     double GetExtraTextRotation( const bool bPreRotation = false ) const;
 
-    TYPEINFO_OVERRIDE();
     SdrObjCustomShape();
     virtual ~SdrObjCustomShape();
 

@@ -28,7 +28,6 @@
 // (based on the facts of the MapUnit of the model). This unity is displayed if necessary.
 class SVX_DLLPUBLIC SdrMeasureUnitItem: public SfxEnumItem {
 public:
-    TYPEINFO_OVERRIDE();
     SdrMeasureUnitItem(FieldUnit eUnit=FUNIT_NONE): SfxEnumItem(SDRATTR_MEASUREUNIT,sal::static_int_cast< sal_uInt16 >(eUnit)) {}
     SdrMeasureUnitItem(SvStream& rIn)             : SfxEnumItem(SDRATTR_MEASUREUNIT,rIn)   {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;

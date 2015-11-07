@@ -38,7 +38,6 @@ private:
 
 public:
 
-                            TYPEINFO_OVERRIDE();
 
                             SdBackgroundObjUndoAction(
                                 SdDrawDocument& rDoc,

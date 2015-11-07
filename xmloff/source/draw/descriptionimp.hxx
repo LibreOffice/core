@@ -31,7 +31,6 @@ private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
     OUString msText;
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXMLDescriptionContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,

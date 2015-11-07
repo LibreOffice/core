@@ -25,7 +25,6 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <rsc/rscsfx.hxx>
-#include <tools/rtti.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 
@@ -90,7 +89,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
@@ -201,7 +199,6 @@ protected:
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,

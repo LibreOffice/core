@@ -60,7 +60,6 @@ void GraphicObjectBar::InitInterface_Impl()
 {
 }
 
-TYPEINIT1( GraphicObjectBar, SfxShell );
 
 GraphicObjectBar::GraphicObjectBar (
     ViewShell* pSdViewShell,

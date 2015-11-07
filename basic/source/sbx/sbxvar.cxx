@@ -36,7 +36,6 @@ using namespace com::sun::star::uno;
 
 // SbxVariable
 
-TYPEINIT1(SbxVariable,SbxValue)
 
 // SbxVariableImpl
 

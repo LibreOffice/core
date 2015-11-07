@@ -25,7 +25,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
 
-TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(css::text::WritingMode_LR_TB, 0));
+
+SfxPoolItem* SvxWritingModeItem::CreateDefault() { return new  SvxWritingModeItem(css::text::WritingMode_LR_TB, 0);}
 
 SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, sal_uInt16 _nWhich )
     : SfxUInt16Item( _nWhich, (sal_uInt16)eValue )

@@ -33,7 +33,6 @@ private:
     OUString               maStrName;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -53,7 +52,6 @@ private:
     OUString               maStrName;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLHatchStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -74,7 +72,6 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLBitmapStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -99,7 +96,6 @@ private:
     OUString               maStrName;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLTransGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -119,7 +115,6 @@ private:
     OUString               maStrName;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLMarkerStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -139,7 +134,6 @@ private:
     OUString               maStrName;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLDashStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );

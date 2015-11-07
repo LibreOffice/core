@@ -32,7 +32,6 @@
 class SVX_DLLPUBLIC XFormTextShadowColorItem : public XColorItem
 {
 public:
-            TYPEINFO_OVERRIDE();
             XFormTextShadowColorItem() {}
             XFormTextShadowColorItem(const OUString& rName, const Color& rTheColor);
             XFormTextShadowColorItem(SvStream& rIn);

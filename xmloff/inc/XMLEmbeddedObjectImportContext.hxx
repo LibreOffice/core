@@ -37,7 +37,6 @@ class XMLEmbeddedObjectImportContext : public SvXMLImportContext
     OUString sCLSID;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     const OUString& GetFilterServiceName() const { return sFilterService; }
     const OUString& GetFilterCLSID() const { return sCLSID; }

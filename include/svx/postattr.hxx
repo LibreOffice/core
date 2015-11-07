@@ -33,7 +33,7 @@ The author shorthand symbol of a note
 class SVX_DLLPUBLIC SvxPostItAuthorItem: public SfxStringItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxPostItAuthorItem( sal_uInt16 nWhich  );
 
@@ -64,7 +64,7 @@ The date of a note
 class SVX_DLLPUBLIC SvxPostItDateItem: public SfxStringItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxPostItDateItem( sal_uInt16 nWhich  );
 
@@ -95,7 +95,7 @@ The text of a note
 class SVX_DLLPUBLIC SvxPostItTextItem: public SfxStringItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxPostItTextItem( sal_uInt16 nWhich  );
 

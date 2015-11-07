@@ -41,7 +41,7 @@ class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
     SvxInterLineSpace eInterLineSpace;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     // The writer relies on a default height of 200! Actually, I would
     // initialize all values to 0, but who can ignore the consequences in

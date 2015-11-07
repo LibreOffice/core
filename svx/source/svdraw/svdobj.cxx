@@ -143,7 +143,6 @@ using namespace ::com::sun::star;
 
 
 
-TYPEINIT0(SdrObjUserCall);
 
 SdrObjUserCall::~SdrObjUserCall()
 {
@@ -298,7 +297,6 @@ void SdrObject::SetBoundRectDirty()
 
 
 
-TYPEINIT1(SdrObject,SfxListener);
 
 SdrObject::SdrObject() :
     mpImpl(new Impl),

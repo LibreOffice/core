@@ -72,9 +72,6 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1( SwContact, SwClient )
-TYPEINIT1( SwFlyDrawContact, SwContact )
-TYPEINIT1( SwDrawContact, SwContact )
 
 void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor )
 {
@@ -2148,7 +2145,6 @@ namespace sdr
 } // end of namespace sdr
 
 /// implementation of class <SwDrawVirtObj>
-TYPEINIT1(SwDrawVirtObj,SdrVirtObj);
 
 sdr::contact::ViewContact* SwDrawVirtObj::CreateObjectSpecificViewContact()
 {

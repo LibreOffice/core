@@ -93,7 +93,6 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
 
-    TYPEINFO_OVERRIDE();
 
     //XNamed
     virtual OUString SAL_CALL getName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
@@ -361,7 +360,6 @@ class SwXOLEListener : public cppu::WeakImplHelper
 public:
     SwXOLEListener(SwFormat& rOLEFormat, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLE);
     virtual ~SwXOLEListener();
-    TYPEINFO_OVERRIDE();
 
 // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;

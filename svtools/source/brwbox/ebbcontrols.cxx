@@ -28,14 +28,7 @@ namespace svt
 {
 
 
-    TYPEINIT0(CellController);
-    TYPEINIT1(EditCellController, CellController);
-    TYPEINIT1(SpinCellController, CellController);
-    TYPEINIT1(CheckBoxCellController, CellController);
-    TYPEINIT1(ComboBoxCellController, CellController);
-    TYPEINIT1(ListBoxCellController, CellController);
 
-    TYPEINIT1( FormattedFieldCellController, EditCellController );
 
 
     //= ComboBoxControl

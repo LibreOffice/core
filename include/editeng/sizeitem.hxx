@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxSizeItem : public SfxPoolItem
     Size aSize;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxSizeItem( const sal_uInt16 nId );
     SvxSizeItem( const sal_uInt16 nId, const Size& rSize);

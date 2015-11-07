@@ -34,7 +34,8 @@
 class SVX_DLLPUBLIC XFillStyleItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             XFillStyleItem(css::drawing::FillStyle = css::drawing::FillStyle_SOLID);
                             XFillStyleItem(SvStream& rIn);
 

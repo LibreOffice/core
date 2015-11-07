@@ -30,7 +30,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
-#include <tools/rtti.hxx>
 #include "smmod.hxx"
 #include "symbol.hxx"
 #include "cfgitem.hxx"
@@ -40,7 +39,6 @@
 #include "starmath.hrc"
 #include "svx/modctrl.hxx"
 
-TYPEINIT1( SmModule, SfxModule );
 
 #define SmModule
 #include "smslots.hxx"

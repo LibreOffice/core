@@ -36,7 +36,6 @@ protected:
     const ScViewData*   GetViewData() const {return pViewData;}
 
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_FORMAT_SHELL)
 
 private:

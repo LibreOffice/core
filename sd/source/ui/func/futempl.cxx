@@ -75,7 +75,6 @@ using namespace com::sun::star::style;
 namespace sd
 {
 
-TYPEINIT1( FuTemplate, FuPoor );
 
 FuTemplate::FuTemplate (
     ViewShell* pViewSh,

@@ -32,7 +32,6 @@ enum SdrCaptionEscDir {SDRCAPT_ESCHORIZONTAL,SDRCAPT_ESCVERTICAL,SDRCAPT_ESCBEST
 
 class SVX_DLLPUBLIC SdrCaptionEscDirItem: public SfxEnumItem {
 public:
-    TYPEINFO_OVERRIDE();
     SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SDRCAPT_ESCHORIZONTAL): SfxEnumItem(SDRATTR_CAPTIONESCDIR,sal::static_int_cast< sal_uInt16 >(eDir)) {}
     SdrCaptionEscDirItem(SvStream& rIn)                              : SfxEnumItem(SDRATTR_CAPTIONESCDIR,rIn)  {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=NULL) const override;

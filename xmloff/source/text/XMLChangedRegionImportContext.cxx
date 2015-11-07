@@ -40,7 +40,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 
 
-TYPEINIT1(XMLChangedRegionImportContext, SvXMLImportContext);
 
 XMLChangedRegionImportContext::XMLChangedRegionImportContext(
     SvXMLImport& rImport,

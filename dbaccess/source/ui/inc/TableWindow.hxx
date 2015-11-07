@@ -22,7 +22,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "TableWindowTitle.hxx"
-#include <tools/rtti.hxx>
 #include <rtl/ref.hxx>
 #include "TableWindowData.hxx"
 #include "TableWindowListBox.hxx"

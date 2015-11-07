@@ -38,7 +38,6 @@
 
 #include <svtools/grfmgr.hxx>
 
-#include <tools/rtti.hxx>
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <vector>

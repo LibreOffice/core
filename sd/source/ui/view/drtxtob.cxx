@@ -82,7 +82,6 @@ void TextObjectBar::InitInterface_Impl()
 {
 }
 
-TYPEINIT1( TextObjectBar, SfxShell );
 
 TextObjectBar::TextObjectBar (
     ViewShell* pSdViewSh,

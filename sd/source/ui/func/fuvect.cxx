@@ -34,7 +34,6 @@
 namespace sd
 {
 
-TYPEINIT1( FuVectorize, FuPoor );
 
 FuVectorize::FuVectorize (
     ViewShell* pViewSh,

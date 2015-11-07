@@ -63,7 +63,6 @@ sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrRectObj,SdrTextObj);
 
 SdrRectObj::SdrRectObj()
 :   mpXPoly(0L)

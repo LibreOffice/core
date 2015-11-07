@@ -30,7 +30,6 @@
 
 
 
-TYPEINIT1(SvxBulletItem,SfxPoolItem);
 
 
 

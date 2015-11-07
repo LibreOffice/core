@@ -53,7 +53,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLIndexSimpleEntryContext(
         SvXMLImport& rImport,

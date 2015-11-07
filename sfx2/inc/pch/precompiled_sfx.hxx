@@ -691,7 +691,6 @@
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/resary.hxx>
-#include <tools/rtti.hxx>
 #include <tools/stream.hxx>
 #include <tools/svborder.hxx>
 #include <tools/tenccvt.hxx>

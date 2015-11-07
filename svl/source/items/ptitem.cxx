@@ -30,8 +30,8 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1_AUTOFACTORY(SfxPointItem, SfxPoolItem);
 
+SfxPoolItem* SfxPointItem::CreateDefault() { return new SfxPointItem; }
 
 
 SfxPointItem::SfxPointItem()

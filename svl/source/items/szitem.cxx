@@ -27,7 +27,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/memberid.hrc>
 
-TYPEINIT1_AUTOFACTORY(SfxSizeItem, SfxPoolItem);
 
 
 

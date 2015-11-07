@@ -54,7 +54,6 @@ struct TableLink_Impl
     TableLink_Impl() : m_pDocSh( NULL ), m_pOldParent( NULL ) {}
 };
 
-TYPEINIT1(ScTableLink, ::sfx2::SvBaseLink);
 
 ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
                             const OUString& rFilter, const OUString& rOpt,

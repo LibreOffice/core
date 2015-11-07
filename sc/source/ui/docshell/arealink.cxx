@@ -54,7 +54,6 @@ struct AreaLink_Impl
     AreaLink_Impl() : m_pDocSh( NULL ), m_pDialog( NULL ) {}
 };
 
-TYPEINIT1(ScAreaLink,::sfx2::SvBaseLink);
 
 ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
                         const OUString& rFilter, const OUString& rOpt,

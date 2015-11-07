@@ -29,7 +29,6 @@ class FmInterfaceItem : public SfxPoolItem
     css::uno::Reference< css::uno::XInterface >  xInterface;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     FmInterfaceItem( const sal_uInt16 nId, const css::uno::Reference< css::uno::XInterface >& rxInterface )
         :SfxPoolItem( nId )

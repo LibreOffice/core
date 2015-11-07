@@ -55,7 +55,6 @@ void ScChartShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_CHART));
 }
 
-TYPEINIT1( ScChartShell, ScDrawShell );
 
 ScChartShell::ScChartShell(ScViewData* pData) :
     ScDrawShell(pData)

@@ -23,7 +23,6 @@
 
 class SdrScaleItem: public SdrFractionItem {
 public:
-    TYPEINFO_OVERRIDE();
     SdrScaleItem(sal_uInt16 nId=0): SdrFractionItem(nId,Fraction(1,1)) {}
     SdrScaleItem(sal_uInt16 nId, const Fraction& rVal): SdrFractionItem(nId,rVal) {}
     SdrScaleItem(sal_uInt16 nId, SvStream& rIn): SdrFractionItem(nId,rIn) {}

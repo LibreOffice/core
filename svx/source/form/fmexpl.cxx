@@ -173,7 +173,6 @@ void FmEntryDataList::clear()
     maEntryDataList.clear();
 }
 
-TYPEINIT0( FmEntryData );
 
 FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface >& _rxIFace )
     :pParent( pParentData )
@@ -254,7 +253,6 @@ bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )
     return true;
 }
 
-TYPEINIT1( FmFormData, FmEntryData );
 
 FmFormData::FmFormData(
     const Reference< XForm >& _rxForm,
@@ -316,7 +314,6 @@ bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
     return FmEntryData::IsEqualWithoutChildren( pFormData );
 }
 
-TYPEINIT1( FmControlData, FmEntryData );
 
 FmControlData::FmControlData(
     const Reference< XFormComponent >& _rxComponent,

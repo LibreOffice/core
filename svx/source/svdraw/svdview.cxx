@@ -154,7 +154,6 @@ SdrDropMarkerOverlay::~SdrDropMarkerOverlay()
 }
 
 
-TYPEINIT1(SdrView,SdrCreateView);
 
 SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut)
 :   SdrCreateView(pModel1,pOut),

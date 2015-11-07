@@ -50,7 +50,6 @@ namespace sd {
 
 // - MediaObjectBar -
 
-TYPEINIT1( MediaObjectBar, SfxShell );
 
 SFX_IMPL_INTERFACE(MediaObjectBar, SfxShell)
 

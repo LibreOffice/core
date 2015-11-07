@@ -44,7 +44,7 @@ namespace avmedia
 {
 
 // - MediaItem -
-TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
+SfxPoolItem* MediaItem::CreateDefault() { return new MediaItem; }
 
 struct MediaItem::Impl
 {

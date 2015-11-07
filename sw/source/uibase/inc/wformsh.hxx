@@ -34,7 +34,6 @@ private:
     static void InitInterface_Impl();
 
 public:
-    TYPEINFO_OVERRIDE();
 };
 
 #endif

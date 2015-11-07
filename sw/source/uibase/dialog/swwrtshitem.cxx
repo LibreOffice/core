@@ -18,7 +18,6 @@
  */
 
 #include "swwrtshitem.hxx"
-TYPEINIT1(SwWrtShellItem,SfxPoolItem);
 SwWrtShellItem::SwWrtShellItem( sal_uInt16 _nWhich, SwWrtShell* pSh )
     : SfxPoolItem( _nWhich ), pWrtSh( pSh )
 {

@@ -43,7 +43,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 const sal_Char sAPI_LevelParagraphStyles[] = "LevelParagraphStyles";
 
-TYPEINIT1( XMLIndexTOCStylesContext, SvXMLImportContext );
 
 
 XMLIndexTOCStylesContext::XMLIndexTOCStylesContext(

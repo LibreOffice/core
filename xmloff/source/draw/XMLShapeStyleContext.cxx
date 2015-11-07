@@ -43,7 +43,6 @@ using ::xmloff::token::XML_TEXT_PROPERTIES;
 using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
 using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 
-TYPEINIT1( XMLShapeStyleContext, XMLPropStyleContext );
 
 XMLShapeStyleContext::XMLShapeStyleContext(
     SvXMLImport& rImport,

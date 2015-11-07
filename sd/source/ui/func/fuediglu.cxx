@@ -36,7 +36,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuEditGluePoints, FuDraw );
 
 FuEditGluePoints::FuEditGluePoints (
     ViewShell* pViewSh,

@@ -50,7 +50,6 @@ void SwWebTableShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_TABLE_TOOLBOX);
 }
 
-TYPEINIT1(SwWebTableShell,SwTableShell)
 
 SwWebTableShell::SwWebTableShell(SwView &_rView) :
     SwTableShell(_rView)

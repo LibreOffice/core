@@ -23,7 +23,6 @@
 #include <memory>
 #include <list>
 #include <algorithm>
-#include <tools/rtti.hxx>
 
 class SfxHint;
 class SdrHint;

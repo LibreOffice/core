@@ -29,10 +29,6 @@
 #include "cfgitems.hxx"
 #include "crstate.hxx"
 
-TYPEINIT1_AUTOFACTORY(SwDocDisplayItem, SfxPoolItem)
-TYPEINIT1_AUTOFACTORY(SwElemItem, SfxPoolItem)
-TYPEINIT1_AUTOFACTORY(SwAddPrinterItem, SfxPoolItem)
-TYPEINIT1_AUTOFACTORY(SwShadowCursorItem, SfxPoolItem)
 
 SwDocDisplayItem::SwDocDisplayItem( sal_uInt16 _nWhich ) :
         SfxPoolItem(_nWhich),

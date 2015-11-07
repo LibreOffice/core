@@ -22,8 +22,10 @@
 #include <sfx2/objitem.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-TYPEINIT1_AUTOFACTORY(SfxObjectShellItem,SfxPoolItem)
-TYPEINIT1_AUTOFACTORY(SfxObjectItem,SfxPoolItem)
+
+SfxPoolItem* SfxObjectShellItem::CreateDefault() { return new SfxObjectShellItem; }
+
+SfxPoolItem* SfxObjectItem::CreateDefault() { return new SfxObjectItem; }
 
 bool SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 {

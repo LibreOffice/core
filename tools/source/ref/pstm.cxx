@@ -41,7 +41,6 @@ SvCreateInstancePersist SvClassManager::Get( sal_Int32 nClassId )
 }
 
 // SvRttiBase
-TYPEINIT0( SvRttiBase );
 
 /** Constructor
 

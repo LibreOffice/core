@@ -49,7 +49,6 @@ struct TabDlg_Impl;
 class SFX2_DLLPUBLIC SfxTabDialogItem: public SfxSetItem
 {
 public:
-    TYPEINFO_OVERRIDE();
                             SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet );
                             SfxTabDialogItem(const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool=NULL);
     virtual SfxPoolItem*    Clone(SfxItemPool* pToPool) const override;

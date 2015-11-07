@@ -135,7 +135,6 @@ public:
         SEARCH_COL  // column selection
     };
 
-    TYPEINFO_OVERRIDE();
 
     // single argument ctors shall be explicit.
     explicit SwTable( SwTableFormat* );
@@ -348,7 +347,6 @@ class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrameFormat.
     SwTableBox *m_pUpper;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SwTableLine() : m_pUpper(0) {}
 
@@ -408,7 +406,6 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
     static SwTableBoxFormat* CheckBoxFormat( SwTableBoxFormat* );
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SwTableBox();
 

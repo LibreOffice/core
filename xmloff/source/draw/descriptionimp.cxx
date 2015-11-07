@@ -36,7 +36,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-TYPEINIT1( SdXMLDescriptionContext, SvXMLImportContext );
 
 SdXMLDescriptionContext::SdXMLDescriptionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,   const OUString& rLocalName,
         const Reference< XAttributeList>&, const Reference< XShape >& rxShape)

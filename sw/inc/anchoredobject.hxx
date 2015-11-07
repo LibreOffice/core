@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_ANCHOREDOBJECT_HXX
 #define INCLUDED_SW_INC_ANCHOREDOBJECT_HXX
 
-#include <tools/rtti.hxx>
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <libxml/xmlwriter.h>
@@ -208,7 +207,6 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         virtual const SwRect GetObjBoundRect() const = 0;
     public:
-        TYPEINFO();
 
         virtual ~SwAnchoredObject();
 

@@ -45,7 +45,6 @@ private:
     mutable ScStyleSheet::Usage eUsage;
 
 public:
-                        TYPEINFO_OVERRIDE();
 
                         ScStyleSheet( const ScStyleSheet& rStyle );
 

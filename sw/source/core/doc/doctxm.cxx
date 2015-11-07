@@ -77,7 +77,6 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT2( SwTOXBaseSection, SwTOXBase, SwSection );    // for RTTI
 
 sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const
 {

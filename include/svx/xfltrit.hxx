@@ -32,7 +32,6 @@
 class SVX_DLLPUBLIC XFillTransparenceItem: public SfxUInt16Item
 {
 public:
-                            TYPEINFO_OVERRIDE();
                             XFillTransparenceItem(sal_uInt16 nFillTransparence = 0);
                             XFillTransparenceItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = NULL) const override;

@@ -35,7 +35,6 @@ using namespace ::xmloff::token;
 
 
 
-TYPEINIT1( XMLTrackedChangesImportContext, SvXMLImportContext );
 
 XMLTrackedChangesImportContext::XMLTrackedChangesImportContext(
     SvXMLImport& rImport,

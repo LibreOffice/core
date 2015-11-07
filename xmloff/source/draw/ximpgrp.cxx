@@ -27,7 +27,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-TYPEINIT1( SdXMLGroupShapeContext, SvXMLImportContext );
 
 SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     SvXMLImport& rImport,

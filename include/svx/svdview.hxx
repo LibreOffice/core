@@ -166,7 +166,6 @@ protected:
     SvtAccessibilityOptions maAccessibilityOptions;
 
 public:
-    TYPEINFO_OVERRIDE();
     explicit SdrView(SdrModel* pModel1, OutputDevice* pOut = 0L);
     virtual ~SdrView();
 

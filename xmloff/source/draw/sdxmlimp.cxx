@@ -101,7 +101,6 @@ public:
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
     virtual ~SdXMLDocContext_Impl();
 
-    TYPEINFO_OVERRIDE();
 
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -121,7 +120,6 @@ SdXMLDocContext_Impl::~SdXMLDocContext_Impl()
 {
 }
 
-TYPEINIT1( SdXMLDocContext_Impl, SvXMLImportContext );
 
 SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,

@@ -56,7 +56,6 @@ protected:
     css::uno::Reference< css::style::XStyle > GetStyle() { return xStyle; }
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLTextMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,

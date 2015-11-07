@@ -134,7 +134,6 @@ protected:
     virtual ~BasicManager();
 
 public:
-                    TYPEINFO_OVERRIDE();
                     BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = NULL, OUString* pLibPath = NULL, bool bDocMgr = false );
                     BasicManager( StarBASIC* pStdLib, OUString* pLibPath = NULL, bool bDocMgr = false );
 

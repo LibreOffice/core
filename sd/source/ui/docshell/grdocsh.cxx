@@ -41,7 +41,6 @@ using namespace sd;
 
 namespace sd
 {
-TYPEINIT1(GraphicDocShell, DrawDocShell);
 
 SFX_IMPL_SUPERCLASS_INTERFACE(GraphicDocShell, SfxObjectShell)
 

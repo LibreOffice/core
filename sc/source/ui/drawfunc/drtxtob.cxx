@@ -95,7 +95,6 @@ void ScDrawTextObjectBar::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScGetFontWorkId());
 }
 
-TYPEINIT1( ScDrawTextObjectBar, SfxShell );
 
 // abschalten der nicht erwuenschten Acceleratoren:
 

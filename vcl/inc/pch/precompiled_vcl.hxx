@@ -373,7 +373,6 @@
 #include <tools/resary.hxx>
 #include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/rtti.hxx>
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/time.hxx>
@@ -381,7 +380,6 @@
 #include <tools/vcompat.hxx>
 #include <tools/zcodec.hxx>
 #include <touch/touch.h>
-#include <typeinfo>
 #include <ucbhelper/content.hxx>
 #include <unicode/ubidi.h>
 #include <unicode/uchar.h>

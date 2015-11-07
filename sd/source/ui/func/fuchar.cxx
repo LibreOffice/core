@@ -40,7 +40,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuChar, FuPoor );
 
 FuChar::FuChar (
     ViewShell* pViewSh,

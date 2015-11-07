@@ -48,11 +48,11 @@ typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, sal_uIn
 struct SfxTbxCtrlFactory
 {
     SfxToolBoxControlCtor   pCtor;
-    TypeId                  nTypeId;
+    const std::type_info&       nTypeId;
     sal_uInt16                  nSlotId;
 
     SfxTbxCtrlFactory( SfxToolBoxControlCtor pTheCtor,
-            TypeId nTheTypeId, sal_uInt16 nTheSlotId ):
+            const std::type_info& nTheTypeId, sal_uInt16 nTheSlotId ):
         pCtor(pTheCtor),
         nTypeId(nTheTypeId),
         nSlotId(nTheSlotId)
@@ -232,14 +232,14 @@ public:
                { return new Class( nSlotId, nId, rTbx ); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
-                    Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
+                    Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
 
 #define SFX_IMPL_TOOLBOX_CONTROL_ARG(Class, nItemClass, Arg) \
         SfxToolBoxControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx, Arg); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
-                    Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
+                    Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
 
 
 

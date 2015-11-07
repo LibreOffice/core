@@ -23,8 +23,8 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SfxTemplateItem, SfxFlagItem);
 
+SfxPoolItem* SfxTemplateItem::CreateDefault() { return new SfxTemplateItem; }
 
 
 SfxTemplateItem::SfxTemplateItem() :

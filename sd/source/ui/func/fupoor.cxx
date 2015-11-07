@@ -60,7 +60,6 @@ using ::com::sun::star::uno::Reference;
 
 namespace sd {
 
-TYPEINIT0( FuPoor );
 
 FuPoor::FuPoor (
     ViewShell* pViewSh,

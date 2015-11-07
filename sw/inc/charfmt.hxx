@@ -36,7 +36,6 @@ class SW_DLLPUBLIC SwCharFormat : public SwFormat
     {}
 
 public:
-    TYPEINFO_OVERRIDE();    // already in base class Client
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };

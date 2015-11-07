@@ -34,7 +34,6 @@ class SVX_DLLPUBLIC XFillHatchItem : public NameOrIndex
     XHatch  aHatch;
 
 public:
-                            TYPEINFO_OVERRIDE();
                             XFillHatchItem() : NameOrIndex(XATTR_FILLHATCH, -1) {}
                             XFillHatchItem(const OUString& rName, const XHatch& rTheHatch);
                             XFillHatchItem(SfxItemPool* pPool, const XHatch& rTheHatch);

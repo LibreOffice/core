@@ -12,7 +12,6 @@
 #include <map>
 
 #include <svl/svldllapi.h>
-#include <tools/rtti.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
@@ -23,7 +22,6 @@ private:
     std::map<OUString, css::uno::Any> m_aMap;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SfxGrabBagItem();
     SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, css::uno::Any>* pMap = 0);

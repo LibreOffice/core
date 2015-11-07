@@ -31,7 +31,8 @@
 class XFormTextShadowTranspItem: public SfxUInt16Item
 {
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence = 0);
                             XFormTextShadowTranspItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = NULL) const override;

@@ -81,7 +81,6 @@ using namespace ::com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 using ::com::sun::star::uno::Reference;
 
-TYPEINIT2( SdPage, FmFormPage, SdrObjUserCall );
 
 /*************************************************************************
 |*

@@ -85,7 +85,6 @@ public:
 class View : public FmFormView
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     View (
         SdDrawDocument& rDrawDoc,

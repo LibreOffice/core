@@ -64,7 +64,6 @@ protected:
     TEParaPortions*     GetTEParaPortions() const { return mpTextEngine->mpTEParaPortions; }
 
 public:
-                        TYPEINFO_OVERRIDE();
     explicit            TextUndo( TextEngine* pTextEngine );
     virtual             ~TextUndo();
 

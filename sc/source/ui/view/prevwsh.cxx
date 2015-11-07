@@ -83,7 +83,6 @@ using namespace com::sun::star;
 
 #include <memory>
 
-TYPEINIT1( ScPreviewShell, SfxViewShell );
 
 SFX_IMPL_INTERFACE(ScPreviewShell, SfxViewShell)
 

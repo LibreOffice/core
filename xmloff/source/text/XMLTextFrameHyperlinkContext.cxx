@@ -36,7 +36,6 @@ using namespace ::xmloff::token;
 
 namespace drawing = com::sun::star::drawing;
 
-TYPEINIT1( XMLTextFrameHyperlinkContext, SvXMLImportContext );
 
 XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
         SvXMLImport& rImport,

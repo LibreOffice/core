@@ -52,7 +52,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLFontStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,

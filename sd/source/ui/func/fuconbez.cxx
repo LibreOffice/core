@@ -49,7 +49,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sd {
 
-TYPEINIT1( FuConstructBezierPolygon, FuConstruct );
 
 FuConstructBezierPolygon::FuConstructBezierPolygon (
     ViewShell* pViewSh,

@@ -220,7 +220,6 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
     return NULL;
 }
 
-TYPEINIT1( SvxFieldItem, SfxPoolItem );
 
 SV_IMPL_PERSIST1( SvxFieldData, SvPersistBase );
 
@@ -247,7 +246,7 @@ SvxFieldData* SvxFieldData::Clone() const
 
 bool SvxFieldData::operator==( const SvxFieldData& rFld ) const
 {
-    DBG_ASSERT( Type() == rFld.Type(), "==: Different Types" );
+    DBG_ASSERT( typeid(*this) == typeid(rFld), "==: Different Types" );
     (void)rFld;
     return true;    // Basic class is always the same.
 }
@@ -362,7 +361,7 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
         return true;
     if( pField == nullptr || pOtherFld == nullptr )
         return false;
-    return ( pField->Type() == pOtherFld->Type() )
+    return ( typeid(*pField) == typeid(*pOtherFld) )
             && ( *pField == *pOtherFld );
 }
 
@@ -401,7 +400,7 @@ SvxFieldData* SvxDateField::Clone() const
 
 bool SvxDateField::operator==( const SvxFieldData& rOther ) const
 {
-    if ( rOther.Type() != Type() )
+    if ( typeid(rOther) != typeid(*this) )
         return false;
 
     const SvxDateField& rOtherFld = static_cast<const SvxDateField&>(rOther);
@@ -539,7 +538,7 @@ SvxFieldData* SvxURLField::Clone() const
 
 bool SvxURLField::operator==( const SvxFieldData& rOther ) const
 {
-    if ( rOther.Type() != Type() )
+    if ( typeid(rOther) != typeid(*this) )
         return false;
 
     const SvxURLField& rOtherFld = static_cast<const SvxURLField&>(rOther);
@@ -628,7 +627,7 @@ SvxFieldData* SvxPageTitleField::Clone() const
 
 bool SvxPageTitleField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxPageTitleField) );
+    return ( dynamic_cast< const SvxPageTitleField *>(&rCmp) != nullptr );
 }
 
 void SvxPageTitleField::Load( SvPersistStream & /*rStm*/ )
@@ -661,7 +660,7 @@ SvxFieldData* SvxPageField::Clone() const
 
 bool SvxPageField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxPageField) );
+    return ( dynamic_cast< const SvxPageField *>(&rCmp) != nullptr );
 }
 
 void SvxPageField::Load( SvPersistStream & /*rStm*/ )
@@ -689,7 +688,7 @@ SvxFieldData* SvxPagesField::Clone() const
 
 bool SvxPagesField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxPagesField) );
+    return ( dynamic_cast< const SvxPagesField *>(&rCmp) != nullptr);
 }
 
 void SvxPagesField::Load( SvPersistStream & /*rStm*/ )
@@ -711,7 +710,7 @@ SvxFieldData* SvxTimeField::Clone() const
 
 bool SvxTimeField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxTimeField) );
+    return ( dynamic_cast< const SvxTimeField *>(&rCmp) != nullptr);
 }
 
 void SvxTimeField::Load( SvPersistStream & /*rStm*/ )
@@ -738,7 +737,7 @@ SvxFieldData* SvxFileField::Clone() const
 
 bool SvxFileField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxFileField) );
+    return ( dynamic_cast< const SvxFileField *>(&rCmp) != nullptr );
 }
 
 void SvxFileField::Load( SvPersistStream & /*rStm*/ )
@@ -768,7 +767,7 @@ SvxFieldData* SvxTableField::Clone() const
 
 bool SvxTableField::operator==( const SvxFieldData& rCmp ) const
 {
-    if (rCmp.Type() != TYPE(SvxTableField))
+    if (dynamic_cast< const SvxTableField *>(&rCmp) != nullptr)
         return false;
 
     return mnTab == static_cast<const SvxTableField&>(rCmp).mnTab;
@@ -817,7 +816,7 @@ SvxFieldData* SvxExtTimeField::Clone() const
 
 bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
 {
-    if ( rOther.Type() != Type() )
+    if ( typeid(rOther) != typeid(*this) )
         return false;
 
     const SvxExtTimeField& rOtherFld = static_cast<const SvxExtTimeField&>(rOther);
@@ -961,7 +960,7 @@ SvxFieldData* SvxExtFileField::Clone() const
 
 bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
 {
-    if ( rOther.Type() != Type() )
+    if ( typeid(rOther) != typeid(*this) )
         return false;
 
     const SvxExtFileField& rOtherFld = static_cast<const SvxExtFileField&>(rOther);
@@ -1113,7 +1112,7 @@ SvxFieldData* SvxAuthorField::Clone() const
 
 bool SvxAuthorField::operator==( const SvxFieldData& rOther ) const
 {
-    if ( rOther.Type() != Type() )
+    if ( typeid(rOther) != typeid(*this) )
         return false;
 
     const SvxAuthorField& rOtherFld = static_cast<const SvxAuthorField&>(rOther);
@@ -1214,7 +1213,7 @@ SvxFieldData* SvxHeaderField::Clone() const
 
 bool SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxHeaderField) );
+    return ( dynamic_cast< const SvxHeaderField *>(&rCmp) != nullptr );
 }
 
 void SvxHeaderField::Load( SvPersistStream & /*rStm*/ )
@@ -1237,7 +1236,7 @@ SvxFieldData* SvxFooterField::Clone() const
 
 bool SvxFooterField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxFooterField) );
+    return ( dynamic_cast< const SvxFooterField *>(&rCmp) != nullptr );
 }
 
 void SvxFooterField::Load( SvPersistStream & /*rStm*/ )
@@ -1259,7 +1258,7 @@ SvxFieldData* SvxDateTimeField::Clone() const
 
 bool SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
 {
-    return ( rCmp.Type() == TYPE(SvxDateTimeField) );
+    return ( dynamic_cast< const SvxDateTimeField *>(&rCmp) != nullptr );
 }
 
 void SvxDateTimeField::Load( SvPersistStream & /*rStm*/ )

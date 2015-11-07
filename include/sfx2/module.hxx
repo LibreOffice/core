@@ -62,7 +62,6 @@ private:
     SAL_DLLPRIVATE void Construct_Impl();
 
 public:
-                                TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXMODULE)
 
 private:

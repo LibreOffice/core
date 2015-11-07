@@ -29,7 +29,6 @@
 class SdrFractionItem: public SfxPoolItem {
     Fraction nValue;
 public:
-    TYPEINFO_VISIBILITY_OVERRIDE( SVX_DLLPUBLIC );
     SdrFractionItem(sal_uInt16 nId=0): SfxPoolItem(nId) {}
     SdrFractionItem(sal_uInt16 nId, const Fraction& rVal): SfxPoolItem(nId), nValue(rVal) {}
     SdrFractionItem(sal_uInt16 nId, SvStream& rIn);

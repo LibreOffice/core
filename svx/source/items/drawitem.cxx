@@ -23,12 +23,13 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1_FACTORY( SvxColorListItem, SfxPoolItem , new SvxColorListItem );
-TYPEINIT1_FACTORY( SvxGradientListItem, SfxPoolItem , new  SvxGradientListItem );
-TYPEINIT1_FACTORY( SvxHatchListItem, SfxPoolItem , new  SvxHatchListItem );
-TYPEINIT1_FACTORY( SvxBitmapListItem, SfxPoolItem , new  SvxBitmapListItem );
-TYPEINIT1_FACTORY( SvxDashListItem, SfxPoolItem , new  SvxDashListItem );
-TYPEINIT1_FACTORY( SvxLineEndListItem, SfxPoolItem , new  SvxLineEndListItem );
+
+SfxPoolItem* SvxColorListItem::CreateDefault() { return new  SvxColorListItem ;}
+SfxPoolItem* SvxGradientListItem::CreateDefault() { return new   SvxGradientListItem ;}
+SfxPoolItem* SvxHatchListItem::CreateDefault() { return new   SvxHatchListItem ;}
+SfxPoolItem* SvxBitmapListItem::CreateDefault() { return new   SvxBitmapListItem ;}
+SfxPoolItem* SvxDashListItem::CreateDefault() { return new   SvxDashListItem ;}
+SfxPoolItem* SvxLineEndListItem::CreateDefault() { return new   SvxLineEndListItem ;}
 
 SvxColorListItem::SvxColorListItem()
 {

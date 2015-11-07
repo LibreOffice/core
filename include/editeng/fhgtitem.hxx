@@ -42,7 +42,7 @@ class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
     sal_uInt16  nProp;              // default 100%
     SfxMapUnit ePropUnit;       // Percent, Twip, ...
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxFontHeightItem( const sal_uLong nSz /*= 240*/, const sal_uInt16 nPropHeight /*= 100*/,
                        const sal_uInt16 nId  );

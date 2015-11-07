@@ -144,7 +144,6 @@ void SwAnnotationShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_ANNOTATION_POPUPMENU));
 }
 
-TYPEINIT1(SwAnnotationShell,SfxShell)
 
 SfxItemPool* SwAnnotationShell::GetAnnotationPool(SwView& rV)
 {

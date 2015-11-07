@@ -30,7 +30,6 @@
 
 // Description: Register all filters
 
-TYPEINIT1(SwGlobalDocShell, SwDocShell);
 
 SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), SfxObjectShellFlags::STD_NORMAL|SfxObjectShellFlags::HASMENU, "swriter/GlobalDocument" )
 

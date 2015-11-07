@@ -61,7 +61,6 @@ public:
     {}
 };
 
-TYPEINIT1( SdXMLShowsContext, SvXMLImportContext );
 
 SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)

@@ -35,7 +35,6 @@ namespace dbaui
         OUString         m_strComment; // undo, redo comment
 
     public:
-        TYPEINFO_OVERRIDE();
         OCommentUndoAction(sal_uInt16 nCommentID) { m_strComment = OUString(ModuleRes(nCommentID)); }
 
         virtual OUString GetComment() const override { return m_strComment; }

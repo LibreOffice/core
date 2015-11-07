@@ -527,20 +527,6 @@ void DbGridColumn::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _
 
 //= cell controls
 
-TYPEINIT0( DbCellControl )
-TYPEINIT1( DbLimitedLengthField, DbCellControl )
-TYPEINIT1( DbTextField, DbLimitedLengthField )
-TYPEINIT1( DbFormattedField, DbLimitedLengthField )
-TYPEINIT1( DbCheckBox, DbCellControl )
-TYPEINIT1( DbComboBox, DbCellControl )
-TYPEINIT1( DbListBox, DbCellControl )
-TYPEINIT1( DbPatternField, DbCellControl )
-TYPEINIT1( DbSpinField, DbCellControl )
-TYPEINIT1( DbDateField, DbSpinField )
-TYPEINIT1( DbTimeField, DbSpinField )
-TYPEINIT1( DbCurrencyField, DbSpinField )
-TYPEINIT1( DbNumericField, DbSpinField )
-TYPEINIT1( DbFilterField, DbCellControl )
 
 
 DbCellControl::DbCellControl( DbGridColumn& _rColumn, bool /*_bText*/ )
@@ -3140,7 +3126,6 @@ IMPL_LINK_NOARG_TYPED(DbFilterField, OnClick, VclPtr<CheckBox>, void)
     }
 }
 
-TYPEINIT0(FmXGridCell);
 
 
 
@@ -3516,7 +3501,6 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
     }
 }
 
-TYPEINIT1(FmXDataCell, FmXGridCell);
 
 void FmXDataCell::PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
                         const Reference< css::sdb::XColumn >& _rxField,
@@ -3533,7 +3517,6 @@ void FmXDataCell::UpdateFromColumn()
         m_pCellControl->UpdateFromField(xField, m_pColumn->GetParent().getNumberFormatter());
 }
 
-TYPEINIT1(FmXTextCell, FmXDataCell);
 
 FmXTextCell::FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl )
     :FmXDataCell( pColumn, _rControl )
@@ -4541,7 +4524,6 @@ void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Win
     }
 }
 
-TYPEINIT1(FmXFilterCell, FmXGridCell);
 
 FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl )
               :FmXGridCell( pColumn, pControl )

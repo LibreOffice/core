@@ -25,7 +25,6 @@ namespace dbaui
 using namespace ::com::sun::star::uno;
 
 // OStringListItem
-TYPEINIT1(OStringListItem, SfxPoolItem);
 OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence< OUString >& _rList)
     :SfxPoolItem(_nWhich)
     ,m_aList(_rList)

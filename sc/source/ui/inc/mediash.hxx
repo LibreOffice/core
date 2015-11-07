@@ -32,7 +32,6 @@ class ScViewData;
 class ScMediaShell: public ScDrawShell
 {
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_MEDIA_SHELL)
 
 private:

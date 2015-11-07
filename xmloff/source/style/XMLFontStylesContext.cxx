@@ -81,7 +81,6 @@ static const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
     return aFontStyleAttrTokenMap;
 }
 
-TYPEINIT1( XMLFontStyleContextFontFace, SvXMLStyleContext );
 
 XMLFontStyleContextFontFace::XMLFontStyleContextFontFace( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -192,7 +191,6 @@ OUString XMLFontStyleContextFontFace::familyName() const
     return ret;
 }
 
-TYPEINIT1( XMLFontStyleContextFontFaceFormat, SvXMLStyleContext );
 
 XMLFontStyleContextFontFaceFormat::XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -213,7 +211,6 @@ void XMLFontStyleContextFontFaceFormat::SetAttribute( sal_uInt16 nPrefixKey, con
         SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
 
-TYPEINIT1( XMLFontStyleContextFontFaceSrc, SvXMLImportContext );
 
 XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -234,7 +231,6 @@ SvXMLImportContext * XMLFontStyleContextFontFaceSrc::CreateChildContext(
 }
 
 
-TYPEINIT1( XMLFontStyleContextFontFaceUri, SvXMLImportContext );
 
 XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -370,7 +366,6 @@ SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
     return pStyle;
 }
 
-TYPEINIT1( XMLFontStylesContext, SvXMLStylesContext );
 
 XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
