@@ -104,7 +104,6 @@ private:
     /// simple ActionChildInserted forwarder to have it on a central place
     static void impChildInserted(SdrObject& rChild);
 public:
-    TYPEINFO();
     SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList=nullptr);
     virtual ~SdrObjList();
 
@@ -457,7 +456,6 @@ protected:
     void lateInit(const SdrPage& rSrcPage, SdrModel* pNewModel = nullptr);
 
 public:
-    TYPEINFO_OVERRIDE();
     explicit SdrPage(SdrModel& rNewModel, bool bMasterPage=false);
     virtual ~SdrPage();
     virtual SdrPage* Clone() const override;

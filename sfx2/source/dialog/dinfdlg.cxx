@@ -104,7 +104,8 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
 }
 
 // STATIC DATA -----------------------------------------------------------
-TYPEINIT1_AUTOFACTORY(SfxDocumentInfoItem, SfxStringItem);
+
+SfxPoolItem* SfxDocumentInfoItem::CreateDefault() { return new SfxDocumentInfoItem; }
 
 const sal_uInt16 HI_NAME = 1;
 const sal_uInt16 HI_TYPE = 2;
@@ -327,7 +328,7 @@ SfxPoolItem* SfxDocumentInfoItem::Clone( SfxItemPool * ) const
 
 bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 {
-    if (!(rItem.Type() == Type() && SfxStringItem::operator==(rItem)))
+    if (!(typeid(rItem) == typeid(*this) && SfxStringItem::operator==(rItem)))
         return false;
     const SfxDocumentInfoItem& rInfoItem(static_cast<const SfxDocumentInfoItem&>(rItem));
 

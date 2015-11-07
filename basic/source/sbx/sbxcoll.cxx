@@ -22,8 +22,6 @@
 #include <basic/sbx.hxx>
 #include "sbxres.hxx"
 
-TYPEINIT1(SbxCollection,SbxObject)
-TYPEINIT1(SbxStdCollection,SbxCollection)
 
 static OUString pCount;
 static OUString pAdd;

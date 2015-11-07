@@ -45,7 +45,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuFormatPaintBrush, FuText );
 
 FuFormatPaintBrush::FuFormatPaintBrush( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 : FuText(pViewSh, pWin, pView, pDoc, rReq)

@@ -35,7 +35,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxPostureItem : public SfxEnumItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxPostureItem( const FontItalic ePost /*= ITALIC_NONE*/,
                     const sal_uInt16 nId  );

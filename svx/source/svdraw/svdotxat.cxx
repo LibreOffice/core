@@ -264,10 +264,10 @@ bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     if (bRet)
     {
         SetRectsDirty();
-        if (HAS_BASE(SdrRectObj,this)) { // this is a hack
+        if (dynamic_cast<const SdrRectObj *>(this) != nullptr) { // this is a hack
             static_cast<SdrRectObj*>(this)->SetXPolyDirty();
         }
-        if (HAS_BASE(SdrCaptionObj,this)) { // this is a hack
+        if (dynamic_cast<const SdrCaptionObj *>(this) != nullptr) { // this is a hack
             static_cast<SdrCaptionObj*>(this)->ImpRecalcTail();
         }
     }
@@ -282,10 +282,10 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         maRect = aNeuRect;
         SetRectsDirty();
-        if (HAS_BASE(SdrRectObj,this)) { // this is a hack
+        if (dynamic_cast<const SdrRectObj *>(this) != nullptr) { // this is a hack
             static_cast<SdrRectObj*>(this)->SetXPolyDirty();
         }
-        if (HAS_BASE(SdrCaptionObj,this)) { // this is a hack
+        if (dynamic_cast<const SdrCaptionObj *>(this) != nullptr) { // this is a hack
             static_cast<SdrCaptionObj*>(this)->ImpRecalcTail();
         }
         SetChanged();

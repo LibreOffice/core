@@ -80,7 +80,6 @@ void SwDrawShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(SwDrawShell,SwDrawBaseShell)
 
 // #i123922# check as the name implies
 SdrObject* SwDrawShell::IsSingleFillableNonOLESelected()

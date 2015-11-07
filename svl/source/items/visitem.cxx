@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
-TYPEINIT1_AUTOFACTORY(SfxVisibilityItem, SfxPoolItem);
 
 SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)

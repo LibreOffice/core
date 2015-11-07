@@ -159,7 +159,6 @@ enum SdrUserCallType {SDRUSERCALL_MOVEONLY,         // only moved, size unchange
 class SVX_DLLPUBLIC SdrObjUserCall
 {
 public:
-    TYPEINFO();
     virtual ~SdrObjUserCall();
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect);
 };
@@ -408,7 +407,6 @@ protected:
     virtual ~SdrObject();
 
 public:
-    TYPEINFO_OVERRIDE();
     SdrObject();
 
     // frees the SdrObject pointed to by the argument

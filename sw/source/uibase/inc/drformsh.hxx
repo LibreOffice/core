@@ -27,7 +27,6 @@ class SwDrawFormShell: public SwDrawBaseShell
 {
 public:
     SFX_DECL_INTERFACE(SW_DRAWFORMSHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

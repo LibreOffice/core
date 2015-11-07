@@ -35,7 +35,7 @@ class EDITENG_DLLPUBLIC SvxParaVertAlignItem : public SfxUInt16Item
 {
 public:
     enum { AUTOMATIC, BASELINE, TOP, CENTER, BOTTOM };
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxParaVertAlignItem( sal_uInt16 nValue /*= 0*/,
                        const sal_uInt16 nId  );

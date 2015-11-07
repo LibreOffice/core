@@ -34,7 +34,7 @@ class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem
 {
     Color mColor;
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxTextLineItem( const FontUnderline eSt,
                      const sal_uInt16 nId );
@@ -87,7 +87,7 @@ public:
 class EDITENG_DLLPUBLIC SvxUnderlineItem : public SvxTextLineItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxUnderlineItem( const FontUnderline eSt,
                       const sal_uInt16 nId );
@@ -104,7 +104,7 @@ public:
 class EDITENG_DLLPUBLIC SvxOverlineItem : public SvxTextLineItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxOverlineItem( const FontUnderline eSt,
                      const sal_uInt16 nId );

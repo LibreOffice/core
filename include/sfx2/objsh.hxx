@@ -244,7 +244,6 @@ protected:
     void AddToRecentlyUsedList();
 
 public:
-                                TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)
 
 private:
@@ -823,7 +822,8 @@ class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
     SfxObjectShell*         pObjSh;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             SfxObjectShellItem() :
                                 SfxPoolItem( 0 ),
                                 pObjSh( nullptr )

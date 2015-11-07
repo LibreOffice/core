@@ -23,7 +23,6 @@
 
 #include <cstdarg>
 #include <svl/poolitem.hxx>
-#include <tools/rtti.hxx>
 
 class SfxItemPool;
 class SfxPoolItem;

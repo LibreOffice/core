@@ -46,7 +46,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 
 
-TYPEINIT1( XMLIndexChapterInfoEntryContext, XMLIndexSimpleEntryContext);
 
 XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
     SvXMLImport& rImport,

@@ -27,7 +27,6 @@
 #include <tools/debug.hxx>
 #include <osl/file.hxx>
 
-TYPEINIT1( SvMetaModule, SvMetaExtern );
 
 SvMetaModule::SvMetaModule( bool bImp )
     : bImported( bImp ), bIsModified( false )

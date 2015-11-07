@@ -26,7 +26,8 @@
 
 
 
-TYPEINIT1_FACTORY(SvxZoomSliderItem,SfxUInt16Item, new SvxZoomSliderItem);
+
+SfxPoolItem* SvxZoomSliderItem::CreateDefault() { return new SvxZoomSliderItem; }
 
 #define ZOOMSLIDER_PARAM_CURRENTZOOM    "Columns"
 #define ZOOMSLIDER_PARAM_SNAPPINGPOINTS "SnappingPoints"

@@ -25,7 +25,6 @@
 namespace svx
 {
 
-    TYPEINIT1( DatabaseMapItem, SfxPoolItem )
 
     DatabaseMapItem::DatabaseMapItem( sal_uInt16 _nId, const DatabaseRegistrations& _rRegistrations )
         :SfxPoolItem( _nId )

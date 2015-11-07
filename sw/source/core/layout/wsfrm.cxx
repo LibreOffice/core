@@ -2153,7 +2153,6 @@ SwLayoutFrm::SwLayoutFrm(SwFrameFormat *const pFormat, SwFrm *const pSib)
 }
 
 // #i28701#
-TYPEINIT1(SwLayoutFrm,SwFrm);
 
 SwTwips SwLayoutFrm::InnerHeight() const
 {

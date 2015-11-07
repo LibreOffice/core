@@ -718,7 +718,6 @@ void sw_setValue( SwXCell &rCell, double nVal )
     pDoc->getIDocumentFieldsAccess().UpdateTableFields( &aTableUpdate );
 }
 
-TYPEINIT1(SwXCell, SwClient);
 
 SwXCell::SwXCell(SwFrameFormat* pTableFormat, SwTableBox* pBx, size_t const nPos) :
     SwXText(pTableFormat->GetDoc(), CURSOR_TBLTEXT),
@@ -1233,7 +1232,6 @@ sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName) throw( u
 uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
     { return {"com.sun.star.text.TextTableRow"}; }
 
-TYPEINIT1(SwXTextTableRow, SwClient);
 
 SwXTextTableRow::SwXTextTableRow(SwFrameFormat* pFormat, SwTableLine* pLn) :
     SwClient(pFormat),
@@ -1936,7 +1934,6 @@ sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& 
     return 0;
 }
 
-TYPEINIT1(SwXTextTable, SwClient)
 
 SwXTextTable::SwXTextTable()
     : m_pImpl(new Impl)
@@ -3119,7 +3116,6 @@ sal_Int64 SAL_CALL SwXCellRange::getSomething( const uno::Sequence< sal_Int8 >& 
     return 0;
 }
 
-TYPEINIT1(SwXCellRange, SwClient);
 
 OUString SwXCellRange::getImplementationName() throw( uno::RuntimeException, std::exception )
     { return OUString("SwXCellRange"); }
@@ -3746,7 +3742,6 @@ sal_Bool SwXTableRows::supportsService(const OUString& rServiceName) throw( uno:
 uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
     { return { "com.sun.star.text.TableRows" }; }
 
-TYPEINIT1(SwXTableRows, SwClient);
 
 SwXTableRows::SwXTableRows(SwFrameFormat& rFrameFormat) :
     SwClient(&rFrameFormat)
@@ -3898,7 +3893,6 @@ sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName) throw( u
 uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
     { return { "com.sun.star.text.TableColumns"}; }
 
-TYPEINIT1(SwXTableColumns, SwClient);
 
 SwXTableColumns::SwXTableColumns(SwFrameFormat& rFrameFormat) :
     SwClient(&rFrameFormat)

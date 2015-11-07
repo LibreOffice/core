@@ -34,7 +34,6 @@ public:
     virtual ~SbJScriptMethod();
 
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_JSCRIPTMETH,2);
-    TYPEINFO_OVERRIDE();
 };
 
 

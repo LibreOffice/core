@@ -139,7 +139,6 @@ void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-TYPEINIT1( XMLTextShapeStyleContext, XMLShapeStyleContext );
 
 XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,

@@ -41,7 +41,6 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::text::XLineNumberingProperties;
 
-TYPEINIT1( XMLLineNumberingImportContext, SvXMLStyleContext );
 
 
 XMLLineNumberingImportContext::XMLLineNumberingImportContext(

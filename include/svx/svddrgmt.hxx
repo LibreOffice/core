@@ -180,7 +180,6 @@ protected:
     drawinglayer::primitive2d::Primitive2DSequence AddConnectorOverlays();
 
 public:
-    TYPEINFO();
 
     void resetSdrDragEntries();
     basegfx::B2DRange getCurrentRange() const;
@@ -238,7 +237,6 @@ protected:
     virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify) override;
 
 public:
-    TYPEINFO_OVERRIDE();
     SdrDragMove(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const override;
@@ -261,7 +259,6 @@ protected:
     Fraction                    aYFact;
 
 public:
-    TYPEINFO_OVERRIDE();
     SdrDragResize(SdrDragView& rNewView);
 
     virtual void TakeSdrDragComment(OUString& rStr) const override;
@@ -290,7 +287,6 @@ protected:
     virtual void createSdrDragEntries() override;
 
 public:
-    TYPEINFO_OVERRIDE();
     SdrDragObjOwn(SdrDragView& rNewView);
     virtual ~SdrDragObjOwn();
 

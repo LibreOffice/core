@@ -44,7 +44,6 @@ using namespace com::sun::star;
 
 namespace sd {
 
-TYPEINIT1( FuCopy, FuPoor );
 
 FuCopy::FuCopy (
     ViewShell* pViewSh,

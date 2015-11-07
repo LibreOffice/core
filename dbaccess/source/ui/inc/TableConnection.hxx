@@ -22,7 +22,6 @@
 #include <vector>
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
-#include <tools/rtti.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include "TableConnectionData.hxx"
 

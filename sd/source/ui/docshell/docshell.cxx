@@ -84,7 +84,6 @@ namespace sd {
 /**
  * slotmaps and definitions of SFX
  */
-TYPEINIT1( DrawDocShell, SfxObjectShell );
 
 SFX_IMPL_OBJECTFACTORY(
     DrawDocShell,

@@ -52,7 +52,6 @@ protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 public:
-                        TYPEINFO_OVERRIDE();
 
     virtual bool        SetName( const OString& rName, SvIdlDataBase * = nullptr  ) override;
 

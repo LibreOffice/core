@@ -161,7 +161,6 @@ void SwBaseShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SvxContourDlgChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(SwBaseShell,SfxShell)
 
 static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {

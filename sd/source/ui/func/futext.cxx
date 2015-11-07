@@ -130,7 +130,6 @@ static sal_uInt16 SidArray[] = {
     FN_NUM_BULLET_ON,                 //   20138
                             0 };
 
-TYPEINIT1( FuText, FuConstruct );
 
 static bool bTestText = false;
 

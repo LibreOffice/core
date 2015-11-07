@@ -34,7 +34,6 @@
 #include "sc.hrc"
 #include "hints.hxx"
 
-TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 

@@ -36,7 +36,6 @@ class FuConstructRectangle
     : public FuConstruct
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
     virtual void DoExecute( SfxRequest& rReq ) override;

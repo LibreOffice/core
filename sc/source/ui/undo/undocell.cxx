@@ -66,17 +66,6 @@ namespace HelperNotifyChanges
     }
 }
 
-TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
-TYPEINIT1(ScUndoEnterData, ScSimpleUndo);
-TYPEINIT1(ScUndoEnterValue, ScSimpleUndo);
-TYPEINIT1(ScUndoSetCell, ScSimpleUndo);
-TYPEINIT1(ScUndoPageBreak, ScSimpleUndo);
-TYPEINIT1(ScUndoPrintZoom, ScSimpleUndo);
-TYPEINIT1(ScUndoThesaurus, ScSimpleUndo);
-TYPEINIT1(ScUndoReplaceNote, ScSimpleUndo);
-TYPEINIT1(ScUndoShowHideNote, ScSimpleUndo);
-TYPEINIT1(ScUndoDetective, ScSimpleUndo);
-TYPEINIT1(ScUndoRangeNames, ScSimpleUndo);
 
 ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,

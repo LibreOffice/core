@@ -368,7 +368,6 @@ protected:
 public:
     SFX_DECL_VIEWFACTORY(SwView);
     SFX_DECL_INTERFACE(SW_VIEWSHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

@@ -100,7 +100,6 @@ void SwTableShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_TABLE_TOOLBOX);
 }
 
-TYPEINIT1(SwTableShell,SwBaseShell)
 
 static const sal_uInt16 aUITableAttrRange[] =
 {

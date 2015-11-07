@@ -27,7 +27,7 @@
 class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SfxStringItem(sal_uInt16 which = 0): CntUnencodedStringItem(which) {}
 
@@ -43,6 +43,7 @@ public:
     virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+
 };
 
 #endif // INCLUDED_SVL_STRITEM_HXX

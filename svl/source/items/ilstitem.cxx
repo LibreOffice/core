@@ -24,7 +24,8 @@
 
 #include <svl/ilstitem.hxx>
 
-TYPEINIT1_AUTOFACTORY(SfxIntegerListItem, SfxPoolItem);
+
+SfxPoolItem* SfxIntegerListItem::CreateDefault() { return new SfxIntegerListItem; }
 
 SfxIntegerListItem::SfxIntegerListItem()
 {

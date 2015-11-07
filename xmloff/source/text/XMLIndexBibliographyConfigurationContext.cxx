@@ -44,7 +44,6 @@ const sal_Char sAPI_FieldMaster_Bibliography[] =
                                 "com.sun.star.text.FieldMaster.Bibliography";
 
 
-TYPEINIT1( XMLIndexBibliographyConfigurationContext, SvXMLStyleContext );
 
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
     SvXMLImport& rImport,

@@ -32,7 +32,6 @@
 class SVX_DLLPUBLIC TbxImageItem : public SfxUInt16Item
 {
 public:
-                            TYPEINFO_OVERRIDE();
                             TbxImageItem( sal_uInt16 nWhich = 0, sal_uInt16 nImage = 0 );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;

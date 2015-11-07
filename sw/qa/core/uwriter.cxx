@@ -1436,12 +1436,9 @@ namespace
     struct TestHint final : SfxHint {};
     struct TestModify : SwModify
     {
-        TYPEINFO_OVERRIDE();
     };
-    TYPEINIT1( TestModify, SwModify );
     struct TestClient : SwClient
     {
-        TYPEINFO_OVERRIDE();
         int m_nModifyCount;
         int m_nNotifyCount;
         TestClient() : m_nModifyCount(0), m_nNotifyCount(0) {};
@@ -1455,17 +1452,14 @@ namespace
                 SwClient::SwClientNotify(rModify, rHint);
         }
     };
-    TYPEINIT1( TestClient, SwClient );
     // sad copypasta as tools/rtti.hxxs little brain can't cope with templates
     struct OtherTestClient : SwClient
     {
-        TYPEINFO_OVERRIDE();
         int m_nModifyCount;
         OtherTestClient() : m_nModifyCount(0) {};
         virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) override
         { ++m_nModifyCount; }
     };
-    TYPEINIT1( OtherTestClient, SwClient );
 }
 void SwDocTest::testClientModify()
 {
@@ -1508,7 +1502,7 @@ void SwDocTest::testClientModify()
         CPPUNIT_ASSERT_EQUAL(aClient2.m_nNotifyCount,1);
     }
     // test typed iteration
-    CPPUNIT_ASSERT(!aClient1.IsA(TYPE(OtherTestClient)));
+    CPPUNIT_ASSERT(typeid(aClient1) != typeid(OtherTestClient));
     {
         SwIterator<OtherTestClient,SwModify> aIter(aMod);
         for(OtherTestClient* pClient = aIter.First(); pClient ; pClient = aIter.Next())

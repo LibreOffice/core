@@ -62,7 +62,7 @@ class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
                     nRightDist;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxBoxItem( const sal_uInt16 nId );
     SvxBoxItem( const SvxBoxItem &rCpy );
@@ -174,7 +174,7 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
     sal_uInt16  nDefDist;       // The default or minimum distance.
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxBoxInfoItem( const sal_uInt16 nId );
     SvxBoxInfoItem( const SvxBoxInfoItem &rCpy );

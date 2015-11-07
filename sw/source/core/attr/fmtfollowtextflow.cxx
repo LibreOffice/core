@@ -19,7 +19,6 @@
 
 #include <fmtfollowtextflow.hxx>
 
-TYPEINIT1(SwFormatFollowTextFlow, SfxBoolItem);
 
 SfxPoolItem*    SwFormatFollowTextFlow::Clone( SfxItemPool * ) const
 {

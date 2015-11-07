@@ -69,7 +69,6 @@ private:
     RotateTransliteration m_aRotateCase;
 
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_CELL_SHELL)
 
 private:

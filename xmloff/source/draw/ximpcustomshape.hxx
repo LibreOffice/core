@@ -51,7 +51,6 @@ class XMLEnhancedCustomShapeContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLEnhancedCustomShapeContext( SvXMLImport& rImport, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &, sal_uInt16 nPrefix,
         const OUString& rLocalName, std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry );

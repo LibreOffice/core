@@ -64,8 +64,6 @@ using namespace ::com::sun::star;
 
 static bool bInResize = false;
 
-TYPEINIT1( SwFlyDrawObj, SdrObject )
-TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 
 namespace sdr
 {

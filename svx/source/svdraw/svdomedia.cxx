@@ -77,7 +77,6 @@ struct SdrMediaObj::Impl
     OUString m_LastFailedPkgURL;
 };
 
-TYPEINIT1( SdrMediaObj, SdrRectObj );
 
 
 

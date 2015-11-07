@@ -30,7 +30,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuTextAttrDlg, FuPoor );
 
 FuTextAttrDlg::FuTextAttrDlg (
     ViewShell* pViewSh,

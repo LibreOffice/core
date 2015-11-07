@@ -40,7 +40,6 @@ namespace xmloff
     using ::com::sun::star::xml::sax::XAttributeList;
 
     //= OFormsRootImport
-    TYPEINIT1(OFormsRootImport, SvXMLImportContext);
     OFormsRootImport::OFormsRootImport( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName )
         :SvXMLImportContext(rImport, nPrfx, rLocalName)
     {

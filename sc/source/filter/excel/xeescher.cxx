@@ -72,7 +72,6 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnstit.hxx>
-#include <svx/sxmspitm.hxx>
 
 #include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>

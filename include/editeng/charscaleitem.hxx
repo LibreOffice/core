@@ -35,7 +35,7 @@
 class EDITENG_DLLPUBLIC SvxCharScaleWidthItem : public SfxUInt16Item
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxCharScaleWidthItem( sal_uInt16 nValue /*= 100*/,
                             const sal_uInt16 nId );

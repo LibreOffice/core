@@ -76,7 +76,6 @@ private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
     virtual ~SdXMLEventContext();
@@ -104,13 +103,11 @@ class XMLEventSoundContext : public SvXMLImportContext
     SdXMLEventContext*  mpParent;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLEventSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent );
     virtual ~XMLEventSoundContext();
 };
 
-TYPEINIT1( XMLEventSoundContext, SvXMLImportContext );
 
 XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent )
 : SvXMLImportContext( rImp, nPrfx, rLocalName ), mpParent( pParent )
@@ -147,7 +144,6 @@ XMLEventSoundContext::~XMLEventSoundContext()
 {
 }
 
-TYPEINIT1( SdXMLEventContext, SvXMLImportContext );
 
 SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const Reference< XShape >& rxShape )
     : SvXMLImportContext(rImp, nPrfx, rLocalName)
@@ -482,7 +478,6 @@ void SdXMLEventContext::EndElement()
     } while(false);
 }
 
-TYPEINIT1( SdXMLEventsContext, SvXMLImportContext );
 
 SdXMLEventsContext::SdXMLEventsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const Reference< XAttributeList>&, const Reference< XShape >& rxShape)

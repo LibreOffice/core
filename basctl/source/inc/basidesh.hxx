@@ -145,7 +145,6 @@ private:
     virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) override;
 
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_VIEWSH )
     SFX_DECL_VIEWFACTORY(Shell);
 

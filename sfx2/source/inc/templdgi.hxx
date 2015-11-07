@@ -33,7 +33,6 @@ class SfxTemplateControllerItem;
 #include <svl/eitem.hxx>
 
 #include <rsc/rscsfx.hxx>
-#include <tools/rtti.hxx>
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/templdlg.hxx>
@@ -291,7 +290,6 @@ protected:
     SfxObjectShell* SaveSelection();
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window*, bool );
     virtual ~SfxCommonTemplateDialog_Impl();
@@ -385,7 +383,6 @@ protected:
 
 public:
     friend class SfxTemplateDialog;
-    TYPEINFO_OVERRIDE();
 
     SfxTemplateDialog_Impl( SfxBindings*, SfxTemplatePanelControl* pDlgWindow );
     virtual ~SfxTemplateDialog_Impl();

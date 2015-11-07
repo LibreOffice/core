@@ -35,7 +35,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxBlinkItem : public SfxBoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxBlinkItem( const bool bBlink /*= false*/, const sal_uInt16 nId  );
 

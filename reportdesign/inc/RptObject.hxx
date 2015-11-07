@@ -148,7 +148,6 @@ protected:
     virtual SdrPage* GetImplPage() const override;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     virtual ~OCustomShape();
 
@@ -193,7 +192,6 @@ protected:
     virtual SdrPage* GetImplPage() const override;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     virtual ~OOle2Obj();
 
@@ -239,7 +237,6 @@ protected:
     virtual SdrPage* GetImplPage() const override;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     virtual void _propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException) override;
 

@@ -69,7 +69,6 @@ namespace svx
         DatabaseRegistrations   m_aRegistrations;
 
     public:
-        TYPEINFO_OVERRIDE();
 
         DatabaseMapItem( sal_uInt16 _nId, const DatabaseRegistrations& _rRegistrations );
 

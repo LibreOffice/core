@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FUPOOR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FUPOOR_HXX
 
-#include <tools/rtti.hxx>
 #include <vcl/timer.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
@@ -52,7 +51,6 @@ public:
     static const int DRGPIX = 2;                   // Drag MinMove in Pixel
     static const int DRGLOG = 53;                  // Minimal drag move in mm100
 
-    TYPEINFO();
 
     virtual void DoExecute( SfxRequest& rReq );
 

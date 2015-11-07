@@ -29,9 +29,6 @@
 #include "drawview.hxx"
 #include <svx/svdpagv.hxx>
 
-TYPEINIT1(SdPageFormatUndoAction, SdUndoAction);
-TYPEINIT1(SdPageLRUndoAction, SdUndoAction);
-TYPEINIT1(SdPageULUndoAction, SdUndoAction);
 
 SdPageFormatUndoAction::~SdPageFormatUndoAction()
 {

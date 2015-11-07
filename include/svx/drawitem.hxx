@@ -30,7 +30,8 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxColorListItem: public SfxPoolItem
     XColorListRef     pColorList;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             SvxColorListItem();
                             SvxColorListItem( XColorListRef pTable,
                                     sal_uInt16 nWhich  );
@@ -54,7 +55,8 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxGradientListItem : public SfxPoolItem
     XGradientListRef  pGradientList;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             SvxGradientListItem();
                             SvxGradientListItem( XGradientListRef pList,
                                     sal_uInt16 nWhich  );
@@ -78,7 +80,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxHatchListItem : public SfxPoolItem
     XHatchListRef     pHatchList;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             SvxHatchListItem();
                             SvxHatchListItem( XHatchListRef pList,
                                     sal_uInt16 nWhich  );
@@ -102,7 +104,8 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxBitmapListItem : public SfxPoolItem
     XBitmapListRef    pBitmapList;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             SvxBitmapListItem();
                             SvxBitmapListItem( XBitmapListRef pBL,
                                     sal_uInt16 nWhich  );
@@ -126,7 +129,8 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxDashListItem : public SfxPoolItem
     XDashListRef      pDashList;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             SvxDashListItem();
                             SvxDashListItem( XDashListRef pList,
                                     sal_uInt16 nWhich  );
@@ -150,7 +154,8 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxLineEndListItem : public SfxPoolItem
     XLineEndListRef   pLineEndList;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
+
                             SvxLineEndListItem();
                             SvxLineEndListItem( XLineEndListRef pList,
                                     sal_uInt16 nWhich  );

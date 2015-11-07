@@ -29,7 +29,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml;
 
 
-TYPEINIT1(SvXMLAttrContainerItem, SfxPoolItem);
 
 SvXMLAttrContainerItem::SvXMLAttrContainerItem( sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich )

@@ -38,7 +38,6 @@ protected:
     {}
 
 public:
-    TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFormat)
 
@@ -60,7 +59,6 @@ protected:
     {}
 
 public:
-    TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFormat)
 
@@ -85,7 +83,6 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
 public:
-    TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFormat)
 

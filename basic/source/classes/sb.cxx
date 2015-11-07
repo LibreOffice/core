@@ -52,7 +52,6 @@
 #include <svtools/miscopt.hxx>
 using namespace ::com::sun::star::script;
 
-TYPEINIT1(StarBASIC,SbxObject)
 
 #define RTLNAME "@SBRTL"
 //  i#i68894#
@@ -628,7 +627,6 @@ SbxObject* createUserTypeImpl( const OUString& rClassName )
 }
 
 
-TYPEINIT1(SbClassModuleObject,SbModule)
 
 SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     : SbModule( pClassModule->GetName() )
@@ -2047,7 +2045,6 @@ void StarBASIC::DetachAllDocBasicItems()
 
 // #118116 Implementation Collection object
 
-TYPEINIT1(BasicCollection,SbxObject)
 
 static const char pCountStr[]   = "Count";
 static const char pAddStr[]     = "Add";

@@ -98,7 +98,6 @@
 #include <sxlayitm.hxx>
 #include <sxlogitm.hxx>
 #include <sxmovitm.hxx>
-#include <svx/sxmspitm.hxx>
 #include <sxoneitm.hxx>
 #include <sxonitm.hxx>
 #include <sxopitm.hxx>
@@ -143,7 +142,6 @@ using namespace ::com::sun::star;
 
 
 
-TYPEINIT0(SdrObjUserCall);
 
 SdrObjUserCall::~SdrObjUserCall()
 {
@@ -298,7 +296,6 @@ void SdrObject::SetBoundRectDirty()
 
 
 
-TYPEINIT1(SdrObject,SfxListener);
 
 SdrObject::SdrObject() :
     mpImpl(new Impl),
@@ -2195,8 +2192,8 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, bool bMerge) const
 {
     const Rectangle& rSnap=GetSnapRect();
     const Rectangle& rLogic=GetLogicRect();
-    lcl_SetItem(rAttr,bMerge,makeSdrObjMoveProtectItem(IsMoveProtect()));
-    lcl_SetItem(rAttr,bMerge,makeSdrObjSizeProtectItem(IsResizeProtect()));
+    lcl_SetItem(rAttr,bMerge,SdrYesNoItem(SDRATTR_OBJMOVEPROTECT, IsMoveProtect()));
+    lcl_SetItem(rAttr,bMerge,SdrYesNoItem(SDRATTR_OBJSIZEPROTECT, IsResizeProtect()));
     lcl_SetItem(rAttr,bMerge,SdrObjPrintableItem(IsPrintable()));
     lcl_SetItem(rAttr,bMerge,SdrObjVisibleItem(IsVisible()));
     lcl_SetItem(rAttr,bMerge,makeSdrRotateAngleItem(GetRotateAngle()));

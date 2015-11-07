@@ -2264,7 +2264,7 @@ ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
 
     while ( pShell && !pFound )
     {
-        if ( pShell->Type() == TYPE(ScDocShell) )
+        if ( dynamic_cast<const ScDocShell*>(pShell) != nullptr )
         {
             if ( nShellCnt == nDocNo )
                 pFound = static_cast<ScDocShell*>(pShell);

@@ -85,7 +85,6 @@ public:
 class SC_DLLPUBLIC ScTpFormulaItem : public SfxPoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
     ScTpFormulaItem( sal_uInt16 nWhich,
                    const ScFormulaOptions& rOpt );
     ScTpFormulaItem( const ScTpFormulaItem& rItem );

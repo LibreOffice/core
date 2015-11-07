@@ -35,7 +35,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuCustomShowDlg, FuPoor );
 
 FuCustomShowDlg::FuCustomShowDlg (
     ViewShell* pViewSh,

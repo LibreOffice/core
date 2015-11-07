@@ -57,7 +57,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     SvxXMLListStyleContext(
             SvXMLImport& rImport,

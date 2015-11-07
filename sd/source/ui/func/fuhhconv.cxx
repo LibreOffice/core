@@ -51,7 +51,6 @@ namespace sd {
 
 class ViewShell;
 
-TYPEINIT1( FuHangulHanjaConversion, FuPoor );
 
 FuHangulHanjaConversion::FuHangulHanjaConversion (
     ViewShell* pViewSh,

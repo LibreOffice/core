@@ -43,7 +43,6 @@ void LeftImpressPaneShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(::sd::LeftPaneImpressChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(LeftImpressPaneShell, SfxShell);
 
 LeftImpressPaneShell::LeftImpressPaneShell()
     : SfxShell()
@@ -69,7 +68,6 @@ void LeftDrawPaneShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(::sd::LeftPaneDrawChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(LeftDrawPaneShell, SfxShell);
 
 LeftDrawPaneShell::LeftDrawPaneShell()
     : SfxShell()

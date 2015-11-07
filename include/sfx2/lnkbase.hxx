@@ -108,7 +108,6 @@ protected:
                     }
 
 public:
-                    TYPEINFO();
 
     virtual void    Closed();
 

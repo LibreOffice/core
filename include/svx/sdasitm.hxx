@@ -51,7 +51,6 @@ private:
 
     public:
 
-            TYPEINFO_OVERRIDE();
 
             SdrCustomShapeGeometryItem();
             SdrCustomShapeGeometryItem( const css::uno::Sequence< css::beans::PropertyValue >& );
@@ -85,10 +84,12 @@ private:
             void ClearPropertyValue( const OUString& rPropertyName );
 };
 
-class SdrCustomShapeReplacementURLItem : public SfxStringItem
+class SVX_DLLPUBLIC SdrCustomShapeReplacementURLItem : public SfxStringItem
 {
     public:
             SdrCustomShapeReplacementURLItem();
+            virtual ~SdrCustomShapeReplacementURLItem();
+            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const override;
 };
 
 inline SdrOnOffItem makeSdrTextWordWrapItem( bool bAuto ) {

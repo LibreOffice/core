@@ -380,7 +380,6 @@ public:
     OUString        maPathShapeId;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLAnimationsEffectContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -400,13 +399,11 @@ class XMLAnimationsSoundContext : public SvXMLImportContext
     XMLAnimationsEffectContext* mpParent;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent );
     virtual ~XMLAnimationsSoundContext();
 };
 
-TYPEINIT1( XMLAnimationsSoundContext, SvXMLImportContext );
 
 XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent )
 : SvXMLImportContext( rImport, nPrfx, rLocalName ), mpParent( pParent )
@@ -443,7 +440,6 @@ XMLAnimationsSoundContext::~XMLAnimationsSoundContext()
 {
 }
 
-TYPEINIT1( XMLAnimationsEffectContext, SvXMLImportContext );
 
 XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, AnimImpImpl* pImpl )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
@@ -650,7 +646,6 @@ void XMLAnimationsEffectContext::EndElement()
     }
 }
 
-TYPEINIT1( XMLAnimationsContext, SvXMLImportContext );
 
 XMLAnimationsContext::XMLAnimationsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& )

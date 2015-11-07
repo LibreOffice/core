@@ -27,7 +27,6 @@
 #include <globals.hxx>
 #include <database.hxx>
 
-TYPEINIT1( SvMetaAttribute, SvMetaReference );
 SvMetaAttribute::SvMetaAttribute()
     : aAutomation( true, false )
     , aExport( true, false )
@@ -220,7 +219,6 @@ void SvMetaAttribute::Insert (SvSlotElementList&, const OString&, SvIdlDataBase&
 {
 }
 
-TYPEINIT1( SvMetaType, SvMetaExtern );
 #define CTOR                            \
     : aCall0( CALL_VALUE, false )       \
     , aCall1( CALL_VALUE, false )       \
@@ -592,8 +590,10 @@ void SvMetaType::WriteSfxItem(
     rOutStm.WriteCharPtr( aTypeName.getStr() ).WriteCharPtr( aVarName.getStr() )
            .WriteCharPtr( " = " ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
-    rOutStm.WriteCharPtr( "\tTYPE(" ).WriteCharPtr( rItemName.getStr() ).WriteCharPtr( "), " )
-           .WriteCharPtr( aAttrCount.getStr() );
+
+    rOutStm.WriteCharPtr( "\tcreateSfxPoolItem<" ).WriteCharPtr( rItemName.getStr() )
+        .WriteCharPtr(">, &typeid(").WriteCharPtr( rItemName.getStr() ).WriteCharPtr( "), " );
+    rOutStm.WriteCharPtr( aAttrCount.getStr() );
     if( nAttrCount )
     {
         rOutStm.WriteCharPtr( ", { " );
@@ -658,13 +658,11 @@ OString SvMetaType::GetParserString() const
     return aPStr;
 }
 
-TYPEINIT1( SvMetaTypeString, SvMetaType );
 SvMetaTypeString::SvMetaTypeString()
     : SvMetaType( "String", "SbxSTRING", "BSTR", 's', "char *", "String", "$" )
 {
 }
 
-TYPEINIT1( SvMetaEnumValue, SvMetaObject );
 SvMetaEnumValue::SvMetaEnumValue()
 {
 }
@@ -677,7 +675,6 @@ bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & rBase,
     return true;
 }
 
-TYPEINIT1( SvMetaTypeEnum, SvMetaType );
 SvMetaTypeEnum::SvMetaTypeEnum()
 {
     SetBasicName("Integer");
@@ -737,7 +734,6 @@ bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
     return false;
 }
 
-TYPEINIT1( SvMetaTypevoid, SvMetaType );
 SvMetaTypevoid::SvMetaTypevoid()
     : SvMetaType( "void", "SbxVOID", "void", 'v', "void", "", "" )
 {

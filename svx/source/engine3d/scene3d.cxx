@@ -182,7 +182,6 @@ sdr::contact::ViewContact* E3dScene::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(E3dScene, E3dObject);
 
 E3dScene::E3dScene()
 :   E3dObject(),

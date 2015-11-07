@@ -440,7 +440,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                         // Different ones are present
                         return SfxItemState::DONTCARE;
 
-                    if ( (*ppFnd)->Type() == TYPE(SfxVoidItem) )
+                    if ( dynamic_cast<const SfxVoidItem *>(*ppFnd) != nullptr )
                         return SfxItemState::DISABLED;
 
                     if (ppItem)

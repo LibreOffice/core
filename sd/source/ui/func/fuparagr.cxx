@@ -38,7 +38,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuParagraph, FuPoor );
 
 FuParagraph::FuParagraph (
     ViewShell* pViewSh,

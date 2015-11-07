@@ -69,7 +69,6 @@
 
 using namespace ::com::sun::star::i18n;
 
-TYPEINIT1( SwContentNode, SwModify )
 
 /*
  * Some local helper functions for the attribute set handle of a content node.

@@ -23,18 +23,22 @@
 #include <svx/sdynitm.hxx>
 
 // text across the dimension line (90deg counter-clockwise rotation)
-class SdrMeasureTextRota90Item: public SdrYesNoItem {
+class SVX_DLLPUBLIC SdrMeasureTextRota90Item: public SdrYesNoItem {
 public:
     SdrMeasureTextRota90Item(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTROTA90,bOn) {}
     SdrMeasureTextRota90Item(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASURETEXTROTA90,rIn) {}
+    virtual ~SdrMeasureTextRota90Item();
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
 };
 
 // Turn the calculated TextRect through 180 deg
 // Text is also switched to the other side of the dimension line, if not Rota90
-class SdrMeasureTextUpsideDownItem: public SdrYesNoItem {
+class SVX_DLLPUBLIC SdrMeasureTextUpsideDownItem: public SdrYesNoItem {
 public:
     SdrMeasureTextUpsideDownItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTUPSIDEDOWN,bOn) {}
     SdrMeasureTextUpsideDownItem(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASURETEXTUPSIDEDOWN,rIn) {}
+    virtual ~SdrMeasureTextUpsideDownItem();
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const override;
 };
 
 #endif

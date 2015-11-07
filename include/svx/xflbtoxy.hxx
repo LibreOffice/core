@@ -26,7 +26,7 @@
 class SVX_DLLPUBLIC XFillBmpTileOffsetXItem : public SfxUInt16Item
 {
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             XFillBmpTileOffsetXItem( sal_uInt16 nOffX = 0 );
                             SVX_DLLPRIVATE XFillBmpTileOffsetXItem( SvStream& rIn );
 
@@ -42,7 +42,7 @@ public:
 class SVX_DLLPUBLIC XFillBmpTileOffsetYItem : public SfxUInt16Item
 {
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             XFillBmpTileOffsetYItem( sal_uInt16 nOffX = 0 );
                             SVX_DLLPRIVATE XFillBmpTileOffsetYItem( SvStream& rIn );
 

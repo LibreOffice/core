@@ -911,7 +911,6 @@ struct SmViewShell_Impl
     SvtMiscOptions          aOpts;
 };
 
-TYPEINIT1(SmViewShell, SfxViewShell);
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmViewShell, SfxViewShell)
 

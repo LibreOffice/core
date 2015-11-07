@@ -34,7 +34,7 @@
 
 #include <libxml/xmlwriter.h>
 
-TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
+SfxPoolItem* XLineTransparenceItem::CreateDefault() {return new XLineTransparenceItem;}
 
 XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
     SfxUInt16Item(XATTR_LINETRANSPARENCE, nLineTransparence)
@@ -79,7 +79,8 @@ bool XLineTransparenceItem::GetPresentation
     }
 }
 
-TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
+
+SfxPoolItem* XLineJointItem::CreateDefault() { return new XLineJointItem; }
 
 XLineJointItem::XLineJointItem( css::drawing::LineJoint eLineJoint ) :
     SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< sal_uInt16 >(eLineJoint))
@@ -182,7 +183,6 @@ sal_uInt16 XLineJointItem::GetValueCount() const
     return 5;
 }
 
-TYPEINIT1_AUTOFACTORY(AffineMatrixItem, SfxPoolItem);
 
 AffineMatrixItem::AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix)
 :   SfxPoolItem(SID_ATTR_TRANSFORM_MATRIX)
@@ -283,7 +283,8 @@ bool AffineMatrixItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberI
     return false;
 }
 
-TYPEINIT1_AUTOFACTORY(XLineCapItem, SfxEnumItem);
+
+SfxPoolItem* XLineCapItem::CreateDefault() { return new XLineCapItem; }
 
 XLineCapItem::XLineCapItem(css::drawing::LineCap eLineCap)
 :   SfxEnumItem(XATTR_LINECAP, sal::static_int_cast< sal_uInt16 >(eLineCap))
@@ -392,7 +393,7 @@ css::drawing::LineCap XLineCapItem::GetValue() const
     return eRetval;
 }
 
-TYPEINIT1_AUTOFACTORY(XFillTransparenceItem, SfxUInt16Item);
+SfxPoolItem* XFillTransparenceItem::CreateDefault() {return new XFillTransparenceItem;}
 
 XFillTransparenceItem::XFillTransparenceItem(sal_uInt16 nFillTransparence) :
     SfxUInt16Item(XATTR_FILLTRANSPARENCE, nFillTransparence)
@@ -445,7 +446,8 @@ void XFillTransparenceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
+
+SfxPoolItem* XFormTextShadowTranspItem::CreateDefault() { return new XFormTextShadowTranspItem; }
 
 XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence) :
     SfxUInt16Item(XATTR_FORMTXTSHDWTRANSP, nShdwTransparence)
@@ -469,7 +471,7 @@ SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 /*nVer*
 
 // class XFillGradientStepCountItem
 
-TYPEINIT1_AUTOFACTORY(XGradientStepCountItem, SfxUInt16Item);
+SfxPoolItem* XGradientStepCountItem::CreateDefault() {return new XGradientStepCountItem;}
 
 XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 nStepCount ) :
     SfxUInt16Item( XATTR_GRADIENTSTEPCOUNT, nStepCount )
@@ -505,7 +507,8 @@ bool XGradientStepCountItem::GetPresentation
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY( XFillBmpTileItem, SfxBoolItem );
+
+SfxPoolItem* XFillBmpTileItem::CreateDefault() {return new XFillBmpTileItem;}
 
 XFillBmpTileItem::XFillBmpTileItem( bool bTile ) :
             SfxBoolItem( XATTR_FILLBMP_TILE, bTile )
@@ -549,7 +552,8 @@ void XFillBmpTileItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class XFillBmpTilePosItem
 
-TYPEINIT1_AUTOFACTORY( XFillBmpPosItem, SfxEnumItem );
+
+SfxPoolItem* XFillBmpPosItem::CreateDefault() {return new XFillBmpPosItem;}
 
 XFillBmpPosItem::XFillBmpPosItem( RECT_POINT eRP ) :
     SfxEnumItem( XATTR_FILLBMP_POS, sal::static_int_cast< sal_uInt16 >( eRP ) )
@@ -598,7 +602,7 @@ void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class XFillBmpTileSizeXItem
 
-TYPEINIT1_AUTOFACTORY( XFillBmpSizeXItem, SfxMetricItem );
+SfxPoolItem* XFillBmpSizeXItem::CreateDefault() {return new XFillBmpSizeXItem;}
 
 XFillBmpSizeXItem::XFillBmpSizeXItem( long nSizeX ) :
             SfxMetricItem( XATTR_FILLBMP_SIZEX, nSizeX )
@@ -639,7 +643,8 @@ bool XFillBmpSizeXItem::HasMetrics() const
 
 // class XFillBmpTileSizeYItem
 
-TYPEINIT1_AUTOFACTORY( XFillBmpSizeYItem, SfxMetricItem );
+
+SfxPoolItem* XFillBmpSizeYItem::CreateDefault() {return new XFillBmpSizeYItem;}
 
 XFillBmpSizeYItem::XFillBmpSizeYItem( long nSizeY ) :
             SfxMetricItem( XATTR_FILLBMP_SIZEY, nSizeY )
@@ -680,7 +685,7 @@ bool XFillBmpSizeYItem::HasMetrics() const
 
 // class XFillBmpTileLogItem
 
-TYPEINIT1_AUTOFACTORY( XFillBmpSizeLogItem, SfxBoolItem );
+SfxPoolItem* XFillBmpSizeLogItem::CreateDefault() {return new XFillBmpSizeLogItem;}
 
 XFillBmpSizeLogItem::XFillBmpSizeLogItem( bool bLog ) :
             SfxBoolItem( XATTR_FILLBMP_SIZELOG, bLog )
@@ -716,7 +721,8 @@ bool XFillBmpSizeLogItem::GetPresentation
 
 // class XFillBmpTileOffXItem
 
-TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetXItem, SfxUInt16Item );
+
+SfxPoolItem* XFillBmpTileOffsetXItem::CreateDefault() {return new XFillBmpTileOffsetXItem;}
 
 XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( sal_uInt16 nOffX ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETX, nOffX )
@@ -752,7 +758,7 @@ bool XFillBmpTileOffsetXItem::GetPresentation
 
 // class XFillBmpTileOffYItem
 
-TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetYItem, SfxUInt16Item );
+SfxPoolItem* XFillBmpTileOffsetYItem::CreateDefault() {return new XFillBmpTileOffsetYItem;}
 
 XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( sal_uInt16 nOffY ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETY, nOffY )
@@ -786,7 +792,7 @@ bool XFillBmpTileOffsetYItem::GetPresentation
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY( XFillBmpStretchItem, SfxBoolItem );
+SfxPoolItem* XFillBmpStretchItem::CreateDefault() {return new XFillBmpStretchItem;}
 
 XFillBmpStretchItem::XFillBmpStretchItem( bool bStretch ) :
             SfxBoolItem( XATTR_FILLBMP_STRETCH, bStretch )
@@ -830,7 +836,7 @@ void XFillBmpStretchItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // class XFillBmpTileOffPosXItem
 
-TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetXItem, SfxUInt16Item );
+SfxPoolItem* XFillBmpPosOffsetXItem::CreateDefault() {return new XFillBmpPosOffsetXItem;}
 
 XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETX, nOffPosX )
@@ -866,7 +872,7 @@ bool XFillBmpPosOffsetXItem::GetPresentation
 
 // class XFillBmpTileOffPosYItem
 
-TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetYItem, SfxUInt16Item );
+SfxPoolItem* XFillBmpPosOffsetYItem::CreateDefault() {return new XFillBmpPosOffsetYItem;}
 
 XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETY, nOffPosY )
@@ -900,7 +906,7 @@ bool XFillBmpPosOffsetYItem::GetPresentation
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
+SfxPoolItem* XFillBackgroundItem::CreateDefault() {return new XFillBackgroundItem;}
 
 XFillBackgroundItem::XFillBackgroundItem( bool bFill ) :
     SfxBoolItem( XATTR_FILLBACKGROUND, bFill )

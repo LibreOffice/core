@@ -124,7 +124,6 @@ void OutlineViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1( OutlineViewShell, ViewShell );
 
 /**
  * common initialization part of both constructors

@@ -23,7 +23,6 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
-#include <tools/rtti.hxx>
 #include <vcl/keycod.hxx>
 
 #include <IShellCursorSupplier.hxx>
@@ -299,7 +298,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    TYPEINFO_OVERRIDE();
     SwCrsrShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = nullptr );
     // disguised copy constructor
     SwCrsrShell( SwCrsrShell& rShell, vcl::Window *pWin );

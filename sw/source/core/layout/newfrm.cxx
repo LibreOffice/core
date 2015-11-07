@@ -340,8 +340,6 @@ SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 // #i65250#
 sal_uInt32 SwFrm::mnLastFrmId=0;
 
-TYPEINIT1(SwFrm,SwClient);      //rtti for SwFrm
-TYPEINIT1(SwContentFrm,SwFrm);    //rtti for SwContentFrm
 
 void _FrmInit()
 {

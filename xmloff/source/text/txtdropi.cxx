@@ -56,7 +56,6 @@ static const SvXMLTokenMapEntry aDropAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-TYPEINIT1( XMLTextDropCapImportContext, XMLElementPropertyContext );
 void XMLTextDropCapImportContext::ProcessAttrs(
         const Reference< xml::sax::XAttributeList >& xAttrList )
 {

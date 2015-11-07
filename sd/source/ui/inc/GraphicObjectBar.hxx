@@ -33,7 +33,6 @@ class GraphicObjectBar
     : public SfxShell
 {
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE( SD_IF_SDDRAWGRAFOBJECTBAR )
 
 private:

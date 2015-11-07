@@ -206,7 +206,6 @@ public:
 
     virtual ~SwXStyle();
 
-    TYPEINFO_OVERRIDE();
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

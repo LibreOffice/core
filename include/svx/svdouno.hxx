@@ -64,7 +64,6 @@ private:
         const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac );
 
 public:
-    TYPEINFO_OVERRIDE();
 
     explicit SdrUnoObj(const OUString& rModelName, bool bOwnsModel = true);
     SdrUnoObj(const OUString& rModelName,

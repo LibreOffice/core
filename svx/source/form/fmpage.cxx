@@ -52,7 +52,6 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::container::XChild;
 using com::sun::star::container::XNameContainer;
 
-TYPEINIT1(FmFormPage, SdrPage);
 
 
 FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)

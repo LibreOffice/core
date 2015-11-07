@@ -85,7 +85,6 @@ SdXML3DLightContext::~SdXML3DLightContext()
 {
 }
 
-TYPEINIT1( SdXML3DSceneShapeContext, SdXMLShapeContext );
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,

@@ -30,8 +30,6 @@ using namespace ::com::sun::star::linguistic2;
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(SfxSpellCheckItem, SfxPoolItem);
-TYPEINIT1(SfxHyphenRegionItem, SfxPoolItem);
 
 // class SfxSpellCheckItem -----------------------------------------------
 

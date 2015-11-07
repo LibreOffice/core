@@ -85,7 +85,6 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    TYPEINFO_OVERRIDE();
     SdrMeasureObj();
     SdrMeasureObj(const Point& rPt1, const Point& rPt2);
     virtual ~SdrMeasureObj();

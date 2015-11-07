@@ -42,7 +42,6 @@ class XMLAutoTextContainerEventImport : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLAutoTextContainerEventImport(
         SvXMLImport& rImport,

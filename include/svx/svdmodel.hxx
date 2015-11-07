@@ -279,7 +279,6 @@ private:
 public:
     bool     IsPasteResize() const        { return bPasteResize; }
     void     SetPasteResize(bool bOn) { bPasteResize=bOn; }
-    TYPEINFO_OVERRIDE();
     // If a custom Pool is put here, the class will call methods
     // on it (Put(), Remove()). On disposal of SdrModel the pool
     // will be deleted with   delete.

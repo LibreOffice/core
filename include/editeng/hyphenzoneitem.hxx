@@ -41,7 +41,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
     sal_uInt8 nMaxHyphens;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxHyphenZoneItem( const bool bHyph /*= false*/,
                        const sal_uInt16 nId  );

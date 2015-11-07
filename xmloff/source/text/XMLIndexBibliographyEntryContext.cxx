@@ -39,7 +39,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-TYPEINIT1( XMLIndexBibliographyEntryContext, XMLIndexSimpleEntryContext);
 
 XMLIndexBibliographyEntryContext::XMLIndexBibliographyEntryContext(
     SvXMLImport& rImport,

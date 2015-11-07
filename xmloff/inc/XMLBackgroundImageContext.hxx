@@ -47,7 +47,6 @@ private:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLBackgroundImageContext(
         SvXMLImport& rImport,

@@ -22,7 +22,6 @@
 #include "ConnectionLineData.hxx"
 #include "TableWindowData.hxx"
 #include <vector>
-#include <tools/rtti.hxx>
 #include <memory>
 
 namespace dbaui

@@ -29,7 +29,6 @@ private:
     css::geometry::AffineMatrix2D        maMatrix;
 
 public:
-    TYPEINFO_OVERRIDE();
     AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix = nullptr);
     AffineMatrixItem(SvStream& rIn);
     AffineMatrixItem(const AffineMatrixItem&);

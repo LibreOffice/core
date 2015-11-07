@@ -43,7 +43,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuScale, FuPoor );
 
 FuScale::FuScale (
     ViewShell* pViewSh,

@@ -68,7 +68,7 @@ private:
 
 public:
 
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
     SvxPageItem( const sal_uInt16 nId );
     SvxPageItem( const SvxPageItem& rItem );
 

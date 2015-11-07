@@ -119,7 +119,6 @@ SvxCellVerJustify lclConvertSlotToVAlign( sal_uInt16 nSlot )
 
 } // namespace
 
-TYPEINIT1( ScFormatShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScFormatShell, SfxShell)
 

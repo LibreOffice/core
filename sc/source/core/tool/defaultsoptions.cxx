@@ -19,7 +19,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-TYPEINIT1(ScTpDefaultsItem, SfxPoolItem);
 
 ScDefaultsOptions::ScDefaultsOptions()
 {

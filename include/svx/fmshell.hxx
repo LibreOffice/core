@@ -99,7 +99,6 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
 
 public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_FORM_SH)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

@@ -21,11 +21,11 @@
 #include <sfx2/sfxsids.hrc>
 #include "sorgitm.hxx"
 #include <osl/diagnose.h>
-
+#include <typeinfo>
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SfxScriptOrganizerItem, SfxStringItem);
 
+SfxPoolItem* SfxScriptOrganizerItem::CreateDefault() { return new SfxScriptOrganizerItem; }
 
 
 SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
@@ -63,7 +63,7 @@ SfxPoolItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
 
 bool SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 {
-     return rItem.Type() == Type() &&
+     return typeid(rItem) == typeid(*this) &&
          SfxStringItem::operator==(rItem) &&
          aLanguage == static_cast<const SfxScriptOrganizerItem &>(rItem).aLanguage;
 }

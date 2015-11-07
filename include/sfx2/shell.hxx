@@ -26,7 +26,6 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/sfxuno.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include <tools/rtti.hxx>
 
 class ResMgr;
 namespace vcl { class Window; }
@@ -165,7 +164,6 @@ protected:
     static void HandleOpenXmlFilterSettings(SfxRequest &);
 
 public:
-    TYPEINFO_OVERRIDE();
 
     /**
         The connection to a possible corresponding SbxObject is dissolved.

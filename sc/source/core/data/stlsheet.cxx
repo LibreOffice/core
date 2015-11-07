@@ -41,7 +41,6 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 
-TYPEINIT1(ScStyleSheet, SfxStyleSheet);
 
 #define TWO_CM      1134
 #define HFDIST_CM   142

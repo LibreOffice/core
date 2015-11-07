@@ -38,7 +38,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_HREF;
 
 
-TYPEINIT1( XMLAutoMarkFileContext, SvXMLImportContext );
 
 XMLAutoMarkFileContext::XMLAutoMarkFileContext(
     SvXMLImport& rImport,

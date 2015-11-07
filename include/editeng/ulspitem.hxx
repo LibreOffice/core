@@ -39,7 +39,7 @@ class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
     bool       bContext; // Contextual spacing?
     sal_uInt16 nPropUpper, nPropLower;      // relative or absolute (=100%)
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxULSpaceItem( const sal_uInt16 nId  );
     SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,

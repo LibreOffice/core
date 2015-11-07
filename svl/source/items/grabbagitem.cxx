@@ -14,7 +14,6 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-TYPEINIT1_AUTOFACTORY(SfxGrabBagItem, SfxPoolItem);
 
 using namespace com::sun::star;
 

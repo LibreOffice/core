@@ -107,7 +107,6 @@ void lcl_AddFilter ( ::std::vector< FilterDesc >& rFilterDescList,
 
 namespace sd {
 
-TYPEINIT1( FuInsertFile, FuPoor );
 
 FuInsertFile::FuInsertFile (
     ViewShell*    pViewSh,

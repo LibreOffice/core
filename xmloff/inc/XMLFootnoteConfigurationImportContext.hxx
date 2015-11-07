@@ -65,7 +65,6 @@ class XMLFootnoteConfigurationImportContext : public SvXMLStyleContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLFootnoteConfigurationImportContext(
         SvXMLImport& rImport,

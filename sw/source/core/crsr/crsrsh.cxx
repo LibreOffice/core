@@ -69,7 +69,6 @@
 using namespace com::sun::star;
 using namespace util;
 
-TYPEINIT2(SwCrsrShell,SwViewShell,SwModify);
 
 /**
  * Delete all overlapping Cursors from a Cursor ring.

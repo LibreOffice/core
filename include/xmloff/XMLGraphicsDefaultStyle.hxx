@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star { namespace container
 class XMLOFF_DLLPUBLIC XMLGraphicsDefaultStyle : public XMLPropStyleContext
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,

@@ -142,7 +142,6 @@ void SdXMLLayerContext::EndElement()
 }
 
 
-TYPEINIT1( SdXMLLayerSetContext, SvXMLImportContext );
 
 SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>&)

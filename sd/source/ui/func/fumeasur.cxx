@@ -29,7 +29,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuMeasureDlg, FuPoor );
 
 FuMeasureDlg::FuMeasureDlg (
     ViewShell* pViewSh,

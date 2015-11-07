@@ -65,7 +65,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
 public:
-    TYPEINFO_OVERRIDE();     ///< Already in base class Client.
     virtual ~SwFrameFormat();
 
     /// Destroys all Frms in aDepend (Frms are identified via dynamic_cast).
@@ -169,7 +168,6 @@ protected:
     {}
 
 public:
-    TYPEINFO_OVERRIDE();
     virtual ~SwFlyFrameFormat();
 
     /// Creates the views.
@@ -265,7 +263,6 @@ protected:
     {}
 
 public:
-    TYPEINFO_OVERRIDE();
     virtual ~SwDrawFrameFormat();
 
     /** DrawObjects are removed from the arrays at the layout.

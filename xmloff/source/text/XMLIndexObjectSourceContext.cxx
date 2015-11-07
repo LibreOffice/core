@@ -53,7 +53,6 @@ const sal_Char sAPI_CreateFromStarMath[] = "CreateFromStarMath";
 const sal_Char sAPI_CreateFromOtherEmbeddedObjects[] = "CreateFromOtherEmbeddedObjects";
 
 
-TYPEINIT1( XMLIndexObjectSourceContext, XMLIndexSourceBaseContext );
 
 XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
     SvXMLImport& rImport,

@@ -737,7 +737,6 @@ public:
 
     bool IsHidden() const;
 
-    TYPEINFO_OVERRIDE(); // fuer rtti
 
     /// override SwIndexReg
     virtual void Update(

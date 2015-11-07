@@ -35,7 +35,6 @@
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-TYPEINIT1(E3dDragMethod, SdrDragMethod);
 
 E3dDragMethod::E3dDragMethod (
     SdrDragView &_rView,
@@ -251,7 +250,6 @@ void E3dDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
     }
 }
 
-TYPEINIT1(E3dDragRotate, E3dDragMethod);
 
 E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
     const SdrMarkList& rMark,
@@ -432,7 +430,6 @@ Pointer E3dDragRotate::GetSdrDragPointer() const
 // 3D scenes. If a 3D-scene itself moved, then this drag method will drag
 // not be used.
 
-TYPEINIT1(E3dDragMove, E3dDragMethod);
 
 E3dDragMove::E3dDragMove(SdrDragView &_rView,
     const SdrMarkList& rMark,

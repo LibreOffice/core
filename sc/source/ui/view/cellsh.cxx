@@ -62,7 +62,6 @@
 #define CellMovement
 #include "scslots.hxx"
 
-TYPEINIT1( ScCellShell, ScFormatShell );
 
 SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell)
 

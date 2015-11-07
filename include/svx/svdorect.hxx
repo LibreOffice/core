@@ -64,7 +64,6 @@ protected:
     virtual void           RestGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    TYPEINFO_OVERRIDE();
     // Der Eckenradius-Parameter fliegt irgendwann raus. Der Eckenradius
     // ist dann (spaeter) ueber SfxItems einzustellen (SetAttributes()).
     // Konstruktion eines Rechteck-Zeichenobjekts

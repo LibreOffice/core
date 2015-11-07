@@ -68,7 +68,6 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-TYPEINIT1( FuDraw, FuPoor );
 
 /**
  * Base-class for all drawmodul-specific functions

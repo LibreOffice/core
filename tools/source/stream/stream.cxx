@@ -170,7 +170,6 @@ void SvLockBytes::close()
     m_pStream = nullptr;
 }
 
-TYPEINIT0(SvLockBytes);
 
 // virtual
 ErrCode SvLockBytes::ReadAt(sal_uInt64 const nPos, void * pBuffer, sal_Size nCount,
@@ -251,11 +250,9 @@ ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const
 
 //  class SvOpenLockBytes
 
-TYPEINIT1(SvOpenLockBytes, SvLockBytes);
 
 //  class SvAsyncLockBytes
 
-TYPEINIT1(SvAsyncLockBytes, SvOpenLockBytes);
 
 // virtual
 ErrCode SvAsyncLockBytes::ReadAt(sal_uInt64 const nPos, void * pBuffer, sal_Size nCount,

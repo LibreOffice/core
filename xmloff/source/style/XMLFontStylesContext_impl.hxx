@@ -44,7 +44,6 @@ class XMLFontStyleContextFontFace : public SvXMLStyleContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLFontStyleContextFontFace( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
@@ -77,7 +76,6 @@ class XMLFontStyleContextFontFaceSrc : public SvXMLImportContext
     const XMLFontStyleContextFontFace& font;
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLFontStyleContextFontFaceSrc( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
@@ -102,7 +100,6 @@ class XMLFontStyleContextFontFaceUri : public SvXMLStyleContext
     void handleEmbeddedFont( const ::css::uno::Sequence< sal_Int8 >& rData, bool eot );
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLFontStyleContextFontFaceUri( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
@@ -125,7 +122,6 @@ class XMLFontStyleContextFontFaceFormat : public SvXMLStyleContext
 {
     XMLFontStyleContextFontFaceUri& uri;
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,

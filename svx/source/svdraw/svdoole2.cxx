@@ -782,7 +782,6 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrOle2Obj,SdrRectObj);
 
 SdrOle2Obj::SdrOle2Obj( bool bFrame_ ) :
     mpImpl(new SdrOle2ObjImpl(bFrame_))

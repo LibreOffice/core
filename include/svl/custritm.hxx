@@ -29,7 +29,6 @@ class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
     OUString m_aValue;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     CntUnencodedStringItem(sal_uInt16 which = 0): SfxPoolItem(which)
     {}

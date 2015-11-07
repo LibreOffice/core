@@ -45,7 +45,6 @@ using namespace com::sun::star;
 
 namespace sd {
 
-TYPEINIT1( FuConstructArc, FuConstruct );
 
 FuConstructArc::FuConstructArc (
     ViewShell*  pViewSh,

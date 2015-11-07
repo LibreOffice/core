@@ -74,7 +74,6 @@ void PresentationViewShell::InitInterface_Impl()
                                             RID_DRAW_COMMONTASK_TOOLBOX);
 }
 
-TYPEINIT1( PresentationViewShell, DrawViewShell );
 
 PresentationViewShell::PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView)
 : DrawViewShell( pFrame, rViewShellBase, pParentWindow, PK_STANDARD, pFrameView)

@@ -40,11 +40,11 @@ typedef SfxStatusBarControl* (*SfxStatusBarControlCtor)( sal_uInt16 nSlotId, sal
 struct SfxStbCtrlFactory
 {
     SfxStatusBarControlCtor pCtor;
-    TypeId                  nTypeId;
+    const std::type_info&   nTypeId;
     sal_uInt16              nSlotId;
 
     SfxStbCtrlFactory( SfxStatusBarControlCtor pTheCtor,
-            TypeId nTheTypeId, sal_uInt16 nTheSlotId ):
+            const std::type_info& nTheTypeId, sal_uInt16 nTheSlotId ):
         pCtor(pTheCtor),
         nTypeId(nTheTypeId),
         nSlotId(nTheSlotId)
@@ -130,7 +130,7 @@ public:
                { return new Class( nSlotId, nId, rStb ); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxStatusBarControl::RegisterStatusBarControl( pMod, new SfxStbCtrlFactory( \
-                    Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
+                    Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
 
 
 #endif

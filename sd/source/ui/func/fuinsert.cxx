@@ -91,10 +91,6 @@ using namespace com::sun::star;
 
 namespace sd {
 
-TYPEINIT1( FuInsertGraphic, FuPoor );
-TYPEINIT1( FuInsertClipboard, FuPoor );
-TYPEINIT1( FuInsertOLE, FuPoor );
-TYPEINIT1( FuInsertAVMedia, FuPoor );
 
 FuInsertGraphic::FuInsertGraphic (
     ViewShell* pViewSh,
@@ -764,7 +760,6 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
 }
 
 #if HAVE_FEATURE_GLTF
-TYPEINIT1( FuInsert3DModel, FuPoor );
 
 FuInsert3DModel::FuInsert3DModel(
     ViewShell* pViewSh,

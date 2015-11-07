@@ -725,7 +725,7 @@ bool SdrDragView::IsInsGluePointPossible() const
         {
             // return sal_False, if only 1 object which is a connector.
             const SdrObject* pObj=GetMarkedObjectByIndex(0);
-            if (!HAS_BASE(SdrEdgeObj,pObj))
+            if (dynamic_cast<const SdrEdgeObj *>(pObj) == nullptr)
             {
                bRet=true;
             }

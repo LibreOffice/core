@@ -98,7 +98,6 @@ protected:
     virtual void Store( SvStream& );
 
 public:
-    TYPEINFO();
 
     // returns the internal name of this style
     virtual const OUString& GetName() const;
@@ -267,7 +266,6 @@ class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
                      public SfxListener, public SfxBroadcaster, public svl::StyleSheetUser
 {
 public:
-                        TYPEINFO_OVERRIDE();
 
                         SfxStyleSheet( const OUString&, const SfxStyleSheetBasePool&, SfxStyleFamily, sal_uInt16 );
                         SfxStyleSheet( const SfxStyleSheet& );

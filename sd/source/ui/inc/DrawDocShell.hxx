@@ -49,7 +49,6 @@ class DrawViewShell;
 class SD_DLLPUBLIC DrawDocShell : public SfxObjectShell
 {
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDDRAWDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
 

@@ -36,7 +36,6 @@ class OutlineViewShell
     : public ViewShell
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     SFX_DECL_VIEWFACTORY(OutlineViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDOUTLINEVIEWSHELL)

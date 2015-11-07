@@ -35,7 +35,6 @@ class StyleSheetUndoAction : public SdUndoAction
     OUString        aComment;
 
 public:
-    TYPEINFO_OVERRIDE();
     StyleSheetUndoAction(SdDrawDocument* pTheDoc,
                          SfxStyleSheet*  pTheStyleSheet,
                          const SfxItemSet* pTheNewItemSet);

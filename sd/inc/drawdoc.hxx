@@ -205,7 +205,6 @@ protected:
 
 public:
 
-                        TYPEINFO_VISIBILITY_OVERRIDE(SAL_DLLPRIVATE);
 
                         SAL_DLLPRIVATE SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
                         SAL_DLLPRIVATE virtual ~SdDrawDocument();

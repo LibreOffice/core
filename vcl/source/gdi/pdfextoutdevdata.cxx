@@ -490,7 +490,6 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
     return bRet;
 }
 
-TYPEINIT1(PDFExtOutDevData,ExtOutDevData);
 PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mrOutDev                ( rOutDev ),
     mbTaggedPDF             ( false ),

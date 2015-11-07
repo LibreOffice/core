@@ -21,7 +21,6 @@
 
 #include <svl/svldllapi.h>
 
-#include <tools/rtti.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 
@@ -35,7 +34,6 @@ private:
     sal_uInt16              _nStyle;
 
 public:
-                            TYPEINFO_OVERRIDE();
 
                             CntWallpaperItem( sal_uInt16 nWhich );
                             CntWallpaperItem( sal_uInt16 nWhich, SvStream& rStream, sal_uInt16 nVersion );

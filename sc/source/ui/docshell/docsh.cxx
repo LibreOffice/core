@@ -175,7 +175,6 @@ void ScDocShell::InitInterface_Impl()
 //  GlobalName of the current version:
 SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), SfxObjectShellFlags::STD_NORMAL, "scalc" )
 
-TYPEINIT1( ScDocShell, SfxObjectShell ); // SfxInPlaceObject: No TypeInfo?
 
 void ScDocShell::FillClass( SvGlobalName* pClassName,
                                         SotClipboardFormatId* pFormat,

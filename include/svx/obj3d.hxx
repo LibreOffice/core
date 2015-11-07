@@ -81,7 +81,6 @@ class E3dObjList : public SdrObjList
     E3dObjList &operator=(const E3dObjList& rSrcList) = delete;
 
 public:
-    TYPEINFO_OVERRIDE();
     E3dObjList(SdrModel* pNewModel = nullptr, SdrPage* pNewPage = nullptr, E3dObjList* pNewUpList = nullptr);
     SVX_DLLPUBLIC virtual ~E3dObjList();
 
@@ -142,7 +141,6 @@ protected:
     E3dObject(bool bIsFromChart);
 
 public:
-    TYPEINFO_OVERRIDE();
     virtual void RecalcSnapRect() override;
     virtual void SetRectsDirty(bool bNotMyself = false) override;
 
@@ -244,7 +242,6 @@ protected:
     basegfx::B2DPolyPolygon TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate);
 
 public:
-    TYPEINFO_OVERRIDE();
 
     E3dCompoundObject();
     E3dCompoundObject(E3dDefaultAttributes& rDefault);

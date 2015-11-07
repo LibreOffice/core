@@ -89,7 +89,6 @@ class RptMLMasterStylesContext_Impl:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     RptMLMasterStylesContext_Impl(
             ORptFilter& rImport, sal_uInt16 nPrfx,
@@ -99,7 +98,6 @@ public:
     virtual void EndElement() override;
 };
 
-TYPEINIT1( RptMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
 RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
         ORptFilter& rImport, sal_uInt16 nPrfx,
         const OUString& rLName ,

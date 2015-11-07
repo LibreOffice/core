@@ -19,6 +19,5 @@
 
 #include "sdundo.hxx"
 
-TYPEINIT1(SdUndoAction, SfxUndoAction);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

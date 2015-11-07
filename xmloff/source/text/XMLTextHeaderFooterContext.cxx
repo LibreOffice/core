@@ -35,7 +35,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 
 
-TYPEINIT1( XMLTextHeaderFooterContext, SvXMLImportContext );
 
 XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,

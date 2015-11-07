@@ -125,7 +125,6 @@ protected:
     bool bValid;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLImageMapObjectContext(
         SvXMLImport& rImport,
@@ -159,7 +158,6 @@ protected:
 };
 
 
-TYPEINIT1( XMLImageMapObjectContext, SvXMLImportContext );
 
 XMLImageMapObjectContext::XMLImageMapObjectContext(
     SvXMLImport& rImport,
@@ -319,7 +317,6 @@ class XMLImageMapRectangleContext : public XMLImageMapObjectContext
     bool bHeightOK;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLImageMapRectangleContext(
         SvXMLImport& rImport,
@@ -342,7 +339,6 @@ protected:
 
 
 
-TYPEINIT1(XMLImageMapRectangleContext, XMLImageMapObjectContext);
 
 XMLImageMapRectangleContext::XMLImageMapRectangleContext(
     SvXMLImport& rImport,
@@ -429,7 +425,6 @@ class XMLImageMapPolygonContext : public XMLImageMapObjectContext
     bool bPointsOK;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLImageMapPolygonContext(
         SvXMLImport& rImport,
@@ -452,7 +447,6 @@ protected:
 
 
 
-TYPEINIT1(XMLImageMapPolygonContext, XMLImageMapObjectContext);
 
 XMLImageMapPolygonContext::XMLImageMapPolygonContext(
     SvXMLImport& rImport,
@@ -527,7 +521,6 @@ class XMLImageMapCircleContext : public XMLImageMapObjectContext
     bool bRadiusOK;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLImageMapCircleContext(
         SvXMLImport& rImport,
@@ -548,7 +541,6 @@ protected:
             ::com::sun::star::beans::XPropertySet> & rPropertySet) override;
 };
 
-TYPEINIT1(XMLImageMapCircleContext, XMLImageMapObjectContext);
 
 XMLImageMapCircleContext::XMLImageMapCircleContext(
     SvXMLImport& rImport,
@@ -631,7 +623,6 @@ void XMLImageMapCircleContext::Prepare(
 
 
 
-TYPEINIT1(XMLImageMapContext, SvXMLImportContext);
 
 XMLImageMapContext::XMLImageMapContext(
     SvXMLImport& rImport,

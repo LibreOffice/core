@@ -44,9 +44,6 @@ static long nTmpCount = 0;
 
 ///////////////////////// class StorageBase
 
-TYPEINIT0( StorageBase );
-TYPEINIT1( BaseStorageStream, StorageBase );
-TYPEINIT1( BaseStorage, StorageBase );
 
 StorageBase::StorageBase()
     : m_bAutoCommit( false )
@@ -155,7 +152,6 @@ bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p )
 
 //////////////////////// class StorageStream
 
-TYPEINIT1( StorageStream, BaseStorageStream );
 
 StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
              : OLEStorageBase( p, q, m_nMode ), nPos( 0L )
@@ -336,7 +332,6 @@ bool Storage::IsStorageFile( SvStream* pStream )
 // Open the storage file. If writing is permitted and the file is not
 // a storage file, initialize it.
 
-TYPEINIT1( Storage, BaseStorage );
 
 Storage::Storage( const OUString& rFile, StreamMode m, bool bDirect )
     : OLEStorageBase( new StgIo, nullptr, m_nMode )

@@ -91,7 +91,7 @@ namespace sdr
         void AttributeProperties::ImpRemoveStyleSheet()
         {
             // Check type since it is destroyed when the type is deleted
-            if(GetStyleSheet() && HAS_BASE(SfxStyleSheet, mpStyleSheet))
+            if(GetStyleSheet() && dynamic_cast<const SfxStyleSheet *>(mpStyleSheet) != nullptr)
             {
                 EndListening(*mpStyleSheet);
                 EndListening(mpStyleSheet->GetPool());
@@ -475,7 +475,7 @@ namespace sdr
 
         void AttributeProperties::ForceStyleToHardAttributes()
         {
-            if(GetStyleSheet() && HAS_BASE(SfxStyleSheet, mpStyleSheet))
+            if(GetStyleSheet() && dynamic_cast<const SfxStyleSheet *>(mpStyleSheet) != nullptr)
             {
                 // prepare copied, new itemset, but WITHOUT parent
                 GetObjectItemSet();
@@ -553,7 +553,7 @@ namespace sdr
                         // to register as listener to that new StyleSheet.
                         if(pModel && !rObj.IsInDestruction())
                         {
-                            if(HAS_BASE(SfxStyleSheet, GetStyleSheet()))
+                            if(dynamic_cast<const SfxStyleSheet *>(GetStyleSheet()) != nullptr)
                             {
                                 pNewStSh = static_cast<SfxStyleSheet*>(pModel->GetStyleSheetPool()->Find(
                                     GetStyleSheet()->GetParent(), GetStyleSheet()->GetFamily()));

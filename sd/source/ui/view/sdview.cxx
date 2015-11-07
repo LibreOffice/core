@@ -101,7 +101,6 @@ using namespace com::sun::star::uno;
 using namespace sdr::table;
 namespace sd {
 
-TYPEINIT1(View, FmFormView);
 
 View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
                ViewShell* pViewShell)

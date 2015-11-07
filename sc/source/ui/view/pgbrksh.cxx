@@ -34,7 +34,6 @@
 #define ScPageBreakShell
 #include "scslots.hxx"
 
-TYPEINIT1( ScPageBreakShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScPageBreakShell, SfxShell)
 

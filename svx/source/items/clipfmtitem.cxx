@@ -33,7 +33,7 @@ struct SvxClipboardFormatItem_Impl
     SvxClipboardFormatItem_Impl( const SvxClipboardFormatItem_Impl& );
 };
 
-TYPEINIT1_FACTORY( SvxClipboardFormatItem, SfxPoolItem , new  SvxClipboardFormatItem(0));
+SfxPoolItem* SvxClipboardFormatItem::CreateDefault() { return new  SvxClipboardFormatItem(0); };
 
 SvxClipboardFormatItem_Impl::SvxClipboardFormatItem_Impl(
                             const SvxClipboardFormatItem_Impl& rCpy )

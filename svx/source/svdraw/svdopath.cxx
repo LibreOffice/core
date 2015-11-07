@@ -1664,7 +1664,6 @@ sdr::contact::ViewContact* SdrPathObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrPathObj(*this);
 }
 
-TYPEINIT1(SdrPathObj,SdrTextObj);
 
 SdrPathObj::SdrPathObj(SdrObjKind eNewKind)
 :   meKind(eNewKind),

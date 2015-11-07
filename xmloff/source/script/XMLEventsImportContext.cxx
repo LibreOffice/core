@@ -37,7 +37,6 @@ using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::lang::IllegalArgumentException;
 
-TYPEINIT1(XMLEventsImportContext,  SvXMLImportContext);
 
 
 XMLEventsImportContext::XMLEventsImportContext(

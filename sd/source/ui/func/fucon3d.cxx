@@ -52,7 +52,6 @@ using namespace com::sun::star;
 
 namespace sd {
 
-TYPEINIT1( FuConstruct3dObject, FuConstruct );
 
 FuConstruct3dObject::FuConstruct3dObject (
     ViewShell*  pViewSh,

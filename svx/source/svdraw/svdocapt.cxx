@@ -193,7 +193,6 @@ sdr::contact::ViewContact* SdrCaptionObj::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrCaptionObj,SdrRectObj);
 
 SdrCaptionObj::SdrCaptionObj():
     SdrRectObj(OBJ_TEXT),

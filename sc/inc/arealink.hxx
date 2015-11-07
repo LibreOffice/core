@@ -45,7 +45,6 @@ private:
     static bool FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const OUString& rAreaName );
 
 public:
-    TYPEINFO_OVERRIDE();
     ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
                     const OUString& rFilter, const OUString& rOpt,
                     const OUString& rArea, const ScRange& rDest, sal_uLong nRefresh );

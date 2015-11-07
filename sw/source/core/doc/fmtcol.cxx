@@ -35,10 +35,6 @@
 #include <calbck.hxx>
 #include <svl/intitem.hxx>
 
-TYPEINIT1( SwTextFormatColl, SwFormatColl );
-TYPEINIT1( SwGrfFormatColl, SwFormatColl );
-TYPEINIT1( SwConditionTextFormatColl, SwTextFormatColl );
-TYPEINIT1( SwCollCondition, SwClient );
 
 namespace TextFormatCollFunc
 {

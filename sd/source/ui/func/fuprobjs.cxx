@@ -43,7 +43,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuPresentationObjects, FuPoor );
 
 FuPresentationObjects::FuPresentationObjects (
     ViewShell* pViewSh,

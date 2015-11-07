@@ -34,7 +34,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::container::XNameContainer;
 using namespace svxform;
 
-TYPEINIT1(FmFormModel, SdrModel);
 
 struct FmFormModelImplData
 {

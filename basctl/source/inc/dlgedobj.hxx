@@ -86,7 +86,6 @@ protected:
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
 
 public:
-    TYPEINFO_OVERRIDE();
 
     virtual ~DlgEdObj();
     virtual void SetPage(SdrPage* pNewPage) override;
@@ -157,7 +156,6 @@ protected:
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     virtual ~DlgEdForm();
 

@@ -330,7 +330,6 @@ void SfxViewShell::InitInterface_Impl()
 {
 }
 
-TYPEINIT2(SfxViewShell,SfxShell,SfxListener);
 
 /** search for a filter name dependent on type and module
  */

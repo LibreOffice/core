@@ -34,7 +34,6 @@ This item is used as a transport medium for a number formatter
 class SVX_DLLPUBLIC SvxNumberInfoItem : public SfxPoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     SvxNumberInfoItem( const sal_uInt16 nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,

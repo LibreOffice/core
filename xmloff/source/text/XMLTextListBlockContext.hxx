@@ -49,7 +49,6 @@ class XMLTextListBlockContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     // add optional parameter <bRestartNumberingAtSubList>
     XMLTextListBlockContext(

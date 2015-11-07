@@ -51,7 +51,6 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 
-TYPEINIT1( XMLEnhancedCustomShapeContext, SvXMLImportContext );
 
 XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImport,
             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,

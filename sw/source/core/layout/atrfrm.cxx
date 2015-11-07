@@ -87,12 +87,8 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1(SwFormatVertOrient, SfxPoolItem);
-TYPEINIT1(SwFormatHoriOrient, SfxPoolItem);
-TYPEINIT2(SwFormatHeader,  SfxPoolItem, SwClient );
-TYPEINIT2(SwFormatFooter,  SfxPoolItem, SwClient );
-TYPEINIT2(SwFormatPageDesc,  SfxPoolItem, SwClient );
-TYPEINIT1_AUTOFACTORY(SwFormatLineNumber, SfxPoolItem);
+
+SfxPoolItem* SwFormatLineNumber::CreateDefault() { return new SwFormatLineNumber; }
 
 static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
 {
@@ -2499,7 +2495,6 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 }
 
 // Partially implemented inline in hxx
-TYPEINIT1( SwFrameFormat, SwFormat );
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrameFormat )
 
 SwFrameFormat::SwFrameFormat(
@@ -2848,7 +2843,6 @@ void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) cons
 //  class SwFlyFrameFormat
 //  Partially implemented inline in hxx
 
-TYPEINIT1( SwFlyFrameFormat, SwFrameFormat );
 IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrameFormat )
 
 SwFlyFrameFormat::~SwFlyFrameFormat()
@@ -3295,7 +3289,6 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
 //  class SwDrawFrameFormat
 //  Partially implemented inline in hxx
 
-TYPEINIT1( SwDrawFrameFormat, SwFrameFormat );
 IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrameFormat )
 
 SwDrawFrameFormat::~SwDrawFrameFormat()

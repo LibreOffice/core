@@ -229,7 +229,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
                 SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
                 while ( pObjSh )
                 {
-                    if ( pObjSh->Type() == TYPE(ScDocShell) )
+                    if ( dynamic_cast<const ScDocShell * >(pObjSh) != nullptr )
                     {
                         ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
                         if ( bArrows )
@@ -272,7 +272,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while ( pObjSh )
         {
-            if ( pObjSh->Type() == TYPE(ScDocShell) )
+            if ( dynamic_cast<const ScDocShell *>(pObjSh) != nullptr )
             {
                 ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
                 OutputDevice* pPrinter = pDocSh->GetPrinter();
@@ -1327,7 +1327,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while ( pObjSh )
         {
-            if ( pObjSh->Type() == TYPE(ScDocShell) )
+            if ( dynamic_cast<const ScDocShell *>(pObjSh) != nullptr )
             {
                 ScDocShell* pOneDocSh = static_cast<ScDocShell*>(pObjSh);
                 pOneDocSh->CalcOutputFactor();

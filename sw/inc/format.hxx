@@ -70,7 +70,6 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
 public:
-    TYPEINFO_OVERRIDE();     ///< Already in base class Client.
 
     virtual ~SwFormat();
     SwFormat &operator=(const SwFormat&);

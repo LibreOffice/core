@@ -70,7 +70,6 @@ using ::com::sun::star::container::XEnumeration;
 
 class XMLHints_Impl : public std::vector<std::unique_ptr<XMLHint_Impl>> {};
 
-TYPEINIT1( XMLCharContext, SvXMLImportContext );
 
 XMLCharContext::XMLCharContext(
         SvXMLImport& rImport,
@@ -160,7 +159,6 @@ void XMLCharContext::InsertString(const OUString& _sString)
 class XMLStartReferenceContext_Impl : public SvXMLImportContext
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     // Do everything in constructor. Well ...
     XMLStartReferenceContext_Impl (
@@ -176,7 +174,6 @@ public:
         OUString& rName);
 };
 
-TYPEINIT1( XMLStartReferenceContext_Impl, SvXMLImportContext );
 
 XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
     SvXMLImport& rImport,
@@ -231,7 +228,6 @@ bool XMLStartReferenceContext_Impl::FindName(
 class XMLEndReferenceContext_Impl : public SvXMLImportContext
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     // Do everything in constructor. Well ...
     XMLEndReferenceContext_Impl(
@@ -242,7 +238,6 @@ public:
         const Reference<xml::sax::XAttributeList> & xAttrList);
 };
 
-TYPEINIT1( XMLEndReferenceContext_Impl, SvXMLImportContext );
 
 XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
     SvXMLImport& rImport,
@@ -286,7 +281,6 @@ class XMLImpSpanContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLImpSpanContext_Impl(
             SvXMLImport& rImport,
@@ -324,7 +318,6 @@ class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLImpHyperlinkContext_Impl(
             SvXMLImport& rImport,
@@ -343,7 +336,6 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
-TYPEINIT1( XMLImpHyperlinkContext_Impl, SvXMLImportContext );
 
 XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
     SvXMLImport& rImport,
@@ -457,7 +449,6 @@ class XMLImpRubyBaseContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLImpRubyBaseContext_Impl(
             SvXMLImport& rImport,
@@ -476,7 +467,6 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
-TYPEINIT1( XMLImpRubyBaseContext_Impl, SvXMLImportContext );
 
 XMLImpRubyBaseContext_Impl::XMLImpRubyBaseContext_Impl(
         SvXMLImport& rImport,
@@ -526,7 +516,6 @@ class XMLImpRubyContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLImpRubyContext_Impl(
             SvXMLImport& rImport,
@@ -552,7 +541,6 @@ class XMLImpRubyTextContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLImpRubyTextContext_Impl(
             SvXMLImport& rImport,
@@ -566,7 +554,6 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 };
 
-TYPEINIT1( XMLImpRubyTextContext_Impl, SvXMLImportContext );
 
 XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
         SvXMLImport& rImport,
@@ -605,7 +592,6 @@ void XMLImpRubyTextContext_Impl::Characters( const OUString& rChars )
     m_rRubyContext.AppendText( rChars );
 }
 
-TYPEINIT1( XMLImpRubyContext_Impl, SvXMLImportContext );
 
 XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
         SvXMLImport& rImport,
@@ -694,7 +680,6 @@ protected:
     OUString m_XmlId;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLMetaImportContextBase(
         SvXMLImport& i_rImport,
@@ -723,7 +708,6 @@ public:
         = 0;
 };
 
-TYPEINIT1( XMLMetaImportContextBase, SvXMLImportContext );
 
 XMLMetaImportContextBase::XMLMetaImportContextBase(
         SvXMLImport& i_rImport,
@@ -813,7 +797,6 @@ class XMLMetaImportContext : public XMLMetaImportContextBase
     OUString m_sDatatype;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLMetaImportContext(
         SvXMLImport& i_rImport,
@@ -828,7 +811,6 @@ public:
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) override;
 };
 
-TYPEINIT1( XMLMetaImportContext, XMLMetaImportContextBase );
 
 XMLMetaImportContext::XMLMetaImportContext(
         SvXMLImport& i_rImport,
@@ -907,7 +889,6 @@ class XMLMetaFieldImportContext : public XMLMetaImportContextBase
     OUString m_DataStyleName;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLMetaFieldImportContext(
         SvXMLImport& i_rImport,
@@ -922,7 +903,6 @@ public:
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) override;
 };
 
-TYPEINIT1( XMLMetaFieldImportContext, XMLMetaImportContextBase );
 
 XMLMetaFieldImportContext::XMLMetaFieldImportContext(
         SvXMLImport& i_rImport,
@@ -1012,7 +992,6 @@ class XMLIndexMarkImportContext_Impl : public SvXMLImportContext
     OUString sID;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLIndexMarkImportContext_Impl(
         SvXMLImport& rImport,
@@ -1049,7 +1028,6 @@ protected:
                         const OUString& rServiceName);
 };
 
-TYPEINIT1( XMLIndexMarkImportContext_Impl, SvXMLImportContext );
 
 XMLIndexMarkImportContext_Impl::XMLIndexMarkImportContext_Impl(
     SvXMLImport& rImport,
@@ -1284,7 +1262,6 @@ class XMLTOCMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
     const OUString sLevel;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLTOCMarkImportContext_Impl(
         SvXMLImport& rImport,
@@ -1302,7 +1279,6 @@ protected:
                                   Reference<beans::XPropertySet>& rPropSet) override;
 };
 
-TYPEINIT1( XMLTOCMarkImportContext_Impl, XMLIndexMarkImportContext_Impl );
 
 XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1349,7 +1325,6 @@ class XMLUserIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
     const OUString sLevel;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLUserIndexMarkImportContext_Impl(
         SvXMLImport& rImport,
@@ -1367,7 +1342,6 @@ protected:
                                   Reference<beans::XPropertySet>& rPropSet) override;
 };
 
-TYPEINIT1( XMLUserIndexMarkImportContext_Impl, XMLIndexMarkImportContext_Impl);
 
 XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1426,7 +1400,6 @@ class XMLAlphaIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Imp
     const OUString sMainEntry;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLAlphaIndexMarkImportContext_Impl(
         SvXMLImport& rImport,
@@ -1444,8 +1417,6 @@ protected:
                                   Reference<beans::XPropertySet>& rPropSet) override;
 };
 
-TYPEINIT1( XMLAlphaIndexMarkImportContext_Impl,
-           XMLIndexMarkImportContext_Impl );
 
 XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1510,7 +1481,6 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
     }
 }
 
-TYPEINIT1( XMLImpSpanContext_Impl, SvXMLImportContext );
 
 XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
         SvXMLImport& rImport,
@@ -1825,7 +1795,6 @@ void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
     GetImport().GetTextImport()->InsertString( sChars, rIgnoreLeadingSpace );
 }
 
-TYPEINIT1( XMLParaContext, SvXMLImportContext );
 
 XMLParaContext::XMLParaContext(
         SvXMLImport& rImport,
@@ -2249,7 +2218,6 @@ void XMLParaContext::Characters( const OUString& rChars )
     GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
 }
 
-TYPEINIT1( XMLNumberedParaContext, SvXMLImportContext );
 
 XMLNumberedParaContext::XMLNumberedParaContext(
         SvXMLImport& i_rImport,

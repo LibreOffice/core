@@ -108,7 +108,6 @@ public:
     static const int MAX_VSPLIT_CNT = 1;
     static const int MIN_SCROLLBAR_SIZE = 50;
 
-    TYPEINFO_OVERRIDE();
 
     ViewShell (
         SfxViewFrame *pFrame,

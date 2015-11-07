@@ -24,7 +24,6 @@
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
-#include <tools/rtti.hxx>
 
 class SvStream;
 
@@ -62,7 +61,6 @@ protected:
     virtual sal_uInt16 GetSbxId() const   { return 0; }
 
 public:
-    TYPEINFO();
     inline void         SetFlags( SbxFlagBits n );
     inline SbxFlagBits  GetFlags() const;
     inline void         SetFlag( SbxFlagBits n );

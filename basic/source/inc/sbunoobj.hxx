@@ -81,7 +81,6 @@ class SbUnoStructRefObject: public SbxObject
     OUString Impl_DumpProperties();
     OUString getDbgObjectName();
 public:
-    TYPEINFO_OVERRIDE();
     StructRefInfo getStructMember( const OUString& rMember );
     StructRefInfo getStructInfo() { return maMemberInfo; }
     SbUnoStructRefObject( const OUString& aName_, const StructRefInfo& rMemberInfo );
@@ -119,7 +118,6 @@ class SbUnoObject: public SbxObject
 
 public:
     static bool getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp );
-    TYPEINFO_OVERRIDE();
     SbUnoObject( const OUString& aName_, const css::uno::Any& aUnoObj_ );
     virtual ~SbUnoObject();
 
@@ -165,7 +163,6 @@ class SbUnoMethod : public SbxMethod
     bool mbInvocation;       // Method is based on invocation
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, css::uno::Reference< css::reflection::XIdlMethod > xUnoMethod_,
         bool bInvocation );
@@ -196,7 +193,6 @@ class SbUnoProperty : public SbxProperty
     SbUnoProperty& operator = ( const SbUnoProperty&) = delete;
 public:
 
-    TYPEINFO_OVERRIDE();
     SbUnoProperty( const OUString& aName_, SbxDataType eSbxType, SbxDataType eRealSbxType,
         const css::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation, bool bUnoStruct );
 
@@ -220,7 +216,6 @@ class SbUnoClass : public SbxObject
     const css::uno::Reference< css::reflection::XIdlClass >   m_xClass;
 
 public:
-    TYPEINFO_OVERRIDE();
     SbUnoClass( const OUString& aName_ )
         : SbxObject( aName_ )
     {}
@@ -250,7 +245,6 @@ class SbUnoService : public SbxObject
     bool m_bNeedsInit;
 
 public:
-    TYPEINFO_OVERRIDE();
     SbUnoService( const OUString& aName_,
         const css::uno::Reference< css::reflection::XServiceTypeDescription2 >& xServiceTypeDesc )
             : SbxObject( aName_ )
@@ -278,7 +272,6 @@ class SbUnoServiceCtor : public SbxMethod
     SbUnoServiceCtor* pNext;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SbUnoServiceCtor( const OUString& aName_, css::uno::Reference< css::reflection::XServiceConstructorDescription > xServiceCtorDesc );
     virtual ~SbUnoServiceCtor();
@@ -295,7 +288,6 @@ class SbUnoSingleton : public SbxObject
     const css::uno::Reference< css::reflection::XSingletonTypeDescription >   m_xSingletonTypeDesc;
 
 public:
-    TYPEINFO_OVERRIDE();
     SbUnoSingleton( const OUString& aName_,
         const css::uno::Reference< css::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
 
@@ -319,7 +311,6 @@ public:
     const css::uno::Any& getValue()
         { return mVal; }
 
-    TYPEINFO_OVERRIDE();
 };
 
 
@@ -330,7 +321,6 @@ class AutomationNamedArgsSbxArray : public SbxArray
 {
     css::uno::Sequence< OUString >      maNameSeq;
 public:
-    TYPEINFO_OVERRIDE();
     AutomationNamedArgsSbxArray( sal_Int32 nSeqSize )
         : maNameSeq( nSeqSize )
     {}
@@ -377,7 +367,6 @@ class BasicCollection : public SbxObject
     void CollRemove( SbxArray* pPar_ );
 
 public:
-    TYPEINFO_OVERRIDE();
     BasicCollection( const OUString& rClassname );
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
     virtual void Clear() override;

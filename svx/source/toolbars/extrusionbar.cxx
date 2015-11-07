@@ -61,7 +61,6 @@ void ExtrusionBar::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_SVX_EXTRUSION_BAR);
 }
 
-TYPEINIT1( ExtrusionBar, SfxShell );
 
 ExtrusionBar::ExtrusionBar(SfxViewShell* pViewShell )
 : SfxShell(pViewShell)

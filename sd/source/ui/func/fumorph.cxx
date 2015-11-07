@@ -51,7 +51,6 @@ using namespace com::sun::star;
 namespace sd {
 
 #define  ITEMVALUE( ItemSet, Id, Cast ) ( static_cast<const Cast&>( (ItemSet).Get( (Id) ) ).GetValue() )
-TYPEINIT1( FuMorph, FuPoor );
 
 FuMorph::FuMorph (
     ViewShell* pViewSh,

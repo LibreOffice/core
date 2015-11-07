@@ -38,7 +38,6 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1( SdXML3DObjectContext, SdXMLShapeContext );
 
 SdXML3DObjectContext::SdXML3DObjectContext(
     SvXMLImport& rImport,
@@ -105,7 +104,6 @@ void SdXML3DObjectContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-TYPEINIT1( SdXML3DCubeObjectShapeContext, SdXML3DObjectContext);
 
 SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     SvXMLImport& rImport,
@@ -207,7 +205,6 @@ void SdXML3DCubeObjectShapeContext::EndElement()
     SdXML3DObjectContext::EndElement();
 }
 
-TYPEINIT1( SdXML3DSphereObjectShapeContext, SdXML3DObjectContext);
 
 SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     SvXMLImport& rImport,
@@ -306,7 +303,6 @@ void SdXML3DSphereObjectShapeContext::EndElement()
     SdXML3DObjectContext::EndElement();
 }
 
-TYPEINIT1( SdXML3DPolygonBasedShapeContext, SdXML3DObjectContext );
 
 SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
     SvXMLImport& rImport,
@@ -393,7 +389,6 @@ void SdXML3DPolygonBasedShapeContext::EndElement()
     SdXML3DObjectContext::EndElement();
 }
 
-TYPEINIT1( SdXML3DLatheObjectShapeContext, SdXML3DPolygonBasedShapeContext);
 
 SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     SvXMLImport& rImport,
@@ -428,7 +423,6 @@ void SdXML3DLatheObjectShapeContext::EndElement()
     SdXML3DPolygonBasedShapeContext::EndElement();
 }
 
-TYPEINIT1( SdXML3DExtrudeObjectShapeContext, SdXML3DPolygonBasedShapeContext);
 
 SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     SvXMLImport& rImport,

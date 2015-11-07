@@ -24,7 +24,6 @@
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <tools/rtti.hxx>
 #include <ximpshap.hxx>
 
 // dr3d:3dscene context
@@ -36,7 +35,6 @@ class SdXML3DSceneShapeContext : public SdXMLShapeContext, public SdXML3DSceneAt
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChildren;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXML3DSceneShapeContext(
         SvXMLImport& rImport,

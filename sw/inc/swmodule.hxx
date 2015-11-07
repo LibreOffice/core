@@ -118,7 +118,6 @@ public:
     // public Data - used for internal Clipboard / Drag & Drop / XSelection
     SwTransferable  *m_pDragDrop, *m_pXSelection;
 
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SW_INTERFACE_MODULE)
 
 private:

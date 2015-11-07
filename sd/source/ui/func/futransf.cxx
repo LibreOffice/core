@@ -35,7 +35,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuTransform, FuPoor );
 
 FuTransform::FuTransform(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                          SdDrawDocument* pDoc, SfxRequest& rReq)

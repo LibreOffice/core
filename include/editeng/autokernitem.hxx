@@ -34,7 +34,7 @@ class SvXMLUnitConverter;
 class EDITENG_DLLPUBLIC SvxAutoKernItem : public SfxBoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxAutoKernItem( const bool bAutoKern /*= false*/,
                      const sal_uInt16 nId );

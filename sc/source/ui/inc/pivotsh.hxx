@@ -31,7 +31,6 @@ class ScDPObject;
 class ScPivotShell : public SfxShell
 {
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_PIVOT_SHELL)
 
 private:
