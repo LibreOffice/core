@@ -22,6 +22,30 @@
       "revId": "11150845559112e8886d627a73803a74399a4984",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_21f6b8d7",
+        "filename": "sw/source/core/layout/findfrm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-11-07T15:48:20Z",
+      "side": 1,
+      "message": "Ouch! Have to pay more attention to variable reuse. Good catch, will revert.",
+      "parentUuid": "faac7902_c1040cc8",
+      "range": {
+        "startLine": 408,
+        "startChar": 46,
+        "endLine": 408,
+        "endChar": 50
+      },
+      "revId": "11150845559112e8886d627a73803a74399a4984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
