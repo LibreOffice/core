@@ -47,7 +47,6 @@ static bool bIsInUpdate;
     ScMatrixRef     pResult;
 
 public:
-    TYPEINFO_OVERRIDE();
 
             ScDdeLink( ScDocument* pD,
                         const OUString& rA, const OUString& rT, const OUString& rI,

@@ -41,7 +41,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuConstructUnoControl, FuConstruct );
 
 FuConstructUnoControl::FuConstructUnoControl (
     ViewShell*  pViewSh,

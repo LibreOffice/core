@@ -68,8 +68,6 @@ public:
     }
 };
 
-TYPEINIT1( OControlStyleContext, XMLPropStyleContext );
-TYPEINIT1( OReportStylesContext, SvXMLStylesContext );
 
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,

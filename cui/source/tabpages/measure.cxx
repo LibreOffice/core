@@ -39,7 +39,6 @@
 #include <svx/sxmbritm.hxx>
 #include <svx/sxmfsitm.hxx>
 #include <svx/sxmlhitm.hxx>
-#include <svx/sxmsuitm.hxx>
 #include <svx/sxmtfitm.hxx>
 #include <svx/sxmtpitm.hxx>
 #include <svx/sxmtritm.hxx>
@@ -500,7 +499,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
     eState = m_pTsbShowUnit->GetState();
     if( m_pTsbShowUnit->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( makeSdrMeasureShowUnitItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, TRISTATE_TRUE == eState ) );
         bModified = true;
     }
 
@@ -729,7 +728,7 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void* p )
     {
         TriState eState = m_pTsbShowUnit->GetState();
         if( eState != TRISTATE_INDET )
-            aAttrSet.Put( makeSdrMeasureShowUnitItem( TRISTATE_TRUE == eState ) );
+            aAttrSet.Put( SdrYesNoItem( SDRATTR_MEASURESHOWUNIT, TRISTATE_TRUE == eState ) );
     }
 
     if( p == m_pLbUnit )

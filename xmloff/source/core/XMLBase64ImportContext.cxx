@@ -28,7 +28,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
-TYPEINIT1( XMLBase64ImportContext, SvXMLImportContext );
 
 XMLBase64ImportContext::XMLBase64ImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,

@@ -21,7 +21,6 @@
 
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <tools/rtti.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <ring.hxx>
@@ -197,7 +196,6 @@ protected:
     bool mbOutputToWindow;
 
 public:
-    TYPEINFO();
 
           SwViewShellImp *Imp() { return mpImp; }
     const SwViewShellImp *Imp() const { return mpImp; }

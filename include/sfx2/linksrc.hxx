@@ -24,7 +24,6 @@
 
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
-#include <tools/rtti.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
 namespace com { namespace sun { namespace star { namespace uno
@@ -56,7 +55,6 @@ private:
     SvLinkSource_Impl*  pImpl; // compatible area
 
 public:
-                        TYPEINFO();
 
                         SvLinkSource();
     virtual             ~SvLinkSource();

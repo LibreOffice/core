@@ -67,7 +67,6 @@ protected:
     virtual ~SwContentFrm();
 
 public:
-    TYPEINFO_OVERRIDE(); // already in base class
 
     virtual void Cut() override;
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) override;

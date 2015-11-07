@@ -57,7 +57,6 @@
 namespace sd
 {
 
-TYPEINIT1( FuPresentationLayout, FuPoor );
 
 #define DOCUMENT_TOKEN '#'
 

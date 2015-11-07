@@ -46,7 +46,6 @@ private:
     void operator=(const FmFormModel& rSrcModel) = delete;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
     FmFormModel(const OUString& rPath, SfxItemPool* pPool=NULL,

@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
-#include <tools/rtti.hxx>
 #include <map>
 
 class SvStream;
@@ -120,7 +119,7 @@ This item describes a Macro table.
 class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit inline SvxMacroItem ( const sal_uInt16 nId );
 

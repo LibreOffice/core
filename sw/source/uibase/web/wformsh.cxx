@@ -48,7 +48,6 @@ void SwWebDrawFormShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_TEXT_TOOLBOX);
 }
 
-TYPEINIT1(SwWebDrawFormShell, SwDrawFormShell)
 
 SwWebDrawFormShell::SwWebDrawFormShell(SwView& rVw) :
     SwDrawFormShell(rVw)

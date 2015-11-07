@@ -33,7 +33,6 @@ protected:
     sal_Unicode m_c;
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLCharContext(
             SvXMLImport& rImport,

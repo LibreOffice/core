@@ -181,7 +181,6 @@ public:
     static SfxViewShell*        Get( const css::uno::Reference< css::frame::XController>& i_rController );
 
     // Initialize Constructors/Destructors
-                                TYPEINFO_OVERRIDE();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWSH)
 
 private:

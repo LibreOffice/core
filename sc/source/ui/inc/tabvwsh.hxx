@@ -219,7 +219,6 @@ protected:
     virtual SdrView* GetDrawView() const override;
 
 public:
-                    TYPEINFO_OVERRIDE();
                     SFX_DECL_INTERFACE(SCID_TABVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScTabViewShell);
 

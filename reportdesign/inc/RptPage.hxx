@@ -52,7 +52,6 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 protected:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 public:
-    TYPEINFO_OVERRIDE();
 
     OReportPage( OReportModel& rModel
                 ,const css::uno::Reference< css::report::XSection >& _xSection

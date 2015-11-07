@@ -31,8 +31,8 @@
 
 // STATIC DATA
 
-TYPEINIT1_AUTOFACTORY(SfxGlobalNameItem, SfxPoolItem);
 
+SfxPoolItem* SfxGlobalNameItem::CreateDefault() { return new SfxGlobalNameItem; }
 
 
 SfxGlobalNameItem::SfxGlobalNameItem()

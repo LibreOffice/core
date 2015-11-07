@@ -30,7 +30,6 @@ private:
     sal_Int16 mnWrapInfluenceOnPosition;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     // #i35017# - constant name has changed
     SwFormatWrapInfluenceOnObjPos(

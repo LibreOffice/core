@@ -36,7 +36,6 @@ namespace sd {
 
 class DrawDocShell;
 
-TYPEINIT1(PresentationViewShellBase, ViewShellBase);
 
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new PresentationViewShellBase object has been constructed.

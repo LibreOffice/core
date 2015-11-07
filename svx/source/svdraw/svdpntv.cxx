@@ -155,7 +155,6 @@ BitmapEx convertMetafileToBitmapEx(
 
 
 
-TYPEINIT2(SdrPaintView,SfxListener,SfxRepeatTarget);
 
 
 void SdrPaintView::ImpClearVars()

@@ -40,8 +40,9 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1_FACTORY( SvxOrientationItem, SfxEnumItem, new SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0) );
-TYPEINIT1_FACTORY( SvxMarginItem, SfxPoolItem, new SvxMarginItem(0) );
+
+SfxPoolItem* SvxOrientationItem::CreateDefault() { return new  SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0) ;}
+SfxPoolItem* SvxMarginItem::CreateDefault() { return new  SvxMarginItem(0) ;}
 
 SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
                                         const sal_uInt16 nId):

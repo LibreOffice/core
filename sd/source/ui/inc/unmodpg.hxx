@@ -41,7 +41,6 @@ class ModifyPageUndoAction : public SdUndoAction
     OUString        maComment;
 
 public:
-    TYPEINFO_OVERRIDE();
     ModifyPageUndoAction(
         SdDrawDocument*         pTheDoc,
         SdPage*                 pThePage,

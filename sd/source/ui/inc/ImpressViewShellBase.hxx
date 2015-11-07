@@ -31,7 +31,6 @@ class ImpressViewShellBase
     : public ViewShellBase
 {
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_VIEWFACTORY(ImpressViewShellBase);
 
     /** This constructor is used by the view factory of the SFX

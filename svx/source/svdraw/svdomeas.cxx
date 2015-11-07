@@ -56,7 +56,6 @@
 #include <svx/sxmlhitm.hxx>
 #include <sxmoitm.hxx>
 #include <sxmsitm.hxx>
-#include <svx/sxmsuitm.hxx>
 #include <sxmtaitm.hxx>
 #include <svx/sxmtfitm.hxx>
 #include <svx/sxmtpitm.hxx>
@@ -212,7 +211,6 @@ sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
 
 
 
-TYPEINIT1(SdrMeasureObj,SdrTextObj);
 
 SdrMeasureObj::SdrMeasureObj():
     bTextDirty(false)

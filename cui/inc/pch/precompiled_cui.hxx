@@ -536,7 +536,6 @@
 #include <svx/sxmbritm.hxx>
 #include <svx/sxmfsitm.hxx>
 #include <svx/sxmlhitm.hxx>
-#include <svx/sxmsuitm.hxx>
 #include <svx/sxmtfitm.hxx>
 #include <svx/sxmtpitm.hxx>
 #include <svx/sxmtritm.hxx>

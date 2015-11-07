@@ -21,7 +21,6 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
-#include <tools/rtti.hxx>
 #include <tools/stream.hxx>
 
 class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
@@ -29,7 +28,7 @@ class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
     SvLockBytesRef          _xVal;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             SfxLockBytesItem();
                             SfxLockBytesItem( sal_uInt16 nWhich, SvStream & );
                             SfxLockBytesItem( const SfxLockBytesItem& );

@@ -35,7 +35,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-TYPEINIT1(ScTpCalcItem, SfxPoolItem);
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;

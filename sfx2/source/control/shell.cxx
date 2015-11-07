@@ -51,7 +51,6 @@
 // Maps the Which() field to a pointer to a SfxPoolItem
 typedef boost::ptr_map<sal_uInt16, SfxPoolItem> SfxItemPtrMap;
 
-TYPEINIT0(SfxShell);
 
 using namespace com::sun::star;
 

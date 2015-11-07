@@ -27,7 +27,6 @@
 
 using namespace com::sun::star;
 
-TYPEINIT1( SvxChartColorTableItem, SfxPoolItem );
 
 SvxChartColorTable::SvxChartColorTable()
     : nNextElementNumber(0)

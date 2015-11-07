@@ -56,7 +56,6 @@ void SwWebTextShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(FN_INSERT_FIELD);
 }
 
-TYPEINIT1(SwWebTextShell, SwTextShell)
 
 SwWebTextShell::SwWebTextShell(SwView &_rView) :
     SwTextShell(_rView)

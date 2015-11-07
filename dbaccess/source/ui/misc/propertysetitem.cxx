@@ -26,7 +26,6 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
 
     // OPropertySetItem
-    TYPEINIT1(OPropertySetItem, SfxPoolItem);
     OPropertySetItem::OPropertySetItem(sal_Int16 _nWhich)
         :SfxPoolItem(_nWhich)
     {

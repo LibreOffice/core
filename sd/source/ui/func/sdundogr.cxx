@@ -19,7 +19,6 @@
 
 #include "sdundogr.hxx"
 
-TYPEINIT1(SdUndoGroup, SdUndoAction);
 
 SdUndoGroup::~SdUndoGroup()
 {

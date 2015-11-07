@@ -30,7 +30,6 @@ protected:
     virtual bool Save() override;
 
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SW_GLOSDOCSHELL)
 
 private:
@@ -61,7 +60,6 @@ protected:
     virtual bool Save() override;
 
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SW_WEBGLOSDOCSHELL)
 
 private:

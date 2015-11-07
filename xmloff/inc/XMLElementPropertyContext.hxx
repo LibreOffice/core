@@ -39,7 +39,6 @@ protected:
     void SetInsert( bool bIns ) { bInsert = bIns; }
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLElementPropertyContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const OUString& rLName,

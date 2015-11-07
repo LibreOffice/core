@@ -50,7 +50,6 @@ class SfxRequest;
 
 namespace sd {
 
-TYPEINIT1( FuThesaurus, FuPoor );
 
 FuThesaurus::FuThesaurus( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                   SdDrawDocument* pDoc, SfxRequest& rReq )

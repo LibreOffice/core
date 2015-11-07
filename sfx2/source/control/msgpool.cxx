@@ -95,7 +95,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 
 
 
-TypeId SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
+const std::type_info* SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
 {
     const SfxSlot* pSlot = (const_cast <SfxSlotPool*> (this))->GetSlot( nId );
     return pSlot ? pSlot->GetType()->Type() : 0;

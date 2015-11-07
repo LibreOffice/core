@@ -35,7 +35,6 @@ class FuDraw
     : public FuPoor
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;

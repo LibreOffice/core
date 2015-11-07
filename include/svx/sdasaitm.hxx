@@ -31,13 +31,12 @@ class SdrCustomShapeAdjustmentValue
     friend class SdrCustomShapeAdjustmentItem;
 };
 
-class SdrCustomShapeAdjustmentItem : public SfxPoolItem
+class SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem : public SfxPoolItem
 {
             std::vector<SdrCustomShapeAdjustmentValue>  aAdjustmentValueList;
 
     public:
 
-            TYPEINFO_OVERRIDE();
             SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem();
             SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion );
             SVX_DLLPUBLIC virtual ~SdrCustomShapeAdjustmentItem();

@@ -604,7 +604,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     else
         pSlotPool = &SfxSlotPool::GetSlotPool();
 
-    TypeId aSlotType = pSlotPool->GetSlotType(nSlotID);
+    const std::type_info* aSlotType = pSlotPool->GetSlotType(nSlotID);
     if ( aSlotType )
     {
         if ( pMod )
@@ -614,7 +614,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
             {
                 SfxStbCtrlFactArr_Impl &rFactories = *pFactories;
                 for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-                if ( rFactories[nFactory].nTypeId == aSlotType &&
+                if ( rFactories[nFactory].nTypeId == *aSlotType &&
                      ( ( rFactories[nFactory].nSlotId == 0 ) ||
                      ( rFactories[nFactory].nSlotId == nSlotID) ) )
                     return rFactories[nFactory].pCtor( nSlotID, nStbId, *pBar );
@@ -623,7 +623,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
 
         SfxStbCtrlFactArr_Impl &rFactories = pApp->GetStbCtrlFactories_Impl();
         for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-        if ( rFactories[nFactory].nTypeId == aSlotType &&
+        if ( rFactories[nFactory].nTypeId == *aSlotType &&
              ( ( rFactories[nFactory].nSlotId == 0 ) ||
              ( rFactories[nFactory].nSlotId == nSlotID) ) )
             return rFactories[nFactory].pCtor( nSlotID, nStbId, *pBar );

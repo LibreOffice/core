@@ -60,23 +60,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(ScUndoInsertCells,        SfxUndoAction);
-TYPEINIT1(ScUndoDeleteCells,        SfxUndoAction);
-TYPEINIT1(ScUndoDeleteMulti,        SfxUndoAction);
-TYPEINIT1(ScUndoCut,                ScBlockUndo);
-TYPEINIT1(ScUndoPaste,              SfxUndoAction);
-TYPEINIT1(ScUndoDragDrop,           SfxUndoAction);
-TYPEINIT1(ScUndoListNames,          SfxUndoAction);
-TYPEINIT1(ScUndoConditionalFormat,  SfxUndoAction);
-TYPEINIT1(ScUndoUseScenario,        SfxUndoAction);
-TYPEINIT1(ScUndoSelectionStyle,     SfxUndoAction);
-TYPEINIT1(ScUndoEnterMatrix,        ScBlockUndo);
-TYPEINIT1(ScUndoIndent,             ScBlockUndo);
-TYPEINIT1(ScUndoTransliterate,      ScBlockUndo);
-TYPEINIT1(ScUndoClearItems,         ScBlockUndo);
-TYPEINIT1(ScUndoRemoveBreaks,       SfxUndoAction);
-TYPEINIT1(ScUndoRemoveMerge,        ScBlockUndo);
-TYPEINIT1(ScUndoBorder,             ScBlockUndo);
 
 // TODO:
 /*A*/   // SetOptimalHeight on Document, if no View

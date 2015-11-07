@@ -39,7 +39,6 @@ class GraphicViewShell
     : public DrawViewShell
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     SFX_DECL_VIEWFACTORY(GraphicViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDGRAPHICVIEWSHELL)

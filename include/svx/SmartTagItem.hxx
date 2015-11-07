@@ -51,7 +51,7 @@ class SVX_DLLPUBLIC SvxSmartTagItem : public SfxPoolItem
     const OUString maRangeText;
 
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxSmartTagItem( const sal_uInt16 nId,
                      const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,

@@ -33,7 +33,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_STYLE_NAME;
 
 
-TYPEINIT1( XMLIndexTitleTemplateContext, SvXMLImportContext );
 
 XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
     SvXMLImport& rImport,

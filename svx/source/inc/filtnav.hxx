@@ -62,7 +62,6 @@ class FmFilterData
     OUString         m_aText;
 
 public:
-    TYPEINFO();
     FmFilterData(FmParentData* pParent = NULL, const OUString& rText = OUString())
         :m_pParent( pParent )
         ,m_aText( rText )
@@ -83,7 +82,6 @@ protected:
     ::std::vector< FmFilterData* >  m_aChildren;
 
 public:
-    TYPEINFO_OVERRIDE();
     FmParentData(FmParentData* pParent, const OUString& rText)
         : FmFilterData(pParent, rText)
     {}
@@ -100,7 +98,6 @@ class FmFormItem : public FmParentData
     css::uno::Reference< css::form::runtime::XFilterController >  m_xFilterController;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     FmFormItem(  FmParentData* _pParent,
                  const css::uno::Reference< css::form::runtime::XFormController > & _xController,
@@ -124,7 +121,6 @@ public:
 class FmFilterItems : public FmParentData
 {
 public:
-    TYPEINFO_OVERRIDE();
     FmFilterItems() : FmParentData(NULL, OUString()) {}
     FmFilterItems(FmFormItem* pParent, const OUString& rText ) : FmParentData(pParent, rText) {}
 
@@ -139,7 +135,6 @@ class FmFilterItem : public FmFilterData
     const sal_Int32     m_nComponentIndex;
 
 public:
-    TYPEINFO_OVERRIDE();
     FmFilterItem(
         FmFilterItems* pParent,
         const OUString& aFieldName,
@@ -166,7 +161,6 @@ class FmFilterModel : public FmParentData
     FmFilterItems*          m_pCurrentItems;
 
 public:
-    TYPEINFO_OVERRIDE();
     FmFilterModel();
     virtual ~FmFilterModel();
 

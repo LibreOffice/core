@@ -57,7 +57,6 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
 public:
-    TYPEINFO_OVERRIDE();
     E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize);
     E3dCubeObj();
 

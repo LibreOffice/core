@@ -27,8 +27,8 @@
 #include <svl/poolitem.hxx>
 #include <svl/memberid.hrc>
 
-TYPEINIT1_AUTOFACTORY(SfxRectangleItem, SfxPoolItem);
 
+SfxPoolItem* SfxRectangleItem::CreateDefault() { return new SfxRectangleItem; }
 
 
 SfxRectangleItem::SfxRectangleItem()

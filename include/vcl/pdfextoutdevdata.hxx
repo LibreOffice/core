@@ -26,7 +26,6 @@
 #include <vcl/extoutdevdata.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/mapmod.hxx>
-#include <tools/rtti.hxx>
 #include <vector>
 #include <deque>
 
@@ -96,7 +95,6 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 
 public:
 
-    TYPEINFO_OVERRIDE();
     PDFExtOutDevData( const OutputDevice& rOutDev );
     virtual ~PDFExtOutDevData();
 

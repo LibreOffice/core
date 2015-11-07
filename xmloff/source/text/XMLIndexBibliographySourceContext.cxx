@@ -41,7 +41,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-TYPEINIT1(XMLIndexBibliographySourceContext, XMLIndexSourceBaseContext);
 
 
 XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(

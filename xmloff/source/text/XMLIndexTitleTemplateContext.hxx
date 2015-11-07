@@ -54,7 +54,6 @@ class XMLIndexTitleTemplateContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
      XMLIndexTitleTemplateContext(
         SvXMLImport& rImport,

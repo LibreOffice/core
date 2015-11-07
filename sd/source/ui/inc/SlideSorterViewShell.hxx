@@ -41,7 +41,6 @@ class SlideSorterViewShell
     friend class controller::SlotManager;
 
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
 
 private:

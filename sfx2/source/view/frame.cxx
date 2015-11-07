@@ -75,10 +75,12 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
-TYPEINIT1_AUTOFACTORY(SfxFrameItem, SfxPoolItem);
-TYPEINIT1(SfxUsrAnyItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SfxUnoFrameItem, SfxPoolItem);
+SfxPoolItem* SfxUsrAnyItem::CreateDefault() { DBG_ASSERT(false, "No SfxUsrAnyItem factory available"); return 0; }
 
+SfxPoolItem* SfxUnoFrameItem::CreateDefault()
+{
+    return new SfxUnoFrameItem();
+}
 void SfxFrame::Construct_Impl()
 {
     pImp = new SfxFrame_Impl( this );

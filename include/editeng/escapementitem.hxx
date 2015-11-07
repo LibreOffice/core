@@ -43,7 +43,7 @@ class EDITENG_DLLPUBLIC SvxEscapementItem : public SfxEnumItemInterface
     short nEsc;
     sal_uInt8  nProp;
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit SvxEscapementItem( const sal_uInt16 nId  );
     SvxEscapementItem( const SvxEscapement eEscape,

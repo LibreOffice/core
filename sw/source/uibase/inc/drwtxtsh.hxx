@@ -40,7 +40,6 @@ class SwDrawTextShell: public SfxShell
 
 public:
     SFX_DECL_INTERFACE(SW_DRWTXTSHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

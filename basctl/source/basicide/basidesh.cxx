@@ -126,8 +126,6 @@ public:
 
 };
 
-TYPEINIT1( Shell, SfxViewShell );
-
 SFX_IMPL_NAMED_VIEWFACTORY( Shell, "Default" )
 {
     SFX_VIEW_REGISTRATION( DocShell );

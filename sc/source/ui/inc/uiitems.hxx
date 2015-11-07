@@ -52,7 +52,6 @@ class ScInputStatusItem : public SfxPoolItem
     const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
 
 public:
-                            TYPEINFO_OVERRIDE();
 
                             ScInputStatusItem( sal_uInt16 nWhich,
                                                const ScAddress& rCurPos,
@@ -134,7 +133,6 @@ public:
 class SC_DLLPUBLIC ScSortItem : public SfxPoolItem
 {
 public:
-                            TYPEINFO_OVERRIDE();
                             ScSortItem( sal_uInt16              nWhich,
                                         ScViewData*         ptrViewData,
                                         const ScSortParam*  pSortData );
@@ -158,7 +156,6 @@ private:
 class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 {
 public:
-                            TYPEINFO_OVERRIDE();
                             ScQueryItem( sal_uInt16                 nWhich,
                                          ScViewData*            ptrViewData,
                                          const ScQueryParam*    pQueryData );
@@ -186,7 +183,6 @@ private:
 class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
 {
 public:
-                TYPEINFO_OVERRIDE();
                 ScSubTotalItem( sal_uInt16                  nWhich,
                                 ScViewData*             ptrViewData,
                                 const ScSubTotalParam*  pSubTotalData );
@@ -210,7 +206,6 @@ private:
 class SC_DLLPUBLIC ScUserListItem : public SfxPoolItem
 {
 public:
-                TYPEINFO_OVERRIDE();
                 ScUserListItem( sal_uInt16 nWhich );
                 ScUserListItem( const ScUserListItem& rItem );
                 virtual ~ScUserListItem();
@@ -228,7 +223,6 @@ private:
 class ScConsolidateItem : public SfxPoolItem
 {
 public:
-                TYPEINFO_OVERRIDE();
                 ScConsolidateItem( sal_uInt16                    nWhich,
                                    const ScConsolidateParam* pParam );
                 ScConsolidateItem( const ScConsolidateItem& rItem );
@@ -246,7 +240,6 @@ private:
 class ScPivotItem : public SfxPoolItem
 {
 public:
-                TYPEINFO_OVERRIDE();
                 ScPivotItem( sal_uInt16 nWhich, const ScDPSaveData* pData,
                              const ScRange* pRange, bool bNew );
                 ScPivotItem( const ScPivotItem& rItem );
@@ -268,7 +261,6 @@ private:
 class ScSolveItem : public SfxPoolItem
 {
 public:
-                TYPEINFO_OVERRIDE();
                 ScSolveItem( sal_uInt16              nWhich,
                              const ScSolveParam* pParam );
                 ScSolveItem( const ScSolveItem& rItem );
@@ -286,7 +278,6 @@ private:
 class ScTabOpItem : public SfxPoolItem
 {
 public:
-                TYPEINFO_OVERRIDE();
                 ScTabOpItem( sal_uInt16              nWhich,
                              const ScTabOpParam* pParam );
                 ScTabOpItem( const ScTabOpItem& rItem );

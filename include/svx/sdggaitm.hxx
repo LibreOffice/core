@@ -32,7 +32,6 @@ class SVX_DLLPUBLIC SdrGrafGamma100Item : public SfxUInt32Item
 {
 public:
 
-                            TYPEINFO_OVERRIDE();
 
                             SdrGrafGamma100Item( sal_uIntPtr nGamma100 = 100 ) : SfxUInt32Item( SDRATTR_GRAFGAMMA, nGamma100 ) {}
                             SdrGrafGamma100Item( SvStream& rIn ) : SfxUInt32Item( SDRATTR_GRAFGAMMA, rIn ) {}

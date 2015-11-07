@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Sequence.h>
 
-#include <tools/rtti.hxx>
 #include <tools/ref.hxx>
 #include <svl/smplhint.hxx>
 #include <sfx2/lnkbase.hxx>
@@ -159,7 +158,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
-    TYPEINFO_OVERRIDE();     // rtti
 
     SwSection(SectionType const eType, OUString const& rName,
                 SwSectionFormat & rFormat);
@@ -293,7 +291,6 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
-    TYPEINFO_OVERRIDE();     // Already contained in base class client.
     virtual ~SwSectionFormat();
 
     // Deletes all Frms in aDepend (Frms are recognized via dynamic_cast).

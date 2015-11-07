@@ -60,20 +60,6 @@
 
 // STATIC DATA ---------------------------------------------------------------
 
-TYPEINIT1(ScUndoDeleteContents,     SfxUndoAction);
-TYPEINIT1(ScUndoFillTable,          SfxUndoAction);
-TYPEINIT1(ScUndoSelectionAttr,      SfxUndoAction);
-TYPEINIT1(ScUndoAutoFill,           SfxUndoAction);
-TYPEINIT1(ScUndoMerge,              SfxUndoAction);
-TYPEINIT1(ScUndoAutoFormat,         SfxUndoAction);
-TYPEINIT1(ScUndoReplace,            SfxUndoAction);
-TYPEINIT1(ScUndoTabOp,              SfxUndoAction);
-TYPEINIT1(ScUndoConversion,         SfxUndoAction);
-TYPEINIT1(ScUndoRefConversion,      SfxUndoAction);
-TYPEINIT1(ScUndoRefreshLink,        SfxUndoAction);
-TYPEINIT1(ScUndoInsertAreaLink,     SfxUndoAction);
-TYPEINIT1(ScUndoRemoveAreaLink,     SfxUndoAction);
-TYPEINIT1(ScUndoUpdateAreaLink,     SfxUndoAction);
 
 // TODO:
 /*A*/   // SetOptimalHeight on Document, when no View

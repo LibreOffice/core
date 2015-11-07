@@ -25,7 +25,6 @@
 
 sw::LegacyModifyHint::~LegacyModifyHint() {}
 
-TYPEINIT0( SwClient );
 
 SwClient::~SwClient()
 {

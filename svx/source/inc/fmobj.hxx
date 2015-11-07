@@ -50,7 +50,6 @@ public:
     FmFormObj(const OUString& rModelName);
     FmFormObj();
 
-    TYPEINFO_VISIBILITY_OVERRIDE(SAL_DLLPRIVATE);
 
     SAL_DLLPRIVATE const css::uno::Reference< css::container::XIndexContainer>&
         GetOriginalParent() const { return m_xParent; }

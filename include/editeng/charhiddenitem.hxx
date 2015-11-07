@@ -32,7 +32,7 @@
 class EDITENG_DLLPUBLIC SvxCharHiddenItem : public SfxBoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     SvxCharHiddenItem( const bool bHidden /*= false*/, const sal_uInt16 nId );
 

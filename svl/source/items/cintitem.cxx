@@ -22,7 +22,6 @@
 #include <tools/stream.hxx>
 #include <svl/cintitem.hxx>
 
-TYPEINIT1_AUTOFACTORY(CntByteItem, SfxPoolItem);
 
 // virtual
 bool CntByteItem::operator ==(const SfxPoolItem & rItem) const
@@ -85,7 +84,6 @@ SfxPoolItem * CntByteItem::Clone(SfxItemPool *) const
     return new CntByteItem(*this);
 }
 
-TYPEINIT1_AUTOFACTORY(CntUInt16Item, SfxPoolItem);
 
 CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
     SfxPoolItem(which)
@@ -157,7 +155,6 @@ SfxPoolItem * CntUInt16Item::Clone(SfxItemPool *) const
     return new CntUInt16Item(*this);
 }
 
-TYPEINIT1_AUTOFACTORY(CntInt32Item, SfxPoolItem);
 
 CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream)
     : SfxPoolItem(which)
@@ -226,7 +223,6 @@ SfxPoolItem * CntInt32Item::Clone(SfxItemPool *) const
     return new CntInt32Item(*this);
 }
 
-TYPEINIT1_AUTOFACTORY(CntUInt32Item, SfxPoolItem);
 
 CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
     SfxPoolItem(which)

@@ -50,7 +50,7 @@ class SC_DLLPUBLIC ScMergeAttr: public SfxPoolItem
     SCsCOL      nColMerge;
     SCsROW      nRowMerge;
 public:
-                TYPEINFO_OVERRIDE();
+                static SfxPoolItem* CreateDefault();
                 ScMergeAttr();
                 ScMergeAttr( SCsCOL nCol, SCsROW nRow = 0);
                 ScMergeAttr( const ScMergeAttr& );
@@ -101,7 +101,7 @@ class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
     bool        bHideCell;      ///< hide cell
     bool        bHidePrint;     ///< don't print cell
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             ScProtectionAttr();
                             ScProtectionAttr(   bool bProtect,
                                                 bool bHFormula = false,
@@ -150,7 +150,7 @@ public:
 class ScRangeItem : public SfxPoolItem
 {
 public:
-            TYPEINFO_OVERRIDE();
+            static SfxPoolItem* CreateDefault();
 
             inline  ScRangeItem( const sal_uInt16 nWhich );
             inline  ScRangeItem( const sal_uInt16   nWhich,
@@ -201,7 +201,7 @@ inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )
 class ScTableListItem : public SfxPoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     inline  ScTableListItem( const sal_uInt16 nWhich );
             ScTableListItem( const ScTableListItem& rCpy );
@@ -240,7 +240,6 @@ class SC_DLLPUBLIC ScPageHFItem : public SfxPoolItem
     EditTextObject* pRightArea;
 
 public:
-                TYPEINFO_OVERRIDE();
                 ScPageHFItem( sal_uInt16 nWhich );
                 ScPageHFItem( const ScPageHFItem& rItem );
                 virtual ~ScPageHFItem();
@@ -270,7 +269,7 @@ public:
 class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem
 {
 public:
-                TYPEINFO_OVERRIDE();
+                static SfxPoolItem* CreateDefault();
 
                 ScViewObjectModeItem( sal_uInt16 nWhich );
                 ScViewObjectModeItem( sal_uInt16 nWhich, ScVObjMode eMode );
@@ -290,7 +289,7 @@ public:
 class ScDoubleItem : public SfxPoolItem
 {
 public:
-                TYPEINFO_OVERRIDE();
+                static SfxPoolItem* CreateDefault();
                 ScDoubleItem( sal_uInt16 nWhich, double nVal=0 );
                 ScDoubleItem( const ScDoubleItem& rItem );
                 virtual ~ScDoubleItem();
@@ -313,7 +312,7 @@ const sal_uInt8 SC_MID_PAGE_SCALETO_HEIGHT   = 2;
 class SC_DLLPUBLIC ScPageScaleToItem : public SfxPoolItem
 {
 public:
-                                TYPEINFO_OVERRIDE();
+                                static SfxPoolItem* CreateDefault();
 
     /** Default c'tor sets the width and height to 0. */
     explicit                    ScPageScaleToItem();
@@ -351,7 +350,7 @@ private:
 class ScCondFormatItem : public SfxPoolItem
 {
 public:
-    TYPEINFO_OVERRIDE();
+    static SfxPoolItem* CreateDefault();
 
     explicit ScCondFormatItem();
     explicit ScCondFormatItem(const std::vector<sal_uInt32>& nIndex);

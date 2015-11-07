@@ -36,8 +36,8 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0));
 
+SfxPoolItem* SvxRotateModeItem::CreateDefault() { return new  SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0);}
 
 
 //  SvxRotateModeItem - orientation with turned text

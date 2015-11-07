@@ -34,8 +34,8 @@ private:
     bool                    bEnabled;
 
 public:
-                            TYPEINFO_OVERRIDE();
 
+                            static SfxPoolItem* CreateDefault();
                             XFillFloatTransparenceItem();
                             XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, bool bEnable = true );
                             XFillFloatTransparenceItem(SfxItemPool* pPool, const XGradient& rTheGradient, bool bEnable = true );

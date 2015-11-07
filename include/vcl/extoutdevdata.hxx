@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_EXTOUTDEVDATA_HXX
 #define INCLUDED_VCL_EXTOUTDEVDATA_HXX
 
-#include <tools/rtti.hxx>
 #include <vcl/dllapi.h>
 
 namespace vcl
@@ -30,7 +29,6 @@ class VCL_DLLPUBLIC ExtOutDevData
 {
 public:
 
-    TYPEINFO();
     virtual ~ExtOutDevData();
 };
 

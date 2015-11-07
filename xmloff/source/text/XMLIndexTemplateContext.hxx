@@ -112,7 +112,6 @@ public:
     const OUString sParaStyleLevel;
 
 
-    TYPEINFO_OVERRIDE();
 
     XMLIndexTemplateContext(
         SvXMLImport& rImport,

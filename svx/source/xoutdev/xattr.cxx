@@ -60,7 +60,6 @@ using namespace ::com::sun::star;
 
 #define VCLTOSVCOL( rCol ) (sal_uInt16)((((sal_uInt16)(rCol))<<8)|(rCol))
 
-TYPEINIT1_AUTOFACTORY(NameOrIndex, SfxStringItem);
 
 long ScaleMetricValue( long nVal, long nMul, long nDiv )
 {
@@ -268,7 +267,7 @@ void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-TYPEINIT1_AUTOFACTORY(XColorItem, NameOrIndex);
+SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem; }
 
 XColorItem::XColorItem(sal_uInt16 _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
     NameOrIndex(_nWhich, nIndex),
@@ -357,7 +356,8 @@ bool XColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 
 // --- line attributes ---
 
-TYPEINIT1_AUTOFACTORY(XLineStyleItem, SfxEnumItem);
+
+SfxPoolItem* XLineStyleItem::CreateDefault() { return new XLineStyleItem; }
 
 XLineStyleItem::XLineStyleItem(css::drawing::LineStyle eTheLineStyle) :
     SfxEnumItem(XATTR_LINESTYLE, sal::static_int_cast< sal_uInt16 >(eTheLineStyle))
@@ -648,7 +648,7 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
     return fFullDotDashLen;
 }
 
-TYPEINIT1_AUTOFACTORY(XLineDashItem, NameOrIndex);
+SfxPoolItem* XLineDashItem::CreateDefault() {return new XLineDashItem;}
 
 XLineDashItem::XLineDashItem(const OUString& rName, const XDash& rTheDash) :
     NameOrIndex(XATTR_LINEDASH, rName),
@@ -1014,7 +1014,7 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
     return NULL;
 }
 
-TYPEINIT1_AUTOFACTORY(XLineWidthItem, SfxMetricItem);
+SfxPoolItem* XLineWidthItem::CreateDefault() {return new XLineWidthItem;}
 
 XLineWidthItem::XLineWidthItem(long nWidth) :
     SfxMetricItem(XATTR_LINEWIDTH, nWidth)
@@ -1071,7 +1071,7 @@ bool XLineWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY(XLineColorItem, XColorItem);
+SfxPoolItem* XLineColorItem::CreateDefault() { return new XLineColorItem; }
 
 XLineColorItem::XLineColorItem(sal_Int32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_LINECOLOR, nIndex, rTheColor)
@@ -1222,7 +1222,7 @@ namespace
     }
 }
 
-TYPEINIT1_AUTOFACTORY(XLineStartItem, NameOrIndex);
+SfxPoolItem* XLineStartItem::CreateDefault() {return new XLineStartItem;}
 
 XLineStartItem::XLineStartItem(sal_Int32 nIndex)
 :   NameOrIndex(XATTR_LINESTART, nIndex)
@@ -1564,7 +1564,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
     return NULL;
 }
 
-TYPEINIT1_AUTOFACTORY(XLineEndItem, NameOrIndex);
+SfxPoolItem* XLineEndItem::CreateDefault() {return new XLineEndItem;}
 
 XLineEndItem::XLineEndItem(sal_Int32 nIndex)
 :   NameOrIndex(XATTR_LINEEND, nIndex)
@@ -1905,7 +1905,7 @@ bool XLineEndItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY(XLineStartWidthItem, SfxMetricItem);
+SfxPoolItem* XLineStartWidthItem::CreateDefault() {return new XLineStartWidthItem;}
 
 XLineStartWidthItem::XLineStartWidthItem(long nWidth) :
     SfxMetricItem(XATTR_LINESTARTWIDTH, nWidth)
@@ -1955,7 +1955,7 @@ bool XLineStartWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY(XLineEndWidthItem, SfxMetricItem);
+SfxPoolItem* XLineEndWidthItem::CreateDefault() {return new XLineEndWidthItem;}
 
 XLineEndWidthItem::XLineEndWidthItem(long nWidth) :
    SfxMetricItem(XATTR_LINEENDWIDTH, nWidth)
@@ -2005,7 +2005,7 @@ bool XLineEndWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMember
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY(XLineStartCenterItem, SfxBoolItem);
+SfxPoolItem* XLineStartCenterItem::CreateDefault() {return new XLineStartCenterItem;}
 
 XLineStartCenterItem::XLineStartCenterItem(bool bStartCenter) :
     SfxBoolItem(XATTR_LINESTARTCENTER, bStartCenter)
@@ -2056,7 +2056,7 @@ bool XLineStartCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMem
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY(XLineEndCenterItem, SfxBoolItem);
+SfxPoolItem* XLineEndCenterItem::CreateDefault() {return new XLineEndCenterItem;}
 
 XLineEndCenterItem::XLineEndCenterItem(bool bEndCenter) :
     SfxBoolItem(XATTR_LINEENDCENTER, bEndCenter)
@@ -2109,7 +2109,8 @@ bool XLineEndCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMembe
 
 // --- fill attributes ---
 
-TYPEINIT1_AUTOFACTORY(XFillStyleItem, SfxEnumItem);
+
+SfxPoolItem* XFillStyleItem::CreateDefault() { return new XFillStyleItem; }
 
 XFillStyleItem::XFillStyleItem(drawing::FillStyle eFillStyle) :
     SfxEnumItem(XATTR_FILLSTYLE, sal::static_int_cast< sal_uInt16 >(eFillStyle))
@@ -2211,7 +2212,8 @@ void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-TYPEINIT1_AUTOFACTORY(XFillColorItem, XColorItem);
+
+SfxPoolItem* XFillColorItem::CreateDefault() { return new XFillColorItem; }
 
 XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
     XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
@@ -2274,8 +2276,7 @@ void XFillColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetColorValue().AsRGBHexString().toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
-
-TYPEINIT1_AUTOFACTORY(XSecondaryFillColorItem, XColorItem);
+SfxPoolItem* XSecondaryFillColorItem::CreateDefault() {return new XSecondaryFillColorItem;}
 
 XSecondaryFillColorItem::XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor) :
     XColorItem(XATTR_SECONDARYFILLCOLOR, rName, rTheColor)
@@ -2363,7 +2364,8 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nStepCount     == rGradient.nStepCount );
 }
 
-TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);
+
+SfxPoolItem* XFillGradientItem::CreateDefault() { return new XFillGradientItem; }
 
 XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
                                    const XGradient& rTheGradient) :
@@ -2748,7 +2750,8 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
     return NULL;
 }
 
-TYPEINIT1_AUTOFACTORY( XFillFloatTransparenceItem, XFillGradientItem );
+
+SfxPoolItem* XFillFloatTransparenceItem::CreateDefault() { return new XFillFloatTransparenceItem; }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
     bEnabled( false )
@@ -2871,7 +2874,8 @@ bool XHatch::operator==(const XHatch& rHatch) const
              nAngle     == rHatch.nAngle );
 }
 
-TYPEINIT1_AUTOFACTORY(XFillHatchItem, NameOrIndex);
+
+SfxPoolItem* XFillHatchItem::CreateDefault() { return new XFillHatchItem; }
 
 XFillHatchItem::XFillHatchItem(const OUString& rName,
                              const XHatch& rTheHatch) :
@@ -3156,7 +3160,8 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 
 // --- form text attributes ---
 
-TYPEINIT1_AUTOFACTORY(XFormTextStyleItem, SfxEnumItem);
+
+SfxPoolItem* XFormTextStyleItem::CreateDefault() { return new XFormTextStyleItem; }
 
 XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
     SfxEnumItem(XATTR_FORMTXTSTYLE, sal::static_int_cast< sal_uInt16 >(eTheStyle))
@@ -3198,7 +3203,8 @@ bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextAdjustItem, SfxEnumItem);
+
+SfxPoolItem* XFormTextAdjustItem::CreateDefault() { return new XFormTextAdjustItem; }
 
 XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
     SfxEnumItem(XATTR_FORMTXTADJUST, sal::static_int_cast< sal_uInt16 >(eTheAdjust))
@@ -3240,7 +3246,8 @@ bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextDistanceItem, SfxMetricItem);
+
+SfxPoolItem* XFormTextDistanceItem::CreateDefault() { return new XFormTextDistanceItem; }
 
 XFormTextDistanceItem::XFormTextDistanceItem(long nDist) :
     SfxMetricItem(XATTR_FORMTXTDISTANCE, nDist)
@@ -3262,7 +3269,7 @@ SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
     return new XFormTextDistanceItem(rIn);
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextStartItem, SfxMetricItem);
+SfxPoolItem* XFormTextStartItem::CreateDefault() { return new XFormTextStartItem; }
 
 XFormTextStartItem::XFormTextStartItem(long nStart) :
     SfxMetricItem(XATTR_FORMTXTSTART, nStart)
@@ -3284,7 +3291,8 @@ SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
     return new XFormTextStartItem(rIn);
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextMirrorItem, SfxBoolItem);
+
+SfxPoolItem* XFormTextMirrorItem::CreateDefault() { return new XFormTextMirrorItem; }
 
 XFormTextMirrorItem::XFormTextMirrorItem(bool bMirror) :
     SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror)
@@ -3306,7 +3314,8 @@ SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
     return new XFormTextMirrorItem(rIn);
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextOutlineItem, SfxBoolItem);
+
+SfxPoolItem* XFormTextOutlineItem::CreateDefault() { return new XFormTextOutlineItem; }
 
 XFormTextOutlineItem::XFormTextOutlineItem(bool bOutline) :
     SfxBoolItem(XATTR_FORMTXTOUTLINE, bOutline)
@@ -3328,7 +3337,8 @@ SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) co
     return new XFormTextOutlineItem(rIn);
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextShadowItem, SfxEnumItem);
+
+SfxPoolItem* XFormTextShadowItem::CreateDefault() { return new XFormTextShadowItem; }
 
 XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
     SfxEnumItem(
@@ -3371,7 +3381,8 @@ bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
     return true;
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextShadowColorItem, XColorItem);
+
+SfxPoolItem* XFormTextShadowColorItem::CreateDefault() { return new XFormTextShadowColorItem; }
 
 XFormTextShadowColorItem::XFormTextShadowColorItem(const OUString& rName,
                                                      const Color& rTheColor) :
@@ -3394,7 +3405,8 @@ SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/
     return new XFormTextShadowColorItem(rIn);
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextShadowXValItem, SfxMetricItem);
+
+SfxPoolItem* XFormTextShadowXValItem::CreateDefault() { return new XFormTextShadowXValItem; }
 
 XFormTextShadowXValItem::XFormTextShadowXValItem(long nVal) :
     SfxMetricItem(XATTR_FORMTXTSHDWXVAL, nVal)
@@ -3416,7 +3428,8 @@ SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/)
     return new XFormTextShadowXValItem(rIn);
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextShadowYValItem, SfxMetricItem);
+
+SfxPoolItem* XFormTextShadowYValItem::CreateDefault() { return new XFormTextShadowYValItem; }
 
 XFormTextShadowYValItem::XFormTextShadowYValItem(long nVal) :
     SfxMetricItem(XATTR_FORMTXTSHDWYVAL, nVal)
@@ -3438,7 +3451,8 @@ SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/)
     return new XFormTextShadowYValItem(rIn);
 }
 
-TYPEINIT1_AUTOFACTORY(XFormTextHideFormItem, SfxBoolItem);
+
+SfxPoolItem* XFormTextHideFormItem::CreateDefault() { return new XFormTextHideFormItem; }
 
 XFormTextHideFormItem::XFormTextHideFormItem(bool bHide) :
     SfxBoolItem(XATTR_FORMTXTHIDEFORM, bHide)
@@ -3462,7 +3476,6 @@ SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 
 // --- SetItems ---
 
-TYPEINIT1(XLineAttrSetItem, SfxSetItem);
 
 /// a line attribute set item
 XLineAttrSetItem::XLineAttrSetItem( SfxItemSet* pItemSet ) :
@@ -3508,7 +3521,6 @@ SvStream& XLineAttrSetItem::Store( SvStream& rStream, sal_uInt16 nItemVersion ) 
 }
 
 
-TYPEINIT1(XFillAttrSetItem, SfxSetItem);
 
 /// fill attribute set item
 XFillAttrSetItem::XFillAttrSetItem( SfxItemSet* pItemSet ) :

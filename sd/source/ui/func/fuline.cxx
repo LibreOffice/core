@@ -40,7 +40,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuLine, FuPoor );
 
 FuLine::FuLine (
     ViewShell* pViewSh,

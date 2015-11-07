@@ -27,7 +27,6 @@
 #include <globals.hxx>
 #include <database.hxx>
 
-TYPEINIT1( SvMetaSlot, SvMetaAttribute );
 
 SvMetaObject *SvMetaSlot::MakeClone() const
 {

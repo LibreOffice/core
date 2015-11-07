@@ -29,7 +29,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuConnectionDlg, FuPoor );
 
 FuConnectionDlg::FuConnectionDlg (
     ViewShell* pViewSh,

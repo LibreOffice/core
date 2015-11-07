@@ -669,7 +669,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     }
 
     SFX_ASSERT( !pImp->ppStaticDefaults ||
-                rItem.IsA(GetDefaultItem(nWhich).Type()), nWhich,
+                typeid(rItem) == typeid(GetDefaultItem(nWhich)), nWhich,
                 "SFxItemPool: wrong item type in Put" );
 
     SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];

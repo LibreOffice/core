@@ -54,7 +54,6 @@ sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
 
 
 
-TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
 
 // Constructor creates a two cover surface tools::PolyPolygon and (point-count 1) side
 // surfaces rectangles from the passed PolyPolygon

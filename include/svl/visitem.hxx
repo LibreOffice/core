@@ -29,7 +29,6 @@ class SVL_DLLPUBLIC SfxVisibilityItem: public SfxPoolItem
     css::frame::status::Visibility m_nValue;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     explicit SfxVisibilityItem(sal_uInt16 which = 0, bool bVisible = true):
         SfxPoolItem(which)

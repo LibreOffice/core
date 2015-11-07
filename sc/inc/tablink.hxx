@@ -42,7 +42,6 @@ private:
     bool bDoPaint:1;
 
 public:
-    TYPEINFO_OVERRIDE();
     ScTableLink( ScDocShell* pDocSh, const OUString& rFile,
                     const OUString& rFilter, const OUString& rOpt, sal_uLong nRefresh );
     ScTableLink( SfxObjectShell* pShell, const OUString& rFile,

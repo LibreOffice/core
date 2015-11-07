@@ -33,7 +33,6 @@
 namespace rptui
 {
     using namespace ::com::sun::star;
-TYPEINIT1( OSectionView, SdrView );
 
 
 OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor )

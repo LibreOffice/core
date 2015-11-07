@@ -25,11 +25,11 @@
 #include <com/sun/star/frame/status/LeftRightMargin.hpp>
 #include <com/sun/star/frame/status/UpperLowerMargin.hpp>
 
-TYPEINIT1_AUTOFACTORY(SvxPagePosSizeItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxLongLRSpaceItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxLongULSpaceItem, SfxPoolItem);
-TYPEINIT1(SvxColumnItem, SfxPoolItem);
-TYPEINIT1(SvxObjectItem, SfxPoolItem);
+SfxPoolItem* SvxPagePosSizeItem::CreateDefault() { return new SvxPagePosSizeItem; }
+SfxPoolItem* SvxLongLRSpaceItem::CreateDefault() { return new SvxLongLRSpaceItem; }
+SfxPoolItem* SvxLongULSpaceItem::CreateDefault() { return new SvxLongULSpaceItem; }
+SfxPoolItem* SvxColumnItem::CreateDefault() { return new SvxColumnItem; }
+SfxPoolItem* SvxObjectItem::CreateDefault() { DBG_ASSERT(false, "No SvxObjectItem factory available"); return 0; }
 
 /* SvxLongLRSpaceItem */
 

@@ -126,7 +126,6 @@ void SwSrcView::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
 }
 
-TYPEINIT1(SwSrcView, SfxViewShell)
 
 static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_Int32 nCurPage, const OUString& rTitle )
 {

@@ -121,7 +121,6 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         virtual const SwRect GetObjBoundRect() const override;
 
     public:
-        TYPEINFO_OVERRIDE();
 
         SwAnchoredDrawObject();
         virtual ~SwAnchoredDrawObject();

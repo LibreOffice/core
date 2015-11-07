@@ -22,7 +22,6 @@
 #include "TableConnectionData.hxx"
 #include "TableFieldDescription.hxx"
 #include "QEnumTypes.hxx"
-#include <tools/rtti.hxx>
 
 namespace dbaui
 {

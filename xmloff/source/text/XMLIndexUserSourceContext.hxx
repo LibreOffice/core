@@ -55,7 +55,6 @@ class XMLIndexUserSourceContext : public XMLIndexSourceBaseContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLIndexUserSourceContext(
         SvXMLImport& rImport,

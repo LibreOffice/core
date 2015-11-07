@@ -39,7 +39,6 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-TYPEINIT1( XMLTextListBlockContext, SvXMLImportContext );
 
 // OD 2008-05-07 #refactorlists#
 // add optional parameter <bRestartNumberingAtSubList> and its handling

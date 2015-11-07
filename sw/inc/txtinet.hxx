@@ -38,7 +38,6 @@ virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 public:
     SwTextINetFormat( SwFormatINetFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTextINetFormat();
-    TYPEINFO_OVERRIDE();
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 

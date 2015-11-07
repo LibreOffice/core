@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_VCLEVENTLISTENERS_HXX
 
 #include <tools/link.hxx>
-#include <tools/rtti.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/impdel.hxx>
 #include <vcl/vclptr.hxx>

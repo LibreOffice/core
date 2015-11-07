@@ -34,10 +34,6 @@
 
 using ::com::sun::star::uno::Exception;
 
-TYPEINIT0(SfxUndoAction);
-TYPEINIT0(SfxListUndoAction);
-TYPEINIT0(SfxLinkUndoAction);
-TYPEINIT0(SfxRepeatTarget);
 
 
 SfxRepeatTarget::~SfxRepeatTarget()

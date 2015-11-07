@@ -50,7 +50,6 @@ void ScDrawFormShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_DRAWFORM));
 }
 
-TYPEINIT1( ScDrawFormShell, ScDrawShell );
 
 ScDrawFormShell::ScDrawFormShell(ScViewData* pData) :
     ScDrawShell(pData)

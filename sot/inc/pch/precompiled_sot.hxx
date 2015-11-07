@@ -78,7 +78,6 @@
 #include <tools/debug.hxx>
 #include <tools/globname.hxx>
 #include <tools/ref.hxx>
-#include <tools/rtti.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

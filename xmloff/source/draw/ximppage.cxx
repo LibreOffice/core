@@ -198,7 +198,6 @@ void DrawAnnotationContext::EndElement()
     }
 }
 
-TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
 
 SdXMLGenericPageContext::SdXMLGenericPageContext(
     SvXMLImport& rImport,

@@ -91,7 +91,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE();
 
     XMLIndexSourceBaseContext(
         SvXMLImport& rImport,

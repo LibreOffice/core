@@ -32,8 +32,7 @@
 class SVX_DLLPUBLIC XFillBackgroundItem : public SfxBoolItem
 {
 public:
-                            TYPEINFO_OVERRIDE();
-
+                            static SfxPoolItem* CreateDefault();
                             XFillBackgroundItem( bool bFill = false );
                             SVX_DLLPRIVATE XFillBackgroundItem( SvStream& rIn );
 

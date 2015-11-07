@@ -64,7 +64,6 @@ protected:
 
 public:
     // --> #i28701#
-    TYPEINFO_OVERRIDE();
 
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
     void RefreshLaySubsidiary( const SwPageFrm*, const SwRect& ) const;

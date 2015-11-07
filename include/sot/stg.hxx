@@ -30,7 +30,6 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 
-#include <tools/rtti.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
@@ -54,7 +53,6 @@ protected:
                     StorageBase();
     virtual         ~StorageBase();
 public:
-                    TYPEINFO();
     virtual bool    Validate( bool=false ) const = 0;
     virtual bool    ValidateMode( StreamMode ) const = 0;
     void            ResetError() const;
@@ -69,7 +67,6 @@ public:
 class BaseStorageStream : public StorageBase
 {
 public:
-                        TYPEINFO_OVERRIDE();
     virtual sal_uLong   Read( void * pData, sal_uLong nSize ) = 0;
     virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) = 0;
     virtual sal_uInt64  Seek( sal_uInt64 nPos ) = 0;
@@ -87,7 +84,6 @@ enum class SotClipboardFormatId : sal_uLong;
 class BaseStorage : public StorageBase
 {
 public:
-                                TYPEINFO_OVERRIDE();
     virtual const OUString&     GetName() const = 0;
     virtual bool                IsRoot() const = 0;
     virtual void                SetClassId( const ClsId& ) = 0;
@@ -143,7 +139,6 @@ class StorageStream : public BaseStorageStream, public OLEStorageBase
 protected:
                         virtual ~StorageStream();
 public:
-                        TYPEINFO_OVERRIDE();
                         StorageStream( StgIo*, StgDirEntry*, StreamMode );
     virtual sal_uLong   Read( void * pData, sal_uLong nSize ) override;
     virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) override;
@@ -170,7 +165,6 @@ class SOT_DLLPUBLIC Storage : public BaseStorage, public OLEStorageBase
 protected:
                                 virtual ~Storage();
 public:
-                                TYPEINFO_OVERRIDE();
                                 Storage( const OUString &, StreamMode = STREAM_STD_READWRITE, bool bDirect = true );
                                 Storage( SvStream& rStrm, bool bDirect = true );
                                 Storage( UCBStorageStream& rStrm, bool bDirect = true );
@@ -227,7 +221,6 @@ friend class UCBStorage;
 protected:
                                 virtual ~UCBStorageStream();
 public:
-                                TYPEINFO_OVERRIDE();
                                 UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, css::uno::Reference< css::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
@@ -282,7 +275,6 @@ public:
                                 UCBStorage( UCBStorage_Impl* );
                                 UCBStorage( SvStream& rStrm, bool bDirect = true );
 
-                                TYPEINFO_OVERRIDE();
     virtual const OUString&     GetName() const override;
     virtual bool                IsRoot() const override;
     virtual void                SetClassId( const ClsId& ) override;

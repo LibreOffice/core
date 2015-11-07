@@ -43,10 +43,10 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT2_AUTOFACTORY( SwFormatDrop, SfxPoolItem, SwClient);
-TYPEINIT1_AUTOFACTORY( SwRegisterItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY( SwNumRuleItem, SfxStringItem);
-TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
+
+SfxPoolItem* SwFormatDrop::CreateDefault() { return new SwFormatDrop; }
+SfxPoolItem* SwRegisterItem::CreateDefault() { return new SwRegisterItem; }
+SfxPoolItem* SwNumRuleItem::CreateDefault() { return new SwNumRuleItem; }
 
 SwFormatDrop::SwFormatDrop()
     : SfxPoolItem( RES_PARATR_DROP ),

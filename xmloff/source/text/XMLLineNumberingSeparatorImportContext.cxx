@@ -34,7 +34,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_INCREMENT;
 
-TYPEINIT1( XMLLineNumberingSeparatorImportContext, SvXMLImportContext );
 
 XMLLineNumberingSeparatorImportContext::XMLLineNumberingSeparatorImportContext(
     SvXMLImport& rImport,

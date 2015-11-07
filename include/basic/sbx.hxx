@@ -137,7 +137,6 @@ protected:
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_ARRAY,1);
-    TYPEINFO_OVERRIDE();
     SbxArray( SbxDataType=SbxVARIANT );
     SbxArray( const SbxArray& );
     SbxArray& operator=( const SbxArray& );
@@ -186,7 +185,6 @@ protected:
     virtual ~SbxDimArray();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_DIMARRAY,1);
-    TYPEINFO_OVERRIDE();
     SbxDimArray( SbxDataType=SbxVARIANT );
     SbxDimArray( const SbxDimArray& );
     SbxDimArray& operator=( const SbxDimArray& );
@@ -229,7 +227,6 @@ protected:
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_COLLECTION,1);
-    TYPEINFO_OVERRIDE();
     SbxCollection( const OUString& rClassname );
     SbxCollection( const SbxCollection& );
     SbxCollection& operator=( const SbxCollection& );
@@ -250,7 +247,6 @@ protected:
     virtual void CollRemove( SbxArray* pPar ) override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_FIXCOLLECTION,1);
-    TYPEINFO_OVERRIDE();
     SbxStdCollection( const OUString& rClassname, const OUString& rElemClass, bool=true );
     SbxStdCollection( const SbxStdCollection& );
     SbxStdCollection& operator=( const SbxStdCollection& );

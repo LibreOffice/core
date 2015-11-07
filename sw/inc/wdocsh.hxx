@@ -29,7 +29,6 @@ public:
     // But implement yourself.
     SFX_DECL_INTERFACE(SW_WEBDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

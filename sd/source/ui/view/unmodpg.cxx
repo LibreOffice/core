@@ -31,7 +31,6 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 
-TYPEINIT1(ModifyPageUndoAction, SdUndoAction);
 
 ModifyPageUndoAction::ModifyPageUndoAction(
     SdDrawDocument* pTheDoc,

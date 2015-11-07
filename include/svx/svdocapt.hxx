@@ -74,7 +74,6 @@ private:
     SVX_DLLPRIVATE void ImpRecalcTail();
 
 public:
-    TYPEINFO_OVERRIDE();
     SdrCaptionObj();
     SdrCaptionObj(const Rectangle& rRect, const Point& rTail);
     virtual ~SdrCaptionObj();

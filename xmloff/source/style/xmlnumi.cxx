@@ -1047,7 +1047,6 @@ SvxXMLListStyleContext::~SvxXMLListStyleContext()
     delete pLevelStyles;
 }
 
-TYPEINIT1( SvxXMLListStyleContext, SvXMLStyleContext );
 
 SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,

@@ -28,7 +28,6 @@
 #include <cassert>
 #include <vector>
 
-TYPEINIT0(SfxBroadcaster);
 
 typedef std::vector<SfxListener*> SfxListenerArr_Impl;
 

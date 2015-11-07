@@ -42,7 +42,6 @@
 #include <sfx2/docfile.hxx>
 #include "workwin.hxx"
 
-TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
 
 
 SfxFilterMatcher& SfxApplication::GetFilterMatcher()

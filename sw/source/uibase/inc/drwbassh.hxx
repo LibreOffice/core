@@ -37,7 +37,6 @@ public:
     virtual     ~SwDrawBaseShell();
 
     SFX_DECL_INTERFACE(SW_DRAWBASESHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

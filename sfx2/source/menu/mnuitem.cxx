@@ -247,7 +247,7 @@ SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/,
 void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
 {
     RegisterMenuControl( pMod, new SfxMenuCtrlFactory(
-                SfxMenuControl::CreateImpl, TYPE(SfxStringItem), nSlotId ) );
+                SfxMenuControl::CreateImpl, typeid(SfxStringItem), nSlotId ) );
 }
 
 
@@ -258,7 +258,7 @@ void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pF
 
 SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings )
 {
-    TypeId aSlotType = SFX_SLOTPOOL().GetSlotType(nId);
+    const std::type_info* aSlotType = SFX_SLOTPOOL().GetSlotType(nId);
     if ( aSlotType )
     {
         SfxApplication *pApp = SfxGetpApp();
@@ -271,7 +271,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
             {
                 SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
                 for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-                    if ( rFactories[nFactory].nTypeId == aSlotType &&
+                    if ( rFactories[nFactory].nTypeId == *aSlotType &&
                          ( ( rFactories[nFactory].nSlotId == 0 ) ||
                            ( rFactories[nFactory].nSlotId == nId) ) )
                         return rFactories[nFactory].pCtor( nId, rMenu, rBindings );
@@ -281,7 +281,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
         SfxMenuCtrlFactArr_Impl &rFactories = pApp->GetMenuCtrlFactories_Impl();
 
         for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-            if ( rFactories[nFactory].nTypeId == aSlotType &&
+            if ( rFactories[nFactory].nTypeId == *aSlotType &&
                  ( ( rFactories[nFactory].nSlotId == 0 ) ||
                    ( rFactories[nFactory].nSlotId == nId) ) )
                 return rFactories[nFactory].pCtor( nId, rMenu, rBindings );

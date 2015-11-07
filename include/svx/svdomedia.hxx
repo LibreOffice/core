@@ -38,7 +38,6 @@ class SVX_DLLPUBLIC SdrMediaObj : public SdrRectObj
 
 public:
 
-                                    TYPEINFO_OVERRIDE();
 
                                     SdrMediaObj();
                                     SdrMediaObj( const Rectangle& rRect );

@@ -48,7 +48,6 @@ static sal_uInt16 SidArraySpell[] = {
             SID_HANDOUTMODE,
             0 };
 
-TYPEINIT1( FuSearch, FuPoor );
 
 FuSearch::FuSearch (
     ViewShell* pViewSh,

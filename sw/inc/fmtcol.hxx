@@ -91,7 +91,6 @@ protected:
 
 public:
 
-    TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
     inline void SetNextTextFormatColl(SwTextFormatColl& rNext);
     SwTextFormatColl& GetNextTextFormatColl() const { return *mpNextTextFormatColl; }
@@ -153,7 +152,6 @@ protected:
     {}
 
 public:
-    TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 };
 
 // FEATURE::CONDCOLL
@@ -184,7 +182,6 @@ class SW_DLLPUBLIC SwCollCondition : public SwClient
     } m_aSubCondition;
 
 public:
-    TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
     SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
                     sal_uLong nSubCond = 0 );
@@ -232,7 +229,6 @@ protected:
     {}
 
 public:
-    TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
     virtual ~SwConditionTextFormatColl();
 

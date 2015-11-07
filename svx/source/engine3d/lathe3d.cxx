@@ -52,7 +52,6 @@ sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
 
 
 
-TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 
 // Constructor from 3D polygon, scale is the conversion factor for the coordinates
 

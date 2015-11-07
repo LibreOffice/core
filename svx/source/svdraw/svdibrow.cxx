@@ -82,7 +82,7 @@ public:
     SfxItemState                    eState;
     sal_uInt16                      nWhichId;
 
-    TypeId                          pType;
+    const std::type_info*           pType;
     ItemType                        eItemType;
 
     sal_Int32                       nVal;
@@ -97,7 +97,7 @@ public:
     ImpItemListRow()
     :   eState(SfxItemState::UNKNOWN),
         nWhichId(0),
-        pType(NULL),
+        pType(nullptr),
         eItemType(ITEM_DONTKNOW),
         nVal(0),
         nMin(0),
@@ -928,7 +928,8 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
             if (eState!=SfxItemState::DISABLED) {
                 const SfxPoolItem& rItem=pSet->Get(nWhich);
                 sal_uInt16 nIndent=0;
-                if (!HAS_BASE(SfxVoidItem,&rItem) && !HAS_BASE(SfxSetItem,&rItem) && (!IsItemIneffective(nWhich,pSet,nIndent) || bDontHideIneffectiveItems)) {
+                if (dynamic_cast<const SfxVoidItem *>(&rItem) == nullptr && dynamic_cast<const SfxSetItem *>(&rItem) == nullptr
+                        && (!IsItemIneffective(nWhich,pSet,nIndent) || bDontHideIneffectiveItems)) {
                     OUString aCommentStr;
 
                     INSERTCOMMENT(XATTR_LINE_FIRST,XATTR_LINE_LAST,"L I N E");
@@ -970,29 +971,29 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                     aEntry.eState=eState;
                     aEntry.nWhichId=nWhich;
                     if (!IsInvalidItem(&rItem)) {
-                        aEntry.pType=rItem.Type();
+                        aEntry.pType=&typeid(&typeid(rItem));
                         aEntry.nMax=0x7FFFFFFF;
                         aEntry.nMin=-aEntry.nMax;
                         aEntry.nVal=-4711;
-                        if      (HAS_BASE(SfxByteItem     ,&rItem)) aEntry.eItemType=ITEM_BYTE;
-                        else if (HAS_BASE(SfxInt16Item    ,&rItem)) aEntry.eItemType=ITEM_INT16;
-                        else if (HAS_BASE(SfxUInt16Item   ,&rItem)) aEntry.eItemType=ITEM_UINT16;
-                        else if (HAS_BASE(SfxInt32Item    ,&rItem)) aEntry.eItemType=ITEM_INT32;
-                        else if (HAS_BASE(SfxUInt32Item   ,&rItem)) aEntry.eItemType=ITEM_UINT32;
-                        else if (HAS_BASE(SfxEnumItemInterface,&rItem)) aEntry.eItemType=ITEM_ENUM;
-                        else if (HAS_BASE(SfxBoolItem     ,&rItem)) aEntry.eItemType=ITEM_BOOL;
-                        else if (HAS_BASE(SfxFlagItem     ,&rItem)) aEntry.eItemType=ITEM_FLAG;
-                        else if (HAS_BASE(XColorItem      ,&rItem)) aEntry.eItemType=ITEM_XCOLOR;
-                        else if (HAS_BASE(SfxStringItem   ,&rItem)) aEntry.eItemType=ITEM_STRING;
-                        else if (HAS_BASE(SfxPointItem    ,&rItem)) aEntry.eItemType=ITEM_POINT;
-                        else if (HAS_BASE(SfxRectangleItem,&rItem)) aEntry.eItemType=ITEM_RECT;
-                        else if (HAS_BASE(SfxRangeItem    ,&rItem)) aEntry.eItemType=ITEM_RANGE;
-                        else if (HAS_BASE(SdrFractionItem ,&rItem)) aEntry.eItemType=ITEM_FRACTION;
-                        else if (HAS_BASE(SvxColorItem    ,&rItem)) aEntry.eItemType=ITEM_COLOR;
-                        else if (HAS_BASE(SvxFontItem     ,&rItem)) aEntry.eItemType=ITEM_FONT;
-                        else if (HAS_BASE(SvxFontHeightItem,&rItem))aEntry.eItemType=ITEM_FONTHEIGHT;
-                        else if (HAS_BASE(SvxCharScaleWidthItem,&rItem)) aEntry.eItemType=ITEM_FONTWIDTH;
-                        else if (HAS_BASE(SvxFieldItem    ,&rItem)) aEntry.eItemType=ITEM_FIELD;
+                        if      (dynamic_cast<const SfxByteItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_BYTE;
+                        else if (dynamic_cast<const SfxInt16Item *>(&rItem) != nullptr) aEntry.eItemType=ITEM_INT16;
+                        else if (dynamic_cast<const SfxUInt16Item *>(&rItem) != nullptr) aEntry.eItemType=ITEM_UINT16;
+                        else if (dynamic_cast<const SfxInt32Item *>(&rItem) != nullptr) aEntry.eItemType=ITEM_INT32;
+                        else if (dynamic_cast<const SfxUInt32Item *>(&rItem) != nullptr) aEntry.eItemType=ITEM_UINT32;
+                        else if (dynamic_cast<const SfxEnumItemInterface *>(&rItem) != nullptr) aEntry.eItemType=ITEM_ENUM;
+                        else if (dynamic_cast<const SfxBoolItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_BOOL;
+                        else if (dynamic_cast<const SfxFlagItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FLAG;
+                        else if (dynamic_cast<const XColorItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_XCOLOR;
+                        else if (dynamic_cast<const SfxStringItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_STRING;
+                        else if (dynamic_cast<const SfxPointItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_POINT;
+                        else if (dynamic_cast<const SfxRectangleItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_RECT;
+                        else if (dynamic_cast<const SfxRangeItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_RANGE;
+                        else if (dynamic_cast<const SdrFractionItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FRACTION;
+                        else if (dynamic_cast<const SvxColorItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_COLOR;
+                        else if (dynamic_cast<const SvxFontItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FONT;
+                        else if (dynamic_cast<const SvxFontHeightItem *>(&rItem) != nullptr)aEntry.eItemType=ITEM_FONTHEIGHT;
+                        else if (dynamic_cast<const SvxCharScaleWidthItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FONTWIDTH;
+                        else if (dynamic_cast<const SvxFieldItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FIELD;
                         switch (aEntry.eItemType) {
                             case ITEM_BYTE      : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxByteItem  &>(rItem).GetValue(); aEntry.nMin=0;      aEntry.nMax=255;   break;
                             case ITEM_INT16     : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxInt16Item &>(rItem).GetValue(); aEntry.nMin=-32767; aEntry.nMax=32767; break;
@@ -1190,7 +1191,7 @@ IMPL_LINK_TYPED(SdrItemBrowser, ChangedHdl, _SdrItemBrowserControl&, rBrowse, vo
                 case ITEM_INT16 : static_cast<SfxInt16Item *>(pNewItem)->SetValue((sal_Int16 )nLongVal); break;
                 case ITEM_UINT16: static_cast<SfxUInt16Item*>(pNewItem)->SetValue((sal_uInt16)nLongVal); break;
                 case ITEM_INT32: {
-                    if(HAS_BASE(SdrAngleItem, pNewItem))
+                    if(dynamic_cast<const SdrAngleItem *>(pNewItem) != nullptr)
                     {
                         aNewText = aNewText.replace(',', '.');
                         double nVal = aNewText.toFloat();

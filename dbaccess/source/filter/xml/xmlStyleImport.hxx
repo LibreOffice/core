@@ -53,7 +53,6 @@ namespace dbaxml
 
     public:
 
-        TYPEINFO_OVERRIDE();
 
         OTableStyleContext( ODBFilter& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
@@ -96,7 +95,6 @@ namespace dbaxml
 
     public:
 
-        TYPEINFO_OVERRIDE();
 
         OTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
                 const OUString& rLName ,

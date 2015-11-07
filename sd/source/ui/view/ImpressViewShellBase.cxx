@@ -32,7 +32,6 @@
 
 namespace sd {
 
-TYPEINIT1(ImpressViewShellBase, ViewShellBase);
 
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ImpressViewShellBase object has been constructed.

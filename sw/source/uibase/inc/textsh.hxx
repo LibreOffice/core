@@ -39,7 +39,6 @@ class SW_DLLPUBLIC SwTextShell: public SwBaseShell
 
 public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

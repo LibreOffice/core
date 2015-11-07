@@ -47,7 +47,6 @@ void SwWebFrameShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_WEBFRAME_TOOLBOX);
 }
 
-TYPEINIT1(SwWebFrameShell, SwFrameShell)
 
 SwWebFrameShell::SwWebFrameShell(SwView &_rView) :
     SwFrameShell(_rView)

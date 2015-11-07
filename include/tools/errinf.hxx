@@ -24,7 +24,6 @@
 
 #include <limits.h>
 #include <rtl/ustring.hxx>
-#include <tools/rtti.hxx>
 #include <tools/errcode.hxx>
 #include <tools/toolsdllapi.h>
 
@@ -40,7 +39,6 @@ private:
     sal_uIntPtr             lUserId;
 
 public:
-                            TYPEINFO();
 
                             ErrorInfo( sal_uIntPtr lArgUserId ) :
                                 lUserId( lArgUserId ){}
@@ -59,7 +57,6 @@ private:
     EDcr_Impl*              pImpl;
 
 public:
-                            TYPEINFO_OVERRIDE();
 
                             DynamicErrorInfo(sal_uIntPtr lUserId, sal_uInt16 nMask);
     virtual                 ~DynamicErrorInfo();
@@ -74,7 +71,6 @@ private:
     OUString                aString;
 
 public:
-                            TYPEINFO_OVERRIDE();
 
                             StringErrorInfo( sal_uIntPtr lUserId,
                                             const OUString& aStringP,
@@ -89,7 +85,6 @@ private:
     OUString aArg2;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     TwoStringErrorInfo(sal_uIntPtr nUserID, const OUString & rTheArg1,
                        const OUString & rTheArg2, sal_uInt16 nFlags = 0):
@@ -104,7 +99,6 @@ public:
 class TOOLS_DLLPUBLIC MessageInfo : public DynamicErrorInfo
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     MessageInfo(sal_uIntPtr UserId, sal_uInt16 nFlags = 0) :
         DynamicErrorInfo(UserId, nFlags) {}

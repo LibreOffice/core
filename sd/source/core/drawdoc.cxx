@@ -111,7 +111,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::beans::PropertyValue;
 
-TYPEINIT1( SdDrawDocument, FmFormModel );
 
 SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
 

@@ -26,7 +26,7 @@
 class SVX_DLLPUBLIC XFillBmpStretchItem : public SfxBoolItem
 {
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             XFillBmpStretchItem( bool bStretch = true );
                             XFillBmpStretchItem( SvStream& rIn );
 

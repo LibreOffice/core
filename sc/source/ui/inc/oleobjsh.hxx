@@ -32,7 +32,6 @@ class ScViewData;
 class ScOleObjectShell: public ScDrawShell
 {
 public:
-    TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SCID_OLEOBJECT_SHELL)
 
 private:

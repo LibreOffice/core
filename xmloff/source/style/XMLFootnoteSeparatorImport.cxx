@@ -52,7 +52,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-TYPEINIT1(XMLFootnoteSeparatorImport, SvXMLImportContext);
 
 
 XMLFootnoteSeparatorImport::XMLFootnoteSeparatorImport(

@@ -44,7 +44,6 @@ protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
 public:
-    TYPEINFO_OVERRIDE();
 
     E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth);
     E3dExtrudeObj();

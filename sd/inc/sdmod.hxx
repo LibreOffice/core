@@ -78,7 +78,6 @@ typedef std::map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache
 class SdModule : public SfxModule, public SfxListener
 {
 public:
-                            TYPEINFO_OVERRIDE();
                             SFX_DECL_INTERFACE(SD_IF_SDAPP)
                             DECL_LINK_TYPED( CalcFieldValueHdl, EditFieldInfo*, void );
 

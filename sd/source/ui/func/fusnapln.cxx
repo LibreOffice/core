@@ -39,7 +39,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuSnapLine, FuPoor );
 
 FuSnapLine::FuSnapLine(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                        SdDrawDocument* pDoc, SfxRequest& rReq) :

@@ -24,7 +24,6 @@
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <tools/rtti.hxx>
 #include "ximpshap.hxx"
 
 // draw:g context (RECURSIVE)
@@ -35,7 +34,6 @@ class SdXMLGroupShapeContext : public SdXMLShapeContext
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChildren;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     SdXMLGroupShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,

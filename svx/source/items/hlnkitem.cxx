@@ -26,7 +26,8 @@
 
 
 
-TYPEINIT1_FACTORY(SvxHyperlinkItem, SfxPoolItem, new SvxHyperlinkItem(0));
+
+SfxPoolItem* SvxHyperlinkItem::CreateDefault() { return new  SvxHyperlinkItem(0);}
 
 #define HYPERLINKFF_MARKER  0x599401FE
 

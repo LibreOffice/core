@@ -304,8 +304,6 @@ void FileStreamWrapper_Impl::checkError()
         throw NotConnectedException(OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
 }
 
-TYPEINIT1( UCBStorageStream, BaseStorageStream );
-TYPEINIT1( UCBStorage, BaseStorage );
 
 #define COMMIT_RESULT_FAILURE           0
 #define COMMIT_RESULT_NOTHING_TO_DO     1

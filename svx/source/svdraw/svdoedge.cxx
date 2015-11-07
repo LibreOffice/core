@@ -164,7 +164,6 @@ sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
 }
 
 
-TYPEINIT1(SdrEdgeObj,SdrTextObj);
 
 SdrEdgeObj::SdrEdgeObj()
 :   SdrTextObj(),
@@ -2128,7 +2127,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
             Rectangle aObjBound(pObj->GetCurrentBoundRect());
             if (aObjBound.IsOver(aMouseRect)) {
                 aTestCon.ResetVars();
-                bool bEdge=HAS_BASE(SdrEdgeObj,pObj); // no BestCon for Edge
+                bool bEdge=dynamic_cast<const SdrEdgeObj *>(pObj) != nullptr; // no BestCon for Edge
                 // User-defined connectors have absolute priority.
                 // After those come Vertex, Corner and center (Best), all prioritized equally.
                 // Finally, a HitTest for the object.

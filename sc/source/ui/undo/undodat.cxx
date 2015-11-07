@@ -44,22 +44,6 @@
 #include "refundo.hxx"
 #include "markdata.hxx"
 
-TYPEINIT1(ScUndoDoOutline,          ScSimpleUndo);
-TYPEINIT1(ScUndoMakeOutline,        ScSimpleUndo);
-TYPEINIT1(ScUndoOutlineLevel,       ScSimpleUndo);
-TYPEINIT1(ScUndoOutlineBlock,       ScSimpleUndo);
-TYPEINIT1(ScUndoRemoveAllOutlines,  ScSimpleUndo);
-TYPEINIT1(ScUndoAutoOutline,        ScSimpleUndo);
-TYPEINIT1(ScUndoSubTotals,          ScDBFuncUndo);
-TYPEINIT1(ScUndoQuery,              ScDBFuncUndo);
-TYPEINIT1(ScUndoAutoFilter,         ScDBFuncUndo);
-TYPEINIT1(ScUndoDBData,             ScSimpleUndo);
-TYPEINIT1(ScUndoImportData,         ScSimpleUndo);
-TYPEINIT1(ScUndoRepeatDB,           ScSimpleUndo);
-TYPEINIT1(ScUndoDataPilot,          ScSimpleUndo);
-TYPEINIT1(ScUndoConsolidate,        ScSimpleUndo);
-TYPEINIT1(ScUndoChartData,          ScSimpleUndo);
-TYPEINIT1(ScUndoDataForm,           SfxUndoAction);
 
 // Show or hide outline groups
 

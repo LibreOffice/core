@@ -105,7 +105,6 @@ struct SdrModelImpl
 
 
 
-TYPEINIT1(SdrModel,SfxBroadcaster);
 void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
     bool bUseExtColorTable, bool bLoadRefCounts)
 {

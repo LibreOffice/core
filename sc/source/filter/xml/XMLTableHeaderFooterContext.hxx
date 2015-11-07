@@ -48,7 +48,6 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     bool    bContainsCenter;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
@@ -73,7 +72,6 @@ private:
     css::uno::Reference< css::text::XTextCursor > xOldTextCursor;
 
 public:
-    TYPEINFO_OVERRIDE();
 
     XMLHeaderFooterRegionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,

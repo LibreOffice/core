@@ -228,7 +228,6 @@ protected:
 public:
     SFX_DECL_VIEWFACTORY(SwPagePreview);
     SFX_DECL_INTERFACE(SW_PAGEPREVIEW)
-    TYPEINFO_OVERRIDE();
 
 private:
     /// SfxInterface initializer.

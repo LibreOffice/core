@@ -35,7 +35,7 @@ class SVX_DLLPUBLIC XLineDashItem : public NameOrIndex
     XDash   aDash;
 
 public:
-                            TYPEINFO_OVERRIDE();
+                            static SfxPoolItem* CreateDefault();
                             XLineDashItem() : NameOrIndex(XATTR_LINEDASH, -1) {}
                             XLineDashItem(const OUString& rName, const XDash& rTheDash);
                             XLineDashItem(SfxItemPool* pPool, const XDash& rTheDash);

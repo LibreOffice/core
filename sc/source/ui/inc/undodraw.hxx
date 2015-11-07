@@ -32,7 +32,6 @@ class ScUndoDraw: public SfxUndoAction
     void            UpdateSubShell();
 
 public:
-                            TYPEINFO_OVERRIDE();
                             ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh );
     virtual                 ~ScUndoDraw();
 

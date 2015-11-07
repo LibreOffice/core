@@ -483,7 +483,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdxcgv.hxx>
-#include <svx/sxmspitm.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unomid.hxx>
 #include <svx/xbitmap.hxx>

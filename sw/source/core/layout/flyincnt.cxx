@@ -58,7 +58,6 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
 }
 
 // #i28701#
-TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
 
 void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
                                  const Point& rRelAttr,

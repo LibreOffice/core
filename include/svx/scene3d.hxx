@@ -88,7 +88,6 @@ protected:
     void ImpCleanup3DDepthMapper();
 
 public:
-    TYPEINFO_OVERRIDE();
     E3dScene();
     E3dScene(E3dDefaultAttributes& rDefault);
     virtual ~E3dScene();

@@ -45,7 +45,6 @@ class CellValues;
 class ScUndoCursorAttr: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoCursorAttr( ScDocShell* pNewDocShell,
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             const ScPatternAttr* pOldPat, const ScPatternAttr* pNewPat,
@@ -81,7 +80,6 @@ private:
 class ScUndoEnterData: public ScSimpleUndo
 {
 public:
-    TYPEINFO_OVERRIDE();
 
     struct Value
     {
@@ -123,7 +121,6 @@ private:
 class ScUndoEnterValue: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
     ScUndoEnterValue(
         ScDocShell* pNewDocShell, const ScAddress& rNewPos,
         const ScCellValue& rUndoCell, double nVal );
@@ -149,7 +146,6 @@ private:
 class ScUndoSetCell : public ScSimpleUndo
 {
 public:
-    TYPEINFO_OVERRIDE();
     ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rOldVal, const ScCellValue& rNewVal );
 
     virtual ~ScUndoSetCell();
@@ -174,7 +170,6 @@ private:
 class ScUndoPageBreak: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoPageBreak( ScDocShell* pNewDocShell,
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             bool bNewColumn, bool bNewInsert );
@@ -200,7 +195,6 @@ private:
 class ScUndoPrintZoom: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoPrintZoom( ScDocShell* pNewDocShell, SCTAB nT,
                                     sal_uInt16 nOS, sal_uInt16 nOP, sal_uInt16 nNS, sal_uInt16 nNP );
     virtual         ~ScUndoPrintZoom();
@@ -225,7 +219,6 @@ private:
 class ScUndoThesaurus: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
     ScUndoThesaurus( ScDocShell* pNewDocShell,
                      SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                      const ScCellValue& rOldText, const ScCellValue& rNewText );
@@ -255,7 +248,6 @@ private:
 class ScUndoReplaceNote : public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
 
     /** Constructs an undo action for inserting or removing a cell note. */
                     ScUndoReplaceNote(
@@ -297,7 +289,6 @@ private:
 class ScUndoShowHideNote : public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoShowHideNote( ScDocShell& rDocShell, const ScAddress& rPos, bool bShow );
     virtual         ~ScUndoShowHideNote();
 
@@ -316,7 +307,6 @@ private:
 class ScUndoDetective: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     ScUndoDetective( ScDocShell* pNewDocShell,
                                     SdrUndoAction* pDraw, const ScDetOpData* pOperation,
                                     ScDetOpList* pUndoList = NULL );
@@ -340,7 +330,6 @@ private:
 class ScUndoRangeNames: public ScSimpleUndo
 {
 public:
-                    TYPEINFO_OVERRIDE();
                     //use nTab = -1 for global range names
                     ScUndoRangeNames( ScDocShell* pNewDocShell,
                                         ScRangeName* pOld, ScRangeName* pNew , SCTAB nTab = -1);

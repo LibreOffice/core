@@ -42,7 +42,6 @@ public:
     virtual ~SwFormatHeader();
     SwFormatHeader& operator=( const SwFormatHeader &rCpy );
 
-    TYPEINFO_OVERRIDE();
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -74,7 +73,6 @@ public:
     virtual ~SwFormatFooter();
     SwFormatFooter& operator=( const SwFormatFooter &rCpy );
 
-    TYPEINFO_OVERRIDE();
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
