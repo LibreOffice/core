@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_c1040cc8",
+        "filename": "sw/source/core/layout/findfrm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-07T15:12:52Z",
+      "side": 1,
+      "message": "pRet is known to be a nullptr at this point, shouldnt deref that. ;)",
+      "range": {
+        "startLine": 408,
+        "startChar": 46,
+        "endLine": 408,
+        "endChar": 50
+      },
+      "revId": "11150845559112e8886d627a73803a74399a4984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
