@@ -1352,7 +1352,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
             aFontSelData.maTargetName.equalsIgnoreAsciiCase("symbol") &&
             aFontSelData.maSearchName.equalsIgnoreAsciiCase("symbol"))
         {
-            pEntry->mpConversion = ConvertChar::GetRecodeData( OUString("Symbol"), OUString("AppleSymbol") );
+            pEntry->mpConversion = ConvertChar::GetRecodeData( "Symbol", "AppleSymbol" );
         }
 #endif
 
