@@ -26,10 +26,11 @@ import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
 import com.sun.star.wizards.ui.FilterComponent;
 
+import static com.sun.star.wizards.ui.UIConsts.RID_QUERY;
+
 public class QuerySummary extends QueryMetaData
 {
 
-    static final private int RID_QUERY = 2300;
     private String sSummary;
     private Resource oResource;
     private final String sSeparator;
