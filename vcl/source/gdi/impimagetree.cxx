@@ -47,6 +47,7 @@
 #include <vcldemo-debug.hxx>
 
 #include <vcl/BitmapProcessor.hxx>
+#include <vcl/BitmapTools.hxx>
 
 using namespace css;
 
@@ -85,6 +86,10 @@ static void loadImageFromStream(std::shared_ptr<SvStream> xStream, OUString cons
         vcl::PNGReader aPNGReader(*xStream);
         aPNGReader.SetIgnoreGammaChunk( true );
         rBitmap = aPNGReader.Read();
+    }
+    else if (rPath.endsWith(".svg"))
+    {
+        vcl::BitmapTools::loadFromSvg(*xStream.get(), rPath, rBitmap);
     }
     else
     {
