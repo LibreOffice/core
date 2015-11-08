@@ -40,7 +40,7 @@ float snoise(vec2 P) {
 }
 
 void main() {
-     float sn = snoise(256*v_texturePosition);
+     float sn = snoise(10.0*v_texturePosition);
      if( sn < time)
          gl_FragColor = texture2D(enteringSlideTexture, v_texturePosition);
      else
