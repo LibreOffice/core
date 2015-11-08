@@ -75,8 +75,6 @@ void BitmapTools::loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx
         const css::uno::Reference<css::rendering::XBitmap> xBitmap(
             xPrimitive2DRenderer->rasterize(aPrimitiveSequence, aViewParameters, nDPI, nDPI, aRealRect, 256*256));
 
-        printf("%f %f %f %f\n", aRealRect.X1, aRealRect.Y1, aRealRect.X2, aRealRect.Y2);
-
         if (xBitmap.is())
         {
             const css::uno::Reference<css::rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
@@ -84,7 +82,6 @@ void BitmapTools::loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx
             if (xIntBmp.is())
             {
                 rBitmapEx = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
-                printf("Size: %d %d\n", rBitmapEx.GetSizePixel().Width(), rBitmapEx.GetSizePixel().Height());
             }
         }
     }
