@@ -18,7 +18,10 @@
 
 #include "TableFillingAndNavigationTools.hxx"
 
-FormulaTemplate::FormulaTemplate(ScDocument* pDoc) : mpDoc(pDoc) {}
+FormulaTemplate::FormulaTemplate(ScDocument* pDoc)
+    : mpDoc(pDoc)
+    , mbUse3D(true)
+{}
 
 void FormulaTemplate::setTemplate(const OUString& aTemplate)
 {
@@ -35,24 +38,25 @@ const OUString& FormulaTemplate::getTemplate()
     RangeReplacementMap::iterator itRange;
     for (itRange = mRangeReplacementMap.begin(); itRange != mRangeReplacementMap.end(); ++itRange)
     {
-        applyRange(itRange->first, itRange->second);
+        applyRange(itRange->first, itRange->second, mbUse3D);
     }
     AddressReplacementMap::iterator itAddress;
     for (itAddress = mAddressReplacementMap.begin(); itAddress != mAddressReplacementMap.end(); ++itAddress)
     {
-        applyAddress(itAddress->first, itAddress->second);
+        applyAddress(itAddress->first, itAddress->second, mbUse3D);
     }
     return mTemplate;
 }
 
 void FormulaTemplate::autoReplaceRange(const OUString& aVariable, const ScRange& rRange)
 {
-    mRangeReplacementMap.insert ( std::pair<OUString, ScRange>(aVariable, rRange) );
+    mRangeReplacementMap[aVariable] = rRange;
 }
 
 void FormulaTemplate::autoReplaceAddress(const OUString& aVariable, ScAddress aAddress)
 {
-    mAddressReplacementMap.insert ( std::pair<OUString, ScAddress>(aVariable, aAddress) );
+
+    mAddressReplacementMap[aVariable] = aAddress;
 }
 
 void FormulaTemplate::applyRange(const OUString& aVariable, const ScRange& aRange, bool b3D)
@@ -306,6 +310,11 @@ ScRange DataRangeByColumnIterator::get()
     );
 }
 
+size_t DataRangeByColumnIterator::size()
+{
+    return mInputRange.aEnd.Row() - mInputRange.aStart.Row() + 1;
+}
+
 void DataRangeByColumnIterator::reset()
 {
     mCol = mInputRange.aStart.Col();
@@ -342,6 +351,11 @@ ScRange DataRangeByRowIterator::get()
     );
 }
 
+size_t DataRangeByRowIterator::size()
+{
+    return mInputRange.aEnd.Col() - mInputRange.aStart.Col() + 1;
+}
+
 void DataRangeByRowIterator::reset()
 {
     mRow = mInputRange.aStart.Row();
@@ -351,5 +365,6 @@ DataCellIterator DataRangeByRowIterator::iterateCells()
 {
     return DataCellIterator(get(), true);
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
