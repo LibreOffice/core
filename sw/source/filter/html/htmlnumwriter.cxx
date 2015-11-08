@@ -180,14 +180,13 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         rWrt.OutNewLine(); // <OL>/<UL> in eine neue Zeile
 
         rWrt.m_aBulletGrfs[i].clear();
-        OStringBuffer sOut;
-        sOut.append('<');
+        OString sOut = "<";
         const SwNumFormat& rNumFormat = rInfo.GetNumRule()->Get( i );
         sal_Int16 eType = rNumFormat.GetNumberingType();
         if( SVX_NUM_CHAR_SPECIAL == eType )
         {
             // Aufzaehlungs-Liste: <OL>
-            sOut.append(OOO_STRING_SVTOOLS_HTML_unorderlist);
+            sOut += OString(OOO_STRING_SVTOOLS_HTML_unorderlist);
 
             // den Typ ueber das Bullet-Zeichen bestimmen
             const sal_Char *pStr = 0;
@@ -206,15 +205,14 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
 
             if( pStr )
             {
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).
-                    append("=\"").append(pStr).append("\"");
+                sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"" + OString(pStr) + "\"";
             }
         }
         else if( SVX_NUM_BITMAP == eType )
         {
             // Unordered list: <UL>
-            sOut.append(OOO_STRING_SVTOOLS_HTML_unorderlist);
-            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            sOut += OString(OOO_STRING_SVTOOLS_HTML_unorderlist);
+            rWrt.Strm().WriteOString( sOut );
             OutHTML_BulletImage( rWrt,
                                     0,
                                     rNumFormat.GetBrush() );
@@ -222,7 +220,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         else
         {
             // Ordered list: <OL>
-            sOut.append(OOO_STRING_SVTOOLS_HTML_orderlist);
+            sOut += OString(OOO_STRING_SVTOOLS_HTML_orderlist);
 
             // den Typ ueber das Format bestimmen
             sal_Char cType = 0;
@@ -245,8 +243,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
             if( cType )
             {
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).
-                    append("=\"").append(cType).append("\"");
+                sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"" + OString(cType) + "\"";
             }
 
             sal_uInt16 nStartVal = rNumFormat.GetStart();
@@ -265,13 +262,12 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
             if( nStartVal != 1 )
             {
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_start).
-                    append("=\"").append(static_cast<sal_Int32>(nStartVal)).append("\"");
+                sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_start) + "=\"" + OString::number(static_cast<sal_Int32>(nStartVal)) + "\"";
             }
         }
 
         if (!sOut.isEmpty())
-            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+            rWrt.Strm().WriteOString( sOut );
 
         if( rWrt.m_bCfgOutStyles )
             OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (sal_uInt8)i );
