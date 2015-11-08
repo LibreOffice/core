@@ -2378,6 +2378,7 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     }
 
     boost::property_tree::ptree aTree;
+    aTree.put("commandName", ".uno:ViewRowColumnHeaders");
     aTree.add_child("rows", aRows);
     aTree.add_child("columns", aCols);
     std::stringstream aStream;
