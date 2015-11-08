@@ -33,26 +33,6 @@
 
 namespace configmgr {
 
-namespace {
-
-// Work around some compilers' failure to accept
-// std::binder1st(std::ptr_fun(&Data::equalTemplateNames), ...):
-class EqualTemplateNames:
-    public std::unary_function< OUString const &, bool >
-{
-public:
-    inline explicit EqualTemplateNames(OUString const & shortName):
-        shortName_(shortName) {}
-
-    inline bool operator ()(OUString const & longName) const
-    { return Data::equalTemplateNames(shortName_, longName); }
-
-private:
-    OUString const & shortName_;
-};
-
-}
-
 SetNode::SetNode(
     int layer, OUString const & defaultTemplateName,
     OUString const & templateName):
@@ -86,7 +66,8 @@ bool SetNode::isValidTemplate(OUString const & templateName) const {
     return Data::equalTemplateNames(templateName, defaultTemplateName_) ||
         (std::find_if(
             additionalTemplateNames_.begin(),
-            additionalTemplateNames_.end(), EqualTemplateNames(templateName)) !=
+            additionalTemplateNames_.end(),
+            [&templateName](OUString const & longName) { return Data::equalTemplateNames(templateName, longName); } ) !=
          additionalTemplateNames_.end());
 }
 
