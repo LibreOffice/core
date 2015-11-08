@@ -60,15 +60,21 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
 
         case MCE_TOKEN( Choice ):
             {
-                OUString aRequires = rAttribs.getString( ( XML_Requires ), "none" );
-                if (!getFilter().hasNamespaceURL(aRequires))
-                    // Check to see if we have this namespace defined first,
-                    // because calling getNamespaceURL() would throw if the
-                    // namespace doesn't exist.
+                if (aMceState.empty() || aMceState.back() != MCE_STARTED)
                     return false;
 
-                aRequires = getFilter().getNamespaceURL( aRequires );
-                if( getFilter().getNamespaceId( aRequires ) > 0 && !aMceState.empty() && aMceState.back() == MCE_STARTED )
+                OUString aRequires = rAttribs.getString( (XML_Requires ), OUString("none") );
+
+                // At this point we can't access namespaces as the correct xml filter
+                // is long gone. For now let's decide depending on a list of supported
+                // namespaces like we do in writerfilter
+
+                static std::vector<OUString> aSupportedNS =
+                {
+                    "p14",
+                };
+
+                if (std::find(aSupportedNS.begin(), aSupportedNS.end(), aRequires) != aSupportedNS.end())
                     aMceState.back() = MCE_FOUND_CHOICE;
                 else
                     return false;
