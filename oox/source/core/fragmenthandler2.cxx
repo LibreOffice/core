@@ -63,7 +63,7 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
                 if (aMceState.empty() || aMceState.back() != MCE_STARTED)
                     return false;
 
-                OUString aRequires = rAttribs.getString( (XML_Requires ), OUString("none") );
+                OUString aRequires = rAttribs.getString( (XML_Requires ), "none" );
 
                 // At this point we can't access namespaces as the correct xml filter
                 // is long gone. For now let's decide depending on a list of supported
