@@ -552,7 +552,6 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     Color    aNullCol(RGB_Color(COL_BLACK));
 
-    XDash     aNullDash;
     XGradient aNullGrad(aNullCol,RGB_Color(COL_WHITE));
               aNullGrad.SetStartIntens( 100 );
               aNullGrad.SetEndIntens( 100 );

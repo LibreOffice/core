@@ -2403,7 +2403,6 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     const Graphic aNullGraphic;
     const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
     const ::Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
-    const XDash aNullDash;
     const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
     const XHatch aNullHatch(aNullLineCol);
 
