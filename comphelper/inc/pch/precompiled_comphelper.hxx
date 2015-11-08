@@ -16,7 +16,6 @@
 
 #include <algorithm>
 #include <assert.h>
-#include <boost/bind.hpp>
 #include <boost/current_function.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
