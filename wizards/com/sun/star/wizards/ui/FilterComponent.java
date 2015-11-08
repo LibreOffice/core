@@ -60,7 +60,6 @@ public class FilterComponent
     private final String slblOperators;
     private final String slblValue;
     private WizardDialog CurUnoDialog;
-    private static final int BaseID = 2300;
     private final String sIncSuffix;
     private final ControlRow[] oControlRows;
     private final String sDuplicateCondition;
@@ -373,14 +372,14 @@ public class FilterComponent
         boolean bEnabled;
         sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "optMatchAll");
 
-        String soptMatchAll = CurUnoDialog.m_oResource.getResText(BaseID + 9);
-        String soptMatchAny = CurUnoDialog.m_oResource.getResText(BaseID + 10);
-        slblFieldNames = CurUnoDialog.m_oResource.getResText(BaseID + 17);
-        slblOperators = CurUnoDialog.m_oResource.getResText(BaseID + 24);
-        slblValue = CurUnoDialog.m_oResource.getResText(BaseID + 25);
-        sLogicOperators = CurUnoDialog.m_oResource.getResArray(BaseID + 26, 10 /* 7 */); // =, <>, <, >, <=, >=, like, !like, is null, !is null
+        String soptMatchAll = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 9);
+        String soptMatchAny = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 10);
+        slblFieldNames = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 17);
+        slblOperators = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 24);
+        slblValue = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 25);
+        sLogicOperators = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_QUERY + 26, 10 /* 7 */); // =, <>, <, >, <=, >=, like, !like, is null, !is null
 
-        sDuplicateCondition = CurUnoDialog.m_oResource.getResText(BaseID + 89);
+        sDuplicateCondition = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 89);
 
         // create Radiobuttons
         // * match all
