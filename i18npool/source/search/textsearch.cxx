@@ -301,15 +301,18 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             for ( sal_Int32 k = 0; k < nGroups; k++ )
             {
                 const sal_Int32 nStart = sres.startOffset[k] - nExtraOffset;
-                if (startPos > 0 || nStart > 0)
-                    sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
+                assert(nStart >= 0); // if not (e.g. searching for $ with ICU regex engine), then what?
+                sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
                 //               next position behind the last found character!
                 //               "a b c" find "b" must return 2,3 and not 2,4!!!
                 const sal_Int32 nStop = sres.endOffset[k] - nExtraOffset;
-                if (startPos > 0 || nStop > 0)
+                assert(nStop >= 0);
+                if (nStop > 0)
                     sres.endOffset[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
+                else
+                    sres.endOffset[k] = offset[0];
             }
         }
     }
