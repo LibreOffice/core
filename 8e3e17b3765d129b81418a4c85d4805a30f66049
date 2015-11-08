@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_81c84476",
+        "filename": "idl/source/objects/types.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "???",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_61c5605a",
+        "filename": "include/sfx2/msg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "???",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_c1a08ca8",
+        "filename": "include/sfx2/msg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "???",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_01abb48a",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "return 0??",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_e1af9092",
+        "filename": "svx/source/dialog/rulritem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "return 0?",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_4195bc3e",
+        "filename": "svx/source/items/SmartTagItem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "return 0?",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_21923858",
+        "filename": "svx/source/svdraw/svdattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "??",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_e1b830e8",
+        "filename": "svx/source/svdraw/svdattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "??",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_41ce5c84",
+        "filename": "svx/source/xoutdev/xattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "??",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_21cb5874",
+        "filename": "svx/source/xoutdev/xattr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-08T07:57:31Z",
+      "side": 1,
+      "message": "??",
+      "revId": "8e3e17b3765d129b81418a4c85d4805a30f66049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
