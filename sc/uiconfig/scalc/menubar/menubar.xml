@@ -545,6 +545,7 @@
                     <menu:menuitem menu:id=".uno:CovarianceDialog"/>
                     <menu:menuitem menu:id=".uno:ExponentialSmoothingDialog"/>
                     <menu:menuitem menu:id=".uno:MovingAverageDialog"/>
+                    <menu:menuitem menu:id=".uno:RegressionDialog"/>
                     <menu:menuitem menu:id=".uno:TTestDialog"/>
                     <menu:menuitem menu:id=".uno:FTestDialog"/>
                     <menu:menuitem menu:id=".uno:ZTestDialog"/>

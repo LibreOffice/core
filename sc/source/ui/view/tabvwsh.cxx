@@ -96,6 +96,7 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScCovarianceDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScExponentialSmoothingDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScMovingAverageDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScRegressionDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScTTestDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScFTestDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScZTestDialogWrapper::GetChildWindowId());

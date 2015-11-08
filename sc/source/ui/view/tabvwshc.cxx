@@ -66,6 +66,7 @@
 #include "CovarianceDialog.hxx"
 #include "ExponentialSmoothingDialog.hxx"
 #include "MovingAverageDialog.hxx"
+#include "RegressionDialog.hxx"
 #include "TTestDialog.hxx"
 #include "FTestDialog.hxx"
 #include "ZTestDialog.hxx"
@@ -368,6 +369,12 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         case SID_MOVING_AVERAGE_DIALOG:
         {
             pResult = VclPtr<ScMovingAverageDialog>::Create( pB, pCW, pParent, &GetViewData() );
+        }
+        break;
+
+        case SID_REGRESSION_DIALOG:
+        {
+            pResult = VclPtr<ScRegressionDialog>::Create( pB, pCW, pParent, &GetViewData() );
         }
         break;
 

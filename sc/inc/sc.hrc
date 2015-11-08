@@ -269,11 +269,12 @@
 #define SID_COVARIANCE_DIALOG               (SC_MESSAGE_START + 75)
 #define SID_EXPONENTIAL_SMOOTHING_DIALOG    (SC_MESSAGE_START + 76)
 #define SID_MOVING_AVERAGE_DIALOG           (SC_MESSAGE_START + 77)
-#define SID_TTEST_DIALOG                    (SC_MESSAGE_START + 78)
-#define SID_FTEST_DIALOG                    (SC_MESSAGE_START + 79)
-#define SID_ZTEST_DIALOG                    (SC_MESSAGE_START + 80)
-#define SID_CHI_SQUARE_TEST_DIALOG          (SC_MESSAGE_START + 81)
-#define SID_SEARCH_RESULTS_DIALOG           (SC_MESSAGE_START + 82)
+#define SID_REGRESSION_DIALOG               (SC_MESSAGE_START + 78)
+#define SID_TTEST_DIALOG                    (SC_MESSAGE_START + 79)
+#define SID_FTEST_DIALOG                    (SC_MESSAGE_START + 80)
+#define SID_ZTEST_DIALOG                    (SC_MESSAGE_START + 81)
+#define SID_CHI_SQUARE_TEST_DIALOG          (SC_MESSAGE_START + 82)
+#define SID_SEARCH_RESULTS_DIALOG           (SC_MESSAGE_START + 83)
 
 // functions
 

@@ -985,6 +985,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
             break;
+        case SID_REGRESSION_DIALOG:
+            {
+                sal_uInt16 nId  = ScRegressionDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd == nullptr );
+            }
+            break;
         case SID_TTEST_DIALOG:
             {
                 sal_uInt16 nId  = ScTTestDialogWrapper::GetChildWindowId();

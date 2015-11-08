@@ -108,6 +108,13 @@ private:
     ScMovingAverageDialogWrapper() = delete;
 };
 
+class ScRegressionDialogWrapper :
+    public ChildWindowWrapper<SID_REGRESSION_DIALOG>
+{
+private:
+    ScRegressionDialogWrapper() = delete;
+};
+
 class ScTTestDialogWrapper :
     public ChildWindowWrapper<SID_TTEST_DIALOG>
 {

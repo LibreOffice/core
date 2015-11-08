@@ -243,6 +243,7 @@ void ScDLL::Init()
     ScCovarianceDialogWrapper           ::RegisterChildWindow(false, pMod);
     ScExponentialSmoothingDialogWrapper ::RegisterChildWindow(false, pMod);
     ScMovingAverageDialogWrapper        ::RegisterChildWindow(false, pMod);
+    ScRegressionDialogWrapper           ::RegisterChildWindow(false, pMod);
     ScTTestDialogWrapper                ::RegisterChildWindow(false, pMod);
     ScFTestDialogWrapper                ::RegisterChildWindow(false, pMod);
     ScZTestDialogWrapper                ::RegisterChildWindow(false, pMod);

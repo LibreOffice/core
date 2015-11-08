@@ -162,6 +162,7 @@ interface CellSelection
     SID_CORRELATION_DIALOG              [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_COVARIANCE_DIALOG               [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_EXPONENTIAL_SMOOTHING_DIALOG    [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_REGRESSION_DIALOG               [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_MOVING_AVERAGE_DIALOG           [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_TTEST_DIALOG                    [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_FTEST_DIALOG                    [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]

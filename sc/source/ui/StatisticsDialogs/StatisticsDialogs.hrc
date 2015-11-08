@@ -55,13 +55,15 @@
 #define STR_COVARIANCE_UNDO_NAME                    63
 #define STR_EXPONENTIAL_SMOOTHING_UNDO_NAME         64
 #define STR_MOVING_AVERAGE_UNDO_NAME                65
-#define STR_TTEST                                   66
-#define STR_TTEST_UNDO_NAME                         67
-#define STR_FTEST                                   68
-#define STR_FTEST_UNDO_NAME                         69
-#define STR_ZTEST                                   70
-#define STR_ZTEST_UNDO_NAME                         71
-#define STR_CHI_SQUARE_TEST                         72
+#define STR_REGRESSION                              66
+#define STR_REGRESSION_UNDO_NAME                    67
+#define STR_TTEST                                   68
+#define STR_TTEST_UNDO_NAME                         69
+#define STR_FTEST                                   70
+#define STR_FTEST_UNDO_NAME                         71
+#define STR_ZTEST                                   72
+#define STR_ZTEST_UNDO_NAME                         73
+#define STR_CHI_SQUARE_TEST                         74
 
 #define STR_COLUMN_LABEL_TEMPLATE                   100
 #define STR_ROW_LABEL_TEMPLATE                      101
@@ -92,6 +94,15 @@
 #define STR_P_VALUE_LABEL                           149
 #define STR_CRITICAL_VALUE_LABEL                    150
 #define STR_TEST_STATISTIC_LABEL                    151
+
+#define STR_LABEL_LINEAR                            160
+#define STR_LABEL_LOGARITHMIC                       161
+#define STR_LABEL_POWER                             162
+
+#define STR_LABEL_REGRESSION_MODEL                  170
+#define STR_LABEL_RSQUARED                          171
+#define STR_LABEL_SLOPE                             172
+#define STR_LABEL_INTERCEPT                         173
 
 #define STR_FTEST_P_RIGHT_TAIL                      200
 #define STR_FTEST_F_CRITICAL_RIGHT_TAIL             201

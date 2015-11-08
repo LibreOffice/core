@@ -305,6 +305,14 @@ Resource RID_STATISTICS_DLGS
     {
         Text [ en-US ] = "Test of Independence (Chi-Square)";
     };
+    String STR_REGRESSION_UNDO_NAME
+    {
+        Text [ en-US ] = "Regression";
+    };
+    String STR_REGRESSION
+    {
+        Text [ en-US ] = "Regression";
+    };
 
     /* Common */
     String STR_COLUMN_LABEL_TEMPLATE
@@ -354,6 +362,38 @@ Resource RID_STATISTICS_DLGS
     String STR_TEST_STATISTIC_LABEL
     {
         Text [ en-US ] = "Test Statistic";
+    };
+
+    /* RegressionDialog */
+
+    String STR_LABEL_LINEAR
+    {
+        Text [ en-US ] = "Linear";
+    };
+    String STR_LABEL_LOGARITHMIC
+    {
+        Text [ en-US ] = "Logarithmic";
+    };
+    String STR_LABEL_POWER
+    {
+        Text [ en-US ] = "Power";
+    };
+
+    String STR_LABEL_REGRESSION_MODEL
+    {
+        Text [ en-US ] = "Regression Model";
+    };
+    String STR_LABEL_RSQUARED
+    {
+        Text [ en-US ] = "R^2";
+    };
+    String STR_LABEL_SLOPE
+    {
+        Text [ en-US ] = "Slope";
+    };
+    String STR_LABEL_INTERCEPT
+    {
+        Text [ en-US ] = "Intercept";
     };
 
     /*F Test */
