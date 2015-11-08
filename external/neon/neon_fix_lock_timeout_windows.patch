@@ -1,0 +1,27 @@
+--- src.origin/ne_locks.c	2007-02-05 11:09:27.000000000 +0100
++++ src/ne_locks.c	2015-11-08 17:21:52.968561488 +0100
+@@ -428,10 +428,20 @@
+     if (ne_strcasecmp(timeout, "infinite") == 0) {
+ 	return NE_TIMEOUT_INFINITE;
+     } else if (strncasecmp(timeout, "Second-", 7) == 0) {
+-	long to = strtol(timeout+7, NULL, 10);
+-	if (to == LONG_MIN || to == LONG_MAX)
+-	    return NE_TIMEOUT_INVALID;
+-	return to;
++        // according RFC 4918 the value used for lock timeout is unsigned 32 bit
++        // see: <http://tools.ietf.org/html/rfc4918#section-10.7>
++        // adapt it to the 'long' used internally by neon instead
++        // LONG_MAX means around 68 years.
++        unsigned long to1 = strtoul(timeout+7, NULL, 10);
++        long to;
++        if (to1 >= LONG_MAX)
++            to = LONG_MAX - 1;
++        else
++            to = (long)to1;
++        NE_DEBUG(NE_DBG_LOCKS, "Received lock timeout: %ld\n", to);
++        if (to == LONG_MIN || to == LONG_MAX)
++            return NE_TIMEOUT_INVALID;
++        return to;
+     } else {
+ 	return NE_TIMEOUT_INVALID;
+     }

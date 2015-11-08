@@ -17,6 +17,16 @@ $(eval $(call gb_UnpackedTarball_add_files,neon,src,\
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,neon,0))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,neon,\
+	external/neon/neon.patch \
+	external/neon/neon_ne_set_request_flag.patch \
+	external/neon/neon_with_gnutls.patch \
+	external/neon/ubsan.patch \
+	external/neon/neon_fix_lock_token_on_if.patch \
+	external/neon/neon_fix_lock_timeout_windows.patch \
+))
+else
 $(eval $(call gb_UnpackedTarball_add_patches,neon,\
 	external/neon/neon.patch \
 	external/neon/neon_ne_set_request_flag.patch \
@@ -24,5 +34,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,neon,\
 	external/neon/ubsan.patch \
 	external/neon/neon_fix_lock_token_on_if.patch \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
