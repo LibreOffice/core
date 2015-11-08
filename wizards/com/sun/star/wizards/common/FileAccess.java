@@ -22,10 +22,6 @@
 
 package com.sun.star.wizards.common;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.Locale;
-import com.sun.star.uno.Exception;
-import com.sun.star.util.XMacroExpander;
 // import com.sun.star.wizards.common.NoValidPathException;
 import java.io.File;
 import java.util.ArrayList;
@@ -33,17 +29,25 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.document.XDocumentProperties;
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
 // import com.sun.star.io.XStream;
 import com.sun.star.io.XTextInputStream;
+import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.ucb.*;
+import com.sun.star.ucb.CommandAbortedException;
+import com.sun.star.ucb.XFileIdentifierConverter;
+import com.sun.star.ucb.XSimpleFileAccess;
+import com.sun.star.ucb.XSimpleFileAccess2;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.DateTime;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.document.XDocumentProperties;
+import com.sun.star.util.XMacroExpander;
+import com.sun.star.wizards.ui.UIConsts;
 
 /**
  * This class delivers static convenience methods
@@ -471,9 +475,9 @@ public class FileAccess
         try
         {
             Resource oResource = new Resource(xMSF, "ImportWizard", "imp");
-            sNoDirCreation = oResource.getResText(1050);
-            String sMsgDirNotThere = oResource.getResText(1051);
-            String sQueryForNewCreation = oResource.getResText(1052);
+            sNoDirCreation = oResource.getResText(UIConsts.RID_DB_COMMON + 50);
+            String sMsgDirNotThere = oResource.getResText(UIConsts.RID_DB_COMMON + 51);
+            String sQueryForNewCreation = oResource.getResText(UIConsts.RID_DB_COMMON + 52);
             String OSPath = JavaTools.convertfromURLNotation(Path);
             String sQueryMessage = JavaTools.replaceSubString(sMsgDirNotThere, OSPath, "%1");
             sQueryMessage = sQueryMessage + (char) 13 + sQueryForNewCreation;

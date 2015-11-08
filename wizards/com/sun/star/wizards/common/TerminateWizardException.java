@@ -24,6 +24,7 @@ package com.sun.star.wizards.common;
 
 // import com.sun.star.wizards.common.Resource;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.wizards.ui.UIConsts;
 
 public class TerminateWizardException extends Exception
 {
@@ -31,7 +32,7 @@ public class TerminateWizardException extends Exception
     public TerminateWizardException(XMultiServiceFactory xMSF)
     {
         Resource oResource = new Resource(xMSF, "AutoPilot", "dbw");
-        String sErrorMessage = oResource.getResText(1006);
+        String sErrorMessage = oResource.getResText(UIConsts.RID_DB_COMMON + 6);
         SystemDialog.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sErrorMessage);
         printStackTrace(System.out);
     }

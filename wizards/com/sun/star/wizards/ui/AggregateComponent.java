@@ -200,14 +200,13 @@ public class AggregateComponent extends ControlScroller
     {
         if (i == 0)
         {
-            int BaseID = 2300;
-            soptDetailQuery = CurUnoDialog.m_oResource.getResText(BaseID + 11);
-            soptSummaryQuery = CurUnoDialog.m_oResource.getResText(BaseID + 12);
-            slblAggregate = CurUnoDialog.m_oResource.getResText(BaseID + 16);
-            slblFieldNames = CurUnoDialog.m_oResource.getResText(BaseID + 17);
-            sFunctions = CurUnoDialog.m_oResource.getResArray(BaseID + 40, 4);
+            soptDetailQuery = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 11);
+            soptSummaryQuery = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 12);
+            slblAggregate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 16);
+            slblFieldNames = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 17);
+            sFunctions = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_QUERY + 40, 4);
 
-            sDuplicateAggregateFunction = CurUnoDialog.m_oResource.getResText(BaseID + 90);
+            sDuplicateAggregateFunction = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 90);
         }
         if (ControlRowVector == null)
         {
