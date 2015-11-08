@@ -867,27 +867,10 @@ String RID_DB_QUERY_WIZARD_START + 43
     Text [ en-US] = "get the maximum of";
 };
 
-
 String RID_DB_QUERY_WIZARD_START + 44
 {
-    Text [ en-US] = "get the sum of <FIELD>";
+    Text [ en-US] = "get the count of";
 };
-
-String RID_DB_QUERY_WIZARD_START + 45
-{
-    Text [ en-US] = "get the average of <FIELD>";
-};
-
-String RID_DB_QUERY_WIZARD_START + 46
-{
-    Text [ en-US] = "get the minimum of <FIELD>";
-};
-
-String RID_DB_QUERY_WIZARD_START + 47
-{
-    Text [ en-US] = "get the maximum of <FIELD>";
-};
-
 
 String RID_DB_QUERY_WIZARD_START + 48
 {

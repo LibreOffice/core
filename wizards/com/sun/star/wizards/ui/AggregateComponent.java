@@ -39,7 +39,7 @@ public class AggregateComponent extends ControlScroller
     String[] sFunctions;
     String[] sFunctionOperators = new String[]
     {
-        "SUM", "AVG", "MIN", "MAX"
+        "SUM", "AVG", "MIN", "MAX", "COUNT"
     };
     QueryMetaData CurDBMetaData;
     XButton optDetailQuery;
@@ -204,7 +204,7 @@ public class AggregateComponent extends ControlScroller
             soptSummaryQuery = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 12);
             slblAggregate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 16);
             slblFieldNames = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 17);
-            sFunctions = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_QUERY + 40, 4);
+            sFunctions = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_QUERY + 40, 5);
 
             sDuplicateAggregateFunction = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 90);
         }
