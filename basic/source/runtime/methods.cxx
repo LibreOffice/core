@@ -4280,7 +4280,7 @@ RTLFUNC(MsgBox)
     if( nArgCount >= 4 )
         aTitle = rPar.Get(3)->GetString();
     else
-        aTitle = GetpApp()->GetAppName();
+        aTitle = GetpApp()->GetDisplayName();
 
     nType &= (16+32+64);
     MessBox* pBox = 0;
