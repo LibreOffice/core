@@ -29,6 +29,7 @@ public:
     virtual bool Close() override;
 
 protected:
+    void dispose() override;
     virtual sal_Int16 GetUndoNameId() override;
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 };

@@ -85,11 +85,21 @@ ScRegressionDialog::ScRegressionDialog(
 }
 
 ScRegressionDialog::~ScRegressionDialog()
-{}
+{
+    disposeOnce();
+}
 
 bool ScRegressionDialog::Close()
 {
     return DoClose(ScRegressionDialogWrapper::GetChildWindowId());
+}
+
+void ScRegressionDialog::dispose()
+{
+    mpLinearCheckBox.disposeAndClear();
+    mpLogarithmicCheckBox.disposeAndClear();
+    mpPowerCheckBox.disposeAndClear();
+    ScStatisticsTwoVariableDialog::dispose();
 }
 
 sal_Int16 ScRegressionDialog::GetUndoNameId()
