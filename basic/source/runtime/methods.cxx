@@ -4625,7 +4625,7 @@ RTLFUNC(MsgBox)
     }
     else
     {
-        aTitle = Application::GetAppName();
+        aTitle = Application::GetDisplayName();
     }
 
     nType &= (16+32+64);
