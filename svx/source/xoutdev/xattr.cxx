@@ -434,8 +434,8 @@ sal_uInt16 XLineStyleItem::GetValueCount() const
     return 3;
 }
 
-XDash::XDash(css::drawing::DashStyle eTheDash, sal_uInt16 nTheDots, sal_uIntPtr nTheDotLen,
-             sal_uInt16 nTheDashes, sal_uIntPtr nTheDashLen, sal_uIntPtr nTheDistance) :
+XDash::XDash(css::drawing::DashStyle eTheDash, sal_uInt16 nTheDots, sal_uInt32 nTheDotLen,
+             sal_uInt16 nTheDashes, sal_uInt32 nTheDashLen, sal_uInt32 nTheDistance) :
     eDash(eTheDash),
     nDots(nTheDots),
     nDotLen(nTheDotLen),
@@ -968,7 +968,7 @@ bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_LINEDASH_DASHLEN:
         case MID_LINEDASH_DISTANCE:
         {
-            sal_Int32 nVal = 0;
+            sal_uInt32 nVal = 0;
             if(!(rVal >>= nVal))
                 return false;
 
