@@ -31,11 +31,11 @@ import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
 import com.sun.star.wizards.ui.FilterComponent;
 
+import static com.sun.star.wizards.ui.UIConsts.RID_QUERY;
+
 public class QuerySummary extends QueryMetaData
 {
 
-    final protected int RID_QUERY = 2300;
-    final protected int RID_REPORT = 2400;
     String sSummary;
     Resource oResource;
     // XMultiServiceFactory xMSF;
