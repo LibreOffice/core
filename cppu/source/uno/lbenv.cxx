@@ -1050,10 +1050,16 @@ static bool loadEnv(OUString const  & cLibStem,
     // late init with some code from matching uno language binding
     // will be unloaded by environment
     osl::Module aMod;
-    bool bMod = cppu::detail::loadModule(aMod, cLibStem);
-
-    if (!bMod)
+    try {
+        bool bMod = cppu::detail::loadModule(aMod, cLibStem);
+        if (!bMod)
+            return false;
+    }
+    catch(...) {
+        // Catch everything and convert to return false
         return false;
+    }
+
 
     uno_initEnvironmentFunc fpInit = reinterpret_cast<uno_initEnvironmentFunc>(aMod.getSymbol(UNO_INIT_ENVIRONMENT));
 
