@@ -22,12 +22,15 @@
 #include <hints.hxx>
 #include <swcache.hxx>
 #include <swfntcch.hxx>
+#include <tools/debug.hxx>
 
 
 TYPEINIT0( SwClient );
 
 SwClient::~SwClient()
 {
+    if(GetRegisteredIn())
+        DBG_TESTSOLARMUTEX();
     OSL_ENSURE( !pRegisteredIn || pRegisteredIn->HasWriterListeners(), "SwModify still known, but Client already disconnected!" );
     if( pRegisteredIn && pRegisteredIn->HasWriterListeners() )
         pRegisteredIn->Remove( this );
@@ -35,6 +38,7 @@ SwClient::~SwClient()
 
 void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
 {
+    DBG_TESTSOLARMUTEX();
     // this method only handles notification about dying SwModify objects
     if( (!pOld || pOld->Which() != RES_OBJECTDYING) )
         return;
@@ -58,6 +62,7 @@ void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
 
 SwModify::~SwModify()
 {
+    DBG_TESTSOLARMUTEX();
     OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
 
     if ( IsInCache() )
@@ -94,6 +99,7 @@ SwModify::~SwModify()
 
 void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
+    DBG_TESTSOLARMUTEX();
     if ( IsInCache() || IsInSwFntCache() )
     {
         const sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
@@ -144,6 +150,7 @@ bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 void SwModify::Add( SwClient* pDepend )
 {
     OSL_ENSURE( !bLockClientList, "Client inserted while in Modify" );
+    DBG_TESTSOLARMUTEX();
 
     if(pDepend->pRegisteredIn != this )
     {
@@ -187,6 +194,7 @@ SwClient* SwModify::Remove( SwClient* pDepend )
     if(m_bInDocDTOR)
         return nullptr;
 
+    DBG_TESTSOLARMUTEX();
     assert(pDepend->pRegisteredIn == this);
 
     // SwClient is my listener

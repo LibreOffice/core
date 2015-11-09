@@ -1217,7 +1217,11 @@ SwXTextTableRow::SwXTextTableRow(SwFrameFormat* pFormat, SwTableLine* pLn) :
 { }
 
 SwXTextTableRow::~SwXTextTableRow()
-{ }
+{
+    SolarMutexGuard aGuard;
+    if(GetRegisteredIn())
+        GetRegisteredIn()->Remove(this);
+}
 
 uno::Reference< beans::XPropertySetInfo > SwXTextTableRow::getPropertySetInfo() throw( uno::RuntimeException, std::exception )
 {
@@ -1969,7 +1973,12 @@ SwXTextTable::SwXTextTable(SwFrameFormat& rFrameFormat)
 { }
 
 SwXTextTable::~SwXTextTable()
-    { delete pTableProps; }
+{
+    SolarMutexGuard aGuard;
+    delete pTableProps;
+    if(GetRegisteredIn())
+        GetRegisteredIn()->Remove(this);
+}
 
 uno::Reference<text::XTextTable> SwXTextTable::CreateXTextTable(SwFrameFormat* const pFrameFormat)
 {
