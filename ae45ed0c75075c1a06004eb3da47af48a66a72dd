@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_e1baf06d",
+        "filename": "sw/source/core/attr/calbck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-11-09T10:51:02Z",
+      "side": 1,
+      "message": "hmm, alternatively one could use the ancient DBG_TESTSOLARMUTEX() here and elsewhere to see how much that fires ...",
+      "revId": "ae45ed0c75075c1a06004eb3da47af48a66a72dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
