@@ -75,6 +75,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33);
     }
 
+    @Override
     public Resource getResource()
     {
         return oWizardResource;
@@ -201,6 +202,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             XControl xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
             XItemEventBroadcaster xRoadmapBroadcaster = UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
             xRoadmapBroadcaster.addItemListener(new XItemListenerAdapter() {
+                @Override
                 public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent) {
                     try
                     {

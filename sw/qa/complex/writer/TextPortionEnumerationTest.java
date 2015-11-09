@@ -3466,6 +3466,7 @@ public class TextPortionEnumerationTest
                         throws Exception {
                     return inserter.makeMeta();
                 }
+                @Override
                 void postInserted(TreeNode node, XTextContent xContent)
                         throws Exception {
                     XMetadatable xMetadatable = UnoRuntime.queryInterface(XMetadatable.class, xContent);
