@@ -361,6 +361,9 @@ SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType
 
 SwXFlatParagraphIterator::~SwXFlatParagraphIterator()
 {
+    SolarMutexGuard aGuard;
+    if(GetRegisteredIn())
+        GetRegisteredIn()->Remove(this);
 }
 
 void SwXFlatParagraphIterator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
