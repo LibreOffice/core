@@ -20,12 +20,13 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PREVLOC_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PREVLOC_HXX
 
-#include <boost/ptr_container/ptr_list.hpp>
-
 #include <sal/types.h>
 #include <vcl/mapmod.hxx>
 
 #include "address.hxx"
+
+#include <memory>
+#include <list>
 
 #define SC_PREVIEW_MAXRANGES    4
 #define SC_PREVIEW_RANGE_EDGE   0
@@ -82,6 +83,9 @@ public:
 
 class ScPreviewLocationData
 {
+public:
+    typedef std::list<std::unique_ptr<ScPreviewLocationEntry>> Entries_t;
+private:
     VclPtr<OutputDevice> pWindow;
     ScDocument* pDoc;
     MapMode     aCellMapMode;
@@ -90,7 +94,7 @@ class ScPreviewLocationData
         sal_uInt8       aDrawRangeId[SC_PREVIEW_MAXRANGES];
     sal_uInt16      nDrawRanges;
     SCTAB       nPrintTab;
-    boost::ptr_list<ScPreviewLocationEntry> aEntries;
+    Entries_t m_Entries;
 
     Rectangle   GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const;
 
