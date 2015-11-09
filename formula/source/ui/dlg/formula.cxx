@@ -58,7 +58,6 @@
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <boost/ref.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <map>
@@ -454,17 +453,6 @@ void FormulaDlg_Impl::DeleteArgs()
     ::std::vector< OUString>().swap(m_aArguments);
     nArgs = 0;
 }
-namespace
-{
-    // comparing two property instances
-    struct OpCodeCompare : public ::std::binary_function< sheet::FormulaOpCodeMapEntry, sal_Int32 , bool >
-    {
-        bool operator() (const sheet::FormulaOpCodeMapEntry& x, sal_Int32 y) const
-        {
-            return x.Token.OpCode == y;
-        }
-    };
-}
 
 sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
 {
@@ -540,7 +528,9 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
                 bFlag = false;
                 nFuncPos = nPrevFuncPos;
             }
-            bool bIsFunction = ::std::find_if(m_aFunctionOpCodes.getConstArray(),m_pFunctionOpCodesEnd,::std::bind2nd(OpCodeCompare(),boost::cref(eOp))) != m_pFunctionOpCodesEnd;
+            bool bIsFunction = ::std::find_if(m_aFunctionOpCodes.getConstArray(),
+                                    m_pFunctionOpCodesEnd,
+                                    [&eOp](const sheet::FormulaOpCodeMapEntry& aEntry) { return aEntry.Token.OpCode == eOp; } ) != m_pFunctionOpCodesEnd;
 
             if( bIsFunction && m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode != eOp )
             {
