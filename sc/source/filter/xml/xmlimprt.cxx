@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/ptr_container.hxx>
 #include <svl/zforlist.hxx>
 #include <sal/macros.h>
 
@@ -2398,12 +2397,13 @@ bool ScXMLImport::GetValidation(const OUString& sName, ScMyImportValidation& aVa
 void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
 {
     ::std::unique_ptr<ScMyNamedExpression> p(pNamedExp);
-    SheetNamedExpMap::iterator itr = maSheetNamedExpressions.find(nTab);
-    if (itr == maSheetNamedExpressions.end())
+    SheetNamedExpMap::iterator itr = m_SheetNamedExpressions.find(nTab);
+    if (itr == m_SheetNamedExpressions.end())
     {
         // No chain exists for this sheet.  Create one.
         ::std::unique_ptr<ScMyNamedExpressions> pNew(new ScMyNamedExpressions);
-        ::std::pair<SheetNamedExpMap::iterator, bool> r = o3tl::ptr_container::insert(maSheetNamedExpressions, nTab, std::move(pNew));
+        ::std::pair<SheetNamedExpMap::iterator, bool> r =
+            m_SheetNamedExpressions.insert(std::make_pair(nTab, std::move(pNew)));
         if (!r.second)
             // insertion failed.
             return;
@@ -3157,15 +3157,14 @@ void ScXMLImport::SetSheetNamedRanges()
     if (!pDoc)
         return;
 
-    SheetNamedExpMap::const_iterator itr = maSheetNamedExpressions.begin(), itrEnd = maSheetNamedExpressions.end();
-    for (; itr != itrEnd; ++itr)
+    for (auto const& itr : m_SheetNamedExpressions)
     {
-        SCTAB nTab = itr->first;
+        const SCTAB nTab = itr.first;
         ScRangeName* pRangeNames = pDoc->GetRangeName(nTab);
         if (!pRangeNames)
             continue;
 
-        const ScMyNamedExpressions& rNames = *itr->second;
+        const ScMyNamedExpressions& rNames = *itr.second;
         ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(pDoc, *pRangeNames, *this));
     }
 }
