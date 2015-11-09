@@ -20,7 +20,7 @@
     </Country>
   </LC_INFO>
   <LC_CTYPE ref="ar_SA" />
-  <LC_FORMAT ref="ar_SA" replaceFrom="[CURRENCY]" replaceTo="[$ر.ي.-2401]"/>
+  <LC_FORMAT ref="ar_SA" replaceFrom="[CURRENCY]" replaceTo="[$ر.ي.‏-2401]"/>
   <LC_COLLATION ref="ar_SA" />
   <LC_SEARCH ref="ar_SA"/>
   <LC_INDEX ref="ar_SA"/>
@@ -28,7 +28,7 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>YER</CurrencyID>
-      <CurrencySymbol>ر.ي.</CurrencySymbol>
+      <CurrencySymbol>ر.ي.‏</CurrencySymbol>
       <BankSymbol>YER</BankSymbol>
       <CurrencyName>YER</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>

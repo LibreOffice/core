@@ -20,7 +20,7 @@
     </Country>
   </LC_INFO>
   <LC_CTYPE ref="ar_SA" />
-  <LC_FORMAT ref="ar_SA" replaceFrom="[CURRENCY]" replaceTo="[$د.ب.-3C01]"/>
+  <LC_FORMAT ref="ar_SA" replaceFrom="[CURRENCY]" replaceTo="[$د.ب.‏-3C01]"/>
   <LC_COLLATION ref="ar_SA" />
   <LC_SEARCH ref="ar_SA"/>
   <LC_INDEX ref="ar_SA"/>
@@ -28,7 +28,7 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>BHD</CurrencyID>
-      <CurrencySymbol>د.ب.</CurrencySymbol>
+      <CurrencySymbol>د.ب.‏</CurrencySymbol>
       <BankSymbol>BHD</BankSymbol>
       <CurrencyName>BHD</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
