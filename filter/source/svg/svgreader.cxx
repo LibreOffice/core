@@ -1036,6 +1036,12 @@ struct AnnotatingVisitor
             case XML_TEXT_ANCHOR:
                 parseTextAlign(maCurrState,aValueUtf8.getStr());
                 break;
+            case XML_STOP_COLOR:
+            case XML_STOP_OPACITY:
+                parseGradientStop( maGradientStopVector.back(),
+                                   maGradientStopVector.size()-1,
+                                   nTokenId, sValue );
+                break;
             case XML_TOKEN_INVALID:
                 SAL_INFO("svg", "unhandled token");
                 break;
