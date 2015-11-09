@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "faac7902_01129462",
+        "filename": "editeng/source/items/textitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2015-11-09T14:03:26Z",
+      "side": 1,
+      "message": "It seems that the code that follows lost its indentation",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 2
+      },
+      "revId": "5e5d20a991b2d55e2be5f808941884ab37fc024a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_e148308a",
         "filename": "tools/source/ref/pstm.cxx",
         "patchSetId": 2
