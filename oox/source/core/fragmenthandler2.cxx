@@ -72,6 +72,7 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
                 static std::vector<OUString> aSupportedNS =
                 {
                     "p14",
+                    "p15",
                 };
 
                 if (std::find(aSupportedNS.begin(), aSupportedNS.end(), aRequires) != aSupportedNS.end())

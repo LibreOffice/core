@@ -80,6 +80,10 @@ w14                     http://schemas.microsoft.com/office/word/2010/wordml
 a14                     http://schemas.microsoft.com/office/drawing/2010/main
 p14                     http://schemas.microsoft.com/office/powerpoint/2010/main
 
+# MSO 2012/2013 extensions ---------------------------------------------------------
+
+p15                     http://schemas.microsoft.com/office/powerpoint/2012/main
+
 # extlst namespaces
 
 # xls14Lst for features introduced by excel 2010

@@ -121,6 +121,7 @@ struct NamespaceIds: public rtl::StaticWithInit<
             "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main",
             "http://schemas.libreoffice.org/",
             "http://schemas.microsoft.com/office/powerpoint/2010/main"
+            "http://schemas.microsoft.com/office/powerpoint/2012/main"
         };
 
         static const sal_Int32 namespaceIds[] = {
@@ -150,6 +151,7 @@ struct NamespaceIds: public rtl::StaticWithInit<
             NMSP_xls14Lst,
             NMSP_loext,
             NMSP_p14,
+            NMSP_p15,
         };
 
         Sequence< beans::Pair< OUString, sal_Int32 > > aRet(SAL_N_ELEMENTS(namespaceIds));

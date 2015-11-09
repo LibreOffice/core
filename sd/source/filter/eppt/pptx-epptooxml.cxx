@@ -70,6 +70,7 @@
                       FSNS(XML_xmlns, XML_p),   "http://schemas.openxmlformats.org/presentationml/2006/main", \
                       FSNS(XML_xmlns, XML_r),   "http://schemas.openxmlformats.org/officeDocument/2006/relationships", \
                       FSNS(XML_xmlns, XML_p14), "http://schemas.microsoft.com/office/powerpoint/2010/main", \
+                      FSNS(XML_xmlns, XML_p15), "http://schemas.microsoft.com/office/powerpoint/2012/main", \
                       FSNS(XML_xmlns, XML_mc),  "http://schemas.openxmlformats.org/markup-compatibility/2006"
 
 
@@ -521,15 +522,19 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
     bool bOOXmlSpecificTransition = false;
 
     sal_Int32 nTransition = 0;
-    sal_Int32 nTransition14 = 0;
-
     const char* pDirection = NULL;
     const char* pDirection14 = NULL;
     const char* pOrientation = NULL;
     const char* pThruBlk = NULL;
     const char* pSpokes = NULL;
     char pSpokesTmp[2] = "0";
+
+    // p14
+    sal_Int32 nTransition14 = 0;
     const char* pInverted = nullptr;
+
+    //p15
+    const char* pPresetTransition = nullptr;
 
     if (!nPPTTransitionType)
     {
@@ -568,6 +573,11 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
                     case animations::TransitionSubType::HORIZONTAL: // Ripple
                         nTransition = XML_fade;
                         nTransition14 = XML_ripple;
+                        bOOXmlSpecificTransition = true;
+                        break;
+                    case animations::TransitionSubType::LEFTTORIGHT: // Fall
+                        nTransition = XML_fade;
+                        pPresetTransition = "fallOver";
                         bOOXmlSpecificTransition = true;
                         break;
                     case animations::TransitionSubType::CORNERSIN:
@@ -615,20 +625,32 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
     if( changeType == 1 && GETA( Duration ) )
         mAny >>= advanceTiming;
 
-    if (nTransition14)
+    if (nTransition14 || pPresetTransition)
     {
+        const char* pRequiresNS = nTransition14 ? "p14" : "p15";
+
         pFS->startElement(FSNS(XML_mc, XML_AlternateContent), FSEND);
-        pFS->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "p14", FSEND);
+        pFS->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, pRequiresNS, FSEND);
+
 
         pFS->startElementNS(XML_p, XML_transition,
                             XML_spd, speed,
                             XML_advTm, advanceTiming != -1 ? I32S( advanceTiming*1000 ) : NULL,
                             FSEND );
 
-        pFS->singleElementNS(XML_p14, nTransition14,
-                             XML_isInverted, pInverted,
-                             XML_dir, pDirection14,
-                             FSEND );
+        if (nTransition14)
+        {
+            pFS->singleElementNS(XML_p14, nTransition14,
+                                 XML_isInverted, pInverted,
+                                 XML_dir, pDirection14,
+                                 FSEND );
+        }
+        else if (pPresetTransition)
+        {
+            pFS->singleElementNS(XML_p15, XML_prstTrans,
+                                 XML_prst, pPresetTransition,
+                                 FSEND );
+        }
 
         pFS->endElement(FSNS(XML_p, XML_transition));
 
@@ -745,7 +767,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
 
     pFS->endElementNS(XML_p, XML_transition);
 
-    if (nTransition14)
+    if (nTransition14 || pPresetTransition)
     {
         pFS->endElement(FSNS(XML_mc, XML_Fallback));
         pFS->endElement(FSNS(XML_mc, XML_AlternateContent));

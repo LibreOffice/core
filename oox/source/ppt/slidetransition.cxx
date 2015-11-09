@@ -419,6 +419,19 @@ namespace oox { namespace ppt {
         }
     }
 
+    void SlideTransition::setPresetTransition(OUString sPresetTransition)
+    {
+        if (sPresetTransition == "fallOver")
+        {
+            mnTransitionType = TransitionType::MISCSHAPEWIPE;
+            mnTransitionSubType = TransitionSubType::LEFTTORIGHT;
+        }
+        else
+        {
+            mnTransitionType = 0;
+        }
+    }
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
