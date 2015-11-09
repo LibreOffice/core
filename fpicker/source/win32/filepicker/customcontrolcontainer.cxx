@@ -20,44 +20,6 @@
 #include "customcontrolcontainer.hxx"
 
 #include <algorithm>
-#include <functional>
-
-
-
-
-
-namespace /* private */
-{
-    void DeleteCustomControl(CCustomControl* aCustomControl)
-    {
-        delete aCustomControl;
-    };
-
-    void AlignCustomControl(CCustomControl* aCustomControl)
-    {
-        aCustomControl->Align();
-    };
-
-    class CSetFontHelper
-    {
-    public:
-        CSetFontHelper(HFONT hFont) :
-            m_hFont(hFont)
-        {
-        }
-
-        void SAL_CALL operator()(CCustomControl* aCustomControl)
-        {
-            aCustomControl->SetFont(m_hFont);
-        }
-
-    private:
-        HFONT m_hFont;
-    };
-}
-
-
-
 
 
 CCustomControlContainer::~CCustomControlContainer()
@@ -66,42 +28,24 @@ CCustomControlContainer::~CCustomControlContainer()
 }
 
 
-
-
-
 void SAL_CALL CCustomControlContainer::Align()
 {
-    std::for_each(
-        m_ControlContainer.begin(),
-        m_ControlContainer.end(),
-        AlignCustomControl);
+    for (auto aCCustomControl : m_ControlContainer)
+        aCCustomControl->Align();
 }
-
-
-
 
 
 void SAL_CALL CCustomControlContainer::SetFont(HFONT hFont)
 {
-    CSetFontHelper aSetFontHelper(hFont);
-
-    std::for_each(
-        m_ControlContainer.begin(),
-        m_ControlContainer.end(),
-        aSetFontHelper);
+    for (auto aCCustomControl : m_ControlContainer)
+        aCCustomControl->SetFont(hFont);
 }
-
-
-
 
 
 void SAL_CALL CCustomControlContainer::AddControl(CCustomControl* aCustomControl)
 {
     m_ControlContainer.push_back(aCustomControl);
 }
-
-
-
 
 
 void SAL_CALL CCustomControlContainer::RemoveControl(CCustomControl* aCustomControl)
@@ -119,15 +63,10 @@ void SAL_CALL CCustomControlContainer::RemoveControl(CCustomControl* aCustomCont
 }
 
 
-
-
-
 void SAL_CALL CCustomControlContainer::RemoveAllControls()
 {
-    std::for_each(
-        m_ControlContainer.begin(),
-        m_ControlContainer.end(),
-        DeleteCustomControl);
+    for (auto aCCustomControl : m_ControlContainer)
+        delete aCCustomControl;
 
     m_ControlContainer.clear();
 }
