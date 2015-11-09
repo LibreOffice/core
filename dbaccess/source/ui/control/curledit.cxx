@@ -140,7 +140,7 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
 OUString OConnectionURLEdit::GetText() const
 {
     if ( m_pForcedPrefix )
-        return m_pForcedPrefix->GetText() += Edit::GetText();
+        return m_pForcedPrefix->GetText() + Edit::GetText();
     return Edit::GetText();
 }
 
