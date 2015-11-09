@@ -147,10 +147,17 @@ storeError SAL_CALL store_openFile (
         return store_E_InvalidParameter;
 
     Reference<ILockBytes> xLockBytes;
+    storeError eErrCode;
 
-    storeError eErrCode = FileLockBytes_createInstance (xLockBytes, pFilename, eAccessMode);
-    if (eErrCode != store_E_None)
-        return eErrCode;
+    try {
+        eErrCode = FileLockBytes_createInstance (xLockBytes, pFilename, eAccessMode);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+    }
+    catch(...) {
+         // throw is a length violation
+         return store_E_InvalidParameter;
+    }
     OSL_ASSERT(xLockBytes.is());
 
     Reference<OStorePageManager> xManager (new OStorePageManager());
