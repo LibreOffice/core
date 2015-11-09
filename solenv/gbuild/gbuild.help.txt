@@ -28,7 +28,6 @@ IMPORTANT OPTIONS
 
 AVAILABLE TARGETS
        all              build product and run unit tests (default goal)
-       build            build product
        unitcheck        run unit tests
        slowcheck        run slow unit tests
        subsequentcheck  run system tests (requires full installation)
@@ -43,6 +42,7 @@ AVAILABLE TARGETS
                         NOTE: needs graphviz to work
        showmodules      shows all registered modules
        <module>         build the named module
+       <module>.build   build the named module without running unittests
        <module>.check   run unittests of the named module
        <module>.clean   clean the named module
        <module>.all     build the named module and the pre-requisite modules for it
