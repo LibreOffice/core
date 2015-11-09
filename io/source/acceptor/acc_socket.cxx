@@ -19,7 +19,7 @@
 
 #include "acceptor.hxx"
 
-#include <algorithm>
+#include <exception>
 #include <unordered_set>
 
 #include <osl/mutex.hxx>
@@ -123,7 +123,8 @@ namespace io_acceptor {
             }
         }
 
-        ::std::for_each(listeners.begin(), listeners.end(), t);
+        for(auto& listener : listeners)
+            t(listener);
     }
 
     static void callStarted(Reference<XStreamListener> xStreamListener)

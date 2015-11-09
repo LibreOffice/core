@@ -20,7 +20,7 @@
 
 #include "connector.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <algorithm>
+#include <exception>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -43,7 +43,8 @@ namespace stoc_connector {
             }
         }
 
-        ::std::for_each(listeners.begin(), listeners.end(), t);
+        for(auto& listener : listeners)
+            t(listener);
     }
 
 
