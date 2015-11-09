@@ -273,7 +273,7 @@ static ScPreviewLocationEntry* lcl_GetEntryByAddress(
     for (auto const& it : rEntries)
     {
         if ( it->eType == eType && it->aCellRange.In( rPos ) )
-            return const_cast<ScPreviewLocationEntry*>(it.get());
+            return it.get();
     }
 
     return NULL;
