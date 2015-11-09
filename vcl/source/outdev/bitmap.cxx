@@ -810,11 +810,13 @@ public:
             const long nMapY  = mpMapY[nY];
             const long nMapFY = mpMapYOffset[nY];
 
-            pLine0 = pSource->GetScanline(nMapY);
-            pLine1 = pSource->GetScanline(nMapY + 1);
+             pLine0 = pSource->GetScanline(nMapY);
+            // tdf#95481 guard nMapY + 1 to be within bounds
+            pLine1 = (nMapY + 1 < pSource->Height()) ? pSource->GetScanline(nMapY + 1) : pLine0;
 
             pLineAlpha0 = pSourceAlpha->GetScanline(nMapY);
-            pLineAlpha1 = pSourceAlpha->GetScanline(nMapY + 1);
+            // tdf#95481 guard nMapY + 1 to be within bounds
+            pLineAlpha1 = (nMapY + 1 < pSourceAlpha->Height()) ? pSourceAlpha->GetScanline(nMapY + 1) : pLineAlpha0;
 
             pDestScanline = pDestination->GetScanline(nY);
 
