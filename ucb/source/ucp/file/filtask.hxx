@@ -54,16 +54,16 @@ namespace fileaccess
 
             bool m_bAbort,m_bHandled;
             sal_Int32 m_nErrorCode,m_nMinorCode;
-            com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInteractionHandler;
-            com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler >     m_xProgressHandler;
-            com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >  m_xCommandEnvironment;
+            css::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
+            css::uno::Reference< css::ucb::XProgressHandler >     m_xProgressHandler;
+            css::uno::Reference< css::ucb::XCommandEnvironment >  m_xCommandEnvironment;
 
 
         public:
 
             explicit TaskHandling(
-                const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv
-                = com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >( 0 ) )
+                const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv
+                = css::uno::Reference< css::ucb::XCommandEnvironment >( 0 ) )
                 : m_bAbort( false ),
                   m_bHandled( false ),
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),
@@ -112,7 +112,7 @@ namespace fileaccess
                 return m_nMinorCode;
             }
 
-            com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > SAL_CALL
+            css::uno::Reference< css::task::XInteractionHandler > SAL_CALL
             getInteractionHandler()
             {
                 if( ! m_xInteractionHandler.is() && m_xCommandEnvironment.is() )
@@ -121,7 +121,7 @@ namespace fileaccess
                 return m_xInteractionHandler;
             }
 
-            com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > SAL_CALL
+            css::uno::Reference< css::ucb::XCommandEnvironment > SAL_CALL
             getCommandEnvironment()
             {
                 return m_xCommandEnvironment;
@@ -145,8 +145,8 @@ namespace fileaccess
 
         void SAL_CALL startTask(
             sal_Int32 CommandId,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv )
-            throw( com::sun::star::ucb::DuplicateCommandIdentifierException );
+            const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv )
+            throw( css::ucb::DuplicateCommandIdentifierException );
 
         sal_Int32 SAL_CALL getCommandId();
         void SAL_CALL abort( sal_Int32 CommandId );
@@ -182,7 +182,7 @@ namespace fileaccess
          */
 
         void SAL_CALL handleTask( sal_Int32 CommandId,
-                                  const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& request );
+                                  const css::uno::Reference< css::task::XInteractionRequest >& request );
 
         /**
          *  Clears any error which are set on the commandid

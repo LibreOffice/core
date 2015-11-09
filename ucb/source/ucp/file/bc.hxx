@@ -59,16 +59,16 @@ namespace fileaccess {
 
     class BaseContent:
         public cppu::OWeakObject,
-        public com::sun::star::lang::XComponent,
-        public com::sun::star::lang::XServiceInfo,
-        public com::sun::star::lang::XTypeProvider,
-        public com::sun::star::ucb::XCommandProcessor,
-        public com::sun::star::beans::XPropertiesChangeNotifier,
-        public com::sun::star::beans::XPropertyContainer,
-        public com::sun::star::beans::XPropertySetInfoChangeNotifier,
-        public com::sun::star::ucb::XContentCreator,
-        public com::sun::star::container::XChild,
-        public com::sun::star::ucb::XContent,
+        public css::lang::XComponent,
+        public css::lang::XServiceInfo,
+        public css::lang::XTypeProvider,
+        public css::ucb::XCommandProcessor,
+        public css::beans::XPropertiesChangeNotifier,
+        public css::beans::XPropertyContainer,
+        public css::beans::XPropertySetInfoChangeNotifier,
+        public css::ucb::XContentCreator,
+        public css::container::XChild,
+        public css::ucb::XContent,
         public fileaccess::Notifier    // implementation class
     {
     private:
@@ -81,16 +81,16 @@ namespace fileaccess {
     public:
         BaseContent(
             shell* pMyShell,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xContentIdentifier,
+            const css::uno::Reference< css::ucb::XContentIdentifier >& xContentIdentifier,
             const OUString& aUnqPath );
 
         virtual ~BaseContent();
 
         // XInterface
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         queryInterface(
-            const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Type& aType )
+            throw( css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         acquire(
@@ -107,96 +107,91 @@ namespace fileaccess {
         virtual void SAL_CALL
         dispose(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         addEventListener(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::lang::XEventListener >& xListener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
-        removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
 
         // XTypeProvider
 
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
             throw( css::uno::RuntimeException, std::exception ) override;
-        virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
             throw( css::uno::RuntimeException, std::exception ) override;
 
 
         // XServiceInfo
         virtual OUString SAL_CALL
         getImplementationName()
-            throw( com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         supportsService( const OUString& ServiceName )
-            throw( com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::uno::RuntimeException, std::exception) override;
 
-        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
 
         // XCommandProcessor
         virtual sal_Int32 SAL_CALL
-        createCommandIdentifier(
-            void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        createCommandIdentifier()
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         execute(
-            const com::sun::star::ucb::Command& aCommand,
+            const css::ucb::Command& aCommand,
             sal_Int32 CommandId,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& Environment )
-            throw( com::sun::star::uno::Exception,
-                   com::sun::star::ucb::CommandAbortedException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+            throw( css::uno::Exception,
+                   css::ucb::CommandAbortedException,
+                   css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         abort(
             sal_Int32 CommandId )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
 
         // XContent
-        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
-        getIdentifier(
-            void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+        getIdentifier()
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL
-        getContentType(
-            void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        getContentType()
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         addContentEventListener(
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContentEventListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::ucb::XContentEventListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         removeContentEventListener(
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContentEventListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::ucb::XContentEventListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XPropertiesChangeNotifier
 
         virtual void SAL_CALL
         addPropertiesChangeListener(
-            const com::sun::star::uno::Sequence< OUString >& PropertyNames,
-            const com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertiesChangeListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Sequence< OUString >& PropertyNames,
+            const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
-        removePropertiesChangeListener( const com::sun::star::uno::Sequence< OUString >& PropertyNames,
-                                        const com::sun::star::uno::Reference<
-                                        com::sun::star::beans::XPropertiesChangeListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        removePropertiesChangeListener( const css::uno::Sequence< OUString >& PropertyNames,
+                                        const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XPropertyContainer
 
@@ -204,57 +199,55 @@ namespace fileaccess {
         addProperty(
             const OUString& Name,
             sal_Int16 Attributes,
-            const com::sun::star::uno::Any& DefaultValue )
-            throw( com::sun::star::beans::PropertyExistException,
-                   com::sun::star::beans::IllegalTypeException,
-                   com::sun::star::lang::IllegalArgumentException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Any& DefaultValue )
+            throw( css::beans::PropertyExistException,
+                   css::beans::IllegalTypeException,
+                   css::lang::IllegalArgumentException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         removeProperty(
             const OUString& Name )
-            throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::beans::NotRemoveableException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::beans::UnknownPropertyException,
+                   css::beans::NotRemoveableException,
+                   css::uno::RuntimeException, std::exception ) override;
 
         // XPropertySetInfoChangeNotifier
 
         virtual void SAL_CALL
         addPropertySetInfoChangeListener(
-            const com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertySetInfoChangeListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         removePropertySetInfoChangeListener(
-            const com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertySetInfoChangeListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
 
         // XContentCreator
 
-        virtual com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo > SAL_CALL
+        virtual css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
         queryCreatableContentsInfo(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
+        virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
         createNewContent(
-            const com::sun::star::ucb::ContentInfo& Info )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::ucb::ContentInfo& Info )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
 
         // XChild
-        virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         getParent(
-            void ) throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            void ) throw( css::uno::RuntimeException, std::exception ) override;
 
         // Not supported
         virtual void SAL_CALL
-        setParent( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& Parent )
-            throw( com::sun::star::lang::NoSupportException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+        setParent( const css::uno::Reference< css::uno::XInterface >& Parent )
+            throw( css::lang::NoSupportException,
+                   css::uno::RuntimeException, std::exception) override;
 
 
         // Notifier
@@ -267,9 +260,9 @@ namespace fileaccess {
 
     private:
         // Data members
-        shell*                                                                      m_pMyShell;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >   m_xContentIdentifier;
-        OUString                                                               m_aUncPath;
+        shell*                                                m_pMyShell;
+        css::uno::Reference< css::ucb::XContentIdentifier >   m_xContentIdentifier;
+        OUString                                              m_aUncPath;
 
         enum state { NameForInsertionSet = 1,
                      JustInserted = 2,
@@ -289,30 +282,30 @@ namespace fileaccess {
 
 
         // Private Methods
-        com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo > SAL_CALL
+        css::uno::Reference< css::ucb::XCommandInfo > SAL_CALL
         getCommandInfo()
-            throw( com::sun::star::uno::RuntimeException );
+            throw( css::uno::RuntimeException );
 
-        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo(
             sal_Int32 nMyCommandIdentifier )
-            throw( com::sun::star::uno::RuntimeException );
+            throw( css::uno::RuntimeException );
 
-        com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > SAL_CALL
+        css::uno::Reference< css::sdbc::XRow > SAL_CALL
         getPropertyValues(
             sal_Int32 nMyCommandIdentifier,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& PropertySet )
+            const css::uno::Sequence< css::beans::Property >& PropertySet )
             throw( css::uno::RuntimeException, std::exception );
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
+        css::uno::Sequence< css::uno::Any > SAL_CALL
         setPropertyValues(
             sal_Int32 nMyCommandIdentifier,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Values );
+            const css::uno::Sequence< css::beans::PropertyValue >& Values );
 
-        com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSet > SAL_CALL
+        css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
         open(
             sal_Int32 nMyCommandIdentifier,
-            const com::sun::star::ucb::OpenCommandArgument2& aCommandArgument );
+            const css::ucb::OpenCommandArgument2& aCommandArgument );
 
         void SAL_CALL
         deleteContent( sal_Int32 nMyCommandIdentifier );
@@ -320,11 +313,11 @@ namespace fileaccess {
 
         void SAL_CALL
         transfer( sal_Int32 nMyCommandIdentifier,
-                  const com::sun::star::ucb::TransferInfo& aTransferInfo );
+                  const css::ucb::TransferInfo& aTransferInfo );
 
         void SAL_CALL
         insert( sal_Int32 nMyCommandIdentifier,
-                const com::sun::star::ucb::InsertCommandArgument& aInsertArgument );
+                const css::ucb::InsertCommandArgument& aInsertArgument );
 
         void SAL_CALL endTask( sal_Int32 CommandId );
 

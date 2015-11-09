@@ -50,20 +50,20 @@ struct DAVResource;
 class PropertyValue
 {
 private:
-    ::com::sun::star::uno::Any m_aValue;
-    bool                       m_bIsCaseSensitive;
+    css::uno::Any m_aValue;
+    bool          m_bIsCaseSensitive;
 
 public:
     PropertyValue()
     : m_bIsCaseSensitive( true ) {}
 
-    PropertyValue( const ::com::sun::star::uno::Any & rValue,
+    PropertyValue( const css::uno::Any & rValue,
                    bool bIsCaseSensitive )
     : m_aValue( rValue),
       m_bIsCaseSensitive( bIsCaseSensitive ) {}
 
     bool isCaseSensitive() const { return m_bIsCaseSensitive; }
-    const ::com::sun::star::uno::Any & value() const { return m_aValue; }
+    const css::uno::Any & value() const { return m_aValue; }
 
 };
 
@@ -94,7 +94,7 @@ public:
 
     bool contains( const OUString & rName ) const;
 
-    const com::sun::star::uno::Any &
+    const css::uno::Any &
     getValue( const OUString & rName ) const;
 
     // Maps the UCB property names contained in rProps with their DAV property
@@ -104,9 +104,7 @@ public:
     // DAVResourceAccess::PROPFIND. The result from PROPFIND
     // (vector< DAVResource >) can be used to create a ContentProperties
     // instance which can map DAV properties back to UCB properties.
-    static void UCBNamesToDAVNames( const com::sun::star::uno::Sequence<
-                                        com::sun::star::beans::Property > &
-                                            rProps,
+    static void UCBNamesToDAVNames( const css::uno::Sequence< css::beans::Property > &  rProps,
                                     std::vector< OUString > & resources,
                                     bool bIncludeUnmatched = true );
 
@@ -117,9 +115,7 @@ public:
     // DAVResourceAccess::HEAD. The result from HEAD (vector< DAVResource >)
     // can be used to create a ContentProperties instance which can map header
     // names back to UCB properties.
-    static void UCBNamesToHTTPNames( const com::sun::star::uno::Sequence<
-                                        com::sun::star::beans::Property > &
-                                            rProps,
+    static void UCBNamesToHTTPNames( const css::uno::Sequence< css::beans::Property > & rProps,
                                     std::vector< OUString > & resources,
                                     bool bIncludeUnmatched = true );
 
@@ -127,8 +123,7 @@ public:
     // this ContentProperties instance. Otherwiese, false will be returned.
     // rNamesNotContained contain the missing names.
     bool containsAllNames(
-                    const com::sun::star::uno::Sequence<
-                        com::sun::star::beans::Property >& rProps,
+                    const css::uno::Sequence< css::beans::Property >& rProps,
                     std::vector< OUString > & rNamesNotContained ) const;
 
     // adds all properties described by rProps that are actually contained in
@@ -139,7 +134,7 @@ public:
 
     // overwrites probably existing entry.
     void addProperty( const OUString & rName,
-                     const com::sun::star::uno::Any & rValue,
+                     const css::uno::Any & rValue,
                      bool bIsCaseSensitive );
 
     // overwrites probably existing entry.
@@ -159,7 +154,7 @@ private:
     std::unique_ptr< PropertyValueMap > m_xProps;
     bool m_bTrailingSlash;
 
-    static com::sun::star::uno::Any m_aEmptyAny;
+    static css::uno::Any m_aEmptyAny;
 
     ContentProperties & operator=( const ContentProperties & ) = delete;
 
@@ -182,12 +177,11 @@ public:
     void addProperties( const std::vector< DAVPropertyValue > & rProps );
 
     bool containsAllNames(
-                    const com::sun::star::uno::Sequence<
-                        com::sun::star::beans::Property >& rProps,
+                    const css::uno::Sequence< css::beans::Property >& rProps,
                     std::vector< OUString > & rNamesNotContained ) const
     { return m_aProps.containsAllNames( rProps, rNamesNotContained ); }
 
-    const com::sun::star::uno::Any &
+    const css::uno::Any &
     getValue( const OUString & rName ) const
     { return m_aProps.getValue( rName ); }
 

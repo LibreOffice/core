@@ -40,7 +40,7 @@ OutputStream::~OutputStream()
     closeOutput();
 }
 
-void SAL_CALL OutputStream::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& rData )
+void SAL_CALL OutputStream::writeBytes( const css::uno::Sequence< sal_Int8 >& rData )
     throw( io::NotConnectedException, io::BufferSizeExceededException,
            io::IOException, uno::RuntimeException, std::exception)
 {

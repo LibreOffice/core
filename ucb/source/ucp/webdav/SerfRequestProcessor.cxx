@@ -129,7 +129,7 @@ bool SerfRequestProcessor::processPropPatch( const std::vector< ProppatchValue >
 }
 
 // GET
-bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
+bool SerfRequestProcessor::processGet( const css::uno::Reference< SerfInputStream >& xioInStrm,
                                        apr_status_t& outSerfStatus )
 {
     mpProcImpl = new SerfGetReqProcImpl( mPathStr,
@@ -141,7 +141,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< Ser
 }
 
 // GET inclusive header fields
-bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
+bool SerfRequestProcessor::processGet( const css::uno::Reference< SerfInputStream >& xioInStrm,
                                        const std::vector< OUString > & inHeaderNames,
                                        DAVResource & ioResource,
                                        apr_status_t& outSerfStatus )
@@ -157,7 +157,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< Ser
 }
 
 // GET
-bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
+bool SerfRequestProcessor::processGet( const css::uno::Reference< css::io::XOutputStream >& xioOutStrm,
                                        apr_status_t& outSerfStatus )
 {
     mpProcImpl = new SerfGetReqProcImpl( mPathStr,
@@ -169,7 +169,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com
 }
 
 // GET inclusive header fields
-bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
+bool SerfRequestProcessor::processGet( const css::uno::Reference< css::io::XOutputStream >& xioOutStrm,
                                        const std::vector< OUString > & inHeaderNames,
                                        DAVResource & ioResource,
                                        apr_status_t& outSerfStatus )
@@ -223,7 +223,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_size_t inDataLen,
                                         const OUString & inContentType,
                                         const OUString & inReferer,
-                                        const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
+                                        const css::uno::Reference< SerfInputStream >& xioInStrm,
                                         apr_status_t& outSerfStatus )
 {
     mContentType = apr_pstrdup( SerfSession::getAprPool(),
@@ -247,7 +247,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_size_t inDataLen,
                                         const OUString & inContentType,
                                         const OUString & inReferer,
-                                        const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
+                                        const css::uno::Reference< css::io::XOutputStream >& xioOutStrm,
                                         apr_status_t& outSerfStatus )
 {
     mContentType = apr_pstrdup( SerfSession::getAprPool(),

@@ -58,12 +58,11 @@ class StorageElementFactory;
 
 class ContentProvider :
     public ::ucbhelper::ContentProviderImplHelper,
-    public com::sun::star::frame::XTransientDocumentsDocumentContentFactory,
+    public css::frame::XTransientDocumentsDocumentContentFactory,
     public OfficeDocumentsEventListener
 {
 public:
-    explicit ContentProvider( const com::sun::star::uno::Reference<
-                        com::sun::star::uno::XComponentContext >& rxContext );
+    explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider();
 
     // XInterface
@@ -96,56 +95,53 @@ public:
                           css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XContentProvider
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContent > SAL_CALL
-    queryContent( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XContentIdentifier >& Identifier )
-        throw( com::sun::star::ucb::IllegalIdentifierException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+        throw( css::ucb::IllegalIdentifierException,
+               css::uno::RuntimeException, std::exception ) override;
 
     // XTransientDocumentsDocumentContentFactory
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContent > SAL_CALL
-    createDocumentContent( const ::com::sun::star::uno::Reference<
-                                com::sun::star::frame::XModel >& Model )
-        throw ( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    createDocumentContent( const css::uno::Reference<
+                                css::frame::XModel >& Model )
+        throw ( css::lang::IllegalArgumentException,
+                css::uno::RuntimeException, std::exception ) override;
 
     // Non-UNO interfaces
-    com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage >
     queryStorage( const OUString & rUri, StorageAccessMode eMode ) const;
 
-    com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage >
     queryStorageClone( const OUString & rUri ) const;
 
-    com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    css::uno::Reference< css::io::XInputStream >
     queryInputStream( const OUString & rUri,
                       const OUString & rPassword ) const
-        throw ( com::sun::star::packages::WrongPasswordException,
+        throw ( css::packages::WrongPasswordException,
                 css::uno::RuntimeException );
 
-    com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
+    css::uno::Reference< css::io::XOutputStream >
     queryOutputStream( const OUString & rUri,
                        const OUString & rPassword,
                        bool bTruncate ) const
-        throw ( com::sun::star::packages::WrongPasswordException,
+        throw ( css::packages::WrongPasswordException,
                 css::uno::RuntimeException );
 
-    com::sun::star::uno::Reference< com::sun::star::io::XStream >
+    css::uno::Reference< css::io::XStream >
     queryStream( const OUString & rUri,
                  const OUString & rPassword,
                  bool bTruncate ) const
-        throw ( com::sun::star::packages::WrongPasswordException,
+        throw ( css::packages::WrongPasswordException,
                 css::uno::RuntimeException );
 
     bool queryNamesOfChildren(
         const OUString & rUri,
-        com::sun::star::uno::Sequence< OUString > & rNames ) const;
+        css::uno::Sequence< OUString > & rNames ) const;
 
     // storage properties
     OUString queryStorageTitle( const OUString & rUri ) const;
 
-    com::sun::star::uno::Reference< com::sun::star::frame::XModel >
+    css::uno::Reference< css::frame::XModel >
     queryDocumentModel( const OUString & rUri ) const;
 
     // interface OfficeDocumentsEventListener

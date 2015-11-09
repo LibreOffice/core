@@ -36,10 +36,9 @@ private:
 
 public:
     DynamicResultSet(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const rtl::Reference< HierarchyContent >& rxContent,
-            const com::sun::star::ucb::OpenCommandArgument2& rCommand );
+            const css::ucb::OpenCommandArgument2& rCommand );
 };
 
 }

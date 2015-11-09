@@ -26,7 +26,7 @@ namespace http_dav_ucp
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
-                                        const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm )
+                                        const css::uno::Reference< SerfInputStream > & xioInStrm )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream( xioInStrm )
     , xOutputStream()
@@ -37,7 +37,7 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
-                                        const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm,
+                                        const css::uno::Reference< SerfInputStream > & xioInStrm,
                                         const std::vector< OUString > & inHeaderNames,
                                         DAVResource & ioResource )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
@@ -50,7 +50,7 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
-                                        const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm )
+                                        const css::uno::Reference< css::io::XOutputStream > & xioOutStrm )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream()
     , xOutputStream( xioOutStrm )
@@ -61,7 +61,7 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
-                                        const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm,
+                                        const css::uno::Reference< css::io::XOutputStream > & xioOutStrm,
                                         const std::vector< OUString > & inHeaderNames,
                                         DAVResource & ioResource )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )

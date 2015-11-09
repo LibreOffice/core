@@ -147,19 +147,18 @@ public:
 
     bool isHeadRequestInProgress();
 
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) override;
 
     virtual void
     GET( const OUString & inPath,
-         com::sun::star::uno::Reference<
-             com::sun::star::io::XOutputStream > &  ioOutputStream,
+         css::uno::Reference< css::io::XOutputStream > &  ioOutputStream,
          const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) override;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
@@ -168,8 +167,7 @@ public:
 
     virtual void
     GET( const OUString & inPath,
-         com::sun::star::uno::Reference<
-             com::sun::star::io::XOutputStream > & ioOutputStream,
+         css::uno::Reference< css::io::XOutputStream > & ioOutputStream,
          const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
          const DAVRequestEnvironment & rEnv )
@@ -177,17 +175,15 @@ public:
 
     virtual void
     PUT( const OUString & inPath,
-         const com::sun::star::uno::Reference<
-             com::sun::star::io::XInputStream > & inInputStream,
+         const css::uno::Reference< css::io::XInputStream > & inInputStream,
          const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) override;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
     POST( const OUString & inPath,
           const OUString & rContentType,
           const OUString & rReferer,
-          const com::sun::star::uno::Reference<
-              com::sun::star::io::XInputStream > & inInputStream,
+          const css::uno::Reference< css::io::XInputStream > & inInputStream,
           const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) override;
 
@@ -195,10 +191,8 @@ public:
     POST( const OUString & inPath,
           const OUString & rContentType,
           const OUString & rReferer,
-          const com::sun::star::uno::Reference<
-              com::sun::star::io::XInputStream > & inInputStream,
-          com::sun::star::uno::Reference<
-              com::sun::star::io::XOutputStream > & oOutputStream,
+          const css::uno::Reference< css::io::XInputStream > & inInputStream,
+          css::uno::Reference< css::io::XOutputStream > & oOutputStream,
           const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) override;
 
@@ -227,7 +221,7 @@ public:
 
     // set new lock.
     virtual void LOCK( const OUString & inURL,
-                       com::sun::star::ucb::Lock & inLock,
+                       css::ucb::Lock & inLock,
                        const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) override;
 
@@ -273,42 +267,12 @@ private:
     // unlock, called by SerfLockStore::~SerfLockStore
     void UNLOCK( const OUString& rLock );
 
-    /*
-    // low level GET implementation, used by public GET implementations
-    static int GET( serf_connection_t * sess,
-                    const char * uri,
-                    //ne_block_reader reader,
-                    bool getheaders,
-                    void * userdata );
-
-    // Buffer-based PUT implementation. Serf only has file descriptor-
-    // based API.
-    static int PUT( serf_connection_t * sess,
-                    const char * uri,
-                    const char * buffer,
-                    size_t size );
-
-    // Buffer-based POST implementation. Serf only has file descriptor-
-    // based API.
-    int POST( serf_connection_t * sess,
-              const char * uri,
-              const char * buffer,
-              //ne_block_reader reader,
-              void * userdata,
-              const OUString & rContentType,
-              const OUString & rReferer );
-    */
-
     // Helper: XInputStream -> Sequence< sal_Int8 >
     static bool getDataFromInputStream(
-        const com::sun::star::uno::Reference<
-            com::sun::star::io::XInputStream > & xStream,
-        com::sun::star::uno::Sequence< sal_Int8 > & rData,
+        const css::uno::Reference<
+            css::io::XInputStream > & xStream,
+        css::uno::Sequence< sal_Int8 > & rData,
         bool bAppendTrailingZeroByte );
-
-    /*
-    OUString makeAbsoluteURL( OUString const & rURL ) const;
-    */
 };
 
 } // namespace http_dav_ucp

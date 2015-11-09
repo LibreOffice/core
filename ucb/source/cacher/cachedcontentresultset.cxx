@@ -299,7 +299,7 @@ const Any& SAL_CALL CachedContentResultSet::CCRS_Cache
 
 const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
     ::getContentIdentifierString( sal_Int32 nRow )
-    throw( com::sun::star::uno::RuntimeException )
+    throw( css::uno::RuntimeException )
 {
     try
     {
@@ -322,7 +322,7 @@ const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
 
 const Reference< XContentIdentifier >& SAL_CALL CachedContentResultSet::CCRS_Cache
     ::getContentIdentifier( sal_Int32 nRow )
-    throw( com::sun::star::uno::RuntimeException )
+    throw( css::uno::RuntimeException )
 {
     try
     {
@@ -345,7 +345,7 @@ const Reference< XContentIdentifier >& SAL_CALL CachedContentResultSet::CCRS_Cac
 
 const Reference< XContent >& SAL_CALL CachedContentResultSet::CCRS_Cache
     ::getContent( sal_Int32 nRow )
-    throw( com::sun::star::uno::RuntimeException )
+    throw( css::uno::RuntimeException )
 {
     try
     {
@@ -374,13 +374,13 @@ const Reference< XContent >& SAL_CALL CachedContentResultSet::CCRS_Cache
 
 class CCRS_PropertySetInfo :
                 public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::beans::XPropertySetInfo
+                public css::lang::XTypeProvider,
+                public css::beans::XPropertySetInfo
 {
     friend class CachedContentResultSet;
 
     //my Properties
-    Sequence< com::sun::star::beans::Property >*
+    Sequence< css::beans::Property >*
                             m_pProperties;
 
     //some helping variables ( names for my special properties )
@@ -399,7 +399,7 @@ private:
     bool SAL_CALL
     impl_queryProperty(
             const OUString& rName
-            , com::sun::star::beans::Property& rProp ) const;
+            , css::beans::Property& rProp ) const;
     sal_Int32 SAL_CALL
     impl_getPos( const OUString& rName ) const;
 
@@ -423,17 +423,17 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
         throw( css::uno::RuntimeException, std::exception ) override;
 
     // XPropertySetInfo
-    virtual Sequence< com::sun::star::beans::Property > SAL_CALL
+    virtual Sequence< css::beans::Property > SAL_CALL
     getProperties()
         throw( RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::beans::Property SAL_CALL
+    virtual css::beans::Property SAL_CALL
     getPropertyByName( const OUString& aName )
-        throw( com::sun::star::beans::UnknownPropertyException, RuntimeException, std::exception ) override;
+        throw( css::beans::UnknownPropertyException, RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
     hasPropertyByName( const OUString& Name )
@@ -852,7 +852,7 @@ if( bIsFinalCount && !bCurIsFinalCount )                            \
 void SAL_CALL CachedContentResultSet
     ::impl_fetchData( sal_Int32 nRow
         , sal_Int32 nFetchSize, sal_Int32 nFetchDirection )
-        throw( com::sun::star::uno::RuntimeException )
+        throw( css::uno::RuntimeException )
 {
     FETCH_XXX( m_aCache, m_xFetchProvider, fetch );
 }
@@ -2072,7 +2072,7 @@ DateTime SAL_CALL CachedContentResultSet
 }
 
 //virtual
-Reference< com::sun::star::io::XInputStream >
+Reference< css::io::XInputStream >
     SAL_CALL CachedContentResultSet
     ::getBinaryStream( sal_Int32 columnIndex )
     throw( SQLException,
@@ -2083,7 +2083,7 @@ Reference< com::sun::star::io::XInputStream >
 }
 
 //virtual
-Reference< com::sun::star::io::XInputStream >
+Reference< css::io::XInputStream >
     SAL_CALL CachedContentResultSet
     ::getCharacterStream( sal_Int32 columnIndex )
     throw( SQLException,
@@ -2097,7 +2097,7 @@ Reference< com::sun::star::io::XInputStream >
 Any SAL_CALL CachedContentResultSet
     ::getObject( sal_Int32 columnIndex,
            const Reference<
-            com::sun::star::container::XNameAccess >& typeMap )
+            css::container::XNameAccess >& typeMap )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -2271,7 +2271,7 @@ Reference< XResultSet > SAL_CALL CachedContentResultSetFactory
     ::createCachedContentResultSet(
             const Reference< XResultSet > & xSource,
             const Reference< XContentIdentifierMapping > & xMapping )
-            throw( com::sun::star::uno::RuntimeException, std::exception )
+            throw( css::uno::RuntimeException, std::exception )
 {
     Reference< XResultSet > xRet;
     xRet = new CachedContentResultSet( m_xContext, xSource, xMapping );

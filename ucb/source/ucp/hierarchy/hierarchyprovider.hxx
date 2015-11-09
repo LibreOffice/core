@@ -48,10 +48,8 @@ namespace hierarchy_ucp {
 
 struct ConfigProviderMapEntry
 {
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > xConfigProvider;
-    com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameAccess > xRootReadAccess;
+    css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider;
+    css::uno::Reference< css::container::XHierarchicalNameAccess > xRootReadAccess;
     bool bTriedToGetRootReadAccess;
 
     ConfigProviderMapEntry() : bTriedToGetRootReadAccess( false ) {}
@@ -66,16 +64,14 @@ typedef std::unordered_map
 ConfigProviderMap;
 
 class HierarchyContentProvider : public ::ucbhelper::ContentProviderImplHelper,
-                                 public com::sun::star::lang::XInitialization
+                                 public css::lang::XInitialization
 {
     ConfigProviderMap   m_aConfigProviderMap;
-    com::sun::star::uno::Reference<
-        com::sun::star::util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
+    css::uno::Reference< css::util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
 public:
     explicit HierarchyContentProvider(
-                const com::sun::star::uno::Reference<
-                    com::sun::star::uno::XComponentContext >& rxContext );
+                const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~HierarchyContentProvider();
 
     // XInterface
@@ -108,31 +104,25 @@ public:
                           css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XContentProvider
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContent > SAL_CALL
-    queryContent( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XContentIdentifier >& Identifier )
-        throw( com::sun::star::ucb::IllegalIdentifierException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+        throw( css::ucb::IllegalIdentifierException,
+               css::uno::RuntimeException, std::exception ) override;
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const ::com::sun::star::uno::Sequence<
-                        ::com::sun::star::uno::Any >& aArguments )
-        throw( ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw( css::uno::Exception,
+               css::uno::RuntimeException, std::exception ) override;
 
     // Non-Interface methods
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >
+    css::uno::Reference< css::lang::XMultiServiceFactory >
     getConfigProvider( const OUString & rServiceSpecifier );
-    com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameAccess >
+    css::uno::Reference< css::container::XHierarchicalNameAccess >
     getRootConfigReadNameAccess( const OUString & rServiceSpecifier );
 
     // Note: may retrun an empty reference.
-    com::sun::star::uno::Reference<
-        com::sun::star::util::XOfficeInstallationDirectories >
+    css::uno::Reference< css::util::XOfficeInstallationDirectories >
     getOfficeInstallationDirectories();
 };
 

@@ -33,30 +33,30 @@ class XPropertySetInfo_impl : public cppu::WeakImplHelper<
     {
     public:
         XPropertySetInfo_impl( shell* pMyShell,const OUString& aUnqPath );
-        XPropertySetInfo_impl( shell* pMyShell,const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq );
+        XPropertySetInfo_impl( shell* pMyShell,const css::uno::Sequence< css::beans::Property >& seq );
 
         virtual ~XPropertySetInfo_impl();
 
-        virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property > SAL_CALL
+        virtual css::uno::Sequence< css::beans::Property > SAL_CALL
         getProperties(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::beans::Property SAL_CALL
+        virtual css::beans::Property SAL_CALL
         getPropertyByName(
             const OUString& aName )
-            throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::beans::UnknownPropertyException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
         hasPropertyByName( const OUString& Name )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
         shell*                                                                     m_pMyShell;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >    m_xProvider;
+        css::uno::Reference< css::ucb::XContentProvider >    m_xProvider;
         sal_Int32                                                                  m_count;
-        com::sun::star::uno::Sequence< com::sun::star::beans::Property >           m_seq;
+        css::uno::Sequence< css::beans::Property >           m_seq;
     };
 }
 

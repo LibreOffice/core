@@ -39,13 +39,13 @@
 class ContentResultSetWrapperListener;
 class ContentResultSetWrapper
                 : public cppu::OWeakObject
-                , public com::sun::star::lang::XComponent
-                , public com::sun::star::sdbc::XCloseable
-                , public com::sun::star::sdbc::XResultSetMetaDataSupplier
-                , public com::sun::star::beans::XPropertySet
-                , public com::sun::star::ucb::XContentAccess
-                , public com::sun::star::sdbc::XResultSet
-                , public com::sun::star::sdbc::XRow
+                , public css::lang::XComponent
+                , public css::sdbc::XCloseable
+                , public css::sdbc::XResultSetMetaDataSupplier
+                , public css::beans::XPropertySet
+                , public css::ucb::XContentAccess
+                , public css::sdbc::XResultSet
+                , public css::sdbc::XRow
 {
 protected:
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
@@ -101,31 +101,31 @@ protected:
     osl::Mutex              m_aMutex;
 
     //different Interfaces from Origin:
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
+    css::uno::Reference< css::sdbc::XResultSet >
                             m_xResultSetOrigin;
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
+    css::uno::Reference< css::sdbc::XRow >
                             m_xRowOrigin; //XRow-interface from m_xOrigin
                             //!! call impl_init_xRowOrigin() bevor you access this member
-    com::sun::star::uno::Reference< com::sun::star::ucb::XContentAccess >
+    css::uno::Reference< css::ucb::XContentAccess >
                             m_xContentAccessOrigin; //XContentAccess-interface from m_xOrigin
                             //!! call impl_init_xContentAccessOrigin() bevor you access this member
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >
+    css::uno::Reference< css::beans::XPropertySet >
                             m_xPropertySetOrigin; //XPropertySet-interface from m_xOrigin
                             //!! call impl_init_xPropertySetOrigin() bevor you access this member
 
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
+    css::uno::Reference< css::beans::XPropertySetInfo >
                             m_xPropertySetInfo;
                             //call impl_initPropertySetInfo() bevor you access this member
 
     sal_Int32               m_nForwardOnly;
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >
+    css::uno::Reference< css::beans::XPropertyChangeListener >
                             m_xMyListenerImpl;
     ContentResultSetWrapperListener*
                             m_pMyListenerImpl;
 
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData >
+    css::uno::Reference< css::sdbc::XResultSetMetaData >
                             m_xMetaDataFromOrigin; //XResultSetMetaData from m_xOrigin
 
     //management of listeners
@@ -151,8 +151,7 @@ private:
 protected:
 
 
-    ContentResultSetWrapper( com::sun::star::uno::Reference<
-                        com::sun::star::sdbc::XResultSet > xOrigin );
+    ContentResultSetWrapper( css::uno::Reference< css::sdbc::XResultSet > xOrigin );
 
     virtual ~ContentResultSetWrapper();
 
@@ -171,18 +170,18 @@ protected:
 
     void SAL_CALL
     impl_EnsureNotDisposed()
-        throw( com::sun::star::lang::DisposedException,
-               com::sun::star::uno::RuntimeException );
+        throw( css::lang::DisposedException,
+               css::uno::RuntimeException );
 
     void SAL_CALL
     impl_notifyPropertyChangeListeners(
-            const com::sun::star::beans::PropertyChangeEvent& rEvt );
+            const css::beans::PropertyChangeEvent& rEvt );
 
     void SAL_CALL
     impl_notifyVetoableChangeListeners(
-            const com::sun::star::beans::PropertyChangeEvent& rEvt )
-            throw( com::sun::star::beans::PropertyVetoException,
-                   com::sun::star::uno::RuntimeException );
+            const css::beans::PropertyChangeEvent& rEvt )
+            throw( css::beans::PropertyVetoException,
+                   css::uno::RuntimeException );
 
     bool SAL_CALL impl_isForwardOnly();
 
@@ -191,326 +190,309 @@ public:
 
     // XInterface
 
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // XComponent
 
     virtual void SAL_CALL
-    dispose() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
-    addEventListener( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XEventListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XEventListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
 
     //XCloseable
 
     virtual void SAL_CALL
     close()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
 
     //XResultSetMetaDataSupplier
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XResultSetMetaData > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
     getMetaData()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
 
     // XPropertySet
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     setPropertyValue( const OUString& aPropertyName,
-                      const com::sun::star::uno::Any& aValue )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::beans::PropertyVetoException,
-               com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                      const css::uno::Any& aValue )
+        throw( css::beans::UnknownPropertyException,
+               css::beans::PropertyVetoException,
+               css::lang::IllegalArgumentException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
     getPropertyValue( const OUString& PropertyName )
-        throw( com::sun::star::beans::UnknownPropertyException,
-        com::sun::star::lang::WrappedTargetException,
-        com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::beans::UnknownPropertyException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     addPropertyChangeListener( const OUString& aPropertyName,
-                               const com::sun::star::uno::Reference<
-                                       com::sun::star::beans::XPropertyChangeListener >& xListener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                               const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     removePropertyChangeListener( const OUString& aPropertyName,
-                                  const com::sun::star::uno::Reference<
-                                      com::sun::star::beans::XPropertyChangeListener >& aListener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                                  const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     addVetoableChangeListener( const OUString& PropertyName,
-                               const com::sun::star::uno::Reference<
-                                       com::sun::star::beans::XVetoableChangeListener >& aListener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                               const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     removeVetoableChangeListener( const OUString& PropertyName,
-                                  const com::sun::star::uno::Reference<
-                                      com::sun::star::beans::XVetoableChangeListener >& aListener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                                  const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
 
 
     // own methods
 
     virtual void SAL_CALL
-        impl_disposing( const com::sun::star::lang::EventObject& Source )
-        throw( com::sun::star::uno::RuntimeException );
+        impl_disposing( const css::lang::EventObject& Source )
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    impl_propertyChange( const com::sun::star::beans::PropertyChangeEvent& evt )
-        throw( com::sun::star::uno::RuntimeException );
+    impl_propertyChange( const css::beans::PropertyChangeEvent& evt )
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    impl_vetoableChange( const com::sun::star::beans::PropertyChangeEvent& aEvent )
-        throw( com::sun::star::beans::PropertyVetoException,
-               com::sun::star::uno::RuntimeException );
+    impl_vetoableChange( const css::beans::PropertyChangeEvent& aEvent )
+        throw( css::beans::PropertyVetoException,
+               css::uno::RuntimeException );
 
 
     // XContentAccess
 
     virtual OUString SAL_CALL
     queryContentIdentifierString()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
     queryContentIdentifier()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContent > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
     queryContent()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // XResultSet
 
     virtual sal_Bool SAL_CALL
     next()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     isBeforeFirst()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     isAfterLast()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     isFirst()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     isLast()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     beforeFirst()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     afterLast()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     first()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     last()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Int32 SAL_CALL
     getRow()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     absolute( sal_Int32 row )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     relative( sal_Int32 rows )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     previous()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     refreshRow()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     rowUpdated()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     rowInserted()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     rowDeleted()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::uno::XInterface > SAL_CALL
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference<
+                css::uno::XInterface > SAL_CALL
     getStatement()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
 
     // XRow
 
     virtual sal_Bool SAL_CALL
     wasNull()
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual OUString SAL_CALL
     getString( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
     getBoolean( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int8 SAL_CALL
     getByte( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int16 SAL_CALL
     getShort( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL
     getInt( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int64 SAL_CALL
     getLong( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual float SAL_CALL
     getFloat( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual double SAL_CALL
     getDouble( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getBytes( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::util::Date SAL_CALL
+    virtual css::util::Date SAL_CALL
     getDate( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::util::Time SAL_CALL
+    virtual css::util::Time SAL_CALL
     getTime( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::util::DateTime SAL_CALL
+    virtual css::util::DateTime SAL_CALL
     getTimestamp( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::io::XInputStream > SAL_CALL
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
     getBinaryStream( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::io::XInputStream > SAL_CALL
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
     getCharacterStream( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
-               const com::sun::star::uno::Reference<
-                   com::sun::star::container::XNameAccess >& typeMap )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+               const css::uno::Reference< css::container::XNameAccess >& typeMap )
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XRef > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL
     getRef( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XBlob > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL
     getBlob( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XClob > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL
     getClob( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XArray > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL
     getArray( sal_Int32 columnIndex )
-        throw( com::sun::star::sdbc::SQLException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::sdbc::SQLException,
+               css::uno::RuntimeException, std::exception ) override;
 };
 
 
 
 class ContentResultSetWrapperListener
         : public cppu::OWeakObject
-        , public com::sun::star::beans::XPropertyChangeListener
-        , public com::sun::star::beans::XVetoableChangeListener
+        , public css::beans::XPropertyChangeListener
+        , public css::beans::XVetoableChangeListener
 {
 protected:
     ContentResultSetWrapper*    m_pOwner;
@@ -532,23 +514,23 @@ public:
     //XEventListener
 
     virtual void SAL_CALL
-        disposing( const com::sun::star::lang::EventObject& Source )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        disposing( const css::lang::EventObject& Source )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     //XPropertyChangeListener
 
     virtual void SAL_CALL
-    propertyChange( const com::sun::star::beans::PropertyChangeEvent& evt )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    propertyChange( const css::beans::PropertyChangeEvent& evt )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     //XVetoableChangeListener
 
     virtual void SAL_CALL
-    vetoableChange( const com::sun::star::beans::PropertyChangeEvent& aEvent )
-        throw( com::sun::star::beans::PropertyVetoException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    vetoableChange( const css::beans::PropertyChangeEvent& aEvent )
+        throw( css::beans::PropertyVetoException,
+               css::uno::RuntimeException, std::exception ) override;
 
 
     // own methods:

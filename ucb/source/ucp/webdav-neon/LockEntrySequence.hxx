@@ -40,8 +40,7 @@ class LockEntrySequence
 {
 public:
     static bool createFromXML( const OString & rInData,
-                               com::sun::star::uno::Sequence<
-                                   com::sun::star::ucb::LockEntry > & rOutData );
+                               css::uno::Sequence< css::ucb::LockEntry > & rOutData );
 };
 
 }

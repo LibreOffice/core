@@ -146,30 +146,6 @@ Reference< XSingleServiceFactory > SAL_CALL
 FileProvider::createServiceFactory(
                    const Reference< XMultiServiceFactory >& rxServiceMgr )
 {
-  /**
-   * Create a single service factory.<BR>
-   * Note: The function pointer ComponentInstantiation points to a function throws Exception.
-   *
-   * @param rServiceManager     the service manager used by the implementation.
-   * @param rImplementationName the implementation name. An empty string is possible.
-   * @param ComponentInstantiation the function pointer to create an object.
-   * @param rServiceNames           the service supported by the implementation.
-   * @return a factory that support the interfaces XServiceProvider, XServiceInfo
-   *            XSingleServiceFactory and XComponent.
-   *
-   * @see createOneInstanceFactory
-   */
-  /*
-   *  Reference< ::com::sun::star::XSingleServiceFactory > createSingleFactory
-   *  (
-   *  const ::com::sun::star::Reference< ::com::sun::star::XMultiServiceFactory > & rServiceManager,
-   *  const OUString & rImplementationName,
-   *  ComponentInstantiation pCreateFunction,
-
-   *  const ::com::sun::star::Sequence< OUString > & rServiceNames
-   *  );
-   */
-
     return Reference< XSingleServiceFactory > ( cppu::createSingleFactory(
         rxServiceMgr,
         fileaccess::shell::getImplementationName_static(),

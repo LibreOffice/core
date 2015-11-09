@@ -27,11 +27,10 @@ using namespace com::sun::star;
 
 namespace gio
 {
-uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
+uno::Reference< css::ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
-            const uno::Reference<
-                    com::sun::star::ucb::XContentIdentifier >& Identifier )
-    throw( com::sun::star::ucb::IllegalIdentifierException,
+            const uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+    throw( css::ucb::IllegalIdentifierException,
            uno::RuntimeException, std::exception )
 {
     SAL_INFO("ucb.ucp.gio", "QueryContent: " << Identifier->getContentIdentifier());
@@ -46,13 +45,13 @@ ContentProvider::queryContent(
     {
         xContent = new ::gio::Content(m_xContext, this, Identifier);
     }
-    catch ( com::sun::star::ucb::ContentCreationException const & )
+    catch ( css::ucb::ContentCreationException const & )
     {
-        throw com::sun::star::ucb::IllegalIdentifierException();
+        throw css::ucb::IllegalIdentifierException();
     }
 
     if ( !xContent->getIdentifier().is() )
-        throw com::sun::star::ucb::IllegalIdentifierException();
+        throw css::ucb::IllegalIdentifierException();
 
     return xContent;
 }
@@ -94,7 +93,7 @@ css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & r
 XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
-                      com::sun::star::ucb::XContentProvider );
+                      css::ucb::XContentProvider );
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.GIOContentProvider" ),

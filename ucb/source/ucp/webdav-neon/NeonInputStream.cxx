@@ -66,11 +66,11 @@ Any NeonInputStream::queryInterface( const Type &type )
 
 // "Reads" the specified number of bytes from the stream
 sal_Int32 SAL_CALL NeonInputStream::readBytes(
-  ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::BufferSizeExceededException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception )
+  css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception )
 {
     // Work out how much we're actually going to write
     sal_Int32 theBytes2Read = nBytesToRead;
@@ -92,11 +92,11 @@ sal_Int32 SAL_CALL NeonInputStream::readBytes(
 }
 
 sal_Int32 SAL_CALL NeonInputStream::readSomeBytes(
- ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
-        throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::BufferSizeExceededException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception )
+ css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception )
 {
     // Warning: What should this be doing ?
     return readBytes( aData, nMaxBytesToRead );
@@ -104,10 +104,10 @@ sal_Int32 SAL_CALL NeonInputStream::readSomeBytes(
 
 // Moves the current stream position forward
 void SAL_CALL NeonInputStream::skipBytes( sal_Int32 nBytesToSkip )
-        throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::BufferSizeExceededException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception )
 {
     mPos += nBytesToSkip;
     if ( mPos >= mLen )
@@ -116,44 +116,44 @@ void SAL_CALL NeonInputStream::skipBytes( sal_Int32 nBytesToSkip )
 
 // Returns the number of unread bytes currently remaining on the stream
 sal_Int32 SAL_CALL NeonInputStream::available(  )
-        throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::io::NotConnectedException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception )
 {
     return sal::static_int_cast<sal_Int32>(mLen - mPos);
 }
 
 void SAL_CALL NeonInputStream::closeInput()
-         throw( ::com::sun::star::io::NotConnectedException,
-                  ::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException, std::exception )
+         throw( css::io::NotConnectedException,
+                  css::io::IOException,
+                  css::uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL NeonInputStream::seek( sal_Int64 location )
-        throw( ::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::lang::IllegalArgumentException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception )
 {
     if ( location < 0 )
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
 
     if ( location <= mLen )
         mPos = location;
     else
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
 }
 
 sal_Int64 SAL_CALL NeonInputStream::getPosition()
-        throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::io::IOException,
+               css::uno::RuntimeException, std::exception )
 {
     return mPos;
 }
 
 sal_Int64 SAL_CALL NeonInputStream::getLength()
-        throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::io::IOException,
+               css::uno::RuntimeException, std::exception )
 {
     return mLen;
 }

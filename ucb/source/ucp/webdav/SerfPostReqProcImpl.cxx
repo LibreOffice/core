@@ -32,7 +32,7 @@ SerfPostReqProcImpl::SerfPostReqProcImpl( const char* inPath,
                                           apr_size_t inDataLen,
                                           const char* inContentType,
                                           const char* inReferer,
-                                          const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm )
+                                          const css::uno::Reference< SerfInputStream > & xioInStrm )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpPostData( inData )
     , mnPostDataLen( inDataLen )
@@ -49,7 +49,7 @@ SerfPostReqProcImpl::SerfPostReqProcImpl( const char* inPath,
                                           apr_size_t inDataLen,
                                           const char* inContentType,
                                           const char* inReferer,
-                                          const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm )
+                                          const css::uno::Reference< css::io::XOutputStream > & xioOutStrm )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpPostData( inData )
     , mnPostDataLen( inDataLen )

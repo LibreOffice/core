@@ -50,7 +50,7 @@ namespace cmis
 
 class ContentProvider;
 class Content : public ::ucbhelper::ContentImplHelper,
-                public com::sun::star::ucb::XContentCreator,
+                public css::ucb::XContentCreator,
                 public ChildrenProvider
 {
 private:
@@ -68,91 +68,86 @@ private:
     libcmis::ObjectTypePtr m_pObjectType;
     std::map< std::string, libcmis::PropertyPtr > m_pObjectProps;
 
-    bool isFolder( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+    bool isFolder( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
     void setCmisProperty(const std::string& rName, const std::string& rValue,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    com::sun::star::uno::Any getBadArgExcept();
+    css::uno::Any getBadArgExcept();
 
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
+    css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
-            const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& rProperties,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+            const css::uno::Sequence< css::beans::Property >& rProperties,
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    libcmis::Session* getSession( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
-    libcmis::ObjectTypePtr getObjectType( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+    libcmis::Session* getSession( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    libcmis::ObjectTypePtr getObjectType( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 private:
     typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;
 
-    com::sun::star::uno::Any open(const com::sun::star::ucb::OpenCommandArgument2 & rArg,
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
-            throw( com::sun::star::uno::Exception, libcmis::Exception );
+    css::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
+        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+            throw( css::uno::Exception, libcmis::Exception );
 
-    void transfer( const com::sun::star::ucb::TransferInfo& rTransferInfo,
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
-            throw( com::sun::star::uno::Exception );
+    void transfer( const css::ucb::TransferInfo& rTransferInfo,
+        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+            throw( css::uno::Exception );
 
-    void insert( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInputStream,
+    void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
         bool bReplaceExisting, const OUString & rMimeType,
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
             throw (css::uno::Exception, std::exception);
 
-    OUString checkIn( const com::sun::star::ucb::CheckinArgument& rArg,
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
-            throw( com::sun::star::uno::Exception );
+    OUString checkIn( const css::ucb::CheckinArgument& rArg,
+        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+            throw( css::uno::Exception );
 
-    OUString checkOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
-            throw( com::sun::star::uno::Exception );
+    OUString checkOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+            throw( css::uno::Exception );
 
-    OUString cancelCheckOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
-            throw( com::sun::star::uno::Exception );
+    OUString cancelCheckOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+            throw( css::uno::Exception );
 
-    static void copyData( com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xIn,
-        com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOut );
+    static void copyData( css::uno::Reference< css::io::XInputStream > xIn,
+        css::uno::Reference< css::io::XOutputStream > xOut );
 
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any >
-        setPropertyValues( const com::sun::star::uno::Sequence<
-            com::sun::star::beans::PropertyValue >& rValues,
-            const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment >& xEnv );
+    css::uno::Sequence< css::uno::Any >
+        setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    com::sun::star::uno::Sequence< com::sun::star::document::CmisVersion >
-        getAllVersions( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
-            throw(com::sun::star::uno::Exception,
+    css::uno::Sequence< css::document::CmisVersion >
+        getAllVersions( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+            throw(css::uno::Exception,
                   std::exception);
 
-    bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
+    bool feedSink( css::uno::Reference< css::uno::XInterface> aSink,
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 public:
-    Content( const com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
+    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ContentProvider *pProvider,
+        const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         libcmis::ObjectPtr pObject = libcmis::ObjectPtr( ) )
-            throw ( com::sun::star::ucb::ContentCreationException );
+            throw ( css::ucb::ContentCreationException );
 
-    Content( const com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
+    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ContentProvider *pProvider,
+        const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         bool bIsFolder)
-            throw ( com::sun::star::ucb::ContentCreationException );
+            throw ( css::ucb::ContentCreationException );
 
     virtual ~Content();
 
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
-        getProperties( const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment > & xEnv ) override;
+    virtual css::uno::Sequence< css::beans::Property >
+        getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
 
     libcmis::ObjectPtr updateProperties(
-            const com::sun::star::uno::Any& iCmisProps,
-            const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment > & xEnv);
+            const css::uno::Any& iCmisProps,
+            const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv);
 
-    virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
-        getCommands( const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment > & xEnv ) override;
+    virtual css::uno::Sequence< css::ucb::CommandInfo >
+        getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
 
     virtual OUString getParentURL() override;
 
@@ -171,40 +166,40 @@ public:
 
     virtual OUString SAL_CALL
     getImplementationName()
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual OUString SAL_CALL
     getContentType()
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Any SAL_CALL
-        execute( const com::sun::star::ucb::Command& aCommand,
+    virtual css::uno::Any SAL_CALL
+        execute( const css::ucb::Command& aCommand,
         sal_Int32 CommandId,
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& Environment )
-            throw( com::sun::star::uno::Exception, com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::RuntimeException, std::exception ) override;
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+            throw( css::uno::Exception, css::ucb::CommandAbortedException, css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL abort( sal_Int32 CommandId )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+    virtual css::uno::Sequence< css::ucb::ContentInfo >
         SAL_CALL queryCreatableContentsInfo()
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
-        SAL_CALL createNewContent( const com::sun::star::ucb::ContentInfo& Info )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent >
+        SAL_CALL createNewContent( const css::ucb::ContentInfo& Info )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-    com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
-        queryCreatableContentsInfo( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
-                throw( com::sun::star::uno::RuntimeException );
+    css::uno::Sequence< css::ucb::ContentInfo >
+        queryCreatableContentsInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
+                throw( css::uno::RuntimeException );
 
-    virtual std::list< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) override;
+    virtual std::list< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
 
-    libcmis::ObjectPtr getObject( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception);
+    libcmis::ObjectPtr getObject( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception);
 };
 
 }

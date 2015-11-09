@@ -34,10 +34,10 @@
 
 class CachedContentResultSetStub
                 : public ContentResultSetWrapper
-                , public com::sun::star::lang::XTypeProvider
-                , public com::sun::star::lang::XServiceInfo
-                , public com::sun::star::ucb::XFetchProvider
-                , public com::sun::star::ucb::XFetchProviderForContentAccess
+                , public css::lang::XTypeProvider
+                , public css::lang::XServiceInfo
+                , public css::ucb::XFetchProvider
+                , public css::ucb::XFetchProviderForContentAccess
 {
 private:
     sal_Int32       m_nColumnCount;
@@ -54,43 +54,38 @@ private:
 
     void SAL_CALL
     impl_getCurrentRowContent(
-        com::sun::star::uno::Any& rRowContent,
-        com::sun::star::uno::Reference<
-            com::sun::star::sdbc::XRow > xRow )
-        throw ( com::sun::star::sdbc::SQLException
-              , com::sun::star::uno::RuntimeException );
+        css::uno::Any& rRowContent,
+        css::uno::Reference< css::sdbc::XRow > xRow )
+        throw ( css::sdbc::SQLException
+              , css::uno::RuntimeException );
 
     sal_Int32 SAL_CALL
     impl_getColumnCount();
 
     static void SAL_CALL
     impl_getCurrentContentIdentifierString(
-            com::sun::star::uno::Any& rAny
-            , com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentAccess > xContentAccess )
-            throw ( com::sun::star::uno::RuntimeException );
+            css::uno::Any& rAny
+            , css::uno::Reference< css::ucb::XContentAccess > xContentAccess )
+            throw ( css::uno::RuntimeException );
 
     static void SAL_CALL
     impl_getCurrentContentIdentifier(
-            com::sun::star::uno::Any& rAny
-            , com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentAccess > xContentAccess )
-            throw ( com::sun::star::uno::RuntimeException );
+            css::uno::Any& rAny
+            , css::uno::Reference< css::ucb::XContentAccess > xContentAccess )
+            throw ( css::uno::RuntimeException );
 
     static void SAL_CALL
     impl_getCurrentContent(
-            com::sun::star::uno::Any& rAny
-            , com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentAccess > xContentAccess )
-            throw ( com::sun::star::uno::RuntimeException );
+            css::uno::Any& rAny
+            , css::uno::Reference< css::ucb::XContentAccess > xContentAccess )
+            throw ( css::uno::RuntimeException );
 
     void SAL_CALL
     impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( css::uno::RuntimeException );
 
 public:
-    CachedContentResultSetStub( com::sun::star::uno::Reference<
-                        com::sun::star::sdbc::XResultSet > xOrigin );
+    CachedContentResultSetStub( css::uno::Reference< css::sdbc::XResultSet > xOrigin );
 
     virtual ~CachedContentResultSetStub();
 
@@ -107,13 +102,13 @@ public:
     // own inherited
 
     virtual void SAL_CALL
-    impl_propertyChange( const com::sun::star::beans::PropertyChangeEvent& evt )
-        throw( com::sun::star::uno::RuntimeException ) override;
+    impl_propertyChange( const css::beans::PropertyChangeEvent& evt )
+        throw( css::uno::RuntimeException ) override;
 
     virtual void SAL_CALL
-    impl_vetoableChange( const com::sun::star::beans::PropertyChangeEvent& aEvent )
-        throw( com::sun::star::beans::PropertyVetoException,
-               com::sun::star::uno::RuntimeException ) override;
+    impl_vetoableChange( const css::beans::PropertyChangeEvent& aEvent )
+        throw( css::beans::PropertyVetoException,
+               css::uno::RuntimeException ) override;
 
     // XTypeProvider
 
@@ -136,47 +131,45 @@ public:
     // XFetchProvider
 
 
-    virtual com::sun::star::ucb::FetchResult SAL_CALL
+    virtual css::ucb::FetchResult SAL_CALL
     fetch( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // XFetchProviderForContentAccess
 
-    virtual com::sun::star::ucb::FetchResult SAL_CALL
+    virtual css::ucb::FetchResult SAL_CALL
          fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::ucb::FetchResult SAL_CALL
+    virtual css::ucb::FetchResult SAL_CALL
          fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::ucb::FetchResult SAL_CALL
+    virtual css::ucb::FetchResult SAL_CALL
          fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 
 
 class CachedContentResultSetStubFactory
                 : public cppu::OWeakObject
-                , public com::sun::star::lang::XTypeProvider
-                , public com::sun::star::lang::XServiceInfo
-                , public com::sun::star::ucb::XCachedContentResultSetStubFactory
+                , public css::lang::XTypeProvider
+                , public css::lang::XServiceInfo
+                , public css::ucb::XCachedContentResultSetStubFactory
 {
 protected:
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >    m_xSMgr;
+    css::uno::Reference< css::lang::XMultiServiceFactory >    m_xSMgr;
 
 public:
 
     CachedContentResultSetStubFactory(
-        const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > & rSMgr);
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
     virtual ~CachedContentResultSetStubFactory();
 
@@ -192,7 +185,7 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
         throw( css::uno::RuntimeException, std::exception ) override;
 
 
@@ -213,12 +206,10 @@ public:
 
     // XCachedContentResultSetStubFactory
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XResultSet > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
     createCachedContentResultSetStub(
-                const com::sun::star::uno::Reference<
-                    com::sun::star::sdbc::XResultSet > & xSource )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+                const css::uno::Reference< css::sdbc::XResultSet > & xSource )
+            throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 #endif

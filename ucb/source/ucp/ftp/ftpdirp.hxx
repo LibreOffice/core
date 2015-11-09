@@ -39,7 +39,7 @@ namespace ftp {
      *======================================================================*/
 
     struct DateTime
-        : public com::sun::star::util::DateTime
+        : public css::util::DateTime
     {
         DateTime(const sal_uInt32& nanoSeconds,
                  const sal_uInt16& seconds,
@@ -48,7 +48,7 @@ namespace ftp {
                  const sal_uInt16& day,
                  const sal_uInt16& month,
                  const sal_uInt16& year)
-                     : com::sun::star::util::DateTime(nanoSeconds,
+                     : css::util::DateTime(nanoSeconds,
                                                       seconds,
                                                       minutes,
                                                       hours,

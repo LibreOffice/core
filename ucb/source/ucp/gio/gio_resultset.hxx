@@ -28,20 +28,19 @@ namespace gio
 
     class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
     {
-      com::sun::star::uno::Reference< Content > m_xContent;
-    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xEnv;
+        css::uno::Reference< Content > m_xContent;
+        css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
 
     private:
-    virtual void initStatic() override;
-    virtual void initDynamic() override;
+       virtual void initStatic() override;
+        virtual void initDynamic() override;
 
     public:
-    DynamicResultSet(
-            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-            const com::sun::star::uno::Reference< Content >& rxContent,
-            const com::sun::star::ucb::OpenCommandArgument2& rCommand,
-            const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment >& rxEnv );
+        DynamicResultSet(
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< Content >& rxContent,
+            const css::ucb::OpenCommandArgument2& rCommand,
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
     };
 }
 

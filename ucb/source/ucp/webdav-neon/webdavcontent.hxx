@@ -74,7 +74,7 @@ class ContentProperties;
 class CachableContentProperties;
 
 class Content : public ::ucbhelper::ContentImplHelper,
-                public com::sun::star::ucb::XContentCreator
+                public css::ucb::XContentCreator
 {
     enum ResourceType
     {
@@ -100,144 +100,119 @@ class Content : public ::ucbhelper::ContentImplHelper,
     std::vector< OUString > m_aFailedPropNames;
 
 private:
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
-    getProperties( const com::sun::star::uno::Reference<
-                       com::sun::star::ucb::XCommandEnvironment > & xEnv ) override;
-    virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
-    getCommands( const com::sun::star::uno::Reference<
-                     com::sun::star::ucb::XCommandEnvironment > & xEnv ) override;
+    virtual css::uno::Sequence< css::beans::Property >
+    getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
+    virtual css::uno::Sequence< css::ucb::CommandInfo >
+    getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
     virtual OUString getParentURL() override;
 
-    bool isFolder( const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
-        throw ( ::com::sun::star::uno::Exception, std::exception );
+    bool isFolder( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
+        throw ( css::uno::Exception, std::exception );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-    getPropertyValues( const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::beans::Property >& rProperties,
-                       const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
-        throw ( ::com::sun::star::uno::Exception, std::exception );
+    css::uno::Reference< css::sdbc::XRow >
+    getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties,
+                       const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
+        throw ( css::uno::Exception, std::exception );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-    setPropertyValues( const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::beans::PropertyValue >& rValues,
-                       const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
-        throw ( ::com::sun::star::uno::Exception, std::exception );
+    css::uno::Sequence< css::uno::Any >
+    setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+                       const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
+        throw ( css::uno::Exception, std::exception );
 
     typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;
     void queryChildren( ContentRefList& rChildren);
 
     bool
-    exchangeIdentity( const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::ucb::XContentIdentifier >& xNewId );
+    exchangeIdentity( const css::uno::Reference< css::ucb::XContentIdentifier >& xNewId );
 
     const OUString
     getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess );
 
     ResourceType
-    getResourceType( const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
-        throw ( ::com::sun::star::uno::Exception, std::exception );
+    getResourceType( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
+        throw ( css::uno::Exception, std::exception );
 
     ResourceType
-    getResourceType( const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
+    getResourceType( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                      const std::unique_ptr< DAVResourceAccess > & rResAccess,
                      bool * networkAccessAllowed = 0)
-        throw ( ::com::sun::star::uno::Exception, std::exception );
+        throw ( css::uno::Exception, std::exception );
 
     // Command "open"
-    com::sun::star::uno::Any open(
-                const com::sun::star::ucb::OpenCommandArgument3 & rArg,
-                const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment > & xEnv )
+    css::uno::Any open(
+                const css::ucb::OpenCommandArgument3 & rArg,
+                const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw (css::uno::Exception, std::exception);
 
     // Command "post"
-    void post( const com::sun::star::ucb::PostCommandArgument2 & rArg,
-               const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+    void post( const css::ucb::PostCommandArgument2 & rArg,
+               const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+        throw( css::uno::Exception, std::exception );
 
     // Command "insert"
-    void insert( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::io::XInputStream > & xInputStream,
+    void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
                  bool bReplaceExisting,
-                 const com::sun::star::uno::Reference<
-                     com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+                 const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+        throw( css::uno::Exception, std::exception );
 
     // Command "transfer"
-    void transfer( const ::com::sun::star::ucb::TransferInfo & rArgs,
-                   const com::sun::star::uno::Reference<
-                       com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+    void transfer( const css::ucb::TransferInfo & rArgs,
+                   const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+        throw( css::uno::Exception, std::exception );
 
     // Command "delete"
     void destroy( bool bDeletePhysical )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+        throw( css::uno::Exception, std::exception );
 
     // Command "lock"
-    void lock( const com::sun::star::uno::Reference<
-                  com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+    void lock( const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+        throw( css::uno::Exception, std::exception );
 
     // Command "unlock"
-    void unlock( const com::sun::star::uno::Reference<
-                  com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+    void unlock( const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+        throw( css::uno::Exception, std::exception );
 
-    ::com::sun::star::uno::Any MapDAVException( const DAVException & e,
+    css::uno::Any MapDAVException( const DAVException & e,
                                                 bool bWrite );
     void cancelCommandExecution(
                     const DAVException & e,
-                    const ::com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XCommandEnvironment > & xEnv,
+                    const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
                     bool bWrite = false )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+        throw( css::uno::Exception, std::exception );
 
     static bool shouldAccessNetworkAfterException( const DAVException & e );
 
     ResourceType resourceTypeForLocks(
-        const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment >& Environment );
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 
-    void addProperty( const com::sun::star::ucb::PropertyCommandArgument &aCmdArg,
-                      const com::sun::star::uno::Reference<
-                      com::sun::star::ucb::XCommandEnvironment >& Environment )
-    throw( com::sun::star::beans::PropertyExistException,
-           com::sun::star::beans::IllegalTypeException,
-           com::sun::star::lang::IllegalArgumentException,
-           com::sun::star::uno::RuntimeException,
+    void addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
+                      const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+    throw( css::beans::PropertyExistException,
+           css::beans::IllegalTypeException,
+           css::lang::IllegalArgumentException,
+           css::uno::RuntimeException,
            std::exception );
 
     void removeProperty( const OUString& Name,
-                         const com::sun::star::uno::Reference<
-                         com::sun::star::ucb::XCommandEnvironment >& Environment )
-    throw( com::sun::star::beans::UnknownPropertyException,
-           com::sun::star::beans::NotRemoveableException,
-           com::sun::star::uno::RuntimeException,
+                         const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+    throw( css::beans::UnknownPropertyException,
+           css::beans::NotRemoveableException,
+           css::uno::RuntimeException,
            std::exception );
 
 public:
-    Content( const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::uno::XComponentContext >& rxContext,
+    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
-             const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::ucb::XContentIdentifier >& Identifier,
+             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              rtl::Reference< DAVSessionFactory > const & rSessionFactory )
-        throw ( ::com::sun::star::ucb::ContentCreationException );
-    Content( const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::uno::XComponentContext >& rxContext,
+        throw ( css::ucb::ContentCreationException );
+    Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
-             const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::ucb::XContentIdentifier >& Identifier,
+             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              rtl::Reference< DAVSessionFactory > const & rSessionFactory,
              bool isCollection )
-        throw ( ::com::sun::star::ucb::ContentCreationException );
+        throw ( css::ucb::ContentCreationException );
     virtual ~Content();
 
     // XInterface
@@ -257,59 +232,56 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL
     getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XContent
     virtual OUString SAL_CALL
     getContentType()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XCommandProcessor
-    virtual com::sun::star::uno::Any SAL_CALL
-    execute( const com::sun::star::ucb::Command& aCommand,
+    virtual css::uno::Any SAL_CALL
+    execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
-             const com::sun::star::uno::Reference<
-                 com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( com::sun::star::uno::Exception,
-               com::sun::star::ucb::CommandAbortedException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+             const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+        throw( css::uno::Exception,
+               css::ucb::CommandAbortedException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     abort( sal_Int32 CommandId )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XPropertyContainer
     virtual void SAL_CALL
     addProperty( const OUString& Name,
                  sal_Int16 Attributes,
-                 const com::sun::star::uno::Any& DefaultValue )
-        throw( com::sun::star::beans::PropertyExistException,
-               com::sun::star::beans::IllegalTypeException,
-               com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                 const css::uno::Any& DefaultValue )
+        throw( css::beans::PropertyExistException,
+               css::beans::IllegalTypeException,
+               css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     removeProperty( const OUString& Name )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::beans::NotRemoveableException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::beans::UnknownPropertyException,
+               css::beans::NotRemoveableException,
+               css::uno::RuntimeException, std::exception ) override;
 
 
     // Additional interfaces
 
 
     // XContentCreator
-    virtual com::sun::star::uno::Sequence<
-        com::sun::star::ucb::ContentInfo > SAL_CALL
+    virtual css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
    queryCreatableContentsInfo()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContent > SAL_CALL
-    createNewContent( const com::sun::star::ucb::ContentInfo& Info )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    createNewContent( const css::ucb::ContentInfo& Info )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // Non-interface methods.
@@ -318,14 +290,11 @@ public:
     DAVResourceAccess & getResourceAccess() { return *m_xResAccess; }
 
     // Called from resultset data supplier.
-    static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-    getPropertyValues( const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::uno::XComponentContext >& rxContext,
-                       const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::beans::Property >& rProperties,
+    static css::uno::Reference< css::sdbc::XRow >
+    getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                       const css::uno::Sequence< css::beans::Property >& rProperties,
                        const ContentProperties& rData,
-                       const rtl::Reference<
-                           ::ucbhelper::ContentProviderImplHelper >& rProvider,
+                       const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
                        const OUString& rContentId );
 };
 

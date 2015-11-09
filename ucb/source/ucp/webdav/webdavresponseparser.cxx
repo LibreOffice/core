@@ -287,7 +287,7 @@ namespace
         WebDAVResponseParserMode_Lock
     };
 
-    class WebDAVResponseParser : public cppu::WeakImplHelper< com::sun::star::xml::sax::XDocumentHandler >
+    class WebDAVResponseParser : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
     {
     private:
         std::vector< ucb::Lock >                      maResult_Lock;

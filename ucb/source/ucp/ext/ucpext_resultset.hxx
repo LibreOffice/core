@@ -37,15 +37,15 @@ namespace ucb { namespace ucp { namespace ext
     {
     public:
         ResultSet(
-            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-              const rtl::Reference< Content >& i_rContent,
-            const com::sun::star::ucb::OpenCommandArgument2& i_rCommand,
-              const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& i_rEnv
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const rtl::Reference< Content >& i_rContent,
+            const css::ucb::OpenCommandArgument2& i_rCommand,
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv
         );
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >  m_xEnvironment;
-        ::rtl::Reference< Content >                                                     m_xContent;
+        css::uno::Reference< css::ucb::XCommandEnvironment >  m_xEnvironment;
+        ::rtl::Reference< Content >                           m_xContent;
 
     private:
         virtual void initStatic() override;

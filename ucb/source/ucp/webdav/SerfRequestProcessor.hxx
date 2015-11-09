@@ -64,21 +64,21 @@ public:
                            apr_status_t& outSerfStatus );
 
     // GET
-    bool processGet( const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
+    bool processGet( const css::uno::Reference< SerfInputStream >& xioInStrm,
                      apr_status_t& outSerfStatus );
 
     // GET inclusive header fields
-    bool processGet( const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
+    bool processGet( const css::uno::Reference< SerfInputStream >& xioInStrm,
                      const std::vector< OUString > & inHeaderNames,
                      DAVResource & ioResource,
                      apr_status_t& outSerfStatus );
 
     // GET
-    bool processGet( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
+    bool processGet( const css::uno::Reference< css::io::XOutputStream >& xioOutStrm,
                      apr_status_t& outSerfStatus );
 
     // GET inclusive header fields
-    bool processGet( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
+    bool processGet( const css::uno::Reference< css::io::XOutputStream >& xioOutStrm,
                      const std::vector< OUString > & inHeaderNames,
                      DAVResource & ioResource,
                      apr_status_t& outSerfStatus );
@@ -98,7 +98,7 @@ public:
                       apr_size_t inDataLen,
                       const OUString & inContentType,
                       const OUString & inReferer,
-                      const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
+                      const css::uno::Reference< SerfInputStream >& xioInStrm,
                       apr_status_t& outSerfStatus );
 
     // POST
@@ -106,7 +106,7 @@ public:
                       apr_size_t inDataLen,
                       const OUString & inContentType,
                       const OUString & inReferer,
-                      const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
+                      const css::uno::Reference< css::io::XOutputStream >& xioOutStrm,
                       apr_status_t& outSerfStatus );
 
     // DELETE

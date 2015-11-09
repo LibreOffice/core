@@ -69,7 +69,7 @@ public:
     }
 
     virtual bool CanUse( const OUString & inPath,
-                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags ) = 0;
+                             const css::uno::Sequence< css::beans::NamedValue >& rFlags ) = 0;
 
     virtual bool UsesProxy() = 0;
 
@@ -101,18 +101,17 @@ public:
                        const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
     virtual void GET( const OUString & inPath,
-                      com::sun::star::uno::Reference<
-                          com::sun::star::io::XOutputStream >& o,
+                      css::uno::Reference< css::io::XOutputStream >& o,
                       const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
@@ -121,34 +120,30 @@ public:
 
     virtual void
     GET( const OUString & inPath,
-         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& o,
+         css::uno::Reference< css::io::XOutputStream >& o,
          const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
          const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
     virtual void PUT( const OUString & inPath,
-                      const com::sun::star::uno::Reference<
-                          com::sun::star::io::XInputStream >& s,
+                      const css::uno::Reference< css::io::XInputStream >& s,
                       const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    virtual css::uno::Reference< css::io::XInputStream >
     POST( const OUString & inPath,
           const OUString & rContentType,
           const OUString & rReferer,
-          const com::sun::star::uno::Reference<
-              com::sun::star::io::XInputStream > & inInputStream,
+          const css::uno::Reference< css::io::XInputStream > & inInputStream,
           const DAVRequestEnvironment & rEnv )
         throw ( std::exception ) = 0;
 
     virtual void POST( const OUString & inPath,
                        const OUString & rContentType,
                        const OUString & rReferer,
-                       const com::sun::star::uno::Reference<
-                           com::sun::star::io::XInputStream > & inInputStream,
-                       com::sun::star::uno::Reference<
-                           com::sun::star::io::XOutputStream > & oOutputStream,
+                       const css::uno::Reference< css::io::XInputStream > & inInputStream,
+                       css::uno::Reference< css::io::XOutputStream > & oOutputStream,
                        const DAVRequestEnvironment & rEnv )
         throw ( std::exception ) = 0;
 
@@ -174,7 +169,7 @@ public:
 
     // set new lock.
     virtual void LOCK( const OUString & inPath,
-                       com::sun::star::ucb::Lock & inLock,
+                       css::ucb::Lock & inLock,
                        const DAVRequestEnvironment & rEnv )
         throw ( std::exception ) = 0;
 

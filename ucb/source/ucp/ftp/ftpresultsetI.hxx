@@ -35,15 +35,11 @@ namespace ftp {
     public:
 
         ResultSetI(
-            const com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext>& rxContext,
-            const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XContentProvider>& xProvider,
+            const css::uno::Reference< css::uno::XComponentContext>& rxContext,
+            const css::uno::Reference< css::ucb::XContentProvider>& xProvider,
             sal_Int32 nOpenMode,
-            const com::sun::star::uno::Sequence<
-            com::sun::star::beans::Property >& seq,
-            const com::sun::star::uno::Sequence<
-            com::sun::star::ucb::NumberedSortingInfo >& seqSort,
+            const css::uno::Sequence< css::beans::Property >& seq,
+            const css::uno::Sequence< css::ucb::NumberedSortingInfo >& seqSort,
             const std::vector<FTPDirentry>&  dirvec);
 
     private:

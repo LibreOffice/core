@@ -44,94 +44,93 @@ namespace tdoc_ucp {
     {
     public:
         StorageElementFactory(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext > & rxContext,
+            const css::uno::Reference< css::uno::XComponentContext > & rxContext,
             const rtl::Reference< OfficeDocumentsManager > & xDocsMgr );
         virtual ~StorageElementFactory();
 
-        com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
+        css::uno::Reference< css::embed::XStorage >
         createTemporaryStorage()
-            throw ( com::sun::star::uno::Exception,
-                    com::sun::star::uno::RuntimeException );
+            throw ( css::uno::Exception,
+                    css::uno::RuntimeException );
 
-        com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
+        css::uno::Reference< css::embed::XStorage >
         createStorage( const OUString & rUri, StorageAccessMode eMode )
-            throw ( com::sun::star::embed::InvalidStorageException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWrappedTargetException,
-                    com::sun::star::uno::RuntimeException );
+            throw ( css::embed::InvalidStorageException,
+                    css::lang::IllegalArgumentException,
+                    css::io::IOException,
+                    css::embed::StorageWrappedTargetException,
+                    css::uno::RuntimeException );
 
-        com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+        css::uno::Reference< css::io::XInputStream >
         createInputStream( const OUString & rUri,
                            const OUString & rPassword )
-            throw ( com::sun::star::embed::InvalidStorageException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWrappedTargetException,
-                    com::sun::star::packages::WrongPasswordException,
-                    com::sun::star::uno::RuntimeException );
+            throw ( css::embed::InvalidStorageException,
+                    css::lang::IllegalArgumentException,
+                    css::io::IOException,
+                    css::embed::StorageWrappedTargetException,
+                    css::packages::WrongPasswordException,
+                    css::uno::RuntimeException );
 
-        com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
+        css::uno::Reference< css::io::XOutputStream >
         createOutputStream( const OUString & rUri,
                             const OUString & rPassword,
                             bool bTruncate )
-            throw ( com::sun::star::embed::InvalidStorageException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWrappedTargetException,
-                    com::sun::star::packages::WrongPasswordException,
-                    com::sun::star::uno::RuntimeException );
+            throw ( css::embed::InvalidStorageException,
+                    css::lang::IllegalArgumentException,
+                    css::io::IOException,
+                    css::embed::StorageWrappedTargetException,
+                    css::packages::WrongPasswordException,
+                    css::uno::RuntimeException );
 
-        com::sun::star::uno::Reference< com::sun::star::io::XStream >
+        css::uno::Reference< css::io::XStream >
         createStream( const OUString & rUri,
                       const OUString & rPassword,
                       bool bTruncate )
-            throw ( com::sun::star::embed::InvalidStorageException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWrappedTargetException,
-                    com::sun::star::packages::WrongPasswordException,
-                    com::sun::star::uno::RuntimeException );
+            throw ( css::embed::InvalidStorageException,
+                    css::lang::IllegalArgumentException,
+                    css::io::IOException,
+                    css::embed::StorageWrappedTargetException,
+                    css::packages::WrongPasswordException,
+                    css::uno::RuntimeException );
 
     private:
         friend class Storage;
 
         void releaseElement( Storage * pElement );
 
-        com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
+        css::uno::Reference< css::embed::XStorage >
         queryParentStorage( const OUString & rUri,
                             StorageAccessMode eMode )
-            throw ( com::sun::star::embed::InvalidStorageException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWrappedTargetException,
-                    com::sun::star::uno::RuntimeException );
+            throw ( css::embed::InvalidStorageException,
+                    css::lang::IllegalArgumentException,
+                    css::io::IOException,
+                    css::embed::StorageWrappedTargetException,
+                    css::uno::RuntimeException );
 
-        com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
-        queryStorage( const com::sun::star::uno::Reference<
-                        com::sun::star::embed::XStorage > & xParentStorage,
+        css::uno::Reference< css::embed::XStorage >
+        queryStorage( const css::uno::Reference<
+                        css::embed::XStorage > & xParentStorage,
                       const OUString & rUri,
                       StorageAccessMode eMode )
-            throw ( com::sun::star::embed::InvalidStorageException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWrappedTargetException,
-                    com::sun::star::uno::RuntimeException );
+            throw ( css::embed::InvalidStorageException,
+                    css::lang::IllegalArgumentException,
+                    css::io::IOException,
+                    css::embed::StorageWrappedTargetException,
+                    css::uno::RuntimeException );
 
-        com::sun::star::uno::Reference< com::sun::star::io::XStream >
-        queryStream( const com::sun::star::uno::Reference<
-                        com::sun::star::embed::XStorage > & xParentStorage,
+        css::uno::Reference< css::io::XStream >
+        queryStream( const css::uno::Reference<
+                        css::embed::XStorage > & xParentStorage,
                      const OUString & rPassword,
                      const OUString & rUri,
                      StorageAccessMode eMode,
                      bool bTruncate /* ignored for read-only streams */ )
-            throw ( com::sun::star::embed::InvalidStorageException,
-                    com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::io::IOException,
-                    com::sun::star::embed::StorageWrappedTargetException,
-                    com::sun::star::packages::WrongPasswordException,
-                    com::sun::star::uno::RuntimeException );
+            throw ( css::embed::InvalidStorageException,
+                    css::lang::IllegalArgumentException,
+                    css::io::IOException,
+                    css::embed::StorageWrappedTargetException,
+                    css::packages::WrongPasswordException,
+                    css::uno::RuntimeException );
 
         struct ltstrbool
         {
@@ -155,8 +154,7 @@ namespace tdoc_ucp {
         StorageMap m_aMap;
         osl::Mutex m_aMutex;
         rtl::Reference< OfficeDocumentsManager > m_xDocsMgr;
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > m_xContext;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
     };
 
 } // namespace tdoc_ucp

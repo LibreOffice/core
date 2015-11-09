@@ -20,7 +20,7 @@ namespace cmis
         public:
             virtual ~ChildrenProvider( ) { };
 
-            virtual std::list< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( ) = 0;
+            virtual std::list< css::uno::Reference< css::ucb::XContent > > getChildren( ) = 0;
     };
 }
 

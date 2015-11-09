@@ -51,19 +51,15 @@ namespace tdoc_ucp {
     struct StorageInfo
     {
         OUString aTitle;
-        com::sun::star::uno::Reference<
-            com::sun::star::embed::XStorage > xStorage;
-        com::sun::star::uno::Reference<
-            com::sun::star::frame::XModel >   xModel;
+        css::uno::Reference< css::embed::XStorage > xStorage;
+        css::uno::Reference< css::frame::XModel >   xModel;
 
         StorageInfo() {}; // needed for STL map only.
 
         StorageInfo(
             const OUString & rTitle,
-            const com::sun::star::uno::Reference<
-                com::sun::star::embed::XStorage > & rxStorage,
-            const com::sun::star::uno::Reference<
-                com::sun::star::frame::XModel > & rxModel )
+            const css::uno::Reference< css::embed::XStorage > & rxStorage,
+            const css::uno::Reference< css::frame::XModel > & rxModel )
         : aTitle( rTitle ), xStorage( rxStorage ), xModel( rxModel ) {}
     };
 
@@ -83,10 +79,10 @@ namespace tdoc_ucp {
 
 
     class OfficeDocumentsManager :
-        public cppu::WeakImplHelper< com::sun::star::document::XDocumentEventListener >
+        public cppu::WeakImplHelper< css::document::XDocumentEventListener >
     {
         class OfficeDocumentsCloseListener :
-           public cppu::WeakImplHelper< com::sun::star::util::XCloseListener >
+           public cppu::WeakImplHelper< css::util::XCloseListener >
 
         {
         public:
@@ -95,19 +91,19 @@ namespace tdoc_ucp {
 
             // util::XCloseListener
             virtual void SAL_CALL queryClosing(
-                    const ::com::sun::star::lang::EventObject& Source,
+                    const css::lang::EventObject& Source,
                     sal_Bool GetsOwnership )
-                throw (::com::sun::star::util::CloseVetoException,
-                       ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw (css::util::CloseVetoException,
+                       css::uno::RuntimeException, std::exception) override;
 
             virtual void SAL_CALL notifyClosing(
-                    const ::com::sun::star::lang::EventObject& Source )
-                throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+                    const css::lang::EventObject& Source )
+                throw (css::uno::RuntimeException, std::exception) override;
 
             // lang::XEventListener (base of util::XCloseListener)
             virtual void SAL_CALL disposing(
-                    const com::sun::star::lang::EventObject & Source )
-                throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+                    const css::lang::EventObject & Source )
+                throw ( css::uno::RuntimeException, std::exception ) override;
 
             void Dispose() { m_pManager = 0; }
 
@@ -117,8 +113,7 @@ namespace tdoc_ucp {
 
     public:
         OfficeDocumentsManager(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext > & rxContext,
+            const css::uno::Reference< css::uno::XComponentContext > & rxContext,
             OfficeDocumentsEventListener * pDocEventListener );
         virtual ~OfficeDocumentsManager();
 
@@ -126,26 +121,25 @@ namespace tdoc_ucp {
 
         // document::XDocumentEventListener
         virtual void SAL_CALL documentEventOccured(
-                const com::sun::star::document::DocumentEvent & Event )
-            throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+                const css::document::DocumentEvent & Event )
+            throw ( css::uno::RuntimeException, std::exception ) override;
 
         // lang::XEventListener (base of document::XDocumentEventListener)
         virtual void SAL_CALL disposing(
-                const com::sun::star::lang::EventObject & Source )
-            throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+                const css::lang::EventObject & Source )
+            throw ( css::uno::RuntimeException, std::exception ) override;
 
         // Non-interface
-        com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
+        css::uno::Reference< css::embed::XStorage >
         queryStorage( const OUString & rDocId );
 
         static OUString queryDocumentId(
-            const com::sun::star::uno::Reference<
-                com::sun::star::frame::XModel > & xModel );
+            const css::uno::Reference< css::frame::XModel > & xModel );
 
-        com::sun::star::uno::Reference< com::sun::star::frame::XModel >
+        css::uno::Reference< css::frame::XModel >
         queryDocumentModel( const OUString & rDocId );
 
-        com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
         queryDocuments();
 
         OUString
@@ -155,33 +149,25 @@ namespace tdoc_ucp {
         void buildDocumentsList();
 
         bool isOfficeDocument(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XInterface > & xDoc );
+            const css::uno::Reference< css::uno::XInterface > & xDoc );
 
         static bool isDocumentPreview(
-            const com::sun::star::uno::Reference<
-                com::sun::star::frame::XModel > & xModel );
+            const css::uno::Reference< css::frame::XModel > & xModel );
 
         static bool isWithoutOrInTopLevelFrame(
-            const com::sun::star::uno::Reference<
-                com::sun::star::frame::XModel > & xModel );
+            const css::uno::Reference< css::frame::XModel > & xModel );
 
         bool
         isBasicIDE(
-            const com::sun::star::uno::Reference<
-                com::sun::star::frame::XModel > & xModel );
+            const css::uno::Reference< css::frame::XModel > & xModel );
 
         static bool isHelpDocument(
-            const com::sun::star::uno::Reference<
-                com::sun::star::frame::XModel > & xModel );
+            const css::uno::Reference< css::frame::XModel > & xModel );
 
         osl::Mutex                                          m_aMtx;
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext >        m_xContext;
-        com::sun::star::uno::Reference<
-            com::sun::star::frame::XGlobalEventBroadcaster > m_xDocEvtNotifier;
-        com::sun::star::uno::Reference<
-            com::sun::star::frame::XModuleManager2 >        m_xModuleMgr;
+        css::uno::Reference< css::uno::XComponentContext >         m_xContext;
+        css::uno::Reference< css::frame::XGlobalEventBroadcaster > m_xDocEvtNotifier;
+        css::uno::Reference< css::frame::XModuleManager2 >         m_xModuleMgr;
         DocumentList                                        m_aDocs;
         OfficeDocumentsEventListener *                      m_pDocEventListener;
         ::rtl::Reference<OfficeDocumentsCloseListener> m_xDocCloseListener;

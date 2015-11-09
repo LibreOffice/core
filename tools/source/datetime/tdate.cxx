@@ -169,7 +169,7 @@ Date::Date( DateInitSystem )
 #endif
 }
 
-Date::Date( const ::com::sun::star::util::DateTime& rDateTime )
+Date::Date( const css::util::DateTime& rDateTime )
 {
     setDateFromDMY( rDateTime.Day, rDateTime.Month, rDateTime.Year );
 }

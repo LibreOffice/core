@@ -51,9 +51,7 @@ public:
 
     rtl::Reference< DAVSession >
         createDAVSession( const OUString & inUri,
-                          const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::uno::XComponentContext >&
-                                rxContext )
+                          const css::uno::Reference< css::uno::XComponentContext >& rxContext )
             throw( DAVException );
 
 private:

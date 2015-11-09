@@ -29,8 +29,8 @@ namespace http_dav_ucp {
 
 struct equalPropertyName
 {
-  bool operator()( const ::com::sun::star::beans::Property & p1,
-                   const ::com::sun::star::beans::Property & p2 ) const
+  bool operator()( const css::beans::Property & p1,
+                   const css::beans::Property & p2 ) const
   {
         return !!( p1.Name == p2.Name );
   }
@@ -38,7 +38,7 @@ struct equalPropertyName
 
 struct hashPropertyName
 {
-    size_t operator()( const ::com::sun::star::beans::Property & p ) const
+    size_t operator()( const css::beans::Property & p ) const
     {
         return p.Name.hashCode();
     }
@@ -46,7 +46,7 @@ struct hashPropertyName
 
 typedef std::unordered_set
 <
-    ::com::sun::star::beans::Property,
+    css::beans::Property,
     hashPropertyName,
     equalPropertyName
 >

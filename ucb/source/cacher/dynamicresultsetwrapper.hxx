@@ -38,46 +38,43 @@
 class DynamicResultSetWrapperListener;
 class DynamicResultSetWrapper
                 : public cppu::OWeakObject
-                , public com::sun::star::ucb::XDynamicResultSet
-                , public com::sun::star::ucb::XSourceInitialization
+                , public css::ucb::XDynamicResultSet
+                , public css::ucb::XSourceInitialization
 {
 private:
     //management of listeners
-    bool                m_bDisposed; ///Dispose call ready.
-    bool                m_bInDispose;///In dispose call
+    bool                    m_bDisposed; ///Dispose call ready.
+    bool                    m_bInDispose;///In dispose call
     osl::Mutex              m_aContainerMutex;
     cppu::OInterfaceContainerHelper*
                             m_pDisposeEventListeners;
 protected:
-    com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >
+    css::uno::Reference< css::ucb::XDynamicResultSetListener >
                             m_xMyListenerImpl;
     DynamicResultSetWrapperListener*
                             m_pMyListenerImpl;
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
                             m_xContext;
 
     osl::Mutex              m_aMutex;
-    bool                m_bStatic;
-    bool                m_bGotWelcome;
+    bool                    m_bStatic;
+    bool                    m_bGotWelcome;
 
     //different Interfaces from Origin:
-    com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSet >
+    css::uno::Reference< css::ucb::XDynamicResultSet >
                             m_xSource;
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
+    css::uno::Reference< css::sdbc::XResultSet >
                             m_xSourceResultOne;
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
+    css::uno::Reference< css::sdbc::XResultSet >
                             m_xSourceResultTwo;
-    //com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
-    //                      m_xSourceResultCurrent;
-    //sal_Bool              m_bUseOne;
 
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
+    css::uno::Reference< css::sdbc::XResultSet >
                             m_xMyResultOne;
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
+    css::uno::Reference< css::sdbc::XResultSet >
                             m_xMyResultTwo;
 
-    com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >
+    css::uno::Reference< css::ucb::XDynamicResultSetListener >
                             m_xListener;
 
     osl::Condition          m_aSourceSet;
@@ -88,96 +85,89 @@ protected:
     void SAL_CALL impl_deinit();
     void SAL_CALL
     impl_EnsureNotDisposed()
-        throw( com::sun::star::lang::DisposedException,
-               com::sun::star::uno::RuntimeException );
+        throw( css::lang::DisposedException,
+               css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    impl_InitResultSetOne( const com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XResultSet >& xResultSet );
+    impl_InitResultSetOne( const css::uno::Reference<
+                css::sdbc::XResultSet >& xResultSet );
     virtual void SAL_CALL
-    impl_InitResultSetTwo( const com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XResultSet >& xResultSet );
+    impl_InitResultSetTwo( const css::uno::Reference<
+                css::sdbc::XResultSet >& xResultSet );
 
 public:
 
     DynamicResultSetWrapper(
-        com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XDynamicResultSet > xOrigin
-        , const com::sun::star::uno::Reference<
-                        com::sun::star::uno::XComponentContext > & rxContext );
+        css::uno::Reference< css::ucb::XDynamicResultSet > xOrigin
+        , const css::uno::Reference< css::uno::XComponentContext > & rxContext );
 
     virtual ~DynamicResultSetWrapper();
 
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type & rType )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // XDynamicResultSet
-    virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
     getStaticResultSet()
-        throw( com::sun::star::ucb::ListenerAlreadySetException
-        , com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::ucb::ListenerAlreadySetException
+        , css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
-    setListener( const com::sun::star::uno::Reference<
-        com::sun::star::ucb::XDynamicResultSetListener > & Listener )
-        throw( com::sun::star::ucb::ListenerAlreadySetException
-            , com::sun::star::uno::RuntimeException, std::exception ) override;
+    setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener > & Listener )
+        throw( css::ucb::ListenerAlreadySetException
+            , css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
-    connectToCache( const com::sun::star::uno::Reference<
-        com::sun::star::ucb::XDynamicResultSet > & xCache )
-        throw( com::sun::star::ucb::ListenerAlreadySetException
-            , com::sun::star::ucb::AlreadyInitializedException
-            , com::sun::star::ucb::ServiceNotFoundException
-            , com::sun::star::uno::RuntimeException, std::exception ) override;
+    connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache )
+        throw( css::ucb::ListenerAlreadySetException
+            , css::ucb::AlreadyInitializedException
+            , css::ucb::ServiceNotFoundException
+            , css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int16 SAL_CALL
-    getCapabilities() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    getCapabilities() throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // XComponent ( base of XDynamicResultSet )
     virtual void SAL_CALL
-    dispose() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    dispose() throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
-    addEventListener( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XEventListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XEventListener >& Listener )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // XSourceInitialization
 
     virtual void SAL_CALL
-    setSource(  const com::sun::star::uno::Reference<
-        com::sun::star::uno::XInterface > & Source )
-         throw( com::sun::star::ucb::AlreadyInitializedException
-                , com::sun::star::uno::RuntimeException, std::exception ) override;
+    setSource(  const css::uno::Reference< css::uno::XInterface > & Source )
+         throw( css::ucb::AlreadyInitializedException
+                , css::uno::RuntimeException, std::exception ) override;
 
 
     // own methods:
     virtual void SAL_CALL
-    impl_disposing( const com::sun::star::lang::EventObject& Source )
-        throw( com::sun::star::uno::RuntimeException );
+    impl_disposing( const css::lang::EventObject& Source )
+        throw( css::uno::RuntimeException );
 
     void SAL_CALL
-    impl_notify( const ::com::sun::star::ucb::ListEvent& Changes )
-        throw( com::sun::star::uno::RuntimeException );
+    impl_notify( const css::ucb::ListEvent& Changes )
+        throw( css::uno::RuntimeException );
 };
 
 
 
 class DynamicResultSetWrapperListener
                 : public cppu::OWeakObject
-                , public com::sun::star::ucb::XDynamicResultSetListener
+                , public css::ucb::XDynamicResultSetListener
 {
 protected:
     DynamicResultSetWrapper*    m_pOwner;
@@ -200,13 +190,13 @@ public:
     // XEventListener ( base of XDynamicResultSetListener )
 
     virtual void SAL_CALL
-    disposing( const com::sun::star::lang::EventObject& Source )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    disposing( const css::lang::EventObject& Source )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XDynamicResultSetListener
     virtual void SAL_CALL
-    notify( const ::com::sun::star::ucb::ListEvent& Changes )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    notify( const css::ucb::ListEvent& Changes )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // own methods:

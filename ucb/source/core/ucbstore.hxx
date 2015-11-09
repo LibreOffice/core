@@ -51,14 +51,11 @@ class UcbStore : public cppu::WeakImplHelper <
     css::ucb::XPropertySetRegistryFactory,
     css::lang::XInitialization >
 {
-    com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     UcbStore_Impl* m_pImpl;
 
 public:
-    explicit UcbStore(
-        const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& xContext );
+    explicit UcbStore( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~UcbStore();
 
     // XServiceInfo
@@ -77,19 +74,17 @@ public:
                           css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XPropertySetRegistryFactory
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XPropertySetRegistry > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XPropertySetRegistry > SAL_CALL
     createPropertySetRegistry( const OUString& URL )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const ::com::sun::star::uno::Sequence<
-                        ::com::sun::star::uno::Any >& aArguments )
-        throw( ::com::sun::star::uno::Exception,
-               ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw( css::uno::Exception,
+               css::uno::RuntimeException, std::exception ) override;
 
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
+    const css::uno::Sequence< css::uno::Any >&
     getInitArgs() const;
 };
 
@@ -105,12 +100,11 @@ class PropertySetRegistry : public cppu::WeakImplHelper <
 {
     friend class PersistentPropertySet;
 
-    com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     PropertySetRegistry_Impl* m_pImpl;
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+    css::uno::Reference< css::lang::XMultiServiceFactory >
     getConfigProvider();
 
     void add   ( PersistentPropertySet* pSet );
@@ -121,10 +115,8 @@ private:
 
 public:
     PropertySetRegistry(
-        const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& xContext,
-                const ::com::sun::star::uno::Sequence<
-                                                ::com::sun::star::uno::Any >& rInitArgs);
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Sequence< css::uno::Any >& rInitArgs);
     virtual ~PropertySetRegistry();
 
 
@@ -140,39 +132,38 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // XPropertySetRegistry
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XPersistentPropertySet > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XPersistentPropertySet > SAL_CALL
     openPropertySet( const OUString& key, sal_Bool create )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     removePropertySet( const OUString& key )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XElementAccess ( XNameAccess is derived from it )
-    virtual com::sun::star::uno::Type SAL_CALL
+    virtual css::uno::Type SAL_CALL
     getElementType()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     hasElements()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XNameAccess
-    virtual com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
     getByName( const OUString& aName )
-        throw( com::sun::star::container::NoSuchElementException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw( css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getElementNames()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     hasByName( const OUString& aName )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // Non-interface methods
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
     getRootConfigReadAccess();
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    css::uno::Reference< css::uno::XInterface >
     getConfigWriteAccess( const OUString& rPath );
 };
 
@@ -194,14 +185,13 @@ class PersistentPropertySet : public cppu::WeakImplHelper <
 
 private:
     void notifyPropertyChangeEvent(
-        const com::sun::star::beans::PropertyChangeEvent& rEvent ) const;
+        const css::beans::PropertyChangeEvent& rEvent ) const;
     void notifyPropertySetInfoChange(
-        const com::sun::star::beans::PropertySetInfoChangeEvent& evt ) const;
+        const css::beans::PropertySetInfoChangeEvent& evt ) const;
 
 public:
     PersistentPropertySet(
-        const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         PropertySetRegistry& rCreator,
         const OUString& rKey );
     virtual ~PersistentPropertySet();
@@ -220,118 +210,106 @@ public:
     // XComponent
     virtual void SAL_CALL
     dispose()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    addEventListener( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XEventListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XEventListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XPropertySet
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     setPropertyValue( const OUString& aPropertyName,
-                      const com::sun::star::uno::Any& aValue )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::beans::PropertyVetoException,
-               com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Any SAL_CALL
+                      const css::uno::Any& aValue )
+        throw( css::beans::UnknownPropertyException,
+               css::beans::PropertyVetoException,
+               css::lang::IllegalArgumentException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
     getPropertyValue( const OUString& PropertyName )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     addPropertyChangeListener( const OUString& aPropertyName,
-                               const com::sun::star::uno::Reference<
-                                   com::sun::star::beans::XPropertyChangeListener >& xListener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                               const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     removePropertyChangeListener( const OUString& aPropertyName,
-                                  const com::sun::star::uno::Reference<
-                                      com::sun::star::beans::XPropertyChangeListener >& aListener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                                  const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     addVetoableChangeListener( const OUString& PropertyName,
-                               const com::sun::star::uno::Reference<
-                                   com::sun::star::beans::XVetoableChangeListener >& aListener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                               const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     removeVetoableChangeListener( const OUString& PropertyName,
-                                  const com::sun::star::uno::Reference<
-                                      com::sun::star::beans::XVetoableChangeListener >& aListener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                                  const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
 
     // XPersistentPropertySet
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XPropertySetRegistry > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XPropertySetRegistry > SAL_CALL
     getRegistry()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual OUString SAL_CALL
     getKey()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XNamed
     virtual OUString SAL_CALL
     getName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     setName( const OUString& aName )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XPropertyContainer
     virtual void SAL_CALL
     addProperty( const OUString& Name,
                  sal_Int16 Attributes,
-                 const com::sun::star::uno::Any& DefaultValue )
-        throw( com::sun::star::beans::PropertyExistException,
-               com::sun::star::beans::IllegalTypeException,
-               com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+                 const css::uno::Any& DefaultValue )
+        throw( css::beans::PropertyExistException,
+               css::beans::IllegalTypeException,
+               css::lang::IllegalArgumentException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     removeProperty( const OUString& Name )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::beans::NotRemoveableException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::beans::UnknownPropertyException,
+               css::beans::NotRemoveableException,
+               css::uno::RuntimeException, std::exception ) override;
 
     // XPropertySetInfoChangeNotifier
     virtual void SAL_CALL
-    addPropertySetInfoChangeListener( const com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertySetInfoChangeListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    addPropertySetInfoChangeListener( const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    removePropertySetInfoChangeListener( const com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertySetInfoChangeListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    removePropertySetInfoChangeListener( const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XPropertyAccess
-    virtual com::sun::star::uno::Sequence<
-                com::sun::star::beans::PropertyValue > SAL_CALL
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
     getPropertyValues()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    setPropertyValues( const com::sun::star::uno::Sequence<
-                            com::sun::star::beans::PropertyValue >& aProps )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::beans::PropertyVetoException,
-               com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::lang::WrappedTargetException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& aProps )
+        throw( css::beans::UnknownPropertyException,
+               css::beans::PropertyVetoException,
+               css::lang::IllegalArgumentException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception ) override;
 
     // Non-interface methods.
     PropertySetRegistry& getPropertySetRegistry();
