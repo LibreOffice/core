@@ -560,6 +560,16 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
                         pDirection14 = "r";
                         bOOXmlSpecificTransition = true;
                         break;
+                    case animations::TransitionSubType::VERTICAL: // Vortex
+                        nTransition = XML_fade;
+                        nTransition14 = XML_vortex;
+                        bOOXmlSpecificTransition = true;
+                        break;
+                    case animations::TransitionSubType::HORIZONTAL: // Ripple
+                        nTransition = XML_fade;
+                        nTransition14 = XML_ripple;
+                        bOOXmlSpecificTransition = true;
+                        break;
                     case animations::TransitionSubType::CORNERSIN:
                         pInverted = "true";
                     case animations::TransitionSubType::CORNERSOUT:
