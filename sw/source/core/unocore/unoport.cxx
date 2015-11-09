@@ -140,6 +140,11 @@ SwXTextPortion::~SwXTextPortion()
 {
     SolarMutexGuard aGuard;
     m_pUnoCursor.reset(nullptr);
+    if(m_FrameDepend.GetRegisteredIn())
+    {
+        auto pFrameDepend(const_cast<SwDepend*>(&m_FrameDepend));
+        pFrameDepend->GetRegisteredIn()->Remove(pFrameDepend);
+    }
 }
 
 uno::Reference< text::XText >  SwXTextPortion::getText()
