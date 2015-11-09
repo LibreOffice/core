@@ -1260,8 +1260,11 @@ SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItem
 
 SwXFrame::~SwXFrame()
 {
+    SolarMutexGuard aGuard;
     delete m_pCopySource;
     delete pProps;
+    if(GetRegisteredIn())
+        GetRegisteredIn()->Remove(this);
 }
 
 template<class Interface, class NameLookupIsHard>
