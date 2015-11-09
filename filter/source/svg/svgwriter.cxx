@@ -808,13 +808,17 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
             if( eCurFontUnderline != eParFontUnderline )
             {
                 if( eCurFontUnderline != UNDERLINE_NONE )
-                    sTextDecoration = "underline ";
+                    sTextDecoration = "underline";
                 bIsDecorationChanged = true;
             }
             if( eCurFontStrikeout != eParFontStrikeout )
             {
                 if( eCurFontStrikeout != STRIKEOUT_NONE )
-                    sTextDecoration += "line-through ";
+                {
+                    if( !sTextDecoration.isEmpty() )
+                        sTextDecoration += " ";
+                    sTextDecoration += "line-through";
+                }
                 bIsDecorationChanged = true;
             }
 
