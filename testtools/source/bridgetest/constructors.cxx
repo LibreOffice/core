@@ -212,13 +212,13 @@ private:
 
     //XMultiBase1
     virtual double SAL_CALL getatt1()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setatt1( double _att1 )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL fn11( ::sal_Int32 arg )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL fn12( const OUString& arg )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 
     double m_attr1;
@@ -411,24 +411,24 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
 
 //XMultiBase1
 double Impl2::getatt1()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return m_attr1;
 }
 
-void Impl2::setatt1( double _att1 )throw (::com::sun::star::uno::RuntimeException, std::exception)
+void Impl2::setatt1( double _att1 )throw (css::uno::RuntimeException, std::exception)
 {
     m_attr1 = _att1;
 }
 
 ::sal_Int32 Impl2::fn11( ::sal_Int32 arg )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return 11 * arg;
 }
 
 OUString Impl2::fn12( const OUString& arg )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return "12" + arg;
 }
