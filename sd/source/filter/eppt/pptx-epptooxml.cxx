@@ -524,6 +524,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
     sal_Int32 nTransition14 = 0;
 
     const char* pDirection = NULL;
+    const char* pDirection14 = NULL;
     const char* pOrientation = NULL;
     const char* pThruBlk = NULL;
     const char* pSpokes = NULL;
@@ -547,6 +548,18 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
             {
                 switch(nTransitionSubtype)
                 {
+                    case animations::TransitionSubType::TOPTOBOTTOM: // Turn around
+                        nTransition = XML_fade;
+                        nTransition14 = XML_flip;
+                        pDirection14 = "l";
+                        bOOXmlSpecificTransition = true;
+                        break;
+                    case animations::TransitionSubType::BOTTOMRIGHT: // Rochade
+                        nTransition = XML_fade;
+                        nTransition14 = XML_switch;
+                        pDirection14 = "r";
+                        bOOXmlSpecificTransition = true;
+                        break;
                     case animations::TransitionSubType::CORNERSIN:
                         pInverted = "true";
                     case animations::TransitionSubType::CORNERSOUT:
@@ -604,6 +617,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
 
         pFS->singleElementNS(XML_p14, nTransition14,
                              XML_isInverted, pInverted,
+                             XML_dir, pDirection14,
                              FSEND );
 
         pFS->endElement(FSNS(XML_p, XML_transition));
