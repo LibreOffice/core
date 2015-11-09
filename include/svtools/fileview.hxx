@@ -209,9 +209,11 @@ class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public MessageDialog
 {
 private:
     VclPtr<PushButton> m_pAllButton;
-public:
 
+    friend class ScopedVclPtrInstance<QueryDeleteDlg_Impl>;
     QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& rName);
+
+public:
     virtual ~QueryDeleteDlg_Impl();
     virtual void dispose() override;
 

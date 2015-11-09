@@ -40,6 +40,7 @@ public:
 
     bool VisitFunctionDecl(const FunctionDecl *);
 
+    bool VisitCXXConstructorDecl(const CXXConstructorDecl *);
     bool VisitCXXDestructorDecl(const CXXDestructorDecl *);
 
     bool VisitCXXDeleteExpr(const CXXDeleteExpr *);
@@ -82,6 +83,36 @@ bool isDerivedFromWindow(const CXXRecordDecl *decl) {
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
         !compat::forallBases(*decl, BaseCheckNotWindowSubclass, nullptr, true)) {
+        return true;
+    }
+    return false;
+}
+
+bool BaseCheckNotDialogSubclass(
+    const CXXRecordDecl *BaseDefinition
+#if __clang_major__ == 3 && __clang_minor__ <= 7
+    , void *
+#endif
+    )
+{
+    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString() == "Dialog") {
+        return false;
+    }
+    return true;
+}
+
+bool isDerivedFromDialog(const CXXRecordDecl *decl) {
+    if (!decl)
+        return false;
+    if (decl->getQualifiedNameAsString() == "Dialog")
+        return true;
+    if (!decl->hasDefinition()) {
+        return false;
+    }
+    if (// not sure what hasAnyDependentBases() does,
+        // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
+        !decl->hasAnyDependentBases() &&
+        !compat::forallBases(*decl, BaseCheckNotDialogSubclass, nullptr, true)) {
         return true;
     }
     return false;
@@ -140,6 +171,34 @@ bool containsWindowSubclass(const Type* pType0) {
     } else {
         return isDerivedFromWindow(pRecordDecl);
     }
+}
+
+bool VCLWidgets::VisitCXXConstructorDecl(const CXXConstructorDecl* constructorDecl)
+{
+    if (ignoreLocation(constructorDecl)) {
+        return true;
+    }
+    if (constructorDecl != constructorDecl->getCanonicalDecl()) {
+        return true;
+    }
+    if (constructorDecl->getAccess() == AS_private || constructorDecl->getAccess() == AS_protected) {
+        return true;
+    }
+    const CXXRecordDecl * pRecordDecl = constructorDecl->getParent();
+    std::string aName = pRecordDecl->getQualifiedNameAsString();
+    if (aName == "Dialog") {
+        return true;
+    }
+    // check if this class is derived from Dialog
+    if (!isDerivedFromDialog(pRecordDecl)) {
+        return true;
+    }
+    report(
+        DiagnosticsEngine::Warning,
+        "Dialog subclass should have private or protected constructor",
+        constructorDecl->getLocStart())
+      << constructorDecl->getSourceRange();
+    return true;
 }
 
 bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorDecl)

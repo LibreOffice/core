@@ -649,16 +649,20 @@ private:
     short get_response(const vcl::Window *pWindow) const;
     void create_owned_areas();
 
+    friend class ScopedVclPtr<MessageDialog>;
+    friend class ScopedVclPtrInstance<MessageDialog>;
     friend class VclPtr<MessageDialog>;
     MessageDialog(vcl::Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
-public:
 
+protected:
     MessageDialog(vcl::Window* pParent,
         const OUString &rMessage,
         VclMessageType eMessageType = VCL_MESSAGE_ERROR,
         VclButtonsType eButtonsType = VCL_BUTTONS_OK,
         WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+
+public:
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
     virtual short Execute() override;
     ///Emitted when an action widget is clicked

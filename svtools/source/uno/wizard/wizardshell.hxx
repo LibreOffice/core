@@ -40,13 +40,13 @@ namespace svt { namespace uno
     typedef ::svt::RoadmapWizard    WizardShell_Base;
     class WizardShell : public WizardShell_Base
     {
-    public:
+        friend class VclPtrInstance<WizardShell>;
         WizardShell(
             vcl::Window* _pParent,
             const css::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
             const css::uno::Sequence< css::uno::Sequence< sal_Int16 > >& i_rPaths
         );
-
+    public:
         // Dialog overridables
         virtual short   Execute() override;
 

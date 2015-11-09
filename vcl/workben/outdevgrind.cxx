@@ -64,7 +64,7 @@ public:
 
 class TestWindow : public Dialog
 {
-    public:
+    friend class ScopedVclPtrInstance<TestWindow>;
         TestWindow() : Dialog( nullptr )
         {
             SetText( "OutDev grinding" );
@@ -73,6 +73,7 @@ class TestWindow : public Dialog
             Show();
         }
 
+    public:
         virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 };
 

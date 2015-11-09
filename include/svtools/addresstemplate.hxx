@@ -68,7 +68,8 @@ namespace svt
         AddressBookSourceDialogData*
                                m_pImpl;
 
-    public:
+        friend class VclPtr<AddressBookSourceDialog>;
+
         AddressBookSourceDialog( vcl::Window* _pParent,
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
@@ -99,6 +100,7 @@ namespace svt
             const css::uno::Sequence< css::util::AliasProgrammaticPair >& _rMapping
         );
 
+    public:
         virtual ~AddressBookSourceDialog();
         virtual void dispose() override;
 

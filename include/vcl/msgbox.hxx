@@ -45,9 +45,11 @@ protected:
     SAL_DLLPRIVATE void ImplInitButtons();
     SAL_DLLPRIVATE void ImplPosControls();
 
-public:
+    friend class VclPtr<MessBox>;
                         MessBox( vcl::Window* pParent, WinBits nStyle,
                                  const OUString& rTitle, const OUString& rMessage );
+
+public:
     virtual             ~MessBox();
     virtual void        dispose() override;
 
@@ -70,11 +72,13 @@ class VCL_DLLPUBLIC InfoBox : public MessBox
 private:
     SAL_DLLPRIVATE void ImplInitInfoBoxData();
 
-public:
+protected:
+    friend class VclPtr<InfoBox>;
                         InfoBox( vcl::Window* pParent, const OUString& rMessage );
                         InfoBox( vcl::Window* pParent, WinBits nStyle,
                                 const OUString& rMessage );
 
+public:
     static Image        GetStandardImage();
 };
 
@@ -83,10 +87,13 @@ class VCL_DLLPUBLIC WarningBox : public MessBox
 private:
     SAL_DLLPRIVATE void ImplInitWarningBoxData();
 
-public:
+protected:
+    friend class ScopedVclPtrInstance<WarningBox>;
+    friend class VclPtr<WarningBox>;
                         WarningBox( vcl::Window* pParent, WinBits nStyle,
                                     const OUString& rMessage );
 
+public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();
@@ -97,10 +104,12 @@ class VCL_DLLPUBLIC ErrorBox : public MessBox
 private:
     SAL_DLLPRIVATE void ImplInitErrorBoxData();
 
-public:
+protected:
+    friend class VclPtr<ErrorBox>;
                         ErrorBox( vcl::Window* pParent, WinBits nStyle,
                                   const OUString& rMessage );
 
+public:
     static Image        GetStandardImage();
 };
 
@@ -109,10 +118,12 @@ class VCL_DLLPUBLIC QueryBox : public MessBox
 private:
     SAL_DLLPRIVATE void ImplInitQueryBoxData();
 
-public:
+protected:
+    friend class VclPtr<QueryBox>;
                         QueryBox( vcl::Window* pParent, WinBits nStyle,
                                   const OUString& rMessage );
 
+public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();

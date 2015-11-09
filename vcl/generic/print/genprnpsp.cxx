@@ -99,9 +99,9 @@ namespace
 
         DECL_LINK_TYPED( ClickBtnHdl, Button*, void );
 
+        friend class ScopedVclPtrInstance<QueryString>;
+        QueryString(vcl::Window* parentWindow, OUString & queryText, OUString & initialValue);
     public:
-        // parent window, Query text, initial value
-        QueryString(vcl::Window*, OUString &, OUString &);
         virtual ~QueryString() { disposeOnce(); }
         virtual void dispose() override
         {

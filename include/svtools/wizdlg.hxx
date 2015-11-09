@@ -235,9 +235,10 @@ private:
     SVT_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
     SVT_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
 
-public:
+protected:
     WizardDialog( vcl::Window* pParent, WinBits nStyle = WB_STDTABDIALOG );
     WizardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
+public:
     virtual ~WizardDialog();
     virtual void dispose() override;
 

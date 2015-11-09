@@ -918,8 +918,9 @@ namespace
         VclPtr<Edit>      m_pUserEdit;
         VclPtr<Edit>      m_pPassEdit;
 
-    public:
+        friend class ScopedVclPtrInstance<RTSPWDialog>;
         RTSPWDialog(const OString& rServer, const OString& rUserName, vcl::Window* pParent);
+    public:
         virtual ~RTSPWDialog();
         virtual void dispose() override;
         OString getUserName() const;

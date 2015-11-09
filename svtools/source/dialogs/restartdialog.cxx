@@ -24,7 +24,7 @@
 namespace {
 
 class RestartDialog: public ModalDialog {
-public:
+    friend class VclPtr<RestartDialog>;
     RestartDialog(vcl::Window * parent, svtools::RestartReason reason):
         ModalDialog(parent, "RestartDialog", "svt/ui/restartdialog.ui")
     {
@@ -50,6 +50,7 @@ public:
         btnYes_->SetClickHdl(LINK(this, RestartDialog, hdlYes));
         btnNo_->SetClickHdl(LINK(this, RestartDialog, hdlNo));
     }
+public:
     virtual ~RestartDialog() { disposeOnce(); }
     virtual void dispose() override
     {
