@@ -63,33 +63,33 @@ void VCLXDevice::SetCreatedWithToolkit( bool bCreatedWithToolkit )
         nFlags &= ~FLAGS_CREATEDWITHTOOLKIT;
 }
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXDevice::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::uno::XInterface
+css::uno::Any VCLXDevice::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::awt::XDevice* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XUnoTunnel* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)),
-                                        (static_cast< ::com::sun::star::awt::XUnitConversion* >(this)) );
+    css::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        (static_cast< css::awt::XDevice* >(this)),
+                                        (static_cast< css::lang::XUnoTunnel* >(this)),
+                                        (static_cast< css::lang::XTypeProvider* >(this)),
+                                        (static_cast< css::awt::XUnitConversion* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXDevice )
 
-// ::com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDevice )
-    cppu::UnoType<com::sun::star::awt::XDevice>::get(),
-    cppu::UnoType<com::sun::star::awt::XUnitConversion>::get()
+    cppu::UnoType<css::awt::XDevice>::get(),
+    cppu::UnoType<css::awt::XUnitConversion>::get()
 IMPL_XTYPEPROVIDER_END
 
 
-// ::com::sun::star::awt::XDevice,
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > VCLXDevice::createGraphics(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XDevice,
+css::uno::Reference< css::awt::XGraphics > VCLXDevice::createGraphics(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > xRef;
+    css::uno::Reference< css::awt::XGraphics > xRef;
 
     if ( mpOutputDevice )
         xRef = mpOutputDevice->CreateUnoGraphics();
@@ -97,11 +97,11 @@ IMPL_XTYPEPROVIDER_END
     return xRef;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXDevice::createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XDevice > VCLXDevice::createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  xRef;
+    css::uno::Reference< css::awt::XDevice >  xRef;
     if ( GetOutputDevice() )
     {
         VCLXVirtualDevice* pVDev = new VCLXVirtualDevice;
@@ -113,11 +113,11 @@ IMPL_XTYPEPROVIDER_END
     return xRef;
 }
 
-::com::sun::star::awt::DeviceInfo VCLXDevice::getInfo() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::DeviceInfo VCLXDevice::getInfo() throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::awt::DeviceInfo aInfo;
+    css::awt::DeviceInfo aInfo;
 
     if( mpOutputDevice )
     {
@@ -158,24 +158,24 @@ IMPL_XTYPEPROVIDER_END
 
         aInfo.Capabilities = 0;
         if ( mpOutputDevice->GetOutDevType() != OUTDEV_PRINTER )
-            aInfo.Capabilities = ::com::sun::star::awt::DeviceCapability::RASTEROPERATIONS|::com::sun::star::awt::DeviceCapability::GETBITS;
+            aInfo.Capabilities = css::awt::DeviceCapability::RASTEROPERATIONS|css::awt::DeviceCapability::GETBITS;
     }
 
     return aInfo;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::awt::FontDescriptor > VCLXDevice::getFontDescriptors(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::awt::FontDescriptor > VCLXDevice::getFontDescriptors(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::awt::FontDescriptor> aFonts;
+    css::uno::Sequence< css::awt::FontDescriptor> aFonts;
     if( mpOutputDevice )
     {
         int nFonts = mpOutputDevice->GetDevFontCount();
         if ( nFonts )
         {
-            aFonts = ::com::sun::star::uno::Sequence< ::com::sun::star::awt::FontDescriptor>( nFonts );
-            ::com::sun::star::awt::FontDescriptor* pFonts = aFonts.getArray();
+            aFonts = css::uno::Sequence< css::awt::FontDescriptor>( nFonts );
+            css::awt::FontDescriptor* pFonts = aFonts.getArray();
             for ( int n = 0; n < nFonts; n++ )
                 pFonts[n] = VCLUnoHelper::CreateFontDescriptor( mpOutputDevice->GetDevFont( n ) );
         }
@@ -183,11 +183,11 @@ IMPL_XTYPEPROVIDER_END
     return aFonts;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > VCLXDevice::getFont( const ::com::sun::star::awt::FontDescriptor& rDescriptor ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XFont > VCLXDevice::getFont( const css::awt::FontDescriptor& rDescriptor ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >  xRef;
+    css::uno::Reference< css::awt::XFont >  xRef;
     if( mpOutputDevice )
     {
         VCLXFont* pMetric = new VCLXFont;
@@ -197,11 +197,11 @@ IMPL_XTYPEPROVIDER_END
     return xRef;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >  xBmp;
+    css::uno::Reference< css::awt::XBitmap >  xBmp;
     if( mpOutputDevice )
     {
         Bitmap aBmp = mpOutputDevice->GetBitmap( Point( nX, nY ), Size( nWidth, nHeight ) );
@@ -213,14 +213,14 @@ IMPL_XTYPEPROVIDER_END
     return xBmp;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayBitmap > VCLXDevice::createDisplayBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >& rxBitmap ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XDisplayBitmap > VCLXDevice::createDisplayBitmap( const css::uno::Reference< css::awt::XBitmap >& rxBitmap ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     BitmapEx aBmp = VCLUnoHelper::GetBitmap( rxBitmap );
     VCLXBitmap* pBmp = new VCLXBitmap;
     pBmp->SetBitmap( aBmp );
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayBitmap >  xDBmp = pBmp;
+    css::uno::Reference< css::awt::XDisplayBitmap >  xDBmp = pBmp;
     return xDBmp;
 }
 
@@ -231,19 +231,19 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
     mpOutputDevice.disposeAndClear();
 }
 
-// Interface implementation of ::com::sun::star::awt::XUnitConversion
+// Interface implementation of css::awt::XUnitConversion
 
-::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const css::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     (void)aPoint;
     SolarMutexGuard aGuard;
-    if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT )
+    if (TargetUnit == css::util::MeasureUnit::PERCENT )
     {
         // percentage not allowed here
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
-    ::com::sun::star::awt::Point aAWTPoint(0,0);
+    css::awt::Point aAWTPoint(0,0);
     // X,Y
 
     if( mpOutputDevice )
@@ -258,18 +258,18 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 }
 
 
-::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToPixel( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Point SAL_CALL VCLXDevice::convertPointToPixel( const css::awt::Point& aPoint, ::sal_Int16 SourceUnit ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     (void)aPoint;
     SolarMutexGuard aGuard;
-    if (SourceUnit == com::sun::star::util::MeasureUnit::PERCENT ||
-        SourceUnit == com::sun::star::util::MeasureUnit::PIXEL )
+    if (SourceUnit == css::util::MeasureUnit::PERCENT ||
+        SourceUnit == css::util::MeasureUnit::PIXEL )
     {
         // pixel or percentage not allowed here
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
-    ::com::sun::star::awt::Point aAWTPoint(0,0);
+    css::awt::Point aAWTPoint(0,0);
 
     if( mpOutputDevice )
     {
@@ -282,17 +282,17 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
     return aAWTPoint;
 }
 
-::com::sun::star::awt::Size SAL_CALL VCLXDevice::convertSizeToLogic( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Size SAL_CALL VCLXDevice::convertSizeToLogic( const css::awt::Size& aSize, ::sal_Int16 TargetUnit ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     (void)aSize;
     SolarMutexGuard aGuard;
-    if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT)
+    if (TargetUnit == css::util::MeasureUnit::PERCENT)
     {
         // percentage not allowed here
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
-    ::com::sun::star::awt::Size aAWTSize(0,0);
+    css::awt::Size aAWTSize(0,0);
     // Width, Height
 
 
@@ -307,18 +307,18 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
     return aAWTSize;
 }
 
-::com::sun::star::awt::Size SAL_CALL VCLXDevice::convertSizeToPixel( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Size SAL_CALL VCLXDevice::convertSizeToPixel( const css::awt::Size& aSize, ::sal_Int16 SourceUnit ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     (void)aSize;
     SolarMutexGuard aGuard;
-    if (SourceUnit == com::sun::star::util::MeasureUnit::PERCENT ||
-        SourceUnit == com::sun::star::util::MeasureUnit::PIXEL)
+    if (SourceUnit == css::util::MeasureUnit::PERCENT ||
+        SourceUnit == css::util::MeasureUnit::PIXEL)
     {
         // pixel or percentage not allowed here
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
     }
 
-    ::com::sun::star::awt::Size aAWTSize(0,0);
+    css::awt::Size aAWTSize(0,0);
     // Width, Height
     if( mpOutputDevice )
     {

@@ -34,13 +34,13 @@
 #include <vcl/sysdata.hxx>
 
 /// helper method to set a window handle into a SystemParentData struct
-void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
+void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
 {
     // does only work for WorkWindows
     vcl::Window *pWindow = GetWindow();
     if ( pWindow->GetType() != WINDOW_WORKWINDOW )
     {
-        com::sun::star::uno::RuntimeException aException;
+        css::uno::RuntimeException aException;
         aException.Message = "not a work window";
         throw aException;
     }
@@ -52,11 +52,11 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     bool bThrow = false;
     if( ! (rHandle >>= nHandle) )
     {
-        com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > aProps;
+        css::uno::Sequence< css::beans::NamedValue > aProps;
         if( rHandle >>= aProps )
         {
             const int nProps = aProps.getLength();
-            const com::sun::star::beans::NamedValue* pProps = aProps.getConstArray();
+            const css::beans::NamedValue* pProps = aProps.getConstArray();
             for( int i = 0; i < nProps; i++ )
             {
                 if ( pProps[i].Name == "WINDOW" )
@@ -70,7 +70,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     }
     if( bThrow )
     {
-        com::sun::star::uno::RuntimeException aException;
+        css::uno::RuntimeException aException;
         aException.Message = "incorrect window handle type";
         throw aException;
     }

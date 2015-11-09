@@ -44,7 +44,7 @@ namespace toolkit
     }
 
 
-    OUString UnoControlScrollBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    OUString UnoControlScrollBarModel::getServiceName( ) throw(css::uno::RuntimeException, std::exception)
     {
         return OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
     }
@@ -114,7 +114,7 @@ namespace toolkit
         return OUString("ScrollBar");
     }
 
-    // ::com::sun::star::uno::XInterface
+    // css::uno::XInterface
     uno::Any UnoScrollBarControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
     {
         uno::Any aRet = ::cppu::queryInterface( rType,
@@ -123,7 +123,7 @@ namespace toolkit
         return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
     }
 
-    // ::com::sun::star::lang::XTypeProvider
+    // css::lang::XTypeProvider
     IMPL_XTYPEPROVIDER_START( UnoScrollBarControl )
         cppu::UnoType<awt::XAdjustmentListener>::get(),
         cppu::UnoType<awt::XScrollBar>::get(),
@@ -146,14 +146,14 @@ namespace toolkit
         xScrollBar->addAdjustmentListener( this );
     }
 
-    // ::com::sun::star::awt::XAdjustmentListener
-    void UnoScrollBarControl::adjustmentValueChanged( const ::com::sun::star::awt::AdjustmentEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    // css::awt::XAdjustmentListener
+    void UnoScrollBarControl::adjustmentValueChanged( const css::awt::AdjustmentEvent& rEvent ) throw(css::uno::RuntimeException, std::exception)
     {
         switch ( rEvent.Type )
         {
-            case ::com::sun::star::awt::AdjustmentType_ADJUST_LINE:
-            case ::com::sun::star::awt::AdjustmentType_ADJUST_PAGE:
-            case ::com::sun::star::awt::AdjustmentType_ADJUST_ABS:
+            case css::awt::AdjustmentType_ADJUST_LINE:
+            case css::awt::AdjustmentType_ADJUST_PAGE:
+            case css::awt::AdjustmentType_ADJUST_ABS:
             {
                 uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
 
@@ -176,23 +176,23 @@ namespace toolkit
             maAdjustmentListeners.adjustmentValueChanged( rEvent );
     }
 
-    // ::com::sun::star::awt::XScrollBar
-    void UnoScrollBarControl::addAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    // css::awt::XScrollBar
+    void UnoScrollBarControl::addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener > & l ) throw(css::uno::RuntimeException, std::exception)
     {
         maAdjustmentListeners.addInterface( l );
     }
 
-    void UnoScrollBarControl::removeAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void UnoScrollBarControl::removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener > & l ) throw(css::uno::RuntimeException, std::exception)
     {
         maAdjustmentListeners.removeInterface( l );
     }
 
-    void UnoScrollBarControl::setValue( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void UnoScrollBarControl::setValue( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE ), uno::makeAny( n ), true );
     }
 
-    void UnoScrollBarControl::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void UnoScrollBarControl::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(css::uno::RuntimeException, std::exception)
     {
         uno::Any aAny;
         aAny <<= nValue;
@@ -203,7 +203,7 @@ namespace toolkit
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), aAny, true );
     }
 
-    sal_Int32 UnoScrollBarControl::getValue() throw(::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 UnoScrollBarControl::getValue() throw(css::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -214,12 +214,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setMaximum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void UnoScrollBarControl::setMaximum( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLVALUE_MAX ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getMaximum() throw(::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 UnoScrollBarControl::getMaximum() throw(css::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -230,12 +230,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setLineIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void UnoScrollBarControl::setLineIncrement( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LINEINCREMENT ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getLineIncrement() throw(::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 UnoScrollBarControl::getLineIncrement() throw(css::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -246,12 +246,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setBlockIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void UnoScrollBarControl::setBlockIncrement( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BLOCKINCREMENT ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getBlockIncrement() throw(::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 UnoScrollBarControl::getBlockIncrement() throw(css::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -262,12 +262,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setVisibleSize( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void UnoScrollBarControl::setVisibleSize( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VISIBLESIZE ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getVisibleSize() throw(::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 UnoScrollBarControl::getVisibleSize() throw(css::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )
@@ -278,12 +278,12 @@ namespace toolkit
         return n;
     }
 
-    void UnoScrollBarControl::setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void UnoScrollBarControl::setOrientation( sal_Int32 n ) throw(css::uno::RuntimeException, std::exception)
     {
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ORIENTATION ), uno::makeAny( n ), true );
     }
 
-    sal_Int32 UnoScrollBarControl::getOrientation() throw(::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 UnoScrollBarControl::getOrientation() throw(css::uno::RuntimeException, std::exception)
     {
         sal_Int32 n = 0;
         if ( getPeer().is() )

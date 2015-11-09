@@ -111,7 +111,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTabPageModel::getPropertySet
 }
 ////----- XInitialization -------------------------------------------------------------------
 void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArguments)
-            throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception)
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     sal_Int16 nPageId = -1;
     if ( rArguments.getLength() == 1 )
@@ -238,9 +238,9 @@ static ::Size ImplMapPixelToAppFont( OutputDevice* pOutDev, const ::Size& aSize 
     ::Size aTmp = pOutDev->PixelToLogic( aSize, MAP_APPFONT );
     return aTmp;
 }
-// ::com::sun::star::awt::XWindowListener
-void SAL_CALL UnoControlTabPage::windowResized( const ::com::sun::star::awt::WindowEvent& e )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XWindowListener
+void SAL_CALL UnoControlTabPage::windowResized( const css::awt::WindowEvent& e )
+throw (css::uno::RuntimeException, std::exception)
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
@@ -277,8 +277,8 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     }
 }
 
-void SAL_CALL UnoControlTabPage::windowMoved( const ::com::sun::star::awt::WindowEvent& e )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UnoControlTabPage::windowMoved( const css::awt::WindowEvent& e )
+throw (css::uno::RuntimeException, std::exception)
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
@@ -303,14 +303,14 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     }
 }
 
-void SAL_CALL UnoControlTabPage::windowShown( const ::com::sun::star::lang::EventObject& e )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UnoControlTabPage::windowShown( const css::lang::EventObject& e )
+throw (css::uno::RuntimeException, std::exception)
 {
     (void)e;
 }
 
-void SAL_CALL UnoControlTabPage::windowHidden( const ::com::sun::star::lang::EventObject& e )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UnoControlTabPage::windowHidden( const css::lang::EventObject& e )
+throw (css::uno::RuntimeException, std::exception)
 {
     (void)e;
 }

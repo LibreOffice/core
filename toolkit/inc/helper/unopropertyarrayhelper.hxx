@@ -38,16 +38,16 @@ protected:
     bool    ImplHasProperty( sal_uInt16 nPropId ) const;
 
 public:
-                UnoPropertyArrayHelper( const ::com::sun::star::uno::Sequence<sal_Int32>& rIDs );
+                UnoPropertyArrayHelper( const css::uno::Sequence<sal_Int32>& rIDs );
                 UnoPropertyArrayHelper( const std::list< sal_uInt16 > &rIDs );
 
     // ::cppu::IPropertyArrayHelper
     sal_Bool SAL_CALL fillPropertyMembersByHandle( OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nHandle ) override;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() override;
-    ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const OUString& rPropertyName) throw (::com::sun::star::beans::UnknownPropertyException) override;
+    css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    css::beans::Property SAL_CALL getPropertyByName(const OUString& rPropertyName) throw (css::beans::UnknownPropertyException) override;
     sal_Bool SAL_CALL hasPropertyByName(const OUString& rPropertyName) override;
     sal_Int32 SAL_CALL getHandleByName( const OUString & rPropertyName ) override;
-    sal_Int32 SAL_CALL fillHandles( sal_Int32* pHandles, const ::com::sun::star::uno::Sequence< OUString > & rPropNames ) override;
+    sal_Int32 SAL_CALL fillHandles( sal_Int32* pHandles, const css::uno::Sequence< OUString > & rPropNames ) override;
 };
 
 

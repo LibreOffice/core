@@ -43,9 +43,9 @@ using namespace com::sun::star;
 uno::Any VCLXGraphics::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::awt::XGraphics* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XUnoTunnel* >(this)) );
+                                        (static_cast< css::awt::XGraphics* >(this)),
+                                        (static_cast< css::lang::XTypeProvider* >(this)),
+                                        (static_cast< css::lang::XUnoTunnel* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

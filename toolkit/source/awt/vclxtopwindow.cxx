@@ -57,7 +57,7 @@ VCLXTopWindow_Base::~VCLXTopWindow_Base()
 
 Any VCLXTopWindow_Base::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aRet( VCLXTopWindow_XBase::queryInterface( rType ) );
+    css::uno::Any aRet( VCLXTopWindow_XBase::queryInterface( rType ) );
 
     // do not expose XSystemDependentWindowPeer if we do not have a system window handle
     if ( !aRet.hasValue() && m_bWHWND )
@@ -74,12 +74,12 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException, std::exc
     return aTypes;
 }
 
-::com::sun::star::uno::Any VCLXTopWindow_Base::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any VCLXTopWindow_Base::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     // TODO, check the process id
-    ::com::sun::star::uno::Any aRet;
+    css::uno::Any aRet;
     vcl::Window* pWindow = GetWindowImpl();
     if ( pWindow )
     {
@@ -87,12 +87,12 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException, std::exc
         if( pSysData )
         {
 #if (defined WNT)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
+            if( SystemType == css::lang::SystemDependent::SYSTEM_WIN32 )
             {
                  aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->hWnd);
             }
 #elif (defined MACOSX)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
+            if( SystemType == css::lang::SystemDependent::SYSTEM_MAC )
             {
                  aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->mpNSView);
             }
@@ -103,9 +103,9 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException, std::exc
             // Nothing
             (void) SystemType;
 #elif (defined UNX)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
+            if( SystemType == css::lang::SystemDependent::SYSTEM_XWINDOW )
             {
-                ::com::sun::star::awt::SystemDependentXWindow aSD;
+                css::awt::SystemDependentXWindow aSD;
                 aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
                 aSD.WindowHandle = pSysData->aWindow;
                 aRet <<= aSD;
@@ -116,21 +116,21 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException, std::exc
     return aRet;
 }
 
-void VCLXTopWindow_Base::addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXTopWindow_Base::addTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     GetTopWindowListenersImpl().addInterface( rxListener );
 }
 
-void VCLXTopWindow_Base::removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXTopWindow_Base::removeTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     GetTopWindowListenersImpl().removeInterface( rxListener );
 }
 
-void VCLXTopWindow_Base::toFront(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXTopWindow_Base::toFront(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -139,11 +139,11 @@ void VCLXTopWindow_Base::toFront(  ) throw(::com::sun::star::uno::RuntimeExcepti
         static_cast<WorkWindow*>(pWindow)->ToTop( ToTopFlags::RestoreWhenMin );
 }
 
-void VCLXTopWindow_Base::toBack(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXTopWindow_Base::toBack(  ) throw(css::uno::RuntimeException, std::exception)
 {
 }
 
-void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& rxMenu ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXTopWindow_Base::setMenuBar( const css::uno::Reference< css::awt::XMenuBar >& rxMenu ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -265,10 +265,10 @@ vcl::Window* VCLXTopWindow::GetWindowImpl()
     return GetTopWindowListeners();
 }
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXTopWindow::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::uno::XInterface
+css::uno::Any VCLXTopWindow::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aRet( VCLXTopWindow_Base::queryInterface( rType ) );
+    css::uno::Any aRet( VCLXTopWindow_Base::queryInterface( rType ) );
 
     if ( !aRet.hasValue() )
         aRet = VCLXContainer::queryInterface( rType );
@@ -276,12 +276,12 @@ vcl::Window* VCLXTopWindow::GetWindowImpl()
     return aRet;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > VCLXTopWindow::getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int8 > VCLXTopWindow::getImplementationId() throw(css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > VCLXTopWindow::getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Type > VCLXTopWindow::getTypes() throw(css::uno::RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences( VCLXTopWindow_Base::getTypes(), VCLXContainer::getTypes() );
 }

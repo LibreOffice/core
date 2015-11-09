@@ -37,16 +37,16 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
 public:
-    explicit UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
+    explicit UnoTreeModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
     UnoTreeModel( const UnoTreeModel& rModel );
 
     UnoControlModel* Clone() const override;
 
-    // ::com::sun::star::beans::XMultiPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::beans::XMultiPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::io::XPersistObject
-    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::io::XPersistObject
+    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

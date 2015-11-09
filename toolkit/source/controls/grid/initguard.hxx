@@ -40,7 +40,7 @@ namespace toolkit
             :comphelper::ComponentGuard( i_component, i_broadcastHelper )
         {
             if ( !i_component.isInitialized() )
-                throw ::com::sun::star::lang::NotInitializedException( OUString(), *&i_component );
+                throw css::lang::NotInitializedException( OUString(), *&i_component );
         }
 
         ~InitGuard()

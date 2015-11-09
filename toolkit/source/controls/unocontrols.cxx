@@ -86,7 +86,7 @@ ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic:
     return ImageHelper::getGraphicFromURL_nothrow( _rURL );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+css::uno::Reference< css::graphic::XGraphic >
 ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
 {
     uno::Reference< graphic::XGraphic > xGraphic;
@@ -118,7 +118,7 @@ UnoControlEditModel::UnoControlEditModel( const Reference< XComponentContext >& 
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXEdit );
 }
 
-OUString UnoControlEditModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlEditModel::getServiceName( ) throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlEditModel );
 }
@@ -537,7 +537,7 @@ UnoControlFileControlModel::UnoControlFileControlModel( const Reference< XCompon
     ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
-OUString UnoControlFileControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlFileControlModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlFileControlModel );
 }
@@ -644,7 +644,7 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
 
-void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception)
+void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception)
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
@@ -696,7 +696,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
             break;
         }
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
         OSL_FAIL( "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
         DBG_UNHANDLED_EXCEPTION();
@@ -721,7 +721,7 @@ UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext
     osl_atomic_decrement( &m_refCount );
 }
 
-OUString UnoControlButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlButtonModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlButtonModel );
 }
@@ -959,7 +959,7 @@ UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComp
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXImageControl );
 }
 
-OUString UnoControlImageControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlImageControlModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlImageControlModel );
 }
@@ -1012,7 +1012,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlImageControlModel::getProper
     return xInfo;
 }
 
-void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::uno::Exception, std::exception)
+void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw (css::uno::Exception, std::exception)
 {
     GraphicControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 
@@ -1138,7 +1138,7 @@ UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XCompon
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXRadioButton );
 }
 
-OUString UnoControlRadioButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlRadioButtonModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlRadioButtonModel );
 }
@@ -1395,7 +1395,7 @@ UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XComponentCon
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCheckBox );
 }
 
-OUString UnoControlCheckBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlCheckBoxModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlCheckBoxModel );
 }
@@ -1626,7 +1626,7 @@ UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< X
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedHyperlink );
 }
 
-OUString UnoControlFixedHyperlinkModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlFixedHyperlinkModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.awt.UnoControlFixedHyperlinkModel" );
 }
@@ -1730,14 +1730,14 @@ OUString UnoFixedHyperlinkControl::getText() throw(uno::RuntimeException, std::e
     return ImplGetPropertyValue_UString( BASEPROPERTY_LABEL );
 }
 
-void UnoFixedHyperlinkControl::setURL( const OUString& URL ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void UnoFixedHyperlinkControl::setURL( const OUString& URL ) throw(css::uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     aAny <<= URL;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_URL ), aAny, true );
 }
 
-OUString UnoFixedHyperlinkControl::getURL(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoFixedHyperlinkControl::getURL(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ImplGetPropertyValue_UString( BASEPROPERTY_URL );
 }
@@ -1829,7 +1829,7 @@ UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentC
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedText );
 }
 
-OUString UnoControlFixedTextModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlFixedTextModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString( "stardiv.vcl.controlmodel.FixedText" );
 }
@@ -2018,7 +2018,7 @@ UnoControlGroupBoxModel::UnoControlGroupBoxModel( const Reference< XComponentCon
     ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
 }
 
-OUString UnoControlGroupBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlGroupBoxModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlGroupBoxModel );
 }
@@ -2264,7 +2264,7 @@ css::uno::Sequence<OUString> UnoControlListBoxModel::getSupportedServiceNames()
     return s;
 }
 
-OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlListBoxModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlListBoxModel );
 }
@@ -2422,7 +2422,7 @@ void SAL_CALL UnoControlListBoxModel::removeItem( ::sal_Int32 i_nPosition ) thro
 }
 
 
-void SAL_CALL UnoControlListBoxModel::removeAllItems(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UnoControlListBoxModel::removeAllItems(  ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // SYNCHRONIZED ----->
@@ -3179,7 +3179,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySe
 }
 
 
-OUString UnoControlComboBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlComboBoxModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlComboBoxModel );
 }
@@ -3604,8 +3604,8 @@ void UnoSpinFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
         xField->addSpinListener( &maSpinListeners );
 }
 
-    // ::com::sun::star::awt::XSpinField
-void UnoSpinFieldControl::addSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    // css::awt::XSpinField
+void UnoSpinFieldControl::addSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) throw(css::uno::RuntimeException, std::exception)
 {
     maSpinListeners.addInterface( l );
     if( getPeer().is() && maSpinListeners.getLength() == 1 )
@@ -3615,7 +3615,7 @@ void UnoSpinFieldControl::addSpinListener( const ::com::sun::star::uno::Referenc
     }
 }
 
-void UnoSpinFieldControl::removeSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void UnoSpinFieldControl::removeSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) throw(css::uno::RuntimeException, std::exception)
 {
     if( getPeer().is() && maSpinListeners.getLength() == 1 )
     {
@@ -3625,35 +3625,35 @@ void UnoSpinFieldControl::removeSpinListener( const ::com::sun::star::uno::Refer
     maSpinListeners.removeInterface( l );
 }
 
-void UnoSpinFieldControl::up() throw(::com::sun::star::uno::RuntimeException, std::exception)
+void UnoSpinFieldControl::up() throw(css::uno::RuntimeException, std::exception)
 {
     uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     if ( xField.is() )
         xField->up();
 }
 
-void UnoSpinFieldControl::down() throw(::com::sun::star::uno::RuntimeException, std::exception)
+void UnoSpinFieldControl::down() throw(css::uno::RuntimeException, std::exception)
 {
     uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     if ( xField.is() )
         xField->down();
 }
 
-void UnoSpinFieldControl::first() throw(::com::sun::star::uno::RuntimeException, std::exception)
+void UnoSpinFieldControl::first() throw(css::uno::RuntimeException, std::exception)
 {
     uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     if ( xField.is() )
         xField->first();
 }
 
-void UnoSpinFieldControl::last() throw(::com::sun::star::uno::RuntimeException, std::exception)
+void UnoSpinFieldControl::last() throw(css::uno::RuntimeException, std::exception)
 {
     uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     if ( xField.is() )
         xField->last();
 }
 
-void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat ) throw(css::uno::RuntimeException, std::exception)
 {
     mbRepeat = bRepeat;
 
@@ -3671,7 +3671,7 @@ UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XComponentC
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXDateField );
 }
 
-OUString UnoControlDateFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlDateFieldModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlDateFieldModel );
 }
@@ -3960,7 +3960,7 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XComponentC
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXTimeField );
 }
 
-OUString UnoControlTimeFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlTimeFieldModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlTimeFieldModel );
 }
@@ -4208,7 +4208,7 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XComp
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXNumericField );
 }
 
-OUString UnoControlNumericFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlNumericFieldModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlNumericFieldModel );
 }
@@ -4453,7 +4453,7 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XCo
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXCurrencyField );
 }
 
-OUString UnoControlCurrencyFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlCurrencyFieldModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlCurrencyFieldModel );
 }
@@ -4704,7 +4704,7 @@ UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XComp
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXPatternField );
 }
 
-OUString UnoControlPatternFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlPatternFieldModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlPatternFieldModel );
 }
@@ -4897,7 +4897,7 @@ UnoControlProgressBarModel::UnoControlProgressBarModel( const Reference< XCompon
     ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE_MIN );
 }
 
-OUString UnoControlProgressBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlProgressBarModel::getServiceName( ) throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlProgressBarModel );
 }
@@ -4984,29 +4984,29 @@ IMPL_XTYPEPROVIDER_START( UnoProgressBarControl )
     UnoControlBase::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-// ::com::sun::star::awt::XProgressBar
-void UnoProgressBarControl::setForegroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XProgressBar
+void UnoProgressBarControl::setForegroundColor( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     aAny <<= nColor;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_FILLCOLOR ), aAny, true );
 }
 
-void UnoProgressBarControl::setBackgroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void UnoProgressBarControl::setBackgroundColor( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     aAny <<= nColor;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_BACKGROUNDCOLOR ), aAny, true );
 }
 
-void UnoProgressBarControl::setValue( sal_Int32 nValue ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void UnoProgressBarControl::setValue( sal_Int32 nValue ) throw(css::uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     aAny <<= nValue;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE ), aAny, true );
 }
 
-void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException, std::exception )
+void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(css::uno::RuntimeException, std::exception )
 {
     uno::Any aMin;
     uno::Any aMax;
@@ -5028,7 +5028,7 @@ void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::c
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_PROGRESSVALUE_MAX ), aMax, true );
 }
 
-sal_Int32 UnoProgressBarControl::getValue() throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 UnoProgressBarControl::getValue() throw(css::uno::RuntimeException, std::exception)
 {
     return ImplGetPropertyValue_INT32( BASEPROPERTY_PROGRESSVALUE );
 }
@@ -5075,7 +5075,7 @@ UnoControlFixedLineModel::UnoControlFixedLineModel( const Reference< XComponentC
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
 }
 
-OUString UnoControlFixedLineModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlFixedLineModel::getServiceName( ) throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlFixedLineModel );
 }

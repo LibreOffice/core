@@ -59,13 +59,13 @@ public:
     void broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >* pNodes, sal_Int32 nNodes );
 
     // XMutableTreeDataModel
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode > SAL_CALL createNode( const ::com::sun::star::uno::Any& DisplayValue, sal_Bool ChildrenOnDemand ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setRoot( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& RootNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::tree::XMutableTreeNode > SAL_CALL createNode( const css::uno::Any& DisplayValue, sal_Bool ChildrenOnDemand ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRoot( const css::uno::Reference< css::awt::tree::XMutableTreeNode >& RootNode ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // XTreeDataModel
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getRoot(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addTreeDataModelListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModelListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeTreeDataModelListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModelListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getRoot(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addTreeDataModelListener( const css::uno::Reference< css::awt::tree::XTreeDataModelListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeTreeDataModelListener( const css::uno::Reference< css::awt::tree::XTreeDataModelListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XComponent
     virtual void SAL_CALL dispose(  ) throw (RuntimeException, std::exception) override;
@@ -95,27 +95,27 @@ public:
     void broadcast_changes(const Reference< XTreeNode >& xNode, bool bNew);
 
     // XMutableTreeNode
-    virtual ::com::sun::star::uno::Any SAL_CALL getDataValue() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDataValue( const ::com::sun::star::uno::Any& _datavalue ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL appendChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& ChildNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL insertChildByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& ChildNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeChildByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHasChildrenOnDemand( sal_Bool ChildrenOnDemand ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDisplayValue( const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setNodeGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setExpandedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setCollapsedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getDataValue() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDataValue( const css::uno::Any& _datavalue ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL appendChild( const css::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL insertChildByIndex( ::sal_Int32 Index, const css::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeChildByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setHasChildrenOnDemand( sal_Bool ChildrenOnDemand ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDisplayValue( const css::uno::Any& Value ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setNodeGraphicURL( const OUString& URL ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setExpandedGraphicURL( const OUString& URL ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setCollapsedGraphicURL( const OUString& URL ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XTreeNode
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getChildAt( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getIndex( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasChildrenOnDemand(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getDisplayValue(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNodeGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getExpandedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getCollapsedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getChildAt( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getChildCount(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::tree::XTreeNode > SAL_CALL getParent(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getIndex( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasChildrenOnDemand(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getDisplayValue(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getNodeGraphicURL(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getExpandedGraphicURL(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getCollapsedGraphicURL(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) override;
@@ -230,7 +230,7 @@ void SAL_CALL MutableTreeDataModel::dispose() throw (RuntimeException, std::exce
     if( !mbDisposed )
     {
         mbDisposed = true;
-        ::com::sun::star::lang::EventObject aEvent;
+        css::lang::EventObject aEvent;
         aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
         BrdcstHelper.aLC.disposeAndClear( aEvent );
     }

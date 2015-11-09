@@ -148,14 +148,14 @@ private:
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowCount() throw (::com::sun::star::uno::RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowCount() throw (css::uno::RuntimeException, std::exception)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return impl_getRowCount_nolck();
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultGridDataModel::getColumnCount() throw (::com::sun::star::uno::RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL DefaultGridDataModel::getColumnCount() throw (css::uno::RuntimeException, std::exception)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_nColumnCount;
@@ -468,7 +468,7 @@ private:
 
     void SAL_CALL DefaultGridDataModel::disposing()
     {
-        ::com::sun::star::lang::EventObject aEvent;
+        css::lang::EventObject aEvent;
         aEvent.Source.set( *this );
         rBHelper.aLC.disposeAndClear( aEvent );
 

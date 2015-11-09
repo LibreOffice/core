@@ -26,7 +26,7 @@
 
 //  class UnoControlContainerModel
 
-UnoControlContainerModel::UnoControlContainerModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
+UnoControlContainerModel::UnoControlContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -40,7 +40,7 @@ UnoControlContainerModel::UnoControlContainerModel( const ::com::sun::star::uno:
     ImplRegisterProperty( BASEPROPERTY_TEXT );
 }
 
-OUString UnoControlContainerModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoControlContainerModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlContainerModel );
 }
@@ -62,9 +62,9 @@ UnoControlContainerModel::getSupportedServiceNames()
     return s;
 }
 
-::com::sun::star::uno::Any UnoControlContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+css::uno::Any UnoControlContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    ::com::sun::star::uno::Any aDefault;
+    css::uno::Any aDefault;
     if ( nPropId == BASEPROPERTY_BORDER )
         aDefault <<= (sal_Int16) 0;
     else
@@ -73,9 +73,9 @@ UnoControlContainerModel::getSupportedServiceNames()
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlContainerModel::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > UnoControlContainerModel::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -86,7 +86,7 @@ UnoControlContainerModel::getSupportedServiceNames()
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        ::com::sun::star::uno::Sequence<sal_Int32>  aIDs = ImplGetPropertyIds();
+        css::uno::Sequence<sal_Int32>  aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;

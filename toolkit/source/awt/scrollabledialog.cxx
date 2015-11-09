@@ -26,8 +26,8 @@ namespace toolkit
 
 // Using  WB_AUTOHSCROLL, WB_AUTOVSCROLL here sucks big time, there is a
 // problem in the toolkit class where there are some clashing IDs
-// ( ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL has the same value
-// as ::com::sun::star::awt::WindowAttribute::NODECORATION and they are used
+// ( css::awt::VclWindowPeerAttribute::VSCROLL has the same value
+// as css::awt::WindowAttribute::NODECORATION and they are used
 // in the same bitmap :-( WB_VSCROLL & WB_HSCROLL apparently are only for
 // child classes ( whole thing is a mess if you ask me )
 template< class T>

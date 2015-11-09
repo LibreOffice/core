@@ -81,7 +81,7 @@ class SimpleNamedThingContainer : public ::cppu::WeakImplHelper< container::XNam
     NamedThingsHash things;
     ::osl::Mutex m_aMutex;
 public:
-    // ::com::sun::star::container::XNameContainer, XNameReplace, XNameAccess
+    // css::container::XNameContainer, XNameReplace, XNameAccess
     virtual void SAL_CALL replaceByName( const OUString& aName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -293,7 +293,7 @@ Reference< XPropertySetInfo > UnoControlDialogModel::getPropertySetInfo(  ) thro
     return xInfo;
 }
 
-void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception)
+void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception)
 {
     ControlModelContainerBase::setFastPropertyValue_NoBroadcast( nHandle, rValue );
     try
@@ -305,7 +305,7 @@ void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32
             setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( mxGrfObj, sImageURL ) ) );
         }
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
         OSL_ENSURE( false, "UnoControlDialogModel::setFastPropertyValue_NoBroadcast: caught an exception while setting ImageURL properties!" );
     }
@@ -416,7 +416,7 @@ css::uno::Sequence<OUString> UnoDialogControl::getSupportedServiceNames()
         "stardiv.vcl.control.Dialog"};
 }
 
-void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
+void UnoDialogControl::PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc )
 {
     UnoControlContainer::PrepareWindowDescriptor( rDesc );
     bool bDecoration( true );
@@ -424,7 +424,7 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
     if ( !bDecoration )
     {
         // Now we have to manipulate the WindowDescriptor
-        rDesc.WindowAttributes = rDesc.WindowAttributes | ::com::sun::star::awt::WindowAttribute::NODECORATION;
+        rDesc.WindowAttributes = rDesc.WindowAttributes | css::awt::WindowAttribute::NODECORATION;
     }
 
     // We have to set the graphic property before the peer
@@ -505,9 +505,9 @@ static ::Size ImplMapPixelToAppFont( OutputDevice* pOutDev, const ::Size& aSize 
     ::Size aTmp = pOutDev->PixelToLogic( aSize, MAP_APPFONT );
     return aTmp;
 }
-// ::com::sun::star::awt::XWindowListener
-void SAL_CALL UnoDialogControl::windowResized( const ::com::sun::star::awt::WindowEvent& e )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XWindowListener
+void SAL_CALL UnoDialogControl::windowResized( const css::awt::WindowEvent& e )
+throw (css::uno::RuntimeException, std::exception)
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
@@ -547,8 +547,8 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     }
 }
 
-void SAL_CALL UnoDialogControl::windowMoved( const ::com::sun::star::awt::WindowEvent& e )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UnoDialogControl::windowMoved( const css::awt::WindowEvent& e )
+throw (css::uno::RuntimeException, std::exception)
 {
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
@@ -724,7 +724,7 @@ void SAL_CALL UnoMultiPageControl::dispose() throw (RuntimeException, std::excep
     ControlContainerBase::dispose();
 }
 
-// com::sun::star::awt::XSimpleTabController
+// css::awt::XSimpleTabController
 ::sal_Int32 SAL_CALL UnoMultiPageControl::insertTab() throw (RuntimeException, std::exception)
 {
     Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
@@ -928,7 +928,7 @@ UnoMultiPageModel::Clone() const
     return pClone;
 }
 
-OUString UnoMultiPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoMultiPageModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.awt.UnoMultiPageModel" );
 }
@@ -1048,7 +1048,7 @@ UnoPageModel::Clone() const
     return pClone;
 }
 
-OUString UnoPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoPageModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.awt.UnoPageModel" );
 }
@@ -1213,7 +1213,7 @@ UnoFrameModel::Clone() const
     return pClone;
 }
 
-OUString UnoFrameModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString UnoFrameModel::getServiceName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.awt.UnoFrameModel" );
 }

@@ -240,7 +240,7 @@ namespace toolkit {
     }
 
 
-    AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< com::sun::star::uno::XComponentContext > const & i_factory )
+    AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< css::uno::XComponentContext > const & i_factory )
         :AnimatedImagesControlModel_Base( i_factory )
         ,m_xData( new AnimatedImagesControlModel_Data )
     {

@@ -29,23 +29,23 @@ ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
     // registerProperty or registerMayBeVoidProperty or registerPropertyNoMember
 
     registerProperty( "Label", RM_PROPERTY_ID_LABEL,
-                      ::com::sun::star::beans::PropertyAttribute::BOUND |
-                      ::com::sun::star::beans::PropertyAttribute::CONSTRAINED,
+                      css::beans::PropertyAttribute::BOUND |
+                      css::beans::PropertyAttribute::CONSTRAINED,
                       & m_sLabel, cppu::UnoType<decltype(m_sLabel)>::get() );
     m_nID = -1;
     registerProperty( "ID", RM_PROPERTY_ID_ID,
-                      ::com::sun::star::beans::PropertyAttribute::BOUND |
-                      ::com::sun::star::beans::PropertyAttribute::CONSTRAINED,
+                      css::beans::PropertyAttribute::BOUND |
+                      css::beans::PropertyAttribute::CONSTRAINED,
                       & m_nID, cppu::UnoType<decltype(m_nID)>::get() );
     m_bEnabled = true;
     registerProperty( "Enabled", RM_PROPERTY_ID_ENABLED,
-                    ::com::sun::star::beans::PropertyAttribute::BOUND |
-                    ::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT,
+                    css::beans::PropertyAttribute::BOUND |
+                    css::beans::PropertyAttribute::MAYBEDEFAULT,
                     & m_bEnabled, cppu::UnoType<decltype(m_bEnabled)>::get() );
 
     registerProperty( "Interactive", RM_PROPERTY_ID_INTERACTIVE,
-                    ::com::sun::star::beans::PropertyAttribute::BOUND |
-                    ::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT,
+                    css::beans::PropertyAttribute::BOUND |
+                    css::beans::PropertyAttribute::MAYBEDEFAULT,
                     & m_bInteractive, cppu::UnoType<decltype(m_bInteractive)>::get() );
 
 
@@ -69,28 +69,28 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
     //  whose XInterface and XTypeProvider implementations should be merged
 
 
-::com::sun::star::uno::Reference< ::com::sun::star:: beans::XPropertySetInfo > SAL_CALL
+css::uno::Reference< css:: beans::XPropertySetInfo > SAL_CALL
     ORoadmapEntry::getPropertySetInfo()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
-    return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >(
+    return css::uno::Reference< css::beans::XPropertySetInfo >(
         createPropertySetInfo( getInfoHelper() ) );
 }
 
-OUString SAL_CALL ORoadmapEntry::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL ORoadmapEntry::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
 {
     OUString aStr("com.sun.star.comp.toolkit.RoadmapItem");
     return aStr;
 }
 
-sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Sequence< OUString > aRet(1);
+    css::uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.awt.RoadmapItem";
     return aRet;
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) 
 
 ::cppu::IPropertyArrayHelper* ORoadmapEntry::createArrayHelper() const
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
+    css::uno::Sequence< css::beans::Property > aProps;
     // describes all properties which have been registered in the ctor
     describeProperties( aProps );
 

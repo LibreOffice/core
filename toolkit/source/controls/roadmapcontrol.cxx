@@ -127,7 +127,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstance(  ) throw (Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstance(  ) throw (Exception, css::uno::RuntimeException, std::exception)
     {
         ORoadmapEntry* pRoadmapItem = new ORoadmapEntry();
         Reference< XInterface > xNewRoadmapItem = static_cast<cppu::OWeakObject*>(pRoadmapItem);
@@ -148,7 +148,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
 
-    ::com::sun::star::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Any  SAL_CALL UnoControlRoadmapModel::queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
     {
         Any aRet = UnoControlRoadmapModel_Base::queryAggregation( rType );
         if ( !aRet.hasValue() )
@@ -359,12 +359,12 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    void SAL_CALL UnoControlRoadmapModel::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL UnoControlRoadmapModel::addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
     {
         maContainerListeners.addInterface( xListener );
     }
 
-    void SAL_CALL UnoControlRoadmapModel::removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL UnoControlRoadmapModel::removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
     {
         maContainerListeners.removeInterface( xListener );
     }

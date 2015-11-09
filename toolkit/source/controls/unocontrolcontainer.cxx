@@ -776,7 +776,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
             OUString aPropName( "Step" );
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
-                ::com::sun::star::uno::Any aVal = xPSet->getPropertyValue( aPropName );
+                css::uno::Any aVal = xPSet->getPropertyValue( aPropName );
                 sal_Int32 nDialogStep = 0;
                 aVal >>= nDialogStep;
                 uno::Reference< awt::XControlContainer > xContainer =
@@ -833,24 +833,24 @@ css::uno::Sequence<OUString> UnoControlContainer::getSupportedServiceNames()
     return s;
 }
 
-void UnoControlContainer::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
+void UnoControlContainer::PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc )
 {
     // HACK due to the fact that we can't really use VSCROLL & HSCROLL
-    // for Dialog  ( ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL
+    // for Dialog  ( css::awt::VclWindowPeerAttribute::VSCROLL
     // has the same value as
-    // ::com::sun::star::awt::WindowAttribute::NODECORATION )
+    // css::awt::WindowAttribute::NODECORATION )
     // For convenience in the PropBrowse using HSCROLL and VSCROLL ensures
     // the Correct text. We exchange them here and the control knows
     // about this hack ( it sucks badly I know )
-    if ( rDesc.WindowAttributes & ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL )
+    if ( rDesc.WindowAttributes & css::awt::VclWindowPeerAttribute::VSCROLL )
     {
-       rDesc.WindowAttributes &= ~::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL;
-       rDesc.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::AUTOVSCROLL;
+       rDesc.WindowAttributes &= ~css::awt::VclWindowPeerAttribute::VSCROLL;
+       rDesc.WindowAttributes |= css::awt::VclWindowPeerAttribute::AUTOVSCROLL;
     }
-    if ( rDesc.WindowAttributes & ::com::sun::star::awt::VclWindowPeerAttribute::HSCROLL )
+    if ( rDesc.WindowAttributes & css::awt::VclWindowPeerAttribute::HSCROLL )
     {
-       rDesc.WindowAttributes &= ~::com::sun::star::awt::VclWindowPeerAttribute::HSCROLL;
-       rDesc.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::AUTOHSCROLL;
+       rDesc.WindowAttributes &= ~css::awt::VclWindowPeerAttribute::HSCROLL;
+       rDesc.WindowAttributes |= css::awt::VclWindowPeerAttribute::AUTOHSCROLL;
     }
 }
 

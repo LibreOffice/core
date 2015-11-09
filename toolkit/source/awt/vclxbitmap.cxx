@@ -29,52 +29,52 @@
 //  class VCLXBitmap
 
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXBitmap::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::uno::XInterface
+css::uno::Any VCLXBitmap::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::awt::XBitmap* >(this)),
-                                        (static_cast< ::com::sun::star::awt::XDisplayBitmap* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XUnoTunnel* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)) );
+    css::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        (static_cast< css::awt::XBitmap* >(this)),
+                                        (static_cast< css::awt::XDisplayBitmap* >(this)),
+                                        (static_cast< css::lang::XUnoTunnel* >(this)),
+                                        (static_cast< css::lang::XTypeProvider* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXBitmap )
 
-// ::com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXBitmap )
-    cppu::UnoType<com::sun::star::awt::XBitmap>::get(),
-    cppu::UnoType<com::sun::star::awt::XDisplayBitmap>::get()
+    cppu::UnoType<css::awt::XBitmap>::get(),
+    cppu::UnoType<css::awt::XDisplayBitmap>::get()
 IMPL_XTYPEPROVIDER_END
 
 
-// ::com::sun::star::awt::XBitmap
-::com::sun::star::awt::Size VCLXBitmap::getSize() throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XBitmap
+css::awt::Size VCLXBitmap::getSize() throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::awt::Size aSize( maBitmap.GetSizePixel().Width(), maBitmap.GetSizePixel().Height() );
+    css::awt::Size aSize( maBitmap.GetSizePixel().Width(), maBitmap.GetSizePixel().Height() );
     return aSize;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB() throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     SvMemoryStream aMem;
     WriteDIB(maBitmap.GetBitmap(), aMem, false, true);
-    return ::com::sun::star::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
+    return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB() throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     SvMemoryStream aMem;
     WriteDIB(maBitmap.GetMask(), aMem, false, true);
-    return ::com::sun::star::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
+    return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

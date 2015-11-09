@@ -124,11 +124,11 @@
 #define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
 
 #if (defined WNT)
-#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32
+#define SYSTEM_DEPENDENT_TYPE css::lang::SystemDependent::SYSTEM_WIN32
 #elif (defined MACOSX)
-#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_MAC
+#define SYSTEM_DEPENDENT_TYPE css::lang::SystemDependent::SYSTEM_MAC
 #elif (defined UNX)
-#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW
+#define SYSTEM_DEPENDENT_TYPE css::lang::SystemDependent::SYSTEM_XWINDOW
 #endif
 
 namespace {
@@ -193,7 +193,7 @@ public:
 
     // css::awt::XToolkitExperimental
     virtual void SAL_CALL processEventsToIdle()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // css::awt::XToolkit
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -331,79 +331,79 @@ WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
         bDecoratedWindow = true;
     }
 
-    if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::BORDER )
+    if( nComponentAttribs & css::awt::WindowAttribute::BORDER )
         nWinBits |= WB_BORDER;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::NOBORDER )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::NOBORDER )
         nWinBits |= WB_NOBORDER;
-    if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::SIZEABLE )
+    if( nComponentAttribs & css::awt::WindowAttribute::SIZEABLE )
         nWinBits |= WB_SIZEABLE;
-    if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::MOVEABLE )
+    if( nComponentAttribs & css::awt::WindowAttribute::MOVEABLE )
         nWinBits |= WB_MOVEABLE;
-    if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::CLOSEABLE )
+    if( nComponentAttribs & css::awt::WindowAttribute::CLOSEABLE )
         nWinBits |= WB_CLOSEABLE;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::HSCROLL )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::HSCROLL )
         nWinBits |= WB_HSCROLL;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::VSCROLL )
         nWinBits |= WB_VSCROLL;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::LEFT )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::LEFT )
         nWinBits |= WB_LEFT;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::CENTER )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::CENTER )
         nWinBits |= WB_CENTER;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::RIGHT )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::RIGHT )
         nWinBits |= WB_RIGHT;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::SPIN )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::SPIN )
         nWinBits |= WB_SPIN;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::SORT )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::SORT )
         nWinBits |= WB_SORT;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DROPDOWN )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DROPDOWN )
         nWinBits |= WB_DROPDOWN;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEFBUTTON )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEFBUTTON )
         nWinBits |= WB_DEFBUTTON;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::READONLY )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::READONLY )
         nWinBits |= WB_READONLY;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::CLIPCHILDREN )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::CLIPCHILDREN )
         nWinBits |= WB_CLIPCHILDREN;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::GROUP )
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::GROUP )
         nWinBits |= WB_GROUP;
-    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::NOLABEL ) //added for issue79712
+    if( nComponentAttribs & css::awt::VclWindowPeerAttribute::NOLABEL ) //added for issue79712
         nWinBits |= WB_NOLABEL;
 
     // These bits are not uniqe
     if ( bMessBox )
     {
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::OK )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::OK )
             nWinBits |= WB_OK;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::OK_CANCEL )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::OK_CANCEL )
             nWinBits |= WB_OK_CANCEL;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::YES_NO )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::YES_NO )
             nWinBits |= WB_YES_NO;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::YES_NO_CANCEL )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::YES_NO_CANCEL )
             nWinBits |= WB_YES_NO_CANCEL;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::RETRY_CANCEL )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::RETRY_CANCEL )
             nWinBits |= WB_RETRY_CANCEL;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_OK )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_OK )
             nWinBits |= WB_DEF_OK;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_CANCEL )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_CANCEL )
             nWinBits |= WB_DEF_CANCEL;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_RETRY )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_RETRY )
             nWinBits |= WB_DEF_RETRY;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_YES )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_YES )
             nWinBits |= WB_DEF_YES;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_NO )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_NO )
             nWinBits |= WB_DEF_NO;
     }
     if ( nCompType == WINDOW_MULTILINEEDIT || nCompType == WINDOW_DIALOG || nCompType == WINDOW_GROUPBOX )
     {
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::AUTOHSCROLL )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::AUTOHSCROLL )
             nWinBits |= WB_AUTOHSCROLL;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::AUTOVSCROLL )
+        if( nComponentAttribs & css::awt::VclWindowPeerAttribute::AUTOVSCROLL )
             nWinBits |= WB_AUTOVSCROLL;
     }
 
 
     if ( bDecoratedWindow )
     {
-        if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::NODECORATION )
+        if( nComponentAttribs & css::awt::WindowAttribute::NODECORATION )
         {
             // No decoration removes several window attributes and must
             // set WB_NOBORDER!
@@ -649,7 +649,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
         {
             pTk->dispose();
         }
-        catch( com::sun::star::uno::Exception & )
+        catch( css::uno::Exception & )
         {
         }
         DeInitVCL();
@@ -665,9 +665,9 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 // constructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit():
     cppu::WeakComponentImplHelper<
-    ::com::sun::star::awt::XToolkitExperimental,
-    ::com::sun::star::awt::XToolkitRobot,
-    ::com::sun::star::lang::XServiceInfo>( GetMutex() ),
+    css::awt::XToolkitExperimental,
+    css::awt::XToolkitRobot,
+    css::lang::XServiceInfo>( GetMutex() ),
     m_aTopWindowListeners(rBHelper.rMutex),
     m_aKeyHandlers(rBHelper.rMutex),
     m_aFocusListeners(rBHelper.rMutex),
@@ -736,18 +736,18 @@ void SAL_CALL VCLXToolkit::disposing()
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xRef;
+    css::uno::Reference< css::awt::XWindowPeer > xRef;
     // 07/00: AppWindow doesn't exist anymore...
     return xRef;
 }
 
-::com::sun::star::awt::Rectangle VCLXToolkit::getWorkArea(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Rectangle VCLXToolkit::getWorkArea(  ) throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nDisplay = Application::GetDisplayBuiltInScreen();
     Rectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
-    com::sun::star::awt::Rectangle aNotherRect;
+    css::awt::Rectangle aNotherRect;
     aNotherRect.X = aWorkRect.getX();
     aNotherRect.Y = aWorkRect.getY();
     aNotherRect.Width = aWorkRect.getWidth();
@@ -755,16 +755,16 @@ void SAL_CALL VCLXToolkit::disposing()
     return aNotherRect;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createWindow( const ::com::sun::star::awt::WindowDescriptor& rDescriptor ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createWindow( const css::awt::WindowDescriptor& rDescriptor ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     return ImplCreateWindow( rDescriptor, WinBits(0) );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > xRef;
+    css::uno::Reference< css::awt::XDevice > xRef;
     VCLXVirtualDevice* pVDev = new VCLXVirtualDevice;
 
     SolarMutexGuard aSolarGuard;
@@ -777,16 +777,16 @@ void SAL_CALL VCLXToolkit::disposing()
     return xRef;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion > VCLXToolkit::createRegion(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XRegion > VCLXToolkit::createRegion(  ) throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >  xRef = new VCLXRegion;
+    css::uno::Reference< css::awt::XRegion >  xRef = new VCLXRegion;
     return xRef;
 }
 
 vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
-    const ::com::sun::star::awt::WindowDescriptor& rDescriptor,
+    const css::awt::WindowDescriptor& rDescriptor,
     vcl::Window* pParent, WinBits nWinBits )
 {
     OUString aServiceName( rDescriptor.WindowServiceName );
@@ -805,7 +805,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     if ( !pParent )
     {
         // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
-        // spaeter mal ::com::sun::star::uno::Exception...
+        // spaeter mal css::uno::Exception...
         bool bException = true;
         if  (   ( nType == WINDOW_DIALOG )
             ||  ( nType == WINDOW_MODALDIALOG )
@@ -821,7 +821,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                   ( nType == WINDOW_WORKWINDOW ) ||
                   ( nType == VCLWINDOW_FRAMEWINDOW ) )
         {
-            if ( rDescriptor.Type == ::com::sun::star::awt::WindowClass_TOP )
+            if ( rDescriptor.Type == css::awt::WindowClass_TOP )
                 bException = false;
         }
 
@@ -1085,7 +1085,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_WINDOW:
             case VCLWINDOW_FRAMEWINDOW:
             case WINDOW_DOCKINGWINDOW:
-                if ( rDescriptor.Type == ::com::sun::star::awt::WindowClass_TOP )
+                if ( rDescriptor.Type == css::awt::WindowClass_TOP )
                 {
                     if (nType == WINDOW_DOCKINGWINDOW )
                         pNewWindow = VclPtr<DockingWindow>::Create( pParent, nWinBits );
@@ -1094,7 +1094,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                         if ((pParent == NULL) && rDescriptor.Parent.is())
                         {
                             // try to get a system dependent window handle
-                            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSystemDependentWindowPeer > xSystemDepParent(rDescriptor.Parent, ::com::sun::star::uno::UNO_QUERY);
+                            css::uno::Reference< css::awt::XSystemDependentWindowPeer > xSystemDepParent(rDescriptor.Parent, css::uno::UNO_QUERY);
 
                             if (xSystemDepParent.is())
                             {
@@ -1102,9 +1102,9 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
                                 rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(processID) );
 
-                                ::com::sun::star::uno::Sequence<sal_Int8> processIdSeq(processID, 16);
+                                css::uno::Sequence<sal_Int8> processIdSeq(processID, 16);
 
-                                ::com::sun::star::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
+                                css::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
                                 // use sal_Int64 here to accommodate all int types
                                 // uno::Any shift operator whill upcast if necessary
@@ -1158,7 +1158,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
                     *ppNewComp = new VCLXTopWindow( pNewWindow->GetType() == WINDOW_WORKWINDOW );
                 }
-                else if ( rDescriptor.Type == ::com::sun::star::awt::WindowClass_CONTAINER )
+                else if ( rDescriptor.Type == css::awt::WindowClass_CONTAINER )
                 {
                     if (nType == WINDOW_DOCKINGWINDOW )
                         pNewWindow = VclPtr<DockingWindow>::Create( pParent, nWinBits );
@@ -1203,7 +1203,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 #else
 
-extern "C" vcl::Window* SAL_CALL CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits );
+extern "C" vcl::Window* SAL_CALL CreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits );
 
 #endif
 
@@ -1215,7 +1215,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     SolarMutexGuard aSolarGuard;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xRef;
+    css::uno::Reference< css::awt::XWindowPeer > xRef;
 
     vcl::Window* pParent = NULL;
     if ( rDescriptor.Parent.is() )
@@ -1274,11 +1274,11 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         pNewWindow->SetCreatedWithToolkit( true );
         //pNewWindow->SetPosPixel( Point() ); // do not force (0,0) position, keep default pos instead
 
-        if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::MINSIZE )
+        if ( rDescriptor.WindowAttributes & css::awt::WindowAttribute::MINSIZE )
         {
             pNewWindow->SetSizePixel( Size() );
         }
-        else if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::FULLSIZE )
+        else if ( rDescriptor.WindowAttributes & css::awt::WindowAttribute::FULLSIZE )
         {
             if ( pParent )
                 pNewWindow->SetSizePixel( pParent->GetOutputSizePixel() );
@@ -1303,22 +1303,22 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         DBG_ASSERT( pNewWindow->GetComponentInterface( false ) == xRef,
             "VCLXToolkit::createWindow: did #133706# resurge?" );
 
-        if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::SHOW )
+        if ( rDescriptor.WindowAttributes & css::awt::WindowAttribute::SHOW )
             pNewWindow->Show();
     }
 
     return xRef;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > > VCLXToolkit::createWindows( const ::com::sun::star::uno::Sequence< ::com::sun::star::awt::WindowDescriptor >& rDescriptors ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::createWindows( const css::uno::Sequence< css::awt::WindowDescriptor >& rDescriptors ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_uInt32 nComponents = rDescriptors.getLength();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > > aSeq( nComponents );
+    css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > aSeq( nComponents );
     for ( sal_uInt32 n = 0; n < nComponents; n++ )
     {
-        ::com::sun::star::awt::WindowDescriptor aDescr = rDescriptors.getConstArray()[n];
+        css::awt::WindowDescriptor aDescr = rDescriptors.getConstArray()[n];
 
         if ( aDescr.ParentIndex == (-1) )
             aDescr.Parent = NULL;
@@ -1329,8 +1329,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return aSeq;
 }
 
-// ::com::sun::star::awt::XSystemChildFactory
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createSystemChild( const ::com::sun::star::uno::Any& Parent, const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XSystemChildFactory
+css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( const css::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType ) throw(css::uno::RuntimeException, std::exception)
 {
     VclPtr<vcl::Window> pChildWindow;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
@@ -1381,7 +1381,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             {
                 pChildWindow.reset( VclPtr<WorkWindow>::Create( &aParentData ) );
             }
-            catch ( const ::com::sun::star::uno::RuntimeException & rEx )
+            catch ( const css::uno::RuntimeException & rEx )
             {
                 // system child window could not be created
                 OSL_TRACE(
@@ -1392,13 +1392,13 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             }
         }
     }
-    else if (nSystemType == com::sun::star::lang::SystemDependent::SYSTEM_JAVA)
+    else if (nSystemType == css::lang::SystemDependent::SYSTEM_JAVA)
     {
         SolarMutexGuard aGuard;
         pChildWindow.reset(VclPtr<WorkWindow>::Create(nullptr, Parent));
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer;
+    css::uno::Reference< css::awt::XWindowPeer > xPeer;
     if ( pChildWindow )
     {
         VCLXTopWindow* pPeer = new VCLXTopWindow(true);
@@ -1410,15 +1410,15 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return xPeer;
 }
 
-// ::com::sun::star::awt::XMessageBoxFactory
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessageBox(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent,
-    ::com::sun::star::awt::MessageBoxType eType,
+// css::awt::XMessageBoxFactory
+css::uno::Reference< css::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessageBox(
+    const css::uno::Reference< css::awt::XWindowPeer >& aParent,
+    css::awt::MessageBoxType eType,
     ::sal_Int32 aButtons,
     const OUString& aTitle,
-    const OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const OUString& aMessage ) throw (css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::awt::WindowDescriptor aDescriptor;
+    css::awt::WindowDescriptor aDescriptor;
 
     sal_Int32 nWindowAttributes = css::awt::WindowAttribute::BORDER|css::awt::WindowAttribute::MOVEABLE|css::awt::WindowAttribute::CLOSEABLE;
 
@@ -1462,7 +1462,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     aDescriptor.ParentIndex       = -1;
     aDescriptor.Parent            = aParent;
     aDescriptor.WindowAttributes  = nWindowAttributes;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > xMsgBox(
+    css::uno::Reference< css::awt::XMessageBox > xMsgBox(
         ImplCreateWindow( aDescriptor, nAddWinBits ), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow > xWindow( xMsgBox, css::uno::UNO_QUERY );
     if ( xMsgBox.is() && xWindow.is() )
@@ -1479,7 +1479,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return xMsgBox;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL VCLXToolkit::getDragGestureRecognizer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL VCLXToolkit::getDragGestureRecognizer( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -1488,10 +1488,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     if( pWindow )
         return pWindow->GetDragGestureRecognizer();
 
-    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer >();
+    return css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer >();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > SAL_CALL VCLXToolkit::getDragSource( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::datatransfer::dnd::XDragSource > SAL_CALL VCLXToolkit::getDragSource( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -1500,10 +1500,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     if( pWindow )
         return pWindow->GetDragSource();
 
-    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >();
+    return css::uno::Reference< css::datatransfer::dnd::XDragSource >();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > SAL_CALL VCLXToolkit::getDropTarget( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::datatransfer::dnd::XDropTarget > SAL_CALL VCLXToolkit::getDropTarget( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -1512,10 +1512,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     if( pWindow )
         return pWindow->GetDropTarget();
 
-    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >();
+    return css::uno::Reference< css::datatransfer::dnd::XDropTarget >();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToolkit::getClipboard( const OUString& clipboardName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToolkit::getClipboard( const OUString& clipboardName ) throw(css::uno::RuntimeException, std::exception)
 {
     if( clipboardName.isEmpty() )
     {
@@ -1534,21 +1534,21 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         return mxSelection;
     }
 
-    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >();
+    return css::uno::Reference< css::datatransfer::clipboard::XClipboard >();
 }
 
 // XServiceInfo
-OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString VCLXToolkit::getImplementationName() throw(css::uno::RuntimeException, std::exception)
 {
     return OUString("stardiv.Toolkit.VCLXToolkit");
 }
 
-sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-::com::sun::star::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{
         "com.sun.star.awt.Toolkit", "stardiv.vcl.VclToolkit"};
@@ -1697,17 +1697,17 @@ void SAL_CALL VCLXToolkit::removeFocusListener(
 
 // virtual
 void SAL_CALL VCLXToolkit::fireFocusGained(
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XInterface > const &)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Reference<
+    css::uno::XInterface > const &)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 // virtual
 void SAL_CALL VCLXToolkit::fireFocusLost(
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XInterface > const &)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Reference<
+    css::uno::XInterface > const &)
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -1900,14 +1900,14 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
 // css::awt::XReschedule:
 
 void SAL_CALL VCLXToolkit::reschedule()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     Application::Reschedule(true);
 }
 
 void SAL_CALL VCLXToolkit::processEventsToIdle()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     Scheduler::ProcessTaskScheduling(false);
