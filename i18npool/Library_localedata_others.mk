@@ -20,13 +20,21 @@ $(eval $(call gb_Library_add_generated_exception_objects,localedata_others,\
 	CustomTarget/i18npool/localedata/localedata_ak_GH \
 	CustomTarget/i18npool/localedata/localedata_am_ET \
 	CustomTarget/i18npool/localedata/localedata_ar_AE \
+	CustomTarget/i18npool/localedata/localedata_ar_BH \
 	CustomTarget/i18npool/localedata/localedata_ar_DZ \
 	CustomTarget/i18npool/localedata/localedata_ar_EG \
+	CustomTarget/i18npool/localedata/localedata_ar_IQ \
+	CustomTarget/i18npool/localedata/localedata_ar_JO \
 	CustomTarget/i18npool/localedata/localedata_ar_KW \
 	CustomTarget/i18npool/localedata/localedata_ar_LB \
+	CustomTarget/i18npool/localedata/localedata_ar_LY \
+	CustomTarget/i18npool/localedata/localedata_ar_MA \
 	CustomTarget/i18npool/localedata/localedata_ar_OM \
+	CustomTarget/i18npool/localedata/localedata_ar_QA \
 	CustomTarget/i18npool/localedata/localedata_ar_SA \
+	CustomTarget/i18npool/localedata/localedata_ar_SY \
 	CustomTarget/i18npool/localedata/localedata_ar_TN \
+	CustomTarget/i18npool/localedata/localedata_ar_YE \
 	CustomTarget/i18npool/localedata/localedata_axk_CG \
 	CustomTarget/i18npool/localedata/localedata_az_AZ \
 	CustomTarget/i18npool/localedata/localedata_beq_CG \

@@ -305,7 +305,14 @@ static const struct {
     { "lgr_SB", lcl_DATA_OTHERS },
     { "mos_BF", lcl_DATA_OTHERS },
     { "ny_MW",  lcl_DATA_OTHERS },
-    { "ti_ET",  lcl_DATA_OTHERS }
+    { "ar_BH",  lcl_DATA_OTHERS },
+    { "ar_IQ",  lcl_DATA_OTHERS },
+    { "ar_JO",  lcl_DATA_OTHERS },
+    { "ar_LY",  lcl_DATA_OTHERS },
+    { "ar_MA",  lcl_DATA_OTHERS },
+    { "ar_QA",  lcl_DATA_OTHERS },
+    { "ar_SY",  lcl_DATA_OTHERS },
+    { "ar_YE",  lcl_DATA_OTHERS }
 };
 
 #else
