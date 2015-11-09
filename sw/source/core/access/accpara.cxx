@@ -564,6 +564,8 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
     delete pPortionData;
     delete pHyperTextData;
     delete mpParaChangeTrackInfo; // #i108125#
+    if(GetRegisteredIn())
+        GetRegisteredIn()->Remove(this);
 }
 
 bool SwAccessibleParagraph::HasCursor()
