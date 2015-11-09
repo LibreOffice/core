@@ -350,7 +350,14 @@ static inline bool loadModule(osl::Module & rModule, const OUString & rBridgeNam
 
     if (!bNeg)
     {
-        bool bModule = cppu::detail::loadModule(rModule, rBridgeName);
+        bool bModule;
+        try {
+            bModule = cppu::detail::loadModule(rModule, rBridgeName);
+        }
+        catch(...) {
+            // convert throw to return false
+            bModule = false;
+        }
 
         if (bModule)
             return true;
