@@ -92,6 +92,9 @@
 
     <color name="panel_grid_item_image_background">#D1D9E1</color>
 
+    <color name="toolbar_forgeround">#3e3e3e</color>
+    <color name="toolbar_background">#ffffff</color>
+
     <color name="handle_color">#40A040</color>
 
 </resources>
