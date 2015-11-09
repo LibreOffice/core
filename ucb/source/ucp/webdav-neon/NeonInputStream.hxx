@@ -41,12 +41,12 @@ namespace webdav_ucp
 
 // A simple XInputStream implementation provided specifically for use
 // by the DAVSession::GET method.
-class NeonInputStream : public ::com::sun::star::io::XInputStream,
-                        public ::com::sun::star::io::XSeekable,
+class NeonInputStream : public css::io::XInputStream,
+                        public css::io::XSeekable,
                         public ::cppu::OWeakObject
 {
     private:
-        com::sun::star::uno::Sequence< sal_Int8 > mInputBuffer;
+        css::uno::Sequence< sal_Int8 > mInputBuffer;
         sal_Int64 mLen;
         sal_Int64 mPos;
 
@@ -58,9 +58,8 @@ class NeonInputStream : public ::com::sun::star::io::XInputStream,
         void AddToStream( const char * inBuf, sal_Int32 inLen );
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
-                                        const ::com::sun::star::uno::Type & type )
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & type )
+                            throw( css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL acquire()
                             throw () override
@@ -73,50 +72,50 @@ class NeonInputStream : public ::com::sun::star::io::XInputStream,
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(
-              ::com::sun::star::uno::Sequence< sal_Int8 > & aData,
+              css::uno::Sequence< sal_Int8 > & aData,
             sal_Int32 nBytesToRead )
-                throw( ::com::sun::star::io::NotConnectedException,
-                          ::com::sun::star::io::BufferSizeExceededException,
-                          ::com::sun::star::io::IOException,
-                          ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::io::NotConnectedException,
+                          css::io::BufferSizeExceededException,
+                          css::io::IOException,
+                          css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL readSomeBytes(
-            ::com::sun::star::uno::Sequence< sal_Int8 > & aData,
+            css::uno::Sequence< sal_Int8 > & aData,
             sal_Int32 nMaxBytesToRead )
-                throw( ::com::sun::star::io::NotConnectedException,
-                          ::com::sun::star::io::BufferSizeExceededException,
-                          ::com::sun::star::io::IOException,
-                          ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::io::NotConnectedException,
+                          css::io::BufferSizeExceededException,
+                          css::io::IOException,
+                          css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-                throw( ::com::sun::star::io::NotConnectedException,
-                          ::com::sun::star::io::BufferSizeExceededException,
-                          ::com::sun::star::io::IOException,
-                          ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::io::NotConnectedException,
+                          css::io::BufferSizeExceededException,
+                          css::io::IOException,
+                          css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL available()
-                throw( ::com::sun::star::io::NotConnectedException,
-                          ::com::sun::star::io::IOException,
-                          ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::io::NotConnectedException,
+                          css::io::IOException,
+                          css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL closeInput()
-                throw( ::com::sun::star::io::NotConnectedException,
-                          ::com::sun::star::io::IOException,
-                          ::com::sun::star::uno::RuntimeException, std::exception ) override;
+                throw( css::io::NotConnectedException,
+                          css::io::IOException,
+                          css::uno::RuntimeException, std::exception ) override;
 
     // XSeekable
     virtual void SAL_CALL seek( sal_Int64 location )
-        throw( ::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::lang::IllegalArgumentException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int64 SAL_CALL getPosition()
-        throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int64 SAL_CALL getLength()
-        throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 };
 
 } // namespace webdav_ucp

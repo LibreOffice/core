@@ -30,63 +30,49 @@
 namespace ucb_cmdenv {
 
 class UcbCommandEnvironment :
-        public cppu::WeakImplHelper< com::sun::star::lang::XInitialization,
-                                      com::sun::star::lang::XServiceInfo,
-                                      com::sun::star::ucb::XCommandEnvironment >
+        public cppu::WeakImplHelper< css::lang::XInitialization,
+                                      css::lang::XServiceInfo,
+                                      css::ucb::XCommandEnvironment >
 {
-    com::sun::star::uno::Reference<
-        com::sun::star::task::XInteractionHandler > m_xIH;
-    com::sun::star::uno::Reference<
-        com::sun::star::ucb::XProgressHandler >     m_xPH;
+    css::uno::Reference< css::task::XInteractionHandler > m_xIH;
+    css::uno::Reference< css::ucb::XProgressHandler >     m_xPH;
 
 public:
-    explicit UcbCommandEnvironment(
-        const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+    explicit UcbCommandEnvironment( const css::uno::Reference< css::lang::XMultiServiceFactory >& rXSMgr );
     virtual ~UcbCommandEnvironment();
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const com::sun::star::uno::Sequence<
-                        com::sun::star::uno::Any >& aArguments )
-        throw( com::sun::star::uno::Exception,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw( css::uno::Exception,
+               css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
     supportsService( const OUString& ServiceName )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XCommandEnvironment
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::task::XInteractionHandler > SAL_CALL
+    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL
     getInteractionHandler()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XProgressHandler > SAL_CALL
+        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL
     getProgressHandler()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // Non-UNO interfaces
-    static OUString
-    getImplementationName_Static();
-    static com::sun::star::uno::Sequence< OUString >
-    getSupportedServiceNames_Static();
+    static OUString  getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-    static com::sun::star::uno::Reference<
-            com::sun::star::lang::XSingleServiceFactory >
-    createServiceFactory( const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > & rxServiceMgr );
-private:
-    //com::sun::star::uno::Reference<
-    //    com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+    static css::uno::Reference< css::lang::XSingleServiceFactory >
+    createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory > & rxServiceMgr );
 };
 
 } // namespace ucb_cmdenv

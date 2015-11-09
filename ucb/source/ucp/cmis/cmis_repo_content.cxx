@@ -131,11 +131,11 @@ namespace cmis
 #ifndef SYSTEM_CURL
         // Initialize NSS library to make sure libcmis (and curl) can access CACERTs using NSS
         // when using internal libcurl.
-        uno::Reference< com::sun::star::xml::crypto::XNSSInitializer >
-            xNSSInitializer = com::sun::star::xml::crypto::NSSInitializer::create( m_xContext );
+        uno::Reference< css::xml::crypto::XNSSInitializer >
+            xNSSInitializer = css::xml::crypto::NSSInitializer::create( m_xContext );
 
-        uno::Reference< com::sun::star::xml::crypto::XDigestContext > xDigestContext(
-                xNSSInitializer->getDigestContext( com::sun::star::xml::crypto::DigestID::SHA256,
+        uno::Reference< css::xml::crypto::XDigestContext > xDigestContext(
+                xNSSInitializer->getDigestContext( css::xml::crypto::DigestID::SHA256,
                                                           uno::Sequence< beans::NamedValue >() ),
                                                           uno::UNO_SET_THROW );
 #endif

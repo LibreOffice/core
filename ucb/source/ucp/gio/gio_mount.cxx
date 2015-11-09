@@ -70,7 +70,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
 
     OOoMountOperation *pThis = reinterpret_cast<OOoMountOperation*>(op);
 
-    const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > &xEnv = *(pThis->pEnv);
+    const css::uno::Reference< css::ucb::XCommandEnvironment > &xEnv = *(pThis->pEnv);
 
     if (xEnv.is())
       xIH = xEnv->getInteractionHandler();

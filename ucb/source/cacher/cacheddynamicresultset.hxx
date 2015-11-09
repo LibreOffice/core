@@ -31,27 +31,22 @@
 
 class CachedDynamicResultSet
                 : public DynamicResultSetWrapper
-                , public com::sun::star::lang::XTypeProvider
-                , public com::sun::star::lang::XServiceInfo
+                , public css::lang::XTypeProvider
+                , public css::lang::XServiceInfo
 {
-    com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifierMapping >
+    css::uno::Reference< css::ucb::XContentIdentifierMapping >
                             m_xContentIdentifierMapping;
 
 protected:
     virtual void SAL_CALL
-    impl_InitResultSetOne( const com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XResultSet >& xResultSet ) override;
+    impl_InitResultSetOne( const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
     virtual void SAL_CALL
-    impl_InitResultSetTwo( const com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XResultSet >& xResultSet ) override;
+    impl_InitResultSetTwo( const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
 
 public:
-    CachedDynamicResultSet( com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XDynamicResultSet > xOrigin
-        , const com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XContentIdentifierMapping > & xContentMapping
-        , const com::sun::star::uno::Reference<
-                        com::sun::star::uno::XComponentContext > & xContext );
+    CachedDynamicResultSet( css::uno::Reference< css::ucb::XDynamicResultSet > xOrigin
+        , const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentMapping
+        , const css::uno::Reference< css::uno::XComponentContext > & xContext );
 
     virtual ~CachedDynamicResultSet();
 
@@ -86,27 +81,25 @@ public:
     // own methods ( inherited )
 
     virtual void SAL_CALL
-    impl_disposing( const com::sun::star::lang::EventObject& Source )
-        throw( com::sun::star::uno::RuntimeException ) override;
+    impl_disposing( const css::lang::EventObject& Source )
+        throw( css::uno::RuntimeException ) override;
 };
 
 
 
 class CachedDynamicResultSetFactory
                 : public cppu::OWeakObject
-                , public com::sun::star::lang::XTypeProvider
-                , public com::sun::star::lang::XServiceInfo
-                , public com::sun::star::ucb::XCachedDynamicResultSetFactory
+                , public css::lang::XTypeProvider
+                , public css::lang::XServiceInfo
+                , public css::ucb::XCachedDynamicResultSetFactory
 {
 protected:
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
 public:
 
     CachedDynamicResultSetFactory(
-        const com::sun::star::uno::Reference<
-           com::sun::star::uno::XComponentContext > & xContext);
+        const css::uno::Reference< css::uno::XComponentContext > & xContext);
 
     virtual ~CachedDynamicResultSetFactory();
 
@@ -122,7 +115,7 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
         throw( css::uno::RuntimeException, std::exception ) override;
 
 
@@ -143,17 +136,12 @@ public:
 
     // XCachedDynamicResultSetFactory
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XDynamicResultSet > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
     createCachedDynamicResultSet(
-                  const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XDynamicResultSet > &
-                        SourceStub
-                , const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XContentIdentifierMapping > &
-                        ContentIdentifierMapping
+                  const css::uno::Reference< css::ucb::XDynamicResultSet > &          SourceStub
+                , const css::uno::Reference< css::ucb::XContentIdentifierMapping > &  ContentIdentifierMapping
                 )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 };
 
 #endif

@@ -54,22 +54,22 @@ namespace ucb { namespace ucp { namespace ext
     {
     public:
         Content(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             ::ucbhelper::ContentProviderImplHelper* pProvider,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier >& Identifier
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier
         );
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
+        static css::uno::Reference< css::sdbc::XRow >
             getArtificialNodePropertyValues(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProperties,
+                const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                const css::uno::Sequence< css::beans::Property >& rProperties,
                 const OUString& rTitle
             );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
+        css::uno::Reference< css::sdbc::XRow >
             getPropertyValues(
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProperties,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& xEnv
+                const css::uno::Sequence< css::beans::Property >& rProperties,
+                const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv
             );
 
         static OUString
@@ -90,39 +90,39 @@ namespace ucb { namespace ucp { namespace ext
         virtual ~Content();
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XContent
-        virtual OUString SAL_CALL getContentType() throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getContentType() throw( css::uno::RuntimeException, std::exception ) override;
 
         // XCommandProcessor
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
                 execute(
-                    const com::sun::star::ucb::Command& aCommand,
+                    const css::ucb::Command& aCommand,
                     sal_Int32 CommandId,
-                    const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& Environment
+                    const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment
                 )
-                throw   (   ::com::sun::star::uno::Exception
-                        ,   ::com::sun::star::ucb::CommandAbortedException
-                        ,   ::com::sun::star::uno::RuntimeException, std::exception
+                throw   (   css::uno::Exception
+                        ,   css::ucb::CommandAbortedException
+                        ,   css::uno::RuntimeException, std::exception
                         ) override;
 
         virtual void SAL_CALL
                 abort(
                     sal_Int32 CommandId
                 )
-                throw   (   ::com::sun::star::uno::RuntimeException, std::exception
+                throw   (   css::uno::RuntimeException, std::exception
                         ) override;
 
     private:
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > getProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& i_rEnv ) override;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::CommandInfo > getCommands( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& i_rEnv ) override;
+        virtual css::uno::Sequence< css::beans::Property > getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
+        virtual css::uno::Sequence< css::ucb::CommandInfo > getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        css::uno::Sequence< css::uno::Any >
             setPropertyValues(
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& xEnv
+                const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+                const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv
             );
 
         static bool denotesRootContent( const OUString& i_rContentIdentifier );

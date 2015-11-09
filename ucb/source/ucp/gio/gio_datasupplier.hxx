@@ -32,9 +32,9 @@ class Content;
 struct ResultListEntry
 {
     OUString aId;
-    com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > xId;
-    com::sun::star::uno::Reference< com::sun::star::ucb::XContent > xContent;
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > xRow;
+    css::uno::Reference< css::ucb::XContentIdentifier > xId;
+    css::uno::Reference< css::ucb::XContent > xContent;
+    css::uno::Reference< css::sdbc::XRow > xRow;
     GFileInfo *pInfo;
 
     explicit ResultListEntry( GFileInfo *pInInfo ) : pInfo(pInInfo)
@@ -53,21 +53,21 @@ typedef std::vector< ResultListEntry* > ResultList;
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
 private:
-    com::sun::star::uno::Reference< ::gio::Content > mxContent;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+    css::uno::Reference< ::gio::Content > mxContent;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMgr;
     sal_Int32 mnOpenMode;
     bool mbCountFinal;
     bool getData();
     ResultList maResults;
 public:
-    DataSupplier( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-        const com::sun::star::uno::Reference< Content >& rContent, sal_Int32 nOpenMode );
+    DataSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSMgr,
+        const css::uno::Reference< Content >& rContent, sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >
+    virtual css::uno::Reference< css::ucb::XContentIdentifier >
         queryContentIdentifier( sal_uInt32 nIndex ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
+    virtual css::uno::Reference< css::ucb::XContent >
         queryContent( sal_uInt32 nIndex ) override;
 
     virtual bool getResult( sal_uInt32 nIndex ) override;
@@ -76,14 +76,14 @@ public:
     virtual sal_uInt32 currentCount() override;
     virtual bool isCountFinal() override;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
+    virtual css::uno::Reference< css::sdbc::XRow >
         queryPropertyValues( sal_uInt32 nIndex  ) override;
     virtual void releasePropertyValues( sal_uInt32 nIndex ) override;
 
     virtual void close() override;
 
     virtual void validate()
-        throw( com::sun::star::ucb::ResultSetException ) override;
+        throw( css::ucb::ResultSetException ) override;
 };
 
 }

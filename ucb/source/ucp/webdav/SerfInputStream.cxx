@@ -73,11 +73,11 @@ Any SerfInputStream::queryInterface( const Type &type )
 // "Reads" the specified number of bytes from the stream
 
 sal_Int32 SAL_CALL SerfInputStream::readBytes(
-  ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::BufferSizeExceededException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+  css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException )
 {
     // Work out how much we're actually going to write
     sal_Int32 theBytes2Read = nBytesToRead;
@@ -102,11 +102,11 @@ sal_Int32 SAL_CALL SerfInputStream::readBytes(
 // readSomeBytes
 
 sal_Int32 SAL_CALL SerfInputStream::readSomeBytes(
- ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
-        throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::BufferSizeExceededException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+ css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException )
 {
     // Warning: What should this be doing ?
     return readBytes( aData, nMaxBytesToRead );
@@ -117,10 +117,10 @@ sal_Int32 SAL_CALL SerfInputStream::readSomeBytes(
 // Moves the current stream position forward
 
 void SAL_CALL SerfInputStream::skipBytes( sal_Int32 nBytesToSkip )
-        throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::BufferSizeExceededException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException )
 {
     mPos += nBytesToSkip;
     if ( mPos >= mLen )
@@ -132,9 +132,9 @@ void SAL_CALL SerfInputStream::skipBytes( sal_Int32 nBytesToSkip )
 // Returns the number of unread bytes currently remaining on the stream
 
 sal_Int32 SAL_CALL SerfInputStream::available(  )
-        throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+        throw( css::io::NotConnectedException,
+               css::io::IOException,
+               css::uno::RuntimeException )
 {
     return sal::static_int_cast<sal_Int32>(mLen - mPos);
 }
@@ -143,9 +143,9 @@ sal_Int32 SAL_CALL SerfInputStream::available(  )
 // closeInput
 
 void SAL_CALL SerfInputStream::closeInput()
-        throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+        throw( css::io::NotConnectedException,
+               css::io::IOException,
+               css::uno::RuntimeException )
 {
 }
 
@@ -153,25 +153,25 @@ void SAL_CALL SerfInputStream::closeInput()
 // seek
 
 void SAL_CALL SerfInputStream::seek( sal_Int64 location )
-        throw( ::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+        throw( css::lang::IllegalArgumentException,
+               css::io::IOException,
+               css::uno::RuntimeException )
 {
     if ( location < 0 )
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
 
     if ( location <= mLen )
         mPos = location;
     else
-        throw ::com::sun::star::lang::IllegalArgumentException();
+        throw css::lang::IllegalArgumentException();
 }
 
 
 // getPosition
 
 sal_Int64 SAL_CALL SerfInputStream::getPosition()
-        throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+        throw( css::io::IOException,
+               css::uno::RuntimeException )
 {
     return mPos;
 }
@@ -180,8 +180,8 @@ sal_Int64 SAL_CALL SerfInputStream::getPosition()
 // getLength
 
 sal_Int64 SAL_CALL SerfInputStream::getLength()
-        throw( ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException )
+        throw( css::io::IOException,
+               css::uno::RuntimeException )
 {
     return mLen;
 }

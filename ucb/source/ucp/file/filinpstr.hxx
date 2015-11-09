@@ -36,9 +36,9 @@ namespace fileaccess {
 
     class XInputStream_impl
         : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::io::XInputStream,
-          public com::sun::star::io::XSeekable
+          public css::lang::XTypeProvider,
+          public css::io::XInputStream,
+          public css::io::XSeekable
     {
     public:
 
@@ -61,10 +61,10 @@ namespace fileaccess {
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
             throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         queryInterface(
-            const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception) override;
+            const css::uno::Type& rType )
+            throw( css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         acquire(
@@ -78,68 +78,67 @@ namespace fileaccess {
 
         virtual sal_Int32 SAL_CALL
         readBytes(
-            com::sun::star::uno::Sequence< sal_Int8 >& aData,
+            css::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nBytesToRead )
-            throw( com::sun::star::io::NotConnectedException,
-                   com::sun::star::io::BufferSizeExceededException,
-                   com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::io::NotConnectedException,
+                   css::io::BufferSizeExceededException,
+                   css::io::IOException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL
         readSomeBytes(
-            com::sun::star::uno::Sequence< sal_Int8 >& aData,
+            css::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nMaxBytesToRead )
-            throw( com::sun::star::io::NotConnectedException,
-                   com::sun::star::io::BufferSizeExceededException,
-                   com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception) override;
+            throw( css::io::NotConnectedException,
+                   css::io::BufferSizeExceededException,
+                   css::io::IOException,
+                   css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
         skipBytes(
             sal_Int32 nBytesToSkip )
-            throw( com::sun::star::io::NotConnectedException,
-                   com::sun::star::io::BufferSizeExceededException,
-                   com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::io::NotConnectedException,
+                   css::io::BufferSizeExceededException,
+                   css::io::IOException,
+                   css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int32 SAL_CALL
         available(
             void )
-            throw( com::sun::star::io::NotConnectedException,
-                   com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::io::NotConnectedException,
+                   css::io::IOException,
+                   css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         closeInput(
             void )
-            throw( com::sun::star::io::NotConnectedException,
-                   com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::io::NotConnectedException,
+                   css::io::IOException,
+                   css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         seek(
             sal_Int64 location )
-            throw( com::sun::star::lang::IllegalArgumentException,
-                   com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::lang::IllegalArgumentException,
+                   css::io::IOException,
+                   css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int64 SAL_CALL
         getPosition(
             void )
-            throw( com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::io::IOException,
+                   css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int64 SAL_CALL
         getLength(
             void )
-            throw( com::sun::star::io::IOException,
-                   com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::io::IOException,
+                   css::uno::RuntimeException, std::exception ) override;
 
     private:
 
-        com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentProvider >            m_xProvider;
-        bool                                           m_nIsOpen;
+        css::uno::Reference< css::ucb::XContentProvider >  m_xProvider;
+        bool                                               m_nIsOpen;
 
         ReconnectingFile                                   m_aFile;
 

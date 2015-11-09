@@ -41,14 +41,14 @@ private:
     static sal_Int32 convertMonthToInt (const OUString& );
 
     static bool ISO8601_To_DateTime (const OUString&,
-        ::com::sun::star::util::DateTime& );
+        css::util::DateTime& );
 
     static bool RFC2068_To_DateTime (const OUString&,
-        ::com::sun::star::util::DateTime& );
+        css::util::DateTime& );
 
 public:
     static bool convert (const OUString&,
-        ::com::sun::star::util::DateTime& );
+        css::util::DateTime& );
 };
 
 } // namespace http_dav_ucp

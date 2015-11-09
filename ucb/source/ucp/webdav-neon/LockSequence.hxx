@@ -41,8 +41,7 @@ class LockSequence
 {
 public:
     static bool createFromXML( const OString & rInData,
-                               com::sun::star::uno::Sequence<
-                                   com::sun::star::ucb::Lock > & rOutData );
+                               css::uno::Sequence< css::ucb::Lock > & rOutData );
 };
 
 }

@@ -79,36 +79,36 @@ namespace fileaccess {
         class MyProperty
         {
         private:
-            OUString                          PropertyName;
-            sal_Int32                              Handle;
-            bool                               isNative;
-            com::sun::star::uno::Type              Typ;        // Duplicates information in Value
-            com::sun::star::uno::Any               Value;
-            com::sun::star::beans::PropertyState   State;
-            sal_Int16                              Attributes;
+            OUString                    PropertyName;
+            sal_Int32                   Handle;
+            bool                        isNative;
+            css::uno::Type              Typ;        // Duplicates information in Value
+            css::uno::Any               Value;
+            css::beans::PropertyState   State;
+            sal_Int16                   Attributes;
         public:
             MyProperty();
             explicit MyProperty( const OUString&  __PropertyName );
-            MyProperty( const bool&                                  __isNative,
-                        const OUString&                              __PropertyName,
-                        const sal_Int32&                             __Handle,
-                        const com::sun::star::uno::Type&             __Typ,
-                        const com::sun::star::uno::Any&              __Value,
-                        const com::sun::star::beans::PropertyState&  __State,
-                        const sal_Int16&                             __Attributes );
+            MyProperty( const bool&                       __isNative,
+                        const OUString&                   __PropertyName,
+                        const sal_Int32&                  __Handle,
+                        const css::uno::Type&             __Typ,
+                        const css::uno::Any&              __Value,
+                        const css::beans::PropertyState&  __State,
+                        const sal_Int16&                  __Attributes );
 
             ~MyProperty();
             inline const bool& SAL_CALL IsNative() const;
             inline const OUString& SAL_CALL getPropertyName() const { return PropertyName; }
             inline const sal_Int32& SAL_CALL getHandle() const;
-            inline const com::sun::star::uno::Type& SAL_CALL getType() const;
-            inline const com::sun::star::uno::Any& SAL_CALL getValue() const;
-            inline const com::sun::star::beans::PropertyState& SAL_CALL getState() const;
+            inline const css::uno::Type& SAL_CALL getType() const;
+            inline const css::uno::Any& SAL_CALL getValue() const;
+            inline const css::beans::PropertyState& SAL_CALL getState() const;
             inline const sal_Int16& SAL_CALL getAttributes() const;
 
             // The set* functions are declared const, because the key of "this" stays intact
-            inline void SAL_CALL setValue( const com::sun::star::uno::Any& __Value ) const;
-            inline void SAL_CALL setState( const com::sun::star::beans::PropertyState& __State ) const;
+            inline void SAL_CALL setValue( const css::uno::Any& __Value ) const;
+            inline void SAL_CALL setState( const css::beans::PropertyState& __State ) const;
         };
 
         struct eMyProperty
@@ -143,9 +143,9 @@ namespace fileaccess {
             NotifierList*              notifier;
 
             // Three views on the PersistentPropertySet
-            com::sun::star::uno::Reference< com::sun::star::ucb::XPersistentPropertySet >   xS;
-            com::sun::star::uno::Reference< com::sun::star::beans::XPropertyContainer >     xC;
-            com::sun::star::uno::Reference< com::sun::star::beans::XPropertyAccess >        xA;
+            css::uno::Reference< css::ucb::XPersistentPropertySet >   xS;
+            css::uno::Reference< css::beans::XPropertyContainer >     xC;
+            css::uno::Reference< css::beans::XPropertyAccess >        xA;
         };
 
         typedef std::unordered_map< OUString,UnqPathData,OUStringHash > ContentMap;
@@ -153,7 +153,7 @@ namespace fileaccess {
     public:
 
         // MethodenDefinitionen
-        shell( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+        shell( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                FileProvider* pProvider, bool bWithConfig );
 
         virtual ~shell();
@@ -179,18 +179,18 @@ namespace fileaccess {
 
         void SAL_CALL associate( const OUString& UnqPath,
                                  const OUString& PropertyName,
-                                 const com::sun::star::uno::Any& DefaultValue,
+                                 const css::uno::Any& DefaultValue,
                                  const sal_Int16 Attributes )
-            throw( com::sun::star::beans::PropertyExistException,
-                   com::sun::star::beans::IllegalTypeException,
-                   com::sun::star::uno::RuntimeException);
+            throw( css::beans::PropertyExistException,
+                   css::beans::IllegalTypeException,
+                   css::uno::RuntimeException);
 
 
         void SAL_CALL deassociate( const OUString& UnqPath,
                                    const OUString& PropertyName )
-            throw( com::sun::star::beans::UnknownPropertyException,
-                   com::sun::star::beans::NotRemoveableException,
-                   com::sun::star::uno::RuntimeException);
+            throw( css::beans::UnknownPropertyException,
+                   css::beans::NotRemoveableException,
+                   css::uno::RuntimeException);
 
 
 
@@ -207,14 +207,14 @@ namespace fileaccess {
 
         void SAL_CALL page( sal_Int32 CommandId,
                             const OUString& aUnqPath,
-                            const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream );
+                            const css::uno::Reference< css::io::XOutputStream >& xOutputStream );
 
 
         /**
          *  Given a file URL aUnqPath, this methods returns a XInputStream which reads from the open file.
          */
 
-        com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
+        css::uno::Reference< css::io::XInputStream > SAL_CALL
         open( sal_Int32 CommandId,
               const OUString& aUnqPath,
               bool bLock );
@@ -225,7 +225,7 @@ namespace fileaccess {
          *  to read and write from/to the file.
          */
 
-        com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
+        css::uno::Reference< css::io::XStream > SAL_CALL
         open_rw( sal_Int32 CommandId,
                  const OUString& aUnqPath,
                  bool bLock );
@@ -236,12 +236,12 @@ namespace fileaccess {
          *  to file URL aUnqPath
          */
 
-        com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSet > SAL_CALL
+        css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
         ls( sal_Int32 CommandId,
             const OUString& aUnqPath,
             const sal_Int32 OpenMode,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& sProperty,
-            const com::sun::star::uno::Sequence< com::sun::star::ucb::NumberedSortingInfo > & sSortingInfo );
+            const css::uno::Sequence< css::beans::Property >& sProperty,
+            const css::uno::Sequence< css::ucb::NumberedSortingInfo > & sSortingInfo );
 
 
         /**
@@ -249,11 +249,11 @@ namespace fileaccess {
          */
 
         // Info for commands
-        com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo > SAL_CALL
+        css::uno::Reference< css::ucb::XCommandInfo > SAL_CALL
         info_c();
 
         // Info for the properties
-        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         info_p( const OUString& aUnqPath );
 
 
@@ -261,9 +261,9 @@ namespace fileaccess {
          *  Sets the values of the properties belonging to fileURL aUnqPath
          */
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
+        css::uno::Sequence< css::uno::Any > SAL_CALL
         setv( const OUString& aUnqPath,
-              const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& values );
+              const css::uno::Sequence< css::beans::PropertyValue >& values );
 
 
         /**
@@ -271,10 +271,10 @@ namespace fileaccess {
          *  Returns an XRow object containing the values in the requested order.
          */
 
-        com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > SAL_CALL
+        css::uno::Reference< css::sdbc::XRow > SAL_CALL
         getv( sal_Int32 CommandId,
               const OUString& aUnqPath,
-              const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& properties );
+              const css::uno::Sequence< css::beans::Property >& properties );
 
 
         /********************************************************************************/
@@ -339,7 +339,7 @@ namespace fileaccess {
         mkfil( sal_Int32 CommandId,
                const OUString& aFileName,
                bool OverWrite,
-               const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream );
+               const css::uno::Reference< css::io::XInputStream >& aInputStream );
 
 
         /**
@@ -351,13 +351,13 @@ namespace fileaccess {
         write( sal_Int32 CommandId,
                const OUString& aUnqPath,
                bool OverWrite,
-               const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream );
+               const css::uno::Reference< css::io::XInputStream >& aInputStream );
 
 
 
         void SAL_CALL insertDefaultProperties( const OUString& aUnqPath );
 
-        com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+        css::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo();
 
 
@@ -374,9 +374,9 @@ namespace fileaccess {
 
 
         bool m_bWithConfig;
-        FileProvider*                                                                   m_pProvider;
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        m_xContext;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XPropertySetRegistry >     m_xFileRegistry;
+        FileProvider*                                             m_pProvider;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< css::ucb::XPropertySetRegistry >     m_xFileRegistry;
 
     private:
 
@@ -408,7 +408,7 @@ namespace fileaccess {
 
         static void SAL_CALL notifyPropertyChanges(
             std::list< PropertyChangeNotifier* >* listeners,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyChangeEvent >& seqChanged );
+            const css::uno::Sequence< css::beans::PropertyChangeEvent >& seqChanged );
 
         static void SAL_CALL notifyContentExchanged(
             std::vector< std::list< ContentEventNotifier* >* >* listeners_vec );
@@ -452,9 +452,9 @@ namespace fileaccess {
         // Special optimized method for getting the properties of a directoryitem, which
         // is returned by osl::DirectoryItem::getNextItem()
 
-        com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > SAL_CALL
+        css::uno::Reference< css::sdbc::XRow > SAL_CALL
         getv( Notifier* pNotifier,
-              const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& properties,
+              const css::uno::Sequence< css::beans::Property >& properties,
               osl::DirectoryItem& DirItem,
               OUString& aUnqPath,
               bool&      bIsRegular );
@@ -488,7 +488,7 @@ namespace fileaccess {
         void SAL_CALL
         getMaskFromProperties(
             sal_Int32& n_Mask,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq );
+            const css::uno::Sequence< css::beans::Property >& seq );
 
 
         // Helper function for public copy
@@ -542,8 +542,8 @@ namespace fileaccess {
 
     private:
 
-        PropertySet                                                         m_aDefaultProperties;
-        com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >   m_sCommandInfo;
+        PropertySet                                   m_aDefaultProperties;
+        css::uno::Sequence< css::ucb::CommandInfo >   m_sCommandInfo;
 
     public:
         // Misceancellous:
@@ -553,7 +553,7 @@ namespace fileaccess {
 
         static OUString SAL_CALL getImplementationName_static();
 
-        static com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
 
     };    // end class shell
 

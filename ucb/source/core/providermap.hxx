@@ -31,29 +31,25 @@ namespace com { namespace sun { namespace star { namespace ucb {
 
 class ProviderListEntry_Impl
 {
-    com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentProvider > m_xProvider;
-    mutable com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentProvider > m_xResolvedProvider;
+    css::uno::Reference<
+        css::ucb::XContentProvider > m_xProvider;
+    mutable css::uno::Reference<
+        css::ucb::XContentProvider > m_xResolvedProvider;
 
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentProvider > resolveProvider() const;
+    css::uno::Reference< css::ucb::XContentProvider > resolveProvider() const;
 
 public:
     explicit ProviderListEntry_Impl(
-        const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XContentProvider >& xProvider )
+        const css::uno::Reference< css::ucb::XContentProvider >& xProvider )
     : m_xProvider( xProvider ) {}
 
-    com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentProvider > getProvider() const
+    css::uno::Reference< css::ucb::XContentProvider > getProvider() const
     { return m_xProvider; }
-    inline com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentProvider > getResolvedProvider() const;
+    inline css::uno::Reference< css::ucb::XContentProvider > getResolvedProvider() const;
 };
 
-inline com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
+inline css::uno::Reference< css::ucb::XContentProvider >
 ProviderListEntry_Impl::getResolvedProvider() const
 {
     return m_xResolvedProvider.is() ? m_xResolvedProvider : resolveProvider();

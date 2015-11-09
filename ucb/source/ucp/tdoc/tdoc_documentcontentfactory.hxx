@@ -30,47 +30,41 @@ namespace tdoc_ucp {
 
 class DocumentContentFactory :
         public cppu::WeakImplHelper<
-            com::sun::star::frame::XTransientDocumentsDocumentContentFactory,
-            com::sun::star::lang::XServiceInfo >
+            css::frame::XTransientDocumentsDocumentContentFactory,
+            css::lang::XServiceInfo >
 {
 public:
-    explicit DocumentContentFactory( const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+    explicit DocumentContentFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rXSMgr );
     virtual ~DocumentContentFactory();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Bool SAL_CALL
     supportsService( const OUString& ServiceName )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XTransientDocumentsDocumentContentFactory
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContent > SAL_CALL
-    createDocumentContent( const ::com::sun::star::uno::Reference<
-                                com::sun::star::frame::XModel >& Model )
-        throw ( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    createDocumentContent( const css::uno::Reference< css::frame::XModel >& Model )
+        throw ( css::lang::IllegalArgumentException,
+                css::uno::RuntimeException, std::exception ) override;
 
     // Non-UNO interfaces
     static OUString
     getImplementationName_Static();
-    static com::sun::star::uno::Sequence< OUString >
+    static css::uno::Sequence< OUString >
     getSupportedServiceNames_Static();
 
-    static com::sun::star::uno::Reference<
-            com::sun::star::lang::XSingleServiceFactory >
-    createServiceFactory( const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > & rxServiceMgr );
+    static css::uno::Reference< css::lang::XSingleServiceFactory >
+    createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory > & rxServiceMgr );
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMgr;
 };
 
 } // namespace tdoc_ucp

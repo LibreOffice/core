@@ -40,9 +40,9 @@ namespace webdav_ucp
 
 struct DAVPropertyValue
 {
-    OUString            Name;
-    com::sun::star::uno::Any Value;
-    bool                     IsCaseSensitive;
+    OUString         Name;
+    css::uno::Any    Value;
+    bool             IsCaseSensitive;
 
     DAVPropertyValue() : IsCaseSensitive( true ) {}
 };

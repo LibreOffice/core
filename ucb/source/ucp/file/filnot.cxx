@@ -201,8 +201,8 @@ PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aProperty
 
 
 PropertyChangeNotifier::PropertyChangeNotifier(
-    const com::sun::star::uno::Reference< XContent >& xCreatorContent,
-    const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
+    const css::uno::Reference< XContent >& xCreatorContent,
+    const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
     ListenerMap* pListeners )
     : m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),

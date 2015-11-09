@@ -104,7 +104,7 @@ OUString SAL_CALL
 FTPContentIdentifier::getContentIdentifier(
 )
     throw (
-        com::sun::star::uno::RuntimeException, std::exception
+        css::uno::RuntimeException, std::exception
     )
 {
     return m_ident;
@@ -115,7 +115,7 @@ OUString SAL_CALL
 FTPContentIdentifier::getContentProviderScheme(
 )
     throw (
-        com::sun::star::uno::RuntimeException, std::exception
+        css::uno::RuntimeException, std::exception
     )
 {
     return OUString("ftp");

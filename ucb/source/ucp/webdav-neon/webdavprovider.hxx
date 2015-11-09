@@ -78,8 +78,7 @@ class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
     PropertyMap * m_pProps;
 
 public:
-    explicit ContentProvider( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::uno::XComponentContext >& rxContext );
+    explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider();
 
     // XInterface
@@ -112,18 +111,16 @@ public:
                           css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XContentProvider
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::ucb::XContent > SAL_CALL
-    queryContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& Identifier )
-        throw( ::com::sun::star::ucb::IllegalIdentifierException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+        throw( css::ucb::IllegalIdentifierException,
+               css::uno::RuntimeException, std::exception ) override;
 
 
     // Non-interface methods.
 
     bool getProperty( const OUString & rPropName,
-                      ::com::sun::star::beans::Property & rProp,
+                      css::beans::Property & rProp,
                       bool bStrict = false );
 };
 

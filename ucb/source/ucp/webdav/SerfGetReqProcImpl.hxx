@@ -37,21 +37,21 @@ class SerfGetReqProcImpl : public SerfRequestProcessorImpl
 public:
     SerfGetReqProcImpl( const char* inPath,
                         const DAVRequestHeaders& inRequestHeaders,
-                        const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm );
+                        const css::uno::Reference< SerfInputStream > & xioInStrm );
 
     SerfGetReqProcImpl( const char* inPath,
                         const DAVRequestHeaders& inRequestHeaders,
-                        const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm,
+                        const css::uno::Reference< SerfInputStream > & xioInStrm,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource );
 
     SerfGetReqProcImpl( const char* inPath,
                         const DAVRequestHeaders& inRequestHeaders,
-                        const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm );
+                        const css::uno::Reference< css::io::XOutputStream > & xioOutStrm );
 
     SerfGetReqProcImpl( const char* inPath,
                         const DAVRequestHeaders& inRequestHeaders,
-                        const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm,
+                        const css::uno::Reference< css::io::XOutputStream > & xioOutStrm,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource );
 
@@ -71,8 +71,8 @@ protected:
     void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) override;
 
 private:
-    com::sun::star::uno::Reference< SerfInputStream > xInputStream;
-    com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOutputStream;
+    css::uno::Reference< SerfInputStream > xInputStream;
+    css::uno::Reference< css::io::XOutputStream > xOutputStream;
     const std::vector< OUString > * mpHeaderNames;
     DAVResource* mpResource;
 };

@@ -1249,7 +1249,7 @@ DateTime SAL_CALL ContentResultSetWrapper::getTimestamp( sal_Int32 columnIndex )
 }
 
 //virtual
-Reference< com::sun::star::io::XInputStream > SAL_CALL ContentResultSetWrapper::getBinaryStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > SAL_CALL ContentResultSetWrapper::getBinaryStream( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1257,7 +1257,7 @@ Reference< com::sun::star::io::XInputStream > SAL_CALL ContentResultSetWrapper::
 }
 
 //virtual
-Reference< com::sun::star::io::XInputStream > SAL_CALL ContentResultSetWrapper::getCharacterStream( sal_Int32 columnIndex )
+Reference< css::io::XInputStream > SAL_CALL ContentResultSetWrapper::getCharacterStream( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1265,7 +1265,7 @@ Reference< com::sun::star::io::XInputStream > SAL_CALL ContentResultSetWrapper::
 }
 
 //virtual
-Any SAL_CALL ContentResultSetWrapper::getObject( sal_Int32 columnIndex, const Reference< com::sun::star::container::XNameAccess >& typeMap )
+Any SAL_CALL ContentResultSetWrapper::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1345,7 +1345,7 @@ void SAL_CALL ContentResultSetWrapperListener::release()
 }
 
 css::uno::Any SAL_CALL ContentResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     //list all interfaces inclusive baseclasses of interfaces
     css::uno::Any aRet = cppu::queryInterface( rType,

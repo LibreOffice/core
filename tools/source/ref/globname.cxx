@@ -77,7 +77,7 @@ SvGlobalName::SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
 {
 }
 
-SvGlobalName::SvGlobalName( const com::sun::star::uno::Sequence < sal_Int8 >& aSeq )
+SvGlobalName::SvGlobalName( const css::uno::Sequence < sal_Int8 >& aSeq )
 {
     // create SvGlobalName from a platform independent representation
     SvGUID aResult;
@@ -269,11 +269,11 @@ OUString SvGlobalName::GetHexName() const
     return OStringToOUString(aHexBuffer.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
 }
 
-com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
+css::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
 {
     // platform independent representation of a "GlobalName"
     // maybe transported remotely
-    com::sun::star::uno::Sequence< sal_Int8 > aResult( 16 );
+    css::uno::Sequence< sal_Int8 > aResult( 16 );
 
     aResult[ 0] = (sal_Int8) (pImp->szData.Data1 >> 24);
     aResult[ 1] = (sal_Int8) ((pImp->szData.Data1 << 8 ) >> 24);

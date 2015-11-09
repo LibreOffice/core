@@ -434,10 +434,8 @@ public:
 
     bool add(OUString const & rKey, Val const & rValue, bool bOverwrite,
              OUString * pReverse = 0);
-        // throws com::sun::star::lang::IllegalArgumentException
 
     iterator find(OUString const & rKey, OUString * pReverse = 0);
-        // throws com::sun::star::lang::IllegalArgumentException
 
     void erase(iterator const & rPos);
 

@@ -23,8 +23,7 @@ private:
     std::map< std::pair< OUString, OUString >, libcmis::Session* > m_aSessionCache;
 
 public:
-    explicit ContentProvider( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::uno::XComponentContext >& rxContext );
+    explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider();
 
     // XInterface
@@ -57,12 +56,10 @@ public:
                           css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XContentProvider
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::ucb::XContent > SAL_CALL
-    queryContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& Identifier )
-        throw( ::com::sun::star::ucb::IllegalIdentifierException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+        throw( css::ucb::IllegalIdentifierException,
+               css::uno::RuntimeException, std::exception ) override;
 
     libcmis::Session* getSession( const OUString& sBindingUrl, const OUString& sUsername );
     void registerSession( const OUString& sBindingUrl, const OUString& sUsername, libcmis::Session* pSession );

@@ -44,8 +44,7 @@ namespace http_dav_ucp
     public:
 
         DAVAuthListener_Impl(
-            const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XCommandEnvironment>& xEnv,
+            const css::uno::Reference<css::ucb::XCommandEnvironment>& xEnv,
             const OUString & inURL )
             : m_xEnv( xEnv ), m_aURL( inURL )
         {
@@ -59,8 +58,7 @@ namespace http_dav_ucp
                                   bool bUsePreviousCredentials = true ) override;
     private:
 
-        const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment > m_xEnv;
+        const css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
         const OUString m_aURL;
 
         OUString m_aPrevPassword;

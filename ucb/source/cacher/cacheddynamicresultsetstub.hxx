@@ -30,22 +30,18 @@
 
 class CachedDynamicResultSetStub
                 : public DynamicResultSetWrapper
-                , public com::sun::star::lang::XTypeProvider
-                , public com::sun::star::lang::XServiceInfo
+                , public css::lang::XTypeProvider
+                , public css::lang::XServiceInfo
 {
 protected:
     virtual void SAL_CALL
-    impl_InitResultSetOne( const com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XResultSet >& xResultSet ) override;
+    impl_InitResultSetOne( const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
     virtual void SAL_CALL
-    impl_InitResultSetTwo( const com::sun::star::uno::Reference<
-                com::sun::star::sdbc::XResultSet >& xResultSet ) override;
+    impl_InitResultSetTwo( const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
 
 public:
-    CachedDynamicResultSetStub( com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XDynamicResultSet > xOrigin
-        , const com::sun::star::uno::Reference<
-                        com::sun::star::uno::XComponentContext > & rxContext );
+    CachedDynamicResultSetStub( css::uno::Reference< css::ucb::XDynamicResultSet > xOrigin
+        , const css::uno::Reference< css::uno::XComponentContext > & rxContext );
 
     virtual ~CachedDynamicResultSetStub();
 
@@ -82,19 +78,17 @@ public:
 
 class CachedDynamicResultSetStubFactory
                 : public cppu::OWeakObject
-                , public com::sun::star::lang::XTypeProvider
-                , public com::sun::star::lang::XServiceInfo
-                , public com::sun::star::ucb::XCachedDynamicResultSetStubFactory
+                , public css::lang::XTypeProvider
+                , public css::lang::XServiceInfo
+                , public css::ucb::XCachedDynamicResultSetStubFactory
 {
 protected:
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
 public:
 
     CachedDynamicResultSetStubFactory(
-        const com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext > & rxContext);
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext);
 
     virtual ~CachedDynamicResultSetStubFactory();
 
@@ -109,7 +103,7 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
         throw( css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
@@ -129,28 +123,22 @@ public:
 
     // XCachedDynamicResultSetStubFactory
 
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XDynamicResultSet > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
     createCachedDynamicResultSetStub(
-                const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XDynamicResultSet > & Source )
-                throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+                const css::uno::Reference< css::ucb::XDynamicResultSet > & Source )
+                throw( css::uno::RuntimeException, std::exception ) override;
 
 
     virtual void SAL_CALL connectToCache(
-                  const com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XDynamicResultSet > & Source
-                , const com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XDynamicResultSet > & TargetCache
-                , const com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::NumberedSortingInfo > & SortingInfo
-                , const com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XAnyCompareFactory > & CompareFactory
+                  const css::uno::Reference< css::ucb::XDynamicResultSet > & Source
+                , const css::uno::Reference< css::ucb::XDynamicResultSet > & TargetCache
+                , const css::uno::Sequence< css::ucb::NumberedSortingInfo > & SortingInfo
+                , const css::uno::Reference< css::ucb::XAnyCompareFactory > & CompareFactory
                 )
                 throw (
-                  com::sun::star::ucb::ListenerAlreadySetException
-                , com::sun::star::ucb::AlreadyInitializedException
-                , com::sun::star::uno::RuntimeException, std::exception
+                  css::ucb::ListenerAlreadySetException
+                , css::ucb::AlreadyInitializedException
+                , css::uno::RuntimeException, std::exception
                  ) override;
 };
 

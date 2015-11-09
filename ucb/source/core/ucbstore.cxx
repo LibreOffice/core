@@ -481,7 +481,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
 
 
 // virtual
-com::sun::star::uno::Type SAL_CALL PropertySetRegistry::getElementType()
+css::uno::Type SAL_CALL PropertySetRegistry::getElementType()
     throw( RuntimeException, std::exception )
 {
     return cppu::UnoType<XPersistentPropertySet>::get();

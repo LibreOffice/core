@@ -33,8 +33,8 @@ namespace http_dav_ucp
 struct DAVPropertyValue
 {
     OUString            Name;
-    com::sun::star::uno::Any Value;
-    bool                     IsCaseSensitive;
+    css::uno::Any       Value;
+    bool                IsCaseSensitive;
 
     DAVPropertyValue() : IsCaseSensitive( true ) {}
 };

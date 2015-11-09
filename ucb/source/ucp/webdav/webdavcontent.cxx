@@ -848,7 +848,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 
 
 
-void Content::addProperty( const com::sun::star::ucb::PropertyCommandArgument &aCmdArg,
+void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
                            const uno::Reference< ucb::XCommandEnvironment >& xEnv  )
 throw( beans::PropertyExistException,
        beans::IllegalTypeException,

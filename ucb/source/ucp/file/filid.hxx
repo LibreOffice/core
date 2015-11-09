@@ -30,8 +30,8 @@ namespace fileaccess {
 
     class FileContentIdentifier :
         public cppu::OWeakObject,
-        public com::sun::star::lang::XTypeProvider,
-        public com::sun::star::ucb::XContentIdentifier
+        public css::lang::XTypeProvider,
+        public css::ucb::XContentIdentifier
     {
 
         // This implementation has to be reworked
@@ -42,10 +42,10 @@ namespace fileaccess {
         virtual ~FileContentIdentifier();
 
         // XInterface
-        virtual com::sun::star::uno::Any SAL_CALL
+        virtual css::uno::Any SAL_CALL
         queryInterface(
-            const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            const css::uno::Type& aType )
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
         acquire(
@@ -58,26 +58,26 @@ namespace fileaccess {
             throw() override;
 
         // XTypeProvider
-        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL
         getTypes(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
-        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         // XContentIdentifier
         virtual OUString SAL_CALL
         getContentIdentifier(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL
         getContentProviderScheme(
             void )
-            throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+            throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
         OUString m_aContentId;              // The URL string

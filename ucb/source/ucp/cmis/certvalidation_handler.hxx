@@ -20,16 +20,14 @@ namespace cmis
 {
     class CertValidationHandler : public libcmis::CertValidationHandler
     {
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment>& m_xEnv;
-        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& m_xContext;
+        const css::uno::Reference< css::ucb::XCommandEnvironment>& m_xEnv;
+        const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
         OUString m_sHostname;
 
         public:
             CertValidationHandler (
-                           const com::sun::star::uno::Reference<
-                                   com::sun::star::ucb::XCommandEnvironment>& xEnv,
-                           const com::sun::star::uno::Reference<
-                                   com::sun::star::uno::XComponentContext>& xContext,
+                           const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv,
+                           const css::uno::Reference< css::uno::XComponentContext>& xContext,
                            const OUString& sHostname ):
                 m_xEnv( xEnv ), m_xContext( xContext ), m_sHostname( sHostname ) { }
 

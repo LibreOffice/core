@@ -81,8 +81,7 @@ namespace fileaccess {
 
     extern void throw_handler( sal_Int32 errorCode,
                                sal_Int32 minorCode,
-                               const com::sun::star::uno::Reference<
-                               com::sun::star::ucb::XCommandEnvironment >& xEnv,
+                               const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                                const OUString& aUncPath,
                                BaseContent* pContent,
                                bool isHandled = false);

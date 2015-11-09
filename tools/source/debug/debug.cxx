@@ -87,7 +87,7 @@ void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunc
         sMessage += currentFunction;
         sMessage += "\ntype: ";
         sMessage += OUStringToOString( caught.getValueTypeName(), osl_getThreadTextEncoding() );
-        ::com::sun::star::uno::Exception exception;
+        css::uno::Exception exception;
         caught >>= exception;
         if ( !exception.Message.isEmpty() )
         {
@@ -101,7 +101,7 @@ void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunc
             sMessage += pContext;
         }
         {
-            ::com::sun::star::configuration::CorruptedConfigurationException
+            css::configuration::CorruptedConfigurationException
                 specialized;
             if ( caught >>= specialized )
             {
@@ -111,7 +111,7 @@ void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunc
             }
         }
         {
-            ::com::sun::star::task::ErrorCodeIOException specialized;
+            css::task::ErrorCodeIOException specialized;
             if ( caught >>= specialized )
             {
                 sMessage += "\ndetails: ";

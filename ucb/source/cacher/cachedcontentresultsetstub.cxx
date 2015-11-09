@@ -412,7 +412,7 @@ void SAL_CALL CachedContentResultSetStub
             {
                 setPropertyValue( m_aPropertyNameForFetchSize, aValue );
             }
-            catch( com::sun::star::uno::Exception& ) {}
+            catch( css::uno::Exception& ) {}
         }
         if( bSetDirection )
         {
@@ -425,7 +425,7 @@ void SAL_CALL CachedContentResultSetStub
             {
                 setPropertyValue( m_aPropertyNameForFetchDirection, aValue );
             }
-            catch( com::sun::star::uno::Exception& ) {}
+            catch( css::uno::Exception& ) {}
         }
 
     }
@@ -463,7 +463,7 @@ void SAL_CALL CachedContentResultSetStub
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifierString, m_xContentAccessOrigin );
@@ -473,7 +473,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifier, m_xContentAccessOrigin );
@@ -483,7 +483,7 @@ FetchResult SAL_CALL CachedContentResultSetStub
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+        throw( css::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContent, m_xContentAccessOrigin );

@@ -25,7 +25,7 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace css::uno;
 
 #if OSL_DEBUG_LEVEL > 0
 #define THROW_WHERE SAL_WHERE

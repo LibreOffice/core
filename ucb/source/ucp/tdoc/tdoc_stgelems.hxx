@@ -49,22 +49,19 @@ class ParentStorageHolder : public MutexHolder
 {
 public:
     ParentStorageHolder(
-        const com::sun::star::uno::Reference<
-            com::sun::star::embed::XStorage > & xParentStorage,
+        const css::uno::Reference< css::embed::XStorage > & xParentStorage,
         const OUString & rUri );
 
     bool isParentARootStorage() const
     { return m_bParentIsRootStorage; }
-    com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
+    css::uno::Reference< css::embed::XStorage >
     getParentStorage() const
     { return m_xParentStorage; }
-    void setParentStorage( const com::sun::star::uno::Reference<
-                            com::sun::star::embed::XStorage > & xStg )
+    void setParentStorage( const css::uno::Reference< css::embed::XStorage > & xStg )
     { osl::MutexGuard aGuard( m_aMutex ); m_xParentStorage = xStg; }
 
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::embed::XStorage > m_xParentStorage;
+    css::uno::Reference< css::embed::XStorage > m_xParentStorage;
     bool                                  m_bParentIsRootStorage;
 };
 
@@ -72,29 +69,26 @@ private:
 
 typedef
     cppu::WeakImplHelper<
-        com::sun::star::embed::XStorage,
-        com::sun::star::embed::XTransactedObject > StorageUNOBase;
+        css::embed::XStorage,
+        css::embed::XTransactedObject > StorageUNOBase;
 
 class Storage : public StorageUNOBase, public ParentStorageHolder
 {
 public:
     Storage(
-        const com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > & rxContext,
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
         const rtl::Reference< StorageElementFactory >  & xFactory,
         const OUString & rUri,
-        const com::sun::star::uno::Reference<
-            com::sun::star::embed::XStorage > & xParentStorage,
-        const com::sun::star::uno::Reference<
-            com::sun::star::embed::XStorage > & xStorageToWrap );
+        const css::uno::Reference< css::embed::XStorage > & xParentStorage,
+        const css::uno::Reference< css::embed::XStorage > & xStorageToWrap );
     virtual ~Storage();
 
     bool isDocumentStorage() const { return m_bIsDocumentStorage; }
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
-            const com::sun::star::uno::Type& aType )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface(
+            const css::uno::Type& aType )
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire()
         throw () override;
     virtual void SAL_CALL release()
@@ -102,199 +96,189 @@ public:
 
     // XTypeProvider (implemnented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XComponent ( one of XStorage bases )
     virtual void SAL_CALL
     dispose()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    addEventListener( const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XEventListener > & xListener )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener )
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XEventListener >& aListener )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XNameAccess ( one of XStorage bases )
-    virtual com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
     getByName( const OUString& aName )
-        throw ( com::sun::star::container::NoSuchElementException,
-                com::sun::star::lang::WrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw ( css::container::NoSuchElementException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getElementNames()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     hasByName( const OUString& aName )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XElementAccess (base of XNameAccess)
-    virtual com::sun::star::uno::Type SAL_CALL
+    virtual css::uno::Type SAL_CALL
     getElementType()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     hasElements()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XStorage
     virtual void SAL_CALL
-    copyToStorage( const com::sun::star::uno::Reference<
-                    com::sun::star::embed::XStorage >& xDest )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
+    copyToStorage( const css::uno::Reference< css::embed::XStorage >& xDest )
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::io::XStream > SAL_CALL
     openStreamElement( const OUString& aStreamName,
                        sal_Int32 nOpenMode )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::packages::WrongPasswordException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::packages::WrongPasswordException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::io::XStream > SAL_CALL
     openEncryptedStreamElement( const OUString& aStreamName,
                                 sal_Int32 nOpenMode,
                                 const OUString& aPassword )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::packages::NoEncryptionException,
-                com::sun::star::packages::WrongPasswordException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::embed::XStorage > SAL_CALL
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::packages::NoEncryptionException,
+                css::packages::WrongPasswordException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL
     openStorageElement( const OUString& aStorName,
                         sal_Int32 nOpenMode )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::io::XStream > SAL_CALL
     cloneStreamElement( const OUString& aStreamName )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::packages::WrongPasswordException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::packages::WrongPasswordException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::io::XStream > SAL_CALL
     cloneEncryptedStreamElement( const OUString& aStreamName,
                                  const OUString& aPassword )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::packages::NoEncryptionException,
-                com::sun::star::packages::WrongPasswordException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::packages::NoEncryptionException,
+                css::packages::WrongPasswordException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    copyLastCommitTo( const com::sun::star::uno::Reference<
-                        com::sun::star::embed::XStorage >& xTargetStorage )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+    copyLastCommitTo( const css::uno::Reference<
+                        css::embed::XStorage >& xTargetStorage )
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     copyStorageElementLastCommitTo( const OUString& aStorName,
-                                    const com::sun::star::uno::Reference<
-                                        com::sun::star::embed::XStorage > &
+                                    const css::uno::Reference<
+                                        css::embed::XStorage > &
                                             xTargetStorage )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     isStreamElement( const OUString& aElementName )
-        throw ( com::sun::star::container::NoSuchElementException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::embed::InvalidStorageException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::container::NoSuchElementException,
+                css::lang::IllegalArgumentException,
+                css::embed::InvalidStorageException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL
     isStorageElement( const OUString& aElementName )
-        throw ( com::sun::star::container::NoSuchElementException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::embed::InvalidStorageException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::container::NoSuchElementException,
+                css::lang::IllegalArgumentException,
+                css::embed::InvalidStorageException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     removeElement( const OUString& aElementName )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::NoSuchElementException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::container::NoSuchElementException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     renameElement( const OUString& aEleName,
                    const OUString& aNewName )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::NoSuchElementException,
-                com::sun::star::container::ElementExistException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::container::NoSuchElementException,
+                css::container::ElementExistException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     copyElementTo( const OUString& aElementName,
-                   const com::sun::star::uno::Reference<
-                    com::sun::star::embed::XStorage >& xDest,
+                   const css::uno::Reference< css::embed::XStorage >& xDest,
                    const OUString& aNewName )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::NoSuchElementException,
-                com::sun::star::container::ElementExistException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::container::NoSuchElementException,
+                css::container::ElementExistException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     moveElementTo( const OUString& aElementName,
-                   const com::sun::star::uno::Reference<
-                    com::sun::star::embed::XStorage >& xDest,
+                   const css::uno::Reference< css::embed::XStorage >& xDest,
                    const OUString& rNewName )
-        throw ( com::sun::star::embed::InvalidStorageException,
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::NoSuchElementException,
-                com::sun::star::container::ElementExistException,
-                com::sun::star::io::IOException,
-                com::sun::star::embed::StorageWrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::embed::InvalidStorageException,
+                css::lang::IllegalArgumentException,
+                css::container::NoSuchElementException,
+                css::container::ElementExistException,
+                css::io::IOException,
+                css::embed::StorageWrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
 
     // XTransactedObject
     virtual void SAL_CALL commit()
-        throw ( com::sun::star::io::IOException,
-                com::sun::star::lang::WrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::io::IOException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL revert()
-        throw ( com::sun::star::io::IOException,
-                com::sun::star::lang::WrappedTargetException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::io::IOException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception ) override;
 
 private:
     explicit Storage( const rtl::Reference< Storage > & rFactory ); // n.i.
 
     rtl::Reference< StorageElementFactory >         m_xFactory;
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XAggregation >         m_xAggProxy;
-    com::sun::star::uno::Reference<
-        com::sun::star::embed::XStorage >           m_xWrappedStorage;
-    com::sun::star::uno::Reference<
-        com::sun::star::embed::XTransactedObject >  m_xWrappedTransObj;
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XComponent >          m_xWrappedComponent;
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XTypeProvider >       m_xWrappedTypeProv;
+    css::uno::Reference< css::uno::XAggregation >         m_xAggProxy;
+    css::uno::Reference< css::embed::XStorage >           m_xWrappedStorage;
+    css::uno::Reference< css::embed::XTransactedObject >  m_xWrappedTransObj;
+    css::uno::Reference< css::lang::XComponent >          m_xWrappedComponent;
+    css::uno::Reference< css::lang::XTypeProvider >       m_xWrappedTypeProv;
     bool                                            m_bIsDocumentStorage;
 
     StorageElementFactory::StorageMap::iterator m_aContainerIt;
@@ -307,225 +291,213 @@ private:
 
 typedef
     cppu::WeakImplHelper<
-        com::sun::star::io::XOutputStream,
-        com::sun::star::lang::XComponent > OutputStreamUNOBase;
+        css::io::XOutputStream,
+        css::lang::XComponent > OutputStreamUNOBase;
 
 class OutputStream : public OutputStreamUNOBase, public ParentStorageHolder
 {
 public:
     OutputStream(
-        const com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > & rxContext,
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
         const OUString & rUri,
-        const com::sun::star::uno::Reference<
-            com::sun::star::embed::XStorage >  & xParentStorage,
-        const com::sun::star::uno::Reference<
-            com::sun::star::io::XOutputStream > & xStreamToWrap );
+        const css::uno::Reference< css::embed::XStorage >  & xParentStorage,
+        const css::uno::Reference< css::io::XOutputStream > & xStreamToWrap );
     virtual ~OutputStream();
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type& aType )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type& aType )
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XTypeProvider (implemnented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XOutputStream
     virtual void SAL_CALL
-    writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData )
-        throw ( com::sun::star::io::NotConnectedException,
-                com::sun::star::io::BufferSizeExceededException,
-                com::sun::star::io::IOException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+    writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
+        throw ( css::io::NotConnectedException,
+                css::io::BufferSizeExceededException,
+                css::io::IOException,
+                css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     flush(  )
-        throw ( com::sun::star::io::NotConnectedException,
-                com::sun::star::io::BufferSizeExceededException,
-                com::sun::star::io::IOException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::io::NotConnectedException,
+                css::io::BufferSizeExceededException,
+                css::io::IOException,
+                css::uno::RuntimeException, std::exception ) override;
     // Note: We need to intercept this one.
     virtual void SAL_CALL
     closeOutput(  )
-        throw ( com::sun::star::io::NotConnectedException,
-                com::sun::star::io::BufferSizeExceededException,
-                com::sun::star::io::IOException,
-                com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::io::NotConnectedException,
+                css::io::BufferSizeExceededException,
+                css::io::IOException,
+                css::uno::RuntimeException, std::exception ) override;
 
     // XComponent
     // Note: We need to intercept this one.
     virtual void SAL_CALL
     dispose()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    addEventListener( const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XEventListener >& xListener )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XEventListener >& aListener )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XAggregation >     m_xAggProxy;
-    com::sun::star::uno::Reference<
-        com::sun::star::io::XOutputStream >     m_xWrappedStream;
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XComponent >      m_xWrappedComponent;
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XTypeProvider >   m_xWrappedTypeProv;
+    css::uno::Reference<
+        css::uno::XAggregation >     m_xAggProxy;
+    css::uno::Reference<
+        css::io::XOutputStream >     m_xWrappedStream;
+    css::uno::Reference<
+        css::lang::XComponent >      m_xWrappedComponent;
+    css::uno::Reference<
+        css::lang::XTypeProvider >   m_xWrappedTypeProv;
 };
 
 
 
-typedef cppu::WeakImplHelper< com::sun::star::io::XStream,
-                               com::sun::star::io::XOutputStream,
-                               com::sun::star::io::XTruncate,
-                               com::sun::star::io::XInputStream,
-                               com::sun::star::lang::XComponent >
+typedef cppu::WeakImplHelper< css::io::XStream,
+                               css::io::XOutputStream,
+                               css::io::XTruncate,
+                               css::io::XInputStream,
+                               css::lang::XComponent >
         StreamUNOBase;
 
 class Stream : public StreamUNOBase, public ParentStorageHolder
 {
 public:
     Stream(
-        const com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > & rxContext,
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext,
         const OUString & rUri,
-        const com::sun::star::uno::Reference<
-            com::sun::star::embed::XStorage >  & xParentStorage,
-        const com::sun::star::uno::Reference<
-            com::sun::star::io::XStream > & xStreamToWrap );
+        const css::uno::Reference< css::embed::XStorage >  & xParentStorage,
+        const css::uno::Reference< css::io::XStream > & xStreamToWrap );
 
     virtual ~Stream();
 
     // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface( const com::sun::star::uno::Type& aType )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    queryInterface( const css::uno::Type& aType )
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XTypeProvider (implemnented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
     // XStream
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::io::XInputStream > SAL_CALL
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
     getInputStream()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::io::XOutputStream > SAL_CALL
+    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL
     getOutputStream()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XOutputStream
     virtual void SAL_CALL
-    writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData )
-        throw( com::sun::star::io::NotConnectedException,
-               com::sun::star::io::BufferSizeExceededException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     flush()
-        throw( com::sun::star::io::NotConnectedException,
-               com::sun::star::io::BufferSizeExceededException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     closeOutput()
-        throw( com::sun::star::io::NotConnectedException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::io::NotConnectedException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     // XTruncate
     virtual void SAL_CALL
     truncate()
-        throw( com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     // XInputStream
     virtual sal_Int32 SAL_CALL
-    readBytes( com::sun::star::uno::Sequence< sal_Int8 >& aData,
+    readBytes( css::uno::Sequence< sal_Int8 >& aData,
                sal_Int32 nBytesToRead )
-        throw( com::sun::star::io::NotConnectedException,
-               com::sun::star::io::BufferSizeExceededException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL
-    readSomeBytes( com::sun::star::uno::Sequence< sal_Int8 >& aData,
+    readSomeBytes( css::uno::Sequence< sal_Int8 >& aData,
                    sal_Int32 nMaxBytesToRead )
-        throw( com::sun::star::io::NotConnectedException,
-               com::sun::star::io::BufferSizeExceededException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception) override;
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
     skipBytes( sal_Int32 nBytesToSkip )
-        throw( com::sun::star::io::NotConnectedException,
-               com::sun::star::io::BufferSizeExceededException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::io::NotConnectedException,
+               css::io::BufferSizeExceededException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual sal_Int32 SAL_CALL
     available()
-        throw( com::sun::star::io::NotConnectedException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::io::NotConnectedException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     virtual void SAL_CALL
     closeInput()
-        throw( com::sun::star::io::NotConnectedException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::io::NotConnectedException,
+               css::io::IOException,
+               css::uno::RuntimeException, std::exception ) override;
 
     // XComponent
     // Note: We need to intercept this one.
     virtual void SAL_CALL
     dispose()
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    addEventListener( const com::sun::star::uno::Reference<
-            com::sun::star::lang::XEventListener >& xListener )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+        throw ( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference<
-            com::sun::star::lang::XEventListener >& aListener )
-        throw ( com::sun::star::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+        throw ( css::uno::RuntimeException, std::exception ) override;
 
 private:
     void commitChanges()
-        throw( com::sun::star::io::IOException );
+        throw( css::io::IOException );
 
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XAggregation >     m_xAggProxy;
-    com::sun::star::uno::Reference<
-        com::sun::star::io::XStream >           m_xWrappedStream;
-    com::sun::star::uno::Reference<
-        com::sun::star::io::XOutputStream >     m_xWrappedOutputStream;
-    com::sun::star::uno::Reference<
-        com::sun::star::io::XTruncate >         m_xWrappedTruncate;
-    com::sun::star::uno::Reference<
-        com::sun::star::io::XInputStream >      m_xWrappedInputStream;
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XComponent >      m_xWrappedComponent;
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XTypeProvider >   m_xWrappedTypeProv;
+    css::uno::Reference<
+        css::uno::XAggregation >     m_xAggProxy;
+    css::uno::Reference<
+        css::io::XStream >           m_xWrappedStream;
+    css::uno::Reference<
+        css::io::XOutputStream >     m_xWrappedOutputStream;
+    css::uno::Reference<
+        css::io::XTruncate >         m_xWrappedTruncate;
+    css::uno::Reference<
+        css::io::XInputStream >      m_xWrappedInputStream;
+    css::uno::Reference<
+        css::lang::XComponent >      m_xWrappedComponent;
+    css::uno::Reference<
+        css::lang::XTypeProvider >   m_xWrappedTypeProv;
 };
 
 } // namespace tdoc_ucp

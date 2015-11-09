@@ -53,11 +53,11 @@ private:
     static const OUString aXMLEnd;
 
 public:
-    static bool supportsType( const com::sun::star::uno::Type & rType );
+    static bool supportsType( const css::uno::Type & rType );
 
     static bool createFromXML( const OString & rInData,
-                               com::sun::star::uno::Any & rOutData );
-    static bool toXML( const com::sun::star::uno::Any & rInData,
+                               css::uno::Any & rOutData );
+    static bool toXML( const css::uno::Any & rInData,
                        OUString & rOutData );
 };
 

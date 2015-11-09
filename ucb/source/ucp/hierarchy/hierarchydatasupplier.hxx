@@ -40,17 +40,15 @@ private:
 
 public:
     HierarchyResultSetDataSupplier(
-                    const com::sun::star::uno::Reference<
-                        com::sun::star::uno::XComponentContext >& rxContext,
+                    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                     const rtl::Reference< HierarchyContent >& rContent,
-                    sal_Int32 nOpenMode = com::sun::star::ucb::OpenMode::ALL );
+                    sal_Int32 nOpenMode = css::ucb::OpenMode::ALL );
     virtual ~HierarchyResultSetDataSupplier();
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >
+    virtual css::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifier( sal_uInt32 nIndex ) override;
-    virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
+    virtual css::uno::Reference< css::ucb::XContent >
     queryContent( sal_uInt32 nIndex ) override;
 
     virtual bool getResult( sal_uInt32 nIndex ) override;
@@ -59,14 +57,14 @@ public:
     virtual sal_uInt32 currentCount() override;
     virtual bool isCountFinal() override;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
+    virtual css::uno::Reference< css::sdbc::XRow >
     queryPropertyValues( sal_uInt32 nIndex  ) override;
     virtual void releasePropertyValues( sal_uInt32 nIndex ) override;
 
     virtual void close() override;
 
     virtual void validate()
-        throw( com::sun::star::ucb::ResultSetException ) override;
+        throw( css::ucb::ResultSetException ) override;
 };
 
 } // namespace hierarchy_ucp

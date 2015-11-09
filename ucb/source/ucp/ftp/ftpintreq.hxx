@@ -62,7 +62,7 @@ namespace ftp {
         XInteractionDisapproveImpl();
 
         virtual void SAL_CALL select()
-            throw (com::sun::star::uno::RuntimeException, std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     private:
 

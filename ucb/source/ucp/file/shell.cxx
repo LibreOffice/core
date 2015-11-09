@@ -121,13 +121,13 @@ shell::MyProperty::MyProperty( const OUString&                         __Propert
     // empty
 }
 
-shell::MyProperty::MyProperty( const bool&                                  __isNative,
-                               const OUString&                              __PropertyName,
-                               const sal_Int32&                             __Handle,
-                               const com::sun::star::uno::Type&              __Typ,
-                               const com::sun::star::uno::Any&              __Value,
-                               const com::sun::star::beans::PropertyState&  __State,
-                               const sal_Int16&                             __Attributes )
+shell::MyProperty::MyProperty( const bool&                        __isNative,
+                               const OUString&                    __PropertyName,
+                               const sal_Int32&                   __Handle,
+                               const css::uno::Type&              __Typ,
+                               const css::uno::Any&               __Value,
+                               const css::beans::PropertyState&   __State,
+                               const sal_Int16&                   __Attributes )
     : PropertyName( __PropertyName ),
       Handle( __Handle ),
       isNative( __isNative ),
@@ -3044,7 +3044,7 @@ uno::Sequence< OUString > SAL_CALL
 shell::getSupportedServiceNames_static()
 {
   OUString Supported("com.sun.star.ucb.FileContentProvider");
-  com::sun::star::uno::Sequence< OUString > Seq( &Supported,1 );
+  css::uno::Sequence< OUString > Seq( &Supported,1 );
   return Seq;
 }
 

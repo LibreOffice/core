@@ -55,14 +55,14 @@ namespace com { namespace sun { namespace star { namespace ucb {
 
 class UniversalContentBroker :
                 public cppu::OWeakObject,
-                public com::sun::star::ucb::XUniversalContentBroker,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::lang::XInitialization,
-                public com::sun::star::util::XChangesListener
+                public css::ucb::XUniversalContentBroker,
+                public css::lang::XTypeProvider,
+                public css::lang::XServiceInfo,
+                public css::lang::XInitialization,
+                public css::util::XChangesListener
 {
 public:
-    explicit UniversalContentBroker( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+    explicit UniversalContentBroker( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~UniversalContentBroker();
 
     // XInterface
@@ -76,7 +76,7 @@ public:
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
         throw( css::uno::RuntimeException, std::exception ) override;
 
     // XServiceInfo
@@ -97,118 +97,101 @@ public:
     // XComponent
     virtual void SAL_CALL
     dispose()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    addEventListener( const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XEventListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference<
-                            com::sun::star::lang::XEventListener >& Listener )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference<
+                            css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const com::sun::star::uno::Sequence<
-                        com::sun::star::uno::Any >& aArguments )
-        throw( com::sun::star::uno::Exception,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw( css::uno::Exception,
+               css::uno::RuntimeException, std::exception ) override;
 
     // XContentProviderManager
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentProvider > SAL_CALL
-    registerContentProvider( const com::sun::star::uno::Reference<
-                                com::sun::star::ucb::XContentProvider >&
-                                    Provider,
+    virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
+    registerContentProvider( const css::uno::Reference< css::ucb::XContentProvider >&  Provider,
                              const OUString& Scheme,
                              sal_Bool ReplaceExisting )
-        throw( com::sun::star::ucb::DuplicateProviderException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::ucb::DuplicateProviderException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
-    deregisterContentProvider( const com::sun::star::uno::Reference<
-                                    com::sun::star::ucb::XContentProvider >&
-                                        Provider,
+    deregisterContentProvider( const css::uno::Reference< css::ucb::XContentProvider >&  Provider,
                                const OUString& Scheme )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence<
-        com::sun::star::ucb::ContentProviderInfo > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::ucb::ContentProviderInfo > SAL_CALL
     queryContentProviders()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentProvider > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
     queryContentProvider( const OUString& Identifier )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XContentProvider
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContent > SAL_CALL
-    queryContent( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XContentIdentifier >& Identifier )
-        throw( com::sun::star::ucb::IllegalIdentifierException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+        throw( css::ucb::IllegalIdentifierException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual sal_Int32 SAL_CALL
-    compareContentIds( const com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XContentIdentifier >& Id1,
-                       const com::sun::star::uno::Reference<
-                           com::sun::star::ucb::XContentIdentifier >& Id2 )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    compareContentIds( const css::uno::Reference< css::ucb::XContentIdentifier >& Id1,
+                       const css::uno::Reference< css::ucb::XContentIdentifier >& Id2 )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XContentIdentifierFactory
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContentIdentifier > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
     createContentIdentifier( const OUString& ContentId )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XCommandProcessor
     virtual sal_Int32 SAL_CALL
     createCommandIdentifier()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Any SAL_CALL
-    execute( const com::sun::star::ucb::Command& aCommand,
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL
+    execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
-             const com::sun::star::uno::Reference<
-                 com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( com::sun::star::uno::Exception,
-               com::sun::star::ucb::CommandAbortedException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+             const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+        throw( css::uno::Exception,
+               css::ucb::CommandAbortedException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     abort( sal_Int32 CommandId )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XCommandProcessor2
     virtual void SAL_CALL releaseCommandIdentifier(sal_Int32 aCommandId)
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred( const com::sun::star::util::ChangesEvent& Event )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
      // XEventListener ( base of XChangesLisetenr )
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
+    css::uno::Reference< css::ucb::XContentProvider >
     queryContentProvider( const OUString& Identifier,
                           bool bResolved );
 
-    static com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo >
+    static css::uno::Reference< css::ucb::XCommandInfo >
     getCommandInfo();
 
     void
     globalTransfer(
-            const com::sun::star::ucb::GlobalTransferCommandArgument2 & rArg,
-            const com::sun::star::uno::Reference<
-                 com::sun::star::ucb::XCommandEnvironment >& xEnv )
-        throw( com::sun::star::uno::Exception, std::exception );
+            const css::ucb::GlobalTransferCommandArgument2 & rArg,
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
+        throw( css::uno::Exception, std::exception );
 
-    com::sun::star::uno::Any checkIn( const com::sun::star::ucb::CheckinArgument& rArg,
-            const com::sun::star::uno::Reference<
-                 com::sun::star::ucb::XCommandEnvironment >& xEnv ) throw( com::sun::star::uno::Exception );
+    css::uno::Any checkIn( const css::ucb::CheckinArgument& rArg,
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv ) throw( css::uno::Exception );
 
 
     bool configureUcb()
-        throw ( com::sun::star::uno::RuntimeException);
+        throw ( css::uno::RuntimeException);
 
     bool getContentProviderData(
             const OUString & rKey1,
@@ -217,13 +200,13 @@ private:
 
     void prepareAndRegister( const ucbhelper::ContentProviderDataList& rData);
 
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference<
+        css::uno::XComponentContext > m_xContext;
 
-    com::sun::star::uno::Reference<
-        com::sun::star::util::XChangesNotifier > m_xNotifier;
+    css::uno::Reference<
+        css::util::XChangesNotifier > m_xNotifier;
 
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_aArguments;
+    css::uno::Sequence< css::uno::Any > m_aArguments;
     ProviderMap_Impl m_aProviders;
     osl::Mutex m_aMutex;
     cppu::OInterfaceContainerHelper* m_pDisposeEventListeners;

@@ -82,7 +82,7 @@ namespace tdoc_ucp {
     {
     public:
         DocumentPasswordRequest(
-            com::sun::star::task::PasswordRequestMode eMode,
+            css::task::PasswordRequestMode eMode,
             const OUString & rDocumentName );
     };
 

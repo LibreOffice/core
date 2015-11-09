@@ -81,7 +81,7 @@ public:
 
     bool getIsDocument() const { return !getIsFolder(); }
 
-    com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+    css::uno::Sequence< css::ucb::ContentInfo >
     getCreatableContentsInfo() const;
 
     const HierarchyEntryData & getHierarchyEntryData() const { return m_aData; }
@@ -96,7 +96,7 @@ private:
 class HierarchyContentProvider;
 
 class HierarchyContent : public ::ucbhelper::ContentImplHelper,
-                         public com::sun::star::ucb::XContentCreator
+                         public css::ucb::XContentCreator
 {
     enum ContentKind  { LINK, FOLDER, ROOT };
     enum ContentState { TRANSIENT,  // created via CreateNewContent,
@@ -114,61 +114,46 @@ class HierarchyContent : public ::ucbhelper::ContentImplHelper,
 
 private:
     HierarchyContent(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
-            const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >& Identifier,
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             const HierarchyContentProperties& rProps );
     HierarchyContent(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
-            const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >& Identifier,
-            const com::sun::star::ucb::ContentInfo& Info );
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
+            const css::ucb::ContentInfo& Info );
 
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
-    getProperties( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment > & xEnv ) override;
-    virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
-    getCommands( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment > & xEnv ) override;
+    virtual css::uno::Sequence< css::beans::Property >
+    getProperties( const css::uno::Reference<css::ucb::XCommandEnvironment > & xEnv ) override;
+    virtual css::uno::Sequence< css::ucb::CommandInfo >
+    getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
     virtual OUString getParentURL() override;
 
     static bool hasData(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& rxContext,
+            const css::uno::Reference<  css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
-            const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >& Identifier );
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
     bool hasData(
-            const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >& Identifier )
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
     { return hasData( m_xContext, m_pProvider, Identifier ); }
     static bool loadData(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
-            const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >& Identifier,
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             HierarchyContentProperties& rProps );
     bool storeData();
-    bool renameData( const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XContentIdentifier >& xOldId,
-                         const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XContentIdentifier >& xNewId );
+    bool renameData( const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
+                     const css::uno::Reference< css::ucb::XContentIdentifier >& xNewId );
     bool removeData();
 
-    void setKind( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XContentIdentifier >& Identifier );
+    void setKind( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
 
     bool isReadOnly();
 
     bool isFolder() const { return ( m_eKind > LINK ); }
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::ucb::XContentIdentifier >
+    css::uno::Reference< css::ucb::XContentIdentifier >
     makeNewIdentifier( const OUString& rTitle );
 
     typedef rtl::Reference< HierarchyContent > HierarchyContentRef;
@@ -176,52 +161,42 @@ private:
     void queryChildren( HierarchyContentRefList& rChildren );
 
     bool exchangeIdentity(
-                const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::ucb::XContentIdentifier >& xNewId );
+                const css::uno::Reference< css::ucb::XContentIdentifier >& xNewId );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-    getPropertyValues( const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::Property >& rProperties );
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+    css::uno::Reference< css::sdbc::XRow >
+    getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
+    css::uno::Sequence< css::uno::Any >
     setPropertyValues(
-            const ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::beans::PropertyValue >& rValues,
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+            const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+            const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+        throw( css::uno::Exception, std::exception );
 
     void insert( sal_Int32 nNameClashResolve,
-                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+                 const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+        throw( css::uno::Exception, std::exception );
 
     void destroy( bool bDeletePhysical,
-                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+                  const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+        throw( css::uno::Exception, std::exception );
 
-    void transfer( const ::com::sun::star::ucb::TransferInfo& rInfo,
-                   const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::uno::Exception, std::exception );
+    void transfer( const css::ucb::TransferInfo& rInfo,
+                   const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
+        throw( css::uno::Exception, std::exception );
 
 public:
     // Create existing content. Fail, if not already exists.
     static HierarchyContent* create(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
-            const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >& Identifier );
+            const css::uno::Reference<
+                css::ucb::XContentIdentifier >& Identifier );
 
     // Create new content. Fail, if already exists.
     static HierarchyContent* create(
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
-            const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier >& Identifier,
-            const com::sun::star::ucb::ContentInfo& Info );
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
+            const css::ucb::ContentInfo& Info );
 
     virtual ~HierarchyContent();
 
@@ -242,56 +217,50 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL
     getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XContent
     virtual OUString SAL_CALL
     getContentType()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContentIdentifier > SAL_CALL
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
     getIdentifier()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
     // XCommandProcessor
-    virtual com::sun::star::uno::Any SAL_CALL
-    execute( const com::sun::star::ucb::Command& aCommand,
+    virtual css::uno::Any SAL_CALL
+    execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
-             const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( com::sun::star::uno::Exception,
-               com::sun::star::ucb::CommandAbortedException,
-               com::sun::star::uno::RuntimeException, std::exception ) override;
+             const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
+        throw( css::uno::Exception,
+               css::ucb::CommandAbortedException,
+               css::uno::RuntimeException, std::exception ) override;
     virtual void SAL_CALL
     abort( sal_Int32 CommandId )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // Additional interfaces
 
 
     // XContentCreator
-    virtual com::sun::star::uno::Sequence<
-                com::sun::star::ucb::ContentInfo > SAL_CALL
+    virtual css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
     queryCreatableContentsInfo()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XContent > SAL_CALL
-    createNewContent( const com::sun::star::ucb::ContentInfo& Info )
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    createNewContent( const css::ucb::ContentInfo& Info )
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 
     // Non-interface methods.
 
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-    getPropertyValues( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::uno::XComponentContext >& rxContext,
-                       const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::Property >& rProperties,
+    static css::uno::Reference< css::sdbc::XRow >
+    getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                       const css::uno::Sequence< css::beans::Property >& rProperties,
                        const HierarchyContentProperties& rData,
                        HierarchyContentProvider* pProvider,
                        const OUString& rContentId );

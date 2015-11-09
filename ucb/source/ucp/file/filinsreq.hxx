@@ -46,13 +46,13 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
         }
 
         virtual void SAL_CALL select()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+            throw (css::uno::RuntimeException, std::exception) override
         {
             m_bSelected = true;
         }
 
         void SAL_CALL setName(const OUString& Name)
-            throw(::com::sun::star::uno::RuntimeException, std::exception) override
+            throw(css::uno::RuntimeException, std::exception) override
         {
             m_aNewName = Name;
         }
@@ -86,7 +86,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
         }
 
         virtual void SAL_CALL select()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) override
+            throw (css::uno::RuntimeException, std::exception) override
         {
             m_bSelected = true;
         }
@@ -110,8 +110,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
 
         XInteractionRequestImpl(
             const OUString& aClashingName,
-            const com::sun::star::uno::Reference<
-            com::sun::star::uno::XInterface>& xOrigin,
+            const css::uno::Reference< css::uno::XInterface>& xOrigin,
             shell* pShell,
             sal_Int32 CommandId);
 
@@ -142,8 +141,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
         css::uno::Reference<css::task::XInteractionRequest> m_xRequest;
 
         OUString m_aClashingName;
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XInterface> m_xOrigin;
+        css::uno::Reference< css::uno::XInterface> m_xOrigin;
     };
 
 }

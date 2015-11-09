@@ -405,7 +405,7 @@ void ContentProperties::addProperty( const DAVPropertyValue & rProp )
 
 
 void ContentProperties::addProperty( const OUString & rName,
-                                     const com::sun::star::uno::Any & rValue,
+                                     const css::uno::Any & rValue,
                                      bool bIsCaseSensitive )
 {
     if ( rName.equals( DAVProperties::CREATIONDATE ) )

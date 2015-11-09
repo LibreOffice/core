@@ -34,26 +34,24 @@ namespace fileaccess {
     {
     private:
         shell* m_pMyShell;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xOldId;
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > > m_sListeners;
+        css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
+        css::uno::Reference< css::ucb::XContentIdentifier > m_xCreatorId;
+        css::uno::Reference< css::ucb::XContentIdentifier > m_xOldId;
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > m_sListeners;
     public:
 
         ContentEventNotifier(
             shell* pMyShell,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
-            const com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
+            const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
+            const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
+            const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
         ContentEventNotifier(
             shell* pMyShell,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xOldId,
-            const com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
+            const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
+            const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
+            const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
+            const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
         void notifyChildInserted( const OUString& aChildName );
         void notifyDeleted();
@@ -65,15 +63,14 @@ namespace fileaccess {
     class PropertySetInfoChangeNotifier
     {
     private:
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > > m_sListeners;
+        css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
+        css::uno::Reference< css::ucb::XContentIdentifier > m_xCreatorId;
+        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > m_sListeners;
     public:
         PropertySetInfoChangeNotifier(
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
-            const com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
+            const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
+            const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
+            const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
         void SAL_CALL notifyPropertyAdded( const OUString & aPropertyName );
         void SAL_CALL notifyPropertyRemoved( const OUString & aPropertyName );
@@ -81,25 +78,25 @@ namespace fileaccess {
 
 
     typedef std::unordered_map< OUString,
-                           com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >,
+                           css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >,
                            OUStringHash >      ListenerMap;
 
     class PropertyChangeNotifier
     {
     private:
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
+        css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
+        css::uno::Reference< css::ucb::XContentIdentifier > m_xCreatorId;
         ListenerMap* m_pListeners;
     public:
         PropertyChangeNotifier(
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
+            const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
+            const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
             ListenerMap* pListeners );
 
         ~PropertyChangeNotifier();
 
         void notifyPropertyChanged(
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyChangeEvent >& seqChanged );
+            const css::uno::Sequence< css::beans::PropertyChangeEvent >& seqChanged );
     };
 
 

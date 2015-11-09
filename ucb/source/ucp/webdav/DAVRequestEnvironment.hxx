@@ -34,15 +34,13 @@ struct DAVRequestEnvironment
 {
     OUString m_aRequestURI;
     rtl::Reference< DAVAuthListener >     m_xAuthListener;
-//    rtl::Reference< DAVStatusListener >   m_xStatusListener;
-//    rtl::Reference< DAVProgressListener > m_xStatusListener;
     DAVRequestHeaders                     m_aRequestHeaders;
-    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xEnv;
+    css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
 
 DAVRequestEnvironment( const OUString & rRequestURI,
                        const rtl::Reference< DAVAuthListener > & xListener,
                        const DAVRequestHeaders & rRequestHeaders,
-                       const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv)
+                       const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv)
     : m_aRequestURI( rRequestURI ),
       m_xAuthListener( xListener ),
       m_aRequestHeaders( rRequestHeaders ),

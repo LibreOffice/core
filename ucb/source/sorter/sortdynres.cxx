@@ -501,7 +501,7 @@ SortedDynamicResultSetFactory_CreateInstance( const css::uno::Reference<
 
 css::uno::Sequence< OUString > SortedDynamicResultSetFactory::getSupportedServiceNames_Static()
 {
-    com::sun::star::uno::Sequence< OUString > aSNS( 1 );
+    css::uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = DYNAMIC_RESULTSET_FACTORY_NAME;
     return aSNS;
 }

@@ -227,7 +227,7 @@ bool createContentProviderData(
 
 
 UniversalContentBroker::UniversalContentBroker(
-    const Reference< com::sun::star::uno::XComponentContext >& xContext )
+    const Reference< css::uno::XComponentContext >& xContext )
 : m_xContext( xContext ),
   m_pDisposeEventListeners( NULL ),
   m_nInitCount( 0 ), //@@@ see initialize() method
@@ -299,7 +299,7 @@ XTYPEPROVIDER_IMPL_9( UniversalContentBroker,
 
 // virtual
 void SAL_CALL UniversalContentBroker::dispose()
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
     {
@@ -316,7 +316,7 @@ void SAL_CALL UniversalContentBroker::dispose()
 // virtual
 void SAL_CALL UniversalContentBroker::addEventListener(
                             const Reference< XEventListener >& Listener )
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners = new OInterfaceContainerHelper( m_aMutex );
@@ -328,7 +328,7 @@ void SAL_CALL UniversalContentBroker::addEventListener(
 // virtual
 void SAL_CALL UniversalContentBroker::removeEventListener(
                             const Reference< XEventListener >& Listener )
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     if ( m_pDisposeEventListeners )
         m_pDisposeEventListeners->removeInterface( Listener );
@@ -361,10 +361,9 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( UniversalContentBroker );
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::initialize(
-                    const com::sun::star::uno::Sequence< Any >& aArguments )
-    throw( com::sun::star::uno::Exception,
-           com::sun::star::uno::RuntimeException, std::exception )
+void SAL_CALL UniversalContentBroker::initialize( const css::uno::Sequence< Any >& aArguments )
+    throw( css::uno::Exception,
+           css::uno::RuntimeException, std::exception )
 {
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -408,7 +407,7 @@ UniversalContentBroker::registerContentProvider(
                             const Reference< XContentProvider >& Provider,
                             const OUString& Scheme,
                             sal_Bool ReplaceExisting )
-    throw( DuplicateProviderException, com::sun::star::uno::RuntimeException, std::exception )
+    throw( DuplicateProviderException, css::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -454,7 +453,7 @@ UniversalContentBroker::registerContentProvider(
 void SAL_CALL UniversalContentBroker::deregisterContentProvider(
                               const Reference< XContentProvider >& Provider,
                             const OUString& Scheme )
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -490,16 +489,15 @@ void SAL_CALL UniversalContentBroker::deregisterContentProvider(
 
 
 // virtual
-com::sun::star::uno::Sequence< ContentProviderInfo > SAL_CALL
+css::uno::Sequence< ContentProviderInfo > SAL_CALL
                             UniversalContentBroker::queryContentProviders()
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     // Return a list with information about active(!) content providers.
 
     osl::MutexGuard aGuard(m_aMutex);
 
-    com::sun::star::uno::Sequence< ContentProviderInfo > aSeq(
-                                                    m_aProviders.size() );
+    css::uno::Sequence< ContentProviderInfo > aSeq( m_aProviders.size() );
     ContentProviderInfo* pInfo = aSeq.getArray();
 
     ProviderMap_Impl::const_iterator end = m_aProviders.end();
@@ -520,7 +518,7 @@ com::sun::star::uno::Sequence< ContentProviderInfo > SAL_CALL
 Reference< XContentProvider > SAL_CALL
         UniversalContentBroker::queryContentProvider( const OUString&
                                                           Identifier )
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     return queryContentProvider( Identifier, false );
 }
@@ -534,7 +532,7 @@ Reference< XContentProvider > SAL_CALL
 // virtual
 Reference< XContent > SAL_CALL UniversalContentBroker::queryContent(
                         const Reference< XContentIdentifier >& Identifier )
-    throw( IllegalIdentifierException, com::sun::star::uno::RuntimeException, std::exception )
+    throw( IllegalIdentifierException, css::uno::RuntimeException, std::exception )
 {
 
     // Let the content provider for the scheme given with the content
@@ -557,7 +555,7 @@ Reference< XContent > SAL_CALL UniversalContentBroker::queryContent(
 sal_Int32 SAL_CALL UniversalContentBroker::compareContentIds(
                                 const Reference< XContentIdentifier >& Id1,
                                 const Reference< XContentIdentifier >& Id2 )
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
     OUString aURI1( Id1->getContentIdentifier() );
     OUString aURI2( Id2->getContentIdentifier() );
@@ -586,7 +584,7 @@ sal_Int32 SAL_CALL UniversalContentBroker::compareContentIds(
 Reference< XContentIdentifier > SAL_CALL
         UniversalContentBroker::createContentIdentifier(
                                             const OUString& ContentId )
-    throw( com::sun::star::uno::RuntimeException, std::exception )
+    throw( css::uno::RuntimeException, std::exception )
 {
 
     // Let the content provider for the scheme given with content

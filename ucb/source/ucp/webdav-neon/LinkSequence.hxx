@@ -40,10 +40,8 @@ class LinkSequence
 {
 public:
     static bool createFromXML( const OString & rInData,
-                               com::sun::star::uno::Sequence<
-                                   com::sun::star::ucb::Link > & rOutData );
-    static bool toXML( const com::sun::star::uno::Sequence<
-                                com::sun::star::ucb::Link > & rInData,
+                               css::uno::Sequence< css::ucb::Link > & rOutData );
+    static bool toXML( const css::uno::Sequence< css::ucb::Link > & rInData,
                        OUString & rOutData );
 };
 

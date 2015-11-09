@@ -22,7 +22,7 @@ using namespace std;
 
 namespace cmis
 {
-    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment> 
+    css::uno::Reference< css::ucb::XCommandEnvironment>
         AuthProvider::sm_xEnv;
     bool AuthProvider::authenticationQuery( string& username, string& password )
     {
@@ -75,8 +75,8 @@ namespace cmis
             "box below. For example:\n"
             "https://login.live.com/oauth20_desktop.srf?code=YOUR_CODE&lc=1033";
         OUString url_oustr( url, strlen( url ), RTL_TEXTENCODING_UTF8 );
-        const com::sun::star::uno::Reference< 
-            com::sun::star::ucb::XCommandEnvironment> xEnv = getXEnv( );
+        const css::uno::Reference<
+            css::ucb::XCommandEnvironment> xEnv = getXEnv( );
 
         if ( xEnv.is() )
         {

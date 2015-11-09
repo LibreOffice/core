@@ -50,8 +50,7 @@ class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
     Packages* m_pPackages;
 
 public:
-    explicit ContentProvider( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::uno::XComponentContext >& rxContext );
+    explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider();
 
     // XInterface
@@ -84,12 +83,10 @@ public:
                           css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XContentProvider
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::ucb::XContent > SAL_CALL
-    queryContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& Identifier )
-        throw( ::com::sun::star::ucb::IllegalIdentifierException,
-               ::com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+        throw( css::ucb::IllegalIdentifierException,
+               css::uno::RuntimeException, std::exception ) override;
 
 
     // Additional interfaces
@@ -99,8 +96,7 @@ public:
     // Non-interface methods.
 
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XHierarchicalNameAccess >
+    css::uno::Reference< css::container::XHierarchicalNameAccess >
     createPackage( const PackageUri & rParam );
     bool
     removePackage( const OUString & rName );

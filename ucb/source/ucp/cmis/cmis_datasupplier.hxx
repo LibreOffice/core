@@ -23,10 +23,10 @@ namespace cmis
 
     struct ResultListEntry
     {
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > xContent;
-        com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > xRow;
+        css::uno::Reference< css::ucb::XContent > xContent;
+        css::uno::Reference< css::sdbc::XRow > xRow;
 
-        explicit ResultListEntry( com::sun::star::uno::Reference< com::sun::star::ucb::XContent > xCnt ) : xContent( xCnt )
+        explicit ResultListEntry( css::uno::Reference< css::ucb::XContent > xCnt ) : xContent( xCnt )
         {
         }
 
@@ -52,9 +52,9 @@ namespace cmis
             virtual ~DataSupplier();
 
             virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;
-            virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >
+            virtual css::uno::Reference< css::ucb::XContentIdentifier >
                 queryContentIdentifier( sal_uInt32 nIndex ) override;
-            virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
+            virtual css::uno::Reference< css::ucb::XContent >
                 queryContent( sal_uInt32 nIndex ) override;
 
             virtual bool getResult( sal_uInt32 nIndex ) override;
@@ -63,14 +63,14 @@ namespace cmis
             virtual sal_uInt32 currentCount() override;
             virtual bool isCountFinal() override;
 
-            virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow >
+            virtual css::uno::Reference< css::sdbc::XRow >
                 queryPropertyValues( sal_uInt32 nIndex  ) override;
             virtual void releasePropertyValues( sal_uInt32 nIndex ) override;
 
             virtual void close() override;
 
             virtual void validate()
-                throw( com::sun::star::ucb::ResultSetException ) override;
+                throw( css::ucb::ResultSetException ) override;
     };
 
 }

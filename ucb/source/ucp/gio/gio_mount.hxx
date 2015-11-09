@@ -36,7 +36,7 @@ struct OOoMountOperation
 {
     GMountOperation parent_instance;
 
-    const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > *pEnv;
+    const css::uno::Reference< css::ucb::XCommandEnvironment > *pEnv;
     char *m_pPrevUsername;
     char *m_pPrevPassword;
 };
@@ -54,7 +54,7 @@ struct OOoMountOperationClass
 
 
 GType            ooo_mount_operation_get_type();
-GMountOperation *ooo_mount_operation_new(const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rEnv);
+GMountOperation *ooo_mount_operation_new(const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv);
 
 G_END_DECLS
 #endif

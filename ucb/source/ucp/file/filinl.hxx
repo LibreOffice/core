@@ -27,15 +27,15 @@ inline const sal_Int32& SAL_CALL shell::MyProperty::getHandle() const
 {
     return Handle;
 }
-inline const com::sun::star::uno::Type& SAL_CALL shell::MyProperty::getType() const
+inline const css::uno::Type& SAL_CALL shell::MyProperty::getType() const
 {
     return Typ;
 }
-inline const com::sun::star::uno::Any& SAL_CALL shell::MyProperty::getValue() const
+inline const css::uno::Any& SAL_CALL shell::MyProperty::getValue() const
 {
     return Value;
 }
-inline const com::sun::star::beans::PropertyState& SAL_CALL shell::MyProperty::getState() const
+inline const css::beans::PropertyState& SAL_CALL shell::MyProperty::getState() const
 {
     return State;
 }
@@ -43,11 +43,11 @@ inline const sal_Int16& SAL_CALL shell::MyProperty::getAttributes() const
 {
     return Attributes;
 }
-inline void SAL_CALL shell::MyProperty::setValue( const com::sun::star::uno::Any& __Value ) const
+inline void SAL_CALL shell::MyProperty::setValue( const css::uno::Any& __Value ) const
 {
     const_cast<MyProperty*>(this)->Value = __Value;
 }
-inline void SAL_CALL shell::MyProperty::setState( const com::sun::star::beans::PropertyState& __State ) const
+inline void SAL_CALL shell::MyProperty::setState( const css::beans::PropertyState& __State ) const
 {
     const_cast<MyProperty*>(this)->State = __State;
 }
