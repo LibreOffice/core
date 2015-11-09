@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_e148308a",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-11-09T12:01:05Z",
+      "side": 1,
+      "message": "leftover comment",
+      "revId": "5e5d20a991b2d55e2be5f808941884ab37fc024a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
