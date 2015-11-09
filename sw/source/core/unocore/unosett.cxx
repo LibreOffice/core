@@ -2099,6 +2099,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     throw(UnknownPropertyException, PropertyVetoException,
         IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
     SwNumRule* pDocRule = 0;
     SwNumRule* pCreatedRule = 0;
     if(!pNumRule)
