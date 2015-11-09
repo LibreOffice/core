@@ -811,10 +811,12 @@ public:
             const long nMapFY = mpMapYOffset[nY];
 
             pLine0 = pSource->GetScanline(nMapY);
-            pLine1 = pSource->GetScanline(nMapY + 1);
+            // tdf#95481 caution: nMapY + 1 may be out of bound. If it is, use same line for blending so nothing will be changed
+            pLine1 = (nMapY + 1 < pSource->Height()) ? pSource->GetScanline(nMapY + 1) : pLine0;
 
             pLineAlpha0 = pSourceAlpha->GetScanline(nMapY);
-            pLineAlpha1 = pSourceAlpha->GetScanline(nMapY + 1);
+            // tdf#95481 caution: nMapY + 1 may be out of bound. If it is, use same line for blending so nothing will be changed
+            pLineAlpha1 = (nMapY + 1 < pSourceAlpha->Height()) ? pSourceAlpha->GetScanline(nMapY + 1) : pLineAlpha0;
 
             pDestScanline = pDestination->GetScanline(nY);
 
