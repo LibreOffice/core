@@ -120,7 +120,7 @@ struct NamespaceIds: public rtl::StaticWithInit<
             "http://schemas.microsoft.com/office/drawing/2008/diagram",
             "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main",
             "http://schemas.libreoffice.org/",
-            "http://schemas.microsoft.com/office/powerpoint/2010/main"
+            "http://schemas.microsoft.com/office/powerpoint/2010/main",
             "http://schemas.microsoft.com/office/powerpoint/2012/main"
         };
 
