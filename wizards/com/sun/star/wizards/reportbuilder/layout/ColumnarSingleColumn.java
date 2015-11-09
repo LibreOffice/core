@@ -41,6 +41,7 @@ public class ColumnarSingleColumn extends ReportBuilderLayouter
         return getResource().getResText(UIConsts.RID_REPORT + 81);
     }
 
+    @Override
     protected void insertDetailFields()
     {
         copyDetailProperties();
@@ -82,6 +83,7 @@ public class ColumnarSingleColumn extends ReportBuilderLayouter
         doNotBreakInTable(xSection);
     }
 
+    @Override
     protected void insertDetailFieldTitles(int lastGroupPostion)
     {
         // we won't extra field titles

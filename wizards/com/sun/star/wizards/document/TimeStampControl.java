@@ -85,17 +85,20 @@ public class TimeStampControl extends DatabaseControl
         oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sTimeAppendix);
     }
 
+    @Override
     public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception
     {
         oDateControl.setPropertyValue(_sPropertyName, _aPropertyValue);
         oTimeControl.setPropertyValue(_sPropertyName, _aPropertyValue);
     }
 
+    @Override
     public int getPreferredWidth()
     {
         return nDBWidth;
     }
 
+    @Override
     public int getControlType()
     {
         return FormHandler.SODATETIMECONTROL;

@@ -95,6 +95,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
+    @Override
     public boolean getConnection(PropertyValue[] _curPropertyValue)
     {
         if (super.getConnection(_curPropertyValue))

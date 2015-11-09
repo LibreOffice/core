@@ -48,6 +48,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         super(_CurUnoDialog, iStep, iCompPosY, _firsthelpid);
     }
 
+    @Override
     protected void insertControlGroup(int i)
     {
         try
@@ -154,6 +155,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         }
     }
 
+    @Override
     protected void enableNextControlRow(int curindex)
     {
         boolean bSlaveField = lstSlaveFields[curindex].getSelectedItemPos() > 0;
@@ -169,6 +171,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         }
     }
 
+    @Override
     protected int getMaxSelIndex()
     {
         int MaxSelIndex = -1;
@@ -182,6 +185,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         return MaxSelIndex;
     }
 
+    @Override
     protected void toggleControlRow(int i, boolean bDoEnable)
     {
         if (i < rowcount)
@@ -198,6 +202,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         }
     }
 
+    @Override
     protected void updateFromNextControlRow(int curindex)
     {
         short iNextMasterItemPos = lstMasterFields[curindex + 1].getSelectedItemPos();

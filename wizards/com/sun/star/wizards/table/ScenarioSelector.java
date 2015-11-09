@@ -197,6 +197,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         super.initialize(oCGTable.getFieldNames(bcolumnnameislimited, imaxcolumnchars), true);
     }
 
+    @Override
     public String[] getSelectedFieldNames()
     {
         String[] displayfieldnames = super.getSelectedFieldNames();

@@ -252,6 +252,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
     }
 
+    @Override
     public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
@@ -269,6 +270,7 @@ public class QueryWizard extends DatabaseObjectWizard
         return false;
     }
 
+    @Override
     protected void enterStep(int nOldStep, int nNewStep)
     {
         try
@@ -316,6 +318,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
     }
 
+    @Override
     protected void leaveStep(int nOldStep, int nNewStep)
     {
         switch (nOldStep)

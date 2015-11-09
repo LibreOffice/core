@@ -131,6 +131,7 @@ public class CallTableWizard
             return booleanSupportsService;
         }
 
+        @Override
         public byte[] getImplementationId()
         {
             return new byte[0];
@@ -149,6 +150,7 @@ public class CallTableWizard
          * @return Sequence of all types (usually interface types) provided by the
          * service.
          */
+        @Override
         public Type[] getTypes()
         {
             Type[] typeReturn =

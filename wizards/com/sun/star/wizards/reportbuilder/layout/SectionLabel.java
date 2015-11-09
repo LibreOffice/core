@@ -36,6 +36,7 @@ public class SectionLabel extends SectionObject
     /**
      * Return the current FontDescriptor
      */
+    @Override
     public FontDescriptor getFontDescriptor()
     {
         FontDescriptor a = null;

@@ -175,6 +175,7 @@ public class AggregateComponent extends ControlScroller
         }
     }
 
+    @Override
     protected void insertControlGroup(int i, int ypos)
     {
         if (i == 0)
@@ -197,6 +198,7 @@ public class AggregateComponent extends ControlScroller
         ControlRowVector.add(oControlRow);
     }
 
+    @Override
     protected void setControlGroupVisible(int _index, boolean _bIsVisible)
     {
         ControlRow oControlRow = ControlRowVector.get(_index);
@@ -411,6 +413,7 @@ public class AggregateComponent extends ControlScroller
         CurUnoDialog.repaintDialogStep();
     }
 
+    @Override
     protected void initializeScrollFields()
     {
         ControlRow curControlRow;

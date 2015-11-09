@@ -93,6 +93,7 @@ public class FormWizard extends DatabaseObjectWizard
     }
 
     // @Override
+    @Override
     protected void enterStep(int nOldStep, int nNewStep)
     {
         try
@@ -167,6 +168,7 @@ public class FormWizard extends DatabaseObjectWizard
     }
 
     // @Override
+    @Override
     protected void leaveStep(int nOldStep, int nNewStep)
     {
         switch (nOldStep)
@@ -270,6 +272,7 @@ public class FormWizard extends DatabaseObjectWizard
     }
 
     // @Override
+    @Override
     public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
@@ -302,6 +305,7 @@ public class FormWizard extends DatabaseObjectWizard
     }
 
     // @Override
+    @Override
     public void cancelWizard()
     {
         m_success = false;
