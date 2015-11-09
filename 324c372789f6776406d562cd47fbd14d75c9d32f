@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_acd45f47",
+        "filename": "basegfx/source/polygon/b2dpolypolygon.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-11-09T22:44:49Z",
+      "side": 1,
+      "message": "this can be moved out of the loop, no need to update every turn",
+      "revId": "324c372789f6776406d562cd47fbd14d75c9d32f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_0ccacba1",
+        "filename": "include/basegfx/polygon/b2dpolypolygon.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-11-09T22:44:49Z",
+      "side": 1,
+      "message": "No very strong opinion, but perhaps this could be kept local to the svg import.\n\nThe name is a bit of a semantical struggle - keeping it here should get at least a doxygen comment explaining the semantics.",
+      "revId": "324c372789f6776406d562cd47fbd14d75c9d32f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
