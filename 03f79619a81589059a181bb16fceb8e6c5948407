@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_2c37cfe4",
+        "filename": "vcl/unx/generic/app/saldisp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-09T17:09:41Z",
+      "side": 1,
+      "message": "i think that this condition is incorrect (inverted), as the warning message says.\n\nm_hColorMap is used by XAllocColor below, so passing it to XQueryColor only if it\u0027s 0 makes no sense at all.",
+      "revId": "03f79619a81589059a181bb16fceb8e6c5948407",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
