@@ -117,7 +117,7 @@ public:
     //= UnoSpinButtonModel
 
 
-    UnoSpinButtonModel::UnoSpinButtonModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
+    UnoSpinButtonModel::UnoSpinButtonModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );

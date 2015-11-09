@@ -124,13 +124,13 @@ public:
 
     UnoPropertyArrayHelper*             mpPropHelper;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >
+    css::uno::Reference< css::awt::XPointer >
                                         mxPointer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    css::uno::Reference< css::accessibility::XAccessibleContext >
                                         mxAccessibleContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >
+    css::uno::Reference< css::awt::XGraphics >
                                         mxViewGraphics;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XStyleSettings >
+    css::uno::Reference< css::awt::XStyleSettings >
                                         mxWindowStyleSettings;
 
 public:
@@ -237,7 +237,7 @@ void VCLXWindowImpl::disposing()
 
     mbDisposed= true;
 
-    ::com::sun::star::lang::EventObject aEvent;
+    css::lang::EventObject aEvent;
     aEvent.Source = mrAntiImpl;
 
     maDockableWindowListeners.disposeAndClear( aEvent );
@@ -319,7 +319,7 @@ Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 
 // Uses an out-parameter instead of return value, due to the object reference
 
-void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, vcl::Window* pWindow )
+void ImplInitWindowEvent( css::awt::WindowEvent& rEvent, vcl::Window* pWindow )
 {
     Point aPos = pWindow->GetPosPixel();
     Size aSz = pWindow->GetSizePixel();
@@ -436,7 +436,7 @@ namespace
 
 void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis( static_cast<cppu::OWeakObject*>(this) );
+    css::uno::Reference< css::uno::XInterface > xThis( static_cast<cppu::OWeakObject*>(this) );
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -456,7 +456,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getPaintListeners().getLength() )
             {
-                ::com::sun::star::awt::PaintEvent aEvent;
+                css::awt::PaintEvent aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 aEvent.UpdateRect = AWTRectangle( *static_cast<Rectangle*>(rVclWindowEvent.GetData()) );
                 aEvent.Count = 0;
@@ -468,7 +468,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getWindowListeners().getLength() )
             {
-                ::com::sun::star::awt::WindowEvent aEvent;
+                css::awt::WindowEvent aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowMoved( aEvent );
@@ -479,7 +479,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getWindowListeners().getLength() )
             {
-                ::com::sun::star::awt::WindowEvent aEvent;
+                css::awt::WindowEvent aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowResized( aEvent );
@@ -490,7 +490,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getWindowListeners().getLength() )
             {
-                ::com::sun::star::awt::WindowEvent aEvent;
+                css::awt::WindowEvent aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowShown( aEvent );
@@ -499,7 +499,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             // For TopWindows this means opened...
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowOpened( aEvent );
             }
@@ -509,7 +509,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getWindowListeners().getLength() )
             {
-                ::com::sun::star::awt::WindowEvent aEvent;
+                css::awt::WindowEvent aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
                 mpImpl->getWindowListeners().windowHidden( aEvent );
@@ -518,7 +518,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             // For TopWindows this means closed...
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowClosed( aEvent );
             }
@@ -528,7 +528,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowActivated( aEvent );
             }
@@ -538,7 +538,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowDeactivated( aEvent );
             }
@@ -548,13 +548,13 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::closed, aEvent );
             }
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowClosing( aEvent );
             }
@@ -573,7 +573,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 if ( mpImpl->getFocusListeners().getLength() )
                 {
-                    ::com::sun::star::awt::FocusEvent aEvent;
+                    css::awt::FocusEvent aEvent;
                     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
                     aEvent.Temporary = sal_False;
@@ -595,7 +595,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 if ( mpImpl->getFocusListeners().getLength() )
                 {
-                    ::com::sun::star::awt::FocusEvent aEvent;
+                    css::awt::FocusEvent aEvent;
                     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.FocusFlags = static_cast<sal_Int16>(rVclWindowEvent.GetWindow()->GetGetFocusFlags());
                     aEvent.Temporary = sal_False;
@@ -622,7 +622,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowMinimized( aEvent );
             }
@@ -632,7 +632,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getTopWindowListeners().windowNormalized( aEvent );
             }
@@ -642,7 +642,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getKeyListeners().getLength() )
             {
-                ::com::sun::star::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                css::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
                     *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this
                 ) );
                 mpImpl->getKeyListeners().keyPressed( aEvent );
@@ -653,7 +653,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getKeyListeners().getLength() )
             {
-                ::com::sun::star::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
+                css::awt::KeyEvent aEvent( VCLUnoHelper::createKeyEvent(
                     *static_cast<KeyEvent*>(rVclWindowEvent.GetData()), *this
                 ) );
                 mpImpl->getKeyListeners().keyReleased( aEvent );
@@ -744,7 +744,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
                 if( pData )
                 {
-                    ::com::sun::star::awt::DockingEvent aEvent;
+                    css::awt::DockingEvent aEvent;
                     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
                     aEvent.MousePos.X = pData->maMousePos.X();
@@ -765,7 +765,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
                 if( pData )
                 {
-                    ::com::sun::star::awt::DockingEvent aEvent;
+                    css::awt::DockingEvent aEvent;
                     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
                     aEvent.MousePos.X = pData->maMousePos.X();
@@ -780,7 +780,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                         xFirstListener.set( aIter.next(), UNO_QUERY );
                     }
 
-                    ::com::sun::star::awt::DockingData aDockingData =
+                    css::awt::DockingData aDockingData =
                         xFirstListener->docking( aEvent );
                     pData->maTrackRect = VCLRectangle( aDockingData.TrackingRectangle );
                     pData->mbFloating = aDockingData.bFloating;
@@ -796,7 +796,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
                 if( pData )
                 {
-                    ::com::sun::star::awt::EndDockingEvent aEvent;
+                    css::awt::EndDockingEvent aEvent;
                     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.WindowRectangle = AWTRectangle( pData->maWindowRect );
                     aEvent.bFloating = pData->mbFloating;
@@ -812,7 +812,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 sal_Bool *p_bFloating = static_cast<sal_Bool*>(rVclWindowEvent.GetData());
 
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
 
                 Reference< XDockableWindowListener > xFirstListener;
@@ -830,7 +830,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
-                ::com::sun::star::lang::EventObject aEvent;
+                css::lang::EventObject aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::toggleFloatingMode, aEvent );
             }
@@ -844,7 +844,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
                 if( pData )
                 {
-                    ::com::sun::star::awt::EndPopupModeEvent aEvent;
+                    css::awt::EndPopupModeEvent aEvent;
                     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                     aEvent.FloatingPosition.X = pData->maFloatingPos.X();
                     aEvent.FloatingPosition.Y = pData->maFloatingPos.Y();
@@ -890,8 +890,8 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 }
 
 
-// ::com::sun::star::lang::XUnoTunnel
-sal_Int64 VCLXWindow::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::lang::XUnoTunnel
+sal_Int64 VCLXWindow::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception)
 {
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( VCLXWindow::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
     {
@@ -903,21 +903,21 @@ namespace
 {
     class theVCLXWindowUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theVCLXWindowUnoTunnelId> {};
 }
-const ::com::sun::star::uno::Sequence< sal_Int8 >& VCLXWindow::GetUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 >& VCLXWindow::GetUnoTunnelId() throw()
 {
     return theVCLXWindowUnoTunnelId::get().getSeq();
 }
-VCLXWindow* VCLXWindow::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace )
+VCLXWindow* VCLXWindow::GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
     return xUT.is() ? reinterpret_cast<VCLXWindow*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( VCLXWindow::GetUnoTunnelId() ))) : NULL;
 }
 
 
 
 
-// ::com::sun::star::lang::Component
-void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::lang::Component
+void VCLXWindow::dispose(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -942,11 +942,11 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException, std:
         // for VCLEVENT_WINDOW_CHILDDESTROYED contains a reference to an already disposed accessible object
         try
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mpImpl->mxAccessibleContext, ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::lang::XComponent > xComponent( mpImpl->mxAccessibleContext, css::uno::UNO_QUERY );
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        catch ( const ::com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
             OSL_FAIL( "VCLXWindow::dispose: could not dispose the accessible context!" );
         }
@@ -956,14 +956,14 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException, std:
     }
 }
 
-void VCLXWindow::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     mpImpl->getEventListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -971,8 +971,8 @@ void VCLXWindow::removeEventListener( const ::com::sun::star::uno::Reference< ::
 }
 
 
-// ::com::sun::star::awt::XWindow
-void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XWindow
+void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -985,11 +985,11 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
     }
 }
 
-::com::sun::star::awt::Rectangle VCLXWindow::getPosSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Rectangle VCLXWindow::getPosSize(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::awt::Rectangle aBounds;
+    css::awt::Rectangle aBounds;
     if ( GetWindow() )
     {
         if( vcl::Window::GetDockingManager()->IsDockable( GetWindow() ) )
@@ -1001,7 +1001,7 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
     return aBounds;
 }
 
-void VCLXWindow::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::setVisible( sal_Bool bVisible ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1013,7 +1013,7 @@ void VCLXWindow::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::Ru
     }
 }
 
-void VCLXWindow::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::setEnable( sal_Bool bEnable ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1025,7 +1025,7 @@ void VCLXWindow::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::Runt
     }
 }
 
-void VCLXWindow::setFocus(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::setFocus(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1033,7 +1033,7 @@ void VCLXWindow::setFocus(  ) throw(::com::sun::star::uno::RuntimeException, std
         GetWindow()->GrabFocus();
 }
 
-void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1048,7 +1048,7 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
         GetWindow()->EnableAllResize();
 }
 
-void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1059,75 +1059,75 @@ void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< :
     mpImpl->getWindowListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getFocusListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getFocusListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getKeyListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getKeyListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getMouseListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getMouseListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getMouseMotionListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getMouseMotionListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getPaintListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     mpImpl->getPaintListeners().removeInterface( rxListener );
 }
 
-// ::com::sun::star::awt::XWindowPeer
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > VCLXWindow::getToolkit(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XWindowPeer
+css::uno::Reference< css::awt::XToolkit > VCLXWindow::getToolkit(  ) throw(css::uno::RuntimeException, std::exception)
 {
     // no guard. nothing to guard here.
     // 82463 - 12/21/00 - fs
     return Application::GetVCLToolkit();
 }
 
-void VCLXWindow::setPointer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >& rxPointer ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::setPointer( const css::uno::Reference< css::awt::XPointer >& rxPointer ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1140,7 +1140,7 @@ void VCLXWindow::setPointer( const ::com::sun::star::uno::Reference< ::com::sun:
     }
 }
 
-void VCLXWindow::setBackground( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::setBackground( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1160,7 +1160,7 @@ void VCLXWindow::setBackground( sal_Int32 nColor ) throw(::com::sun::star::uno::
     }
 }
 
-void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1168,7 +1168,7 @@ void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags ) throw(::com::sun::star
         GetWindow()->Invalidate( static_cast<InvalidateFlags>(nInvalidateFlags) );
 }
 
-void VCLXWindow::invalidateRect( const ::com::sun::star::awt::Rectangle& rRect, sal_Int16 nInvalidateFlags ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::invalidateRect( const css::awt::Rectangle& rRect, sal_Int16 nInvalidateFlags ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1177,8 +1177,8 @@ void VCLXWindow::invalidateRect( const ::com::sun::star::awt::Rectangle& rRect, 
 }
 
 
-// ::com::sun::star::awt::XVclWindowPeer
-sal_Bool VCLXWindow::isChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rxPeer ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XVclWindowPeer
+sal_Bool VCLXWindow::isChild( const css::uno::Reference< css::awt::XWindowPeer >& rxPeer ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1193,20 +1193,20 @@ sal_Bool VCLXWindow::isChild( const ::com::sun::star::uno::Reference< ::com::sun
     return bIsChild;
 }
 
-void VCLXWindow::setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::setDesignMode( sal_Bool bOn ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     mpImpl->mbDesignMode = bOn;
 }
 
-sal_Bool VCLXWindow::isDesignMode(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool VCLXWindow::isDesignMode(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return mpImpl->mbDesignMode;
 }
 
-void VCLXWindow::enableClipSiblings( sal_Bool bClip ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::enableClipSiblings( sal_Bool bClip ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1214,7 +1214,7 @@ void VCLXWindow::enableClipSiblings( sal_Bool bClip ) throw(::com::sun::star::un
         GetWindow()->EnableClipSiblings( bClip );
 }
 
-void VCLXWindow::setForeground( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::setForeground( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1225,7 +1225,7 @@ void VCLXWindow::setForeground( sal_Int32 nColor ) throw(::com::sun::star::uno::
     }
 }
 
-void VCLXWindow::setControlFont( const ::com::sun::star::awt::FontDescriptor& rFont ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::setControlFont( const css::awt::FontDescriptor& rFont ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1233,7 +1233,7 @@ void VCLXWindow::setControlFont( const ::com::sun::star::awt::FontDescriptor& rF
         GetWindow()->SetControlFont( VCLUnoHelper::CreateFont( rFont, GetWindow()->GetControlFont() ) );
 }
 
-void VCLXWindow::getStyles( sal_Int16 nType, ::com::sun::star::awt::FontDescriptor& Font, sal_Int32& ForegroundColor, sal_Int32& BackgroundColor ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal_Int32& ForegroundColor, sal_Int32& BackgroundColor ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1243,14 +1243,14 @@ void VCLXWindow::getStyles( sal_Int16 nType, ::com::sun::star::awt::FontDescript
 
         switch ( nType )
         {
-            case ::com::sun::star::awt::Style::FRAME:
+            case css::awt::Style::FRAME:
             {
                 Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
                 ForegroundColor = rStyleSettings.GetWindowTextColor().GetColor();
                 BackgroundColor = rStyleSettings.GetWindowColor().GetColor();
             }
             break;
-            case ::com::sun::star::awt::Style::DIALOG:
+            case css::awt::Style::DIALOG:
             {
                 Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
                 ForegroundColor = rStyleSettings.GetDialogTextColor().GetColor();
@@ -1265,7 +1265,7 @@ void VCLXWindow::getStyles( sal_Int16 nType, ::com::sun::star::awt::FontDescript
 
 namespace toolkit
 {
-    static void setColorSettings( vcl::Window* _pWindow, const ::com::sun::star::uno::Any& _rValue,
+    static void setColorSettings( vcl::Window* _pWindow, const css::uno::Any& _rValue,
         void (StyleSettings::*pSetter)( const Color& ), const Color& (StyleSettings::*pGetter)( ) const )
     {
         sal_Int32 nColor = 0;
@@ -1387,8 +1387,8 @@ namespace
     }
 }
 
-void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value )
-    throw(::com::sun::star::uno::RuntimeException,
+void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any& Value )
+    throw(css::uno::RuntimeException,
           std::exception)
 {
     SolarMutexGuard aGuard;
@@ -1397,7 +1397,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
     if ( !pWindow )
         return;
 
-    bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
 
     WindowType eWinType = pWindow->GetType();
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -1550,7 +1550,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                 pWindow->SetControlFont( vcl::Font() );
             else
             {
-                ::com::sun::star::awt::FontDescriptor aFont;
+                css::awt::FontDescriptor aFont;
                 if ( Value >>= aFont )
                     pWindow->SetControlFont( VCLUnoHelper::CreateFont( aFont, pWindow->GetControlFont() ) );
             }
@@ -1917,11 +1917,11 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
     }
 }
 
-::com::sun::star::uno::Any VCLXWindow::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Any aProp;
+    css::uno::Any aProp;
     if ( GetWindow() )
     {
         WindowType eWinType = GetWindow()->GetType();
@@ -2010,7 +2010,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             case BASEPROPERTY_FONTDESCRIPTOR:
             {
                 vcl::Font aFont = GetWindow()->GetControlFont();
-                ::com::sun::star::awt::FontDescriptor aFD = VCLUnoHelper::CreateFontDescriptor( aFont );
+                css::awt::FontDescriptor aFD = VCLUnoHelper::CreateFontDescriptor( aFont );
                 aProp <<= aFD;
             }
             break;
@@ -2146,13 +2146,13 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 }
 
 
-// ::com::sun::star::awt::XLayoutConstrains
-::com::sun::star::awt::Size VCLXWindow::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XLayoutConstrains
+css::awt::Size VCLXWindow::getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     // Use this method only for those components which can be created through
-    // ::com::sun::star::awt::Toolkit , but do not have an interface
+    // css::awt::Toolkit , but do not have an interface
 
     Size aSz;
     if ( GetWindow() )
@@ -2182,20 +2182,20 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
         }
     }
 
-    return ::com::sun::star::awt::Size( aSz.Width(), aSz.Height() );
+    return css::awt::Size( aSz.Width(), aSz.Height() );
 }
 
-::com::sun::star::awt::Size VCLXWindow::getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Size VCLXWindow::getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return getMinimumSize();
 }
 
-::com::sun::star::awt::Size VCLXWindow::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Size VCLXWindow::calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::awt::Size aNewSize( rNewSize );
-    ::com::sun::star::awt::Size aMinSize = getMinimumSize();
+    css::awt::Size aNewSize( rNewSize );
+    css::awt::Size aMinSize = getMinimumSize();
 
     if ( aNewSize.Width < aMinSize.Width )
         aNewSize.Width = aMinSize.Width;
@@ -2206,8 +2206,8 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 }
 
 
-// ::com::sun::star::awt::XView
-sal_Bool VCLXWindow::setGraphics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& rxDevice ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XView
+sal_Bool VCLXWindow::setGraphics( const css::uno::Reference< css::awt::XGraphics >& rxDevice ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2219,24 +2219,24 @@ sal_Bool VCLXWindow::setGraphics( const ::com::sun::star::uno::Reference< ::com:
     return mpImpl->mxViewGraphics.is();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > VCLXWindow::getGraphics(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XGraphics > VCLXWindow::getGraphics(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     return mpImpl->mxViewGraphics;
 }
 
-::com::sun::star::awt::Size VCLXWindow::getSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Size VCLXWindow::getSize(  ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     Size aSz;
     if ( GetWindow() )
         aSz = GetWindow()->GetSizePixel();
-    return ::com::sun::star::awt::Size( aSz.Width(), aSz.Height() );
+    return css::awt::Size( aSz.Width(), aSz.Height() );
 }
 
-void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2330,7 +2330,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
     }
 }
 
-void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2346,8 +2346,8 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::sta
     }
 }
 
-// ::com::sun::star::lang::XEventListener
-void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+// css::lang::XEventListener
+void SAL_CALL VCLXWindow::disposing( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2361,8 +2361,8 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     }
 }
 
-// ::com::sun::star::accessibility::XAccessible
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+// css::accessibility::XAccessible
+css::uno::Reference< css::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception)
 {
     using namespace ::com::sun::star;
 
@@ -2387,8 +2387,8 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     return mpImpl->mxAccessibleContext;
 }
 
-// ::com::sun::star::awt::XDockable
-void SAL_CALL VCLXWindow::addDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+// css::awt::XDockable
+void SAL_CALL VCLXWindow::addDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2397,14 +2397,14 @@ void SAL_CALL VCLXWindow::addDockableWindowListener( const ::com::sun::star::uno
 
 }
 
-void SAL_CALL VCLXWindow::removeDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::removeDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     mpImpl->getDockableWindowListeners().removeInterface( xListener );
 }
 
-void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2413,7 +2413,7 @@ void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (::com::sun::s
         pWindow->EnableDocking( bEnable );
 }
 
-sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2424,7 +2424,7 @@ sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (::com::sun::star::uno::Runti
         return sal_False;
 }
 
-void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2433,7 +2433,7 @@ void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (::com::su
         vcl::Window::GetDockingManager()->SetFloatingMode( pWindow, bFloating );
 }
 
-sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2444,7 +2444,7 @@ sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (::com::sun::star::uno::Runtime
         return sal_False;
 }
 
-void SAL_CALL VCLXWindow::lock(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::lock(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2453,7 +2453,7 @@ void SAL_CALL VCLXWindow::lock(  ) throw (::com::sun::star::uno::RuntimeExceptio
         vcl::Window::GetDockingManager()->Lock( pWindow );
 }
 
-void SAL_CALL VCLXWindow::unlock(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::unlock(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2461,14 +2461,14 @@ void SAL_CALL VCLXWindow::unlock(  ) throw (::com::sun::star::uno::RuntimeExcept
     if( pWindow && !vcl::Window::GetDockingManager()->IsFloating( pWindow ) )
         vcl::Window::GetDockingManager()->Unlock( pWindow );
 }
-void SAL_CALL VCLXWindow::startPopupMode( const ::com::sun::star::awt::Rectangle& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::startPopupMode( const css::awt::Rectangle& ) throw (css::uno::RuntimeException, std::exception)
 {
     // TODO: remove interface in the next incompatible build
     SolarMutexGuard aGuard;
 
 }
 
-sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (css::uno::RuntimeException, std::exception)
 {
     // TODO: remove interface in the next incompatible build
     SolarMutexGuard aGuard;
@@ -2476,9 +2476,9 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::Ru
 }
 
 
-// ::com::sun::star::awt::XWindow2
+// css::awt::XWindow2
 
-void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     vcl::Window *pWindow;
@@ -2492,7 +2492,7 @@ void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSiz
     }
 }
 
-::com::sun::star::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     vcl::Window *pWindow;
@@ -2505,10 +2505,10 @@ void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSiz
             return AWTSize( pWindow->GetOutputSizePixel() );
     }
     else
-        return ::com::sun::star::awt::Size();
+        return css::awt::Size();
 }
 
-sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2517,7 +2517,7 @@ sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (::com::sun::star::uno::Runtim
         return sal_False;
 }
 
-sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2527,7 +2527,7 @@ sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (::com::sun::star::uno::Runtime
 
 }
 
-sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2536,7 +2536,7 @@ sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (::com::sun::star::uno::Runtim
         return sal_False;
 }
 
-sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2545,7 +2545,7 @@ sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (::com::sun::star::uno::Runtime
         return sal_False;
 }
 
-// ::com::sun::star::beans::XPropertySetInfo
+// css::beans::XPropertySetInfo
 
 UnoPropertyArrayHelper *
 VCLXWindow::GetPropHelper()
@@ -2560,19 +2560,19 @@ VCLXWindow::GetPropHelper()
     return mpImpl->mpPropHelper;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL
-VCLXWindow::getProperties() throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::beans::Property > SAL_CALL
+VCLXWindow::getProperties() throw (css::uno::RuntimeException, std::exception)
 {
     return GetPropHelper()->getProperties();
 }
-::com::sun::star::beans::Property SAL_CALL
-VCLXWindow::getPropertyByName( const OUString& rName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::beans::Property SAL_CALL
+VCLXWindow::getPropertyByName( const OUString& rName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
 {
     return GetPropHelper()->getPropertyByName( rName );
 }
 
 sal_Bool SAL_CALL
-VCLXWindow::hasPropertyByName( const OUString& rName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+VCLXWindow::hasPropertyByName( const OUString& rName ) throw (css::uno::RuntimeException, std::exception)
 {
     return GetPropHelper()->hasPropertyByName( rName );
 }

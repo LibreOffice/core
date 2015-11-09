@@ -310,7 +310,7 @@ namespace toolkit
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleControlContext::getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OAccessibleControlContext::getForeground(  ) throw (css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...
@@ -336,7 +336,7 @@ namespace toolkit
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleControlContext::getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OAccessibleControlContext::getBackground(  ) throw (css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...

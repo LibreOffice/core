@@ -21,7 +21,7 @@
 #define INCLUDED_TOOLKIT_SOURCE_CONTROLS_CONTROLMODELCONTAINERBASE_INTERNAL_HXX
 
 ////HELPER
-OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
+OUString getPhysicalLocation( const css::uno::Any& rbase, const css::uno::Any& rUrl );
 
 #endif // INCLUDED_TOOLKIT_SOURCE_CONTROLS_CONTROLMODELCONTAINERBASE_INTERNAL_HXX
 

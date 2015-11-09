@@ -60,18 +60,18 @@ using namespace ::com::sun::star;
 //  class VCLUnoHelper
 
 
-uno::Reference< ::com::sun::star::awt::XToolkit> VCLUnoHelper::CreateToolkit()
+uno::Reference< css::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< awt::XToolkit> xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
     return xToolkit;
 }
 
-BitmapEx VCLUnoHelper::GetBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>& rxBitmap )
+BitmapEx VCLUnoHelper::GetBitmap( const css::uno::Reference< css::awt::XBitmap>& rxBitmap )
 {
     BitmapEx aBmp;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic( rxBitmap, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::graphic::XGraphic > xGraphic( rxBitmap, css::uno::UNO_QUERY );
     if( xGraphic.is() )
     {
         Graphic aGraphic( xGraphic );
@@ -86,12 +86,12 @@ BitmapEx VCLUnoHelper::GetBitmap( const ::com::sun::star::uno::Reference< ::com:
         {
             Bitmap aDIB, aMask;
             {
-                ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getDIB();
+                css::uno::Sequence<sal_Int8> aBytes = rxBitmap->getDIB();
                 SvMemoryStream aMem( aBytes.getArray(), aBytes.getLength(), StreamMode::READ );
                 ReadDIB(aDIB, aMem, true);
             }
             {
-                ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getMaskDIB();
+                css::uno::Sequence<sal_Int8> aBytes = rxBitmap->getMaskDIB();
                 SvMemoryStream aMem( aBytes.getArray(), aBytes.getLength(), StreamMode::READ );
                 ReadDIB(aMask, aMem, true);
             }
@@ -101,32 +101,32 @@ BitmapEx VCLUnoHelper::GetBitmap( const ::com::sun::star::uno::Reference< ::com:
     return aBmp;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap> VCLUnoHelper::CreateBitmap( const BitmapEx& rBitmap )
+css::uno::Reference< css::awt::XBitmap> VCLUnoHelper::CreateBitmap( const BitmapEx& rBitmap )
 {
     Graphic aGraphic( rBitmap );
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap> xBmp( aGraphic.GetXGraphic(), ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XBitmap> xBmp( aGraphic.GetXGraphic(), css::uno::UNO_QUERY );
     return xBmp;
 }
 
-VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow )
+VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : VclPtr< vcl::Window >();
 }
 
-VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow )
+VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow2>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : VclPtr< vcl::Window >();
 }
 
-VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindow )
+VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindowPeer>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : VclPtr< vcl::Window >();
 }
 
-vcl::Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion )
+vcl::Region VCLUnoHelper::GetRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     vcl::Region aRegion;
     VCLXRegion* pVCLRegion = VCLXRegion::GetImplementation( rxRegion );
@@ -134,7 +134,7 @@ vcl::Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::c
         aRegion = pVCLRegion->GetRegion();
     else
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::awt::Rectangle > aRects = rxRegion->getRectangles();
+        css::uno::Sequence< css::awt::Rectangle > aRects = rxRegion->getRectangles();
         sal_Int32 nRects = aRects.getLength();
         for ( sal_Int32 n = 0; n < nRects; n++ )
             aRegion.Union( VCLRectangle( aRects.getArray()[n] ) );
@@ -142,18 +142,18 @@ vcl::Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::c
     return aRegion;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> VCLUnoHelper::GetInterface( vcl::Window* pWindow )
+css::uno::Reference< css::awt::XWindow> VCLUnoHelper::GetInterface( vcl::Window* pWindow )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWin;
+    css::uno::Reference< css::awt::XWindow > xWin;
     if ( pWindow )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetComponentInterface();
+        css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetComponentInterface();
         xWin.set(xPeer, css::uno::UNO_QUERY);
     }
     return xWin;
 }
 
-OutputDevice* VCLUnoHelper::GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>& rxDevice )
+OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt::XDevice>& rxDevice )
 {
     OutputDevice* pOutDev = NULL;
     VCLXDevice* pDev = VCLXDevice::GetImplementation( rxDevice );
@@ -162,7 +162,7 @@ OutputDevice* VCLUnoHelper::GetOutputDevice( const ::com::sun::star::uno::Refere
     return pOutDev;
 }
 
-OutputDevice* VCLUnoHelper::GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics>& rxGraphics )
+OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt::XGraphics>& rxGraphics )
 {
     OutputDevice* pOutDev = NULL;
     VCLXGraphics* pGrf = VCLXGraphics::GetImplementation( rxGraphics );
@@ -171,8 +171,8 @@ OutputDevice* VCLUnoHelper::GetOutputDevice( const ::com::sun::star::uno::Refere
     return pOutDev;
 }
 
-tools::Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX,
-                                            const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY )
+tools::Polygon VCLUnoHelper::CreatePolygon( const css::uno::Sequence< sal_Int32 >& DataX,
+                                            const css::uno::Sequence< sal_Int32 >& DataY )
 {
     sal_Int32 nLen = DataX.getLength();
     const sal_Int32* pDataX = DataX.getConstArray();
@@ -188,13 +188,13 @@ tools::Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequenc
     return aPoly;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer> VCLUnoHelper::CreateControlContainer( vcl::Window* pWindow )
+css::uno::Reference< css::awt::XControlContainer> VCLUnoHelper::CreateControlContainer( vcl::Window* pWindow )
 {
     UnoControlContainer* pContainer = new UnoControlContainer( pWindow->GetComponentInterface() );
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > x = pContainer;
+    css::uno::Reference< css::awt::XControlContainer > x = pContainer;
 
     UnoControlModel* pContainerModel = new UnoControlContainerModel( ::comphelper::getProcessComponentContext() );
-    pContainer->setModel( static_cast<com::sun::star::awt::XControlModel*>(pContainerModel) );
+    pContainer->setModel( static_cast<css::awt::XControlModel*>(pContainerModel) );
 
     return x;
 }
@@ -202,51 +202,51 @@ tools::Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequenc
 float VCLUnoHelper::ConvertFontWidth( FontWidth eWidth )
 {
     if( eWidth == WIDTH_DONTKNOW )
-        return ::com::sun::star::awt::FontWidth::DONTKNOW;
+        return css::awt::FontWidth::DONTKNOW;
     else if( eWidth == WIDTH_ULTRA_CONDENSED )
-        return ::com::sun::star::awt::FontWidth::ULTRACONDENSED;
+        return css::awt::FontWidth::ULTRACONDENSED;
     else if( eWidth == WIDTH_EXTRA_CONDENSED )
-        return ::com::sun::star::awt::FontWidth::EXTRACONDENSED;
+        return css::awt::FontWidth::EXTRACONDENSED;
     else if( eWidth == WIDTH_CONDENSED )
-        return ::com::sun::star::awt::FontWidth::CONDENSED;
+        return css::awt::FontWidth::CONDENSED;
     else if( eWidth == WIDTH_SEMI_CONDENSED )
-        return ::com::sun::star::awt::FontWidth::SEMICONDENSED;
+        return css::awt::FontWidth::SEMICONDENSED;
     else if( eWidth == WIDTH_NORMAL )
-        return ::com::sun::star::awt::FontWidth::NORMAL;
+        return css::awt::FontWidth::NORMAL;
     else if( eWidth == WIDTH_SEMI_EXPANDED )
-        return ::com::sun::star::awt::FontWidth::SEMIEXPANDED;
+        return css::awt::FontWidth::SEMIEXPANDED;
     else if( eWidth == WIDTH_EXPANDED )
-        return ::com::sun::star::awt::FontWidth::EXPANDED;
+        return css::awt::FontWidth::EXPANDED;
     else if( eWidth == WIDTH_EXTRA_EXPANDED )
-        return ::com::sun::star::awt::FontWidth::EXTRAEXPANDED;
+        return css::awt::FontWidth::EXTRAEXPANDED;
     else if( eWidth == WIDTH_ULTRA_EXPANDED )
-        return ::com::sun::star::awt::FontWidth::ULTRAEXPANDED;
+        return css::awt::FontWidth::ULTRAEXPANDED;
 
     OSL_FAIL( "Unknown FontWidth" );
-    return ::com::sun::star::awt::FontWidth::DONTKNOW;
+    return css::awt::FontWidth::DONTKNOW;
 }
 
 FontWidth VCLUnoHelper::ConvertFontWidth( float f )
 {
-    if( f <= ::com::sun::star::awt::FontWidth::DONTKNOW )
+    if( f <= css::awt::FontWidth::DONTKNOW )
         return WIDTH_DONTKNOW;
-    else if( f <= ::com::sun::star::awt::FontWidth::ULTRACONDENSED )
+    else if( f <= css::awt::FontWidth::ULTRACONDENSED )
         return WIDTH_ULTRA_CONDENSED;
-    else if( f <= ::com::sun::star::awt::FontWidth::EXTRACONDENSED )
+    else if( f <= css::awt::FontWidth::EXTRACONDENSED )
         return WIDTH_EXTRA_CONDENSED;
-    else if( f <= ::com::sun::star::awt::FontWidth::CONDENSED )
+    else if( f <= css::awt::FontWidth::CONDENSED )
         return WIDTH_CONDENSED;
-    else if( f <= ::com::sun::star::awt::FontWidth::SEMICONDENSED )
+    else if( f <= css::awt::FontWidth::SEMICONDENSED )
         return WIDTH_SEMI_CONDENSED;
-    else if( f <= ::com::sun::star::awt::FontWidth::NORMAL )
+    else if( f <= css::awt::FontWidth::NORMAL )
         return WIDTH_NORMAL;
-    else if( f <= ::com::sun::star::awt::FontWidth::SEMIEXPANDED )
+    else if( f <= css::awt::FontWidth::SEMIEXPANDED )
         return WIDTH_SEMI_EXPANDED;
-    else if( f <= ::com::sun::star::awt::FontWidth::EXPANDED )
+    else if( f <= css::awt::FontWidth::EXPANDED )
         return WIDTH_EXPANDED;
-    else if( f <= ::com::sun::star::awt::FontWidth::EXTRAEXPANDED )
+    else if( f <= css::awt::FontWidth::EXTRAEXPANDED )
         return WIDTH_EXTRA_EXPANDED;
-    else if( f <= ::com::sun::star::awt::FontWidth::ULTRAEXPANDED )
+    else if( f <= css::awt::FontWidth::ULTRAEXPANDED )
         return WIDTH_ULTRA_EXPANDED;
 
     OSL_FAIL( "Unknown FontWidth" );
@@ -256,51 +256,51 @@ FontWidth VCLUnoHelper::ConvertFontWidth( float f )
 float VCLUnoHelper::ConvertFontWeight( FontWeight eWeight )
 {
     if( eWeight == WEIGHT_DONTKNOW )
-        return ::com::sun::star::awt::FontWeight::DONTKNOW;
+        return css::awt::FontWeight::DONTKNOW;
     else if( eWeight == WEIGHT_THIN )
-        return ::com::sun::star::awt::FontWeight::THIN;
+        return css::awt::FontWeight::THIN;
     else if( eWeight == WEIGHT_ULTRALIGHT )
-        return ::com::sun::star::awt::FontWeight::ULTRALIGHT;
+        return css::awt::FontWeight::ULTRALIGHT;
     else if( eWeight == WEIGHT_LIGHT )
-        return ::com::sun::star::awt::FontWeight::LIGHT;
+        return css::awt::FontWeight::LIGHT;
     else if( eWeight == WEIGHT_SEMILIGHT )
-        return ::com::sun::star::awt::FontWeight::SEMILIGHT;
+        return css::awt::FontWeight::SEMILIGHT;
     else if( ( eWeight == WEIGHT_NORMAL ) || ( eWeight == WEIGHT_MEDIUM ) )
-        return ::com::sun::star::awt::FontWeight::NORMAL;
+        return css::awt::FontWeight::NORMAL;
     else if( eWeight == WEIGHT_SEMIBOLD )
-        return ::com::sun::star::awt::FontWeight::SEMIBOLD;
+        return css::awt::FontWeight::SEMIBOLD;
     else if( eWeight == WEIGHT_BOLD )
-        return ::com::sun::star::awt::FontWeight::BOLD;
+        return css::awt::FontWeight::BOLD;
     else if( eWeight == WEIGHT_ULTRABOLD )
-        return ::com::sun::star::awt::FontWeight::ULTRABOLD;
+        return css::awt::FontWeight::ULTRABOLD;
     else if( eWeight == WEIGHT_BLACK )
-        return ::com::sun::star::awt::FontWeight::BLACK;
+        return css::awt::FontWeight::BLACK;
 
     OSL_FAIL( "Unknown FontWeight" );
-    return ::com::sun::star::awt::FontWeight::DONTKNOW;
+    return css::awt::FontWeight::DONTKNOW;
 }
 
 FontWeight VCLUnoHelper::ConvertFontWeight( float f )
 {
-    if( f <= ::com::sun::star::awt::FontWeight::DONTKNOW )
+    if( f <= css::awt::FontWeight::DONTKNOW )
         return WEIGHT_DONTKNOW;
-    else if( f <= ::com::sun::star::awt::FontWeight::THIN )
+    else if( f <= css::awt::FontWeight::THIN )
         return WEIGHT_THIN;
-    else if( f <= ::com::sun::star::awt::FontWeight::ULTRALIGHT )
+    else if( f <= css::awt::FontWeight::ULTRALIGHT )
         return WEIGHT_ULTRALIGHT;
-    else if( f <= ::com::sun::star::awt::FontWeight::LIGHT )
+    else if( f <= css::awt::FontWeight::LIGHT )
         return WEIGHT_LIGHT;
-    else if( f <= ::com::sun::star::awt::FontWeight::SEMILIGHT )
+    else if( f <= css::awt::FontWeight::SEMILIGHT )
         return WEIGHT_SEMILIGHT;
-    else if( f <= ::com::sun::star::awt::FontWeight::NORMAL )
+    else if( f <= css::awt::FontWeight::NORMAL )
         return WEIGHT_NORMAL;
-    else if( f <= ::com::sun::star::awt::FontWeight::SEMIBOLD )
+    else if( f <= css::awt::FontWeight::SEMIBOLD )
         return WEIGHT_SEMIBOLD;
-    else if( f <= ::com::sun::star::awt::FontWeight::BOLD )
+    else if( f <= css::awt::FontWeight::BOLD )
         return WEIGHT_BOLD;
-    else if( f <= ::com::sun::star::awt::FontWeight::ULTRABOLD )
+    else if( f <= css::awt::FontWeight::ULTRABOLD )
         return WEIGHT_ULTRABOLD;
-    else if( f <= ::com::sun::star::awt::FontWeight::BLACK )
+    else if( f <= css::awt::FontWeight::BLACK )
         return WEIGHT_BLACK;
 
     OSL_FAIL( "Unknown FontWeight" );
@@ -363,9 +363,9 @@ FontItalic VCLUnoHelper::ConvertFontSlant(css::awt::FontSlant eSlant)
     return eRet;
 }
 
-::com::sun::star::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rFont )
+css::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rFont )
 {
-    ::com::sun::star::awt::FontDescriptor aFD;
+    css::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetName();
     aFD.StyleName = rFont.GetStyleName();
     aFD.Height = (sal_Int16)rFont.GetSize().Height();
@@ -385,7 +385,7 @@ FontItalic VCLUnoHelper::ConvertFontSlant(css::awt::FontSlant eSlant)
     return aFD;
 }
 
-vcl::Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const vcl::Font& rInitFont )
+vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, const vcl::Font& rInitFont )
 {
     vcl::Font aFont( rInitFont );
     if ( !rDescr.Name.isEmpty() )
@@ -419,7 +419,7 @@ vcl::Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor&
     return aFont;
 }
 
-vcl::Font VCLUnoHelper::CreateFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont )
+vcl::Font VCLUnoHelper::CreateFont( const css::uno::Reference< css::awt::XFont >& rxFont )
 {
     vcl::Font aFont;
     VCLXFont* pVCLXFont = VCLXFont::GetImplementation( rxFont );
@@ -429,9 +429,9 @@ vcl::Font VCLUnoHelper::CreateFont( const ::com::sun::star::uno::Reference< ::co
 }
 
 
-::com::sun::star::awt::SimpleFontMetric VCLUnoHelper::CreateFontMetric( const FontMetric& rFontMetric )
+css::awt::SimpleFontMetric VCLUnoHelper::CreateFontMetric( const FontMetric& rFontMetric )
 {
-    ::com::sun::star::awt::SimpleFontMetric aFM;
+    css::awt::SimpleFontMetric aFM;
     aFM.Ascent = (sal_Int16)rFontMetric.GetAscent();
     aFM.Descent = (sal_Int16)rFontMetric.GetDescent();
     aFM.Leading = (sal_Int16)rFontMetric.GetIntLeading();
@@ -450,27 +450,27 @@ MapUnit VCLUnoHelper::UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit )
 {
     switch( nUnoEmbedMapUnit )
     {
-        case ::com::sun::star::embed::EmbedMapUnits::ONE_100TH_MM:
+        case css::embed::EmbedMapUnits::ONE_100TH_MM:
             return MAP_100TH_MM;
-        case ::com::sun::star::embed::EmbedMapUnits::ONE_10TH_MM:
+        case css::embed::EmbedMapUnits::ONE_10TH_MM:
             return MAP_10TH_MM;
-        case ::com::sun::star::embed::EmbedMapUnits::ONE_MM:
+        case css::embed::EmbedMapUnits::ONE_MM:
             return MAP_MM;
-        case ::com::sun::star::embed::EmbedMapUnits::ONE_CM:
+        case css::embed::EmbedMapUnits::ONE_CM:
             return MAP_CM;
-        case ::com::sun::star::embed::EmbedMapUnits::ONE_1000TH_INCH:
+        case css::embed::EmbedMapUnits::ONE_1000TH_INCH:
             return MAP_1000TH_INCH;
-        case ::com::sun::star::embed::EmbedMapUnits::ONE_100TH_INCH:
+        case css::embed::EmbedMapUnits::ONE_100TH_INCH:
             return MAP_100TH_INCH;
-        case ::com::sun::star::embed::EmbedMapUnits::ONE_10TH_INCH:
+        case css::embed::EmbedMapUnits::ONE_10TH_INCH:
             return MAP_10TH_INCH;
-        case ::com::sun::star::embed::EmbedMapUnits::ONE_INCH:
+        case css::embed::EmbedMapUnits::ONE_INCH:
             return MAP_INCH;
-        case ::com::sun::star::embed::EmbedMapUnits::POINT:
+        case css::embed::EmbedMapUnits::POINT:
             return MAP_POINT;
-        case ::com::sun::star::embed::EmbedMapUnits::TWIP:
+        case css::embed::EmbedMapUnits::TWIP:
             return MAP_TWIP;
-        case ::com::sun::star::embed::EmbedMapUnits::PIXEL:
+        case css::embed::EmbedMapUnits::PIXEL:
             return MAP_PIXEL;
     }
 
@@ -483,27 +483,27 @@ sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
     switch( nVCLMapUnit )
     {
         case MAP_100TH_MM:
-            return ::com::sun::star::embed::EmbedMapUnits::ONE_100TH_MM;
+            return css::embed::EmbedMapUnits::ONE_100TH_MM;
         case MAP_10TH_MM:
-            return ::com::sun::star::embed::EmbedMapUnits::ONE_10TH_MM;
+            return css::embed::EmbedMapUnits::ONE_10TH_MM;
         case MAP_MM:
-            return ::com::sun::star::embed::EmbedMapUnits::ONE_MM;
+            return css::embed::EmbedMapUnits::ONE_MM;
         case MAP_CM:
-            return ::com::sun::star::embed::EmbedMapUnits::ONE_CM;
+            return css::embed::EmbedMapUnits::ONE_CM;
         case MAP_1000TH_INCH:
-            return ::com::sun::star::embed::EmbedMapUnits::ONE_1000TH_INCH;
+            return css::embed::EmbedMapUnits::ONE_1000TH_INCH;
         case MAP_100TH_INCH:
-            return ::com::sun::star::embed::EmbedMapUnits::ONE_100TH_INCH;
+            return css::embed::EmbedMapUnits::ONE_100TH_INCH;
         case MAP_10TH_INCH:
-            return ::com::sun::star::embed::EmbedMapUnits::ONE_10TH_INCH;
+            return css::embed::EmbedMapUnits::ONE_10TH_INCH;
         case MAP_INCH:
-            return ::com::sun::star::embed::EmbedMapUnits::ONE_INCH;
+            return css::embed::EmbedMapUnits::ONE_INCH;
         case MAP_POINT:
-            return ::com::sun::star::embed::EmbedMapUnits::POINT;
+            return css::embed::EmbedMapUnits::POINT;
         case MAP_TWIP:
-            return ::com::sun::star::embed::EmbedMapUnits::TWIP;
+            return css::embed::EmbedMapUnits::TWIP;
         case MAP_PIXEL:
-            return ::com::sun::star::embed::EmbedMapUnits::PIXEL;
+            return css::embed::EmbedMapUnits::PIXEL;
         default: ; // avoid compiler warning
     }
 
@@ -588,123 +588,102 @@ FieldUnit VCLUnoHelper::ConvertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int
 }
 
 
-MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.sun.star.util.MeasureUnit.* */ _nMeasureUnit) throw (::com::sun::star::lang::IllegalArgumentException)
+MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.sun.star.util.MeasureUnit.* */ _nMeasureUnit) throw (css::lang::IllegalArgumentException)
 {
     MapUnit eMode;
     switch(_nMeasureUnit)
     {
-    case com::sun::star::util::MeasureUnit::MM_100TH:
+    case css::util::MeasureUnit::MM_100TH:
         eMode = MAP_100TH_MM;
         break;
 
-
-    case com::sun::star::util::MeasureUnit::MM_10TH:
+    case css::util::MeasureUnit::MM_10TH:
         eMode = MAP_10TH_MM;
         break;
 
-    case com::sun::star::util::MeasureUnit::MM:
+    case css::util::MeasureUnit::MM:
         eMode = MAP_MM;
         break;
 
-    case com::sun::star::util::MeasureUnit::CM:
+    case css::util::MeasureUnit::CM:
         eMode = MAP_CM;
         break;
 
-    case com::sun::star::util::MeasureUnit::INCH_1000TH:
+    case css::util::MeasureUnit::INCH_1000TH:
         eMode = MAP_1000TH_INCH;
         break;
 
-    case com::sun::star::util::MeasureUnit::INCH_100TH:
+    case css::util::MeasureUnit::INCH_100TH:
         eMode = MAP_100TH_INCH;
         break;
 
-    case com::sun::star::util::MeasureUnit::INCH_10TH:
+    case css::util::MeasureUnit::INCH_10TH:
         eMode = MAP_10TH_INCH;
         break;
 
-    case com::sun::star::util::MeasureUnit::INCH:
+    case css::util::MeasureUnit::INCH:
         eMode = MAP_INCH;
         break;
 
-    case com::sun::star::util::MeasureUnit::POINT:
+    case css::util::MeasureUnit::POINT:
         eMode = MAP_POINT;
         break;
 
-    case com::sun::star::util::MeasureUnit::TWIP:
+    case css::util::MeasureUnit::TWIP:
         eMode = MAP_TWIP;
         break;
 
-    case com::sun::star::util::MeasureUnit::PIXEL:
+    case css::util::MeasureUnit::PIXEL:
         eMode = MAP_PIXEL;
         break;
 
-/*
-    case com::sun::star::util::MeasureUnit::M:
-        break;
-    case com::sun::star::util::MeasureUnit::KM:
-        break;
-    case com::sun::star::util::MeasureUnit::PICA:
-        break;
-    case com::sun::star::util::MeasureUnit::FOOT:
-        break;
-    case com::sun::star::util::MeasureUnit::MILE:
-        break;
-    case com::sun::star::util::MeasureUnit::PERCENT:
-        break;
-*/
-    case com::sun::star::util::MeasureUnit::APPFONT:
+    case css::util::MeasureUnit::APPFONT:
         eMode = MAP_APPFONT;
         break;
 
-    case com::sun::star::util::MeasureUnit::SYSFONT:
+    case css::util::MeasureUnit::SYSFONT:
         eMode = MAP_SYSFONT;
         break;
 
-/*
-    case com::sun::star::util::MeasureUnit::RELATIVE:
-        eMode = MAP_RELATIVE;
-        break;
-*/
-
     default:
-        throw ::com::sun::star::lang::IllegalArgumentException("Unsupported measure unit.", NULL, 1 );
+        throw css::lang::IllegalArgumentException("Unsupported measure unit.", NULL, 1 );
     }
     return eMode;
 }
 
-::Size VCLUnoHelper::ConvertToVCLSize(com::sun::star::awt::Size const& _aSize)
+::Size VCLUnoHelper::ConvertToVCLSize(css::awt::Size const& _aSize)
 {
     ::Size aVCLSize(_aSize.Width, _aSize.Height);
     return aVCLSize;
 }
 
-com::sun::star::awt::Size VCLUnoHelper::ConvertToAWTSize(::Size /* VCLSize */ const& _aSize)
+css::awt::Size VCLUnoHelper::ConvertToAWTSize(::Size /* VCLSize */ const& _aSize)
 {
-    com::sun::star::awt::Size aAWTSize(_aSize.Width(), _aSize.Height());
+    css::awt::Size aAWTSize(_aSize.Width(), _aSize.Height());
     return aAWTSize;
 }
 
 
-::Point VCLUnoHelper::ConvertToVCLPoint(com::sun::star::awt::Point const& _aPoint)
+::Point VCLUnoHelper::ConvertToVCLPoint(css::awt::Point const& _aPoint)
 {
     ::Point aVCLPoint(_aPoint.X, _aPoint.Y);
     return aVCLPoint;
 }
 
-com::sun::star::awt::Point VCLUnoHelper::ConvertToAWTPoint(::Point /* VCLPoint */ const& _aPoint)
+css::awt::Point VCLUnoHelper::ConvertToAWTPoint(::Point /* VCLPoint */ const& _aPoint)
 {
-    com::sun::star::awt::Point aAWTPoint(_aPoint.X(), _aPoint.Y());
+    css::awt::Point aAWTPoint(_aPoint.X(), _aPoint.Y());
     return aAWTPoint;
 }
 
-::Rectangle VCLUnoHelper::ConvertToVCLRect( ::com::sun::star::awt::Rectangle const & _rRect )
+::Rectangle VCLUnoHelper::ConvertToVCLRect( css::awt::Rectangle const & _rRect )
 {
     return ::Rectangle( _rRect.X, _rRect.Y, _rRect.X + _rRect.Width - 1, _rRect.Y + _rRect.Height - 1 );
 }
 
-::com::sun::star::awt::Rectangle VCLUnoHelper::ConvertToAWTRect( ::Rectangle const & _rRect )
+css::awt::Rectangle VCLUnoHelper::ConvertToAWTRect( ::Rectangle const & _rRect )
 {
-    return ::com::sun::star::awt::Rectangle( _rRect.Left(), _rRect.Top(), _rRect.GetWidth(), _rRect.GetHeight() );
+    return css::awt::Rectangle( _rRect.Left(), _rRect.Top(), _rRect.GetWidth(), _rRect.GetHeight() );
 }
 
 awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, const uno::Reference< uno::XInterface >& _rxContext )
@@ -714,19 +693,19 @@ awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, 
 
     aMouseEvent.Modifiers = 0;
     if ( _rVclEvent.IsShift() )
-        aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
+        aMouseEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
     if ( _rVclEvent.IsMod1() )
-        aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+        aMouseEvent.Modifiers |= css::awt::KeyModifier::MOD1;
     if ( _rVclEvent.IsMod2() )
-        aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+        aMouseEvent.Modifiers |= css::awt::KeyModifier::MOD2;
 
     aMouseEvent.Buttons = 0;
     if ( _rVclEvent.IsLeft() )
-        aMouseEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
+        aMouseEvent.Buttons |= css::awt::MouseButton::LEFT;
     if ( _rVclEvent.IsRight() )
-        aMouseEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
+        aMouseEvent.Buttons |= css::awt::MouseButton::RIGHT;
     if ( _rVclEvent.IsMiddle() )
-        aMouseEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
+        aMouseEvent.Buttons |= css::awt::MouseButton::MIDDLE;
 
     aMouseEvent.X = _rVclEvent.GetPosPixel().X();
     aMouseEvent.Y = _rVclEvent.GetPosPixel().Y();

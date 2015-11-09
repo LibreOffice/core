@@ -49,26 +49,26 @@ VCLXSystemDependentWindow::~VCLXSystemDependentWindow()
 {
 }
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXSystemDependentWindow::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::uno::XInterface
+css::uno::Any VCLXSystemDependentWindow::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::awt::XSystemDependentWindowPeer* >(this)) );
+    css::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        (static_cast< css::awt::XSystemDependentWindowPeer* >(this)) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+// css::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXSystemDependentWindow )
-    cppu::UnoType<com::sun::star::awt::XSystemDependentWindowPeer>::get(),
+    cppu::UnoType<css::awt::XSystemDependentWindowPeer>::get(),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Any VCLXSystemDependentWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     // TODO, check the process id
-    ::com::sun::star::uno::Any aRet;
+    css::uno::Any aRet;
     vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
@@ -76,12 +76,12 @@ IMPL_XTYPEPROVIDER_END
         if( pSysData )
         {
 #if (defined WNT)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
+            if( SystemType == css::lang::SystemDependent::SYSTEM_WIN32 )
             {
                  aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->hWnd);
             }
 #elif (defined MACOSX)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
+            if( SystemType == css::lang::SystemDependent::SYSTEM_MAC )
             {
                  aRet <<= reinterpret_cast<sal_IntPtr>(pSysData->mpNSView);
             }
@@ -92,9 +92,9 @@ IMPL_XTYPEPROVIDER_END
             // Nothing
             (void) SystemType;
 #elif (defined UNX)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
+            if( SystemType == css::lang::SystemDependent::SYSTEM_XWINDOW )
             {
-                ::com::sun::star::awt::SystemDependentXWindow aSD;
+                css::awt::SystemDependentXWindow aSD;
                 aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
                 aSD.WindowHandle = pSysData->aWindow;
                 aRet <<= aSD;

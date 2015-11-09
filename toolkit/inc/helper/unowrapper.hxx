@@ -36,29 +36,29 @@
 class UnoWrapper : public UnoWrapperBase
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>  mxToolkit;
-    ::toolkit::AccessibilityClient                                      maAccessibleFactoryAccess;
+    css::uno::Reference< css::awt::XToolkit>  mxToolkit;
+    ::toolkit::AccessibilityClient            maAccessibleFactoryAccess;
 
 public:
-    UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit );
+    UnoWrapper( const css::uno::Reference< css::awt::XToolkit>& rxToolkit );
 
     virtual void        Destroy() override;
 
     // Toolkit
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> GetVCLToolkit() override;
+    virtual css::uno::Reference< css::awt::XToolkit> GetVCLToolkit() override;
 
     // Graphics
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev ) override;
-    virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) override;
+    virtual css::uno::Reference< css::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev ) override;
+    virtual void        ReleaseAllGraphics( OutputDevice* pOutDev ) override;
 
     // Window
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) override;
-    virtual void                SetWindowInterface( vcl::Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace ) override;
+    virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow, bool bCreate ) override;
+    virtual void        SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer> xIFace ) override;
 
     void                WindowDestroyed( vcl::Window* pWindow ) override;
 
     // Accessibility
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
                         CreateAccessible( Menu* pMenu, bool bIsMenuBar ) override;
 
 private:

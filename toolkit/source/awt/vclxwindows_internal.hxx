@@ -22,8 +22,8 @@
 
 namespace toolkit
 {
-    void                        setButtonLikeFaceColor( vcl::Window* _pWindow, const ::com::sun::star::uno::Any& _rColorValue );
-    ::com::sun::star::uno::Any  getButtonLikeFaceColor( const vcl::Window* _pWindow );
+    void           setButtonLikeFaceColor( vcl::Window* _pWindow, const css::uno::Any& _rColorValue );
+    css::uno::Any  getButtonLikeFaceColor( const vcl::Window* _pWindow );
 }
 
 #endif // INCLUDED_TOOLKIT_SOURCE_AWT_VCLXWINDOWS_INTERNAL_HXX

@@ -70,7 +70,7 @@ namespace
 }
 
 
-UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+UnoGridModel::UnoGridModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -359,14 +359,14 @@ sal_Bool SAL_CALL UnoGridControl::setModel( const Reference< XControlModel >& i_
 }
 
 
-::sal_Int32 UnoGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException, std::exception)
+::sal_Int32 UnoGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
     return xGrid->getRowAtPoint( x, y );
 }
 
 
-::sal_Int32 UnoGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException, std::exception)
+::sal_Int32 UnoGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XGridControl > const xGrid ( getPeer(), UNO_QUERY_THROW );
     return xGrid->getColumnAtPoint( x, y );
@@ -400,7 +400,7 @@ void SAL_CALL UnoGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (Runtime
 }
 
 
-void SAL_CALL UnoGridControl::selectAllRows() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UnoGridControl::selectAllRows() throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->selectAllRows();
 }
@@ -412,37 +412,37 @@ void SAL_CALL UnoGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (Runti
 }
 
 
-void SAL_CALL UnoGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UnoGridControl::deselectAllRows() throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->deselectAllRows();
 }
 
 
-::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelectedRows() throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelectedRows() throw (css::uno::RuntimeException, std::exception)
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->getSelectedRows();
 }
 
 
-sal_Bool SAL_CALL UnoGridControl::hasSelectedRows() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoGridControl::hasSelectedRows() throw (css::uno::RuntimeException, std::exception)
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->hasSelectedRows();
 }
 
 
-sal_Bool SAL_CALL UnoGridControl::isRowSelected(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL UnoGridControl::isRowSelected(::sal_Int32 index) throw (css::uno::RuntimeException, std::exception)
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->isRowSelected( index );
 }
 
 
-void SAL_CALL UnoGridControl::addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UnoGridControl::addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) throw (css::uno::RuntimeException, std::exception)
 {
     m_aSelectionListeners.addInterface( listener );
 }
 
 
-void SAL_CALL UnoGridControl::removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL UnoGridControl::removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) throw (css::uno::RuntimeException, std::exception)
 {
     m_aSelectionListeners.removeInterface( listener );
 }

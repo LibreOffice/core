@@ -44,7 +44,7 @@ namespace toolkit
 
 //  class UnoTreeModel
 
-UnoTreeModel::UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory )
+UnoTreeModel::UnoTreeModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -204,7 +204,7 @@ OUString UnoTreeControl::GetComponentServiceName()
 }
 
 
-// ::com::sun::star::view::XSelectionSupplier
+// css::view::XSelectionSupplier
 
 
 sal_Bool SAL_CALL UnoTreeControl::select( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
@@ -246,7 +246,7 @@ void SAL_CALL UnoTreeControl::removeSelectionChangeListener( const Reference< XS
 }
 
 
-// ::com::sun::star::view::XMultiSelectionSupplier
+// css::view::XMultiSelectionSupplier
 
 
 sal_Bool SAL_CALL UnoTreeControl::addSelection( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
@@ -488,7 +488,7 @@ void UnoTreeControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
 }
 
-void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNode >& Node ) throw (RuntimeException, ::com::sun::star::util::VetoException, std::exception)
+void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNode >& Node ) throw (RuntimeException, css::util::VetoException, std::exception)
 {
     ::cppu::OInterfaceIteratorHelper aIt( *this );
     while( aIt.hasMoreElements() )

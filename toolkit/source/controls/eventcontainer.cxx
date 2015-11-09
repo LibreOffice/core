@@ -174,12 +174,12 @@ void NameContainer_Impl::removeByName( const OUString& Name )
 }
 
 // Methods XContainer
-void NameContainer_Impl::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void NameContainer_Impl::addContainerListener( const css::uno::Reference< css::container::XContainerListener >& l ) throw(css::uno::RuntimeException, std::exception)
 {
     maContainerListeners.addInterface( l );
 }
 
-void NameContainer_Impl::removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void NameContainer_Impl::removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& l ) throw(css::uno::RuntimeException, std::exception)
 {
     maContainerListeners.removeInterface( l );
 }

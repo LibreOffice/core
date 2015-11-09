@@ -26,7 +26,7 @@
 //  class UnoPropertyArrayHelper
 
 
-UnoPropertyArrayHelper::UnoPropertyArrayHelper( const ::com::sun::star::uno::Sequence<sal_Int32>& rIDs )
+UnoPropertyArrayHelper::UnoPropertyArrayHelper( const css::uno::Sequence<sal_Int32>& rIDs )
 {
     sal_Int32 nIDs = rIDs.getLength();
     const sal_Int32* pIDs = rIDs.getConstArray();
@@ -64,7 +64,7 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropNa
     return bValid;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > UnoPropertyArrayHelper::getProperties()
+css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties()
 {
     // Sortiert nach Namen...
 
@@ -83,8 +83,8 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropNa
     }
 
     sal_uInt32 nProps = aSortedPropsIds.size();   // koennen jetzt mehr sein
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aProps( nProps );
-    ::com::sun::star::beans::Property* pProps = aProps.getArray();
+    css::uno::Sequence< css::beans::Property> aProps( nProps );
+    css::beans::Property* pProps = aProps.getArray();
 
     std::map<sal_Int32, sal_uInt16>::const_iterator it = aSortedPropsIds.begin();
     for ( sal_uInt32 n = 0; n < nProps; n++, ++it )
@@ -99,9 +99,9 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropNa
     return aProps;
 }
 
-::com::sun::star::beans::Property UnoPropertyArrayHelper::getPropertyByName(const OUString& rPropertyName) throw (::com::sun::star::beans::UnknownPropertyException)
+css::beans::Property UnoPropertyArrayHelper::getPropertyByName(const OUString& rPropertyName) throw (css::beans::UnknownPropertyException)
 {
-    ::com::sun::star::beans::Property aProp;
+    css::beans::Property aProp;
     sal_uInt16 nId = GetPropertyId( rPropertyName );
     if ( ImplHasProperty( nId ) )
     {
@@ -125,7 +125,7 @@ sal_Int32 UnoPropertyArrayHelper::getHandleByName( const OUString & rPropertyNam
     return nId ? nId : (-1);
 }
 
-sal_Int32 UnoPropertyArrayHelper::fillHandles( sal_Int32* pHandles, const ::com::sun::star::uno::Sequence< OUString > & rPropNames )
+sal_Int32 UnoPropertyArrayHelper::fillHandles( sal_Int32* pHandles, const css::uno::Sequence< OUString > & rPropNames )
 {
     const OUString* pNames = rPropNames.getConstArray();
     sal_Int32 nValues = rPropNames.getLength();

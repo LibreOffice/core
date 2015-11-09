@@ -30,17 +30,17 @@ VCLXPointer::~VCLXPointer()
 {
 }
 
-// ::com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXPointer )
 
-void VCLXPointer::setType( sal_Int32 nType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void VCLXPointer::setType( sal_Int32 nType ) throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maPointer = Pointer( (PointerStyle)nType );
 }
 
-sal_Int32 VCLXPointer::getType() throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 VCLXPointer::getType() throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 

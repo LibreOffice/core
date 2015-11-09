@@ -39,7 +39,7 @@
 
 using namespace ::com::sun::star;
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > CreateXWindow( vcl::Window* pWindow )
+css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window* pWindow )
 {
     switch ( pWindow->GetType() )
     {
@@ -131,7 +131,7 @@ TOOLKIT_DLLPUBLIC UnoWrapperBase* CreateUnoWrapper()
 }   // extern "C"
 
 
-UnoWrapper::UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit )
+UnoWrapper::UnoWrapper( const css::uno::Reference< css::awt::XToolkit>& rxToolkit )
 {
     mxToolkit = rxToolkit;
 }
@@ -145,16 +145,16 @@ UnoWrapper::~UnoWrapper()
 {
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> UnoWrapper::GetVCLToolkit()
+css::uno::Reference< css::awt::XToolkit> UnoWrapper::GetVCLToolkit()
 {
     if ( !mxToolkit.is() )
         mxToolkit = VCLUnoHelper::CreateToolkit();
     return mxToolkit.get();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow, bool bCreate )
+css::uno::Reference< css::awt::XWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow, bool bCreate )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
+    css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
     if ( !xPeer.is() && bCreate )
     {
         xPeer = CreateXWindow( pWindow );
@@ -163,14 +163,14 @@ UnoWrapper::~UnoWrapper()
     return xPeer;
 }
 
-void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace )
+void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer> xIFace )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( xIFace );
 
     DBG_ASSERT( pVCLXWindow, "SetComponentInterface - unsupported type" );
     if ( pVCLXWindow )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
+        css::uno::Reference< css::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
         if( xPeer.is() )
         {
             bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));
@@ -183,9 +183,9 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, ::com::sun::star::uno
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> UnoWrapper::CreateGraphics( OutputDevice* pOutDev )
+css::uno::Reference< css::awt::XGraphics> UnoWrapper::CreateGraphics( OutputDevice* pOutDev )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> xGrf;
+    css::uno::Reference< css::awt::XGraphics> xGrf;
     VCLXGraphics* pGrf = new VCLXGraphics;
     xGrf = pGrf;
     pGrf->Init( pOutDev );
@@ -217,7 +217,7 @@ static bool lcl_ImplIsParent( vcl::Window* pParentWindow, vcl::Window* pPossible
 
 void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
 {
-    // their still might be some children created with ::com::sun::star::loader::Java
+    // their still might be some children created with css::loader::Java
     // that would otherwise not be destroyed until the garbage collector cleans up
     VclPtr< vcl::Window > pChild = pWindow->GetWindow( GetWindowType::FirstChild );
     while ( pChild )
@@ -227,7 +227,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
         VclPtr< vcl::Window > pClient = pChild->GetWindow( GetWindowType::Client );
         if ( pClient && pClient->GetWindowPeer() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( false ), ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::lang::XComponent > xComp( pClient->GetComponentInterface( false ), css::uno::UNO_QUERY );
             xComp->dispose();
         }
 
@@ -246,7 +246,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
 
             if ( pClient && pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( false ), ::com::sun::star::uno::UNO_QUERY );
+                css::uno::Reference< css::lang::XComponent > xComp( pClient->GetComponentInterface( false ), css::uno::UNO_QUERY );
                 xComp->dispose();
             }
 
@@ -296,7 +296,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, bool bIsMenuBar )
+css::uno::Reference< css::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, bool bIsMenuBar )
 {
     return maAccessibleFactoryAccess.getFactory().createAccessible( pMenu, bIsMenuBar );
 }

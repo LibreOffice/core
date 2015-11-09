@@ -32,10 +32,10 @@ ListenerMultiplexerBase::~ListenerMultiplexerBase()
 {
 }
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any ListenerMultiplexerBase::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::uno::XInterface
+css::uno::Any ListenerMultiplexerBase::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
-    return ::cppu::queryInterface( rType, (static_cast< ::com::sun::star::uno::XInterface* >(this)) );
+    return ::cppu::queryInterface( rType, (static_cast< css::uno::XInterface* >(this)) );
 }
 
 
@@ -56,132 +56,132 @@ void SAL_CALL EventListenerMultiplexer::release() throw ()
     return ListenerMultiplexerBase::release();
 }
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any EventListenerMultiplexer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::uno::XInterface
+css::uno::Any EventListenerMultiplexer::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::lang::XEventListener* >(this)) );
+    css::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        (static_cast< css::lang::XEventListener* >(this)) );
     return (aRet.hasValue() ? aRet : ListenerMultiplexerBase::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XEventListener
-void EventListenerMultiplexer::disposing( const ::com::sun::star::lang::EventObject& ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+// css::lang::XEventListener
+void EventListenerMultiplexer::disposing( const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception)
 {
 }
 
 
 //  class FocusListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( FocusListenerMultiplexer, ::com::sun::star::awt::XFocusListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( FocusListenerMultiplexer, ::com::sun::star::awt::XFocusListener, focusGained, ::com::sun::star::awt::FocusEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( FocusListenerMultiplexer, ::com::sun::star::awt::XFocusListener, focusLost, ::com::sun::star::awt::FocusEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( FocusListenerMultiplexer, css::awt::XFocusListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( FocusListenerMultiplexer, css::awt::XFocusListener, focusGained, css::awt::FocusEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( FocusListenerMultiplexer, css::awt::XFocusListener, focusLost, css::awt::FocusEvent )
 
 
 //  class WindowListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( WindowListenerMultiplexer, ::com::sun::star::awt::XWindowListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( WindowListenerMultiplexer, ::com::sun::star::awt::XWindowListener, windowResized, ::com::sun::star::awt::WindowEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( WindowListenerMultiplexer, ::com::sun::star::awt::XWindowListener, windowMoved, ::com::sun::star::awt::WindowEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( WindowListenerMultiplexer, ::com::sun::star::awt::XWindowListener, windowShown, ::com::sun::star::lang::EventObject )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( WindowListenerMultiplexer, ::com::sun::star::awt::XWindowListener, windowHidden, ::com::sun::star::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( WindowListenerMultiplexer, css::awt::XWindowListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( WindowListenerMultiplexer, css::awt::XWindowListener, windowResized, css::awt::WindowEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( WindowListenerMultiplexer, css::awt::XWindowListener, windowMoved, css::awt::WindowEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( WindowListenerMultiplexer, css::awt::XWindowListener, windowShown, css::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( WindowListenerMultiplexer, css::awt::XWindowListener, windowHidden, css::lang::EventObject )
 
 
 //  class VclContainerListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( VclContainerListenerMultiplexer, ::com::sun::star::awt::XVclContainerListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( VclContainerListenerMultiplexer, ::com::sun::star::awt::XVclContainerListener, windowAdded, ::com::sun::star::awt::VclContainerEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( VclContainerListenerMultiplexer, ::com::sun::star::awt::XVclContainerListener, windowRemoved, ::com::sun::star::awt::VclContainerEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( VclContainerListenerMultiplexer, css::awt::XVclContainerListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( VclContainerListenerMultiplexer, css::awt::XVclContainerListener, windowAdded, css::awt::VclContainerEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( VclContainerListenerMultiplexer, css::awt::XVclContainerListener, windowRemoved, css::awt::VclContainerEvent )
 
 
 //  class KeyListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( KeyListenerMultiplexer, ::com::sun::star::awt::XKeyListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( KeyListenerMultiplexer, ::com::sun::star::awt::XKeyListener, keyPressed, ::com::sun::star::awt::KeyEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( KeyListenerMultiplexer, ::com::sun::star::awt::XKeyListener, keyReleased, ::com::sun::star::awt::KeyEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( KeyListenerMultiplexer, css::awt::XKeyListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( KeyListenerMultiplexer, css::awt::XKeyListener, keyPressed, css::awt::KeyEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( KeyListenerMultiplexer, css::awt::XKeyListener, keyReleased, css::awt::KeyEvent )
 
 
 //  class MouseListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( MouseListenerMultiplexer, ::com::sun::star::awt::XMouseListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseListenerMultiplexer, ::com::sun::star::awt::XMouseListener, mousePressed, ::com::sun::star::awt::MouseEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseListenerMultiplexer, ::com::sun::star::awt::XMouseListener, mouseReleased, ::com::sun::star::awt::MouseEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseListenerMultiplexer, ::com::sun::star::awt::XMouseListener, mouseEntered, ::com::sun::star::awt::MouseEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseListenerMultiplexer, ::com::sun::star::awt::XMouseListener, mouseExited, ::com::sun::star::awt::MouseEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( MouseListenerMultiplexer, css::awt::XMouseListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseListenerMultiplexer, css::awt::XMouseListener, mousePressed, css::awt::MouseEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseListenerMultiplexer, css::awt::XMouseListener, mouseReleased, css::awt::MouseEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseListenerMultiplexer, css::awt::XMouseListener, mouseEntered, css::awt::MouseEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseListenerMultiplexer, css::awt::XMouseListener, mouseExited, css::awt::MouseEvent )
 
 
 //  class MouseMotionListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( MouseMotionListenerMultiplexer, ::com::sun::star::awt::XMouseMotionListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseMotionListenerMultiplexer, ::com::sun::star::awt::XMouseMotionListener, mouseDragged, ::com::sun::star::awt::MouseEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseMotionListenerMultiplexer, ::com::sun::star::awt::XMouseMotionListener, mouseMoved, ::com::sun::star::awt::MouseEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( MouseMotionListenerMultiplexer, css::awt::XMouseMotionListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseMotionListenerMultiplexer, css::awt::XMouseMotionListener, mouseDragged, css::awt::MouseEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MouseMotionListenerMultiplexer, css::awt::XMouseMotionListener, mouseMoved, css::awt::MouseEvent )
 
 
 //  class PaintListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( PaintListenerMultiplexer, ::com::sun::star::awt::XPaintListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( PaintListenerMultiplexer, ::com::sun::star::awt::XPaintListener, windowPaint, ::com::sun::star::awt::PaintEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( PaintListenerMultiplexer, css::awt::XPaintListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( PaintListenerMultiplexer, css::awt::XPaintListener, windowPaint, css::awt::PaintEvent )
 
 
 //  class TopWindowListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TopWindowListenerMultiplexer, ::com::sun::star::awt::XTopWindowListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, ::com::sun::star::awt::XTopWindowListener, windowOpened, ::com::sun::star::lang::EventObject )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, ::com::sun::star::awt::XTopWindowListener, windowClosing, ::com::sun::star::lang::EventObject )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, ::com::sun::star::awt::XTopWindowListener, windowClosed, ::com::sun::star::lang::EventObject )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, ::com::sun::star::awt::XTopWindowListener, windowMinimized, ::com::sun::star::lang::EventObject )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, ::com::sun::star::awt::XTopWindowListener, windowNormalized, ::com::sun::star::lang::EventObject )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, ::com::sun::star::awt::XTopWindowListener, windowActivated, ::com::sun::star::lang::EventObject )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, ::com::sun::star::awt::XTopWindowListener, windowDeactivated, ::com::sun::star::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TopWindowListenerMultiplexer, css::awt::XTopWindowListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, css::awt::XTopWindowListener, windowOpened, css::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, css::awt::XTopWindowListener, windowClosing, css::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, css::awt::XTopWindowListener, windowClosed, css::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, css::awt::XTopWindowListener, windowMinimized, css::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, css::awt::XTopWindowListener, windowNormalized, css::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, css::awt::XTopWindowListener, windowActivated, css::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TopWindowListenerMultiplexer, css::awt::XTopWindowListener, windowDeactivated, css::lang::EventObject )
 
 
 //  class TextListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TextListenerMultiplexer, ::com::sun::star::awt::XTextListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TextListenerMultiplexer, ::com::sun::star::awt::XTextListener, textChanged, ::com::sun::star::awt::TextEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TextListenerMultiplexer, css::awt::XTextListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TextListenerMultiplexer, css::awt::XTextListener, textChanged, css::awt::TextEvent )
 
 
 //  class ActionListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ActionListenerMultiplexer, ::com::sun::star::awt::XActionListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ActionListenerMultiplexer, ::com::sun::star::awt::XActionListener, actionPerformed, ::com::sun::star::awt::ActionEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ActionListenerMultiplexer, css::awt::XActionListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ActionListenerMultiplexer, css::awt::XActionListener, actionPerformed, css::awt::ActionEvent )
 
 
 //  class ItemListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ItemListenerMultiplexer, ::com::sun::star::awt::XItemListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ItemListenerMultiplexer, ::com::sun::star::awt::XItemListener, itemStateChanged, ::com::sun::star::awt::ItemEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ItemListenerMultiplexer, css::awt::XItemListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ItemListenerMultiplexer, css::awt::XItemListener, itemStateChanged, css::awt::ItemEvent )
 
 
 //  class TabListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TabListenerMultiplexer, css::awt::XTabListener )
 
-void TabListenerMultiplexer::inserted( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException, std::exception)
-IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, inserted, ::sal_Int32 )
+void TabListenerMultiplexer::inserted( sal_Int32 evt ) throw(css::uno::RuntimeException, std::exception)
+IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, css::awt::XTabListener, inserted, ::sal_Int32 )
 
-void TabListenerMultiplexer::removed( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException, std::exception)
-IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, removed, ::sal_Int32 )
+void TabListenerMultiplexer::removed( sal_Int32 evt ) throw(css::uno::RuntimeException, std::exception)
+IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, css::awt::XTabListener, removed, ::sal_Int32 )
 
-void TabListenerMultiplexer::changed( sal_Int32 evt, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& evt2 ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< css::beans::NamedValue >& evt2 ) throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 aMulti( evt );
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > aMulti2( evt2 );
+    css::uno::Sequence< css::beans::NamedValue > aMulti2( evt2 );
     ::cppu::OInterfaceIteratorHelper aIt( *this );
     while( aIt.hasMoreElements() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener > xListener(
-            static_cast< ::com::sun::star::awt::XTabListener* >( aIt.next() ) );
+        css::uno::Reference< css::awt::XTabListener > xListener(
+            static_cast< css::awt::XTabListener* >( aIt.next() ) );
         try
         {
             xListener->changed( aMulti, aMulti2 );
         }
-        catch(const ::com::sun::star::lang::DisposedException& e)
+        catch(const css::lang::DisposedException& e)
         {
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" );
             if ( e.Context == xListener || !e.Context.is() )
                 aIt.remove();
         }
-        catch(const ::com::sun::star::uno::RuntimeException& e)
+        catch(const css::uno::RuntimeException& e)
         {
             DISPLAY_EXCEPTION( TabListenerMultiplexer, changed, e )
         }
@@ -189,74 +189,74 @@ void TabListenerMultiplexer::changed( sal_Int32 evt, const ::com::sun::star::uno
 }
 
 
-void TabListenerMultiplexer::activated( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException, std::exception)
-IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, activated, ::sal_Int32 )
+void TabListenerMultiplexer::activated( sal_Int32 evt ) throw(css::uno::RuntimeException, std::exception)
+IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, css::awt::XTabListener, activated, ::sal_Int32 )
 
-void TabListenerMultiplexer::deactivated( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException, std::exception)
-IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, deactivated, ::sal_Int32 )
+void TabListenerMultiplexer::deactivated( sal_Int32 evt ) throw(css::uno::RuntimeException, std::exception)
+IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, css::awt::XTabListener, deactivated, ::sal_Int32 )
 
 
 //  class ContainerListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ContainerListenerMultiplexer, ::com::sun::star::container::XContainerListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ContainerListenerMultiplexer, ::com::sun::star::container::XContainerListener, elementInserted, ::com::sun::star::container::ContainerEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ContainerListenerMultiplexer, ::com::sun::star::container::XContainerListener, elementRemoved, ::com::sun::star::container::ContainerEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ContainerListenerMultiplexer, ::com::sun::star::container::XContainerListener, elementReplaced, ::com::sun::star::container::ContainerEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ContainerListenerMultiplexer, css::container::XContainerListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ContainerListenerMultiplexer, css::container::XContainerListener, elementInserted, css::container::ContainerEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ContainerListenerMultiplexer, css::container::XContainerListener, elementRemoved, css::container::ContainerEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ContainerListenerMultiplexer, css::container::XContainerListener, elementReplaced, css::container::ContainerEvent )
 
 
 //  class SpinListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( SpinListenerMultiplexer, ::com::sun::star::awt::XSpinListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SpinListenerMultiplexer, ::com::sun::star::awt::XSpinListener, up, ::com::sun::star::awt::SpinEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SpinListenerMultiplexer, ::com::sun::star::awt::XSpinListener, down, ::com::sun::star::awt::SpinEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SpinListenerMultiplexer, ::com::sun::star::awt::XSpinListener, first, ::com::sun::star::awt::SpinEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SpinListenerMultiplexer, ::com::sun::star::awt::XSpinListener, last, ::com::sun::star::awt::SpinEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( SpinListenerMultiplexer, css::awt::XSpinListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SpinListenerMultiplexer, css::awt::XSpinListener, up, css::awt::SpinEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SpinListenerMultiplexer, css::awt::XSpinListener, down, css::awt::SpinEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SpinListenerMultiplexer, css::awt::XSpinListener, first, css::awt::SpinEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SpinListenerMultiplexer, css::awt::XSpinListener, last, css::awt::SpinEvent )
 
 
 //  class AdjustmentListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( AdjustmentListenerMultiplexer, ::com::sun::star::awt::XAdjustmentListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( AdjustmentListenerMultiplexer, ::com::sun::star::awt::XAdjustmentListener, adjustmentValueChanged, ::com::sun::star::awt::AdjustmentEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( AdjustmentListenerMultiplexer, css::awt::XAdjustmentListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( AdjustmentListenerMultiplexer, css::awt::XAdjustmentListener, adjustmentValueChanged, css::awt::AdjustmentEvent )
 
 
 //  class MenuListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, itemHighlighted, ::com::sun::star::awt::MenuEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, itemSelected, ::com::sun::star::awt::MenuEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, itemActivated, ::com::sun::star::awt::MenuEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, itemDeactivated, ::com::sun::star::awt::MenuEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( MenuListenerMultiplexer, css::awt::XMenuListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, css::awt::XMenuListener, itemHighlighted, css::awt::MenuEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, css::awt::XMenuListener, itemSelected, css::awt::MenuEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, css::awt::XMenuListener, itemActivated, css::awt::MenuEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, css::awt::XMenuListener, itemDeactivated, css::awt::MenuEvent )
 
 
 //  class TreeSelectionListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeSelectionListenerMultiplexer, ::com::sun::star::view::XSelectionChangeListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeSelectionListenerMultiplexer, ::com::sun::star::view::XSelectionChangeListener, selectionChanged,  ::com::sun::star::lang::EventObject )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeSelectionListenerMultiplexer, css::view::XSelectionChangeListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeSelectionListenerMultiplexer, css::view::XSelectionChangeListener, selectionChanged,  css::lang::EventObject )
 
 
 //  class TreeSelectionListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, requestChildNodes, ::com::sun::star::awt::tree::TreeExpansionEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_EXCEPTION( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, treeExpanding, ::com::sun::star::awt::tree::TreeExpansionEvent, ::com::sun::star::awt::tree::ExpandVetoException )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_EXCEPTION( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, treeCollapsing, ::com::sun::star::awt::tree::TreeExpansionEvent, ::com::sun::star::awt::tree::ExpandVetoException )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, treeExpanded, ::com::sun::star::awt::tree::TreeExpansionEvent )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, treeCollapsed, ::com::sun::star::awt::tree::TreeExpansionEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeExpansionListenerMultiplexer, css::awt::tree::XTreeExpansionListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeExpansionListenerMultiplexer, css::awt::tree::XTreeExpansionListener, requestChildNodes, css::awt::tree::TreeExpansionEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_EXCEPTION( TreeExpansionListenerMultiplexer, css::awt::tree::XTreeExpansionListener, treeExpanding, css::awt::tree::TreeExpansionEvent, css::awt::tree::ExpandVetoException )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_EXCEPTION( TreeExpansionListenerMultiplexer, css::awt::tree::XTreeExpansionListener, treeCollapsing, css::awt::tree::TreeExpansionEvent, css::awt::tree::ExpandVetoException )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeExpansionListenerMultiplexer, css::awt::tree::XTreeExpansionListener, treeExpanded, css::awt::tree::TreeExpansionEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeExpansionListenerMultiplexer, css::awt::tree::XTreeExpansionListener, treeCollapsed, css::awt::tree::TreeExpansionEvent )
 
 
 //  class TreeEditListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeEditListenerMultiplexer, ::com::sun::star::awt::tree::XTreeEditListener )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeEditListenerMultiplexer, css::awt::tree::XTreeEditListener )
 
 
 //  class SelectionListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener, selectionChanged, ::com::sun::star::awt::grid::GridSelectionEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( SelectionListenerMultiplexer, css::awt::grid::XGridSelectionListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SelectionListenerMultiplexer, css::awt::grid::XGridSelectionListener, selectionChanged, css::awt::grid::GridSelectionEvent )
 
 
 //  class SelectionListenerMultiplexer
 
-IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TabPageListenerMultiplexer, ::com::sun::star::awt::tab::XTabPageContainerListener )
-IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TabPageListenerMultiplexer, ::com::sun::star::awt::tab::XTabPageContainerListener, tabPageActivated, ::com::sun::star::awt::tab::TabPageActivatedEvent )
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TabPageListenerMultiplexer, css::awt::tab::XTabPageContainerListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TabPageListenerMultiplexer, css::awt::tab::XTabPageContainerListener, tabPageActivated, css::awt::tab::TabPageActivatedEvent )
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

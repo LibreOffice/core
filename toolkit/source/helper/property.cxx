@@ -61,12 +61,12 @@ using namespace com::sun::star;
 struct ImplPropertyInfo
 {
     OUString                 aName;
-    sal_uInt16                      nPropId;
-    ::com::sun::star::uno::Type     aType;
-    sal_Int16                       nAttribs;
-    bool                        bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
+    sal_uInt16               nPropId;
+    css::uno::Type           aType;
+    sal_Int16                nAttribs;
+    bool                     bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
 
-    ImplPropertyInfo( OUString const & theName, sal_uInt16 nId, const ::com::sun::star::uno::Type& rType,
+    ImplPropertyInfo( OUString const & theName, sal_uInt16 nId, const css::uno::Type& rType,
                         sal_Int16 nAttrs, bool bDepends = false )
      : aName( theName )
      {
@@ -79,16 +79,16 @@ struct ImplPropertyInfo
 };
 
 #define DECL_PROP_1( asciiname, id, type, attrib1 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), ::com::sun::star::beans::PropertyAttribute::attrib1 )
+    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 )
 #define DECL_PROP_2( asciiname, id, type, attrib1, attrib2 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 )
+    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 )
 #define DECL_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3 )
+    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 )
 
 #define DECL_DEP_PROP_2( asciiname, id, type, attrib1, attrib2 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2, true )
+    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2, true )
 #define DECL_DEP_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \
-    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3, true )
+    ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3, true )
 
 ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 {
@@ -140,7 +140,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "FontEmphasisMark",       FONTEMPHASISMARK,   sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "FontDescriptor",         FONTDESCRIPTOR,     FontDescriptor,     BOUND, MAYBEDEFAULT ),
 
-            // Teile des ::com::sun::star::awt::FontDescriptor
+            // Teile des css::awt::FontDescriptor
             DECL_PROP_2     ( "FontName",               FONTDESCRIPTORPART_NAME,         OUString,BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "FontStyleName",          FONTDESCRIPTORPART_STYLENAME,    OUString,BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "FontFamily",             FONTDESCRIPTORPART_FAMILY,       sal_Int16,      BOUND, MAYBEDEFAULT ),
@@ -159,7 +159,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "FontType",               FONTDESCRIPTORPART_TYPE,         sal_Int16,      BOUND, MAYBEDEFAULT ),
 
             DECL_PROP_3     ( "FormatKey",              FORMATKEY,          sal_Int32,      BOUND, MAYBEVOID, TRANSIENT ),
-            DECL_PROP_3     ( "FormatsSupplier",        FORMATSSUPPLIER,    Reference< ::com::sun::star::util::XNumberFormatsSupplier >, BOUND, MAYBEVOID, TRANSIENT ),
+            DECL_PROP_3     ( "FormatsSupplier",        FORMATSSUPPLIER,    Reference< css::util::XNumberFormatsSupplier >, BOUND, MAYBEVOID, TRANSIENT ),
 
             DECL_PROP_2     ( "Graphic",                GRAPHIC,            Reference< XGraphic >, BOUND, TRANSIENT ),
             DECL_PROP_2     ( "GroupName",              GROUPNAME,          OUString,    BOUND, MAYBEDEFAULT ),
@@ -251,9 +251,9 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "StepTime",               STEP_TIME,              sal_Int32,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Decoration",             DECORATION,             sal_Bool,       BOUND, MAYBEDEFAULT ),
 
-            DECL_PROP_2     ( "SelectionType",          TREE_SELECTIONTYPE,     ::com::sun::star::view::SelectionType,      BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "SelectionType",          TREE_SELECTIONTYPE,     css::view::SelectionType,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Editable",               TREE_EDITABLE,          sal_Bool,       BOUND, MAYBEDEFAULT ),
-            DECL_PROP_3     ( "DataModel",              TREE_DATAMODEL,         Reference< ::com::sun::star::awt::tree::XTreeDataModel >,       BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "DataModel",              TREE_DATAMODEL,         Reference< css::awt::tree::XTreeDataModel >,       BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "RootDisplayed",          TREE_ROOTDISPLAYED,     sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ShowsHandles",           TREE_SHOWSHANDLES,      sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ShowsRootHandles",       TREE_SHOWSROOTHANDLES,  sal_Bool,           BOUND, MAYBEDEFAULT ),
@@ -267,9 +267,9 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "RowHeaderWidth",         ROW_HEADER_WIDTH,       sal_Int32,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ShowColumnHeader",       GRID_SHOWCOLUMNHEADER,  sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "ColumnHeaderHeight",     COLUMN_HEADER_HEIGHT,   sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_1     ( "GridDataModel",          GRID_DATAMODEL,         Reference< ::com::sun::star::awt::grid::XGridDataModel >,          BOUND ),
-            DECL_PROP_1     ( "ColumnModel",            GRID_COLUMNMODEL,       Reference< ::com::sun::star::awt::grid::XGridColumnModel >,          BOUND ),
-            DECL_PROP_3     ( "SelectionModel",         GRID_SELECTIONMODE,     ::com::sun::star::view::SelectionType,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_1     ( "GridDataModel",          GRID_DATAMODEL,         Reference< css::awt::grid::XGridDataModel >,          BOUND ),
+            DECL_PROP_1     ( "ColumnModel",            GRID_COLUMNMODEL,       Reference< css::awt::grid::XGridColumnModel >,          BOUND ),
+            DECL_PROP_3     ( "SelectionModel",         GRID_SELECTIONMODE,     css::view::SelectionType,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "EnableVisible",          ENABLEVISIBLE,          sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "ReferenceDevice",        REFERENCE_DEVICE,       Reference< XDevice >,BOUND, MAYBEDEFAULT, TRANSIENT ),
             DECL_PROP_3     ( "HeaderBackgroundColor",  GRID_HEADER_BACKGROUND,     sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID ),
@@ -278,7 +278,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "RowBackgroundColors",    GRID_ROW_BACKGROUND_COLORS, Sequence< sal_Int32 >,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "UseGridLines",           USE_GRID_LINES,             sal_Bool,               BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_3 ( "MultiPageValue",          MULTIPAGEVALUE,      sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_3     ( "AllDialogChildren",                USERFORMCONTAINEES,                Reference< ::com::sun::star::container::XNameContainer >,           BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "AllDialogChildren",                USERFORMCONTAINEES,                Reference< css::container::XNameContainer >,           BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "ActiveSelectionBackgroundColor",     ACTIVE_SEL_BACKGROUND_COLOR,    sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "InactiveSelectionBackgroundColor",   INACTIVE_SEL_BACKGROUND_COLOR,  sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "ActiveSelectionTextColor",           ACTIVE_SEL_TEXT_COLOR,          sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
@@ -366,7 +366,7 @@ const OUString& GetPropertyName( sal_uInt16 nPropertyId )
     return pImplPropertyInfo->aName;
 }
 
-const ::com::sun::star::uno::Type* GetPropertyType( sal_uInt16 nPropertyId )
+const css::uno::Type* GetPropertyType( sal_uInt16 nPropertyId )
 {
     const ImplPropertyInfo* pImplPropertyInfo = ImplGetImplPropertyInfo( nPropertyId );
     DBG_ASSERT( pImplPropertyInfo, "Invalid PropertyId!" );
@@ -387,7 +387,7 @@ bool DoesDependOnOthers( sal_uInt16 nPropertyId )
     return pImplPropertyInfo && pImplPropertyInfo->bDependsOnOthers;
 }
 
-bool CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 )
+bool CompareProperties( const css::uno::Any& r1, const css::uno::Any& r2 )
 {
     return r1 == r2;
 }

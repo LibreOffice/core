@@ -43,26 +43,26 @@ class GridEventForwarder;
 class UnoGridModel : public UnoControlModel
 {
 protected:
-    ::com::sun::star::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    css::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
 
 public:
-    explicit UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_factory );
+    explicit UnoGridModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
     UnoGridModel( const UnoGridModel& rModel );
 
     UnoControlModel* Clone() const override;
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::beans::XMultiPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::beans::XMultiPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::io::XPersistObject
-    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::io::XPersistObject
+    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
 
     // OPropertySetHelper
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception) override;
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
@@ -84,8 +84,8 @@ public:
 // = UnoGridControl
 
 typedef ::cppu::ImplInheritanceHelper  <   UnoControlBase
-                                        ,   ::com::sun::star::awt::grid::XGridControl
-                                        ,   ::com::sun::star::awt::grid::XGridRowSelection
+                                        ,   css::awt::grid::XGridControl
+                                        ,   css::awt::grid::XGridRowSelection
                                         >   UnoGridControl_Base;
 class UnoGridControl : public UnoGridControl_Base
 {
@@ -93,32 +93,32 @@ public:
     UnoGridControl();
     OUString             GetComponentServiceName() override;
 
-    // ::com::sun::star::lang::XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::lang::XComponent
+    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::XControl
-    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::XControl
+    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& rxModel ) throw(css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::awt::grid::XGridControl
-    virtual ::sal_Int32 SAL_CALL getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getCurrentColumn(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getCurrentRow(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::util::VetoException, std::exception) override;
+    // css::awt::grid::XGridControl
+    virtual ::sal_Int32 SAL_CALL getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getCurrentColumn(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getCurrentRow(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, css::util::VetoException, std::exception) override;
 
-    // ::com::sun::star::awt::grid::XGridRowSelection
-    virtual void SAL_CALL selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, std::exception ) override;
-    virtual void SAL_CALL selectAllRows() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, std::exception ) override;
-    virtual void SAL_CALL deselectAllRows() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasSelectedRows() throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isRowSelected(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    // css::awt::grid::XGridRowSelection
+    virtual void SAL_CALL selectRow( ::sal_Int32 i_rowIndex ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, std::exception ) override;
+    virtual void SAL_CALL selectAllRows() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, std::exception ) override;
+    virtual void SAL_CALL deselectAllRows() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasSelectedRows() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isRowSelected(::sal_Int32 index) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) throw (css::uno::RuntimeException, std::exception) override;
 
-    // ::com::sun::star::lang::XServiceInfo
+    // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
     { return OUString("stardiv.Toolkit.GridControl"); }

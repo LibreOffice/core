@@ -768,7 +768,7 @@ void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XC
 }
 
 ////----- XInitialization -------------------------------------------------------------------
-void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArguments) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArguments) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     if ( rArguments.getLength() == 1 )
     {
@@ -780,19 +780,19 @@ void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArgum
     else
         m_nTabPageId = -1;
 }
-::sal_Int16 SAL_CALL ControlModelContainerBase::getTabPageID() throw (::com::sun::star::uno::RuntimeException, std::exception)
+::sal_Int16 SAL_CALL ControlModelContainerBase::getTabPageID() throw (css::uno::RuntimeException, std::exception)
 {
     return m_nTabPageId;
 }
-sal_Bool SAL_CALL ControlModelContainerBase::getEnabled() throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ControlModelContainerBase::getEnabled() throw (css::uno::RuntimeException, std::exception)
 {
     return m_bEnabled;
 }
-void SAL_CALL ControlModelContainerBase::setEnabled( sal_Bool _enabled ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ControlModelContainerBase::setEnabled( sal_Bool _enabled ) throw (css::uno::RuntimeException, std::exception)
 {
     m_bEnabled = _enabled;
 }
-OUString SAL_CALL ControlModelContainerBase::getTitle() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL ControlModelContainerBase::getTitle() throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Reference<XPropertySet> xThis(*this,UNO_QUERY);
@@ -800,25 +800,25 @@ OUString SAL_CALL ControlModelContainerBase::getTitle() throw (::com::sun::star:
     xThis->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)) >>= sTitle;
     return sTitle;
 }
-void SAL_CALL ControlModelContainerBase::setTitle( const OUString& _title ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ControlModelContainerBase::setTitle( const OUString& _title ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Reference<XPropertySet> xThis(*this,UNO_QUERY);
     xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),makeAny(_title));
 }
-OUString SAL_CALL ControlModelContainerBase::getImageURL() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL ControlModelContainerBase::getImageURL() throw (css::uno::RuntimeException, std::exception)
 {
     return m_sImageURL;
 }
-void SAL_CALL ControlModelContainerBase::setImageURL( const OUString& _imageurl ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ControlModelContainerBase::setImageURL( const OUString& _imageurl ) throw (css::uno::RuntimeException, std::exception)
 {
     m_sImageURL = _imageurl;
 }
-OUString SAL_CALL ControlModelContainerBase::getToolTip() throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL ControlModelContainerBase::getToolTip() throw (css::uno::RuntimeException, std::exception)
 {
     return m_sTooltip;
 }
-void SAL_CALL ControlModelContainerBase::setToolTip( const OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ControlModelContainerBase::setToolTip( const OUString& _tooltip ) throw (css::uno::RuntimeException, std::exception)
 {
     m_sTooltip = _tooltip;
 }
@@ -1845,7 +1845,7 @@ void ControlContainerBase::ImplUpdateResourceResolver()
 ////    Helper Method to convert relative url to physical location
 ////    ----------------------------------------------------
 
-OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
+OUString getPhysicalLocation( const css::uno::Any& rbase, const css::uno::Any& rUrl )
 {
 
     OUString baseLocation;
@@ -1875,7 +1875,7 @@ OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::c
 }
 
 void
-ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContainer >& xAllChildren, const OUString& aName, ChildOperation Operation, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xTarget ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContainer >& xAllChildren, const OUString& aName, ChildOperation Operation, const css::uno::Reference< css::awt::XControlModel >& xTarget ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     if ( Operation < Insert || Operation > Remove )
         throw IllegalArgumentException();
