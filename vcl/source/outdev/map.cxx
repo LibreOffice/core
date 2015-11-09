@@ -1511,15 +1511,15 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
     DBG_ASSERT( eUnitSource != MAP_SYSFONT
                 && eUnitSource != MAP_APPFONT
                 && eUnitSource != MAP_RELATIVE,
-                "Source MapUnit nicht erlaubt" );
+                "Source MapUnit is not permitted" );
     DBG_ASSERT( eUnitDest != MAP_SYSFONT
                 && eUnitDest != MAP_APPFONT
                 && eUnitDest != MAP_RELATIVE,
-                "Destination MapUnit nicht erlaubt" );
+                "Destination MapUnit is not permitted" );
     SAL_WARN_IF( eUnitSource == MAP_PIXEL, "vcl",
-                       "MAP_PIXEL mit 72dpi angenaehert" );
+                       "MAP_PIXEL approximated with 72dpi" );
     SAL_WARN_IF( eUnitDest == MAP_PIXEL, "vcl",
-                       "MAP_PIXEL mit 72dpi angenaehert" );
+                       "MAP_PIXEL approximated with 72dpi" );
 }
 
 #define ENTER3( eUnitSource, eUnitDest )                                \
