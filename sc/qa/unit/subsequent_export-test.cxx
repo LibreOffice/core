@@ -2685,7 +2685,8 @@ void ScExportTest::testSheetRunParagraphProperty()
     xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/sharedStrings.xml", XLSX);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:sst/x:si/x:r[1]/x:rPr[1]", 1);
+    OUString aColor = getXPath(pDoc, "/x:sst/x:si/x:r[1]/x:rPr[1]/x:color", "rgb");
+    CPPUNIT_ASSERT_EQUAL(OUString("FFFF0000"), aColor);
 
     xDocSh->DoClose();
 }
