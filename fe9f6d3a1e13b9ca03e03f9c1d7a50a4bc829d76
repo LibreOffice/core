@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_21d878ef",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-11-09T08:48:56Z",
+      "side": 1,
+      "message": "This is an identifier, please do not change this (at least not in this patch)",
+      "revId": "fe9f6d3a1e13b9ca03e03f9c1d7a50a4bc829d76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
