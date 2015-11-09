@@ -21,9 +21,12 @@
 #define INCLUDED_SC_SOURCE_UI_INC_PREVLOC_HXX
 
 #include <sal/types.h>
-#include <vcl/mapmod.hxx>
 
 #include "address.hxx"
+
+#include <vcl/mapmod.hxx>
+#include <vcl/vclptr.hxx>
+#include <tools/gen.hxx>
 
 #include <memory>
 #include <list>

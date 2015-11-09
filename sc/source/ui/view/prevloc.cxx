@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/outdev.hxx>
-
 #include "prevloc.hxx"
 #include "document.hxx"
+
+#include <vcl/outdev.hxx>
 
 #include <o3tl/make_unique.hxx>
 
