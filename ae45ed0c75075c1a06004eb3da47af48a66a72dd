@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "faac7902_c149ac90",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-11-09T11:45:10Z",
+      "side": 1,
+      "message": "SwXFlatParagraphIterator::~SwXFlatParagraphIterator is probably missing a SolarMutexGuard, see sw::UnoImplPtr how to fix that",
+      "revId": "ae45ed0c75075c1a06004eb3da47af48a66a72dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "faac7902_e1baf06d",
         "filename": "sw/source/core/attr/calbck.cxx",
         "patchSetId": 1
