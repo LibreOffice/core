@@ -405,6 +405,14 @@ namespace oox { namespace ppt {
             else
                 mnTransitionSubType = TransitionSubType::CORNERSOUT;
             break;
+        case P14_TOKEN(vortex):
+            mnTransitionType = TransitionType::MISCSHAPEWIPE;
+            mnTransitionSubType = TransitionSubType::VERTICAL;
+            break;
+        case P14_TOKEN(ripple):
+            mnTransitionType = TransitionType::MISCSHAPEWIPE;
+            mnTransitionSubType = TransitionSubType::HORIZONTAL;
+            break;
         default:
             mnTransitionType = 0;
             break;

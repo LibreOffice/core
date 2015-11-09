@@ -173,13 +173,15 @@ public:
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
     CPPUNIT_TEST(testTransparentBackground);
-    CPPUNIT_TEST(testExportTransitionsPPTX);
     CPPUNIT_TEST(testTdf91378);
 
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
 #endif
     CPPUNIT_TEST(testTdf80224);
+
+    CPPUNIT_TEST(testExportTransitionsPPTX);
+
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1413,8 +1415,14 @@ void SdExportTest::testExportTransitionsPPTX()
     // INSIDE TURNING CUBE
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 60, TransitionType::MISCSHAPEWIPE, TransitionSubType::CORNERSIN));
 
+    // VORTEX
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 70, TransitionType::MISCSHAPEWIPE, TransitionSubType::VERTICAL));
+
+    // RIPPLE
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 71, TransitionType::MISCSHAPEWIPE, TransitionSubType::HORIZONTAL));
+
     // NEWSFLASH
-    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 71, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
+    CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 72, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
