@@ -3508,14 +3508,22 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 tmpCode |= MODKEY_LSHIFT;
             if( GetKeyState( VK_RSHIFT )  & 0x8000 )
                 tmpCode |= MODKEY_RSHIFT;
-            if( GetKeyState( VK_LCONTROL ) & 0x8000 )
-                tmpCode |= MODKEY_LMOD1;
             if( GetKeyState( VK_RCONTROL ) & 0x8000 )
                 tmpCode |= MODKEY_RMOD1;
             if( GetKeyState( VK_LMENU )  & 0x8000 )
                 tmpCode |= MODKEY_LMOD2;
-            if( GetKeyState( VK_RMENU )  & 0x8000 )
+
+            // Pressing AltGr is handled as VK_RMENU && VK_LCONTROL!
+            // If VK_LCONTROL is not set the left Ctrl is actually pressed and
+            // so for AltGr the evaluation of VK_LCONTROL has to be inverted
+            if( GetKeyState( VK_RMENU ) & 0x8000 )
+            {
                 tmpCode |= MODKEY_RMOD2;
+                if( ! ( GetKeyState( VK_LCONTROL ) & 0x8000 ) )
+                    tmpCode |= MODKEY_LMOD1;
+            }
+            else if( GetKeyState( VK_LCONTROL ) & 0x8000 )
+                tmpCode |= MODKEY_LMOD1;
 
             if( tmpCode < nLastModKeyCode )
             {
