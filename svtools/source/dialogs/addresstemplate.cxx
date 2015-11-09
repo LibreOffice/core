@@ -183,11 +183,11 @@ public:
             }
             else
             {
-                OSL_FAIL(   (   OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
-                                +=  OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                                +=  OString(")!")
-                                ).getStr()
-                            );
+                OSL_FAIL(
+                    OString(
+                        "AssigmentTransientData::AssigmentTransientData: unknown programmatic name ("
+                        + OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
+                        + ")!").getStr());
             }
         }
     }

@@ -33,6 +33,7 @@
 #include <rtl/stringutils.hxx>
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+#include <config_global.h>
 #include <rtl/stringconcat.hxx>
 #endif
 
@@ -309,10 +310,16 @@ public:
       @param    str         a OString.
     */
     OString & operator+=( const OString & str )
+#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+        &
+#endif
     {
         rtl_string_newConcat( &pData, pData, str.pData );
         return *this;
     }
+#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+    void operator+=(OString const &) && = delete;
+#endif
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
@@ -321,6 +328,9 @@ public:
     */
     template< typename T1, typename T2 >
     OString& operator+=( const OStringConcat< T1, T2 >& c )
+#if HAVE_CXX11_REF_QUALIFIER
+        &
+#endif
     {
         sal_Int32 l = c.length();
         if( l == 0 )
@@ -332,6 +342,10 @@ public:
         pData->length = l;
         return *this;
     }
+#if HAVE_CXX11_REF_QUALIFIER
+    template<typename T1, typename T2> void operator +=(
+        OStringConcat<T1, T2> const &) && = delete;
+#endif
 #endif
 
     /**

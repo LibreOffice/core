@@ -363,9 +363,9 @@ namespace toolkit
             }
 
             throw IllegalArgumentException(
-                        ( OUString("Unable to convert the given value for the property ")
-                    +=  GetPropertyName((sal_uInt16)nPropId) )
-                    += " (double, integer, or string expected).",
+                ("Unable to convert the given value for the property "
+                 + GetPropertyName((sal_uInt16)nPropId)
+                 + " (double, integer, or string expected)."),
                 static_cast< XPropertySet* >(this),
                 1);
         }

@@ -203,7 +203,7 @@ namespace dbp
                     // the data field the column should be bound to
                     xColumn->setPropertyValue(s_sDataFieldProperty, makeAny(*pFormFieldName));
                     // the label
-                    xColumn->setPropertyValue(s_sLabelProperty, makeAny(OUString(*pFormFieldName) += *pColumnLabelPostfix));
+                    xColumn->setPropertyValue(s_sLabelProperty, makeAny(*pFormFieldName + *pColumnLabelPostfix));
                     // the width (<void/> => column will be auto-sized)
                     xColumn->setPropertyValue(s_sWidthProperty, Any());
 

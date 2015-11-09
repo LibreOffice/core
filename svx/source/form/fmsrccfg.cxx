@@ -135,11 +135,9 @@ namespace svxform
         }
 
         OSL_FAIL(
-            (   OString( "lcl_implMapIntValue: could not convert the integer value " )
-            +=  OString::number( _nValue )
-            +=  OString( " !" )
-            ).getStr()
-        );
+            OString(
+                "lcl_implMapIntValue: could not convert the integer value "
+                + OString::number(_nValue) + " !").getStr());
         static const sal_Char* s_pDummy = "";
             // just as a fallback ....
         return s_pDummy;

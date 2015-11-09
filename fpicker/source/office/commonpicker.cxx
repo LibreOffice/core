@@ -450,21 +450,19 @@ namespace svt
             else
             {
                 OSL_FAIL(
-                    (   OString( "OCommonPicker::initialize: unknown argument type at position " )
-                    +=  OString::number( pArguments - _rArguments.getConstArray() )
-                    ).getStr()
-                );
+                    OString(
+                        "OCommonPicker::initialize: unknown argument type at position "
+                        + OString::number(pArguments - _rArguments.getConstArray())).getStr());
                 continue;
             }
 
             bool bKnownSetting =
                 implHandleInitializationArgument( sSettingName, aSettingValue );
             DBG_ASSERT( bKnownSetting,
-                (   OString( "OCommonPicker::initialize: unknown argument \"" )
-                +=  OString( sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding() )
-                +=  OString( "\"!" )
-                ).getStr()
-            );
+                OString(
+                    "OCommonPicker::initialize: unknown argument \""
+                    + OString(sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding())
+                    + "\"!").getStr() );
         }
     }
 

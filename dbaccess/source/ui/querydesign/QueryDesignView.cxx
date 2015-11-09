@@ -2758,7 +2758,7 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
             for(;aStrIter != aStrEnd;++aStrIter)
             {
                 if (bAllTables || aStrIter->toChar() == '*')
-                    pFieldList->InsertEntry(OUString(strCurrentPrefix) += *aStrIter);
+                    pFieldList->InsertEntry(strCurrentPrefix + *aStrIter);
                 else
                     pFieldList->InsertEntry(*aStrIter);
             }

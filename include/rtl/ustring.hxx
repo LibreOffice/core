@@ -34,6 +34,7 @@
 #include <sal/log.hxx>
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+#include <config_global.h>
 #include <rtl/stringconcat.hxx>
 #endif
 
@@ -419,10 +420,16 @@ public:
       @param    str         a OUString.
     */
     OUString & operator+=( const OUString & str )
+#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+        &
+#endif
     {
         rtl_uString_newConcat( &pData, pData, str.pData );
         return *this;
     }
+#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+    void operator+=(OUString const &) && = delete;
+#endif
 
     /** Append an ASCII string literal to this string.
 
@@ -432,7 +439,11 @@ public:
     */
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<T, OUString &>::Type
-    operator +=(T & literal) {
+    operator +=(T & literal)
+#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+        &
+#endif
+    {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
         rtl_uString_newConcatAsciiL(
@@ -441,6 +452,11 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::length);
         return *this;
     }
+#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+    template<typename T>
+    typename libreoffice_internal::ConstCharArrayDetector<T, OUString &>::Type
+    operator +=(T &) && = delete;
+#endif
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
@@ -449,6 +465,9 @@ public:
     */
     template< typename T1, typename T2 >
     OUString& operator+=( const OUStringConcat< T1, T2 >& c )
+#if HAVE_CXX11_REF_QUALIFIER
+        &
+#endif
     {
         sal_Int32 l = c.length();
         if( l == 0 )
@@ -460,6 +479,10 @@ public:
         pData->length = l;
         return *this;
     }
+#if HAVE_CXX11_REF_QUALIFIER
+    template<typename T1, typename T2> void operator +=(
+        OUStringConcat<T1, T2> const &) && = delete;
+#endif
 #endif
 
     /**
