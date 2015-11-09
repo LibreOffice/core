@@ -2074,7 +2074,7 @@ ScXMLImport::ScXMLImport(
     pDataStreamAttrTokenMap(NULL),
     mpPostProcessData(NULL),
     aTables(*this),
-    pMyNamedExpressions(NULL),
+    m_pMyNamedExpressions(nullptr),
     pMyLabelRanges(NULL),
     pValidations(NULL),
     pDetectiveOpArray(NULL),
@@ -2223,7 +2223,7 @@ ScXMLImport::~ScXMLImport() throw()
 
     delete pSolarMutexGuard;
 
-    delete pMyNamedExpressions;
+    delete m_pMyNamedExpressions;
     delete pMyLabelRanges;
     delete pValidations;
     delete pDetectiveOpArray;
@@ -2411,7 +2411,7 @@ void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
         itr = r.first;
     }
     ScMyNamedExpressions& r = *itr->second;
-    o3tl::ptr_container::push_back(r, std::move(p));
+    r.push_back(std::move(p));
 }
 
 ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
@@ -3101,11 +3101,11 @@ public:
     RangeNameInserter(ScDocument* pDoc, ScRangeName& rRangeName, ScXMLImport& rXmlImport) :
         mpDoc(pDoc), mrRangeName(rRangeName), mrXmlImport(rXmlImport) {}
 
-    void operator() (const ScMyNamedExpression& r) const
+    void operator() (const std::unique_ptr<ScMyNamedExpression>& p) const
     {
         using namespace formula;
 
-        const OUString& aType = r.sRangeType;
+        const OUString& aType = p->sRangeType;
         sal_uInt32 nUnoType = ScXMLImport::GetRangeType(aType);
 
         sal_uInt16 nNewType = RT_NAME;
@@ -3120,16 +3120,16 @@ public:
             ScAddress aPos;
             sal_Int32 nOffset = 0;
             bool bSuccess = ScRangeStringConverter::GetAddressFromString(
-                aPos, r.sBaseCellAddress, mpDoc, FormulaGrammar::CONV_OOO, nOffset);
+                aPos, p->sBaseCellAddress, mpDoc, FormulaGrammar::CONV_OOO, nOffset);
 
             if (bSuccess)
             {
-                OUString aContent = r.sContent;
-                if (!r.bIsExpression)
+                OUString aContent = p->sContent;
+                if (!p->bIsExpression)
                     ScXMLConverter::ParseFormula(aContent, false);
 
                 ScRangeData* pData = new ScRangeData(
-                    mpDoc, r.sName, aContent, aPos, nNewType, r.eGrammar);
+                    mpDoc, p->sName, aContent, aPos, nNewType, p->eGrammar);
                 mrRangeName.insert(pData);
             }
         }

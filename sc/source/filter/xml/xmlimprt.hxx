@@ -45,7 +45,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include <boost/ptr_container/ptr_list.hpp>
+#include <list>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -782,7 +782,7 @@ struct ScMyNamedExpression
     bool               bIsExpression;
 };
 
-typedef ::boost::ptr_list<ScMyNamedExpression> ScMyNamedExpressions;
+typedef ::std::list<std::unique_ptr<ScMyNamedExpression>> ScMyNamedExpressions;
 
 struct ScMyLabelRange
 {
@@ -938,7 +938,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
 
     ScMyTables              aTables;
 
-    ScMyNamedExpressions*   pMyNamedExpressions;
+    ScMyNamedExpressions*   m_pMyNamedExpressions;
     SheetNamedExpMap maSheetNamedExpressions;
 
     ScMyLabelRanges*        pMyLabelRanges;
@@ -1112,12 +1112,12 @@ public:
 
     void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
     {
-        if (!pMyNamedExpressions)
-            pMyNamedExpressions = new ScMyNamedExpressions();
-        pMyNamedExpressions->push_back(pMyNamedExpression);
+        if (!m_pMyNamedExpressions)
+            m_pMyNamedExpressions = new ScMyNamedExpressions();
+        m_pMyNamedExpressions->push_back(std::unique_ptr<ScMyNamedExpression>(pMyNamedExpression));
     }
 
-    ScMyNamedExpressions* GetNamedExpressions() { return pMyNamedExpressions; }
+    ScMyNamedExpressions* GetNamedExpressions() { return m_pMyNamedExpressions; }
 
     void AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp);
 
