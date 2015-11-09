@@ -16,12 +16,51 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
+#include <boost/preprocessor/stringize.hpp>
+
+#define MAKE_PATH_STRING( path ) BOOST_PP_STRINGIZE( path )
+#define SVG_SVG  *[name()='svg']
+#define SVG_G *[name()='g']
+#define SVG_TEXT *[name()='text']
+#define SVG_TSPAN *[name()='tspan']
+
 using namespace css;
 
-class SdSVGFilterTest : public SdModelTestBase, public XmlTestTools
+class SdSVGFilterTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
     uno::Reference<lang::XComponent> mxComponent;
     utl::TempFile maTempFile;
+
+protected:
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override
+    {
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("svg"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"));
+    }
+
+    void load(const char* pDir, const char* pName)
+    {
+        return loadURL(getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName);
+    }
+
+    void loadURL(OUString const& rURL, const char* pName)
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        // Output name early, so in the case of a hang, the name of the hanging input file is visible.
+        if (pName)
+            std::cout << pName << ",";
+        mxComponent = loadFromDesktop(rURL);
+        CPPUNIT_ASSERT(mxComponent.is());
+    }
+
+    void save()
+    {
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        OUString aFilterName("impress_svg_Export");
+        aMediaDescriptor["FilterName"] <<= aFilterName;
+        xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    }
 
 public:
     SdSVGFilterTest()
@@ -31,7 +70,7 @@ public:
 
     virtual void setUp() override
     {
-        SdModelTestBase::setUp();
+        test::BootstrapFixture::setUp();
 
         mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
     }
@@ -41,23 +80,35 @@ public:
         if (mxComponent.is())
             mxComponent->dispose();
 
-        SdModelTestBase::tearDown();
+        test::BootstrapFixture::tearDown();
+    }
+
+    void executeExport(const char* pName)
+    {
+        load( "/sd/qa/unit/data/odp/", pName );
+        save();
     }
 
     void testSVGExportTextDecorations()
     {
-        mxComponent = loadFromDesktop(getURLFromSrc("/sd/qa/unit/data/odp/svg-export-text-decorations.odp"));
-        CPPUNIT_ASSERT(mxComponent.is());
+        executeExport( "svg-export-text-decorations.odp" );
 
-        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-        utl::MediaDescriptor aMediaDescriptor;
-        OUString aFilterName("impress_svg_Export");
-        aMediaDescriptor["FilterName"] <<= aFilterName;
-        xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-        xmlDocPtr pXmlDoc = parseXml(maTempFile);
-        CPPUNIT_ASSERT(pXmlDoc);
+        xmlDocPtr svgDoc = parseXml(maTempFile);
+        CPPUNIT_ASSERT(svgDoc);
 
-        // TODO use assertXPath() here.
+        svgDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(maTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
+
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG ), 1);
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2] ), "class", "SlideGroup");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G ), "class", "Slide");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[1] ), "class", "TitleText");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT ), "class", "TextShape");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[1]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "underline");
+
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT ), "class", "TextShape");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "class", "TextParagraph");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_G[2]/SVG_G/SVG_G/SVG_G/SVG_G[2]/SVG_G/SVG_TEXT/SVG_TSPAN ), "text-decoration", "line-through");
     }
 
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);
