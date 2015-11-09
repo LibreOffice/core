@@ -513,8 +513,12 @@ struct AnnotatingVisitor
             return true; // cannot write style, svm import case
 
         // do we have a gradient fill? then write out gradient as well
-        if( rState.meFillType == GRADIENT && rState.maFillGradient.maStops.size() > 1 )
+        if( rState.meFillType == GRADIENT && rState.maFillGradient.maStops.size() > 0 )
         {
+            // if only one stop-color is defined
+            if( rState.maFillGradient.maStops.size() == 1 )
+                rState.maFillGradient.maStops.push_back(rState.maFillGradient.maStops[0]);
+
             // TODO(F3): ODF12 supposedly also groks svg:linear/radialGradient. But CL says: nope.
             xAttrs->AddAttribute( "draw:name", getStyleName("svggradient", rState.maFillGradient.mnId) );
             if( rState.maFillGradient.meType == Gradient::LINEAR )
