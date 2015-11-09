@@ -419,7 +419,7 @@ namespace oox { namespace ppt {
         }
     }
 
-    void SlideTransition::setPresetTransition(OUString sPresetTransition)
+    void SlideTransition::setPresetTransition(OUString const & sPresetTransition)
     {
         if (sPresetTransition == "fallOver")
         {

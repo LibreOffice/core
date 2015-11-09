@@ -54,7 +54,7 @@ namespace oox { namespace ppt {
         void setOoxTransitionType( ::sal_Int32 OoxType,
                                                              ::sal_Int32 param1, ::sal_Int32 param2 );
 
-        void setPresetTransition(OUString sPresetTransition);
+        void setPresetTransition(OUString const & sPresetTransition);
 
     private:
         ::sal_Int16 mnTransitionType;
