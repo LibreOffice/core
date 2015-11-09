@@ -20,16 +20,16 @@
 #ifndef INCLUDED_STARMATH_INC_NODE_HXX
 #define INCLUDED_STARMATH_INC_NODE_HXX
 
-#include <vector>
-#include <ostream>
-
 #include "types.hxx"
 #include "token.hxx"
 #include "error.hxx"
 #include "rect.hxx"
 #include "format.hxx"
-#include <boost/ptr_container/ptr_deque.hpp>
+
 #include <memory>
+#include <vector>
+#include <deque>
+#include <ostream>
 
 #define ATTR_BOLD       0x0001
 #define ATTR_ITALIC     0x0002
@@ -61,15 +61,16 @@ class SmNode;
 class SmStructureNode;
 
 typedef std::shared_ptr<SmNode> SmNodePointer;
-typedef boost::ptr_deque<SmNode> SmNodeStack;
+typedef std::deque<std::unique_ptr<SmNode>> SmNodeStack;
 typedef std::vector< SmNode * > SmNodeArray;
 
 template < typename T >
-T* popOrZero( boost::ptr_deque<T> & rStack )
+T* popOrZero(std::deque<std::unique_ptr<T>> & rStack)
 {
     if (rStack.empty())
-        return 0;
-    auto pTmp = rStack.pop_front();
+        return nullptr;
+    std::unique_ptr<T> pTmp(std::move(rStack.front()));
+    rStack.pop_front();
     return pTmp.release();
 }
 

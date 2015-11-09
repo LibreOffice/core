@@ -42,6 +42,7 @@ one go*/
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
@@ -670,9 +671,9 @@ void SmXMLContext_Helper::ApplyAttrs()
                 aToken.eType = TBOLD;
             else
                 aToken.eType = TNBOLD;
-            SmFontNode *pFontNode = new SmFontNode(aToken);
+            std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
             pFontNode->SetSubNodes(0,popOrZero(rNodeStack));
-            rNodeStack.push_front(pFontNode);
+            rNodeStack.push_front(std::move(pFontNode));
         }
         if (nIsItalic != -1)
         {
@@ -680,14 +681,14 @@ void SmXMLContext_Helper::ApplyAttrs()
                 aToken.eType = TITALIC;
             else
                 aToken.eType = TNITALIC;
-            SmFontNode *pFontNode = new SmFontNode(aToken);
+            std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
             pFontNode->SetSubNodes(0,popOrZero(rNodeStack));
-            rNodeStack.push_front(pFontNode);
+            rNodeStack.push_front(std::move(pFontNode));
         }
         if (nFontSize != 0.0)
         {
             aToken.eType = TSIZE;
-            SmFontNode *pFontNode = new SmFontNode(aToken);
+            std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
 
             if (util::MeasureUnit::PERCENT == rContext.GetSmImport()
                     .GetMM100UnitConverter().GetXMLMeasureUnit())
@@ -703,7 +704,7 @@ void SmXMLContext_Helper::ApplyAttrs()
                 pFontNode->SetSizeParameter(Fraction(nFontSize),FontSizeType::ABSOLUT);
 
             pFontNode->SetSubNodes(0,popOrZero(rNodeStack));
-            rNodeStack.push_front(pFontNode);
+            rNodeStack.push_front(std::move(pFontNode));
         }
         if (!sFontFamily.isEmpty())
         {
@@ -718,9 +719,9 @@ void SmXMLContext_Helper::ApplyAttrs()
                 return;
 
             aToken.aText = sFontFamily;
-            SmFontNode *pFontNode = new SmFontNode(aToken);
+            std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
             pFontNode->SetSubNodes(0,popOrZero(rNodeStack));
-            rNodeStack.push_front(pFontNode);
+            rNodeStack.push_front(std::move(pFontNode));
         }
         if (!sColor.isEmpty())
         {
@@ -732,9 +733,9 @@ void SmXMLContext_Helper::ApplyAttrs()
             if (tok != XML_TOK_UNKNOWN)
             {
                 aToken.eType = static_cast<SmTokenType>(tok);
-                SmFontNode *pFontNode = new SmFontNode(aToken);
+                std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
                 pFontNode->SetSubNodes(0,popOrZero(rNodeStack));
-                rNodeStack.push_front(pFontNode);
+                rNodeStack.push_front(std::move(pFontNode));
             }
         }
 
@@ -929,10 +930,10 @@ void SmXMLPhantomContext_Impl::EndElement()
     aToken.nLevel = 5;
     aToken.eType = TPHANTOM;
 
-    SmFontNode *pPhantom = new SmFontNode(aToken);
+    std::unique_ptr<SmFontNode> pPhantom(new SmFontNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     pPhantom->SetSubNodes(0,popOrZero(rNodeStack));
-    rNodeStack.push_front(pPhantom);
+    rNodeStack.push_front(std::move(pPhantom));
 }
 
 
@@ -994,7 +995,7 @@ void SmXMLFencedContext_Impl::EndElement()
 
     aToken.eType = TLPARENT;
     aToken.cMathChar = cBegin;
-    SmStructureNode *pSNode = new SmBraceNode(aToken);
+    std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(aToken));
     SmNode *pLeft = new SmMathSymbolNode(aToken);
 
     aToken.cMathChar = cEnd;
@@ -1014,7 +1015,8 @@ void SmXMLFencedContext_Impl::EndElement()
     aRelationArray.resize(i);
     while (rNodeStack.size() > nElementCount)
     {
-        auto pNode = rNodeStack.pop_front();
+        auto pNode = std::move(rNodeStack.front());
+        rNodeStack.pop_front();
         aRelationArray[--i] = pNode.release();
         if (i > 1 && rNodeStack.size() > 1)
             aRelationArray[--i] = new SmGlyphSpecialNode(aToken);
@@ -1027,7 +1029,7 @@ void SmXMLFencedContext_Impl::EndElement()
 
     pSNode->SetSubNodes(pLeft,pBody,pRight);
     pSNode->SetScaleMode(SCALE_HEIGHT);
-    GetSmImport().GetNodeStack().push_front(pSNode);
+    GetSmImport().GetNodeStack().push_front(std::move(pSNode));
 }
 
 
@@ -1088,7 +1090,7 @@ void SmXMLNumberContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLNumberContext_Impl::EndElement()
 {
-    GetSmImport().GetNodeStack().push_front(new SmTextNode(aToken,FNT_NUMBER));
+    GetSmImport().GetNodeStack().push_front(o3tl::make_unique<SmTextNode>(aToken,FNT_NUMBER));
 }
 
 
@@ -1167,7 +1169,7 @@ void SmXMLTextContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLTextContext_Impl::EndElement()
 {
-    GetSmImport().GetNodeStack().push_front(new SmTextNode(aToken,FNT_TEXT));
+    GetSmImport().GetNodeStack().push_front(o3tl::make_unique<SmTextNode>(aToken,FNT_TEXT));
 }
 
 
@@ -1209,7 +1211,7 @@ void SmXMLStringContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLStringContext_Impl::EndElement()
 {
-    GetSmImport().GetNodeStack().push_front(new SmTextNode(aToken,FNT_FIXED));
+    GetSmImport().GetNodeStack().push_front(o3tl::make_unique<SmTextNode>(aToken,FNT_FIXED));
 }
 
 
@@ -1240,18 +1242,18 @@ public:
 
 void SmXMLIdentifierContext_Impl::EndElement()
 {
-    SmTextNode *pNode = 0;
+    std::unique_ptr<SmTextNode> pNode;
     //we will handle identifier italic/normal here instead of with a standalone
     //font node
     if (((aStyleHelper.nIsItalic == -1) && (aToken.aText.getLength() > 1))
         || ((aStyleHelper.nIsItalic == 0) && (aToken.aText.getLength() == 1)))
     {
-        pNode = new SmTextNode(aToken,FNT_FUNCTION);
+        pNode.reset(new SmTextNode(aToken,FNT_FUNCTION));
         pNode->GetFont().SetItalic(ITALIC_NONE);
         aStyleHelper.nIsItalic = -1;
     }
     else
-        pNode = new SmTextNode(aToken,FNT_VARIABLE);
+        pNode.reset(new SmTextNode(aToken,FNT_VARIABLE));
     if (aStyleHelper.bFontNodeNeeded && aStyleHelper.nIsItalic != -1)
     {
         if (aStyleHelper.nIsItalic)
@@ -1268,7 +1270,7 @@ void SmXMLIdentifierContext_Impl::EndElement()
         aStyleHelper.bFontNodeNeeded=false;
     if (aStyleHelper.bFontNodeNeeded)
         aStyleHelper.ApplyAttrs();
-    GetSmImport().GetNodeStack().push_front(pNode);
+    GetSmImport().GetNodeStack().push_front(std::move(pNode));
 }
 
 void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
@@ -1306,13 +1308,13 @@ void SmXMLOperatorContext_Impl::TCharacters(const OUString &rChars)
 
 void SmXMLOperatorContext_Impl::EndElement()
 {
-    SmMathSymbolNode *pNode = new SmMathSymbolNode(aToken);
+    std::unique_ptr<SmMathSymbolNode> pNode(new SmMathSymbolNode(aToken));
     //For stretchy scaling the scaling must be retrieved from this node
     //and applied to the expression itself so as to get the expression
     //to scale the operator to the height of the expression itself
     if (bIsStretchy)
         pNode->SetScaleMode(SCALE_HEIGHT);
-    GetSmImport().GetNodeStack().push_front(pNode);
+    GetSmImport().GetNodeStack().push_front(std::move(pNode));
 }
 
 
@@ -1365,9 +1367,9 @@ void SmXMLSpaceContext_Impl::StartElement(
     aToken.cMathChar = '\0';
     aToken.eType = TBLANK;
     aToken.nLevel = 5;
-    SmBlankNode *pBlank = new SmBlankNode(aToken);
+    std::unique_ptr<SmBlankNode> pBlank(new SmBlankNode(aToken));
     pBlank->IncreaseBy(aToken);
-    GetSmImport().GetNodeStack().push_front(pBlank);
+    GetSmImport().GetNodeStack().push_front(std::move(pBlank));
 }
 
 
@@ -1400,7 +1402,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.eType = eType;
-    SmSubSupNode *pNode = new SmSubSupNode(aToken);
+    std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
     // initialize subnodes array
@@ -1412,7 +1414,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
     aSubNodes[eSubSup+1] = popOrZero(rNodeStack);
     aSubNodes[0] = popOrZero(rNodeStack);
     pNode->SetSubNodes(aSubNodes);
-    rNodeStack.push_front(pNode);
+    rNodeStack.push_front(std::move(pNode));
 }
 
 
@@ -1460,7 +1462,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.eType = eType;
-    SmSubSupNode *pNode = new SmSubSupNode(aToken);
+    std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
     // initialize subnodes array
@@ -1473,7 +1475,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     aSubNodes[aSub+1] = popOrZero(rNodeStack);
     aSubNodes[0] =  popOrZero(rNodeStack);
     pNode->SetSubNodes(aSubNodes);
-    rNodeStack.push_front(pNode);
+    rNodeStack.push_front(std::move(pNode));
 }
 
 
@@ -1519,7 +1521,7 @@ void SmXMLUnderContext_Impl::HandleAccent()
     SmNodeArray aSubNodes;
     aSubNodes.resize(2);
 
-    SmStructureNode *pNode = new SmAttributNode(aToken);
+    std::unique_ptr<SmStructureNode> pNode(new SmAttributNode(aToken));
     if ((pTest->GetToken().cMathChar & 0x0FFF) == 0x0332)
     {
         aSubNodes[0] = new SmRectangleNode(aToken);
@@ -1531,7 +1533,7 @@ void SmXMLUnderContext_Impl::HandleAccent()
     aSubNodes[1] = popOrZero(rNodeStack);
     pNode->SetSubNodes(aSubNodes);
     pNode->SetScaleMode(SCALE_WIDTH);
-    rNodeStack.push_front(pNode);
+    rNodeStack.push_front(std::move(pNode));
 }
 
 
@@ -1588,7 +1590,7 @@ void SmXMLOverContext_Impl::HandleAccent()
     aToken.cMathChar = '\0';
     aToken.eType = TACUTE;
 
-    SmAttributNode *pNode = new SmAttributNode(aToken);
+    std::unique_ptr<SmAttributNode> pNode(new SmAttributNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
     SmNodeArray aSubNodes;
@@ -1597,7 +1599,7 @@ void SmXMLOverContext_Impl::HandleAccent()
     aSubNodes[1] = popOrZero(rNodeStack);
     pNode->SetSubNodes(aSubNodes);
     pNode->SetScaleMode(SCALE_WIDTH);
-    rNodeStack.push_front(pNode);
+    rNodeStack.push_front(std::move(pNode));
 
 }
 
@@ -1657,7 +1659,7 @@ void SmXMLNoneContext_Impl::EndElement()
     aToken.nLevel = 5;
     aToken.eType = TIDENT;
     GetSmImport().GetNodeStack().push_front(
-        new SmTextNode(aToken,FNT_VARIABLE));
+        o3tl::make_unique<SmTextNode>(aToken,FNT_VARIABLE));
 }
 
 
@@ -2136,21 +2138,22 @@ void SmXMLDocContext_Impl::EndElement()
     ContextArray[0] = popOrZero(rNodeStack);
 
     SmToken aDummy;
-    SmStructureNode *pSNode = new SmLineNode(aDummy);
+    std::unique_ptr<SmStructureNode> pSNode(new SmLineNode(aDummy));
     pSNode->SetSubNodes(ContextArray);
-    rNodeStack.push_front(pSNode);
+    rNodeStack.push_front(std::move(pSNode));
 
     SmNodeArray  LineArray;
     auto n = rNodeStack.size();
     LineArray.resize(n);
     for (size_t j = 0; j < n; j++)
     {
-        auto pNode = rNodeStack.pop_front();
+        auto pNode = std::move(rNodeStack.front());
+        rNodeStack.pop_front();
         LineArray[n - (j + 1)] = pNode.release();
     }
-    SmStructureNode *pSNode2 = new SmTableNode(aDummy);
+    std::unique_ptr<SmStructureNode> pSNode2(new SmTableNode(aDummy));
     pSNode2->SetSubNodes(LineArray);
-    rNodeStack.push_front(pSNode2);
+    rNodeStack.push_front(std::move(pSNode2));
 }
 
 void SmXMLFracContext_Impl::EndElement()
@@ -2164,12 +2167,12 @@ void SmXMLFracContext_Impl::EndElement()
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.eType = TOVER;
-    SmStructureNode *pSNode = new SmBinVerNode(aToken);
+    std::unique_ptr<SmStructureNode> pSNode(new SmBinVerNode(aToken));
     SmNode *pOper = new SmRectangleNode(aToken);
     SmNode *pSecond = popOrZero(rNodeStack);
     SmNode *pFirst = popOrZero(rNodeStack);
     pSNode->SetSubNodes(pFirst,pOper,pSecond);
-    rNodeStack.push_front(pSNode);
+    rNodeStack.push_front(std::move(pSNode));
 }
 
 void SmXMLRootContext_Impl::EndElement()
@@ -2183,13 +2186,13 @@ void SmXMLRootContext_Impl::EndElement()
     SmToken aToken;
     aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
     aToken.eType = TNROOT;
-    SmStructureNode *pSNode = new SmRootNode(aToken);
+    std::unique_ptr<SmStructureNode> pSNode(new SmRootNode(aToken));
     SmNode *pOper = new SmRootSymbolNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     SmNode *pIndex = popOrZero(rNodeStack);
     SmNode *pBase = popOrZero(rNodeStack);
     pSNode->SetSubNodes(pIndex,pOper,pBase);
-    rNodeStack.push_front(pSNode);
+    rNodeStack.push_front(std::move(pSNode));
 }
 
 void SmXMLSqrtContext_Impl::EndElement()
@@ -2205,11 +2208,11 @@ void SmXMLSqrtContext_Impl::EndElement()
     SmToken aToken;
     aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
     aToken.eType = TSQRT;
-    SmStructureNode *pSNode = new SmRootNode(aToken);
+    std::unique_ptr<SmStructureNode> pSNode(new SmRootNode(aToken));
     SmNode *pOper = new SmRootSymbolNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     pSNode->SetSubNodes(0,pOper,popOrZero(rNodeStack));
-    rNodeStack.push_front(pSNode);
+    rNodeStack.push_front(std::move(pSNode));
 }
 
 void SmXMLRowContext_Impl::EndElement()
@@ -2224,7 +2227,8 @@ void SmXMLRowContext_Impl::EndElement()
         aRelationArray.resize(nSize);
         for (auto j=nSize;j > 0;j--)
         {
-            auto pNode = rNodeStack.pop_front();
+            auto pNode = std::move(rNodeStack.front());
+            rNodeStack.pop_front();
             aRelationArray[j-1] = pNode.release();
         }
 
@@ -2279,13 +2283,13 @@ void SmXMLRowContext_Impl::EndElement()
             }
 
             SmToken aDummy;
-            SmStructureNode *pSNode = new SmBraceNode(aToken);
+            std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(aToken));
             SmStructureNode *pBody = new SmExpressionNode(aDummy);
             pBody->SetSubNodes(aRelationArray2);
 
             pSNode->SetSubNodes(pLeft,pBody,pRight);
             pSNode->SetScaleMode(SCALE_HEIGHT);
-            rNodeStack.push_front(pSNode);
+            rNodeStack.push_front(std::move(pSNode));
             return;
         }
     }
@@ -2300,9 +2304,9 @@ void SmXMLRowContext_Impl::EndElement()
     }
 
     SmToken aDummy;
-    SmStructureNode *pSNode = new SmExpressionNode(aDummy);
+    std::unique_ptr<SmStructureNode> pSNode(new SmExpressionNode(aDummy));
     pSNode->SetSubNodes(aRelationArray);
-    rNodeStack.push_front(pSNode);
+    rNodeStack.push_front(std::move(pSNode));
 }
 
 
@@ -2429,8 +2433,9 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
         SmNodeStack aReverseStack;
         for (size_t i = 0; i < nCount + 1; i++)
         {
-            auto pNode = rNodeStack.pop_front();
-            aReverseStack.push_front(pNode.release());
+            auto pNode = std::move(rNodeStack.front());
+            rNodeStack.pop_front();
+            aReverseStack.push_front(std::move(pNode));
         }
 
         SmSubSup eSub = bIsPrescript ? LSUB : RSUB;
@@ -2438,7 +2443,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
 
         for (size_t i = 0; i < nCount; i += 2)
         {
-            SmSubSupNode *pNode = new SmSubSupNode(aToken);
+            std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(aToken));
 
             // initialize subnodes array
             SmNodeArray aSubNodes(1 + SUBSUP_NUM_ENTRIES);
@@ -2459,11 +2464,12 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
                 aSubNodes[eSup+1] = pScriptNode;
 
             pNode->SetSubNodes(aSubNodes);
-            aReverseStack.push_front(pNode);
+            aReverseStack.push_front(std::move(pNode));
         }
         assert(!aReverseStack.empty());
-        auto pNode = aReverseStack.pop_front();
-        rNodeStack.push_front(pNode.release());
+        auto pNode = std::move(aReverseStack.front());
+        aReverseStack.pop_front();
+        rNodeStack.push_front(std::move(pNode));
     }
     else
     {
@@ -2489,8 +2495,8 @@ void SmXMLTableContext_Impl::EndElement()
     SmStructureNode *pArray;
     for (auto i=nRows;i > 0;i--)
     {
-        auto pNode = rNodeStack.pop_front();
-        pArray = static_cast<SmStructureNode *>(pNode.release());
+        pArray = static_cast<SmStructureNode *>(rNodeStack.front().release());
+        rNodeStack.pop_front();
         if (pArray->GetNumSubNodes() == 0)
         {
             //This is a little tricky, it is possible that there was
@@ -2511,14 +2517,14 @@ void SmXMLTableContext_Impl::EndElement()
 
         if (pArray->GetNumSubNodes() > nCols)
             nCols = pArray->GetNumSubNodes();
-        aReverseStack.push_front(pArray);
+        aReverseStack.push_front(std::unique_ptr<SmStructureNode>(pArray));
     }
     aExpressionArray.resize(nCols*nRows);
     size_t j=0;
     while ( !aReverseStack.empty() )
     {
-        auto pNode = aReverseStack.pop_front();
-        pArray = static_cast<SmStructureNode *>(pNode.release());
+        pArray = static_cast<SmStructureNode *>(aReverseStack.front().release());
+        aReverseStack.pop_front();
         for (sal_uInt16 i=0;i<pArray->GetNumSubNodes();i++)
             aExpressionArray[j++] = pArray->GetSubNode(i);
     }
@@ -2527,10 +2533,10 @@ void SmXMLTableContext_Impl::EndElement()
     aToken.cMathChar = '\0';
     aToken.nGroup = TRGROUP;
     aToken.eType = TMATRIX;
-    SmMatrixNode *pSNode = new SmMatrixNode(aToken);
+    std::unique_ptr<SmMatrixNode> pSNode(new SmMatrixNode(aToken));
     pSNode->SetSubNodes(aExpressionArray);
     pSNode->SetRowCol(static_cast<sal_uInt16>(nRows),nCols);
-    rNodeStack.push_front(pSNode);
+    rNodeStack.push_front(std::move(pSNode));
 }
 
 SvXMLImportContext *SmXMLTableRowContext_Impl::CreateChildContext(
@@ -2630,12 +2636,13 @@ void SmXMLActionContext_Impl::EndElement()
     {
         rNodeStack.pop_front();
     }
-    auto pSelected = rNodeStack.pop_front();
+    auto pSelected = std::move(rNodeStack.front());
+    rNodeStack.pop_front();
     for (auto i=rNodeStack.size()-nElementCount; i > 0; i--)
     {
         rNodeStack.pop_front();
     }
-    rNodeStack.push_front(pSelected.release());
+    rNodeStack.push_front(std::move(pSelected));
 }
 
 SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
