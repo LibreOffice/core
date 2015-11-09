@@ -15,6 +15,7 @@ $(eval $(call gb_PythonTest_set_defs,sw_python,\
 
 $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_index \
+	check_bookmarks \
 	check_fields \
 	check_table \
 	get_expression \
