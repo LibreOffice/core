@@ -313,6 +313,7 @@ UnoActionRemoveContext::~UnoActionRemoveContext()
 
 void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
+    SolarMutexGuard aGuard;
     switch( pOld ? pOld->Which() : 0 )
     {
     case RES_REMOVE_UNO_OBJECT:

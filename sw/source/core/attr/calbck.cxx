@@ -22,6 +22,7 @@
 #include <hints.hxx>
 #include <swcache.hxx>
 #include <swfntcch.hxx>
+#include <vcl/svapp.hxx>
 
 sw::LegacyModifyHint::~LegacyModifyHint() {}
 
@@ -29,6 +30,7 @@ TYPEINIT0( SwClient );
 
 SwClient::~SwClient()
 {
+    SolarMutexGuard aGuard;
     OSL_ENSURE( !pRegisteredIn || pRegisteredIn->HasWriterListeners(), "SwModify still known, but Client already disconnected!" );
     if( pRegisteredIn && pRegisteredIn->HasWriterListeners() )
         pRegisteredIn->Remove( this );
@@ -73,6 +75,7 @@ void SwClient::Modify(SfxPoolItem const*const pOldValue, SfxPoolItem const*const
 
 SwModify::~SwModify()
 {
+    SolarMutexGuard aGuard;
     OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
 
     if ( IsInCache() )
@@ -158,6 +161,7 @@ bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 
 void SwModify::Add( SwClient* pDepend )
 {
+    SolarMutexGuard aGuard;
     OSL_ENSURE( !m_bLockClientList, "Client inserted while in Modify" );
 
     if(pDepend->pRegisteredIn != this )
