@@ -168,11 +168,12 @@ private:
 
                         sal_Int32 GetDefaultUnit();
 
-public:
+    friend class VclPtr<ExportDialog>;
                         ExportDialog( FltCallDialogParameter& rPara,
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
                             bool bExportSelection, bool bIsExportVectorFormat );
+public:
                         virtual ~ExportDialog();
                         virtual void dispose() override;
 };

@@ -59,23 +59,23 @@ private:
     bool bLabelChanged;
     bool m_bShowPassword;
 
-public :
 
-     PlaceEditDialog( vcl::Window* pParent);
-     PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place> &rPlace );
-     virtual ~PlaceEditDialog();
-     virtual void dispose() override;
+    PlaceEditDialog( vcl::Window* pParent);
+    PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place> &rPlace );
+public:
+    virtual ~PlaceEditDialog();
+    virtual void dispose() override;
 
-     // Returns a place instance with given information
-     std::shared_ptr<Place> GetPlace();
+    // Returns a place instance with given information
+    std::shared_ptr<Place> GetPlace();
 
-     OUString GetServerName() { return m_pEDServerName->GetText(); }
-     OUString GetServerUrl();
-     OUString GetPassword() { return m_pEDPassword->GetText(); };
-     OUString GetUser() { return m_pEDUsername->GetText(); };
-     bool     IsRememberChecked() { return m_pCBPassword->IsChecked(); }
+    OUString GetServerName() { return m_pEDServerName->GetText(); }
+    OUString GetServerUrl();
+    OUString GetPassword() { return m_pEDPassword->GetText(); };
+    OUString GetUser() { return m_pEDUsername->GetText(); };
+    bool     IsRememberChecked() { return m_pCBPassword->IsChecked(); }
 
-     void ShowPasswordControl( bool bShow = true ) { m_bShowPassword = bShow; }
+    void ShowPasswordControl( bool bShow = true ) { m_bShowPassword = bShow; }
 
 private:
 

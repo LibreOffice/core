@@ -57,8 +57,8 @@ private:
                     DECL_DLLPRIVATE_LINK_TYPED( ImplChangePrinterHdl, ListBox&, void );
                     DECL_DLLPRIVATE_LINK_TYPED( ImplStatusHdl, Timer*, void );
 
-public:
                     PrinterSetupDialog( vcl::Window* pWindow );
+public:
     virtual         ~PrinterSetupDialog();
     virtual void    dispose() override;
 

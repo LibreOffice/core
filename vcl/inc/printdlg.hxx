@@ -251,8 +251,10 @@ namespace vcl
         DECL_LINK_TYPED( UIOption_SelectHdl, ListBox&, void );
         DECL_LINK_TYPED( UIOption_ModifyHdl, Edit&, void );
 
-    public:
+    private:
+        friend class ScopedVclPtrInstance<PrintDialog>;
         PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );
+    public:
         virtual ~PrintDialog();
         virtual void dispose() override;
 
@@ -277,8 +279,9 @@ namespace vcl
 
         DECL_LINK_TYPED( ClickHdl, Button*, void );
 
-    public:
+        friend class VclPtr<PrintProgressDialog>;
         PrintProgressDialog(vcl::Window* i_pParent, int i_nMax);
+    public:
         virtual ~PrintProgressDialog();
         virtual void dispose() override;
         bool isCanceled() const { return mbCanceled; }

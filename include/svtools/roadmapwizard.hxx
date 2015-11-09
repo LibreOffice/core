@@ -66,7 +66,7 @@ namespace svt
     private:
         RoadmapWizardImpl*  m_pImpl;
 
-    public:
+    protected:
         RoadmapWizard(
             vcl::Window* _pParent,
             const WinBits i_nStyle,
@@ -76,6 +76,7 @@ namespace svt
             vcl::Window* _pParent,
             WizardButtonFlags _nButtonFlags = WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP
         );
+    public:
         virtual ~RoadmapWizard( );
         virtual void dispose() override;
 

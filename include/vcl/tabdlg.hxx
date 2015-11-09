@@ -37,10 +37,12 @@ private:
     SAL_DLLPRIVATE void ImplInitTabDialogData();
     SAL_DLLPRIVATE void ImplPosControls();
 
-public:
+protected:
+    friend class VclPtr<TabDialog>;
                         TabDialog( vcl::Window* pParent,
                                    WinBits nStyle = WB_STDTABDIALOG );
                         TabDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
+public:
     virtual             ~TabDialog();
     virtual void        dispose() override;
 

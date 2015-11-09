@@ -60,8 +60,8 @@ private:
     DECL_LINK_TYPED( heightModifiedHandle,      Edit&, void );
     DECL_LINK_TYPED( resolutionModifiedHandle,  Edit&, void );
 
-public:
     GraphicExportOptionsDialog( vcl::Window* pWindow, const css::uno::Reference<css::lang::XComponent>& rxSourceDocument );
+public:
     virtual ~GraphicExportOptionsDialog();
     virtual void dispose() override;
     css::uno::Sequence<css::beans::PropertyValue> getFilterData();

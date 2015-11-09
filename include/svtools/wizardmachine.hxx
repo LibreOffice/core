@@ -171,9 +171,10 @@ namespace svt
         // hold members in this structure to allow keeping compatible when members are added
         WizardMachineImplData*  m_pImpl;
 
-    public:
+    protected:
         OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags );
         OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags );
+    public:
         virtual ~OWizardMachine();
         virtual void dispose() override;
 
