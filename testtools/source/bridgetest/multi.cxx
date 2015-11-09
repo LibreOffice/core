@@ -56,9 +56,7 @@ template< typename T > void checkEqual(T const & value, T const & argument) {
 
 namespace testtools { namespace bridgetest {
 
-OUString testMulti(
-    com::sun::star::uno::Reference< test::testtools::bridgetest::XMulti >
-    const & multi)
+OUString testMulti(  css::uno::Reference< test::testtools::bridgetest::XMulti >  const & multi )
 {
     try {
         checkEqual(

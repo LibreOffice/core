@@ -189,8 +189,8 @@ static void assign( TestElement & rData,
                     sal_Int64 nHyper, sal_uInt64 nUHyper,
                     float fFloat, double fDouble,
                     TestEnum eEnum, const OUString& rStr,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
-                    const ::com::sun::star::uno::Any& rAny )
+                    const css::uno::Reference< css::uno::XInterface >& xTest,
+                    const css::uno::Any& rAny )
 {
     rData.Bool = bBool;
     rData.Char = cChar;
@@ -311,9 +311,9 @@ private:
 
 public:
     void SAL_CALL callRecursivly(
-        const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall,
+        const css::uno::Reference< XRecursiveCall >& xCall,
         sal_Int32 nToCall )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override
+        throw(css::uno::RuntimeException, std::exception) override
         {
             MutexGuard guard( m_mutex );
             if( nToCall )
