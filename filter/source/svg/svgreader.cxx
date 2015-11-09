@@ -1350,11 +1350,26 @@ struct ShapeWritingVisitor
                     aPoly.setClosed(true);
                 }
 
-                writePathShape(xAttrs,
-                               xUnoAttrs,
-                               xElem,
-                               sStyleId,
-                               aPoly);
+                // tdf#51165: rendering of paths with open and closed polygons is not implemented
+                // split mixed polypolygons into single polygons and add them one by one
+                if( aPoly.isMixedOpenAndClosed() )
+                {
+                    for( int i=0; i<aPoly.count(); ++i ) {
+                        writePathShape(xAttrs,
+                                       xUnoAttrs,
+                                       xElem,
+                                       sStyleId,
+                                       basegfx::B2DPolyPolygon(aPoly.getB2DPolygon(i)));
+                    }
+                }
+                else
+                {
+                    writePathShape(xAttrs,
+                                   xUnoAttrs,
+                                   xElem,
+                                   sStyleId,
+                                   aPoly);
+                }
                 break;
             }
             case XML_CIRCLE:

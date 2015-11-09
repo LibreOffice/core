@@ -106,6 +106,7 @@ namespace basegfx
         // closed state
         bool isClosed() const;
         void setClosed(bool bNew);
+        bool isMixedOpenAndClosed() const;
 
         // flip polygon direction
         void flip();

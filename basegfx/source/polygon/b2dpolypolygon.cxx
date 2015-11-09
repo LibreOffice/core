@@ -326,7 +326,7 @@ namespace basegfx
     {
         bool bRetval(true);
 
-        // PolyPOlygon is closed when all contained Polygons are closed or
+        // PolyPolygon is closed when all contained Polygons are closed or
         // no Polygon exists.
         for(sal_uInt32 a(0L); bRetval && a < mpPolyPolygon->count(); a++)
         {
@@ -334,6 +334,31 @@ namespace basegfx
             {
                 bRetval = false;
             }
+        }
+
+        return bRetval;
+    }
+
+    bool B2DPolyPolygon::isMixedOpenAndClosed() const
+    {
+        bool bRetval(false);
+        bool bOpen(false);
+        bool bClosed(false);
+
+        // PolyPolygon is mixed open and closed if there is more than one
+        // polygon and there are both closed and open polygons.
+        for(sal_uInt32 a(0L); !bRetval && a < mpPolyPolygon->count(); a++)
+        {
+            if ((mpPolyPolygon->getB2DPolygon(a)).isClosed())
+            {
+                bClosed = true;
+            }
+            else
+            {
+                bOpen = true;
+            }
+
+            bRetval = (bClosed && bOpen);
         }
 
         return bRetval;
