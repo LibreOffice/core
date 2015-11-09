@@ -20,7 +20,7 @@
     </Country>
   </LC_INFO>
   <LC_CTYPE ref="ar_SA" />
-  <LC_FORMAT ref="ar_SA" replaceFrom="[CURRENCY]" replaceTo="[$4001-ر.ق.]"/>
+  <LC_FORMAT ref="ar_SA" replaceFrom="[CURRENCY]" replaceTo="[$ر.ق.-4001]"/>
   <LC_COLLATION ref="ar_SA" />
   <LC_SEARCH ref="ar_SA"/>
   <LC_INDEX ref="ar_SA"/>
