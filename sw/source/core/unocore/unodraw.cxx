@@ -1006,12 +1006,15 @@ void SwXShape::AddExistingShapeToFormat( SdrObject& _rObj )
 
 SwXShape::~SwXShape()
 {
+    SolarMutexGuard aGuard;
     if (xShapeAgg.is())
     {
         uno::Reference< uno::XInterface >  xRef;
         xShapeAgg->setDelegator(xRef);
     }
     delete pImpl;
+    if(GetRegisteredIn())
+        GetRegisteredIn()->Remove(this);
 }
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType ) throw( uno::RuntimeException, std::exception )

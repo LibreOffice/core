@@ -1304,6 +1304,8 @@ SwXStyle::~SwXStyle()
     if(m_pBasePool)
         EndListening(*m_pBasePool);
     delete m_pPropertiesImpl;
+    if(GetRegisteredIn())
+        GetRegisteredIn()->Remove( this );
 }
 
 void SwXStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)

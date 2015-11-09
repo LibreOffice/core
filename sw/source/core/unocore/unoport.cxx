@@ -137,7 +137,10 @@ SwXTextPortion::SwXTextPortion(
 }
 
 SwXTextPortion::~SwXTextPortion()
-{ }
+{
+    SolarMutexGuard aGuard;
+    m_pUnoCursor.reset(nullptr);
+}
 
 uno::Reference< text::XText >  SwXTextPortion::getText()
 throw( uno::RuntimeException, std::exception )

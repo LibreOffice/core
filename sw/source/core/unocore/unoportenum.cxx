@@ -384,7 +384,10 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
 }
 
 SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
-{ }
+{
+    SolarMutexGuard aGuard;
+    m_pUnoCrsr.reset(nullptr);
+}
 
 sal_Bool SwXTextPortionEnumeration::hasMoreElements()
 throw( uno::RuntimeException, std::exception )
