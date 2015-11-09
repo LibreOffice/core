@@ -29,10 +29,9 @@ class SwView;
 class SwHyphWrapper : public SvxSpellWrapper {
 private:
     SwView* pView;
-    css::uno::Reference<
-        css::linguistic2::XHyphenator >  xHyph;
-    sal_uInt16          nPageCount;     // page count for progress view
-    sal_uInt16          nPageStart;     // 1st checked page
+    css::uno::Reference< css::linguistic2::XHyphenator >  xHyph;
+    sal_uInt16      nPageCount;     // page count for progress view
+    sal_uInt16      nPageStart;     // 1st checked page
     bool            bInSelection : 1; // separating selected text
     bool            bAutomatic : 1; // insert separators without further inquiry
     bool            bInfoBox : 1;   // display info-box when ending
@@ -46,8 +45,7 @@ protected:
 
 public:
     SwHyphWrapper( SwView* pVw,
-                   css::uno::Reference<
-                        css::linguistic2::XHyphenator >  &rxHyph,
+                   css::uno::Reference< css::linguistic2::XHyphenator >  &rxHyph,
                    bool bStart, bool bOther, bool bSelect );
     virtual ~SwHyphWrapper();
 };

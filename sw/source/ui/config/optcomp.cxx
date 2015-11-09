@@ -35,9 +35,9 @@
 #include <svtools/treelistentry.hxx>
 #include <IDocumentSettingAccess.hxx>
 
-using namespace css::beans;
-using namespace css::document;
-using namespace css::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::uno;
 using namespace ::std;
 
 struct CompatibilityItem

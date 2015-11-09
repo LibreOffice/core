@@ -772,7 +772,8 @@ private:
                            SfxItemSet& rCSS1ItemSet,
                            SvxCSS1PropertyInfo& rCSS1PropInfo,
                            bool bHidden=false );
-                        css::uno::Reference< css::drawing::XShape >  InsertControl( const css::uno::Reference< css::form::XFormComponent > & rFormComp,
+     css::uno::Reference< css::drawing::XShape >  InsertControl(
+                        const css::uno::Reference< css::form::XFormComponent > & rFormComp,
                         const css::uno::Reference< css::beans::XPropertySet > & rFCompPropSet,
                         const Size& rSize,
                         sal_Int16 eVertOri,
@@ -899,8 +900,7 @@ public:
     // for reading asynchronously from SvStream
     virtual void Continue( int nToken ) override;
 
-    virtual bool ParseMetaOptions( const css::uno::Reference<
-                css::document::XDocumentProperties>&,
+    virtual bool ParseMetaOptions( const css::uno::Reference<css::document::XDocumentProperties>&,
             SvKeyValueIterator* ) override;
 };
 

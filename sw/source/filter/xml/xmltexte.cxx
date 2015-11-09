@@ -48,12 +48,12 @@
 #include <SwStyleNameMapper.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::style;
-using namespace css::beans;
-using namespace css::lang;
-using namespace css::document;
-using namespace css::io;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
 enum SvEmbeddedObjectTypes

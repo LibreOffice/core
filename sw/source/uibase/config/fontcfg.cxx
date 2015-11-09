@@ -30,7 +30,7 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace css::uno;
+using namespace com::sun::star::uno;
 
 static inline LanguageType lcl_LanguageOfType(sal_Int16 nType, sal_Int16 eWestern, sal_Int16 eCJK, sal_Int16 eCTL)
 {

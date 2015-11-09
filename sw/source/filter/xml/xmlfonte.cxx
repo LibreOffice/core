@@ -27,9 +27,9 @@
 #include <xmlimp.hxx>
 #include <IDocumentSettingAccess.hxx>
 
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::text;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
 
 class SwXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {

@@ -48,7 +48,7 @@ class SwFieldDokInfPage : public SwFieldPage
 
     sal_Int32               nOldSel;
     sal_uLong               nOldFormat;
-    OUString     m_sOldCustomFieldName;
+    OUString                m_sOldCustomFieldName;
 
     DECL_LINK_TYPED(TypeHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(SubTypeHdl, ListBox&, void);

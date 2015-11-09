@@ -56,8 +56,8 @@
 sal_uInt16  SwView::m_nMoveType = NID_PGE;
 sal_Int32 SwView::m_nActMark = 0;
 
-using namespace css::uno;
-using namespace css::frame;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
 {

@@ -42,7 +42,7 @@
 #include <unomid.h>
 
 using namespace ::com::sun::star;
-using namespace css::ui::dialogs;
+using namespace ::com::sun::star::ui::dialogs;
 
 class SwAddressControl_Impl : public Control
 {

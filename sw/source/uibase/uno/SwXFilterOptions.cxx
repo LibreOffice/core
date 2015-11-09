@@ -35,9 +35,9 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace css::ui::dialogs;
-using namespace css::document;
-using namespace css::lang;
+using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::lang;
 
 #define FILTER_OPTIONS_NAME             "FilterOptions"
 

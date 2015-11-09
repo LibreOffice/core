@@ -33,9 +33,9 @@
 
 #include <unomid.h>
 
-using namespace css::uno;
-using namespace css::beans;
-using namespace css::sdbc;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdbc;
 
 SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent)
     : svt::OWizardPage(_pParent, "MMPreparePage", "modules/swriter/ui/mmpreparepage.ui")

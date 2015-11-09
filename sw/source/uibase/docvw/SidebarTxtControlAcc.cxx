@@ -139,13 +139,11 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 
         virtual void SAL_CALL
                 addAccessibleEventListener (
-                    const css::uno::Reference<
-                        css::accessibility::XAccessibleEventListener >& xListener)
+                    const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
                 throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL
                 removeAccessibleEventListener (
-                    const css::uno::Reference<
-                        css::accessibility::XAccessibleEventListener >& xListener)
+                    const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
                 throw (css::uno::RuntimeException, std::exception) override;
 
     protected:

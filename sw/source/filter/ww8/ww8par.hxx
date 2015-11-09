@@ -687,10 +687,8 @@ public:
     std::vector<OUString> maListEntries;
     virtual ~WW8FormulaControl() {}
     void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
-    virtual bool Import(const css::uno::Reference <
-        css::lang::XMultiServiceFactory> &rServiceFactory,
-        css::uno::Reference <
-        css::form::XFormComponent> &rFComp,
+    virtual bool Import(const css::uno::Reference< css::lang::XMultiServiceFactory> &rServiceFactory,
+        css::uno::Reference< css::form::XFormComponent> &rFComp,
         css::awt::Size &rSz) = 0;
     OUString msName;
 };
@@ -704,10 +702,8 @@ private:
 public:
     explicit WW8FormulaCheckBox(SwWW8ImplReader &rR);
 
-    virtual bool Import(const css::uno::Reference <
-        css::lang::XMultiServiceFactory> &rServiceFactory,
-        css::uno::Reference <
-        css::form::XFormComponent> &rFComp,
+    virtual bool Import(const css::uno::Reference< css::lang::XMultiServiceFactory> &rServiceFactory,
+        css::uno::Reference< css::form::XFormComponent> &rFComp,
         css::awt::Size &rSz) override;
 };
 
@@ -720,10 +716,8 @@ private:
 public:
     explicit WW8FormulaListBox(SwWW8ImplReader &rR);
 
-    virtual bool Import(const css::uno::Reference <
-        css::lang::XMultiServiceFactory> &rServiceFactory,
-        css::uno::Reference <
-        css::form::XFormComponent> &rFComp,
+    virtual bool Import(const css::uno::Reference< css::lang::XMultiServiceFactory> &rServiceFactory,
+        css::uno::Reference< css::form::XFormComponent> &rFComp,
         css::awt::Size &rSz) override;
 };
 
@@ -735,10 +729,8 @@ private:
 public:
     explicit WW8FormulaEditBox(SwWW8ImplReader &rR);
     //no real implementation, return false
-    virtual bool Import(const css::uno::Reference <
-        css::lang::XMultiServiceFactory> & /* rServiceFactory */,
-        css::uno::Reference <
-        css::form::XFormComponent> & /* rFComp */,
+    virtual bool Import(const css::uno::Reference< css::lang::XMultiServiceFactory> & /* rServiceFactory */,
+        css::uno::Reference< css::form::XFormComponent> & /* rFComp */,
         css::awt::Size & /* rSz */) override { return false; }
 };
 
@@ -747,15 +739,12 @@ class SwMSConvertControls: public oox::ole::MSConvertOCXControls
 public:
     SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP );
     bool InsertFormula( WW8FormulaControl &rFormula);
-    virtual bool InsertControl(const css::uno::Reference<
-        css::form::XFormComponent >& rFComp,
+    virtual bool InsertControl(const css::uno::Reference< css::form::XFormComponent >& rFComp,
         const css::awt::Size& rSize,
-        css::uno::Reference <
-        css::drawing::XShape > *pShape, bool bFloatingCtrl) override;
+        css::uno::Reference<  css::drawing::XShape > *pShape, bool bFloatingCtrl) override;
     bool ExportControl(WW8Export &rWrt, const SdrUnoObj& rFormObj);
     bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
-        css::uno::Reference<
-        css::drawing::XShape > *pShapeRef=0,
+        css::uno::Reference< css::drawing::XShape > *pShapeRef=0,
         bool bFloatingCtrl=false );
 private:
     sal_uInt32 GenerateObjectID() { return ++mnObjectId; }
@@ -1853,8 +1842,7 @@ public:     // really private, but can only be done public
     eF_ResT Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr );
     eF_ResT Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr);
     css::awt::Size MiserableDropDownFormHack(const OUString &rString,
-        css::uno::Reference<css::beans::XPropertySet>&
-        rPropSet);
+        css::uno::Reference<css::beans::XPropertySet>& rPropSet);
 
     eF_ResT Read_F_Macro( WW8FieldDesc*, OUString& rStr);
     eF_ResT Read_F_DBField( WW8FieldDesc*, OUString& rStr );

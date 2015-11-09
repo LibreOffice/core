@@ -63,18 +63,18 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace css::container;
-using namespace css::lang;
-using namespace css::sdb;
-using namespace css::sdbc;
-using namespace css::sdbcx;
-using namespace css::beans;
-using namespace css::util;
-using namespace css::uno;
-using namespace css::frame;
-using namespace css::form;
-using namespace css::view;
-using namespace css::ui::dialogs;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::ui::dialogs;
 
 struct SwMailMergeDlg_Impl {
     uno::Reference<runtime::XFormController> xFController;

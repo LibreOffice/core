@@ -57,8 +57,8 @@
 #include <unomid.h>
 #include <memory>
 
-using namespace css::uno;
-using namespace css::frame;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
 SFX_IMPL_CHILDWINDOW_CONTEXT( SwNavigationChild, SID_NAVIGATOR, SwView )
 

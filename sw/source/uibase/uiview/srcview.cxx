@@ -91,12 +91,12 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using namespace ::com::sun::star;
-using namespace css::i18n;
-using namespace css::lang;
-using namespace css::uno;
-using namespace css::ui::dialogs;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
-using css::util::SearchOptions;
+using ::com::sun::star::util::SearchOptions;
 
 #define SWSRCVIEWFLAGS ( SfxViewShellFlags::CAN_PRINT | SfxViewShellFlags::NO_NEWWINDOW )
 

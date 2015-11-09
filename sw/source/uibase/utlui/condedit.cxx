@@ -24,7 +24,7 @@
 #include <vcl/builderfactory.hxx>
 
 using namespace ::svx;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 ConditionEdit::ConditionEdit(vcl::Window* pParent, WinBits nStyle)
     : Edit(pParent, nStyle)

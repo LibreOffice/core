@@ -31,7 +31,7 @@
 
 using namespace svt;
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 static void lcl_FillGreetingsBox(ListBox& rBox,
                         SwMailMergeConfigItem& rConfig,

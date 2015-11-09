@@ -42,26 +42,20 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
     const SvGlobalName aOutplaceClassId;
 
     static SwNoTextNode *GetNoTextNode(
-        const css::uno::Reference <
-                css::beans::XPropertySet >& rPropSet );
+        const css::uno::Reference < css::beans::XPropertySet >& rPropSet );
 
 protected:
     virtual void exportStyleContent(
-            const css::uno::Reference<
-                css::style::XStyle > & rStyle ) override;
+            const css::uno::Reference< css::style::XStyle > & rStyle ) override;
 
     virtual void _collectTextEmbeddedAutoStyles(
-        const css::uno::Reference <
-            css::beans::XPropertySet > & rPropSet ) override;
+        const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
     virtual void _exportTextEmbedded(
-        const css::uno::Reference <
-            css::beans::XPropertySet > & rPropSet,
-        const css::uno::Reference <
-            css::beans::XPropertySetInfo > & rPropSetInfo ) override;
+        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo ) override;
 
     virtual void exportTable(
-        const css::uno::Reference <
-            css::text::XTextContent > & rTextContent,
+        const css::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress ) override;
 
 public:

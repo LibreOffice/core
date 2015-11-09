@@ -31,9 +31,9 @@
 #include <unoprnms.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::lang;
-using namespace css::container;
-using namespace css::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::uno;
 using namespace ::comphelper;
 
 void SwVisitingCardPage::InitFrameControl()

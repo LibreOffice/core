@@ -60,34 +60,25 @@ private:
     // write a single XML stream into the package
     bool WriteThroughComponent(
         // the component we export
-        const css::uno::Reference<
-            css::lang::XComponent> & xComponent,
+        const css::uno::Reference<css::lang::XComponent> & xComponent,
         const sal_Char* pStreamName,        // the stream name
         // service factory for pServiceName
-        const css::uno::Reference<
-            css::uno::XComponentContext> & rFactory,
+        const css::uno::Reference<css::uno::XComponentContext> & rFactory,
         const sal_Char* pServiceName,       // service name of the component
         // the argument (XInitialization)
-        const css::uno::Sequence<
-            css::uno::Any> & rArguments,
+        const css::uno::Sequence<css::uno::Any> & rArguments,
         // output descriptor
-        const css::uno::Sequence<
-            css::beans::PropertyValue> & rMediaDesc );
+        const css::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );
 
     // write a single output stream
     // (to be called either directly or by WriteThroughComponent(...))
     static bool WriteThroughComponent(
-        const css::uno::Reference<
-            css::io::XOutputStream> & xOutputStream,
-        const css::uno::Reference<
-            css::lang::XComponent> & xComponent,
-        const css::uno::Reference<
-            css::uno::XComponentContext> & rFactory,
+        const css::uno::Reference<css::io::XOutputStream> & xOutputStream,
+        const css::uno::Reference<css::lang::XComponent> & xComponent,
+        const css::uno::Reference<css::uno::XComponentContext> & rFactory,
         const sal_Char* pServiceName,
-        const css::uno::Sequence<
-            css::uno::Any> & rArguments,
-        const css::uno::Sequence<
-            css::beans::PropertyValue> & rMediaDesc );
+        const css::uno::Sequence<css::uno::Any> & rArguments,
+        const css::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_WRTXML_HXX

@@ -60,7 +60,7 @@
 #include "swabstdlg.hxx"
 #include <memory>
 
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 // Context menu for GlobalTree
 #define CTX_INSERT_ANY_INDEX 10

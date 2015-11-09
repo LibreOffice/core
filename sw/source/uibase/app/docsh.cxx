@@ -129,9 +129,9 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::script;
-using namespace css::container;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::container;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwDocShell, SfxObjectShell)
 

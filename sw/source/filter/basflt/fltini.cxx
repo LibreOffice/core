@@ -58,7 +58,7 @@
 #include <rtl/bootstrap.hxx>
 
 using namespace utl;
-using namespace css::uno;
+using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
 SwRead ReadAscii = 0, ReadHTML = 0, ReadXML = 0;

@@ -39,7 +39,7 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace css::uno;
+using namespace com::sun::star::uno;
 
 #define GLOB_NAME_CALC      0
 #define GLOB_NAME_IMPRESS   1

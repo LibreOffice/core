@@ -152,13 +152,13 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace css::text;
-using namespace css::i18n;
-using namespace css::uno;
-using namespace css::beans;
-using namespace css::lang;
-using namespace css::container;
-using namespace css::document;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
 using ::osl::FileBase;
 
 #define SW_CREATE_DASH_TABLE            0x01

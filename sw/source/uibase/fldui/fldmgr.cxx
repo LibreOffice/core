@@ -80,13 +80,13 @@
 #include <cnttab.hxx>
 #include <unotools/useroptions.hxx>
 
-using namespace css::uno;
-using namespace css::container;
-using namespace css::lang;
-using namespace css::beans;
-using namespace css::text;
-using namespace css::style;
-using namespace css::sdbc;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::container;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::text;
+using namespace com::sun::star::style;
+using namespace com::sun::star::sdbc;
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 

@@ -50,10 +50,10 @@
 #include <unomid.h>
 
 using namespace ::com::sun::star;
-using namespace css::text;
-using namespace css::uno;
-using namespace css::linguistic2;
-using namespace css::i18n;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::linguistic2;
+using namespace ::com::sun::star::i18n;
 
 //     Description: Turn off frame/object shell if applicable
 

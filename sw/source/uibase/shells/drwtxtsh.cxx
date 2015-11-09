@@ -77,9 +77,9 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::beans;
-using namespace css::i18n;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::i18n;
 
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell)
 

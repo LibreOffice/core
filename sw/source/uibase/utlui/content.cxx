@@ -101,9 +101,9 @@
 
 using namespace ::std;
 using namespace ::com::sun::star;
-using namespace css::text;
-using namespace css::uno;
-using namespace css::container;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 
 #define NAVI_BOOKMARK_DELIM     (sal_Unicode)1
 

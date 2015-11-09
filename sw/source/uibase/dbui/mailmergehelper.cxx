@@ -43,11 +43,11 @@
 #include <dbui.hrc>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::container;
-using namespace css::sdb;
-using namespace css::sdbc;
-using namespace css::sdbcx;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 
 namespace SwMailMergeHelper
 {

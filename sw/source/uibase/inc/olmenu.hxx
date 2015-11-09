@@ -36,10 +36,8 @@ class SwWrtShell;
 class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
 {
     SwWrtShell* m_pSh;
-    css::uno::Sequence< css::uno::Reference<
-        css::linguistic2::XDictionary >  >     m_aDics;
-    css::uno::Reference<
-        css::linguistic2::XSpellAlternatives > m_xSpellAlt;
+    css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary >  >     m_aDics;
+    css::uno::Reference< css::linguistic2::XSpellAlternatives > m_xSpellAlt;
 
     css::linguistic2::ProofreadingResult m_xGrammarResult;
     sal_Int32 m_nGrammarError;
@@ -71,8 +69,7 @@ class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
 
 public:
     SwSpellPopup( SwWrtShell *pWrtSh,
-            const css::uno::Reference<
-                css::linguistic2::XSpellAlternatives >  &xAlt,
+            const css::uno::Reference< css::linguistic2::XSpellAlternatives >  &xAlt,
             const OUString & rParaText );
 
     SwSpellPopup( SwWrtShell *pWrtSh,

@@ -42,7 +42,7 @@
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 extern SvXMLItemMapEntry aXMLTableItemMap[];

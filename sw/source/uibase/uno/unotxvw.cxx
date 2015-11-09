@@ -77,14 +77,14 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::beans;
-using namespace css::text;
-using namespace css::view;
-using namespace css::frame;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::frame;
 
-using css::util::URL;
+using ::com::sun::star::util::URL;
 using comphelper::HelperBaseNoState;
 
 SwXTextView::SwXTextView(SwView* pSwView) :

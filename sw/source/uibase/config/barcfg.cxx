@@ -26,7 +26,7 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace css::uno;
+using namespace com::sun::star::uno;
 
 #define SEL_TYPE_TABLE_TEXT     0
 #define SEL_TYPE_LIST_TEXT      1

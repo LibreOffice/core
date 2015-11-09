@@ -54,10 +54,8 @@ class XMLRedlineImportHelper
     bool bIgnoreRedlines;
 
     // save information for saving and reconstruction of the redline mode
-    css::uno::Reference<
-        css::beans::XPropertySet> xModelPropertySet;
-    css::uno::Reference<
-        css::beans::XPropertySet> xImportInfoPropertySet;
+    css::uno::Reference<css::beans::XPropertySet> xModelPropertySet;
+    css::uno::Reference<css::beans::XPropertySet> xImportInfoPropertySet;
     bool bShowChanges;
     bool bRecordChanges;
     css::uno::Sequence<sal_Int8> aProtectionKey;
@@ -66,13 +64,10 @@ public:
 
     XMLRedlineImportHelper(
         bool bIgnoreRedlines,       // ignore redlines mode
-
         // property sets of model + import info for saving + restoring the
         // redline mode
-        const css::uno::Reference<
-            css::beans::XPropertySet> & rModel,
-        const css::uno::Reference<
-            css::beans::XPropertySet> & rImportInfoSet );
+        const css::uno::Reference<css::beans::XPropertySet> & rModel,
+        const css::uno::Reference<css::beans::XPropertySet> & rImportInfoSet );
     virtual ~XMLRedlineImportHelper();
 
     // create a redline object
@@ -88,10 +83,8 @@ public:
 
     // create a text section for the redline, and return an
     // XText/XTextCursor that may be used to write into it.
-    css::uno::Reference<
-        css::text::XTextCursor> CreateRedlineTextSection(
-            css::uno::Reference<   // needed to get the document
-                    css::text::XTextCursor> xOldCursor,
+    css::uno::Reference<css::text::XTextCursor> CreateRedlineTextSection(
+            css::uno::Reference<css::text::XTextCursor> xOldCursor, // needed to get the document
             const OUString& rId);    // ID used to RedlineAdd() call
 
     // Set start or end position for a redline in the text body.
@@ -99,8 +92,7 @@ public:
     void SetCursor(
         const OUString& rId,     // ID used in RedlineAdd() call
         bool bStart,                // start or end Range
-        css::uno::Reference<   // the actual XTextRange
-            css::text::XTextRange> & rRange,
+        css::uno::Reference<css::text::XTextRange> & rRange, // the actual XTextRange
         // text range is (from an XML view) outside of a paragraph
         // (i.e. before a table)
         bool bIsOusideOfParagraph);
@@ -117,8 +109,7 @@ public:
          const OUString& rId,        // ID used in RedlineAdd() call
         bool bStart,
         // XTextRange _inside_ a table/section
-        css::uno::Reference<
-            css::text::XTextRange> & rRange);
+        css::uno::Reference<css::text::XTextRange> & rRange);
 
     // set redline mode: show changes
     void SetShowChanges( bool bShowChanges );
@@ -127,8 +118,7 @@ public:
     void SetRecordChanges( bool bRecordChanges );
 
     // set redline protection key
-    void SetProtectionKey(
-        const css::uno::Sequence<sal_Int8> & rKey );
+    void SetProtectionKey(const css::uno::Sequence<sal_Int8> & rKey );
 
 private:
 

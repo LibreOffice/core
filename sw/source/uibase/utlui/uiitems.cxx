@@ -30,7 +30,7 @@
 #include <numrule.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( const sal_uInt16 nId, SwPageFootnoteInfo& rInfo) :
     SfxPoolItem( nId ),

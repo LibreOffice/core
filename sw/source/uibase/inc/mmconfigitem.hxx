@@ -49,7 +49,6 @@ struct SwDocMergeInfo
 
 class SW_DLLPUBLIC SwMailMergeConfigItem
 {
-//    css::uno::Sequence< OUString>     m_aSavedDocuments;
     SwMailMergeConfigItem_Impl* m_pImpl;
     //session information - not stored in configuration
     bool m_bAddressInserted;

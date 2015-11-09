@@ -33,17 +33,17 @@
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-using css::frame::XModel;
-using css::text::XTextCursor;
-using css::text::XTextRange;
-using css::text::XText;
-using css::text::XWordCursor;
-using css::lang::XUnoTunnel;
-using css::beans::XPropertySet;
-using css::beans::XPropertySetInfo;
+using ::com::sun::star::frame::XModel;
+using ::com::sun::star::text::XTextCursor;
+using ::com::sun::star::text::XTextRange;
+using ::com::sun::star::text::XText;
+using ::com::sun::star::text::XWordCursor;
+using ::com::sun::star::lang::XUnoTunnel;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::XPropertySetInfo;
 // collision with tools/DateTime: use UNO DateTime as util::DateTime
 // using util::DateTime;
 

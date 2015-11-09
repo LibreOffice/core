@@ -39,9 +39,9 @@
 #include <helpid.h>
 
 using namespace ::com::sun::star;
-using namespace css::lang;
-using namespace css::mail;
-using namespace css::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::mail;
+using namespace ::com::sun::star::beans;
 
 class SwTestAccountSettingsDialog : public SfxModalDialog
 {

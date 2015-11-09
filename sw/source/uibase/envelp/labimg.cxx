@@ -29,7 +29,7 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 SwLabItem::SwLabItem() :
 

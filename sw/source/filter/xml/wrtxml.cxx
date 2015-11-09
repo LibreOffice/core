@@ -54,11 +54,11 @@
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::container;
-using namespace css::document;
-using namespace css::beans;
-using namespace css::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 
 SwXMLWriter::SwXMLWriter( const OUString& rBaseURL )
 {

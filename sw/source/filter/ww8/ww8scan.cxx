@@ -49,7 +49,7 @@
 #include <stdio.h>
 #endif
 
-using namespace css::lang;
+using namespace ::com::sun::star::lang;
 
 //-begin
 namespace SL

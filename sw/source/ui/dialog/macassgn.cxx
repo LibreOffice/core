@@ -38,8 +38,8 @@
 
 #include <doc.hxx>
 
-using css::uno::Reference;
-using css::frame::XFrame;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::frame::XFrame;
 
 SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 {

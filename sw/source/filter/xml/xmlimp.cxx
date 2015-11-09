@@ -76,14 +76,14 @@
 #include <unordered_set>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::text;
-using namespace css::lang;
-using namespace css::beans;
-using namespace css::container;
-using namespace css::i18n;
-using namespace css::drawing;
-using namespace css::xforms;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::xforms;
 using namespace ::xmloff::token;
 using namespace ::std;
 

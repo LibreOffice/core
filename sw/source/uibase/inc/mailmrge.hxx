@@ -98,7 +98,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     SwModuleOptions* pModOpt;
 
     DBManagerOptions nMergeType;
-    css::uno::Sequence< css::uno::Any >       m_aSelection;
+    css::uno::Sequence< css::uno::Any >        m_aSelection;
     css::uno::Reference< css::frame::XFrame2 > m_xFrame;
 
     Size            m_aDialogSize;

@@ -90,7 +90,7 @@ public:
 struct StatusStruct_Impl
 {
     css::uno::Reference< css::frame::XStatusListener> xListener;
-    css::util::URL                                                 aURL;
+    css::util::URL                                    aURL;
 };
 typedef std::list< StatusStruct_Impl > StatusListenerList;
 class SwXDispatch : public cppu::WeakImplHelper

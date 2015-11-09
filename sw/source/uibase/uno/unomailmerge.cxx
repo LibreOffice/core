@@ -74,11 +74,11 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace css::frame;
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::beans;
-using namespace css::text;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::text;
 using namespace SWUnoHelper;
 
 typedef ::utl::SharedUNOComponent< XInterface > SharedComponent;

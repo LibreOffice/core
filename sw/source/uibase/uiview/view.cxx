@@ -114,9 +114,9 @@
 #include <svl/cjkoptions.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::scanner;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::scanner;
 
 extern bool g_bNoInterrupt;       // in swmodule.cxx
 

@@ -86,8 +86,7 @@ class SwXMLImport: public SvXMLImport
     void                    UpdateTextCollConditions( SwDoc *pDoc );
 
     void         setTextInsertMode(
-                     const css::uno::Reference<
-                        css::text::XTextRange > & rInsertPos );
+                     const css::uno::Reference< css::text::XTextRange > & rInsertPos );
     void         setStyleInsertMode( sal_uInt16 nFamilies,
                                      bool bOverwrite );
     void         setBlockMode();
@@ -99,8 +98,7 @@ protected:
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                   const OUString& rLocalName,
-                  const css::uno::Reference<
-                    css::xml::sax::XAttributeList > & xAttrList ) override;
+                  const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual XMLTextImportHelper* CreateTextImport() override;
 
@@ -139,17 +137,14 @@ public:
     SvXMLImportContext *CreateScriptContext( const OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(
                 const OUString& rLocalName,
-                const css::uno::Reference<
-                    css::xml::sax::XAttributeList > & xAttrList,
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
                 bool bAuto );
     SvXMLImportContext *CreateMasterStylesContext(
                 const OUString& rLocalName,
-                const css::uno::Reference<
-                    css::xml::sax::XAttributeList > & xAttrList );
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext *CreateFontDeclsContext(
             const OUString& rLocalName,
-            const css::uno::Reference<
-                    css::xml::sax::XAttributeList > & xAttrList );
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext *CreateBodyContentContext( const OUString& rLocalName );
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
     bool IsInsertMode() const { return bInsert; }
@@ -162,8 +157,7 @@ public:
     inline       SvXMLImportItemMapper& GetTableItemMapper();
     SvXMLImportContext *CreateTableItemImportContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
-                const css::uno::Reference<
-                    css::xml::sax::XAttributeList > & xAttrList,
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
                 sal_uInt16 nSubFamily, SfxItemSet& rItemSet );
 
     const SvXMLTokenMap& GetDocElemTokenMap();
@@ -186,8 +180,7 @@ public:
     virtual void initXForms() override;
 
     // get the document properties, but only if they actually need importing
-    css::uno::Reference<
-        css::document::XDocumentProperties>
+    css::uno::Reference<css::document::XDocumentProperties>
             GetDocumentProperties() const;
 
     virtual void NotifyEmbeddedFontRead() override;

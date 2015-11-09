@@ -39,10 +39,10 @@
 
 using namespace svt;
 using namespace ::com::sun::star;
-using namespace css::container;
-using namespace css::sdb;
-using namespace css::sdbc;
-using namespace css::sdbcx;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 
 static void lcl_Move(Control* pCtrl, long nYOffset)
 {

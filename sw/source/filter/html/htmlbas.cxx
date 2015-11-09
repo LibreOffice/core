@@ -46,8 +46,8 @@
 #include "swhtml.hxx"
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::container;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 
 static HTMLOutEvent aBodyEventTable[] =
 {

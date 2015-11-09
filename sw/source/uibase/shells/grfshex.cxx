@@ -57,8 +57,8 @@
 // <- #111827#
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::ui::dialogs;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
 bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )

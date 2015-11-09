@@ -85,9 +85,9 @@
 
 
 using namespace ::com::sun::star;
-using namespace css::lang;
-using namespace css::uno;
-using namespace css::ui::dialogs;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 #include <svtools/editbrowsebox.hxx>
 

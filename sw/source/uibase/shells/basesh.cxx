@@ -149,9 +149,9 @@ namespace
 }
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::frame;
-using namespace css::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwBaseShell, SfxShell)
 

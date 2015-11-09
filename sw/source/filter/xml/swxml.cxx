@@ -77,11 +77,11 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::text;
-using namespace css::container;
-using namespace css::document;
-using namespace css::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::lang;
 
 static void lcl_EnsureValidPam( SwPaM& rPam )
 {

@@ -108,10 +108,10 @@ using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
 using namespace nsFieldFlags;
-using css::uno::Reference;
-using css::uno::UNO_QUERY;
-using css::beans::XPropertySet;
-using css::drawing::XShape;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::drawing::XShape;
 
 bool SwBasicEscherEx::IsRelUrl()
 {

@@ -138,7 +138,7 @@ using namespace nsSwDocInfoSubType;
 using namespace nsFieldFlags;
 using namespace sw::util;
 using namespace ::com::sun::star;
-using namespace css::drawing;
+using namespace ::com::sun::star::drawing;
 
 static const sal_Int32 Tag_StartParagraph_1 = 1;
 static const sal_Int32 Tag_StartParagraph_2 = 2;

@@ -41,7 +41,7 @@
 #endif
 
 using namespace utl;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 

@@ -121,8 +121,8 @@ protected:
         virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 public:
-        SwScrollNaviPopup( sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window *pParent );
-        virtual ~SwScrollNaviPopup();
+    SwScrollNaviPopup( sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window *pParent );
+    virtual ~SwScrollNaviPopup();
     virtual void dispose() override;
 
     static OUString         GetQuickHelpText(bool bNext);

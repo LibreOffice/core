@@ -75,7 +75,7 @@
 
 using namespace svt;
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 #define MM_DOCTYPE_OOO              1
 #define MM_DOCTYPE_PDF              2

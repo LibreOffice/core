@@ -46,8 +46,8 @@
 #include <helpid.h>
 #include <docvw.hrc>
 
-using namespace css::lang;
-using namespace css::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::sfx2;
 

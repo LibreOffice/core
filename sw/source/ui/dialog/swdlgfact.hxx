@@ -369,10 +369,10 @@ public:
     virtual ~SwAbstractDialogFactory_Impl() {}
 
     virtual SfxAbstractDialog*              CreateSfxDialog( vcl::Window* pParent,
-                                                                        const SfxItemSet& rAttr,
-                                    const css::uno::Reference< css::frame::XFrame >& _rxFrame,
-                                                                        sal_uInt32 nResId
-                                                                        ) override;
+                                                             const SfxItemSet& rAttr,
+                                                             const css::uno::Reference< css::frame::XFrame >& _rxFrame,
+                                                             sal_uInt32 nResId
+                                                            ) override;
     virtual AbstractSwWordCountFloatDlg* CreateSwWordCountDialog(SfxBindings* pBindings,
         SfxChildWindow* pChild, vcl::Window *pParent, SfxChildWinInfo* pInfo) override;
     virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg(vcl::Window* pParent) override;

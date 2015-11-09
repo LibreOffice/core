@@ -50,12 +50,12 @@
 
 using namespace utl;
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::beans;
-using namespace css::sdb;
-using namespace css::sdbc;
-using namespace css::sdbcx;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 
 const char* cAddressDataAssignments     = "AddressDataAssignments";
 const char* cDBColumnAssignments        = "DBColumnAssignments";

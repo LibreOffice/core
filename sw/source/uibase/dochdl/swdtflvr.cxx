@@ -145,8 +145,8 @@ extern bool g_bExecuteDrag;
 
 using namespace ::svx;
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::datatransfer;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::datatransfer;
 using namespace nsTransferBufferType;
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()

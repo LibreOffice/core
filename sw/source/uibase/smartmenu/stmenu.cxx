@@ -29,7 +29,7 @@
 #include <breakit.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
                                   Sequence< OUString >& rSmartTagTypes,

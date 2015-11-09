@@ -70,7 +70,7 @@ class SwAddressListDialog : public SfxModalDialog
 
     css::uno::Reference< css::sdb::XDatabaseContext> m_xDBContext;
 
-    SwDBData                                                                   m_aDBData;
+    SwDBData                                         m_aDBData;
 
     void DetectTablesAndQueries(SvTreeListEntry* pSelect, bool bWidthDialog);
 

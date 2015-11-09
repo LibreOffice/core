@@ -67,7 +67,7 @@
 #include "misc.hrc"
 
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell)
 

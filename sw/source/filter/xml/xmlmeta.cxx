@@ -35,9 +35,9 @@
 #include "xmlexp.hxx"
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::text;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 uno::Reference<document::XDocumentProperties>

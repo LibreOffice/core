@@ -153,15 +153,15 @@ const char sStatusComma[] = " , ";
 
 using namespace sfx2;
 using namespace ::com::sun::star;
-using namespace css::i18n;
-using namespace css::util;
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::scanner;
-using namespace css::beans;
-using namespace css::container;
-using namespace css::sdb;
-using namespace css::ui::dialogs;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::scanner;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::ui::dialogs;
 
 static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhichId )
 {

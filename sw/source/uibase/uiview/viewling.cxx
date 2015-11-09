@@ -90,10 +90,10 @@
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
-using namespace css::beans;
-using namespace css::uno;
-using namespace css::linguistic2;
-using namespace css::smarttags;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::linguistic2;
+using namespace ::com::sun::star::smarttags;
 
 // Lingu-Dispatcher
 

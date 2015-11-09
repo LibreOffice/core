@@ -37,11 +37,11 @@
 #include <view.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::lang;
-using namespace css::frame;
-using namespace css::uno;
-using namespace css::linguistic2;
-using namespace css::linguistic2::LinguServiceEventFlags;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::linguistic2;
+using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 
 SwLinguServiceEventListener::SwLinguServiceEventListener()
 {

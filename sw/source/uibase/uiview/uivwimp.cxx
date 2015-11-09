@@ -49,10 +49,10 @@
 #include <view.hrc>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace css::scanner;
-using namespace css::lang;
-using namespace css::datatransfer::clipboard;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::scanner;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::datatransfer::clipboard;
 
 SwView_Impl::SwView_Impl(SwView* pShell)
     : mxXTextView()

@@ -32,37 +32,31 @@ protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
                 sal_uInt16 nPrefix, const OUString& rLocalName,
-                const css::uno::Reference<
-                    css::xml::sax::XAttributeList > & xAttrList ) override;
+                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
 public:
     SwXMLTextImportHelper(
-            const css::uno::Reference <
-                css::frame::XModel>& rModel,
+            const css::uno::Reference<css::frame::XModel>& rModel,
             SvXMLImport& rImport,
-            const css::uno::Reference <
-                css::beans::XPropertySet>& rInfoSet,
+            const css::uno::Reference<css::beans::XPropertySet>& rInfoSet,
             bool bInsertM, bool bStylesOnlyM, bool bProgress,
             bool bBlockM, bool bOrganizerM,
             bool bPreserveRedlineMode );
     virtual ~SwXMLTextImportHelper();
 
-    virtual css::uno::Reference<
-        css::beans::XPropertySet>
+    virtual css::uno::Reference<css::beans::XPropertySet>
             createAndInsertOLEObject( SvXMLImport& rImport,
                                       const OUString& rHRef,
                                       const OUString& rStyleName,
                                       const OUString& rTableName,
-                                         sal_Int32 nWidth, sal_Int32 nHeight ) override;
-    virtual css::uno::Reference<
-        css::beans::XPropertySet>
+                                      sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual css::uno::Reference<css::beans::XPropertySet>
             createAndInsertOOoLink( SvXMLImport& rImport,
                                       const OUString& rHRef,
                                       const OUString& rStyleName,
                                       const OUString& rTableName,
-                                         sal_Int32 nWidth, sal_Int32 nHeight ) override;
-    virtual css::uno::Reference<
-        css::beans::XPropertySet>
+                                      sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual css::uno::Reference<css::beans::XPropertySet>
         createAndInsertApplet(
             const OUString &rName,
             const OUString &rCode,
@@ -70,15 +64,13 @@ public:
             const OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
-    virtual css::uno::Reference<
-        css::beans::XPropertySet>
+    virtual css::uno::Reference<css::beans::XPropertySet>
         createAndInsertPlugin(
             const OUString &rMimeType,
             const OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
-    virtual css::uno::Reference<
-        css::beans::XPropertySet>
+    virtual css::uno::Reference<css::beans::XPropertySet>
         createAndInsertFloatingFrame(
             const OUString &rName,
             const OUString &rHRef,
@@ -100,10 +92,8 @@ public:
         const OUString& rComment,    /// redline comment
         const css::util::DateTime& rDateTime,  /// date+time
         bool bMergeLastPara) override;           /// merge last paragraph
-    virtual css::uno::Reference<
-        css::text::XTextCursor> RedlineCreateText(
-            css::uno::Reference<   /// needed to get the document
-                    css::text::XTextCursor> & rOldCursor,
+    virtual css::uno::Reference<css::text::XTextCursor> RedlineCreateText(
+            css::uno::Reference<css::text::XTextCursor> & rOldCursor, /// needed to get the document
             const OUString& rId) override;    /// ID used to RedlineAdd() call
     virtual void RedlineSetCursor(
         const OUString& rId,         /// ID used to RedlineAdd() call

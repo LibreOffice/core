@@ -111,15 +111,13 @@ public:
 
     //XRubySelection
     virtual css::uno::Sequence<
-            css::uno::Sequence<
-            css::beans::PropertyValue > > SAL_CALL getRubyList( sal_Bool bAutomatic )
+            css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRubyList( sal_Bool bAutomatic )
                 throw (css::uno::RuntimeException,
                        std::exception) override;
 
     virtual void SAL_CALL setRubyList(
         const css::uno::Sequence<
-        css::uno::Sequence<
-        css::beans::PropertyValue > >& RubyList, sal_Bool bAutomatic )
+        css::uno::Sequence< css::beans::PropertyValue > >& RubyList, sal_Bool bAutomatic )
             throw (css::uno::RuntimeException,
                    std::exception) override;
 

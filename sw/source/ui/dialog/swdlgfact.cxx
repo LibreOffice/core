@@ -635,9 +635,9 @@ AbstractSwInsertAbstractDlg * SwAbstractDialogFactory_Impl::CreateSwInsertAbstra
 }
 
 SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pParent,
-                                                                        const SfxItemSet& rSet,
-                                    const css::uno::Reference< css::frame::XFrame >&,
-                                                                        sal_uInt32 nResId
+                                                                  const SfxItemSet& rSet,
+                                                                  const css::uno::Reference< css::frame::XFrame >&,
+                                                                  sal_uInt32 nResId
                                                                 )
 {
     SfxModalDialog* pDlg=NULL;

@@ -85,7 +85,7 @@
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::com::sun::star::uno;
 
 // Prototypes
 static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);

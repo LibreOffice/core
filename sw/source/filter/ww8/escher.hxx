@@ -157,8 +157,7 @@ private:
         EscherPropertyContainer& rPropOpt) override;
 
     virtual sal_uInt32 QueryTextID(
-        const css::uno::Reference<
-        css::drawing::XShape > &,sal_uInt32) override;
+        const css::uno::Reference< css::drawing::XShape > &, sal_uInt32) override;
     virtual void SetPicId(const SdrObject &rSdrObj, sal_uInt32 nShapeId,
         EscherPropertyContainer &rPropOpt) override;
 public:
@@ -169,8 +168,7 @@ public:
 
     virtual void WriteFrmExtraData(const SwFrameFormat& rFormat) override;
 
-    EscherExHostAppData* StartShape(const css::uno::Reference<
-        css::drawing::XShape > &, const Rectangle*) override {return &aHostData;}
+    EscherExHostAppData* StartShape(const css::uno::Reference< css::drawing::XShape > &, const Rectangle*) override {return &aHostData;}
 private:
     SwEscherEx(const SwEscherEx&) = delete;
     SwEscherEx &operator=(const SwEscherEx&) = delete;

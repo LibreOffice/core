@@ -32,7 +32,7 @@
 #include <string.h>
 
 using namespace ::com::sun::star;
-using namespace css::lang;
+using namespace ::com::sun::star::lang;
 
 // #i73788#
 #include <cppuhelper/implementationentry.hxx>

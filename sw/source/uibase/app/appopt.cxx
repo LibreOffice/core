@@ -68,8 +68,8 @@
 
 #include <unomid.h>
 
-using namespace css::uno;
-using namespace css::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 {
@@ -151,7 +151,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
         css::lang::Locale aLocale;
         LanguageType nLang;
 
-        using namespace css::i18n::ScriptType;
+        using namespace ::com::sun::star::i18n::ScriptType;
 
         Any aLang = aLinguCfg.GetProperty(OUString("DefaultLocale"));
         aLang >>= aLocale;
