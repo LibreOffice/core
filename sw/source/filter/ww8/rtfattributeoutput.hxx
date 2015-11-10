@@ -219,7 +219,7 @@ public:
 
 protected:
     /// Output frames - the implementation.
-    virtual void OutputFlyFrame_Impl(const sw::Frame& rFormat, const Point& rNdTopLeft) override;
+    virtual void OutputFlyFrame_Impl(const ww8::Frame& rFormat, const Point& rNdTopLeft) override;
 
     /// Sfx item Sfx item RES_CHRATR_CASEMAP
     virtual void CharCaseMap(const SvxCaseMapItem& rCaseMap) override;
@@ -636,7 +636,7 @@ public:
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) override;
 
     /// Handles just the {\shptxt ...} part of a shape export.
-    void writeTextFrame(const sw::Frame& rFrame, bool bTextBox = false);
+    void writeTextFrame(const ww8::Frame& rFrame, bool bTextBox = false);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX

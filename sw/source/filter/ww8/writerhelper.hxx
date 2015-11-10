@@ -61,7 +61,7 @@ namespace sw
     }
 }
 
-namespace sw
+namespace ww8
 {
     /// STL container of Paragraph Styles (SwTextFormatColl)
     typedef std::vector<SwTextFormatColl *> ParaStyles;
@@ -76,10 +76,10 @@ namespace sw
 
         In word all frames are effectively anchored to character or as
         character. This is nice and simple, writer is massively complex in this
-        area, so this sw::Frame simplifies matters by providing a single unified
+        area, so this ww8::Frame simplifies matters by providing a single unified
         view of the multitute of elements in writer and their differing quirks.
 
-        A sw::Frame wraps a writer frame and is guaranteed to have a suitable
+        A ww8::Frame wraps a writer frame and is guaranteed to have a suitable
         anchor position available from it. It hides much of the needless
         complexity of the multitude of floating/inline elements in writer, it...
 
@@ -154,7 +154,7 @@ namespace sw
 
             There are a variety of circumstances where word cannot have
             anything except inline elements, e.g. inside frames. So its easier
-            to force this sw::Frame into behaving as one, instead of special
+            to force this ww8::Frame into behaving as one, instead of special
             casing export code all over the place.
 
         */
@@ -169,10 +169,10 @@ namespace sw
         const Graphic &GetGraphic() const { return maGrf; }
         bool HasGraphic() const { return mbForBullet; }
 
-        /** Does this sw::Frame refer to the same writer content as another
+        /** Does this ww8::Frame refer to the same writer content as another
 
          @return
-         if the two sw::Frames are handling the same writer frame
+         if the two ww8::Frames are handling the same writer frame
         */
         bool RefersToSameFrameAs(const Frame &rOther) const
         {
@@ -442,7 +442,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        ParaStyles GetParaStyles(const SwDoc &rDoc);
+        ww8::ParaStyles GetParaStyles(const SwDoc &rDoc);
 
         /** Get a Paragraph Style which fits a given name
 
@@ -495,7 +495,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        void SortByAssignedOutlineStyleListLevel(ParaStyles &rStyles);
+        void SortByAssignedOutlineStyleListLevel(ww8::ParaStyles &rStyles);
 
         /** Get the SfxPoolItems of a SfxItemSet
 
@@ -512,12 +512,12 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems, bool bExportParentItemSet );
+        void GetPoolItems(const SfxItemSet &rSet, ww8::PoolItems &rItems, bool bExportParentItemSet );
 
-        const SfxPoolItem *SearchPoolItems(const PoolItems &rItems,
+        const SfxPoolItem *SearchPoolItems(const ww8::PoolItems &rItems,
             sal_uInt16 eType);
 
-        template<class T> const T* HasItem(const sw::PoolItems &rItems,
+        template<class T> const T* HasItem(const ww8::PoolItems &rItems,
             sal_uInt16 eType)
         {
             return item_cast<T>(SearchPoolItems(rItems, eType));
@@ -551,7 +551,7 @@ namespace sw
             e.g. Page Anchored elements will not be. For the winword export we
             need them to have something to be anchored to. So this method
             returns all the floating elements in a document as a STL container
-            of sw::Frames which are guaranteed to have an appropriate anchor.
+            of ww8::Frames which are guaranteed to have an appropriate anchor.
 
             @param rDoc
             The SwDoc document to get the styles from
@@ -565,10 +565,10 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM = nullptr);
+        ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM = nullptr);
 
         /** fix up frame positions, must be called after SetRedlineMode */
-        void UpdateFramePositions(Frames & rFrames);
+        void UpdateFramePositions(ww8::Frames & rFrames);
 
         /** Get the Frames anchored to a given node
 
@@ -585,7 +585,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode);
+        ww8::Frames GetFramesInNode(const ww8::Frames &rFrames, const SwNode &rNode);
 
         /** Get the Numbering Format used on a paragraph
 

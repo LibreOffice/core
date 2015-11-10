@@ -450,7 +450,7 @@ private:
 protected:
 
     /// Output frames - the implementation.
-    virtual void OutputFlyFrame_Impl( const sw::Frame& rFormat, const Point& rNdTopLeft ) override;
+    virtual void OutputFlyFrame_Impl( const ww8::Frame& rFormat, const Point& rNdTopLeft ) override;
 
     /// Sfx item Sfx item RES_CHRATR_CASEMAP
     virtual void CharCaseMap( const SvxCaseMapItem& rCaseMap ) override;
@@ -798,7 +798,7 @@ private:
     /// The current table helper
     std::unique_ptr<SwWriteTable> m_xTableWrt;
 
-    sw::Frame* m_pCurrentFrame;
+    ww8::Frame* m_pCurrentFrame;
 
     bool m_bParagraphOpened;
     bool m_bParagraphFrameOpen;
@@ -810,7 +810,7 @@ private:
     // beginning of the next paragraph
     DocxColBreakStatus m_nColBreakStatus;
 
-    std::vector<sw::Frame> m_aFramesOfParagraph;
+    std::vector<ww8::Frame> m_aFramesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
 
     // close of hyperlink needed

@@ -450,7 +450,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 {
     // write the paragraph properties + the run, already in the correct order
     m_pSerializer->mergeTopMarks(Tag_StartParagraph_2);
-    std::vector<  std::shared_ptr <sw::Frame> > aFramePrTextbox;
+    std::vector<  std::shared_ptr <ww8::Frame> > aFramePrTextbox;
     // Write the anchored frame if any
     // Word can't handle nested text boxes, so write them on the same level.
     ++m_nTextFrameLevel;
@@ -463,7 +463,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
         {
             m_bParagraphFrameOpen = true;
-            sw::Frame aFrame = m_aFramesOfParagraph[nIndex];
+            ww8::Frame aFrame = m_aFramesOfParagraph[nIndex];
             const SwFrameFormat& rFrameFormat = aFrame.GetFrameFormat();
 
             if (!TextBoxIsFramePr(rFrameFormat) || m_bWritingHeaderFooter)
@@ -526,8 +526,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             }
             else
             {
-                std::shared_ptr<sw::Frame>  pFramePr;
-                pFramePr.reset(new sw::Frame(aFrame));
+                std::shared_ptr<ww8::Frame>  pFramePr;
+                pFramePr.reset(new ww8::Frame(aFrame));
                 aFramePrTextbox.push_back(pFramePr);
             }
         }
@@ -585,7 +585,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // Write framePr
     if(!aFramePrTextbox.empty())
     {
-        for (std::vector< std::shared_ptr<sw::Frame> > ::iterator it = aFramePrTextbox.begin() ; it != aFramePrTextbox.end(); ++it)
+        for (std::vector< std::shared_ptr<ww8::Frame> > ::iterator it = aFramePrTextbox.begin() ; it != aFramePrTextbox.end(); ++it)
         {
             DocxTableExportContext aTableExportContext;
             pushToTableExportContext(aTableExportContext);
@@ -4934,13 +4934,13 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     m_pPostponedOLEs.reset(pPostponedOLEs.release());
 }
 
-void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& rNdTopLeft )
+void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const Point& rNdTopLeft )
 {
     m_pSerializer->mark(Tag_OutputFlyFrame);
 
     switch ( rFrame.GetWriterType() )
     {
-        case sw::Frame::eGraphic:
+        case ww8::Frame::eGraphic:
             {
                 const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
                 const SwNode *pNode = rFrame.GetContent();
@@ -4960,7 +4960,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 }
             }
             break;
-        case sw::Frame::eDrawing:
+        case ww8::Frame::eDrawing:
             {
                 const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
                 if ( pSdrObj )
@@ -5011,7 +5011,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 }
             }
             break;
-        case sw::Frame::eTextBox:
+        case ww8::Frame::eTextBox:
             {
                 // If this is a TextBox of a shape, then ignore: it's handled in WriteTextBox().
                 if (m_rExport.SdrExporter().isTextBox(rFrame.GetFrameFormat()))
@@ -5035,11 +5035,11 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 if( !bDuplicate )
                 {
                     m_bPostponedProcessingFly = true ;
-                    m_aFramesOfParagraph.push_back(sw::Frame(rFrame));
+                    m_aFramesOfParagraph.push_back(ww8::Frame(rFrame));
                 }
             }
             break;
-        case sw::Frame::eOle:
+        case ww8::Frame::eOle:
             {
                 const SwFrameFormat &rFrameFormat = rFrame.GetFrameFormat();
                 const SdrObject *pSdrObj = rFrameFormat.FindRealSdrObject();
@@ -5052,7 +5052,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 }
             }
             break;
-        case sw::Frame::eFormControl:
+        case ww8::Frame::eFormControl:
             {
                 const SdrObject* pObject = rFrame.GetFrameFormat().FindRealSdrObject();
                 m_aPostponedFormControls.push_back(pObject);
@@ -5060,9 +5060,9 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             }
             break;
         default:
-            OSL_TRACE( "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Point& rNdTopLeft ) - frame type '%s'\n",
-                    rFrame.GetWriterType() == sw::Frame::eTextBox? "eTextBox":
-                    ( rFrame.GetWriterType() == sw::Frame::eOle? "eOle": "???" ) );
+            OSL_TRACE( "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFrame, const Point& rNdTopLeft ) - frame type '%s'\n",
+                    rFrame.GetWriterType() == ww8::Frame::eTextBox? "eTextBox":
+                    ( rFrame.GetWriterType() == ww8::Frame::eOle? "eOle": "???" ) );
             break;
     }
 
@@ -5181,7 +5181,7 @@ void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
-    sw::Frame aFrame(*pTextBox, *pAnchor);
+    ww8::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
 
     popFromTableExportContext(aTableExportContext);
@@ -5194,7 +5194,7 @@ void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
-    sw::Frame aFrame(*pTextBox, *pAnchor);
+    ww8::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
 
     popFromTableExportContext(aTableExportContext);

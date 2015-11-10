@@ -5799,10 +5799,10 @@ void SwWW8ImplReader::SetOutlineStyles()
     sal_uInt16 nOutlineStyleListLevelWithAssignment = 0;
     if (!m_bNewDoc)
     {
-        sw::ParaStyles aOutLined(sw::util::GetParaStyles(m_rDoc));
+        ww8::ParaStyles aOutLined(sw::util::GetParaStyles(m_rDoc));
         sw::util::SortByAssignedOutlineStyleListLevel(aOutLined);
-        sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
-        for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
+        ww8::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
+        for ( ww8::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
         {
             if ((*aIter)->IsAssignedToListLevelOfOutlineStyle())
                 nOutlineStyleListLevelWithAssignment |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();

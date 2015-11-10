@@ -30,7 +30,7 @@ class Point;
 class SdrObject;
 class SvxBoxItem;
 
-namespace sw
+namespace ww8
 {
 class Frame;
 }
@@ -45,7 +45,7 @@ class ExportDataSaveRestore
 private:
     DocxExport& m_rExport;
 public:
-    ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, sw::Frame* pParentFrame);
+    ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, ww8::Frame* pParentFrame);
     ~ExportDataSaveRestore();
 };
 
@@ -101,13 +101,13 @@ public:
                           css::uno::Reference<css::io::XOutputStream> xOutStream, const OUString& sGrabBagProperyName,
                           int nAnchorId);
     /// Writes text frame in DML format.
-    void writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly = false);
+    void writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly = false);
     /// Writes text frame in VML format.
-    void writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly = false);
+    void writeVMLTextFrame(ww8::Frame* pParentFrame, bool bTextBoxOnly = false);
     /// Is this a standalone TextFrame, or used as a TextBox of a shape?
     bool isTextBox(const SwFrameFormat& rFrameFormat);
     /// Writes text from Textbox for <w:framePr>
-    void writeOnlyTextOfFrame(sw::Frame* pParentFrame);
+    void writeOnlyTextOfFrame(ww8::Frame* pParentFrame);
     /// Writes the drawingML <a:ln> markup of a box item.
     void writeBoxItemLine(const SvxBoxItem& rBoxItem);
 };

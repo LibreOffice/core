@@ -1773,7 +1773,7 @@ void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyP
 
 }
 
-void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
+void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
 {
     RtfStringBuffer aRunText;
     if (bTextBox)
@@ -1840,14 +1840,14 @@ void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
     }
 }
 
-void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Point& /*rNdTopLeft*/)
+void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Point& /*rNdTopLeft*/)
 {
     const SwNode* pNode = rFrame.GetContent();
     const SwGrfNode* pGrfNode = pNode ? pNode->GetGrfNode() : nullptr;
 
     switch (rFrame.GetWriterType())
     {
-    case sw::Frame::eTextBox:
+    case ww8::Frame::eTextBox:
     {
         // If this is a TextBox of a shape, then ignore: it's handled in RtfSdrExport::StartShape().
         if (m_rExport.SdrExporter().isTextBox(rFrame.GetFrameFormat()))
@@ -1897,7 +1897,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
         m_rExport.Strm().WriteCharPtr(SAL_NEWLINE_STRING);
     }
     break;
-    case sw::Frame::eGraphic:
+    case ww8::Frame::eGraphic:
         if (!rFrame.IsInline())
         {
             m_rExport.m_pParentFrame = &rFrame;
@@ -1913,7 +1913,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
         if (pGrfNode)
             m_aRunText.append(dynamic_cast<const SwFlyFrameFormat*>(&rFrame.GetFrameFormat()), pGrfNode);
         break;
-    case sw::Frame::eDrawing:
+    case ww8::Frame::eDrawing:
     {
         const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
         if (pSdrObj)
@@ -1947,7 +1947,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
         }
     }
     break;
-    case sw::Frame::eFormControl:
+    case ww8::Frame::eFormControl:
     {
         const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
         const SdrObject* pObject = rFrameFormat.FindRealSdrObject();
@@ -2147,7 +2147,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
         m_aRun->append('}');
     }
     break;
-    case sw::Frame::eOle:
+    case ww8::Frame::eOle:
     {
         const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
         const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
@@ -3908,8 +3908,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     aRendered.Width() = rS.GetWidth();
     aRendered.Height() = rS.GetHeight();
 
-    sw::Frame* pFrame = nullptr;
-    for (sw::FrameIter it = m_rExport.m_aFrames.begin(); it != m_rExport.m_aFrames.end(); ++it)
+    ww8::Frame* pFrame = nullptr;
+    for (ww8::FrameIter it = m_rExport.m_aFrames.begin(); it != m_rExport.m_aFrames.end(); ++it)
     {
         if (pFlyFrameFormat == &it->GetFrameFormat())
         {

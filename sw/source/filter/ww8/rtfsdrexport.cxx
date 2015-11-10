@@ -514,8 +514,8 @@ sal_Int32 RtfSdrExport::StartShape()
     {
         if (SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(pShape))
         {
-            sw::Frame* pFrame = nullptr;
-            for (sw::FrameIter it = m_rExport.m_aFrames.begin(); it != m_rExport.m_aFrames.end(); ++it)
+            ww8::Frame* pFrame = nullptr;
+            for (ww8::FrameIter it = m_rExport.m_aFrames.begin(); it != m_rExport.m_aFrames.end(); ++it)
             {
                 if (pTextBox == &it->GetFrameFormat())
                 {

@@ -338,14 +338,14 @@ class DrawObj
 public:
     WW8_CP mnCp;                // CP-Pos of references
     sal_uInt32 mnShapeId;       // ShapeId for the SwFrameFormats
-    sw::Frame maContent;          // the frame itself
+    ww8::Frame maContent;          // the frame itself
     Point maParentPos;          // Points
     sal_Int32 mnThick;          // Border Thicknesses
     short mnDirection;          // If BiDi or not
     unsigned int mnHdFtIndex;   // 0 for main text, +1 for each subsequent
                                 // msword hd/ft
 
-    DrawObj(const sw::Frame &rContent, WW8_CP nCp, Point aParentPos, short nDir,
+    DrawObj(const ww8::Frame &rContent, WW8_CP nCp, Point aParentPos, short nDir,
             unsigned int nHdFtIndex)
         : mnCp(nCp), mnShapeId(0), maContent(rContent), maParentPos(aParentPos),
         mnThick(0), mnDirection(nDir), mnHdFtIndex(nHdFtIndex) {}
@@ -370,7 +370,7 @@ protected:
 public:
     PlcDrawObj() {}
     void WritePlc( WW8Export& rWrt ) const;
-    bool Append( WW8Export&, WW8_CP nCp, const sw::Frame& rFormat,
+    bool Append( WW8Export&, WW8_CP nCp, const ww8::Frame& rFormat,
         const Point& rNdTopLeft );
     int size() { return maDrawObjs.size(); };
     DrawObjVector &GetObjArr() { return maDrawObjs; }
@@ -432,7 +432,7 @@ struct MSWordSaveData
     ww::bytes* pOOld;                ///< WW8Export only
     SwPaM* pOldPam, *pOldEnd;
     sal_uLong nOldStart, nOldEnd;
-    const sw::Frame* pOldFlyFormat;
+    const ww8::Frame* pOldFlyFormat;
     const SwPageDesc* pOldPageDesc;
 
     bool bOldWriteAll : 1;          ///< WW8Export only
@@ -481,7 +481,7 @@ public:
 public:
     /* implicit bookmark vector containing pairs of node indexes and bookmark names */
     std::vector<aBookmarkPair> m_aImplicitBookmarks;
-    sw::Frames m_aFrames;             // The floating frames in this document
+    ww8::Frames m_aFrames;             // The floating frames in this document
     const SwPageDesc *m_pAktPageDesc;
     bool m_bPrevTextNodeIsEmpty;
     WW8_WrPlcPn* m_pPapPlc;
@@ -503,7 +503,7 @@ public:
     bool m_bLinkedTextboxesHelperInitialized = false;
     sal_Int32 m_nLinkedTextboxesChainId=0;
 
-    const sw::Frame *m_pParentFrame; // If set we are exporting content inside
+    const ww8::Frame *m_pParentFrame; // If set we are exporting content inside
                                     // a frame, e.g. a graphic node
 
     Point* m_pFlyOffset;              // for adjusting of character-bound Fly in the Writer,
@@ -588,7 +588,7 @@ public:
     void WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_uInt8 nTTyp );
 
     /// Export the pool items to attributes (through an attribute output class).
-    void ExportPoolItemsToCHP( sw::PoolItems &rItems, sal_uInt16 nScript );
+    void ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript );
 
     /// Return the numeric id of the numbering rule
     sal_uInt16 GetId( const SwNumRule& rNumRule );
@@ -1014,7 +1014,7 @@ public:
     const SvxBrushItem* GetCurrentPageBgBrush() const;
     SvxBrushItem TrueFrameBgBrush(const SwFrameFormat &rFlyFormat) const;
 
-    void AppendFlyInFlys(const sw::Frame& rFrameFormat, const Point& rNdTopLeft);
+    void AppendFlyInFlys(const ww8::Frame& rFrameFormat, const Point& rNdTopLeft);
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
     void WriteSdrTextObj(const SdrTextObj& rObj, sal_uInt8 nTyp);
 
@@ -1028,7 +1028,7 @@ public:
 
     void StartCommentOutput( const OUString& rName );
     void EndCommentOutput(   const OUString& rName );
-    void OutGrf(const sw::Frame &rFrame);
+    void OutGrf(const ww8::Frame &rFrame);
     bool TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> xOleStg,
         tools::SvRef<SotStorage> xObjStg, OUString &rStorageName, SwOLENode *pOLENd);
 
@@ -1038,7 +1038,7 @@ public:
     virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
 
     virtual void ExportGrfBullet(const SwTextNode& rNd) override;
-    void OutGrfBullets(const sw::Frame &rFrame);
+    void OutGrfBullets(const ww8::Frame &rFrame);
 
     void MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo);
 
@@ -1097,7 +1097,7 @@ public:
 
     /// Nasty swap for bidi if necessary
     bool MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
-        const sw::Frame &rFrameFormat);
+        const ww8::Frame &rFrameFormat);
 
     void InsUInt16( sal_uInt16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( sal_uInt32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
@@ -1327,12 +1327,12 @@ public:
 class GraphicDetails
 {
 public:
-    sw::Frame maFly;                // surrounding FlyFrms
+    ww8::Frame maFly;                // surrounding FlyFrms
     sal_uLong mnPos;                // FilePos of the graphics
     sal_uInt16 mnWid;               // Width of the graphics
     sal_uInt16 mnHei;               // Height of the graphics
 
-    GraphicDetails(const sw::Frame &rFly, sal_uInt16 nWid, sal_uInt16 nHei)
+    GraphicDetails(const ww8::Frame &rFly, sal_uInt16 nWid, sal_uInt16 nHei)
         : maFly(rFly), mnPos(0), mnWid(nWid), mnHei(nHei)
     {}
     GraphicDetails& operator=(const GraphicDetails& rOther);
@@ -1357,12 +1357,12 @@ private:
     typedef std::vector<GraphicDetails>::iterator myiter;
     sal_uInt16 mnIdx;       // index in file positions
 
-    static void WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
+    static void WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
             sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight,
             const SwAttrSet* pAttrSet = nullptr);
     void WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem);
     void WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rNd,
-        const sw::Frame &rFly, sal_uInt16 nWidth, sal_uInt16 nHeight);
+        const ww8::Frame &rFly, sal_uInt16 nWidth, sal_uInt16 nHeight);
 
     static void WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf, sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight);
     void WriteGrfForBullet(SvStream& rStrm,  const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight);
@@ -1371,7 +1371,7 @@ private:
     SwWW8WrGrf& operator=(const SwWW8WrGrf&) = delete;
 public:
     explicit SwWW8WrGrf( WW8Export& rW ) : rWrt( rW ), mnIdx( 0 ) {}
-    void Insert(const sw::Frame &rFly);
+    void Insert(const ww8::Frame &rFly);
     void Write();
     sal_uLong GetFPos()
         { return (mnIdx < maDetails.size()) ? maDetails[mnIdx++].mnPos : 0; }
@@ -1465,8 +1465,8 @@ private:
 
     const SwFormatDrop &mrSwFormatDrop;
 
-    sw::Frames maFlyFrms;     // #i2916#
-    sw::FrameIter maFlyIter;
+    ww8::Frames maFlyFrms;     // #i2916#
+    ww8::FrameIter maFlyIter;
 
     sal_Int32 SearchNext( sal_Int32 nStartPos );
 

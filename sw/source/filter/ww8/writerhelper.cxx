@@ -110,15 +110,15 @@ namespace
     }
 
     /*
-     Utility to convert a SwPosFlyFrms into a simple vector of sw::Frames
+     Utility to convert a SwPosFlyFrms into a simple vector of ww8::Frames
 
-     The crucial thing is that a sw::Frame always has an anchor which
+     The crucial thing is that a ww8::Frame always has an anchor which
      points to some content in the document. This is a requirement of exporting
      to Word
     */
-    sw::Frames SwPosFlyFrmsToFrames(const SwPosFlyFrms &rFlys)
+    ww8::Frames SwPosFlyFrmsToFrames(const SwPosFlyFrms &rFlys)
     {
-        sw::Frames aRet;
+        ww8::Frames aRet;
 
         for(SwPosFlyFrms::const_iterator aIter(rFlys.begin()); aIter != rFlys.end(); ++aIter)
         {
@@ -130,7 +130,7 @@ namespace
                 // so set a dummy position and fix it in UpdateFramePositions
                 SwPosition const dummy(SwNodeIndex(
                             const_cast<SwNodes&>(pAnchor->nNode.GetNodes())));
-                aRet.push_back(sw::Frame(rEntry, dummy));
+                aRet.push_back(ww8::Frame(rEntry, dummy));
             }
             else
             {
@@ -141,27 +141,27 @@ namespace
                     aPos.nContent.Assign(pTextNd, 0);
                 }
 
-                aRet.push_back(sw::Frame(rEntry, aPos));
+                aRet.push_back(ww8::Frame(rEntry, aPos));
             }
         }
         return aRet;
     }
 
     //Utility to test if a frame is anchored at a given node index
-    class anchoredto: public std::unary_function<const sw::Frame&, bool>
+    class anchoredto: public std::unary_function<const ww8::Frame&, bool>
     {
     private:
         sal_uLong mnNode;
     public:
         explicit anchoredto(sal_uLong nNode) : mnNode(nNode) {}
-        bool operator()(const sw::Frame &rFrame) const
+        bool operator()(const ww8::Frame &rFrame) const
         {
             return (mnNode == rFrame.GetPosition().nNode.GetNode().GetIndex());
         }
     };
 }
 
-namespace sw
+namespace ww8
 {
     //For i120928,size conversion before exporting graphic of bullet
     Frame::Frame(const Graphic &rGrf, const SwPosition &rPos)
@@ -268,7 +268,10 @@ namespace sw
     {
         mbIsInline = true;
     }
+}
 
+namespace sw
+{
     namespace hack
     {
 
@@ -417,7 +420,7 @@ namespace sw
         }
         //SetLayer boilerplate end
 
-        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems, bool bExportParentItemSet )
+        void GetPoolItems(const SfxItemSet &rSet, ww8::PoolItems &rItems, bool bExportParentItemSet )
         {
             if( bExportParentItemSet )
             {
@@ -443,10 +446,10 @@ namespace sw
             }
         }
 
-        const SfxPoolItem *SearchPoolItems(const PoolItems &rItems,
+        const SfxPoolItem *SearchPoolItems(const ww8::PoolItems &rItems,
             sal_uInt16 eType)
         {
-            sw::cPoolItemIter aIter = rItems.find(eType);
+            ww8::cPoolItemIter aIter = rItems.find(eType);
             if (aIter != rItems.end())
                 return aIter->second;
             return nullptr;
@@ -467,10 +470,10 @@ namespace sw
             }
         }
 
-        ParaStyles GetParaStyles(const SwDoc &rDoc)
+        ww8::ParaStyles GetParaStyles(const SwDoc &rDoc)
         {
-            ParaStyles aStyles;
-            typedef ParaStyles::size_type mysizet;
+            ww8::ParaStyles aStyles;
+            typedef ww8::ParaStyles::size_type mysizet;
 
             const SwTextFormatColls *pColls = rDoc.GetTextFormatColls();
             mysizet nCount = pColls ? pColls->size() : 0;
@@ -510,7 +513,7 @@ namespace sw
         }
 
         // #i98791# - adjust sorting algorithm
-        void SortByAssignedOutlineStyleListLevel(ParaStyles &rStyles)
+        void SortByAssignedOutlineStyleListLevel(ww8::ParaStyles &rStyles)
         {
             std::sort(rStyles.begin(), rStyles.end(), outlinecmp());
         }
@@ -519,16 +522,16 @@ namespace sw
            Utility to extract FlyFormats from a document, potentially from a
            selection.
            */
-        Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM /*, bool bAll*/)
+        ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM /*, bool bAll*/)
         {
             SwPosFlyFrms aFlys(rDoc.GetAllFlyFormats(pPaM, true));
-            sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
+            ww8::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
             return aRet;
         }
 
-        void UpdateFramePositions(Frames & rFrames)
+        void UpdateFramePositions(ww8::Frames & rFrames)
         {
-            for (Frame & rFrame : rFrames)
+            for (ww8::Frame & rFrame : rFrames)
             {
                 SwFormatAnchor const& rAnchor = rFrame.GetFrameFormat().GetAnchor();
                 if (SwPosition const*const pAnchor = rAnchor.GetContentAnchor())
@@ -542,9 +545,9 @@ namespace sw
             }
         }
 
-        Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode)
+        ww8::Frames GetFramesInNode(const ww8::Frames &rFrames, const SwNode &rNode)
         {
-            Frames aRet;
+            ww8::Frames aRet;
             my_copy_if(rFrames.begin(), rFrames.end(),
                 std::back_inserter(aRet), anchoredto(rNode.GetIndex()));
             return aRet;

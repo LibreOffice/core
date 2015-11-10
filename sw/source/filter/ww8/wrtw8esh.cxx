@@ -664,7 +664,7 @@ bool RTLDrawingsHack(long &rLeft, long /*nWidth*/,
 }
 
 bool WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
-    const sw::Frame &rFrameFormat)
+    const ww8::Frame &rFrameFormat)
 {
     //Require nasty bidi swap
     if (FRMDIR_HORI_RIGHT_TOP != m_pDoc->GetTextDirection(rFrameFormat.GetPosition()))
@@ -677,8 +677,8 @@ bool WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
     const SwFormatHoriOrient& rHOr = rFrameFormat.GetFrameFormat().GetHoriOrient();
 
     bool bRet = false;
-    sw::Frame::WriterSource eSource = rFrameFormat.GetWriterType();
-    if (eSource == sw::Frame::eDrawing || eSource == sw::Frame::eFormControl)
+    ww8::Frame::WriterSource eSource = rFrameFormat.GetWriterType();
+    if (eSource == ww8::Frame::eDrawing || eSource == ww8::Frame::eFormControl)
     {
         if (RTLDrawingsHack(rLeft, nWidth, rHOr.GetHoriOrient(),
             rHOr.GetRelationOrient(), nPageLeft, nPageRight, nPageSize))
@@ -724,7 +724,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
         for (aIter = maDrawObjs.begin(); aIter < aEnd; ++aIter)
         {
             // write the fspa-struct
-            const sw::Frame &rFrameFormat = aIter->maContent;
+            const ww8::Frame &rFrameFormat = aIter->maContent;
             const SwFrameFormat &rFormat = rFrameFormat.GetFrameFormat();
             const SdrObject* pObj = rFormat.FindRealSdrObject();
 
@@ -934,7 +934,7 @@ DrawObj& DrawObj::operator=(const DrawObj& rOther)
     return *this;
 }
 
-bool PlcDrawObj::Append( WW8Export& rWrt, WW8_CP nCp, const sw::Frame& rFormat,
+bool PlcDrawObj::Append( WW8Export& rWrt, WW8_CP nCp, const ww8::Frame& rFormat,
     const Point& rNdTopLeft )
 {
     bool bRet = false;
@@ -1025,7 +1025,7 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrameFormat& rFormat ) const
     return nOrdNum;
 }
 
-void WW8Export::AppendFlyInFlys(const sw::Frame& rFrameFormat,
+void WW8Export::AppendFlyInFlys(const ww8::Frame& rFrameFormat,
     const Point& rNdTopLeft)
 {
     OSL_ENSURE(!m_pEscher, "der EscherStream wurde schon geschrieben!");
@@ -2318,20 +2318,20 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             OSL_ENSURE(pObj, "impossible");
             if (!pObj)
                 continue;
-            const sw::Frame &rFrame = pObj->maContent;
+            const ww8::Frame &rFrame = pObj->maContent;
             const SwFrameFormat& rFormat = rFrame.GetFrameFormat();
 
             switch (rFrame.GetWriterType())
             {
-                case sw::Frame::eTextBox:
-                case sw::Frame::eOle:
-                case sw::Frame::eGraphic:
+                case ww8::Frame::eTextBox:
+                case ww8::Frame::eOle:
+                case ww8::Frame::eGraphic:
                     nBorderThick = WriteFlyFrm(*pObj, nShapeId, aSorted);
                     break;
-                case sw::Frame::eFormControl:
+                case ww8::Frame::eFormControl:
                     WriteOCXControl(rFormat, nShapeId = GenerateShapeId());
                     break;
-                case sw::Frame::eDrawing:
+                case ww8::Frame::eDrawing:
                 {
                     aWinwordAnchoring.SetAnchoring(rFormat);
                     const SdrObject* pSdrObj = rFormat.FindRealSdrObject();

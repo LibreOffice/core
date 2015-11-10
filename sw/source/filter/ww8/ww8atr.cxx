@@ -204,10 +204,10 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
 
 //  Hilfsroutinen fuer Styles
 
-void MSWordExportBase::ExportPoolItemsToCHP( sw::PoolItems &rItems, sal_uInt16 nScript )
+void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript )
 {
-    sw::cPoolItemIter aEnd = rItems.end();
-    for ( sw::cPoolItemIter aI = rItems.begin(); aI != aEnd; ++aI )
+    ww8::cPoolItemIter aEnd = rItems.end();
+    for ( ww8::cPoolItemIter aI = rItems.begin(); aI != aEnd; ++aI )
     {
         const SfxPoolItem *pItem = aI->second;
         sal_uInt16 nWhich = pItem->Which();
@@ -266,14 +266,14 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
             }
         }
 
-        sw::PoolItems aItems;
+        ww8::PoolItems aItems;
         GetPoolItems( rSet, aItems, bExportParentItemSet );
         if ( bChpFormat )
             ExportPoolItemsToCHP(aItems, nScript);
         if ( bPapFormat )
         {
-            sw::cPoolItemIter aEnd = aItems.end();
-            for ( sw::cPoolItemIter aI = aItems.begin(); aI != aEnd; ++aI )
+            ww8::cPoolItemIter aEnd = aItems.end();
+            for ( ww8::cPoolItemIter aI = aItems.begin(); aI != aEnd; ++aI )
             {
                 pItem = aI->second;
                 sal_uInt16 nWhich = pItem->Which();
@@ -2925,7 +2925,7 @@ void AttributeOutputBase::TextFlyContent( const SwFormatFlyCnt& rFlyContent )
         aLayPos = pTextNd->FindLayoutRect( false, &aLayPos ).Pos();
 
         SwPosition aPos( *pTextNd );
-        sw::Frame aFrm( *rFlyContent.GetFrameFormat(), aPos );
+        ww8::Frame aFrm( *rFlyContent.GetFrameFormat(), aPos );
 
         OutputFlyFrame_Impl( aFrm, aLayPos );
     }

@@ -1459,7 +1459,7 @@ void WW8Export::ExportGrfBullet(const SwTextNode& rNd)
         AppendBookmark(aPicBullets);
         for (int i = 0; i < nCount; i++)
         {
-            sw::Frame aFrame(*(m_vecBulletPic[i]), aPos);
+            ww8::Frame aFrame(*(m_vecBulletPic[i]), aPos);
             OutGrfBullets(aFrame);
         }
         AppendBookmark(aPicBullets);
@@ -1467,7 +1467,7 @@ void WW8Export::ExportGrfBullet(const SwTextNode& rNd)
 }
 
 static sal_uInt8 nAttrMagicIdx = 0;
-void WW8Export::OutGrfBullets(const sw::Frame & rFrame)
+void WW8Export::OutGrfBullets(const ww8::Frame & rFrame)
 {
     if ( !m_pGrf || !m_pChpPlc || !pO )
         return;

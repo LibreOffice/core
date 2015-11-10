@@ -129,7 +129,7 @@ namespace rtl { class OUString; }
 
 class MSWordExportBase;
 
-namespace sw { class Frame; }
+namespace ww8 { class Frame; }
 
 namespace msword {
     const sal_uInt8 ColumnBreak = 0xE;
@@ -365,7 +365,7 @@ protected:
     static void GetNumberPara( OUString& rStr, const SwField& rField );
 
     /// Output frames - the implementation.
-    virtual void OutputFlyFrame_Impl( const sw::Frame& rFormat, const Point& rNdTopLeft ) = 0;
+    virtual void OutputFlyFrame_Impl( const ww8::Frame& rFormat, const Point& rNdTopLeft ) = 0;
 
     /// Sfx item Sfx item RES_CHRATR_CASEMAP
     virtual void CharCaseMap( const SvxCaseMapItem& ) = 0;
@@ -643,7 +643,7 @@ public:
     void OutputStyleItemSet( const SfxItemSet& rSet, bool bDeep, bool bTestForDefault );
 
     /// Output frames.
-    void OutputFlyFrame( const sw::Frame& rFormat );
+    void OutputFlyFrame( const ww8::Frame& rFormat );
 
     void GetTablePageSize
     ( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner,

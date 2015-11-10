@@ -159,10 +159,10 @@ MSWordAttrIter::~MSWordAttrIter()
 }
 
 class sortswflys :
-    public std::binary_function<const sw::Frame&, const sw::Frame&, bool>
+    public std::binary_function<const ww8::Frame&, const ww8::Frame&, bool>
 {
 public:
-    bool operator()(const sw::Frame &rOne, const sw::Frame &rTwo) const
+    bool operator()(const ww8::Frame &rOne, const ww8::Frame &rTwo) const
     {
         return rOne.GetPosition() < rTwo.GetPosition();
     }
@@ -211,7 +211,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     if (rWr.m_bInWriteEscher)
     {
         std::for_each(maFlyFrms.begin(), maFlyFrms.end(),
-            std::mem_fun_ref(&sw::Frame::ForceTreatAsInline));
+            std::mem_fun_ref(&ww8::Frame::ForceTreatAsInline));
     }
 
     maFlyIter = maFlyFrms.begin();
@@ -414,7 +414,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
 
     //The additional hard formatting properties that affect this range in the
     //paragraph
-    sw::PoolItems aRangeItems;
+    ww8::PoolItems aRangeItems;
     if (const SwpHints* pTextAttrs = rNd.GetpSwpHints())
     {
         for( size_t i = 0; i < pTextAttrs->Count(); ++i )
@@ -465,14 +465,14 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
     if ( pCharFormatItem )
         ClearOverridesFromSet( *pCharFormatItem, aExportSet );
 
-    sw::PoolItems aExportItems;
+    ww8::PoolItems aExportItems;
     GetPoolItems( aExportSet, aExportItems, false );
 
     if( rNd.GetpSwpHints() == nullptr )
         m_rExport.SetCurItemSet(&aExportSet);
 
-    sw::cPoolItemIter aEnd = aRangeItems.end();
-    for ( sw::cPoolItemIter aI = aRangeItems.begin(); aI != aEnd; ++aI )
+    ww8::cPoolItemIter aEnd = aRangeItems.end();
+    for ( ww8::cPoolItemIter aI = aRangeItems.begin(); aI != aEnd; ++aI )
     {
         if ( !bRuby || !lcl_isFontsizeItem( *aI->second ) )
             aExportItems[aI->first] = aI->second;
@@ -530,7 +530,7 @@ bool SwWW8AttrIter::IsWatermarkFrame()
 
 bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
 {
-    sw::FrameIter aTmpFlyIter = maFlyIter ;
+    ww8::FrameIter aTmpFlyIter = maFlyIter ;
 
     while ( aTmpFlyIter != maFlyFrms.end() )
     {
@@ -551,11 +551,11 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 {
     // collection point to first gather info about all of the potentially linked textboxes: to be analyzed later.
     OUString sLinkChainName;
-    sw::FrameIter linkedTextboxesIter = maFlyIter;
+    ww8::FrameIter linkedTextboxesIter = maFlyIter;
     while ( linkedTextboxesIter != maFlyFrms.end() )
     {
         uno::Reference< drawing::XShape > xShape;
-        sw::Frame xFrame = *linkedTextboxesIter;
+        ww8::Frame xFrame = *linkedTextboxesIter;
         const SdrObject* pSdrObj = xFrame.GetFrameFormat().FindRealSdrObject();
         if( pSdrObj )
             xShape.set(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
@@ -2894,7 +2894,7 @@ void WW8Export::AppendSection( const SwPageDesc *pPageDesc, const SwSectionForma
 
 // Flys
 
-void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFormat, const Point& rNdTopLeft )
+void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const Point& rNdTopLeft )
 {
     const SwFrameFormat &rFrameFormat = rFormat.GetFrameFormat();
     const SwFormatAnchor& rAnch = rFrameFormat.GetAnchor();
@@ -2903,8 +2903,8 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFormat, const Po
 
     if (rFormat.IsInline())
     {
-        sw::Frame::WriterSource eType = rFormat.GetWriterType();
-        if ((eType == sw::Frame::eGraphic) || (eType == sw::Frame::eOle))
+        ww8::Frame::WriterSource eType = rFormat.GetWriterType();
+        if ((eType == ww8::Frame::eGraphic) || (eType == ww8::Frame::eOle))
             bUseEscher = false;
         else
             bUseEscher = true;
@@ -2913,7 +2913,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFormat, const Po
          A special case for converting some inline form controls to form fields
          when in winword 8+ mode
         */
-        if (bUseEscher && (eType == sw::Frame::eFormControl))
+        if (bUseEscher && (eType == ww8::Frame::eFormControl))
         {
             if ( m_rWW8Export.MiserableFormFieldExportHack( rFrameFormat ) )
                 return ;
@@ -2988,7 +2988,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFormat, const Po
     }
 }
 
-void AttributeOutputBase::OutputFlyFrame( const sw::Frame& rFormat )
+void AttributeOutputBase::OutputFlyFrame( const ww8::Frame& rFormat )
 {
     if ( !rFormat.GetContentNode() )
         return;

@@ -200,7 +200,7 @@ public:
 
 protected:
     /// Output frames - the implementation.
-    void OutputFlyFrame_Impl( const sw::Frame& rFormat, const Point& rNdTopLeft ) override;
+    void OutputFlyFrame_Impl( const ww8::Frame& rFormat, const Point& rNdTopLeft ) override;
 
     /// Sfx item Sfx item RES_CHRATR_CASEMAP
     virtual void CharCaseMap( const SvxCaseMapItem& ) override;

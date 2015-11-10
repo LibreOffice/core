@@ -358,13 +358,13 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
     }
 }
 
-void WW8Export::OutGrf(const sw::Frame &rFrame)
+void WW8Export::OutGrf(const ww8::Frame &rFrame)
 {
     //Added for i120568,the hyperlink info within a graphic whose anchor type is "As character"
     //will be exported to ensure the fidelity
     const SwFormatURL& rURL = rFrame.GetFrameFormat().GetAttrSet().GetURL();
     bool bURLStarted = false;
-    if( !rURL.GetURL().isEmpty() && rFrame.GetWriterType() == sw::Frame::eGraphic)
+    if( !rURL.GetURL().isEmpty() && rFrame.GetWriterType() == ww8::Frame::eGraphic)
     {
         bURLStarted = true;
         m_pAttrOutput->StartURL( rURL.GetURL(), rURL.GetTargetFrameName() );
@@ -490,7 +490,7 @@ GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)
     return *this;
 }
 
-void SwWW8WrGrf::Insert(const sw::Frame &rFly)
+void SwWW8WrGrf::Insert(const ww8::Frame &rFly)
 {
     const Size aSize( rFly.GetLayoutSize() );
     const sal_uInt16 nWidth = static_cast< sal_uInt16 >(aSize.Width());
@@ -498,7 +498,7 @@ void SwWW8WrGrf::Insert(const sw::Frame &rFly)
     maDetails.push_back(GraphicDetails(rFly, nWidth, nHeight));
 }
 
-void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
+void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
     sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight, const SwAttrSet* pAttrSet)
 {
     sal_Int16 nXSizeAdd = 0, nYSizeAdd = 0;
@@ -654,7 +654,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
 }
 
 void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
-    const sw::Frame &rFly, sal_uInt16 nWidth, sal_uInt16 nHeight)
+    const ww8::Frame &rFly, sal_uInt16 nWidth, sal_uInt16 nHeight)
 {
     if (rGrfNd.IsLinkedFile())     // Linked File
     {
@@ -780,10 +780,10 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
     sal_uInt16 nHeight = rItem.mnHei;
     sal_uInt32 nPos = rStrm.Tell();         // store start of graphic
 
-    const sw::Frame &rFly = rItem.maFly;
+    const ww8::Frame &rFly = rItem.maFly;
     switch (rFly.GetWriterType())
     {
-        case sw::Frame::eGraphic:
+        case ww8::Frame::eGraphic:
         {
             const SwNode *pNode = rItem.maFly.GetContent();
             const SwGrfNode *pNd = pNode ? pNode->GetGrfNode() : nullptr;
@@ -793,7 +793,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         }
         break;
         //For i120928,add branch to export graphic of bullet
-        case sw::Frame::eBulletGrf:
+        case ww8::Frame::eBulletGrf:
         {
             if (rItem.maFly.HasGraphic())
             {
@@ -803,7 +803,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         }
         break;
 
-        case sw::Frame::eOle:
+        case ww8::Frame::eOle:
         {
             const SwNode *pNode = rItem.maFly.GetContent();
             const SwOLENode *pNd = pNode ? pNode->GetOLENode() : nullptr;
@@ -846,9 +846,9 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             }
         }
         break;
-        case sw::Frame::eDrawing:
-        case sw::Frame::eTextBox:
-        case sw::Frame::eFormControl:
+        case ww8::Frame::eDrawing:
+        case ww8::Frame::eTextBox:
+        case ww8::Frame::eFormControl:
             /*
             #i3958# We only export an empty dummy picture frame here, this is
             what word does the escher export should contain an anchored to
