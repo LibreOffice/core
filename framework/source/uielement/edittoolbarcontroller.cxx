@@ -78,7 +78,7 @@ EditControl::~EditControl()
 
 void EditControl::dispose()
 {
-    m_pEditToolbarController = 0;
+    m_pEditToolbarController = nullptr;
     Edit::dispose();
 }
 
@@ -129,7 +129,7 @@ EditToolbarController::EditToolbarController(
     sal_Int32                                nWidth,
     const OUString&                          aCommand ) :
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
-    ,   m_pEditControl( 0 )
+    ,   m_pEditControl( nullptr )
 {
     m_pEditControl = VclPtr<EditControl>::Create( m_pToolbar, WB_BORDER, this );
     if ( nWidth == 0 )
@@ -151,7 +151,7 @@ throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    m_pToolbar->SetItemWindow( m_nID, 0 );
+    m_pToolbar->SetItemWindow( m_nID, nullptr );
     m_pEditControl.disposeAndClear();
 
     ComplexToolbarController::dispose();

@@ -100,11 +100,11 @@ ImageXMLEntryProperty ImagesEntries[OReadImagesDocumentHandler::IMG_XML_ENTRY_CO
 
 OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aItems ) :
     m_aImageList( aItems ),
-    m_pImages( 0 ),
-    m_pExternalImages( 0 )
+    m_pImages( nullptr ),
+    m_pExternalImages( nullptr )
 {
-    m_aImageList.pImageList         = NULL;
-    m_aImageList.pExternalImageList = NULL;
+    m_aImageList.pImageList         = nullptr;
+    m_aImageList.pExternalImageList = nullptr;
 
     m_nHashMaskModeBitmap   = OUString( ATTRIBUTE_MASKMODE_BITMAP ).hashCode();
     m_nHashMaskModeColor    = OUString( ATTRIBUTE_MASKMODE_COLOR ).hashCode();
@@ -251,7 +251,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                                 else
                                 {
                                     delete m_pImages;
-                                    m_pImages = NULL;
+                                    m_pImages = nullptr;
 
                                     OUString aErrorMessage = getErrorLineString();
                                     aErrorMessage += "Attribute image:maskmode must be 'maskcolor' or 'maskbitmap'!";
@@ -281,7 +281,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 if ( m_pImages->aURL.isEmpty() )
                 {
                     delete m_pImages;
-                    m_pImages = NULL;
+                    m_pImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Required attribute xlink:href must have a value!";
@@ -296,7 +296,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 if ( !m_bImagesStartFound )
                 {
                     delete m_pImages;
-                    m_pImages = NULL;
+                    m_pImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Element 'image:entry' must be embedded into element 'image:images'!";
@@ -343,7 +343,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 {
                     delete pItem;
                     delete m_pImages;
-                    m_pImages = NULL;
+                    m_pImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Required attribute 'image:bitmap-index' must have a value >= 0!";
@@ -355,7 +355,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 {
                     delete pItem;
                     delete m_pImages;
-                    m_pImages = NULL;
+                    m_pImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Required attribute 'image:command' must have a value!";
@@ -372,7 +372,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 if ( !m_bImageContainerStartFound )
                 {
                     delete m_pImages;
-                    m_pImages = NULL;
+                    m_pImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Element 'image:externalimages' must be embedded into element 'image:imagecontainer'!";
@@ -383,7 +383,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 if ( m_bExternalImagesStartFound )
                 {
                     delete m_pImages;
-                    m_pImages = NULL;
+                    m_pImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Element 'image:externalimages' cannot be embedded into 'image:externalimages'!";
@@ -402,8 +402,8 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 {
                     delete m_pImages;
                     delete m_pExternalImages;
-                    m_pImages = NULL;
-                    m_pExternalImages = NULL;
+                    m_pImages = nullptr;
+                    m_pExternalImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Element 'image:externalentry' must be embedded into 'image:externalimages'!";
@@ -414,8 +414,8 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 {
                     delete m_pImages;
                     delete m_pExternalImages;
-                    m_pImages = NULL;
-                    m_pExternalImages = NULL;
+                    m_pImages = nullptr;
+                    m_pExternalImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Element 'image:externalentry' cannot be embedded into 'image:externalentry'!";
@@ -458,8 +458,8 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     delete pItem;
                     delete m_pImages;
                     delete m_pExternalImages;
-                    m_pImages = NULL;
-                    m_pExternalImages = NULL;
+                    m_pImages = nullptr;
+                    m_pExternalImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Required attribute 'image:command' must have a value!";
@@ -472,8 +472,8 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     delete pItem;
                     delete m_pImages;
                     delete m_pExternalImages;
-                    m_pImages = NULL;
-                    m_pExternalImages = NULL;
+                    m_pImages = nullptr;
+                    m_pExternalImages = nullptr;
 
                     OUString aErrorMessage = getErrorLineString();
                     aErrorMessage += "Required attribute 'xlink:href' must have a value!";
@@ -517,7 +517,7 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
                 {
                     if ( m_aImageList.pImageList )
                         m_aImageList.pImageList->push_back( m_pImages );
-                    m_pImages = NULL;
+                    m_pImages = nullptr;
                 }
                 m_bImagesStartFound = false;
             }
@@ -538,7 +538,7 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
                 }
 
                 m_bExternalImagesStartFound = false;
-                m_pExternalImages = NULL;
+                m_pExternalImages = nullptr;
             }
             break;
 

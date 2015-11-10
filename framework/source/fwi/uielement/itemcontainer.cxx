@@ -118,7 +118,7 @@ Reference< XIndexAccess > ItemContainer::deepCopyContainer( const Reference< XIn
     if ( rSubContainer.is() )
     {
         ConstItemContainer* pSource = ConstItemContainer::GetImplementation( rSubContainer );
-        ItemContainer* pSubContainer( 0 );
+        ItemContainer* pSubContainer( nullptr );
         if ( pSource )
             pSubContainer = new ItemContainer( *pSource, rMutex );
         else
@@ -143,7 +143,7 @@ ItemContainer* ItemContainer::GetImplementation( const css::uno::Reference< css:
 {
     css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
     return xUT.is() ? reinterpret_cast< ItemContainer* >(sal::static_int_cast< sal_IntPtr >(
-                          xUT->getSomething( ItemContainer::GetUnoTunnelId() ))) : NULL;
+                          xUT->getSomething( ItemContainer::GetUnoTunnelId() ))) : nullptr;
 }
 
 // XElementAccess

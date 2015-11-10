@@ -76,7 +76,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
 {
     const OUString*    pFontNameArray = rFontNameSeq.getConstArray();
     VCLXPopupMenu*     pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
-    PopupMenu*         pVCLPopupMenu = 0;
+    PopupMenu*         pVCLPopupMenu = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 

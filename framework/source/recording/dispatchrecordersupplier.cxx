@@ -51,7 +51,7 @@ DEFINE_INIT_SERVICE(
             it's not necessary to do anything here.
  */
 DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& )
-        : m_xDispatchRecorder( NULL                          )
+        : m_xDispatchRecorder( nullptr                          )
 {
 }
 
@@ -63,7 +63,7 @@ DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< c
  */
 DispatchRecorderSupplier::~DispatchRecorderSupplier()
 {
-    m_xDispatchRecorder = NULL;
+    m_xDispatchRecorder = nullptr;
 }
 
 /**

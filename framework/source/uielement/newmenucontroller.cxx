@@ -314,7 +314,7 @@ NewMenuController::~NewMenuController()
 void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
-    PopupMenu*     pVCLPopupMenu = 0;
+    PopupMenu*     pVCLPopupMenu = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 
@@ -434,7 +434,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
         pNewDocument->xDispatch  = xDispatch;
         pNewDocument->aTargetURL = aTargetURL;
         pNewDocument->aArgSeq    = aArgsList;
-        Application::PostUserEvent( LINK(0, NewMenuController, ExecuteHdl_Impl), pNewDocument );
+        Application::PostUserEvent( LINK(nullptr, NewMenuController, ExecuteHdl_Impl), pNewDocument );
     }
 }
 

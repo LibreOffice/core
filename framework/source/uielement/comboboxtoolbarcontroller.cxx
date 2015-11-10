@@ -82,7 +82,7 @@ ComboBoxControl::~ComboBoxControl()
 
 void ComboBoxControl::dispose()
 {
-    m_pComboboxToolbarController = 0;
+    m_pComboboxToolbarController = nullptr;
     ComboBox::dispose();
 }
 
@@ -147,7 +147,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     sal_Int32                             nWidth,
     const OUString&                       aCommand ) :
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
-    ,   m_pComboBox( 0 )
+    ,   m_pComboBox( nullptr )
 {
     m_pComboBox = VclPtr<ComboBoxControl>::Create( m_pToolbar, WB_DROPDOWN, this );
     if ( nWidth == 0 )
@@ -170,7 +170,7 @@ throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    m_pToolbar->SetItemWindow( m_nID, 0 );
+    m_pToolbar->SetItemWindow( m_nID, nullptr );
     m_pComboBox.disposeAndClear();
 
     ComplexToolbarController::dispose();

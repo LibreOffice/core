@@ -75,7 +75,7 @@ throw ( RuntimeException, std::exception )
     svt::StatusbarController::dispose();
 
     SolarMutexGuard aGuard;
-    m_pItemData = NULL;
+    m_pItemData = nullptr;
     m_xGraphic.clear();
     m_xStatusbarItem.clear();
 

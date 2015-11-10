@@ -77,7 +77,7 @@ namespace framework
 XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext      (xContext                     )
     , m_aPresetHandler(xContext                     )
-    , m_pWriteCache   (0                            )
+    , m_pWriteCache   (nullptr                            )
 {
 }
 
@@ -320,7 +320,7 @@ sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isModified()
     throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return (m_pWriteCache != 0);
+    return (m_pWriteCache != nullptr);
 }
 
 sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
@@ -402,7 +402,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
         {
             // be aware of reentrance problems - use temp variable for calling delete ... :-)
             AcceleratorCache* pTemp = m_pWriteCache;
-            m_pWriteCache = 0;
+            m_pWriteCache = nullptr;
             delete pTemp;
         }
     }
@@ -440,7 +440,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
     css::uno::Reference< css::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
-        bChanged = (m_pWriteCache != 0);
+        bChanged = (m_pWriteCache != nullptr);
         if (bChanged)
             aCache.takeOver(*m_pWriteCache);
         else
@@ -473,7 +473,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
         m_aReadCache.takeOver(*m_pWriteCache);
         // live with reentrance .-)
         AcceleratorCache* pTemp = m_pWriteCache;
-        m_pWriteCache = 0;
+        m_pWriteCache = nullptr;
         delete pTemp;
     }
 }
@@ -517,8 +517,8 @@ OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 
 XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
                                 : m_xContext      (xContext                     )
-                                , m_pPrimaryWriteCache(0                        )
-                                , m_pSecondaryWriteCache(0                      )
+                                , m_pPrimaryWriteCache(nullptr                        )
+                                , m_pSecondaryWriteCache(nullptr                      )
 {
     const OUString CFG_ENTRY_ACCELERATORS("org.openoffice.Office.Accelerators");
     m_xCfg.set(
@@ -820,7 +820,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
     {
         // be aware of reentrance problems - use temp variable for calling delete ... :-)
         AcceleratorCache* pTemp = m_pPrimaryWriteCache;
-        m_pPrimaryWriteCache = 0;
+        m_pPrimaryWriteCache = nullptr;
         delete pTemp;
     }
     m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
@@ -832,7 +832,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
     {
         // be aware of reentrance problems - use temp variable for calling delete ... :-)
         AcceleratorCache* pTemp = m_pSecondaryWriteCache;
-        m_pSecondaryWriteCache = 0;
+        m_pSecondaryWriteCache = nullptr;
         delete pTemp;
     }
     m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
@@ -891,14 +891,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     {
         SolarMutexGuard g;
 
-        if (m_pPrimaryWriteCache != 0)
+        if (m_pPrimaryWriteCache != nullptr)
             aCache.takeOver(*m_pPrimaryWriteCache);
         else
             aCache.takeOver(m_aPrimaryReadCache);
 
         AcceleratorCache::TKeyList lKeys;
         AcceleratorCache::TKeyList::const_iterator pIt;
-        if (m_pSecondaryWriteCache!=0)
+        if (m_pSecondaryWriteCache!=nullptr)
         {
             lKeys = m_pSecondaryWriteCache->getAllKeys();
             for ( pIt=lKeys.begin(); pIt!=lKeys.end(); ++pIt )
@@ -1215,7 +1215,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred, const css::
         {
             m_aPrimaryReadCache.takeOver(*m_pPrimaryWriteCache);
             AcceleratorCache* pTemp = m_pPrimaryWriteCache;
-            m_pPrimaryWriteCache = 0;
+            m_pPrimaryWriteCache = nullptr;
             delete pTemp;
         }
     }
@@ -1254,7 +1254,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred, const css::
         {
             m_aSecondaryReadCache.takeOver(*m_pSecondaryWriteCache);
             AcceleratorCache* pTemp = m_pSecondaryWriteCache;
-            m_pSecondaryWriteCache = 0;
+            m_pSecondaryWriteCache = nullptr;
             delete pTemp;
         }
     }

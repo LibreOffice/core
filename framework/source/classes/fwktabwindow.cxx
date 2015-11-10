@@ -238,7 +238,7 @@ bool FwkTabWindow::RemoveEntry( sal_Int32 nIndex )
 
 TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
 {
-    TabEntry* pEntry = NULL;
+    TabEntry* pEntry = nullptr;
 
     TabEntryList::const_iterator pIt;
     for (  pIt  = m_TabList.begin();

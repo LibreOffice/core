@@ -244,7 +244,7 @@ MenuManager::MenuManager(
                 }
 
                 Reference< XDispatch > aXDispatchRef;
-                m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, aXDispatchRef ));
+                m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, nullptr, aXDispatchRef ));
 
             }
         }
@@ -294,14 +294,14 @@ MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( sal_uInt16 nItemI
             return pItemHandler;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void SAL_CALL MenuManager::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException, std::exception )
 {
     OUString aFeatureURL = Event.FeatureURL.Complete;
-    MenuItemHandler* pStatusChangedMenu = NULL;
+    MenuItemHandler* pStatusChangedMenu = nullptr;
 
     {
         SolarMutexGuard g;
@@ -403,7 +403,7 @@ void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( Runtim
     else
     {
         // disposing called from menu item dispatcher, remove listener
-        MenuItemHandler* pMenuItemDisposing = NULL;
+        MenuItemHandler* pMenuItemDisposing = nullptr;
 
         {
             SolarMutexGuard g;
@@ -451,7 +451,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
         Reference< XDispatch > aXDispatchRef;
         MenuItemHandler* pNewMenuItemHandler = new MenuItemHandler(
                                                     nPickItemId++,
-                                                    NULL,
+                                                    nullptr,
                                                     aXDispatchRef );
 
         for ( int j = 0; j < aPickListEntry.getLength(); j++ )
@@ -573,7 +573,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                     OUString aCompactedSystemPath;
 
                     aTipHelpText = aSystemPath;
-                    oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
+                    oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, nullptr );
                     if ( !nError )
                         aMenuTitle = aCompactedSystemPath;
                     else
@@ -762,7 +762,7 @@ IMPL_LINK_TYPED( MenuManager, Activate, Menu *, pMenu, bool )
                 {
                     MenuItemHandler* pMenuItemHandler = *p;
                     if ( pMenuItemHandler &&
-                         pMenuItemHandler->pSubMenuManager == 0 &&
+                         pMenuItemHandler->pSubMenuManager == nullptr &&
                          !pMenuItemHandler->xMenuItemDispatch.is() )
                     {
                         // There is no dispatch mechanism for the special window list menu items,

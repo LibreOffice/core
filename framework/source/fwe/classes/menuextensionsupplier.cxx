@@ -20,7 +20,7 @@
 #include <framework/menuextensionsupplier.hxx>
 #include <osl/mutex.hxx>
 
-static pfunc_setMenuExtensionSupplier pMenuExtensionSupplierFunc = NULL;
+static pfunc_setMenuExtensionSupplier pMenuExtensionSupplierFunc = nullptr;
 
 namespace framework
 {
@@ -29,7 +29,7 @@ MenuExtensionItem SAL_CALL GetMenuExtension()
 {
     MenuExtensionItem aItem;
 
-    pfunc_setMenuExtensionSupplier pLocalMenuExtensionSupplierFunc( 0 );
+    pfunc_setMenuExtensionSupplier pLocalMenuExtensionSupplierFunc( nullptr );
 
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

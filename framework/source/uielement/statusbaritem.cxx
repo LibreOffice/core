@@ -85,8 +85,8 @@ StatusbarItem::~StatusbarItem()
 void SAL_CALL StatusbarItem::disposing()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    m_pItemData = 0;
-    m_pStatusBar = 0;
+    m_pItemData = nullptr;
+    m_pStatusBar = nullptr;
 }
 
 OUString SAL_CALL StatusbarItem::getCommand()

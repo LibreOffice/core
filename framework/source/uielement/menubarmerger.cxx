@@ -86,7 +86,7 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
     ReferencePathInfo aResult;
     if ( !nCount )
     {
-        aResult.pPopupMenu = NULL;
+        aResult.pPopupMenu = nullptr;
         aResult.nPos = 0;
         aResult.nLevel = -1;
         aResult.eResult = RP_MENUITEM_NOT_FOUND;
@@ -119,7 +119,7 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
             {
                 sal_uInt16 nItemId = pCurrMenu->GetItemId( nTmpPos );
                 Menu* pTmpMenu     = pCurrMenu->GetPopupMenu( nItemId );
-                if ( pTmpMenu != 0 )
+                if ( pTmpMenu != nullptr )
                     pCurrMenu = pTmpMenu;
                 else
                 {

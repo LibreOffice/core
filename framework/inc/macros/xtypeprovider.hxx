@@ -69,13 +69,13 @@ ________________________________________________________________________________
         /* And we don't must use a mutex at every call!                 */                                                                      \
         /* For the first call; pTypeCollection is NULL -                */                                                                      \
         /* for the second call pTypeCollection is different from NULL!  */                                                                      \
-        static ::cppu::OTypeCollection* pTypeCollection = NULL;                                                                                \
-        if ( pTypeCollection == NULL )                                                                                                          \
+        static ::cppu::OTypeCollection* pTypeCollection = nullptr;                                                                                \
+        if ( pTypeCollection == nullptr )                                                                                                          \
         {                                                                                                                                       \
             /* Ready for multithreading; get global mutex for first call of this method only! see before   */                                   \
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );                                                                         \
             /* Control these pointer again ... it can be, that another instance will be faster then these! */                                   \
-            if ( pTypeCollection == NULL )                                                                                                      \
+            if ( pTypeCollection == nullptr )                                                                                                      \
             {                                                                                                                                   \
                 /* Create a static typecollection ...           */                                                                              \
                 /* Attention: "TYPES" will expand to "(...)"!   */                                                                              \
@@ -98,13 +98,13 @@ ________________________________________________________________________________
         /* And we don't must use a mutex at every call!                 */                                                                      \
         /* For the first call; pTypeCollection is NULL -                */                                                                      \
         /* for the second call pTypeCollection is different from NULL!  */                                                                      \
-        static css::uno::Sequence< css::uno::Type >* pTypeCollection = NULL;                                         \
-        if ( pTypeCollection == NULL )                                                                                                          \
+        static css::uno::Sequence< css::uno::Type >* pTypeCollection = nullptr;                                         \
+        if ( pTypeCollection == nullptr )                                                                                                          \
         {                                                                                                                                       \
             /* Ready for multithreading; get global mutex for first call of this method only! see before   */                                   \
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );                                                                         \
             /* Control these pointer again ... it can be, that another instance will be faster then these! */                                   \
-            if ( pTypeCollection == NULL )                                                                                                      \
+            if ( pTypeCollection == nullptr )                                                                                                      \
             {                                                                                                                                   \
                 /* Create two typecollections                           */                                                                      \
                 /* (cppuhelper support 12 items per collection only!)   */                                                                      \

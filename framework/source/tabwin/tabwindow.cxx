@@ -144,7 +144,7 @@ TabControl* TabWindow::impl_GetTabControl( const css::uno::Reference< css::awt::
     if ( pWindow )
         return static_cast<TabControl *>(pWindow);
     else
-        return NULL;
+        return nullptr;
 }
 
 void TabWindow::impl_SetTitle( const OUString& rTitle )
@@ -163,7 +163,7 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID ) co
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
                                                         cppu::UnoType<css::awt::XTabListener>::get());
-    if (pContainer!=NULL)
+    if (pContainer!=nullptr)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
         while (pIterator.hasMoreElements())
@@ -200,7 +200,7 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID, con
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
                                                         cppu::UnoType<css::awt::XTabListener>::get());
-    if (pContainer!=NULL)
+    if (pContainer!=nullptr)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
         while (pIterator.hasMoreElements())
@@ -846,15 +846,15 @@ void SAL_CALL TabWindow::getFastPropertyValue( css::uno::Any& aValue  ,
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = NULL;
+    static ::cppu::OPropertyArrayHelper* pInfoHelper = nullptr;
 
-    if( pInfoHelper == NULL )
+    if( pInfoHelper == nullptr )
     {
         // Ready for multithreading
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control this pointer again, another instance can be faster then these!
-        if( pInfoHelper == NULL )
+        if( pInfoHelper == nullptr )
         {
             // Define static member to give structure of properties to baseclass "OPropertySetHelper".
             // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
@@ -873,14 +873,14 @@ throw ( css::uno::RuntimeException, std::exception )
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = NULL;
+    static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = nullptr;
 
-    if( pInfo == NULL )
+    if( pInfo == nullptr )
     {
         // Ready for multithreading
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
         // Control this pointer again, another instance can be faster then these!
-        if( pInfo == NULL )
+        if( pInfo == nullptr )
         {
             // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
             // (Use method "getInfoHelper()".)

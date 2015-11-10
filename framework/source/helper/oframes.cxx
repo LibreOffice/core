@@ -294,7 +294,7 @@ void OFrames::impl_resetObject()
     // Destroy this to reset this object.
     m_xOwner.clear();
     // Reset pointer to shared container to!
-    m_pFrameContainer = NULL;
+    m_pFrameContainer = nullptr;
 }
 
 void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFrame > >&  seqDestination  ,
@@ -351,7 +351,7 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
 bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XFrame >&              xOwner          ,
                                                             FrameContainer*                             pFrameContainer )
 {
-    return xOwner.is() && pFrameContainer != 0;
+    return xOwner.is() && pFrameContainer != nullptr;
 }
 
 // Its only allowed to add valid references to container.

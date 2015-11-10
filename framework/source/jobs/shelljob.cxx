@@ -141,15 +141,15 @@ bool ShellJob::impl_execute(const OUString&                       sCommand      
                             const css::uno::Sequence< OUString >& lArguments    ,
                                   bool                            bCheckExitCode)
 {
-          ::rtl_uString**  pArgs    = NULL;
+          ::rtl_uString**  pArgs    = nullptr;
     const ::sal_Int32      nArgs    = lArguments.getLength ();
           oslProcessOption nOptions = osl_Process_WAIT;
-          oslProcess       hProcess(0);
+          oslProcess       hProcess(nullptr);
 
     if (nArgs > 0)
         pArgs = reinterpret_cast< ::rtl_uString** >(const_cast< OUString* >(lArguments.getConstArray()));
 
-    oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgs, nOptions, NULL, NULL, NULL, 0, &hProcess);
+    oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgs, nOptions, nullptr, nullptr, nullptr, 0, &hProcess);
 
     // executable not found or couldnt be started
     if (eError != osl_Process_E_None)

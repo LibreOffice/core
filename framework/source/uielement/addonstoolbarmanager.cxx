@@ -149,7 +149,7 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException, std::exce
             {
                 AddonsParams* pRuntimeItemData = static_cast<AddonsParams*>(m_pToolBar->GetItemData( nId ));
                 delete pRuntimeItemData;
-                m_pToolBar->SetItemData( nId, NULL );
+                m_pToolBar->SetItemData( nId, nullptr );
             }
         }
     }
@@ -306,7 +306,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 }
                 else
                 {
-                    ::cppu::OWeakObject* pController = 0;
+                    ::cppu::OWeakObject* pController = nullptr;
 
                     pController = ToolBarMerger::CreateController( m_xContext, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
                     xController.set( pController, UNO_QUERY );

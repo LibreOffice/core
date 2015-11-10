@@ -60,7 +60,7 @@ DEFINE_INIT_SERVICE                     (   FontSizeMenuController, {} )
 
 FontSizeMenuController::FontSizeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
-    m_pHeightArray( 0 )
+    m_pHeightArray( nullptr )
 {
 }
 
@@ -126,7 +126,7 @@ void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XP
 void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu*          pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
-    PopupMenu*              pVCLPopupMenu = 0;
+    PopupMenu*              pVCLPopupMenu = nullptr;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )

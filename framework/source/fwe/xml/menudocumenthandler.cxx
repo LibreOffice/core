@@ -148,8 +148,8 @@ static void ExtractMenuParameters( const Sequence< PropertyValue >& rProp,
 // Base class implementation
 
 ReadMenuDocumentHandlerBase::ReadMenuDocumentHandlerBase() :
-    m_xLocator( 0 ),
-    m_xReader( 0 ),
+    m_xLocator( nullptr ),
+    m_xReader( nullptr ),
     m_aType( ITEM_DESCRIPTOR_TYPE ),
     m_aLabel( ITEM_DESCRIPTOR_LABEL ),
     m_aContainer( ITEM_DESCRIPTOR_CONTAINER ),

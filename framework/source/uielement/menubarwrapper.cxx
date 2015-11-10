@@ -125,8 +125,8 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
         if ( xFrame.is() && m_xConfigSource.is() )
         {
             // Create VCL menubar which will be filled with settings data
-            MenuBar*        pVCLMenuBar = 0;
-            VCLXMenuBar*    pAwtMenuBar = 0;
+            MenuBar*        pVCLMenuBar = nullptr;
+            VCLXMenuBar*    pAwtMenuBar = nullptr;
             {
                 SolarMutexGuard aSolarMutexGuard;
                 pVCLMenuBar = new MenuBar();

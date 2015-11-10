@@ -53,14 +53,14 @@ struct TTabPageInfo
         TTabPageInfo()
             : m_nIndex      ( -1      )
             , m_bCreated    (false)
-            , m_pPage       ( NULL    )
+            , m_pPage       ( nullptr    )
             , m_lProperties (         )
         {}
 
         TTabPageInfo(::sal_Int32 nID)
             : m_nIndex      ( nID     )
             , m_bCreated    (false)
-            , m_pPage       ( NULL    )
+            , m_pPage       ( nullptr    )
             , m_lProperties (         )
         {}
 
@@ -203,7 +203,7 @@ TabWindowService::TabWindowService()
 
         // Init member
         ,   m_xTabWin               (                               )
-        ,   m_pTabWin               ( NULL                          )
+        ,   m_pTabWin               ( nullptr                          )
         ,   m_lTabPageInfos         (                               )
         ,   m_lListener             ( m_aMutex )
         ,   m_nPageIndexCounter     ( 1                             )
@@ -429,7 +429,7 @@ IMPL_LINK_TYPED( TabWindowService, EventListener, VclWindowEvent&, rEvent, void 
         m_lListener.disposeAndClear (aEvent);
 
         m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
-        m_pTabWin = NULL;
+        m_pTabWin = nullptr;
         m_xTabWin.clear();
 
         return;
@@ -508,7 +508,7 @@ TTabPageInfoHash::iterator TabWindowService::impl_getTabPageInfo(::sal_Int32 nID
 //  TabWindowService
 FwkTabWindow* TabWindowService::mem_TabWin ()
 {
-    FwkTabWindow* pWin = NULL;
+    FwkTabWindow* pWin = nullptr;
 
     if ( ! m_xTabWin.is ())
     {

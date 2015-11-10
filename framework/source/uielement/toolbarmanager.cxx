@@ -768,7 +768,7 @@ void ToolBarManager::RemoveControllers()
                 {
                 }
             }
-            m_pToolBar->SetItemWindow(nItemId, 0);
+            m_pToolBar->SetItemWindow(nItemId, nullptr);
         }
     }
     m_aControllerMap.clear();
@@ -868,7 +868,7 @@ void ToolBarManager::CreateControllers()
         CommandToInfoMap::iterator pCommandIter = m_aCommandMap.find( aCommandURL );
         sal_Int16 nWidth = ( pCommandIter != m_aCommandMap.end() ? pCommandIter->second.nWidth : 0 );
 
-        svt::ToolboxController* pController( 0 );
+        svt::ToolboxController* pController( nullptr );
 
         if ( bHasDisabledEntries )
         {
@@ -926,7 +926,7 @@ void ToolBarManager::CreateControllers()
             pController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
             if ( !pController )
             {
-                if ( m_pToolBar->GetItemData( nId ) != 0 )
+                if ( m_pToolBar->GetItemData( nId ) != nullptr )
                 {
                     // retrieve additional parameters
                     OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
@@ -1593,7 +1593,7 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
     {
         pItemMenu->Clear();
         delete pItemMenu;
-        pItemMenu = NULL;
+        pItemMenu = nullptr;
         pMenu->SetPopupMenu( 1, pItemMenu );
     }
 
@@ -1678,7 +1678,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
             xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
 
         if ( !xDisp.is() || IsPluginMode() )
-            return 0;
+            return nullptr;
     }
 
     // popup menu for quick customization
@@ -1826,7 +1826,7 @@ IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
 
         //fdo#86820 We may have been disposed and so have a NULL m_pToolBar by
         //executing a menu entry, e.g. inserting a chart replaces the toolbars
-        pManagerMenu = m_bDisposed ? NULL : m_pToolBar->GetMenu();
+        pManagerMenu = m_bDisposed ? nullptr : m_pToolBar->GetMenu();
         if (pManagerMenu)
         {
             // Unlink our listeners again -- see above for why.
@@ -1897,7 +1897,7 @@ IMPL_LINK_TYPED( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                 pExecuteInfo->nCmd            = EXEC_CMD_DOCKTOOLBAR;
                 pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
 
-                Application::PostUserEvent( LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
+                Application::PostUserEvent( LINK(nullptr, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
                 break;
             }
 
@@ -1909,7 +1909,7 @@ IMPL_LINK_TYPED( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                 pExecuteInfo->nCmd            = EXEC_CMD_DOCKALLTOOLBARS;
                 pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
 
-                Application::PostUserEvent( LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
+                Application::PostUserEvent( LINK(nullptr, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
                 break;
             }
 
@@ -1937,7 +1937,7 @@ IMPL_LINK_TYPED( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                 pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
                 pExecuteInfo->xWindow         = VCLUnoHelper::GetInterface( m_pToolBar );
 
-                Application::PostUserEvent( LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
+                Application::PostUserEvent( LINK(nullptr, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
                 break;
             }
 

@@ -89,7 +89,7 @@ SpinfieldControl::~SpinfieldControl()
 
 void SpinfieldControl::dispose()
 {
-    m_pSpinfieldToolbarController = 0;
+    m_pSpinfieldToolbarController = nullptr;
     SpinField::dispose();
 }
 
@@ -189,7 +189,7 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     ,   m_nMin( 0.0 )
     ,   m_nValue( 0.0 )
     ,   m_nStep( 0.0 )
-    ,   m_pSpinfieldControl( 0 )
+    ,   m_pSpinfieldControl( nullptr )
 {
     m_pSpinfieldControl = VclPtr<SpinfieldControl>::Create( m_pToolbar, WB_SPIN|WB_BORDER, this );
     if ( nWidth == 0 )
@@ -211,7 +211,7 @@ throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    m_pToolbar->SetItemWindow( m_nID, 0 );
+    m_pToolbar->SetItemWindow( m_nID, nullptr );
     m_pSpinfieldControl.disposeAndClear();
 
     ComplexToolbarController::dispose();

@@ -101,8 +101,8 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
         if ( xFrame.is() && m_xConfigSource.is() )
         {
             // Create VCL based toolbar which will be filled with settings data
-            StatusBar*        pStatusBar( 0 );
-            StatusBarManager* pStatusBarManager( 0 );
+            StatusBar*        pStatusBar( nullptr );
+            StatusBarManager* pStatusBarManager( nullptr );
             {
                 SolarMutexGuard aSolarMutexGuard;
                 vcl::Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );

@@ -173,7 +173,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
                                                             // and they exist more than ones. We have no idea which our sub tasks is the right one
        )
     {
-        return NULL;
+        return nullptr;
     }
 
     // I) handle special cases which not right for using findFrame() first

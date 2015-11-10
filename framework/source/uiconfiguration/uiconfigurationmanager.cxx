@@ -447,7 +447,7 @@ UIConfigurationManager::UIElementData* UIConfigurationManager::impl_findUIElemen
     }
 
     // Nothing has been found!
-    return NULL;
+    return nullptr;
 }
 
 void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& xStorage, UIElementType& rElementType, bool bResetModifyState )
@@ -683,7 +683,7 @@ void UIConfigurationManager::impl_Initialize()
 }
 
 UIConfigurationManager::UIConfigurationManager( const css::uno::Reference< css::uno::XComponentContext > & rxContext ) :
-    m_xDocConfigStorage( 0 )
+    m_xDocConfigStorage( nullptr )
     , m_bReadOnly( true )
     , m_bModified( false )
     , m_bConfigRead( false )
@@ -1388,7 +1388,7 @@ sal_Bool SAL_CALL UIConfigurationManager::isReadOnly() throw (css::uno::RuntimeE
 void UIConfigurationManager::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::ui::XUIConfigurationListener>::get());
-    if ( pContainer != NULL )
+    if ( pContainer != nullptr )
     {
         ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
         while ( pIterator.hasMoreElements() )

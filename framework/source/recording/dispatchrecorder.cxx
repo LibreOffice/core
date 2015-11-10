@@ -72,7 +72,7 @@ Sequence< Any > make_seq_out_of_struct(
         throw RuntimeException(
             type.getTypeName() + "is no struct or exception!" );
     }
-    typelib_TypeDescription * pTD = 0;
+    typelib_TypeDescription * pTD = nullptr;
     TYPELIB_DANGER_GET( &pTD, type.getTypeLibType() );
     OSL_ASSERT( pTD );
     if (! pTD)

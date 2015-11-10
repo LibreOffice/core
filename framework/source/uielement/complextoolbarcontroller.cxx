@@ -72,7 +72,7 @@ throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    m_pToolbar->SetItemWindow( m_nID, 0 );
+    m_pToolbar->SetItemWindow( m_nID, nullptr );
     svt::ToolboxController::dispose();
 
     m_xURLTransformer.clear();
@@ -124,7 +124,7 @@ throw ( RuntimeException, std::exception )
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( LINK(nullptr, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
 
@@ -260,7 +260,7 @@ void ComplexToolbarController::addNotifyInfo(
         aInfoSeq[nCount].Value = uno::makeAny( getFrameInterface() );
         pNotifyInfo->aInfoSeq  = aInfoSeq;
 
-        Application::PostUserEvent( LINK(0, ComplexToolbarController, Notify_Impl), pNotifyInfo );
+        Application::PostUserEvent( LINK(nullptr, ComplexToolbarController, Notify_Impl), pNotifyInfo );
     }
 }
 

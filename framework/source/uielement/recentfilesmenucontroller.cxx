@@ -144,7 +144,7 @@ RecentFilesMenuController::~RecentFilesMenuController()
 void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
-    PopupMenu*     pVCLPopupMenu = 0;
+    PopupMenu*     pVCLPopupMenu = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 
@@ -317,7 +317,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq    = aArgsList;
 
-        Application::PostUserEvent( LINK(0, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
+        Application::PostUserEvent( LINK(nullptr, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
     }
 }
 

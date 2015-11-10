@@ -172,7 +172,7 @@ throw ( RuntimeException, std::exception )
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( LINK(0, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
+        Application::PostUserEvent( LINK(nullptr, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
 
@@ -297,7 +297,7 @@ MenuToolbarController::MenuToolbarController( const Reference< XComponentContext
                                               const Reference< XIndexAccess >& xMenuDesc )
     : GenericToolbarController( rxContext, rFrame, pToolBar, nID, aCommand ),
       m_xMenuDesc( xMenuDesc ),
-      pMenu( NULL ),
+      pMenu( nullptr ),
       m_aModuleIdentifier( aModuleIdentifier )
 {
 }
@@ -313,7 +313,7 @@ MenuToolbarController::~MenuToolbarController()
     if ( pMenu )
     {
         delete pMenu;
-        pMenu = NULL;
+        pMenu = nullptr;
     }
 
 }
@@ -357,14 +357,14 @@ MenuToolbarController::createPopupWindow() throw (css::uno::RuntimeException, st
     }
 
     if ( !pMenu || !m_pToolbar )
-        return NULL;
+        return nullptr;
 
     OSL_ENSURE ( pMenu->GetItemCount(), "Empty PopupMenu!" );
 
     ::Rectangle aRect( m_pToolbar->GetItemRect( m_nID ) );
     pMenu->Execute( m_pToolbar, aRect, PopupMenuFlags::ExecuteDown );
 
-    return NULL;
+    return nullptr;
 }
 } // namespace
 

@@ -109,7 +109,7 @@ PopupMenu* AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, const Refe
     else if ( eMenuType == ADDON_POPUPMENU )
         return new AddonPopupMenu( rFrame );
     else
-        return NULL;
+        return nullptr;
 }
 
 // Create the Add-Ons menu
@@ -117,7 +117,7 @@ AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame,
                                               const Reference< XComponentContext >& rContext )
 {
     AddonsOptions aOptions;
-    AddonMenu*  pAddonMenu      = NULL;
+    AddonMenu*  pAddonMenu      = nullptr;
     sal_uInt16      nUniqueMenuId   = ADDONMENU_ITEMID_START;
 
     const Sequence< Sequence< PropertyValue > >& rAddonMenuEntries = aOptions.GetAddonsMenu();
@@ -131,7 +131,7 @@ AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame,
         if ( pAddonMenu->GetItemCount() == 0 )
         {
             delete pAddonMenu;
-            pAddonMenu = NULL;
+            pAddonMenu = nullptr;
         }
     }
 
@@ -297,7 +297,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
             bInsertSeparator = true;
         else
         {
-            PopupMenu* pSubMenu = NULL;
+            PopupMenu* pSubMenu = nullptr;
             if ( aAddonSubMenu.getLength() > 0 )
             {
                 pSubMenu = AddonMenuManager::CreatePopupMenuType( nSubMenuType, rFrame );
@@ -307,7 +307,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                 if ( pSubMenu->GetItemCount() == 0 )
                 {
                     delete pSubMenu;
-                    pSubMenu =  NULL;
+                    pSubMenu =  nullptr;
                     continue;
                 }
             }

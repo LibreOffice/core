@@ -264,7 +264,7 @@ void MenuBarManager::Destroy()
         if ( m_bDeleteMenu )
         {
             delete m_pVCLMenu;
-            m_pVCLMenu = 0;
+            m_pVCLMenu = nullptr;
         }
     }
 }
@@ -512,7 +512,7 @@ MenuBarManager::MenuItemHandler* MenuBarManager::GetMenuItemHandler( sal_uInt16 
             return pItemHandler;
     }
 
-    return 0;
+    return nullptr;
 }
 
 // Helper to set request images flag
@@ -561,7 +561,7 @@ void MenuBarManager::RemoveListener()
             {
                 {
                     // Remove popup menu from menu structure
-                    m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, 0 );
+                    m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, nullptr );
                 }
 
                 Reference< css::lang::XEventListener > xEventListener( pItemHandler->xPopupMenuController, UNO_QUERY );
@@ -610,12 +610,12 @@ void MenuBarManager::RemoveListener()
     {
     }
 
-    m_xFrame = 0;
+    m_xFrame = nullptr;
 }
 
 void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( RuntimeException, std::exception )
 {
-    MenuItemHandler* pMenuItemDisposing = NULL;
+    MenuItemHandler* pMenuItemDisposing = nullptr;
 
     SolarMutexGuard g;
 
@@ -656,7 +656,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
                 {
                     // Remove popup menu from menu structure as we release our reference to
                     // the controller.
-                    m_pVCLMenu->SetPopupMenu( pMenuItemDisposing->nItemId, 0 );
+                    m_pVCLMenu->SetPopupMenu( pMenuItemDisposing->nItemId, nullptr );
                 }
 
                 pMenuItemDisposing->xPopupMenuController.clear();
@@ -819,7 +819,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
                     vcl::KeyCode aKeyCode( KEY_F1 );
                     pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
                 }
-                else if ( pMenu->GetPopupMenu( pMenuItemHandler->nItemId ) == 0 )
+                else if ( pMenu->GetPopupMenu( pMenuItemHandler->nItemId ) == nullptr )
                     pMenu->SetAccelKey( pMenuItemHandler->nItemId, pMenuItemHandler->aKeyCode );
             }
         }
@@ -1387,7 +1387,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 vcl::KeyCode aKeyCode( KEY_F1 );
                 pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
             }
-            else if ( pMenu->GetPopupMenu( pMenuItemHandler->nItemId ) == 0 )
+            else if ( pMenu->GetPopupMenu( pMenuItemHandler->nItemId ) == nullptr )
                 pMenu->SetAccelKey( pMenuItemHandler->nItemId, pMenuItemHandler->aKeyCode );
         }
     }

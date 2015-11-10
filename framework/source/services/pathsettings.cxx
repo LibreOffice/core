@@ -459,7 +459,7 @@ PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentConte
     : PathSettings_BASE(m_aMutex)
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     ,   m_xContext (xContext)
-    ,   m_pPropHelp(0    )
+    ,   m_pPropHelp(nullptr    )
     ,  m_bIgnoreEvents(false)
 {
 }
@@ -484,7 +484,7 @@ void SAL_CALL PathSettings::disposing()
     m_xCfgNewListener.clear();
 
     delete m_pPropHelp;
-    m_pPropHelp = 0;
+    m_pPropHelp = nullptr;
 }
 
 css::uno::Any SAL_CALL PathSettings::queryInterface( const css::uno::Type& _rType )
@@ -739,8 +739,8 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
     // SAFE ->
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
-    PathSettings::PathInfo* pPathOld = 0;
-    PathSettings::PathInfo* pPathNew = 0;
+    PathSettings::PathInfo* pPathOld = nullptr;
+    PathSettings::PathInfo* pPathNew = nullptr;
     PathSettings::EChangeOp eOp      = PathSettings::E_UNDEFINED;
     PathSettings::PathInfo  aPath;
 
@@ -797,7 +797,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
              {
                 if (bNotifyListener)
                 {
-                    pPathOld = 0;
+                    pPathOld = nullptr;
                     pPathNew = &aPath;
                     impl_notifyPropListener(eOp, sPath, pPathOld, pPathNew);
                 }
@@ -824,7 +824,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
                     if (bNotifyListener)
                     {
                         pPathOld = &(pPath->second);
-                        pPathNew = 0;
+                        pPathNew = nullptr;
                         impl_notifyPropListener(eOp, sPath, pPathOld, pPathNew);
                     }
                     m_lPaths.erase(pPath);
@@ -1113,7 +1113,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
          ++pIt                     )
     {
         const PathSettings::PathInfo& rPath = pIt->second;
-              css::beans::Property*   pProp = 0;
+              css::beans::Property*   pProp = nullptr;
 
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName;
@@ -1351,7 +1351,7 @@ PathSettings::PathInfo* PathSettings::impl_getPathAccess(sal_Int32 nHandle)
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (nHandle > (m_lPropDesc.getLength()-1))
-        return 0;
+        return nullptr;
 
     const css::beans::Property&            rProp = m_lPropDesc[nHandle];
           OUString                  sProp = impl_extractBaseFromPropName(rProp.Name);
@@ -1360,7 +1360,7 @@ PathSettings::PathInfo* PathSettings::impl_getPathAccess(sal_Int32 nHandle)
     if (rPath != m_lPaths.end())
        return &(rPath->second);
 
-    return 0;
+    return nullptr;
     // <- SAFE
 }
 
@@ -1370,7 +1370,7 @@ const PathSettings::PathInfo* PathSettings::impl_getPathAccessConst(sal_Int32 nH
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (nHandle > (m_lPropDesc.getLength()-1))
-        return 0;
+        return nullptr;
 
     const css::beans::Property&                  rProp = m_lPropDesc[nHandle];
           OUString                        sProp = impl_extractBaseFromPropName(rProp.Name);
@@ -1379,7 +1379,7 @@ const PathSettings::PathInfo* PathSettings::impl_getPathAccessConst(sal_Int32 nH
     if (rPath != m_lPaths.end())
        return &(rPath->second);
 
-    return 0;
+    return nullptr;
     // <- SAFE
 }
 

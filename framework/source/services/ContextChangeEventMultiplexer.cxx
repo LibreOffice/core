@@ -167,7 +167,7 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
             0);
 
     FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, true);
-    if (pFocusDescriptor != NULL)
+    if (pFocusDescriptor != nullptr)
     {
         ListenerContainer& rContainer (pFocusDescriptor->maListeners);
         if (::std::find(rContainer.begin(), rContainer.end(), rxListener) == rContainer.end())
@@ -182,10 +182,10 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
 
     // Send out an initial event that informs the new listener about
     // the current context.
-    if (rxEventFocus.is() && pFocusDescriptor!=NULL)
+    if (rxEventFocus.is() && pFocusDescriptor!=nullptr)
     {
         css::ui::ContextChangeEventObject aEvent (
-            NULL,
+            nullptr,
             pFocusDescriptor->msCurrentApplicationName,
             pFocusDescriptor->msCurrentContextName);
         rxListener->notifyContextChangeEvent(aEvent);
@@ -203,7 +203,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
             static_cast<XWeak*>(this), 0);
 
     FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, false);
-    if (pFocusDescriptor != NULL)
+    if (pFocusDescriptor != nullptr)
     {
         ListenerContainer& rContainer (pFocusDescriptor->maListeners);
         const ListenerContainer::iterator iListener (
@@ -255,7 +255,7 @@ void SAL_CALL ContextChangeEventMultiplexer::broadcastContextChangeEvent (
     if (rxEventFocus.is())
     {
         FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, true);
-        if (pFocusDescriptor != NULL)
+        if (pFocusDescriptor != nullptr)
         {
             pFocusDescriptor->msCurrentApplicationName = rEventObject.ApplicationName;
             pFocusDescriptor->msCurrentContextName = rEventObject.ContextName;
@@ -264,7 +264,7 @@ void SAL_CALL ContextChangeEventMultiplexer::broadcastContextChangeEvent (
 
     BroadcastEventToSingleContainer(rEventObject, rxEventFocus);
     if (rxEventFocus.is())
-        BroadcastEventToSingleContainer(rEventObject, NULL);
+        BroadcastEventToSingleContainer(rEventObject, nullptr);
 }
 
 void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
@@ -272,7 +272,7 @@ void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
     const cssu::Reference<cssu::XInterface>& rxEventFocus)
 {
     FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, false);
-    if (pFocusDescriptor != NULL)
+    if (pFocusDescriptor != nullptr)
     {
         // Create a copy of the listener container to avoid problems
         // when one of the called listeners calls add... or remove...
@@ -309,7 +309,7 @@ ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::G
     if (iDescriptor != maListeners.end())
         return &iDescriptor->second;
     else
-        return NULL;
+        return nullptr;
 }
 
 OUString SAL_CALL ContextChangeEventMultiplexer::getImplementationName()

@@ -539,7 +539,7 @@ ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl
     }
 
     // Nothing has been found!
-    return NULL;
+    return nullptr;
 }
 
 void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorage > xStorage, UIElementType& rElementType, bool bResetModifyState )
@@ -849,8 +849,8 @@ void ModuleUIConfigurationManager::impl_Initialize()
 ModuleUIConfigurationManager::ModuleUIConfigurationManager(
         const Reference< XComponentContext >& xContext,
         const css::uno::Sequence< css::uno::Any >& aArguments)
-    : m_xDefaultConfigStorage( 0 )
-    , m_xUserConfigStorage( 0 )
+    : m_xDefaultConfigStorage( nullptr )
+    , m_xUserConfigStorage( nullptr )
     , m_bReadOnly( true )
     , m_bModified( false )
     , m_bConfigRead( false )
@@ -862,7 +862,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     , m_aListenerContainer( m_mutex )
 {
     for ( int i = 0; i < css::ui::UIElementType::COUNT; i++ )
-        m_pStorageHandler[i] = 0;
+        m_pStorageHandler[i] = nullptr;
 
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
@@ -1687,7 +1687,7 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::isReadOnly() throw (css::uno::Ru
 void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::ui::XUIConfigurationListener>::get());
-    if ( pContainer != NULL )
+    if ( pContainer != nullptr )
     {
         ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
         while ( pIterator.hasMoreElements() )

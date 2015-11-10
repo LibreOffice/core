@@ -151,7 +151,7 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
     if ( rSubContainer.is() )
     {
         ItemContainer*      pSource = ItemContainer::GetImplementation( rSubContainer );
-        ConstItemContainer* pSubContainer( 0 );
+        ConstItemContainer* pSubContainer( nullptr );
         if ( pSource )
             pSubContainer = new ConstItemContainer( *pSource );
         else
@@ -186,7 +186,7 @@ ConstItemContainer* ConstItemContainer::GetImplementation( const css::uno::Refer
 {
     css::uno::Reference< css::lang::XUnoTunnel > xUT( rxIFace, css::uno::UNO_QUERY );
     return xUT.is() ? reinterpret_cast< ConstItemContainer* >(sal::static_int_cast< sal_IntPtr >(
-                          xUT->getSomething( ConstItemContainer::GetUnoTunnelId() ))) : NULL;
+                          xUT->getSomething( ConstItemContainer::GetUnoTunnelId() ))) : nullptr;
 }
 
 // XElementAccess
@@ -219,14 +219,14 @@ throw (css::uno::RuntimeException, std::exception)
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static Reference< XPropertySetInfo >* pInfo = NULL;
+    static Reference< XPropertySetInfo >* pInfo = nullptr;
 
-    if( pInfo == NULL )
+    if( pInfo == nullptr )
     {
         // Ready for multithreading
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
         // Control this pointer again, another instance can be faster then these!
-        if( pInfo == NULL )
+        if( pInfo == nullptr )
         {
             // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
             // (Use method "getInfoHelper()".)
@@ -295,15 +295,15 @@ throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, 
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = NULL;
+    static ::cppu::OPropertyArrayHelper* pInfoHelper = nullptr;
 
-    if( pInfoHelper == NULL )
+    if( pInfoHelper == nullptr )
     {
         // Ready for multithreading
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control this pointer again, another instance can be faster then these!
-        if( pInfoHelper == NULL )
+        if( pInfoHelper == nullptr )
         {
             // Define static member to give structure of properties to baseclass "OPropertySetHelper".
             // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.

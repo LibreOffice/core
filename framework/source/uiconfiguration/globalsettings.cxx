@@ -257,7 +257,7 @@ bool GlobalSettings_Access::impl_initConfigAccess()
 //  global class
 
 struct mutexGlobalSettings : public rtl::Static< osl::Mutex, mutexGlobalSettings > {};
-static GlobalSettings_Access* pStaticSettings = 0;
+static GlobalSettings_Access* pStaticSettings = nullptr;
 
 static GlobalSettings_Access* GetGlobalSettings( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
 {

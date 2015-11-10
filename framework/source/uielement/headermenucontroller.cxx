@@ -75,7 +75,7 @@ HeaderMenuController::~HeaderMenuController()
 void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >& rModel, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu*       pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
-    PopupMenu*           pVCLPopupMenu     = 0;
+    PopupMenu*           pVCLPopupMenu     = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 

@@ -26,7 +26,7 @@ namespace framework {
 
 VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow)
     : m_xParentWindow    (xParentWindow                )
-    , m_pStatusBar       (0                            )
+    , m_pStatusBar       (nullptr                            )
     , m_nRange           (0                            )
     , m_nValue           (0                            )
 {

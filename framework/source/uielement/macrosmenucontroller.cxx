@@ -72,7 +72,7 @@ MacrosMenuController::~MacrosMenuController()
 void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu* pVCLPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
-    PopupMenu*     pPopupMenu    = 0;
+    PopupMenu*     pPopupMenu    = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 

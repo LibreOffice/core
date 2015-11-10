@@ -301,7 +301,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
         nUpdateMode = css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
         try
         {
-            xInteractionHandler.set( css::task::InteractionHandler::createWithParent( i_rxContext, 0 ), css::uno::UNO_QUERY_THROW );
+            xInteractionHandler.set( css::task::InteractionHandler::createWithParent( i_rxContext, nullptr ), css::uno::UNO_QUERY_THROW );
         }
         catch(const css::uno::RuntimeException&) {throw;}
         catch(const css::uno::Exception&       ) {      }
@@ -313,7 +313,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
         nUpdateMode = css::document::UpdateDocMode::NO_UPDATE;
         rtl::Reference<QuietInteraction> pQuietInteraction = new QuietInteraction();
         xInteractionHandler = pQuietInteraction.get();
-        if ( o_ppQuietInteraction != NULL )
+        if ( o_ppQuietInteraction != nullptr )
         {
             *o_ppQuietInteraction = pQuietInteraction;
         }

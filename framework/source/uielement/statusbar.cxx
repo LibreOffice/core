@@ -28,7 +28,7 @@ FrameworkStatusBar::FrameworkStatusBar(
     vcl::Window*           pParent,
     WinBits           nWinBits ) :
     StatusBar( pParent, nWinBits ),
-    m_pMgr( NULL )
+    m_pMgr( nullptr )
 {
     // set optimal size
     SetOutputSizePixel( CalcWindowSizePixel() );

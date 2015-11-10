@@ -56,13 +56,13 @@ class TransactionGuard : private boost::noncopyable
             @param      "eMode"     enable/disable throwing of exceptions for rejected calls
             @param      "eReason"   returns reason for rejected calls
         *//*-*****************************************************************************************************/
-        inline TransactionGuard( TransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason = NULL )
+        inline TransactionGuard( TransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason = nullptr )
             : m_pManager( &rManager )
         {
             // If exception mode is set to E_HARDEXCEPTIONS we don't need a buffer to return reason!
             // We handle it private. If a call is rejected, our manager throw some exceptions ... and the reason
             // could be ignorable ...
-            if( eReason == NULL )
+            if( eReason == nullptr )
             {
                 ERejectReason eMyReason;
                 m_pManager->registerTransaction( eMode, eMyReason );
@@ -92,10 +92,10 @@ class TransactionGuard : private boost::noncopyable
         *//*-*************************************************************************************************************/
         inline void stop()
         {
-            if( m_pManager != NULL )
+            if( m_pManager != nullptr )
             {
                 m_pManager->unregisterTransaction();
-                m_pManager = NULL;
+                m_pManager = nullptr;
             }
         }
 

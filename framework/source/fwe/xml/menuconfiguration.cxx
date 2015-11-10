@@ -109,7 +109,7 @@ PopupMenu* MenuConfiguration::CreateBookmarkMenu(css::uno::Reference<css::frame:
     else if ( aURL == BOOKMARK_WIZARDMENU )
         return new BmkMenu( rFrame, BmkMenu::BMK_WIZARDMENU );
     else
-        return NULL;
+        return nullptr;
 }
 
 void MenuConfiguration::StoreMenuBarConfigurationToXML(

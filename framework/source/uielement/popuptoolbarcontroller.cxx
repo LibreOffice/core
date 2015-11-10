@@ -431,13 +431,13 @@ throw ( css::uno::RuntimeException, std::exception )
     if ( m_xPopupMenu.is() )
     {
         // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
-        MenuAttributes* pMenuAttributes( 0 );
+        MenuAttributes* pMenuAttributes( nullptr );
         VCLXPopupMenu*  pTkPopupMenu =
             static_cast<VCLXPopupMenu *>( VCLXMenu::GetImplementation( m_xPopupMenu ) );
 
         SolarMutexGuard aSolarMutexGuard;
         PopupMenu* pVCLPopupMenu = pTkPopupMenu ?
-            dynamic_cast< PopupMenu * >( pTkPopupMenu->GetMenu() ) : NULL;
+            dynamic_cast< PopupMenu * >( pTkPopupMenu->GetMenu() ) : nullptr;
 
         if ( pVCLPopupMenu )
             pMenuAttributes = reinterpret_cast< MenuAttributes* >(

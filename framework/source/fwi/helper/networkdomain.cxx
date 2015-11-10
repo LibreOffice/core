@@ -130,7 +130,7 @@ static rtl_uString *getDomainName()
 static rtl_uString *getDomainName()
 {
     /* Initialize and assume failure */
-    rtl_uString *ustrDomainName = NULL;
+    rtl_uString *ustrDomainName = nullptr;
 
     char    buffer[256]; // actually the man page says 65 bytes should be enough
 

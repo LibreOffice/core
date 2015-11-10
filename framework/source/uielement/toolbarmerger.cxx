@@ -634,7 +634,7 @@ bool ToolBarMerger::RemoveItems(
     sal_uInt16             nWidth,
     const OUString& rControlType )
 {
-    ::cppu::OWeakObject* pResult( 0 );
+    ::cppu::OWeakObject* pResult( nullptr );
 
     if ( rControlType == TOOLBARCONTROLLER_BUTTON )
         pResult = new ButtonToolbarController( rxContext, pToolbar, rCommandURL );

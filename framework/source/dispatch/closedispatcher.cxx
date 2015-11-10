@@ -61,7 +61,7 @@ CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponent
         new vcl::EventPoster(LINK(this, CloseDispatcher, impl_asyncCallback)))
     , m_eOperation(E_CLOSE_DOC)
     , m_lStatusListener(m_mutex)
-    , m_pSysWindow(NULL)
+    , m_pSysWindow(nullptr)
 {
     uno::Reference<frame::XFrame> xTarget = static_impl_searchRightTargetFrame(xFrame, sTarget);
     m_xCloseFrame = xTarget;
@@ -217,7 +217,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     }
 
     if ( bIsSynchron )
-        impl_asyncCallback(0);
+        impl_asyncCallback(nullptr);
     else
     {
         SolarMutexGuard g;

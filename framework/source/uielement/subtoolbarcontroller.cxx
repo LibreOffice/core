@@ -109,7 +109,7 @@ SubToolBarController::SubToolBarController( const css::uno::Sequence< css::uno::
 SubToolBarController::~SubToolBarController()
 {
     disposeUIElement();
-    m_xUIElement = 0;
+    m_xUIElement = nullptr;
 }
 
 void SubToolBarController::disposeUIElement()
@@ -129,7 +129,7 @@ void SubToolBarController::statusChanged( const css::frame::FeatureStateEvent& E
     if ( m_bDisposed )
         return;
 
-    ToolBox* pToolBox = 0;
+    ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
     {
@@ -192,7 +192,7 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
 {
     SolarMutexGuard aGuard;
 
-    ToolBox* pToolBox = 0;
+    ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
     {
@@ -287,7 +287,7 @@ void SubToolBarController::updateImage()
     SolarMutexGuard aGuard;
     if ( !m_aLastCommand.isEmpty() )
     {
-        ToolBox* pToolBox = 0;
+        ToolBox* pToolBox = nullptr;
         sal_uInt16 nId = 0;
         if ( getToolboxId( nId, &pToolBox ) )
         {
@@ -352,7 +352,7 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
         }
         disposeUIElement();
     }
-    m_xUIElement = 0;
+    m_xUIElement = nullptr;
 
     // if the toolbar was teared-off recreate it and place it at the given position
     if( e.bTearoff )
@@ -412,7 +412,7 @@ void SubToolBarController::update()
 {
     svt::ToolboxController::update();
 
-    ToolBox* pToolBox = 0;
+    ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
     {
@@ -432,7 +432,7 @@ void SubToolBarController::dispose()
 
     svt::ToolboxController::dispose();
     disposeUIElement();
-    m_xUIElement = 0;
+    m_xUIElement = nullptr;
 }
 
 OUString SubToolBarController::getImplementationName()

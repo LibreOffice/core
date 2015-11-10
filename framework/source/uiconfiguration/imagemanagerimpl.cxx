@@ -87,7 +87,7 @@ static const char*  BITMAP_FILE_NAMES[]   =
 
 namespace framework
 {
-    static GlobalImageList*     pGlobalImageList = 0;
+    static GlobalImageList*     pGlobalImageList = nullptr;
     static const char* ImageType_Prefixes[ImageType_COUNT] =
     {
         "cmd/sc_",
@@ -111,7 +111,7 @@ static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponen
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
 
-    if ( pGlobalImageList == 0 )
+    if ( pGlobalImageList == nullptr )
         pGlobalImageList = new GlobalImageList( rxContext );
 
     return pGlobalImageList;
@@ -153,7 +153,7 @@ CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxCo
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
     for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
-        m_pImageList[n] = 0;
+        m_pImageList[n] = nullptr;
 }
 
 CmdImageList::~CmdImageList()
@@ -261,7 +261,7 @@ ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
     {
         m_sIconTheme = rIconTheme;
         for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
-            delete m_pImageList[n], m_pImageList[n] = NULL;
+            delete m_pImageList[n], m_pImageList[n] = nullptr;
     }
 
     if ( !m_pImageList[nImageType] )
@@ -312,7 +312,7 @@ GlobalImageList::~GlobalImageList()
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
     // remove global pointer as we destroy the object now
-    pGlobalImageList = 0;
+    pGlobalImageList = nullptr;
 }
 
 Image GlobalImageList::getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL )
@@ -437,7 +437,7 @@ bool ImageManagerImpl::implts_loadUserImages(
             ImagesConfiguration::LoadImages( m_xContext,
                                              xInputStream,
                                              aUserImageListInfo );
-            if (( aUserImageListInfo.pImageList != 0 ) &&
+            if (( aUserImageListInfo.pImageList != nullptr ) &&
                 ( !aUserImageListInfo.pImageList->empty() ))
             {
                 ImageListItemDescriptor* pList = &aUserImageListInfo.pImageList->front();
@@ -622,7 +622,7 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
 ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext >& rxContext,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
     m_xContext( rxContext )
     , m_pOwner(pOwner)
-    , m_pDefaultImageList( 0 )
+    , m_pDefaultImageList( nullptr )
     , m_aXMLPostfix( ".xml" )
     , m_aResourceString( ModuleImageList )
     , m_aListenerContainer( m_mutex )
@@ -635,7 +635,7 @@ ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext
 {
     for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
     {
-        m_pUserImageList[n] = 0;
+        m_pUserImageList[n] = nullptr;
         m_bUserImageListModified[n] = false;
     }
 }
@@ -664,10 +664,10 @@ void ImageManagerImpl::dispose()
         for ( sal_Int32 n=0; n < ImageType_COUNT; n++ )
         {
             delete m_pUserImageList[n];
-            m_pUserImageList[n] = 0;
+            m_pUserImageList[n] = nullptr;
         }
         delete m_pDefaultImageList;
-        m_pDefaultImageList = 0;
+        m_pDefaultImageList = nullptr;
     }
 
 }
@@ -861,7 +861,7 @@ throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException )
 
     sal_Int16                         nIndex            = implts_convertImageTypeToIndex( nImageType );
     rtl::Reference< GlobalImageList > rGlobalImageList;
-    CmdImageList*                     pDefaultImageList = NULL;
+    CmdImageList*                     pDefaultImageList = nullptr;
     if ( m_bUseGlobal )
     {
         rGlobalImageList  = implts_getGlobalImageList();
@@ -898,8 +898,8 @@ throw (css::lang::IllegalArgumentException,
        css::uno::RuntimeException,
        std::exception)
 {
-    CmdToXGraphicNameAccess* pInsertedImages( 0 );
-    CmdToXGraphicNameAccess* pReplacedImages( 0 );
+    CmdToXGraphicNameAccess* pInsertedImages( nullptr );
+    CmdToXGraphicNameAccess* pReplacedImages( nullptr );
 
     {
         SolarMutexGuard g;
@@ -942,7 +942,7 @@ throw (css::lang::IllegalArgumentException,
             }
         }
 
-        if (( pInsertedImages != 0 ) || (  pReplacedImages != 0 ))
+        if (( pInsertedImages != nullptr ) || (  pReplacedImages != nullptr ))
         {
             m_bModified = true;
             m_bUserImageListModified[nIndex] = true;
@@ -951,7 +951,7 @@ throw (css::lang::IllegalArgumentException,
 
     uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
     // Notify listeners
-    if ( pInsertedImages != 0 )
+    if ( pInsertedImages != nullptr )
     {
         ConfigurationEvent aInsertEvent;
         aInsertEvent.aInfo           <<= nImageType;
@@ -962,7 +962,7 @@ throw (css::lang::IllegalArgumentException,
                                         static_cast< OWeakObject *>( pInsertedImages ), UNO_QUERY ));
         implts_notifyContainerListener( aInsertEvent, NotifyOp_Insert );
     }
-    if ( pReplacedImages != 0 )
+    if ( pReplacedImages != nullptr )
     {
         ConfigurationEvent aReplaceEvent;
         aReplaceEvent.aInfo           <<= nImageType;
@@ -981,8 +981,8 @@ throw ( css::lang::IllegalArgumentException,
         css::lang::IllegalAccessException,
         css::uno::RuntimeException)
 {
-    CmdToXGraphicNameAccess* pRemovedImages( 0 );
-    CmdToXGraphicNameAccess* pReplacedImages( 0 );
+    CmdToXGraphicNameAccess* pRemovedImages( nullptr );
+    CmdToXGraphicNameAccess* pReplacedImages( nullptr );
 
     {
         SolarMutexGuard g;
@@ -999,7 +999,7 @@ throw ( css::lang::IllegalArgumentException,
 
         sal_Int16 nIndex = implts_convertImageTypeToIndex( nImageType );
         rtl::Reference< GlobalImageList > rGlobalImageList;
-        CmdImageList*                     pDefaultImageList = NULL;
+        CmdImageList*                     pDefaultImageList = nullptr;
         if ( m_bUseGlobal )
         {
             rGlobalImageList  = implts_getGlobalImageList();
@@ -1046,7 +1046,7 @@ throw ( css::lang::IllegalArgumentException,
             }
         }
 
-        if (( pReplacedImages != 0 ) || ( pRemovedImages != 0 ))
+        if (( pReplacedImages != nullptr ) || ( pRemovedImages != nullptr ))
         {
             m_bModified = true;
             m_bUserImageListModified[nIndex] = true;
@@ -1055,7 +1055,7 @@ throw ( css::lang::IllegalArgumentException,
 
     // Notify listeners
     uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
-    if ( pRemovedImages != 0 )
+    if ( pRemovedImages != nullptr )
     {
         ConfigurationEvent aRemoveEvent;
         aRemoveEvent.aInfo           = uno::makeAny( nImageType );
@@ -1066,7 +1066,7 @@ throw ( css::lang::IllegalArgumentException,
                                             static_cast< OWeakObject *>( pRemovedImages ), UNO_QUERY ));
         implts_notifyContainerListener( aRemoveEvent, NotifyOp_Remove );
     }
-    if ( pReplacedImages != 0 )
+    if ( pReplacedImages != nullptr )
     {
         ConfigurationEvent aReplaceEvent;
         aReplaceEvent.aInfo           = uno::makeAny( nImageType );
@@ -1124,9 +1124,9 @@ void ImageManagerImpl::reload()
                 pImageList = implts_getUserImageList( (ImageType)i );
                 pImageList->GetImageNames( aNewUserCmdImageSet );
 
-                CmdToXGraphicNameAccess* pInsertedImages( 0 );
-                CmdToXGraphicNameAccess* pReplacedImages( 0 );
-                CmdToXGraphicNameAccess* pRemovedImages( 0 );
+                CmdToXGraphicNameAccess* pInsertedImages( nullptr );
+                CmdToXGraphicNameAccess* pReplacedImages( nullptr );
+                CmdToXGraphicNameAccess* pRemovedImages( nullptr );
 
                 const sal_uInt32 nNewCount = aNewUserCmdImageSet.size();
                 for ( j = 0; j < nNewCount; j++ )
@@ -1153,7 +1153,7 @@ void ImageManagerImpl::reload()
                 // through this reload operation.
                 // We have to search the module and global image list!
                 rtl::Reference< GlobalImageList > rGlobalImageList;
-                CmdImageList*                     pDefaultImageList = NULL;
+                CmdImageList*                     pDefaultImageList = nullptr;
                 if ( m_bUseGlobal )
                 {
                     rGlobalImageList  = implts_getGlobalImageList();
@@ -1201,7 +1201,7 @@ void ImageManagerImpl::reload()
 
                 // Now notify our listeners. Unlock mutex to prevent deadlocks
                 uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
-                if ( pInsertedImages != 0 )
+                if ( pInsertedImages != nullptr )
                 {
                     ConfigurationEvent aInsertEvent;
                     aInsertEvent.aInfo           = uno::makeAny( i );
@@ -1212,7 +1212,7 @@ void ImageManagerImpl::reload()
                                                     static_cast< OWeakObject *>( pInsertedImages ), UNO_QUERY ));
                     implts_notifyContainerListener( aInsertEvent, NotifyOp_Insert );
                 }
-                if ( pReplacedImages != 0 )
+                if ( pReplacedImages != nullptr )
                 {
                     ConfigurationEvent aReplaceEvent;
                     aReplaceEvent.aInfo           = uno::makeAny( i );
@@ -1224,7 +1224,7 @@ void ImageManagerImpl::reload()
                                                     static_cast< OWeakObject *>( pReplacedImages ), UNO_QUERY ));
                     implts_notifyContainerListener( aReplaceEvent, NotifyOp_Replace );
                 }
-                if ( pRemovedImages != 0 )
+                if ( pRemovedImages != nullptr )
                 {
                     ConfigurationEvent aRemoveEvent;
                     aRemoveEvent.aInfo           = uno::makeAny( i );
@@ -1348,7 +1348,7 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
                                         cppu::UnoType<css::ui::XUIConfigurationListener>::get());
-    if ( pContainer != NULL )
+    if ( pContainer != nullptr )
     {
         ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
         while ( pIterator.hasMoreElements() )
@@ -1382,7 +1382,7 @@ void ImageManagerImpl::clear()
     for ( sal_Int32 n = 0; n < ImageType_COUNT; n++ )
     {
         delete m_pUserImageList[n];
-        m_pUserImageList[n] = 0;
+        m_pUserImageList[n] = nullptr;
     }
 }
 } // namespace framework

@@ -79,7 +79,7 @@ throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentExcept
 {
     Reference< css::ui::XUIElement > xStatusBar(
             static_cast<OWeakObject *>(new StatusBarWrapper(m_xContext)), UNO_QUERY);
-    MenuBarFactory::CreateUIElement(ResourceURL, Args, NULL, "private:resource/statusbar/", xStatusBar, m_xContext);
+    MenuBarFactory::CreateUIElement(ResourceURL, Args, nullptr, "private:resource/statusbar/", xStatusBar, m_xContext);
     return xStatusBar;
 }
 

@@ -68,10 +68,10 @@ PatternHash::iterator PatternHash::findPatternKey( const OUString& sURL )
                 That means it use two static member list to hold all necessary information
                 and a ref count mechanism to create/destroy it on demand.
  */
-HandlerHash* HandlerCache::m_pHandler  = NULL;
-PatternHash* HandlerCache::m_pPattern  = NULL;
+HandlerHash* HandlerCache::m_pHandler  = nullptr;
+PatternHash* HandlerCache::m_pPattern  = nullptr;
 sal_Int32    HandlerCache::m_nRefCount = 0;
-HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
+HandlerCFGAccess* HandlerCache::m_pConfig = nullptr;
 
 /**
     @short      ctor of the cache of all registered protocol handler
@@ -107,16 +107,16 @@ HandlerCache::~HandlerCache()
 
     if( m_nRefCount==1)
     {
-        m_pConfig->setCache(NULL);
+        m_pConfig->setCache(nullptr);
         m_pHandler->free();
         m_pPattern->free();
 
         delete m_pConfig;
         delete m_pHandler;
         delete m_pPattern;
-        m_pConfig = NULL;
-        m_pHandler= NULL;
-        m_pPattern= NULL;
+        m_pConfig = nullptr;
+        m_pHandler= nullptr;
+        m_pPattern= nullptr;
     }
 
     --m_nRefCount;
@@ -180,7 +180,7 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
  */
 HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
     : ConfigItem(sPackage)
-    , m_pCache(0)
+    , m_pCache(nullptr)
 {
     css::uno::Sequence< OUString > lListenPaths(1);
     lListenPaths[0] = SETNAME_HANDLER;

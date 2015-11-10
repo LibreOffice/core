@@ -29,7 +29,7 @@ namespace framework
 
 ResMgr* FwkResId::GetResManager()
 {
-    static ResMgr*  pResMgr = NULL;
+    static ResMgr*  pResMgr = nullptr;
 
     if ( !pResMgr )
     {

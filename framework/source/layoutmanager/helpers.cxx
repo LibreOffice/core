@@ -101,7 +101,7 @@ OUString retrieveToolbarNameFromHelpURL( vcl::Window* pWindow )
 
 ToolBox* getToolboxPtr( vcl::Window* pWindow )
 {
-    ToolBox* pToolbox(NULL);
+    ToolBox* pToolbox(nullptr);
     if ( pWindow->GetType() == WINDOW_TOOLBOX )
         pToolbox = dynamic_cast<ToolBox*>( pWindow );
     return pToolbox;
@@ -125,7 +125,7 @@ SystemWindow* getTopSystemWindow( const uno::Reference< awt::XWindow >& xWindow 
     if ( pWindow )
         return static_cast<SystemWindow *>(pWindow);
     else
-        return 0;
+        return nullptr;
 }
 
 void setZeroRectangle( ::Rectangle& rRect )

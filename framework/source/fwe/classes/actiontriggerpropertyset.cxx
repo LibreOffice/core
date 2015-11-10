@@ -55,8 +55,8 @@ ActionTriggerPropertySet::ActionTriggerPropertySet()
     : OBroadcastHelper         ( m_aMutex )
     ,   OPropertySetHelper       ( *(static_cast< OBroadcastHelper * >(this)))
     , OWeakObject              ()
-    , m_xBitmap                ( 0 )
-    , m_xActionTriggerContainer( 0 )
+    , m_xBitmap                ( nullptr )
+    , m_xActionTriggerContainer( nullptr )
 {
 }
 
@@ -123,15 +123,15 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeEx
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static ::cppu::OTypeCollection* pTypeCollection = NULL;
+    static ::cppu::OTypeCollection* pTypeCollection = nullptr;
 
-    if ( pTypeCollection == NULL )
+    if ( pTypeCollection == nullptr )
     {
         // Ready for multithreading; get global mutex for first call of this method only! see before
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == NULL )
+        if ( pTypeCollection == nullptr )
         {
             // Create a static typecollection ...
             static ::cppu::OTypeCollection aTypeCollection(
@@ -261,13 +261,13 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
-    static OPropertyArrayHelper* pInfoHelper = NULL;
+    static OPropertyArrayHelper* pInfoHelper = nullptr;
 
-    if( pInfoHelper == NULL )
+    if( pInfoHelper == nullptr )
     {
         SolarMutexGuard aGuard;
         // Control this pointer again, another instance can be faster then these!
-        if( pInfoHelper == NULL )
+        if( pInfoHelper == nullptr )
         {
             // Define static member to give structure of properties to baseclass "OPropertySetHelper".
             // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
@@ -286,13 +286,13 @@ throw ( RuntimeException, std::exception )
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static Reference< XPropertySetInfo >* pInfo = NULL;
+    static Reference< XPropertySetInfo >* pInfo = nullptr;
 
-    if( pInfo == NULL )
+    if( pInfo == nullptr )
     {
         SolarMutexGuard aGuard;
         // Control this pointer again, another instance can be faster then these!
-        if( pInfo == NULL )
+        if( pInfo == nullptr )
         {
             // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
             // (Use method "getInfoHelper()".)

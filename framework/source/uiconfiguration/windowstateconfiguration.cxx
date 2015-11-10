@@ -96,7 +96,7 @@ static const char* CONFIGURATION_PROPERTIES[]           =
     WINDOWSTATE_PROPERTY_STYLE,
     WINDOWSTATE_PROPERTY_DOCKPOS,
     WINDOWSTATE_PROPERTY_DOCKSIZE,
-    0
+    nullptr
 };
 
 //  Configuration access class for WindowState supplier implementation

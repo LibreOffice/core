@@ -508,7 +508,7 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
         ,   m_bSelfClose                ( false                                         ) // Important!
         ,   m_bIsHidden                 ( true                                          )
         ,   m_xTitleHelper              (                                                   )
-        ,   m_pWindowCommandDispatch    ( 0                                                 )
+        ,   m_pWindowCommandDispatch    ( nullptr                                                 )
         ,   m_aChildFrameContainer      (                                                   )
 {
 }
@@ -1006,7 +1006,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
         (sTargetFrameName==SPECIALTARGET_MENUBAR  )         // valid for dispatches - not for findFrame()!
        )
     {
-        return NULL;
+        return nullptr;
     }
 
     // I) check for special defined targets first which must be handled exclusive.
@@ -1535,7 +1535,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
         // We hold it alive for next calls by using xOldController!
         /* SAFE {*/
         SolarMutexClearableGuard aWriteLock;
-        m_xController = NULL;
+        m_xController = nullptr;
         aWriteLock.clear();
         /* } SAFE */
 
@@ -1549,7 +1549,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
             catch(const css::lang::DisposedException&)
                 {}
         }
-        xOldController = NULL;
+        xOldController = nullptr;
     }
 
     // Now it's time to release the component window.
@@ -1564,7 +1564,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     {
         /* SAFE { */
         SolarMutexClearableGuard aWriteLock;
-        m_xComponentWindow = NULL;
+        m_xComponentWindow = nullptr;
         aWriteLock.clear();
         /* } SAFE */
 
@@ -1579,7 +1579,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
             {
             }
         }
-        xOldComponentWindow = NULL;
+        xOldComponentWindow = nullptr;
     }
 
     // Now it's time to set the new component ...
@@ -1746,7 +1746,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
     // Note: container is threadsafe himself.
     css::lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
-    if (pContainer!=NULL)
+    if (pContainer!=nullptr)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
         while (pIterator.hasMoreElements())
@@ -1775,12 +1775,12 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
         throw css::util::CloseVetoException("Frame in use for loading document ...",static_cast< ::cppu::OWeakObject*>(this));
     }
 
-    if ( ! setComponent(NULL,NULL) )
+    if ( ! setComponent(nullptr,nullptr) )
         throw css::util::CloseVetoException("Component couldn't be deattached ...",static_cast< ::cppu::OWeakObject*>(this));
 
     // If closing is allowed... inform all listeners and dispose this frame!
     pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
-    if (pContainer!=NULL)
+    if (pContainer!=nullptr)
     {
         ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
         while (pIterator.hasMoreElements())
@@ -1900,7 +1900,7 @@ void SAL_CALL Frame::removeTitleChangeListener( const css::uno::Reference< css::
 css::uno::Reference<css::container::XNameContainer> SAL_CALL Frame::getUserDefinedAttributes() throw (css::uno::RuntimeException, std::exception)
 {
     // optional attribute
-    return 0;
+    return nullptr;
 }
 
 css::uno::Reference<css::frame::XDispatchRecorderSupplier> SAL_CALL Frame::getDispatchRecorderSupplier() throw (css::uno::RuntimeException, std::exception)
@@ -2838,7 +2838,7 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
     // ( OInterfaceContainerHelper is synchronized with m_aListenerContainer! )
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XFrameActionListener>::get());
 
-    if( pContainer != NULL )
+    if( pContainer != nullptr )
     {
         // Build action event.
         css::frame::FrameActionEvent aFrameActionEvent( static_cast< ::cppu::OWeakObject* >(this), this, aAction );
@@ -2964,7 +2964,7 @@ void Frame::implts_setIconOnWindow()
             SolarMutexGuard aSolarGuard;
             vcl::Window* pWindow = (VCLUnoHelper::GetWindow( xContainerWindow ));
             if(
-                ( pWindow            != NULL              ) &&
+                ( pWindow            != nullptr              ) &&
                 ( pWindow->GetType() == WINDOW_WORKWINDOW )
                 )
             {

@@ -53,7 +53,7 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
     aLock.clear();
     // <- SAFE
 
-    css::uno::Reference< css::task::XInteractionHandler > xHandler( css::task::InteractionHandler::createWithParent( m_xContext, 0 ), css::uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::task::XInteractionHandler > xHandler( css::task::InteractionHandler::createWithParent( m_xContext, nullptr ), css::uno::UNO_QUERY_THROW );
 
     // SAFE ->
     aLock.reset();

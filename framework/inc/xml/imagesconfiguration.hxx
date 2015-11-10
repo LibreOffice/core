@@ -61,7 +61,7 @@ typedef boost::ptr_vector<ExternalImageItemDescriptor> ExternalImageItemListDesc
 struct ImageListItemDescriptor
 {
     ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color ),
-                                pImageItemList( 0 ) {}
+                                pImageItemList( nullptr ) {}
 
     ~ImageListItemDescriptor() { delete pImageItemList; }
 
@@ -78,8 +78,8 @@ typedef boost::ptr_vector<ImageListItemDescriptor> ImageListDescriptor;
 
 struct ImageListsDescriptor
 {
-    ImageListsDescriptor() : pImageList( 0 ),
-                     pExternalImageList( 0 ) {}
+    ImageListsDescriptor() : pImageList( nullptr ),
+                     pExternalImageList( nullptr ) {}
     ~ImageListsDescriptor() { delete pImageList; delete pExternalImageList; }
 
     ImageListDescriptor*            pImageList;

@@ -242,7 +242,7 @@ private:
 
 ControlMenuController::ControlMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
-    m_pResPopupMenu( 0 )
+    m_pResPopupMenu( nullptr )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
@@ -278,7 +278,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu*                                     pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
-    PopupMenu*                                         pVCLPopupMenu     = 0;
+    PopupMenu*                                         pVCLPopupMenu     = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;
 
@@ -320,7 +320,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
         }
     }
 
-    VCLXPopupMenu*  pPopupMenu = NULL;
+    VCLXPopupMenu*  pPopupMenu = nullptr;
 
     if ( nMenuId )
         pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( m_xPopupMenu ));
@@ -391,7 +391,7 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
 // XPopupMenuController
 void ControlMenuController::impl_setPopupMenu()
 {
-    if ( m_pResPopupMenu == 0 )
+    if ( m_pResPopupMenu == nullptr )
     {
         std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
         if ( pResMgr )

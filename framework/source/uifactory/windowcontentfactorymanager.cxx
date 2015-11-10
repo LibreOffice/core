@@ -106,7 +106,7 @@ void SAL_CALL WindowContentFactoryManager::disposing()
     {
         // reduce reference count
         m_pConfigAccess->release();
-        m_pConfigAccess = 0;
+        m_pConfigAccess = nullptr;
     }
 }
 

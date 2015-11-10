@@ -597,7 +597,7 @@ namespace framework
         const bool bHasRedoActions = ( rUndoManager.GetRedoActionCount( IUndoManager::TopLevel ) > 0 );
 
         // prepare notification
-        void ( SAL_CALL XUndoManagerListener::*notificationMethod )( const UndoManagerEvent& ) = NULL;
+        void ( SAL_CALL XUndoManagerListener::*notificationMethod )( const UndoManagerEvent& ) = nullptr;
 
         UndoManagerEvent aContextEvent( buildEvent( OUString() ) );
         const EventObject aClearedEvent( getXUndoManager() );

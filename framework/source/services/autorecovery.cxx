@@ -746,7 +746,7 @@ private:
      */
     AutoRecovery::ETimerType implts_saveDocs(      bool        bAllowUserIdleLoop,
                                                    bool        bRemoveLockFiles,
-                                             const DispatchParams* pParams        = 0);
+                                             const DispatchParams* pParams        = nullptr);
 
     /** @short  save one of the current documents to a specific
                 backup directory.
@@ -1397,7 +1397,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
 void AutoRecovery::ListenerInformer::start()
 {
     m_rRecovery.implts_informListener(m_eJob,
-        AutoRecovery::implst_createFeatureStateEvent(m_eJob, OPERATION_START, NULL));
+        AutoRecovery::implst_createFeatureStateEvent(m_eJob, OPERATION_START, nullptr));
 }
 
 void AutoRecovery::ListenerInformer::stop()
@@ -1405,7 +1405,7 @@ void AutoRecovery::ListenerInformer::stop()
     if (m_bStopped)
         return;
     m_rRecovery.implts_informListener(m_eJob,
-        AutoRecovery::implst_createFeatureStateEvent(m_eJob, OPERATION_STOP, NULL));
+        AutoRecovery::implst_createFeatureStateEvent(m_eJob, OPERATION_STOP, nullptr));
     m_bStopped = true;
 }
 
@@ -2381,7 +2381,7 @@ IMPL_LINK_NOARG_TYPED(AutoRecovery, implts_timerExpired, Timer *, void)
         } /* SAFE */
 
         implts_informListener(AutoRecovery::E_AUTO_SAVE,
-            AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_START, NULL));
+            AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_START, nullptr));
 
         // force save of all currently open documents
         // The called method returns an info, if and how this
@@ -2404,7 +2404,7 @@ IMPL_LINK_NOARG_TYPED(AutoRecovery, implts_timerExpired, Timer *, void)
         }
 
         implts_informListener(AutoRecovery::E_AUTO_SAVE,
-            AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_STOP, NULL));
+            AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_STOP, nullptr));
 
         // restart timer - because it was disabled before ...
         /* SAFE */ {
@@ -3315,7 +3315,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         else
             continue; // TODO ERROR!
 
-        LoadEnv::initializeUIDefaults( m_xContext, lDescriptor, true, NULL );
+        LoadEnv::initializeUIDefaults( m_xContext, lDescriptor, true, nullptr );
 
         // } /* SAFE */
         g.clear();
@@ -3556,12 +3556,12 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
                                          const css::frame::FeatureStateEvent& aEvent)
 {
     // Helper shares mutex with us -> threadsafe!
-    ::cppu::OInterfaceContainerHelper* pListenerForURL = 0;
+    ::cppu::OInterfaceContainerHelper* pListenerForURL = nullptr;
     OUString                           sJob            = AutoRecovery::implst_getJobDescription(eJob);
 
     // inform listener, which are registered for any URLs(!)
     pListenerForURL = m_lListener.getContainer(sJob);
-    if(pListenerForURL != 0)
+    if(pListenerForURL != nullptr)
     {
         ::cppu::OInterfaceIteratorHelper pIt(*pListenerForURL);
         while(pIt.hasMoreElements())
@@ -4057,7 +4057,7 @@ const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescripto
 
 ::cppu::IPropertyArrayHelper& SAL_CALL AutoRecovery::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = 0;
+    static ::cppu::OPropertyArrayHelper* pInfoHelper = nullptr;
     if(!pInfoHelper)
     {
         SolarMutexGuard g;
@@ -4074,7 +4074,7 @@ const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescripto
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL AutoRecovery::getPropertySetInfo()
     throw(css::uno::RuntimeException, std::exception)
 {
-    static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = 0;
+    static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = nullptr;
     if(!pInfo)
     {
         SolarMutexGuard g;

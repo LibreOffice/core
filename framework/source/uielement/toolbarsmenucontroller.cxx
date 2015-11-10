@@ -442,7 +442,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             {
                 SolarMutexGuard aGuard;
                 VCLXPopupMenu* pXPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( m_xPopupMenu ));
-                PopupMenu* pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : NULL;
+                PopupMenu* pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : nullptr;
                 assert(pVCLPopupMenu);
                 if (pVCLPopupMenu)
                     pVCLPopupMenu->SetUserValue( nIndex, sal_uIntPtr( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
@@ -551,7 +551,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
     {
         SolarMutexGuard aGuard;
         VCLXPopupMenu* pXPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( xPopupMenu ));
-        PopupMenu*     pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : NULL;
+        PopupMenu*     pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : nullptr;
 
         SAL_WARN_IF(!pVCLPopupMenu, "framework", "worrying lack of popup menu");
         if (!pVCLPopupMenu)
@@ -713,7 +713,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                     pExecuteInfo->xDispatch     = xDispatch;
                     pExecuteInfo->aTargetURL    = aTargetURL;
                     pExecuteInfo->aArgs         = aArgs;
-                    Application::PostUserEvent( LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
+                    Application::PostUserEvent( LINK(nullptr, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
                 }
             }
             else

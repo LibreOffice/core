@@ -67,7 +67,7 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  
         ,   m_aListenerContainer    ( m_mutex )
         ,   m_bAlreadyDisposed      ( false                      )
         ,   m_bActivateListener     ( false                      )
-        ,   m_pMenuManager          ( NULL                           )
+        ,   m_pMenuManager          ( nullptr                           )
 {
     // Safe impossible cases
     // We need valid information about our owner for work.
@@ -152,7 +152,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
     else if ( m_pMenuManager && aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING )
     {
         if ( m_pMenuManager )
-            impl_setMenuBar( NULL );
+            impl_setMenuBar( nullptr );
     }
 }
 
@@ -188,7 +188,7 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
 
         // Remove our menu from system window if it is still there!
         if ( m_pMenuManager )
-            impl_setMenuBar( NULL );
+            impl_setMenuBar( nullptr );
     }
 }
 
@@ -215,7 +215,7 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
     if ( xFrame.is() )
     {
         uno::Reference< css::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
-        vcl::Window* pWindow = NULL;
+        vcl::Window* pWindow = nullptr;
 
         SolarMutexGuard aSolarGuard;
         {
@@ -232,17 +232,17 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
             {
                 // remove old menu from our system window if it was set before
                 if ( m_pMenuManager->GetMenu() == static_cast<Menu *>(pSysWindow->GetMenuBar()) )
-                    pSysWindow->SetMenuBar( NULL );
+                    pSysWindow->SetMenuBar( nullptr );
 
                 // remove listener before we destruct ourself, so we cannot be called back afterwards
                 m_pMenuManager->RemoveListener();
 
                 (static_cast< css::uno::XInterface* >(static_cast<OWeakObject*>(m_pMenuManager)))->release();
 
-                m_pMenuManager = 0;
+                m_pMenuManager = nullptr;
             }
 
-            if ( pMenuBar != NULL )
+            if ( pMenuBar != nullptr )
             {
                 sal_uInt16 nPos = pMenuBar->GetItemPos( SLOTID_MDIWINDOWLIST );
                 if ( nPos != MENU_ITEM_NOTFOUND )

@@ -79,7 +79,7 @@ ListBoxControl::~ListBoxControl()
 
 void ListBoxControl::dispose()
 {
-    m_pListBoxListener = 0;
+    m_pListBoxListener = nullptr;
     ListBox::dispose();
 }
 
@@ -130,7 +130,7 @@ DropdownToolbarController::DropdownToolbarController(
     sal_Int32                                nWidth,
     const OUString&                          aCommand ) :
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
-    ,   m_pListBoxControl( 0 )
+    ,   m_pListBoxControl( nullptr )
 {
     m_pListBoxControl = VclPtr<ListBoxControl>::Create( m_pToolbar, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER, this );
     if ( nWidth == 0 )
@@ -154,7 +154,7 @@ throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    m_pToolbar->SetItemWindow( m_nID, 0 );
+    m_pToolbar->SetItemWindow( m_nID, nullptr );
     m_pListBoxControl.disposeAndClear();
 
     ComplexToolbarController::dispose();
