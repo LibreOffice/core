@@ -182,7 +182,7 @@ XFListStyle::XFListStyle(const XFListStyle& other):XFStyle(other)
             m_pListLevels[i] = new XFListLevelBullet(*pBullet);
         }
         else
-            m_pListLevels[i] = NULL;
+            m_pListLevels[i] = nullptr;
     }
 }
 
@@ -202,7 +202,7 @@ XFListStyle& XFListStyle::operator=(const XFListStyle& other)
             m_pListLevels[i] = new XFListLevelBullet(*pBullet);
         }
         else
-            m_pListLevels[i] = NULL;
+            m_pListLevels[i] = nullptr;
     }
     return *this;
 }

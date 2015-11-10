@@ -73,7 +73,7 @@ LwpSilverBullet::LwpSilverBullet(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     , m_nFlags(0)
     , m_nUseCount(0)
     , m_pAtomHolder(new LwpAtomHolder)
-    , m_pBulletPara(NULL)
+    , m_pBulletPara(nullptr)
 {
 }
 
@@ -231,7 +231,7 @@ LwpPara* LwpSilverBullet::GetBulletPara()
         LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY).get());
         if (!pStory)
         {
-            return NULL;
+            return nullptr;
         }
 
         m_pBulletPara = dynamic_cast<LwpPara*>(pStory->GetFirstPara().obj(VO_PARA).get());
@@ -319,7 +319,7 @@ bool LwpSilverBullet::IsBulletOrdered()
 
     LwpFribPtr& rFribs = m_pBulletPara->GetFribs();
 
-    return (rFribs.HasFrib(FRIB_TAG_PARANUMBER) != NULL);
+    return (rFribs.HasFrib(FRIB_TAG_PARANUMBER) != nullptr);
 }
 
 /**

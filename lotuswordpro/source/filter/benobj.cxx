@@ -70,8 +70,8 @@ pCBenValue
 CBenObject::UseValue(BenObjectID PropertyID)
 {
     pCBenProperty pProperty = UseProperty(PropertyID);
-    if (pProperty == NULL)
-        return NULL;
+    if (pProperty == nullptr)
+        return nullptr;
     return &pProperty->UseValue();
 }
 

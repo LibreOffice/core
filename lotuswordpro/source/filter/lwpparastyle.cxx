@@ -155,7 +155,7 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
 {
     assert(pParaStyle);
 
-    LwpVirtualPiece *pPiece = NULL;
+    LwpVirtualPiece *pPiece = nullptr;
     //alignment:
     pPiece = dynamic_cast<LwpVirtualPiece*>(m_AlignmentStyle.obj().get());
     if( pPiece )
@@ -177,10 +177,10 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
                 std::unique_ptr<LwpIndentOverride> pNewIndent(pIndent->clone());
                 pNewIndent->SetMFirst(0);
                 pNewIndent->SetMRest(0);
-                ApplyIndent(NULL, pParaStyle, pNewIndent.get());
+                ApplyIndent(nullptr, pParaStyle, pNewIndent.get());
             }
             else
-                ApplyIndent(NULL,pParaStyle,pIndent);
+                ApplyIndent(nullptr,pParaStyle,pIndent);
         }
     }
     //shadow & borders.
@@ -199,7 +199,7 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
     {
         LwpSpacingOverride *pSpacing = dynamic_cast<LwpSpacingOverride*>(pPiece->GetOverride());
         if( pSpacing)
-            ApplySpacing(NULL,pParaStyle,pSpacing);
+            ApplySpacing(nullptr,pParaStyle,pSpacing);
     }
 
     //paragraph background.
@@ -434,7 +434,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
     if (pPara)
         pParentPara = pPara->GetParent();
     else
-        pParentPara = NULL;
+        pParentPara = nullptr;
 
     std::unique_ptr<LwpIndentOverride> pTotalIndent(new LwpIndentOverride);
     if (pIndent->IsUseRelative() && pParentPara)
@@ -684,79 +684,79 @@ void LwpParaStyle::RegisterStyle()
 
 LwpAlignmentOverride* LwpParaStyle::GetAlignment()
 {
-    if (m_AlignmentStyle.obj() == NULL)
-        return NULL;
+    if (m_AlignmentStyle.obj() == nullptr)
+        return nullptr;
 
     LwpAlignmentPiece *pPiece = dynamic_cast<LwpAlignmentPiece*>(m_AlignmentStyle.obj().get());
     if (pPiece)
         return dynamic_cast<LwpAlignmentOverride*>(pPiece->GetOverride());
-    return NULL;
+    return nullptr;
 }
 
 LwpIndentOverride* LwpParaStyle::GetIndent()
 {
-    if (m_IndentStyle.obj() == NULL)
-        return NULL;
+    if (m_IndentStyle.obj() == nullptr)
+        return nullptr;
 
     LwpIndentPiece *pPiece = dynamic_cast<LwpIndentPiece*>(m_IndentStyle.obj().get());
     if (pPiece)
         return dynamic_cast<LwpIndentOverride*>(pPiece->GetOverride());
-    return NULL;
+    return nullptr;
 }
 
 LwpSpacingOverride* LwpParaStyle::GetSpacing()
 {
-    if (m_SpacingStyle.obj() == NULL)
-        return NULL;
+    if (m_SpacingStyle.obj() == nullptr)
+        return nullptr;
 
     LwpSpacingPiece *pPiece = dynamic_cast<LwpSpacingPiece*>(m_SpacingStyle.obj().get());
     if (pPiece)
         return dynamic_cast<LwpSpacingOverride*>(pPiece->GetOverride());
-    return NULL;
+    return nullptr;
 }
 
 LwpParaBorderOverride* LwpParaStyle::GetParaBorder() const
 {
     if(m_BorderStyle.IsNull())
-        return NULL;
+        return nullptr;
 
     LwpParaBorderPiece *pPiece = dynamic_cast<LwpParaBorderPiece*>(m_BorderStyle.obj(VO_PARABORDERPIECE).get());
     if (pPiece)
         return dynamic_cast<LwpParaBorderOverride*>(pPiece->GetOverride());
-    return NULL;
+    return nullptr;
 }
 
 LwpBreaksOverride* LwpParaStyle::GetBreaks() const
 {
     if(m_BreaksStyle.IsNull())
-        return NULL;
+        return nullptr;
 
     LwpBreaksPiece *pPiece = dynamic_cast<LwpBreaksPiece*>(m_BreaksStyle.obj(VO_BREAKSPIECE).get());
     if (pPiece)
         return dynamic_cast<LwpBreaksOverride*>(pPiece->GetOverride());
-    return NULL;
+    return nullptr;
 }
 
 
 LwpNumberingOverride* LwpParaStyle::GetNumberingOverride() const
 {
     if(m_NumberingStyle.IsNull())
-        return NULL;
+        return nullptr;
 
     LwpNumberingPiece *pPiece = dynamic_cast<LwpNumberingPiece*>(m_NumberingStyle.obj(VO_NUMBERINGPIECE).get());
     if (pPiece)
         return dynamic_cast<LwpNumberingOverride*>(pPiece->GetOverride());
-    return NULL;
+    return nullptr;
 }
 
 LwpTabOverride* LwpParaStyle::GetTabOverride() const
 {
-    if(m_TabStyle.obj() == NULL)
-        return NULL;
+    if(m_TabStyle.obj() == nullptr)
+        return nullptr;
     LwpTabPiece *pPiece = dynamic_cast<LwpTabPiece*>(m_TabStyle.obj().get());
     if (pPiece)
         return dynamic_cast<LwpTabOverride*>(pPiece->GetOverride());
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

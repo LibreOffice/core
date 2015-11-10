@@ -70,7 +70,7 @@
 #include "lwpglobalmgr.hxx"
 
 LwpFribSection::LwpFribSection(LwpPara *pPara)
-     : LwpFrib(pPara),m_pMasterPage(NULL)
+     : LwpFrib(pPara),m_pMasterPage(nullptr)
 {
 
 }
@@ -80,7 +80,7 @@ LwpFribSection::~LwpFribSection()
     if(m_pMasterPage)
     {
         delete m_pMasterPage;
-        m_pMasterPage = NULL;
+        m_pMasterPage = nullptr;
     }
 }
 
@@ -138,7 +138,7 @@ LwpPageLayout* LwpFribSection::GetPageLayout()
 {
     if(GetSection())
         return GetSection()->GetPageLayout();
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -367,7 +367,7 @@ XFSection* LwpMasterPage::CreateXFSection()
         pXFSection->SetStyleName(m_SectionStyleName);
         return pXFSection;
     }
-    return NULL;
+    return nullptr;
 }
 
 /**

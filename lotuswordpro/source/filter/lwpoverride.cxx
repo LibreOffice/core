@@ -377,10 +377,10 @@ LwpSpacingOverride::~LwpSpacingOverride()
 
 LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
     : LwpOverride(rOther)
-    , m_pSpacing(0)
-    , m_pAboveLineSpacing(0)
-    , m_pParaSpacingAbove(0)
-    , m_pParaSpacingBelow(0)
+    , m_pSpacing(nullptr)
+    , m_pAboveLineSpacing(nullptr)
+    , m_pParaSpacingAbove(nullptr)
+    , m_pParaSpacingBelow(nullptr)
 {
     std::unique_ptr<LwpSpacingCommonOverride> pSpacing(::clone(rOther.m_pSpacing));
     std::unique_ptr<LwpSpacingCommonOverride> pAboveLineSpacing(::clone(rOther.m_pAboveLineSpacing));
@@ -460,7 +460,7 @@ LwpAmikakeOverride::~LwpAmikakeOverride()
 
 LwpAmikakeOverride::LwpAmikakeOverride(LwpAmikakeOverride const& rOther)
     : LwpOverride(rOther)
-    , m_pBackgroundStuff(0)
+    , m_pBackgroundStuff(nullptr)
     , m_nType(rOther.m_nType)
 {
     std::unique_ptr<LwpBackgroundStuff> pBackgroundStuff(::clone(rOther.m_pBackgroundStuff));

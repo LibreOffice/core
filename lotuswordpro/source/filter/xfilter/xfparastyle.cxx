@@ -71,8 +71,8 @@ XFParaStyle::XFParaStyle()
     , m_bJustSingleWord(false)
     , m_bKeepWithNext(false)
     , m_fTextIndent(0)
-    , m_pBorders(NULL)
-    , m_pBGImage(NULL)
+    , m_pBorders(nullptr)
+    , m_pBGImage(nullptr)
     , m_nPageNumber(0)
     , m_bNumberLines(true)
     , m_nLineNumberRestart(0)
@@ -108,12 +108,12 @@ XFParaStyle::XFParaStyle(const XFParaStyle& other)
     if( other.m_pBorders )
         m_pBorders = new XFBorders(*other.m_pBorders);
     else
-        m_pBorders = NULL;
+        m_pBorders = nullptr;
 
     if( other.m_pBGImage )
         m_pBGImage = new XFBGImage(*other.m_pBGImage);
     else
-        m_pBGImage = NULL;
+        m_pBGImage = nullptr;
 
     for (size_t i = 0; i < other.m_aTabs.GetCount(); ++i)
     {
@@ -155,12 +155,12 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
         if( other.m_pBorders )
             m_pBorders = new XFBorders(*other.m_pBorders);
         else
-            m_pBorders = NULL;
+            m_pBorders = nullptr;
         m_aBackColor = other.m_aBackColor;
         if( other.m_pBGImage )
             m_pBGImage = new XFBGImage(*other.m_pBGImage);
         else
-            m_pBGImage = NULL;
+            m_pBGImage = nullptr;
 
         m_aShadow = other.m_aShadow;
         m_aMargin = other.m_aMargin;

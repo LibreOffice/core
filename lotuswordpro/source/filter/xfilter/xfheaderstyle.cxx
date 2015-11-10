@@ -66,9 +66,9 @@ XFHeaderStyle::XFHeaderStyle(bool isFooter)
     m_bDynamicSpace = true;
     m_fHeight = -1;
     m_fMinHeight = -1;
-    m_pBorders = NULL;
-    m_pShadow = NULL;
-    m_pBGImage = NULL;
+    m_pBorders = nullptr;
+    m_pShadow = nullptr;
+    m_pBGImage = nullptr;
 }
 
 XFHeaderStyle::~XFHeaderStyle()

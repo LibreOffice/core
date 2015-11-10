@@ -60,9 +60,9 @@
 #include "xfconfigmanager.hxx"
 
 XFConfigManager::XFConfigManager()
-    : m_pLineNumberConfig(0)
-    , m_pFootnoteConfig(0)
-    , m_pEndnoteConfig(0)
+    : m_pLineNumberConfig(nullptr)
+    , m_pFootnoteConfig(nullptr)
+    , m_pEndnoteConfig(nullptr)
 
 {
 }
@@ -103,9 +103,9 @@ void    XFConfigManager::ToXml(IXFStream *pStrm)
 
     XFStyleContainer::ToXml(pStrm);
     XFStyleContainer::Reset();
-    m_pLineNumberConfig = NULL;
-    m_pFootnoteConfig = NULL;
-    m_pEndnoteConfig = NULL;
+    m_pLineNumberConfig = nullptr;
+    m_pFootnoteConfig = nullptr;
+    m_pEndnoteConfig = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,7 +66,7 @@ XFList::XFList()
 {
     m_bOrdered = true;
     m_bContinueNumber = false;
-    m_pHeader = NULL;
+    m_pHeader = nullptr;
 }
 
 XFList::~XFList()
@@ -76,7 +76,7 @@ XFList::~XFList()
 void    XFList::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
-    assert(NULL!=pAttrList);
+    assert(nullptr!=pAttrList);
 
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )

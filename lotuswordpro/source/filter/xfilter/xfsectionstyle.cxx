@@ -64,8 +64,8 @@ XFSectionStyle::XFSectionStyle()
 {
     m_fMarginLeft = 0;
     m_fMarginRight = 0;
-    m_pBackImage = NULL;
-    m_pColumns = NULL;
+    m_pBackImage = nullptr;
+    m_pColumns = nullptr;
 }
 
 XFSectionStyle::~XFSectionStyle()

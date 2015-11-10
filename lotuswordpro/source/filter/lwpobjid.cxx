@@ -187,7 +187,7 @@ rtl::Reference<LwpObject> LwpObjectID::obj(VO_TYPE tag) const
     LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
     if(IsNull())
     {
-        return NULL;
+        return nullptr;
     }
     rtl::Reference<LwpObject> pObj = pObjMgr->QueryObject(*this);
     if( tag!=VO_INVALID &&  (pObj.is()) )

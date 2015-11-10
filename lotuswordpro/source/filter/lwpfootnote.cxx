@@ -103,7 +103,7 @@ void LwpFribFootnote::XFConvert(XFContentContainer* pCont)
     LwpFootnote* pFootnote = GetFootnote();
     if(pFootnote)
     {
-        XFContentContainer* pContent = NULL;
+        XFContentContainer* pContent = nullptr;
         if(pFootnote->GetType() == FN_FOOTNOTE)
         {
             pContent = new XFFootNote();
@@ -209,7 +209,7 @@ LwpCellLayout* LwpFootnote::GetCellLayout()
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -218,18 +218,18 @@ LwpCellLayout* LwpFootnote::GetCellLayout()
 LwpDocument* LwpFootnote::GetFootnoteTableDivision()
 {
     if(!m_pFoundry)
-        return NULL;
+        return nullptr;
 
-    LwpDocument* pPrev =NULL;
-    LwpDocument* pDivision = NULL;
-    LwpDocument* pFootnoteDivision =NULL;
+    LwpDocument* pPrev =nullptr;
+    LwpDocument* pDivision = nullptr;
+    LwpDocument* pFootnoteDivision =nullptr;
 
     // Make sure the footnote does belong to some division
     // The division might not have a DivisionInfo if it's being Destruct()ed
     pPrev = m_pFoundry->GetDocument();
     pFootnoteDivision = pPrev;
     if (!pPrev || pPrev->GetDivInfoID().IsNull())
-        return NULL;
+        return nullptr;
 
     switch (m_nType)
     {
@@ -285,7 +285,7 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
     }
     if (pDivision)
         return pDivision;
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -310,7 +310,7 @@ LwpDocument* LwpFootnote::GetEndnoteDivision(LwpDocument* pPossible)
             break;
         pDivision = pDivision->GetPreviousDivision();
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -352,25 +352,25 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
 {
     LwpDocument* pDivision = GetFootnoteTableDivision();
     if(!pDivision)
-        return NULL;
+        return nullptr;
 
     LwpFoundry* pFoundry = pDivision->GetFoundry();
     OUString strClassName = GetTableClass();
     if(strClassName.isEmpty() )
-        return NULL;
+        return nullptr;
 
-    LwpContent* pContent = NULL;
+    LwpContent* pContent = nullptr;
 
-    while ((pContent = pFoundry->EnumContents(pContent)) != NULL)
+    while ((pContent = pFoundry->EnumContents(pContent)) != nullptr)
         if (pContent->IsTable() && (strClassName.equals(pContent->GetClassName())) &&
-            pContent->IsActive() && pContent->GetLayout(NULL))
+            pContent->IsActive() && pContent->GetLayout(nullptr))
         {
             // Found it!
             return static_cast<LwpEnSuperTableLayout *>(
                 static_cast<LwpTable*>(pContent)->GetSuperTableLayout());
         }
 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -381,7 +381,7 @@ LwpContent* LwpFootnote::FindFootnoteContent()
     LwpContent* pContent = dynamic_cast<LwpContent*>(m_Content.obj().get());
     //if the content has layout, the content has footnote contents;
     //or looking for the celllayout and return the footnote contents.
-    if(pContent && pContent->GetLayout(NULL))
+    if(pContent && pContent->GetLayout(nullptr))
         return pContent;
 
     LwpCellLayout* pCellLayout = GetCellLayout();

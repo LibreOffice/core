@@ -62,8 +62,8 @@ unsigned long
 CBenValue::GetValueSize()
 {
     unsigned long Size = 0;
-    pCBenValueSegment pCurr = NULL;
-    while ((pCurr = GetNextValueSegment(pCurr)) != NULL)
+    pCBenValueSegment pCurr = nullptr;
+    while ((pCurr = GetNextValueSegment(pCurr)) != nullptr)
         Size += pCurr->GetSize();
     return Size;
 }
@@ -75,7 +75,7 @@ CBenValue::ReadValueData(void * pReadBuffer, unsigned long Offset,
     BenError Err;
     unsigned long SegOffset = 0;
     *pAmtRead = 0;
-    pCBenValueSegment pCurrSeg = NULL;
+    pCBenValueSegment pCurrSeg = nullptr;
     pLtcBenContainer pContainer = GetContainer();
     BenByte* pBuffer = static_cast<BenByte*>(pReadBuffer);
 
@@ -86,7 +86,7 @@ CBenValue::ReadValueData(void * pReadBuffer, unsigned long Offset,
 
     /// SegOffset     -- current segment's start address offset, relative value in the whole value stream
 
-    while ((pCurrSeg = GetNextValueSegment(pCurrSeg)) != NULL)
+    while ((pCurrSeg = GetNextValueSegment(pCurrSeg)) != nullptr)
     {
         if (Amt == 0)               /// whole buffer is full now, so return
             return BenErr_OK;

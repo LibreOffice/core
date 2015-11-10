@@ -76,7 +76,7 @@ class LwpGlobalMgr
 {
 public:
     ~LwpGlobalMgr();
-    static LwpGlobalMgr* GetInstance(LwpSvStream* pSvStream=NULL);
+    static LwpGlobalMgr* GetInstance(LwpSvStream* pSvStream=nullptr);
     static void DeleteInstance();
     LwpObjectFactory* GetLwpObjFactory(){return m_pObjFactory;}
     LwpBookmarkMgr* GetLwpBookmarkMgr(){return m_pBookmarkMgr;}

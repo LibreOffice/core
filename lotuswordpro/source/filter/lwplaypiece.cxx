@@ -262,7 +262,7 @@ void LwpColumnInfo:: Read(LwpObjectStream *pStrm)
 LwpLayoutColumns::LwpLayoutColumns(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
     , m_nNumCols(0)
-    , m_pColumns(NULL)
+    , m_pColumns(nullptr)
 {}
 
 LwpLayoutColumns::~LwpLayoutColumns()
@@ -270,7 +270,7 @@ LwpLayoutColumns::~LwpLayoutColumns()
     if(m_pColumns)
     {
         delete[] m_pColumns;
-        m_pColumns = NULL;
+        m_pColumns = nullptr;
     }
 
 }

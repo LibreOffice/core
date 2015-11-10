@@ -64,7 +64,7 @@ XFTableStyle::XFTableStyle()
 {
     m_fWidth = 2;
     m_eAlign = enumXFAlignStart;
-    m_pBGImage = NULL;
+    m_pBGImage = nullptr;
 }
 
 XFTableStyle::~XFTableStyle()

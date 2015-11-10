@@ -77,15 +77,15 @@ FindNamedObject(pCUtList pList, const char * sName,
             continue;
         else
         {
-            if (ppPrev != NULL)
+            if (ppPrev != nullptr)
                 *ppPrev = pCurrNamedObjectListElmt;
-            return NULL;
+            return nullptr;
         }
     }
 
-    if (ppPrev != NULL)
+    if (ppPrev != nullptr)
         *ppPrev = &rTerminating;
-    return NULL;
+    return nullptr;
 }
 
 // Assume list is of BenIDListElmt list elements, sorted by ID
@@ -104,15 +104,15 @@ FindID(pCUtList pList, BenObjectID ObjectID, pCUtListElmt * ppPrev)
             continue;
         else
         {
-            if (ppPrev != NULL)
+            if (ppPrev != nullptr)
                 *ppPrev = pCurrIDListElmt;
-            return NULL;
+            return nullptr;
         }
     }
 
-    if (ppPrev != NULL)
+    if (ppPrev != nullptr)
         *ppPrev = &rTerminating;
-    return NULL;
+    return nullptr;
 }
 } //end namespace OpenStormBento
 

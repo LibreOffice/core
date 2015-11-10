@@ -67,10 +67,10 @@ XFFrameStyle::XFFrameStyle()
 {
     m_eWrap = enumXFWrapNone;
     m_nWrapLines = 0;   //not limited.
-    m_pBorders = NULL;
-    m_pColumns = NULL;
-    m_pShadow = NULL;
-    m_pBGImage = NULL;
+    m_pBorders = nullptr;
+    m_pColumns = nullptr;
+    m_pShadow = nullptr;
+    m_pBGImage = nullptr;
 
     m_bProtectContent = false;
     m_bProtectSize = false;

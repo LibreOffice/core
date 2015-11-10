@@ -86,7 +86,7 @@ protected:
     DrawingOffsetAndScale* m_pTransData;
 
 public:
-    LwpDrawObj(SvStream* pStream, DrawingOffsetAndScale* pTransData = NULL);
+    LwpDrawObj(SvStream* pStream, DrawingOffsetAndScale* pTransData = nullptr);
     virtual ~LwpDrawObj() {}
 
 private:
@@ -157,8 +157,8 @@ protected:
     {
         return OUString();
     }
-    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) override { return NULL; }
-    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) override { return NULL; }
+    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) override { return nullptr; }
+    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) override { return nullptr; }
 };
 
 /**
@@ -351,8 +351,8 @@ protected:
     {
         return OUString();
     }
-    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) override {return NULL;}
-    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) override {return NULL;}
+    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) override {return nullptr;}
+    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) override {return nullptr;}
 };
 
 /**

@@ -76,8 +76,8 @@
 LwpFoundry::LwpFoundry(LwpObjectStream *pStrm, LwpDocument* pDoc)
     : m_pDoc(pDoc)
     , m_bRegisteredAll(false)
-    , m_pPieceMgr(NULL)
-    , m_pStyleMgr(NULL)
+    , m_pPieceMgr(nullptr)
+    , m_pStyleMgr(nullptr)
 {
     Read(pStrm);
     m_pDropcapMgr = new LwpDropcapMgr;
@@ -232,7 +232,7 @@ LwpBookMark* LwpFoundry::GetBookMark(LwpObjectID objMarker)
         rObjID = pBookMark->GetNext();
         pBookMark = static_cast<LwpBookMark*>(rObjID.obj().get());
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -261,7 +261,7 @@ LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 {
     LwpVersionedPointer * pPointer = static_cast<LwpVersionedPointer *>(m_DefaultTextStyle.obj().get());
     if (!pPointer)
-        return NULL;
+        return nullptr;
 
     return &pPointer->GetPointer();
 }
@@ -286,7 +286,7 @@ LwpObjectID * LwpFoundry::FindParaStyleByName(const OUString& name)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -392,7 +392,7 @@ LwpContent* LwpContentManager::EnumContents(LwpContent* pContent)
     if(pContent)
         return pContent->GetNextEnumerated();
     LwpVersionedPointer* pPointer = static_cast<LwpVersionedPointer*>(m_EnumHead.obj().get());
-    return pPointer ? static_cast<LwpContent*>(pPointer->GetPointer().obj().get()) : NULL;
+    return pPointer ? static_cast<LwpContent*>(pPointer->GetPointer().obj().get()) : nullptr;
 }
 
 void LwpPieceManager::Read(LwpObjectStream *pStrm)
@@ -445,7 +445,7 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
     if(pLast && !pLast->GetNext().IsNull())
         return static_cast<LwpOrderedObject*>(pLast->GetNext().obj().get());
 
-    LwpListList* pList = NULL;
+    LwpListList* pList = nullptr;
     if(pLast)
     {
         // We're at the end of Last's list (not Liszt's list).
@@ -456,7 +456,7 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
     else
     {
         // Start with the first active ListList
-        pList = GetNextActiveListList(NULL);
+        pList = GetNextActiveListList(nullptr);
     }
 
     if(pList)
@@ -464,7 +464,7 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
         return static_cast<LwpOrderedObject*>(pList->GetHead().obj().get());
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -473,7 +473,7 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
 */
 LwpListList* LwpOrderedObjectManager::GetNextActiveListList(LwpListList * pLast)
 {
-    LwpListList* pList = NULL;
+    LwpListList* pList = nullptr;
     if(pLast)
         pList = static_cast<LwpListList*>(pLast->GetNext().obj().get());
     else
@@ -493,11 +493,11 @@ LwpListList* LwpOrderedObjectManager::GetNextActiveListList(LwpListList * pLast)
             return pList;
         pList = static_cast<LwpListList*>(pList->GetNext().obj().get());
     }
-    return NULL;
+    return nullptr;
 }
 
 LwpStyleManager::LwpStyleManager()
-    : m_pFoundry(0)
+    : m_pFoundry(nullptr)
 {
 }
 
@@ -535,7 +535,7 @@ IXFStyle* LwpStyleManager::GetStyle(const LwpObjectID &styleObjID)
     if (it != m_StyleList.end()) {
         return((*it).second);
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

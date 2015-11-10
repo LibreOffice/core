@@ -87,6 +87,6 @@ rtl::Reference<XFFont> XFFontFactory::FindSameFont(rtl::Reference<XFFont> const 
             return *it;
     }
 
-    return NULL;
+    return nullptr;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

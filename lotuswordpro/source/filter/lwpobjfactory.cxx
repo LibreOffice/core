@@ -661,7 +661,7 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
         default:
         {
             //Unknown object type
-            newObj = NULL;
+            newObj = nullptr;
             break;
         }
     }
@@ -685,20 +685,20 @@ rtl::Reference<LwpObject> LwpObjectFactory::QueryObject(const LwpObjectID &objID
         //Read the object from file
         sal_uInt32 nStreamOffset = m_IndexMgr.GetObjOffset(objID);
         if(nStreamOffset == BAD_OFFSET) //does not find the offset in index manager
-            return NULL;
+            return nullptr;
 
         sal_Int64 nDesiredPos = nStreamOffset + LwpSvStream::LWP_STREAM_BASE;
         if (nDesiredPos != m_pSvStream->Seek(nDesiredPos))
-            return NULL;
+            return nullptr;
         LwpObjectHeader objHdr;
         if (!objHdr.Read(*m_pSvStream))
-            return NULL;
+            return nullptr;
 
         LwpObjectID& rId = objHdr.GetID();
         if (rId != objID)
         {
             OSL_FAIL("apparently incorrect objid, invalidating");
-            return NULL;
+            return nullptr;
         }
 
         obj = CreateObject(objHdr.GetTag(), objHdr);
@@ -717,7 +717,7 @@ rtl::Reference<LwpObject> LwpObjectFactory::FindObject(const LwpObjectID &objID)
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 /**

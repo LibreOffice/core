@@ -75,8 +75,8 @@ LwpCharacterBorderOverride::LwpCharacterBorderOverride()
 
 LwpCharacterBorderOverride::LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther)
     : LwpOverride(rOther)
-    , m_pBorderStuff(0)
-    , m_pMargins(0)
+    , m_pBorderStuff(nullptr)
+    , m_pMargins(nullptr)
     , m_nAboveWidth(rOther.m_nAboveWidth)
     , m_nBelowWidth(rOther.m_nBelowWidth)
 {

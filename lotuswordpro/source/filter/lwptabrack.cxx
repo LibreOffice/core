@@ -108,7 +108,7 @@ LwpTab* LwpTabRack::Lookup(sal_uInt16 nIndex)
     //return NULL;
     /* It's not in this tabrack, so get it out of our next. */
     if (!GetNext())
-        return NULL;        /* ouch */
+        return nullptr;        /* ouch */
 
     return GetNext()->Lookup(nIndex - m_nNumTabs);
 }

@@ -757,7 +757,7 @@ void LwpFrameLink::Read(LwpObjectStream* pStrm)
 }
 
 LwpFrameLayout::LwpFrameLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-    : LwpPlacableLayout(objHdr, pStrm), m_pFrame(NULL)
+    : LwpPlacableLayout(objHdr, pStrm), m_pFrame(nullptr)
 {
 }
 
@@ -814,7 +814,7 @@ void LwpFrameLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
 {
     if(m_pFrame)
     {
-        XFFrame* pXFFrame = NULL;
+        XFFrame* pXFFrame = nullptr;
         if(nEnd < nStart)
         {
             pXFFrame = new XFFrame();
@@ -1012,7 +1012,7 @@ void LwpFrameLayout::ApplyGraphicSize(XFFrame * pXFFrame)
 
 LwpGroupLayout::LwpGroupLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
-    , m_pFrame(NULL)
+    , m_pFrame(nullptr)
 {
 
 }
@@ -1078,7 +1078,7 @@ void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
 {
     if(m_pFrame)
     {
-        XFFrame* pXFFrame = NULL;
+        XFFrame* pXFFrame = nullptr;
         if(nEnd < nStart)
         {
             pXFFrame = new XFFrame();

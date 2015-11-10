@@ -70,10 +70,10 @@
 
 LwpDocument::LwpDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
-    , m_pOwnedFoundry(NULL)
+    , m_pOwnedFoundry(nullptr)
     , m_nFlags(0)
     , m_nPersistentFlags(0)
-    , m_pLnOpts(NULL)
+    , m_pLnOpts(nullptr)
 {
 }
 
@@ -175,7 +175,7 @@ bool LwpDocument::IsSkippedDivision()
     OUString sDivName;
     bool ret = false;
     LwpDivInfo* pDiv = dynamic_cast<LwpDivInfo*>(GetDivInfoID().obj(VO_DIVISIONINFO).get());
-    if (pDiv == NULL)
+    if (pDiv == nullptr)
         return true;
     sDivName = pDiv->GetDivName();
     if (!sDivName.isEmpty() && !pDiv->IsGotoable()) //including toa,scripts division
@@ -403,7 +403,7 @@ void LwpDocument::ParseDocContent(IXFStream* pOutputStream)
 {
     //Parse content in PageLayout
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj().get());
-    if(pDivInfo==NULL) return;
+    if(pDivInfo==nullptr) return;
 
     rtl::Reference<LwpObject> pLayoutObj = pDivInfo->GetInitialLayoutID().obj();
     if(!pLayoutObj.is())
@@ -425,7 +425,7 @@ LwpObjectID* LwpDocument::GetValidFootnoteOpts()
     {
         return &pRoot->GetFootnoteOpts();
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -455,7 +455,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     {
         return dynamic_cast<LwpDocument*>(pDocSock->GetPrevious().obj().get());
     }
-    return NULL;
+    return nullptr;
 }
 /**
  * @descr    Get next division
@@ -467,7 +467,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     {
         return dynamic_cast<LwpDocument*>(pDocSock->GetNext().obj().get());
     }
-    return NULL;
+    return nullptr;
 }
 /**
  * @descr    Get parent division
@@ -479,14 +479,14 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     {
         return dynamic_cast<LwpDocument*>(pDocSock->GetParent().obj().get());
     }
-    return NULL;
+    return nullptr;
 }
 /**
  * @descr    Get previous division in group, copy from lwp source code
  */
  LwpDocument* LwpDocument::GetPreviousInGroup()
 {
-    LwpDocument* pPrev = NULL;
+    LwpDocument* pPrev = nullptr;
 
     for (pPrev = GetPreviousDivision(); pPrev; pPrev = pPrev->GetPreviousDivision())
     {
@@ -494,14 +494,14 @@ LwpDocument* LwpDocument::GetPreviousDivision()
         if(pDivInfo && pDivInfo->HasContents())
             return pPrev;
     }
-    return NULL;
+    return nullptr;
 }
 /**
  * @descr       Get previous division in group, copy from lwp source code
  */
  LwpDocument* LwpDocument::GetNextInGroup()
 {
-    LwpDocument* pNext = NULL;
+    LwpDocument* pNext = nullptr;
 
     for (pNext = GetNextDivision(); pNext; pNext = pNext->GetNextDivision())
     {
@@ -510,7 +510,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
             return pNext;
     }
 
-    return NULL;
+    return nullptr;
 }
 /**
  * @descr    Get previous division which has contents, copy from lwp source code
@@ -525,7 +525,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     }
     if(GetParentDivision())
         return GetParentDivision()->GetPreviousDivisionWithContents();
-    return NULL;
+    return nullptr;
 }
  /**
  * @descr    Get last division which has contents, copy from lwp source code
@@ -550,14 +550,14 @@ LwpDocument* LwpDocument::GetPreviousDivision()
         pDivision = pDivision->GetPreviousDivision();
     }
 
-    return NULL;
+    return nullptr;
 }
  /**
  * @descr    Get last division in group  which has contents, copy from lwp source code
  */
  LwpDocument* LwpDocument::GetLastInGroupWithContents()
 {
-    LwpDocument* pLast = NULL;
+    LwpDocument* pLast = nullptr;
     LwpDocument* pNext = this;
 
     while (pNext)
@@ -569,7 +569,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     }
     if (pLast)
         return pLast;
-    return NULL;
+    return nullptr;
 }
   /**
  * @descr    Get last division
@@ -579,7 +579,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket().obj().get());
     if(pDocSock)
         return dynamic_cast<LwpDocument*>(pDocSock->GetChildTail().obj().get());
-    return NULL;
+    return nullptr;
 }
 
   /**
@@ -590,7 +590,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     LwpDocSock* pDocSock = dynamic_cast<LwpDocSock*>(GetSocket().obj().get());
     if(pDocSock)
         return dynamic_cast<LwpDocument*>(pDocSock->GetChildHead().obj().get());
-    return NULL;
+    return nullptr;
 }
 
  /**
@@ -605,7 +605,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
             return pRoot;
         pRoot = pRoot->GetParentDivision();
     }
-    return NULL;
+    return nullptr;
 }
   /**
  * @descr    Get first division with contents that is not ole, copy from lwp-source code
@@ -626,7 +626,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
             return pContentDivision;
         pDivision = pDivision->GetNextDivision();
     }
-    return NULL;
+    return nullptr;
 }
  /**
  * @descr    Get last division that has endnote
@@ -641,7 +641,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
             return pLastDoc;
         pLastDoc = pLastDoc->GetPreviousDivisionWithContents();
     }
-    return NULL;
+    return nullptr;
 
 }
  /**
@@ -654,7 +654,7 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     {
         return pHeadLayout->FindEnSuperTableLayout();
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -724,7 +724,7 @@ void LwpDocument::ParseFrameInPage(IXFStream * pOutputStream)
 
     pXFContainer->ToXml(pOutputStream);
     delete pXFContainer;
-    pXFContainer = NULL;
+    pXFContainer = nullptr;
 }
  /**
  * @descr    Parse the frame which anchor is to page in the entire document

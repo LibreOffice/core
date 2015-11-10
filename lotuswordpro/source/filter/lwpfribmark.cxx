@@ -170,8 +170,8 @@ void  LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
 LwpFribBookMark::LwpFribBookMark(LwpPara* pPara )
     : LwpFrib(pPara)
     , m_nType(0)
-    , m_pStart(NULL)
-    , m_pEnd(NULL)
+    , m_pStart(nullptr)
+    , m_pEnd(nullptr)
 {
 }
 
@@ -399,8 +399,8 @@ void LwpFribField::RegisterTotalTimeStyle()
 
 void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
 {
-    XFDateStyle* pDateStyle = NULL;
-    XFTimeStyle* pTimeStyle = NULL;
+    XFDateStyle* pDateStyle = nullptr;
+    XFTimeStyle* pTimeStyle = nullptr;
 //DATE
     if (sFormula.getLength()<2)
         return;
@@ -1199,7 +1199,7 @@ void LwpFribField::CheckFieldType(LwpFieldMark* pFieldMark)
 
 void LwpFribField::ConvertDocFieldStart(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark)
 {
-    XFContent* pContent = NULL;
+    XFContent* pContent = nullptr;
     switch(m_nDocPowerType)
     {
         case LwpFieldMark::DOC_DESCRIPTION:
@@ -1240,7 +1240,7 @@ void LwpFribField::ConvertDocFieldStart(XFContentContainer* pXFPara,LwpFieldMark
 
 void LwpFribField::ConvertDocFieldEnd(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark)
 {
-    XFContent* pContent = NULL;
+    XFContent* pContent = nullptr;
     switch(m_nDocPowerType)
     {
         case LwpFieldMark::DOC_DESCRIPTION:
@@ -1279,7 +1279,7 @@ void LwpFribField::ConvertDocFieldEnd(XFContentContainer* pXFPara,LwpFieldMark* 
 
 void LwpFribField::ConvertDateTimeStart(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark)
 {
-    XFContent* pContent = NULL;
+    XFContent* pContent = nullptr;
     switch(m_nDateTimeType)
     {
     case LwpFieldMark::DATETIME_NOW:
@@ -1327,7 +1327,7 @@ void LwpFribField::ConvertDateTimeStart(XFContentContainer* pXFPara,LwpFieldMark
 
 void LwpFribField::ConvertDateTimeEnd(XFContentContainer* pXFPara,LwpFieldMark* pFieldMark)
 {
-    XFContent* pContent = NULL;
+    XFContent* pContent = nullptr;
     switch(m_nDateTimeType)
     {
         case LwpFieldMark::DATETIME_NOW:

@@ -462,12 +462,12 @@ HuffmanTreeNode::~HuffmanTreeNode()
     if (left)
     {
         delete left;
-        left = NULL;
+        left = nullptr;
     }
     if (right)
     {
         delete right;
-        right = NULL;
+        right = nullptr;
     }
 }
 

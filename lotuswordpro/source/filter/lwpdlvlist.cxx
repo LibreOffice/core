@@ -119,7 +119,7 @@ void LwpDLNFVList::ReadName(LwpObjectStream* pObjStrm)
  **/
 LwpDLNFPVList::LwpDLNFPVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm),
-    m_bHasProperties(true),m_pPropList(NULL)
+    m_bHasProperties(true),m_pPropList(nullptr)
 {}
 /**
  * @descr       Read name of LwpDLNFVList from object stream

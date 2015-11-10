@@ -78,7 +78,7 @@
 LwpSdwGroupLoaderV0102::LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj)
     : m_pStream(pStream)
     , m_pGraphicObj(pGraphicObj)
-    , m_pDrawObjVector(NULL)
+    , m_pDrawObjVector(nullptr)
 {
 }
 
@@ -129,7 +129,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
     m_pStream->SeekRel(2);
 
     //for calculating transformation params.
-    LwpFrameLayout* pMyFrameLayout = static_cast<LwpFrameLayout*>(m_pGraphicObj->GetLayout(NULL));
+    LwpFrameLayout* pMyFrameLayout = static_cast<LwpFrameLayout*>(m_pGraphicObj->GetLayout(nullptr));
     if (pMyFrameLayout)
     {
         LwpLayoutScale* pMyScale = pMyFrameLayout->GetLayoutScale();
@@ -249,7 +249,7 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
     if (BinSignature[0] != 'S' || BinSignature[1] != 'M')
     {
         assert(false);
-        return NULL;
+        return nullptr;
     }
     //version
     unsigned short nVersion;
@@ -257,7 +257,7 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
     if (nVersion<0x0102)
     {
         assert(false);
-        return NULL;
+        return nullptr;
     }
     // topObj, botObj
     m_pStream->SeekRel(4);
@@ -308,8 +308,8 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
     unsigned char recType;
     m_pStream->Read(&recType,1);
 
-    LwpDrawObj* pDrawObj = NULL;
-    XFFrame* pRetObjct = NULL;
+    LwpDrawObj* pDrawObj = nullptr;
+    XFFrame* pRetObjct = nullptr;
 
     switch(recType)
     {
@@ -399,7 +399,7 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
     if (pDrawObj)
     {
         delete pDrawObj;
-        pDrawObj = NULL;
+        pDrawObj = nullptr;
     }
 
     return pRetObjct;

@@ -61,7 +61,7 @@ LwpGlobalMgr::LwpGlobalMgr(LwpSvStream* pSvStream)
     if (pSvStream)
         m_pObjFactory = new LwpObjectFactory(pSvStream);
     else
-        m_pObjFactory = NULL;
+        m_pObjFactory = nullptr;
     m_pBookmarkMgr = new LwpBookmarkMgr;
     m_pChangeMgr = new LwpChangeMgr;
     m_pXFFontFactory = new XFFontFactory;
@@ -73,33 +73,33 @@ LwpGlobalMgr::~LwpGlobalMgr()
     if (m_pObjFactory)
     {
         delete m_pObjFactory;
-        m_pObjFactory = NULL;
+        m_pObjFactory = nullptr;
     }
     if (m_pBookmarkMgr)
     {
         delete m_pBookmarkMgr;
-        m_pBookmarkMgr = NULL;
+        m_pBookmarkMgr = nullptr;
     }
     if (m_pChangeMgr)
     {
         delete m_pChangeMgr;
-        m_pChangeMgr = NULL;
+        m_pChangeMgr = nullptr;
     }
     if (m_pXFFontFactory)
     {
         delete m_pXFFontFactory;
-        m_pXFFontFactory = NULL;
+        m_pXFFontFactory = nullptr;
     }
     if (m_pXFStyleManager)
     {
         delete m_pXFStyleManager;
-        m_pXFStyleManager = NULL;
+        m_pXFStyleManager = nullptr;
     }
     std::map<sal_uInt16,LwpEditorAttr*>::iterator iter;
     for (iter =m_EditorAttrMap.begin();iter != m_EditorAttrMap.end(); ++iter)
     {
         delete iter->second;
-        iter->second = NULL;
+        iter->second = nullptr;
     }
     m_EditorAttrMap.clear();
 }
@@ -127,7 +127,7 @@ void LwpGlobalMgr::DeleteInstance()
     if (iter != m_ThreadMap.end())
     {
         delete iter->second;
-        iter->second = NULL;
+        iter->second = nullptr;
         m_ThreadMap.erase(iter);
     }
 }

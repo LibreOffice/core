@@ -90,7 +90,7 @@ LwpIndexManager::~LwpIndexManager()
         if( pKey )
         {
             delete pKey;
-            pKey = NULL;
+            pKey = nullptr;
         }
     }
     m_ObjectKeys.clear();

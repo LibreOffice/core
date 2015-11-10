@@ -108,7 +108,7 @@ IXFStyleRet XFStyleContainer::AddStyle(IXFStyle *pStyle)
 {
     IXFStyleRet aRet;
 
-    IXFStyle    *pConStyle = NULL;
+    IXFStyle    *pConStyle = nullptr;
     OUString   name;
 
     if( !pStyle )
@@ -162,7 +162,7 @@ IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
             return pConStyle;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 IXFStyle*   XFStyleContainer::FindStyle(const OUString& name)
@@ -176,7 +176,7 @@ IXFStyle*   XFStyleContainer::FindStyle(const OUString& name)
             return pConStyle;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 const IXFStyle* XFStyleContainer::Item(size_t index) const
@@ -186,7 +186,7 @@ const IXFStyle* XFStyleContainer::Item(size_t index) const
     {
         return m_aStyles[index];
     }
-    return NULL;
+    return nullptr;
 }
 
 void    XFStyleContainer::ToXml(IXFStream *pStrm)

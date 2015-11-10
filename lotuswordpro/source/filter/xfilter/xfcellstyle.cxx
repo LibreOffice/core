@@ -67,8 +67,8 @@ XFCellStyle::XFCellStyle()
     m_eHoriAlign = enumXFAlignNone;
     m_eVertAlign = enumXFAlignNone;
     m_fTextIndent = 0;
-    m_pBorders = NULL;
-    m_pBackImage = NULL;
+    m_pBorders = nullptr;
+    m_pBackImage = nullptr;
     m_bWrapText = false;
 }
 

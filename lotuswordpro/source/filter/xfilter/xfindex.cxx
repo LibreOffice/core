@@ -62,7 +62,7 @@
 
 XFIndex::XFIndex()
 {
-    m_pTitle = NULL;
+    m_pTitle = nullptr;
     m_eType = enumXFIndexTOC;
     m_bProtect = true;
     m_bSeparator = false;

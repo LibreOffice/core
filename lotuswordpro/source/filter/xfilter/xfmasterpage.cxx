@@ -65,8 +65,8 @@
 #include "../lwpglobalmgr.hxx"
 XFMasterPage::XFMasterPage()
 {
-    m_pHeader = NULL;
-    m_pFooter = NULL;
+    m_pHeader = nullptr;
+    m_pFooter = nullptr;
 }
 
 XFMasterPage::~XFMasterPage()

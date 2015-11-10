@@ -63,7 +63,7 @@ class CBenTOCReader
 public: // Methods
     explicit CBenTOCReader(pLtcBenContainer pContainer)
         : cpContainer(pContainer)
-        , cpTOC(NULL)
+        , cpTOC(nullptr)
         , cBlockSize(0)
         , cCurr(0)
         , cTOCSize(0)

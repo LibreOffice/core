@@ -79,7 +79,7 @@ LwpPageLayout::LwpPageLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     , m_nPrinterBin(0)
     , m_nBdroffset(0)
     , m_pPaperName(new LwpAtomHolder)
-    , m_pXFPageMaster(NULL)
+    , m_pXFPageMaster(nullptr)
 {
 }
 
@@ -269,7 +269,7 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
     {
         LwpObjectID* pFontnodeId = pDocument->GetValidFootnoteOpts();
 
-        LwpFootnoteOptions* pFootnoteOpts = pFontnodeId ? dynamic_cast<LwpFootnoteOptions*>(pFontnodeId->obj().get()) : NULL;
+        LwpFootnoteOptions* pFootnoteOpts = pFontnodeId ? dynamic_cast<LwpFootnoteOptions*>(pFontnodeId->obj().get()) : nullptr;
         if(pFootnoteOpts)
         {
             LwpFootnoteSeparatorOptions& rFootnoteSep = pFootnoteOpts->GetFootnoteSeparator();
@@ -497,7 +497,7 @@ void LwpPageLayout::ResetXFColumns()
 {
     if(m_pXFPageMaster)
     {
-        m_pXFPageMaster->SetColumns(NULL);
+        m_pXFPageMaster->SetColumns(nullptr);
     }
 }
 
@@ -510,7 +510,7 @@ LwpHeaderLayout* LwpPageLayout::GetHeaderLayout()
             return ( static_cast<LwpHeaderLayout*> (pLay) );
         pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
     }
-    return NULL;
+    return nullptr;
 }
 
 LwpFooterLayout* LwpPageLayout::GetFooterLayout()
@@ -522,7 +522,7 @@ LwpFooterLayout* LwpPageLayout::GetFooterLayout()
             return ( static_cast<LwpFooterLayout*> (pLay) );
         pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -548,7 +548,7 @@ LwpPageLayout* LwpPageLayout::GetOddChildLayout()
             pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext().obj().get());
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -719,7 +719,7 @@ LwpPara* LwpPageLayout::GetPagePosition()
     LwpFoundry* pFoundry = GetFoundry();
     if(pFoundry)
     {
-        LwpSection* pSection = NULL;
+        LwpSection* pSection = nullptr;
         while( (pSection = pFoundry->EnumSections(pSection)) )
         {
             if(pSection->GetPageLayout() == this)
@@ -727,7 +727,7 @@ LwpPara* LwpPageLayout::GetPagePosition()
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 LwpHeaderLayout::LwpHeaderLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
     : LwpPlacableLayout(objHdr, pStrm)

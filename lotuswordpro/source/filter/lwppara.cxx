@@ -101,22 +101,22 @@ LwpPara::LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     , m_nOrdinal(0)
     , m_nFlags(0)
     , m_nLevel(0)
-    , m_pProps(NULL)
-    , m_pBreaks(NULL)
-    , m_pIndentOverride(NULL)
+    , m_pProps(nullptr)
+    , m_pBreaks(nullptr)
+    , m_pIndentOverride(nullptr)
     , m_FontID(0)
     , m_AllText("")
     , m_bHasBullet(false)
-    , m_pSilverBullet(NULL)
-    , m_pBullOver(NULL)
+    , m_pSilverBullet(nullptr)
+    , m_pBullOver(nullptr)
     , m_bBullContinue(false)
     , m_SectionStyleName("")
     , m_bHasDropcap(false)
     , m_nLines(0)
     , m_nChars(0)
-    , m_pDropcapLayout(NULL)
+    , m_pDropcapLayout(nullptr)
     , m_BelowSpacing(0)
-    , m_pXFContainer(NULL)
+    , m_pXFContainer(nullptr)
 {
 }
 
@@ -126,7 +126,7 @@ LwpPara::~LwpPara()
     if (m_pBreaks)
     {
         delete m_pBreaks;
-        m_pBreaks = NULL;
+        m_pBreaks = nullptr;
     }
 /*  if (m_pParaNumbering)
     {
@@ -137,7 +137,7 @@ LwpPara::~LwpPara()
     if (m_pBullOver)
     {
         delete m_pBullOver;
-        m_pBullOver = NULL;
+        m_pBullOver = nullptr;
     }
     if(m_pIndentOverride)
     {
@@ -250,7 +250,7 @@ void LwpPara::Parse(IXFStream* pOutputStream)
     m_pXFContainer->ToXml(pOutputStream);
     m_pXFContainer->Reset();
     delete m_pXFContainer;
-    m_pXFContainer = NULL;
+    m_pXFContainer = nullptr;
 }
 
 void LwpPara::XFConvert(XFContentContainer* pCont)
@@ -348,7 +348,7 @@ void LwpPara::RegisterStyle()
     if (!m_pFoundry)
         return;
     XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(m_ParaStyle));
-    if (pBaseStyle == NULL) return;
+    if (pBaseStyle == nullptr) return;
     m_StyleName = pBaseStyle->GetStyleName();//such intf to be added
     m_ParentStyleName = m_StyleName;
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -360,11 +360,11 @@ void LwpPara::RegisterStyle()
         m_pIndentOverride = pIndentOverride.release();
     }
 
-    XFParaStyle* pOverStyle = NULL;
+    XFParaStyle* pOverStyle = nullptr;
     bool noSpacing = true;
-    LwpParaProperty* pBulletProps = NULL, *pNumberingProps = NULL;
+    LwpParaProperty* pBulletProps = nullptr, *pNumberingProps = nullptr;
 
-    if (m_pProps != NULL)
+    if (m_pProps != nullptr)
     {
         bool noIndent = true;
         pOverStyle = new XFParaStyle;
@@ -381,7 +381,7 @@ void LwpPara::RegisterStyle()
             case PP_LOCAL_ALIGN:
             {
                 if (!rParaStyle.GetAlignment())
-                    OverrideAlignment(NULL,static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),pOverStyle);
+                    OverrideAlignment(nullptr,static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),pOverStyle);
                 else
                 {
                     std::unique_ptr<LwpAlignmentOverride> const pAlign(
@@ -396,7 +396,7 @@ void LwpPara::RegisterStyle()
             {
                 noIndent = false;
                 if (!rParaStyle.GetIndent())
-                    OverrideIndent(NULL,static_cast<LwpParaIndentProperty*>(pProps)->GetIndent(),pOverStyle);
+                    OverrideIndent(nullptr,static_cast<LwpParaIndentProperty*>(pProps)->GetIndent(),pOverStyle);
 
                 else
                 {
@@ -408,7 +408,7 @@ void LwpPara::RegisterStyle()
             {
                 noSpacing = false;
                 if (!rParaStyle.GetSpacing())
-                    OverrideSpacing(NULL,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
+                    OverrideSpacing(nullptr,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
                 else
                 {
                     std::unique_ptr<LwpSpacingOverride> const
@@ -479,7 +479,7 @@ void LwpPara::RegisterStyle()
         {
             if (m_pIndentOverride->IsUseRelative() && GetParent())
             {
-                OverrideIndent(NULL,m_pIndentOverride,pOverStyle);
+                OverrideIndent(nullptr,m_pIndentOverride,pOverStyle);
             }
         }
         if (!m_ParentStyleName.isEmpty())
@@ -495,7 +495,7 @@ void LwpPara::RegisterStyle()
                 {
                     pOverStyle = new XFParaStyle;
                     *pOverStyle = *pBaseStyle;
-                    OverrideIndent(NULL,m_pIndentOverride,pOverStyle);
+                    OverrideIndent(nullptr,m_pIndentOverride,pOverStyle);
                     if (!m_ParentStyleName.isEmpty())
                         pOverStyle->SetParentStyleName(m_ParentStyleName);
                     m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
@@ -548,7 +548,7 @@ void LwpPara::RegisterStyle()
                     sal_uInt16 nPosition = pNumbering->GetPosition();
                     bool bLesser = m_pSilverBullet->IsLesserLevel(nPosition);
                     LwpPara* pPara = this;
-                    LwpPara* pPrePara = NULL;
+                    LwpPara* pPrePara = nullptr;
                     sal_uInt16 nNum = 0, nLevel = 0, nFoundLevel = 0xffff, nFoundBound = 0;
 
                     nFoundBound = nLevel = pNumbering->GetLevel();
@@ -788,10 +788,10 @@ XFSection* LwpPara::CreateXFSection()
 void LwpPara::RegisterTabStyle(XFParaStyle* pXFParaStyle)
 {
     LwpTabOverride aFinaOverride;
-    LwpTabOverride* pBase = NULL;
+    LwpTabOverride* pBase = nullptr;
     //get the tabrack from the current layout
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj().get());
-    LwpMiddleLayout* pLayout = pStory ? pStory->GetTabLayout() : NULL;
+    LwpMiddleLayout* pLayout = pStory ? pStory->GetTabLayout() : nullptr;
     if(pLayout)
     {
         pBase = pLayout->GetTabOverride();
@@ -877,7 +877,7 @@ LwpBulletStyleMgr* LwpPara::GetBulletStyleMgr()
         return m_pFoundry->GetBulletStyleMgr();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
@@ -886,7 +886,7 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
     if (!pBulletStyleMgr)
     {
         assert(false);
-        return NULL;
+        return nullptr;
     }
 
     sal_uInt16 nLevel = m_nLevel;

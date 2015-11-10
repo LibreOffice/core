@@ -72,8 +72,8 @@
 #include "lwpglobalmgr.hxx"
 
 LwpBulletStyleMgr::LwpBulletStyleMgr()
-    : m_pFoundry(NULL)
-    , m_pBulletList(NULL)
+    : m_pFoundry(nullptr)
+    , m_pBulletList(nullptr)
     , m_bContinue(true)
     , m_bIsBulletSkipped(false)
 {
@@ -120,7 +120,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
     }
 
     LwpParaProperty* pProp = pPara->GetProperty(PP_LOCAL_INDENT);
-    LwpParaIndentProperty* pIndentProp = NULL;
+    LwpParaIndentProperty* pIndentProp = nullptr;
     LwpObjectID aIndentID;
     if (pProp)
     {
@@ -150,7 +150,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
     OUString aStyleName;
 
     LwpFribPtr& rBulletParaFribs = pBulletPara->GetFribs();
-    bool bIsNumbering = (rBulletParaFribs.HasFrib(FRIB_TAG_PARANUMBER) != 0);
+    bool bIsNumbering = (rBulletParaFribs.HasFrib(FRIB_TAG_PARANUMBER) != nullptr);
 
     enumXFAlignType eAlign = enumXFAlignStart;
     if (pBullOver->IsRightAligned())
@@ -263,9 +263,9 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
     bool bContinue = m_bContinue;
 
     XFList* theList;
-    XFList* prevList = NULL;
+    XFList* prevList = nullptr;
     XFListItem* theItem;
-    XFListItem* InnerItem = NULL;
+    XFListItem* InnerItem = nullptr;
     for (sal_Int8 nC = nLevel-1; nC >= 0; nC--)
     {
         theList = new XFList();

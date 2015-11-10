@@ -74,9 +74,9 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer
 {
     BenError Err;
 
-    *ppContainer = NULL;
+    *ppContainer = nullptr;
 
-    if (NULL == pStream)
+    if (nullptr == pStream)
     {
         return BenErr_ContainerWithNoObjects;
     }
@@ -116,7 +116,7 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
     pCBenNamedObject pNamedObject = FindNamedObject(&cNamedObjects,
       sPropertyName, &pPrevNamedObjectListElmt);
 
-    if (pNamedObject != NULL)
+    if (pNamedObject != nullptr)
     {
         if (! pNamedObject->IsPropertyName())
             return BenErr_NameConflict;
@@ -125,7 +125,7 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
     else
     {
         pCUtListElmt pPrevObject;
-        if (FindID(&cObjects, cNextAvailObjectID, &pPrevObject) != NULL)
+        if (FindID(&cObjects, cNextAvailObjectID, &pPrevObject) != nullptr)
             return BenErr_DuplicateObjectID;
 
         *ppPropertyName = new CBenPropertyName(this, cNextAvailObjectID,
@@ -146,11 +146,11 @@ pCBenObject
 LtcBenContainer::FindNextObjectWithProperty(pCBenObject pCurrObject,
   BenObjectID PropertyID)
 {
-    while ((pCurrObject = GetNextObject(pCurrObject)) != NULL)
-        if (pCurrObject->UseProperty(PropertyID) != NULL)
+    while ((pCurrObject = GetNextObject(pCurrObject)) != nullptr)
+        if (pCurrObject->UseProperty(PropertyID) != nullptr)
             return pCurrObject;
 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -229,19 +229,19 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
     CBenPropertyName * pPropertyName;
     RegisterPropertyName(sPropertyName, &pPropertyName);        // Get property name object
 
-    if (NULL == pPropertyName)
-        return NULL;                                            // Property not exist
+    if (nullptr == pPropertyName)
+        return nullptr;                                            // Property not exist
 
     // Get current object
-    CBenObject * pObj = NULL;
-    if (pCurrentValueStream != NULL)
+    CBenObject * pObj = nullptr;
+    if (pCurrentValueStream != nullptr)
     {
         pObj = pCurrentValueStream->GetValue()->GetProperty()->GetBenObject();
     }
 
     pObj =FindNextObjectWithProperty(pObj, pPropertyName->GetID()); // Get next object with same property name
-    if (NULL == pObj)
-        return NULL;
+    if (nullptr == pObj)
+        return nullptr;
 
     CBenValue * pValue;
     LtcUtBenValueStream * pValueStream;
@@ -260,7 +260,7 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
 */
 LtcUtBenValueStream * LtcBenContainer::FindValueStreamWithPropertyName(const char * sPropertyName)
 {
-    return FindNextValueStreamWithPropertyName(sPropertyName, NULL);
+    return FindNextValueStreamWithPropertyName(sPropertyName, nullptr);
 }
 /**
 *   <description>
@@ -292,7 +292,7 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
 {
     if (!pObjectName)
     {
-        pStream = NULL;
+        pStream = nullptr;
         return BenErr_NamedObjectError;
     }
     // construct the string of property name
@@ -303,9 +303,9 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     sprintf(sDName, "%s-D", pObjectName);
 
     /* traverse the found properties and construct the stream vectors */
-    SvMemoryStream * pMemStream = NULL;
+    SvMemoryStream * pMemStream = nullptr;
     // get S&D's stream and merge them together
-    SvStream *pD = NULL, *pS = NULL;
+    SvStream *pD = nullptr, *pS = nullptr;
 
     pS = FindValueStreamWithPropertyName(sSName);
     pD = FindValueStreamWithPropertyName(sDName);
@@ -325,12 +325,12 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     // the 'D' stream is NULL or it has invalid length
     if (nLen <= 0)
     {
-        pStream = NULL;
+        pStream = nullptr;
         return BenErr_NamedObjectError;
     }
 
     char * pBuf = new char[nLen];
-    assert(pBuf != NULL);
+    assert(pBuf != nullptr);
     char * pPointer = pBuf;
     if(pD)
     {
@@ -345,7 +345,7 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     }
 
     pMemStream = new SvMemoryStream(pBuf, nLen, StreamMode::READ);
-    assert(pMemStream != NULL);
+    assert(pMemStream != nullptr);
 
     pStream = pMemStream;
     return BenErr_OK;

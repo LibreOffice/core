@@ -106,7 +106,7 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     // not pattern fill?
     if (!this->IsPatternFill())
     {
-        return NULL;
+        return nullptr;
     }
 
     // get pattern array from pattern table
@@ -160,7 +160,7 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     pXFBGImage->SetImageData(pImageBuff, nSize);
 
     delete [] pImageBuff;
-    pImageBuff = NULL;
+    pImageBuff = nullptr;
 
     pXFBGImage->SetRepeate();
 

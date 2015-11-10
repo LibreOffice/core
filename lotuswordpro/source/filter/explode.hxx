@@ -67,7 +67,7 @@ public:
     HuffmanTreeNode * right;
     sal_uInt32 value;
 
-    HuffmanTreeNode(sal_uInt32 value = 0xffffffff, HuffmanTreeNode * left = NULL, HuffmanTreeNode * right = NULL) ;
+    HuffmanTreeNode(sal_uInt32 value = 0xffffffff, HuffmanTreeNode * left = nullptr, HuffmanTreeNode * right = nullptr) ;
     ~HuffmanTreeNode() ;
     HuffmanTreeNode * InsertNode(sal_uInt32 nValue, const sal_Char * pInCode);
     HuffmanTreeNode * QueryNode(const sal_Char *pCode);

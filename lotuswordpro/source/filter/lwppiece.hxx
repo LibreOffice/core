@@ -80,7 +80,7 @@ class LwpVirtualPiece : public LwpDLVList
 public:
     LwpVirtualPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
     {
-        m_pOverride = NULL;
+        m_pOverride = nullptr;
     }
 
     virtual void Read() override

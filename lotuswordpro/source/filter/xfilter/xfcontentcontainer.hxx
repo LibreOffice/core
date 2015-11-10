@@ -132,7 +132,7 @@ private:
 inline rtl::Reference<XFContent> XFContentContainer::GetContent(sal_uInt32 index) const
 {
     if (index > m_aContents.size()-1)
-        return NULL;
+        return nullptr;
     return m_aContents[index];
 }
 #endif

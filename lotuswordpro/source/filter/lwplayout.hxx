@@ -129,7 +129,7 @@ public:
     virtual sal_uInt8 GetRelativeType();
     bool IsRelativeAnchored();
     LwpUseWhen* GetUseWhen();
-    virtual LwpUseWhen* VirtualGetUseWhen(){ return NULL;}
+    virtual LwpUseWhen* VirtualGetUseWhen(){ return nullptr;}
     virtual bool IsUseOnAllPages(){ return false;}
     virtual bool IsUseOnAllEvenPages(){ return false;}
     virtual bool IsUseOnAllOddPages(){ return false;}
@@ -137,9 +137,9 @@ public:
     virtual sal_Int32 GetPageNumber(sal_uInt16 /*nLayoutNumber*/ = 0){ return -1;}
     bool IsMinimumHeight();
     virtual bool IsForWaterMark(){ return false;}
-    virtual LwpPara* GetLastParaOfPreviousStory() { return NULL; }
+    virtual LwpPara* GetLastParaOfPreviousStory() { return nullptr; }
     LwpVirtualLayout* GetParentLayout();
-    virtual LwpVirtualLayout* GetContainerLayout(){ return NULL;}
+    virtual LwpVirtualLayout* GetContainerLayout(){ return nullptr;}
     void RegisterChildStyle();
     bool NoContentReference();
     bool IsStyleLayout();

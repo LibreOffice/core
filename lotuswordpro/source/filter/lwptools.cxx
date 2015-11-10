@@ -251,9 +251,9 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
     int32_t nLength = 0;
     int32_t nLengthNeed;
     UErrorCode status = U_ZERO_ERROR;
-    UChar* pattern = NULL;
+    UChar* pattern = nullptr;
 
-    nLengthNeed = udat_toPattern(reinterpret_cast<void **>(fmt),sal_False,NULL,nLength,&status);
+    nLengthNeed = udat_toPattern(reinterpret_cast<void **>(fmt),sal_False,nullptr,nLength,&status);
     if (status == U_BUFFER_OVERFLOW_ERROR)
     {
         status = U_ZERO_ERROR;
@@ -261,8 +261,8 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
         pattern = static_cast<UChar*>(malloc(sizeof(UChar)*nLength));
         udat_toPattern(reinterpret_cast<void **>(fmt),sal_False,pattern,nLength,&status);
     }
-    if (pattern == NULL)
-        return NULL;
+    if (pattern == nullptr)
+        return nullptr;
     // 3 parse pattern string,per icu date/time format syntax, there are 20 letters reserved
     // as patter letter,each represent a element in date/time and its repeat numbers represent
     // different format: for exampel: M produces '1',MM produces '01', MMM produces 'Jan', MMMM produces 'Januaray'
@@ -597,7 +597,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
                 if ((cSymbol>='A' && cSymbol<='Z') || (cSymbol>='a' && cSymbol<='z') )
                 {
                     delete pDateStyle;
-                    return NULL;
+                    return nullptr;
                 }
                 else//TEXT
                 {
@@ -640,8 +640,8 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
     int32_t nLength = 0;
     int32_t nLengthNeed;
     UErrorCode status = U_ZERO_ERROR;
-    UChar* pattern = NULL;
-    nLengthNeed = udat_toPattern(reinterpret_cast<void **>(fmt),false,NULL,nLength,&status);
+    UChar* pattern = nullptr;
+    nLengthNeed = udat_toPattern(reinterpret_cast<void **>(fmt),false,nullptr,nLength,&status);
     if (status == U_BUFFER_OVERFLOW_ERROR)
     {
         status = U_ZERO_ERROR;
@@ -650,8 +650,8 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
         udat_toPattern(reinterpret_cast<void **>(fmt),false,pattern,nLength,&status);
     }
 
-    if (pattern == NULL)
-        return NULL;
+    if (pattern == nullptr)
+        return nullptr;
     // 3 parse pattern string,per icu date/time format syntax, there are 20 letters reserved
     // as patter letter,each represent a element in date/time and its repeat numbers represent
     // different format: for exampel: M produces '1',MM produces '01', MMM produces 'Jan', MMMM produces 'Januaray'
@@ -820,7 +820,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                 if ((cSymbol>='A' && cSymbol<='Z') || (cSymbol>='a' && cSymbol<='z') )
                 {
                     delete pTimeStyle;
-                    return NULL;
+                    return nullptr;
                 }
                 else//TEXT
                 {

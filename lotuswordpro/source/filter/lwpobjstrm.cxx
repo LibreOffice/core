@@ -65,7 +65,7 @@
  * @descr  ctor() from LwpSvStream
  */
 LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, bool isCompressed, sal_uInt16 size)
-    :m_pContentBuf(NULL), m_nBufSize(size), m_nReadPos(0),
+    :m_pContentBuf(nullptr), m_nBufSize(size), m_nReadPos(0),
     m_pStrm(pStrm), m_bCompressed(isCompressed)
 {
     assert(size<IO_BUFFERSIZE);
@@ -78,7 +78,7 @@ void LwpObjectStream::ReadStream()
 {
     if(m_nBufSize == 0)
     {
-        m_pContentBuf = NULL;
+        m_pContentBuf = nullptr;
     }
     else
     {
@@ -157,7 +157,7 @@ void LwpObjectStream::ReleaseBuffer()
         if(m_pContentBuf)
         {
             delete [] m_pContentBuf;
-            m_pContentBuf = NULL;
+            m_pContentBuf = nullptr;
         }
     }
 }

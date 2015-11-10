@@ -84,7 +84,7 @@
 #include "lwpglobalmgr.hxx"
 
 LwpFribPtr::LwpFribPtr()
-    : m_pFribs(NULL),m_pXFPara(NULL),m_pPara(NULL)
+    : m_pFribs(nullptr),m_pXFPara(nullptr),m_pPara(nullptr)
 {
 }
 
@@ -100,7 +100,7 @@ LwpFribPtr::~LwpFribPtr()
 
 void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
 {
-    LwpFrib* pCurFrib = m_pFribs = NULL;
+    LwpFrib* pCurFrib = m_pFribs = nullptr;
     for(;;)
     {
         // Get the frib type
@@ -431,7 +431,7 @@ LwpFrib* LwpFribPtr::HasFrib(sal_uInt8 nType)
         }
         pFrib = pFrib->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 void LwpFribPtr::GatherAllText()
@@ -614,7 +614,7 @@ bool LwpFribPtr::ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLay
         return true;
 
     LwpFrib* pFrib = m_pFribs;
-    LwpVirtualLayout* pLayout = NULL;
+    LwpVirtualLayout* pLayout = nullptr;
     while(pFrib)
     {
         switch(pFrib->GetType())

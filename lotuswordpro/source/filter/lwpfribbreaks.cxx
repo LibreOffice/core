@@ -70,7 +70,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
 {
 //    XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(pFoundry->GetStyleManager()->GetStyle(styleID));
     XFParaStyle* pBaseStyle =  pPara->GetXFParaStyle();
-    if (pBaseStyle == NULL) return;
+    if (pBaseStyle == nullptr) return;
 //    m_StyleName = pBaseStyle->GetStyleName();
 
     XFParaStyle* pOverStyle = new XFParaStyle;
@@ -82,7 +82,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
     //  ->GetCurrentLayout()->GetNumCols() == 1)
     //New code
     LwpStory* pStory = static_cast<LwpStory*>(pPara->GetStoryID().obj().get());
-    LwpPageLayout* pCurLayout = pStory ? pStory->GetCurrentLayout() : NULL;
+    LwpPageLayout* pCurLayout = pStory ? pStory->GetCurrentLayout() : nullptr;
     if( pCurLayout && (pCurLayout->GetNumCols() == 1) )
 
     {
@@ -103,7 +103,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
 }
 
 LwpFribPageBreak::LwpFribPageBreak( LwpPara* pPara )
-    : LwpFrib(pPara), m_bLastFrib(false), m_pMasterPage(NULL)
+    : LwpFrib(pPara), m_bLastFrib(false), m_pMasterPage(nullptr)
 {
 }
 
@@ -112,7 +112,7 @@ LwpFribPageBreak::~LwpFribPageBreak()
     if(m_pMasterPage)
     {
         delete m_pMasterPage;
-        m_pMasterPage = NULL;
+        m_pMasterPage = nullptr;
     }
 }
 
@@ -124,7 +124,7 @@ void LwpFribPageBreak::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
 void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
 {
     XFParaStyle* pBaseStyle =  pPara->GetXFParaStyle();
-    if (pBaseStyle == NULL) return;
+    if (pBaseStyle == nullptr) return;
 
     LwpPageLayout* pLayout = static_cast<LwpPageLayout*>(m_Layout.obj().get());
     if(pLayout)

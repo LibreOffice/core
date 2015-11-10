@@ -62,7 +62,7 @@
 
 LwpDropcapMgr::LwpDropcapMgr()
 {
-    m_pXFPara = NULL;
+    m_pXFPara = nullptr;
 }
 
 LwpDropcapMgr::~LwpDropcapMgr()

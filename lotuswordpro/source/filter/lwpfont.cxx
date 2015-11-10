@@ -242,12 +242,12 @@ void LwpFontTableEntry::RegisterFontDecl()
 
 LwpFontTable::LwpFontTable()
     : m_nCount(0)
-    , m_pFontEntries(NULL)
+    , m_pFontEntries(nullptr)
 {}
 
 void LwpFontTable::Read(LwpObjectStream *pStrm)
 {
-    m_pFontEntries = NULL;
+    m_pFontEntries = nullptr;
     m_nCount = pStrm->QuickReaduInt16();
     if(m_nCount>0)
     {
@@ -271,7 +271,7 @@ LwpFontTable::~LwpFontTable()
     if(m_pFontEntries)
     {
         delete [] m_pFontEntries;
-        m_pFontEntries = NULL;
+        m_pFontEntries = nullptr;
     }
 }
 
@@ -360,7 +360,7 @@ bool LwpFontNameEntry::IsBackgroundColorOverridden()
 
 LwpFontNameManager::LwpFontNameManager()
     : m_nCount(0)
-    , m_pFontNames(NULL)
+    , m_pFontNames(nullptr)
 {}
 
 LwpFontNameManager::~LwpFontNameManager()
@@ -368,7 +368,7 @@ LwpFontNameManager::~LwpFontNameManager()
     if(m_pFontNames)
     {
         delete [] m_pFontNames;
-        m_pFontNames = NULL;
+        m_pFontNames = nullptr;
     }
 }
 

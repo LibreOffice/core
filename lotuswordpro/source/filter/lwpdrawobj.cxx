@@ -384,7 +384,7 @@ XFFrame* LwpDrawObj::CreateXFDrawObject()
     OUString aStyleName = this->RegisterStyle();
 
     // create XF-Objects
-    XFFrame* pXFObj = NULL;
+    XFFrame* pXFObj = nullptr;
     if (m_pTransData
         && FABS(m_pTransData->fOffsetX - m_pTransData->fLeftMargin) < THRESHOLD
         && FABS(m_pTransData->fOffsetY - m_pTransData->fTopMargin) < THRESHOLD
@@ -479,7 +479,7 @@ XFFrame* LwpDrawLine::CreateStandardDrawObj(const  OUString& rStyleName)
  * @param   pStream   The memory stream which contains the lwp-sdw draw objects
  */
 LwpDrawPolyLine::LwpDrawPolyLine(SvStream * pStream, DrawingOffsetAndScale* pTransData)
-: LwpDrawObj(pStream, pTransData), m_pVector(NULL)
+: LwpDrawObj(pStream, pTransData), m_pVector(nullptr)
 {
 }
 LwpDrawPolyLine::~LwpDrawPolyLine()
@@ -487,7 +487,7 @@ LwpDrawPolyLine::~LwpDrawPolyLine()
     if (m_pVector)
     {
         delete [] m_pVector;
-        m_pVector = NULL;
+        m_pVector = nullptr;
     }
 }
 
@@ -570,7 +570,7 @@ XFFrame* LwpDrawPolyLine::CreateStandardDrawObj(const  OUString& rStyleName)
 LwpDrawPolygon::LwpDrawPolygon(SvStream * pStream, DrawingOffsetAndScale* pTransData)
     : LwpDrawObj(pStream, pTransData)
     , m_nNumPoints(0)
-    , m_pVector(NULL)
+    , m_pVector(nullptr)
 {
 }
 
@@ -579,7 +579,7 @@ LwpDrawPolygon::~LwpDrawPolygon()
     if (m_pVector)
     {
         delete [] m_pVector;
-        m_pVector = NULL;
+        m_pVector = nullptr;
     }
 }
 
@@ -974,7 +974,7 @@ LwpDrawTextBox::~LwpDrawTextBox()
     if (m_aTextRec.pTextString)
     {
         delete [] m_aTextRec.pTextString;
-        m_aTextRec.pTextString = NULL;
+        m_aTextRec.pTextString = nullptr;
     }
 }
 
@@ -1144,17 +1144,17 @@ LwpDrawTextArt::~LwpDrawTextArt()
     if (m_aTextArtRec.aPath[0].pPts)
     {
         delete [] m_aTextArtRec.aPath[0].pPts;
-        m_aTextArtRec.aPath[0].pPts = NULL;
+        m_aTextArtRec.aPath[0].pPts = nullptr;
     }
     if (m_aTextArtRec.aPath[1].pPts)
     {
         delete [] m_aTextArtRec.aPath[1].pPts;
-        m_aTextArtRec.aPath[1].pPts = NULL;
+        m_aTextArtRec.aPath[1].pPts = nullptr;
     }
     if (m_aTextArtRec.pTextString)
     {
         delete [] m_aTextArtRec.pTextString;
-        m_aTextArtRec.pTextString = NULL;
+        m_aTextArtRec.pTextString = nullptr;
     }
 
 }
@@ -1293,7 +1293,7 @@ OUString LwpDrawTextArt::RegisterStyle()
 
 XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
 {
-    XFFrame* pRetObj = NULL;
+    XFFrame* pRetObj = nullptr;
     XFDrawStyle* pStyle = new XFDrawStyle();
 
     pRetObj = new XFDrawPath();
@@ -1350,7 +1350,7 @@ void LwpDrawMetafile::Read()
  * @descr   Constructor of class LwpDrawBitmap
  * @param   pStream   The memory stream which contains the lwp-sdw draw objects
  */
-LwpDrawBitmap::LwpDrawBitmap(SvStream* pStream) : LwpDrawObj(pStream), m_pImageData(NULL)
+LwpDrawBitmap::LwpDrawBitmap(SvStream* pStream) : LwpDrawObj(pStream), m_pImageData(nullptr)
 {
 }
 
@@ -1359,7 +1359,7 @@ LwpDrawBitmap::~LwpDrawBitmap()
     if (m_pImageData)
     {
         delete [] m_pImageData;
-        m_pImageData = NULL;
+        m_pImageData = nullptr;
     }
 }
 

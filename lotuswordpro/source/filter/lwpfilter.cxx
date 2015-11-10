@@ -147,7 +147,7 @@ using namespace OpenStormBento;
  */
  bool GetLwpSvStream(SvStream *pStream, LwpSvStream * & pLwpSvStream)
 {
-    SvStream * pDecompressed = NULL;
+    SvStream * pDecompressed = nullptr;
 
     sal_uInt32 nTag;
     pStream->Seek(0x10);
@@ -157,14 +157,14 @@ using namespace OpenStormBento;
         // small file, needs decompression
         if (!Decompress(pStream, pDecompressed))
         {
-            pLwpSvStream = NULL;
+            pLwpSvStream = nullptr;
             return true;
         }
         pStream->Seek(0);
         pDecompressed->Seek(0);
     }
 
-    pLwpSvStream = NULL;
+    pLwpSvStream = nullptr;
     bool bCompressed = false;
     if (pDecompressed)
     {
@@ -182,7 +182,7 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHa
 {
     try
     {
-        LwpSvStream *pRawLwpSvStream = NULL;
+        LwpSvStream *pRawLwpSvStream = nullptr;
         std::unique_ptr<LwpSvStream> aLwpSvStream;
         std::unique_ptr<LwpSvStream> aCompressedLwpSvStream;
         std::unique_ptr<SvStream> aDecompressed;

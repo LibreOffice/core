@@ -67,7 +67,7 @@
 #include "xftable.hxx"
 
 XFRow::XFRow()
-    : m_pOwnerTable(NULL)
+    : m_pOwnerTable(nullptr)
     , m_nRepeat(0)
     , m_nRow(0)
 {
@@ -101,7 +101,7 @@ sal_Int32   XFRow::GetCellCount() const
 XFCell* XFRow::GetCell(sal_Int32 col) const
 {
     if( m_aCells.find(col) == m_aCells.end() )
-        return NULL;
+        return nullptr;
     else
         return m_aCells.find(col)->second;
 }

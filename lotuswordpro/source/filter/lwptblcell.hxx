@@ -86,7 +86,7 @@ public:
     sal_uInt8 GetColumnID(){return cColumn;}
     LwpObjectID GetValueID(){return cValue;}
 
-    virtual void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=NULL);
+    virtual void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=nullptr);
 protected:
     virtual ~LwpCellList();
 

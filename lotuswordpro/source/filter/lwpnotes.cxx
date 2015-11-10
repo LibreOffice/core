@@ -196,7 +196,7 @@ LwpVirtualLayout* LwpNoteLayout::GetTextLayout()
         return pLayout->FindChildByType(LWP_NOTETEXT_LAYOUT);
     }
 
-    return NULL;
+    return nullptr;
 }
 /**
  * @descr  Get author.

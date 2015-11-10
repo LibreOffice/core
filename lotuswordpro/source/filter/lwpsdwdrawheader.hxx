@@ -285,7 +285,7 @@ struct SdwFMPATH
     SdwPoint* pPts;
     SdwFMPATH()
         : n(0)
-        , pPts(NULL)
+        , pPts(nullptr)
     {
     }
 };

@@ -103,7 +103,7 @@ LwpPropListElement* LwpPropList::FindPropByName(const OUString& name)
             return pElement;
         pElement = pElement->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 void LwpPropList::Read(LwpObjectStream* pObjStrm)

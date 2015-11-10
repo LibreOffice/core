@@ -70,7 +70,7 @@ struct IXFStyleRet
     IXFStyle* m_pStyle;
     bool m_bOrigDeleted;
     IXFStyleRet()
-        : m_pStyle(NULL)
+        : m_pStyle(nullptr)
         , m_bOrigDeleted(false)
     {
     }

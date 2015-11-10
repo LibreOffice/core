@@ -140,7 +140,7 @@ void  LwpTable::Parse(IXFStream* /*pOutputStream*/)
     if(pLayout)
         return dynamic_cast<LwpSuperTableLayout*>(pLayout->GetParent().obj().get());
 
-    return NULL;
+    return nullptr;
 }
 
  /*****************************************************************************/

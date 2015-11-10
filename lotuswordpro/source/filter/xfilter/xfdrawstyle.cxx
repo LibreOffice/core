@@ -68,10 +68,10 @@ XFDrawStyle::XFDrawStyle()
     m_eWrap = enumXFWrapNone;
     m_nWrapLines = 0;   //not limited.
 
-    m_pLineStyle = NULL;
-    m_pAreaStyle = NULL;
+    m_pLineStyle = nullptr;
+    m_pAreaStyle = nullptr;
 
-    m_pFontWorkStyle = NULL;
+    m_pFontWorkStyle = nullptr;
 
     m_fArrowStartSize = 0.3;
     m_fArrowEndSize = 0.3;
@@ -85,7 +85,7 @@ XFDrawStyle::~XFDrawStyle()
     if (m_pFontWorkStyle)
     {
         delete m_pFontWorkStyle;
-        m_pFontWorkStyle = NULL;
+        m_pFontWorkStyle = nullptr;
     }
 }
 

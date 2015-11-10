@@ -62,7 +62,7 @@
 
 LwpDLList::LwpDLList()
 {
-    m_pNext = m_pPrevious = NULL;
+    m_pNext = m_pPrevious = nullptr;
 }
 
 void

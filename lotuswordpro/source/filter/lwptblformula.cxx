@@ -85,7 +85,7 @@ LwpFormulaInfo::~LwpFormulaInfo()
         {
             LwpFormulaArg* pArg=m_aStack.back();
             m_aStack.pop_back();
-            delete pArg; pArg=NULL;
+            delete pArg; pArg=nullptr;
         }
     }catch (...)
     {
@@ -438,7 +438,7 @@ LwpFormulaFunc::~LwpFormulaFunc()
         {
             LwpFormulaArg* pArg = m_aArgs.back();
             m_aArgs.pop_back();
-            delete pArg;pArg=NULL;
+            delete pArg;pArg=nullptr;
         }
     }catch (...) {
         assert(false);

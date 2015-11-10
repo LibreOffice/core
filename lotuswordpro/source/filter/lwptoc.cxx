@@ -78,7 +78,7 @@
 LwpTocSuperLayout::LwpTocSuperLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpSuperTableLayout(objHdr, pStrm)
     , m_nFrom(0)
-    , m_pCont(NULL)
+    , m_pCont(nullptr)
 {
 }
 
@@ -229,7 +229,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
 
             // one level may have several corresponding Styles
             pLevel = GetNextSearchLevelPtr(i, pLevel);  // find next LwpTocLevelData which is same index
-        }while (pLevel != NULL);
+        }while (pLevel != nullptr);
     }
 
     m_pCont = pCont;
@@ -252,7 +252,7 @@ void  LwpTocSuperLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nSt
 {
     if(m_pFrame)
     {
-        XFFrame* pXFFrame = NULL;
+        XFFrame* pXFFrame = nullptr;
         if(nEnd < nStart)
         {
             pXFFrame = new XFFrame();
@@ -393,7 +393,7 @@ LwpTocLevelData * LwpTocSuperLayout::GetSearchLevelPtr(sal_uInt16 index)
         pObj = dynamic_cast<LwpTocLevelData *>(rID.obj().get());
     }
 
-    return NULL;
+    return nullptr;
 }
 /**
  * @short   Get next TOCLEVELDATA obj from current position
@@ -417,7 +417,7 @@ LwpTocLevelData * LwpTocSuperLayout::GetNextSearchLevelPtr(sal_uInt16 index, Lwp
         pObj = dynamic_cast<LwpTocLevelData *>(rID.obj().get());
     }
 
-    return NULL;
+    return nullptr;
 }
 
 LwpTocLevelData::LwpTocLevelData(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)

@@ -143,7 +143,7 @@ rtl::Reference<XFContent> XFContentContainer::GetLastContent()
         return m_aContents[index];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void XFContentContainer::RemoveLastContent()

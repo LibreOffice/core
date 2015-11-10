@@ -91,7 +91,7 @@ LwpChangeMgr::LwpChangeMgr()
 }
 LwpChangeMgr::~LwpChangeMgr()
 {
-    m_pFribMap=NULL;
+    m_pFribMap=nullptr;
     m_DocFribMap.clear();
     m_HeadFootFribMap.clear();
     m_ChangeList.clear();
@@ -150,7 +150,7 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
     for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();++iter1)
     {
         delete *iter1;
-        *iter1=NULL;
+        *iter1=nullptr;
     }
     m_ChangeList.clear();
 }

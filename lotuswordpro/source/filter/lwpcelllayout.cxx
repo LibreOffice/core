@@ -94,7 +94,7 @@ LwpTableLayout * LwpCellLayout::GetTableLayout()
     LwpRowLayout * pRow = dynamic_cast<LwpRowLayout *>(GetParent().obj().get());
     if(!pRow)
     {
-        return NULL;
+        return nullptr;
     }
     LwpTableLayout * pTableLayout = pRow->GetParentTableLayout();
     return pTableLayout;
@@ -109,7 +109,7 @@ LwpTable * LwpCellLayout::GetTable()
     LwpTableLayout * pTableLayout = GetTableLayout();
     if(!pTableLayout)
     {
-        return NULL;
+        return nullptr;
     }
     LwpTable *pTable = pTableLayout->GetTable();
     return pTable;
@@ -134,7 +134,7 @@ double LwpCellLayout::GetActualWidth()
     //Get table layout
     LwpTableLayout * pTableLayout = GetTableLayout();
 
-    if (pTableLayout == NULL)
+    if (pTableLayout == nullptr)
     {
         return GetGeometryWidth();
     }
@@ -317,7 +317,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
     if (!pTable)
     {
         assert(false);
-        return NULL;
+        return nullptr;
     }
     XFCell * pXFCell = new XFCell();
     OUString aStyleName = m_StyleName;
@@ -351,7 +351,7 @@ LwpPara* LwpCellLayout::GetLastParaOfPreviousStory()
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -366,7 +366,7 @@ LwpObjectID * LwpCellLayout::GetPreviousCellStory()
     if (!pTable)
     {
         assert(false);
-        return NULL;
+        return nullptr;
     }
     sal_uInt16 nRow = crowid;
     sal_uInt16 nCol = ccolid;
@@ -376,7 +376,7 @@ LwpObjectID * LwpCellLayout::GetPreviousCellStory()
     {
         if (nRow == 0)
         {
-            return NULL;
+            return nullptr;
         }
         nRow -=1;
     }
@@ -387,7 +387,7 @@ LwpObjectID * LwpCellLayout::GetPreviousCellStory()
         {
             if (nRow == 0)
             {
-                return NULL;
+                return nullptr;
             }
             else
             {
@@ -406,7 +406,7 @@ LwpObjectID * LwpCellLayout::GetPreviousCellStory()
     if (!pTableLayout)
     {
         assert(false);
-        return NULL;
+        return nullptr;
     }
     return pTableLayout->SearchCellStoryMap(nRow, nCol);
 }
@@ -663,8 +663,8 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
         {
             // judge whole table
             LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
-            LwpTableLayout * pTableLayout = pTable ? static_cast<LwpTableLayout *>(pTable->GetTableLayout()) : NULL;
-            LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : NULL;
+            LwpTableLayout * pTableLayout = pTable ? static_cast<LwpTableLayout *>(pTable->GetTableLayout()) : nullptr;
+            LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : nullptr;
             if (pSuper && pSuper->IsProtected())
             {
                 bProtected = true;
@@ -875,14 +875,14 @@ void LwpHiddenCellLayout::Read()
 XFCell* LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol)
 {
     if (!cconnectedlayout.obj().is())
-        return NULL;
+        return nullptr;
     LwpConnectedCellLayout* pConnCell = dynamic_cast<LwpConnectedCellLayout* >(cconnectedlayout.obj().get());
 
     if (!pConnCell || nRow < (pConnCell->GetNumrows()+pConnCell->GetRowID()))
-        return NULL;
+        return nullptr;
     // if the hidden cell should be displayed for limit of SODC
     // use the default cell layout
-    XFCell* pXFCell = NULL;
+    XFCell* pXFCell = nullptr;
     LwpTable *pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
     if (pTable)
     {

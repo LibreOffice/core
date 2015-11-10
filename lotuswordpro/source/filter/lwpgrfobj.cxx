@@ -108,7 +108,7 @@ void LwpGraphicObject::Read()
         m_sDataFormat[strsize] = '\0';
     }
     sal_uInt32 nServerContextSize = m_pObjStrm->QuickReaduInt32();
-    unsigned char *pServerContext = NULL;
+    unsigned char *pServerContext = nullptr;
     if (nServerContextSize > 0)
     {
         pServerContext = new unsigned char[nServerContextSize];
@@ -141,7 +141,7 @@ void LwpGraphicObject::Read()
     }
     m_nCachedBaseLine = m_pObjStrm->QuickReadInt32();
     m_bIsLinked = m_pObjStrm->QuickReadInt16();
-    unsigned char * pFilterContext = NULL;
+    unsigned char * pFilterContext = nullptr;
 
     if (m_bIsLinked)
     {
@@ -181,10 +181,10 @@ void LwpGraphicObject::Read()
         m_WatermarkName = m_pObjStrm->QuickReadStringPtr();
     }
 
-    if (pServerContext != NULL)
+    if (pServerContext != nullptr)
         delete[] pServerContext;
 
-    if (pFilterContext != NULL)
+    if (pFilterContext != nullptr)
         delete[] pFilterContext;
 
 }
@@ -210,7 +210,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
         }
         else
         {
-            sal_uInt8* pGrafData = NULL;
+            sal_uInt8* pGrafData = nullptr;
             sal_uInt32 nDataLen = this->GetRawGrafData(pGrafData);
 
             if (pGrafData)
@@ -219,7 +219,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 
                 // delete used image data
                 delete [] pGrafData;
-                pGrafData = NULL;
+                pGrafData = nullptr;
             }
         }
 
@@ -273,7 +273,7 @@ void LwpGraphicObject::RegisterStyle()
 
     if (m_sServerContextFormat[1]=='l'&&m_sServerContextFormat[2]=='c'&&m_sServerContextFormat[3]=='h')
     {
-        LwpVirtualLayout* pMyLayout = GetLayout(NULL);
+        LwpVirtualLayout* pMyLayout = GetLayout(nullptr);
         if (pMyLayout && pMyLayout->IsFrame())
         {
             XFFrameStyle* pXFFrameStyle = new XFFrameStyle();
@@ -299,7 +299,7 @@ void LwpGraphicObject::CreateDrawObjects()
     if (ulRet != OpenStormBento::BenErr_OK)
         return;
 
-    SvStream* pDrawObjStream = NULL;
+    SvStream* pDrawObjStream = nullptr;
 
     // get graphic object's bento objet name
     LwpObjectID& rMyID = this->GetObjectID();
@@ -314,7 +314,7 @@ void LwpGraphicObject::CreateDrawObjects()
         fileLoader.CreateDrawObjects(&m_vXFDrawObjects);
 
         delete pDrawObjStream;
-        pDrawObjStream = NULL;
+        pDrawObjStream = nullptr;
     }
 }
 
@@ -344,14 +344,14 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
 
     std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
     {
-        OpenStormBento::LtcBenContainer* pTmp(0);
+        OpenStormBento::LtcBenContainer* pTmp(nullptr);
         sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pTmp);
         pBentoContainer.reset(pTmp);
         if (ulRet != OpenStormBento::BenErr_OK)
             return 0;
     }
 
-    SvStream* pGrafStream = NULL;
+    SvStream* pGrafStream = nullptr;
 
     // get graphic object's bento objet name
     LwpObjectID& rMyID = this->GetObjectID();
@@ -370,7 +370,7 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
         pMemGrafStream->Read(pGrafData, nDataLen);
 
         delete pMemGrafStream;
-        pMemGrafStream = NULL;
+        pMemGrafStream = nullptr;
 
         return nDataLen;
     }
@@ -394,7 +394,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     if (ulRet != OpenStormBento::BenErr_OK)
         return 0;
 
-    SvStream* pGrafStream = NULL;
+    SvStream* pGrafStream = nullptr;
 
     // get graphic object's bento objet name
     LwpObjectID& rMyID = this->GetObjectID();
@@ -421,7 +421,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
         pMemGrafStream->Read(pGrafData, nDataLen);
 
         delete pMemGrafStream;
-        pMemGrafStream = NULL;
+        pMemGrafStream = nullptr;
 
         return nDataLen;
     }
@@ -665,7 +665,7 @@ void LwpGraphicObject::CreateGrafObject()
  */
 void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
 {
-    sal_uInt8* pGrafData = NULL;
+    sal_uInt8* pGrafData = nullptr;
     sal_uInt32 nDataLen = this->GetGrafData(pGrafData);
     if(pGrafData)
     {
@@ -706,7 +706,7 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
         pCont->Add(pXFPara);
 
         delete [] pGrafData;
-        pGrafData = NULL;
+        pGrafData = nullptr;
     }
 
 }

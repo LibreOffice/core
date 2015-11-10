@@ -67,11 +67,11 @@
 LwpStory::LwpStory(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
     , m_bPMModified(false)
-    , m_pCurrentLayout(NULL)
-    , m_pTabLayout(NULL)
+    , m_pCurrentLayout(nullptr)
+    , m_pTabLayout(nullptr)
     , m_bDropcap(false)
     , m_pHyperlinkMgr(new LwpHyperlinkMgr)
-    , m_pXFContainer(NULL)
+    , m_pXFContainer(nullptr)
 {
 }
 
@@ -145,7 +145,7 @@ void LwpStory::Parse(IXFStream* pOutputStream)
     XFConvert(m_pXFContainer);
     m_pXFContainer->ToXml(pOutputStream);
     delete m_pXFContainer;
-    m_pXFContainer = NULL;
+    m_pXFContainer = nullptr;
 
     //It seems that, currently, we do not need to process the child story
     /*LwpObject* pChildStory = GetFirstStory()->obj();
@@ -206,7 +206,7 @@ LwpPageLayout* LwpStory::GetNextPageLayout()
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 /**************************************************************************
  * @descr:   Sort the pagelayout according to their position
@@ -215,7 +215,7 @@ void LwpStory::SortPageLayout()
 {
     //Get all the pagelayout and store in list
     std::vector<LwpPageLayout*>  aLayoutList;
-    LwpVirtualLayout* pLayout = GetLayout(NULL);
+    LwpVirtualLayout* pLayout = GetLayout(nullptr);
     while(pLayout)
     {
         if(pLayout->IsPage())
@@ -315,7 +315,7 @@ bool LwpStory::IsNeedSection()
 **************************************************************************/
 void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
 {
-    LwpVirtualLayout* pLayout = GetLayout(NULL);
+    LwpVirtualLayout* pLayout = GetLayout(nullptr);
     while(pLayout)
     {
         LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
@@ -343,7 +343,7 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
 **************************************************************************/
 void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
 {
-    LwpVirtualLayout* pLayout = GetLayout(NULL);
+    LwpVirtualLayout* pLayout = GetLayout(nullptr);
     while(pLayout)
     {
         LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
@@ -366,7 +366,7 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
 **************************************************************************/
 void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
 {
-    LwpVirtualLayout* pLayout = GetLayout(NULL);
+    LwpVirtualLayout* pLayout = GetLayout(nullptr);
     while(pLayout)
     {
         LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
@@ -386,7 +386,7 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
 **************************************************************************/
 void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
 {
-    LwpVirtualLayout* pLayout = GetLayout(NULL);
+    LwpVirtualLayout* pLayout = GetLayout(nullptr);
     while(pLayout)
     {
         LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
@@ -418,18 +418,18 @@ XFContentContainer* LwpStory::GetXFContent()
     if(m_pXFContainer)
         return m_pXFContainer;
     else
-        return NULL;
+        return nullptr;
 }
 
 LwpPara* LwpStory::GetLastParaOfPreviousStory()
 {
-    LwpVirtualLayout* pVLayout = this->GetLayout(NULL);
+    LwpVirtualLayout* pVLayout = this->GetLayout(nullptr);
     if (pVLayout)
     {
         return pVLayout->GetLastParaOfPreviousStory();
     }
 
-    return NULL;
+    return nullptr;
 }
 /**************************************************************************
  * @descr:  get text from story
@@ -455,7 +455,7 @@ OUString LwpStory::GetContentText(bool bAllText)
         if(pObj.is())
         {
             LwpPara* pPara = dynamic_cast<LwpPara*>(pObj.get());
-            if (!pPara || pPara->GetNext().obj() != NULL)
+            if (!pPara || pPara->GetNext().obj() != nullptr)
                 return OUString("");
             pPara->SetFoundry(m_pFoundry);
             return pPara->GetContentText();
@@ -475,7 +475,7 @@ OUString LwpStory::RegisterFirstFribStyle()
     pFirstFrib->RegisterStyle(m_pFoundry);
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     XFTextStyle* pBaseStyle = pXFStyleManager->FindTextStyle(pFirstFrib->GetStyleName());
-    if (pBaseStyle == NULL)
+    if (pBaseStyle == nullptr)
         return OUString("");
     XFTextStyle* pStyle = new XFTextStyle;
     *pStyle = *pBaseStyle;

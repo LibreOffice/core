@@ -142,7 +142,7 @@ void LwpCHBlkMarker::Read()
 
 OUString LwpCHBlkMarker::GetPromptText()
 {
-    LwpStory* pStory = NULL;
+    LwpStory* pStory = nullptr;
     if (m_objPromptStory.obj().is())
         pStory = dynamic_cast<LwpStory*>(m_objPromptStory.obj().get());
     if (pStory)
@@ -357,7 +357,7 @@ LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     , m_nFieldType(0)
     , m_bHasStyle(false)
     , m_bHasStart(false)
-    , m_pFrib(NULL)
+    , m_pFrib(nullptr)
     , m_bRevisionFlag(false)
 {
 }

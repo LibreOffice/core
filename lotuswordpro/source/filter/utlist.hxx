@@ -69,14 +69,14 @@ class CUtListElmt
 {
 public: // Methods
     CUtListElmt()
-        : cpNext(NULL)
-        , cpPrev(NULL)
+        : cpNext(nullptr)
+        , cpPrev(nullptr)
     {}
     explicit CUtListElmt(pCUtListElmt pPrev) { InsertAfter(pPrev); }
     explicit CUtListElmt(pCUtList pList);
     virtual ~CUtListElmt();
-    bool OnList() { return cpNext != NULL; }
-    void MakeNotOnList() { cpNext = NULL; } // Same as Remove but doesn't
+    bool OnList() { return cpNext != nullptr; }
+    void MakeNotOnList() { cpNext = nullptr; } // Same as Remove but doesn't
                                             // patch up list
     pCUtListElmt GetNext() const { return cpNext; }
     void SetNext(pCUtListElmt pNext) { cpNext = pNext; }

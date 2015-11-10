@@ -130,9 +130,9 @@ struct ParaNumbering
 
     void clear()
     {
-        pPrefix = NULL;
-        pParaNumber = NULL;
-        pSuffix = NULL;
+        pPrefix = nullptr;
+        pParaNumber = nullptr;
+        pSuffix = nullptr;
         nPrefixLevel = 0;
         nNumLevel = 0;
         nSuffixLevel = 0;
@@ -348,7 +348,7 @@ inline LwpStory* LwpPara::GetStory()
 {
     if (m_Story.obj().is())
         return dynamic_cast<LwpStory*>(m_Story.obj().get());
-    return NULL;
+    return nullptr;
 }
 inline void LwpPara::SetParaDropcap(bool bFlag)
 {

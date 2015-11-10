@@ -128,7 +128,7 @@ LwpVirtualLayout* LwpContent::GetLayout(LwpVirtualLayout* pStartLayout)
 
 bool LwpContent::HasNonEmbeddedLayouts()
 {
-    LwpVirtualLayout* pLayout = NULL;
+    LwpVirtualLayout* pLayout = nullptr;
     while( (pLayout = GetLayout(pLayout)) )
     {
         if(!pLayout->NoContentReference())
@@ -139,7 +139,7 @@ bool LwpContent::HasNonEmbeddedLayouts()
 
 bool LwpContent::IsStyleContent()
 {
-    LwpVirtualLayout* pLayout = NULL;
+    LwpVirtualLayout* pLayout = nullptr;
     while( (pLayout = GetLayout(pLayout)) )
     {
         if(pLayout->IsStyleLayout())

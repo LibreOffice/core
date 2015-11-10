@@ -61,11 +61,11 @@
 //Added for SS migration
 #include <rtl/textenc.h>
 
-LwpCharSetMgr* LwpCharSetMgr::Instance = NULL;
+LwpCharSetMgr* LwpCharSetMgr::Instance = nullptr;
 
 LwpCharSetMgr* LwpCharSetMgr::GetInstance()
 {
-   if (Instance == NULL)
+   if (Instance == nullptr)
        Instance = new LwpCharSetMgr;
    return Instance;
 }

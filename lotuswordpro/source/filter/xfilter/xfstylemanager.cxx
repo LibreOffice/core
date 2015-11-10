@@ -69,7 +69,7 @@ XFStyleManager::XFStyleManager() : s_aStdArrowStyles( "arrow" ), s_aTextStyles( 
     s_aParaStyles( "P" ),s_aListStyles( "L" ),s_aSectionStyles( "Sect" ),
     s_aPageMasters( "PM" ),s_aMasterpages( "MP" ),s_aDateStyles( "N" ),
     s_aGraphicsStyles( "fr" ),s_aTableStyles( "table" ),s_aTableCellStyles( "cell" ),
-    s_aTableRowStyles( "row" ),s_aTableColStyles( "col" ),s_pOutlineStyle(NULL)
+    s_aTableRowStyles( "row" ),s_aTableColStyles( "col" ),s_pOutlineStyle(nullptr)
 {
 }
 
@@ -83,7 +83,7 @@ void    XFStyleManager::Reset()
     if( s_pOutlineStyle )
     {
         delete s_pOutlineStyle;
-        s_pOutlineStyle = NULL;
+        s_pOutlineStyle = nullptr;
     }
 
     s_aStdTextStyles.Reset();
@@ -276,7 +276,7 @@ IXFStyle*   XFStyleManager::FindStyle(const OUString& name)
     if( pStyle )
         return pStyle;
 
-    return NULL;
+    return nullptr;
 }
 
 XFParaStyle*    XFStyleManager::FindParaStyle(const OUString& name)

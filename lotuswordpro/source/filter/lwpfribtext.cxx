@@ -140,7 +140,7 @@ LwpFribDocVar::~LwpFribDocVar()
     if (m_pName)
     {
         delete m_pName;
-        m_pName = NULL;
+        m_pName = nullptr;
     }
 }
 /**
@@ -213,7 +213,7 @@ void LwpFribDocVar::RegisterTotalTimeStyle()
  */
 void LwpFribDocVar::XFConvert(XFContentContainer* pXFPara)
 {
-    XFContent* pContent=NULL;
+    XFContent* pContent=nullptr;
     switch(m_nType)
     {
     case FILENAME:

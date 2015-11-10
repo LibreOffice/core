@@ -64,7 +64,7 @@ XFRowStyle::XFRowStyle():m_fHeight(0)
 {
     m_fHeight = 0;
     m_fMinHeight = 0;
-    m_pBGImage = NULL;
+    m_pBGImage = nullptr;
 }
 
 enumXFStyle XFRowStyle::GetStyleFamily()
@@ -113,7 +113,7 @@ XFRowStyle& XFRowStyle::operator=(XFRowStyle const &other)
         if( other.m_pBGImage )
             m_pBGImage = new XFBGImage(*other.m_pBGImage);
         else
-            m_pBGImage = NULL;
+            m_pBGImage = nullptr;
     }
     return *this;
 }

@@ -147,7 +147,7 @@ LwpMiddleLayout* LwpStory::GetTabLayout()
 {
     if(m_pTabLayout)
         return m_pTabLayout;
-    return static_cast<LwpMiddleLayout*>(GetLayout(NULL));
+    return static_cast<LwpMiddleLayout*>(GetLayout(nullptr));
 }
 void LwpStory::SetPMModified(bool bPMModified)
 {

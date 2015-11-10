@@ -68,7 +68,7 @@
 Lwp9Reader::Lwp9Reader (LwpSvStream* pInputStream, IXFStream* pStream)
     : m_pDocStream(pInputStream)
     , m_pStream(pStream)
-    , m_pObjMgr(NULL)
+    , m_pObjMgr(nullptr)
     , m_LwpFileHdr()
 {}
 
@@ -143,7 +143,7 @@ void Lwp9Reader::ParseDocument()
 
     //Parse Doc Data
     LwpDocData *pDocData = dynamic_cast<LwpDocData*>(doc->GetDocData().obj().get());
-    if (pDocData!=NULL)
+    if (pDocData!=nullptr)
         pDocData->Parse(m_pStream);
 
     //Register Styles

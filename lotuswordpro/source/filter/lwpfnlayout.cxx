@@ -234,7 +234,7 @@ void LwpEnSuperTableLayout::RegisterStyle()
 {
     // if this layout is style of real table entry
     LwpVirtualLayout* pTableLayout = GetMainTableLayout();
-    if (pTableLayout != NULL)
+    if (pTableLayout != nullptr)
     {
         pTableLayout->SetFoundry(m_pFoundry);
         pTableLayout->RegisterStyle();
@@ -270,7 +270,7 @@ void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
         rID = pLayout->GetPrevious();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 LwpFnSuperTableLayout::LwpFnSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
@@ -326,7 +326,7 @@ LwpVirtualLayout* LwpFnSuperTableLayout::GetMainTableLayout()
         rID = pLayout->GetPrevious();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 LwpContFromLayout::LwpContFromLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
