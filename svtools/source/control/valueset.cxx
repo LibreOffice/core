@@ -308,7 +308,9 @@ void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* 
                 Size  aRectSize = aRect.GetSize();
                 Point aPos(aRect.Left(), aRect.Top());
                 aPos.X() += (aRectSize.Width() - aImageSize.Width()) / 2;
-                aPos.Y() += (aRectSize.Height() - aImageSize.Height()) / 2;
+
+                if (pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
+                    aPos.Y() += (aRectSize.Height() - aImageSize.Height()) / 2;
 
                 DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
                 if (!IsEnabled())
@@ -323,6 +325,26 @@ void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* 
                 }
                 else
                     maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
+
+                if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
+                {
+                    maVirDev->SetFont(rRenderContext.GetFont());
+                    maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
+                    maVirDev->SetTextFillColor();
+
+                    long nTxtWidth = maVirDev->GetTextWidth(pItem->maText);
+
+                    if (nTxtWidth > aRect.GetWidth())
+                        maVirDev->SetClipRegion(vcl::Region(aRect));
+
+                    maVirDev->DrawText(Point(aRect.Left() +
+                                             (aRect.GetWidth() - nTxtWidth) / 2,
+                                             aRect.Bottom() - maVirDev->GetTextHeight()),
+                                       pItem->maText);
+
+                    if (nTxtWidth > aRect.GetWidth())
+                        maVirDev->SetClipRegion();
+                }
             }
         }
 
@@ -1584,11 +1606,12 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos 
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                           const OUString& rText, size_t nPos )
+                           const OUString& rText, size_t nPos,
+                           bool bShowLegend )
 {
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_IMAGE;
+    pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
     ImplInsertItem( pItem, nPos );
@@ -1798,6 +1821,27 @@ void ValueSet::SetItemHeight( long nNewItemHeight )
     if ( mnUserItemHeight != nNewItemHeight )
     {
         mnUserItemHeight = nNewItemHeight;
+        mbFormat = true;
+        queue_resize();
+        if ( IsReallyVisible() && IsUpdateMode() )
+            Invalidate();
+    }
+}
+
+/**
+ * An inelegant method; sets the item width & height such that
+ * all of the included items and their labels fit; if we can
+ * calculate that.
+ */
+void ValueSet::RecalculateItemSizes()
+{
+    Size aLargestItem = GetLargestItemSize();
+
+    if ( mnUserItemWidth != aLargestItem.Width() ||
+         mnUserItemHeight != aLargestItem.Height() )
+    {
+        mnUserItemWidth = aLargestItem.Width();
+        mnUserItemHeight = aLargestItem.Height();
         mbFormat = true;
         queue_resize();
         if ( IsReallyVisible() && IsUpdateMode() )
@@ -2286,9 +2330,9 @@ void ValueSet::SetHighlightHdl( const Link<ValueSet*,void>& rLink )
     maHighlightHdl = rLink;
 }
 
-Size ValueSet::GetOptimalSize() const
+Size ValueSet::GetLargestItemSize()
 {
-    Size aLargestItemSize;
+    Size aLargestItem;
 
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
@@ -2296,18 +2340,33 @@ Size ValueSet::GetOptimalSize() const
         if (!pItem->mbVisible)
             continue;
 
-        if (pItem->meType != VALUESETITEM_IMAGE)
+        if (pItem->meType != VALUESETITEM_IMAGE &&
+            pItem->meType != VALUESETITEM_IMAGE_AND_TEXT)
         {
-            //handle determining an optimal size for this case
+            // handle determining an optimal size for this case
             continue;
         }
 
-        Size aImageSize = pItem->maImage.GetSizePixel();
-        aLargestItemSize.Width() = std::max(aLargestItemSize.Width(), aImageSize.Width());
-        aLargestItemSize.Height() = std::max(aLargestItemSize.Height(), aImageSize.Height());
+        Size aSize = pItem->maImage.GetSizePixel();
+        if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
+        {
+            aSize.Height() += 3 * NAME_LINE_HEIGHT +
+                maVirDev->GetTextHeight();
+            aSize.Width() = std::max(aSize.Width(),
+                                     maVirDev->GetTextWidth(pItem->maText) + NAME_OFFSET);
+        }
+
+        aLargestItem.Width() = std::max(aLargestItem.Width(), aSize.Width());
+        aLargestItem.Height() = std::max(aLargestItem.Height(), aSize.Height());
     }
 
-    return CalcWindowSizePixel(aLargestItemSize);
+    return aLargestItem;
+}
+
+Size ValueSet::GetOptimalSize() const
+{
+    return CalcWindowSizePixel(
+        const_cast<ValueSet *>(this)->GetLargestItemSize());
 }
 
 void ValueSet::SetEdgeBlending(bool bNew)
