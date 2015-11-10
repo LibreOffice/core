@@ -167,6 +167,7 @@ public:
     void testTdf88986();
     void testTdf87922();
     void testTdf77014();
+    void testTdf92648();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -243,6 +244,7 @@ public:
     CPPUNIT_TEST(testTdf88986);
     CPPUNIT_TEST(testTdf87922);
     CPPUNIT_TEST(testTdf77014);
+    CPPUNIT_TEST(testTdf92648);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2741,6 +2743,21 @@ void SwUiWriterTest::testTdf77014()
 
     CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[5]/Text[5]", "nType"));
     CPPUNIT_ASSERT_EQUAL(OUString("1"),       parseDump("/root/page/body/txt[5]/Text[5]", "nLength"));
+}
+
+void SwUiWriterTest::testTdf92648()
+{
+    SwDoc* pDoc = createDoc("tdf92648.docx");
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+    // Make sure we have ten draw shapes.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), SwTextBoxHelper::getCount(pPage, aTextBoxes));
+    // and the text boxes haven't got zero height
+    for (std::set<const SwFrameFormat*>::iterator it=aTextBoxes.begin(); it!=aTextBoxes.end(); ++it)
+    {
+        SwFormatFrmSize aSize((*it)->GetFrmSize());
+        CPPUNIT_ASSERT(aSize.GetHeight() != 0);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
