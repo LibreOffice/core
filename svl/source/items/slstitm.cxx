@@ -46,14 +46,14 @@ SfxImpStringList::~SfxImpStringList()
 }
 
 SfxStringListItem::SfxStringListItem() :
-    pImp(NULL)
+    pImp(nullptr)
 {
 }
 
 
 SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUString>* pList ) :
     SfxPoolItem( which ),
-    pImp(NULL)
+    pImp(nullptr)
 {
     // FIXME: Putting an empty list does not work
     // Therefore the query after the count is commented out
@@ -67,7 +67,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUStri
 
 SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
     SfxPoolItem( which ),
-    pImp(NULL)
+    pImp(nullptr)
 {
     sal_Int32 nEntryCount;
     rStream.ReadInt32( nEntryCount );

@@ -41,7 +41,7 @@ using namespace ::utl;
 
 
 SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const css::uno::Reference< css::uno::XComponentContext >& _rxORB)
-    :m_pOwnFormatter(NULL)
+    :m_pOwnFormatter(nullptr)
     ,m_xORB(_rxORB)
 {
 }
@@ -51,7 +51,7 @@ SvNumberFormatsSupplierServiceObject::~SvNumberFormatsSupplierServiceObject()
     if (m_pOwnFormatter)
     {
         delete m_pOwnFormatter;
-        m_pOwnFormatter = NULL;
+        m_pOwnFormatter = nullptr;
     }
 }
 
@@ -72,14 +72,14 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 {
     ::osl::MutexGuard aGuard( getSharedMutex() );
 
-    DBG_ASSERT(m_pOwnFormatter == NULL,
+    DBG_ASSERT(m_pOwnFormatter == nullptr,
         "SvNumberFormatsSupplierServiceObject::initialize : already initialized !");
         // maybe you already called a method which needed the formatter
         // you should use XMultiServiceFactory::createInstanceWithArguments to avoid that
     if (m_pOwnFormatter)
     {   // !!! this is only a emergency handling, normally this should not occur !!!
         delete m_pOwnFormatter;
-        m_pOwnFormatter = NULL;
+        m_pOwnFormatter = nullptr;
         SetNumberFormatter(m_pOwnFormatter);
     }
 

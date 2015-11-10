@@ -78,8 +78,8 @@ struct FSStorage_Impl
     : m_aURL( aContent.getURL() )
     , m_pContent( new ::ucbhelper::Content( aContent ) )
     , m_nMode( nMode )
-    , m_pListenersContainer( NULL )
-    , m_pTypeCollection( NULL )
+    , m_pListenersContainer( nullptr )
+    , m_pTypeCollection( nullptr )
     , m_xContext( xContext )
     {
         OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
@@ -286,11 +286,11 @@ void SAL_CALL FSStorage::release() throw()
 uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
         throw( uno::RuntimeException, std::exception )
 {
-    if ( m_pImpl->m_pTypeCollection == NULL )
+    if ( m_pImpl->m_pTypeCollection == nullptr )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( m_pImpl->m_pTypeCollection == NULL )
+        if ( m_pImpl->m_pTypeCollection == nullptr )
         {
             m_pImpl->m_pTypeCollection = new ::cppu::OTypeCollection
                                 (   cppu::UnoType<lang::XTypeProvider>::get()
@@ -1155,7 +1155,7 @@ void SAL_CALL FSStorage::dispose()
     }
 
     delete m_pImpl;
-    m_pImpl = NULL;
+    m_pImpl = nullptr;
 }
 
 void SAL_CALL FSStorage::addEventListener(

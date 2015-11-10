@@ -390,7 +390,7 @@ void StorageItem::ImplCommit()
 
 
 PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xServiceFactory ):
-    m_pStorageFile( NULL )
+    m_pStorageFile( nullptr )
 {
     // m_pStorageFile->Notify() can be called
     ::osl::MutexGuard aGuard( mMutex );
@@ -411,7 +411,7 @@ PasswordContainer::~PasswordContainer()
     if( m_pStorageFile )
     {
         delete m_pStorageFile;
-        m_pStorageFile = NULL;
+        m_pStorageFile = nullptr;
     }
 
     if( mComponent.is() )
@@ -429,7 +429,7 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& ) throw(RuntimeEx
     if( m_pStorageFile )
     {
         delete m_pStorageFile;
-        m_pStorageFile = NULL;
+        m_pStorageFile = nullptr;
     }
 
     if( mComponent.is() )
@@ -457,7 +457,7 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
 
             rtlCipherError result = rtl_cipher_init (
                     aDecoder, rtl_Cipher_DirectionDecode,
-                    code, RTL_DIGEST_LENGTH_MD5, NULL, 0 );
+                    code, RTL_DIGEST_LENGTH_MD5, nullptr, 0 );
 
             if( result == rtl_Cipher_E_None )
             {
@@ -508,7 +508,7 @@ OUString PasswordContainer::EncodePasswords(const vector< OUString >& lines, con
 
             rtlCipherError result = rtl_cipher_init (
                     aEncoder, rtl_Cipher_DirectionEncode,
-                    code, RTL_DIGEST_LENGTH_MD5, NULL, 0 );
+                    code, RTL_DIGEST_LENGTH_MD5, nullptr, 0 );
 
             if( result == rtl_Cipher_E_None )
             {
@@ -1073,7 +1073,7 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
             {
                 uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
                 uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
-                xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
+                xTmpHandler.set( InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
             }
 
             if ( !m_aMasterPasswd.isEmpty() )
@@ -1117,7 +1117,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
-            xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
+            xTmpHandler.set( InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
         }
 
         bool bCanChangePassword = true;
@@ -1229,7 +1229,7 @@ sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Refere
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
-            xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
+            xTmpHandler.set( InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
         }
 
         bool bCanChangePassword = true;
@@ -1444,7 +1444,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL passwordcontainer_component_getFactory (
     SAL_UNUSED_PARAMETER void * pServiceManager,
     SAL_UNUSED_PARAMETER void * /* pRegistryKey */)
 {
-    void * pResult = 0;
+    void * pResult = nullptr;
     if (pServiceManager)
     {
         Reference< XSingleServiceFactory > xFactory;

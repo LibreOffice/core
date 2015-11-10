@@ -128,7 +128,7 @@ bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
             _xVal = new SvLockBytes( pStream, true );
         }
         else
-            _xVal = NULL;
+            _xVal = nullptr;
 
         return true;
     }

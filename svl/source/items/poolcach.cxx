@@ -28,7 +28,7 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
                                     const SfxPoolItem *pPutItem ):
     pPool(pItemPool),
     pCache(new SfxItemModifyArr_Impl),
-    pSetToPut( 0 ),
+    pSetToPut( nullptr ),
     pItemToPut( &pItemPool->Put(*pPutItem) )
 {
     DBG_ASSERT(pItemPool, "No Pool provided");
@@ -40,7 +40,7 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
     pPool(pItemPool),
     pCache(new SfxItemModifyArr_Impl),
     pSetToPut( pPutSet ),
-    pItemToPut( 0 )
+    pItemToPut( nullptr )
 {
     DBG_ASSERT(pItemPool, "No Pool provided");
 }
@@ -52,7 +52,7 @@ SfxItemPoolCache::~SfxItemPoolCache()
         pPool->Remove( *(*pCache)[nPos].pPoolItem );
         pPool->Remove( *(*pCache)[nPos].pOrigItem );
     }
-    delete pCache; pCache = 0;
+    delete pCache; pCache = nullptr;
 
     if ( pItemToPut )
         pPool->Remove( *pItemToPut );

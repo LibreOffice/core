@@ -81,7 +81,7 @@ SharedString SharedStringPool::intern( const OUString& rStr )
 
     if (!mpImpl->mpCharClass)
         // We don't track case insensitive strings.
-        return SharedString(pOrig, NULL);
+        return SharedString(pOrig, nullptr);
 
     if (!aRes.second)
     {

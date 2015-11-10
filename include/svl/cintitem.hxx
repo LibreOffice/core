@@ -45,7 +45,7 @@ public:
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
-                                                const IntlWrapper * = 0)
+                                                const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,
@@ -58,7 +58,7 @@ public:
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override;
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
     sal_uInt8 GetValue() const { return m_nValue; }
 
@@ -95,7 +95,7 @@ public:
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
-                                                const IntlWrapper * = 0)
+                                                const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,
@@ -108,7 +108,7 @@ public:
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override;
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
     sal_uInt16 GetValue() const { return m_nValue; }
 
@@ -145,7 +145,7 @@ public:
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
-                                                const IntlWrapper * = 0)
+                                                const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,
@@ -158,7 +158,7 @@ public:
 
     virtual SvStream & Store(SvStream &, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override;
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
     sal_Int32 GetValue() const { return m_nValue; }
 
@@ -195,7 +195,7 @@ public:
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
-                                                const IntlWrapper * = 0)
+                                                const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,
@@ -208,7 +208,7 @@ public:
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override;
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
     sal_uInt32 GetValue() const { return m_nValue; }
 

@@ -227,7 +227,7 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
 
 
 
-SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = NULL;
+SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = nullptr;
 bool SvNumberFormatter::bCurrencyTableInitialized = false;
 namespace
 {
@@ -267,7 +267,7 @@ SvNumberFormatter::~SvNumberFormatter()
         if ( !pFormatterRegistry->Count() )
         {
             delete pFormatterRegistry;
-            pFormatterRegistry = NULL;
+            pFormatterRegistry = nullptr;
         }
     }
 
@@ -309,10 +309,10 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
 
     pStringScanner = new ImpSvNumberInputScan( this );
     pFormatScanner = new ImpSvNumberformatScan( this );
-    pFormatTable = NULL;
+    pFormatTable = nullptr;
     MaxCLOffset = 0;
     ImpGenerateFormats( 0, false );     // 0 .. 999 for initialized language formats
-    pMergeTable = NULL;
+    pMergeTable = nullptr;
     bNoZero = false;
 
     ::osl::MutexGuard aGuard( GetMutex() );
@@ -347,7 +347,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 // static
 ::osl::Mutex& SvNumberFormatter::GetMutex()
 {
-    static ::osl::Mutex* pMutex = NULL;
+    static ::osl::Mutex* pMutex = nullptr;
     if( !pMutex )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -387,7 +387,7 @@ Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex)
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -1471,7 +1471,7 @@ void SvNumberFormatter::GetOutputString(const OUString& sString,
     }
     if (!pFormat->IsTextFormat() && !pFormat->HasTextFormat())
     {
-        *ppColor = NULL;
+        *ppColor = nullptr;
         sOutString = sString;
     }
     else
@@ -1704,7 +1704,7 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
             }
             else
             {
-                *ppColor = NULL;
+                *ppColor = nullptr;
                 sOutString = sPreviewString;
             }
         }
@@ -1791,7 +1791,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
         }
         delete pFormat;
-        return NULL;
+        return nullptr;
     }
     if ( rCode.Index >= NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS )
     {
@@ -1823,7 +1823,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
                 }
             }
             delete pFormat;
-            return NULL;
+            return nullptr;
         }
         else if ( nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
         {
@@ -1836,7 +1836,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
             }
             delete pFormat;
-            return NULL;
+            return nullptr;
         }
     }
     if ( !aFTable.insert( make_pair( nPos, pFormat) ).second )
@@ -1856,7 +1856,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
             SAL_WARN( "svl.numbers", "SvNumberFormatter::ImpInsertFormat: dup position");
         }
         delete pFormat;
-        return NULL;
+        return nullptr;
     }
     if ( rCode.Default )
         pFormat->SetStandard();
@@ -2131,7 +2131,7 @@ SvNumberformat* SvNumberFormatter::GetFormatEntry( sal_uInt32 nKey )
     SvNumberFormatTable::iterator it = aFTable.find( nKey);
     if (it != aFTable.end())
         return it->second;
-    return 0;
+    return nullptr;
 }
 
 const SvNumberformat* SvNumberFormatter::GetFormatEntry( sal_uInt32 nKey ) const
@@ -2144,7 +2144,7 @@ const SvNumberformat* SvNumberFormatter::GetEntry( sal_uInt32 nKey ) const
     SvNumberFormatTable::const_iterator it = aFTable.find( nKey);
     if (it != aFTable.end())
         return it->second;
-    return 0;
+    return nullptr;
 }
 
 void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditionalFormats )
@@ -2159,7 +2159,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     NumberFormatCodeWrapper aNumberFormatCode( m_xContext,
             GetLanguageTag().getLocale() );
-    SvNumberformat* pNewFormat = NULL;
+    SvNumberformat* pNewFormat = nullptr;
     sal_Int32 nIdx;
     bool bDefault;
 
@@ -3147,7 +3147,7 @@ const NfCurrencyEntry* SvNumberFormatter::MatchSystemCurrency()
 {
     // MUST call GetTheCurrencyTable() before accessing nSystemCurrencyPosition
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
-    return nSystemCurrencyPosition ? &rTable[nSystemCurrencyPosition] : NULL;
+    return nSystemCurrencyPosition ? &rTable[nSystemCurrencyPosition] : nullptr;
 }
 
 
@@ -3188,7 +3188,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(const OUString& rAbbr
             return &rTable[j];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -3210,7 +3210,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( const OUSt
             return &rTable[j];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -3375,7 +3375,7 @@ bool SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(
     {
         if ( pFoundEntry && pFoundEntry != pData )
         {
-            pFoundEntry = NULL;
+            pFoundEntry = nullptr;
             return false;   // break loop, not unique
         }
         if ( nPos == 0 )
@@ -3406,7 +3406,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
                                                     bool* pBank /* = NULL */ ) const
 {
     if ( ppEntry )
-        *ppEntry = NULL;
+        *ppEntry = nullptr;
     if ( pBank )
         *pBank = false;
 
@@ -3489,7 +3489,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
     {
         eExtLang = LANGUAGE_DONTKNOW;
     }
-    const NfCurrencyEntry* pFoundEntry = NULL;
+    const NfCurrencyEntry* pFoundEntry = nullptr;
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
     sal_uInt16 nCount = rTable.size();
     bool bCont = true;
@@ -3788,7 +3788,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                 "SvNumberFormatter::ImpInitCurrencyTable: system currency not in I18N locale data.");
     }
     pLocaleData.reset();
-    SvtSysLocaleOptions::SetCurrencyChangeLink( LINK( NULL, SvNumberFormatter, CurrencyChangeLink ) );
+    SvtSysLocaleOptions::SetCurrencyChangeLink( LINK( nullptr, SvNumberFormatter, CurrencyChangeLink ) );
     bInitializing = false;
     bCurrencyTableInitialized = true;
 }

@@ -376,7 +376,7 @@ void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumer
 }
 // global
 
-static SvtCTLOptions_Impl*  pCTLOptions = NULL;
+static SvtCTLOptions_Impl*  pCTLOptions = nullptr;
 static sal_Int32            nCTLRefCount = 0;
 namespace { struct CTLMutex : public rtl::Static< osl::Mutex, CTLMutex > {}; }
 

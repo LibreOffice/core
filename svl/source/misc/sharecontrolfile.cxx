@@ -81,7 +81,7 @@ void ShareControlFile::OpenStream()
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
         ::ucbhelper::Content aContent = ::ucbhelper::Content( m_aURL, xDummyEnv, comphelper::getProcessComponentContext() );
 
-        uno::Reference< ucb::XContentIdentifier > xContId( aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
+        uno::Reference< ucb::XContentIdentifier > xContId( aContent.get().is() ? aContent.get()->getIdentifier() : nullptr );
         if ( !xContId.is() || xContId->getContentProviderScheme() != "file" )
             throw io::IOException(); // the implementation supports only local files for now
 

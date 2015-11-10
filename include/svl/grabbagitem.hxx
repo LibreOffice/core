@@ -26,7 +26,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SfxGrabBagItem();
-    SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, css::uno::Any>* pMap = 0);
+    SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, css::uno::Any>* pMap = nullptr);
     SfxGrabBagItem(const SfxGrabBagItem& rItem);
     virtual ~SfxGrabBagItem();
 
@@ -41,7 +41,7 @@ public:
     }
 
     virtual bool operator==(const SfxPoolItem&) const override;
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const override;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;

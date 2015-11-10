@@ -37,38 +37,38 @@ class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl> {};
 
 SfxAllEnumItem::SfxAllEnumItem() :
     SfxEnumItem(),
-    pValues( 0 ),
-    pDisabledValues( 0 )
+    pValues( nullptr ),
+    pDisabledValues( nullptr )
 {
 }
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
     SfxEnumItem(which, nVal),
-    pValues( 0 ),
-    pDisabledValues( 0 )
+    pValues( nullptr ),
+    pDisabledValues( nullptr )
 {
     InsertValue( nVal );
 }
 
 SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
     SfxEnumItem(which, rStream),
-    pValues( 0 ),
-    pDisabledValues( 0 )
+    pValues( nullptr ),
+    pDisabledValues( nullptr )
 {
     InsertValue( GetValue() );
 }
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which):
     SfxEnumItem(which, 0),
-    pValues( 0 ),
-    pDisabledValues( 0 )
+    pValues( nullptr ),
+    pDisabledValues( nullptr )
 {
 }
 
 SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
     SfxEnumItem(rCopy),
-    pValues(0),
-    pDisabledValues( 0 )
+    pValues(nullptr),
+    pDisabledValues( nullptr )
 {
     if ( !rCopy.pValues )
         return;

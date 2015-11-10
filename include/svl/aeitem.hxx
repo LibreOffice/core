@@ -52,7 +52,7 @@ public:
     virtual sal_uInt16      GetValueCount() const override;
     virtual sal_uInt16      GetValueByPos( sal_uInt16 nPos ) const override;
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const override;
     virtual bool        IsEnabled( sal_uInt16 ) const override;
     void                    DisableValue( sal_uInt16 );

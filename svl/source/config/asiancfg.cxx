@@ -135,12 +135,12 @@ void SvxAsianConfig::SetStartEndChars(
     css::lang::Locale const & locale, OUString const * startChars,
     OUString const * endChars)
 {
-    assert((startChars == 0) == (endChars == 0));
+    assert((startChars == nullptr) == (endChars == nullptr));
     css::uno::Reference< css::container::XNameContainer > set(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
             impl_->batch));
     OUString name(toString(locale));
-    if (startChars == 0) {
+    if (startChars == nullptr) {
         try {
             set->removeByName(name);
         } catch (css::container::NoSuchElementException &) {}

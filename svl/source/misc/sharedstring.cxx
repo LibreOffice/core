@@ -15,12 +15,12 @@ SharedString SharedString::getEmptyString()
 {
     // unicode string array for empty string is globally shared in OUString.
     // Let's take advantage of that.
-    rtl_uString* pData = NULL;
+    rtl_uString* pData = nullptr;
     rtl_uString_new(&pData);
     return SharedString(pData, pData);
 }
 
-SharedString::SharedString() : mpData(NULL), mpDataIgnoreCase(NULL) {}
+SharedString::SharedString() : mpData(nullptr), mpDataIgnoreCase(nullptr) {}
 
 SharedString::SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase ) :
     mpData(pData), mpDataIgnoreCase(pDataIgnoreCase)
@@ -31,7 +31,7 @@ SharedString::SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase ) :
         rtl_uString_acquire(mpDataIgnoreCase);
 }
 
-SharedString::SharedString( const OUString& rStr ) : mpData(rStr.pData), mpDataIgnoreCase(NULL)
+SharedString::SharedString( const OUString& rStr ) : mpData(rStr.pData), mpDataIgnoreCase(nullptr)
 {
     rtl_uString_acquire(mpData);
 }
@@ -122,12 +122,12 @@ const rtl_uString* SharedString::getDataIgnoreCase() const
 
 bool SharedString::isValid() const
 {
-    return mpData != NULL;
+    return mpData != nullptr;
 }
 
 bool SharedString::isEmpty() const
 {
-    return mpData == NULL || mpData->length == 0;
+    return mpData == nullptr || mpData->length == 0;
 }
 
 sal_Int32 SharedString::getLength() const

@@ -40,7 +40,7 @@ public:
 void Test::testBad() {
     OUString in("foo=bar");
     CPPUNIT_ASSERT_EQUAL(
-        static_cast<sal_Unicode const *>(0),
+        static_cast<sal_Unicode const *>(nullptr),
         INetMIME::scanContentType(in.getStr(), in.getStr() + in.getLength()));
     OUString t;
     OUString s;

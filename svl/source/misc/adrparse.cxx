@@ -46,8 +46,8 @@ struct ParsedAddrSpec
 
 inline void ParsedAddrSpec::reset()
 {
-    m_pBegin = 0;
-    m_pEnd = 0;
+    m_pBegin = nullptr;
+    m_pEnd = nullptr;
     m_eLastElem = ELEMENT_START;
     m_bAtFound = false;
     m_bReparse = false;
@@ -115,14 +115,14 @@ public:
 
 inline void SvAddressParser_Impl::resetRealNameAndFirstComment()
 {
-    m_pRealNameBegin = 0;
-    m_pRealNameEnd = 0;
-    m_pRealNameContentBegin = 0;
-    m_pRealNameContentEnd = 0;
+    m_pRealNameBegin = nullptr;
+    m_pRealNameEnd = nullptr;
+    m_pRealNameContentBegin = nullptr;
+    m_pRealNameContentEnd = nullptr;
     m_bRealNameReparse = false;
     m_bRealNameFinished = false;
-    m_pFirstCommentBegin = 0;
-    m_pFirstCommentEnd = 0;
+    m_pFirstCommentBegin = nullptr;
+    m_pFirstCommentEnd = nullptr;
     m_bFirstCommentReparse = false;
 }
 
@@ -221,8 +221,8 @@ bool SvAddressParser_Impl::readToken()
         case TOKEN_COMMENT:
         {
             m_pCurTokenBegin = m_pInputPos - 1;
-            m_pCurTokenContentBegin = 0;
-            m_pCurTokenContentEnd = 0;
+            m_pCurTokenContentBegin = nullptr;
+            m_pCurTokenContentEnd = nullptr;
             bool bEscaped = false;
             int nLevel = 0;
             for (;;)
@@ -440,10 +440,10 @@ OUString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
 
 SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                            const OUString& rInput)
-    : m_pCurTokenBegin(NULL)
-    , m_pCurTokenEnd(NULL)
-    , m_pCurTokenContentBegin(NULL)
-    , m_pCurTokenContentEnd(NULL)
+    : m_pCurTokenBegin(nullptr)
+    , m_pCurTokenEnd(nullptr)
+    , m_pCurTokenContentBegin(nullptr)
+    , m_pCurTokenContentEnd(nullptr)
 {
     m_pInputPos = rInput.getStr();
     m_pInputEnd = m_pInputPos + rInput.getLength();
@@ -619,7 +619,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                 }
                 else
                 {
-                    m_pAddrSpec = 0;
+                    m_pAddrSpec = nullptr;
                 }
 
                 if (m_pAddrSpec)

@@ -34,7 +34,7 @@ public:
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxByteItem(*this); }
 };
 
@@ -62,7 +62,7 @@ public:
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
-                                                const IntlWrapper * = 0)
+                                                const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue( css::uno::Any& rVal,
@@ -75,7 +75,7 @@ public:
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override;
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
     sal_Int16 GetValue() const { return m_nValue; }
 
@@ -103,7 +103,7 @@ public:
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
     { return new SfxUInt16Item(Which(), rStream); }
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt16Item(*this); }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
@@ -124,7 +124,7 @@ public:
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
     { return new SfxInt32Item(Which(), rStream); }
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxInt32Item(*this); }
 
 };
@@ -144,7 +144,7 @@ public:
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const override
     { return new SfxUInt32Item(Which(), rStream); }
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt32Item(*this); }
 };
 

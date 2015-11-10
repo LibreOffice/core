@@ -117,7 +117,7 @@ inline TypeIDMapEntry * Registration::getEntry(INetContentType eTypeID)
     if( it != rRegistration.m_aTypeIDMap.end() )
         return it->second;
     else
-        return NULL;
+        return nullptr;
 }
 
 MediaTypeEntry const * seekEntry(OUString const & rTypeName,
@@ -444,7 +444,7 @@ TypeNameMapEntry * Registration::getExtensionEntry(OUString const & rTypeName)
     TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     if (it != rRegistration.m_aTypeNameMap.end())
         return & it->second;
-    return 0;
+    return nullptr;
 }
 
 // static
@@ -558,7 +558,7 @@ MediaTypeEntry const * seekEntry(OUString const & rTypeName,
         else
             nLow = nMiddle + 1;
     }
-    return 0;
+    return nullptr;
 }
 
 }
@@ -789,10 +789,10 @@ bool INetContentTypes::parse(
     OUString t;
     OUString s;
     INetContentTypeParameterList p;
-    if (INetMIME::scanContentType(b, e, &t, &s, pParameters == 0 ? 0 : &p) == e) {
+    if (INetMIME::scanContentType(b, e, &t, &s, pParameters == nullptr ? nullptr : &p) == e) {
         rType = t;
         rSubType = s;
-        if (pParameters != 0) {
+        if (pParameters != nullptr) {
             *pParameters = p;
         }
         return true;

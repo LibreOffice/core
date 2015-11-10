@@ -37,7 +37,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     SfxStringListItem();
-    SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=NULL );
+    SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=nullptr );
     SfxStringListItem( sal_uInt16 nWhich, SvStream& rStream );
     SfxStringListItem( const SfxStringListItem& rItem );
     virtual ~SfxStringListItem();
@@ -58,8 +58,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = 0 ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+                                    const IntlWrapper * = nullptr ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream &, sal_uInt16 nVersion ) const override;
     virtual SvStream&       Store( SvStream &, sal_uInt16 nItemVersion ) const override;
 

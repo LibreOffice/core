@@ -379,7 +379,7 @@ bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
 
 // global
 
-static SvtCJKOptions_Impl*  pCJKOptions = NULL;
+static SvtCJKOptions_Impl*  pCJKOptions = nullptr;
 static sal_Int32            nCJKRefCount = 0;
 namespace { struct theCJKOptionsMutex : public rtl::Static< ::osl::Mutex , theCJKOptionsMutex >{}; }
 

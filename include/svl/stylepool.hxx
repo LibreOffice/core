@@ -33,7 +33,7 @@ private:
 public:
     typedef std::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 
-    explicit StylePool( SfxItemSet* pIgnorableItems = 0 );
+    explicit StylePool( SfxItemSet* pIgnorableItems = nullptr );
 
     /** Insert a SfxItemSet into the style pool.
 

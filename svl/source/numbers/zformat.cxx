@@ -337,15 +337,15 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
 ImpSvNumFor::ImpSvNumFor()
 {
     nAnzStrings = 0;
-    aI.nTypeArray = NULL;
-    aI.sStrArray = NULL;
+    aI.nTypeArray = nullptr;
+    aI.sStrArray = nullptr;
     aI.eScannedType = css::util::NumberFormat::UNDEFINED;
     aI.bThousand = false;
     aI.nThousand = 0;
     aI.nCntPre = 0;
     aI.nCntPost = 0;
     aI.nCntExp = 0;
-    pColor = NULL;
+    pColor = nullptr;
 }
 
 ImpSvNumFor::~ImpSvNumFor()
@@ -368,8 +368,8 @@ void ImpSvNumFor::Enlarge(sal_uInt16 nAnz)
         }
         else
         {
-            aI.nTypeArray = NULL;
-            aI.sStrArray  = NULL;
+            aI.nTypeArray = nullptr;
+            aI.sStrArray  = nullptr;
         }
     }
 }
@@ -481,7 +481,7 @@ void SvNumberformat::ImpCopyNumberformat( const SvNumberformat& rFormat )
     bAdditionalBuiltin = rFormat.bAdditionalBuiltin;
 
     // #121103# when copying between documents, get color pointers from own scanner
-    ImpSvNumberformatScan* pColorSc = ( &rScan != &rFormat.rScan ) ? &rScan : NULL;
+    ImpSvNumberformatScan* pColorSc = ( &rScan != &rFormat.rScan ) ? &rScan : nullptr;
 
     for (sal_uInt16 i = 0; i < 4; i++)
     {
@@ -719,7 +719,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 switch ( eSymbolType )
                 {
                 case BRACKET_SYMBOLTYPE_COLOR :
-                    if ( NumFor[nIndex].GetColor() != NULL )
+                    if ( NumFor[nIndex].GetColor() != nullptr )
                     {                           // error, more than one color
                         bCancel = true;         // break for
                         nCheckPos = nPosOld;
@@ -728,7 +728,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     {
                         Color* pColor = pSc->GetColor( sStr);
                         NumFor[nIndex].SetColor( pColor, sStr);
-                        if (pColor == NULL)
+                        if (pColor == nullptr)
                         {                       // error
                             bCancel = true;     // break for
                             nCheckPos = nPosOld;
@@ -1894,7 +1894,7 @@ bool SvNumberformat::GetOutputString(const OUString& sString,
     }
     else
     {
-        *ppColor = NULL; // no change of color
+        *ppColor = nullptr; // no change of color
         return false;
     }
     *ppColor = NumFor[nIx].GetColor();
@@ -2090,7 +2090,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
     bool bRes = false;
     OUStringBuffer sBuff;
     OutString.clear();
-    *ppColor = NULL; // No color change
+    *ppColor = nullptr; // No color change
     if (eType & css::util::NumberFormat::LOGICAL)
     {
         if (fNumber)
@@ -4462,12 +4462,12 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
 {
     if ( nNumFor > 3 )
     {
-        return NULL;
+        return nullptr;
     }
     sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
     if ( !nAnz )
     {
-        return NULL;
+        return nullptr;
     }
     if ( nPos == 0xFFFF )
     {
@@ -4483,13 +4483,13 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
             }
             if ( (*pType != NF_SYMBOLTYPE_STRING) && (*pType != NF_SYMBOLTYPE_CURRENCY) )
             {
-                return NULL;
+                return nullptr;
             }
         }
     }
     else if ( nPos > nAnz - 1 )
     {
-        return NULL;
+        return nullptr;
     }
     else if ( bString )
     {
@@ -4504,7 +4504,7 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
         if ( nPos >= nAnz || ((*pType != NF_SYMBOLTYPE_STRING) &&
                               (*pType != NF_SYMBOLTYPE_CURRENCY)) )
         {
-            return NULL;
+            return nullptr;
         }
     }
     return &NumFor[nNumFor].Info().sStrArray[nPos];
@@ -4685,7 +4685,7 @@ Color* SvNumberformat::GetColor( sal_uInt16 nNumFor ) const
 {
     if ( nNumFor > 3 )
     {
-        return NULL;
+        return nullptr;
     }
     return NumFor[nNumFor].GetColor();
 }

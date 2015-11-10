@@ -225,7 +225,7 @@ IndexedStyleSheets::GetStyleSheetByPosition(unsigned pos)
 {
     if( pos < mStyleSheets.size() )
         return mStyleSheets.at(pos);
-    return NULL;
+    return nullptr;
 }
 
 void

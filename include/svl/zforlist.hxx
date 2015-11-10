@@ -704,8 +704,8 @@ public:
         returned, even if the format code only contains [$xxx] !
      */
     bool    GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString& rSymbol,
-                                        const NfCurrencyEntry** ppEntry = NULL,
-                                        bool* pBank = NULL ) const;
+                                        const NfCurrencyEntry** ppEntry = nullptr,
+                                        bool* pBank = nullptr ) const;
 
     /** Look up the corresponding NfCurrencyEntry matching
         rSymbol (may be CurrencySymbol or CurrencyAbbreviation) and possibly

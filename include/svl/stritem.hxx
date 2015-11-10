@@ -40,7 +40,7 @@ public:
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override;
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

@@ -138,7 +138,7 @@ SfxUShortRanges::SfxUShortRanges( const SfxUShortRanges &rOrig )
         memcpy( _pRanges, rOrig._pRanges, sizeof(sal_uInt16) * nCount );
     }
     else
-        _pRanges = 0;
+        _pRanges = nullptr;
 }
 
 /**
@@ -215,7 +215,7 @@ SfxUShortRanges& SfxUShortRanges::operator =
 
     // special case: 'rRanges' is empty
     if ( rRanges.IsEmpty() )
-        _pRanges = 0;
+        _pRanges = nullptr;
     else
     {
         // copy ranges
@@ -511,7 +511,7 @@ SfxUShortRanges& SfxUShortRanges::operator -=
         memcpy( _pRanges, pTarget.get(), nUShorts * sizeof(sal_uInt16) );
     }
     else
-        _pRanges = 0;
+        _pRanges = nullptr;
 
     return *this;
 }
@@ -624,7 +624,7 @@ SfxUShortRanges& SfxUShortRanges::operator /=
         memcpy( _pRanges, pTarget.get(), nUShorts * sizeof(sal_uInt16) );
     }
     else
-        _pRanges = 0;
+        _pRanges = nullptr;
 
     return *this;
 }

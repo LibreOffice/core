@@ -103,7 +103,7 @@ public:
                                     SfxItemPool( const OUString &rName,
                                                  sal_uInt16 nStart, sal_uInt16 nEnd,
                                                  const SfxItemInfo *pItemInfos,
-                                                 SfxPoolItem **pDefaults = 0,
+                                                 SfxPoolItem **pDefaults = nullptr,
                                                  bool bLoadRefCounts = true );
 
 protected:
@@ -154,7 +154,7 @@ public:
     virtual bool                    GetPresentation( const SfxPoolItem& rItem,
                                         SfxMapUnit          ePresentationMetric,
                                         OUString&           rText,
-                                        const IntlWrapper * pIntlWrapper = 0 ) const;
+                                        const IntlWrapper * pIntlWrapper = nullptr ) const;
     virtual SfxItemPool*            Clone() const;
     const OUString&                 GetName() const;
 
@@ -164,7 +164,7 @@ public:
 
     const SfxPoolItem*              LoadItem( SvStream &rStream,
                                               bool bDirect = false,
-                                              const SfxItemPool *pRefPool = 0 );
+                                              const SfxItemPool *pRefPool = nullptr );
     bool                            StoreItem( SvStream &rStream,
                                                const SfxPoolItem &rItem,
                                                bool bDirect = false ) const;
@@ -175,7 +175,7 @@ public:
     sal_uInt32                      GetItemCount2(sal_uInt16 nWhich) const;
     const SfxPoolItem*              LoadSurrogate(SvStream& rStream,
                                             sal_uInt16 &rWhich, sal_uInt16 nSlotId,
-                                            const SfxItemPool* pRefPool = 0 );
+                                            const SfxItemPool* pRefPool = nullptr );
     bool                            StoreSurrogate(SvStream& rStream,
                                             const SfxPoolItem *pItem ) const;
 

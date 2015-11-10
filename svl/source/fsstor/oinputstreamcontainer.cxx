@@ -29,7 +29,7 @@ OFSInputStreamContainer::OFSInputStreamContainer( const uno::Reference< io::XInp
 , m_xSeekable( xStream, uno::UNO_QUERY )
 , m_bSeekable( false )
 , m_bDisposed( false )
-, m_pListenersContainer( NULL )
+, m_pListenersContainer( nullptr )
 {
     m_bSeekable = m_xSeekable.is();
 }
@@ -39,20 +39,20 @@ OFSInputStreamContainer::~OFSInputStreamContainer()
     if ( m_pListenersContainer )
     {
         delete m_pListenersContainer;
-        m_pListenersContainer = NULL;
+        m_pListenersContainer = nullptr;
     }
 }
 
 uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
         throw ( uno::RuntimeException, std::exception )
 {
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
+    static ::cppu::OTypeCollection* pTypeCollection = nullptr ;
 
-    if ( pTypeCollection == NULL )
+    if ( pTypeCollection == nullptr )
     {
         ::osl::MutexGuard aGuard( m_aMutex ) ;
 
-        if ( pTypeCollection == NULL )
+        if ( pTypeCollection == nullptr )
         {
             if ( m_bSeekable )
             {

@@ -108,7 +108,7 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
     else
     {
         SFX_ASSERT( false, nWhich, "unknown WhichId - cannot get pool default" );
-        pRet = 0;
+        pRet = nullptr;
     }
     return pRet;
 }
@@ -309,7 +309,7 @@ void SfxItemPool::ReleaseDefaults
 
     // ppStaticDefaults points to deleted memory if bDelete == true.
     if ( bDelete )
-        pImp->ppStaticDefaults = 0;
+        pImp->ppStaticDefaults = nullptr;
 }
 
 
@@ -343,11 +343,11 @@ void SfxItemPool::ReleaseDefaults
                     n, "this is not a static Default" );
         (*( pDefaults + n ))->SetRefCount( 0 );
         if ( bDelete )
-            { delete *( pDefaults + n ); *(pDefaults + n) = 0; }
+            { delete *( pDefaults + n ); *(pDefaults + n) = nullptr; }
     }
 
     if ( bDelete )
-        { delete[] pDefaults; pDefaults = 0; }
+        { delete[] pDefaults; pDefaults = nullptr; }
 }
 
 
@@ -357,7 +357,7 @@ SfxItemPool::~SfxItemPool()
     if ( !pImp->maPoolItems.empty() && pImp->ppPoolDefaults )
         Delete();
 
-    if (pImp->mpMaster != NULL && pImp->mpMaster != this)
+    if (pImp->mpMaster != nullptr && pImp->mpMaster != this)
     {
         // This condition indicates an error.
         // A pImp->mpMaster->SetSecondaryPool(...) call should have been made
@@ -365,7 +365,7 @@ SfxItemPool::~SfxItemPool()
         // prevent a crash later on.
         DBG_ASSERT( pImp->mpMaster == this, "destroying active Secondary-Pool" );
         if (pImp->mpMaster->pImp->mpSecondary == this)
-            pImp->mpMaster->pImp->mpSecondary = NULL;
+            pImp->mpMaster->pImp->mpSecondary = nullptr;
     }
 
     delete pImp;
@@ -767,7 +767,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     {
         sal_uInt32 nOffset = std::distance(pItemArr->begin(), ppFree);
         pItemArr->maPtrToIndex.insert(std::make_pair(pNewItem, nOffset));
-        assert(*ppFree == NULL);
+        assert(*ppFree == nullptr);
         *ppFree = pNewItem;
     }
     return *pNewItem;
@@ -953,7 +953,7 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
         if ( pImp->mpSecondary )
             return pImp->mpSecondary->GetItem2( nWhich, nOfst );
         SFX_ASSERT( false, nWhich, "unknown WhichId - cannot resolve surrogate" );
-        return 0;
+        return nullptr;
     }
 
     // default attribute?
@@ -964,7 +964,7 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
     if( pItemArr && nOfst < pItemArr->size() )
         return (*pItemArr)[nOfst];
 
-    return 0;
+    return nullptr;
 }
 
 sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
@@ -1065,6 +1065,6 @@ void SfxItemPool::SetFileFormatVersion( sal_uInt16 nFileFormatVersion )
         pPool->pImp->mnFileFormatVersion = nFileFormatVersion;
 }
 
-const SfxItemPool* SfxItemPool::pStoringPool_ = 0;
+const SfxItemPool* SfxItemPool::pStoringPool_ = nullptr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -110,7 +110,7 @@ SvStream& SfxRangeItem::Store(SvStream &rStream, sal_uInt16) const
 }
 
 SfxUShortRangesItem::SfxUShortRangesItem()
-:   _pRanges(0)
+:   _pRanges(nullptr)
 {
 }
 

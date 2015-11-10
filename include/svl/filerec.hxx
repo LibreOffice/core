@@ -232,7 +232,7 @@ protected:
 
                         // three phase constructor for sub-classes
     SfxMiniRecordReader()
-        : _pStream(NULL)
+        : _pStream(nullptr)
         , _nEofRec(0)
         , _bSkipped(false)
         , _nPreTag(0)

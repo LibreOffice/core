@@ -71,7 +71,7 @@ public:
                                 SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
     virtual                     ~SfxItemSet();
 
-    virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = 0) const;
+    virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
 
     // Get number of items
     sal_uInt16                  Count() const { return m_nCount; }
@@ -112,9 +112,9 @@ public:
     // Get item-status
     SfxItemState                GetItemState(   sal_uInt16 nWhich,
                                                 bool bSrchInParent = true,
-                                                const SfxPoolItem **ppItem = 0 ) const;
+                                                const SfxPoolItem **ppItem = nullptr ) const;
 
-    bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = NULL) const;
+    bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = nullptr) const;
 
     void                        DisableItem(sal_uInt16 nWhich);
     void                        InvalidateItem( sal_uInt16 nWhich );
@@ -149,7 +149,7 @@ public:
     const SfxItemSet*           GetParent() const { return m_pParent; }
 
     SvStream &                  Load( SvStream &, bool bDirect = false,
-                                      const SfxItemPool *pRefPool = 0 );
+                                      const SfxItemPool *pRefPool = nullptr );
     SvStream &                  Store( SvStream &, bool bDirect = false ) const;
 
     bool                        operator==(const SfxItemSet &) const;
@@ -176,7 +176,7 @@ public:
                                 SfxAllItemSet( const SfxItemSet & );
                                 SfxAllItemSet( const SfxAllItemSet & );
 
-    virtual SfxItemSet *        Clone( bool bItems = true, SfxItemPool *pToPool = 0 ) const override;
+    virtual SfxItemSet *        Clone( bool bItems = true, SfxItemPool *pToPool = nullptr ) const override;
     virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich ) override;
     using SfxItemSet::Put;
 };

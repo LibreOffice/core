@@ -482,7 +482,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
         }
     }
 
-    Color* pResult = NULL;
+    Color* pResult = nullptr;
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
         const OUString& rColorWord = rKeyword[NF_KEY_COLOR];

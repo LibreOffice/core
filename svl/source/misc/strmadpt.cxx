@@ -82,7 +82,7 @@ public:
 
     sal_uInt32 read();
 
-    void clearReadBuffer() { m_pReadBuffer = 0; }
+    void clearReadBuffer() { m_pReadBuffer = nullptr; }
 
     sal_uInt32 write(sal_Int8 const * pBuffer, sal_uInt32 nSize);
 
@@ -96,10 +96,10 @@ public:
 SvDataPipe_Impl::SvDataPipe_Impl(sal_uInt32 nThePageSize,
                                  sal_uInt32 nTheMinPages,
                                  sal_uInt32 nTheMaxPages)
-    : m_pFirstPage( 0 )
-    , m_pReadPage( 0 )
-    , m_pWritePage( 0 )
-    , m_pReadBuffer( 0 )
+    : m_pFirstPage( nullptr )
+    , m_pReadPage( nullptr )
+    , m_pWritePage( nullptr )
+    , m_pReadBuffer( nullptr )
     , m_nReadBufferSize( 0 )
     , m_nReadBufferFilled( 0 )
     , m_nPageSize(std::min< sal_uInt32 >(
@@ -413,7 +413,7 @@ void SvInputStream::SetSize(sal_uInt64)
 
 SvInputStream::SvInputStream( css::uno::Reference< css::io::XInputStream > const & rTheStream):
     m_xStream(rTheStream),
-    m_pPipe(0),
+    m_pPipe(nullptr),
     m_nSeekedFrom(STREAM_SEEK_TO_END)
 {
     SetBufferSize(0);
@@ -563,7 +563,7 @@ bool SvDataPipe_Impl::remove(Page * pPage)
 
 SvDataPipe_Impl::~SvDataPipe_Impl()
 {
-    if (m_pFirstPage != 0)
+    if (m_pFirstPage != nullptr)
         for (Page * pPage = m_pFirstPage;;)
         {
             Page * pNext = pPage->m_pNext;
@@ -576,7 +576,7 @@ SvDataPipe_Impl::~SvDataPipe_Impl()
 
 sal_uInt32 SvDataPipe_Impl::read()
 {
-    if (m_pReadBuffer == 0 || m_nReadBufferSize == 0 || m_pReadPage == 0)
+    if (m_pReadBuffer == nullptr || m_nReadBufferSize == 0 || m_pReadPage == nullptr)
         return 0;
 
     sal_uInt32 nSize = m_nReadBufferSize;
@@ -617,7 +617,7 @@ sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
     if (nSize == 0)
         return 0;
 
-    if (m_pWritePage == 0)
+    if (m_pWritePage == nullptr)
     {
         m_pFirstPage
             = static_cast< Page * >(rtl_allocateMemory(sizeof (Page)
@@ -636,7 +636,7 @@ sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
 
     sal_uInt32 nRemain = nSize;
 
-    if (m_pReadBuffer != 0 && m_pReadPage == m_pWritePage
+    if (m_pReadBuffer != nullptr && m_pReadPage == m_pWritePage
         && m_pReadPage->m_pRead == m_pWritePage->m_pEnd)
     {
         sal_uInt32 nBlock = std::min(nRemain,
@@ -713,7 +713,7 @@ sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
 SvDataPipe_Impl::SeekResult SvDataPipe_Impl::setReadPosition(sal_uInt32
                                                                  nPosition)
 {
-    if (m_pFirstPage == 0)
+    if (m_pFirstPage == nullptr)
         return nPosition == 0 ? SEEK_OK : SEEK_PAST_END;
 
     if (nPosition

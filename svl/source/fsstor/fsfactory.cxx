@@ -61,7 +61,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
 {
     OUString aTempURL;
 
-    aTempURL = ::utl::TempFile( NULL, true ).GetURL();
+    aTempURL = ::utl::TempFile( nullptr, true ).GetURL();
 
     if ( aTempURL.isEmpty() )
         throw uno::RuntimeException(); // TODO: can not create tempfile
@@ -183,7 +183,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL fsstorage_component_getFactory (
     const sal_Char * pImplementationName, void * pServiceManager,
     SAL_UNUSED_PARAMETER void * /* pRegistryKey */)
 {
-    void * pResult = 0;
+    void * pResult = nullptr;
     if (pServiceManager)
     {
         uno::Reference< lang::XSingleServiceFactory > xFactory;

@@ -67,8 +67,8 @@ class OnDemandLocaleDataWrapper
 public:
                                 OnDemandLocaleDataWrapper()
                                     : eLastAnyLanguage( LANGUAGE_DONTKNOW )
-                                    , pEnglish(0)
-                                    , pAny(0)
+                                    , pEnglish(nullptr)
+                                    , pAny(nullptr)
                                     , bInitialized(false)
                                     {
                                         pCurrent = pSystem = aSysLocale.GetLocaleDataPtr();
@@ -78,9 +78,9 @@ public:
                                     const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                     const LanguageTag& rLanguageTag
                                     )
-                                    : pEnglish(0)
-                                    , pAny(0)
-                                    , pCurrent(0)
+                                    : pEnglish(nullptr)
+                                    , pAny(nullptr)
+                                    , pCurrent(nullptr)
                                     , bInitialized(false)
                                     {
                                         pSystem = aSysLocale.GetLocaleDataPtr();
@@ -156,7 +156,7 @@ class OnDemandCalendarWrapper
 
 public:
                                 OnDemandCalendarWrapper()
-                                    : pPtr(0)
+                                    : pPtr(nullptr)
                                     , bValid(false)
                                     , bInitialized(false)
                                     {}
@@ -184,7 +184,7 @@ public:
                                         if ( pPtr )
                                         {
                                             delete pPtr;
-                                            pPtr = NULL;
+                                            pPtr = nullptr;
                                         }
                                         bInitialized = true;
                                     }
@@ -229,7 +229,7 @@ public:
                                 OnDemandTransliterationWrapper()
                                     : eLanguage( LANGUAGE_SYSTEM )
                                     , nType(css::i18n::TransliterationModules_END_OF_MODULE)
-                                    , pPtr(0)
+                                    , pPtr(nullptr)
                                     , bValid(false)
                                     , bInitialized(false)
                                     {}
@@ -262,7 +262,7 @@ public:
                                         if ( pPtr )
                                         {
                                             delete pPtr;
-                                            pPtr = NULL;
+                                            pPtr = nullptr;
                                         }
                                         bInitialized = true;
                                     }
@@ -304,13 +304,13 @@ class OnDemandNativeNumberWrapper
 
 public:
                                 OnDemandNativeNumberWrapper()
-                                    : pPtr(0)
+                                    : pPtr(nullptr)
                                     , bInitialized(false)
                                     {}
                                 OnDemandNativeNumberWrapper(
                                     const css::uno::Reference< css::uno::XComponentContext >& rxContext
                                     )
-                                    : pPtr(0)
+                                    : pPtr(nullptr)
                                     , bInitialized(false)
                                     {
                                         init( rxContext );
@@ -328,7 +328,7 @@ public:
                                         if ( pPtr )
                                         {
                                             delete pPtr;
-                                            pPtr = NULL;
+                                            pPtr = nullptr;
                                         }
                                         bInitialized = true;
                                     }

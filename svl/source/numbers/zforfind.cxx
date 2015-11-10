@@ -69,14 +69,14 @@ static const sal_Unicode cNarrowNoBreakSpace = 0x202F;
 
 ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         :
-        pUpperMonthText( NULL ),
-        pUpperAbbrevMonthText( NULL ),
-        pUpperGenitiveMonthText( NULL ),
-        pUpperGenitiveAbbrevMonthText( NULL ),
-        pUpperPartitiveMonthText( NULL ),
-        pUpperPartitiveAbbrevMonthText( NULL ),
-        pUpperDayText( NULL ),
-        pUpperAbbrevDayText( NULL ),
+        pUpperMonthText( nullptr ),
+        pUpperAbbrevMonthText( nullptr ),
+        pUpperGenitiveMonthText( nullptr ),
+        pUpperGenitiveAbbrevMonthText( nullptr ),
+        pUpperPartitiveMonthText( nullptr ),
+        pUpperPartitiveAbbrevMonthText( nullptr ),
+        pUpperDayText( nullptr ),
+        pUpperAbbrevDayText( nullptr ),
         bTextInitialized( false ),
         bScanGenitiveMonths( false ),
         bScanPartitiveMonths( false ),

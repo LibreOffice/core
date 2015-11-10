@@ -110,7 +110,7 @@ SfxStyleSheetBase::SfxStyleSheetBase( const OUString& rName, SfxStyleSheetBasePo
     , aName( rName )
     , aParent()
     , aFollow( rName )
-    , pSet( NULL )
+    , pSet( nullptr )
     , nMask(mask)
     , nHelpId( 0 )
     , bMySet( false )
@@ -140,7 +140,7 @@ SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
     if( r.pSet )
         pSet = bMySet ? new SfxItemSet( *r.pSet ) : r.pSet;
     else
-        pSet = NULL;
+        pSet = nullptr;
 }
 
 SfxStyleSheetBase::~SfxStyleSheetBase()
@@ -152,7 +152,7 @@ SfxStyleSheetBase::~SfxStyleSheetBase()
     if( bMySet )
     {
         delete pSet;
-        pSet = 0;
+        pSet = nullptr;
     }
 }
 
@@ -411,7 +411,7 @@ struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
 
 SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
                                              SfxStyleFamily eFam, sal_uInt16 n)
-    : pAktStyle(NULL)
+    : pAktStyle(nullptr)
     , nAktPosition(0)
 {
     pBasePool=pBase;
@@ -451,7 +451,7 @@ sal_uInt16 SfxStyleSheetIterator::Count()
 
 SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
 {
-    SfxStyleSheetBase* retval = NULL;
+    SfxStyleSheetBase* retval = nullptr;
     if( IsTrivialSearch())
     {
         retval = pBasePool->pImp->mxIndexedStyleSheets->GetStyleSheetByPosition(nIdx).get();
@@ -471,14 +471,14 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
         DoesStyleMatchStyleSheetPredicate predicate(this);
         rtl::Reference< SfxStyleSheetBase > ref =
                 pBasePool->pImp->mxIndexedStyleSheets->GetNthStyleSheetThatMatchesPredicate(nIdx, predicate);
-        if (ref.get() != NULL)
+        if (ref.get() != nullptr)
         {
             nAktPosition = pBasePool->pImp->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
             retval = ref.get();
         }
     }
 
-    if (retval == NULL)
+    if (retval == nullptr)
     {
         OSL_FAIL("Incorrect index");
     }
@@ -492,14 +492,14 @@ SfxStyleSheetBase* SfxStyleSheetIterator::First()
         return operator[](0);
     }
     else {
-        return NULL;
+        return nullptr;
     }
 }
 
 
 SfxStyleSheetBase* SfxStyleSheetIterator::Next()
 {
-    SfxStyleSheetBase* retval = NULL;
+    SfxStyleSheetBase* retval = nullptr;
 
     if ( IsTrivialSearch() )
     {
@@ -530,7 +530,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
                 pBasePool->pImp->mxIndexedStyleSheets->GetNthStyleSheetThatMatchesPredicate(
                         0, predicate, nAktPosition+1);
         retval = ref.get();
-        if (retval != NULL) {
+        if (retval != nullptr) {
             nAktPosition = pBasePool->pImp->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
         }
     }
@@ -546,7 +546,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Find(const OUString& rStr)
             pBasePool->pImp->mxIndexedStyleSheets->FindPositionsByNameAndPredicate(rStr, predicate,
                     svl::IndexedStyleSheets::RETURN_FIRST);
     if (positions.empty()) {
-        return NULL;
+        return nullptr;
     }
 
     unsigned pos = positions.front();

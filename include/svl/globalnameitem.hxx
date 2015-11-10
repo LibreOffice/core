@@ -35,7 +35,7 @@ public:
                             virtual ~SfxGlobalNameItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     SvGlobalName            GetValue() const { return m_aName; }
 
     virtual bool            PutValue  ( const css::uno::Any& rVal,

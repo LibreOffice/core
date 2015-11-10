@@ -523,7 +523,7 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
 
 
 SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream, sal_uInt16 nTag )
-    : _pContentOfs(0)
+    : _pContentOfs(nullptr)
     , _nContentSize(0)
     , _nContentCount(0)
     , _nContentNo(0)

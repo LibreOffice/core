@@ -219,8 +219,8 @@ class SVL_DLLPUBLIC INetContentTypes
 public:
     static INetContentType RegisterContentType(OUString const & rTypeName,
                                                OUString const & rPresentation,
-                                               OUString const * pExtension = 0,
-                                               OUString const * pSystemFileType = 0);
+                                               OUString const * pExtension = nullptr,
+                                               OUString const * pSystemFileType = nullptr);
 
     static INetContentType GetContentType(OUString const & rTypeName);
 
@@ -237,7 +237,7 @@ public:
 
     static bool parse(OUString const & rMediaType, OUString & rType,
                       OUString & rSubType,
-                      INetContentTypeParameterList * pParameters = 0);
+                      INetContentTypeParameterList * pParameters = nullptr);
 };
 
 #endif // INCLUDED_SVL_INETTYPE_HXX

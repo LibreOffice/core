@@ -46,8 +46,8 @@ namespace {
         Node() // root node Ctor
             : mChildren(),
               maItemSet(),
-              mpItem( 0 ),
-              mpUpper( 0 ),
+              mpItem( nullptr ),
+              mpUpper( nullptr ),
               mbIsItemIgnorable( false )
         {}
         Node( const SfxPoolItem& rItem, Node* pParent, const bool bIgnorable ) // child node Ctor
@@ -174,7 +174,7 @@ namespace {
             if( aIter != mChildren.end() )
                 ++aIter;
         }
-        Node *pNext = 0;
+        Node *pNext = nullptr;
         while( aIter != mChildren.end() )
         {
             // #i86923#
@@ -194,7 +194,7 @@ namespace {
             {
                 return pNext;
             }
-            pNext = pNext->nextItemSet( 0, bSkipUnusedItemSets, bSkipIgnorable ); // 0 => downstairs only
+            pNext = pNext->nextItemSet( nullptr, bSkipUnusedItemSets, bSkipIgnorable ); // 0 => downstairs only
             if( pNext )
                 return pNext;
             ++aIter;
@@ -248,7 +248,7 @@ namespace {
                 }
                 else
                 {
-                    pChild = pChild->nextItemSet( 0, bSkipUnusedItemSets, false );
+                    pChild = pChild->nextItemSet( nullptr, bSkipUnusedItemSets, false );
                     if ( pChild )
                     {
                         return pChild->getUsedOrLastAddedItemSet();
@@ -287,7 +287,7 @@ namespace {
                   const bool bSkipIgnorable )
             : mrRoot( rR ),
               mpCurrNode( rR.begin() ),
-              mpNode(0),
+              mpNode(nullptr),
               mbSkipUnusedItemSets( bSkipUnusedItemSets ),
               mbSkipIgnorable( bSkipIgnorable )
         {}
@@ -352,12 +352,12 @@ private:
     SfxItemSet* mpIgnorableItems;
 public:
     // #i86923#
-    explicit StylePoolImpl( SfxItemSet* pIgnorableItems = 0 )
+    explicit StylePoolImpl( SfxItemSet* pIgnorableItems = nullptr )
         : maRoot(),
           mnCount(0),
-          mpIgnorableItems( pIgnorableItems != 0
+          mpIgnorableItems( pIgnorableItems != nullptr
                             ? pIgnorableItems->Clone( false )
-                            : 0 )
+                            : nullptr )
     {
         DBG_ASSERT( !pIgnorableItems || !pIgnorableItems->Count(),
                     "<StylePoolImpl::StylePoolImpl(..)> - misusage: item set for ignorable item should be empty. Please correct usage." );
@@ -396,7 +396,7 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
         if( !rSet.GetPool()->IsItemFlag(pItem->Which(), SfxItemPoolFlags::POOLABLE ) )
             bNonPoolable = true;
         if ( !xFoundIgnorableItems.get() ||
-             (xFoundIgnorableItems->Put( *pItem ) == 0 ) )
+             (xFoundIgnorableItems->Put( *pItem ) == nullptr ) )
         {
             pCurNode = pCurNode->findChildNode( *pItem );
         }

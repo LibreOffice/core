@@ -123,19 +123,19 @@ void Test::testNumberFormat()
         "#,##0",
         "#,##0.00",
         "#,###.00",
-        0
+        nullptr
     };
 
     const char* pScientific[] = {
         "0.00E+000",
         "0.00E+00",
-        0
+        nullptr
     };
 
     const char* pPercent[] = {
         "0%",
         "0.00%",
-        0
+        nullptr
     };
 
     const char* pFraction[] = {
@@ -147,7 +147,7 @@ void Test::testNumberFormat()
         "# \?/4",
         "# \?\?/100",
 #endif
-        0
+        nullptr
     };
 
 #if 0 // TODO: Find out why on some systems the last two currency format codes differ.
@@ -197,7 +197,7 @@ void Test::testNumberFormat()
         "[HH]:MM:SS",
         "MM:SS.00",
         "[HH]:MM:SS.00",
-        0
+        nullptr
     };
 
 #if 0 // TODO: This currently fails
@@ -210,12 +210,12 @@ void Test::testNumberFormat()
 
     const char* pBoolean[] = {
         "BOOLEAN",
-        0
+        nullptr
     };
 
     const char* pText[] = {
         "@",
-        0
+        nullptr
     };
 
     struct {
@@ -400,7 +400,7 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
                               OUString& sExpected)
 {
     OUString sStr;
-    Color* pColor = 0;
+    Color* pColor = nullptr;
     Color** ppColor = &pColor;
     if (!aFormatter.GetPreviewString(sCode, fPreviewNumber, sStr, ppColor, eLang))
         CPPUNIT_FAIL("GetPreviewString() failed");

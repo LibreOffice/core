@@ -91,7 +91,7 @@ public:
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
-                                                const IntlWrapper * = 0)
+                                                const IntlWrapper * = nullptr)
         const override;
 
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 = 0) const override;
@@ -104,7 +104,7 @@ public:
 
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const override;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const override;
+    virtual SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 
     virtual OUString GetValueTextByVal(bool bTheValue) const;
 };

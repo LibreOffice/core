@@ -42,8 +42,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = 0 ) const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const override;
+                                    const IntlWrapper * = nullptr ) const override;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
     inline sal_uInt16&          From() { return nFrom; }
     virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const override;
     virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const override;
@@ -67,8 +67,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = 0 ) const override;
-    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const override;
+                                    const IntlWrapper * = nullptr ) const override;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const override;
     virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const override;
 };

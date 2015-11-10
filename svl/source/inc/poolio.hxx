@@ -112,13 +112,13 @@ struct SfxItemPool_Impl
     bool                            mbPersistentRefCounts;
 
     SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
-        : maPoolItems(nEnd - nStart + 1, static_cast<SfxPoolItemArray_Impl*>(NULL))
+        : maPoolItems(nEnd - nStart + 1, static_cast<SfxPoolItemArray_Impl*>(nullptr))
         , aName(rName)
         , ppPoolDefaults(new SfxPoolItem* [nEnd - nStart + 1])
-        , ppStaticDefaults(0)
+        , ppStaticDefaults(nullptr)
         , mpMaster(pMaster)
-        , mpSecondary(NULL)
-        , mpPoolRanges(NULL)
+        , mpSecondary(nullptr)
+        , mpPoolRanges(nullptr)
         , mnStart(nStart)
         , mnEnd(nEnd)
         , mnFileFormatVersion(0)
@@ -153,9 +153,9 @@ struct SfxItemPool_Impl
         maPoolItems.clear();
 
         delete[] mpPoolRanges;
-        mpPoolRanges = NULL;
+        mpPoolRanges = nullptr;
         delete[] ppPoolDefaults;
-        ppPoolDefaults = NULL;
+        ppPoolDefaults = nullptr;
     }
 
     void readTheItems(SvStream & rStream, sal_uInt32 nCount, sal_uInt16 nVersion,

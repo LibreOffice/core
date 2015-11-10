@@ -28,8 +28,8 @@ OFSStreamContainer::OFSStreamContainer( const uno::Reference < io::XStream >& xS
 : m_bDisposed( false )
 , m_bInputClosed( false )
 , m_bOutputClosed( false )
-, m_pListenersContainer( NULL )
-, m_pTypeCollection( NULL )
+, m_pListenersContainer( nullptr )
+, m_pTypeCollection( nullptr )
 {
     try
     {
@@ -59,7 +59,7 @@ OFSStreamContainer::~OFSStreamContainer()
     if ( m_pListenersContainer )
     {
         delete m_pListenersContainer;
-        m_pListenersContainer = NULL;
+        m_pListenersContainer = nullptr;
     }
 }
 
@@ -145,11 +145,11 @@ void SAL_CALL OFSStreamContainer::release()
 uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
         throw( uno::RuntimeException, std::exception )
 {
-    if ( m_pTypeCollection == NULL )
+    if ( m_pTypeCollection == nullptr )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( m_pTypeCollection == NULL )
+        if ( m_pTypeCollection == nullptr )
         {
             ::cppu::OTypeCollection aTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()

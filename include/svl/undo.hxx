@@ -117,7 +117,7 @@ struct SVL_DLLPUBLIC SfxUndoArray
     SfxUndoArray            *pFatherUndoArray;
                             SfxUndoArray(size_t nMax=0):
                                 nMaxUndoActions(nMax), nCurUndoAction(0),
-                                pFatherUndoArray(0) {}
+                                pFatherUndoArray(nullptr) {}
     virtual ~SfxUndoArray();
 };
 

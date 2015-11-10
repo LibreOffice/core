@@ -43,12 +43,12 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nVersion) const override;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const override;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString & rText,
-                                    const IntlWrapper * = 0 ) const override;
+                                    const IntlWrapper * = nullptr ) const override;
             sal_uInt16           GetValue() const { return nVal; }
             void             SetValue( sal_uInt16 nNewVal ) {
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );

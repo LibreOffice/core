@@ -45,7 +45,7 @@ public:
 
     virtual sal_uInt16 GetVersion(sal_uInt16) const override;
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = NULL ) const override;
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     void SetValue( const OUString& rNewVal );
 
@@ -53,7 +53,7 @@ public:
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
                                                  OUString & rText,
-                                                 const IntlWrapper* pIntlWrapper = 0 ) const override;
+                                                 const IntlWrapper* pIntlWrapper = nullptr ) const override;
 
     virtual bool QueryValue( css::uno::Any& rVal,
                              sal_uInt8 nMemberId = 0 ) const override;

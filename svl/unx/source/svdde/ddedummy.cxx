@@ -21,22 +21,22 @@
 #include <rtl/instance.hxx>
 
 DdeData::DdeData()
-    : pImp(NULL)
+    : pImp(nullptr)
 {
 }
 
 DdeData::DdeData( const OUString& )
-    : pImp(NULL)
+    : pImp(nullptr)
 {
 }
 
 DdeData::DdeData( const DdeData& )
-    : pImp(NULL)
+    : pImp(nullptr)
 {
 }
 
 DdeData::DdeData( const void*, long, SotClipboardFormatId)
-    : pImp(NULL)
+    : pImp(nullptr)
 {
 }
 
@@ -65,7 +65,7 @@ DdeData::operator long() const
 
 DdeData::operator const void*() const
 {
-  return NULL;
+  return nullptr;
 }
 
 long DdeConnection::GetError()
@@ -74,9 +74,9 @@ long DdeConnection::GetError()
 }
 
 DdeConnection::DdeConnection( const OUString&, const OUString& )
-    : pService(NULL)
-    , pTopic(NULL)
-    , pImp(NULL)
+    : pService(nullptr)
+    , pTopic(nullptr)
+    , pImp(nullptr)
 {
 }
 
@@ -96,7 +96,7 @@ const OUString DdeConnection::GetTopicName()
 
 DdeTransaction::DdeTransaction( DdeConnection& rConnection, const OUString&, long )
     : rDde(rConnection)
-    , pName(NULL)
+    , pName(nullptr)
     , nType(0)
     , nId(0)
     , nTime(0)
@@ -137,7 +137,7 @@ DdePoke::DdePoke( DdeConnection& rConnection, const OUString& rString, const Dde
 
 
 DdeTopic::DdeTopic( const OUString& )
-    : pName(NULL)
+    : pName(nullptr)
 {
 }
 
@@ -160,7 +160,7 @@ void DdeTopic::RemoveItem( SAL_UNUSED_PARAMETER const DdeItem& )
 
 DdeData* DdeTopic::Get(SAL_UNUSED_PARAMETER SotClipboardFormatId)
 {
-    return NULL;
+    return nullptr;
 }
 
 bool DdeTopic::MakeItem( SAL_UNUSED_PARAMETER const OUString& )
@@ -194,9 +194,9 @@ const OUString DdeTopic::GetName() const
 }
 
 DdeService::DdeService( const OUString& )
-    : pSysTopic(NULL)
-    , pName(NULL)
-    , pConv(NULL)
+    : pSysTopic(nullptr)
+    , pName(nullptr)
+    , pConv(nullptr)
     , nStatus(0)
 {
 }
@@ -278,17 +278,17 @@ DdeServices& DdeService::GetServices()
 }
 
 DdeItem::DdeItem( const OUString& )
-    : pName(NULL)
-    , pMyTopic(NULL)
-    , pImpData(NULL)
+    : pName(nullptr)
+    , pMyTopic(nullptr)
+    , pImpData(nullptr)
     , nType(0)
 {
 }
 
 DdeItem::DdeItem( const DdeItem& )
-    : pName(NULL)
-    , pMyTopic(NULL)
-    , pImpData(NULL)
+    : pName(nullptr)
+    , pMyTopic(nullptr)
+    , pImpData(nullptr)
     , nType(0)
 {
 }
@@ -313,7 +313,7 @@ DdeGetPutItem::DdeGetPutItem( const DdeItem& rItem )
 
 DdeData* DdeGetPutItem::Get( SAL_UNUSED_PARAMETER SotClipboardFormatId )
 {
-    return NULL;
+    return nullptr;
 }
 
 bool DdeGetPutItem::Put( SAL_UNUSED_PARAMETER const DdeData* )

@@ -175,7 +175,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresentationMetric,
                                     OUString &rText,
-                                    const IntlWrapper * pIntlWrapper = 0 ) const;
+                                    const IntlWrapper * pIntlWrapper = nullptr ) const;
 
     virtual sal_uInt16       GetVersion( sal_uInt16 nFileFormatVersion ) const;
     virtual bool             ScaleMetrics( long lMult, long lDiv );
@@ -186,7 +186,7 @@ public:
 
     virtual SfxPoolItem*     Create( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const = 0;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const = 0;
 
     sal_uLong                GetRefCount() const { return m_nRefCount; }
     inline SfxItemKind       GetKind() const { return m_nKind; }
@@ -264,10 +264,10 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = 0 ) const override;
+                                    const IntlWrapper * = nullptr ) const override;
 
     // create a copy of itself
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
@@ -280,7 +280,7 @@ public:
                             TYPEINFO_OVERRIDE();
                             SfxSetItem( sal_uInt16 nWhich, SfxItemSet *pSet );
                             SfxSetItem( sal_uInt16 nWhich, const SfxItemSet &rSet );
-                            SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = 0 );
+                            SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = nullptr );
                             virtual ~SfxSetItem();
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -289,10 +289,10 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = 0 ) const override;
+                                    const IntlWrapper * = nullptr ) const override;
 
     // create a copy of itself
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const override = 0;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override = 0;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const override = 0;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nVer) const override;
 

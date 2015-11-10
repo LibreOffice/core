@@ -266,7 +266,7 @@ void Test::testNormalizedMakeRelative() {
             URIHelper::normalizedMakeRelative(
                 m_context, OUString::createFromAscii(tests[i].base),
                 OUString::createFromAscii(tests[i].absolute)));
-        bool ok = tests[i].relative == 0
+        bool ok = tests[i].relative == nullptr
             ? !ref.is()
             : ref.is() && ref->getUriReference().equalsAscii(tests[i].relative);
         OString msg;
@@ -287,7 +287,7 @@ void Test::testNormalizedMakeRelative() {
                 buf.append("none");
             }
             buf.append(" instead of ");
-            if (tests[i].relative == 0) {
+            if (tests[i].relative == nullptr) {
                 buf.append("none");
             } else {
                 buf.append('<');
@@ -310,7 +310,7 @@ void Test::testFindFirstURLInText() {
     static Data const tests[] = {
         { "...ftp://bla.bla.bla/blubber/...",
           "ftp://bla.bla.bla/blubber/", 3, 29 },
-        { "..\\ftp://bla.bla.bla/blubber/...", 0, 0, 0 },
+        { "..\\ftp://bla.bla.bla/blubber/...", nullptr, 0, 0 },
         { "..\\ftp:\\\\bla.bla.bla\\blubber/...",
 //Sync with tools/source/fsys/urlobj.cxx and changeScheme
 #ifdef LINUX
@@ -320,12 +320,12 @@ void Test::testFindFirstURLInText() {
 #endif
         { "http://sun.com", "http://sun.com/", 0, 14 },
         { "http://sun.com/", "http://sun.com/", 0, 15 },
-        { "http://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 0, 0 },
+        { "http://www.xerox.com@www.pcworld.com/go/3990332.htm", nullptr, 0, 0 },
         { "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm",
           "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 50 },
-        { "Version.1.2.3", 0, 0, 0 },
-        { "Version:1.2.3", 0, 0, 0 },
-        { "a.b.c", 0, 0, 0 },
+        { "Version.1.2.3", nullptr, 0, 0 },
+        { "Version:1.2.3", nullptr, 0, 0 },
+        { "a.b.c", nullptr, 0, 0 },
         { "file:///a|...", "file:///a:", 0, 10 },
         { "file:///a||...", "file:///a%7C%7C", 0, 11 },
         { "file:///a|/bc#...", "file:///a:/bc", 0, 13 },
@@ -333,61 +333,61 @@ void Test::testFindFirstURLInText() {
         { "abc.def.ghi,ftp.xxx.yyy/zzz...", "ftp://ftp.xxx.yyy/zzz", 12, 27 },
         { "abc.def.ghi,Ftp.xxx.yyy/zzz...", "ftp://Ftp.xxx.yyy/zzz", 12, 27 },
         { "abc.def.ghi,www.xxx.yyy...", "http://www.xxx.yyy/", 12, 23 },
-        { "abc.def.ghi,wwww.xxx.yyy...", 0, 0, 0 },
+        { "abc.def.ghi,wwww.xxx.yyy...", nullptr, 0, 0 },
         { "abc.def.ghi,wWW.xxx.yyy...", "http://wWW.xxx.yyy/", 12, 23 },
         { "Bla {mailto.me@abc.def.g.h.i}...",
           "mailto:%7Bmailto.me@abc.def.g.h.i", 4, 28 },
-        { "abc@def@ghi", 0, 0, 0 },
+        { "abc@def@ghi", nullptr, 0, 0 },
         { "lala@sun.com", "mailto:lala@sun.com", 0, 12 },
         { "1lala@sun.com", "mailto:1lala@sun.com", 0, 13 },
         { "aaa_bbb@xxx.yy", "mailto:aaa_bbb@xxx.yy", 0, 14 },
         { "{a:\\bla/bla/bla...}", "file:///a:/bla/bla/bla", 1, 15 },
         { "#b:/c/d#e#f#", "file:///b:/c/d", 1, 7 },
         { "a:/", "file:///a:/", 0, 3 },
-        { ".component:", 0, 0, 0 },
-        { ".uno:", 0, 0, 0 },
-        { "cid:", 0, 0, 0 },
-        { "data:", 0, 0, 0 },
-        { "db:", 0, 0, 0 },
-        { "file:", 0, 0, 0 },
-        { "ftp:", 0, 0, 0 },
-        { "http:", 0, 0, 0 },
-        { "https:", 0, 0, 0 },
-        { "imap:", 0, 0, 0 },
-        { "javascript:", 0, 0, 0 },
-        { "ldap:", 0, 0, 0 },
-        { "macro:", 0, 0, 0 },
-        { "mailto:", 0, 0, 0 },
-        { "news:", 0, 0, 0 },
-        { "out:", 0, 0, 0 },
-        { "pop3:", 0, 0, 0 },
-        { "private:", 0, 0, 0 },
-        { "slot:", 0, 0, 0 },
-        { "staroffice.component:", 0, 0, 0 },
-        { "staroffice.db:", 0, 0, 0 },
-        { "staroffice.factory:", 0, 0, 0 },
-        { "staroffice.helpid:", 0, 0, 0 },
-        { "staroffice.java:", 0, 0, 0 },
-        { "staroffice.macro:", 0, 0, 0 },
-        { "staroffice.out:", 0, 0, 0 },
-        { "staroffice.pop3:", 0, 0, 0 },
-        { "staroffice.private:", 0, 0, 0 },
-        { "staroffice.searchfolder:", 0, 0, 0 },
-        { "staroffice.slot:", 0, 0, 0 },
-        { "staroffice.trashcan:", 0, 0, 0 },
-        { "staroffice.uno:", 0, 0, 0 },
-        { "staroffice.vim:", 0, 0, 0 },
-        { "staroffice:", 0, 0, 0 },
-        { "vim:", 0, 0, 0 },
-        { "vnd.sun.star.cmd:", 0, 0, 0 },
-        { "vnd.sun.star.help:", 0, 0, 0 },
-        { "vnd.sun.star.hier:", 0, 0, 0 },
-        { "vnd.sun.star.pkg:", 0, 0, 0 },
-        { "vnd.sun.star.script:", 0, 0, 0 },
-        { "vnd.sun.star.webdav:", 0, 0, 0 },
-        { "vnd.sun.star.wfs:", 0, 0, 0 },
-        { "generic:path", 0, 0, 0 },
-        { "wfs:", 0, 0, 0 }
+        { ".component:", nullptr, 0, 0 },
+        { ".uno:", nullptr, 0, 0 },
+        { "cid:", nullptr, 0, 0 },
+        { "data:", nullptr, 0, 0 },
+        { "db:", nullptr, 0, 0 },
+        { "file:", nullptr, 0, 0 },
+        { "ftp:", nullptr, 0, 0 },
+        { "http:", nullptr, 0, 0 },
+        { "https:", nullptr, 0, 0 },
+        { "imap:", nullptr, 0, 0 },
+        { "javascript:", nullptr, 0, 0 },
+        { "ldap:", nullptr, 0, 0 },
+        { "macro:", nullptr, 0, 0 },
+        { "mailto:", nullptr, 0, 0 },
+        { "news:", nullptr, 0, 0 },
+        { "out:", nullptr, 0, 0 },
+        { "pop3:", nullptr, 0, 0 },
+        { "private:", nullptr, 0, 0 },
+        { "slot:", nullptr, 0, 0 },
+        { "staroffice.component:", nullptr, 0, 0 },
+        { "staroffice.db:", nullptr, 0, 0 },
+        { "staroffice.factory:", nullptr, 0, 0 },
+        { "staroffice.helpid:", nullptr, 0, 0 },
+        { "staroffice.java:", nullptr, 0, 0 },
+        { "staroffice.macro:", nullptr, 0, 0 },
+        { "staroffice.out:", nullptr, 0, 0 },
+        { "staroffice.pop3:", nullptr, 0, 0 },
+        { "staroffice.private:", nullptr, 0, 0 },
+        { "staroffice.searchfolder:", nullptr, 0, 0 },
+        { "staroffice.slot:", nullptr, 0, 0 },
+        { "staroffice.trashcan:", nullptr, 0, 0 },
+        { "staroffice.uno:", nullptr, 0, 0 },
+        { "staroffice.vim:", nullptr, 0, 0 },
+        { "staroffice:", nullptr, 0, 0 },
+        { "vim:", nullptr, 0, 0 },
+        { "vnd.sun.star.cmd:", nullptr, 0, 0 },
+        { "vnd.sun.star.help:", nullptr, 0, 0 },
+        { "vnd.sun.star.hier:", nullptr, 0, 0 },
+        { "vnd.sun.star.pkg:", nullptr, 0, 0 },
+        { "vnd.sun.star.script:", nullptr, 0, 0 },
+        { "vnd.sun.star.webdav:", nullptr, 0, 0 },
+        { "vnd.sun.star.wfs:", nullptr, 0, 0 },
+        { "generic:path", nullptr, 0, 0 },
+        { "wfs:", nullptr, 0, 0 }
     };
     CharClass charClass( m_context, LanguageTag( css::lang::Locale("en", "US", "")));
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
@@ -396,7 +396,7 @@ void Test::testFindFirstURLInText() {
         sal_Int32 end = input.getLength();
         OUString result(
             URIHelper::FindFirstURLInText(input, begin, end, charClass));
-        bool ok = tests[i].result == 0
+        bool ok = tests[i].result == nullptr
             ? (result.getLength() == 0 && begin == input.getLength()
                && end == input.getLength())
             : (result.equalsAscii(tests[i].result) && begin == tests[i].begin
@@ -407,7 +407,7 @@ void Test::testFindFirstURLInText() {
             buf.append('"');
             buf.append(tests[i].input);
             buf.append("\" -> ");
-            buf.append(tests[i].result == 0 ? "none" : tests[i].result);
+            buf.append(tests[i].result == nullptr ? "none" : tests[i].result);
             buf.append(" (");
             buf.append(static_cast< sal_Int32 >(tests[i].begin));
             buf.append(", ");

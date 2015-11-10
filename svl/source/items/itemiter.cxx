@@ -62,7 +62,7 @@ const SfxPoolItem* SfxItemIter::NextItem()
         } while (m_nCurrent < m_nEnd && !*(ppFnd + m_nCurrent ));
         return *(ppFnd+m_nCurrent);
     }
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

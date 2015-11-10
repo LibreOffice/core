@@ -41,7 +41,7 @@ public:
 // Default ctor for getReflection
 SvNumberFormatsSupplierObj::SvNumberFormatsSupplierObj()
 {
-    pImpl = new SvNumFmtSuppl_Impl(NULL);
+    pImpl = new SvNumFmtSuppl_Impl(nullptr);
 }
 
 SvNumberFormatsSupplierObj::SvNumberFormatsSupplierObj(SvNumberFormatter* pForm)
@@ -117,7 +117,7 @@ const uno::Sequence<sal_Int8>& SvNumberFormatsSupplierObj::getUnoTunnelId()
 SvNumberFormatsSupplierObj* SvNumberFormatsSupplierObj::getImplementation(
                                 const uno::Reference<util::XNumberFormatsSupplier>& rObj )
 {
-    SvNumberFormatsSupplierObj* pRet = NULL;
+    SvNumberFormatsSupplierObj* pRet = nullptr;
     uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<SvNumberFormatsSupplierObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( getUnoTunnelId() )));

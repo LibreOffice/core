@@ -28,7 +28,7 @@ public:
 
     virtual bool GetPresentation(
         SfxItemPresentation, SfxMapUnit, SfxMapUnit,
-        OUString& rText, const IntlWrapper* pIntlWrapper = NULL ) const override;
+        OUString& rText, const IntlWrapper* pIntlWrapper = nullptr ) const override;
 
     virtual bool QueryValue(
         css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -40,7 +40,7 @@ public:
 
     virtual SvStream& Store( SvStream& rStream, sal_uInt16 nItemVersion ) const override;
 
-    virtual SfxPoolItem* Clone( SfxItemPool* pOther = NULL ) const override;
+    virtual SfxPoolItem* Clone( SfxItemPool* pOther = nullptr ) const override;
 
     sal_Int64 GetValue() const { return mnValue;}
 
