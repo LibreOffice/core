@@ -77,13 +77,13 @@ void SwClient::Modify(SfxPoolItem const*const pOldValue, SfxPoolItem const*const
 
 void SwModify::SetInDocDTOR()
 {
-    m_bInDocDTOR = true;
     // If the document gets destroyed anyway, just tell clients to
     // forget me so that they don't try to get removed from my list
     // later when they also get destroyed
     SwIterator<SwClient,SwModify> aIter(*this);
     for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
         pClient->pRegisteredIn = nullptr;
+    m_pWriterListeners = nullptr;
 }
 
 SwModify::~SwModify()
@@ -97,8 +97,6 @@ SwModify::~SwModify()
     if ( IsInSwFntCache() )
         pSwFontCache->Delete( this );
 
-    if(m_bInDocDTOR)
-        return;
     // notify all clients that they shall remove themselves
     SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
     NotifyClients( &aDyObject, &aDyObject );
@@ -203,9 +201,6 @@ void SwModify::Add( SwClient* pDepend )
 
 SwClient* SwModify::Remove( SwClient* pDepend )
 {
-    if(m_bInDocDTOR)
-        return nullptr;
-
     DBG_TESTSOLARMUTEX();
     assert(pDepend->pRegisteredIn == this);
 
