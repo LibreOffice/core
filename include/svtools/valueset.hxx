@@ -89,7 +89,7 @@ WB_NONEFIELD        There is a NoSelection field which can be selected if
                     is selected. This field shows the text which is specified
                     by SetText() respectively no one, if no text was set. With
                     SetNoSelection() the selection can be disabled.
-WB_VSCROLL          A scroolbar will be always shown. The visible number of
+WB_VSCROLL          A scrollbar will be always shown. The visible number of
                     lines have to be specified with SetLineCount() if this
                     flag is set.
 WB_BORDER           A border will be drawn around the window.

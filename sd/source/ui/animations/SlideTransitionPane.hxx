@@ -29,6 +29,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
+#include <svtools/valueset.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -69,6 +70,8 @@ public:
 private:
     void updateControls();
     void updateControlState();
+    void updateVariants(size_t nPresetOffset);
+    size_t getPresetOffset(const impl::TransitionEffect &rEffect);
 
     void updateSoundList();
     void openSoundFileDialog();
@@ -90,20 +93,20 @@ private:
     DECL_LINK_TYPED( PlayButtonClicked, Button*, void );
     DECL_LINK_TYPED( AutoPreviewClicked, Button*, void );
 
-    DECL_LINK_TYPED( TransitionSelected, ListBox&, void );
+    DECL_LINK_TYPED( TransitionSelected, ValueSet *, void );
     DECL_LINK_TYPED( AdvanceSlideRadioButtonToggled, RadioButton&, void );
     DECL_LINK_TYPED( AdvanceTimeModified, Edit&, void );
     DECL_LINK_TYPED( VariantListBoxSelected, ListBox&, void );
     DECL_LINK_TYPED( SpeedListBoxSelected, ListBox&, void );
     DECL_LINK_TYPED( SoundListBoxSelected, ListBox&, void );
     DECL_LINK_TYPED( LoopSoundBoxChecked, Button*, void );
-    DECL_LINK_TYPED(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
+    DECL_LINK_TYPED( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
     DECL_LINK_TYPED(LateInitCallback, Timer *, void);
 
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;
 
-    VclPtr<ListBox>      mpLB_SLIDE_TRANSITIONS;
+    VclPtr<ValueSet>     mpVS_TRANSITION_ICONS;
     VclPtr<FixedText>    mpFT_VARIANT;
     VclPtr<ListBox>      mpLB_VARIANT;
     VclPtr<FixedText>    mpFT_SPEED;
@@ -128,12 +131,6 @@ private:
     typedef ::std::vector< OUString > tSoundListType;
     tSoundListType  maSoundList;
     mutable OUString maCurrentSoundFile;
-
-    // Map from TransitionSets (as in Effects.xcu) to mpLB_SLIDE_TRANSITIONS entry index.
-    std::map< OUString, int > m_aSetToTransitionLBIndex;
-
-    // The reverse mapping: TransitionSets id of each entry in mpLB_SLIDE_TRANSITIONS.
-    std::vector< OUString > m_aTransitionLBToSet;
 
     // How many variants each transition set has
     std::map< OUString, int > m_aNumVariants;
