@@ -643,8 +643,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     {
         mnColorRate = 0;
     }
-    maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
-    mpCamera = static_cast<opengl3D::Camera*>(&maShapes.back());
+    maShapes.push_back(std::make_unique<opengl3D::Camera>(mpRenderer.get()));
+    mpCamera = static_cast<opengl3D::Camera*>(maShapes.back().get());
 
     sal_Int32 nSeriesIndex = 0;
     sal_Int32 nMaxPointCount = 0;
@@ -678,10 +678,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         if(!aSeriesName.isEmpty())
         {
-            maShapes.push_back(new opengl3D::Text(mpRenderer.get(),
+            maShapes.push_back(std::make_unique<opengl3D::Text>(mpRenderer.get(),
                         *mpTextCache, aSeriesName, nId));
             nId += ID_STEP;
-            opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
+            opengl3D::Text* p = static_cast<opengl3D::Text*>(maShapes.back().get());
             glm::vec3 aTopLeft, aTopRight, aBottomRight;
             aTopRight.x = -BAR_DISTANCE_Y;
             aTopRight.y = nYPos + BAR_DISTANCE_Y;
@@ -729,7 +729,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
                         processAutoFly(nId, nColor);
                 }
             }
-            maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId));
+            maShapes.push_back(std::make_unique<opengl3D::Bar>(mpRenderer.get(), aBarPosition, nColor, nId));
             nId += ID_STEP;
         }
 
@@ -743,9 +743,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     nYPos += BAR_SIZE_Y + BAR_DISTANCE_Y;
 
     // X axis
-    maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId));
+    maShapes.push_back(std::make_unique<opengl3D::Line>(mpRenderer.get(), nId));
     nId += ID_STEP;
-    opengl3D::Line* pAxis = static_cast<opengl3D::Line*>(&maShapes.back());
+    opengl3D::Line* pAxis = static_cast<opengl3D::Line*>(maShapes.back().get());
     glm::vec3 aBegin;
     aBegin.y = nYPos;
     glm::vec3 aEnd = aBegin;
@@ -754,9 +754,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     pAxis->setLineColor(COL_BLUE);
 
     // Y axis
-    maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId));
+    maShapes.push_back(std::make_unique<opengl3D::Line>(mpRenderer.get(), nId));
     nId += ID_STEP;
-    pAxis = static_cast<opengl3D::Line*>(&maShapes.back());
+    pAxis = static_cast<opengl3D::Line*>(maShapes.back().get());
     aBegin.x = aBegin.y = 0;
     aEnd = aBegin;
     aEnd.y = nYPos;
@@ -764,9 +764,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     pAxis->setLineColor(COL_BLUE);
 
     // Chart background.
-    maShapes.push_back(new opengl3D::Rectangle(mpRenderer.get(), nId));
+    maShapes.push_back(std::make_unique<opengl3D::Rectangle>(mpRenderer.get(), nId));
     nId += ID_STEP;
-    opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(&maShapes.back());
+    opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(maShapes.back().get());
     glm::vec3 aTopLeft;
     glm::vec3 aTopRight = aTopLeft;
     aTopRight.x = mbBenchMarkMode ? (mbScrollFlg ? nXEnd - BAR_SIZE_X : nXEnd + 2 * BAR_DISTANCE_X) : (nXEnd + 2 * BAR_DISTANCE_X);
@@ -791,10 +791,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         float nXPos = i * (BAR_SIZE_X + BAR_DISTANCE_X);
 
-        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), *mpTextCache,
+        maShapes.push_back(std::make_unique<opengl3D::Text>(mpRenderer.get(), *mpTextCache,
                     aCats[i], nId));
         nId += ID_STEP;
-        opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
+        opengl3D::Text* p = static_cast<opengl3D::Text*>(maShapes.back().get());
         aTopLeft.x = nXPos + TEXT_HEIGHT + 0.5 * BAR_SIZE_X;
         aTopLeft.y = nYPos + calculateTextWidth(aCats[i]) + 0.5 * BAR_DISTANCE_Y;
         aTopRight = aTopLeft;
@@ -805,10 +805,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
         // create shapes on other side as well
 
-        maShapes.push_back(new opengl3D::Text(mpRenderer.get(), *mpTextCache,
+        maShapes.push_back(std::make_unique<opengl3D::Text>(mpRenderer.get(), *mpTextCache,
                     aCats[i], nId));
         nId += ID_STEP;
-        p = static_cast<opengl3D::Text*>(&maShapes.back());
+        p = static_cast<opengl3D::Text*>(maShapes.back().get());
         aTopLeft.x = nXPos + TEXT_HEIGHT + 0.5 * BAR_SIZE_X;
         aTopLeft.y =  - 0.5 * BAR_DISTANCE_Y;
         aTopRight = aTopLeft;
@@ -975,9 +975,9 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
         glm::vec3 aTextPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
                 rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
                 rBarInfo.maPos.z);
-        maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
+        maShapes.push_back(std::make_unique<opengl3D::ScreenText>(mpRenderer.get(), *mpTextCache,
                     "Value: " + OUString::number(rBarInfo.mnVal), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), CALC_POS_EVENT_ID));
-        opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
+        opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(maShapes.back().get());
         pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f), aTextPos);
         pScreenText->render();
         mpWindow->getContext().resetCurrent();
@@ -1015,10 +1015,9 @@ void GL3DBarChart::renderFrame()
     if(mbNeedsNewRender)
     {
         mpRenderer->ReleaseTextTexture();
-        for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
-                itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+        for(std::unique_ptr<opengl3D::Renderable3DObject>& aObj : maShapes)
         {
-            itr->render();
+            aObj->render();
         }
     }
     else

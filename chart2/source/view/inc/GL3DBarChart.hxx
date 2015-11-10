@@ -120,7 +120,7 @@ private:
     void getNeighborBarID(sal_uInt32 nSelectBarId, sal_uInt32 *pNeighborBarId);
     void addMovementScreenText(sal_uInt32 nBarId);
     css::uno::Reference<css::chart2::XChartType> mxChartType;
-    boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
+    std::vector<std::unique_ptr<opengl3D::Renderable3DObject> > maShapes;
 
     std::unique_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
     VclPtr<OpenGLWindow> mpWindow;
