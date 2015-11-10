@@ -123,6 +123,35 @@ double colorDiffSquared(const ARGBColor& rCol1, const ARGBColor& rCol2)
         + square(rCol1.b-rCol2.b);
 }
 
+/**
+    check whether a polypolygon contains both open and closed
+    polygons
+**/
+bool PolyPolygonIsMixedOpenAndClosed( const basegfx::B2DPolyPolygon& rPoly )
+{
+    bool bRetval(false);
+    bool bOpen(false);
+    bool bClosed(false);
+
+    // PolyPolygon is mixed open and closed if there is more than one
+    // polygon and there are both closed and open polygons.
+    for( sal_uInt32 a(0L); !bRetval && a < rPoly.count(); a++ )
+    {
+        if ( (rPoly.getB2DPolygon(a)).isClosed() )
+        {
+            bClosed = true;
+        }
+        else
+        {
+            bOpen = true;
+        }
+
+        bRetval = (bClosed && bOpen);
+    }
+
+    return bRetval;
+}
+
 typedef std::map<OUString,sal_Size> ElementRefMapType;
 
 struct AnnotatingVisitor
@@ -1350,11 +1379,26 @@ struct ShapeWritingVisitor
                     aPoly.setClosed(true);
                 }
 
-                writePathShape(xAttrs,
-                               xUnoAttrs,
-                               xElem,
-                               sStyleId,
-                               aPoly);
+                // tdf#51165: rendering of paths with open and closed polygons is not implemented
+                // split mixed polypolygons into single polygons and add them one by one
+                if( PolyPolygonIsMixedOpenAndClosed(aPoly) )
+                {
+                    for( sal_uInt32 i(0L); i<aPoly.count(); ++i ) {
+                        writePathShape(xAttrs,
+                                       xUnoAttrs,
+                                       xElem,
+                                       sStyleId,
+                                       basegfx::B2DPolyPolygon(aPoly.getB2DPolygon(i)));
+                    }
+                }
+                else
+                {
+                    writePathShape(xAttrs,
+                                   xUnoAttrs,
+                                   xElem,
+                                   sStyleId,
+                                   aPoly);
+                }
                 break;
             }
             case XML_CIRCLE:
