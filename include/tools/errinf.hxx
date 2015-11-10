@@ -126,7 +126,7 @@ private:
     ErrorContextImpl *pImpl;
 
 public:
-                            ErrorContext(vcl::Window *pWin=0);
+                            ErrorContext(vcl::Window *pWin=nullptr);
     virtual                 ~ErrorContext();
 
     virtual bool            GetString( sal_uIntPtr nErrId, OUString& rCtxStr ) = 0;

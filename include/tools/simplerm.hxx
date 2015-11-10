@@ -53,7 +53,7 @@ public:
     static SimpleResMgr*    Create( const sal_Char* pPrefixName,
                                     const LanguageTag& rLocale = LanguageTag( LANGUAGE_SYSTEM) );// only in VCL
 
-    bool                    IsValid() const { return m_pResImpl != NULL; }
+    bool                    IsValid() const { return m_pResImpl != nullptr; }
 
     /** reads the string with the given resource id
         @param  nId

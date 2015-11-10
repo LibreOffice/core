@@ -249,19 +249,19 @@ namespace tools_urlobj
             url = INetURLObject("data:");
             //TODO: CPPUNIT_ASSERT(url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == 0);
+            CPPUNIT_ASSERT(strm == nullptr);
 
             url = INetURLObject("data:,");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT(strm != nullptr);
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), strm->GetSize());
             strm.reset();
 
             url = INetURLObject("data:,,%C3%A4%90");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT(strm != nullptr);
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(4), strm->GetSize());
             buf = static_cast<unsigned char const *>(strm->GetData());
             CPPUNIT_ASSERT_EQUAL(0x2C, int(buf[0]));
@@ -273,26 +273,26 @@ namespace tools_urlobj
             url = INetURLObject("data:base64,");
             //TODO: CPPUNIT_ASSERT(url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == 0);
+            CPPUNIT_ASSERT(strm == nullptr);
 
             url = INetURLObject("data:;base64,");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT(strm != nullptr);
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), strm->GetSize());
             strm.reset();
 
             url = INetURLObject("data:;bAsE64,");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT(strm != nullptr);
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), strm->GetSize());
             strm.reset();
 
             url = INetURLObject("data:;base64,YWJjCg==");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT(strm != nullptr);
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(4), strm->GetSize());
             buf = static_cast<unsigned char const *>(strm->GetData());
             CPPUNIT_ASSERT_EQUAL(0x61, int(buf[0]));
@@ -304,17 +304,17 @@ namespace tools_urlobj
             url = INetURLObject("data:;base64,YWJjCg=");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == 0);
+            CPPUNIT_ASSERT(strm == nullptr);
 
             url = INetURLObject("data:;base64,YWJ$Cg==");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == 0);
+            CPPUNIT_ASSERT(strm == nullptr);
 
             url = INetURLObject("data:text/plain;param=%22;base64,%22,YQ==");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT(strm != nullptr);
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(4), strm->GetSize());
             buf = static_cast<unsigned char const *>(strm->GetData());
             CPPUNIT_ASSERT_EQUAL(0x59, int(buf[0]));
@@ -326,7 +326,7 @@ namespace tools_urlobj
             url = INetURLObject("http://example.com");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
-            CPPUNIT_ASSERT(strm == 0);
+            CPPUNIT_ASSERT(strm == nullptr);
         }
 
         void urlobjTest_isSchemeEqualTo() {

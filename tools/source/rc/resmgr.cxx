@@ -56,7 +56,7 @@
 using namespace osl;
 
 // for thread safety
-static osl::Mutex* pResMgrMutex = NULL;
+static osl::Mutex* pResMgrMutex = nullptr;
 
 static osl::Mutex& getResMgrMutex()
 {
@@ -116,7 +116,7 @@ class ResMgrContainer
         int             nLoadCount;
 
         ContainerElement() :
-            pResMgr( NULL ),
+            pResMgr( nullptr ),
             nRefCount( 0 ),
             nLoadCount( 0 )
             {}
@@ -148,7 +148,7 @@ public:
     { return m_aDefLocale; }
 };
 
-ResMgrContainer* ResMgrContainer::pOneInstance = NULL;
+ResMgrContainer* ResMgrContainer::pOneInstance = nullptr;
 
 ResMgrContainer& ResMgrContainer::get()
 {
@@ -172,7 +172,7 @@ ResMgrContainer::~ResMgrContainer()
 void ResMgrContainer::release()
 {
     delete pOneInstance;
-    pOneInstance = NULL;
+    pOneInstance = nullptr;
 }
 
 void ResMgrContainer::init()
@@ -306,7 +306,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             m_aResFiles[ sURL ].aFileURL = sURL;
             return getResMgr(rPrefix,rLocale,bForceNewInstance);
         } // if ( m_aResFiles.find(sURL) == m_aResFiles.end() )
-        return NULL;
+        return nullptr;
     }
 
     rLocale = aLocale;
@@ -324,7 +324,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
         {
             // shortcut: the match algorithm already created the InternalResMgr
             // take it instead of creating yet another one
-            it->second.pResMgr = NULL;
+            it->second.pResMgr = nullptr;
             pImp->bSingular = true;
         }
         else
@@ -334,7 +334,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             if( !pImp->Create() )
             {
                 delete pImp;
-                pImp = NULL;
+                pImp = nullptr;
             }
             else
                 it->second.nLoadCount++;
@@ -366,7 +366,7 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
     {
         if( pNext->bSingular )
             delete pNext;
-        pNext = NULL;
+        pNext = nullptr;
     }
     return pNext;
 }
@@ -387,7 +387,7 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
             if( it->second.nRefCount == 0 )
             {
                 delete it->second.pResMgr;
-                it->second.pResMgr = NULL;
+                it->second.pResMgr = nullptr;
             }
         }
     }
@@ -415,16 +415,16 @@ struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpCon
     }
 };
 
-static ResHookProc pImplResHookProc = 0;
+static ResHookProc pImplResHookProc = nullptr;
 
 InternalResMgr::InternalResMgr( const OUString& rFileURL,
                                 const OUString& rPrefix,
                                 const OUString& rResName,
                                 const LanguageTag& rLocale )
-    : pContent( NULL )
+    : pContent( nullptr )
     , nOffCorrection( 0 )
-    , pStringBlock( NULL )
-    , pStm( NULL )
+    , pStringBlock( nullptr )
+    , pStm( nullptr )
     , bEqual2Content( true )
     , nEntries( 0 )
     , aFileName( rFileURL )
@@ -432,7 +432,7 @@ InternalResMgr::InternalResMgr( const OUString& rFileURL,
     , aResName( rResName )
     , bSingular( false )
     , aLocale( rLocale )
-    , pResUseDump( 0 )
+    , pResUseDump( nullptr )
 {
 }
 
@@ -601,7 +601,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
         } // if( nRT == RSC_STRING && bEqual2Content )
         else
         {
-            *pResHandle = 0;
+            *pResHandle = nullptr;
             RSHEADER_TYPE aHeader;
             pStm->Seek( pFind->nOffset );
             pStm->Read( &aHeader, sizeof( RSHEADER_TYPE ) );
@@ -612,8 +612,8 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
             return pRes;
         }
     } // if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == nValue) )
-    *pResHandle = 0;
-    return NULL;
+    *pResHandle = nullptr;
+    return nullptr;
 }
 
 void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
@@ -723,10 +723,10 @@ static void RscException_Impl()
 
 void ImpRCStack::Init( ResMgr* pMgr, const Resource* pObj, sal_uInt32 Id )
 {
-    pResource       = NULL;
-    pClassRes       = NULL;
+    pResource       = nullptr;
+    pClassRes       = nullptr;
     Flags           = RCFlags::NONE;
-    aResHandle      = NULL;
+    aResHandle      = nullptr;
     pResObj         = pObj;
     nId             = Id & ~RSC_DONTRELEASE; //TLX: Besser Init aendern
     pResMgr         = pMgr;
@@ -736,13 +736,13 @@ void ImpRCStack::Init( ResMgr* pMgr, const Resource* pObj, sal_uInt32 Id )
 
 void ImpRCStack::Clear()
 {
-    pResource       = NULL;
-    pClassRes       = NULL;
+    pResource       = nullptr;
+    pClassRes       = nullptr;
     Flags           = RCFlags::NONE;
-    aResHandle      = NULL;
-    pResObj         = NULL;
+    aResHandle      = nullptr;
+    pResObj         = nullptr;
     nId             = 0;
-    pResMgr         = NULL;
+    pResMgr         = nullptr;
 }
 
 static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
@@ -767,10 +767,10 @@ static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
-void* ResMgr::pEmptyBuffer = NULL;
+void* ResMgr::pEmptyBuffer = nullptr;
 
 void* ResMgr::getEmptyBuffer()
 {
@@ -786,12 +786,12 @@ void ResMgr::DestroyAllResMgr()
         if( pEmptyBuffer )
         {
             rtl_freeMemory( pEmptyBuffer );
-            pEmptyBuffer = NULL;
+            pEmptyBuffer = nullptr;
         }
         ResMgrContainer::release();
     }
     delete pResMgrMutex;
-    pResMgrMutex = NULL;
+    pResMgrMutex = nullptr;
 }
 
 void ResMgr::Init( const OUString& rFileName )
@@ -811,7 +811,7 @@ void ResMgr::Init( const OUString& rFileName )
 #ifdef DBG_UTIL
     else
     {
-        void* aResHandle = 0;     // Helper variable for resource handles
+        void* aResHandle = nullptr;     // Helper variable for resource handles
         void* pVoid;              // Pointer on the resource
 
         pVoid = pImpRes->LoadGlobalRes( RSC_VERSIONCONTROL, RSCVERSION_ID,
@@ -826,7 +826,7 @@ void ResMgr::Init( const OUString& rFileName )
 #endif
     nCurStack = -1;
     aStack.clear();
-    pFallbackResMgr = pOriginalResMgr = NULL;
+    pFallbackResMgr = pOriginalResMgr = nullptr;
     incStack();
 }
 
@@ -881,7 +881,7 @@ void ResMgr::decStack()
                      OUStringToOString(pFallbackResMgr->GetFileName(), osl_getThreadTextEncoding() ).getStr() );
             #endif
             delete pFallbackResMgr;
-            pFallbackResMgr = NULL;
+            pFallbackResMgr = nullptr;
         }
         nCurStack--;
     }
@@ -923,7 +923,7 @@ bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
     if( pMgr->pFallbackResMgr )
     {
         ResId aId( rId );
-        aId.SetResMgr( NULL );
+        aId.SetResMgr( nullptr );
         return pMgr->pFallbackResMgr->IsAvailable( aId, pResObj );
     }
 
@@ -961,7 +961,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     if( pFallbackResMgr )
     {
         ResId aId( rId );
-        aId.SetResMgr( NULL );
+        aId.SetResMgr( nullptr );
         return pFallbackResMgr->GetResource( aId, pResObj );
     }
 
@@ -1094,11 +1094,11 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
     if( pFallbackResMgr )
     {
         ResId aId( rId );
-        aId.SetResMgr( NULL );
+        aId.SetResMgr( nullptr );
         return pFallbackResMgr->CreateBlock( aId );
     }
 
-    RSHEADER_TYPE* pHeader = NULL;
+    RSHEADER_TYPE* pHeader = nullptr;
     if ( GetResource( rId ) )
     {
         // Pointer is at the beginning of the resource, thus
@@ -1221,7 +1221,7 @@ void* ResMgr::Increment( sal_uInt32 nSize )
 
 ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResource )
 {
-    ResMgr *pFallback = NULL;
+    ResMgr *pFallback = nullptr;
     if( nCurStack > 0 )
     {
         // get the next fallback level in resource file scope
@@ -1239,7 +1239,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
             {
                 // found a recursion, no fallback possible
                 ResMgrContainer::get().freeResMgr( pRes );
-                return NULL;
+                return nullptr;
             }
             OSL_TRACE( "trying fallback: %s", OUStringToOString( pRes->aFileName, osl_getThreadTextEncoding() ).getStr() );
             pFallback = new ResMgr( pRes );
@@ -1273,7 +1273,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
             if( !bHaveStack )
             {
                 delete pFallback;
-                pFallback = NULL;
+                pFallback = nullptr;
             }
         }
     }
@@ -1292,7 +1292,7 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
         aLocale = ResMgrContainer::get().getDefLocale();
 
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, aLocale );
-    return pImp ? new ResMgr( pImp ) : NULL;
+    return pImp ? new ResMgr( pImp ) : nullptr;
 }
 
 ResMgr* ResMgr::SearchCreateResMgr(
@@ -1307,7 +1307,7 @@ ResMgr* ResMgr::SearchCreateResMgr(
         rLocale = ResMgrContainer::get().getDefLocale();
 
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, rLocale );
-    return pImp ? new ResMgr( pImp ) : NULL;
+    return pImp ? new ResMgr( pImp ) : nullptr;
 }
 
 sal_Int16 ResMgr::ReadShort()
@@ -1527,7 +1527,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
     if ( !m_pResImpl )
         return sReturn;
 
-    void* pResHandle = NULL;
+    void* pResHandle = nullptr;
     InternalResMgr* pFallback = m_pResImpl;
     RSHEADER_TYPE* pResHeader = static_cast<RSHEADER_TYPE*>(m_pResImpl->LoadGlobalRes( RSC_STRING, nId, &pResHandle ));
     if ( !pResHeader )
@@ -1551,7 +1551,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
                 else
                 {
                     ResMgrContainer::get().freeResMgr( pFallback );
-                    pFallback = NULL;
+                    pFallback = nullptr;
                 }
             }
         }

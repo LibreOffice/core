@@ -155,7 +155,7 @@ Date::Date( DateInitSystem )
     struct tm aTime;
 
     // get current time
-    nTmpTime = time( 0 );
+    nTmpTime = time( nullptr );
 
     // compute date
     if ( localtime_r( &nTmpTime, &aTime ) )

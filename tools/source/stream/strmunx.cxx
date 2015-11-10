@@ -174,7 +174,7 @@ class StreamData
 public:
     oslFileHandle rHandle;
 
-    StreamData() : rHandle( 0 ) { }
+    StreamData() : rHandle( nullptr ) { }
 };
 
 static sal_uInt32 GetSvError( int nErrno )
@@ -554,7 +554,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
             rc = osl_closeFile( nHandleTmp );
             bIsOpen = false;
             m_isWritable = false;
-            pInstanceData->rHandle = 0;
+            pInstanceData->rHandle = nullptr;
         }
     }
     else
@@ -576,7 +576,7 @@ void SvFileStream::Close()
 
         Flush();
         osl_closeFile( pInstanceData->rHandle );
-        pInstanceData->rHandle = 0;
+        pInstanceData->rHandle = nullptr;
     }
 
     bIsOpen     = false;

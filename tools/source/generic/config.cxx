@@ -97,7 +97,7 @@ static sal_uIntPtr ImplSysGetConfigTimeStamp( const OUString& rFileName )
 static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
                                 sal_uInt64& rRead, bool& rbRead, bool& rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
 {
-    sal_uInt8*          pBuf = NULL;
+    sal_uInt8*          pBuf = nullptr;
     ::osl::File aFile( rFileName );
 
     if( aFile.open( osl_File_OpenFlag_Read ) == ::osl::FileBase::E_None )
@@ -107,7 +107,7 @@ static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
         {
             if (nPos > SAL_MAX_SIZE) {
                 aFile.close();
-                return 0;
+                return nullptr;
             }
             pBuf = new sal_uInt8[static_cast< std::size_t >(nPos)];
             sal_uInt64 nRead = 0;
@@ -129,7 +129,7 @@ static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
             else
             {
                 delete[] pBuf;
-                pBuf = NULL;
+                pBuf = nullptr;
             }
         }
         aFile.close();
@@ -208,10 +208,10 @@ static void ImplMakeConfigList( ImplConfigData* pData,
     sal_uInt64 nKeyLen;
     sal_uInt64 i;
     const sal_uInt8*    pLine;
-    ImplKeyData*    pPrevKey = NULL;
+    ImplKeyData*    pPrevKey = nullptr;
     ImplKeyData*    pKey;
-    ImplGroupData*  pPrevGroup = NULL;
-    ImplGroupData*  pGroup = NULL;
+    ImplGroupData*  pPrevGroup = nullptr;
+    ImplGroupData*  pGroup = nullptr;
     i = 0;
     while ( i < nLen )
     {
@@ -245,16 +245,16 @@ static void ImplMakeConfigList( ImplConfigData* pData,
         if ( *pLine == '[' )
         {
             pGroup               = new ImplGroupData;
-            pGroup->mpNext       = NULL;
-            pGroup->mpFirstKey   = NULL;
+            pGroup->mpNext       = nullptr;
+            pGroup->mpFirstKey   = nullptr;
             pGroup->mnEmptyLines = 0;
             if ( pPrevGroup )
                 pPrevGroup->mpNext = pGroup;
             else
                 pData->mpFirstGroup = pGroup;
             pPrevGroup  = pGroup;
-            pPrevKey    = NULL;
-            pKey        = NULL;
+            pPrevKey    = nullptr;
+            pKey        = nullptr;
 
             // filter group names
             pLine++;
@@ -283,12 +283,12 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                 if ( !pGroup )
                 {
                     pGroup              = new ImplGroupData;
-                    pGroup->mpNext      = NULL;
-                    pGroup->mpFirstKey  = NULL;
+                    pGroup->mpNext      = nullptr;
+                    pGroup->mpFirstKey  = nullptr;
                     pGroup->mnEmptyLines = 0;
                     pData->mpFirstGroup = pGroup;
                     pPrevGroup  = pGroup;
-                    pPrevKey    = NULL;
+                    pPrevKey    = nullptr;
                 }
 
                 // if empty line, append it
@@ -306,7 +306,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
 
                 // Generate new key
                 pKey        = new ImplKeyData;
-                pKey->mpNext = NULL;
+                pKey->mpNext = nullptr;
                 if ( pPrevKey )
                     pPrevKey->mpNext = pKey;
                 else
@@ -433,13 +433,13 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
             return pWriteBuf;
         }
         else
-            return 0;
+            return nullptr;
     }
 
     // Allocate new write buffer (caller frees it)
     pWriteBuf = new sal_uInt8[nBufLen];
     if ( !pWriteBuf )
-        return 0;
+        return nullptr;
 
     // fill buffer
     pBuf = pWriteBuf;
@@ -576,7 +576,7 @@ static void ImplDeleteConfigData( ImplConfigData* pData )
         pGroup = pTempGroup;
     }
 
-    pData->mpFirstGroup = NULL;
+    pData->mpFirstGroup = nullptr;
 }
 
 static ImplConfigData* ImplGetConfigData( const OUString& rFileName )
@@ -585,7 +585,7 @@ static ImplConfigData* ImplGetConfigData( const OUString& rFileName )
 
     pData                   = new ImplConfigData;
     pData->maFileName       = rFileName;
-    pData->mpFirstGroup     = NULL;
+    pData->mpFirstGroup     = nullptr;
     pData->mnDataUpdateId   = 0;
     pData->meLineEnd        = LINEEND_CRLF;
     pData->mnRefCount       = 0;
@@ -620,7 +620,7 @@ ImplGroupData* Config::ImplGetGroup() const
 {
     if ( !mpActGroup || (mnDataUpdateId != mpData->mnDataUpdateId) )
     {
-        ImplGroupData* pPrevGroup = NULL;
+        ImplGroupData* pPrevGroup = nullptr;
         ImplGroupData* pGroup = mpData->mpFirstGroup;
         while ( pGroup )
         {
@@ -635,8 +635,8 @@ ImplGroupData* Config::ImplGetGroup() const
         if ( !pGroup )
         {
             pGroup               = new ImplGroupData;
-            pGroup->mpNext       = NULL;
-            pGroup->mpFirstKey   = NULL;
+            pGroup->mpNext       = nullptr;
+            pGroup->mpFirstKey   = nullptr;
             pGroup->mnEmptyLines = 1;
             if ( pPrevGroup )
                 pPrevGroup->mpNext = pGroup;
@@ -658,7 +658,7 @@ Config::Config( const OUString& rFileName )
     // Initialize config data
     maFileName      = toUncPath( rFileName );
     mpData          = ImplGetConfigData( maFileName );
-    mpActGroup      = NULL;
+    mpActGroup      = nullptr;
     mnDataUpdateId  = 0;
     mnLockCount     = 1;
     mbPersistence   = true;
@@ -700,7 +700,7 @@ void Config::DeleteGroup(const OString& rGroup)
         mpData->mbRead = true;
     }
 
-    ImplGroupData* pPrevGroup = NULL;
+    ImplGroupData* pPrevGroup = nullptr;
     ImplGroupData* pGroup = mpData->mpFirstGroup;
     while ( pGroup )
     {
@@ -858,7 +858,7 @@ void Config::WriteKey(const OString& rKey, const OString& rStr)
     ImplGroupData* pGroup = ImplGetGroup();
     if ( pGroup )
     {
-        ImplKeyData* pPrevKey = NULL;
+        ImplKeyData* pPrevKey = nullptr;
         ImplKeyData* pKey = pGroup->mpFirstKey;
         while ( pKey )
         {
@@ -873,7 +873,7 @@ void Config::WriteKey(const OString& rKey, const OString& rStr)
         if ( !pKey )
         {
             pKey              = new ImplKeyData;
-            pKey->mpNext      = NULL;
+            pKey->mpNext      = nullptr;
             pKey->maKey       = rKey;
             pKey->mbIsComment = false;
             if ( pPrevKey )
@@ -912,7 +912,7 @@ void Config::DeleteKey(const OString& rKey)
     ImplGroupData* pGroup = ImplGetGroup();
     if ( pGroup )
     {
-        ImplKeyData* pPrevKey = NULL;
+        ImplKeyData* pPrevKey = nullptr;
         ImplKeyData* pKey = pGroup->mpFirstKey;
         while ( pKey )
         {

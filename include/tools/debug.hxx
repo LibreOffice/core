@@ -43,7 +43,7 @@ typedef void (*DbgTestSolarMutexProc)();
 #define DBG_FUNC_SETTESTSOLARMUTEX  2
 #define DBG_FUNC_TESTSOLARMUTEX     3
 
-TOOLS_DLLPUBLIC void* DbgFunc( sal_uInt16 nAction, void* pData = NULL );
+TOOLS_DLLPUBLIC void* DbgFunc( sal_uInt16 nAction, void* pData = nullptr );
 
 inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
 {

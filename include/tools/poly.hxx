@@ -86,7 +86,7 @@ public:
                         Polygon();
                         Polygon( sal_uInt16 nSize );
                         Polygon( sal_uInt16 nPoints, const Point* pPtAry,
-                                 const sal_uInt8* pFlagAry = NULL );
+                                 const sal_uInt8* pFlagAry = nullptr );
                         Polygon( const Rectangle& rRect );
                         Polygon( const Rectangle& rRect,
                                  sal_uInt32 nHorzRound, sal_uInt32 nVertRound );

@@ -197,8 +197,8 @@ public:
      */
     static sal_Unicode const * scanContentType(
         sal_Unicode const *pBegin, sal_Unicode const * pEnd,
-        OUString * pType = 0, OUString * pSubType = 0,
-        INetContentTypeParameterList * pParameters = 0);
+        OUString * pType = nullptr, OUString * pSubType = nullptr,
+        INetContentTypeParameterList * pParameters = nullptr);
 
     static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                      const OUString& rBody,

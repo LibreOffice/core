@@ -170,7 +170,7 @@ public:
 
     INetMIMEMessage* GetChild (sal_uIntPtr nIndex) const
     {
-        return ( nIndex < aChildren.size() ) ? aChildren[ nIndex ] : NULL;
+        return ( nIndex < aChildren.size() ) ? aChildren[ nIndex ] : nullptr;
     }
     INetMIMEMessage* GetParent() const { return pParent; }
 

@@ -73,7 +73,7 @@ protected:
     { m_pResMgr->PopContext( this ); }
 
     // constructors
-    Resource() : m_pResMgr( NULL ) {}
+    Resource() : m_pResMgr( nullptr ) {}
     Resource( const ResId& rResId );
 
 public:

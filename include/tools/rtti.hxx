@@ -71,7 +71,7 @@ typedef void* (*TypeId)();
         TYPEINIT_FACTORY(sType, Factory); \
         TYPEINIT_END(sType)
 #define TYPEINIT0_AUTOFACTORY(sType) TYPEINIT0_FACTORY(sType, new sType)
-#define TYPEINIT0(sType) TYPEINIT0_FACTORY(sType, 0)
+#define TYPEINIT0(sType) TYPEINIT0_FACTORY(sType, nullptr)
 
 #define TYPEINIT1_FACTORY(sType, sSuper, Factory) \
         TYPEINIT_FACTORY(sType, Factory); \
@@ -80,7 +80,7 @@ typedef void* (*TypeId)();
 #define TYPEINIT1_AUTOFACTORY(sType, sSuper) \
             TYPEINIT1_FACTORY(sType, sSuper, new sType)
 #define TYPEINIT1(sType, sSuper) \
-            TYPEINIT1_FACTORY(sType, sSuper, 0)
+            TYPEINIT1_FACTORY(sType, sSuper, nullptr)
 
 #define TYPEINIT2_FACTORY(sType, sSuper1, sSuper2, Factory) \
         TYPEINIT_FACTORY(sType, Factory); \
@@ -90,7 +90,7 @@ typedef void* (*TypeId)();
 #define TYPEINIT2_AUTOFACTORY(sType, sSuper1, sSuper2) \
             TYPEINIT2_FACTORY(sType, sSuper1, sSuper2, new sType)
 #define TYPEINIT2(sType, sSuper1, sSuper2) \
-            TYPEINIT2_FACTORY(sType, sSuper1, sSuper2, 0)
+            TYPEINIT2_FACTORY(sType, sSuper1, sSuper2, nullptr)
 
 #define TYPEINIT3_FACTORY(sType, sSuper1, sSuper2, sSuper3, Factory) \
         TYPEINIT_FACTORY(sType, Factory); \
@@ -99,7 +99,7 @@ typedef void* (*TypeId)();
             SUPERTYPE(sSuper3); \
         TYPEINIT_END(sType)
 #define TYPEINIT3(sType, sSuper1, sSuper2, sSuper3) \
-            TYPEINIT3_FACTORY(sType, sSuper1, sSuper2, sSuper3, 0)
+            TYPEINIT3_FACTORY(sType, sSuper1, sSuper2, sSuper3, nullptr)
 
 #define TYPE(sType) (sType::StaticType())
 #define ISA(sType) IsA(sType::StaticType())

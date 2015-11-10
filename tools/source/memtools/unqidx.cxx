@@ -62,7 +62,7 @@ void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
             return p;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
@@ -75,7 +75,7 @@ void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
         if( it != maMap.end() )
             return it->second;
     }
-    return NULL;
+    return nullptr;
 }
 
 sal_uIntPtr UniqueIndexImpl::FirstIndex() const

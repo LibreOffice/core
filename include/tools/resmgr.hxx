@@ -96,7 +96,7 @@ private:
 
     TOOLS_DLLPRIVATE const ImpRCStack * StackTop( sal_uInt32 nOff = 0 ) const
     {
-        return (((int)nOff >= nCurStack) ? NULL : &aStack[nCurStack-nOff]);
+        return (((int)nOff >= nCurStack) ? nullptr : &aStack[nCurStack-nOff]);
     }
     TOOLS_DLLPRIVATE void  Init( const OUString& rFileName );
 
@@ -148,13 +148,13 @@ public:
 
     /// Check whether resource is available
     bool                IsAvailable( const ResId& rId,
-                                     const Resource* = NULL) const;
+                                     const Resource* = nullptr) const;
 
     /// Search and load resource, given its ID
-    bool                GetResource( const ResId& rId, const Resource * = NULL );
+    bool                GetResource( const ResId& rId, const Resource * = nullptr );
     static void *       GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr );
     /// Free resource context
-    void                PopContext( const Resource* = NULL );
+    void                PopContext( const Resource* = nullptr );
 
     /// Increment resource pointer
     void*               Increment( sal_uInt32 nSize );

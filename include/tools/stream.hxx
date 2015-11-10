@@ -114,7 +114,7 @@ protected:
 public:
     TYPEINFO();
 
-    SvLockBytes() : m_pStream(0), m_bOwner(false), m_bSync(false) {}
+    SvLockBytes() : m_pStream(nullptr), m_bOwner(false), m_bSync(false) {}
 
     SvLockBytes(SvStream * pTheStream, bool bTheOwner = false) :
         m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(false) {}
@@ -147,7 +147,7 @@ class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
 public:
     TYPEINFO_OVERRIDE();
 
-    SvOpenLockBytes() : SvLockBytes(0, false) {}
+    SvOpenLockBytes() : SvLockBytes(nullptr, false) {}
     SvOpenLockBytes(SvStream * pStream, bool bOwner):
         SvLockBytes(pStream, bOwner) {}
 

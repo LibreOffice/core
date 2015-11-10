@@ -78,7 +78,7 @@ int INetMIMEMessageStream::GetBodyLine(sal_Char* pData, sal_uIntPtr nSize)
 
     if (pSourceMsg->GetDocumentLB())
     {
-        if (pMsgStrm == NULL)
+        if (pMsgStrm == nullptr)
             pMsgStrm = new SvStream (pSourceMsg->GetDocumentLB());
 
         sal_uIntPtr nRead = pMsgStrm->Read(pWBuf, (pWEnd - pWBuf));
@@ -147,7 +147,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
             // Encapsulated message body.
             while (!done)
             {
-                if (pChildStrm == NULL)
+                if (pChildStrm == nullptr)
                 {
                     INetMIMEMessage *pChild = pSourceMsg->GetChild(nChildIndex);
                     if (pChild)
@@ -201,7 +201,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                     {
                         // Cleanup exhausted child stream.
                         delete pChildStrm;
-                        pChildStrm = NULL;
+                        pChildStrm = nullptr;
                     }
                 }
             }
@@ -210,7 +210,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
         else
         {
             // Single part message body.
-            if (pSourceMsg->GetDocumentLB() == NULL)
+            if (pSourceMsg->GetDocumentLB() == nullptr)
             {
                 // Empty message body.
                 return 0;
@@ -227,13 +227,13 @@ INetMIMEMessageStream::INetMIMEMessageStream(
     pSourceMsg(pMsg),
     bHeaderGenerated(headerGenerated),
     nBufSiz(2048),
-    pMsgStrm(NULL),
+    pMsgStrm(nullptr),
     pMsgBuffer(new SvMemoryStream),
-    pMsgRead(NULL),
-    pMsgWrite(NULL),
+    pMsgRead(nullptr),
+    pMsgWrite(nullptr),
     done(false),
     nChildIndex(0),
-    pChildStrm(NULL)
+    pChildStrm(nullptr)
 {
     assert(pMsg != nullptr);
     pMsgBuffer->SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);

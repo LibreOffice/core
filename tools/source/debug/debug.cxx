@@ -49,7 +49,7 @@ struct DebugData
     DbgTestSolarMutexProc   pDbgTestSolarMutex;
 
     DebugData()
-        :pDbgTestSolarMutex( NULL )
+        :pDbgTestSolarMutex( nullptr )
     {
     }
 };
@@ -68,14 +68,14 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
 
     case DBG_FUNC_TESTSOLARMUTEX:
         SAL_WARN_IF(
-            pDebugData->pDbgTestSolarMutex == 0, "tools.debug",
+            pDebugData->pDbgTestSolarMutex == nullptr, "tools.debug",
             "no DbgTestSolarMutex function set");
         if ( pDebugData->pDbgTestSolarMutex )
             pDebugData->pDbgTestSolarMutex();
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 #endif

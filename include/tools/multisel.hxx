@@ -101,7 +101,7 @@ class TOOLS_DLLPUBLIC StringRangeEnumerator
     bool setRange( const OUString& i_rNewRange, bool i_bStrict = false );
     bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence, bool bMayAdjust );
     bool insertJoinedRanges( const std::vector< sal_Int32 >& rNumbers, bool i_bStrict );
-    bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
+    bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
 public:
     class TOOLS_DLLPUBLIC Iterator
     {
@@ -119,7 +119,7 @@ public:
         , nRangeIndex( i_nRange ), nCurrent( i_nCurrent ) {}
 
     public:
-        Iterator() : pEnumerator( NULL ), pPossibleValues( NULL ), nRangeIndex( -1 ), nCurrent( -1 ) {}
+        Iterator() : pEnumerator( nullptr ), pPossibleValues( nullptr ), nRangeIndex( -1 ), nCurrent( -1 ) {}
         Iterator& operator++();
         sal_Int32 operator*() const { return nCurrent;}
         bool operator==(const Iterator&) const;
@@ -136,11 +136,11 @@ public:
                            );
 
     sal_Int32 size() const { return mnCount; }
-    Iterator begin( const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
-    Iterator end( const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
+    Iterator begin( const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
+    Iterator end( const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
 
     bool isValidInput() const { return mbValidInput; }
-    bool hasValue( sal_Int32 nValue, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
+    bool hasValue( sal_Int32 nValue, const std::set< sal_Int32 >* i_pPossibleValues = nullptr ) const;
 
     /**
     i_rPageRange:     the string to be changed into a sequence of numbers
@@ -171,7 +171,7 @@ public:
                                      sal_Int32 i_nMinNumber,
                                      sal_Int32 i_nMaxNumber,
                                      sal_Int32 i_nLogicalOffset = -1,
-                                     std::set< sal_Int32 >* i_pPossibleValues = NULL
+                                     std::set< sal_Int32 >* i_pPossibleValues = nullptr
                                     );
 };
 

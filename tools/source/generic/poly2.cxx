@@ -53,7 +53,7 @@ ImplPolyPolygon::ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly )
             mpPolyAry[i] = new tools::Polygon( *rImplPolyPoly.mpPolyAry[i] );
     }
     else
-        mpPolyAry = NULL;
+        mpPolyAry = nullptr;
 }
 
 ImplPolyPolygon::~ImplPolyPolygon()
@@ -212,7 +212,7 @@ void PolyPolygon::Clear()
             for ( sal_uInt16 i = 0; i < mpImplPolyPolygon->mnCount; i++ )
                 delete mpImplPolyPolygon->mpPolyAry[i];
             delete[] mpImplPolyPolygon->mpPolyAry;
-            mpImplPolyPolygon->mpPolyAry = NULL;
+            mpImplPolyPolygon->mpPolyAry = nullptr;
             mpImplPolyPolygon->mnCount   = 0;
             mpImplPolyPolygon->mnSize    = mpImplPolyPolygon->mnResize;
         }

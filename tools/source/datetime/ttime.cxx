@@ -119,7 +119,7 @@ Time::Time( TimeInitSystem )
     if (clock_gettime(CLOCK_REALTIME, &tsTime) != 0)
     {
         struct timeval tvTime;
-        OSL_VERIFY( gettimeofday(&tvTime, NULL) != 0 );
+        OSL_VERIFY( gettimeofday(&tvTime, nullptr) != 0 );
         tsTime.tv_sec  = tvTime.tv_sec;
         tsTime.tv_nsec = tvTime.tv_usec * 1000;
     }
@@ -383,7 +383,7 @@ Time tools::Time::GetUTCOffset()
          ( nTicks < nCacheTicks ) // handle overflow
          )
     {
-        nTime = time( 0 );
+        nTime = time( nullptr );
         localtime_r( &nTime, &aTM );
         nLocalTime = mktime( &aTM );
 #if defined( SOLARIS )
@@ -427,7 +427,7 @@ sal_uInt64 tools::Time::GetSystemTicks()
         (nPerformanceCount.QuadPart*1000)/nTicksPerSecond.QuadPart);
 #else
     timeval tv;
-    int n = gettimeofday (&tv, 0);
+    int n = gettimeofday (&tv, nullptr);
     if (n == -1) {
         int e = errno;
         SAL_WARN("tools.datetime", "gettimeofday failed: " << e);

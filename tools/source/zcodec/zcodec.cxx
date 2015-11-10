@@ -41,11 +41,11 @@ ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize )
     : meState(STATE_INIT)
     , mbStatus(false)
     , mbFinish(false)
-    , mpInBuf(NULL)
+    , mpInBuf(nullptr)
     , mnInBufSize(nInBufSize)
     , mnInToRead(0)
-    , mpOStm(NULL)
-    , mpOutBuf(NULL)
+    , mpOStm(nullptr)
+    , mpOutBuf(nullptr)
     , mnOutBufSize(nOutBufSize)
     , mnCRC(0)
     , mnCompressLevel(0)
@@ -65,9 +65,9 @@ void ZCodec::BeginCompression( int nCompressLevel, bool updateCrc, bool gzLib )
     assert(meState == STATE_INIT);
     mbStatus = true;
     mbFinish = false;
-    mpOStm = NULL;
+    mpOStm = nullptr;
     mnInToRead = 0xffffffff;
-    mpInBuf = mpOutBuf = NULL;
+    mpInBuf = mpOutBuf = nullptr;
     PZSTREAM->total_out = PZSTREAM->total_in = 0;
     mnCompressLevel = nCompressLevel;
     mbUpdateCrc = updateCrc;

@@ -36,7 +36,7 @@ struct Encoder
         sal_uInt32 nCvtInfo;
 
         sal_Size nChars = rtl_convertUnicodeToText(m_aConverter,
-            NULL, &c, 1, aTempArray, sizeof(aTempArray),
+            nullptr, &c, 1, aTempArray, sizeof(aTempArray),
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |  RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,
              &nCvtInfo, &nTempSize);
         m_bCapable = nChars > 0;

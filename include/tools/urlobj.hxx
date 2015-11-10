@@ -835,7 +835,7 @@ public:
         specified notation, or if this is not a file URL at all, an empty
         string is returned.
      */
-    OUString getFSysPath(FSysStyle eStyle, sal_Unicode * pDelimiter = 0)
+    OUString getFSysPath(FSysStyle eStyle, sal_Unicode * pDelimiter = nullptr)
         const;
 
     // Data URLs:

@@ -55,7 +55,7 @@
 
 static ImplPolygonData aStaticImplPolygon =
 {
-    NULL, NULL, 0, 0
+    nullptr, nullptr, 0, 0
 };
 
 ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, bool bFlags  )
@@ -67,7 +67,7 @@ ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, bool bFlags  )
         memset( mpPointAry, 0, nSz );
     }
     else
-        mpPointAry = NULL;
+        mpPointAry = nullptr;
 
     if( bFlags )
     {
@@ -75,7 +75,7 @@ ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, bool bFlags  )
         memset( mpFlagAry, 0, nInitSize );
     }
     else
-        mpFlagAry = NULL;
+        mpFlagAry = nullptr;
 
     mnRefCount = 1;
     mnPoints = nInitSize;
@@ -95,12 +95,12 @@ ImplPolygon::ImplPolygon( const ImplPolygon& rImpPoly )
             memcpy( mpFlagAry, rImpPoly.mpFlagAry, rImpPoly.mnPoints );
         }
         else
-            mpFlagAry = NULL;
+            mpFlagAry = nullptr;
     }
     else
     {
-        mpPointAry = NULL;
-        mpFlagAry = NULL;
+        mpPointAry = nullptr;
+        mpFlagAry = nullptr;
     }
 
     mnRefCount = 1;
@@ -121,12 +121,12 @@ ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, const Point* pInitAry, const sal
             memcpy( mpFlagAry, pInitFlags, nInitSize );
         }
         else
-            mpFlagAry = NULL;
+            mpFlagAry = nullptr;
     }
     else
     {
-        mpPointAry = NULL;
-        mpFlagAry  = NULL;
+        mpPointAry = nullptr;
+        mpFlagAry  = nullptr;
     }
 
     mnRefCount = 1;
@@ -175,7 +175,7 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
         }
     }
     else
-        pNewAry = NULL;
+        pNewAry = nullptr;
 
     if ( mpPointAry )
         delete[] reinterpret_cast<char*>(mpPointAry);
@@ -203,7 +203,7 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
             }
         }
         else
-            pNewFlagAry = NULL;
+            pNewFlagAry = nullptr;
 
         delete[] mpFlagAry;
         mpFlagAry  = pNewFlagAry;
@@ -845,13 +845,13 @@ PolyFlags Polygon::GetFlags( sal_uInt16 nPos ) const
 
 bool Polygon::HasFlags() const
 {
-    return mpImplPolygon->mpFlagAry != NULL;
+    return mpImplPolygon->mpFlagAry != nullptr;
 }
 
 bool Polygon::IsRect() const
 {
     bool bIsRect = false;
-    if ( mpImplPolygon->mpFlagAry == NULL )
+    if ( mpImplPolygon->mpFlagAry == nullptr )
     {
         if ( ( ( mpImplPolygon->mnPoints == 5 ) && ( mpImplPolygon->mpPointAry[ 0 ] == mpImplPolygon->mpPointAry[ 4 ] ) ) ||
              ( mpImplPolygon->mnPoints == 4 ) )
@@ -1643,7 +1643,7 @@ void Polygon::Read( SvStream& rIStream )
 
 void Polygon::ImplWrite( SvStream& rOStream ) const
 {
-    bool bHasPolyFlags = mpImplPolygon->mpFlagAry != NULL;
+    bool bHasPolyFlags = mpImplPolygon->mpFlagAry != nullptr;
     WritePolygon( rOStream, *this );
     rOStream.WriteBool(bHasPolyFlags);
 
@@ -1812,7 +1812,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
 // and a memcopy at ImplPolygon creation, but contains no zero-controlpoints
 // for straight edges.
 Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
-:   mpImplPolygon(0)
+:   mpImplPolygon(nullptr)
 {
     const bool bCurve(rPolygon.areControlPointsUsed());
     const bool bClosed(rPolygon.isClosed());

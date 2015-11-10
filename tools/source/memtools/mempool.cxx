@@ -28,14 +28,14 @@ FixedMemPool::FixedMemPool(char const * pTypeName, sal_uInt16 nTypeSize)
 {
     char name[RTL_CACHE_NAME_LENGTH + 1];
     snprintf (name, sizeof(name), "FixedMemPool_%d", (int)nTypeSize);
-    m_pImpl = reinterpret_cast<FixedMemPool_Impl*>(rtl_cache_create (name, nTypeSize, 0, NULL, NULL, NULL, 0, NULL, 0));
+    m_pImpl = reinterpret_cast<FixedMemPool_Impl*>(rtl_cache_create (name, nTypeSize, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0));
     SAL_INFO("tools.memtools","FixedMemPool::ctor(\"" << m_pTypeName << "\"): " << m_pImpl);
 }
 
 FixedMemPool::~FixedMemPool()
 {
     SAL_INFO("tools.memtools","FixedMemPool::dtor(\"" << m_pTypeName << "\"): " << m_pImpl);
-    rtl_cache_destroy (reinterpret_cast<rtl_cache_type*>(m_pImpl)), m_pImpl = 0;
+    rtl_cache_destroy (reinterpret_cast<rtl_cache_type*>(m_pImpl)), m_pImpl = nullptr;
 }
 
 void* FixedMemPool::Alloc()

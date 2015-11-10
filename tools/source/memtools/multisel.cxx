@@ -513,7 +513,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
     aTotRange = rTotRange;
 
     // adjust lower boundary
-    Range* pRange = aSels.empty() ? NULL : aSels.front();
+    Range* pRange = aSels.empty() ? nullptr : aSels.front();
     while( pRange )
     {
         if( pRange->Max() < aTotRange.Min() )
@@ -529,7 +529,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
         else
             break;
 
-        pRange = aSels.empty() ? NULL : aSels.front();
+        pRange = aSels.empty() ? nullptr : aSels.front();
     }
 
     // adjust upper boundary

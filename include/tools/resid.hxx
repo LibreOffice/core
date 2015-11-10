@@ -53,7 +53,7 @@ class ResId
     void ImplInit( sal_uInt32 nId, ResMgr& rMgr, RSHEADER_TYPE* pRes )
     {
         m_pResource = pRes; m_nResId = nId; m_nRT = RSC_NOTYPE; m_pResMgr = &rMgr; m_nRT2 = RSC_NOTYPE; m_nWinBits = 0;
-        OSL_ENSURE( m_pResMgr != NULL, "ResId without ResMgr created" );
+        OSL_ENSURE( m_pResMgr != nullptr, "ResId without ResMgr created" );
     }
 
 public:
@@ -63,7 +63,7 @@ public:
     }
     ResId( sal_uInt32 nId, ResMgr& rMgr )
     {
-        ImplInit( nId, rMgr, NULL );
+        ImplInit( nId, rMgr, nullptr );
     }
 
     void SetWinBits( sal_uInt32 nBits ) const { m_nWinBits = nBits; }
@@ -102,7 +102,7 @@ public:
     const ResId &   SetResMgr( ResMgr * pMgr ) const
     {
         m_pResMgr = pMgr;
-        OSL_ENSURE( m_pResMgr != NULL, "invalid ResMgr set on ResId" );
+        OSL_ENSURE( m_pResMgr != nullptr, "invalid ResMgr set on ResId" );
         return *this;
     }
 

@@ -37,7 +37,7 @@ void SvClassManager::Register( sal_Int32 nClassId, SvCreateInstancePersist pFunc
 SvCreateInstancePersist SvClassManager::Get( sal_Int32 nClassId )
 {
     Map::const_iterator i(aAssocTable.find(nClassId));
-    return i == aAssocTable.end() ? 0 : i->second;
+    return i == aAssocTable.end() ? nullptr : i->second;
 }
 
 // SvRttiBase
@@ -59,7 +59,7 @@ SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream, sal
     , pStm( pStream )
     , aPUIdx( nStartIdxP )
     , nStartIdx( nStartIdxP )
-    , pRefStm( NULL )
+    , pRefStm( nullptr )
 {
     DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
     m_isWritable = true;
@@ -73,7 +73,7 @@ SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream, sal
 
 SvPersistStream::~SvPersistStream()
 {
-    SetStream( NULL );
+    SetStream( nullptr );
 }
 
 /**
@@ -157,7 +157,7 @@ SvPersistBase * SvPersistStream::GetObject( sal_uIntPtr nIdx ) const
         return aPUIdx.Get( nIdx );
     else if( pRefStm )
         return pRefStm->GetObject( nIdx );
-    return NULL;
+    return nullptr;
 }
 
 #define LEN_1           0x80
@@ -474,7 +474,7 @@ sal_uInt32 SvPersistStream::ReadObj
     sal_uInt32  nId = 0;
     sal_uInt16  nClassId;
 
-    rpObj = NULL; // specification: 0 in case of error
+    rpObj = nullptr; // specification: 0 in case of error
     ReadId( *this, nHdr, nId, nClassId );
 
     // get version number through masking
@@ -488,7 +488,7 @@ sal_uInt32 SvPersistStream::ReadObj
     {
         if( P_OBJ & nHdr )
         { // read object, nId only set for P_DBGUTIL
-            DBG_ASSERT( !(nHdr & P_DBGUTIL) || NULL == aPUIdx.Get( nId ),
+            DBG_ASSERT( !(nHdr & P_DBGUTIL) || nullptr == aPUIdx.Get( nId ),
                         "object already exist" );
             SvCreateInstancePersist pFunc = rClassMgr.Get( nClassId );
 
@@ -538,7 +538,7 @@ sal_uInt32 SvPersistStream::ReadObj
         else
         {
             rpObj = GetObject( nId );
-            DBG_ASSERT( rpObj != NULL, "object does not exist" );
+            DBG_ASSERT( rpObj != nullptr, "object does not exist" );
             DBG_ASSERT( rpObj->GetClassId() == nClassId, "class mismatch" );
         }
     }

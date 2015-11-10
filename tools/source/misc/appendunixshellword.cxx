@@ -35,7 +35,7 @@ namespace tools {
 void appendUnixShellWord(
     OStringBuffer * accumulator, OString const & text)
 {
-    OSL_ASSERT(accumulator != NULL);
+    OSL_ASSERT(accumulator != nullptr);
     if (text.isEmpty()) {
         accumulator->append("''");
     } else {

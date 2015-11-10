@@ -59,14 +59,14 @@ friend class ErrorInfo;
 };
 
 EDcrData::EDcrData()
-    : pFirstHdl(0)
-    , pFirstCtx(0)
-    , pDsp(0)
+    : pFirstHdl(nullptr)
+    , pFirstCtx(nullptr)
+    , pDsp(nullptr)
     , bIsWindowDsp(false)
     , nNextDcr(0)
 {
     for(sal_uInt16 n=0;n<ERRCODE_DYNAMIC_COUNT;n++)
-        ppDcr[n]=0;
+        ppDcr[n]=nullptr;
 }
 
 void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
@@ -94,7 +94,7 @@ void EDcr_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
         ((sal_uIntPtr)(*pDcr) & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DBG_ASSERT(ppDcr[lIdx]==pDcr,"ErrHdl: Error nicht gefunden");
     if(ppDcr[lIdx]==pDcr)
-        ppDcr[lIdx]=0;
+        ppDcr[lIdx]=nullptr;
 }
 
 TYPEINIT0(ErrorInfo);
@@ -226,7 +226,7 @@ ErrorHandler::~ErrorHandler()
 
 vcl::Window* ErrorContext::GetParent()
 {
-    return pImpl ? pImpl->pWin : NULL;
+    return pImpl ? pImpl->pWin : nullptr;
 }
 
 void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
@@ -273,7 +273,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     ErrorContext *pCtx=ErrorContext::GetContext();
     if(pCtx)
         pCtx->GetString(pInfo->GetErrorCode(), aAction);
-    vcl::Window *pParent=0;
+    vcl::Window *pParent=nullptr;
     // Remove parent from context
     for(;pCtx;pCtx=pCtx->pImpl->pNext)
         if(pCtx->GetParent())
