@@ -31,7 +31,7 @@ public:
         EditTextObjectImpl::ContentInfosType& rContents = mrObj.GetContents();
         for (size_t i = 0; i < rContents.size(); ++i)
         {
-            ContentInfo& rContent = rContents[i];
+            ContentInfo& rContent = *rContents[i].get();
             ContentInfo::XEditAttributesType& rAttribs = rContent.GetAttribs();
             for (size_t j = 0; j < rAttribs.size(); ++j)
             {

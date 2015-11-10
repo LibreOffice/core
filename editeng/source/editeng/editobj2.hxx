@@ -28,7 +28,6 @@
 #include "svl/sharedstring.hxx"
 #include <svl/languageoptions.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
@@ -177,7 +176,7 @@ public:
 class EditTextObjectImpl : boost::noncopyable
 {
 public:
-    typedef boost::ptr_vector<ContentInfo> ContentInfosType;
+    typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;
 
 private:
     EditTextObject* mpFront;

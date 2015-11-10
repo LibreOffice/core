@@ -1241,7 +1241,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
 
     for (sal_Int32 n = 0; n < nContents; ++n, ++nPara)
     {
-        const ContentInfo* pC = &rTextObject.mpImpl->GetContents()[n];
+        const ContentInfo* pC = rTextObject.mpImpl->GetContents()[n].get();
         bool bNewContent = aPaM.GetNode()->Len() == 0;
         const sal_Int32 nStartPos = aPaM.GetIndex();
 
