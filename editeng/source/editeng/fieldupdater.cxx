@@ -35,7 +35,7 @@ public:
             ContentInfo::XEditAttributesType& rAttribs = rContent.GetAttribs();
             for (size_t j = 0; j < rAttribs.size(); ++j)
             {
-                XEditAttribute& rAttr = rAttribs[j];
+                XEditAttribute& rAttr = *rAttribs[j].get();
                 const SfxPoolItem* pItem = rAttr.GetItem();
                 if (pItem->Which() != EE_FEATURE_FIELD)
                     // This is not a field item.

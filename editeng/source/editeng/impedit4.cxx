@@ -1111,7 +1111,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
                 if ( !pX->GetLen() && !bEmptyPara )
                     pTxtObj->mpImpl->DestroyAttrib(pX);
                 else
-                    pC->GetAttribs().push_back(pX);
+                    pC->GetAttribs().push_back(std::unique_ptr<XEditAttribute>(pX));
             }
             nAttr++;
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
@@ -1259,7 +1259,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             bool bUpdateFields = false;
             for (size_t nAttr = 0; nAttr < nNewAttribs; ++nAttr)
             {
-                const XEditAttribute& rX = pC->GetAttribs()[nAttr];
+                const XEditAttribute& rX = *pC->GetAttribs()[nAttr].get();
                 // Can happen when paragraphs > 16K, it is simply wrapped.
                 if ( rX.GetEnd() <= aPaM.GetNode()->Len() )
                 {

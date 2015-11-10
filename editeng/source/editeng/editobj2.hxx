@@ -128,7 +128,7 @@ class ContentInfo : boost::noncopyable
 {
     friend class EditTextObjectImpl;
 public:
-    typedef boost::ptr_vector<XEditAttribute> XEditAttributesType;
+    typedef std::vector<std::unique_ptr<XEditAttribute> > XEditAttributesType;
 
 private:
     svl::SharedString maText;
