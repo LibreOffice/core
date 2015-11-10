@@ -55,10 +55,10 @@ constants FileFormat
     const short NTRIPLES    = 2;    // "text/plain";
 
     /// <a href="http://www.w3.org/TR/trig/">TriG</a>
-    const short TRIG        = 3;    // "application/x-trig";
+    const short TRIG        = 3;    // "application/trig";
 
     /// <a href="https://web.archive.org/web/20110724134923/http://sw.nokia.com/trix/">TriX</a>
-    const short TRIX        = 4;    // "if only the damn server were up I'd know";
+    const short TRIX        = 4;    // "application/trix";
 
     /// <a href="http://www.dajobe.org/2004/01/turtle/">Turtle</a>
     const short TURTLE      = 5;    // "application/turtle";
