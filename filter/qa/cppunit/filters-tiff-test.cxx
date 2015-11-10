@@ -54,7 +54,7 @@ bool TiffFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return itiGraphicImport(aFileStream, aGraphic, NULL);
+    return itiGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void TiffFilterTest::testCVEs()

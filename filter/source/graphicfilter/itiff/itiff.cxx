@@ -126,11 +126,11 @@ public:
     TIFFReader()
         : bStatus(false)
         , nLastPercent(0)
-        , pTIFF(NULL)
-        , pAcc(NULL)
+        , pTIFF(nullptr)
+        , pAcc(nullptr)
         , nDstBitsPerPixel(0)
-        , pAlphaMask(NULL)
-        , pMaskAcc(NULL)
+        , pAlphaMask(nullptr)
+        , pMaskAcc(nullptr)
         , nOrigPos(0)
         , nEndOfFile(0)
         , nDataType(0)
@@ -146,12 +146,12 @@ public:
         , nCellWidth(1)
         , nCellLength(1)
         , nFillOrder(1)
-        , pStripOffsets(NULL)
+        , pStripOffsets(nullptr)
         , nNumStripOffsets(0)
         , nOrientation(1)
         , nSamplesPerPixel(1)
         , nRowsPerStrip(0xffffffff)
-        , pStripByteCounts(NULL)
+        , pStripByteCounts(nullptr)
         , nNumStripByteCounts(0)
         , nMinSampleValue(0)
         , nMaxSampleValue(0)
@@ -162,13 +162,13 @@ public:
         , nGroup4Options(0)
         , nResolutionUnit(2)
         , nPredictor(0)
-        , pColorMap(NULL)
+        , pColorMap(nullptr)
         , nNumColors(0)
         , nPlanes(0)
         , nStripsPerPlane(0)
         , nBytesPerRow(0)
     {
-        pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = NULL;
+        pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = nullptr;
     }
 
     ~TIFFReader()
@@ -371,7 +371,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         case 0x0111: { // Strip Offset(s)
             sal_uLong nOldNumSO, i, * pOldSO;
             pOldSO = pStripOffsets;
-            if ( pOldSO == NULL )
+            if ( pOldSO == nullptr )
                 nNumStripOffsets = 0;
             nOldNumSO = nNumStripOffsets;
             nDataLen += nOldNumSO;
@@ -387,7 +387,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 }
                 catch (const std::bad_alloc &)
                 {
-                    pStripOffsets = NULL;
+                    pStripOffsets = nullptr;
                     nNumStripOffsets = 0;
                 }
                 if ( pStripOffsets )
@@ -420,7 +420,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         case 0x0117: { // Strip Byte Counts
             sal_uLong nOldNumSBC, i, * pOldSBC;
             pOldSBC = pStripByteCounts;
-            if ( pOldSBC == NULL )
+            if ( pOldSBC == nullptr )
                 nNumStripByteCounts = 0; // to be on the safe side
             nOldNumSBC = nNumStripByteCounts;
             nDataLen += nOldNumSBC;
@@ -436,7 +436,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 }
                 catch (const std::bad_alloc &)
                 {
-                    pStripByteCounts = NULL;
+                    pStripByteCounts = nullptr;
                     nNumStripByteCounts = 0;
                 }
                 if ( pStripByteCounts )
@@ -1074,7 +1074,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         }
     }
     else if ( ( nSamplesPerPixel == 2 ) && ( nBitsPerSample == 8 ) &&
-        ( nPlanarConfiguration == 1 ) && ( pColorMap == 0 ) )               // grayscale
+        ( nPlanarConfiguration == 1 ) && ( pColorMap == nullptr ) )               // grayscale
     {
         if ( nMaxSampleValue > nMinSampleValue )
         {
@@ -1098,7 +1098,7 @@ void TIFFReader::MakePalCol()
     if ( nDstBitsPerPixel <= 8 )
     {
         sal_uLong i, nVal, n0RGB;
-        if  ( pColorMap == NULL )
+        if  ( pColorMap == nullptr )
             pColorMap = new sal_uLong[ 256 ];
         if ( nPhotometricInterpretation <= 1 )
         {
@@ -1291,11 +1291,11 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 nPredictor = 1;
                 nNumColors = 0;
 
-                pAcc = NULL;
-                pColorMap = NULL;
-                pStripOffsets = NULL;
-                pStripByteCounts = NULL;
-                pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = NULL;
+                pAcc = nullptr;
+                pColorMap = nullptr;
+                pStripOffsets = nullptr;
+                pStripByteCounts = nullptr;
+                pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = nullptr;
 
                 pTIFF->ReadUInt16( nNumTags );
                 nPos = pTIFF->Tell();
@@ -1382,7 +1382,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                             }
                             catch (const std::bad_alloc &)
                             {
-                                pMap[ j ] = NULL;
+                                pMap[ j ] = nullptr;
                                 bStatus = false;
                                 break;
                             }
@@ -1412,7 +1412,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         {
                             if ( pAlphaMask )
                                 pAlphaMask->ReleaseAccess( pMaskAcc );
-                            pMaskAcc = NULL;
+                            pMaskAcc = nullptr;
                         }
 
                         if ( bStatus )

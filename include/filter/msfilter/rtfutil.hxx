@@ -23,7 +23,7 @@ namespace rtfutil {
 MSFILTER_DLLPUBLIC OString OutHex(sal_uLong nHex, sal_uInt8 nLen);
 
 /// Handles correct unicode and legacy export of a single character.
-MSFILTER_DLLPUBLIC OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc, bool* pSuccess = 0, bool bUnicode = true);
+MSFILTER_DLLPUBLIC OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc, bool* pSuccess = nullptr, bool bUnicode = true);
 
 /**
  * Handles correct unicode and legacy export of a string.

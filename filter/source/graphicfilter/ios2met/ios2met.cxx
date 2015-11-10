@@ -307,7 +307,7 @@ struct OSAttr
 //  //...    aViewWindow;
 
     OSAttr()
-        : pSucc(NULL)
+        : pSucc(nullptr)
         , nPushOrder(0)
         , nIvAttrA(0)
         , nIvAttrP(0)
@@ -433,24 +433,24 @@ public:
 
 OS2METReader::OS2METReader()
     : ErrorCode(0)
-    , pOS2MET(NULL)
-    , pVirDev(NULL)
+    , pOS2MET(nullptr)
+    , pVirDev(nullptr)
     , nOrigPos(0)
     , aBoundingRect()
     , aCalcBndRect()
     , aGlobMapMode()
     , bCoord32(false)
-    , pPaletteStack(NULL)
+    , pPaletteStack(nullptr)
     , aLineInfo()
-    , pAreaStack(NULL)
-    , pPathStack(NULL)
-    , pPathList(NULL)
-    , pFontList(NULL)
-    , pBitmapList(NULL)
+    , pAreaStack(nullptr)
+    , pPathStack(nullptr)
+    , pPathList(nullptr)
+    , pFontList(nullptr)
+    , pBitmapList(nullptr)
     , aDefAttr()
     , aAttr()
-    , pAttrStack(NULL)
-    , pOrdFile(NULL)
+    , pAttrStack(nullptr)
+    , pOrdFile(nullptr)
 {
 }
 
@@ -504,7 +504,7 @@ void OS2METReader::AddPointsToArea(const tools::Polygon & rPoly)
 {
     sal_uInt16 nOldSize, nNewSize,i;
 
-    if (pAreaStack==NULL || rPoly.GetSize()==0) return;
+    if (pAreaStack==nullptr || rPoly.GetSize()==0) return;
     tools::PolyPolygon * pPP=&(pAreaStack->aPPoly);
     if (pPP->Count()==0 || pAreaStack->bClosed) pPP->Insert(rPoly);
     else {
@@ -525,7 +525,7 @@ void OS2METReader::AddPointsToPath(const tools::Polygon & rPoly)
 {
     sal_uInt16 nOldSize, nNewSize,i;
 
-    if (pPathStack==NULL || rPoly.GetSize()==0) return;
+    if (pPathStack==nullptr || rPoly.GetSize()==0) return;
     tools::PolyPolygon * pPP=&(pPathStack->aPPoly);
     if (pPP->Count()==0 /*|| pPathStack->bClosed==sal_True*/) pPP->Insert(rPoly);
     else {
@@ -547,8 +547,8 @@ void OS2METReader::AddPointsToPath(const tools::Polygon & rPoly)
 
 void OS2METReader::CloseFigure()
 {
-    if (pAreaStack!=NULL) pAreaStack->bClosed=true;
-    else if (pPathStack!=NULL) pPathStack->bClosed=true;
+    if (pAreaStack!=nullptr) pAreaStack->bClosed=true;
+    else if (pPathStack!=nullptr) pPathStack->bClosed=true;
 }
 
 void OS2METReader::PushAttr(sal_uInt16 nPushOrder)
@@ -564,7 +564,7 @@ void OS2METReader::PopAttr()
 {
     OSAttr * p=pAttrStack;
 
-    if (p==NULL) return;
+    if (p==nullptr) return;
     switch (p->nPushOrder) {
 
         case GOrdPIvAtr:
@@ -725,16 +725,16 @@ void OS2METReader::SetRasterOp(RasterOp eROP)
 
 void OS2METReader::SetPalette0RGB(sal_uInt16 nIndex, sal_uLong nCol)
 {
-    if (pPaletteStack==NULL) {
+    if (pPaletteStack==nullptr) {
         pPaletteStack=new OSPalette;
-        pPaletteStack->pSucc=NULL;
-        pPaletteStack->p0RGB=NULL;
+        pPaletteStack->pSucc=nullptr;
+        pPaletteStack->p0RGB=nullptr;
         pPaletteStack->nSize=0;
     }
-    if (pPaletteStack->p0RGB==NULL || nIndex>=pPaletteStack->nSize) {
+    if (pPaletteStack->p0RGB==nullptr || nIndex>=pPaletteStack->nSize) {
         sal_uInt32 * pOld0RGB=pPaletteStack->p0RGB;
         size_t nOldSize = pPaletteStack->nSize;
-        if (pOld0RGB==NULL) nOldSize=0;
+        if (pOld0RGB==nullptr) nOldSize=0;
         pPaletteStack->nSize=2*(nIndex+1);
         if (pPaletteStack->nSize<256) pPaletteStack->nSize=256;
         pPaletteStack->p0RGB = new sal_uInt32[pPaletteStack->nSize];
@@ -751,7 +751,7 @@ void OS2METReader::SetPalette0RGB(sal_uInt16 nIndex, sal_uLong nCol)
 
 sal_uInt32 OS2METReader::GetPalette0RGB(sal_uInt32 nIndex)
 {
-    if (pPaletteStack!=NULL && pPaletteStack->p0RGB!=NULL &&
+    if (pPaletteStack!=nullptr && pPaletteStack->p0RGB!=nullptr &&
         pPaletteStack->nSize>nIndex) nIndex=pPaletteStack->p0RGB[nIndex];
     return nIndex;
 }
@@ -834,8 +834,8 @@ void OS2METReader::ReadLine(bool bGivenPos, sal_uInt16 nOrderLen)
         else aPolygon.SetPoint(ReadPoint(),i);
     }
     aAttr.aCurPos=aPolygon.GetPoint(nPolySize-1);
-    if (pAreaStack!=NULL) AddPointsToArea(aPolygon);
-    else if (pPathStack!=NULL) AddPointsToPath(aPolygon);
+    if (pAreaStack!=nullptr) AddPointsToArea(aPolygon);
+    else if (pPathStack!=nullptr) AddPointsToPath(aPolygon);
     else
     {
         SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
@@ -872,8 +872,8 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
         aPolygon.SetPoint(aP0,i);
     }
     aAttr.aCurPos=aPolygon.GetPoint(nPolySize-1);
-    if (pAreaStack!=NULL) AddPointsToArea(aPolygon);
-    else if (pPathStack!=NULL) AddPointsToPath(aPolygon);
+    if (pAreaStack!=nullptr) AddPointsToArea(aPolygon);
+    else if (pPathStack!=nullptr) AddPointsToPath(aPolygon);
     else
     {
         SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
@@ -958,8 +958,8 @@ void OS2METReader::ReadBitBlt()
     aSize=Size(aP2.X()-aP1.X(),aP2.Y()-aP1.Y());
 
     pB=pBitmapList;
-    while (pB!=NULL && pB->nID!=nID) pB=pB->pSucc;
-    if (pB!=NULL) {
+    while (pB!=nullptr && pB->nID!=nID) pB=pB->pSucc;
+    if (pB!=nullptr) {
         SetRasterOp(aAttr.ePatMix);
         pVirDev->DrawBitmap(aP1,aSize,pB->aBitmap);
     }
@@ -974,8 +974,8 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
     Size aSize;
 
     pF = pFontList;
-    while (pF!=NULL && pF->nID!=aAttr.nChrSet) pF=pF->pSucc;
-    if (pF!=NULL)
+    while (pF!=nullptr && pF->nID!=aAttr.nChrSet) pF=pF->pSucc;
+    if (pF!=nullptr)
         aFont = pF->aFont;
     aFont.SetColor(aAttr.aChrCol);
     aFont.SetSize(Size(0,aAttr.aChrCellSize.Height()));
@@ -1003,7 +1003,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
             nLen = nOrderLen-4;
     }
     if (nLen > pOS2MET->remainingSize())
-        throw css::uno::Exception("attempt to read past end of input", 0);
+        throw css::uno::Exception("attempt to read past end of input", nullptr);
     std::unique_ptr<char[]> pChr(new char[nLen+1]);
     for (i=0; i<nLen; i++)
         pOS2MET->ReadChar( pChr[i] );
@@ -1109,7 +1109,7 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
                     aCenter.X()+nP,aCenter.Y()+nQ);
     aCalcBndRect.Union(aRect);
 
-    if (pAreaStack!=NULL) {
+    if (pAreaStack!=nullptr) {
         ChangeBrush(aAttr.aPatCol,aAttr.aPatBgCol,aAttr.bFill);
         SetRasterOp(aAttr.ePatMix);
         if ((pAreaStack->nFlags&0x40)!=0)
@@ -1269,9 +1269,9 @@ void OS2METReader::ReadBezier(bool bGivenPos, sal_uInt16 nOrderLen)
 
     aAttr.aCurPos = aPolygon[ nNumPoints - 1 ];
 
-    if (pAreaStack!=NULL)
+    if (pAreaStack!=nullptr)
         AddPointsToArea(aPolygon);
-    else if (pPathStack!=NULL)
+    else if (pPathStack!=nullptr)
         AddPointsToPath(aPolygon);
     else
     {
@@ -1294,8 +1294,8 @@ void OS2METReader::ReadFillet(bool bGivenPos, sal_uInt16 nOrderLen)
         else aPolygon.SetPoint(ReadPoint(),i);
     }
     aAttr.aCurPos=aPolygon.GetPoint(nNumPoints-1);
-    if (pAreaStack!=NULL) AddPointsToArea(aPolygon);
-    else if (pPathStack!=NULL) AddPointsToPath(aPolygon);
+    if (pAreaStack!=nullptr) AddPointsToArea(aPolygon);
+    else if (pPathStack!=nullptr) AddPointsToPath(aPolygon);
     else {
         SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
         SetRasterOp(aAttr.eLinMix);
@@ -1317,8 +1317,8 @@ void OS2METReader::ReadFilletSharp(bool bGivenPos, sal_uInt16 nOrderLen)
     aPolygon.SetPoint(aAttr.aCurPos,0);
     for (i=1; i<nNumPoints; i++) aPolygon.SetPoint(ReadPoint(),i);
     aAttr.aCurPos=aPolygon.GetPoint(nNumPoints-1);
-    if (pAreaStack!=NULL) AddPointsToArea(aPolygon);
-    else if (pPathStack!=NULL) AddPointsToPath(aPolygon);
+    if (pAreaStack!=nullptr) AddPointsToArea(aPolygon);
+    else if (pPathStack!=nullptr) AddPointsToPath(aPolygon);
     else
     {
         SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
@@ -1535,12 +1535,12 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
         case GOrdEndPth: {
             OSPath * p, * pprev, * psucc;
-            if (pPathStack==NULL) break;
-            p=pPathList; pprev=NULL;
-            while (p!=NULL) {
+            if (pPathStack==nullptr) break;
+            p=pPathList; pprev=nullptr;
+            while (p!=nullptr) {
                 psucc=p->pSucc;
                 if (p->nID==pPathStack->nID) {
-                    if (pprev==NULL) pPathList=psucc; else pprev->pSucc=psucc;
+                    if (pprev==nullptr) pPathList=psucc; else pprev->pSucc=psucc;
                     delete p;
                 }
                 else pprev=p;
@@ -1611,10 +1611,10 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             OSPath* p=pPathList;
             pOS2MET->SeekRel(2);
             pOS2MET->ReadUInt32( nID );
-            while (p!=NULL && p->nID!=nID)
+            while (p!=nullptr && p->nID!=nID)
                 p=p->pSucc;
 
-            if( p!=NULL )
+            if( p!=nullptr )
             {
                 SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
                 SetRasterOp(aAttr.eLinMix);
@@ -1635,9 +1635,9 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             OSPath * p=pPathList;
             pOS2MET->SeekRel(2);
             pOS2MET->ReadUInt32( nID );
-            if (nID==0) p=NULL;
-            while (p!=NULL && p->nID!=nID) p=p->pSucc;
-            if (p!=NULL) pVirDev->SetClipRegion(vcl::Region(p->aPPoly));
+            if (nID==0) p=nullptr;
+            while (p!=nullptr && p->nID!=nID) p=p->pSucc;
+            if (p!=nullptr) pVirDev->SetClipRegion(vcl::Region(p->aPPoly));
             else pVirDev->SetClipRegion();
             break;
         }
@@ -2170,7 +2170,7 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
 
 void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
 {
-    OSBitmap * p=pBitmapList; if (p==NULL) return;
+    OSBitmap * p=pBitmapList; if (p==nullptr) return;
 
     switch (nDataID) {
 
@@ -2204,7 +2204,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
         case 0xfe92: { // Image Data
             // At the latest we now need the temporary BMP file and
             // inside this file we need the header and the palette.
-            if (p->pBMP==NULL) {
+            if (p->pBMP==nullptr) {
                 p->pBMP=new SvMemoryStream();
                 p->pBMP->SetEndian(SvStreamEndian::LITTLE);
                 if (p->nWidth==0 || p->nHeight==0 || p->nBitsPerPixel==0) {
@@ -2393,7 +2393,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             // create new bitmap by now: (will be filled later)
             OSBitmap * pB=new OSBitmap;
             pB->pSucc=pBitmapList; pBitmapList=pB;
-            pB->pBMP=NULL; pB->nWidth=0; pB->nHeight=0; pB->nBitsPerPixel=0;
+            pB->pBMP=nullptr; pB->nWidth=0; pB->nHeight=0; pB->nBitsPerPixel=0;
             pB->nMapPos=0;
             // determine ID of the bitmap:
             sal_uInt8 i,nbyte,nbyte2;
@@ -2406,12 +2406,12 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             // put new palette on the palette stack: (will be filled later)
             OSPalette * pP=new OSPalette;
             pP->pSucc=pPaletteStack; pPaletteStack=pP;
-            pP->p0RGB=NULL; pP->nSize=0;
+            pP->p0RGB=nullptr; pP->nSize=0;
             break;
         }
         case EndImgObjMagic: {
             // read temporary Windows BMP file:
-            if (pBitmapList==NULL || pBitmapList->pBMP==NULL ||
+            if (pBitmapList==nullptr || pBitmapList->pBMP==nullptr ||
                 pBitmapList->pBMP->GetError()!=0) {
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=5;
@@ -2425,12 +2425,12 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=6;
             }
-            delete pBitmapList->pBMP; pBitmapList->pBMP=NULL;
+            delete pBitmapList->pBMP; pBitmapList->pBMP=nullptr;
             // kill palette from stack:
             OSPalette * pP=pPaletteStack;
-            if (pP!=NULL) {
+            if (pP!=nullptr) {
                 pPaletteStack=pP->pSucc;
-                if (pP->p0RGB!=NULL) delete[] pP->p0RGB;
+                if (pP->p0RGB!=nullptr) delete[] pP->p0RGB;
                 delete pP;
             }
             break;
@@ -2475,7 +2475,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             sal_uInt16 nOrderID, nOrderLen;
             sal_uInt8 nbyte;
 
-            if (pOrdFile==NULL) break;
+            if (pOrdFile==nullptr) break;
 
             // In pOrdFile all "DatGrfObj" fields were collected so that the
             // therein contained "Orders" are continuous and not segmented by fields.
@@ -2530,7 +2530,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=10;
             }
-            delete pOrdFile; pOrdFile=NULL;
+            delete pOrdFile; pOrdFile=nullptr;
             break;
         }
         case DscGrfObjMagic: {
@@ -2549,7 +2549,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             break;
         }
         case DatGrfObjMagic: {
-            if (pOrdFile==NULL) {
+            if (pOrdFile==nullptr) {
                 pOrdFile = new SvMemoryStream;
                 pOrdFile->SetEndian(SvStreamEndian::LITTLE);
             }
@@ -2578,13 +2578,13 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     SvStreamEndian nOrigNumberFormat = pOS2MET->GetEndian();
 
     bCoord32 = true;
-    pPaletteStack=NULL;
-    pAreaStack=NULL;
-    pPathStack=NULL;
-    pPathList=NULL;
-    pFontList=NULL;
-    pBitmapList=NULL;
-    pAttrStack=NULL;
+    pPaletteStack=nullptr;
+    pAreaStack=nullptr;
+    pPathStack=nullptr;
+    pPathList=nullptr;
+    pFontList=nullptr;
+    pBitmapList=nullptr;
+    pAttrStack=nullptr;
 
     aDefAttr.aLinCol     =Color(COL_BLACK);
     aDefAttr.aLinBgCol   =Color(COL_WHITE);
@@ -2625,7 +2625,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
     aAttr=aDefAttr;
 
-    pOrdFile=NULL;
+    pOrdFile=nullptr;
 
     pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->EnableOutput(false);
@@ -2710,49 +2710,49 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
         rGDIMetaFile.SetPrefSize( aCalcBndRect.GetSize() );
     }
 
-    if (pOrdFile!=NULL) delete pOrdFile;
+    if (pOrdFile!=nullptr) delete pOrdFile;
 
-    while (pAreaStack!=NULL) {
+    while (pAreaStack!=nullptr) {
         OSArea * p=pAreaStack;
         pAreaStack=p->pSucc;
         delete p;
     }
 
-    while (pPathStack!=NULL) {
+    while (pPathStack!=nullptr) {
         OSPath * p=pPathStack;
         pPathStack=p->pSucc;
         delete p;
     }
 
-    while (pPathList!=NULL) {
+    while (pPathList!=nullptr) {
         OSPath * p=pPathList;
         pPathList=p->pSucc;
         delete p;
     }
 
-    while (pFontList!=NULL) {
+    while (pFontList!=nullptr) {
         OSFont * p=pFontList;
         pFontList=p->pSucc;
         delete p;
     }
 
-    while (pBitmapList!=NULL) {
+    while (pBitmapList!=nullptr) {
         OSBitmap * p=pBitmapList;
         pBitmapList=p->pSucc;
-        if (p->pBMP!=NULL) delete p->pBMP;
+        if (p->pBMP!=nullptr) delete p->pBMP;
         delete p;
     }
 
-    while (pAttrStack!=NULL) {
+    while (pAttrStack!=nullptr) {
         OSAttr * p=pAttrStack;
         pAttrStack=p->pSucc;
         delete p;
     }
 
-    while (pPaletteStack!=NULL) {
+    while (pPaletteStack!=nullptr) {
         OSPalette * p=pPaletteStack;
         pPaletteStack=p->pSucc;
-        if (p->p0RGB!=NULL) delete[] p->p0RGB;
+        if (p->p0RGB!=nullptr) delete[] p->p0RGB;
         delete p;
     }
 

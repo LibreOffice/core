@@ -25,12 +25,12 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 #define IMPLEMENTATION_ENTRY( className ) \
-    { &className##_createInstance, &className##_getImplementationName, &className##_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 }
+    { &className##_createInstance, &className##_getImplementationName, &className##_getSupportedServiceNames, ::cppu::createSingleComponentFactory, nullptr, 0 }
 
 static ::cppu::ImplementationEntry const spServices[] =
 {
     IMPLEMENTATION_ENTRY( ::ooo::vba::VBAMacroResolver ),
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 #undef IMPLEMENTATION_ENTRY

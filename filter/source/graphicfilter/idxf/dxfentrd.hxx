@@ -528,7 +528,7 @@ public:
 
 inline DXFEntities::DXFEntities()
 {
-    pFirst=NULL;
+    pFirst=nullptr;
 }
 
 

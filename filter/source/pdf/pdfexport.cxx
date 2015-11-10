@@ -165,8 +165,8 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
     bool        bRet = false;
     try
     {
-        Any* pFirstPage = NULL;
-        Any* pLastPage = NULL;
+        Any* pFirstPage = nullptr;
+        Any* pLastPage = nullptr;
 
         bool bExportNotesPages = false;
 
@@ -810,7 +810,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
             if ( pOut )
             {
-                DBG_ASSERT( pOut->GetExtOutDevData() == NULL, "PDFExport: ExtOutDevData already set!!!" );
+                DBG_ASSERT( pOut->GetExtOutDevData() == nullptr, "PDFExport: ExtOutDevData already set!!!" );
                 std::unique_ptr<vcl::PDFExtOutDevData> pPDFExtOutDevData(new vcl::PDFExtOutDevData( *pOut ));
                 pOut->SetExtOutDevData( pPDFExtOutDevData.get() );
                 pPDFExtOutDevData->SetIsExportNotes( mbExportNotes );
@@ -928,7 +928,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     bRet = pPDFWriter->Emit();
                     aErrors = pPDFWriter->GetErrors();
                 }
-                pOut->SetExtOutDevData( NULL );
+                pOut->SetExtOutDevData( nullptr );
                 if( bReChangeToNormalView )
                 {
                     try

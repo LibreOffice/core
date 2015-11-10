@@ -144,7 +144,7 @@ public:
     bool                          operator==( const ObjectRepresentation& rPresentation ) const;
 
     const Reference< XInterface >&    GetObject() const { return mxObject; }
-    bool                          HasRepresentation() const { return mpMtf != NULL; }
+    bool                          HasRepresentation() const { return mpMtf != nullptr; }
     const GDIMetaFile&                GetRepresentation() const { return *mpMtf; }
 };
 

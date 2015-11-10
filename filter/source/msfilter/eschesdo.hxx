@@ -159,7 +159,7 @@ protected:
                                         const Point& rTextRefPoint );
     sal_uInt32          ImplEnterAdditionalTextGroup(
                                 const css::uno::Reference< css::drawing::XShape >& rShape,
-                                const Rectangle* pBoundRect = NULL );
+                                const Rectangle* pBoundRect = nullptr );
 
 
 public:

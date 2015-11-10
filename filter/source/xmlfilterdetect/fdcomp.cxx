@@ -30,8 +30,8 @@ namespace {
 static cppu::ImplementationEntry const services[] = {
     { &FilterDetect_createInstance, &FilterDetect_getImplementationName,
       &FilterDetect_getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
+      &cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

@@ -213,7 +213,7 @@ void Impl_OlePres::Write( SvStream & rStm )
 
 DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan )
     : rManager(rMan)
-    , pDefaultPropSet(NULL)
+    , pDefaultPropSet(nullptr)
     , mnFix16Angle(0)
     , mbRotateGranientFillWithAngle(false)
 {
@@ -1229,7 +1229,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
                 {
                     const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.Current()->SeekToBegOfRecord( rIn );
                     DffPropertyReader aSecPropSet( rManager );
-                    aSecPropSet.ReadPropSet( rIn, NULL );
+                    aSecPropSet.ReadPropSet( rIn, nullptr );
                     sal_Int32 nSecFillProperties = aSecPropSet.GetPropertyValue( DFF_Prop_fNoFillHitTest, 0x200020 );
                     bRotateWithShape = ( nSecFillProperties & 0x0020 );
                 }
@@ -2906,7 +2906,7 @@ DffRecordList::DffRecordList( DffRecordList* pList ) :
     nCount                  ( 0 ),
     nCurrent                ( 0 ),
     pPrev                   ( pList ),
-    pNext                   ( NULL )
+    pNext                   ( nullptr )
 {
     if ( pList )
         pList->pNext = this;
@@ -2918,13 +2918,13 @@ DffRecordList::~DffRecordList()
 }
 
 DffRecordManager::DffRecordManager() :
-    DffRecordList   ( NULL ),
+    DffRecordList   ( nullptr ),
     pCList          ( static_cast<DffRecordList*>(this) )
 {
 }
 
 DffRecordManager::DffRecordManager( SvStream& rIn ) :
-    DffRecordList   ( NULL ),
+    DffRecordList   ( nullptr ),
     pCList          ( static_cast<DffRecordList*>(this) )
 {
     Consume( rIn );
@@ -2964,14 +2964,14 @@ void DffRecordManager::Consume( SvStream& rIn, bool bAppend, sal_uInt32 nStOfs )
 void DffRecordManager::Clear()
 {
     pCList = static_cast<DffRecordList*>(this);
-    delete pNext, pNext = NULL;
+    delete pNext, pNext = nullptr;
     nCurrent = 0;
     nCount = 0;
 }
 
 DffRecordHeader* DffRecordManager::Current()
 {
-    DffRecordHeader* pRet = NULL;
+    DffRecordHeader* pRet = nullptr;
     if ( pCList->nCurrent < pCList->nCount )
         pRet = &pCList->mHd[ pCList->nCurrent ];
     return pRet;
@@ -2979,7 +2979,7 @@ DffRecordHeader* DffRecordManager::Current()
 
 DffRecordHeader* DffRecordManager::First()
 {
-    DffRecordHeader* pRet = NULL;
+    DffRecordHeader* pRet = nullptr;
     pCList = static_cast<DffRecordList*>(this);
     if ( pCList->nCount )
     {
@@ -2991,7 +2991,7 @@ DffRecordHeader* DffRecordManager::First()
 
 DffRecordHeader* DffRecordManager::Next()
 {
-    DffRecordHeader* pRet = NULL;
+    DffRecordHeader* pRet = nullptr;
     sal_uInt32 nC = pCList->nCurrent + 1;
     if ( nC < pCList->nCount )
     {
@@ -3009,7 +3009,7 @@ DffRecordHeader* DffRecordManager::Next()
 
 DffRecordHeader* DffRecordManager::Prev()
 {
-    DffRecordHeader* pRet = NULL;
+    DffRecordHeader* pRet = nullptr;
     sal_uInt32 nCur = pCList->nCurrent;
     if ( !nCur && pCList->pPrev )
     {
@@ -3026,7 +3026,7 @@ DffRecordHeader* DffRecordManager::Prev()
 
 DffRecordHeader* DffRecordManager::Last()
 {
-    DffRecordHeader* pRet = NULL;
+    DffRecordHeader* pRet = nullptr;
     while ( pCList->pNext )
         pCList = pCList->pNext;
     sal_uInt32 nCnt = pCList->nCount;
@@ -3080,7 +3080,7 @@ DffRecordHeader* DffRecordManager::GetRecordHeader( sal_uInt16 nRecId, DffSeekTo
                 pHd = Next();
             }
             if ( pHd->nRecType != nRecId )
-                pHd = NULL;
+                pHd = nullptr;
         }
     }
     if ( !pHd )
@@ -3191,7 +3191,7 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
     }
     else
     {
-        pModel = 0;
+        pModel = nullptr;
         nMapMul = nMapDiv = nMapXOfs = nMapYOfs = nEmuMul = nEmuDiv = nPntMul = nPntDiv = 0;
         bNeedMap = false;
     }
@@ -3263,7 +3263,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
             else
             {
                 bRet = true;
-                if ( pRecHd != NULL )
+                if ( pRecHd != nullptr )
                     *pRecHd = aHd;
                 else
                 {
@@ -3775,7 +3775,7 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
 
 SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, const DffObjData& rObjData )
 {
-    SdrObject*  pRet = NULL;
+    SdrObject*  pRet = nullptr;
     OUString    aFileName;
     OUString    aLinkFileName, aLinkFilterName;
     Rectangle   aVisArea;
@@ -3826,7 +3826,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             // the writer is doing its own cropping, so this part affects only impress and calc,
             // unless we're inside a group, in which case writer doesn't crop either
             if (( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_CROP_BITMAPS ) || rObjData.nCalledByGroup != 0 )
-                lcl_ApplyCropping( *this, ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 ? &rSet : NULL, aGraf );
+                lcl_ApplyCropping( *this, ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 ? &rSet : nullptr, aGraf );
 
             if ( IsProperty( DFF_Prop_pictureTransparent ) )
             {
@@ -4028,7 +4028,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
 SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
     Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup, sal_Int32* pShapeId )
 {
-    SdrObject* pRet = NULL;
+    SdrObject* pRet = nullptr;
     DffRecordHeader aObjHd;
     bool bOk = ReadDffRecordHeader(rSt, aObjHd);
     if (bOk && aObjHd.nRecType == DFF_msofbtSpgrContainer)
@@ -4047,7 +4047,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                                             Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
                                                 int nCalledByGroup, sal_Int32* pShapeId )
 {
-    SdrObject* pRet = NULL;
+    SdrObject* pRet = nullptr;
 
     if( pShapeId )
         *pShapeId = 0;
@@ -4158,7 +4158,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                             Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
                                             int nCalledByGroup, sal_Int32* pShapeId )
 {
-    SdrObject* pRet = NULL;
+    SdrObject* pRet = nullptr;
 
     if( pShapeId )
         *pShapeId = 0;
@@ -4231,7 +4231,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         maShapeRecords.Current()->SeekToBegOfRecord( rSt );
         delete pSecPropSet;
         pSecPropSet = new DffPropertyReader( *this );
-        pSecPropSet->ReadPropSet( rSt, NULL );
+        pSecPropSet->ReadPropSet( rSt, nullptr );
     }
 
     aObjData.bChildAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtChildAnchor, SEEK_FROM_CURRENT_AND_RESTART );
@@ -4697,8 +4697,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // connectors
                         MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
 
-                        static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(true, NULL);
-                        static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(false, NULL);
+                        static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(true, nullptr);
+                        static_cast<SdrEdgeObj*>(pRet)->ConnectToNode(false, nullptr);
 
                         Point aPoint1( aObjData.aBoundRect.TopLeft() );
                         Point aPoint2( aObjData.aBoundRect.BottomRight() );
@@ -5060,7 +5060,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
         //  text frame, also Title or Outline
         SdrObject*  pOrgObj  = pObj;
-        SdrRectObj* pTextObj = 0;
+        SdrRectObj* pTextObj = nullptr;
         sal_uInt32 nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
         if( nTextId )
         {
@@ -5090,7 +5090,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if (bTextFrame)
             {
                 SdrObject::Free( pObj );
-                pObj = pOrgObj = 0;
+                pObj = pOrgObj = nullptr;
             }
 
             // Distance of Textbox to it's surrounding Customshape
@@ -5358,7 +5358,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             SfxItemSet aSet( pSdrModel->GetItemPool() );
             ApplyAttributes( rSt, aSet, rObjData );
 
-            const SfxPoolItem* pPoolItem=NULL;
+            const SfxPoolItem* pPoolItem=nullptr;
             SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
                                                      false, &pPoolItem );
             if( SfxItemState::DEFAULT == eState )
@@ -5398,7 +5398,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
         {
             delete pTextImpRec->pWrapPolygon;
-            pTextImpRec->pWrapPolygon = NULL;
+            pTextImpRec->pWrapPolygon = nullptr;
             sal_uInt16 nNumElemVert(0), nNumElemMemVert(0), nElemSizeVert(0);
             rSt.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
             bool bOk = false;
@@ -5547,8 +5547,8 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
 
         if( rOrder.pObj == pObject )
         {
-            rOrder.pObj      = 0;
-            rOrder.pFly      = 0;
+            rOrder.pObj      = nullptr;
+            rOrder.pFly      = nullptr;
             rOrder.nTxBxComp = 0;
         }
     }
@@ -5567,7 +5567,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  SvStream* pStData2_,
                                  bool bSkipImages )
     :DffPropertyReader( *this ),
-     pFormModel( NULL ),
+     pFormModel( nullptr ),
      m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      m_pShapeOrders( new SvxMSDffShapeOrders ),
@@ -5584,7 +5584,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      pStData2( pStData2_ ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
-     pSecPropSet( NULL ),
+     pSecPropSet( nullptr ),
      mnDefaultColor( mnDefaultColor_),
      mbTracing( false ),
      mbSkipImages (bSkipImages)
@@ -5616,7 +5616,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
 
 SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
     :DffPropertyReader( *this ),
-     pFormModel( NULL ),
+     pFormModel( nullptr ),
      m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      m_pShapeOrders( new SvxMSDffShapeOrders ),
@@ -5628,16 +5628,16 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      mnDrawingsSaved(0),
      mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
-     pStData( 0 ),
-     pStData2( 0 ),
+     pStData( nullptr ),
+     pStData2( nullptr ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
-     pSecPropSet( NULL ),
+     pSecPropSet( nullptr ),
      mnDefaultColor( COL_DEFAULT ),
      mbTracing( false ),
      mbSkipImages(false)
 {
-    SetModel( NULL, 0 );
+    SetModel( nullptr, 0 );
 }
 
 SvxMSDffManager::~SvxMSDffManager()
@@ -6221,7 +6221,7 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         rStCtrl.Seek( nOldPosCtrl );
         if( &rStCtrl != pStData && pStData )
             pStData->Seek( nOldPosData );
-        return ( 0 != rpShape );
+        return ( nullptr != rpShape );
     }
     return false;
 }
@@ -6550,7 +6550,7 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
                                        const int /* _nCalledByGroup */,
                                        sal_Int64 nAspect ) const
 {
-    SdrObject* pRet = 0;
+    SdrObject* pRet = nullptr;
     OUString sStorageName;
     tools::SvRef<SotStorage> xSrcStg;
     ErrCode nError = ERRCODE_NONE;
@@ -6825,7 +6825,7 @@ const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
     else if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 )
       || aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
         return "schart";
-    return 0;
+    return nullptr;
 }
 
 OUString GetFilterNameFromClassID_Impl( const SvGlobalName& aGlobName )
@@ -6916,7 +6916,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint slide
                 0x64818d11L, 0x4f9b, 0x11cf,
                 0x86,0xea,0x00,0xaa,0x00,0xb9,0x29,0xe8 },
-            { 0, 0,
+            { 0, nullptr,
               0, 0, 0,
               0, 0, 0, 0, 0, 0, 0, 0 }
         };
@@ -6941,7 +6941,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
     if ( sStarName.getLength() )
     {
         //TODO/MBA: check if (and when) storage and stream will be destroyed!
-        const SfxFilter* pFilter = 0;
+        const SfxFilter* pFilter = nullptr;
         std::unique_ptr<SvMemoryStream> xMemStream (new SvMemoryStream);
         if ( pName )
         {
@@ -7072,7 +7072,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 sal_Int64 nRecommendedAspect )
 {
     sal_Int64 nAspect = nRecommendedAspect;
-    SdrOle2Obj* pRet = 0;
+    SdrOle2Obj* pRet = nullptr;
     if( rSrcStorage.Is() && xDestStorage.is() && rStorageName.getLength() )
     {
         comphelper::EmbeddedObjectContainer aCnt( xDestStorage );
@@ -7267,16 +7267,16 @@ bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Reference< 
 }
 
 SvxMSDffImportRec::SvxMSDffImportRec()
-    : pObj( 0 ),
-      pWrapPolygon(0),
-      pClientAnchorBuffer( 0 ),
+    : pObj( nullptr ),
+      pWrapPolygon(nullptr),
+      pClientAnchorBuffer( nullptr ),
       nClientAnchorLen(  0 ),
-      pClientDataBuffer( 0 ),
+      pClientDataBuffer( nullptr ),
       nClientDataLen(    0 ),
       nXAlign( 0 ), // position n cm from left
-      pXRelTo( NULL ), //   relative to column
+      pXRelTo( nullptr ), //   relative to column
       nYAlign( 0 ), // position n cm below
-      pYRelTo( NULL ), //   relative to paragraph
+      pYRelTo( nullptr ), //   relative to paragraph
       nLayoutInTableCell( 0 ), // element is laid out in table cell
       nFlags( 0 ),
       nTextRotationAngle( 0 ),
@@ -7313,9 +7313,9 @@ SvxMSDffImportRec::SvxMSDffImportRec()
 SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
     : pObj( rCopy.pObj ),
       nXAlign( rCopy.nXAlign ),
-      pXRelTo( NULL ),
+      pXRelTo( nullptr ),
       nYAlign( rCopy.nYAlign ),
-      pYRelTo( NULL ),
+      pYRelTo( nullptr ),
       nLayoutInTableCell( rCopy.nLayoutInTableCell ),
       nFlags( rCopy.nFlags ),
       nTextRotationAngle( rCopy.nTextRotationAngle ),
@@ -7365,7 +7365,7 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
                 nClientAnchorLen );
     }
     else
-        pClientAnchorBuffer = 0;
+        pClientAnchorBuffer = nullptr;
 
     nClientDataLen = rCopy.nClientDataLen;
     if( rCopy.nClientDataLen )
@@ -7376,12 +7376,12 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
                 nClientDataLen );
     }
     else
-        pClientDataBuffer = 0;
+        pClientDataBuffer = nullptr;
 
     if (rCopy.pWrapPolygon)
         pWrapPolygon = new tools::Polygon(*rCopy.pWrapPolygon);
     else
-        pWrapPolygon = 0;
+        pWrapPolygon = nullptr;
 }
 
 SvxMSDffImportRec::~SvxMSDffImportRec()
@@ -7416,7 +7416,7 @@ void SvxMSDffManager::removeShapeId( SdrObject* pShape )
 SdrObject* SvxMSDffManager::getShapeForId( sal_Int32 nShapeId )
 {
     SvxMSDffShapeIdContainer::iterator aIter( maShapeIdContainer.find(nShapeId) );
-    return aIter != maShapeIdContainer.end() ? (*aIter).second : 0;
+    return aIter != maShapeIdContainer.end() ? (*aIter).second : nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

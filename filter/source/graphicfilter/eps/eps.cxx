@@ -161,7 +161,7 @@ private:
 
     css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
-    void                ImplWriteProlog( const Graphic* pPreviewEPSI = NULL );
+    void                ImplWriteProlog( const Graphic* pPreviewEPSI = nullptr );
     void                ImplWriteEpilog();
     void                ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev );
 
@@ -213,7 +213,7 @@ private:
     void                ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
-    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const long* pDXArry = NULL, bool bStretch = false );
+    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const long* pDXArry = nullptr, bool bStretch = false );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw( sal_uLong nMode = PS_RET );
@@ -254,15 +254,15 @@ PSWriter::PSWriter()
     , mbCompression(false)
     , mnPreview(0)
     , mnTextMode(0)
-    , mpPS(NULL)
-    , pMTF(NULL)
-    , pAMTF(NULL)
+    , mpPS(nullptr)
+    , pMTF(nullptr)
+    , pAMTF(nullptr)
     , pVDev()
     , nBoundingX1(0)
     , nBoundingY1(0)
     , nBoundingX2(0)
     , nBoundingY2(0)
-    , pGDIStack(NULL)
+    , pGDIStack(nullptr)
     , mnCursorPos(0)
     , aColor()
     , bLineColor(false)
@@ -283,10 +283,10 @@ PSWriter::PSWriter()
     , maFont()
     , maLastFont()
     , nChrSet(0)
-    , pChrSetList(NULL)
+    , pChrSetList(nullptr)
     , nNextChrSetId(0)
-    , pTable(NULL)
-    , pPrefix(NULL)
+    , pTable(nullptr)
+    , pPrefix(nullptr)
     , nDataSize(0)
     , nClearCode(0)
     , nEOICode(0)
@@ -296,7 +296,7 @@ PSWriter::PSWriter()
     , dwShift(0)
     , xStatusIndicator()
 {
-    pAMTF = NULL;
+    pAMTF = nullptr;
 }
 
 
@@ -430,7 +430,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     nBoundingX2 = pMTF->GetPrefSize().Width();
     nBoundingY2 = pMTF->GetPrefSize().Height();
 
-    pGDIStack = NULL;
+    pGDIStack = nullptr;
     aColor = Color( COL_TRANSPARENT );
     bLineColor = true;
     aLineColor = Color( COL_BLACK );
@@ -447,12 +447,12 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     bRegionChanged = false;
 
     nChrSet = 0x00;
-    pChrSetList = NULL;
+    pChrSetList = nullptr;
     nNextChrSetId = 1;
 
     if( pMTF->GetActionSize() )
     {
-        ImplWriteProlog( ( mnPreview & EPS_PREVIEW_EPSI ) ? &rGraphic : NULL );
+        ImplWriteProlog( ( mnPreview & EPS_PREVIEW_EPSI ) ? &rGraphic : nullptr );
         mnCursorPos = 0;
         ImplWriteActions( *pMTF, *pVDev.get() );
         ImplWriteEpilog();
@@ -809,7 +809,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, NULL, 0, rVDev );
+                ImplText( aUniStr, aPoint, nullptr, 0, rVDev );
             }
             break;
 
@@ -825,7 +825,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, NULL, pA->GetWidth(), rVDev );
+                ImplText( aUniStr, aPoint, nullptr, pA->GetWidth(), rVDev );
             }
             break;
 
@@ -846,7 +846,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Point aPoint = static_cast<const MetaBmpAction*>(pMA)->GetPoint();
                 Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
-                ImplBmp( &aBitmap, NULL, aPoint, aSize.Width(), aSize.Height() );
+                ImplBmp( &aBitmap, nullptr, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
 
@@ -857,7 +857,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Point aPoint = static_cast<const MetaBmpScaleAction*>(pMA)->GetPoint();
                 Size aSize = static_cast<const MetaBmpScaleAction*>(pMA)->GetSize();
-                ImplBmp( &aBitmap, NULL, aPoint, aSize.Width(), aSize.Height() );
+                ImplBmp( &aBitmap, nullptr, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
 
@@ -870,7 +870,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Point aPoint = static_cast<const MetaBmpScalePartAction*>(pMA)->GetDestPoint();
                 Size aSize = static_cast<const MetaBmpScalePartAction*>(pMA)->GetDestSize();
-                ImplBmp( &aBitmap, NULL, aPoint, aSize.Width(), aSize.Height() );
+                ImplBmp( &aBitmap, nullptr, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
 
@@ -972,7 +972,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         ImplBmp( &aBitmap, &aMask, Point( aRect.Left(), aRect.Top() ), aRect.GetWidth(), aRect.GetHeight() );
                     }
                     else
-                        ImplBmp( &aBitmap, NULL, Point( aRect.Left(), aRect.Top() ), aRect.GetWidth(), aRect.GetHeight() );
+                        ImplBmp( &aBitmap, nullptr, Point( aRect.Left(), aRect.Top() ), aRect.GetWidth(), aRect.GetHeight() );
 
                         // wallpaper Style
 
@@ -1167,7 +1167,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 sal_uLong   nSize = aGfxLink.GetDataSize();
                 sal_uLong   nParseThis = POSTSCRIPT_BOUNDINGSEARCH;
                 if ( nSize < 64 )                       // assuming eps is larger than 64 bytes
-                    pSource = NULL;
+                    pSource = nullptr;
                 if ( nParseThis > nSize )
                     nParseThis = nSize;
 
@@ -1263,7 +1263,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pMA);
                 if ( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") )
                 {
-                    const MetaGradientExAction* pGradAction = NULL;
+                    const MetaGradientExAction* pGradAction = nullptr;
                     while( ++nCurAction < nCount )
                     {
                         MetaAction* pAction = rMtf.GetAction( nCurAction );
@@ -2183,7 +2183,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
     else if ( ( mnTextMode == 1 ) || ( mnTextMode == 2 ) )  // normal text output
     {
         if ( mnTextMode == 2 )  // forcing output one complete text packet, by
-            pDXArry = NULL;     // ignoring the kerning array
+            pDXArry = nullptr;     // ignoring the kerning array
         ImplSetAttrForText( rPos );
         OString aStr(OUStringToOString(rUniString,
             maFont.GetCharSet()));
@@ -2684,10 +2684,10 @@ void PSWriter::StartCompression()
 
     for ( i = 0; i < 4096; i++ )
     {
-        pTable[ i ].pBrother = pTable[ i ].pFirstChild = NULL;
+        pTable[ i ].pBrother = pTable[ i ].pFirstChild = nullptr;
         pTable[ i ].nValue = (sal_uInt8)( pTable[ i ].nCode = i );
     }
-    pPrefix = NULL;
+    pPrefix = nullptr;
     WriteBits( nClearCode, nCodeSize );
 }
 
@@ -2706,7 +2706,7 @@ void PSWriter::Compress( sal_uInt8 nCompThis )
     else
     {
         nV = nCompThis;
-        for( p = pPrefix->pFirstChild; p != NULL; p = p->pBrother )
+        for( p = pPrefix->pFirstChild; p != nullptr; p = p->pBrother )
         {
             if ( p->nValue == nV )
                 break;
@@ -2723,7 +2723,7 @@ void PSWriter::Compress( sal_uInt8 nCompThis )
                 WriteBits( nClearCode, nCodeSize );
 
                 for ( i = 0; i < nClearCode; i++ )
-                    pTable[ i ].pFirstChild = NULL;
+                    pTable[ i ].pFirstChild = nullptr;
 
                 nCodeSize = nDataSize + 1;
                 nTableSize = nEOICode + 1;
@@ -2737,7 +2737,7 @@ void PSWriter::Compress( sal_uInt8 nCompThis )
                 p->pBrother = pPrefix->pFirstChild;
                 pPrefix->pFirstChild = p;
                 p->nValue = nV;
-                p->pFirstChild = NULL;
+                p->pFirstChild = nullptr;
             }
 
             pPrefix = pTable + nV;
@@ -2772,7 +2772,7 @@ sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDes
             return pSource;
         pSource++;
     }
-    return NULL;
+    return nullptr;
 }
 
 

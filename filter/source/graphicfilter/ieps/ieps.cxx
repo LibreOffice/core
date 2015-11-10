@@ -65,7 +65,7 @@ static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, 
             return pSource;
         pSource++;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -181,7 +181,7 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
 #else
     result = osl_executeProcess_WithRedirectedIO(rProgName.pData,
         pArgs, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN,
-        pSecurity, 0, 0, 0, pProcess, pIn, pOut, pErr);
+        pSecurity, nullptr, nullptr, 0, pProcess, pIn, pOut, pErr);
 #endif
     osl_freeSecurityHandle( pSecurity );
     return result;
@@ -227,9 +227,9 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
         arg1.pData, arg2.pData, arg3.pData, input.pData, output.pData
     };
     oslProcess aProcess;
-    oslFileHandle pIn = NULL;
-    oslFileHandle pOut = NULL;
-    oslFileHandle pErr = NULL;
+    oslFileHandle pIn = nullptr;
+    oslFileHandle pOut = nullptr;
+    oslFileHandle pErr = nullptr;
         oslProcessError eErr = runProcessWithPathSearch(
             "pstoedit" EXESUFFIX,
             args, sizeof(args)/sizeof(rtl_uString *),
@@ -295,9 +295,9 @@ static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
     Graphic &rGraphic, const OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
 {
     oslProcess aProcess;
-    oslFileHandle pIn = NULL;
-    oslFileHandle pOut = NULL;
-    oslFileHandle pErr = NULL;
+    oslFileHandle pIn = nullptr;
+    oslFileHandle pOut = nullptr;
+    oslFileHandle pErr = nullptr;
         oslProcessError eErr = runProcessWithPathSearch(rProgName,
             pArgs, nArgs,
             &aProcess, &pIn, &pOut, &pErr);
@@ -435,7 +435,7 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
         rMtf.AddAction( static_cast<MetaAction*>( new MetaCommentAction( aComment, 0, static_cast<const sal_uInt8*>(aReplacement.GetData()), aReplacement.Tell() ) ) );
     }
     else
-        rMtf.AddAction( static_cast<MetaAction*>( new MetaCommentAction( aComment, 0, NULL, 0 ) ) );
+        rMtf.AddAction( static_cast<MetaAction*>( new MetaCommentAction( aComment, 0, nullptr, 0 ) ) );
 }
 
 //there is no preview -> make a red box

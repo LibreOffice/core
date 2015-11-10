@@ -40,7 +40,7 @@ void CGM::ImplDoClass0()
                 // do anything with the bitmap
                 mpOutAct->DrawBitmap( pBmpDesc );
                 delete mpBitmapInUse;
-                mpBitmapInUse = NULL;
+                mpBitmapInUse = nullptr;
             }
             mbIsFinished = true;
             mbPictureBody = false;
@@ -59,7 +59,7 @@ void CGM::ImplDoClass0()
                 mbPicture = mbFirstOutPut = true;
                 mbFigure = false;
                 mnAct4PostReset = 0;
-                if ( mpChart == NULL )      // normal CGM Files determines "BeginPic"
+                if ( mpChart == nullptr )      // normal CGM Files determines "BeginPic"
                     mpOutAct->InsertPage();     // as the next slide
             }
         }
@@ -77,7 +77,7 @@ void CGM::ImplDoClass0()
                     // do anything with the bitmap
                     mpOutAct->DrawBitmap( pBmpDesc );
                     delete mpBitmapInUse;
-                    mpBitmapInUse = NULL;
+                    mpBitmapInUse = nullptr;
                 }
                 mpOutAct->EndFigure();                          // close potential figures
                 mpOutAct->EndGrouping();                        // finish potential groups

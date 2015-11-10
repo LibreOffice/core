@@ -107,7 +107,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
 
     maBmp = Bitmap( Size( mnWidth, mnHeight ), mnDstBitsPerPix );
     Bitmap::ScopedWriteAccess pAcc(maBmp);
-    if ( pAcc == 0 )
+    if ( pAcc == nullptr )
         return false;
 
     if ( mnDstBitsPerPix <= 8 )     // paletten bildchen

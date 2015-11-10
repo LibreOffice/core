@@ -54,7 +54,7 @@ bool MetFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return imeGraphicImport(aFileStream, aGraphic, NULL);
+    return imeGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void MetFilterTest::testCVEs()

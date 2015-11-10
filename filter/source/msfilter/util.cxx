@@ -1178,11 +1178,11 @@ static struct {
 };
 
 typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> CustomShapeTypeTranslationHashMap;
-static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = NULL;
+static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = nullptr;
 
 const char* GetOOXMLPresetGeometry( const char* sShapeType )
 {
-    if( pCustomShapeTypeTranslationHashMap == NULL )
+    if( pCustomShapeTypeTranslationHashMap == nullptr )
     {
         pCustomShapeTypeTranslationHashMap = new CustomShapeTypeTranslationHashMap ();
         for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCustomShapeTypeTranslationTable); ++i )

@@ -26,13 +26,13 @@
 #define MAX_TABLE_SIZE 4096
 
 LZWDecompressor::LZWDecompressor()
-    : pIStream(NULL)
+    : pIStream(nullptr)
     , nTableSize(0)
     , bEOIFound(false)
     , bInvert(false)
     , bFirst(true)
     , nOldCode(0)
-    , pOutBufData(NULL)
+    , pOutBufData(nullptr)
     , nOutBufDataLen(0)
     , nInputBitsBuf(0)
     , nInputBitsBufSize(0)
@@ -86,7 +86,7 @@ sal_uLong LZWDecompressor::Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount)
 {
     sal_uLong nCount;
 
-    if (pIStream==NULL) return 0;
+    if (pIStream==nullptr) return 0;
 
     nCount=0;
     for (;;) {

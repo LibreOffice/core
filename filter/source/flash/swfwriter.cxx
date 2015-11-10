@@ -42,9 +42,9 @@ static sal_Int32 map100thmm( sal_Int32 n100thMM )
 
 
 Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int32 nDocWidthInput, sal_Int32 nDocHeightInput, sal_Int32 nJPEGcompressMode )
-:   mpClipPolyPolygon( NULL ),
-    mpTag( NULL ),
-    mpSprite( NULL ),
+:   mpClipPolyPolygon( nullptr ),
+    mpTag( nullptr ),
+    mpSprite( nullptr ),
     mnNextId( 1 ),
     mnGlobalTransparency(0),
     mnJPEGCompressMode(nJPEGcompressMode)
@@ -208,7 +208,7 @@ void Writer::endSprite()
             mvSpriteStack.pop();
         }
         else
-            mpSprite = NULL;
+            mpSprite = nullptr;
     }
 }
 
@@ -222,7 +222,7 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
 
     aBits.writeUB( sal_uInt32(nClip != 0), 1 ); // Has Clip Actions?
     aBits.writeUB( 0, 1 );              // reserved
-    aBits.writeUB( sal_uInt32(pName != NULL), 1 ); // has a name
+    aBits.writeUB( sal_uInt32(pName != nullptr), 1 ); // has a name
     aBits.writeUB( 0, 1 );              // no ratio
     aBits.writeUB( 0, 1 );              // no color transform
     aBits.writeUB( 1, 1 );              // has a matrix
@@ -261,7 +261,7 @@ void Writer::removeShape( sal_uInt16 nDepth )
 
 void Writer::startTag( sal_uInt8 nTagId )
 {
-    DBG_ASSERT( mpTag == NULL, "Last tag was not ended");
+    DBG_ASSERT( mpTag == nullptr, "Last tag was not ended");
 
     mpTag = new Tag( nTagId );
 }
@@ -275,13 +275,13 @@ void Writer::endTag()
     if( mpSprite && ( (nTag == TAG_END) || (nTag == TAG_SHOWFRAME) || (nTag == TAG_DOACTION) || (nTag == TAG_STARTSOUND) || (nTag == TAG_PLACEOBJECT) || (nTag == TAG_PLACEOBJECT2) || (nTag == TAG_REMOVEOBJECT2) || (nTag == TAG_FRAMELABEL) ) )
     {
         mpSprite->addTag( mpTag );
-        mpTag = NULL;
+        mpTag = nullptr;
     }
     else
     {
         mpTag->write( *mpMovieStream );
         delete mpTag;
-        mpTag = NULL;
+        mpTag = nullptr;
     }
 }
 
@@ -292,7 +292,7 @@ void Writer::showFrame()
     startTag( TAG_SHOWFRAME );
     endTag();
 
-    if(NULL == mpSprite)
+    if(nullptr == mpSprite)
         mnFrames++;
 }
 

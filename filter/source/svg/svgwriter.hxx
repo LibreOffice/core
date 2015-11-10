@@ -112,7 +112,7 @@ public:
     void                    AddColorAttr( const char* pColorAttrName, const char* pColorOpacityAttrName, const Color& rColor );
     void                    AddGradientDef( const Rectangle& rObjRect,const Gradient& rGradient, OUString& rGradientId );
     void                    AddPaintAttr( const Color& rLineColor, const Color& rFillColor,
-                                          const Rectangle* pObjBoundRect = NULL, const Gradient* pFillGradient = NULL );
+                                          const Rectangle* pObjBoundRect = nullptr, const Gradient* pFillGradient = nullptr );
 
     void                    SetFontAttr( const vcl::Font& rFont );
     void                    startFontSettings();
@@ -311,7 +311,7 @@ private:
             delete maContextStack.top();
             maContextStack.pop();
         }
-        mpContext = (maContextStack.empty() ? NULL : maContextStack.top());
+        mpContext = (maContextStack.empty() ? nullptr : maContextStack.top());
         maTextWriter.setContext( mpContext );
     }
 
@@ -322,7 +322,7 @@ private:
     tools::Polygon&         ImplMap( const tools::Polygon& rPoly, tools::Polygon& rDstPoly ) const;
     tools::PolyPolygon&     ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
 
-    void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL,
+    void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = nullptr,
                                            bool bApplyMapping = true );
     void                    ImplWriteRect( const Rectangle& rRect, long nRadX = 0, long nRadY = 0,
                                            bool bApplyMapping = true );
@@ -348,8 +348,8 @@ private:
     void                    ImplWriteActions( const GDIMetaFile& rMtf,
                                               sal_uInt32 nWriteFlags,
                                               const OUString* pElementId,
-                                              const Reference< XShape >* pXShape = NULL,
-                                              const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
+                                              const Reference< XShape >* pXShape = nullptr,
+                                              const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 
     vcl::Font               ImplSetCorrectFontHeight() const;
 
@@ -367,9 +367,9 @@ public:
                                            const Size& rSize100thmm,
                                            const GDIMetaFile& rMtf,
                                            sal_uInt32 nWriteFlags,
-                                           const OUString* pElementId = NULL,
-                                           const Reference< XShape >* pXShape = NULL,
-                                           const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
+                                           const OUString* pElementId = nullptr,
+                                           const Reference< XShape >* pXShape = nullptr,
+                                           const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 };
 
 class SVGWriter : public cppu::WeakImplHelper< XSVGWriter >

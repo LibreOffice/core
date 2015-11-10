@@ -137,7 +137,7 @@ XMLFilterTestDialog::XMLFilterTestDialog(vcl::Window* pParent,
     const Reference<XComponentContext>& rxContext)
     : ModalDialog(pParent, "TestXMLFilterDialog", "filter/ui/testxmlfilter.ui")
     , mxContext(rxContext)
-    , m_pFilterInfo(NULL)
+    , m_pFilterInfo(nullptr)
 {
     get(m_pExport, "export");
     get(m_pFTExportXSLTFile, "exportxsltfile");
@@ -278,7 +278,7 @@ void XMLFilterTestDialog::updateCurrentDocumentButtonState( Reference< XComponen
 void XMLFilterTestDialog::initDialog()
 {
     DBG_ASSERT( m_pFilterInfo, "i need a filter I can test!" );
-    if( NULL == m_pFilterInfo )
+    if( nullptr == m_pFilterInfo )
         return;
 
     OUString aTitle( m_sDialogTitle );
@@ -417,7 +417,7 @@ void XMLFilterTestDialog::onExportBrowse()
             m_sExportRecentFile = aDlg.GetPath();
 
             Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
-            Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, 0);
+            Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
             OUString aFrame( "_default" );
             Sequence< PropertyValue > aArguments(1);
             aArguments[0].Name = "InteractionHandler";
@@ -599,7 +599,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
     try
     {
         Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
-        Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, 0);
+        Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
 
         OUString aFrame( "_default" );
         Sequence< PropertyValue > aArguments(2);

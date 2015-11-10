@@ -801,7 +801,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     OUString                              sPath      ;
-    css::uno::Reference< css::uno::XInterface >* pConfig = 0;
+    css::uno::Reference< css::uno::XInterface >* pConfig = nullptr;
     css::uno::Reference< css::uno::XInterface >  xOld       ;
     OString                               sRtlLog    ;
 
@@ -847,7 +847,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         }
         break;
 
-        default : throw css::uno::RuntimeException("These configuration node is not supported here for open!", 0);
+        default : throw css::uno::RuntimeException("These configuration node is not supported here for open!", nullptr);
     }
 
     {
@@ -1264,7 +1264,7 @@ void FilterCache::impl_addItem2FlushList(      EItemType        eType,
                                          const OUString& sItem)
     throw(css::uno::Exception)
 {
-    OUStringList* pList = 0;
+    OUStringList* pList = nullptr;
     switch(eType)
     {
         case E_TYPE :
@@ -1283,7 +1283,7 @@ void FilterCache::impl_addItem2FlushList(      EItemType        eType,
                 pList = &m_lChangedContentHandlers;
                 break;
 
-        default : throw css::uno::RuntimeException("unsupported item type", 0);
+        default : throw css::uno::RuntimeException("unsupported item type", nullptr);
     }
 
     OUStringList::const_iterator pItem = ::std::find(pList->begin(), pList->end(), sItem);
@@ -1736,7 +1736,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
                                                            const OUString& sItem)
     throw(css::uno::Exception)
 {
-    CacheItemList*                              pList   = 0;
+    CacheItemList*                              pList   = nullptr;
     css::uno::Reference< css::uno::XInterface > xConfig    ;
     OUString                             sSet       ;
 

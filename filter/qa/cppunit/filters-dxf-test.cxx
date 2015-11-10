@@ -54,7 +54,7 @@ bool DxfFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return idxGraphicImport(aFileStream, aGraphic, NULL);
+    return idxGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void DxfFilterTest::testCVEs()

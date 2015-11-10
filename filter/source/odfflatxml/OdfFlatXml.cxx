@@ -223,7 +223,7 @@ odfflatxml_component_getFactory( const sal_Char* pImplementationName,
                       void* /* pRegistryKey */ )
 {
     if ((!pImplementationName) || (!pServiceManager))
-        return NULL;
+        return nullptr;
 
     css::uno::Reference< css::lang::XMultiServiceFactory >
         xSMGR = static_cast< css::lang::XMultiServiceFactory* >(pServiceManager);
@@ -242,7 +242,7 @@ odfflatxml_component_getFactory( const sal_Char* pImplementationName,
         return xFactory.get();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

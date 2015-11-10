@@ -28,7 +28,7 @@ DXFBasicEntity::DXFBasicEntity(DXFEntityType eThisType)
     , m_sLineType("BYLAYER")
 {
     eType=eThisType;
-    pSucc=NULL;
+    pSucc=nullptr;
     fElevation=0;
     fThickness=0;
     nColor=256;
@@ -411,7 +411,7 @@ DXFLWPolyLineEntity::DXFLWPolyLineEntity() :
     fConstantWidth( 0.0 ),
     fStartWidth( 0.0 ),
     fEndWidth( 0.0 ),
-    pP( NULL )
+    pP( nullptr )
 {
 }
 
@@ -571,7 +571,7 @@ DXFBoundaryPathData::DXFBoundaryPathData() :
     nEdgeCount( 0 ),
     bIsPolyLine( true ),
     nPointIndex( 0 ),
-    pP( NULL )
+    pP( nullptr )
 {
 }
 
@@ -662,7 +662,7 @@ DXFHatchEntity::DXFHatchEntity() :
     nHatchPatternDefinitionLines( 0 ),
     fPixelSize( 1.0 ),
     nNumberOfSeedPoints( 0 ),
-    pBoundaryPathData( NULL )
+    pBoundaryPathData( nullptr )
 {
 }
 
@@ -803,7 +803,7 @@ void DXFEntities::Read(DXFGroupReader & rDGR)
     DXFBasicEntity * pE, * * ppSucc;
 
     ppSucc=&pFirst;
-    while (*ppSucc!=NULL) ppSucc=&((*ppSucc)->pSucc);
+    while (*ppSucc!=nullptr) ppSucc=&((*ppSucc)->pSucc);
 
     while (rDGR.GetG()!=0) rDGR.Read();
 
@@ -847,7 +847,7 @@ void DXFEntities::Clear()
 {
     DXFBasicEntity * ptmp;
 
-    while (pFirst!=NULL) {
+    while (pFirst!=nullptr) {
         ptmp=pFirst;
         pFirst=ptmp->pSucc;
         delete ptmp;

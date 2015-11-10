@@ -44,7 +44,7 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > const & rModel )
     , mnXFraction(0)
     , mnYFraction(0)
     , mbAngReverse(false)
-    , mpGraphic(NULL)
+    , mpGraphic(nullptr)
     , mbStatus(true)
     , mbMetaFile(false)
     , mbIsFinished(false)
@@ -53,20 +53,20 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > const & rModel )
     , mbFigure(false)
     , mbFirstOutPut(false)
     , mnAct4PostReset(0)
-    , mpBitmapInUse(NULL)
-    , mpChart(NULL)
+    , mpBitmapInUse(nullptr)
+    , mpChart(nullptr)
     , mpOutAct(new CGMImpressOutAct(*this, rModel))
-    , mpSource(NULL)
-    , mpEndValidSource(NULL)
+    , mpSource(nullptr)
+    , mpEndValidSource(nullptr)
     , mnParaSize(0)
     , mnActCount(0)
-    , mpBuf(NULL)
+    , mpBuf(nullptr)
     , mnMode(nMode | CGM_EXPORT_IMPRESS)
     , mnEscape(0)
     , mnElementClass(0)
     , mnElementID(0)
     , mnElementSize(0)
-    , mpGDIMetaFile(NULL)
+    , mpGDIMetaFile(nullptr)
 {
     pElement = new CGMElements( *this );
     pCopyOfE = new CGMElements( *this );
@@ -102,7 +102,7 @@ sal_uInt32 CGM::ImplGetUI16( sal_uInt32 /*nAlign*/ )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     if (pSource + 2 > mpEndValidSource)
-        throw css::uno::Exception("attempt to read past end of input", 0);
+        throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += 2;
     return ( pSource[ 0 ] << 8 ) +  pSource[ 1 ];
 };
@@ -116,7 +116,7 @@ sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     if (pSource + nPrecision > mpEndValidSource)
-        throw css::uno::Exception("attempt to read past end of input", 0);
+        throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
     {
@@ -148,7 +148,7 @@ sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     if (pSource + nPrecision > mpEndValidSource)
-        throw css::uno::Exception("attempt to read past end of input", 0);
+        throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
     {
@@ -203,7 +203,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
 #endif
 
     if (mpSource + mnParaSize + nRealSize > mpEndValidSource)
-        throw css::uno::Exception("attempt to read past end of input", 0);
+        throw css::uno::Exception("attempt to read past end of input", nullptr);
 
     if ( bCompatible )
     {

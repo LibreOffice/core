@@ -109,11 +109,11 @@ public:
 
 TGAReader::TGAReader(SvStream &rTGA)
     : m_rTGA(rTGA)
-    , mpAcc(NULL)
-    , mpFileHeader(NULL)
-    , mpFileFooter(NULL)
-    , mpExtension(NULL)
-    , mpColorMap(NULL)
+    , mpAcc(nullptr)
+    , mpFileHeader(nullptr)
+    , mpFileFooter(nullptr)
+    , mpExtension(nullptr)
+    , mpColorMap(nullptr)
     , mbStatus(true)
     , mnTGAVersion(1)
     , mnDestBitDepth(8)
@@ -161,7 +161,7 @@ bool TGAReader::ReadTGA(Graphic & rGraphic)
                 mbStatus = false;
 
             if ( mpAcc )
-                Bitmap::ReleaseAccess ( mpAcc), mpAcc = NULL;
+                Bitmap::ReleaseAccess ( mpAcc), mpAcc = nullptr;
 
             if ( mbStatus )
                 rGraphic = aBitmap;

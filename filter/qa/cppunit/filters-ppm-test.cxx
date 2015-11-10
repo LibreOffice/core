@@ -54,7 +54,7 @@ bool PpmFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return ipbGraphicImport(aFileStream, aGraphic, NULL);
+    return ipbGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void PpmFilterTest::testCVEs()

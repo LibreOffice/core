@@ -33,7 +33,7 @@ sal_uLong DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)
     sal_uLong nRes;
 
     nRes=0;
-    for (pBE=rEntities.pFirst; pBE!=NULL; pBE=pBE->pSucc) nRes++;
+    for (pBE=rEntities.pFirst; pBE!=nullptr; pBE=pBE->pSucc) nRes++;
     return nRes;
 }
 
@@ -56,7 +56,7 @@ long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE)
             nColor=nParentLayerColor;
         } else {
             pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
-            if (pLayer!=NULL) nColor=pLayer->nColor;
+            if (pLayer!=nullptr) nColor=pLayer->nColor;
             else nColor=nParentLayerColor;
         }
     }
@@ -70,7 +70,7 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(OString const& rLineType)
     DXFLineInfo aDXFLineInfo;
 
     pLT = pDXF->aTables.SearchLType(rLineType);
-    if (pLT==NULL || pLT->nDashCount == 0) {
+    if (pLT==nullptr || pLT->nDashCount == 0) {
         aDXFLineInfo.eStyle = LINE_SOLID;
     }
     else {
@@ -129,7 +129,7 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
             aDXFLineInfo=aParentLayerDXFLineInfo;
         } else {
             const DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
-            if (pLayer!=NULL) {
+            if (pLayer!=nullptr) {
                 aDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
             }
             else aDXFLineInfo=aParentLayerDXFLineInfo;
@@ -438,7 +438,7 @@ void DXF2GDIMetaFile::DrawInsertEntity(const DXFInsertEntity & rE, const DXFTran
 {
     const DXFBlock * pB;
     pB=pDXF->aBlocks.Search(rE.m_sName);
-    if (pB!=NULL) {
+    if (pB!=nullptr) {
         DXFTransform aDXFTransform1(1.0,1.0,1.0,DXFVector(0.0,0.0,0.0)-pB->aBasePoint);
         DXFTransform aDXFTransform2(rE.fXScale,rE.fYScale,rE.fZScale,rE.fRotAngle,rE.aP0);
         DXFTransform aT(
@@ -455,7 +455,7 @@ void DXF2GDIMetaFile::DrawInsertEntity(const DXFInsertEntity & rE, const DXFTran
         aBlockDXFLineInfo=GetEntityDXFLineInfo(rE);
         if (rE.m_sLayer.getLength() > 1) {
             DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
-            if (pLayer!=NULL) {
+            if (pLayer!=nullptr) {
                 nParentLayerColor=pLayer->nColor;
                 aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
             }
@@ -501,7 +501,7 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
 
     nPolySize=0;
     pBE=rE.pSucc;
-    while (pBE!=NULL && pBE->eType==DXF_VERTEX) {
+    while (pBE!=nullptr && pBE->eType==DXF_VERTEX) {
         nPolySize++;
         pBE=pBE->pSucc;
     }
@@ -648,7 +648,7 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
 {
     const DXFBlock * pB;
     pB=pDXF->aBlocks.Search(rE.m_sPseudoBlock);
-    if (pB!=NULL) {
+    if (pB!=nullptr) {
         DXFTransform aT(
             DXFTransform(1.0,1.0,1.0,DXFVector(0.0,0.0,0.0)-pB->aBasePoint),
             rTransform
@@ -663,7 +663,7 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
         aBlockDXFLineInfo=GetEntityDXFLineInfo(rE);
         if (rE.m_sLayer.getLength() > 1) {
             DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
-            if (pLayer!=NULL) {
+            if (pLayer!=nullptr) {
                 nParentLayerColor=pLayer->nColor;
                 aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
             }
@@ -686,7 +686,7 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
 
     const DXFBasicEntity * pE=rEntities.pFirst;
 
-    while (pE!=NULL && bStatus) {
+    while (pE!=nullptr && bStatus) {
         if (pE->nSpace==0) {
             if (pE->aExtrusion.fz==1.0) {
                 pT=&rTransform;
@@ -749,8 +749,8 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
 
 
 DXF2GDIMetaFile::DXF2GDIMetaFile()
-    : pVirDev(NULL)
-    , pDXF(NULL)
+    : pVirDev(nullptr)
+    , pDXF(nullptr)
     , bStatus(false)
     , OptPointsPerCircle(0)
     , nMinPercent(0)
@@ -797,7 +797,7 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     aBlockDXFLineInfo.fDistance = 0;
 
     pLayer=pDXF->aTables.SearchLayer("0");
-    if (pLayer!=NULL) {
+    if (pLayer!=nullptr) {
         nParentLayerColor=pLayer->nColor & 0xff;
         aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
     }
@@ -820,12 +820,12 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     aActFont = pVirDev->GetFont();
 
     pVPort=pDXF->aTables.SearchVPort("*ACTIVE");
-    if (pVPort!=NULL) {
+    if (pVPort!=nullptr) {
         if (pVPort->aDirection.fx==0 && pVPort->aDirection.fy==0)
-            pVPort=NULL;
+            pVPort=nullptr;
     }
 
-    if (pVPort==NULL) {
+    if (pVPort==nullptr) {
         if (pDXF->aBoundingBox.bEmpty)
             bStatus=false;
         else {

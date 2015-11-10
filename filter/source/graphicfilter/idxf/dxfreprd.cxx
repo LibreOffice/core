@@ -244,7 +244,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                                         DXFBoundingBox & rBox)
 {
     DXFBasicEntity * pBE=rEntities.pFirst;
-    while (pBE!=NULL) {
+    while (pBE!=nullptr) {
         switch (pBE->eType) {
             case DXF_LINE: {
                 const DXFLineEntity * pE = static_cast<const DXFLineEntity*>(pBE);
@@ -315,7 +315,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 DXFBoundingBox aBox;
                 DXFVector aP;
                 pB=aBlocks.Search(pE->m_sName);
-                if (pB==NULL) break;
+                if (pB==nullptr) break;
                 CalcBoundingBox(*pB,aBox);
                 if (aBox.bEmpty) break;
                 aP.fx=(aBox.fMinX-pB->aBasePoint.fx)*pE->fXScale+pE->aP0.fx;
@@ -357,7 +357,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 DXFBoundingBox aBox;
                 DXFVector aP;
                 pB = aBlocks.Search(pE->m_sPseudoBlock);
-                if (pB==NULL) break;
+                if (pB==nullptr) break;
                 CalcBoundingBox(*pB,aBox);
                 if (aBox.bEmpty) break;
                 aP.fx=aBox.fMinX-pB->aBasePoint.fx;

@@ -40,11 +40,11 @@ public:
     explicit Impl_OlePres( SotClipboardFormatId nF )
         : nFormat( nF )
         , nAspect( ASPECT_CONTENT )
-        , pBmp( NULL )
-        , pMtf( NULL )
+        , pBmp( nullptr )
+        , pMtf( nullptr )
         , nAdvFlags( 0x2 )  // in Dokument gefunden
         , nJobLen( 0 )
-        , pJob( NULL )
+        , pJob( nullptr )
     {}
     ~Impl_OlePres()
     {

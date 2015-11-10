@@ -341,7 +341,7 @@ Bundle* CGMElements::GetBundle( BundleList& rList, long nIndex )
             return rList[ i ];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 

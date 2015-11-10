@@ -65,8 +65,8 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
     , maMapModeSrc(MAP_100TH_MM)
     // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi
     , maMapModeDest( MAP_INCH, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) )
-    , mpPicStrm(NULL)
-    , mpHostAppData(NULL)
+    , mpPicStrm(nullptr)
+    , mpHostAppData(nullptr)
     , mnPagesWritten(0)
     , mnShapeMasterTitle(0)
     , mnShapeMasterBody(0)
@@ -167,7 +167,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
     sal_uInt32 nGrpShapeID = 0;
 
     do {
-        mpHostAppData = mpEscherEx->StartShape( rObj.GetShapeRef(), (mpEscherEx->GetGroupLevel() > 1) ? &rObj.GetRect() : 0 );
+        mpHostAppData = mpEscherEx->StartShape( rObj.GetShapeRef(), (mpEscherEx->GetGroupLevel() > 1) ? &rObj.GetRect() : nullptr );
         if ( mpHostAppData && mpHostAppData->DontWriteShape() )
             break;
 
@@ -246,7 +246,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         // #i51348# shape name
         if (!aShapeName.isEmpty())
             aPropOpt.AddOpt( ESCHER_Prop_wzName, aShapeName );
-        if ( InteractionInfo* pInteraction = mpHostAppData ? mpHostAppData->GetInteractionInfo():NULL )
+        if ( InteractionInfo* pInteraction = mpHostAppData ? mpHostAppData->GetInteractionInfo():nullptr )
         {
             const std::unique_ptr< SvMemoryStream >& pMemStrm = pInteraction->getHyperlinkRecord();
             if ( pMemStrm.get() )
@@ -710,7 +710,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
     sal_uInt16 nShapeType = 0;
     do
     {
-        mpHostAppData = mpEscherEx->StartShape( rObj.GetShapeRef(), (mpEscherEx->GetGroupLevel() > 1) ? &rObj.GetRect() : 0 );
+        mpHostAppData = mpEscherEx->StartShape( rObj.GetShapeRef(), (mpEscherEx->GetGroupLevel() > 1) ? &rObj.GetRect() : nullptr );
         if ( mpHostAppData && mpHostAppData->DontWriteShape() )
             break;
 
@@ -857,8 +857,8 @@ void ImplEESdrWriter::ImplWritePage(
 ImplEscherExSdr::ImplEscherExSdr( EscherEx& rEx )
         :
         ImplEESdrWriter( rEx ),
-        mpSdrPage( NULL ),
-        mpSolverContainer( NULL )
+        mpSdrPage( nullptr ),
+        mpSolverContainer( nullptr )
 {
 }
 
@@ -880,7 +880,7 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
             // eventually write SolverContainer of current page, deletes the Solver
             ImplFlushSolverContainer();
 
-            mpSdrPage = NULL;
+            mpSdrPage = nullptr;
             mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( const_cast<SdrPage*>(&rPage) );
             mXShapes.set( mXDrawPage, UNO_QUERY );
             if ( !mXShapes.is() )
@@ -894,7 +894,7 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
         else
             pSvxDrawPage = SvxDrawPage::getImplementation(mXDrawPage);
 
-        return pSvxDrawPage != 0;
+        return pSvxDrawPage != nullptr;
     } while ( false );
 
     return false;
@@ -908,7 +908,7 @@ bool ImplEscherExSdr::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
     if( !rxShapes.is() )
         return false;
 
-    mpSdrPage = 0;
+    mpSdrPage = nullptr;
     mXDrawPage.clear();
     mXShapes = rxShapes;
 
@@ -926,7 +926,7 @@ void ImplEscherExSdr::ImplExitPage()
         mpEscherEx->LeaveGroup();
 
     ImplFlushSolverContainer();
-    mpSdrPage = NULL;   // reset page for next init
+    mpSdrPage = nullptr;   // reset page for next init
 }
 
 
@@ -936,7 +936,7 @@ void ImplEscherExSdr::ImplFlushSolverContainer()
     {
         mpSolverContainer->WriteSolver( mpEscherEx->GetStream() );
         delete mpSolverContainer;
-        mpSolverContainer = NULL;
+        mpSolverContainer = nullptr;
     }
 }
 
@@ -981,7 +981,7 @@ void EscherEx::EndSdrObjectPage()
 
 EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape */, const Rectangle* /*pChildAnchor*/ )
 {
-    return NULL;
+    return nullptr;
 }
 
 void EscherEx::EndShape( sal_uInt16 /* nShapeType */, sal_uInt32 /* nShapeID */ )
@@ -1007,7 +1007,7 @@ sal_uInt32 EscherEx::AddDummyShape()
 // static
 const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
 {
-    const SdrObject* pRet = 0;
+    const SdrObject* pRet = nullptr;
     const SvxShape* pSvxShape = SvxShape::getImplementation( rShape );
     DBG_ASSERT( pSvxShape, "EscherEx::GetSdrObject: no SvxShape" );
     if( pSvxShape )

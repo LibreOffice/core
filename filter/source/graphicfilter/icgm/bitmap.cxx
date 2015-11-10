@@ -45,7 +45,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
     if ( ImplGetDimensions( rDesc ) && rDesc.mpBuf )
     {
         rDesc.mpBitmap = new Bitmap( Size( rDesc.mnX, rDesc.mnY ), (sal_uInt16)rDesc.mnDstBitsPerPixel );
-        if ( ( rDesc.mpAcc = rDesc.mpBitmap->AcquireWriteAccess() ) != NULL )
+        if ( ( rDesc.mpAcc = rDesc.mpBitmap->AcquireWriteAccess() ) != nullptr )
         {
 
             // the picture may either be read from left to right or right to left, from top to bottom ...
@@ -204,14 +204,14 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
     if ( rDesc.mpAcc )
     {
         Bitmap::ReleaseAccess( rDesc.mpAcc );
-        rDesc.mpAcc = NULL;
+        rDesc.mpAcc = nullptr;
     }
     if ( !rDesc.mbStatus )
     {
         if ( rDesc.mpBitmap )
         {
             delete rDesc.mpBitmap;
-            rDesc.mpBitmap = NULL;
+            rDesc.mpBitmap = nullptr;
         }
     }
 }
@@ -367,7 +367,7 @@ CGMBitmap* CGMBitmap::GetNext()
         {
             ImplInsert( *(pCGMTempBitmap->pCGMBitmapDescriptor), *(pCGMBitmapDescriptor) );
             delete pCGMTempBitmap;
-            return NULL;
+            return nullptr;
         }
 
         CGMBitmapDescriptor* pTempBD = pCGMBitmapDescriptor;
@@ -376,7 +376,7 @@ CGMBitmap* CGMBitmap::GetNext()
         return pCGMTempBitmap;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

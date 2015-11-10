@@ -57,7 +57,7 @@ PBMReader::PBMReader(SvStream & rPBM)
     , mbRemark(false)
     , mbRaw(true)
     , mnMode(0)
-    , mpAcc(NULL)
+    , mpAcc(nullptr)
     , mnWidth(0)
     , mnHeight(0)
     , mnCol(0)
@@ -107,7 +107,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
             else
                 maBmp = Bitmap( Size( mnWidth, mnHeight ), 8);
 
-            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == 0 )
+            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == nullptr )
                 return false;
             mnCol = (sal_uInt16)mnMaxVal + 1;
             if ( mnCol > 256 )
@@ -122,7 +122,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
             break;
         case 2 :
             maBmp = Bitmap( Size( mnWidth, mnHeight ), 24 );
-            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == 0 )
+            if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == nullptr )
                 return false;
             break;
     }
@@ -132,7 +132,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
 
     if ( mpAcc )
     {
-        Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
+        Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
     }
     if ( mbStatus )
         rGraphic = maBmp;

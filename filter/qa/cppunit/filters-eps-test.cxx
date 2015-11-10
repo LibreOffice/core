@@ -54,7 +54,7 @@ bool EpsFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return ipsGraphicImport(aFileStream, aGraphic, NULL);
+    return ipsGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void EpsFilterTest::testCVEs()

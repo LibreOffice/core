@@ -54,7 +54,7 @@ bool TgaFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return itgGraphicImport(aFileStream, aGraphic, NULL);
+    return itgGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void TgaFilterTest::testCVEs()

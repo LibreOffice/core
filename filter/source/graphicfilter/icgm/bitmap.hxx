@@ -47,9 +47,9 @@ class CGMBitmapDescriptor
         sal_uInt32              mnCompressionMode;
 
         CGMBitmapDescriptor()
-            : mpBuf(NULL)
-            , mpBitmap(NULL)
-            , mpAcc(NULL)
+            : mpBuf(nullptr)
+            , mpBitmap(nullptr)
+            , mpAcc(nullptr)
             , mbStatus(false)
             , mbVMirror(false)
             , mbHMirror(false)

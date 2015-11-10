@@ -186,9 +186,9 @@ void XMLFilterSettingsDialog::updateStates()
 {
     SvTreeListEntry* pSelectedEntry = m_pFilterListBox->FirstSelected();
 
-    bool bHasSelection = pSelectedEntry != NULL;
+    bool bHasSelection = pSelectedEntry != nullptr;
 
-    bool bMultiSelection = bHasSelection && (m_pFilterListBox->NextSelected( pSelectedEntry ) != NULL );
+    bool bMultiSelection = bHasSelection && (m_pFilterListBox->NextSelected( pSelectedEntry ) != nullptr );
     bool bIsReadonly = false;
     bool bIsDefault = false;
     if(pSelectedEntry)
@@ -448,7 +448,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
     }
 
-    filter_info_impl* pFilterEntry( NULL );
+    filter_info_impl* pFilterEntry( nullptr );
 
     if( bOk )
     {
@@ -1286,7 +1286,7 @@ const application_info_impl* getApplicationInfo( const OUString& rServiceName )
             return (*aIter);
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 OUString getApplicationUIName( const OUString& rServiceName )

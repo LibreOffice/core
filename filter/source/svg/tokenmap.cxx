@@ -56,7 +56,7 @@ sal_Int32 getTokenId( const OUString& sIdent )
 const char* getTokenName( sal_Int32 nTokenId )
 {
     if( nTokenId >= XML_TOKEN_COUNT )
-        return NULL;
+        return nullptr;
 
     const xmltoken* pCurr=wordlist;
     const xmltoken* pEnd=wordlist+sizeof(wordlist)/sizeof(*wordlist);
@@ -67,7 +67,7 @@ const char* getTokenName( sal_Int32 nTokenId )
         ++pCurr;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 } // namespace svgi

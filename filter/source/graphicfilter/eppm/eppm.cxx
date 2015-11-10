@@ -57,7 +57,7 @@ PPMWriter::PPMWriter(SvStream &rStrm)
     : m_rOStm(rStrm)
     , mbStatus(true)
     , mnMode(0)
-    , mpAcc(NULL)
+    , mpAcc(nullptr)
     , mnWidth(0)
     , mnHeight(0)
 {

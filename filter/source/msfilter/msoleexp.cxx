@@ -122,7 +122,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
 {
     SvGlobalName aOwnGlobalName;
     SvGlobalName aObjName( rObj->getClassID() );
-    const SfxFilter* pExpFilter = NULL;
+    const SfxFilter* pExpFilter = nullptr;
     {
         static struct _ObjExpType {
             sal_uInt32 nFlag;
@@ -154,7 +154,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
                 {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},    // SJ: !!!! SO3_SDRAW_CLASSID is only available up from
                  {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50 }}}, // ver 5.0, it is purpose to have double entrys here.
 
-            { 0xffff,0,
+            { 0xffff,nullptr,
                 {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},
                 {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50}}}
         };

@@ -102,7 +102,7 @@ FlashExporter::FlashExporter(
     , mxSelectedDrawPage(rxSelectedDrawPage)
     , mbExportSelection(false)
 
-    , mpWriter(NULL)
+    , mpWriter(nullptr)
     , mnDocWidth(0)
     , mnDocHeight(0)
     , mnJPEGcompressMode(nJPEGCompressMode)
@@ -127,7 +127,7 @@ FlashExporter::~FlashExporter()
 void FlashExporter::Flush()
 {
     delete mpWriter;
-    mpWriter = NULL;
+    mpWriter = nullptr;
 
     maPagesMap.clear();
 }
@@ -290,7 +290,7 @@ bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Reference< X
 
     try
     {
-        if( NULL == mpWriter )
+        if( nullptr == mpWriter )
         {
             xPropSet->getPropertyValue( "Width" ) >>= mnDocWidth;
             xPropSet->getPropertyValue( "Height" ) >>= mnDocHeight;
@@ -324,7 +324,7 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, R
     if( !xDrawPage.is() || !xPropSet.is() )
         return 0;
 
-    if( NULL == mpWriter )
+    if( nullptr == mpWriter )
     {
         xPropSet->getPropertyValue( "Width" ) >>= mnDocWidth;
         xPropSet->getPropertyValue( "Height" ) >>= mnDocHeight;

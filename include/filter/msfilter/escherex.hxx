@@ -668,7 +668,7 @@ public:
                         sal_uInt32 nPictureOffset,
                         const GraphicObject& rObj,
                         const OString& rId,
-                        const GraphicAttr* pAttr = NULL
+                        const GraphicAttr* pAttr = nullptr
                     );
 
                     ~EscherBlibEntry();
@@ -700,16 +700,16 @@ protected:
 
 public:
 
-    sal_uInt32  GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE = NULL ) const;
-    void        WriteBlibStoreContainer( SvStream& rStrm, SvStream* pMergePicStreamBSE = NULL  );
+    sal_uInt32  GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE = nullptr ) const;
+    void        WriteBlibStoreContainer( SvStream& rStrm, SvStream* pMergePicStreamBSE = nullptr  );
     bool        WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId,
     bool        bWritePictureOffset, sal_uInt32 nResize = 0);
     sal_uInt32  GetBlibID(
                     SvStream& rPicOutStream,
                     const OString& rGraphicId,
                     const Rectangle& rBoundRect,
-                    const css::awt::Rectangle* pVisArea = NULL,
-                    const GraphicAttr* pGrafikAttr = NULL,
+                    const css::awt::Rectangle* pVisArea = nullptr,
+                    const GraphicAttr* pGrafikAttr = nullptr,
                     const bool ooxmlExport = false
                 );
     bool        HasGraphics() const { return mnBlibEntrys != 0; };
@@ -885,7 +885,7 @@ public:
                     sal_uInt32 nFlags,
                     bool bBezier,
                     css::awt::Rectangle& rGeoRect,
-                    tools::Polygon* pPolygon = NULL
+                    tools::Polygon* pPolygon = nullptr
                 );
 
     static sal_uInt32 GetGradientColor(
@@ -1046,8 +1046,8 @@ private:
         bool                        bDontWriteShape;
 
 public:
-        EscherExHostAppData() : pClientAnchor(0), pClientData(0),
-                pClientTextbox(0), pInteractionInfo(0), bDontWriteShape(false)
+        EscherExHostAppData() : pClientAnchor(nullptr), pClientData(nullptr),
+                pClientTextbox(nullptr), pInteractionInfo(nullptr), bDontWriteShape(false)
         {}
 
         void SetInteractionInfo( InteractionInfo* p )
@@ -1215,7 +1215,7 @@ public:
                 /// If pPicStreamMergeBSE is known, the BLIPs from this stream are being
                 /// merged into the MsofbtBSE Records of the EscherStream like it's
                 /// required for Excel (and maybe Word?)
-        void Flush( SvStream* pPicStreamMergeBSE = NULL );
+        void Flush( SvStream* pPicStreamMergeBSE = nullptr );
 
     /** Inserts the passed number of bytes at the current position of the
         output stream.
@@ -1264,8 +1264,8 @@ public:
     void AddChildAnchor( const Rectangle& rRectangle );
     void AddClientAnchor( const Rectangle& rRectangle );
 
-    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 );
-    sal_uInt32  EnterGroup( const Rectangle* pBoundRect = NULL );
+    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = nullptr );
+    sal_uInt32  EnterGroup( const Rectangle* pBoundRect = nullptr );
     sal_uInt32  GetGroupLevel() const { return mnGroupLevel; };
     bool SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
     bool SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );

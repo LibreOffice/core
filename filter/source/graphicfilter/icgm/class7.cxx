@@ -41,7 +41,7 @@ void CGM::ImplDoClass7()
                 {
                     case 0x000 : /*AppData - Beginning of File Opcodes*/
                     {
-                        if ( mpChart == NULL )
+                        if ( mpChart == nullptr )
                             mpChart = new CGMChart( *this );
                         mpChart->mnCurrentFileType = pAppData[ 3 ];
                     }
@@ -120,14 +120,14 @@ void CGM::ImplDoClass7()
                         memcpy( pTextEntry->pText, pAppData, nLen );
                         pAppData += nLen;
 
-                        TextAttribute* pTextOld = 0;
+                        TextAttribute* pTextOld = nullptr;
                         for ( sal_uInt16 i = 0; i < nAttributes; i++ )
                         {
                             TextAttribute* pTextAttr = new TextAttribute;
 
                             *pTextAttr = *reinterpret_cast<TextAttribute*>( pAppData );
 
-                            pTextAttr->pNextAttribute = NULL;
+                            pTextAttr->pNextAttribute = nullptr;
                             if ( i == 0 )
                                 pTextEntry->pAttribute = pTextAttr;
                             else

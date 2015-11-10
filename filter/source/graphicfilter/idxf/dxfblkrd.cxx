@@ -28,7 +28,7 @@
 
 
 DXFBlock::DXFBlock()
-    : pSucc(NULL)
+    : pSucc(nullptr)
     , nFlags(0)
 {
 }
@@ -73,7 +73,7 @@ void DXFBlock::Read(DXFGroupReader & rDGR)
 
 DXFBlocks::DXFBlocks()
 {
-    pFirst=NULL;
+    pFirst=nullptr;
 }
 
 
@@ -88,7 +88,7 @@ void DXFBlocks::Read(DXFGroupReader & rDGR)
     DXFBlock * pB, * * ppSucc;
 
     ppSucc=&pFirst;
-    while (*ppSucc!=NULL) ppSucc=&((*ppSucc)->pSucc);
+    while (*ppSucc!=nullptr) ppSucc=&((*ppSucc)->pSucc);
 
     for (;;) {
         while (rDGR.GetG()!=0) rDGR.Read();
@@ -108,7 +108,7 @@ void DXFBlocks::Read(DXFGroupReader & rDGR)
 DXFBlock * DXFBlocks::Search(OString const& rName) const
 {
     DXFBlock * pB;
-    for (pB=pFirst; pB!=NULL; pB=pB->pSucc) {
+    for (pB=pFirst; pB!=nullptr; pB=pB->pSucc) {
         if (rName == pB->m_sName) break;
     }
     return pB;
@@ -119,7 +119,7 @@ void DXFBlocks::Clear()
 {
     DXFBlock * ptmp;
 
-    while (pFirst!=NULL) {
+    while (pFirst!=nullptr) {
         ptmp=pFirst;
         pFirst=ptmp->pSucc;
         delete ptmp;

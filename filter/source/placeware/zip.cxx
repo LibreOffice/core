@@ -83,7 +83,7 @@ void PlacewareZipFile::copyAndCRC(ZipEntry *e, osl::File& rFile)
     char buf[2048];
     sal_uInt64 n, nWritten;
 
-    e->crc = rtl_crc32( 0, 0L, 0 );
+    e->crc = rtl_crc32( 0, nullptr, 0 );
 
     while( !isError() )
     {

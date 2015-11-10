@@ -80,7 +80,7 @@ public:
         : bStatus(false)
         , nLastPercent(0)
         , m_rPCD(rStream)
-        , mpAcc(NULL)
+        , mpAcc(nullptr)
         , nOrientation(0)
         , eResolution(PCDRES_BASE16)
         , nWidth(0)
@@ -156,12 +156,12 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
             nBMPHeight = nWidth;
         }
         aBmp = Bitmap( Size( nBMPWidth, nBMPHeight ), 24 );
-        if ( ( mpAcc = aBmp.AcquireWriteAccess() ) == 0 )
+        if ( ( mpAcc = aBmp.AcquireWriteAccess() ) == nullptr )
             return false;
 
         ReadImage();
 
-        Bitmap::ReleaseAccess( mpAcc ), mpAcc = NULL;
+        Bitmap::ReleaseAccess( mpAcc ), mpAcc = nullptr;
         rGraphic = aBmp;
     }
     return bStatus;
@@ -219,8 +219,8 @@ void PCDReader::ReadImage()
     pCbN=static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
     pCrN=static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
 
-    if ( pL0 == NULL || pL1 == NULL || pCb == NULL || pCr == NULL ||
-        pL0N == NULL || pL1N == NULL || pCbN == NULL || pCrN == NULL)
+    if ( pL0 == nullptr || pL1 == nullptr || pCb == nullptr || pCr == nullptr ||
+        pL0N == nullptr || pL1N == nullptr || pCbN == nullptr || pCrN == nullptr)
     {
         rtl_freeMemory(static_cast<void*>(pL0) );
         rtl_freeMemory(static_cast<void*>(pL1) );

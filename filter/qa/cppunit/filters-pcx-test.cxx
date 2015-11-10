@@ -54,7 +54,7 @@ bool PcxFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return ipxGraphicImport(aFileStream, aGraphic, NULL);
+    return ipxGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void PcxFilterTest::testCVEs()

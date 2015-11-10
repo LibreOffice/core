@@ -38,7 +38,7 @@ struct MSFILTER_DLLPUBLIC MacroResolvedInfo
     OUString            msResolvedMacro;
     bool                mbFound;
 
-    inline explicit MacroResolvedInfo( SfxObjectShell* pDocContext = 0 ) : mpDocContext( pDocContext ), mbFound( false ) {}
+    inline explicit MacroResolvedInfo( SfxObjectShell* pDocContext = nullptr ) : mpDocContext( pDocContext ), mbFound( false ) {}
 };
 
 MSFILTER_DLLPUBLIC OUString makeMacroURL( const OUString& sMacroName );

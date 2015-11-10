@@ -38,7 +38,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL
                                         void* /* pRegistryKey */ )
 {
     if ((!pImplementationName) || (!pServiceManager ))
-        return NULL;
+        return nullptr;
 
     css::uno::Reference< css::lang::XMultiServiceFactory >
         xSMGR = static_cast< css::lang::XMultiServiceFactory* >(pServiceManager);
@@ -82,7 +82,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL
         return xFactory.get();
     }
 
-    return NULL;
+    return nullptr;
 }
 
     } // namespace config

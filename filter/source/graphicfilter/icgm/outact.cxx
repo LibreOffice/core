@@ -33,7 +33,7 @@ CGMOutAct::CGMOutAct( CGM& rCGM )
     mpFlags = new sal_uInt8[ 0x2000 ];
 
     mnIndex = 0;
-    mpGradient = NULL;
+    mpGradient = nullptr;
 }
 
 CGMOutAct::~CGMOutAct()

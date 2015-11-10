@@ -76,7 +76,7 @@ OUString trimMacroName( const OUString& rMacroName )
 
 SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
 {
-    SfxObjectShell* pFoundShell=NULL;
+    SfxObjectShell* pFoundShell=nullptr;
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();
     INetURLObject aObj;
     aObj.SetURL( sMacroURLOrPath );
@@ -234,7 +234,7 @@ bool hasMacro( SfxObjectShell* pShell, const OUString& sLibrary, OUString& sMod,
 OUString getDefaultProjectName( SfxObjectShell* pShell )
 {
     OUString aPrjName;
-    if( BasicManager* pBasicMgr = pShell ? pShell->GetBasicManager() : 0 )
+    if( BasicManager* pBasicMgr = pShell ? pShell->GetBasicManager() : nullptr )
     {
         aPrjName = pBasicMgr->GetName();
         if( aPrjName.isEmpty() )
@@ -310,7 +310,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
         OUString sDocUrlOrPath = aMacroName.copy( 0, nDocSepIndex );
         aMacroName = aMacroName.copy( nDocSepIndex + 1 );
         SAL_INFO("filter.ms", "doc search, current shell is " << pShell);
-        SfxObjectShell* pFoundShell = 0;
+        SfxObjectShell* pFoundShell = nullptr;
         if( bSearchGlobalTemplates )
         {
             SvtPathOptions aPathOpt;
@@ -527,7 +527,7 @@ uno::Reference< uno::XInterface > SAL_CALL VBAMacroResolver_createInstance( cons
 
 
 VBAMacroResolver::VBAMacroResolver() :
-    mpObjShell( 0 )
+    mpObjShell( nullptr )
 {
 }
 
@@ -753,7 +753,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
         OUString aMacroName = MacroName.trim();
         if( aMacroName.startsWith("!") )
             MacroName = aMacroName.copy(1).trim();
-        SfxObjectShell* pShell = NULL;
+        SfxObjectShell* pShell = nullptr;
         if ( rxModel.is() )
         {
             uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( rxModel, uno::UNO_QUERY_THROW );

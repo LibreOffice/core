@@ -59,7 +59,7 @@ namespace XSLT
 
     void SAL_CALL OleHandler::ensureCreateRootStorage()
     {
-        if (m_storage == NULL || m_rootStream == NULL)
+        if (m_storage == nullptr || m_rootStream == nullptr)
             {
                 m_rootStream = createTempFile();
                 Sequence<Any> args(1);

@@ -185,7 +185,7 @@ private:
     void WriteChrSets();
     sal_uInt8 FindChrSet(const vcl::Font & rFont);
 
-    void WriteColorAttributeTable(sal_uInt32 nFieldId=4, BitmapPalette* pPalette=NULL,
+    void WriteColorAttributeTable(sal_uInt32 nFieldId=4, BitmapPalette* pPalette=nullptr,
                                   sal_uInt8 nBasePartFlags=0x40, sal_uInt8 nBasePartLCTID=0);
 
     void WriteImageObject(const Bitmap & rBitmap);
@@ -239,16 +239,16 @@ public:
     METWriter()
         : bStatus(false)
         , nLastPercent( 0 )
-        , pMET(NULL)
+        , pMET(nullptr)
         , nActualFieldStartPos( 0 )
         , nNumberOfDataFields( 0 )
         , eGDIRasterOp( ROP_OVERPAINT )
-        , pGDIStack(NULL)
+        , pGDIStack(nullptr)
         , eMETMix( ROP_OVERPAINT )
         , nMETStrokeLineWidth(0)
         , nMETChrAngle(0)
         , nMETChrSet( 0 )
-        , pChrSetList(NULL)
+        , pChrSetList(nullptr)
         , nNextChrSetId( 0 )
         , nActBitmapId( 0 )
         , nNumberOfActions( 0 )
@@ -256,7 +256,7 @@ public:
         , nWrittenActions( 0 )
         , nWrittenBitmaps( 0 )
         , nActBitmapPercent( 0 )
-        , pCompDev(NULL)
+        , pCompDev(nullptr)
     {
         pCompDev = reinterpret_cast< OutputDevice* >( Application::GetAppWindow() );
         if( !pCompDev )
@@ -440,7 +440,7 @@ sal_uInt8 METWriter::FindChrSet(const vcl::Font & rFont)
 {
     METChrSet* pCS;
 
-    for (pCS=pChrSetList; pCS!=NULL; pCS=pCS->pSucc)
+    for (pCS=pChrSetList; pCS!=nullptr; pCS=pCS->pSucc)
     {
         if (pCS->aName==rFont.GetName() && pCS->eWeight==rFont.GetWeight() )
             return pCS->nSet;
@@ -457,7 +457,7 @@ void METWriter::WriteChrSets()
     METChrSet * pCS;
     sal_uInt8 nbyte;
 
-    for (pCS=pChrSetList; pCS!=NULL; pCS=pCS->pSucc)
+    for (pCS=pChrSetList; pCS!=nullptr; pCS=pCS->pSucc)
     {
 
         WriteFieldIntroducer(0x58,MapCodFntMagic,0,0);
@@ -520,7 +520,7 @@ void METWriter::WriteColorAttributeTable(sal_uInt32 nFieldId, BitmapPalette* pPa
     //--- The Field 'Color Attribute Table':
     WriteFieldIntroducer(0,BlkColAtrMagic,0,0);
     pMET->WriteUChar( nBasePartFlags ).WriteUChar( 0x00 ).WriteUChar( nBasePartLCTID ); // 'Base Part'
-    if (pPalette!=NULL)
+    if (pPalette!=nullptr)
     {
         nIndex=0;
         while (nIndex<pPalette->GetEntryCount())
@@ -1897,7 +1897,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrSet(FindChrSet(aGDIFont));
                 aStr = pA->GetText().copy(pA->GetIndex(),pA->GetLen());
 
-                if( pA->GetDXArray()!=NULL )
+                if( pA->GetDXArray()!=nullptr )
                 {
                     Point aPt2;
 
@@ -2521,7 +2521,7 @@ bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, Filt
     aGDIFont=vcl::Font();
     aGDIMapMode=MapMode();
     aGDIClipRect=Rectangle();
-    pGDIStack=NULL;
+    pGDIStack=nullptr;
     aMETColor=Color(COL_BLACK);
     aMETBackgroundColor=Color(COL_WHITE);
     eMETMix=ROP_OVERPAINT;
@@ -2529,7 +2529,7 @@ bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, Filt
     aMETChrCellSize=Size(0,0);
     nMETChrAngle=0;
     nMETChrSet=0x00;
-    pChrSetList=NULL;
+    pChrSetList=nullptr;
     nNextChrSetId=1;
     nNumberOfActions=0;
     nNumberOfBitmaps=0;

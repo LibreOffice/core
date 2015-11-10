@@ -42,7 +42,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
     if (pSuccess)
         *pSuccess = true;
     OStringBuffer aBuf;
-    const sal_Char* pStr = 0;
+    const sal_Char* pStr = nullptr;
     // 0x0b instead of \n, etc because of the replacements in SwWW8AttrIter::GetSnippet()
     switch (c)
     {
@@ -127,7 +127,7 @@ OString OutString(const OUString& rStr, rtl_TextEncoding eDestEnc, bool bUnicode
     OStringBuffer aBuf;
     int nUCMode = 1;
     for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
-        aBuf.append(OutChar(rStr[n], &nUCMode, eDestEnc, 0, bUnicode));
+        aBuf.append(OutChar(rStr[n], &nUCMode, eDestEnc, nullptr, bUnicode));
     if (nUCMode != 1)
     {
         aBuf.append(OOO_STRING_SVTOOLS_RTF_UC);

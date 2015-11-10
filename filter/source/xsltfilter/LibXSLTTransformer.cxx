@@ -123,7 +123,7 @@ namespace XSLT
         static void *
         init(xsltTransformContextPtr, const xmlChar*)
         {
-            return NULL;
+            return nullptr;
         }
         static void
         insertByName(xmlXPathParserContextPtr ctxt, int nargs)
@@ -136,7 +136,7 @@ namespace XSLT
                 return;
             }
             tctxt = xsltXPathGetTransformContext(ctxt);
-            if (tctxt == NULL) {
+            if (tctxt == nullptr) {
                 xsltGenericError(xsltGenericErrorContext,
                     "xsltExtFunctionTest: failed to get the transformation context\n");
                 return;
@@ -145,7 +145,7 @@ namespace XSLT
             // idea to pass the OleHandler than by attaching it to tctxt->_private. See also
             // below.
             data = tctxt->_private;
-            if (data == NULL) {
+            if (data == nullptr) {
                 xsltGenericError(xsltGenericErrorContext,
                     "xsltExtFunctionTest: failed to get module data\n");
                 return;
@@ -182,7 +182,7 @@ namespace XSLT
             }
 
             tctxt = xsltXPathGetTransformContext(ctxt);
-            if (tctxt == NULL) {
+            if (tctxt == nullptr) {
                 xsltGenericError(xsltGenericErrorContext,
                     "xsltExtFunctionTest: failed to get the transformation context\n");
                 return;
@@ -190,7 +190,7 @@ namespace XSLT
             // XXX: someone with better knowledge of libxslt might come up with a better
             // idea to pass the OleHandler than by attaching it to tctxt->_private
             data = tctxt->_private;
-            if (data == NULL) {
+            if (data == nullptr) {
                 xsltGenericError(xsltGenericErrorContext,
                     "xsltExtFunctionTest: failed to get module data\n");
                 return;
@@ -216,7 +216,7 @@ namespace XSLT
     Reader::read(char * buffer, int len)
     {
         //        const char *ptr = (const char *) context;
-        if (buffer == NULL || len < 0)
+        if (buffer == nullptr || len < 0)
             return (-1);
         sal_Int32 n;
         css::uno::Reference<XInputStream> xis = this->m_transformer->getInputStream();
@@ -231,7 +231,7 @@ namespace XSLT
     int
     Reader::write(const char * buffer, int len)
     {
-        if (buffer == NULL || len < 0)
+        if (buffer == nullptr || len < 0)
             return -1;
         if (len > 0)
             {
@@ -271,7 +271,7 @@ namespace XSLT
     void
     Reader::execute()
     {
-        OSL_ASSERT(m_transformer != NULL);
+        OSL_ASSERT(m_transformer != nullptr);
         OSL_ASSERT(m_transformer->getInputStream().is());
         OSL_ASSERT(m_transformer->getOutputStream().is());
         OSL_ASSERT(!m_transformer->getStyleSheetURL().isEmpty());
@@ -284,14 +284,14 @@ namespace XSLT
             params[paramIndex++] = (*pit).first;
             params[paramIndex++] = (*pit).second.getStr();
         }
-        params[paramIndex] = NULL;
+        params[paramIndex] = nullptr;
         xmlDocPtr doc = xmlReadIO(&ParserInputBufferCallback::on_read,
                 &ParserInputBufferCallback::on_close,
-                static_cast<void*> (this), NULL, NULL, 0);
+                static_cast<void*> (this), nullptr, nullptr, 0);
         xsltStylesheetPtr styleSheet = xsltParseStylesheetFile(
                 reinterpret_cast<const xmlChar *>(m_transformer->getStyleSheetURL().getStr()));
-        xmlDocPtr result = NULL;
-        xsltTransformContextPtr tcontext = NULL;
+        xmlDocPtr result = nullptr;
+        xsltTransformContextPtr tcontext = nullptr;
         exsltRegisterAll();
         registerExtensionModule();
 #if OSL_DEBUG_LEVEL > 1
@@ -304,7 +304,7 @@ namespace XSLT
                 tcontext = xsltNewTransformContext(styleSheet, doc);
                 tcontext->_private = static_cast<void *> (oh.get());
                 xsltQuoteUserParams(tcontext, &params[0]);
-                result = xsltApplyStylesheetUser(styleSheet, doc, 0, 0, 0,
+                result = xsltApplyStylesheetUser(styleSheet, doc, nullptr, nullptr, nullptr,
                         tcontext);
             }
 
@@ -342,7 +342,7 @@ namespace XSLT
     Reader::registerExtensionModule()
     {
         const xmlChar* oleModuleURI = reinterpret_cast<const xmlChar *>(EXT_MODULE_OLE_URI);
-        xsltRegisterExtModule(oleModuleURI, &ExtFuncOleCB::init, NULL);
+        xsltRegisterExtModule(oleModuleURI, &ExtFuncOleCB::init, nullptr);
         xsltRegisterExtModuleFunction(
                                  reinterpret_cast<const xmlChar*>("insertByName"),
                                  oleModuleURI,

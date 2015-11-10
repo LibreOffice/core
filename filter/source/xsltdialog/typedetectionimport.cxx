@@ -137,7 +137,7 @@ Node* TypeDetectionImporter::findTypeNode( const OUString& rType )
             return (*aIter);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
@@ -185,7 +185,7 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
 
     bool bOk = true;
 
-    if( pTypeNode == NULL )
+    if( pTypeNode == nullptr )
         bOk = false;
 
     if( pFilter->maFilterName.isEmpty() )
@@ -212,7 +212,7 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
     if( !bOk )
     {
         delete pFilter;
-        pFilter = NULL;
+        pFilter = nullptr;
     }
 
     return pFilter;

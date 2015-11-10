@@ -372,7 +372,7 @@ SVGExport::~SVGExport()
 
 
 ObjectRepresentation::ObjectRepresentation() :
-    mpMtf( NULL )
+    mpMtf( nullptr )
 {
 }
 
@@ -389,7 +389,7 @@ ObjectRepresentation::ObjectRepresentation( const Reference< XInterface >& rxObj
 
 ObjectRepresentation::ObjectRepresentation( const ObjectRepresentation& rPresentation ) :
     mxObject( rPresentation.mxObject ),
-    mpMtf( rPresentation.mpMtf ? new GDIMetaFile( *rPresentation.mpMtf ) : NULL )
+    mpMtf( rPresentation.mpMtf ? new GDIMetaFile( *rPresentation.mpMtf ) : nullptr )
 {
 }
 
@@ -408,7 +408,7 @@ ObjectRepresentation& ObjectRepresentation::operator=( const ObjectRepresentatio
     if (this == &rPresentation)
         return *this;
     mxObject = rPresentation.mxObject;
-    delete mpMtf, ( mpMtf = rPresentation.mpMtf ? new GDIMetaFile( *rPresentation.mpMtf ) : NULL );
+    delete mpMtf, ( mpMtf = rPresentation.mpMtf ? new GDIMetaFile( *rPresentation.mpMtf ) : nullptr );
 
     return *this;
 }
@@ -611,7 +611,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                 }
                 catch( ... )
                 {
-                    delete mpSVGDoc, mpSVGDoc = NULL;
+                    delete mpSVGDoc, mpSVGDoc = nullptr;
                     OSL_FAIL( "Exception caught" );
                 }
 
@@ -631,10 +631,10 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     }
                 }
 
-                delete mpSVGWriter, mpSVGWriter = NULL;
-                mpSVGExport = NULL; // pointed object is released by xSVGExport dtor at the end of this scope
-                delete mpSVGFontExport, mpSVGFontExport = NULL;
-                delete mpObjects, mpObjects = NULL;
+                delete mpSVGWriter, mpSVGWriter = nullptr;
+                mpSVGExport = nullptr; // pointed object is released by xSVGExport dtor at the end of this scope
+                delete mpSVGFontExport, mpSVGFontExport = nullptr;
+                delete mpObjects, mpObjects = nullptr;
                 mbPresentation = false;
             }
         }
@@ -881,7 +881,7 @@ bool SVGFilter::implExportDocument()
                 implGenerateScript();
             }
 
-            delete mpSVGDoc, mpSVGDoc = NULL;
+            delete mpSVGDoc, mpSVGDoc = nullptr;
             bRet = true;
         }
     }
@@ -1128,7 +1128,7 @@ bool SVGFilter::implGenerateMetaData()
             // text fields are used only for generating meta info so we don't need them anymore
             for( size_t i = 0; i < aFieldSet.size(); ++i )
             {
-                if( aFieldSet[i] != NULL )
+                if( aFieldSet[i] != nullptr )
                 {
                     delete aFieldSet[i];
                 }
@@ -1661,7 +1661,7 @@ bool SVGFilter::implExportShapes( const Reference< XShapes >& rxShapes,
         if( ( rxShapes->getByIndex( i ) >>= xShape ) && xShape.is() )
             bRet = implExportShape( xShape, bMaster ) || bRet;
 
-        xShape = NULL;
+        xShape = nullptr;
     }
 
     return bRet;
@@ -1720,7 +1720,7 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
                 if( rMtf.GetActionSize() )
                 {   // for text field shapes we set up text-adjust attributes
                     // and set visibility to hidden
-                    const OUString* pElementId = NULL;
+                    const OUString* pElementId = nullptr;
                     if( mbPresentation )
                     {
                         bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
@@ -1796,7 +1796,7 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
                     }
 
-                    const GDIMetaFile* pEmbeddedBitmapsMtf = NULL;
+                    const GDIMetaFile* pEmbeddedBitmapsMtf = nullptr;
                     if( mEmbeddedBitmapActionMap.find( rxShape ) !=  mEmbeddedBitmapActionMap.end() )
                     {
                         pEmbeddedBitmapsMtf = &( mEmbeddedBitmapActionMap[ rxShape ].GetRepresentation() );
@@ -1919,7 +1919,7 @@ bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPa
         if( ( rxShapes->getByIndex( i ) >>= xShape ) && xShape.is() )
             bRet = implCreateObjectsFromShape( rxPage, xShape ) || bRet;
 
-        xShape = NULL;
+        xShape = nullptr;
     }
 
     return bRet;
@@ -2159,8 +2159,8 @@ IMPL_LINK_TYPED( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                 static const OUString aDateTimeId( aOOOAttrDateTimeField );
                 static const OUString aVariableDateTimeId( aOOOAttrDateTimeField + "-variable" );
 
-                const UCharSet * pCharSet = NULL;
-                UCharSetMap * pCharSetMap = NULL;
+                const UCharSet * pCharSet = nullptr;
+                UCharSetMap * pCharSetMap = nullptr;
                 if( bHasCharSetMap )
                 {
                     pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
@@ -2298,7 +2298,7 @@ IMPL_LINK_TYPED( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                 }
                 if( bFieldProcessed )
                 {
-                    if( pCharSet != NULL )
+                    if( pCharSet != nullptr )
                     {
                         UCharSet::const_iterator aChar = pCharSet->begin();
                         for( ; aChar != pCharSet->end(); ++aChar )

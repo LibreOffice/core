@@ -48,7 +48,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL graphicfilter_component_getFactor
     {
         return component_getFactoryHelper( pImplementationName, graphicExportDialog );
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

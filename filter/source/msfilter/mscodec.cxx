@@ -253,11 +253,11 @@ MSCodec_Std97::MSCodec_Std97 ()
 {
     m_hCipher = rtl_cipher_create (
         rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
-    OSL_ASSERT(m_hCipher != 0);
+    OSL_ASSERT(m_hCipher != nullptr);
 
     m_hDigest = rtl_digest_create (
         rtl_Digest_AlgorithmMD5);
-    OSL_ASSERT(m_hDigest != 0);
+    OSL_ASSERT(m_hDigest != nullptr);
 
     (void)memset (m_pDigestValue, 0, sizeof(m_pDigestValue));
     (void)memset (m_pDocId, 0, sizeof(m_pDocId));
@@ -409,7 +409,7 @@ bool MSCodec_Std97::InitCipher (sal_uInt32 nCounter)
     // Initialize Cipher with KeyData (for decoding).
     result = rtl_cipher_init (
         m_hCipher, rtl_Cipher_DirectionBoth,
-        pKeyData, RTL_DIGEST_LENGTH_MD5, 0, 0);
+        pKeyData, RTL_DIGEST_LENGTH_MD5, nullptr, 0);
 
     // Erase KeyData array and leave.
     rtl_secureZeroMemory (pKeyData, sizeof(pKeyData));

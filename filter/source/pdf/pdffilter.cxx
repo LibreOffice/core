@@ -157,7 +157,7 @@ public:
 IMPL_LINK_TYPED( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
 {
     if( rEvent.GetId() == VCLEVENT_OBJECT_DYING )
-        m_pFocusWindow = NULL;
+        m_pFocusWindow = nullptr;
 }
 
 sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )

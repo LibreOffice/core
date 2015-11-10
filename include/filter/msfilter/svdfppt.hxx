@@ -490,7 +490,7 @@ struct MSFILTER_DLLPUBLIC PPTFieldEntry
     SvxFieldItem*       pField2;
     OUString*           pString;
 
-    PPTFieldEntry() : nPos( 0 ), nTextRangeEnd( 0 ), pField1( NULL ), pField2( NULL ), pString( NULL ) {};
+    PPTFieldEntry() : nPos( 0 ), nTextRangeEnd( 0 ), pField1( nullptr ), pField2( nullptr ), pString( nullptr ) {};
     ~PPTFieldEntry();
 
     void                SetDateTime( sal_uInt32 nType );
@@ -515,7 +515,7 @@ struct MSFILTER_DLLPUBLIC HeaderFooterEntry
                             const PptSlidePersistEntry& rSlidePersist
                         );
 
-                        explicit HeaderFooterEntry( const PptSlidePersistEntry* pMaster = NULL );
+                        explicit HeaderFooterEntry( const PptSlidePersistEntry* pMaster = nullptr );
                         ~HeaderFooterEntry();
 };
 
@@ -529,7 +529,7 @@ struct ProcessData
     ProcessData( PptSlidePersistEntry& rP, SdPageCapsule pP ) :
         rPersistEntry               ( rP ),
         pPage                       ( pP ),
-        pTableRowProperties         ( NULL ) {};
+        pTableRowProperties         ( nullptr ) {};
     ~ProcessData() { delete[] pTableRowProperties; };
 };
 
@@ -569,8 +569,8 @@ protected:
 protected:
     using SdrEscherImport::ReadObjText;
 
-    bool                    SeekToAktPage(DffRecordHeader* pRecHd=NULL) const;
-    bool                    SeekToDocument(DffRecordHeader* pRecHd=NULL) const;
+    bool                    SeekToAktPage(DffRecordHeader* pRecHd=nullptr) const;
+    bool                    SeekToDocument(DffRecordHeader* pRecHd=nullptr) const;
     static bool             SeekToContentOfProgTag(
                                 sal_Int32 nVersion,
                                 SvStream& rSt,
@@ -629,7 +629,7 @@ public:
                                 PptPageKind ePageKind = PPT_SLIDEPAGE
                             ) const;
 
-    void                    ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist = NULL );
+    void                    ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist = nullptr );
     virtual bool            GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const override;
     virtual bool            SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const override;
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const override;
@@ -689,7 +689,7 @@ struct  PPTTextSpecInfoAtomInterpreter
                         SvStream& rIn,
                         const DffRecordHeader& rRecHd,
                         sal_uInt16 nRecordType,
-                        const PPTTextSpecInfo* pTextSpecDefault = NULL
+                        const PPTTextSpecInfo* pTextSpecDefault = nullptr
                     );
 
 };
@@ -1234,13 +1234,13 @@ struct ImplPPTTextObj
         : mnRefCount(0)
         , mnShapeId(0)
         , mnShapeMaster(0)
-        , mpPlaceHolderAtom(NULL)
+        , mpPlaceHolderAtom(nullptr)
         , mnInstance(0)
         , mnDestinationInstance(0)
         , meShapeType(mso_sptMin)
         , mnCurrentObject(0)
         , mnParagraphCount(0)
-        , mpParagraphList(NULL)
+        , mpParagraphList(nullptr)
         , mrPersistEntry ( rPersistEntry )
         , mnTextFlags(0) {};
 };
@@ -1309,7 +1309,7 @@ public:
     {};
     bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
         css::uno::Reference<
-        css::drawing::XShape > *pShapeRef=0,
+        css::drawing::XShape > *pShapeRef=nullptr,
         bool bFloatingCtrl=false );
     virtual bool InsertControl(
         const css::uno::Reference< css::form::XFormComponent > &rFComp,

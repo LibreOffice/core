@@ -234,7 +234,7 @@ void TypeDetectionExporter::addProperty( Reference< XWriter > xHandler, const OU
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sProp, xAttrList );
-        xAttrList = NULL;
+        xAttrList = nullptr;
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sValue,xAttrList );
         xHandler->characters( rValue );

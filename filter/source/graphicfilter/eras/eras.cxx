@@ -59,7 +59,7 @@ public:
 RASWriter::RASWriter(SvStream &rStream)
     : m_rOStm(rStream)
     , mbStatus(true)
-    , mpAcc(NULL)
+    , mpAcc(nullptr)
     , mnWidth(0)
     , mnHeight(0)
     , mnColors(0)

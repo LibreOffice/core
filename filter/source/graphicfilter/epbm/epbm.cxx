@@ -58,7 +58,7 @@ PBMWriter::PBMWriter(SvStream &rPBM)
     : m_rOStm(rPBM)
     , mbStatus(true)
     , mnMode(0)
-    , mpAcc(NULL)
+    , mpAcc(nullptr)
     , mnWidth(0)
     , mnHeight(0)
 {

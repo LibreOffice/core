@@ -126,7 +126,7 @@ struct GIFLZWCTreeNode
 
 
 GIFLZWCompressor::GIFLZWCompressor()
-    : pIDOS(NULL), pTable(NULL), pPrefix(NULL), nDataSize(0), nClearCode(0),
+    : pIDOS(nullptr), pTable(nullptr), pPrefix(nullptr), nDataSize(0), nClearCode(0),
       nEOICode(0), nTableSize(0), nCodeSize(0)
 {
 }
@@ -135,7 +135,7 @@ GIFLZWCompressor::GIFLZWCompressor()
 
 GIFLZWCompressor::~GIFLZWCompressor()
 {
-    if (pIDOS!=NULL) EndCompression();
+    if (pIDOS!=nullptr) EndCompression();
 }
 
 
@@ -161,11 +161,11 @@ void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
 
         for (i=0; i<4096; i++)
         {
-            pTable[i].pBrother = pTable[i].pFirstChild = NULL;
+            pTable[i].pBrother = pTable[i].pFirstChild = nullptr;
             pTable[i].nValue = (sal_uInt8) ( pTable[i].nCode = i );
         }
 
-        pPrefix = NULL;
+        pPrefix = nullptr;
         pIDOS->WriteBits( nClearCode,nCodeSize );
     }
 }
@@ -190,7 +190,7 @@ void GIFLZWCompressor::Compress( sal_uInt8* pSrc, sal_uLong nSize )
         {
             nSize--;
             nV=*pSrc++;
-            for( p=pPrefix->pFirstChild; p!=NULL; p=p->pBrother )
+            for( p=pPrefix->pFirstChild; p!=nullptr; p=p->pBrother )
             {
                 if (p->nValue==nV)
                     break;
@@ -207,7 +207,7 @@ void GIFLZWCompressor::Compress( sal_uInt8* pSrc, sal_uLong nSize )
                     pIDOS->WriteBits(nClearCode,nCodeSize);
 
                     for (i=0; i<nClearCode; i++)
-                        pTable[i].pFirstChild=NULL;
+                        pTable[i].pFirstChild=nullptr;
 
                     nCodeSize=nDataSize+1;
                     nTableSize=nEOICode+1;
@@ -221,7 +221,7 @@ void GIFLZWCompressor::Compress( sal_uInt8* pSrc, sal_uLong nSize )
                     p->pBrother=pPrefix->pFirstChild;
                     pPrefix->pFirstChild=p;
                     p->nValue=nV;
-                    p->pFirstChild=NULL;
+                    p->pFirstChild=nullptr;
                 }
 
                 pPrefix=pTable+nV;
@@ -242,7 +242,7 @@ void GIFLZWCompressor::EndCompression()
         pIDOS->WriteBits( nEOICode,nCodeSize );
         delete[] pTable;
         delete pIDOS;
-        pIDOS=NULL;
+        pIDOS=nullptr;
     }
 }
 

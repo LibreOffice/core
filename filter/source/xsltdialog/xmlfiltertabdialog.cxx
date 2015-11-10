@@ -97,7 +97,7 @@ bool XMLFilterTabDialog::onOk()
 
     sal_uInt16 nErrorPage = 0;
     sal_uInt16 nErrorId = 0;
-    vcl::Window* pFocusWindow = NULL;
+    vcl::Window* pFocusWindow = nullptr;
     OUString aReplace1;
     OUString aReplace2;
 

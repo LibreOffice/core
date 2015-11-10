@@ -24,7 +24,7 @@
 //----------------------------------DXFLType-----------------------------------
 
 DXFLType::DXFLType()
-    : pSucc(NULL)
+    : pSucc(nullptr)
     , nFlags(0)
     , nDashCount(0)
     , fPatternLength(0.0)
@@ -81,7 +81,7 @@ void DXFLType::Read(DXFGroupReader & rDGR)
 
 DXFLayer::DXFLayer()
 {
-    pSucc=NULL;
+    pSucc=nullptr;
     nFlags=0;
     nColor=-1;
 }
@@ -112,7 +112,7 @@ void DXFLayer::Read(DXFGroupReader & rDGR)
 
 DXFStyle::DXFStyle()
 {
-    pSucc=NULL;
+    pSucc=nullptr;
     nFlags=0;
     fHeight=0.0;
     fWidthFak=1.0;
@@ -162,7 +162,7 @@ void DXFStyle::Read(DXFGroupReader & rDGR)
 
 DXFVPort::DXFVPort()
 {
-    pSucc=NULL;
+    pSucc=nullptr;
 
     nFlags=0;
     fMinX=0;
@@ -250,10 +250,10 @@ void DXFVPort::Read(DXFGroupReader & rDGR)
 
 DXFTables::DXFTables()
 {
-    pLTypes=NULL;
-    pLayers=NULL;
-    pStyles=NULL;
-    pVPorts=NULL;
+    pLTypes=nullptr;
+    pLayers=nullptr;
+    pStyles=nullptr;
+    pVPorts=nullptr;
 }
 
 
@@ -271,16 +271,16 @@ void DXFTables::Read(DXFGroupReader & rDGR)
     DXFVPort * * ppVP, * pVP;
 
     ppLT=&pLTypes;
-    while(*ppLT!=NULL) ppLT=&((*ppLT)->pSucc);
+    while(*ppLT!=nullptr) ppLT=&((*ppLT)->pSucc);
 
     ppLa=&pLayers;
-    while(*ppLa!=NULL) ppLa=&((*ppLa)->pSucc);
+    while(*ppLa!=nullptr) ppLa=&((*ppLa)->pSucc);
 
     ppSt=&pStyles;
-    while(*ppSt!=NULL) ppSt=&((*ppSt)->pSucc);
+    while(*ppSt!=nullptr) ppSt=&((*ppSt)->pSucc);
 
     ppVP=&pVPorts;
-    while(*ppVP!=NULL) ppVP=&((*ppVP)->pSucc);
+    while(*ppVP!=nullptr) ppVP=&((*ppVP)->pSucc);
 
     for (;;) {
         while (rDGR.GetG()!=0) rDGR.Read();
@@ -322,22 +322,22 @@ void DXFTables::Clear()
     DXFStyle * pSt;
     DXFVPort * pVP;
 
-    while (pStyles!=NULL) {
+    while (pStyles!=nullptr) {
         pSt=pStyles;
         pStyles=pSt->pSucc;
         delete pSt;
     }
-    while (pLayers!=NULL) {
+    while (pLayers!=nullptr) {
         pLa=pLayers;
         pLayers=pLa->pSucc;
         delete pLa;
     }
-    while (pLTypes!=NULL) {
+    while (pLTypes!=nullptr) {
         pLT=pLTypes;
         pLTypes=pLT->pSucc;
         delete pLT;
     }
-    while (pVPorts!=NULL) {
+    while (pVPorts!=nullptr) {
         pVP=pVPorts;
         pVPorts=pVP->pSucc;
         delete pVP;
@@ -348,7 +348,7 @@ void DXFTables::Clear()
 DXFLType * DXFTables::SearchLType(OString const& rName) const
 {
     DXFLType * p;
-    for (p=pLTypes; p!=NULL; p=p->pSucc) {
+    for (p=pLTypes; p!=nullptr; p=p->pSucc) {
         if (rName == p->m_sName) break;
     }
     return p;
@@ -358,7 +358,7 @@ DXFLType * DXFTables::SearchLType(OString const& rName) const
 DXFLayer * DXFTables::SearchLayer(OString const& rName) const
 {
     DXFLayer * p;
-    for (p=pLayers; p!=NULL; p=p->pSucc) {
+    for (p=pLayers; p!=nullptr; p=p->pSucc) {
         if (rName == p->m_sName) break;
     }
     return p;
@@ -368,7 +368,7 @@ DXFLayer * DXFTables::SearchLayer(OString const& rName) const
 DXFVPort * DXFTables::SearchVPort(OString const& rName) const
 {
     DXFVPort * p;
-    for (p=pVPorts; p!=NULL; p=p->pSucc) {
+    for (p=pVPorts; p!=nullptr; p=p->pSucc) {
         if (rName == p->m_sName) break;
     }
     return p;

@@ -37,7 +37,7 @@ ErrCode SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
                                 STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL ) );
     if( xVBAStg.Is() && !xVBAStg->GetError() )
     {
-        xVBAStg = 0;
+        xVBAStg = nullptr;
         if( bSaveInto )
         {
 #if HAVE_FEATURE_SCRIPTING

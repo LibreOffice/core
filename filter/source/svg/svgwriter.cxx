@@ -96,8 +96,8 @@ static sal_Char const XML_UNO_NAME_NRULE_BULLET_CHAR[] = "BulletChar";
 SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport )
     : mrExport( rExport )
     , mrFontExport( rFontExport )
-    , mpElemFont( NULL )
-    , mpElemPaint( NULL )
+    , mpElemFont( nullptr )
+    , mpElemPaint( nullptr )
     , maLineJoin(basegfx::B2DLineJoin::NONE)
     , maLineCap(css::drawing::LineCap_BUTT)
 {
@@ -371,7 +371,7 @@ void SVGAttributeWriter::endFontSettings()
     if( mpElemFont )
     {
         delete mpElemFont;
-        mpElemFont = NULL;
+        mpElemFont = nullptr;
     }
 }
 
@@ -405,8 +405,8 @@ void SVGAttributeWriter::setFontFamily()
 
 SVGTextWriter::SVGTextWriter( SVGExport& rExport )
     :   mrExport( rExport ),
-        mpContext( NULL ),
-        mpVDev( NULL ),
+        mpContext( nullptr ),
+        mpVDev( nullptr ),
         mbIsTextShapeStarted( false ),
         mrTextShape(),
         msShapeId(),
@@ -414,11 +414,11 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport )
         mrCurrentTextParagraph(),
         mrTextPortionEnumeration(),
         mrCurrentTextPortion(),
-        mpTextEmbeddedBitmapMtf( NULL ),
-        mpTargetMapMode( NULL ),
-        mpTextShapeElem( NULL ),
-        mpTextParagraphElem( NULL ),
-        mpTextPositionElem( NULL ),
+        mpTextEmbeddedBitmapMtf( nullptr ),
+        mpTargetMapMode( nullptr ),
+        mpTextShapeElem( nullptr ),
+        mpTextParagraphElem( nullptr ),
+        mpTextPositionElem( nullptr ),
         mnLeftTextPortionLength( 0 ),
         maTextPos(0,0),
         mnTextWidth(0),
@@ -1201,7 +1201,7 @@ void SVGTextWriter::endTextShape()
     if( mpTextShapeElem )
     {
         delete mpTextShapeElem;
-        mpTextShapeElem = NULL;
+        mpTextShapeElem = nullptr;
     }
     mbIsTextShapeStarted = false;
     // these need to be invoked after the <text> element has been closed
@@ -1258,7 +1258,7 @@ void SVGTextWriter::endTextParagraph()
     if( mpTextParagraphElem )
     {
         delete mpTextParagraphElem;
-        mpTextParagraphElem = NULL;
+        mpTextParagraphElem = nullptr;
     }
 
 }
@@ -1281,7 +1281,7 @@ void SVGTextWriter::endTextPosition()
     if( mpTextPositionElem )
     {
         delete mpTextPositionElem;
-        mpTextPositionElem = NULL;
+        mpTextPositionElem = nullptr;
     }
 }
 
@@ -1667,7 +1667,7 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mnCurPatternId( 1 ),
     mrExport( rExport ),
     mrFontExport( rFontExport ),
-    mpContext( NULL ),
+    mpContext( nullptr ),
     maTextWriter( rExport ),
     mnInnerMtfCount( 0 ),
     mbClipAttrChanged( false ),
@@ -2099,7 +2099,7 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                         mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
                     else if ( pGradient )
                         mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
-                    ImplWriteActions( aTmpMtf, nWriteFlags, NULL );
+                    ImplWriteActions( aTmpMtf, nWriteFlags, nullptr );
                 }
             }
         }
@@ -2121,7 +2121,7 @@ void SVGActionWriter::ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, 
     }
     else
     {
-        ImplWritePattern( rPolyPoly, NULL, &rGradient, nWriteFlags );
+        ImplWritePattern( rPolyPoly, nullptr, &rGradient, nWriteFlags );
     }
 }
 
@@ -2329,7 +2329,7 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
         SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
         mpVDev->Push();
-        ImplWriteActions( rMtf, nWriteFlags, NULL );
+        ImplWriteActions( rMtf, nWriteFlags, nullptr );
         mpVDev->Pop();
     }
 }
@@ -2682,11 +2682,11 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
     }
 #endif
     mbIsPlaceholderShape = false;
-    if( ( pElementId != NULL ) && ( *pElementId == sPlaceholderTag ) )
+    if( ( pElementId != nullptr ) && ( *pElementId == sPlaceholderTag ) )
     {
         mbIsPlaceholderShape = true;
         // since we utilize pElementId in an improper way we reset it to NULL before to go on
-        pElementId = NULL;
+        pElementId = nullptr;
     }
 
     for( sal_uLong nCurAction = 0, nCount = rMtf.GetActionSize(); nCurAction < nCount; nCurAction++ )
@@ -2923,7 +2923,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pAction);
-                    ImplWritePattern( pA->GetPolyPolygon(), &pA->GetHatch(), NULL, nWriteFlags );
+                    ImplWritePattern( pA->GetPolyPolygon(), &pA->GetHatch(), nullptr, nWriteFlags );
                 }
             }
             break;
@@ -2993,7 +2993,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( ( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") ) &&
                     ( nWriteFlags & SVGWRITER_WRITE_FILL ) )
                 {
-                    const MetaGradientExAction* pGradAction = NULL;
+                    const MetaGradientExAction* pGradAction = nullptr;
                     bool                    bDone = false;
 
                     while( !bDone && ( ++nCurAction < nCount ) )
@@ -3461,7 +3461,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
                             mpContext->SetFontAttr( aFont );
-                            ImplWriteText( pA->GetPoint(), aText, NULL, 0 );
+                            ImplWriteText( pA->GetPoint(), aText, nullptr, 0 );
                         }
                         else
                         {
@@ -3484,7 +3484,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
                             mpContext->SetFontAttr( aFont );
-                            ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), NULL, 0 );
+                            ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), nullptr, 0 );
                         }
                         maTextWriter.writeTextPortion( pA->GetRect().TopLeft(), pA->GetText() );
                     }
@@ -3531,7 +3531,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
                             mpContext->SetFontAttr( aFont );
-                            ImplWriteText( pA->GetPoint(), aText, NULL, pA->GetWidth() );
+                            ImplWriteText( pA->GetPoint(), aText, nullptr, pA->GetWidth() );
                         }
                         else
                         {

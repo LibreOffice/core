@@ -134,14 +134,14 @@ inistruct ini;
 
 T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r )
     : mxMSF(r)
-    , mpAttrList(NULL)
+    , mpAttrList(nullptr)
     , node(START)
 {
 }
 
 T602ImportFilter::T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream)
     : mxInputStream(xInputStream)
-    , mpAttrList(NULL)
+    , mpAttrList(nullptr)
     , node(START)
 {
 }
@@ -913,7 +913,7 @@ Reference< XInterface > SAL_CALL T602ImportFilter_createInstance( const Referenc
 }
 
 T602ImportFilterDialog::T602ImportFilterDialog(const css::uno::Reference<css::lang::XMultiServiceFactory > &r ) :
-    mxMSF( r ), mpResMgr( NULL ) {}
+    mxMSF( r ), mpResMgr( nullptr ) {}
 
 T602ImportFilterDialog::~T602ImportFilterDialog()
 {
@@ -1090,7 +1090,7 @@ bool T602ImportFilterDialog::OptionsDlg()
     Reference < XToolkit > xToolkit = Toolkit::create( rComponentContext );
 
     dialog->setVisible( false );
-    dialog->createPeer( xToolkit, NULL );
+    dialog->createPeer( xToolkit, nullptr );
 
     bool ret = ( dialog->execute() != 0 );
     if ( ret ) {

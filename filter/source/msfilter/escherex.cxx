@@ -176,7 +176,7 @@ EscherPropertyContainer::~EscherPropertyContainer()
 
 void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_uInt32 nPropValue, bool bBlib )
 {
-    AddOpt( nPropID, bBlib, nPropValue, NULL, 0 );
+    AddOpt( nPropID, bBlib, nPropValue, nullptr, 0 );
 }
 
 void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, const OUString& rString )
@@ -423,7 +423,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     const css::uno::Reference< css::beans::XPropertySet > & rXPropSet , bool bTransparentGradient)
 {
     css::uno::Any          aAny;
-    css::awt::Gradient const * pGradient = NULL;
+    css::awt::Gradient const * pGradient = nullptr;
 
     sal_uInt32  nFillType = ESCHER_FillShadeScale;
     sal_Int32  nAngle = 0;
@@ -1264,7 +1264,7 @@ bool EscherPropertyContainer::CreateOLEGraphicProperties(
     if ( rXShape.is() )
     {
         SdrObject* pSdrOLE2( GetSdrObjectFromXShape( rXShape ) );   // SJ: leaving unoapi, because currently there is
-        if ( pSdrOLE2 && 0 != dynamic_cast<const SdrOle2Obj* > (pSdrOLE2) )              // no access to the native graphic object
+        if ( pSdrOLE2 && nullptr != dynamic_cast<const SdrOle2Obj* > (pSdrOLE2) )              // no access to the native graphic object
         {
             const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
             if ( pGraphic )
@@ -1706,7 +1706,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
                 {
                     Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-                    const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aUniqueId, aRect, NULL, pGraphicAttr.get()));
+                    const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aUniqueId, aRect, nullptr, pGraphicAttr.get()));
 
                     if(nBlibId)
                     {
@@ -1729,7 +1729,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                     SvMemoryStream aMemStrm;
                     Rectangle aRect;
 
-                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, NULL, pGraphicAttr.get(), bOOxmlExport ) )
+                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, nullptr, pGraphicAttr.get(), bOOxmlExport ) )
                     {
                         // grab BLIP from stream and insert directly as complex property
                         // ownership of stream memory goes to complex property
@@ -1849,7 +1849,7 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const css::uno::Any&
 
         // get pointer to inner sequences
         css::drawing::PointSequence const * pOuterSequence = pSourcePolyPolygon->getConstArray();
-        bNoError = pOuterSequence != NULL;
+        bNoError = pOuterSequence != nullptr;
         if ( bNoError )
         {
             sal_uInt16 a, b, nInnerSequenceCount;
@@ -1858,13 +1858,13 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const css::uno::Any&
             for( a = 0; a < nOuterSequenceCount; a++ )
             {
                 css::drawing::PointSequence const * pInnerSequence = pOuterSequence++;
-                bNoError = pInnerSequence != NULL;
+                bNoError = pInnerSequence != nullptr;
                 if ( bNoError )
                 {
                     // get pointer to arrays
                     css::awt::Point const * pArray =
                           pInnerSequence->getConstArray();
-                    if ( pArray != NULL )
+                    if ( pArray != nullptr )
                     {
                         nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
                         aPolygon = tools::Polygon( nInnerSequenceCount );
@@ -1884,14 +1884,14 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const css::uno::Any&
         css::drawing::PointSequence const * pInnerSequence =
             static_cast<css::drawing::PointSequence const *>(rAny.getValue());
 
-        bNoError = pInnerSequence != NULL;
+        bNoError = pInnerSequence != nullptr;
         if ( bNoError )
         {
             sal_uInt16 a, nInnerSequenceCount;
 
             // get pointer to arrays
             css::awt::Point const * pArray = pInnerSequence->getConstArray();
-            if ( pArray != NULL )
+            if ( pArray != nullptr )
             {
                 nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
                 aPolygon = tools::Polygon( nInnerSequenceCount );
@@ -2488,7 +2488,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                 {
                     std::shared_ptr< EnhancedCustomShape::ExpressionNode > aExpressNode(
                         EnhancedCustomShape::FunctionParser::parseFunction( sEquationSource[ i ], aCustoShape2d ) );
-                    css::drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, NULL, 0 ) );
+                    css::drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, nullptr, 0 ) );
                     if ( aPara.Type != css::drawing::EnhancedCustomShapeParameterType::EQUATION )
                     {
                         EnhancedCustomShapeEquation aEquation;
@@ -3998,7 +3998,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
     maPrefMapMode   ( rObject.GetPrefMapMode() ),
     mbIsEmpty       ( true )
 {
-    mbIsNativeGraphicPossible = ( pGraphicAttr == NULL );
+    mbIsNativeGraphicPossible = ( pGraphicAttr == nullptr );
     meBlibType = UNKNOWN;
     mnSize = 0;
 
@@ -4099,7 +4099,7 @@ bool EscherBlibEntry::operator==( const EscherBlibEntry& rEscherBlibEntry ) cons
 
 EscherGraphicProvider::EscherGraphicProvider( sal_uInt32 nFlags ) :
     mnFlags         ( nFlags ),
-    mpBlibEntrys    ( NULL ),
+    mpBlibEntrys    ( nullptr ),
     mnBlibBufSize   ( 0 ),
     mnBlibEntrys    ( 0 )
 {
@@ -4252,7 +4252,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
         GfxLink             aGraphicLink;
         SvMemoryStream      aStream;
 
-        const sal_uInt8*    pGraphicAry = NULL;
+        const sal_uInt8*    pGraphicAry = nullptr;
 
         if ( p_EscherBlibEntry->mbIsNativeGraphicPossible && aGraphic.IsLink() )
         {
@@ -4464,7 +4464,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 rPicOutStrm.WriteUInt32( nPos - nAtomSize );
                 rPicOutStrm.Seek( nPos );
             }
-            nBlibId = ImplInsertBlib( p_EscherBlibEntry ), p_EscherBlibEntry = NULL;
+            nBlibId = ImplInsertBlib( p_EscherBlibEntry ), p_EscherBlibEntry = nullptr;
         }
     }
     delete p_EscherBlibEntry;
@@ -4828,7 +4828,7 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 
 EscherExGlobal::EscherExGlobal( sal_uInt32 nGraphicProvFlags ) :
     EscherGraphicProvider( nGraphicProvFlags ),
-    mpPicStrm( 0 ),
+    mpPicStrm( nullptr ),
     mbHasDggCont( false ),
     mbPicStrmQueried( false )
 {
@@ -4947,7 +4947,7 @@ SvStream* EscherExGlobal::QueryPictureStream()
 
 SvStream* EscherExGlobal::ImplQueryPictureStream()
 {
-    return 0;
+    return nullptr;
 }
 
 // Implementation of an empty stream that silently succeeds, but does nothing.
@@ -5272,7 +5272,7 @@ void EscherEx::AddClientAnchor( const Rectangle& rRect )
 
 EscherExHostAppData* EscherEx::EnterAdditionalTextGroup()
 {
-    return NULL;
+    return nullptr;
 }
 
 sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect )

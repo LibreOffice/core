@@ -62,16 +62,16 @@ namespace
 
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mxContext( rxCtx ),
-    mpSVGDoc( NULL ),
-    mpSVGExport( NULL ),
-    mpSVGFontExport( NULL ),
-    mpSVGWriter( NULL ),
-    mpDefaultSdrPage( NULL ),
-    mpSdrModel( NULL ),
+    mpSVGDoc( nullptr ),
+    mpSVGExport( nullptr ),
+    mpSVGFontExport( nullptr ),
+    mpSVGWriter( nullptr ),
+    mpDefaultSdrPage( nullptr ),
+    mpSdrModel( nullptr ),
     mbPresentation( false ),
     mbSinglePage( false ),
     mnVisiblePage( -1 ),
-    mpObjects( NULL ),
+    mpObjects( nullptr ),
     mxSrcDoc(),
     mxDstDoc(),
     mxDefaultPage(),
@@ -84,11 +84,11 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
 
 SVGFilter::~SVGFilter()
 {
-    DBG_ASSERT( mpSVGDoc == NULL, "mpSVGDoc not destroyed" );
-    DBG_ASSERT( mpSVGExport == NULL, "mpSVGExport not destroyed" );
-    DBG_ASSERT( mpSVGFontExport == NULL, "mpSVGFontExport not destroyed" );
-    DBG_ASSERT( mpSVGWriter == NULL, "mpSVGWriter not destroyed" );
-    DBG_ASSERT( mpObjects == NULL, "mpObjects not destroyed" );
+    DBG_ASSERT( mpSVGDoc == nullptr, "mpSVGDoc not destroyed" );
+    DBG_ASSERT( mpSVGExport == nullptr, "mpSVGExport not destroyed" );
+    DBG_ASSERT( mpSVGFontExport == nullptr, "mpSVGFontExport not destroyed" );
+    DBG_ASSERT( mpSVGWriter == nullptr, "mpSVGWriter not destroyed" );
+    DBG_ASSERT( mpObjects == nullptr, "mpObjects not destroyed" );
 }
 
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
@@ -419,7 +419,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL svgfilter_component_getFactory(
     {
         return component_getFactoryHelper( pImplName, svgWriter );
     }
-    return NULL;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

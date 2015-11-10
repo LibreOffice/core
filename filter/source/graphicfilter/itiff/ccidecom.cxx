@@ -569,15 +569,15 @@ const CCIHuffmanTableEntry CCIUncompTableSave[CCIUncompTableSize]={
 CCIDecompressor::CCIDecompressor( sal_uLong nOpts, sal_uInt32 nImageWidth ) :
     bTableBad   ( false ),
     bStatus     ( false ),
-    pByteSwap   ( NULL ),
-    pIStream    ( NULL ),
+    pByteSwap   ( nullptr ),
+    pIStream    ( nullptr ),
     nEOLCount   ( 0 ),
     nWidth      ( nImageWidth ),
     nOptions    ( nOpts ),
     bFirstEOL   ( false ),
     nInputBitsBuf( 0 ),
     nInputBitsBufSize( 0 ),
-    pLastLine   ( NULL ),
+    pLastLine   ( nullptr ),
     nLastLineSize( 0 )
 {
     if ( nOpts & CCI_OPTION_INVERSEBITORDER )
@@ -671,9 +671,9 @@ bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTarget
     // should the situation arise, generate a white previous line for 2D:
     if ( nOptions & CCI_OPTION_2D )
     {
-        if ( pLastLine == NULL || nLastLineSize != ( ( nTargetBits + 7 ) >> 3 ) )
+        if ( pLastLine == nullptr || nLastLineSize != ( ( nTargetBits + 7 ) >> 3 ) )
         {
-            if ( pLastLine == NULL )
+            if ( pLastLine == nullptr )
                 delete[] pLastLine;
             nLastLineSize = ( nTargetBits + 7 ) >> 3;
             pLastLine = new sal_uInt8[ nLastLineSize ];

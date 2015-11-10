@@ -114,7 +114,7 @@ private:
 
 namespace
 {
-    static ResMgr* pXSLTResMgr = NULL;
+    static ResMgr* pXSLTResMgr = nullptr;
 }
 
 ResMgr* getXSLTDialogResMgr()
@@ -125,7 +125,7 @@ ResMgr* getXSLTDialogResMgr()
 XMLFilterDialogComponent::XMLFilterDialogComponent( const css::uno::Reference< XComponentContext >& rxContext ) :
     OComponentHelper( maMutex ),
     mxContext( rxContext ),
-    mpDialog( NULL )
+    mpDialog( nullptr )
 {
     Reference< XDesktop2 > xDesktop = Desktop::create( rxContext );
     Reference< XTerminateListener > xListener( this );
@@ -271,7 +271,7 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
     if (pXSLTResMgr)
     {
         delete pXSLTResMgr;
-        pXSLTResMgr = NULL;
+        pXSLTResMgr = nullptr;
     }
 }
 
@@ -319,7 +319,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException,
 {
     ::SolarMutexGuard aGuard;
 
-    if( NULL == pXSLTResMgr )
+    if( nullptr == pXSLTResMgr )
     {
         pXSLTResMgr = ResMgr::CreateResMgr( "xsltdlg", Application::GetSettings().GetUILanguageTag() );
     }
@@ -365,7 +365,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsltdlg_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     if( pServiceManager )
     {

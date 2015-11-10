@@ -116,10 +116,10 @@ void CGM::ImplDoClass4()
         // do anything with the bitmap
         mpOutAct->DrawBitmap( pBmpDesc );
         delete mpBitmapInUse;
-        mpBitmapInUse = NULL;
+        mpBitmapInUse = nullptr;
     }
 
-    if ( ( mpChart == NULL ) || mpChart->IsAnnotation() )
+    if ( ( mpChart == nullptr ) || mpChart->IsAnnotation() )
     {
         switch ( mnElementID )
         {

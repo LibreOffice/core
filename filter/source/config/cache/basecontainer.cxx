@@ -51,7 +51,7 @@ namespace
 BaseContainer::BaseContainer()
     : BaseLock     (       )
     , m_rCache     (       )
-    , m_pFlushCache(NULL   )
+    , m_pFlushCache(nullptr   )
     , m_eType()
     , m_lListener  (m_aLock)
 {
@@ -512,7 +512,7 @@ void SAL_CALL BaseContainer::flush()
     }
 
     delete m_pFlushCache;
-    m_pFlushCache = NULL;
+    m_pFlushCache = nullptr;
 
     css::uno::Reference< css::util::XRefreshable > xRefreshBroadcaster = m_xRefreshBroadcaster;
 

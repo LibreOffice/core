@@ -1261,7 +1261,7 @@ struct ShapeWritingVisitor
                         +OUString::number(y1)+"L"+OUString::number(x2)+","
                         +OUString::number(y2);
                     basegfx::B2DPolyPolygon aPoly;
-                    basegfx::tools::importFromSvgD(aPoly, sLinePath, false, NULL);
+                    basegfx::tools::importFromSvgD(aPoly, sLinePath, false, nullptr);
 
                     writePathShape(xAttrs,
                                    xUnoAttrs,
@@ -1351,7 +1351,7 @@ struct ShapeWritingVisitor
             {
                 OUString sPath = xElem->hasAttribute("d") ? xElem->getAttribute("d") : "";
                 basegfx::B2DPolyPolygon aPoly;
-                basegfx::tools::importFromSvgD(aPoly, sPath, false, NULL);
+                basegfx::tools::importFromSvgD(aPoly, sPath, false, nullptr);
 
                 if ((maCurrState.meStrokeType == NONE) &&
                     (maCurrState.meFillType != NONE) &&

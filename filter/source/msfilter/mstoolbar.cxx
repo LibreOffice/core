@@ -62,7 +62,7 @@ void CustomToolBarImportHelper::applyIcons()
         sal_uInt16 nColor = ui::ImageType::COLOR_NORMAL;
 
         vcl::Window* topwin = Application::GetActiveTopWindow();
-    if ( topwin != NULL && topwin->GetDisplayBackground().GetColor().IsDark() )
+    if ( topwin != nullptr && topwin->GetDisplayBackground().GetColor().IsDark() )
             nColor = css::ui::ImageType::COLOR_HIGHCONTRAST;
 
         ScaleImage( images[ 0 ], 16 );

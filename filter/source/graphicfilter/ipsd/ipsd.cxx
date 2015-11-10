@@ -86,17 +86,17 @@ public:
 
 PSDReader::PSDReader(SvStream &rStream)
     : m_rPSD(rStream)
-    , mpFileHeader(NULL)
+    , mpFileHeader(nullptr)
     , mnXResFixed(0)
     , mnYResFixed(0)
     , mbStatus(true)
     , mbTransparent(false)
-    , mpReadAcc(NULL)
-    , mpWriteAcc(NULL)
-    , mpMaskWriteAcc(NULL)
+    , mpReadAcc(nullptr)
+    , mpWriteAcc(nullptr)
+    , mpMaskWriteAcc(nullptr)
     , mnDestBitDepth(0)
     , mbCompression(false)
-    , mpPalette(NULL)
+    , mpPalette(nullptr)
 {
 }
 
@@ -120,14 +120,14 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
 
     Size aBitmapSize( mpFileHeader->nColumns, mpFileHeader->nRows );
     maBmp = Bitmap( aBitmapSize, mnDestBitDepth );
-    if ( ( mpWriteAcc = maBmp.AcquireWriteAccess() ) == NULL )
+    if ( ( mpWriteAcc = maBmp.AcquireWriteAccess() ) == nullptr )
         mbStatus = false;
-    if ( ( mpReadAcc = maBmp.AcquireReadAccess() ) == NULL )
+    if ( ( mpReadAcc = maBmp.AcquireReadAccess() ) == nullptr )
         mbStatus = false;
     if ( mbTransparent && mbStatus )
     {
         maMaskBmp = Bitmap( aBitmapSize, 1 );
-        if ( ( mpMaskWriteAcc = maMaskBmp.AcquireWriteAccess() ) == NULL )
+        if ( ( mpMaskWriteAcc = maMaskBmp.AcquireWriteAccess() ) == nullptr )
             mbStatus = false;
     }
     if ( mpPalette && mbStatus )

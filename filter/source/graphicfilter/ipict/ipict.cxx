@@ -242,8 +242,8 @@ private:
 public:
 
     PictReader()
-        : pPict(NULL)
-        , pVirDev(NULL)
+        : pPict(nullptr)
+        , pVirDev(nullptr)
         , nOrigPos(0)
         , IsVersion2(false)
         , eActROP(ROP_OVERPAINT)
@@ -486,7 +486,7 @@ sal_uLong PictReader::ReadPixPattern(PictReader::Pattern &pattern)
     pPict->ReadUInt16( nPatType );
     if (nPatType==1) {
             pattern.read(*pPict);
-        nDataSize=ReadPixMapEtc(aBMP,false,true,NULL,NULL,false,false);
+        nDataSize=ReadPixMapEtc(aBMP,false,true,nullptr,nullptr,false,false);
         // CHANGEME: use average pixmap colors to update the pattern, ...
         if (nDataSize!=0xffffffff) nDataSize+=10;
     }
@@ -703,8 +703,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                                     Rectangle* pDestRect, bool bMode, bool bMaskRgn )
 {
     Bitmap              aBitmap;
-    BitmapWriteAccess*  pAcc = NULL;
-    BitmapReadAccess*   pReadAcc = NULL;
+    BitmapWriteAccess*  pAcc = nullptr;
+    BitmapReadAccess*   pReadAcc = nullptr;
     sal_uInt16              nColTabSize;
     sal_uInt16              nRowBytes, nBndX, nBndY, nWidth, nHeight, nPackType,
                         nPixelSize, nCmpCount, nCmpSize;
@@ -746,7 +746,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             nDstBitCount = 4;
         aBitmap = Bitmap( Size( nWidth, nHeight ), nDstBitCount );
 
-        if ( ( pAcc = aBitmap.AcquireWriteAccess() ) == NULL )
+        if ( ( pAcc = aBitmap.AcquireWriteAccess() ) == nullptr )
             BITMAPERROR;
 
         if ( bColorTable )
@@ -778,7 +778,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         nPixelSize = nCmpCount = nCmpSize = 1;
         nDataSize += 10;
         aBitmap = Bitmap( Size( nWidth, nHeight ), 1 );
-        if ( ( pAcc = aBitmap.AcquireWriteAccess() ) == NULL )
+        if ( ( pAcc = aBitmap.AcquireWriteAccess() ) == nullptr )
             BITMAPERROR;
         pAcc->SetPaletteEntryCount( 2 );
         pAcc->SetPaletteColor( 0, BitmapColor( 0xff, 0xff, 0xff ) );
@@ -786,7 +786,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     }
 
     // conditionally read source rectangle:
-    if ( pSrcRect != 0)
+    if ( pSrcRect != nullptr)
     {
         sal_uInt16  nTop, nLeft, nBottom, nRight;
         pPict->ReadUInt16( nTop ).ReadUInt16( nLeft ).ReadUInt16( nBottom ).ReadUInt16( nRight );
@@ -795,7 +795,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     }
 
     // conditionally read destination rectangle:
-    if ( pDestRect != 0 )
+    if ( pDestRect != nullptr )
     {
         Point aTL, aBR;
         aTL = ReadPoint();
@@ -996,7 +996,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         size_t                  nCount;
         sal_uLong               nSrcBitsPos;
         BitmapColor         aBitmapColor;
-        if ( ( pReadAcc = aBitmap.AcquireReadAccess() ) == NULL )
+        if ( ( pReadAcc = aBitmap.AcquireReadAccess() ) == nullptr )
             BITMAPERROR;
         if ( nRowBytes != 4*nWidth )
             BITMAPERROR;

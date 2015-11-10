@@ -866,7 +866,7 @@ void PictWriter::WriteOpcode_Poly(PictDrawingMethod eMethod, const tools::Polygo
 
 void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap)
 {
-    BitmapReadAccess*   pAcc = NULL;
+    BitmapReadAccess*   pAcc = nullptr;
     Bitmap              aBitmap( rBitmap );
 
     sal_uLong   nWidth, nHeight, nDstRowBytes, nx, nc, ny, nCount, nColTabSize, i;
@@ -884,7 +884,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
 
     if ( !bStatus )
         return;
-    if ( ( pAcc = aBitmap.AcquireReadAccess() ) == NULL )
+    if ( ( pAcc = aBitmap.AcquireReadAccess() ) == nullptr )
         return;
 
     nBitsPerPixel = aBitmap.GetBitCount();
@@ -1308,7 +1308,7 @@ void PictWriter::SetAttrForText()
 
 void PictWriter::WriteTextArray(Point & rPoint, const OUString& rString, const long* pDXAry)
 {
-    if ( pDXAry == NULL )
+    if ( pDXAry == nullptr )
         WriteOpcode_Text( rPoint, rString, false );
     else
     {
@@ -2212,7 +2212,7 @@ bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, F
     aMap72.SetScaleY( aDPIFrac );
     aTargetMapMode = aMap72;
 
-    pAttrStack=NULL;
+    pAttrStack=nullptr;
 
     bDstBkPatValid=false;
     bDstTxFaceValid=false;
@@ -2241,7 +2241,7 @@ bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, F
     WriteOpcode_EndOfFile();
     UpdateHeader();
 
-    while (pAttrStack!=NULL) {
+    while (pAttrStack!=nullptr) {
         pAt=pAttrStack;
         pAttrStack=pAt->pSucc;
         delete pAt;

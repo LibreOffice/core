@@ -100,7 +100,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
     {
         aBmp = Bitmap( Size( nWidth, nHeight ), nDestBitsPerPixel );
         Bitmap::ScopedWriteAccess pAcc(aBmp);
-        if ( pAcc == 0 )
+        if ( pAcc == nullptr )
             return false;
 
         if ( nDestBitsPerPixel <= 8 )

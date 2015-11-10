@@ -68,7 +68,7 @@ bool PictFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return iptGraphicImport(aFileStream, aGraphic, NULL);
+    return iptGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void PictFilterTest::testCVEs()

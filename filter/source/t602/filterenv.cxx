@@ -37,7 +37,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL t602filter_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     OUString implName = OUString::createFromAscii( pImplName );
     if ( pServiceManager && implName.equals(T602ImportFilter_getImplementationName()) )

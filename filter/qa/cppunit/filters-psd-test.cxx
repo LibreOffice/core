@@ -54,7 +54,7 @@ bool PsdFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return ipdGraphicImport(aFileStream, aGraphic, NULL);
+    return ipdGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void PsdFilterTest::testCVEs()

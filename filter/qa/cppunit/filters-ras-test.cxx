@@ -54,7 +54,7 @@ bool RasFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return iraGraphicImport(aFileStream, aGraphic, NULL);
+    return iraGraphicImport(aFileStream, aGraphic, nullptr);
 }
 
 void RasFilterTest::testCVEs()

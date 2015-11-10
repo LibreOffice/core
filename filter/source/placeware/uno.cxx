@@ -37,7 +37,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL placeware_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
 
     OUString implName = OUString::createFromAscii( pImplName );
     if ( pServiceManager && implName.equals(PlaceWareExportFilter_getImplementationName()) )

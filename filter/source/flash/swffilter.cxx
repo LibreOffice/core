@@ -369,7 +369,7 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
 
     fullpath = swfdirpath + STR("/backgroundconfig.txt");
 
-    oslFileHandle xBackgroundConfig( 0 );
+    oslFileHandle xBackgroundConfig( nullptr );
 
     // AS: Only export the background config if we're exporting all of the pages, otherwise we'll
     //  screw it up.
@@ -454,7 +454,7 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
 
 bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDescriptor)
 {
-    Reference < XOutputStream > xOutputStream = findPropertyValue<Reference<XOutputStream> >(aDescriptor, "OutputStream", 0);
+    Reference < XOutputStream > xOutputStream = findPropertyValue<Reference<XOutputStream> >(aDescriptor, "OutputStream", nullptr);
     Sequence< PropertyValue > aFilterData;
 
     if (!xOutputStream.is() )

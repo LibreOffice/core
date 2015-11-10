@@ -301,7 +301,7 @@ public:
     // control tags
 
     /** inserts a place shape tag into the movie stream or the current sprite */
-    void placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y, sal_uInt16 nClipDepth = 0, const char* pName = NULL );
+    void placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y, sal_uInt16 nClipDepth = 0, const char* pName = nullptr );
 
     /** inserts a remove shape tag into the movie stream or the current sprite */
     void removeShape( sal_uInt16 nDepth );
@@ -348,7 +348,7 @@ private:
     void Impl_writeText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth );
     void Impl_writeText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor );
     void Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
-    void Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL );
+    void Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = nullptr );
     void Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY );
     void Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY );
     bool Impl_writeFilling( SvtGraphicFill& rFilling );

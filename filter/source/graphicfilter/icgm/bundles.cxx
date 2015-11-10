@@ -84,9 +84,9 @@ FillBundle& FillBundle::operator=( FillBundle& rSource )
 };
 
 FontEntry::FontEntry() :
-    pFontName       ( NULL ),
+    pFontName       ( nullptr ),
     eCharSetType    ( CST_CCOMPLETE ),
-    pCharSetValue   ( NULL ),
+    pCharSetValue   ( nullptr ),
     nFontType       ( 0 )
 {
 }
@@ -148,7 +148,7 @@ FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
     sal_uInt32 nInd = nIndex;
     if ( nInd )
         nInd--;
-    return ( nInd < aFontEntryList.size() ) ? aFontEntryList[ nInd ] : NULL;
+    return ( nInd < aFontEntryList.size() ) ? aFontEntryList[ nInd ] : nullptr;
 }
 
 
@@ -167,7 +167,7 @@ static sal_Int8* ImplSearchEntry( sal_Int8* pSource, sal_Int8 const * pDest, sal
             return pSource;
         pSource++;
     }
-    return NULL;
+    return nullptr;
 }
 
 void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )

@@ -57,7 +57,7 @@ PGMWriter::PGMWriter(SvStream &rStream)
     : m_rOStm(rStream)
     , mbStatus(true)
     , mnMode(0)
-    , mpAcc(NULL)
+    , mpAcc(nullptr)
     , mnWidth(0)
     , mnHeight(0)
 {
