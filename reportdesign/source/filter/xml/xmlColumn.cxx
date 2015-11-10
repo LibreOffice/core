@@ -86,7 +86,7 @@ SvXMLImportContext* OXMLRowColumn::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     ORptFilter& rImport = GetOwnImport();
     const SvXMLTokenMap&    rTokenMap   = rImport.GetColumnTokenMap();
 
@@ -108,7 +108,7 @@ SvXMLImportContext* OXMLRowColumn::CreateChildContext(
             break;
         case XML_TOK_COV_CELL:
             m_pContainer->incrementColumnIndex();
-            m_pContainer->addCell(NULL);
+            m_pContainer->addCell(nullptr);
             break;
         default:
             break;

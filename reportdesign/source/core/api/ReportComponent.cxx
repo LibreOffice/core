@@ -128,7 +128,7 @@ OReportComponentProperties::~OReportComponentProperties()
 {
     if ( m_xProxy.is() )
     {
-        m_xProxy->setDelegator( NULL );
+        m_xProxy->setDelegator( nullptr );
         m_xProxy.clear();
     }
 }

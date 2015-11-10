@@ -116,8 +116,8 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
     : m_pParent(_pParent)
     , m_rView(_pParent->getSectionView())
-    , m_xOverlappingObj(NULL)
-    , m_pOverlappingObj(NULL)
+    , m_xOverlappingObj(nullptr)
+    , m_pOverlappingObj(nullptr)
     , m_nOverlappedControlColor(0)
     , m_nOldColor(0)
     , m_bSelectionMode(false)
@@ -194,7 +194,7 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
             SdrHdl* pHdl = m_rView.PickHandle(m_aMDPos);
 
             // if selected object was hit, drag object
-            if ( pHdl!=NULL || m_rView.IsMarkedHit(m_aMDPos) )
+            if ( pHdl!=nullptr || m_rView.IsMarkedHit(m_aMDPos) )
             {
                 bHandled = true;
                 m_pParent->CaptureMouse();
@@ -207,11 +207,11 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
         SdrPageView* pPV = m_rView.GetSdrPageView();
         SdrViewEvent aVEvt;
         if ( m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt) != SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() )
-            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(nullptr);
         if ( aVEvt.pRootObj )
             m_rView.MarkObj(aVEvt.pRootObj, pPV);
         else
-            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(nullptr);
 
         bHandled = true;
     }
@@ -295,7 +295,7 @@ bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     if ( pHdl )
                         ((SdrHdlList&)rHdlList).ResetFocusHdl();
                     else
-                        m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
+                        m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(nullptr);
 
                     deactivateOle(true);
                     bReturn = false;
@@ -490,8 +490,8 @@ void DlgEdFunc::unColorizeOverlappedObj()
             OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
 
             lcl_setColorOfObject(m_xOverlappingObj, m_nOldColor);
-            m_xOverlappingObj = NULL;
-            m_pOverlappingObj = NULL;
+            m_xOverlappingObj = nullptr;
+            m_pOverlappingObj = nullptr;
         }
     }
 }
@@ -584,15 +584,15 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
     {
         // no drag rect, we have to check every single select rect
         const SdrDragStat& rDragStat = m_rView.GetDragStat();
-        if (rDragStat.GetDragMethod() != NULL)
+        if (rDragStat.GetDragMethod() != nullptr)
         {
             SdrObjListIter aIter(*m_pParent->getPage(),IM_DEEPNOGROUPS);
-            SdrObject* pObjIter = NULL;
+            SdrObject* pObjIter = nullptr;
             // loop through all marked objects and check if there new rect overlapps an old one.
-            while( (pObjIter = aIter.Next()) != NULL && !bIsSetPoint)
+            while( (pObjIter = aIter.Next()) != nullptr && !bIsSetPoint)
             {
                 if ( m_rView.IsObjMarked(pObjIter)
-                     && (dynamic_cast<OUnoObject*>(pObjIter) != NULL || dynamic_cast<OOle2Obj*>(pObjIter) != NULL) )
+                     && (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr) )
                 {
                     Rectangle aNewRect = pObjIter->GetLastBoundRect();
                     long nDx = rDragStat.IsHorFixed() ? 0 : rDragStat.GetDX();
@@ -780,7 +780,7 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
         }
         bIsSetPoint = setMovementPointer(rMEvt);
         ForceScroll(aPos);
-        m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPos,&m_rView, m_rView.GetDragMethod() == NULL, false);
+        m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPos,&m_rView, m_rView.GetDragMethod() == nullptr, false);
     }
 
     if ( !bIsSetPoint )
@@ -816,7 +816,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     {
         // if not multi selection, unmark all
         if ( !rMEvt.IsShift() )
-            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(nullptr);
 
         if ( m_rView.MarkObj(m_aMDPos) && rMEvt.IsLeft() )
         {
@@ -832,7 +832,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         if( !rMEvt.IsShift() )
-            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(nullptr);
 
         if ( rMEvt.GetClicks() == 1 )
         {
@@ -886,7 +886,7 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     {
         bIsSetPoint = setMovementPointer(rMEvt);
         ForceScroll(aPnt);
-        if (m_rView.GetDragMethod()==NULL)
+        if (m_rView.GetDragMethod()==nullptr)
         {
             // create a selection
             m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, true, false);

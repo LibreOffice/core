@@ -1523,8 +1523,8 @@ bool OReportDefinition::WriteThroughComponent(
     const uno::Sequence<beans::PropertyValue> & rMediaDesc,
     const uno::Reference<embed::XStorage>& _xStorageToSaveTo)
 {
-    OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
-    OSL_ENSURE( NULL != pServiceName, "Need service name!" );
+    OSL_ENSURE( nullptr != pStreamName, "Need stream name!" );
+    OSL_ENSURE( nullptr != pServiceName, "Need service name!" );
     try
     {
         uno::Reference<embed::XStorage> xMyStorage = _xStorageToSaveTo;
@@ -1582,7 +1582,7 @@ bool OReportDefinition::WriteThroughComponent(
 {
     OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
     OSL_ENSURE( xComponent.is(), "Need component!" );
-    OSL_ENSURE( NULL != pServiceName, "Need component name!" );
+    OSL_ENSURE( nullptr != pServiceName, "Need component name!" );
 
     // get component
     uno::Reference< xml::sax::XWriter > xSaxWriter(
@@ -2011,7 +2011,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OReportDefinition::getImplementationId(  ) th
 
 uno::Sequence< sal_Int8 > OReportDefinition::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -2480,7 +2480,7 @@ uno::Reference< embed::XStorage > OReportDefinition::getStorage() const
 uno::Reference< task::XInteractionHandler > OReportDefinition::getInteractionHandler() const
 {
     uno::Reference< task::XInteractionHandler > xRet(
-        task::InteractionHandler::createWithParent(m_aProps->m_xContext, 0), uno::UNO_QUERY_THROW);
+        task::InteractionHandler::createWithParent(m_aProps->m_xContext, nullptr), uno::UNO_QUERY_THROW);
     return xRet;
 }
 

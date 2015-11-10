@@ -105,7 +105,7 @@ void SAL_CALL OFunctions::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexO
         ::std::advance(aPos,Index);
         xFunction = *aPos;
         m_aFunctions.erase(aPos);
-        xFunction->setParent(NULL);
+        xFunction->setParent(nullptr);
     }
     container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::makeAny(Index), uno::makeAny(xFunction), uno::Any());
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved,aEvent);

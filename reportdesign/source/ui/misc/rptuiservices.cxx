@@ -42,20 +42,20 @@ namespace
 
 cppu::ImplementationEntry entries[] = {
     { &OReportController::create, &OReportController::getImplementationName_Static, &OReportController::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OToolboxController::create, &OToolboxController::getImplementationName_Static, &OToolboxController::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OStatusbarController::create, &OStatusbarController::getImplementationName_Static, &OStatusbarController::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &DefaultComponentInspectorModel::create, &DefaultComponentInspectorModel::getImplementationName_Static, &DefaultComponentInspectorModel::getSupportedServiceNames_static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &ReportComponentHandler::create, &ReportComponentHandler::getImplementationName_Static, &ReportComponentHandler::getSupportedServiceNames_static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &GeometryHandler::create, &GeometryHandler::getImplementationName_Static, &GeometryHandler::getSupportedServiceNames_static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &DataProviderHandler::create, &DataProviderHandler::getImplementationName_Static, &DataProviderHandler::getSupportedServiceNames_static,
-        &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
+        &cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 }
 

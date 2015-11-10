@@ -113,7 +113,7 @@ sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
 
 SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportComponent>& _xComponent)
 {
-    SdrObject* pNewObj = NULL;
+    SdrObject* pNewObj = nullptr;
     sal_uInt16 nType = OObjectBase::getObjectType(_xComponent);
     switch( nType )
     {

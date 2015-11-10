@@ -268,7 +268,7 @@ OUString OReportEngineJFree::getNewOutputName()
 // Methods
 uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentModel( ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException, std::exception)
 {
-    return createDocumentAlive(NULL,true);
+    return createDocumentAlive(nullptr,true);
 }
 
 uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException, std::exception)

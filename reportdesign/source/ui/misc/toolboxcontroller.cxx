@@ -87,7 +87,7 @@ Reference< XInterface > OToolboxController::create(Reference< XComponentContext 
 }
 
 OToolboxController::OToolboxController(const Reference< XComponentContext >& _rxORB)
-    : m_pToolbarController(NULL)
+    : m_pToolbarController(nullptr)
     ,m_nToolBoxId(1)
     ,m_nSlotId(0)
 {

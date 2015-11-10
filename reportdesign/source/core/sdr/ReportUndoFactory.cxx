@@ -29,11 +29,11 @@ SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCo
 {
     OObjectBase* pObj = dynamic_cast<OObjectBase*>(&rObject);
     if ( !pObj )
-        return NULL;
+        return nullptr;
     uno::Reference< report::XReportComponent> xReportComponent = pObj->getReportComponent();
     uno::Reference< report::XSection> xSection = pObj->getSection();
     uno::Reference< report::XGroup> xGroup = xSection->getGroup();
-    SdrUndoAction* pUndo = NULL;
+    SdrUndoAction* pUndo = nullptr;
     if ( xGroup.is() )
         pUndo = new OUndoGroupSectionAction(*rObject.GetModel(),_eAction,OGroupHelper::getMemberFunction(xSection),xGroup,xReportComponent,_nCommentId);
     else

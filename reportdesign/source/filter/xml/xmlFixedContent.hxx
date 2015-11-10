@@ -48,7 +48,7 @@ namespace rptxml
                     const OUString& rLName
                     ,OXMLCell& _rCell
                     ,OXMLTable* _pContainer
-                    ,OXMLFixedContent* _pInP = NULL);
+                    ,OXMLFixedContent* _pInP = nullptr);
         virtual ~OXMLFixedContent();
 
         // This method is called for all characters that are contained in the

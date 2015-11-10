@@ -244,7 +244,7 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = 0;
+    SvXMLStyleContext *pStyle = nullptr;
 
     switch( nFamily )
     {

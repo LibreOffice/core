@@ -87,7 +87,7 @@ uno::Reference<report::XSection> OSection::createOSection(
     bool const bPageSection)
 {
     OSection *const pNew =
-        new OSection(xParentDef, 0, context, lcl_getAbsent(bPageSection));
+        new OSection(xParentDef, nullptr, context, lcl_getAbsent(bPageSection));
     pNew->init();
     return pNew;
 }
@@ -98,7 +98,7 @@ uno::Reference<report::XSection> OSection::createOSection(
     bool const)
 {
     OSection *const pNew =
-        new OSection(0, xParentGroup, context, lcl_getGroupAbsent());
+        new OSection(nullptr, xParentGroup, context, lcl_getGroupAbsent());
     pNew->init();
     return pNew;
 }
@@ -548,7 +548,7 @@ OSection::group(uno::Reference< drawing::XShapes > const& xShapes)
     // no lock because m_xDrawPage_ShapeGrouper is const
     return (m_xDrawPage_ShapeGrouper.is())
         ? m_xDrawPage_ShapeGrouper->group(xShapes)
-        : 0;
+        : nullptr;
 }
 void SAL_CALL
 OSection::ungroup(uno::Reference<drawing::XShapeGroup> const& xGroup)
@@ -567,7 +567,7 @@ uno::Reference<container::XNameContainer> SAL_CALL OSection::getForms()
     // no lock because m_xDrawPage_FormSupplier is const
     return (m_xDrawPage_FormSupplier.is())
         ? m_xDrawPage_FormSupplier->getForms()
-        : 0;
+        : nullptr;
 }
 // XFormsSupplier2
 sal_Bool SAL_CALL OSection::hasForms() throw (uno::RuntimeException, std::exception)
@@ -590,7 +590,7 @@ sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId ) throw 
 
 OSection* OSection::getImplementation( const uno::Reference< uno::XInterface >& _rxComponent )
 {
-    OSection* pContent( NULL );
+    OSection* pContent( nullptr );
 
     uno::Reference< lang::XUnoTunnel > xUnoTunnel( _rxComponent, uno::UNO_QUERY );
     if ( xUnoTunnel.is() )
@@ -601,7 +601,7 @@ OSection* OSection::getImplementation( const uno::Reference< uno::XInterface >& 
 
 uno::Sequence< sal_Int8 > OSection::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = 0;
+    static ::cppu::OImplementationId * pId = nullptr;
     if (! pId)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

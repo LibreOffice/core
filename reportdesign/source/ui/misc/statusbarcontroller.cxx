@@ -100,7 +100,7 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
             }
         }
 
-        SfxStatusBarControl *pController = 0;
+        SfxStatusBarControl *pController = nullptr;
         if ( m_aCommandURL == ".uno:ZoomSlider" )
         {
             pController = new SvxZoomSliderControl(m_nSlotId = SID_ATTR_ZOOMSLIDER,m_nId,*pStatusBar);

@@ -122,7 +122,7 @@ SvXMLImportContext* OXMLControlProperty::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     ORptFilter& rImport = GetOwnImport();
     const SvXMLTokenMap&    rTokenMap   = rImport.GetControlPropertyElemTokenMap();
 

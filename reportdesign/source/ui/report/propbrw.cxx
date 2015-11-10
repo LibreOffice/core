@@ -94,7 +94,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
           :DockingWindow(pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
           ,m_xORB(_xORB)
           ,m_pDesignView(_pDesignView)
-          ,m_pView( NULL )
+          ,m_pView( nullptr )
           ,m_bInitialStateChange(true)
 {
 
@@ -223,10 +223,10 @@ void PropBrw::implDetachController()
     implSetNewObject(  );
 
     if ( m_xMeAsFrame.is() )
-        m_xMeAsFrame->setComponent( NULL, NULL );
+        m_xMeAsFrame->setComponent( nullptr, nullptr );
 
     if ( m_xBrowserController.is() )
-        m_xBrowserController->attachFrame( NULL );
+        m_xBrowserController->attachFrame( nullptr );
 
     m_xMeAsFrame.clear();
     m_xBrowserController.clear();
@@ -297,7 +297,7 @@ uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const Sdr
         if (pCurrent->IsGroupObject())
         {
             pGroupIterator.reset(new SdrObjListIter(*pCurrent->GetSubList()));
-            pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
+            pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : nullptr;
         }
 
         while (pCurrent)
@@ -307,7 +307,7 @@ uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const Sdr
                 aSets.push_back(CreateComponentPair(pObj));
 
             // next element
-            pCurrent = pGroupIterator.get() && pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
+            pCurrent = pGroupIterator.get() && pGroupIterator->IsMore() ? pGroupIterator->Next() : nullptr;
         }
     }
     return uno::Sequence< Reference<uno::XInterface> >(aSets.data(), aSets.size());
@@ -477,14 +477,14 @@ void PropBrw::Update( OSectionView* pNewView )
         if ( m_pView )
         {
             EndListening( *(m_pView->GetModel()) );
-            m_pView = NULL;
+            m_pView = nullptr;
         }
 
         // set focus on initialization
         if ( m_bInitialStateChange )
         {
             // if we're just newly created, we want to have the focus
-            PostUserEvent( LINK( this, PropBrw, OnAsyncGetFocus ), NULL, true );
+            PostUserEvent( LINK( this, PropBrw, OnAsyncGetFocus ), nullptr, true );
             m_bInitialStateChange = false;
             // and additionally, we want to show the page which was active during
             // our previous incarnation
@@ -553,7 +553,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
             if ( m_pView )
             {
                 EndListening( *(m_pView->GetModel()) );
-                m_pView = NULL;
+                m_pView = nullptr;
             }
 
             uno::Reference< uno::XInterface> xTemp(CreateComponentPair(_xReportComponent,_xReportComponent));

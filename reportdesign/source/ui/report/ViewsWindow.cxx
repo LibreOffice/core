@@ -63,7 +63,7 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
     if ( bMoveAllowed )
     {
         Rectangle aNewRect = _aObjRect;
-        SdrObject* pOverlappedObj = NULL;
+        SdrObject* pOverlappedObj = nullptr;
         do
         {
             aNewRect = _aObjRect;
@@ -78,7 +78,7 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
                     aNewRect.Move(_nXMov,_nYMov);
                     break;
             }
-            if (dynamic_cast<OUnoObject*>(_pObj) != NULL || dynamic_cast<OOle2Obj*>(_pObj) != NULL)
+            if (dynamic_cast<OUnoObject*>(_pObj) != nullptr || dynamic_cast<OOle2Obj*>(_pObj) != nullptr)
             {
                 pOverlappedObj = isOver(aNewRect,*_pObj->GetPage(),*_pView,true,_pObj);
                 if ( pOverlappedObj && _pObj != pOverlappedObj )
@@ -161,7 +161,7 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
                     _nYMov = nYTemp;
                 }
                 else
-                    pOverlappedObj = NULL;
+                    pOverlappedObj = nullptr;
             }
         }
         while ( pOverlappedObj && bMoveAllowed );
@@ -424,7 +424,7 @@ OSectionWindow* OViewsWindow::getSectionWindow(const uno::Reference< report::XSe
 {
     OSL_ENSURE(_xSection.is(),"Section is NULL!");
 
-    OSectionWindow* pSectionWindow = NULL;
+    OSectionWindow* pSectionWindow = nullptr;
     TSectionsMap::const_iterator aIter = m_aSections.begin();
     TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (; aIter != aEnd ; ++aIter)
@@ -442,7 +442,7 @@ OSectionWindow* OViewsWindow::getSectionWindow(const uno::Reference< report::XSe
 
 OSectionWindow* OViewsWindow::getMarkedSection(NearSectionAccess nsa) const
 {
-    OSectionWindow* pRet = NULL;
+    OSectionWindow* pRet = nullptr;
     TSectionsMap::const_iterator aIter = m_aSections.begin();
     TSectionsMap::const_iterator aEnd = m_aSections.end();
     sal_uInt32 nCurrentPosition = 0;
@@ -460,7 +460,7 @@ OSectionWindow* OViewsWindow::getMarkedSection(NearSectionAccess nsa) const
                 if (nCurrentPosition > 0)
                 {
                     pRet = (*(--aIter));
-                    if (pRet == 0)
+                    if (pRet == nullptr)
                     {
                         pRet = (*m_aSections.begin());
                     }
@@ -478,7 +478,7 @@ OSectionWindow* OViewsWindow::getMarkedSection(NearSectionAccess nsa) const
                 if ((nCurrentPosition + 1) < nSize)
                 {
                     pRet = *(++aIter);
-                    if (pRet == 0)
+                    if (pRet == nullptr)
                     {
                         pRet = (*(--aEnd));
                     }
@@ -615,7 +615,7 @@ OViewsWindow::TSectionsMap::iterator OViewsWindow::getIteratorAtPos(sal_uInt16 _
 
 void OViewsWindow::setMarked(OSectionView* _pSectionView, bool _bMark)
 {
-    OSL_ENSURE(_pSectionView != NULL,"SectionView is NULL!");
+    OSL_ENSURE(_pSectionView != nullptr,"SectionView is NULL!");
     if ( _pSectionView )
         setMarked(_pSectionView->getReportSection()->getSection(),_bMark);
 }
@@ -656,7 +656,7 @@ void OViewsWindow::setMarked(const uno::Sequence< uno::Reference< report::XRepor
             if ( pSectionWindow )
             {
                 SvxShape* pShape = SvxShape::getImplementation( *pIter );
-                SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
+                SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
                 OSL_ENSURE( pObject, "OViewsWindow::setMarked: no SdrObject for the shape!" );
                 if ( pObject )
                     pSectionWindow->getReportSection().getSectionView().MarkObj( pObject, pSectionWindow->getReportSection().getSectionView().GetSdrPageView(), !_bMark );
@@ -951,7 +951,7 @@ sal_uInt16 OViewsWindow::getPosition(const OSectionWindow* _pSectionWindow) cons
 
 OSectionWindow* OViewsWindow::getSectionWindow(const sal_uInt16 _nPos) const
 {
-    OSectionWindow* aReturn = NULL;
+    OSectionWindow* aReturn = nullptr;
 
     if ( _nPos < m_aSections.size() )
         aReturn = m_aSections[_nPos];
@@ -1199,7 +1199,7 @@ void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
 
 OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pSection,Point& _rPnt)
 {
-    OSectionView* pSection = NULL;
+    OSectionView* pSection = nullptr;
     sal_Int32 nCount = 0;
     TSectionsMap::iterator aIter = m_aSections.begin();
     const TSectionsMap::iterator aEnd = m_aSections.end();
@@ -1517,7 +1517,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
             const SdrHdlList& rHdlList = rView.GetHdlList();
             SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
-            if ( pHdl == 0 )
+            if ( pHdl == nullptr )
             {
                 // no handle selected
                 if ( rView.IsMoveAllowed() )
@@ -1552,7 +1552,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                         for (size_t i = 0; !bCheck && i < rMarkList.GetMarkCount(); ++i )
                         {
                             SdrMark* pMark = rMarkList.GetMark(i);
-                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL|| dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
+                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != nullptr|| dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
                         }
 
 
@@ -1597,8 +1597,8 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                                     }
                                     pOverlapped = isOver(aMarkRect,*rReportSection.getPage(),rView);
                                 }
-                                while(pOverlapped != NULL);
-                                if (pOverlapped != NULL)
+                                while(pOverlapped != nullptr);
+                                if (pOverlapped != nullptr)
                                     break;
                             }
                         }
@@ -1621,7 +1621,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                     const SdrDragStat& rDragStat = rView.GetDragStat();
 
                     // start dragging
-                    rView.BegDragObj( aStartPoint, 0, pHdl, 0 );
+                    rView.BegDragObj( aStartPoint, nullptr, pHdl, 0 );
 
                     if ( rView.IsDragObj() )
                     {
@@ -1640,7 +1640,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                         for (size_t i = 0; !bCheck && i < rMarkList.GetMarkCount(); ++i )
                         {
                             SdrMark* pMark = rMarkList.GetMark(i);
-                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL || dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj()) != NULL;
+                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != nullptr || dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj()) != nullptr;
                             if ( bCheck )
                                 aNewRect.Union(pMark->GetMarkedSdrObj()->GetLastBoundRect());
                         }

@@ -41,7 +41,7 @@ namespace rptui
         sal_Int32 nPatternIndex = sExpression.indexOf( '$' );
         while ( nPatternIndex > -1 )
         {
-            const OUString* pReplace = NULL;
+            const OUString* pReplace = nullptr;
             switch ( sExpression[ nPatternIndex + 1 ] )
             {
             case '$': pReplace = &_rFieldDataSource; break;
@@ -50,7 +50,7 @@ namespace rptui
             default: break;
             }
 
-            if ( pReplace == NULL )
+            if ( pReplace == nullptr )
             {
                 OSL_FAIL( "ConditionalExpression::assembleExpression: illegal pattern!" );
                 break;

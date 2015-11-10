@@ -220,8 +220,8 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
         ,m_aTimerTriggered(-1,-1)
         ,m_aDropActionType( DA_SCROLLUP )
         ,m_rController(_rController)
-        ,m_pMasterReport(NULL)
-        ,m_pDragedEntry(NULL)
+        ,m_pMasterReport(nullptr)
+        ,m_pDragedEntry(nullptr)
         ,m_nTimerCounter( DROP_ACTION_TIMER_INITIAL_TICKS )
 {
     set_hexpand(true);
@@ -280,13 +280,13 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
     case CommandEventId::ContextMenu:
         {
             // the point that was clicked on
-            SvTreeListEntry* ptClickedOn = NULL;
+            SvTreeListEntry* ptClickedOn = nullptr;
             ::Point aWhere;
             if (rEvt.IsMouseEvent())
             {
                 aWhere = rEvt.GetMousePosPixel();
                 ptClickedOn = GetEntry(aWhere);
-                if (ptClickedOn == NULL)
+                if (ptClickedOn == nullptr)
                     break;
                 if ( !IsSelected(ptClickedOn) )
                 {
@@ -507,7 +507,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
 
 SvTreeListEntry* NavigatorTree::insertEntry(const OUString& _sName,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData)
 {
-    SvTreeListEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = nullptr;
     if ( _nImageId )
     {
         const Image aImage( m_aNavigatorImages.GetImage( _nImageId ) );
@@ -550,7 +550,7 @@ void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>&
 
 SvTreeListEntry* NavigatorTree::find(const uno::Reference< uno::XInterface >& _xContent)
 {
-    SvTreeListEntry* pRet = NULL;
+    SvTreeListEntry* pRet = nullptr;
     if ( _xContent.is() )
     {
         SvTreeListEntry* pCurrent = First();

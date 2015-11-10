@@ -57,7 +57,7 @@ ImportDocumentHandler::~ImportDocumentHandler()
 {
     if ( m_xProxy.is() )
     {
-        m_xProxy->setDelegator( NULL );
+        m_xProxy->setDelegator( nullptr );
         m_xProxy.clear();
     }
 }
@@ -203,7 +203,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
         catch(uno::Exception&)
         {
         }
-        m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_CHART),NULL);
+        m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_CHART),nullptr);
         bExport = false;
         m_bImportedChart = true;
     }
@@ -367,7 +367,7 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
         xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
     }
 
-    m_aArguments = m_xDatabaseDataProvider->detectArguments(NULL);
+    m_aArguments = m_xDatabaseDataProvider->detectArguments(nullptr);
 
     uno::Reference< reflection::XProxyFactory > xProxyFactory = reflection::ProxyFactory::create( m_xContext );
     m_xProxy = xProxyFactory->createProxy(m_xDelegatee.get());

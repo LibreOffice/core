@@ -41,8 +41,8 @@ namespace rptui
 {
 
 
-Image*  OStartMarker::s_pDefCollapsed       = NULL;
-Image*  OStartMarker::s_pDefExpanded        = NULL;
+Image*  OStartMarker::s_pDefCollapsed       = nullptr;
+Image*  OStartMarker::s_pDefExpanded        = nullptr;
 oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
 

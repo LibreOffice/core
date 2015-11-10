@@ -173,7 +173,7 @@ namespace rptui
                 if ( pUnoObj ) // this doesn't need to be done for shapes
                 {
                     OSectionWindow* pSectionWindow = m_rReportController.getSectionWindow(xSection);
-                    if (pSectionWindow != 0)
+                    if (pSectionWindow != nullptr)
                     {
                         OReportSection& aOutputDevice = pSectionWindow->getReportSection(); // OutputDevice
                         OSectionView& aSdrView = aOutputDevice.getSectionView();            // SdrView

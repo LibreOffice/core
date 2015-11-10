@@ -45,24 +45,24 @@ namespace
 
 cppu::ImplementationEntry entries[] = {
     { &OReportDefinition::create, &OReportDefinition::getImplementationName_Static, &OReportDefinition::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OFormattedField::create, &OFormattedField::getImplementationName_Static, &OFormattedField::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OFixedText::create, &OFixedText::getImplementationName_Static, &OFixedText::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OImageControl::create, &OImageControl::getImplementationName_Static, &OImageControl::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OFormatCondition::create, &OFormatCondition::getImplementationName_Static, &OFormatCondition::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OReportEngineJFree::create, &OReportEngineJFree::getImplementationName_Static, &OReportEngineJFree::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OFunction::create, &OFunction::getImplementationName_Static, &OFunction::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OShape::create, &OShape::getImplementationName_Static, &OShape::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, 0, 0 },
+        &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OFixedLine::create, &OFixedLine::getImplementationName_Static, &OFixedLine::getSupportedServiceNames_Static,
-    &cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
+    &cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 }
 

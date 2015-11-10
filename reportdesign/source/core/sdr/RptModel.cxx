@@ -48,8 +48,8 @@ TYPEINIT1(OReportModel,SdrModel);
 
 
 OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition) :
-    SdrModel(SvtPathOptions().GetPalettePath(),NULL,_pReportDefinition, false, false)
-    ,m_pController(NULL)
+    SdrModel(SvtPathOptions().GetPalettePath(),nullptr,_pReportDefinition, false, false)
+    ,m_pController(nullptr)
     ,m_pReportDefinition(_pReportDefinition)
 {
     m_pUndoEnv = new OXUndoEnvironment(*this);
@@ -66,8 +66,8 @@ OReportModel::~OReportModel()
 
 void OReportModel::detachController()
 {
-    m_pReportDefinition = NULL;
-    m_pController = NULL;
+    m_pReportDefinition = nullptr;
+    m_pController = nullptr;
     m_pUndoEnv->EndListening( *this );
     ClearUndoBuffer();
     m_pUndoEnv->Clear(OXUndoEnvironment::Accessor());
@@ -76,7 +76,7 @@ void OReportModel::detachController()
 SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     OSL_FAIL("Who called me!");
-    return NULL;
+    return nullptr;
 }
 
 
@@ -113,7 +113,7 @@ OReportPage* OReportModel::createNewPage(const uno::Reference< report::XSection 
 
 OReportPage* OReportModel::getPage(const uno::Reference< report::XSection >& _xSection)
 {
-    OReportPage* pPage = NULL;
+    OReportPage* pPage = nullptr;
     sal_uInt16 nCount = GetPageCount();
     for (sal_uInt16 i = 0; i < nCount && !pPage ; ++i)
     {

@@ -178,7 +178,7 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
 
 ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> addStyleListener(const uno::Reference< report::XReportDefinition >& _xReportDefinition,::comphelper::OPropertyChangeListener* _pListener)
 {
-    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> pRet = NULL;
+    ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> pRet = nullptr;
     if ( _xReportDefinition.is() )
     {
         uno::Reference<beans::XPropertySet> xPageStyle(getUsedStyle(_xReportDefinition),uno::UNO_QUERY);
@@ -377,7 +377,7 @@ namespace
         sal_uInt16 _nFont, sal_uInt16 _nFontHeight,sal_uInt16 _nPosture, sal_uInt16 _nWeight)
     {
         vcl::Font aNewFont( _rOriginalFont );
-        const SfxPoolItem* pItem( NULL );
+        const SfxPoolItem* pItem( nullptr );
         if ( SfxItemState::SET == _rItemSet.GetItemState( _nFont,true,&pItem) && dynamic_cast< const SvxFontItem *>( pItem ) !=  nullptr)
         {
             const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pItem);
@@ -440,7 +440,7 @@ namespace
 
     void lcl_itemsToCharProperties( const vcl::Font& _rOriginalControlFont,const vcl::Font& _rOriginalControlFontAsian,const vcl::Font& _rOriginalControlFontComplex, const SfxItemSet& _rItemSet, uno::Sequence< beans::NamedValue >& _out_rProperties )
     {
-        const SfxPoolItem* pItem( NULL );
+        const SfxPoolItem* pItem( nullptr );
 
         // create an AWT font
         awt::FontDescriptor aAwtFont;
@@ -834,7 +834,7 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
 void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
-    SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : NULL;
+    SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : nullptr;
     if ( pSystemWindow )
     {
         rMemFunc( pSystemWindow->GetTaskPaneList(), _pToRegister );
@@ -843,22 +843,22 @@ void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const 
 
 SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, bool _bAllObjects, SdrObject* _pIgnore, sal_Int16 _nIgnoreType)
 {
-    SdrObject* pOverlappedObj = NULL;
+    SdrObject* pOverlappedObj = nullptr;
     SdrObjListIter aIter(_rPage,IM_DEEPNOGROUPS);
-    SdrObject* pObjIter = NULL;
+    SdrObject* pObjIter = nullptr;
 
-    while( !pOverlappedObj && (pObjIter = aIter.Next()) != NULL )
+    while( !pOverlappedObj && (pObjIter = aIter.Next()) != nullptr )
     {
         if ( _pIgnore != pObjIter
             && (_bAllObjects || !_rView.IsObjMarked(pObjIter))
-            && (dynamic_cast<OUnoObject*>(pObjIter) != NULL || dynamic_cast<OOle2Obj*>(pObjIter) != NULL))
+            && (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr))
         {
             if (_nIgnoreType == ISOVER_IGNORE_CUSTOMSHAPES && pObjIter->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
             {
                 continue;
             }
 
-            if (dynamic_cast<OUnoObject*>(pObjIter) != NULL || dynamic_cast<OOle2Obj*>(pObjIter) != NULL)
+            if (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr)
             {
                 Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
                 if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
@@ -884,11 +884,11 @@ bool checkArrayForOccurrence(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int
 
 SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj * _pIgnoreList[], int _nIgnoreListLength)
 {
-    SdrObject* pOverlappedObj = NULL;
+    SdrObject* pOverlappedObj = nullptr;
     SdrObjListIter aIter(_rPage,IM_DEEPNOGROUPS);
-    SdrObject* pObjIter = NULL;
+    SdrObject* pObjIter = nullptr;
 
-    while( !pOverlappedObj && (pObjIter = aIter.Next()) != NULL )
+    while( !pOverlappedObj && (pObjIter = aIter.Next()) != nullptr )
     {
         if (checkArrayForOccurrence(pObjIter, _pIgnoreList, _nIgnoreListLength))
         {
@@ -896,7 +896,7 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
         }
 
         if ( (_bAllObjects || !_rView.IsObjMarked(pObjIter))
-             && (dynamic_cast<OUnoObject*>(pObjIter) != NULL || dynamic_cast<OOle2Obj*>(pObjIter) != NULL) )
+             && (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr) )
         {
             Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
             if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
@@ -909,8 +909,8 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
 
 SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView,bool _bUnMarkedObjects)
 {
-    SdrObject* pOverlappedObj = NULL;
-    if (dynamic_cast<OUnoObject*>(_pObj) != NULL || dynamic_cast<OOle2Obj*>(_pObj) != NULL) // this doesn't need to be done for shapes
+    SdrObject* pOverlappedObj = nullptr;
+    if (dynamic_cast<OUnoObject*>(_pObj) != nullptr || dynamic_cast<OOle2Obj*>(_pObj) != nullptr) // this doesn't need to be done for shapes
     {
         Rectangle aRect = _pObj->GetCurrentBoundRect();
         pOverlappedObj = isOver(aRect,_rPage,_rView,_bUnMarkedObjects,_pObj);
@@ -977,7 +977,7 @@ void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,boo
     while ( bOverlapping )
     {
         SdrObject* pOverlappedObj = isOver(aRect,*_aReportSection.getPage(),rSectionView,true, _pControl);
-        bOverlapping = pOverlappedObj != NULL;
+        bOverlapping = pOverlappedObj != nullptr;
         if ( bOverlapping )
         {
             const Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();

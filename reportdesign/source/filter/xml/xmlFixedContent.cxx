@@ -112,7 +112,7 @@ OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
                 ,OXMLCell& _rCell
                 ,OXMLTable* _pContainer
                 ,OXMLFixedContent* _pInP) :
-    OXMLReportElementBase( rImport, nPrfx, rLName,NULL,_pContainer)
+    OXMLReportElementBase( rImport, nPrfx, rLName,nullptr,_pContainer)
 ,m_rCell(_rCell)
 ,m_pInP(_pInP)
 ,m_bFormattedField(false)

@@ -51,7 +51,7 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     ,m_aCornerWin( VclPtr<ScrollBarBox>::Create(this) )
     ,m_pParent(_pDesignView)
     ,m_aReportWindow(VclPtr<rptui::OReportWindow>::Create(this,m_pParent))
-    ,m_pReportDefinitionMultiPlexer(NULL)
+    ,m_pReportDefinitionMultiPlexer(nullptr)
 {
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
@@ -333,8 +333,8 @@ bool OScrollWindowHelper::Notify( NotifyEvent& rNEvt )
          (pCommandEvent->GetCommand() == CommandEventId::StartAutoScroll) ||
          (pCommandEvent->GetCommand() == CommandEventId::AutoScroll))) )
     {
-        ScrollBar* pHScrBar = NULL;
-        ScrollBar* pVScrBar = NULL;
+        ScrollBar* pHScrBar = nullptr;
+        ScrollBar* pVScrBar = nullptr;
         if ( m_aHScroll->IsVisible() )
             pHScrBar = m_aHScroll.get();
 

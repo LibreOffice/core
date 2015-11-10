@@ -174,7 +174,7 @@ namespace rptxml
                 const XMLPropertyState& /*rProperty*/,
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
-                const ::std::vector< XMLPropertyState >* /*pProperties*/ = 0,
+                const ::std::vector< XMLPropertyState >* /*pProperties*/ = nullptr,
                 sal_uInt32 /*nIdx*/ = 0 ) const override
         {
             // nothing to do here
@@ -512,7 +512,7 @@ void ORptExport::collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_I
 
 void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
 {
-    OSL_ENSURE(_xProp != NULL,"Section is NULL -> GPF");
+    OSL_ENSURE(_xProp != nullptr,"Section is NULL -> GPF");
     exportAutoStyle(_xProp);
 
     Reference<XReportDefinition> xReport = _xProp->getReportDefinition();

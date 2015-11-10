@@ -205,7 +205,7 @@ sal_Int32 ReadThroughComponent(
     ,const uno::Reference<beans::XPropertySet>& _xProp)
 {
     OSL_ENSURE( xStorage.is(), "Need storage!");
-    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");
 
     if ( xStorage.is() )
     {
@@ -222,7 +222,7 @@ sal_Int32 ReadThroughComponent(
                 // if no stream can be opened, return immediately with OK signal
 
                 // do we even have an alternative name?
-                if ( NULL == pCompatibilityStreamName )
+                if ( nullptr == pCompatibilityStreamName )
                     return 0;
 
                 // if so, does the stream exist?
@@ -627,7 +627,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
                                       const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetDocElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
@@ -648,7 +648,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                         pAutoStyle->FillPropertySet(getReportDefinition().get());
                     }
                 }
-                pContext = new OXMLReport( *this, nPrefix, rLocalName,xAttrList,getReportDefinition(),NULL );
+                pContext = new OXMLReport( *this, nPrefix, rLocalName,xAttrList,getReportDefinition(),nullptr );
             }
             break;
         case XML_TOK_DOC_STYLES:
@@ -1019,7 +1019,7 @@ void ORptFilter::insertFunction(const css::uno::Reference< css::report::XFunctio
 
 SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName,const uno::Reference<xml::sax::XAttributeList>&)
 {
-    SvXMLImportContext* pContext = NULL;
+    SvXMLImportContext* pContext = nullptr;
 
     if ( (getImportFlags() & SvXMLImportFlags::META) )
     {

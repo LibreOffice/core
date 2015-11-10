@@ -61,7 +61,7 @@ class OTaskWindow : public vcl::Window
 {
     VclPtr<PropBrw> m_pPropWin;
 public:
-    explicit OTaskWindow(vcl::Window* _pParent) : Window(_pParent),m_pPropWin(NULL){}
+    explicit OTaskWindow(vcl::Window* _pParent) : Window(_pParent),m_pPropWin(nullptr){}
     virtual ~OTaskWindow() { disposeOnce(); }
     virtual void dispose() override { m_pPropWin.clear(); vcl::Window::dispose(); }
 
@@ -89,10 +89,10 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     ,m_aSplitWin(VclPtr<SplitWindow>::Create(this))
     ,m_rReportController( _rController )
     ,m_aScrollWindow(VclPtr<rptui::OScrollWindowHelper>::Create(this))
-    ,m_pPropWin(NULL)
-    ,m_pAddField(NULL)
-    ,m_pCurrentView(NULL)
-    ,m_pReportExplorer(NULL)
+    ,m_pPropWin(nullptr)
+    ,m_pAddField(nullptr)
+    ,m_pCurrentView(nullptr)
+    ,m_pReportExplorer(nullptr)
     ,m_eMode( RPTUI_SELECT )
     ,m_eActObj( OBJ_NONE )
     ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
@@ -465,7 +465,7 @@ void ODesignView::showProperties(const uno::Reference< uno::XInterface>& _xRepor
         m_xReportComponent = _xReportComponent;
         if ( m_pCurrentView )
             m_aScrollWindow->setMarked(m_pCurrentView,false);
-        m_pCurrentView = NULL;
+        m_pCurrentView = nullptr;
         m_aMarkIdle.Start();
     }
 }
@@ -607,7 +607,7 @@ void ODesignView::setMarked(const uno::Reference< report::XSection>& _xSection,b
     if ( _bMark )
         UpdatePropertyBrowserDelayed(getMarkedSection()->getReportSection().getSectionView());
     else
-        m_pCurrentView = NULL;
+        m_pCurrentView = nullptr;
 }
 
 void ODesignView::setMarked(const uno::Sequence< uno::Reference< report::XReportComponent> >& _aShapes,bool _bMark)

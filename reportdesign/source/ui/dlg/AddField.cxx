@@ -165,8 +165,8 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent
             ,m_aInsertButton(VclPtr<PushButton>::Create(this, WB_TABSTOP|WB_CENTER))
             ,m_nCommandType(0)
             ,m_bEscapeProcessing(false)
-            ,m_pChangeListener(NULL)
-            ,m_pContainerListener(NULL)
+            ,m_pChangeListener(nullptr)
+            ,m_pContainerListener(nullptr)
 {
     SetHelpId( HID_RPT_FIELD_SEL_WIN );
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
@@ -291,7 +291,7 @@ namespace
         const OUString* pEntries = _rEntries.getConstArray();
         sal_Int32 nEntries = _rEntries.getLength();
         for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
-            _rListBox.InsertEntry( *pEntries,NULL,false,TREELIST_APPEND,new ColumnInfo(*pEntries) );
+            _rListBox.InsertEntry( *pEntries,nullptr,false,TREELIST_APPEND,new ColumnInfo(*pEntries) );
     }
     void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
     {
@@ -305,9 +305,9 @@ namespace
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( !sLabel.isEmpty() )
-                _rListBox.InsertEntry( sLabel,NULL,false,TREELIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( sLabel,nullptr,false,TREELIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
             else
-                _rListBox.InsertEntry( *pEntries,NULL,false,TREELIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( *pEntries,nullptr,false,TREELIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
         }
     }
 }
@@ -319,7 +319,7 @@ void OAddFieldWindow::Update()
 
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
-    m_pContainerListener = NULL;
+    m_pContainerListener = nullptr;
     m_xColumns.clear();
 
     try
@@ -378,7 +378,7 @@ void OAddFieldWindow::Update()
                     m_aActions->EnableItem(m_aActions->GetItemId(i));
                 }
             }
-                OnSelectHdl(NULL);
+                OnSelectHdl(nullptr);
         }
     }
     catch( const Exception& )
@@ -473,9 +473,9 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( !sLabel.isEmpty() )
-                m_pListBox->InsertEntry( sLabel,NULL,false,TREELIST_APPEND,new ColumnInfo(sName,sLabel) );
+                m_pListBox->InsertEntry( sLabel,nullptr,false,TREELIST_APPEND,new ColumnInfo(sName,sLabel) );
             else
-                m_pListBox->InsertEntry( sName,NULL,false,TREELIST_APPEND,new ColumnInfo(sName,sLabel) );
+                m_pListBox->InsertEntry( sName,nullptr,false,TREELIST_APPEND,new ColumnInfo(sName,sLabel) );
         }
     }
 }
@@ -501,7 +501,7 @@ IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnSelectHdl, SvTreeListBox*, void )
 
 IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnClickHdl, Button*, void )
 {
-    OnDoubleClickHdl(NULL);
+    OnDoubleClickHdl(nullptr);
 }
 
 IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnDoubleClickHdl, SvTreeListBox*, bool )
@@ -532,7 +532,7 @@ IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnSortAction, ToolBox*, void )
 {
     const sal_uInt16 nCurItem = m_aActions->GetCurItemId();
     if ( SID_ADD_CONTROL_PAIR == nCurItem )
-        OnDoubleClickHdl(NULL);
+        OnDoubleClickHdl(nullptr);
     else
     {
         if ( SID_FM_REMOVE_FILTER_SORT == nCurItem || !m_aActions->IsItemChecked(nCurItem) )

@@ -198,11 +198,11 @@ OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentD
                     BrowserMode::COLUMNSELECTION | BrowserMode::MULTISELECTION | BrowserMode::AUTOSIZE_LASTCOL |
                               BrowserMode::KEEPHIGHLIGHT | BrowserMode::HLINES | BrowserMode::VLINES)
     ,m_aGroupPositions(GROUPS_START_LEN,-1)
-    ,m_pComboCell(NULL)
+    ,m_pComboCell(nullptr)
     ,m_nDataPos(-1)
     ,m_nCurrentPos(-1)
-    ,m_nPasteEvent(0)
-    ,m_nDeleteEvent(0)
+    ,m_nPasteEvent(nullptr)
+    ,m_nDeleteEvent(nullptr)
     ,m_pParent(_pParentDialog)
     ,m_bIgnoreEvent(false)
     ,aContainerListener(new OFieldExpressionControlContainerListener(this))
@@ -746,7 +746,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                     case SID_DELETE:
                         if( m_nDeleteEvent )
                             Application::RemoveUserEvent( m_nDeleteEvent );
-                        m_nDeleteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedDelete), NULL, true );
+                        m_nDeleteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedDelete), nullptr, true );
                         break;
                     default:
                         break;
@@ -853,13 +853,13 @@ void OFieldExpressionControl::paste()
     {
         if( m_nPasteEvent )
             Application::RemoveUserEvent( m_nPasteEvent );
-        m_nPasteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedPaste), NULL, true );
+        m_nPasteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedPaste), nullptr, true );
     }
 }
 
 IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, DelayedPaste, void*, void )
 {
-    m_nPasteEvent = 0;
+    m_nPasteEvent = nullptr;
 
     sal_Int32 nPastePosition = GetSelectRowCount() ? FirstSelectedRow() : GetCurRow();
 
@@ -870,7 +870,7 @@ IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, DelayedPaste, void*, void )
 
 IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, DelayedDelete, void*, void )
 {
-    m_nDeleteEvent = 0;
+    m_nDeleteEvent = nullptr;
     DeleteRows();
 }
 
@@ -943,7 +943,7 @@ OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnl
     : FloatingWindow(_pParent, "FloatingSort", "modules/dbreport/ui/floatingsort.ui")
     , OPropertyChangeListener(m_aMutex)
     , m_pController(_pController)
-    , m_pCurrentGroupListener(NULL)
+    , m_pCurrentGroupListener(nullptr)
     , m_xGroups(m_pController->getReportDefinition()->getGroups())
     , m_bReadOnly(_bReadOnly)
 {
@@ -1036,7 +1036,7 @@ void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
 
     if ( m_pCurrentGroupListener.is() )
         m_pCurrentGroupListener->dispose();
-    m_pCurrentGroupListener = NULL;
+    m_pCurrentGroupListener = nullptr;
     if ( !bEmpty && nGroupPos != NO_GROUP )
     {
         uno::Reference< report::XGroup> xGroup = getGroup(nGroupPos);
@@ -1159,7 +1159,7 @@ IMPL_LINK_NOARG_TYPED( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )
         }
         if ( nCommand == m_nDeleteId )
         {
-            Application::PostUserEvent( LINK(m_pFieldExpression, OFieldExpressionControl, DelayedDelete), NULL, true );
+            Application::PostUserEvent( LINK(m_pFieldExpression, OFieldExpressionControl, DelayedDelete), nullptr, true );
         }
         else
         {

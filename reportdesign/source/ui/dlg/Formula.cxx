@@ -52,9 +52,9 @@ FormulaDialog::FormulaDialog(vcl::Window* pParent
     : FormulaModalDialog( pParent, false,false,false,_pFunctionMgr.get(),this)
     ,m_aFunctionManager(_pFunctionMgr)
     ,m_pFormulaData(new FormEditData())
-    ,m_pAddField(NULL)
+    ,m_pAddField(nullptr)
     ,m_xRowSet(_xRowSet)
-    ,m_pEdit(NULL)
+    ,m_pEdit(nullptr)
     ,m_sFormula("=")
     ,m_nStart(0)
     ,m_nEnd(1)
@@ -237,7 +237,7 @@ IMPL_LINK_TYPED( FormulaDialog, OnClickHdl, OAddFieldWindow& ,_rAddFieldDlg, voi
             m_pEdit->SetText(sName);
         }
     }
-    m_pEdit = NULL;
+    m_pEdit = nullptr;
     _rAddFieldDlg.Hide();
     RefInputDoneAfter( true );
 }
@@ -260,7 +260,7 @@ table::CellAddress FormulaDialog::getReferencePosition() const
 ::std::unique_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::unique_ptr<formula::FormulaTokenArray> pArray(new FormulaTokenArray());
-    pArray->Fill(_aTokenList, mrStringPool, NULL);
+    pArray->Fill(_aTokenList, mrStringPool, nullptr);
     return pArray;
 }
 

@@ -89,7 +89,7 @@ namespace rptui
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 )
 
     sal_uInt16              OPropertyInfoService::s_nCount = 0;
-    OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
+    OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = nullptr;
 
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
@@ -197,7 +197,7 @@ namespace rptui
         if ( ( pPropInfo < s_pPropertyInfos + s_nCount ) && pPropInfo->sName == _rName )
             return pPropInfo;
 
-        return NULL;
+        return nullptr;
     }
 
 
@@ -213,7 +213,7 @@ namespace rptui
             if (s_pPropertyInfos[i].nId == _nId)
                 return &s_pPropertyInfos[i];
 
-        return NULL;
+        return nullptr;
     }
 
 

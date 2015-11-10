@@ -79,11 +79,11 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     : Window(_pParent,WB_DIALOGCONTROL)
     , ::comphelper::OPropertyChangeListener(m_aMutex)
     , DropTargetHelper(this)
-    , m_pPage(NULL)
-    , m_pView(NULL)
+    , m_pPage(nullptr)
+    , m_pView(nullptr)
     , m_pParent(_pParent)
-    , m_pMulti(NULL)
-    , m_pReportListener(NULL)
+    , m_pMulti(nullptr)
+    , m_pReportListener(nullptr)
     , m_xSection(_xSection)
     , m_nPaintEntranceCount(0)
     , m_eMode(RPTUI_SELECT)
@@ -115,7 +115,7 @@ OReportSection::~OReportSection()
 
 void OReportSection::dispose()
 {
-    m_pPage = NULL;
+    m_pPage = nullptr;
     if ( m_pMulti.is() )
         m_pMulti->dispose();
 
@@ -127,7 +127,7 @@ void OReportSection::dispose()
         ::std::unique_ptr<OSectionView> aTemp( m_pView);
         if ( m_pView )
             m_pView->EndListening( *m_pModel );
-        m_pView = NULL;
+        m_pView = nullptr;
     }
     m_pParent.clear();
     vcl::Window::dispose();
@@ -145,7 +145,7 @@ void OReportSection::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
         const vcl::Region aPaintRectRegion(rRect);
 
         // #i74769#
-        SdrPaintWindow* pTargetPaintWindow = 0;
+        SdrPaintWindow* pTargetPaintWindow = nullptr;
 
         // mark repaint start
         if (pPgView)
@@ -264,7 +264,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                     for (;pCopiesIter != pCopiesEnd ; ++pCopiesIter)
                     {
                         SvxShape* pShape = SvxShape::getImplementation( *pCopiesIter );
-                        SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
+                        SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
                         if ( pObject )
                         {
                             SdrObject* pNeuObj = pObject->Clone();
@@ -280,7 +280,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                             bool bOverlapping = true;
                             while ( bOverlapping )
                             {
-                                bOverlapping = isOver(aRet,*m_pPage,*m_pView,true,pNeuObj) != NULL;
+                                bOverlapping = isOver(aRet,*m_pPage,*m_pView,true,pNeuObj) != nullptr;
                                 if ( bOverlapping )
                                 {
                                     aRet.Move(0,aRet.getHeight()+1);
@@ -424,8 +424,8 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
         {
             m_pView->UnmarkAll();
             SdrObjListIter aIter(*m_pPage,IM_DEEPNOGROUPS);
-            SdrObject* pObjIter = NULL;
-            while( (pObjIter = aIter.Next()) != NULL )
+            SdrObject* pObjIter = nullptr;
+            while( (pObjIter = aIter.Next()) != nullptr )
             {
                 if ( pObjIter->GetObjIdentifier() == _nObjectType )
                     m_pView->MarkObj( pObjIter, m_pView->GetSdrPageView() );
@@ -552,7 +552,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
             awt::Point aPos = xReportComponent->getPosition();
             awt::Size aSize = xReportComponent->getSize();
             SvxShape* pShape = SvxShape::getImplementation( xReportComponent );
-            SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
+            SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
             if ( pObject )
             {
                 bool bChanged = false;
@@ -636,7 +636,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
             {
                 if ( aIter->equalsIgnoreAsciiCase( _sType ) )
                 {
-                    OReportModel aReportModel(NULL);
+                    OReportModel aReportModel(nullptr);
                     SfxItemPool& rPool = aReportModel.GetItemPool();
                     rPool.FreezeIdRanges();
                     if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aReportModel ) )

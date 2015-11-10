@@ -317,7 +317,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     // add their undo actions out-of-order
 
     SolarMutexGuard aSolarGuard;
-    ORptUndoPropertyAction* pUndo = NULL;
+    ORptUndoPropertyAction* pUndo = nullptr;
     try
     {
         uno::Reference< report::XSection> xSection( xSet, uno::UNO_QUERY );
@@ -335,7 +335,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    if ( pUndo == NULL )
+    if ( pUndo == nullptr )
         pUndo = new ORptUndoPropertyAction( m_pImpl->m_rModel, _rEvent );
 
     m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( pUndo );

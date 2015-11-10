@@ -507,14 +507,14 @@ namespace rptui
 
                 // determine whether the new focus window is part of an (currently invisible) condition
                 const vcl::Window* pConditionCandidate = pGetFocusWindow->GetParent();
-                const vcl::Window* pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
+                const vcl::Window* pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : nullptr;
                 while   (   ( pPlaygroundCandidate )
                         &&  ( pPlaygroundCandidate != this )
                         &&  ( pPlaygroundCandidate != m_pConditionPlayground )
                         )
                 {
                     pConditionCandidate = pConditionCandidate->GetParent();
-                    pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
+                    pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : nullptr;
                 }
                 if (pConditionCandidate && pPlaygroundCandidate == m_pConditionPlayground)
                 {

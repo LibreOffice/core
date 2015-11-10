@@ -61,13 +61,13 @@ OReportPage::~OReportPage()
 
 SdrPage* OReportPage::Clone() const
 {
-    return Clone(0);
+    return Clone(nullptr);
 }
 
 SdrPage* OReportPage::Clone( SdrModel* const pNewModel ) const
 {
     OReportPage *const pNewPage = new OReportPage( *this );
-    OReportModel* pReportModel = 0;
+    OReportModel* pReportModel = nullptr;
     if ( pNewModel )
     {
         pReportModel = dynamic_cast<OReportModel*>( pNewModel );
@@ -124,7 +124,7 @@ SdrObject* OReportPage::RemoveObject(size_t nObjNum)
         OUnoObject& rUnoObj = dynamic_cast<OUnoObject&>(*pObj);
         uno::Reference< container::XChild> xChild(rUnoObj.GetUnoControlModel(),uno::UNO_QUERY);
         if ( xChild.is() )
-            xChild->setParent(NULL);
+            xChild->setParent(nullptr);
     }
     return pObj;
 }
@@ -139,7 +139,7 @@ void OReportPage::insertObject(const uno::Reference< report::XReportComponent >&
         return; // Object already in list
 
     SvxShape* pShape = SvxShape::getImplementation( _xObject );
-    OObjectBase* pObject = pShape ? dynamic_cast< OObjectBase* >( pShape->GetSdrObject() ) : NULL;
+    OObjectBase* pObject = pShape ? dynamic_cast< OObjectBase* >( pShape->GetSdrObject() ) : nullptr;
     OSL_ENSURE( pObject, "OReportPage::insertObject: no implementation object found for the given shape/component!" );
     if ( pObject )
         pObject->StartListening();

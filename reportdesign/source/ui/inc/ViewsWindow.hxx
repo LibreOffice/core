@@ -262,7 +262,7 @@ namespace rptui
 
         /** returns the current position in the list
         */
-        sal_uInt16 getPosition(const OSectionWindow* _pSectionWindow = NULL) const;
+        sal_uInt16 getPosition(const OSectionWindow* _pSectionWindow = nullptr) const;
 
         /** calls on every section BrkAction
         *

@@ -83,7 +83,7 @@ SvXMLImportContext* OXMLMasterFields::CreateChildContext(
         const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext = nullptr;
     const SvXMLTokenMap&    rTokenMap   = static_cast<ORptFilter&>(GetImport()).GetSubDocumentElemTokenMap();
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )

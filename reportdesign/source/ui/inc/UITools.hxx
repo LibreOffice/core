@@ -138,7 +138,7 @@ namespace rptui
     * \param _bAllObjects  if <TRUE/> all objects are taken into account, otherwise only not marked ones
     * \return the object which is overlapped, otherwise <NULL/>
     */
-    SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects = false,SdrObject* _pIgnore = NULL, sal_Int16 _nIgnoreType=0);
+    SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects = false,SdrObject* _pIgnore = nullptr, sal_Int16 _nIgnoreType=0);
 
     SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj* _pIgnoreList[], int _nIgnoreListLength);
 
