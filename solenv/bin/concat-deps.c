@@ -773,7 +773,7 @@ static inline void print_fullpaths(char* line)
     char* end;
     int boost_count = 0;
     int token_len;
-    const char * unpacked_end = 0; /* end of UnpackedTarget match (if any) */
+    const char * unpacked_end = NULL; /* end of UnpackedTarget match (if any) */
     /* for UnpackedTarget the target is GenC{,xx}Object, don't mangle! */
     int target_seen = 0;
 
@@ -815,7 +815,7 @@ static inline void print_fullpaths(char* line)
                 {
                     emit_unpacked_target(token, unpacked_end);
                 }
-                unpacked_end = 0;
+                unpacked_end = NULL;
             }
         }
         else
@@ -1111,7 +1111,7 @@ off_t in_list_size = 0;
 char* in_list;
 char* in_list_cursor;
 char* in_list_base;
-struct hash* dep_hash = 0;
+struct hash* dep_hash = NULL;
 const char *env_str;
 
     if(argc < 2)
