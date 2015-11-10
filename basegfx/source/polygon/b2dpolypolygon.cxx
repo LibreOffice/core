@@ -138,7 +138,7 @@ public:
     const basegfx::B2DPolygon* begin() const
     {
         if(maPolygons.empty())
-            return 0;
+            return nullptr;
         else
             return &maPolygons.front();
     }
@@ -146,7 +146,7 @@ public:
     const basegfx::B2DPolygon* end() const
     {
         if(maPolygons.empty())
-            return 0;
+            return nullptr;
         else
             return (&maPolygons.back())+1;
     }
@@ -154,7 +154,7 @@ public:
     basegfx::B2DPolygon* begin()
     {
         if(maPolygons.empty())
-            return 0;
+            return nullptr;
         else
             return &maPolygons.front();
     }
@@ -162,7 +162,7 @@ public:
     basegfx::B2DPolygon* end()
     {
         if(maPolygons.empty())
-            return 0;
+            return nullptr;
         else
             return &(maPolygons.back())+1;
     }

@@ -101,8 +101,8 @@ public:
             sal_uInt32 nISmallest(0);
             sal_uInt32 a(0);
             const basegfx::B3DPoint* pSmallest(&maVector[0].getCoordinate());
-            const basegfx::B3DPoint* pNext(0);
-            const basegfx::B3DPoint* pPrev(0);
+            const basegfx::B3DPoint* pNext(nullptr);
+            const basegfx::B3DPoint* pPrev(nullptr);
 
             // To guarantee a correctly oriented point, choose an outmost one
             // which then cannot be concave
@@ -779,9 +779,9 @@ public:
     // the RefCount is set to 1 to never 'delete' this static incarnation.
     ImplB3DPolygon()
     :   maPoints(0L),
-        mpBColors(0L),
-        mpNormals(0L),
-        mpTextureCoordinates(0L),
+        mpBColors(nullptr),
+        mpNormals(nullptr),
+        mpTextureCoordinates(nullptr),
         maPlaneNormal(::basegfx::B3DVector::getEmptyVector()),
         mbIsClosed(false),
         mbPlaneNormalValid(true)
@@ -791,9 +791,9 @@ public:
 
     ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied)
     :   maPoints(rToBeCopied.maPoints),
-        mpBColors(0L),
-        mpNormals(0L),
-        mpTextureCoordinates(0L),
+        mpBColors(nullptr),
+        mpNormals(nullptr),
+        mpTextureCoordinates(nullptr),
         maPlaneNormal(rToBeCopied.maPlaneNormal),
         mbIsClosed(rToBeCopied.mbIsClosed),
         mbPlaneNormalValid(rToBeCopied.mbPlaneNormalValid)
@@ -817,9 +817,9 @@ public:
 
     ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maPoints(rToBeCopied.maPoints, nIndex, nCount),
-        mpBColors(0L),
-        mpNormals(0L),
-        mpTextureCoordinates(0L),
+        mpBColors(nullptr),
+        mpNormals(nullptr),
+        mpTextureCoordinates(nullptr),
         maPlaneNormal(::basegfx::B3DVector::getEmptyVector()),
         mbIsClosed(rToBeCopied.mbIsClosed),
         mbPlaneNormalValid(false)
@@ -832,7 +832,7 @@ public:
             if(!mpBColors->isUsed())
             {
                 delete mpBColors;
-                mpBColors = 0L;
+                mpBColors = nullptr;
             }
         }
 
@@ -843,7 +843,7 @@ public:
             if(!mpNormals->isUsed())
             {
                 delete mpNormals;
-                mpNormals = 0L;
+                mpNormals = nullptr;
             }
         }
 
@@ -854,7 +854,7 @@ public:
             if(!mpTextureCoordinates->isUsed())
             {
                 delete mpTextureCoordinates;
-                mpTextureCoordinates = 0L;
+                mpTextureCoordinates = nullptr;
             }
         }
     }
@@ -864,19 +864,19 @@ public:
         if(mpBColors)
         {
             delete mpBColors;
-            mpBColors = 0L;
+            mpBColors = nullptr;
         }
 
         if(mpNormals)
         {
             delete mpNormals;
-            mpNormals = 0L;
+            mpNormals = nullptr;
         }
 
         if(mpTextureCoordinates)
         {
             delete mpTextureCoordinates;
-            mpTextureCoordinates = 0L;
+            mpTextureCoordinates = nullptr;
         }
     }
 
@@ -1069,7 +1069,7 @@ public:
             if(!mpBColors->isUsed())
             {
                 delete mpBColors;
-                mpBColors = 0L;
+                mpBColors = nullptr;
             }
         }
     }
@@ -1084,7 +1084,7 @@ public:
         if(mpBColors)
         {
             delete mpBColors;
-            mpBColors = 0L;
+            mpBColors = nullptr;
         }
     }
 
@@ -1128,7 +1128,7 @@ public:
             if(!mpNormals->isUsed())
             {
                 delete mpNormals;
-                mpNormals = 0L;
+                mpNormals = nullptr;
             }
         }
     }
@@ -1151,7 +1151,7 @@ public:
         if(mpNormals)
         {
             delete mpNormals;
-            mpNormals = 0L;
+            mpNormals = nullptr;
         }
     }
 
@@ -1184,7 +1184,7 @@ public:
             if(!mpTextureCoordinates->isUsed())
             {
                 delete mpTextureCoordinates;
-                mpTextureCoordinates = 0L;
+                mpTextureCoordinates = nullptr;
             }
         }
     }
@@ -1199,7 +1199,7 @@ public:
         if(mpTextureCoordinates)
         {
             delete mpTextureCoordinates;
-            mpTextureCoordinates = 0L;
+            mpTextureCoordinates = nullptr;
         }
     }
 
@@ -1287,7 +1287,7 @@ public:
                 if(!mpBColors->isUsed())
                 {
                     delete mpBColors;
-                    mpBColors = 0L;
+                    mpBColors = nullptr;
                 }
             }
 
@@ -1298,7 +1298,7 @@ public:
                 if(!mpNormals->isUsed())
                 {
                     delete mpNormals;
-                    mpNormals = 0L;
+                    mpNormals = nullptr;
                 }
             }
 
@@ -1309,7 +1309,7 @@ public:
                 if(!mpTextureCoordinates->isUsed())
                 {
                     delete mpTextureCoordinates;
-                    mpTextureCoordinates = 0L;
+                    mpTextureCoordinates = nullptr;
                 }
             }
         }

@@ -613,7 +613,7 @@ namespace basegfx
         {
             // t is in ]0.0 .. 1.0[. Split and extract
             B2DCubicBezier aRight;
-            split(t, 0, &aRight);
+            split(t, nullptr, &aRight);
 
             return aRight.getControlPointA() - aRight.getStartPoint();
         }
@@ -871,7 +871,7 @@ namespace basegfx
 
                 if(!bEndIsOne)
                 {
-                    aRetval.split(fEnd, &aRetval, 0);
+                    aRetval.split(fEnd, &aRetval, nullptr);
 
                     if(!bStartIsZero)
                     {
@@ -881,7 +881,7 @@ namespace basegfx
 
                 if(!bStartIsZero)
                 {
-                    aRetval.split(fStart, 0, &aRetval);
+                    aRetval.split(fStart, nullptr, &aRetval);
                 }
             }
             else

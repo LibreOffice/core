@@ -32,7 +32,7 @@ namespace basegfx { namespace tools
                                          fValue,
                                          rtl_math_StringFormat_F,
                                          nDecPlaces, '.',
-                                         0, ',');
+                                         nullptr, ',');
 
         B2DPolyPolygon aRes;
         B2DHomMatrix aMat;

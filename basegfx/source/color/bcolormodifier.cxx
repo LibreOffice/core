@@ -36,7 +36,7 @@ namespace basegfx
 
     bool BColorModifier_gray::operator==(const BColorModifier& rCompare) const
     {
-        return 0 != dynamic_cast< const BColorModifier_gray* >(&rCompare);
+        return nullptr != dynamic_cast< const BColorModifier_gray* >(&rCompare);
     }
 
     ::basegfx::BColor BColorModifier_gray::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
@@ -55,7 +55,7 @@ namespace basegfx
 
     bool BColorModifier_invert::operator==(const BColorModifier& rCompare) const
     {
-        return 0 != dynamic_cast< const BColorModifier_invert* >(&rCompare);
+        return nullptr != dynamic_cast< const BColorModifier_invert* >(&rCompare);
     }
 
     ::basegfx::BColor BColorModifier_invert::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
@@ -72,7 +72,7 @@ namespace basegfx
 
     bool BColorModifier_luminance_to_alpha::operator==(const BColorModifier& rCompare) const
     {
-        return 0 != dynamic_cast< const BColorModifier_luminance_to_alpha* >(&rCompare);
+        return nullptr != dynamic_cast< const BColorModifier_luminance_to_alpha* >(&rCompare);
     }
 
     ::basegfx::BColor BColorModifier_luminance_to_alpha::getModifiedColor(const ::basegfx::BColor& aSourceColor) const

@@ -135,8 +135,8 @@ public:
         OUString aValid=OUString::createFromAscii(pValidSvgD);
         B2DPolyPolygon aInputPoly, aValidPoly;
 
-        tools::importFromSvgD(aInputPoly, aInput, false, NULL);
-        tools::importFromSvgD(aValidPoly, aValid, false, NULL);
+        tools::importFromSvgD(aInputPoly, aInput, false, nullptr);
+        tools::importFromSvgD(aValidPoly, aValid, false, nullptr);
 
         CPPUNIT_ASSERT_MESSAGE(
             pName,

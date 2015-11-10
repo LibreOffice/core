@@ -238,7 +238,7 @@ namespace basegfx
                 aPolygon.append(B3DPoint(aStart.getX() - aPerpend.getX(), aStart.getY() - aPerpend.getY(), fZStartWithAdd));
                 aPolygon.setClosed(true);
 
-                addArea(aPolygon, 0);
+                addArea(aPolygon, nullptr);
             }
         }
         else

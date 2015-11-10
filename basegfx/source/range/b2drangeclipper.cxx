@@ -244,7 +244,7 @@ namespace basegfx
             /** Create polygon
              */
             ImplPolygon() :
-                mpLeadingRightEdge(NULL),
+                mpLeadingRightEdge(nullptr),
                 mnIdx(-1),
                 maPoints(),
                 mbIsFinished(false)
@@ -454,7 +454,7 @@ namespace basegfx
                     ActiveEdge* const pFarEdge=rTmp.mpLeadingRightEdge;
                     ActiveEdge* const pNearEdge=&rActiveEdge;
 
-                    rTmp.mpLeadingRightEdge = NULL;
+                    rTmp.mpLeadingRightEdge = nullptr;
                     pNearEdge->setTargetPolygonIndex(nTmpIdx);
 
                     mpLeadingRightEdge = pFarEdge;
@@ -476,7 +476,7 @@ namespace basegfx
                 rActiveEdge.setTargetPolygonIndex(mnIdx);
                 mpLeadingRightEdge = &rActiveEdge;
 
-                rTmp.mpLeadingRightEdge = NULL;
+                rTmp.mpLeadingRightEdge = nullptr;
 
                 return nTmpIdx;
             }
@@ -509,7 +509,7 @@ namespace basegfx
                              "ImplPolygon::finish(): first and last point violate 90 degree line angle constraint!" );
 
                 mbIsFinished = true;
-                mpLeadingRightEdge = NULL;
+                mpLeadingRightEdge = nullptr;
 
                 rRes.append(getPolygon());
             }

@@ -163,7 +163,7 @@ public:
         B2DPolyPolygon randomPoly;
         tools::importFromSvgD(
             randomPoly,
-            OUString::createFromAscii(randomSvg), false, 0);
+            OUString::createFromAscii(randomSvg), false, nullptr);
         for (auto const& aPolygon : randomPoly)
             aRandomIntersections.appendElement(aPolygon.getB2DRange(), B2VectorOrientation::Negative);
 #endif
@@ -225,14 +225,14 @@ public:
         B2DPolyPolygon aTmp1;
         CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
-                                   aTmp1, OUString::createFromAscii(sSvg), false, 0));
+                                   aTmp1, OUString::createFromAscii(sSvg), false, nullptr));
 
         const OUString aSvg=
             tools::exportToSvgD(toTest.solveCrossovers(), true, true, false);
         B2DPolyPolygon aTmp2;
         CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
-                                   aTmp2, aSvg, false, 0));
+                                   aTmp2, aSvg, false, nullptr));
 
         CPPUNIT_ASSERT_MESSAGE(
             sName,

@@ -66,7 +66,7 @@ namespace basegfx
             const B3DPolygon& rCandidate,
             const ::std::vector<double>& rDotDashArray,
             B3DPolyPolygon* pLineTarget,
-            B3DPolyPolygon* pGapTarget = 0,
+            B3DPolyPolygon* pGapTarget = nullptr,
             double fFullDashDotLen = 0.0);
 
         /** Create/replace normals for given 3d geometry with default normals from given center to outside.

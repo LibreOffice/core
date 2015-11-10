@@ -156,7 +156,7 @@ public:
     const basegfx::B3DPolygon* begin() const
     {
         if(maPolygons.empty())
-            return 0;
+            return nullptr;
         else
             return &maPolygons.front();
     }
@@ -164,7 +164,7 @@ public:
     const basegfx::B3DPolygon* end() const
     {
         if(maPolygons.empty())
-            return 0;
+            return nullptr;
         else
             return (&maPolygons.back())+1;
     }
@@ -172,7 +172,7 @@ public:
     basegfx::B3DPolygon* begin()
     {
         if(maPolygons.empty())
-            return 0;
+            return nullptr;
         else
             return &maPolygons.front();
     }
@@ -180,7 +180,7 @@ public:
     basegfx::B3DPolygon* end()
     {
         if(maPolygons.empty())
-            return 0;
+            return nullptr;
         else
             return &(maPolygons.back())+1;
     }

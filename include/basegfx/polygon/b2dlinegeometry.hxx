@@ -77,7 +77,7 @@ namespace basegfx
             double fWidth,
             double fCandidateLength = 0.0, // 0.0 -> calculate self
             double fDockingPosition = 0.5, // 0->top, 1->bottom
-            double* pConsumedLength = 0L,
+            double* pConsumedLength = nullptr,
             double fShift = 0.0);
 
         /** create filled polygon geometry for lines with a line width

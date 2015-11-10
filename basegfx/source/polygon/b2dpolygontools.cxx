@@ -838,7 +838,7 @@ namespace basegfx
                                             const double fBezierDistance(aBezierSegmentHelper.distanceToRelative(fFrom - fPositionOfStart));
                                             B2DCubicBezier aRight;
 
-                                            aBezierSegment.split(fBezierDistance, 0, &aRight);
+                                            aBezierSegment.split(fBezierDistance, nullptr, &aRight);
                                             aRetval.append(aRight.getStartPoint());
                                             aRetval.setNextControlPoint(aRetval.count() - 1, aRight.getControlPointA());
                                             bDone = true;
@@ -896,7 +896,7 @@ namespace basegfx
                                         const double fBezierDistance(aBezierSegmentHelper.distanceToRelative(fTo - fPositionOfStart));
                                         B2DCubicBezier aLeft;
 
-                                        aBezierSegment.split(fBezierDistance, &aLeft, 0);
+                                        aBezierSegment.split(fBezierDistance, &aLeft, nullptr);
                                         aRetval.append(aLeft.getEndPoint());
                                         aRetval.setPrevControlPoint(aRetval.count() - 1, aLeft.getControlPointB());
                                         bDone = true;
@@ -1290,7 +1290,7 @@ namespace basegfx
                                 B2DCubicBezier aRight;
                                 const double fBezierSplit(aCubicBezierHelper.distanceToRelative(fLastDotDashMovingLength));
 
-                                aCurrentEdge.split(fBezierSplit, 0, &aRight);
+                                aCurrentEdge.split(fBezierSplit, nullptr, &aRight);
 
                                 if(!aSnippet.count())
                                 {

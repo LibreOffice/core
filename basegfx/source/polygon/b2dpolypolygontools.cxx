@@ -279,8 +279,8 @@ namespace basegfx
                     applyLineDashing(
                         aCandidate,
                         rDotDashArray,
-                        pLineTarget ? &aLineTarget : 0,
-                        pGapTarget ? &aGapTarget : 0,
+                        pLineTarget ? &aLineTarget : nullptr,
+                        pGapTarget ? &aGapTarget : nullptr,
                         fFullDashDotLen);
 
                     if(pLineTarget)

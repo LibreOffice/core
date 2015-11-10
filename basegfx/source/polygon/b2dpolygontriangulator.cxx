@@ -42,7 +42,7 @@ namespace basegfx
 
         public:
             EdgeEntry(const B2DPoint& rStart, const B2DPoint& rEnd)
-            :   mpNext(0L),
+            :   mpNext(nullptr),
                 maStart(rStart),
                 maEnd(rEnd),
                 mfAtan2(0.0)
@@ -134,7 +134,7 @@ namespace basegfx
             // create an entry, else the comparison might use the wrong edges
             EdgeEntry aNew(rStart, rEnd);
             EdgeEntry* pCurr = mpList;
-            EdgeEntry* pPrev = 0L;
+            EdgeEntry* pPrev = nullptr;
 
             while(pCurr
                 && pCurr->getStart().getY() <= aNew.getStart().getY()
@@ -162,7 +162,7 @@ namespace basegfx
                 EdgeEntry* pNew = new EdgeEntry(aNew);
                 maNewEdgeEntries.push_back(pNew);
                 pCurr = mpList;
-                pPrev = 0L;
+                pPrev = nullptr;
 
                 while(pCurr && *pCurr < *pNew)
                 {
@@ -217,7 +217,7 @@ namespace basegfx
 
         // consume as long as there are edges
         Triangulator::Triangulator(const B2DPolyPolygon& rCandidate)
-        :   mpList(0L)
+        :   mpList(nullptr)
         {
             // add all available edges to the single linked local list which will be sorted
             // by Y,X,atan2 when adding nodes

@@ -147,7 +147,7 @@ namespace basegfx
             const B2DPoint& rEdge1Start, const B2DVector& rEdge1Delta,
             const B2DPoint& rEdge2Start, const B2DVector& rEdge2Delta,
             CutFlagValue aCutFlags = CutFlagValue::DEFAULT,
-            double* pCut1 = 0L, double* pCut2 = 0L);
+            double* pCut1 = nullptr, double* pCut2 = nullptr);
 
         // test if point is on the given edge in range ]0.0..1.0[ without
         // the start/end points. If so, return true and put the parameter
@@ -156,7 +156,7 @@ namespace basegfx
             const B2DPoint& rPoint,
             const B2DPoint& rEdgeStart,
             const B2DVector& rEdgeDelta,
-            double* pCut = 0L);
+            double* pCut = nullptr);
 
         /** Apply given LineDashing to given polygon
 
@@ -195,7 +195,7 @@ namespace basegfx
             const B2DPolygon& rCandidate,
             const ::std::vector<double>& rDotDashArray,
             B2DPolyPolygon* pLineTarget,
-            B2DPolyPolygon* pGapTarget = 0,
+            B2DPolyPolygon* pGapTarget = nullptr,
             double fFullDashDotLen = 0.0);
 
         // test if point is inside epsilon-range around an edge defined

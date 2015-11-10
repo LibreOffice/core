@@ -101,14 +101,14 @@ public:
         B2DPolyPolygon aTmp1;
         CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
-                                   aTmp1, OUString::createFromAscii(sSvg), false, 0));
+                                   aTmp1, OUString::createFromAscii(sSvg), false, nullptr));
 
         const OUString aSvg=
             tools::exportToSvgD(toTest.getClipPoly(), true, true, false);
         B2DPolyPolygon aTmp2;
         CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
-                                   aTmp2, aSvg, false, 0));
+                                   aTmp2, aSvg, false, nullptr));
 
         CPPUNIT_ASSERT_MESSAGE(
             sName,
@@ -139,7 +139,7 @@ public:
 
         B2DPolyPolygon aTmp1;
         tools::importFromSvgD(
-            aTmp1, OUString::createFromAscii(unionSvg), false, 0);
+            aTmp1, OUString::createFromAscii(unionSvg), false, nullptr);
 
         aMixedClip.intersectPolyPolygon(aTmp1);
         aMixedClip.subtractRange(B2DRange(-20,-150,20,0));
