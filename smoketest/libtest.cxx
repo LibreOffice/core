@@ -42,7 +42,7 @@
     long getTimeMS()
     {
         struct timeval t;
-        gettimeofday(&t, NULL);
+        gettimeofday(&t, nullptr);
         return t.tv_sec*1000 + t.tv_usec/1000;
     }
 
@@ -111,7 +111,7 @@ int main (int argc, char **argv)
 
     if( argc > 3 )
     {
-        const char *pFilter = NULL;
+        const char *pFilter = nullptr;
         if( argc > 4 )
             pFilter = argv[4];
         fprintf( stderr, "save document as '%s' (%s)\n", argv[3], pFilter ? pFilter : "<null>" );
