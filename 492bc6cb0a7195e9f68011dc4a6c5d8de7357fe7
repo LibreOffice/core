@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac7902_6c039710",
+        "filename": "external/neon/UnpackedTarball_neon.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-10T14:40:30Z",
+      "side": 1,
+      "message": "there can be multiple gb_UnpackedTarball_add_patches calls, so better only wrap the additonal external/neon/neon_fix_lock_timeout_windows.patch in an ifeq",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_2c098f32",
+        "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-10T14:40:30Z",
+      "side": 1,
+      "message": "the original code apparently used\n\n  if (to \u003d\u003d LONG_MIN || to \u003d\u003d LONG_MAX)\n      return NE_TIMEOUT_INVALID;\n\nto check for strtol returning an indicator that \"the correct value is outside the range of representable values,\" so when using strtoul instead you should instead check for\n\n  if (to \u003d\u003d ULONG_MAX)\n      return NE_TIMEOUT_INVALID;",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_8c06bb1e",
+        "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-10T14:40:30Z",
+      "side": 1,
+      "message": "assuming 32-bit, two\u0027s-complement long, an input of \"Second-4294967295\" would have resulted in returning NE_TIMEOUT_INVALID from the original code, while now it would result in returning NE_TIMEOUT_INFINITE (-1); I guess it is better to return NE_TIMOUT_INVALID for any valid input in the range \u003e LONG_MAX and \u003c 2^32 than to silent convert it from unsigned long to a negative long return value, i.e., precede the else branch with another\n\n  else if (to1 \u003e (unsinged long) LONG_MAX)\n      return NE_TIMEOUT_INVALID",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faac7902_0c12cb62",
+        "filename": "external/neon/neon_fix_lock_timeout_windows.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-11-10T14:40:30Z",
+      "side": 1,
+      "message": "this and the following lines did not change from the original, apart from the trivial tab vs. spaces; I\u0027d suggest to use tabs in your change, too, and turn these effectively unchanged lines back into context\n\nand this check should no longer be necessary at all, see the other comments above",
+      "revId": "492bc6cb0a7195e9f68011dc4a6c5d8de7357fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
