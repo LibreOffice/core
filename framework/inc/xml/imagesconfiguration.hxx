@@ -57,7 +57,7 @@ struct ExternalImageItemDescriptor
 
 typedef std::vector<std::unique_ptr<ImageItemDescriptor> > ImageItemListDescriptor;
 
-typedef boost::ptr_vector<ExternalImageItemDescriptor> ExternalImageItemListDescriptor;
+typedef std::vector<std::unique_ptr<ExternalImageItemDescriptor> > ExternalImageItemListDescriptor;
 
 struct ImageListItemDescriptor
 {

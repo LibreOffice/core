@@ -422,7 +422,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
                 m_bExternalImageStartFound = true;
 
-                ExternalImageItemDescriptor* pItem = new ExternalImageItemDescriptor;
+                std::unique_ptr<ExternalImageItemDescriptor> pItem(new ExternalImageItemDescriptor);
 
                 // Read attributes for this external image definition
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
@@ -444,8 +444,8 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                             }
                             break;
 
-                                          default:
-                                              break;
+                            default:
+                            break;
                         }
                     }
                 }
@@ -453,7 +453,6 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 // Check required attribute "command"
                 if ( pItem->aCommandURL.isEmpty() )
                 {
-                    delete pItem;
                     delete m_pImages;
                     delete m_pExternalImages;
                     m_pImages = nullptr;
@@ -467,7 +466,6 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 // Check required attribute "href"
                 if ( pItem->aURL.isEmpty() )
                 {
-                    delete pItem;
                     delete m_pImages;
                     delete m_pExternalImages;
                     m_pImages = nullptr;
@@ -479,14 +477,12 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 }
 
                 if ( m_pExternalImages )
-                    m_pExternalImages->push_back( pItem );
-                else
-                    delete pItem;
+                    m_pExternalImages->push_back( std::move(pItem) );
             }
             break;
 
-                  default:
-                      break;
+            default:
+            break;
         }
     }
 }
@@ -763,7 +759,7 @@ void OWriteImagesDocumentHandler::WriteExternalImageList( const ExternalImageIte
 
     for ( size_t i = 0; i < pExternalImageList->size(); i++ )
     {
-        const ExternalImageItemDescriptor* pItem = &(*pExternalImageList)[i];
+        const ExternalImageItemDescriptor* pItem = (*pExternalImageList)[i].get();
         WriteExternalImage( pItem );
     }
 
