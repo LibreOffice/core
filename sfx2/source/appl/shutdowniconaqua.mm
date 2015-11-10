@@ -411,14 +411,13 @@ void aqua_init_systray()
             std::set< rtl::OUString > aFileNewAppsAvailable;
             SvtDynamicMenuOptions aOpt;
             css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
-            const rtl::OUString sURLKey( "URL" );
 
             const css::uno::Sequence< css::beans::PropertyValue >* pNewMenu = aNewMenu.getConstArray();
             const css::uno::Sequence< css::beans::PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
             for ( ; pNewMenu != pNewMenuEnd; ++pNewMenu )
             {
                 comphelper::SequenceAsHashMap aEntryItems( *pNewMenu );
-                rtl::OUString sURL( aEntryItems.getUnpackedValueOrDefault( sURLKey, rtl::OUString() ) );
+                rtl::OUString sURL( aEntryItems.getUnpackedValueOrDefault( "URL", rtl::OUString() ) );
                 if ( sURL.getLength() )
                     aFileNewAppsAvailable.insert( sURL );
             }
