@@ -12,6 +12,7 @@
 #include <string.h>
 #include <vector>
 #include <string>
+#include <iostream>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
@@ -1059,7 +1060,10 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         // Have a cursor, but no selection: we need the middle handle.
         gchar* handleMiddlePath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_middle.png", NULL);
         if (!priv->m_pHandleMiddle)
+        {
             priv->m_pHandleMiddle = cairo_image_surface_create_from_png(handleMiddlePath);
+            assert(cairo_surface_status(priv->m_pHandleMiddle) == CAIRO_STATUS_SUCCESS);
+        }
         g_free (handleMiddlePath);
         renderHandle(pDocView, pCairo, priv->m_aVisibleCursor, priv->m_pHandleMiddle, priv->m_aHandleMiddleRect);
     }
@@ -1084,7 +1088,10 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
             // Have a start position: we need a start handle.
             gchar* handleStartPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_start.png", NULL);
             if (!priv->m_pHandleStart)
+            {
                 priv->m_pHandleStart = cairo_image_surface_create_from_png(handleStartPath);
+                assert(cairo_surface_status(priv->m_pHandleStart) == CAIRO_STATUS_SUCCESS);
+            }
             renderHandle(pDocView, pCairo, priv->m_aTextSelectionStart, priv->m_pHandleStart, priv->m_aHandleStartRect);
             g_free (handleStartPath);
         }
@@ -1093,7 +1100,10 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
             // Have a start position: we need an end handle.
             gchar* handleEndPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_end.png", NULL);
             if (!priv->m_pHandleEnd)
+            {
                 priv->m_pHandleEnd = cairo_image_surface_create_from_png(handleEndPath);
+                assert(cairo_surface_status(priv->m_pHandleEnd) == CAIRO_STATUS_SUCCESS);
+            }
             renderHandle(pDocView, pCairo, priv->m_aTextSelectionEnd, priv->m_pHandleEnd, priv->m_aHandleEndRect);
             g_free (handleEndPath);
         }
@@ -1103,7 +1113,10 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     {
         gchar* handleGraphicPath = g_strconcat (priv->m_aLOPath, "/../..", CURSOR_HANDLE_DIR, "handle_graphic.png", NULL);
         if (!priv->m_pGraphicHandle)
+        {
             priv->m_pGraphicHandle = cairo_image_surface_create_from_png(handleGraphicPath);
+            assert(cairo_surface_status(priv->m_pGraphicHandle) == CAIRO_STATUS_SUCCESS);
+        }
         renderGraphicHandle(pDocView, pCairo, priv->m_aGraphicSelection, priv->m_pGraphicHandle);
         g_free (handleGraphicPath);
     }
