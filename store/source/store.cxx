@@ -106,7 +106,7 @@ storeError SAL_CALL store_createMemoryFile (
 {
     if (!phFile)
         return store_E_InvalidParameter;
-    *phFile = NULL;
+    *phFile = nullptr;
 
     Reference<ILockBytes> xLockBytes;
 
@@ -141,7 +141,7 @@ storeError SAL_CALL store_openFile (
 ) SAL_THROW_EXTERN_C()
 {
     if (phFile)
-        *phFile = NULL;
+        *phFile = nullptr;
 
     if (!(pFilename && phFile))
         return store_E_InvalidParameter;
@@ -218,7 +218,7 @@ storeError SAL_CALL store_openDirectory (
 {
     storeError eErrCode = store_E_None;
     if (phDirectory)
-        *phDirectory = NULL;
+        *phDirectory = nullptr;
 
     OStoreHandle<OStorePageManager> xManager (
         OStoreHandle<OStorePageManager>::query (hFile));
@@ -312,7 +312,7 @@ storeError SAL_CALL store_openStream (
 {
     storeError eErrCode = store_E_None;
     if (phStream)
-        *phStream = NULL;
+        *phStream = nullptr;
 
     OStoreHandle<OStorePageManager> xManager (
         OStoreHandle<OStorePageManager>::query (hFile));

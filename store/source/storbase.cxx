@@ -50,18 +50,18 @@ SharedCount::Allocator::Allocator()
         "store_shared_count_cache",
         sizeof(long),
         0, // objalign
-        0, // constructor
-        0, // destructor
-        0, // reclaim
-        0, // userarg
-        0, // default source
+        nullptr, // constructor
+        nullptr, // destructor
+        nullptr, // reclaim
+        nullptr, // userarg
+        nullptr, // default source
         0  // flags
         );
 }
 
 SharedCount::Allocator::~Allocator()
 {
-    rtl_cache_destroy (m_cache), m_cache = 0;
+    rtl_cache_destroy (m_cache), m_cache = nullptr;
 }
 
 /*========================================================================
@@ -104,7 +104,7 @@ private:
 } // namespace store
 
 PageData::Allocator_Impl::Allocator_Impl()
-    : m_page_cache(0), m_page_size(0)
+    : m_page_cache(nullptr), m_page_size(0)
 {}
 
 storeError
@@ -114,7 +114,7 @@ PageData::Allocator_Impl::initialize (sal_uInt16 nPageSize)
     sal_Size size = sal::static_int_cast< sal_Size >(nPageSize);
     (void) snprintf (name, sizeof(name), "store_page_alloc_%" SAL_PRIuUINTPTR, size);
 
-    m_page_cache = rtl_cache_create (name, size, 0, 0, 0, 0, 0, 0, 0);
+    m_page_cache = rtl_cache_create (name, size, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0);
     if (!m_page_cache)
         return store_E_OutOfMemory;
 
@@ -124,19 +124,19 @@ PageData::Allocator_Impl::initialize (sal_uInt16 nPageSize)
 
 PageData::Allocator_Impl::~Allocator_Impl()
 {
-    rtl_cache_destroy(m_page_cache), m_page_cache = 0;
+    rtl_cache_destroy(m_page_cache), m_page_cache = nullptr;
 }
 
 void PageData::Allocator_Impl::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 {
-    OSL_PRECOND((ppPage != 0) && (pnSize != 0), "contract violation");
-    if ((ppPage != 0) && (pnSize != 0))
+    OSL_PRECOND((ppPage != nullptr) && (pnSize != nullptr), "contract violation");
+    if ((ppPage != nullptr) && (pnSize != nullptr))
         *ppPage = rtl_cache_alloc(m_page_cache), *pnSize = m_page_size;
 }
 
 void PageData::Allocator_Impl::deallocate_Impl (void * pPage)
 {
-    OSL_PRECOND(pPage != 0, "contract violation");
+    OSL_PRECOND(pPage != nullptr, "contract violation");
     rtl_cache_free(m_page_cache, pPage);
 }
 

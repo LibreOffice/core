@@ -60,8 +60,8 @@ storeError ILockBytes::writePageAt (PageHolder const & rPage, sal_uInt32 nOffset
 {
     // [SECURITY:ValInput]
     PageData const * pagedata = rPage.get();
-    OSL_PRECOND(!(pagedata == 0), "store::ILockBytes::writePageAt(): invalid Page");
-    if (pagedata == 0)
+    OSL_PRECOND(!(pagedata == nullptr), "store::ILockBytes::writePageAt(): invalid Page");
+    if (pagedata == nullptr)
         return store_E_InvalidParameter;
 
     sal_uInt32 const offset = pagedata->location();
@@ -80,7 +80,7 @@ storeError ILockBytes::readAt (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nB
 {
     // [SECURITY:ValInput]
     sal_uInt8 * dst_lo = static_cast<sal_uInt8*>(pBuffer);
-    if (!(dst_lo != 0))
+    if (!(dst_lo != nullptr))
         return store_E_InvalidParameter;
 
     sal_uInt8 * dst_hi = dst_lo + nBytes;
@@ -102,7 +102,7 @@ storeError ILockBytes::writeAt (sal_uInt32 nOffset, void const * pBuffer, sal_uI
 {
     // [SECURITY:ValInput]
     sal_uInt8 const * src_lo = static_cast<sal_uInt8 const*>(pBuffer);
-    if (!(src_lo != 0))
+    if (!(src_lo != nullptr))
         return store_E_InvalidParameter;
 
     sal_uInt8 const * src_hi = src_lo + nBytes;
@@ -148,7 +148,7 @@ struct FileHandle
 {
     oslFileHandle m_handle;
 
-    FileHandle() : m_handle(0) {}
+    FileHandle() : m_handle(nullptr) {}
 
     bool operator != (FileHandle const & rhs)
     {
@@ -270,7 +270,7 @@ struct FileHandle
         {
             // Release handle.
             closeFile (rFile.m_handle);
-            rFile.m_handle = 0;
+            rFile.m_handle = nullptr;
         }
     };
     typedef CloseFile destructor_type;
@@ -379,7 +379,7 @@ storeError FileLockBytes::readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOffse
 storeError FileLockBytes::writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset)
 {
     PageData const * pagedata = rPage.get();
-    OSL_PRECOND(pagedata != 0, "contract violation");
+    OSL_PRECOND(pagedata != nullptr, "contract violation");
     return writeAt_Impl (nOffset, pagedata, pagedata->size());
 }
 
@@ -448,7 +448,7 @@ struct FileMapping
     sal_uInt32  m_nSize;
     oslFileHandle m_hFile;
 
-    FileMapping() : m_pAddr(0), m_nSize(0), m_hFile(0) {}
+    FileMapping() : m_pAddr(nullptr), m_nSize(0), m_hFile(nullptr) {}
 
     bool operator != (FileMapping const & rhs) const
     {
@@ -490,7 +490,7 @@ struct FileMapping
         {
             // Release mapping.
             unmapFile (rMapping.m_hFile, rMapping.m_pAddr, rMapping.m_nSize);
-            rMapping.m_pAddr = 0, rMapping.m_nSize = 0;
+            rMapping.m_pAddr = nullptr, rMapping.m_nSize = 0;
         }
     };
     typedef UnmapFile destructor_type;
@@ -554,9 +554,9 @@ MappedLockBytes::~MappedLockBytes()
 
 void MappedLockBytes::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 {
-    OSL_PRECOND((ppPage != 0) && (pnSize != 0), "contract violation");
-    if ((ppPage != 0) && (pnSize != 0))
-        *ppPage = 0, *pnSize = m_nPageSize;
+    OSL_PRECOND((ppPage != nullptr) && (pnSize != nullptr), "contract violation");
+    if ((ppPage != nullptr) && (pnSize != nullptr))
+        *ppPage = nullptr, *pnSize = m_nPageSize;
 }
 
 void MappedLockBytes::deallocate_Impl (void * pPage)
@@ -676,7 +676,7 @@ protected:
 } // namespace store
 
 MemoryLockBytes::MemoryLockBytes()
-    : m_pData (0), m_nSize (0), m_xAllocator()
+    : m_pData (nullptr), m_nSize (0), m_xAllocator()
 {}
 
 MemoryLockBytes::~MemoryLockBytes()
@@ -715,7 +715,7 @@ storeError MemoryLockBytes::readPageAt_Impl (PageHolder & rPage, sal_uInt32 nOff
 storeError MemoryLockBytes::writePageAt_Impl (PageHolder const & rPage, sal_uInt32 nOffset)
 {
     PageData const * pagedata = rPage.get();
-    OSL_PRECOND(!(pagedata == 0), "contract violation");
+    OSL_PRECOND(!(pagedata == nullptr), "contract violation");
     return writeAt_Impl (nOffset, pagedata, pagedata->size());
 }
 
@@ -768,7 +768,7 @@ storeError MemoryLockBytes::setSize_Impl (sal_uInt32 nSize)
     if (nSize != m_nSize)
     {
         sal_uInt8 * pData = static_cast<sal_uInt8*>(rtl_reallocateMemory (m_pData, nSize));
-        if (pData != 0)
+        if (pData != nullptr)
         {
             if (nSize > m_nSize)
                 memset (pData + m_nSize, 0, sal::static_int_cast<size_t>(nSize - m_nSize));

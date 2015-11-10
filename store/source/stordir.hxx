@@ -110,7 +110,7 @@ SAL_CALL query (OStoreObject *pHandle, SAL_UNUSED_PARAMETER OStoreDirectory_Impl
         // Handle is kind of OStoreDirectory_Impl.
         return static_cast<OStoreDirectory_Impl*>(pHandle);
     }
-    return 0;
+    return nullptr;
 }
 
 /*========================================================================

@@ -51,7 +51,7 @@ inline sal_Size __store_convertTextToUnicode (
     sal_uInt32 nCvtInfo = 0;
     sal_Size nCvtBytes = 0;
     return rtl_convertTextToUnicode (
-        hConverter, 0,
+        hConverter, nullptr,
         pSrcBuffer, nSrcLength,
         pDstBuffer, nDstLength,
         OSTRING_TO_OUSTRING_CVTFLAGS,
@@ -72,7 +72,7 @@ OStoreDirectory_Impl::OStoreDirectory_Impl()
     : m_xManager (),
       m_aDescr   (0, 0, 0),
       m_nPath    (0),
-      m_hTextCvt (NULL)
+      m_hTextCvt (nullptr)
 {}
 
 /*
@@ -154,7 +154,7 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
     osl::MutexGuard aGuard (*m_xManager);
 
     // Check TextConverter.
-    if (m_hTextCvt == NULL)
+    if (m_hTextCvt == nullptr)
         m_hTextCvt = rtl_createTextToUnicodeConverter(RTL_TEXTENCODING_UTF8);
 
     // Setup iteration key.

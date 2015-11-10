@@ -40,7 +40,7 @@ public:
     /** Construction.
      */
     inline OStoreStream()
-        : m_hImpl (0)
+        : m_hImpl (nullptr)
     {}
 
     /** Destruction.
@@ -100,7 +100,7 @@ public:
         if (m_hImpl)
         {
             (void) store_releaseHandle (m_hImpl);
-            m_hImpl = 0;
+            m_hImpl = nullptr;
         }
         return store_openStream (hFile, rPath.pData, rName.pData, eMode, &m_hImpl);
     }
@@ -152,7 +152,7 @@ public:
     /** Construction.
      */
     inline OStoreDirectory()
-        : m_hImpl (0)
+        : m_hImpl (nullptr)
     {}
 
     /** Destruction.
@@ -212,7 +212,7 @@ public:
         if (m_hImpl)
         {
             (void) store_releaseHandle (m_hImpl);
-            m_hImpl = 0;
+            m_hImpl = nullptr;
         }
         return store_openDirectory (hFile, rPath.pData, rName.pData, eMode, &m_hImpl);
     }
@@ -262,7 +262,7 @@ public:
     /** Construction.
      */
     inline OStoreFile()
-        : m_hImpl (0)
+        : m_hImpl (nullptr)
     {}
 
     /** Destruction.
@@ -315,7 +315,7 @@ public:
      */
     inline bool isValid() const
     {
-        return (m_hImpl != 0);
+        return (m_hImpl != nullptr);
     }
 
     /** Open the file.
@@ -329,7 +329,7 @@ public:
         if (m_hImpl)
         {
             (void) store_releaseHandle (m_hImpl);
-            m_hImpl = 0;
+            m_hImpl = nullptr;
         }
         return store_openFile (rFilename.pData, eAccessMode, nPageSize, &m_hImpl);
     }
@@ -343,7 +343,7 @@ public:
         if (m_hImpl)
         {
             (void) store_releaseHandle (m_hImpl);
-            m_hImpl = 0;
+            m_hImpl = nullptr;
         }
         return store_createMemoryFile (nPageSize, &m_hImpl);
     }
@@ -356,7 +356,7 @@ public:
         if (m_hImpl)
         {
             (void) store_closeFile (m_hImpl);
-            m_hImpl = 0;
+            m_hImpl = nullptr;
         }
     }
 

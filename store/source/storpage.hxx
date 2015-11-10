@@ -158,7 +158,7 @@ SAL_CALL query (OStoreObject *pHandle, SAL_UNUSED_PARAMETER OStorePageManager*)
         // Handle is kind of OStorePageManager.
         return static_cast<OStorePageManager*>(pHandle);
     }
-    return 0;
+    return nullptr;
 }
 
 /*========================================================================

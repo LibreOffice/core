@@ -53,7 +53,7 @@ struct Entry
 
     // Construction
     explicit Entry (PageHolder const & rxPage = PageHolder(), sal_uInt32 nOffset = STORE_PAGE_NULL)
-        : m_xPage(rxPage), m_nOffset(nOffset), m_pNext(0)
+        : m_xPage(rxPage), m_nOffset(nOffset), m_pNext(nullptr)
     {}
 
     // Destruction
@@ -96,34 +96,34 @@ EntryCache::EntryCache()
         "store_cache_entry_cache",
         sizeof(Entry),
         0, // objalign
-        0, // constructor
-        0, // destructor
-        0, // reclaim
-        0, // userarg
-        0, // default source
+        nullptr, // constructor
+        nullptr, // destructor
+        nullptr, // reclaim
+        nullptr, // userarg
+        nullptr, // default source
         0  // flags
         );
 }
 
 EntryCache::~EntryCache()
 {
-    rtl_cache_destroy (m_entry_cache), m_entry_cache = 0;
+    rtl_cache_destroy (m_entry_cache), m_entry_cache = nullptr;
 }
 
 Entry * EntryCache::create (PageHolder const & rxPage, sal_uInt32 nOffset)
 {
     void * pAddr = rtl_cache_alloc (m_entry_cache);
-    if (pAddr != 0)
+    if (pAddr != nullptr)
     {
         // construct
         return new(pAddr) Entry (rxPage, nOffset);
     }
-    return 0;
+    return nullptr;
 }
 
 void EntryCache::destroy (Entry * entry)
 {
-    if (entry != 0)
+    if (entry != nullptr)
     {
         // destruct
         entry->~Entry();
@@ -181,9 +181,9 @@ PageCache::~PageCache()
     {
         int x = 0;
         Entry * entry = m_hash_table[i];
-        while (entry != 0)
+        while (entry != nullptr)
         {
-            m_hash_table[i] = entry->m_pNext, entry->m_pNext = 0;
+            m_hash_table[i] = entry->m_pNext, entry->m_pNext = nullptr;
             EntryCache::get().destroy (entry);
             entry = m_hash_table[i];
             x += 1;
@@ -209,7 +209,7 @@ void PageCache::rescale_Impl (sal_Size new_size)
     sal_Size new_bytes = new_size * sizeof(Entry*);
     Entry ** new_table = static_cast<Entry**>(rtl_allocateMemory(new_bytes));
 
-    if (new_table != 0)
+    if (new_table != nullptr)
     {
         Entry ** old_table = m_hash_table;
         sal_Size old_size  = m_hash_size;
@@ -230,14 +230,14 @@ void PageCache::rescale_Impl (sal_Size new_size)
         for (i = 0; i < old_size; i++)
         {
             Entry * curr = old_table[i];
-            while (curr != 0)
+            while (curr != nullptr)
             {
                 Entry * next = curr->m_pNext;
                 int index = hash_index_Impl(curr->m_nOffset);
                 curr->m_pNext = m_hash_table[index], m_hash_table[index] = curr;
                 curr = next;
             }
-            old_table[i] = 0;
+            old_table[i] = nullptr;
         }
         if (old_table != m_hash_table_0)
         {
@@ -250,7 +250,7 @@ void PageCache::rescale_Impl (sal_Size new_size)
 Entry * PageCache::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
 {
     int lookups = 0;
-    while (entry != 0)
+    while (entry != nullptr)
     {
         if (entry->m_nOffset == nOffset)
             break;
@@ -277,7 +277,7 @@ storeError PageCache::lookupPageAt (PageHolder & rxPage, sal_uInt32 nOffset)
 
     int index = hash_index_Impl(nOffset);
     Entry const * entry = lookup_Impl (m_hash_table[index], nOffset);
-    if (entry != 0)
+    if (entry != nullptr)
     {
         // Existing entry.
         rxPage = entry->m_xPage;
@@ -296,8 +296,8 @@ storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffse
 {
     // [SECURITY:ValInput]
     PageData const * pagedata = rxPage.get();
-    OSL_PRECOND(!(pagedata == 0), "store::PageCache::insertPageAt(): invalid Page");
-    if (pagedata == 0)
+    OSL_PRECOND(!(pagedata == nullptr), "store::PageCache::insertPageAt(): invalid Page");
+    if (pagedata == nullptr)
         return store_E_InvalidParameter;
 
     sal_uInt32 const offset = pagedata->location();
@@ -310,7 +310,7 @@ storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffse
         return store_E_CantSeek;
 
     Entry * entry = EntryCache::get().create (rxPage, nOffset);
-    if (entry != 0)
+    if (entry != nullptr)
     {
         // Insert new entry.
         int index = hash_index_Impl(nOffset);
@@ -327,8 +327,8 @@ storeError PageCache::updatePageAt (PageHolder const & rxPage, sal_uInt32 nOffse
 {
     // [SECURITY:ValInput]
     PageData const * pagedata = rxPage.get();
-    OSL_PRECOND(!(pagedata == 0), "store::PageCache::updatePageAt(): invalid Page");
-    if (pagedata == 0)
+    OSL_PRECOND(!(pagedata == nullptr), "store::PageCache::updatePageAt(): invalid Page");
+    if (pagedata == nullptr)
         return store_E_InvalidParameter;
 
     sal_uInt32 const offset = pagedata->location();
@@ -342,7 +342,7 @@ storeError PageCache::updatePageAt (PageHolder const & rxPage, sal_uInt32 nOffse
 
     int index = hash_index_Impl(nOffset);
     Entry *  entry  = lookup_Impl (m_hash_table[index], nOffset);
-    if (entry != 0)
+    if (entry != nullptr)
     {
         // Update existing entry.
         entry->m_xPage = rxPage;
@@ -360,7 +360,7 @@ storeError PageCache::removePageAt (sal_uInt32 nOffset)
         return store_E_CantSeek;
 
     Entry ** ppEntry = &(m_hash_table[hash_index_Impl(nOffset)]);
-    while (*ppEntry != 0)
+    while (*ppEntry != nullptr)
     {
         if ((*ppEntry)->m_nOffset == nOffset)
         {
@@ -368,7 +368,7 @@ storeError PageCache::removePageAt (sal_uInt32 nOffset)
             Entry * entry = (*ppEntry);
 
             // Dequeue and destroy entry.
-            (*ppEntry) = entry->m_pNext, entry->m_pNext = 0;
+            (*ppEntry) = entry->m_pNext, entry->m_pNext = nullptr;
             EntryCache::get().destroy (entry);
 
             // Update stats and leave.

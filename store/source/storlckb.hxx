@@ -135,7 +135,7 @@ SAL_CALL query (OStoreObject *pHandle, SAL_UNUSED_PARAMETER OStoreLockBytes*)
         // Handle is kind of OStoreLockBytes.
         return static_cast<OStoreLockBytes*>(pHandle);
     }
-    return 0;
+    return nullptr;
 }
 
 /*========================================================================

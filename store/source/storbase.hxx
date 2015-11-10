@@ -124,12 +124,12 @@ public:
     SharedCount()
         : m_pCount(Allocator::get().alloc())
     {
-        if (m_pCount != 0) (*m_pCount) = 1;
+        if (m_pCount != nullptr) (*m_pCount) = 1;
     }
 
     ~SharedCount()
     {
-        if (m_pCount != 0)
+        if (m_pCount != nullptr)
         {
             long new_count = --(*m_pCount);
             if (new_count == 0)
@@ -145,7 +145,7 @@ public:
     SharedCount (SharedCount const & rhs) // nothrow
         : m_pCount (rhs.m_pCount)
     {
-        if (m_pCount != 0) ++(*m_pCount);
+        if (m_pCount != nullptr) ++(*m_pCount);
     }
     SharedCount & operator= (SharedCount const & rhs) // nothrow
     {
@@ -156,7 +156,7 @@ public:
 
     bool operator== (long count) const
     {
-        return (m_pCount != 0) && (*m_pCount == count);
+        return (m_pCount != nullptr) && (*m_pCount == count);
     }
 };
 
@@ -440,7 +440,7 @@ struct PageData
     public:
         template< class T > T * construct()
         {
-            void * page = 0; sal_uInt16 size = 0;
+            void * page = nullptr; sal_uInt16 size = 0;
             if (allocate (&page, &size))
             {
                 return new(page) T(size);
@@ -451,12 +451,12 @@ struct PageData
         bool allocate (void ** ppPage, sal_uInt16 * pnSize)
         {
             allocate_Impl (ppPage, pnSize);
-            return ((*ppPage != 0) && (*pnSize != 0));
+            return ((*ppPage != nullptr) && (*pnSize != 0));
         }
 
         void deallocate (void * pPage)
         {
-            if (pPage != 0)
+            if (pPage != nullptr)
                 deallocate_Impl (pPage);
         }
 
@@ -548,17 +548,17 @@ class PageHolder
     allocator_type m_allocator;
 
 public:
-    explicit PageHolder (PageData * pagedata = 0, allocator_type const & allocator = allocator_type())
+    explicit PageHolder (PageData * pagedata = nullptr, allocator_type const & allocator = allocator_type())
         : m_refcount (),
           m_pagedata (pagedata),
           m_allocator(allocator)
     {
-        OSL_ENSURE((m_pagedata == 0) || m_allocator.is(), "store::PageHolder::ctor(): pagedata w/o allocator.");
+        OSL_ENSURE((m_pagedata == nullptr) || m_allocator.is(), "store::PageHolder::ctor(): pagedata w/o allocator.");
     }
 
     ~PageHolder()
     {
-        if ((m_refcount == 1) && (m_pagedata != 0))
+        if ((m_refcount == 1) && (m_pagedata != nullptr))
         {
             // free pagedata.
             OSL_ENSURE(m_allocator.is(), "store::PageHolder::dtor(): pagedata w/o allocator.");
@@ -591,23 +591,23 @@ public:
 
     PageData * operator->()
     {
-        OSL_PRECOND(m_pagedata != 0, "store::PageHolder::operator->(): Null pointer");
+        OSL_PRECOND(m_pagedata != nullptr, "store::PageHolder::operator->(): Null pointer");
         return m_pagedata;
     }
     PageData const * operator->() const
     {
-        OSL_PRECOND(m_pagedata != 0, "store::PageHolder::operator->(): Null pointer");
+        OSL_PRECOND(m_pagedata != nullptr, "store::PageHolder::operator->(): Null pointer");
         return m_pagedata;
     }
 
     PageData & operator*()
     {
-        OSL_PRECOND(m_pagedata != 0, "store::PageHolder::operator*(): Null pointer");
+        OSL_PRECOND(m_pagedata != nullptr, "store::PageHolder::operator*(): Null pointer");
         return *m_pagedata;
     }
     PageData const & operator*() const
     {
-        OSL_PRECOND(m_pagedata != 0, "store::PageHolder::operator*(): Null pointer");
+        OSL_PRECOND(m_pagedata != nullptr, "store::PageHolder::operator*(): Null pointer");
         return *m_pagedata;
     }
 };
@@ -629,7 +629,7 @@ class PageHolderObject
     template< class U >
     static bool isA (PageData const * p)
     {
-        return ((p != 0) && (p->type() == U::theTypeId));
+        return ((p != nullptr) && (p->type() == U::theTypeId));
     }
 
     template< class U >

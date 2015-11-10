@@ -475,24 +475,24 @@ OStorePageBIOS::AceCache::AceCache()
     sizeof (OStorePageBIOS::Ace),
     0, // objalign
    reinterpret_cast<ace_constructor_type>( OStorePageBIOS::Ace::constructor),
-    0, // destructor,
-    0, // reclaim,
-    0, // userarg,
-    0, // default source,
+    nullptr, // destructor,
+    nullptr, // reclaim,
+    nullptr, // userarg,
+    nullptr, // default source,
     0  // flags
     );
 }
 
 OStorePageBIOS::AceCache::~AceCache()
 {
-  rtl_cache_destroy (m_ace_cache), m_ace_cache = 0;
+  rtl_cache_destroy (m_ace_cache), m_ace_cache = nullptr;
 }
 
 OStorePageBIOS::Ace *
 OStorePageBIOS::AceCache::create (sal_uInt32 addr, sal_uInt32 used)
 {
   Ace * ace = static_cast<Ace*>(rtl_cache_alloc (m_ace_cache));
-  if (ace != 0)
+  if (ace != nullptr)
   {
     // verify invariant state.
     OSL_ASSERT((ace->m_next == ace) && (ace->m_prev == ace));
@@ -507,7 +507,7 @@ OStorePageBIOS::AceCache::create (sal_uInt32 addr, sal_uInt32 used)
 void
 OStorePageBIOS::AceCache::destroy (OStorePageBIOS::Ace * ace)
 {
-  if (ace != 0)
+  if (ace != nullptr)
   {
     // remove from queue (if any).
     ace->m_next->m_prev = ace->m_prev, ace->m_prev->m_next = ace->m_next;
@@ -529,8 +529,8 @@ OStorePageBIOS::AceCache::destroy (OStorePageBIOS::Ace * ace)
  * OStorePageBIOS.
  */
 OStorePageBIOS::OStorePageBIOS()
-    : m_xLockBytes (NULL),
-      m_pSuper     (NULL),
+    : m_xLockBytes (nullptr),
+      m_pSuper     (nullptr),
       m_bWriteable (false)
 {
 }
@@ -588,7 +588,7 @@ storeError OStorePageBIOS::initialize_Impl (
     if (eAccessMode != store_AccessCreate)
     {
         // Load SuperBlock page.
-        if ((m_pSuper = new SuperBlockPage()) == 0)
+        if ((m_pSuper = new SuperBlockPage()) == nullptr)
             return store_E_OutOfMemory;
 
         eErrCode = read (0, m_pSuper, SuperBlockPage::theSize);
@@ -627,7 +627,7 @@ storeError OStorePageBIOS::initialize_Impl (
         rnPageSize = ((rnPageSize + STORE_MINIMUM_PAGESIZE - 1) & ~(STORE_MINIMUM_PAGESIZE - 1));
 
         // Create initial page (w/ SuperBlock).
-        if ((m_pSuper = new(rnPageSize) SuperBlockPage(rnPageSize)) == 0)
+        if ((m_pSuper = new(rnPageSize) SuperBlockPage(rnPageSize)) == nullptr)
             return store_E_OutOfMemory;
         eErrCode = m_pSuper->save (*this, rnPageSize);
     }
@@ -667,7 +667,7 @@ void OStorePageBIOS::cleanup_Impl()
     }
 
     // Release SuperBlock page.
-    delete m_pSuper, m_pSuper = 0;
+    delete m_pSuper, m_pSuper = nullptr;
 
     // Release PageCache.
     m_xCache.clear();
