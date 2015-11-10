@@ -65,12 +65,12 @@ Thesaurus::Thesaurus() :
     aEvtListeners   ( GetLinguMutex() )
 {
     bDisposing = false;
-    pPropHelper = NULL;
-    aThes = NULL;
-    aCharSetInfo = NULL;
-    aTEncs = NULL;
-    aTLocs = NULL;
-    aTNames = NULL;
+    pPropHelper = nullptr;
+    aThes = nullptr;
+    aCharSetInfo = nullptr;
+    aTEncs = nullptr;
+    aTLocs = nullptr;
+    aTNames = nullptr;
     numthes = 0;
     prevLocale = LANGUAGE_DONTKNOW;
 }
@@ -82,28 +82,28 @@ Thesaurus::~Thesaurus()
         for (int i = 0; i < numthes; i++)
         {
             if (aThes[i]) delete aThes[i];
-            aThes[i] = NULL;
+            aThes[i] = nullptr;
         }
         delete[] aThes;
     }
-    aThes = NULL;
+    aThes = nullptr;
     if (aCharSetInfo)
     {
         for (int i = 0; i < numthes; i++)
         {
             if (aCharSetInfo[i]) delete aCharSetInfo[i];
-            aCharSetInfo[i] = NULL;
+            aCharSetInfo[i] = nullptr;
         }
         delete[] aCharSetInfo;
     }
-    aCharSetInfo = NULL;
+    aCharSetInfo = nullptr;
     numthes = 0;
     if (aTEncs) delete[] aTEncs;
-    aTEncs = NULL;
+    aTEncs = nullptr;
     if (aTLocs) delete[] aTLocs;
-    aTLocs = NULL;
+    aTLocs = nullptr;
     if (aTNames) delete[] aTNames;
-    aTNames = NULL;
+    aTNames = nullptr;
 
     if (pPropHelper)
     {
@@ -216,7 +216,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
                         LanguageTag aLanguageTag( aDictIt->aLocaleNames[i] );
-                        aThes[k]  = NULL;
+                        aThes[k]  = nullptr;
                         aTEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
                         aTLocs[k]  = aLanguageTag.getLocale();
                         aCharSetInfo[k] = new CharClass( aLanguageTag );
@@ -238,11 +238,11 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         {
             /* no dictionary found so register no dictionaries */
             numthes = 0;
-            aThes  = NULL;
-            aTEncs  = NULL;
-            aTLocs  = NULL;
-            aTNames = NULL;
-            aCharSetInfo = NULL;
+            aThes  = nullptr;
+            aTEncs  = nullptr;
+            aTLocs  = nullptr;
+            aTNames = nullptr;
+            aCharSetInfo = nullptr;
             aSuppLocales.realloc(0);
         }
     }
@@ -304,15 +304,15 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
     if (prevTerm == qTerm && prevLocale == nLanguage)
         return prevMeanings;
 
-    mentry * pmean = NULL;
+    mentry * pmean = nullptr;
     sal_Int32 nmean = 0;
 
     PropertyHelper_Thesaurus &rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
-    MyThes * pTH = NULL;
+    MyThes * pTH = nullptr;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-    CharClass * pCC = NULL;
+    CharClass * pCC = nullptr;
 
     // find the first thesaurus that matches the locale
     for (int i =0; i < numthes; i++)
@@ -596,7 +596,7 @@ void SAL_CALL Thesaurus::dispose()
         {
             pPropHelper->RemoveAsPropListener();
             delete pPropHelper;
-            pPropHelper = NULL;
+            pPropHelper = nullptr;
         }
     }
 }
@@ -653,7 +653,7 @@ Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
 void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if ( Thesaurus::getImplementationName_Static().equalsAscii( pImplName ) )
     {
 

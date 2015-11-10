@@ -70,8 +70,8 @@ Hyphenator::Hyphenator() :
     aEvtListeners   ( GetLinguMutex() )
 {
     bDisposing = false;
-    pPropHelper = NULL;
-    aDicts = NULL;
+    pPropHelper = nullptr;
+    aDicts = nullptr;
     numdict = 0;
 }
 
@@ -197,7 +197,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
                         LanguageTag aLanguageTag( aDictIt->aLocaleNames[i] );
-                        aDicts[k].aPtr = NULL;
+                        aDicts[k].aPtr = nullptr;
                         aDicts[k].eEnc = RTL_TEXTENCODING_DONTKNOW;
                         aDicts[k].aLoc = aLanguageTag.getLocale();
                         aDicts[k].apCC = new CharClass( aLanguageTag );
@@ -219,7 +219,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         {
             // no dictionary found so register no dictionaries
             numdict = 0;
-            aDicts = NULL;
+            aDicts = nullptr;
             aSuppLocales.realloc(0);
         }
     }
@@ -263,7 +263,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     sal_Int16 minLead = rHelper.GetMinLeading();
     sal_Int16 minLen = rHelper.GetMinWordLength();
 
-    HyphenDict *dict = NULL;
+    HyphenDict *dict = nullptr;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
     Reference< XHyphenatedWord > xRes;
@@ -297,10 +297,10 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 #endif
 
-            if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
+            if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == nullptr )
             {
                fprintf(stderr, "Couldn't find file %s\n", OU2ENC(dictpath, osl_getThreadTextEncoding()) );
-               return NULL;
+               return nullptr;
             }
             aDicts[k].aPtr = dict;
             aDicts[k].eEnc = getTextEncodingFromCharset(dict->cset);
@@ -317,7 +317,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         // Hopefully something not working at all will raise proper attention quickly. ;-)
         DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
         if (eEnc == RTL_TEXTENCODING_DONTKNOW)
-            return NULL;
+            return nullptr;
 
         CapType ct = capitalType(aWord, pCC);
 
@@ -345,9 +345,9 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         std::unique_ptr<char[]> lcword(new char[wordlen + 1]);
         std::unique_ptr<char[]> hyphens(new char[wordlen + 5]);
 
-        char ** rep = NULL; // replacements of discretionary hyphenation
-        int * pos = NULL; // array of [hyphenation point] minus [deletion position]
-        int * cut = NULL; // length of deletions in original word
+        char ** rep = nullptr; // replacements of discretionary hyphenation
+        int * pos = nullptr; // array of [hyphenation point] minus [deletion position]
+        int * cut = nullptr; // length of deletions in original word
 
         // copy converted word into simple char buffer
         strcpy(lcword.get(),encWord.getStr());
@@ -359,7 +359,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         n++;
         if (n > 0)
         {
-            const bool bFailed = 0 != hnj_hyphen_hyphenate3( dict, lcword.get(), n, hyphens.get(), NULL,
+            const bool bFailed = 0 != hnj_hyphen_hyphenate3( dict, lcword.get(), n, hyphens.get(), nullptr,
                     &rep, &pos, &cut, minLead, minTrail,
                     Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead  - Max(dict->lhmin, 2))),
                     Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2))) );
@@ -376,7 +376,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 }
                 if (pos) free(pos);
                 if (cut) free(cut);
-                return NULL;
+                return nullptr;
             }
         }
 
@@ -426,7 +426,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
         if (nHyphenationPos  == -1)
         {
-            xRes = NULL;
+            xRes = nullptr;
         }
         else
         {
@@ -491,7 +491,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         if (cut) free(cut);
         return xRes;
     }
-    return NULL;
+    return nullptr;
 }
 
 Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
@@ -508,7 +508,7 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
         if (xRes.is() && xRes->isAlternativeSpelling() && xRes->getHyphenationPos() == nIndex)
             return xRes;
     }
-    return NULL;
+    return nullptr;
 }
 
 #if defined(WNT)
@@ -562,7 +562,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     // if we have a hyphenation dictionary matching this locale
     if (k != -1)
     {
-        HyphenDict *dict = NULL;
+        HyphenDict *dict = nullptr;
         // if this dictioanry has not been loaded yet do that
         if (!aDicts[k].aPtr)
         {
@@ -580,10 +580,10 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             sTmp = Win_GetShortPathName( dictpath );
 #endif
 
-            if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
+            if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == nullptr )
             {
                fprintf(stderr, "Couldn't find file %s and %s\n", sTmp.getStr(), OU2ENC(dictpath, osl_getThreadTextEncoding()) );
-               return NULL;
+               return nullptr;
             }
             aDicts[k].aPtr = dict;
             aDicts[k].eEnc = getTextEncodingFromCharset(dict->cset);
@@ -600,7 +600,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         // Hopefully something not working at all will raise proper attention quickly. ;-)
         DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
         if (eEnc == RTL_TEXTENCODING_DONTKNOW)
-            return NULL;
+            return nullptr;
 
         // first handle smart quotes both single and double
         OUStringBuffer rBuf(aWord);
@@ -625,9 +625,9 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         int wordlen = encWord.getLength();
         std::unique_ptr<char[]> lcword(new char[wordlen+1]);
         std::unique_ptr<char[]> hyphens(new char[wordlen+5]);
-        char ** rep = NULL; // replacements of discretionary hyphenation
-        int * pos = NULL; // array of [hyphenation point] minus [deletion position]
-        int * cut = NULL; // length of deletions in original word
+        char ** rep = nullptr; // replacements of discretionary hyphenation
+        int * pos = nullptr; // array of [hyphenation point] minus [deletion position]
+        int * cut = nullptr; // length of deletions in original word
 
         // copy converted word into simple char buffer
         strcpy(lcword.get(),encWord.getStr());
@@ -639,7 +639,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         n++;
         if (n > 0)
         {
-            const bool bFailed = 0 != hnj_hyphen_hyphenate3(dict, lcword.get(), n, hyphens.get(), NULL,
+            const bool bFailed = 0 != hnj_hyphen_hyphenate3(dict, lcword.get(), n, hyphens.get(), nullptr,
                     &rep, &pos, &cut, minLead, minTrail,
                     Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead - Max(dict->lhmin, 2))),
                     Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2))) );
@@ -656,7 +656,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
                 if (pos) free(pos);
                 if (cut) free(cut);
 
-                return NULL;
+                return nullptr;
             }
         }
         // now backfill hyphens[] for any removed periods
@@ -709,7 +709,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         return xRes;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 OUString SAL_CALL Hyphenator::makeLowerCase(const OUString& aTerm, CharClass * pCC)
@@ -824,7 +824,7 @@ void SAL_CALL Hyphenator::dispose()
         {
             pPropHelper->RemoveAsPropListener();
             delete pPropHelper;
-            pPropHelper = NULL;
+            pPropHelper = nullptr;
         }
     }
 }
@@ -883,7 +883,7 @@ Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
 void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if ( Hyphenator::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =

@@ -59,13 +59,13 @@ using namespace linguistic;
 #define SPELLML_HEADER "<?xml?>"
 
 SpellChecker::SpellChecker() :
-    aDicts(NULL),
-    aDEncs(NULL),
-    aDLocs(NULL),
-    aDNames(NULL),
+    aDicts(nullptr),
+    aDEncs(nullptr),
+    aDLocs(nullptr),
+    aDNames(nullptr),
     numdict(0),
     aEvtListeners(GetLinguMutex()),
-    pPropHelper(NULL),
+    pPropHelper(nullptr),
     bDisposing(false)
 {
 }
@@ -192,7 +192,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     // Once for each of it's supported locales.
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
-                        aDicts[k]  = NULL;
+                        aDicts[k]  = nullptr;
                         aDEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
                         aDLocs[k]  = LanguageTag::convertToLocale( aLocaleNames[i] );
                         // also both files have to be in the same directory and the
@@ -214,13 +214,13 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             // no dictionary found so register no dictionaries
             numdict = 0;
             delete[] aDicts;
-            aDicts  = NULL;
+            aDicts  = nullptr;
             delete[] aDEncs;
-            aDEncs = NULL;
+            aDEncs = nullptr;
             delete[] aDLocs;
-            aDLocs  = NULL;
+            aDLocs  = nullptr;
             delete[] aDNames;
-            aDNames = NULL;
+            aDNames = nullptr;
             aSuppLocales.realloc(0);
         }
     }
@@ -252,7 +252,7 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 
 sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
-    Hunspell * pMS = NULL;
+    Hunspell * pMS = nullptr;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
     // initialize a myspell object for each dictionary once
@@ -287,7 +287,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
     {
         for (sal_Int32 i = 0; i < numdict; ++i)
         {
-            pMS = NULL;
+            pMS = nullptr;
             eEnc = RTL_TEXTENCODING_DONTKNOW;
 
             if (rLocale == aDLocs[i])
@@ -359,7 +359,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                 } else {
                     return -1;
                 }
-                pMS = NULL;
+                pMS = nullptr;
             }
         }
     }
@@ -416,7 +416,7 @@ Reference< XSpellAlternatives >
     Reference< XSpellAlternatives > xRes;
     // note: mutex is held by higher up by spell which covers both
 
-    Hunspell* pMS = NULL;
+    Hunspell* pMS = nullptr;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
     // first handle smart quotes (single and double)
@@ -441,7 +441,7 @@ Reference< XSpellAlternatives >
         Sequence< OUString > aStr( 0 );
         for (int i = 0; i < numdict; i++)
         {
-            pMS = NULL;
+            pMS = nullptr;
             eEnc = RTL_TEXTENCODING_DONTKNOW;
 
             if (rLocale == aDLocs[i])
@@ -452,7 +452,7 @@ Reference< XSpellAlternatives >
 
             if (pMS)
             {
-                char ** suglst = NULL;
+                char ** suglst = nullptr;
                 OString aWrd(OU2ENC(nWord,eEnc));
                 int count = pMS->suggest(&suglst, aWrd.getStr());
 
@@ -488,10 +488,10 @@ Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
     MutexGuard  aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  rWord.isEmpty())
-        return NULL;
+        return nullptr;
 
     if (!hasLocale( rLocale ))
-        return NULL;
+        return nullptr;
 
     Reference< XSpellAlternatives > xAlt;
     if (!isValid( rWord, rLocale, rProperties ))
@@ -586,7 +586,7 @@ void SAL_CALL SpellChecker::dispose()
         {
             pPropHelper->RemoveAsPropListener();
             delete pPropHelper;
-            pPropHelper = NULL;
+            pPropHelper = nullptr;
         }
     }
 }
@@ -645,7 +645,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
-    void * pRet = 0;
+    void * pRet = nullptr;
     if ( SpellChecker::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =

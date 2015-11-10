@@ -366,9 +366,9 @@ static const struct ::cppu::ImplementationEntry s_component_entries [] =
         LangGuess_Impl_create, getImplementationName_LangGuess_Impl,
         getSupportedServiceNames_LangGuess_Impl,
         ::cppu::createSingleComponentFactory,
-        0, 0
+        nullptr, 0
     },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 extern "C"

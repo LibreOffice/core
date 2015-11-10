@@ -34,7 +34,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL spell_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = NULL;
+    void * pRet = nullptr;
     pRet = SpellChecker_getFactory(
         pImplName,
         static_cast< XMultiServiceFactory * >( pServiceManager ),

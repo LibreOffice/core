@@ -84,7 +84,7 @@ typedef struct textcat_t{
 
 SimpleGuesser::SimpleGuesser()
 {
-    h = NULL;
+    h = nullptr;
 }
 
 SimpleGuesser& SimpleGuesser::operator=(const SimpleGuesser& sg){
