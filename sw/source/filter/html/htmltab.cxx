@@ -57,8 +57,6 @@
 #include "swcss1.hxx"
 #include <numrule.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #define NETSCAPE_DFLT_BORDER 1
 #define NETSCAPE_DFLT_CELLSPACING 2
 
@@ -362,7 +360,7 @@ public:
 // HTML table
 typedef std::vector<std::unique_ptr<HTMLTableRow>> HTMLTableRows;
 
-typedef boost::ptr_vector<HTMLTableColumn> HTMLTableColumns;
+typedef std::vector<std::unique_ptr<HTMLTableColumn>> HTMLTableColumns;
 
 typedef std::vector<SdrObject *> SdrObjects;
 
@@ -377,7 +375,7 @@ class HTMLTable
     std::vector<sal_uInt16> *pDrawObjPrcWidths;   // column of draw object and its rel. width
 
     HTMLTableRows *m_pRows;         ///< table rows
-    HTMLTableColumns *pColumns;     // table columns
+    HTMLTableColumns *m_pColumns;   ///< table columns
 
     sal_uInt16 nRows;                   // number of rows
     sal_uInt16 nCols;                   // number of columns
@@ -929,7 +927,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     pDrawObjPrcWidths = nullptr;
 
     m_pRows = new HTMLTableRows;
-    pColumns = new HTMLTableColumns;
+    m_pColumns = new HTMLTableColumns;
     nRows = 0;
     nCurRow = 0; nCurCol = 0;
 
@@ -1080,7 +1078,7 @@ HTMLTable::HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
     InitCtor( pOptions );
 
     for( sal_uInt16 i=0; i<nCols; i++ )
-        pColumns->push_back( new HTMLTableColumn );
+        m_pColumns->push_back(o3tl::make_unique<HTMLTableColumn>());
 }
 
 HTMLTable::~HTMLTable()
@@ -1089,7 +1087,7 @@ HTMLTable::~HTMLTable()
     delete pDrawObjPrcWidths;
 
     delete m_pRows;
-    delete pColumns;
+    delete m_pColumns;
     delete pBGBrush;
     delete pInhBGBrush;
 
@@ -1105,7 +1103,7 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
 
     sal_uInt16 nBorderWidth = GetBorderWidth( aBorderLine, true );
     sal_uInt16 nLeftBorderWidth =
-        ((*pColumns)[0]).bLeftBorder ? GetBorderWidth( aLeftBorderLine, true ) : 0;
+        (*m_pColumns)[0]->bLeftBorder ? GetBorderWidth(aLeftBorderLine, true) : 0;
     sal_uInt16 nRightBorderWidth =
         bRightBorder ? GetBorderWidth( aRightBorderLine, true ) : 0;
     sal_uInt16 nInhLeftBorderWidth = 0;
@@ -1146,7 +1144,7 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
     pLayoutInfo->SetExportable( bExportable );
 
     for( i=0; i<nCols; i++ )
-        pLayoutInfo->SetColumn( ((*pColumns)[i]).CreateLayoutInfo(), i );
+        pLayoutInfo->SetColumn( ((*m_pColumns)[i])->CreateLayoutInfo(), i );
 
     return pLayoutInfo;
 }
@@ -1345,7 +1343,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
     sal_uInt32 nNumFormat = 0;
     double nValue = 0.0;
 
-    HTMLTableColumn *pColumn = &(*pColumns)[nCol];
+    HTMLTableColumn *const pColumn = (*m_pColumns)[nCol].get();
 
     if( pBox->GetSttNd() )
     {
@@ -1450,7 +1448,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 }
                 bSet = true;
             }
-            if( ((*pColumns)[nCol]).bLeftBorder )
+            if (((*m_pColumns)[nCol])->bLeftBorder)
             {
                 const SvxBorderLine& rBorderLine =
                     0==nCol ? aLeftBorderLine : aBorderLine;
@@ -1934,7 +1932,7 @@ void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
             GetBorderWidth( aInhRightBorderLine, true ) + MIN_BORDER_DIST;
     }
 
-    if( ((*pParent->pColumns)[nCol]).bLeftBorder )
+    if (((*pParent->m_pColumns)[nCol])->bLeftBorder)
     {
         bInhLeftBorder = true;  // erstmal nur merken
         aInhLeftBorderLine = 0==nCol ? pParent->aLeftBorderLine
@@ -1952,7 +1950,7 @@ void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
 
     bRightAlwd = ( pParent->bRightAlwd &&
                   (nCol+nColSpan==pParent->nCols ||
-                   !((*pParent->pColumns)[nCol+nColSpan]).bLeftBorder) );
+                   !((*pParent->m_pColumns)[nCol+nColSpan])->bLeftBorder) );
 }
 
 void HTMLTable::SetBorders()
@@ -1961,8 +1959,10 @@ void HTMLTable::SetBorders()
     for( i=1; i<nCols; i++ )
         if( HTML_TR_ALL==eRules || HTML_TR_COLS==eRules ||
             ((HTML_TR_ROWS==eRules || HTML_TR_GROUPS==eRules) &&
-             ((*pColumns)[i-1]).IsEndOfGroup()) )
-            ((*pColumns)[i]).bLeftBorder = true;
+             ((*m_pColumns)[i-1])->IsEndOfGroup()))
+        {
+            ((*m_pColumns)[i])->bLeftBorder = true;
+        }
 
     for( i=0; i<nRows-1; i++ )
         if( HTML_TR_ALL==eRules || HTML_TR_ROWS==eRules ||
@@ -1984,7 +1984,9 @@ void HTMLTable::SetBorders()
                       HTML_TF_BOX==eFrame) )
         bRightBorder = true;
     if( HTML_TF_LHS==eFrame || HTML_TF_VSIDES==eFrame || HTML_TF_BOX==eFrame )
-        ((*pColumns)[0]).bLeftBorder = true;
+    {
+        ((*m_pColumns)[0])->bLeftBorder = true;
+    }
 
     for( i=0; i<nRows; i++ )
     {
@@ -2042,7 +2044,7 @@ inline HTMLTableCell *HTMLTable::GetCell( sal_uInt16 nRow,
 
 SvxAdjust HTMLTable::GetInheritedAdjust() const
 {
-    SvxAdjust eAdjust = (nCurCol<nCols ? ((*pColumns)[nCurCol]).GetAdjust()
+    SvxAdjust eAdjust = (nCurCol<nCols ? ((*m_pColumns)[nCurCol])->GetAdjust()
                                        : SVX_ADJUST_END );
     if( SVX_ADJUST_END==eAdjust )
         eAdjust = (*m_pRows)[nCurRow]->GetAdjust();
@@ -2055,7 +2057,7 @@ sal_Int16 HTMLTable::GetInheritedVertOri() const
     // text::VertOrientation::TOP ist der default!
     sal_Int16 eVOri = (*m_pRows)[nCurRow]->GetVertOri();
     if( text::VertOrientation::TOP==eVOri && nCurCol<nCols )
-        eVOri = ((*pColumns)[nCurCol]).GetVertOri();
+        eVOri = ((*m_pColumns)[nCurCol])->GetVertOri();
     if( text::VertOrientation::TOP==eVOri )
         eVOri = eVertOri;
 
@@ -2086,11 +2088,11 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
     if( nCols < nColsReq )
     {
         for( i=nCols; i<nColsReq; i++ )
-            pColumns->push_back( new HTMLTableColumn );
+            m_pColumns->push_back(o3tl::make_unique<HTMLTableColumn>());
         for( i=0; i<nRows; i++ )
             (*m_pRows)[i]->Expand( nColsReq, i<nCurRow );
         nCols = nColsReq;
-        OSL_ENSURE(pColumns->size() == nCols,
+        OSL_ENSURE(m_pColumns->size() == nCols,
                 "wrong number of columns after expanding");
     }
     if( nColsReq > nFilledCols )
@@ -2266,7 +2268,7 @@ inline void HTMLTable::CloseColGroup( sal_uInt16 nSpan, sal_uInt16 _nWidth,
 
     OSL_ENSURE( nCurCol<=nCols, "ungueltige Spalte" );
     if( nCurCol>0 && nCurCol<=nCols )
-        ((*pColumns)[nCurCol-1]).SetEndOfGroup();
+        ((*m_pColumns)[nCurCol-1])->SetEndOfGroup();
 }
 
 void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidth,
@@ -2286,7 +2288,7 @@ void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidt
     if( nCols < nColsReq )
     {
         for( i=nCols; i<nColsReq; i++ )
-            pColumns->push_back( new HTMLTableColumn );
+            m_pColumns->push_back(o3tl::make_unique<HTMLTableColumn>());
         nCols = nColsReq;
     }
 
@@ -2299,7 +2301,7 @@ void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidt
 
     for( i=nCurCol; i<nColsReq; i++ )
     {
-        HTMLTableColumn *pCol = &(*pColumns)[i];
+        HTMLTableColumn *const pCol = (*m_pColumns)[i].get();
         sal_uInt16 nTmp = bRelWidth ? nColWidth : (sal_uInt16)aTwipSz.Width();
         pCol->SetWidth( nTmp, bRelWidth );
         pCol->SetAdjust( eAdjust );
@@ -2338,7 +2340,7 @@ void HTMLTable::CloseTable()
     // falls die Tabelle keine Spalte hat, muessen wir eine hinzufuegen
     if( 0==nCols )
     {
-        pColumns->push_back( new HTMLTableColumn );
+        m_pColumns->push_back(o3tl::make_unique<HTMLTableColumn>());
         for( i=0; i<nRows; i++ )
             (*m_pRows)[i]->Expand(1);
         nCols = 1;
@@ -2355,7 +2357,7 @@ void HTMLTable::CloseTable()
 
     if( nFilledCols < nCols )
     {
-        pColumns->erase( pColumns->begin() + nFilledCols, pColumns->begin() + nCols );
+        m_pColumns->erase(m_pColumns->begin() + nFilledCols, m_pColumns->begin() + nCols);
         for( i=0; i<nRows; i++ )
             (*m_pRows)[i]->Shrink( nFilledCols );
         nCols = nFilledCols;
@@ -2462,11 +2464,11 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         }
 
         if( pLayoutInfo->GetRelLeftFill() == 0 &&
-            !((*pColumns)[0]).bLeftBorder &&
+            !((*m_pColumns)[0])->bLeftBorder &&
             bInhLeftBorder )
         {
             // ggf. rechte Umrandung von auesserer Tabelle uebernehmen
-            ((*pColumns)[0]).bLeftBorder = true;
+            ((*m_pColumns)[0])->bLeftBorder = true;
             aLeftBorderLine = aInhLeftBorderLine;
         }
     }
