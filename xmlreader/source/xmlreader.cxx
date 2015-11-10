@@ -56,9 +56,9 @@ bool isSpace(char c) {
 
 XmlReader::XmlReader(char const *sStr, size_t nLength)
     : fileUrl_("stream")
-    , fileHandle_(0)
+    , fileHandle_(nullptr)
     , fileSize_(0)
-    , fileAddress_(0)
+    , fileAddress_(nullptr)
 {
     namespaceIris_.push_back(Span("http://www.w3.org/XML/1998/namespace"));
     namespaces_.push_back(NamespaceData(Span("xml"), NAMESPACE_XML));
@@ -70,7 +70,7 @@ XmlReader::XmlReader(char const *sStr, size_t nLength)
 
 XmlReader::XmlReader(OUString const & fileUrl)
     : fileUrl_(fileUrl)
-    , fileHandle_(0)
+    , fileHandle_(nullptr)
 {
     oslFileError e = osl_openFile(
         fileUrl_.pData, &fileHandle_, osl_File_OpenFlag_Read);
@@ -164,7 +164,7 @@ XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
 }
 
 bool XmlReader::nextAttribute(int * nsId, Span * localName) {
-    assert(nsId != 0 && localName != 0);
+    assert(nsId != nullptr && localName != nullptr);
     if (firstAttribute_) {
         currentAttribute_ = attributes_.begin();
         firstAttribute_ = false;
@@ -174,7 +174,7 @@ bool XmlReader::nextAttribute(int * nsId, Span * localName) {
     if (currentAttribute_ == attributes_.end()) {
         return false;
     }
-    if (currentAttribute_->nameColon == 0) {
+    if (currentAttribute_->nameColon == nullptr) {
         *nsId = NAMESPACE_NONE;
         *localName = Span(
             currentAttribute_->nameBegin,
@@ -361,7 +361,7 @@ Span XmlReader::scanCdataSection() {
 }
 
 bool XmlReader::scanName(char const ** nameColon) {
-    assert(nameColon != 0 && *nameColon == 0);
+    assert(nameColon != nullptr && *nameColon == nullptr);
     for (char const * begin = pos_;; ++pos_) {
         switch (peek()) {
         case '\0': // i.e., EOF
@@ -383,7 +383,7 @@ bool XmlReader::scanName(char const ** nameColon) {
 }
 
 int XmlReader::scanNamespaceIri(char const * begin, char const * end) {
-    assert(begin != 0 && begin <= end);
+    assert(begin != nullptr && begin <= end);
     Span iri(handleAttributeValue(begin, end, false));
     for (NamespaceIris::size_type i = 0; i < namespaceIris_.size(); ++i) {
         if (namespaceIris_[i].equals(iri)) {
@@ -395,7 +395,7 @@ int XmlReader::scanNamespaceIri(char const * begin, char const * end) {
 
 char const * XmlReader::handleReference(char const * position, char const * end)
 {
-    assert(position != 0 && *position == '&' && position < end);
+    assert(position != nullptr && *position == '&' && position < end);
     ++position;
     if (*position == '#') {
         ++position;
@@ -603,9 +603,9 @@ Span XmlReader::handleAttributeValue(
 }
 
 XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
-    assert(nsId != 0 && localName);
+    assert(nsId != nullptr && localName);
     char const * nameBegin = pos_;
-    char const * nameColon = 0;
+    char const * nameColon = nullptr;
     if (!scanName(&nameColon)) {
         throw css::uno::RuntimeException(
             "bad tag name in " + fileUrl_ );
@@ -626,7 +626,7 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
                 "missing whitespace before attribute in " + fileUrl_ );
         }
         char const * attrNameBegin = pos_;
-        char const * attrNameColon = 0;
+        char const * attrNameColon = nullptr;
         if (!scanName(&attrNameColon)) {
             throw css::uno::RuntimeException(
                 "bad attribute name in " + fileUrl_ );
@@ -651,12 +651,12 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
         }
         char const * valueEnd = pos_ + i;
         pos_ += i + 1;
-        if (attrNameColon == 0 &&
+        if (attrNameColon == nullptr &&
             Span(attrNameBegin, attrNameEnd - attrNameBegin).equals("xmlns"))
         {
             hasDefaultNs = true;
             defaultNsId = scanNamespaceIri(valueBegin, valueEnd);
-        } else if (attrNameColon != 0 &&
+        } else if (attrNameColon != nullptr &&
                    Span(attrNameBegin, attrNameColon - attrNameBegin).equals(
                        "xmlns"))
         {
@@ -690,7 +690,7 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
         ElementData(
             Span(nameBegin, nameEnd - nameBegin), inheritedNamespaces,
             defaultNsId));
-    if (nameColon == 0) {
+    if (nameColon == nullptr) {
         *nsId = defaultNsId;
         *localName = Span(nameBegin, nameEnd - nameBegin);
     } else {
@@ -706,7 +706,7 @@ XmlReader::Result XmlReader::handleEndTag() {
             "spurious end tag in " + fileUrl_ );
     }
     char const * nameBegin = pos_;
-    char const * nameColon = 0;
+    char const * nameColon = nullptr;
     if (!scanName(&nameColon) ||
         !elements_.top().name.equals(nameBegin, pos_ - nameBegin))
     {

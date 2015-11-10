@@ -34,7 +34,7 @@ namespace xmlreader {
 
 OUString Span::convertFromUtf8() const {
     assert(is());
-    rtl_uString * s = 0;
+    rtl_uString * s = nullptr;
     if (!rtl_convertStringToUString(
             &s, begin, length, RTL_TEXTENCODING_UTF8,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |

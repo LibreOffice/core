@@ -29,7 +29,7 @@ namespace xmlreader {
 
 void Pad::add(char const * begin, sal_Int32 length) {
     assert(
-        begin != 0 && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
+        begin != nullptr && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
     if (length != 0) {
         flushSpan();
         if (buffer_.isEmpty()) {
@@ -42,7 +42,7 @@ void Pad::add(char const * begin, sal_Int32 length) {
 
 void Pad::addEphemeral(char const * begin, sal_Int32 length) {
     assert(
-        begin != 0 && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
+        begin != nullptr && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
     if (length != 0) {
         flushSpan();
         buffer_.append(begin, length);

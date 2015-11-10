@@ -35,7 +35,7 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
     char const * begin;
     sal_Int32 length;
 
-    inline Span(): begin(0), length(0) {}
+    inline Span(): begin(nullptr), length(0) {}
         // init length to avoid compiler warnings
 
     inline Span(char const * theBegin, sal_Int32 theLength):
@@ -45,9 +45,9 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
         begin(literal), length(N - 1)
     {}
 
-    inline void clear() throw() { begin = 0; }
+    inline void clear() throw() { begin = nullptr; }
 
-    inline bool is() const { return begin != 0; }
+    inline bool is() const { return begin != nullptr; }
 
     inline bool equals(Span const & text) const {
         return length == text.length
