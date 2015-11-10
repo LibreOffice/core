@@ -31,6 +31,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svl/urihelper.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <fmtornt.hxx>
 #include <frmfmt.hxx>
@@ -267,11 +268,11 @@ public:
 };
 
 // Row of a HTML table
-typedef boost::ptr_vector<HTMLTableCell> HTMLTableCells;
+typedef std::vector<std::unique_ptr<HTMLTableCell>> HTMLTableCells;
 
 class HTMLTableRow
 {
-    HTMLTableCells *pCells;             // cells of the row
+    HTMLTableCells *m_pCells;   ///< cells of the row
 
     bool bIsEndOfGroup : 1;
 
@@ -770,8 +771,8 @@ SwHTMLTableLayoutCell *HTMLTableCell::CreateLayoutInfo()
                                       bRelWidth, bNoWrap );
 }
 
-HTMLTableRow::HTMLTableRow( sal_uInt16 nCells ):
-    pCells(new HTMLTableCells),
+HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
+    : m_pCells(new HTMLTableCells),
     bIsEndOfGroup(false),
     nHeight(0),
     nEmptyRows(0),
@@ -782,16 +783,16 @@ HTMLTableRow::HTMLTableRow( sal_uInt16 nCells ):
 {
     for( sal_uInt16 i=0; i<nCells; i++ )
     {
-        pCells->push_back( new HTMLTableCell );
+        m_pCells->push_back(o3tl::make_unique<HTMLTableCell>());
     }
 
-    OSL_ENSURE(nCells == pCells->size(),
+    OSL_ENSURE(nCells == m_pCells->size(),
             "wrong Cell count in new HTML table row");
 }
 
 HTMLTableRow::~HTMLTableRow()
 {
-    delete pCells;
+    delete m_pCells;
     delete pBGBrush;
 }
 
@@ -803,9 +804,9 @@ inline void HTMLTableRow::SetHeight( sal_uInt16 nHght )
 
 inline HTMLTableCell *HTMLTableRow::GetCell( sal_uInt16 nCell ) const
 {
-    OSL_ENSURE( nCell<pCells->size(),
+    OSL_ENSURE( nCell < m_pCells->size(),
         "ungueltiger Zellen-Index in HTML-Tabellenzeile" );
-    return &(*pCells)[nCell];
+    return (*m_pCells)[nCell].get();
 }
 
 void HTMLTableRow::Expand( sal_uInt16 nCells, bool bOneCell )
@@ -814,34 +815,34 @@ void HTMLTableRow::Expand( sal_uInt16 nCells, bool bOneCell )
     // bOneCell gesetzt ist. Das geht, nur fuer Zeilen, in die keine
     // Zellen mehr eingefuegt werden!
 
-    sal_uInt16 nColSpan = nCells-pCells->size();
-    for( sal_uInt16 i=pCells->size(); i<nCells; i++ )
+    sal_uInt16 nColSpan = nCells - m_pCells->size();
+    for (sal_uInt16 i = m_pCells->size(); i < nCells; ++i)
     {
-        HTMLTableCell *pCell = new HTMLTableCell;
+        std::unique_ptr<HTMLTableCell> pCell(new HTMLTableCell);
         if( bOneCell )
             pCell->SetColSpan( nColSpan );
 
-        pCells->push_back( pCell );
+        m_pCells->push_back(std::move(pCell));
         nColSpan--;
     }
 
-    OSL_ENSURE(nCells == pCells->size(),
+    OSL_ENSURE(nCells == m_pCells->size(),
             "wrong Cell count in expanded HTML table row");
 }
 
 void HTMLTableRow::Shrink( sal_uInt16 nCells )
 {
-    OSL_ENSURE(nCells < pCells->size(), "number of cells too large");
+    OSL_ENSURE(nCells < m_pCells->size(), "number of cells too large");
 
 #if OSL_DEBUG_LEVEL > 0
-     sal_uInt16 nEnd = pCells->size();
+     sal_uInt16 const nEnd = m_pCells->size();
 #endif
     // The colspan of empty cells at the end has to be fixed to the new
     // number of cells.
     sal_uInt16 i=nCells;
     while( i )
     {
-        HTMLTableCell *pCell = &(*pCells)[--i];
+        HTMLTableCell *pCell = (*m_pCells)[--i].get();
         if( !pCell->GetContents() )
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -856,7 +857,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
 #if OSL_DEBUG_LEVEL > 0
     for( i=nCells; i<nEnd; i++ )
     {
-        HTMLTableCell *pCell = &(*pCells)[i];
+        HTMLTableCell *pCell = (*m_pCells)[i].get();
         OSL_ENSURE( pCell->GetRowSpan() == 1,
                 "RowSpan von zu loesender Zelle ist falsch" );
         OSL_ENSURE( pCell->GetColSpan() == nEnd - i,
@@ -865,7 +866,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
     }
 #endif
 
-    pCells->erase( pCells->begin() + nCells, pCells->end() );
+    m_pCells->erase( m_pCells->begin() + nCells, m_pCells->end() );
 }
 
 HTMLTableColumn::HTMLTableColumn():
