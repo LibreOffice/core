@@ -1522,7 +1522,11 @@ rtl_cache_wsupdate_all (void * arg)
     }
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 
+#if defined(SAL_UNX)
     return nullptr;
+#elif defined(SAL_W32)
+    return 0;
+#endif
 }
 
 /* ================================================================= *
