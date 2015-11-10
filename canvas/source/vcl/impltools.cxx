@@ -257,8 +257,8 @@ namespace vclcanvas
                                                      nullptr,
                                                      aSrcAlpha );
 
-            if( pReadAccess.get() == NULL ||
-                (pAlphaReadAccess.get() == NULL && rBitmap.IsTransparent()) )
+            if( pReadAccess.get() == nullptr ||
+                (pAlphaReadAccess.get() == nullptr && rBitmap.IsTransparent()) )
             {
                 // TODO(E2): Error handling!
                 ENSURE_OR_THROW( false,
@@ -315,8 +315,8 @@ namespace vclcanvas
                 Bitmap::ScopedWriteAccess pAlphaWriteAccess( aDstAlpha );
 
 
-                if( pWriteAccess.get() != NULL &&
-                    pAlphaWriteAccess.get() != NULL &&
+                if( pWriteAccess.get() != nullptr &&
+                    pAlphaWriteAccess.get() != nullptr &&
                     rTransform.isInvertible() )
                 {
                     // we're doing inverse mapping here, i.e. mapping

@@ -36,7 +36,7 @@ namespace vclcanvas
             if( !pWindow )
                 throw lang::NoSupportException(
                     "Parent window not VCL window, or canvas out-of-process!",
-                    NULL);
+                    nullptr);
             return *pWindow;
         }
     }

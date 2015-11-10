@@ -81,14 +81,14 @@ namespace canvas
 
         /// Creates a 'naked' fragment.
         explicit PageFragment( const ::basegfx::B2ISize& rSize ) :
-            mpPage(NULL),
+            mpPage(nullptr),
             maRect(rSize),
             mpBuffer(),
             maSourceOffset()
         {
         }
 
-        bool                        isNaked() const { return (mpPage == NULL); }
+        bool                        isNaked() const { return (mpPage == nullptr); }
         const SurfaceRect&          getRect() const { return maRect; }
         const ::basegfx::B2IPoint&  getPos() const { return maRect.maPos; }
         const ::basegfx::B2ISize&   getSize() const { return maRect.maSize; }
@@ -101,7 +101,7 @@ namespace canvas
             if(mpPage)
                 mpPage->free(pFragment);
 
-            mpPage=NULL;
+            mpPage=nullptr;
         }
 
         bool select( bool bRefresh )

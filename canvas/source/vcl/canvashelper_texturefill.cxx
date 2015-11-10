@@ -1103,7 +1103,7 @@ namespace vclcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
 }

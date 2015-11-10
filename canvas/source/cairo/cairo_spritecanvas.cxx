@@ -80,7 +80,7 @@ namespace cairocanvas
         vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
         if( !pParentWindow )
             throw lang::NoSupportException(
-                "Parent window not VCL window, or canvas out-of-process!", NULL);
+                "Parent window not VCL window, or canvas out-of-process!", nullptr);
 
         bool bHasCairo = pParentWindow->SupportsCairo();
         ENSURE_ARG_OR_THROW(bHasCairo,

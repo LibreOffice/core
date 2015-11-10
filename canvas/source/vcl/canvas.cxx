@@ -99,7 +99,7 @@ namespace vclcanvas
         if( !pOutDev )
             throw lang::NoSupportException(
                 OUString( "Passed OutDev invalid!" ),
-                NULL);
+                nullptr);
 
         OutDevProviderSharedPtr pOutdevProvider( new OutDevHolder(*pOutDev) );
 

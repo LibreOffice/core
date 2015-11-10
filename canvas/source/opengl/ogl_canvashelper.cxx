@@ -362,8 +362,8 @@ namespace oglcanvas
     }
 
     CanvasHelper::CanvasHelper() :
-        mpDevice( NULL ),
-        mpDeviceHelper( NULL ),
+        mpDevice( nullptr ),
+        mpDeviceHelper( nullptr ),
         mpRecordedActions()
     {}
 
@@ -382,8 +382,8 @@ namespace oglcanvas
     {
         RecordVectorT aThrowaway;
         mpRecordedActions.swap( aThrowaway );
-        mpDevice = NULL;
-        mpDeviceHelper = NULL;
+        mpDevice = nullptr;
+        mpDeviceHelper = nullptr;
     }
 
     void CanvasHelper::init( rendering::XGraphicDevice& rDevice,
@@ -478,7 +478,7 @@ namespace oglcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
@@ -505,7 +505,7 @@ namespace oglcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
@@ -516,7 +516,7 @@ namespace oglcanvas
                                                                                            const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           /*pCanvas*/,
@@ -528,7 +528,7 @@ namespace oglcanvas
                                                                                                 const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
     {
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            /*pCanvas*/,
@@ -538,7 +538,7 @@ namespace oglcanvas
                                                                                    const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
-        return uno::Reference< rendering::XPolyPolygon2D >(NULL);
+        return uno::Reference< rendering::XPolyPolygon2D >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
@@ -563,7 +563,7 @@ namespace oglcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
@@ -659,7 +659,7 @@ namespace oglcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             /*pCanvas*/,
@@ -670,7 +670,7 @@ namespace oglcanvas
                                                                                               const uno::Reference< geometry::XMapping2D >&         /*xMapping*/ )
     {
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    /*pCanvas*/,
@@ -701,7 +701,7 @@ namespace oglcanvas
                                                                           sal_Int8                                          /*textDirection*/ )
     {
         // TODO - but not used from slideshow
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       /*pCanvas*/,
@@ -797,7 +797,7 @@ namespace oglcanvas
         }
 
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   /*pCanvas*/,
@@ -862,7 +862,7 @@ namespace oglcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      pCanvas,

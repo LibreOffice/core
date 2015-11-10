@@ -116,7 +116,7 @@ namespace canvas
             // TODO: NYI
         }
 
-        return NULL;
+        return nullptr;
     }
 
     ParametricPolyPolygon* ParametricPolyPolygon::createLinearHorizontalGradient(

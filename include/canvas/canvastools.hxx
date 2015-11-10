@@ -384,7 +384,7 @@ namespace canvas
 #endif
                 throw css::uno::RuntimeException(
                     "numeric_cast detected data loss",
-                    NULL );
+                    nullptr );
             }
 
             return static_cast<Target>(arg);
@@ -558,7 +558,7 @@ namespace canvas
         CANVASTOOLS_DLLPUBLIC void clipOutDev(const css::rendering::ViewState& viewState,
                         const css::rendering::RenderState& renderState,
                         OutputDevice& rOutDev,
-                        OutputDevice* p2ndOutDev=NULL);
+                        OutputDevice* p2ndOutDev=nullptr);
     }
 }
 

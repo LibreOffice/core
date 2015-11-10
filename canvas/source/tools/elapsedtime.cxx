@@ -156,7 +156,7 @@ void ElapsedTime::adjustTimer( double fOffset, bool /*bLimitToLastQueriedTime*/ 
 
 double ElapsedTime::getCurrentTime() const
 {
-    return m_pTimeBase.get() == 0
+    return m_pTimeBase.get() == nullptr
         ? getSystemTime() : m_pTimeBase->getElapsedTimeImpl();
 }
 

@@ -111,11 +111,11 @@ namespace vclcanvas
 
         const rendering::ViewState aViewState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            NULL);
+            nullptr);
 
         rendering::RenderState aRenderState (
             geometry::AffineMatrix2D(1,0,0,0,1,0),
-            NULL,
+            nullptr,
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
@@ -164,11 +164,11 @@ namespace vclcanvas
 
         const rendering::ViewState aViewState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            NULL);
+            nullptr);
 
         rendering::RenderState aRenderState (
             geometry::AffineMatrix2D(1,0,0,0,1,0),
-            NULL,
+            nullptr,
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
@@ -444,7 +444,7 @@ namespace vclcanvas
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
     {
-        ENSURE_OR_THROW( outputOffsets!=NULL,
+        ENSURE_OR_THROW( outputOffsets!=nullptr,
                           "TextLayout::setupTextOffsets offsets NULL" );
 
         ::basegfx::B2DHomMatrix aMatrix;

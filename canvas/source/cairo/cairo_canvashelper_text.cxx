@@ -240,7 +240,7 @@ namespace cairocanvas
         if (!aRegion.IsEmpty() && !aRegion.IsNull())
         {
             doPolyPolygonImplementation(aRegion.GetAsB2DPolyPolygon(), Clip, mpCairo.get(),
-                                        NULL, mpSurfaceProvider, rendering::FillRule_EVEN_ODD);
+                                        nullptr, mpSurfaceProvider, rendering::FillRule_EVEN_ODD);
         }
     }
 
@@ -273,7 +273,7 @@ namespace cairocanvas
 #endif
             ::Point aOutpos;
             if( !setupTextOutput( *mpVirtualDevice.get(), pOwner, aOutpos, viewState, renderState, xFont ) )
-                return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
+                return uno::Reference< rendering::XCachedPrimitive >(nullptr); // no output necessary
 
                 // change text direction and layout mode
             ComplexTextLayoutMode nLayoutMode(TEXT_LAYOUT_DEFAULT);
@@ -307,7 +307,7 @@ namespace cairocanvas
             pTextLayout->draw(mpCairo, *mpVirtualDevice, aOutpos, viewState, renderState);
         }
 
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       pOwner,
@@ -341,7 +341,7 @@ namespace cairocanvas
 
                 ::Point aOutpos;
                 if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
-                    return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
+                    return uno::Reference< rendering::XCachedPrimitive >(nullptr); // no output necessary
 
                 clip_cairo_from_dev(*mpVirtualDevice);
 
@@ -355,7 +355,7 @@ namespace cairocanvas
                              "CanvasHelper::drawTextLayout(): TextLayout not compatible with this canvas" );
         }
 
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
 }

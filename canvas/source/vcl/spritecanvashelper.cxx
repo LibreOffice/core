@@ -116,8 +116,8 @@ namespace vclcanvas
     }
 
     SpriteCanvasHelper::SpriteCanvasHelper() :
-        mpRedrawManager( NULL ),
-        mpOwningSpriteCanvas( NULL ),
+        mpRedrawManager( nullptr ),
+        mpOwningSpriteCanvas( nullptr ),
         maVDev(VclPtr<VirtualDevice>::Create()),
         maLastUpdate(),
         mbShowFrameInfo( false ),
@@ -150,8 +150,8 @@ namespace vclcanvas
 
     void SpriteCanvasHelper::disposing()
     {
-        mpRedrawManager = NULL;
-        mpOwningSpriteCanvas = NULL;
+        mpRedrawManager = nullptr;
+        mpOwningSpriteCanvas = nullptr;
 
         // forward to base
         CanvasHelper::disposing();
@@ -213,7 +213,7 @@ namespace vclcanvas
         const Size  aOutDevSize( rBackOutDev.GetOutputSizePixel() );
         const Point aEmptyPoint(0,0);
 
-        vcl::Window* pTargetWindow = NULL;
+        vcl::Window* pTargetWindow = nullptr;
         if( rOutDev.GetOutDevType() == OUTDEV_WINDOW )
         {
             pTargetWindow = &static_cast<vcl::Window&>(rOutDev); // TODO(Q3): Evil downcast.
@@ -552,7 +552,7 @@ namespace vclcanvas
 
         OUString text( ::rtl::math::doubleToUString( denominator == 0.0 ? 100.0 : 1.0/denominator,
                                                             rtl_math_StringFormat_F,
-                                                            2,'.',NULL,' ') );
+                                                            2,'.',nullptr,' ') );
 
         // pad with leading space
         while( text.getLength() < 6 )
@@ -641,7 +641,7 @@ namespace vclcanvas
 
             OUString text( ::rtl::math::doubleToUString( nMemUsage / 1048576.0,
                                                                 rtl_math_StringFormat_F,
-                                                                2,'.',NULL,' ') );
+                                                                2,'.',nullptr,' ') );
 
             // pad with leading space
             while( text.getLength() < 4 )

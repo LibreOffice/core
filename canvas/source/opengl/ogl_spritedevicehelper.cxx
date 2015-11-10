@@ -75,8 +75,8 @@ namespace oglcanvas
 {
 
     SpriteDeviceHelper::SpriteDeviceHelper() :
-        mpDevice(NULL),
-        mpSpriteCanvas(NULL),
+        mpDevice(nullptr),
+        mpSpriteCanvas(nullptr),
         maActiveSprites(),
         maLastUpdate(),
         mpTextureCache(new TextureCache()),
@@ -135,8 +135,8 @@ namespace oglcanvas
     void SpriteDeviceHelper::disposing()
     {
         // release all references
-        mpSpriteCanvas = NULL;
-        mpDevice = NULL;
+        mpSpriteCanvas = nullptr;
+        mpDevice = nullptr;
         mpTextureCache.reset();
 
         if( mxContext->isInitialized() )

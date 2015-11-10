@@ -41,7 +41,7 @@ namespace cairocanvas
 {
 
     SpriteDeviceHelper::SpriteDeviceHelper() :
-        mpSpriteCanvas( NULL ),
+        mpSpriteCanvas( nullptr ),
         mpBufferSurface(),
         maSize(),
         mbFullScreen( false )
@@ -65,7 +65,7 @@ namespace cairocanvas
     {
         // release all references
         mpBufferSurface.reset();
-        mpSpriteCanvas = NULL;
+        mpSpriteCanvas = nullptr;
     }
 
     bool SpriteDeviceHelper::showBuffer( bool, bool )

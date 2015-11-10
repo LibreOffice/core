@@ -137,7 +137,7 @@ namespace vclcanvas
                                                  nullptr : aAlpha.AcquireReadAccess(),
                                                  aAlpha );
 
-        ENSURE_OR_THROW( pReadAccess.get() != NULL,
+        ENSURE_OR_THROW( pReadAccess.get() != nullptr,
                          "Could not acquire read access to bitmap" );
 
         // TODO(F1): Support more formats.
@@ -156,7 +156,7 @@ namespace vclcanvas
              y<aBmpSize.Height() && y<rect.Y2;
              ++y )
         {
-            if( pAlphaReadAccess.get() != NULL )
+            if( pAlphaReadAccess.get() != nullptr )
             {
                 for( int x=rect.X1;
                      x<aBmpSize.Width() && x<rect.X2;
@@ -223,7 +223,7 @@ namespace vclcanvas
                             "non-8bit alpha not supported!" );
             }
 
-            ENSURE_OR_THROW( pWriteAccess.get() != NULL,
+            ENSURE_OR_THROW( pWriteAccess.get() != nullptr,
                              "Could not acquire write access to bitmap" );
 
             // TODO(F1): Support more formats.
@@ -235,7 +235,7 @@ namespace vclcanvas
                  y<aBmpSize.Height() && y<rect.Y2;
                  ++y )
             {
-                if( pAlphaWriteAccess.get() != NULL )
+                if( pAlphaWriteAccess.get() != nullptr )
                 {
                     switch( pWriteAccess->GetScanlineFormat() )
                     {
@@ -457,14 +457,14 @@ namespace vclcanvas
                                                        nullptr : aAlpha.AcquireWriteAccess(),
                                                        aAlpha );
 
-            ENSURE_OR_THROW( pWriteAccess.get() != NULL,
+            ENSURE_OR_THROW( pWriteAccess.get() != nullptr,
                              "Could not acquire write access to bitmap" );
 
             pWriteAccess->SetPixel( pos.Y, pos.X, BitmapColor( color[ 0 ],
                                                                color[ 1 ],
                                                                color[ 2 ] ) );
 
-            if( pAlphaWriteAccess.get() != NULL )
+            if( pAlphaWriteAccess.get() != nullptr )
                 pAlphaWriteAccess->SetPixel( pos.Y, pos.X, BitmapColor( 255 - color[ 3 ] ) );
 
             bCopyBack = true;
@@ -509,7 +509,7 @@ namespace vclcanvas
         Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
                                                  nullptr : aAlpha.AcquireReadAccess(),
                                                  aAlpha );
-        ENSURE_OR_THROW( pReadAccess.get() != NULL,
+        ENSURE_OR_THROW( pReadAccess.get() != nullptr,
                          "Could not acquire read access to bitmap" );
 
         uno::Sequence< sal_Int8 > aRes( 4 );
@@ -520,7 +520,7 @@ namespace vclcanvas
         pRes[ 1 ] = aColor.GetGreen();
         pRes[ 2 ] = aColor.GetBlue();
 
-        if( pAlphaReadAccess.get() != NULL )
+        if( pAlphaReadAccess.get() != nullptr )
             pRes[ 3 ] = pAlphaReadAccess->GetPixel( pos.Y, pos.X ).GetIndex();
         else
             pRes[ 3 ] = sal_uInt8(255);

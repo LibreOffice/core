@@ -324,7 +324,7 @@ namespace vclcanvas
 
                     OUString text( ::rtl::math::doubleToUString( getPriority(),
                                                                         rtl_math_StringFormat_F,
-                                                                        2,'.',NULL,' ') );
+                                                                        2,'.',nullptr,' ') );
 
                     rTargetSurface.DrawText( aOutPos+Point(2,2), text );
                     SAL_INFO( "canvas.vcl",

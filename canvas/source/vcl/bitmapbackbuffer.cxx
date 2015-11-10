@@ -32,7 +32,7 @@ namespace vclcanvas
     BitmapBackBuffer::BitmapBackBuffer( const BitmapEx&         rBitmap,
                                         const OutputDevice&     rRefDevice ) :
         maBitmap( rBitmap ),
-        mpVDev( NULL ),
+        mpVDev( nullptr ),
         mrRefDevice( rRefDevice ),
         mbBitmapContentIsCurrent( false ),
         mbVDevContentIsCurrent( false )

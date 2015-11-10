@@ -79,7 +79,7 @@ namespace cairocanvas
         maArguments[0] >>= nPtr;
         OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
 
-        ENSURE_ARG_OR_THROW( pOutDev != NULL,
+        ENSURE_ARG_OR_THROW( pOutDev != nullptr,
                              "Canvas::initialize: invalid OutDev pointer" );
 
         awt::Rectangle aBounds;

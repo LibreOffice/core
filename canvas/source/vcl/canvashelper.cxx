@@ -118,7 +118,7 @@ namespace vclcanvas
 
     void CanvasHelper::disposing()
     {
-        mpDevice = NULL;
+        mpDevice = nullptr;
         mpProtectedOutDev.reset();
         mpOutDev.reset();
         mp2ndOutDev.reset();
@@ -322,7 +322,7 @@ namespace vclcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            ,
@@ -452,7 +452,7 @@ namespace vclcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            ,
@@ -462,7 +462,7 @@ namespace vclcanvas
                                                                                            const uno::Sequence< rendering::Texture >&           ,
                                                                                            const rendering::StrokeAttributes&                    )
     {
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           ,
@@ -473,7 +473,7 @@ namespace vclcanvas
                                                                                                 const uno::Reference< geometry::XMapping2D >&       ,
                                                                                                 const rendering::StrokeAttributes&                   )
     {
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            ,
@@ -482,7 +482,7 @@ namespace vclcanvas
                                                                                    const rendering::RenderState&                        ,
                                                                                    const rendering::StrokeAttributes&                    )
     {
-        return uno::Reference< rendering::XPolyPolygon2D >(NULL);
+        return uno::Reference< rendering::XPolyPolygon2D >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          ,
@@ -530,7 +530,7 @@ namespace vclcanvas
         }
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             ,
@@ -540,7 +540,7 @@ namespace vclcanvas
                                                                                               const uno::Sequence< rendering::Texture >&            ,
                                                                                               const uno::Reference< geometry::XMapping2D >&              )
     {
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                        ,
@@ -583,7 +583,7 @@ namespace vclcanvas
 
             ::Point aOutpos;
             if( !setupTextOutput( aOutpos, viewState, renderState, xFont ) )
-                return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
+                return uno::Reference< rendering::XCachedPrimitive >(nullptr); // no output necessary
 
             // change text direction and layout mode
             ComplexTextLayoutMode nLayoutMode(TEXT_LAYOUT_DEFAULT);
@@ -622,7 +622,7 @@ namespace vclcanvas
             }
         }
 
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       ,
@@ -648,7 +648,7 @@ namespace vclcanvas
 
                 ::Point aOutpos;
                 if( !setupTextOutput( aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
-                    return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
+                    return uno::Reference< rendering::XCachedPrimitive >(nullptr); // no output necessary
 
                 // TODO(F2): What about the offset scalings?
                 // TODO(F2): alpha
@@ -664,7 +664,7 @@ namespace vclcanvas
                                  "TextLayout not compatible with this canvas" );
         }
 
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::implDrawBitmap( const rendering::XCanvas*                   pCanvas,
@@ -746,7 +746,7 @@ namespace vclcanvas
 
                 // Returning a cache object is not useful, the XBitmap
                 // itself serves this purpose
-                return uno::Reference< rendering::XCachedPrimitive >(NULL);
+                return uno::Reference< rendering::XCachedPrimitive >(nullptr);
             }
             else
             {
@@ -869,7 +869,7 @@ namespace vclcanvas
         }
 
         // Nothing rendered
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   pCanvas,
@@ -951,7 +951,7 @@ namespace vclcanvas
 
         Bitmap::ScopedReadAccess pReadAccess( aBitmap );
 
-        ENSURE_OR_THROW( pReadAccess.get() != NULL,
+        ENSURE_OR_THROW( pReadAccess.get() != nullptr,
                          "Could not acquire read access to OutDev bitmap" );
 
         const sal_Int32 nWidth( rect.X2 - rect.X1 );
@@ -1002,7 +1002,7 @@ namespace vclcanvas
         const Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
         const sal_uInt16    nBitCount( ::std::min( (sal_uInt16)24U,
                                                (sal_uInt16)rOutDev.GetBitCount() ) );
-        const BitmapPalette* pPalette = NULL;
+        const BitmapPalette* pPalette = nullptr;
 
         if( nBitCount <= 8 )
         {
@@ -1028,7 +1028,7 @@ namespace vclcanvas
         {
             Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
 
-            ENSURE_OR_THROW( pWriteAccess.get() != NULL,
+            ENSURE_OR_THROW( pWriteAccess.get() != nullptr,
                              "Could not acquire write access to OutDev bitmap" );
 
             // for the time being, always read as RGB
@@ -1201,7 +1201,7 @@ namespace vclcanvas
                                       eColorType == IGNORE_COLOR ? 0 : 3 );
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
-        OutputDevice* p2ndOutDev = NULL;
+        OutputDevice* p2ndOutDev = nullptr;
 
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );

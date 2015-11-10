@@ -40,8 +40,8 @@ using namespace ::com::sun::star;
 namespace cairocanvas
 {
     DeviceHelper::DeviceHelper() :
-        mpSurfaceProvider( NULL ),
-        mpRefDevice( NULL ),
+        mpSurfaceProvider( nullptr ),
+        mpRefDevice( nullptr ),
         mpSurface()
     {
     }
@@ -71,8 +71,8 @@ namespace cairocanvas
     {
         // release all references
         mpSurface.reset();
-        mpRefDevice = NULL;
-        mpSurfaceProvider = NULL;
+        mpRefDevice = nullptr;
+        mpSurfaceProvider = nullptr;
     }
 
     void DeviceHelper::setSize( const ::basegfx::B2ISize& rSize )

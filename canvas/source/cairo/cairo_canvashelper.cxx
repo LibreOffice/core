@@ -66,8 +66,8 @@ using namespace ::com::sun::star;
 namespace cairocanvas
 {
     CanvasHelper::CanvasHelper() :
-        mpSurfaceProvider(NULL),
-        mpDevice(NULL),
+        mpSurfaceProvider(nullptr),
+        mpDevice(nullptr),
         mpVirtualDevice(),
         mbHaveAlpha(),
         mpCairo(),
@@ -81,8 +81,8 @@ namespace cairocanvas
         mpSurface.reset();
         mpCairo.reset();
         mpVirtualDevice.disposeAndClear();
-        mpDevice = NULL;
-        mpSurfaceProvider = NULL;
+        mpDevice = nullptr;
+        mpSurfaceProvider = nullptr;
     }
 
     void CanvasHelper::init( const ::basegfx::B2ISize&  rSizePixel,
@@ -408,7 +408,7 @@ namespace cairocanvas
         bHasAlpha = xBitmap->hasAlpha();
         SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap );
         if( pSurface )
-            data = NULL;
+            data = nullptr;
         else
         {
             ::BitmapEx aBmpEx = bitmapExFromXBitmap(xBitmap);
@@ -420,7 +420,7 @@ namespace cairocanvas
             if( !aBmpEx.IsTransparent() && !aBmpEx.IsAlpha() )
             {
                 pSurface = rSurfaceProvider->createSurface( aBitmap );
-                data = NULL;
+                data = nullptr;
                 bHasAlpha = false;
             }
 
@@ -429,7 +429,7 @@ namespace cairocanvas
                 AlphaMask aAlpha = aBmpEx.GetAlpha();
 
                 ::BitmapReadAccess* pBitmapReadAcc = aBitmap.AcquireReadAccess();
-                ::BitmapReadAccess* pAlphaReadAcc = NULL;
+                ::BitmapReadAccess* pAlphaReadAcc = nullptr;
                 const long      nWidth = pBitmapReadAcc->Width();
                 const long      nHeight = pBitmapReadAcc->Height();
                 long nX, nY;
@@ -704,7 +704,7 @@ namespace cairocanvas
 
     static cairo_pattern_t* patternFromParametricPolyPolygon( ::canvas::ParametricPolyPolygon& rPolygon )
     {
-        cairo_pattern_t* pPattern = NULL;
+        cairo_pattern_t* pPattern = nullptr;
         const ::canvas::ParametricPolyPolygon::Values aValues = rPolygon.getValues();
         double x0, x1, y0, y1, cx, cy, r0, r1;
 
@@ -750,7 +750,7 @@ namespace cairocanvas
                     const css::rendering::Texture& aTexture ( (*pTextures)[0] );
                     if( aTexture.Bitmap.is() )
                     {
-                        unsigned char* data = NULL;
+                        unsigned char* data = nullptr;
                         bool bHasAlpha = false;
                         SurfaceSharedPtr pSurface = surfaceFromXBitmap( (*pTextures)[0].Bitmap, pDevice, data, bHasAlpha );
 
@@ -1149,7 +1149,7 @@ namespace cairocanvas
         mxDevice->stopPerfTrace( &aTimer, "drawPolyPolygon" );
 #endif
 
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            ,
@@ -1232,7 +1232,7 @@ namespace cairocanvas
 #endif
 
         // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            ,
@@ -1243,7 +1243,7 @@ namespace cairocanvas
                                                                                            const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           ,
@@ -1255,7 +1255,7 @@ namespace cairocanvas
                                                                                                 const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
     {
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            ,
@@ -1265,7 +1265,7 @@ namespace cairocanvas
                                                                                    const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
-        return uno::Reference< rendering::XPolyPolygon2D >(NULL);
+        return uno::Reference< rendering::XPolyPolygon2D >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          ,
@@ -1294,7 +1294,7 @@ namespace cairocanvas
         mxDevice->stopPerfTrace( &aTimer, "fillPolyPolygon" );
 #endif
 
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          ,
@@ -1313,7 +1313,7 @@ namespace cairocanvas
             cairo_restore( mpCairo.get() );
         }
 
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             ,
@@ -1324,7 +1324,7 @@ namespace cairocanvas
                                                                                               const uno::Reference< geometry::XMapping2D >&         /*xMapping*/ )
     {
         // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::implDrawBitmapSurface( const rendering::XCanvas*        pCanvas,
@@ -1336,7 +1336,7 @@ namespace cairocanvas
                                                                                        bool                             bHasAlpha )
     {
         SurfaceSharedPtr pSurface=pInputSurface;
-        uno::Reference< rendering::XCachedPrimitive > rv(NULL);
+        uno::Reference< rendering::XCachedPrimitive > rv(nullptr);
         geometry::IntegerSize2D aBitmapSize = rSize;
 
         if( mpCairo )
@@ -1454,7 +1454,7 @@ namespace cairocanvas
 #endif
 
         uno::Reference< rendering::XCachedPrimitive > rv;
-        unsigned char* data = NULL;
+        unsigned char* data = nullptr;
         bool bHasAlpha = false;
         SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
         geometry::IntegerSize2D aSize = xBitmap->getSize();
@@ -1467,7 +1467,7 @@ namespace cairocanvas
                 free( data );
         }
         else
-            rv.set(NULL);
+            rv.set(nullptr);
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "drawBitmap" );
@@ -1487,7 +1487,7 @@ namespace cairocanvas
 #endif
 
         uno::Reference< rendering::XCachedPrimitive > rv;
-        unsigned char* data = NULL;
+        unsigned char* data = nullptr;
         bool bHasAlpha = false;
         SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
         geometry::IntegerSize2D aSize = xBitmap->getSize();
@@ -1500,7 +1500,7 @@ namespace cairocanvas
                 free( data );
         }
         else
-            rv.set(NULL);
+            rv.set(nullptr);
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "drawBitmap" );

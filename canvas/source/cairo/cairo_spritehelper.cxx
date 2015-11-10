@@ -133,7 +133,7 @@ namespace cairocanvas
                             rClip ));
 
                     doPolyPolygonImplementation( aClipPoly, Clip, pCairo.get(),
-                                                 NULL, SurfaceProviderRef(mpSpriteCanvas.get()),
+                                                 nullptr, SurfaceProviderRef(mpSpriteCanvas.get()),
                                                  rClip->getFillRule() );
                 }
 

@@ -89,8 +89,8 @@ namespace cairocanvas
     }
 
     SpriteCanvasHelper::SpriteCanvasHelper() :
-        mpRedrawManager( NULL ),
-        mpOwningSpriteCanvas( NULL ),
+        mpRedrawManager( nullptr ),
+        mpOwningSpriteCanvas( nullptr ),
         mpCompositingSurface(),
         maCompositingSurfaceSize(),
         mbCompositingSurfaceDirty(true)
@@ -110,8 +110,8 @@ namespace cairocanvas
     void SpriteCanvasHelper::disposing()
     {
         mpCompositingSurface.reset();
-        mpOwningSpriteCanvas = NULL;
-        mpRedrawManager = NULL;
+        mpOwningSpriteCanvas = nullptr;
+        mpRedrawManager = nullptr;
 
         // forward to base
         CanvasHelper::disposing();

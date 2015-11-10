@@ -341,7 +341,7 @@ namespace cairocanvas
         aSysLayoutData = rOutDev.GetSysTextLayoutData(rOutpos, maText.Text,
                                                       ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                                       ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
-                                                      maLogicalAdvancements.getLength() ? aOffsets.get() : NULL);
+                                                      maLogicalAdvancements.getLength() ? aOffsets.get() : nullptr);
 
         // Sort them so that all glyphs on the same glyph fallback level are consecutive
         std::sort(aSysLayoutData.rGlyphData.begin(), aSysLayoutData.rGlyphData.end(), compareFallbacks);
@@ -432,7 +432,7 @@ namespace cairocanvas
             /**
              * Setup font
              **/
-            cairo_font_face_t* font_face = NULL;
+            cairo_font_face_t* font_face = nullptr;
 
 #if defined CAIRO_HAS_FT_FONT
             font_face = cairo_ft_font_face_create_for_ft_face(static_cast<FT_Face>(rSysFontData.nFontId),
@@ -563,7 +563,7 @@ namespace cairocanvas
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
     {
-        ENSURE_OR_THROW( outputOffsets!=NULL,
+        ENSURE_OR_THROW( outputOffsets!=nullptr,
                           "TextLayout::setupTextOffsets offsets NULL" );
 
         ::basegfx::B2DHomMatrix aMatrix;
