@@ -39,10 +39,10 @@ SvMetaSlot::SvMetaSlot()
     , aSynchron( true, false )
     , aRecordPerSet( true, false )
     , aRecordAbsolute( false, false )
-    , pLinkedSlot(0)
-    , pNextSlot(0)
+    , pLinkedSlot(nullptr)
+    , pNextSlot(nullptr)
     , nListPos(0)
-    , pEnumValue(0)
+    , pEnumValue(nullptr)
 {
 }
 
@@ -52,10 +52,10 @@ SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     , aSynchron( true, false )
     , aRecordPerSet( true, false )
     , aRecordAbsolute( false, false )
-    , pLinkedSlot(0)
-    , pNextSlot(0)
+    , pLinkedSlot(nullptr)
+    , pNextSlot(nullptr)
     , nListPos(0)
-    , pEnumValue(0)
+    , pEnumValue(nullptr)
 {
 }
 
@@ -67,7 +67,7 @@ bool SvMetaSlot::IsVariable() const
 bool SvMetaSlot::IsMethod() const
 {
     bool b = SvMetaAttribute::IsMethod();
-    b |= NULL != GetMethod();
+    b |= nullptr != GetMethod();
     return b;
 }
 
@@ -553,14 +553,14 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
     }
 
     // iron out EnumSlots
-    SvMetaTypeEnum * pEnum = NULL;
+    SvMetaTypeEnum * pEnum = nullptr;
     SvMetaType * pBType = GetType()->GetBaseType();
     pEnum = dynamic_cast<SvMetaTypeEnum*>( pBType  );
     if( GetPseudoSlots() && pEnum && pEnum->Count() )
     {
         // clone the MasterSlot
         SvMetaSlotRef xEnumSlot;
-        SvMetaSlot *pFirstEnumSlot = NULL;
+        SvMetaSlot *pFirstEnumSlot = nullptr;
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
             // create SlotId
@@ -576,7 +576,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
 
             OString aSId = aBuf.makeStringAndClear();
 
-            xEnumSlot = NULL;
+            xEnumSlot = nullptr;
             for( m=0; m<rBase.GetAttrList().size(); m++ )
             {
                 SvMetaAttribute * pAttr = rBase.GetAttrList()[m];
@@ -625,7 +625,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
         SvSlotElement *pEle;
         do
         {
-            pEle = ( ++i < rList.size() ) ? rList[ i ] : NULL;
+            pEle = ( ++i < rList.size() ) ? rList[ i ] : nullptr;
             if ( pEle && pEle->xSlot->pLinkedSlot == this )
             {
                 xEnumSlot->pNextSlot = pEle->xSlot;
@@ -712,7 +712,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     if ( !GetExport() && !GetHidden() )
         return;
 
-    bool bIsEnumSlot = 0 != pEnumValue;
+    bool bIsEnumSlot = nullptr != pEnumValue;
 
     rOutStm.WriteCharPtr( "// Slot Nr. " )
        .WriteCharPtr( OString::number(nListPos).getStr() )
@@ -765,8 +765,8 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         // look for the next slot with the same StateMethod like me
         // the slotlist is set to the current slot
         size_t i = nStart;
-        SvSlotElement* pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : NULL;
-        pNextSlot = pEle ? &pEle->xSlot : NULL;
+        SvSlotElement* pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : nullptr;
+        pNextSlot = pEle ? &pEle->xSlot : nullptr;
         while ( pNextSlot )
         {
             if ( !pNextSlot->pNextSlot &&
@@ -774,8 +774,8 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
             ) {
                 break;
             }
-            pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : NULL;
-            pNextSlot = pEle ? &pEle->xSlot : NULL;
+            pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : nullptr;
+            pNextSlot = pEle ? &pEle->xSlot : nullptr;
         }
 
         if ( !pNextSlot )
@@ -783,15 +783,15 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
             // There is no slot behind me that has the same ExecMethod.
             // So I search for the first slot with it (could be myself).
             i = 0;
-            pEle = rSlotList.empty() ? NULL : rSlotList[ i ];
-            pNextSlot = pEle ? &pEle->xSlot : NULL;
+            pEle = rSlotList.empty() ? nullptr : rSlotList[ i ];
+            pNextSlot = pEle ? &pEle->xSlot : nullptr;
             while ( pNextSlot != this )
             {
                 if ( !pNextSlot->pEnumValue &&
                     pNextSlot->GetStateMethod() == GetStateMethod() )
                     break;
-                pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : NULL;
-                pNextSlot = pEle ? &pEle->xSlot : NULL;
+                pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : nullptr;
+                pNextSlot = pEle ? &pEle->xSlot : nullptr;
             }
         }
 

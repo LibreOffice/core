@@ -107,7 +107,7 @@ public:
     static void         Back2Delemitter( SvStream & );
     static void         WriteStars( SvStream & );
 
-    virtual bool                SetName( const OString& rName, SvIdlDataBase * = NULL  );
+    virtual bool                SetName( const OString& rName, SvIdlDataBase * = nullptr  );
     const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
     virtual const SvString &    GetName() const { return aName; }
     virtual const SvString &    GetHelpText() const { return aHelpText; }
@@ -136,7 +136,7 @@ public:
                         for( SvMetaObjectMemberList::reverse_iterator it = aList.rbegin(); it != aList.rend(); ++it )
                             if( isSvMetaObject(*it) )
                                 return *it;
-                        return NULL;
+                        return nullptr;
                     }
 };
 

@@ -198,7 +198,7 @@ public:
     void                SetListPos(sal_uLong n)
                         { nListPos = n; }
     void                ResetSlotPointer()
-                        { pNextSlot = pLinkedSlot = 0; }
+                        { pNextSlot = pLinkedSlot = nullptr; }
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     virtual void        ReadAttributesSvIdl( SvIdlDataBase & rBase,

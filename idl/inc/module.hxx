@@ -54,7 +54,7 @@ protected:
 public:
                         TYPEINFO_OVERRIDE();
 
-    virtual bool        SetName( const OString& rName, SvIdlDataBase * = NULL  ) override;
+    virtual bool        SetName( const OString& rName, SvIdlDataBase * = nullptr  ) override;
 
                         SvMetaModule( bool bImported );
 

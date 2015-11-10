@@ -167,7 +167,7 @@ SvMetaReference::SvMetaReference()
 TYPEINIT1( SvMetaExtern, SvMetaReference );
 
 SvMetaExtern::SvMetaExtern()
-    : pModule( NULL )
+    : pModule( nullptr )
     , bReadUUId( false )
     , bReadVersion( false )
 {
@@ -175,7 +175,7 @@ SvMetaExtern::SvMetaExtern()
 
 SvMetaModule * SvMetaExtern::GetModule() const
 {
-    DBG_ASSERT( pModule != NULL, "module not set" );
+    DBG_ASSERT( pModule != nullptr, "module not set" );
     return pModule;
 }
 

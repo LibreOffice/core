@@ -31,7 +31,7 @@ SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     : bExport( false )
     , nUniqueId( 0 )
     , nVerbosity( rCmd.nVerbosity )
-    , pIdTable( NULL )
+    , pIdTable( nullptr )
 {
     sSlotMapFile = rCmd.aSlotMapFile;
 }
@@ -78,7 +78,7 @@ SvMetaModule * SvIdlDataBase::GetModule( const OString& rName )
     for( sal_uLong n = 0; n < aModuleList.size(); n++ )
         if( aModuleList[n]->GetName().getString().equals(rName) )
             return aModuleList[n];
-    return NULL;
+    return nullptr;
 }
 
 void SvIdlDataBase::SetError( const OString& rError, SvToken& rTok )
@@ -270,7 +270,7 @@ SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
     for( SvMetaTypeMemberList::const_iterator it = rList.begin(); it != rList.end(); ++it )
         if( *it == pPType )
             return *it;
-    return NULL;
+    return nullptr;
 }
 
 SvMetaType * SvIdlDataBase::FindType( const OString& rName )
@@ -278,7 +278,7 @@ SvMetaType * SvIdlDataBase::FindType( const OString& rName )
     for( SvMetaTypeMemberList::const_iterator it = aTypeList.begin(); it != aTypeList.end(); ++it )
         if( rName.equals((*it)->GetName().getString()) )
             return *it;
-    return NULL;
+    return nullptr;
 }
 
 SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
@@ -325,7 +325,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
         OString aName = pTok->GetString();
         SvMetaTypeMemberList & rList = GetTypeList();
         SvMetaTypeMemberList::const_iterator it = rList.begin();
-        SvMetaType * pType = NULL;
+        SvMetaType * pType = nullptr;
         while( it != rList.end() )
         {
             if( (*it)->GetName().getString().equals(aName) )
@@ -373,7 +373,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
         }
     }
     rInStm.Seek( nTokPos );
-    return NULL;
+    return nullptr;
 }
 
 SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
@@ -412,7 +412,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
     }
 
     rInStm.Seek( nTokPos );
-    return NULL;
+    return nullptr;
 }
 
 SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
@@ -431,7 +431,7 @@ SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
@@ -448,7 +448,7 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
         }
 
     rInStm.Seek( nTokPos );
-    return NULL;
+    return nullptr;
 }
 
 void SvIdlDataBase::Write(const OString& rText)
@@ -495,7 +495,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
             aErrorText.append("may be <");
             aErrorText.append(aError.GetText());
         }
-        SvToken * pPrevTok = NULL;
+        SvToken * pPrevTok = nullptr;
         while( pTok != pPrevTok )
         {
             pPrevTok = pTok;
@@ -551,7 +551,7 @@ bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const 
     {
         rInStm.GetToken_Next();
         bOk = rInStm.Read( '(' ); // optional
-        pTok = bOk ? rInStm.GetToken_Next() : NULL;
+        pTok = bOk ? rInStm.GetToken_Next() : nullptr;
         if( pTok && pTok->IsString() )
         {
             OUString aFullName;

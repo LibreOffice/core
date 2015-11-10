@@ -123,7 +123,7 @@ public:
 
     SvMetaType *            ReadKnownType( SvTokenStream & rInStm );
     SvMetaAttribute *       ReadKnownAttr( SvTokenStream & rInStm,
-                                            SvMetaType * pType = NULL );
+                                            SvMetaType * pType = nullptr );
     SvMetaAttribute *       SearchKnownAttr( const SvIdentifier& );
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
     void AddDepFile(OUString const& rFileName);

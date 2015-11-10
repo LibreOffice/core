@@ -159,7 +159,7 @@ public:
     const OString& GetCName() const;
     char                GetParserChar() const { return cParserChar; }
 
-    virtual bool        SetName( const OString& rName, SvIdlDataBase * = NULL ) override;
+    virtual bool        SetName( const OString& rName, SvIdlDataBase * = nullptr ) override;
 
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;

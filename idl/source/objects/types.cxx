@@ -225,7 +225,7 @@ TYPEINIT1( SvMetaType, SvMetaExtern );
     : aCall0( CALL_VALUE, false )       \
     , aCall1( CALL_VALUE, false )       \
     , aSbxDataType( 0, false )          \
-    , pAttrList( NULL )                 \
+    , pAttrList( nullptr )                 \
     , nType( TYPE_BASE )                \
     , bIsItem( false )                  \
     , bIsShell( false )                 \

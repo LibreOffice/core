@@ -104,7 +104,7 @@ SvTokenStream::SvTokenStream( const OUString & rFileName )
 }
 
 SvTokenStream::SvTokenStream( SvStream & rStream, const OUString & rFileName )
-    : pInStream( NULL )
+    : pInStream( nullptr )
     , rInStream( rStream )
     , aFileName( rFileName )
 {

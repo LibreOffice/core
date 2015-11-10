@@ -91,7 +91,7 @@ inline OUString tempFileHelper(OUString const & fname)
     {
         OUString aTmpDir( fname.copy( 0,  delimIndex ) );
         osl::FileBase::getFileURLFromSystemPath( aTmpDir, aTmpDir );
-        osl::FileBase::createTempFile( &aTmpDir, 0, &aTmpFile );
+        osl::FileBase::createTempFile( &aTmpDir, nullptr, &aTmpFile );
         osl::FileBase::getSystemPathFromFileURL( aTmpFile, aTmpFile );
     }
     else

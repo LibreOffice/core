@@ -106,7 +106,7 @@ char const * SyntaxStrings[] = {
 "\t\t{ slot }",
 "\t'}'\n",
 "---syntax example is sfx.idl---\n",
-NULL };
+nullptr };
 
 char CommandLineSyntax[] =
 "-fs<slotmap file>\n"

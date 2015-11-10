@@ -179,7 +179,7 @@ SvStringHashEntry * SvStringHashTable::Get( sal_uInt32 nIndex ) const
 {
     if( IsEntry( nIndex ) )
         return pEntries + nIndex;
-    return NULL;
+    return nullptr;
 }
 
 bool SvStringHashTable::equals( const OString& rElement,
