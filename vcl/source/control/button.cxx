@@ -32,6 +32,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <vcl/buttonstatuslistener.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
@@ -42,6 +43,7 @@
 #include <controldata.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
+
 
 using namespace css;
 
@@ -67,6 +69,9 @@ using namespace css;
 class ImplCommonButtonData
 {
 public:
+    ImplCommonButtonData();
+    ~ImplCommonButtonData();
+
     Rectangle       maFocusRect;
     long            mnSeparatorX;
     DrawButtonFlags mnButtonState;
@@ -76,9 +81,8 @@ public:
     ImageAlign      meImageAlign;
     SymbolAlign     meSymbolAlign;
 
-public:
-                    ImplCommonButtonData();
-                   ~ImplCommonButtonData();
+    /** StatusListener. Updates the button as the slot state changes */
+    rtl::Reference<ButtonStatusListener> mpStatusListener;
 };
 
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
@@ -104,12 +108,16 @@ Button::~Button()
 void Button::dispose()
 {
     Control::dispose();
+    if (mpButtonData->mpStatusListener.is())
+        mpButtonData->mpStatusListener->dispose();
 }
 
 void Button::SetCommandHandler(const OUString& aCommand)
 {
     maCommand = aCommand;
     SetClickHdl( LINK( this, Button, dispatchCommandHandler) );
+
+    mpButtonData->mpStatusListener = new ButtonStatusListener(this, aCommand);
 }
 
 void Button::Click()
