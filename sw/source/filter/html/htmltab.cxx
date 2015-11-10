@@ -56,6 +56,8 @@
 #include "swcss1.hxx"
 #include <numrule.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #define NETSCAPE_DFLT_BORDER 1
 #define NETSCAPE_DFLT_CELLSPACING 2
 

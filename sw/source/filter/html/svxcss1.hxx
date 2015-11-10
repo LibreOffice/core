@@ -24,9 +24,8 @@
 #include <rtl/textenc.h>
 #include "parcss1.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <memory>
+#include <vector>
 #include <map>
 
 class SfxItemPool;
@@ -178,9 +177,9 @@ public:
 
 class SvxCSS1Parser : public CSS1Parser
 {
-    typedef ::boost::ptr_vector<CSS1Selector> CSS1Selectors;
+    typedef ::std::vector<std::unique_ptr<CSS1Selector>> CSS1Selectors;
     typedef ::std::map<OUString, std::unique_ptr<SvxCSS1MapEntry>> CSS1Map;
-    CSS1Selectors aSelectors;   // Liste der "offenen" Selectoren
+    CSS1Selectors m_Selectors;   // List of "open" Selectors
 
     CSS1Map m_Ids;
     CSS1Map m_Classes;

@@ -664,18 +664,18 @@ bool SvxCSS1Parser::SelectorParsed( CSS1Selector *pSelector, bool bFirst )
     {
         OSL_ENSURE( pSheetItemSet, "Where is the Item-Set for Style-Sheets?" );
 
-        for (size_t i = 0; i < aSelectors.size(); ++i)
+        for (size_t i = 0; i < m_Selectors.size(); ++i)
         {
-            StyleParsed( &aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
+            StyleParsed(m_Selectors[i].get(), *pSheetItemSet, *pSheetPropInfo);
         }
         pSheetItemSet->ClearItem();
         pSheetPropInfo->Clear();
 
         // und die naechste Rule vorbereiten
-        aSelectors.clear();
+        m_Selectors.clear();
     }
 
-    aSelectors.push_back(pSelector);
+    m_Selectors.push_back(std::unique_ptr<CSS1Selector>(pSelector));
 
     return false; // den Selektor haben wir gespeichert. Loeschen toedlich!
 }
@@ -828,13 +828,13 @@ bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
 
     bool bSuccess = CSS1Parser::ParseStyleSheet( rIn );
 
-    for (size_t i = 0; i < aSelectors.size(); ++i)
+    for (size_t i = 0; i < m_Selectors.size(); ++i)
     {
-        StyleParsed( &aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
+        StyleParsed(m_Selectors[i].get(), *pSheetItemSet, *pSheetPropInfo);
     }
 
     // und etwas aufrauemen
-    aSelectors.clear();
+    m_Selectors.clear();
     pSheetItemSet->ClearItem();
     pSheetPropInfo->Clear();
 
