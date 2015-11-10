@@ -49,7 +49,7 @@ EmPicture::EmPicture(size_t tsize)
     : size(tsize >= 32 ? tsize - 32 : 0)
 {
     if (size == 0)
-        data = 0;
+        data = nullptr;
     else
         data = new uchar[size];
 }
@@ -79,7 +79,7 @@ bool EmPicture::Read(HWPFile & hwpf)
 
 OlePicture::OlePicture(int tsize)
     : signature(0)
-    , pis(NULL)
+    , pis(nullptr)
 {
     size = tsize - 4;
     if (size <= 0)
@@ -139,7 +139,7 @@ bool OlePicture::Read(HWPFile & hwpf)
     }
     unlink(tname);
 #else
-    if (pis == 0 || hwpf.ReadBlock(pis, size) == 0)
+    if (pis == nullptr || hwpf.ReadBlock(pis, size) == 0)
         return false;
 #endif
 

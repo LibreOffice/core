@@ -67,7 +67,7 @@ bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
 }
 
 HWPPara::HWPPara()
-    : _next(NULL)
+    : _next(nullptr)
     , reuse_shape(0)
     , nch(0)
     , nline(0)
@@ -78,9 +78,9 @@ HWPPara::HWPPara()
     , ctrlflag(0)
     , pstyno(0)
     , pno(0)
-    , linfo(NULL)
-    , cshapep(NULL)
-    , hhstr(NULL)
+    , linfo(nullptr)
+    , cshapep(nullptr)
+    , hhstr(nullptr)
 {
     memset(&cshape, 0, sizeof(cshape));
     memset(&pshape, 0, sizeof(pshape));
@@ -186,11 +186,11 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hhstr = ::comphelper::newArray_null<HBox *>(nch);
     if (!hhstr) { return false; }
     for (ii = 0; ii < nch; ii++)
-        hhstr[ii] = 0;
+        hhstr[ii] = nullptr;
     ii = 0;
     while (ii < nch)
     {
-        if (0 == (hhstr[ii] = readHBox(hwpf)))
+        if (nullptr == (hhstr[ii] = readHBox(hwpf)))
             return false;
         if (hhstr[ii]->hh == CH_END_PARA)
             break;
@@ -218,12 +218,12 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
 {
     hchar hh;
     if (!hwpf.Read2b(hh))
-        return 0;
+        return nullptr;
 
-    HBox *hbox = 0;
+    HBox *hbox = nullptr;
 
     if (hwpf.State() != HWP_NoError)
-        return 0;
+        return nullptr;
 
     if (hh > 31 || hh == CH_END_PARA)
         hbox = new HBox(hh);
@@ -310,7 +310,7 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
     {
         delete hbox;
 
-        return 0;
+        return nullptr;
     }
     if( hh == CH_TEXT_BOX || hh == CH_PICTURE || hh == CH_LINE )
     {

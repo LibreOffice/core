@@ -36,7 +36,7 @@
 
 #include <osl/diagnose.h>
 
-HWPFile *HWPFile::cur_doc = 0;
+HWPFile *HWPFile::cur_doc = nullptr;
 static int ccount = 0;
 static int pcount = 0;
 static int datecodecount = 0;
@@ -48,10 +48,10 @@ HWPFile::HWPFile()
     , linenumber(0)
     , info_block_len(0)
     , error_code(HWP_NoError)
-    , oledata(0)
+    , oledata(nullptr)
     , m_nCurrentPage(1)
     , m_nMaxSettedPage(0)
-    , hiodev(0)
+    , hiodev(nullptr)
     , currenthyper(0)
 {
     SetCurrentDoc(this);
@@ -387,7 +387,7 @@ ColumnDef *HWPFile::GetColumnDef(int num)
     if( it != columnlist.end() )
         return (*it)->coldef;
     else
-        return 0;
+        return nullptr;
 }
 /* Index of @return starts from 1 */
 int HWPFile::GetPageMasterNum(int page)
@@ -413,7 +413,7 @@ HyperText *HWPFile::GetHyperText()
     }
 
     currenthyper++;
-    return it != hyperlist.end() ? *it : NULL;
+    return it != hyperlist.end() ? *it : nullptr;
 }
 
 EmPicture *HWPFile::GetEmPicture(Picture * pic)
@@ -428,7 +428,7 @@ EmPicture *HWPFile::GetEmPicture(Picture * pic)
     for (; it != emblist.end(); ++it)
         if (strcmp(name, (*it)->name) == 0)
             return *it;
-    return 0;
+    return nullptr;
 }
 
 EmPicture *HWPFile::GetEmPictureByName(char * name)
@@ -441,7 +441,7 @@ EmPicture *HWPFile::GetEmPictureByName(char * name)
     for (; it != emblist.end(); ++it)
         if (strcmp(name, (*it)->name) == 0)
             return *it;
-    return 0;
+    return nullptr;
 }
 
 
@@ -455,7 +455,7 @@ void HWPFile::AddBox(FBox * box)
         box->prev->next = box;
     }
     else
-        box->prev = 0;
+        box->prev = nullptr;
     blist.push_back(box);
 }
 
@@ -469,7 +469,7 @@ ParaShape *HWPFile::getParaShape(int index)
 	  break;
     }
 
-    return it != pslist.end() ? *it : NULL;
+    return it != pslist.end() ? *it : nullptr;
 }
 
 
@@ -482,7 +482,7 @@ CharShape *HWPFile::getCharShape(int index)
 	  break;
     }
 
-    return it != cslist.end() ? *it : 0;
+    return it != cslist.end() ? *it : nullptr;
 }
 
 
@@ -495,7 +495,7 @@ FBoxStyle *HWPFile::getFBoxStyle(int index)
 	  break;
     }
 
-    return it != fbslist.end() ? *it : 0;
+    return it != fbslist.end() ? *it : nullptr;
 }
 
 DateCode *HWPFile::getDateCode(int index)
@@ -507,7 +507,7 @@ DateCode *HWPFile::getDateCode(int index)
 	  break;
     }
 
-    return it != datecodes.end() ? *it : NULL;
+    return it != datecodes.end() ? *it : nullptr;
 }
 
 HeaderFooter *HWPFile::getHeaderFooter(int index)
@@ -519,7 +519,7 @@ HeaderFooter *HWPFile::getHeaderFooter(int index)
 	  break;
     }
 
-    return it != headerfooters.end() ? *it : NULL;
+    return it != headerfooters.end() ? *it : nullptr;
 }
 
 ShowPageNum *HWPFile::getPageNumber(int index)
@@ -531,7 +531,7 @@ ShowPageNum *HWPFile::getPageNumber(int index)
 	  break;
     }
 
-    return it != pagenumbers.end() ? *it : NULL;
+    return it != pagenumbers.end() ? *it : nullptr;
 
 }
 
@@ -544,7 +544,7 @@ Table *HWPFile::getTable(int index)
 	  break;
     }
 
-    return it != tables.end() ? *it : NULL;
+    return it != tables.end() ? *it : nullptr;
 }
 
 void HWPFile::AddParaShape(ParaShape * pshape)

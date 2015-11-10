@@ -25,7 +25,7 @@ double** mgcLinearSystemD::NewMatrix (int N)
 {
   double** A = new double*[N];
   if ( !A )
-    return 0;
+    return nullptr;
 
   for (int row = 0; row < N; row++)
   {
@@ -35,7 +35,7 @@ double** mgcLinearSystemD::NewMatrix (int N)
       for (int i = 0; i < row; i++)
     delete[] A[i];
       delete[] A;
-      return 0;
+      return nullptr;
     }
     for (int col = 0; col < N; col++)
       A[row][col] = 0;
@@ -54,7 +54,7 @@ double* mgcLinearSystemD::NewVector (int N)
 {
   double* B = new double[N];
   if ( !B )
-    return 0;
+    return nullptr;
 
   for (int row = 0; row < N; row++)
     B[row] = 0;

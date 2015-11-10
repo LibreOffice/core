@@ -40,7 +40,7 @@ std::list<Node*> nodelist;
 
 void yyerror(const char *);
 
-Node *top=0L;
+Node *top=nullptr;
 
 int Node::count = 0;
 
@@ -525,7 +525,7 @@ yyparse(YYPARSE_PARAM_ARG)
 #endif
 
   YYSTYPE yyval;        /*  the variable used to return     */
-  yyval.dval = 0;
+  yyval.dval = nullptr;
                 /*  semantic values from the action */
                 /*  routines                */
 
@@ -1226,12 +1226,12 @@ yyerrhandle:
 Node *mainParse(const char *_code)
 {
     initFlex( _code );
-    top = 0L;
+    top = nullptr;
     yyparse();
     if( top )
         return top;
     else
-        return 0L;
+        return nullptr;
 }
 
 void yyerror(const char * /*err*/)
@@ -1244,7 +1244,7 @@ void yyerror(const char * /*err*/)
         nodelist.pop_front();
         delete pNode;
     }
-    top = 0L;
+    top = nullptr;
 }
 
 #ifndef PARSE_DEBUG

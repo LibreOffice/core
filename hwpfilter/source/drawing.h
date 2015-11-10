@@ -85,7 +85,7 @@ HWPDOFuncType HWPDOFuncTbl[] =
     HWPDOFreeFormFunc,
 };
 
-static HMemIODev *hmem = 0;
+static HMemIODev *hmem = NULL;
 
 static int count = 0;
 
@@ -299,7 +299,7 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
         hdo->property.contrast = 0;
         hdo->property.greyscale = 0;
     }
-    hdo->property.pPara = 0L;
+    hdo->property.pPara = NULL;
 
     if( ( size > common_size ) && (hdo->property.flag & HWPDO_FLAG_AS_TEXTBOX) )
     {
@@ -392,7 +392,7 @@ static HWPDrawingObject *LoadDrawingObject(void)
         return head;
     }
     else
-        return 0;
+        return NULL;
 }
 
 
@@ -423,7 +423,7 @@ static bool LoadDrawingObjectBlock(Picture * pic)
         return false;
 
     pic->picinfo.picdraw.hdo = LoadDrawingObject();
-    if (pic->picinfo.picdraw.hdo == 0)
+    if (pic->picinfo.picdraw.hdo == NULL)
         return false;
     return true;
 }
@@ -557,7 +557,7 @@ int cmd, void *argp, int argv)
     {
         case OBJFUNC_LOAD:
         {
-            hdo->u.freeform.pt = 0;
+            hdo->u.freeform.pt = NULL;
             if (ReadSizeField(4) < 4)
                 return OBJRET_FILE_ERROR;
             if (!hmem->read4b(hdo->u.freeform.npt))
@@ -625,7 +625,7 @@ static void FreeParaList(HWPPara * para)
 static HWPPara *LoadParaList()
 {
     if (!hmem)
-        return 0;
+        return NULL;
 
     HWPFile *hwpf = GetCurrentDoc();
     HIODev *hio = hwpf->SetIODevice(hmem);
@@ -635,7 +635,7 @@ static HWPPara *LoadParaList()
     hwpf->ReadParaList(plist);
     hwpf->SetIODevice(hio);
 
-    return plist.size()? plist.front() : 0;
+    return plist.size()? plist.front() : NULL;
 }
 
 

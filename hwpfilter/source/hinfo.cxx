@@ -56,7 +56,7 @@ HWPInfo::HWPInfo()
     , compressed(0)
     , reserved3(0)
     , info_block_len(0)
-    , info_block(NULL)
+    , info_block(nullptr)
 {
     back_info.isset = false;
     memset(reserved1, 0, sizeof(reserved1));
@@ -67,7 +67,7 @@ HWPInfo::HWPInfo()
 HWPInfo::~HWPInfo()
 {
     delete[] info_block;
-    info_block = 0;
+    info_block = nullptr;
 }
 
 

@@ -28,7 +28,7 @@ HWPFont::HWPFont()
     for (int ii = 0; ii < NLanguage; ii++)
     {
         nFonts[ii] = 0;
-        fontnames[ii] = NULL;
+        fontnames[ii] = nullptr;
     }
 }
 
@@ -61,9 +61,9 @@ int HWPFont::AddFont(int lang, const char *font)
 const char *HWPFont::GetFontName(int lang, int id)
 {
     if (!(lang >= 0 && lang < NLanguage))
-        return 0;
+        return nullptr;
     if (id < 0 || nFonts[lang] <= id)
-        return 0;
+        return nullptr;
     return fontnames[lang] + id * FONTNAMELEN;
 }
 

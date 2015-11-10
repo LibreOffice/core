@@ -73,7 +73,7 @@
     rendEl("text:span"); \
     tstart = false
 
-static hchar *field = 0L;
+static hchar *field = nullptr;
 static char buf[1024];
 
 namespace
@@ -98,7 +98,7 @@ struct HwpReaderPrivate
         bInBody = false;
         bInHeader = false;
         nPnPos = 0;
-        pPn = 0L;
+        pPn = nullptr;
 
     }
     bool bFirstPara;
@@ -118,7 +118,7 @@ HwpReader::HwpReader()
 
 HwpReader::~HwpReader()
 {
-    rList = 0;
+    rList = nullptr;
     delete d;
 }
 
@@ -523,7 +523,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 }
                 else
                 {
-                    EmPicture *emp = 0L;
+                    EmPicture *emp = nullptr;
                     if ( strlen( prop->szPatternFile ) > 3)
                         emp = hwpfile.GetEmPictureByName(prop->szPatternFile);
                     if( emp )
@@ -933,13 +933,13 @@ struct PageSetting
 {
     PageSetting()
     {
-        header = 0L;
-        header_odd = 0L;
-        header_even = 0L;
-        footer = 0L;
-        footer_odd = 0L;
-        footer_even = 0L;
-        pagenumber=0L;
+        header = nullptr;
+        header_odd = nullptr;
+        header_even = nullptr;
+        footer = nullptr;
+        footer_odd = nullptr;
+        footer_even = nullptr;
+        pagenumber=nullptr;
         bIsSet = false;
     }
     HeaderFooter *header ;
@@ -976,8 +976,8 @@ void HwpReader::makeMasterStyles()
             {
                 case 0 :
                     pSet[hf->m_nPageNumber].header = hf;
-                    pSet[hf->m_nPageNumber].header_even = 0L;
-                    pSet[hf->m_nPageNumber].header_odd = 0L;
+                    pSet[hf->m_nPageNumber].header_even = nullptr;
+                    pSet[hf->m_nPageNumber].header_odd = nullptr;
                     break;
                 case 1:
                     pSet[hf->m_nPageNumber].header_even = hf;
@@ -985,7 +985,7 @@ void HwpReader::makeMasterStyles()
                     {
                         pSet[hf->m_nPageNumber].header_odd =
                             pSet[hf->m_nPageNumber].header;
-                        pSet[hf->m_nPageNumber].header = 0L;
+                        pSet[hf->m_nPageNumber].header = nullptr;
                     }
                     break;
                 case 2:
@@ -994,7 +994,7 @@ void HwpReader::makeMasterStyles()
                     {
                         pSet[hf->m_nPageNumber].header_even =
                             pSet[hf->m_nPageNumber].header;
-                        pSet[hf->m_nPageNumber].header = 0L;
+                        pSet[hf->m_nPageNumber].header = nullptr;
                     }
                     break;
             }
@@ -1005,8 +1005,8 @@ void HwpReader::makeMasterStyles()
             {
                 case 0 :
                     pSet[hf->m_nPageNumber].footer = hf;
-                    pSet[hf->m_nPageNumber].footer_even = 0L;
-                    pSet[hf->m_nPageNumber].footer_odd = 0L;
+                    pSet[hf->m_nPageNumber].footer_even = nullptr;
+                    pSet[hf->m_nPageNumber].footer_odd = nullptr;
                     break;
                 case 1:
                     pSet[hf->m_nPageNumber].footer_even = hf;
@@ -1014,7 +1014,7 @@ void HwpReader::makeMasterStyles()
                     {
                         pSet[hf->m_nPageNumber].footer_odd =
                             pSet[hf->m_nPageNumber].footer;
-                        pSet[hf->m_nPageNumber].footer = 0L;
+                        pSet[hf->m_nPageNumber].footer = nullptr;
                     }
                     break;
                 case 2:
@@ -1023,15 +1023,15 @@ void HwpReader::makeMasterStyles()
                     {
                         pSet[hf->m_nPageNumber].footer_even =
                             pSet[hf->m_nPageNumber].footer;
-                        pSet[hf->m_nPageNumber].footer = 0L;
+                        pSet[hf->m_nPageNumber].footer = nullptr;
                     }
                     break;
             }
         }
     }
 
-    PageSetting *pPrevSet = 0L;
-    PageSetting *pPage = 0L;
+    PageSetting *pPrevSet = nullptr;
+    PageSetting *pPage = nullptr;
 
     for( i = 1; i <= nMax ; i++ )
     {
@@ -1062,13 +1062,13 @@ void HwpReader::makeMasterStyles()
                 {
                     pSet[i].header_even = pSet[i].header;
                     pSet[i].header_odd = pSet[i].header;
-                    pSet[i].header = 0L;
+                    pSet[i].header = nullptr;
                 }
                 if( pSet[i].pagenumber->where == 8 && pSet[i].footer )
                 {
                     pSet[i].footer_even = pSet[i].footer;
                     pSet[i].footer_odd = pSet[i].footer;
-                    pSet[i].footer = 0L;
+                    pSet[i].footer = nullptr;
                 }
             }
 
@@ -1127,7 +1127,7 @@ void HwpReader::makeMasterStyles()
             }
             parsePara(pPage->header->plist.front());
             d->bInHeader = false;
-            d->pPn = 0L;
+            d->pPn = nullptr;
             rendEl("style:header");
         }
         if( pPage->header_even )
@@ -1142,7 +1142,7 @@ void HwpReader::makeMasterStyles()
             }
             parsePara(pPage->header_even->plist.front());
             d->bInHeader = false;
-            d->pPn = 0L;
+            d->pPn = nullptr;
             d->nPnPos = 0;
             rendEl("style:header");
         }
@@ -1159,7 +1159,7 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 3;
                 makeShowPageNum();
-                d->pPn = 0L;
+                d->pPn = nullptr;
                 d->nPnPos = 0;
             }
             rendEl("text:p");
@@ -1177,7 +1177,7 @@ void HwpReader::makeMasterStyles()
             }
             parsePara(pPage->header_odd->plist.front());
             d->bInHeader = false;
-            d->pPn = 0L;
+            d->pPn = nullptr;
             d->nPnPos = 0;
             rendEl("style:header-left");
         }
@@ -1194,7 +1194,7 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 1;
                 makeShowPageNum();
-                d->pPn = 0L;
+                d->pPn = nullptr;
                 d->nPnPos = 0;
             }
             rendEl("text:p");
@@ -1211,7 +1211,7 @@ void HwpReader::makeMasterStyles()
             {
                 d->pPn = pPage->pagenumber;
                 makeShowPageNum();
-                d->pPn = 0L;
+                d->pPn = nullptr;
             }
             rendEl("text:p");
             rendEl("style:header");
@@ -1228,7 +1228,7 @@ void HwpReader::makeMasterStyles()
             }
             parsePara(pPage->footer->plist.front());
             d->bInHeader = false;
-            d->pPn = 0L;
+            d->pPn = nullptr;
             rendEl("style:footer");
         }
         if( pPage->footer_even )
@@ -1243,7 +1243,7 @@ void HwpReader::makeMasterStyles()
             }
             parsePara(pPage->footer_even->plist.front());
             d->bInHeader = false;
-            d->pPn = 0L;
+            d->pPn = nullptr;
             d->nPnPos = 0;
             rendEl("style:footer");
         }
@@ -1260,7 +1260,7 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 3;
                 makeShowPageNum();
-                d->pPn = 0L;
+                d->pPn = nullptr;
                 d->nPnPos = 0;
             }
             rendEl("text:p");
@@ -1278,7 +1278,7 @@ void HwpReader::makeMasterStyles()
             }
             parsePara(pPage->footer_odd->plist.front());
             d->bInHeader = false;
-            d->pPn = 0L;
+            d->pPn = nullptr;
             d->nPnPos = 0;
             rendEl("style:footer-left");
         }
@@ -1295,7 +1295,7 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 1;
                 makeShowPageNum();
-                d->pPn = 0L;
+                d->pPn = nullptr;
                 d->nPnPos = 0;
             }
             rendEl("text:p");
@@ -1312,7 +1312,7 @@ void HwpReader::makeMasterStyles()
             {
                 d->pPn = pPage->pagenumber;
                 makeShowPageNum();
-                d->pPn = 0L;
+                d->pPn = nullptr;
             }
             rendEl("text:p");
             rendEl("style:footer");
@@ -2959,7 +2959,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                      if( hbox->type[0] == 4 && hbox->type[1] == 0 )
                      {
                          makeFieldCode(str, hbox);
-                         field = 0L;
+                         field = nullptr;
                      }
                 infield = false;
                 str.clear();
@@ -3663,7 +3663,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
 {
     char mybuf[3000];
     HWPPara* pPar;
-    CharShape *cshape = 0;
+    CharShape *cshape = nullptr;
 
     int n, c, res;
      hchar dest[3];
@@ -4360,11 +4360,11 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                               double *yarr = new double[n+1];
                               double *tarr = new double[n+1];
 
-                              double *xb = 0L;
-                              double *yb = 0L;
+                              double *xb = nullptr;
+                              double *yb = nullptr;
 
-                              double *carr = 0L;
-                              double *darr = 0L;
+                              double *carr = nullptr;
+                              double *darr = nullptr;
 
 
                               for( i = 0 ; i < n ; i++ ){
@@ -4380,18 +4380,18 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                   PeriodicSpline(n, tarr, xarr, xb, carr, darr);
                                   // prevent memory leak
                                   delete[] carr;
-                                  carr = 0;
+                                  carr = nullptr;
                                   delete[] darr;
-                                  darr = 0;
+                                  darr = nullptr;
                                   PeriodicSpline(n, tarr, yarr, yb, carr, darr);
                               }
                               else{
                                   NaturalSpline(n, tarr, xarr, xb, carr, darr);
                                   // prevent memory leak
                                   delete[] carr;
-                                  carr = 0;
+                                  carr = nullptr;
                                   delete[] darr;
-                                  darr = 0;
+                                  darr = nullptr;
                                   NaturalSpline(n, tarr, yarr, yb, carr, darr);
                               }
 

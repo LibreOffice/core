@@ -359,7 +359,7 @@ bool TxtBox::Read(HWPFile & hwpf)
           delete[] pArr;
      }
      else
-          m_pTable = 0L;
+          m_pTable = nullptr;
 
     return !hwpf.State();
 }
@@ -443,7 +443,7 @@ bool Picture::Read(HWPFile & hwpf)
             style.cell = picinfo.picdraw.hdo;
             delete hmem;
 
-            hmem = 0;
+            hmem = nullptr;
         }
         else
         {

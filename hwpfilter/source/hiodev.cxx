@@ -122,7 +122,7 @@ HStreamIODev::~HStreamIODev()
 
 void HStreamIODev::init()
 {
-    _gzfp = NULL;
+    _gzfp = nullptr;
     compressed = false;
 }
 
@@ -148,7 +148,7 @@ void HStreamIODev::close()
     this->flush();
     if (_gzfp)
         gz_close(_gzfp);
-    _gzfp = NULL;
+    _gzfp = nullptr;
 }
 
 
@@ -163,12 +163,12 @@ bool HStreamIODev::setCompressed(bool flag)
 {
     compressed = flag;
     if (flag)
-        return 0 != (_gzfp = gz_open(*_stream));
+        return nullptr != (_gzfp = gz_open(*_stream));
     else if (_gzfp)
     {
         gz_flush(_gzfp, Z_FINISH);
         gz_close(_gzfp);
-        _gzfp = 0;
+        _gzfp = nullptr;
     }
     return true;
 }
@@ -278,7 +278,7 @@ HMemIODev::~HMemIODev()
 
 void HMemIODev::init()
 {
-    ptr = 0;
+    ptr = nullptr;
     length = 0;
     pos = 0;
 }

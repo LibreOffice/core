@@ -42,7 +42,7 @@ static char buffer[MAXSTYLENAME + 1];
 HWPStyle::HWPStyle()
 {
     nstyles = 0;
-    style = 0;
+    style = nullptr;
 }
 
 
@@ -58,7 +58,7 @@ HWPStyle::~HWPStyle()
 char *HWPStyle::GetName(int n) const
 {
     if (!(n >= 0 && n < nstyles))
-        return 0;
+        return nullptr;
     return DATA[n].name;
 }
 
@@ -78,7 +78,7 @@ void HWPStyle::SetName(int n, char *name)
 CharShape *HWPStyle::GetCharShape(int n) const
 {
     if (!(n >= 0 && n < nstyles))
-        return 0;
+        return nullptr;
     return &DATA[n].cshape;
 }
 
@@ -98,7 +98,7 @@ void HWPStyle::SetCharShape(int n, CharShape * cshapep)
 ParaShape *HWPStyle::GetParaShape(int n) const
 {
     if (!(n >= 0 && n < nstyles))
-        return 0;
+        return nullptr;
     return &DATA[n].pshape;
 }
 

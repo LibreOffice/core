@@ -76,7 +76,7 @@ SkipData::SkipData(hchar hch)
     : HBox(hch)
     , data_block_len(0)
     , dummy(0)
-    , data_block(0)
+    , data_block(nullptr)
 {
 }
 
@@ -90,11 +90,11 @@ SkipData::~SkipData()
 FieldCode::FieldCode()
     : HBox(CH_FIELD)
     , location_info(0)
-    , str1(NULL)
-    , str2(NULL)
-    , str3(NULL)
-    , bin(NULL)
-    , m_pDate(NULL)
+    , str1(nullptr)
+    , str2(nullptr)
+    , str3(nullptr)
+    , bin(nullptr)
+    , m_pDate(nullptr)
 {
     reserved1 = new char[4];
     reserved2 = new char[22];
@@ -316,8 +316,8 @@ FBox::FBox(hchar hch)
     , pgy(0)
     , pgno(0)
     , showpg(0)
-    , prev(NULL)
-    , next(NULL)
+    , prev(nullptr)
+    , next(nullptr)
 {
 }
 
@@ -341,9 +341,9 @@ TxtBox::TxtBox()
     , type(0)
     , nCell(0)
     , protect(0)
-    , cell(0)
-    , m_pTable(NULL)
-    , plists(NULL)
+    , cell(nullptr)
+    , m_pTable(nullptr)
+    , plists(nullptr)
 {
     reserved[0] = reserved[1] = 0;
 }
@@ -385,7 +385,7 @@ Picture::Picture()
     , cap_pos(0)
     , num(0)
     , pictype(0)
-    , follow(0)
+    , follow(nullptr)
     , ishyper(false)
 {
 }
@@ -525,7 +525,7 @@ static const hchar *GetOutlineStyleChars(int style)
     };
     if (style >= OLSTY_BULLET1 && style <= OLSTY_BULLET5)
         return out_bul_style_entry[style - OLSTY_BULLET1];
-    return NULL;
+    return nullptr;
 }
 
 

@@ -185,7 +185,7 @@ struct yy_buffer_state
 #define YY_BUFFER_EOF_PENDING 2
     };
 
-static YY_BUFFER_STATE yy_current_buffer = 0;
+static YY_BUFFER_STATE yy_current_buffer = nullptr;
 
 /* We provide macros for accessing buffer states in case in the
  * future we want to put the buffer states in a more general
@@ -1595,7 +1595,7 @@ static int yy_get_next_buffer()
                 }
             else
                 /* Can't grow it, we don't own it. */
-                b->yy_ch_buf = 0;
+                b->yy_ch_buf = nullptr;
 
             if ( ! b->yy_ch_buf )
                 YY_FATAL_ERROR(
@@ -1898,7 +1898,7 @@ yy_size_t size;
          base[size-2] != YY_END_OF_BUFFER_CHAR ||
          base[size-1] != YY_END_OF_BUFFER_CHAR )
         /* They forgot to leave room for the EOB's. */
-        return 0;
+        return nullptr;
 
     b = static_cast<YY_BUFFER_STATE>(yy_flex_alloc( sizeof( struct yy_buffer_state ) ));
     if ( ! b )
@@ -1907,7 +1907,7 @@ yy_size_t size;
     b->yy_buf_size = size - 2;  /* "- 2" to take care of EOB's */
     b->yy_buf_pos = b->yy_ch_buf = base;
     b->yy_is_our_buffer = 0;
-    b->yy_input_file = 0;
+    b->yy_input_file = nullptr;
     b->yy_n_chars = b->yy_buf_size;
     b->yy_is_interactive = false;
     b->yy_at_bol = 1;

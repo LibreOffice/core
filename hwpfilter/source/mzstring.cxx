@@ -54,7 +54,7 @@ MzString::MzString()
 {
     Length    = 0;
     Allocated = 0;
-    Data      = 0;
+    Data      = nullptr;
 }
 
 
@@ -79,7 +79,7 @@ MzString &MzString::operator = (MzString &s)
 
 MzString &MzString::operator = (const char *s)
 {
-    if (s == NULL)
+    if (s == nullptr)
         s = "";
     int n = strlen(s);
     if (allocate(n))
@@ -122,7 +122,7 @@ void MzString::append(const char *s)
 int MzString::compare(const char *s)
 {
     if (!Data)   return -1;
-    if (s==NULL) return 1;
+    if (s==nullptr) return 1;
 
     Data[Length] = 0;
     return strcmp(Data, s);

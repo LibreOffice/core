@@ -570,7 +570,7 @@ void Formula::makeBlock(Node *res)
 
 int Formula::parse()
 {
-     Node *res = 0L;
+     Node *res = nullptr;
      if( !eq ) return 0;
      if( isHwpEQ ){
           MzString a;
@@ -611,7 +611,7 @@ int Formula::parse()
           if( buf[0] != '\0' )
                 res = mainParse( a.c_str() );
           else
-                res = 0L;
+                res = nullptr;
           free(buf);
      }
      else{
@@ -659,7 +659,7 @@ void Formula::trim()
      if( buf[0] != '\0' )
           strcpy(eq, buf);
      else
-          eq = 0L;
+          eq = nullptr;
      free(buf);
 }
 

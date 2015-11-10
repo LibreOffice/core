@@ -71,7 +71,7 @@ gz_stream *gz_open(HStream & _stream)
     s->z_err = Z_OK;
     s->z_eof = 0;
     s->crc = crc32(0L, Z_NULL, 0);
-    s->msg = NULL;
+    s->msg = nullptr;
     s->transparent = 0;
 
     s->mode = 'r';
@@ -134,7 +134,7 @@ local int destroy(gz_stream * s)
 
     TRYFREE(s->msg);
 
-    if (s->stream.state != NULL)
+    if (s->stream.state != nullptr)
     {
         err = inflateEnd(&(s->stream));
     }
@@ -160,7 +160,7 @@ int gz_read(gz_stream * file, voidp buf, unsigned len)
     gz_stream *s = file;
     Bytef *start = static_cast<Bytef *>(buf);                 /* starting point for crc computation */
     Byte *next_out;                               /* == stream.next_out but not forced far (for MSDOS) */
-    if (s == NULL)
+    if (s == nullptr)
         return Z_STREAM_ERROR;
 
     if (s->z_err == Z_DATA_ERROR || s->z_err == Z_ERRNO)
@@ -245,7 +245,7 @@ int gz_flush(gz_stream * file, int flush)
     bool done = false;
     gz_stream *s = file;
 
-    if (s == NULL || s->mode != 'w')
+    if (s == nullptr || s->mode != 'w')
         return Z_STREAM_ERROR;
 
     s->stream.avail_in = 0;                       /* should be zero already anyway */
@@ -307,7 +307,7 @@ int gz_close(gz_stream * file)
 //  int err;
     gz_stream *s = file;
 
-    if (s == NULL)
+    if (s == nullptr)
         return Z_STREAM_ERROR;
 #if 0
     if (s->mode == 'w')
