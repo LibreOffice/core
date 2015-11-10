@@ -68,7 +68,7 @@ class SfxListenerGuard
 {
 public:
     inline SfxListenerGuard(::SfxListener & rListener):
-        m_rListener(rListener), m_pNotifier(0) {}
+        m_rListener(rListener), m_pNotifier(nullptr) {}
 
     inline ~SfxListenerGuard() { endListening(); }
 
@@ -87,7 +87,7 @@ class WindowListenerGuard
 {
 public:
     inline WindowListenerGuard(::Link<VclWindowEvent&,void> const & rListener):
-        m_aListener(rListener), m_pNotifier(0) {}
+        m_aListener(rListener), m_pNotifier(nullptr) {}
 
     inline ~WindowListenerGuard() { endListening(); }
 
@@ -539,7 +539,7 @@ public:
 
     css::i18n::Boundary
     retrieveParagraphLineBoundary( Paragraph const * pParagraph,
-                                   ::sal_Int32 nIndex, ::sal_Int32 *pLineNo = NULL);
+                                   ::sal_Int32 nIndex, ::sal_Int32 *pLineNo = nullptr);
 
     css::i18n::Boundary
     retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,

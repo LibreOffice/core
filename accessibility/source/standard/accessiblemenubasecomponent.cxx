@@ -70,7 +70,7 @@ OAccessibleMenuBaseComponent::~OAccessibleMenuBaseComponent()
         m_pMenu->RemoveEventListener( LINK( this, OAccessibleMenuBaseComponent, MenuEventListener ) );
 
     delete m_pExternalLock;
-    m_pExternalLock = NULL;
+    m_pExternalLock = nullptr;
 }
 
 
@@ -661,7 +661,7 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
             {
                 m_pMenu->RemoveEventListener( LINK( this, OAccessibleMenuBaseComponent, MenuEventListener ) );
 
-                m_pMenu = NULL;
+                m_pMenu = nullptr;
 
                 // dispose all menu items
                 for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
@@ -705,7 +705,7 @@ void OAccessibleMenuBaseComponent::disposing()
     {
         m_pMenu->RemoveEventListener( LINK( this, OAccessibleMenuBaseComponent, MenuEventListener ) );
 
-        m_pMenu = NULL;
+        m_pMenu = nullptr;
 
         // dispose all menu items
         for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )

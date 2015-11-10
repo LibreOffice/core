@@ -143,7 +143,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
     SolarMutexGuard g;
 
     ensureIsAlive();
-    return NULL;        // no headers in headers
+    return nullptr;        // no headers in headers
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibleColumnHeaders()
@@ -152,7 +152,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
     SolarMutexGuard g;
 
     ensureIsAlive();
-    return NULL;        // no headers in headers
+    return nullptr;        // no headers in headers
 }
 //not selectable
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibleRows()
@@ -186,7 +186,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlHeader::getAccessibleCell
         sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    return NULL;
+    return nullptr;
 }
 // not selectable
 sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
@@ -226,7 +226,7 @@ Rectangle AccessibleGridControlHeader::implGetBoundingBox()
 
 Rectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
 {
-    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( NULL ) );
+    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ) );
     Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
     if(isColumnBar())
         return Rectangle(aGridRect.TopLeft(), Size(aGridRect.getWidth(),aHeaderRect.getHeight()));

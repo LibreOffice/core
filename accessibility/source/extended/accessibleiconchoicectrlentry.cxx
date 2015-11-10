@@ -123,7 +123,7 @@ throw(RuntimeException, std::exception)
         {
             aRect = m_pIconCtrl->GetBoundingBox( pEntry );
             Point aTopLeft = aRect.TopLeft();
-            aTopLeft += m_pIconCtrl->GetWindowExtentsRelative( NULL ).TopLeft();
+            aTopLeft += m_pIconCtrl->GetWindowExtentsRelative( nullptr ).TopLeft();
             aRect = Rectangle( aTopLeft, aRect.GetSize() );
         }
 
@@ -224,8 +224,8 @@ throw(RuntimeException, std::exception)
         if ( xComp.is() )
             xComp->removeEventListener( this );
 
-        m_pIconCtrl = NULL;
-        m_xParent = NULL;
+        m_pIconCtrl = nullptr;
+        m_xParent = nullptr;
     }
 
     // XServiceInfo

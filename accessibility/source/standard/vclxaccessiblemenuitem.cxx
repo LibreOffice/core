@@ -406,7 +406,7 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
                 vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
 
                 SolarMutexReleaser aReleaser;
-                xClipboard->setContents( pDataObj, NULL );
+                xClipboard->setContents( pDataObj, nullptr );
                 Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
                 if( xFlushableClipboard.is() )
                     xFlushableClipboard->flushClipboard();

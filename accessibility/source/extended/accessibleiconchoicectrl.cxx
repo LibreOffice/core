@@ -94,7 +94,7 @@ namespace accessibility
                     if ( pCtrl && pCtrl->HasFocus() )
                     {
                         SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
-                        if ( pEntry == NULL )
+                        if ( pEntry == nullptr )
                         {
                             pEntry = getCtrl()->GetSelectedEntry();
                         }
@@ -122,7 +122,7 @@ namespace accessibility
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        m_xParent = NULL;
+        m_xParent = nullptr;
     }
 
     // XServiceInfo

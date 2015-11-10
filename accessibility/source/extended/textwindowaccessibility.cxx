@@ -31,17 +31,17 @@ namespace accessibility
 {
 void SfxListenerGuard::startListening(::SfxBroadcaster & rNotifier)
 {
-    OSL_ENSURE(m_pNotifier == 0, "called more than once");
+    OSL_ENSURE(m_pNotifier == nullptr, "called more than once");
     m_pNotifier = &rNotifier;
     m_rListener.StartListening(*m_pNotifier, true);
 }
 
 void SfxListenerGuard::endListening()
 {
-    if (m_pNotifier != 0)
+    if (m_pNotifier != nullptr)
     {
         m_rListener.EndListening(*m_pNotifier);
-        m_pNotifier = 0;
+        m_pNotifier = nullptr;
     }
 }
 
@@ -221,7 +221,7 @@ Paragraph::getAccessibleAtPoint(css::awt::Point const &)
     throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
-    return 0;
+    return nullptr;
 }
 
 // virtual
@@ -1511,7 +1511,7 @@ Document::getAccessibleAtPoint(css::awt::Point const & rPoint)
                 return getAccessibleChild(aIt);
         }
     }
-    return 0;
+    return nullptr;
 }
 void Document::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -1537,7 +1537,7 @@ void SAL_CALL Document::disposing()
 {
     m_aEngineListener.endListening();
     m_aViewListener.endListening();
-    if (m_xParagraphs.get() != 0)
+    if (m_xParagraphs.get() != nullptr)
         disposeParagraphs();
     VCLXAccessibleComponent::disposing();
 }
@@ -1751,7 +1751,7 @@ IMPL_LINK_TYPED(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
 
 void Document::init()
 {
-    if (m_xParagraphs.get() == 0)
+    if (m_xParagraphs.get() == nullptr)
     {
         const sal_uInt32 nCount = m_rEngine.GetParagraphCount();
         m_xParagraphs.reset(new Paragraphs);

@@ -212,7 +212,7 @@ namespace accessibility
             }
         }
 
-        m_pBrowseBox = NULL;
+        m_pBrowseBox = nullptr;
         m_xControlAccessible.clear();
         m_aContext.clear();
         // NO dispose of the inner object there: it is the XAccessible of an window, and disposing

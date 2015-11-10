@@ -30,7 +30,7 @@
 class VCLXAccessibleMenuSeparator : public OAccessibleMenuItemComponent
 {
 public:
-    VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = 0 );
+    VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = nullptr );
     virtual ~VCLXAccessibleMenuSeparator();
 
     // XServiceInfo

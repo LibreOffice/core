@@ -62,7 +62,7 @@ public:
 AccessibleBrowseBox::AccessibleBrowseBox(
             const Reference< XAccessible >& _rxParent, const Reference< XAccessible >& _rxCreator,
             IAccessibleTableProvider& _rBrowseBox )
-    : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,NULL, BBTYPE_BROWSEBOX )
+    : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, BBTYPE_BROWSEBOX )
 {
     m_xImpl.reset( new AccessibleBrowseBoxImpl() );
     m_xImpl->m_aCreator = _rxCreator;
@@ -89,9 +89,9 @@ void SAL_CALL AccessibleBrowseBox::disposing()
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
 
-    m_xImpl->m_pTable           = NULL;
-    m_xImpl->m_pColumnHeaderBar = NULL;
-    m_xImpl->m_pRowHeaderBar    = NULL;
+    m_xImpl->m_pTable           = nullptr;
+    m_xImpl->m_pColumnHeaderBar = nullptr;
+    m_xImpl->m_pRowHeaderBar    = nullptr;
     m_xImpl->m_aCreator.clear();
 
     Reference< XAccessible >  xTable = m_xImpl->mxTable;
@@ -213,7 +213,7 @@ Rectangle AccessibleBrowseBox::implGetBoundingBox()
 
 Rectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
 {
-    return mpBrowseBox->GetWindowExtentsRelative( NULL );
+    return mpBrowseBox->GetWindowExtentsRelative( nullptr );
 }
 
 
@@ -235,7 +235,7 @@ Reference< XAccessible >
 AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
 {
     Reference< XAccessible > xRet;
-    Reference< XAccessible >* pxMember = NULL;
+    Reference< XAccessible >* pxMember = nullptr;
 
     if( eObjType == BBTYPE_ROWHEADERBAR )
         pxMember = &m_xImpl->mxRowHeaderBar;
@@ -312,7 +312,7 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
 AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const Reference< XAccessible >& _rxParent, IAccessibleTableProvider& _rBrowseBox )
         :m_xParent( _rxParent )
         ,m_rBrowseBox( _rBrowseBox )
-        ,m_pContext( NULL )
+        ,m_pContext( nullptr )
 {
 }
 
@@ -326,7 +326,7 @@ void AccessibleBrowseBoxAccess::dispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    m_pContext = NULL;
+    m_pContext = nullptr;
     ::comphelper::disposeComponent( m_xContext );
 }
 
@@ -341,7 +341,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibl
     // if the context died meanwhile (there is no listener, so it won't tell us explicitily when this happens),
     // then reset and re-create.
     if ( m_pContext && !m_pContext->isAlive() )
-        m_xContext = m_pContext = NULL;
+        m_xContext = m_pContext = nullptr;
 
     if ( !m_xContext.is() )
         m_xContext = m_pContext = new AccessibleBrowseBox( m_xParent, this, m_rBrowseBox );
@@ -352,7 +352,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibl
 
 bool AccessibleBrowseBoxAccess::isContextAlive() const
 {
-    return  ( NULL != m_pContext ) && m_pContext->isAlive();
+    return  ( nullptr != m_pContext ) && m_pContext->isAlive();
 }
 
 

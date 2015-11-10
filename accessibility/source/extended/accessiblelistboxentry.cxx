@@ -135,7 +135,7 @@ namespace accessibility
         {
             aRect = getListBox()->GetBoundingRect( pEntry );
             Point aTopLeft = aRect.TopLeft();
-            aTopLeft += getListBox()->GetWindowExtentsRelative( NULL ).TopLeft();
+            aTopLeft += getListBox()->GetWindowExtentsRelative( nullptr ).TopLeft();
             aRect = Rectangle( aTopLeft, aRect.GetSize() );
         }
 
@@ -351,7 +351,7 @@ namespace accessibility
                 if ( pParentEntry )
                     pParentEntry = getListBox()->GetParent(pParentEntry);
                 if ( pParentEntry )
-                    xParent = new AccessibleListBoxEntry( *getListBox(), pParentEntry, NULL );
+                    xParent = new AccessibleListBoxEntry( *getListBox(), pParentEntry, nullptr );
                     // note that we pass NULL here as parent-accessible:
                     // this is allowed, as the AccessibleListBoxEntry class will create its parent
                     // when needed
@@ -1201,7 +1201,7 @@ namespace accessibility
 
     SvTreeListEntry* AccessibleListBoxEntry::GetRealChild(sal_Int32 nIndex)
     {
-        SvTreeListEntry* pEntry = NULL;
+        SvTreeListEntry* pEntry = nullptr;
         SvTreeListEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
         if (pParent)
         {

@@ -85,10 +85,10 @@ void SAL_CALL AccessibleGridControl::disposing()
 {
     SolarMutexGuard g;
 
-    m_xImpl->m_pTable       = NULL;
-    m_xImpl->m_pColumnHeaderBar = NULL;
-    m_xImpl->m_pRowHeaderBar    = NULL;
-    m_xImpl->m_pCell            = NULL;
+    m_xImpl->m_pTable       = nullptr;
+    m_xImpl->m_pColumnHeaderBar = nullptr;
+    m_xImpl->m_pRowHeaderBar    = nullptr;
+    m_xImpl->m_pCell            = nullptr;
     m_xImpl->m_aCreator.clear();
 
     Reference< XAccessible >  xTable = m_xImpl->m_xTable;
@@ -240,7 +240,7 @@ Rectangle AccessibleGridControl::implGetBoundingBox()
 
 Rectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
 {
-    return m_aTable.GetWindowExtentsRelative( NULL );
+    return m_aTable.GetWindowExtentsRelative( nullptr );
 }
 // internal helper methods ----------------------------------------------------
 
@@ -259,7 +259,7 @@ Reference< XAccessible >
 AccessibleGridControl::implGetHeaderBar( AccessibleTableControlObjType eObjType )
 {
     Reference< XAccessible > xRet;
-    Reference< XAccessible >* pxMember = NULL;
+    Reference< XAccessible >* pxMember = nullptr;
 
     if( eObjType == TCTYPE_ROWHEADERBAR )
         pxMember = &m_xImpl->m_xRowHeaderBar;
@@ -396,7 +396,7 @@ AccessibleGridControlAccess::AccessibleGridControlAccess(
         const Reference< XAccessible >& rxParent, IAccessibleTable& rTable )
     : m_xParent( rxParent )
     , m_pTable( & rTable )
-    , m_pContext( 0 )
+    , m_pContext( nullptr )
 {
 }
 
@@ -410,8 +410,8 @@ void AccessibleGridControlAccess::DisposeAccessImpl()
 {
     SolarMutexGuard g;
 
-    m_pTable = 0;
-    m_pContext = NULL;
+    m_pTable = nullptr;
+    m_pContext = nullptr;
     ::comphelper::disposeComponent( m_xContext );
 }
 
@@ -426,7 +426,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleGridControlAccess::getAccessi
     // if the context died meanwhile (we're no listener, so it won't tell us explicitily when this happens),
     // then reset an re-create.
     if ( m_pContext && !m_pContext->isAlive() )
-        m_xContext = m_pContext = NULL;
+        m_xContext = m_pContext = nullptr;
 
     if (!m_xContext.is() && m_pTable)
         m_xContext = m_pContext =
@@ -438,7 +438,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleGridControlAccess::getAccessi
 
 bool AccessibleGridControlAccess::isContextAlive() const
 {
-    return  ( NULL != m_pContext ) && m_pContext->isAlive();
+    return  ( nullptr != m_pContext ) && m_pContext->isAlive();
 }
 
 

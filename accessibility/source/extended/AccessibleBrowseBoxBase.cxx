@@ -111,8 +111,8 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
         AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
     }
 
-    mxParent = NULL;
-    mpBrowseBox = NULL;
+    mxParent = nullptr;
+    mpBrowseBox = nullptr;
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -487,12 +487,12 @@ sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
 Reference<XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleAtPoint( const css::awt::Point& )
         throw ( uno::RuntimeException, std::exception )
 {
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL AccessibleBrowseBoxBase::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
-    m_xFocusWindow = NULL;
+    m_xFocusWindow = nullptr;
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (css::uno::RuntimeException, std::exception)

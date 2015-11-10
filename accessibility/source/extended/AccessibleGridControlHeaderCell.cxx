@@ -147,7 +147,7 @@ Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
 
 Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
 {
-    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( NULL ) );
+    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ) );
     sal_Int32 nIndex = getAccessibleIndexInParent();
     Rectangle aCellRect;
     if(m_eObjType == TCTYPE_COLUMNHEADERCELL)

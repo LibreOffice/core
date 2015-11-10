@@ -124,14 +124,14 @@ Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessib
     throw ( uno::RuntimeException, std::exception )
 {
     ensureIsAlive();
-    return NULL;        // no headers in headers
+    return nullptr;        // no headers in headers
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleColumnHeaders()
     throw ( uno::RuntimeException, std::exception )
 {
     ensureIsAlive();
-    return NULL;        // no headers in headers
+    return nullptr;        // no headers in headers
 }
 
 Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxHeaderBar::getSelectedAccessibleRows()

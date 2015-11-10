@@ -234,7 +234,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             if ( m_pStatusBar )
             {
-                m_pStatusBar = NULL;
+                m_pStatusBar = nullptr;
 
                 // dispose all children
                 for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
@@ -264,7 +264,7 @@ void VCLXAccessibleStatusBar::disposing()
 
     if ( m_pStatusBar )
     {
-        m_pStatusBar = NULL;
+        m_pStatusBar = nullptr;
 
         // dispose all children
         for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )

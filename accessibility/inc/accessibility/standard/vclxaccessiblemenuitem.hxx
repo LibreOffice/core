@@ -57,7 +57,7 @@ protected:
     virtual void                         implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
 public:
-    VCLXAccessibleMenuItem( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = 0 );
+    VCLXAccessibleMenuItem( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = nullptr );
     virtual ~VCLXAccessibleMenuItem();
 
     // XInterface

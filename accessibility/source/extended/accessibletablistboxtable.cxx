@@ -53,7 +53,7 @@ namespace accessibility
     {
         if ( isAlive() )
         {
-            m_pTabListBox = NULL;
+            m_pTabListBox = nullptr;
 
             // increment ref count to prevent double call of Dtor
             osl_atomic_increment( &m_refCount );
@@ -71,7 +71,7 @@ namespace accessibility
                 case  VCLEVENT_OBJECT_DYING :
                 {
                     m_pTabListBox->RemoveEventListener( LINK( this, AccessibleTabListBoxTable, WindowEventListener ) );
-                    m_pTabListBox = NULL;
+                    m_pTabListBox = nullptr;
                     break;
                 }
 
@@ -218,7 +218,7 @@ namespace accessibility
                     {
                         commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
                         TabListBoxEventData* pData = static_cast< TabListBoxEventData* >( rVclWindowEvent.GetData() );
-                        SvTreeListEntry* pEntry = pData != NULL ? pData->m_pEntry : NULL;
+                        SvTreeListEntry* pEntry = pData != nullptr ? pData->m_pEntry : nullptr;
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );

@@ -97,7 +97,7 @@ namespace accessibility
         virtual ~AccessibleToolPanelTabBar_Impl();
 
         void    checkDisposed();
-        bool    isDisposed() const { return m_pPanelDeck == NULL; }
+        bool    isDisposed() const { return m_pPanelDeck == nullptr; }
         void    dispose();
 
         ::svt::IToolPanelDeck*          getPanelDeck() const { return m_pPanelDeck; }
@@ -159,7 +159,7 @@ namespace accessibility
     {
         ENSURE_OR_RETURN_VOID( !isDisposed(), "disposed twice" );
         m_pPanelDeck->RemoveListener( *this );
-        m_pPanelDeck = NULL;
+        m_pPanelDeck = nullptr;
 
         m_pTabBar->GetScrollButton( true ).RemoveEventListener( LINK( this, AccessibleToolPanelTabBar_Impl, OnWindowEvent ) );
         m_pTabBar->GetScrollButton( false ).RemoveEventListener( LINK( this, AccessibleToolPanelTabBar_Impl, OnWindowEvent ) );
@@ -170,8 +170,8 @@ namespace accessibility
 
     Reference< XAccessible > AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem( size_t i_nPosition )
     {
-        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem: already disposed!", NULL );
-        ENSURE_OR_RETURN( i_nPosition < m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem: invalid index!", NULL );
+        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem: already disposed!", nullptr );
+        ENSURE_OR_RETURN( i_nPosition < m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::getAccessiblePanelItem: invalid index!", nullptr );
 
         Reference< XAccessible >& rAccessibleChild( m_aChildren[ i_nPosition ] );
         if ( !rAccessibleChild.is() )
@@ -304,7 +304,7 @@ namespace accessibility
         if ( bScrollBackRequested || bScrollForwardRequested )
         {
             Reference< XAccessible > xScrollButtonAccessible( m_xImpl->getTabBar()->GetScrollButton( bScrollForwardRequested ).GetAccessible() );
-            ENSURE_OR_RETURN( xScrollButtonAccessible.is(), "AccessibleToolPanelTabBar::getAccessibleChild: invalid button accessible!", NULL );
+            ENSURE_OR_RETURN( xScrollButtonAccessible.is(), "AccessibleToolPanelTabBar::getAccessibleChild: invalid button accessible!", nullptr );
         #if OSL_DEBUG_LEVEL > 0
             Reference< XAccessibleContext > xScrollButtonContext( xScrollButtonAccessible->getAccessibleContext() );
             ENSURE_OR_RETURN( xScrollButtonContext.is(), "AccessibleToolPanelTabBar::getAccessibleChild: invalid button accessible context!", xScrollButtonAccessible );
@@ -365,7 +365,7 @@ namespace accessibility
             return m_xImpl->getTabBar()->GetScrollButton( true ).GetAccessible();
 
         // no hit
-        return NULL;
+        return nullptr;
     }
 
     void SAL_CALL AccessibleToolPanelTabBar::disposing()
@@ -379,7 +379,7 @@ namespace accessibility
         // don't let the base class generate any A11Y events from VclWindowEvent, we completely manage those
         // A11Y events ourself
         (void)i_rVclWindowEvent;
-        return NULL;
+        return nullptr;
     }
 
     void AccessibleToolPanelTabBar::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet )

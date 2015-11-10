@@ -89,7 +89,7 @@ namespace
         inline sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
         inline void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
 
-        static  bool    isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation = NULL );
+        static  bool    isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation = nullptr );
 
     public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
@@ -130,7 +130,7 @@ namespace
 
     bool OToolBoxWindowItem::isWindowItem( const Reference< XAccessible >& _rxAcc, OToolBoxWindowItem** /* [out] */ _ppImplementation )
     {
-        OToolBoxWindowItem* pImplementation = NULL;
+        OToolBoxWindowItem* pImplementation = nullptr;
 
         Reference< XUnoTunnel > xTunnel( _rxAcc, UNO_QUERY );
         if ( xTunnel.is() )
@@ -139,12 +139,12 @@ namespace
         if ( _ppImplementation )
             *_ppImplementation = pImplementation;
 
-        return NULL != pImplementation;
+        return nullptr != pImplementation;
     }
 
     Sequence< sal_Int8 > OToolBoxWindowItem::getUnoTunnelImplementationId()
     {
-        static ::cppu::OImplementationId * pId = 0;
+        static ::cppu::OImplementationId * pId = nullptr;
         if (! pId)
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -183,7 +183,7 @@ VCLXAccessibleToolBox::~VCLXAccessibleToolBox()
 
 VCLXAccessibleToolBoxItem* VCLXAccessibleToolBox::GetItem_Impl( sal_Int32 _nPos, bool _bMustHaveFocus )
 {
-    VCLXAccessibleToolBoxItem* pItem = NULL;
+    VCLXAccessibleToolBoxItem* pItem = nullptr;
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
     if ( pToolBox && ( !_bMustHaveFocus || pToolBox->HasFocus() ) )
     {
@@ -270,7 +270,7 @@ void VCLXAccessibleToolBox::UpdateChecked_Impl( sal_Int32 _nPos )
     if ( pToolBox )
     {
         sal_uInt16 nFocusId = pToolBox->GetItemId( (sal_uInt16)_nPos );
-        VCLXAccessibleToolBoxItem* pFocusItem = NULL;
+        VCLXAccessibleToolBoxItem* pFocusItem = nullptr;
 
         for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
               aIter != m_aAccessibleChildren.end(); ++aIter )
@@ -319,7 +319,7 @@ void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator& _
         NotifyAccessibleEvent( AccessibleEventId::CHILD, makeAny( xItemAcc ), Any() );
     }
 
-    OToolBoxWindowItem* pWindowItem = NULL;
+    OToolBoxWindowItem* pWindowItem = nullptr;
     if ( !OToolBoxWindowItem::isWindowItem( xItemAcc, &pWindowItem ) )
     {
         static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() )->ReleaseToolBox();
@@ -367,7 +367,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, bool _bItemAdded )
         {
             Reference< XAccessible > xItemAcc( aIndexAdjust->second );
 
-            OToolBoxWindowItem* pWindowItem = NULL;
+            OToolBoxWindowItem* pWindowItem = nullptr;
             if ( !OToolBoxWindowItem::isWindowItem( xItemAcc, &pWindowItem ) )
             {
                 VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() );
@@ -755,7 +755,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
         return xChild;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( const awt::Point& _rPoint ) throw (RuntimeException, std::exception)

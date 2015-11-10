@@ -82,7 +82,7 @@ namespace accessibility
         virtual void Dying() override;
 
     public:
-        bool    isDisposed() const { return m_pPanelDeck == NULL; }
+        bool    isDisposed() const { return m_pPanelDeck == nullptr; }
         void    checkDisposed() const;
         void    dispose();
 
@@ -135,7 +135,7 @@ namespace accessibility
 
         m_xAccessibleParent.clear();
         m_pPanelDeck->RemoveListener( *this );
-        m_pPanelDeck = NULL;
+        m_pPanelDeck = nullptr;
         m_pTabBar.clear();
     }
 
@@ -148,7 +148,7 @@ namespace accessibility
     OUString AccessibleToolPanelDeckTabBarItem_Impl::getPanelDisplayName()
     {
         const ::svt::PToolPanel pPanel( m_pPanelDeck->GetPanel( getItemPos() ) );
-        if ( pPanel.get() == NULL )
+        if ( pPanel.get() == nullptr )
             throw DisposedException();
         return pPanel->GetDisplayName();
     }
@@ -320,7 +320,7 @@ namespace accessibility
         ItemMethodGuard aGuard( *m_xImpl );
         // we do not have children ...
         (void)i_rLocation;
-        return NULL;
+        return nullptr;
     }
 
     void SAL_CALL AccessibleToolPanelDeckTabBarItem::grabFocus(  ) throw (RuntimeException, std::exception)

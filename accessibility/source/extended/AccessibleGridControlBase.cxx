@@ -81,7 +81,7 @@ void SAL_CALL AccessibleGridControlBase::disposing()
         AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
     }
 
-    m_xParent = NULL;
+    m_xParent = nullptr;
     //m_aTable = NULL;
 }
 
@@ -409,7 +409,7 @@ sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
 Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint( const css::awt::Point& )
         throw ( uno::RuntimeException, std::exception )
 {
-    return NULL;
+    return nullptr;
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (css::uno::RuntimeException, std::exception)

@@ -301,7 +301,7 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChild
     if(isAccessibleChildSelected(nSelectedChildIndex))
         return getAccessibleChild(nSelectedChildIndex);
     else
-        return NULL;
+        return nullptr;
 }
 //not implemented yet, because only row selection possible
 void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
@@ -358,7 +358,7 @@ Rectangle AccessibleGridControlTable::implGetBoundingBox()
 
 Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
 {
-    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( NULL ));
+    Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ));
     Rectangle aTableRect( m_aTable.calcTableRect() );
     long nX = aGridRect.Left() + aTableRect.Left();
     long nY = aGridRect.Top() + aTableRect.Top();

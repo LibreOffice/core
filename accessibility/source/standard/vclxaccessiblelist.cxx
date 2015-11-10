@@ -55,7 +55,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
                                         const Reference< XAccessible >& _xParent)
     : VCLXAccessibleComponent   (pVCLWindow),
       m_aBoxType                (aBoxType),
-      m_pListBoxHelper          (0),
+      m_pListBoxHelper          (nullptr),
       m_nVisibleLineCount       (0),
       m_nIndexInParent          (DEFAULT_INDEX_IN_PARENT),
       m_nLastTopEntry           ( 0 ),
@@ -116,7 +116,7 @@ void SAL_CALL VCLXAccessibleList::disposing()
     clearItems();
 
     delete m_pListBoxHelper;
-    m_pListBoxHelper = NULL;
+    m_pListBoxHelper = nullptr;
 }
 
 
@@ -879,7 +879,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getSelectedAccessibleChild
         return getAccessibleChild( (sal_Int32)m_pListBoxHelper->GetSelectEntryPos( (sal_uInt16)nSelectedChildIndex ) );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void SAL_CALL VCLXAccessibleList::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)

@@ -118,7 +118,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
 {
     delete m_pExternalLock;
-    m_pExternalLock = NULL;
+    m_pExternalLock = nullptr;
 }
 
 OUString VCLXAccessibleToolBoxItem::GetText( bool _bAsName )
@@ -288,7 +288,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleToolBoxItem, AccessibleTextHelpe
 void SAL_CALL VCLXAccessibleToolBoxItem::disposing()
 {
     AccessibleTextHelper_BASE::disposing();
-    m_pToolBox = NULL;
+    m_pToolBox = nullptr;
 }
 
 // XServiceInfo
@@ -525,7 +525,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sa
             vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
 
             SolarMutexReleaser aReleaser;
-            xClipboard->setContents( pDataObj, NULL );
+            xClipboard->setContents( pDataObj, nullptr );
 
             Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )

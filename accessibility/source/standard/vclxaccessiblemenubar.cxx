@@ -47,7 +47,7 @@ VCLXAccessibleMenuBar::VCLXAccessibleMenuBar( Menu* pMenu )
     }
     else
     {
-        m_pWindow = 0;
+        m_pWindow = nullptr;
     }
 }
 
@@ -99,7 +99,7 @@ void VCLXAccessibleMenuBar::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             if ( m_pWindow )
             {
                 m_pWindow->RemoveEventListener( LINK( this, VCLXAccessibleMenuBar, WindowEventListener ) );
-                m_pWindow = NULL;
+                m_pWindow = nullptr;
             }
         }
         break;
@@ -121,7 +121,7 @@ void VCLXAccessibleMenuBar::disposing()
     if ( m_pWindow )
     {
         m_pWindow->RemoveEventListener( LINK( this, VCLXAccessibleMenuBar, WindowEventListener ) );
-        m_pWindow = NULL;
+        m_pWindow = nullptr;
     }
 }
 

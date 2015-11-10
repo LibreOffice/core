@@ -45,7 +45,7 @@ AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
         const Reference< XAccessible >& rxParent,
         IAccessibleTableProvider&                      rBrowseBox,
         AccessibleBrowseBoxObjType      eObjType ) :
-    BrowseBoxAccessibleElement( rxParent, rBrowseBox,NULL, eObjType )
+    BrowseBoxAccessibleElement( rxParent, rBrowseBox,nullptr, eObjType )
 {
 }
 
@@ -117,14 +117,14 @@ Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleCap
     throw ( uno::RuntimeException, std::exception )
 {
     ensureIsAlive();
-    return NULL;    // not supported
+    return nullptr;    // not supported
 }
 
 Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleSummary()
     throw ( uno::RuntimeException, std::exception )
 {
     ensureIsAlive();
-    return NULL;    // not supported
+    return nullptr;    // not supported
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleIndex(

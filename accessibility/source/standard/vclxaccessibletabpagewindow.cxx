@@ -37,7 +37,7 @@ VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindo
     :VCLXAccessibleComponent( pVCLXWindow )
 {
     m_pTabPage = static_cast< TabPage* >( GetWindow().get() );
-    m_pTabControl = 0;
+    m_pTabControl = nullptr;
     m_nPageId = 0;
     if ( m_pTabPage )
     {
@@ -94,8 +94,8 @@ void VCLXAccessibleTabPageWindow::disposing()
 {
     VCLXAccessibleComponent::disposing();
 
-    m_pTabControl = NULL;
-    m_pTabPage = NULL;
+    m_pTabControl = nullptr;
+    m_pTabPage = nullptr;
 }
 
 

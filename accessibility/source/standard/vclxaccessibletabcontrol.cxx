@@ -240,7 +240,7 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
         {
             if ( m_pTabControl )
             {
-                m_pTabControl = NULL;
+                m_pTabControl = nullptr;
 
                 // dispose all tab pages
                 for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
@@ -323,7 +323,7 @@ void VCLXAccessibleTabControl::disposing()
 
     if ( m_pTabControl )
     {
-        m_pTabControl = NULL;
+        m_pTabControl = nullptr;
 
         // dispose all tab pages
         for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )

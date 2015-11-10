@@ -184,9 +184,9 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
 
         VCLXAccessibleListItem_BASE::disposing();
         m_sEntryText.clear();
-        m_pListBoxHelper    = NULL;
-        m_xParent           = NULL;
-        m_xParentContext    = NULL;
+        m_pListBoxHelper    = nullptr;
+        m_xParent           = nullptr;
+        m_xParentContext    = nullptr;
 
         nId = m_nClientId;
         m_nClientId =  0;
@@ -377,7 +377,7 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  ) throw (Runti
     {
         Rectangle aRect = m_pListBoxHelper->GetBoundingRectangle( (sal_uInt16)m_nIndexInParent );
         aPoint = aRect.TopLeft();
-        aPoint += m_pListBoxHelper->GetWindowExtentsRelative( NULL ).TopLeft();
+        aPoint += m_pListBoxHelper->GetWindowExtentsRelative( nullptr ).TopLeft();
     }
     return AWTPoint( aPoint );
 }
@@ -578,7 +578,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
             vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
 
             SolarMutexReleaser aReleaser;
-            xClipboard->setContents( pDataObj, NULL );
+            xClipboard->setContents( pDataObj, nullptr );
             Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();

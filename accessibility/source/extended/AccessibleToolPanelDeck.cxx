@@ -159,14 +159,14 @@ namespace accessibility
 
     Reference< XAccessible > AccessibleToolPanelDeck_Impl::getActivePanelAccessible()
     {
-        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: already disposed!", NULL );
+        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: already disposed!", nullptr );
 
         if ( !m_xActivePanelAccessible.is() )
         {
             ::boost::optional< size_t > aActivePanel( m_pPanelDeck->GetActivePanel() );
-            ENSURE_OR_RETURN( !!aActivePanel, "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: this should not be called without an active panel!", NULL );
+            ENSURE_OR_RETURN( !!aActivePanel, "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: this should not be called without an active panel!", nullptr );
             ::svt::PToolPanel pActivePanel( m_pPanelDeck->GetPanel( *aActivePanel ) );
-            ENSURE_OR_RETURN( pActivePanel.get() != NULL, "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: no active panel!", NULL );
+            ENSURE_OR_RETURN( pActivePanel.get() != nullptr, "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: no active panel!", nullptr );
             m_xActivePanelAccessible = pActivePanel->CreatePanelAccessible( getOwnAccessible() );
             OSL_ENSURE( m_xActivePanelAccessible.is(), "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: illegal accessible returned by the panel!" );
         }
@@ -300,7 +300,7 @@ namespace accessibility
         try
         {
             const ::svt::PDeckLayouter pLayouter( m_xImpl->m_pPanelDeck->GetLayouter() );
-            ENSURE_OR_THROW( pLayouter.get() != NULL, "invalid layouter" );
+            ENSURE_OR_THROW( pLayouter.get() != nullptr, "invalid layouter" );
 
             const size_t nLayouterChildren = pLayouter->GetAccessibleChildCount();
             for ( size_t i=0; i<nLayouterChildren; ++i )
@@ -317,7 +317,7 @@ namespace accessibility
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        return NULL;
+        return nullptr;
     }
 
     void SAL_CALL AccessibleToolPanelDeck::grabFocus(  ) throw (RuntimeException, std::exception)
@@ -337,7 +337,7 @@ namespace accessibility
         // don't let the base class generate any A11Y events from VclWindowEvent, we completely manage those
         // A11Y events ourself
         (void)i_rVclWindowEvent;
-        return NULL;
+        return nullptr;
     }
 
     void AccessibleToolPanelDeck::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet )

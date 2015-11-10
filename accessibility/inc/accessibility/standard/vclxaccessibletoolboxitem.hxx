@@ -84,7 +84,7 @@ public:
     inline bool         HasFocus() const { return m_bHasFocus; }
     void                SetChecked( bool _bCheck );
     void                SetIndeterminate( bool _bIndeterminate );
-    inline void         ReleaseToolBox() { m_pToolBox = NULL; }
+    inline void         ReleaseToolBox() { m_pToolBox = nullptr; }
     void                NameChanged();
     void                SetChild( const css::uno::Reference< css::accessibility::XAccessible >& _xChild );
     css::uno::Reference< css::accessibility::XAccessible >

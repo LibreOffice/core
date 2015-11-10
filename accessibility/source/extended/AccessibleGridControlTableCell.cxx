@@ -351,7 +351,7 @@ namespace accessibility
 
     Rectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
-        Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( NULL );
+        Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( nullptr );
         sal_Int32 nIndex = getAccessibleIndexInParent();
         Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
         long nX = aGridRect.Left() + aCellRect.Left();

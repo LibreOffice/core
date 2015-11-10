@@ -31,7 +31,7 @@ namespace accessibility
 
 AccessibleTabBarBase::AccessibleTabBarBase( TabBar* pTabBar ) :
     AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() ),
-    m_pTabBar( 0 )
+    m_pTabBar( nullptr )
 {
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
     SetTabBarPointer( pTabBar );
@@ -50,7 +50,7 @@ IMPL_LINK_TYPED( AccessibleTabBarBase, WindowEventListener, VclWindowEvent&, rEv
 
     if( ( rEvent.GetId() == VCLEVENT_TABBAR_PAGEREMOVED ) &&
         ( (sal_uInt16)reinterpret_cast<sal_IntPtr>(rEvent.GetData()) == TabBar::PAGE_NOT_FOUND ) &&
-        ( dynamic_cast< AccessibleTabBarPageList *> (this) != NULL ) )
+        ( dynamic_cast< AccessibleTabBarPageList *> (this) != nullptr ) )
     {
         return;
     }
@@ -88,7 +88,7 @@ void AccessibleTabBarBase::ClearTabBarPointer()
     if( m_pTabBar )
     {
         m_pTabBar->RemoveEventListener( LINK( this, AccessibleTabBarBase, WindowEventListener ) );
-        m_pTabBar = 0;
+        m_pTabBar = nullptr;
     }
 }
 

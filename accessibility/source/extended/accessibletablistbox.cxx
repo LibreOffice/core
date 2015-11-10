@@ -39,7 +39,7 @@ namespace accessibility
     // Ctor() and Dtor()
 
     AccessibleTabListBox::AccessibleTabListBox( const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox )
-        :AccessibleBrowseBox( rxParent, NULL, rBox )
+        :AccessibleBrowseBox( rxParent, nullptr, rBox )
         ,m_pTabListBox( &rBox )
 
     {

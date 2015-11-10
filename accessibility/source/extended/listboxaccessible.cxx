@@ -54,7 +54,7 @@ namespace accessibility
         SolarMutexGuard g;
         if ( m_pWindow )
             m_pWindow->RemoveEventListener( LINK( this, ListBoxAccessibleBase, WindowEventListener ) );
-        m_pWindow = NULL;
+        m_pWindow = nullptr;
     }
 
     void ListBoxAccessibleBase::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
@@ -67,7 +67,7 @@ namespace accessibility
                 {
                     if ( m_pWindow )
                         m_pWindow->RemoveEventListener( LINK( this, ListBoxAccessibleBase, WindowEventListener ) );
-                    m_pWindow = NULL;
+                    m_pWindow = nullptr;
                     dispose();
                     break;
                 }

@@ -56,7 +56,7 @@ VCLXAccessibleListBox::~VCLXAccessibleListBox()
 
 bool VCLXAccessibleListBox::IsValid() const
 {
-    return GetWindow().get() != NULL;
+    return GetWindow().get() != nullptr;
 }
 
 void VCLXAccessibleListBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent)

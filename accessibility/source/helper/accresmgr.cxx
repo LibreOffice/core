@@ -28,7 +28,7 @@ using namespace accessibility;
 // TkResMgr
 
 
-SimpleResMgr* TkResMgr::m_pImpl = NULL;
+SimpleResMgr* TkResMgr::m_pImpl = nullptr;
 
 
 

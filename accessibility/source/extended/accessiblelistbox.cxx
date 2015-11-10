@@ -155,12 +155,12 @@ namespace accessibility
                             MAP_ENTRY::iterator mi = m_mapEntry.find(pEntry);
                             if(mi != m_mapEntry.end())
                             {
-                                OSL_ASSERT(mi->second.get() != NULL);
+                                OSL_ASSERT(mi->second.get() != nullptr);
                                 m_xFocusedChild = mi->second;
                             }
                             else
                             {
-                                AccessibleListBoxEntry *pEntNew = new AccessibleListBoxEntry( *getListBox(), pEntry, NULL );
+                                AccessibleListBoxEntry *pEntNew = new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
                                 m_xFocusedChild = pEntNew;
                                 m_mapEntry.insert(MAP_ENTRY::value_type(pEntry,pEntNew));
                             }
@@ -239,7 +239,7 @@ namespace accessibility
         AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
         if (pEntryFocus && pEntry && pEntry != pEntryFocus->GetSvLBoxEntry())
         {
-            AccessibleListBoxEntry *pAccCurOptionEntry =NULL;
+            AccessibleListBoxEntry *pAccCurOptionEntry =nullptr;
             MAP_ENTRY::iterator mi = m_mapEntry.find(pEntry);
             if (mi != m_mapEntry.end())
             {
@@ -247,7 +247,7 @@ namespace accessibility
             }
             else
             {
-                pAccCurOptionEntry =new AccessibleListBoxEntry( *getListBox(), pEntry, NULL );
+                pAccCurOptionEntry =new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
                 std::pair<MAP_ENTRY::iterator, bool> pairMi =  m_mapEntry.insert(MAP_ENTRY::value_type(pAccCurOptionEntry->GetSvLBoxEntry(),pAccCurOptionEntry));
                 mi = pairMi.first;
             }
@@ -313,7 +313,7 @@ namespace accessibility
 
         m_mapEntry.clear();
         VCLXAccessibleComponent::disposing();
-        m_xParent = NULL;
+        m_xParent = nullptr;
     }
 
     // XServiceInfo
@@ -368,7 +368,7 @@ namespace accessibility
         sal_Int32 nCount = 0;
         SvTreeListBox* pSvTreeListBox = getListBox();
         if ( pSvTreeListBox )
-            nCount = pSvTreeListBox->GetLevelChildCount( NULL );
+            nCount = pSvTreeListBox->GetLevelChildCount( nullptr );
 
         return nCount;
     }
@@ -384,7 +384,7 @@ namespace accessibility
 
         // Solution: Set the parameter of the parent to null to let entry determine the parent by itself
         //return new AccessibleListBoxEntry( *getListBox(), pEntry, this );
-        return new AccessibleListBoxEntry( *getListBox(), pEntry, NULL );
+        return new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
     }
 
     Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleParent(  ) throw (RuntimeException, std::exception)
@@ -499,7 +499,7 @@ namespace accessibility
 
         ensureAlive();
 
-        sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( nullptr );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvTreeListEntry* pEntry = getListBox()->GetEntry( i );
@@ -514,7 +514,7 @@ namespace accessibility
 
         ensureAlive();
 
-        sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( nullptr );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvTreeListEntry* pEntry = getListBox()->GetEntry( i );
@@ -543,7 +543,7 @@ namespace accessibility
 
         Reference< XAccessible > xChild;
         sal_Int32 nSelCount= 0;
-        sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
+        sal_Int32 nCount = getListBox()->GetLevelChildCount( nullptr );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             SvTreeListEntry* pEntry = getListBox()->GetEntry( i );
@@ -554,7 +554,7 @@ namespace accessibility
             {
                 // Solution: Set the parameter of the parent to null to let entry determine the parent by itself
                 //xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, this );
-                xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, NULL );
+                xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
                 break;
             }
         }

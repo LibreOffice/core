@@ -76,7 +76,7 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
             if (m_aBoxType==COMBOBOX)
             {
                 VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
-                if ( ( pComboBox != nullptr ) && ( pChildWindow != NULL ) )
+                if ( ( pComboBox != nullptr ) && ( pChildWindow != nullptr ) )
                     if (pChildWindow == pComboBox->GetSubEdit())
                     {
                         if (rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW)
@@ -89,7 +89,7 @@ void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindo
                         {
                             // Release text field.
                             aOldValue <<= m_xText;
-                            m_xText = NULL;
+                            m_xText = nullptr;
                         }
                         // Tell the listeners about the new/removed child.
                         NotifyAccessibleEvent (
@@ -116,12 +116,12 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         {
             // Forward the call to the list child.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-            if ( pList == NULL )
+            if ( pList == nullptr )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
                 pList = static_cast<VCLXAccessibleList*>(m_xList.get());
             }
-            if ( pList != NULL )
+            if ( pList != nullptr )
             {
                 pList->ProcessWindowEvent (rVclWindowEvent, m_bIsDropDownBox);
 #if defined WNT
@@ -136,12 +136,12 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         case VCLEVENT_DROPDOWN_OPEN:
         {
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-            if ( pList == NULL )
+            if ( pList == nullptr )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
                 pList = static_cast<VCLXAccessibleList*>(m_xList.get());
             }
-            if ( pList != NULL )
+            if ( pList != nullptr )
             {
                 pList->ProcessWindowEvent (rVclWindowEvent);
                 pList->HandleDropOpen();
@@ -151,12 +151,12 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         case VCLEVENT_DROPDOWN_CLOSE:
         {
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-            if ( pList == NULL )
+            if ( pList == nullptr )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
                 pList = static_cast<VCLXAccessibleList*>(m_xList.get());
             }
-            if ( pList != NULL )
+            if ( pList != nullptr )
             {
                 pList->ProcessWindowEvent (rVclWindowEvent);
             }
@@ -172,7 +172,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         case VCLEVENT_COMBOBOX_SELECT:
         {
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-            if (pList != NULL && m_xText.is())
+            if (pList != nullptr && m_xText.is())
             {
                 Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
                 if ( xText.is() )
@@ -202,12 +202,12 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         {
             // Forward the call to the list child.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-            if ( pList == NULL )
+            if ( pList == nullptr )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
                 pList = static_cast<VCLXAccessibleList*>(m_xList.get());
             }
-            if ( pList != NULL )
+            if ( pList != nullptr )
                 pList->ProcessWindowEvent (rVclWindowEvent);
             break;
         }
@@ -220,7 +220,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             // combobox, however, we have to help by providing the list with
             // the text of the currently selected item.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
-            if (pList != NULL && m_xText.is())
+            if (pList != nullptr && m_xText.is())
             {
                 Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
                 if ( xText.is() )
@@ -246,7 +246,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                 {
                     Reference<XAccessibleContext> xContext = m_xText->getAccessibleContext();
                     VCLXAccessibleEdit* pEdit = static_cast<VCLXAccessibleEdit*>(xContext.get());
-                    if (pEdit != NULL)
+                    if (pEdit != nullptr)
                         pEdit->ProcessWindowEvent (rVclWindowEvent);
                 }
             }
@@ -287,9 +287,9 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleChildCount()
     {
         // Object not valid anymore.  Release references to children.
         m_bHasTextChild = false;
-        m_xText = NULL;
+        m_xText = nullptr;
         m_bHasListChild = false;
-        m_xList = NULL;
+        m_xList = nullptr;
     }
 
     return nCount;
@@ -328,7 +328,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32
                 if (m_aBoxType==COMBOBOX)
                 {
                     VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
-                    if (pComboBox!=nullptr && pComboBox->GetSubEdit()!=NULL)
+                    if (pComboBox!=nullptr && pComboBox->GetSubEdit()!=nullptr)
                     //Set the edit's acc name the same as parent
                     {
                         pComboBox->GetSubEdit()->SetAccessibleName(getAccessibleName());

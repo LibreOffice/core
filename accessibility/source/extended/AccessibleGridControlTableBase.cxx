@@ -127,7 +127,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleC
     SolarMutexGuard g;
 
     ensureIsAlive();
-    return NULL;    // not supported
+    return nullptr;    // not supported
 }
 
 Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleSummary()
@@ -136,7 +136,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleS
     SolarMutexGuard g;
 
     ensureIsAlive();
-    return NULL;    // not supported
+    return nullptr;    // not supported
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleIndex(
